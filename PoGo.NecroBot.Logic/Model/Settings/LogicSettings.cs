@@ -1,5 +1,6 @@
 #region using directives
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using PoGo.NecroBot.Logic.Interfaces.Configuration;
@@ -198,5 +199,12 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool HumanWalkingSnipeAllowSpeedUp => _settings.HumanWalkSnipeConfig.AllowSpeedUp;
         public int HumanWalkingSnipeDelayTimeAtDestination => _settings.HumanWalkSnipeConfig.DelayTimeAtDestination;
         public bool HumanWalkingSnipeUsePogoLocationFeeder => _settings.HumanWalkSnipeConfig.UsePogoLocationFeeder;
-    }
+
+        public bool GymAllowed => _settings.GymConfig.Enable;
+        public TeamColor GymDefaultTeam => _settings.GymConfig.DefaultTeam;
+
+        public double GymMaxDistance => _settings.GymConfig.MaxDistance;
+        public int GymVisitTimeout => _settings.GymConfig.VisitTimeout;
+        public string GymPokemonToDeploy => _settings.GymConfig.PokemonToDeploy;
+    }                         
 }
