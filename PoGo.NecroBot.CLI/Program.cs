@@ -30,7 +30,7 @@ namespace PoGo.NecroBot.CLI
         private static string _subPath = "";
 
         private static readonly Uri StrKillSwitchUri =
-            new Uri("https://raw.githubusercontent.com/NoxxDev/NecroBot/master/KillSwitch.txt");
+            new Uri("https://raw.githubusercontent.com/Necrobot-Private/Necrobot2/master/KillSwitch.txt");
 
         private static Session _session;
 
@@ -44,7 +44,7 @@ namespace PoGo.NecroBot.CLI
 
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionEventHandler;
 
-            Console.Title = @"NecroBot";
+            Console.Title = @"NecroBot2";
             Console.CancelKeyPress += (sender, eArgs) =>
             {
                 QuitEvent.Set();
@@ -183,7 +183,7 @@ namespace PoGo.NecroBot.CLI
                 }
             }
 
-            ProgressBar.Start("NecroBot is starting up", 10);
+            ProgressBar.Start("NecroBot2 is starting up", 10);
 
             _session.Client.ApiFailure = new ApiFailureStrategy(_session);
             ProgressBar.Fill(20);
@@ -195,7 +195,7 @@ namespace PoGo.NecroBot.CLI
             var strVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
             stats.DirtyEvent +=
                 () =>
-                    Console.Title = $"[Necrobot v{strVersion}] " +
+                    Console.Title = $"[Necrobot2 v{strVersion}] " +
                                     stats.GetTemplatedStats(
                                         _session.Translation.GetTranslation(TranslationString.StatsTemplateString),
                                         _session.Translation.GetTranslation(TranslationString.StatsXpTemplateString));

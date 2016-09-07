@@ -37,5 +37,5 @@
  * [MarVinPL] (https://github.com/NoxxDev/NecroBot/issues?q=is%3Apr+author%3AMarVinPL)
  * [CreativiTimothy] (https://github.com/NoxxDev/NecroBot/pulls?q=is%3Apr+author%3ACreativiTimothy)
  * [chamingkk] (https://github.com/NoxxDev/NecroBot/issues?q=is%3Apr+author%3Achamingkk)
- * [fedyay] (https://github.com/NoxxDev/NecroBot/issues?q=is%3Apr+author%3Afedyay)
- * [Brazuca87] (https://github.com/NoxxDev/NecroBot/issues?q=is%3Apr+author%3ABrazuca87)
+ * [fedyay] 
+ * [Brazuca87] 

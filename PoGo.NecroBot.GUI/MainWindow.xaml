@@ -4,10 +4,10 @@
                       xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
                       xmlns:awe="http://schemas.awesomium.com/winfx"
                       x:Name="webWindow"
-                      Title="NecroBot"
+                      Title="NecroBot-Private Team"
                       Width="1200"
                       Height="700"
-                      Icon="Resources/Icon.ico"
+                      Icon="Resources/Ico.ico"
                       Loaded="webWindow_Loaded"
                       WindowStartupLocation="CenterScreen">
     <Controls:MetroWindow.RightWindowCommands>

@@ -27,19 +27,19 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 4)]
         public bool GetSniperInfoFromPokezz;
 
-        [DefaultValue(true)]
+        [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 5)]
-        public bool GetOnlyVerifiedSniperInfoFromPokezz = true;
+        public bool GetOnlyVerifiedSniperInfoFromPokezz;
 
-        [DefaultValue(true)]
+        [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 6)]
-        public bool GetSniperInfoFromPokeSnipers = true;
+        public bool GetSniperInfoFromPokeSnipers;
 
-        [DefaultValue(true)]
+        [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 7)]
-        public bool GetSniperInfoFromPokeWatchers = true;
+        public bool GetSniperInfoFromPokeWatchers;
 
-        [DefaultValue(true)]
+        [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 8)]
         public bool GetSniperInfoFromSkiplagged = true;
 

@@ -30,7 +30,7 @@ namespace PoGo.NecroBot.Logic.Logging
                 using (
                     var log =
                         File.AppendText(Path.Combine(_path,
-                            $"NecroBot-{DateTime.Today.ToString("yyyy-MM-dd")}-{DateTime.Now.ToString("HH")}.txt"))
+                            $"NecroBot2-{DateTime.Today.ToString("yyyy-MM-dd")}-{DateTime.Now.ToString("HH")}.txt"))
                     )
                 {
                     foreach (var line in LogbufferList)
@@ -58,7 +58,7 @@ namespace PoGo.NecroBot.Logic.Logging
             {
                 _path = Path.Combine(Directory.GetCurrentDirectory(), subPath, "Logs");
                 Directory.CreateDirectory(_path);
-                Log($"Initializing NecroBot logger at time {DateTime.Now}...");
+                Log($"Initializing NecroBot2 logger at time {DateTime.Now}...");
             }
         }
 

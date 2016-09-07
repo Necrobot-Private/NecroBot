@@ -102,6 +102,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                 // also, GPX pathing uses its own EggWalker and calls the CatchPokemon tasks internally.
                 if (!session.LogicSettings.UseGpxPathing)
                 {
+
+                    // Will modify Lat,Lng and Name to fake position
+                    SetMoveToTargetTask.CheckSetMoveToTargetStatus(ref fortInfo, ref pokeStop); 
+
                     var eggWalker = new EggWalker(1000, session);
 
                     var distance = LocationUtils.CalculateDistanceInMeters(session.Client.CurrentLatitude,
@@ -109,7 +113,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     cancellationToken.ThrowIfCancellationRequested();
 
                     if (!session.LogicSettings.UseGoogleWalk && !session.LogicSettings.UseYoursWalk)
-                        session.EventDispatcher.Send(new FortTargetEvent { Name = fortInfo.Name, Distance = distance, Route = "NecroBot" });
+                        session.EventDispatcher.Send(new FortTargetEvent { Name = fortInfo.Name, Distance = distance, Route = "NecroBot2" });
                     else
                         BaseWalkStrategy.FortInfo = fortInfo;
 
@@ -117,6 +121,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                         LocationUtils.getElevation(session, pokeStop.Latitude, pokeStop.Longitude)),
                     async () =>
                     {
+                        if (SetMoveToTargetTask.CheckStopforSetMoveToTarget())
+                            return false;
                         // Catch normal map Pokemon
                         await CatchNearbyPokemonsTask.Execute(session, cancellationToken);
                         //Catch Incense Pokemon
@@ -131,7 +137,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                     // we have moved this distance, so apply it immediately to the egg walker.
                     await eggWalker.ApplyDistance(distance, cancellationToken);
                 }
-
+                if (SetMoveToTargetTask.CheckReachTarget(session))
+                    return;
+            		
                 await FortAction(session, pokeStop, fortInfo, cancellationToken);
 
                 if (session.LogicSettings.SnipeAtPokestops || session.LogicSettings.UseSnipeLocationServer)

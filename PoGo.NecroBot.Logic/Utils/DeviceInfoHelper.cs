@@ -167,24 +167,6 @@ namespace PoGo.NecroBot.Logic.Utils
                     { "HardwareModel", "SM-G935T" }
                 }
             },
-            { "asus-zenfone2",
-                new Dictionary<string, string>()
-                {
-                    { "AndroidBoardName", "moorefield" },
-                    { "AndroidBootloader", "" },
-                    { "DeviceBrand", "asus" },
-                    { "DeviceId", "8525f5d8201f78b5" },
-                    { "DeviceModel", "ASUS_Z00AD" },
-                    { "DeviceModelBoot", "qcom" },
-                    { "DeviceModelIdentifier", "WW_Z00A" },
-                    { "FirmwareBrand", "WW_Z00A" },
-                    { "FirmwareFingerprint", "asus/WW_Z00A/Z00A_1:5.0/LRX21V/2.20.40.194_20160713_6971_user:user/release-keys" },
-                    { "FirmwareTags", "release-keys" },
-                    { "FirmwareType", "user" },
-                    { "HardwareManufacturer", "asus" },
-                    { "HardwareModel", "ASUS_Z00AD" }
-                }
-            },
             { "xperia-z5",
                 new Dictionary<string, string>()
                 {
