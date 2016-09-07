@@ -1,23 +1,17 @@
 
-<a href="https://discord.gg/VXKxNFr">
-    <img alt="Logo" src="https://discordapp.com/api/guilds/209253611031625728/widget.png?style=banner2">
-  </a>
-  
-[![Discord](https://discordapp.com/api/guilds/209253611031625728/widget.png)](https://discord.gg/VXKxNFr)
-[![Stories in Ready](https://badge.waffle.io/NoxxDev/NecroBot.svg?label=ready&title=Ready)](https://waffle.io/NoxxDev/NecroBot)
-[![Github All Releases](https://img.shields.io/github/downloads/NoxxDev/NecroBot/total.svg)](https://github.com/NoxxDev/NecroBot/releases)
-[![GitHub license](https://img.shields.io/badge/license-AGPL-blue.svg)](https://raw.githubusercontent.com/NoxxDev/NecroBot/master/LICENSE.md)
-[![Twitter Follow](https://img.shields.io/twitter/follow/NoxxDev.svg?style=social&label=Follow&maxAge=1)](https://twitter.com/NoxxDev)
-  
-## This repository is a fork updated of [NecroBot](https://github.com/NECROBOTIO/NecroBot)
+[![Stories in Ready](https://discordapp.com/api/guilds/220703917871333376/widget.png?style=banner2)](https://discord.gg/KNqJAyj)
+
+[![Stories in Ready](https://badge.waffle.io/Necrobot-Private/NecroBot.svg?label=ready&title=Ready)](https://waffle.io/Necrobot-Private/NecroBot)
+[![Github All Releases](https://img.shields.io/github/downloads/Necrobot-Private/NecroBot/total.svg?maxAge=258)](https://github.com/Necrobot-Private/NecroBot/releases)
+[![GitHub license](https://img.shields.io/badge/license-AGPL-blue.svg)](https://raw.githubusercontent.com/Necrobot-Private/NecroBot/master/LICENSE.md)
+
+### 1. This repository is a fork updated of [NecroBot-NECROBOTIO](https://github.com/NECROBOTIO/NecroBot)
+### 2. This repository is a fork updated of [NecroBot-NecronomiconCoding](https://github.com/NecronomiconCoding/NecroBot)
+### 3. This repository is a fork updated of [NecroBot-NoxxDev](https://github.com/NoxxDev/NecroBot)
 
 <h2><a name="getting-started">Getting Started</a></h2>
-Make sure you check out our [Wiki](https://github.com/NoxxDev/NecroBot/wiki) to get started.
+Make sure you check out our [Wiki](https://github.com/Necrobot-Private/NecroBot/wiki) to get started.
 <br/>
-
-<h2><a name="donating">Donating</a></h2>
-<a name="paypal">Feel free to buy us all a beer, by using PayPal:</a><br/>
-[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=J2XY5Y5FKGTSE)<br/>
 
 <h6><em>[A big part of the Donations goes to the top 3 active Contributors. Other expenses as Server costs will be covered using the Donations.]</em></h6><br/>
 ![Display](necrobot1.gif)
@@ -65,7 +59,7 @@ Msx752 - [MSniper](https://msx752.github.io/MSniper/)
 
 Lunat1q - [CheckTosState] (https://github.com/Lunat1q/Catchem-PoGo)
 
-## [Contributors](https://github.com/NoxxDev/NecroBot/blob/master/CONTRIBUTORS.md)
+## [Contributors](https://github.com/Necrobot-Private/NecroBot/blob/master/CONTRIBUTORS.md)
 
 <h2><a name="legal">Legal</a></h2>
 
