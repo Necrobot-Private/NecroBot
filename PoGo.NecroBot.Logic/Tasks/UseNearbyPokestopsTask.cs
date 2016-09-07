@@ -76,7 +76,11 @@ namespace PoGo.NecroBot.Logic.Tasks
             while (pokestopList.Any())
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                await SnipeMSniperTask.CheckMSniperLocation(session, cancellationToken);
+                
+                if (session.LogicSettings.ActivateMSniper)//before pokestops
+                {
+                    await SnipeMSniperTask.CheckMSniperLocation(session, cancellationToken);
+                }
 
                 pokestopList =
                     pokestopList.OrderBy(

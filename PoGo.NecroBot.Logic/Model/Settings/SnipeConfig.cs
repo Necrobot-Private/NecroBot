@@ -93,5 +93,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [Range(0, 999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 19)]
         public int SnipeCountLimit = 39;
+        
+        [DefaultValue(true)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 13)]
+        public bool ActivateMSniper;
     }
 }

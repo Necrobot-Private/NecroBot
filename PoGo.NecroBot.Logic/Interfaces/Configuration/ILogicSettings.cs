@@ -101,6 +101,7 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         string ProfileConfigPath { get; }
         string GeneralConfigPath { get; }
         bool SnipeAtPokestops { get; }
+        bool ActivateMSniper { get; }
         bool UseTelegramAPI { get; }
         string TelegramAPIKey { get; }
         string TelegramPassword { get; }
