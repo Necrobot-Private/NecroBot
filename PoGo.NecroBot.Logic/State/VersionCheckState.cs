@@ -24,13 +24,13 @@ namespace PoGo.NecroBot.Logic.State
     public class VersionCheckState : IState
     {
         public const string VersionUri =
-            "https://rawgit.com/Necrobot-Private/Necrobot2/master/PoGo.NecroBot.Logic/Properties/AssemblyInfo.cs";
+            "https://rawgit.com/Necrobot-Private/NecroBot/master/PoGo.NecroBot.Logic/Properties/AssemblyInfo.cs";
 
         public const string LatestReleaseApi =
-            "https://api.github.com/repos/Necrobot-Private/Necrobot2/releases/latest";
+            "https://api.github.com/repos/Necrobot-Private/NecroBot/releases/latest";
 
         private const string LatestRelease =
-            "https://github.com/Necrobot-Private/Necrobot2/releases";
+            "https://github.com/Necrobot-Private/NecroBot/releases";
 
         public static Version RemoteVersion;
 
@@ -89,7 +89,7 @@ namespace PoGo.NecroBot.Logic.State
                 Message = session.Translation.GetTranslation(TranslationString.DownloadingUpdate)
             });
             var remoteReleaseUrl =
-                $"https://github.com/Necrobot-Private/Necrobot2/releases/download/v{RemoteVersion}/";
+                $"https://github.com/Necrobot-Private/NecroBot/releases/download/v{RemoteVersion}/";
             const string zipName = "Release.zip";
             var downloadLink = remoteReleaseUrl + zipName;
             var baseDir = Directory.GetCurrentDirectory();
@@ -202,7 +202,7 @@ namespace PoGo.NecroBot.Logic.State
 
                 var gitVersion = new Version($"{match.Groups[1]}.{match.Groups[2]}.{match.Groups[3]}.{match.Groups[4]}");
                 RemoteVersion = gitVersion;
-                if (gitVersion >= Assembly.GetExecutingAssembly().GetName().Version)
+                if (gitVersion > Assembly.GetExecutingAssembly().GetName().Version)
                     return false;
             }
             catch (Exception)
