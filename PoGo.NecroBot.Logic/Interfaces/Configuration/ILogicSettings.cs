@@ -199,7 +199,10 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         bool GymAllowed { get; }
         TeamColor GymDefaultTeam { get; }
         double GymMaxDistance { get; }
-        string GymPokemonToDeploy { get; } 
+        int GymMaxCPToDeploy {  get; }
+        int GymMaxLevelToDeploy { get; }
+        bool GymUseRandomPokemon { get; }
         int GymVisitTimeout { get; }
+        int GymNumberOfTopPokemonToBeExcluded { get; }
     }
 }

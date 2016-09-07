@@ -127,5 +127,6 @@ namespace PoGo.NecroBot.Logic.Logging
         SoftBan = 16,
         LevelUp = 17,
         Debug = 18,
+        Gym = 19,
     }
 }

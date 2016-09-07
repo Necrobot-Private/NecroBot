@@ -1,5 +1,5 @@
 #region using directives
-
+using System.Linq;
 using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Interfaces.Configuration;
@@ -8,6 +8,8 @@ using PoGo.NecroBot.Logic.Service;
 using PokemonGo.RocketAPI;
 using POGOProtos.Networking.Responses;
 using PoGo.NecroBot.Logic.Service.Elevation;
+using System.Collections.Generic;
+using POGOProtos.Map.Fort;
 
 #endregion
 
@@ -26,6 +28,8 @@ namespace PoGo.NecroBot.Logic.State
         TelegramService Telegram { get; set; }
         SessionStats Stats { get; }
         ElevationService ElevationService { get; }
+        List<FortData> Forts { get; set; }
+        void AddForts(List<FortData> mapObjects);
     }
 
 
@@ -33,10 +37,12 @@ namespace PoGo.NecroBot.Logic.State
     {
         public Session(ISettings settings, ILogicSettings logicSettings) : this(settings, logicSettings, Common.Translation.Load(logicSettings))
         {
+           
         }
 
         public Session(ISettings settings, ILogicSettings logicSettings, ITranslation translation)
         {
+            this.Forts = new List<FortData>();
             EventDispatcher = new EventDispatcher();
             LogicSettings = logicSettings;
 
@@ -51,7 +57,7 @@ namespace PoGo.NecroBot.Logic.State
             Reset(settings, LogicSettings);
             Stats = new SessionStats();
         }
-
+        public List<FortData> Forts { get; set; }
         public GlobalSettings GlobalSettings { get; set; }
 
         public ISettings Settings { get; set; }
@@ -82,6 +88,11 @@ namespace PoGo.NecroBot.Logic.State
             // ferox wants us to set this manually
             Inventory = new Inventory(Client, logicSettings);
             Navigation = new Navigation(Client, logicSettings);
+        }
+        public void AddForts(List<FortData> data)
+        {
+            this.Forts.RemoveAll(p => data.Any(x => x.Id == p.Id));
+            this.Forts.AddRange(data);
         }
     }
 }

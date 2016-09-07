@@ -9,6 +9,7 @@ using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Utils;
 using POGOProtos.Enums;
 using POGOProtos.Inventory.Item;
+using POGOProtos.Map.Fort;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -223,7 +224,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                     // if (!pokemon.IsVisited)
                     {
                         await CatchNearbyPokemonsTask.Execute(session, cancellationToken, pokemon.PokemonId, false);
-                        await CatchIncensePokemonsTask.Execute(session, cancellationToken);
+                        await Task.Delay(1000);
+                        if (!pokemon.IsVisited)
+                        {
+                            await CatchLurePokemonsTask.Execute(session, cancellationToken);
+
+                        }
                     }
                     pokemon.IsVisited = true;
                     pokemon.IsCatching = false;

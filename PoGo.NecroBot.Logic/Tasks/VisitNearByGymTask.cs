@@ -37,8 +37,11 @@ namespace PoGo.NecroBot.Logic.Tasks
             cancellationToken.ThrowIfCancellationRequested();
 
             FortData nearByGym = GetGymsNearby();
-            await VisitGym(session, nearByGym, cancellationToken);
-            gyms[nearByGym] = DateTime.Now;
+            if (nearByGym != null)
+            {
+                await VisitGym(session, nearByGym, cancellationToken);
+                gyms[nearByGym] = DateTime.Now;
+            }
         }
 
         private static FortData GetGymsNearby()
@@ -53,12 +56,16 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         internal static async Task UpdateGymList(ISession session, List<FortData> newGyms)
         {
-            Logger.Write($"found {newGyms.Count} gym in farming zone. will visit them later when we close enought...");
             var notInList = newGyms.Where(p => !gyms.Keys.Any(x => x.Id == p.Id)).ToList();
             foreach (var item in notInList)
             {
                 gyms.Add(item, DateTime.Now.AddDays(-1));
             }
+
+            session.EventDispatcher.Send(new GymListEvent()
+            {
+                Gyms = newGyms
+            });
 
         }
 
@@ -76,8 +83,13 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 //dispatched event to visit gym
 
-                var name = $"(GYM) {fortInfo.Name} in {distance:0.##} m distance";
-                Logger.Write(name, LogLevel.None, ConsoleColor.Cyan);
+                session.EventDispatcher.Send(new GymWalkToTargetEvent()
+                {
+                    Name = fortInfo.Name,
+                    Distance = distance, 
+                    Latitude = fortInfo.Latitude, 
+                    Longitude = fortInfo.Longitude
+                });
 
                 await session.Navigation.Move(new GeoCoordinate(gym.Latitude, gym.Longitude),
                     async () =>
@@ -92,7 +104,6 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 if (fortDetails.Result == GetGymDetailsResponse.Types.Result.Success)
                 {
-                    var fortString = $"{ fortDetails.Name} | { fortDetails.GymState.FortData.OwnedByTeam } | { gym.GymPoints} | { fortDetails.GymState.Memberships.Count}";
                     if (fortDetails.Result == GetGymDetailsResponse.Types.Result.Success)
                     {
                         var player = session.Profile.PlayerData;
@@ -106,11 +117,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 player.Team = defaultTeam;
                             }
 
-                            //Logger.Write($"(TEAM) Joined the {player.Team} Team!", LogLevel.None, color);
-                            //Logger.Write($"The team color selection failed - Player:{teamResponse.PlayerData} - Setting:{player.Team}", LogLevel.Error);
-
-                            // Logger.Write($"The team was already set! - Player:{teamResponse.PlayerData} - Setting:{player.Team}", LogLevel.Error);
-
                             session.EventDispatcher.Send(new GymTeamJoinEvent()
                             {
                                 Team = defaultTeam,
@@ -122,22 +128,34 @@ namespace PoGo.NecroBot.Logic.Tasks
                         //if (!player.Team.TutorialState.Contains(TutorialState.GymTutorial))
                         //    await TutorialGeneric(TutorialState.GymTutorial, "GYM");
 
-                        fortString = $"{ fortDetails.Name} | { fortDetails.GymState.FortData.OwnedByTeam } | { gym.GymPoints} | { fortDetails.GymState.Memberships.Count}";
+
+                        session.EventDispatcher.Send(new GymDetailInfoEvent()
+                        {
+                            Team = fortDetails.GymState.FortData.OwnedByTeam,
+                            Point = gym.GymPoints,
+                            Name = fortDetails.Name,
+                        });
+
                         if (player.Team != TeamColor.Neutral && fortDetails.GymState.FortData.OwnedByTeam == player.Team)
                         {
-                            var pokemon = await GetDeployPokemon(session);
+                            var pokemon = await GetDeployablePokemon(session);
                             if (pokemon != null)
                             {
                                 var response = await session.Client.Fort.FortDeployPokemon(fortInfo.FortId, pokemon.Id);
                                 if (response.Result == FortDeployPokemonResponse.Types.Result.Success)
                                 {
-                                    Logger.Write($"(GYM) Deployed {pokemon.PokemonId.ToString()} to {fortDetails.Name}", LogLevel.None, ConsoleColor.Green);
+                                    session.EventDispatcher.Send(new GymDeployEvent()
+                                    {
+                                        PokemonId = pokemon.PokemonId,
+                                        Name = fortDetails.Name
+                                    });
+
                                 }
                             }
                         }
                         else
                         {
-                            Logger.Write($"(GYM) Wasted walk on {fortString}", LogLevel.None, ConsoleColor.Cyan);
+                            Logger.Write($"(GYM) Wasted walk on . this gym is defending by other color", LogLevel.None, ConsoleColor.Cyan);
                         }
                     }
                     else
@@ -154,24 +172,20 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
         }
 
-        private static async Task<POGOProtos.Data.PokemonData> GetDeployPokemon(ISession session)
+        private static async Task<POGOProtos.Data.PokemonData> GetDeployablePokemon(ISession session)
         {
-            var pokemonList = await session.Inventory.GetPokemons();
-            switch (_session.LogicSettings.GymPokemonToDeploy.ToLower())
-            {
-                case "iv":
-                    pokemonList = pokemonList.OrderByDescending(p => PokemonInfo.CalculatePokemonPerfection(p));
-                    break;
+            var pokemonList = (await session.Inventory.GetPokemons()).ToList();
+            pokemonList = pokemonList.OrderByDescending(p => p.Cp).Skip(Math.Min(pokemonList.Count - 1, session.LogicSettings.GymNumberOfTopPokemonToBeExcluded)).ToList();
 
-                case "cp":
-                    pokemonList = pokemonList.OrderByDescending(p => p.Cp);
-                    break;
-            }
-            if(_session.LogicSettings.GymPokemonToDeploy.ToLower() == "random")
+
+            if (pokemonList.Count == 1) return pokemonList.FirstOrDefault();
+            if (_session.LogicSettings.GymUseRandomPokemon)
             {
-                return pokemonList.ElementAt(new Random().Next(0, pokemonList.Count()));
+
+                return pokemonList.ElementAt(new Random().Next(0, pokemonList.Count - 1));
             }
-            var pokemon = pokemonList.FirstOrDefault();
+
+            var pokemon = pokemonList.FirstOrDefault(p => p.Cp <= _session.LogicSettings.GymMaxCPToDeploy && PokemonInfo.GetLevel(p) <= session.LogicSettings.GymMaxLevelToDeploy && string.IsNullOrEmpty(p.DeployedFortId));
             return pokemon;
         }
     }

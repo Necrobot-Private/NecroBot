@@ -23,11 +23,26 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
-        public string PokemonToDeploy = "random";
+        public int MaxCPToDeploy = 1000;
+
+        [DefaultValue(true)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
+        public int MaxLevelToDeploy = 16;
 
         [DefaultValue(60)]
         [Range(0, 999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
         public int VisitTimeout = 60;
+
+        [DefaultValue(false)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
+
+        public bool UseRandomPokemon = false;
+
+        [DefaultValue(10)]
+        [Range(0, 999)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
+
+        public int NumberOfTopPokemonToBeExcluded = 10;
     }
 }

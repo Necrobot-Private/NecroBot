@@ -405,6 +405,8 @@ namespace PoGo.NecroBot.Logic.Tasks
         private static async Task<Tuple<List<FortData>, List<FortData>>> GetPokeStops(ISession session)
         {
             List<FortData> mapObjects = await UpdateFortsData(session);
+            session.AddForts(mapObjects);
+
             if (!session.LogicSettings.UseGpxPathing)
             {
                 if (mapObjects.Count <= 0)
@@ -448,7 +450,6 @@ namespace PoGo.NecroBot.Logic.Tasks
         private static async Task<List<FortData>> UpdateFortsData(ISession session)
         {
             var mapObjects = await session.Client.Map.GetMapObjects();
-
             var pokeStops = mapObjects.Item1.MapCells.SelectMany(i => i.Forts)
                 .Where(
                     i =>

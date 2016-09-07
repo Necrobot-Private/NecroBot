@@ -143,6 +143,7 @@
     <Compile Include="Event\FortFailedEvent.cs" />
     <Compile Include="Event\FortUsedEvent.cs" />
     <Compile Include="Event\Gym\GymDeployEvent.cs" />
+    <Compile Include="Event\Gym\GymDetailInfoEvent.cs" />
     <Compile Include="Event\Gym\GymTeamJoinEvent.cs" />
     <Compile Include="Event\HumanWalkingEvent.cs" />
     <Compile Include="Event\HumanWalkSnipeEvent.cs" />

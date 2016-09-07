@@ -205,6 +205,11 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         public double GymMaxDistance => _settings.GymConfig.MaxDistance;
         public int GymVisitTimeout => _settings.GymConfig.VisitTimeout;
-        public string GymPokemonToDeploy => _settings.GymConfig.PokemonToDeploy;
+        public int GymMaxCPToDeploy => _settings.GymConfig.MaxCPToDeploy;
+        public int GymMaxLevelToDeploy => _settings.GymConfig.MaxLevelToDeploy;
+
+        public bool GymUseRandomPokemon => _settings.GymConfig.UseRandomPokemon;
+
+        public int GymNumberOfTopPokemonToBeExcluded => _settings.GymConfig.NumberOfTopPokemonToBeExcluded;
     }                         
 }
