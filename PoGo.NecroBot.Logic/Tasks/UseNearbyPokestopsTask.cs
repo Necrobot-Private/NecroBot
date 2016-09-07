@@ -113,7 +113,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     cancellationToken.ThrowIfCancellationRequested();
 
                     if (!session.LogicSettings.UseGoogleWalk && !session.LogicSettings.UseYoursWalk)
-                        session.EventDispatcher.Send(new FortTargetEvent { Name = fortInfo.Name, Distance = distance, Route = "NecroBot" });
+                        session.EventDispatcher.Send(new FortTargetEvent { Name = fortInfo.Name, Distance = distance, Route = "NecroBot2" });
                     else
                         BaseWalkStrategy.FortInfo = fortInfo;
 

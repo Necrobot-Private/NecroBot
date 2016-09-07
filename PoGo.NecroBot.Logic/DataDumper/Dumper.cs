@@ -21,7 +21,7 @@ namespace PoGo.NecroBot.Logic.DataDumper
         {
             var path = Path.Combine(session.LogicSettings.ProfilePath, "Dumps");
             var file = Path.Combine(path,
-                $"NecroBot-{filename}-{DateTime.Today.ToString("yyyy-MM-dd")}-{DateTime.Now.ToString("HH")}.{extension}");
+                $"NecroBot2-{filename}-{DateTime.Today.ToString("yyyy-MM-dd")}-{DateTime.Now.ToString("HH")}.{extension}");
             if (!Directory.Exists(path)) Directory.CreateDirectory(path);
 
             // Clears all contents of a file first if overwrite is true
@@ -51,7 +51,7 @@ namespace PoGo.NecroBot.Logic.DataDumper
         private static void DumpToFile(ISession session, string[] data, string filename, string extension = "csv")
         {
             var path = Path.Combine(session.LogicSettings.ProfilePath, "Dumps",
-                $"NecroBot-{filename}-{DateTime.Today.ToString("yyyy-MM-dd")}-{DateTime.Now.ToString("HH")}.{extension}");
+                $"NecroBot2-{filename}-{DateTime.Today.ToString("yyyy-MM-dd")}-{DateTime.Now.ToString("HH")}.{extension}");
 
             CultureInfo culture = CultureInfo.CurrentUICulture;
             string listSeparator = culture.TextInfo.ListSeparator;

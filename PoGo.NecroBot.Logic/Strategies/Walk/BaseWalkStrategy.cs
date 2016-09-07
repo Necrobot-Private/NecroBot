@@ -60,7 +60,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
 
             var distance = LocationUtils.CalculateDistanceInMeters(session.Client.CurrentLatitude,
                         session.Client.CurrentLongitude, FortInfo.Latitude, FortInfo.Longitude);
-            session.EventDispatcher.Send(new FortTargetEvent { Name = FortInfo.Name, Distance = distance, Route = "NecroBot" });
+            session.EventDispatcher.Send(new FortTargetEvent { Name = FortInfo.Name, Distance = distance, Route = "NecroBot2" });
             return new HumanStrategy(_client).Walk(targetLocation, functionExecutedWhileWalking, session, cancellationToken);
         }
 

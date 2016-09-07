@@ -9,7 +9,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PoGo.NecroBot.GUI</RootNamespace>
-    <AssemblyName>NecroBot.GUI</AssemblyName>
+    <AssemblyName>NecroBot2.GUI</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -40,7 +40,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resources\Icon.ico</ApplicationIcon>
+    <ApplicationIcon>Ico.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -145,6 +145,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\downloads-metro-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Ico.ico" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(SolutionName)'=='Awesomium.NET') Or ('$(SolutionName)'=='Awesomium.Windows')">

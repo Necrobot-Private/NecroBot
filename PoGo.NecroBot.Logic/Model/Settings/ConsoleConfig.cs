@@ -16,10 +16,10 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
         public bool StartupWelcomeDelay;
 
-        [DefaultValue(10)]
+        [DefaultValue(2)]
         [Range(0, 250)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 3)]
-        public int AmountOfPokemonToDisplayOnStart = 10;
+        public int AmountOfPokemonToDisplayOnStart = 2;
 
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 4)]
