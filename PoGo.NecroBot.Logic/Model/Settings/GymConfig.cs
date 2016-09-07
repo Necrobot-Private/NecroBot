@@ -19,7 +19,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         [DefaultValue("Yellow")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
-        public TeamColor DefaultTeam = TeamColor.Yellow;
+        public string DefaultTeam = "Yellow";
 
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]

@@ -31,7 +31,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         private static ISession _session;
         public static async Task Execute(ISession session, CancellationToken cancellationToken)
         {
-            if (!_session.LogicSettings.GymAllowed) return;
+            if (!session.LogicSettings.GymAllowed) return;
 
             _session = session;
             cancellationToken.ThrowIfCancellationRequested();

@@ -201,7 +201,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool HumanWalkingSnipeUsePogoLocationFeeder => _settings.HumanWalkSnipeConfig.UsePogoLocationFeeder;
 
         public bool GymAllowed => _settings.GymConfig.Enable;
-        public TeamColor GymDefaultTeam => _settings.GymConfig.DefaultTeam;
+        public TeamColor GymDefaultTeam =>(TeamColor)Enum.Parse(typeof(TeamColor), _settings.GymConfig.DefaultTeam);
 
         public double GymMaxDistance => _settings.GymConfig.MaxDistance;
         public int GymVisitTimeout => _settings.GymConfig.VisitTimeout;
