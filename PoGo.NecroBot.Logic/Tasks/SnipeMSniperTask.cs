@@ -127,7 +127,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 case SocketCmd.PokemonCount:
                     var x = PkmnLocations.GroupBy(p => p.PokemonId)
-                        .Select(s => new { PokemonId = s.First().PokemonId, Count = s.Count() })
+                        .Select(s => new PokemonCount { PokemonId = s.First().PokemonId, Count = s.Count() })
                         .ToList();
                     msocket.Send(JsonConvert.SerializeObject(x));
                     break;
