@@ -102,15 +102,15 @@ before_package:
 
 # scripts to run after build
 after_build:
-  - cmd: 'if exist C:\projects\necrobot\release rmdir C:\projects\necrobot\release /s /q'
-  - cmd: 'if not exist C:\projects\necrobot\release mkdir C:\projects\necrobot\release'
-  - cmd: 'if exist C:\projects\necrobot\release\necrobotgui rmdir C:\projects\necrobot\release\necrobotgui /s /q'
-  - cmd: 'if not exist C:\projects\necrobot\release\necrobotgui mkdir C:\projects\necrobot\release\necrobotgui'
-  - cmd: 'C:\projects\necrobot\PoGo.NecroBot.CLI\bin\x86\Release\GUI C:\projects\necrobot\release\necrobotgui /s /e'
-  - cmd: 'C:\projects\necrobot\release\necrobot rmdir C:\projects\necrobot\release\necrobot /s /q'
-  - cmd: 'if not exist C:\projects\necrobot\release\necrobot mkdir C:\projects\necrobot\release\necrobot'
-  - cmd: 'xcopy C:\projects\necrobot\PoGo.NecroBot.CLI\bin\x86\Release C:\projects\necrobot\release\necrobot /s /e'
-  - cmd: 'rmdir C:\projects\necrobot\release\necrobot\GUI /s /q'
+ - cmd: 'if exist C:\projects\necrobot\release rmdir C:\projects\necrobot\release /s /q'
+ - cmd: 'if not exist C:\projects\necrobot\release mkdir C:\projects\necrobot\release'
+ - cmd: 'if exist C:\projects\necrobot\release\necrobotgui rmdir C:\projects\necrobot\release\necrobotgui /s /q'
+ - cmd: 'if not exist C:\projects\necrobot\release\necrobotgui mkdir C:\projects\necrobot\release\necrobotgui'
+ - cmd: 'C:\projects\necrobot\PoGo.NecroBot.CLI\bin\x86\Release\GUI C:\projects\necrobot\release\necrobotgui /s /e'
+ - cmd: 'C:\projects\necrobot\release\necrobot rmdir C:\projects\necrobot\release\necrobot /s /q'
+ - cmd: 'if not exist C:\projects\necrobot\release\necrobot mkdir C:\projects\necrobot\release\necrobot'
+ - cmd: 'xcopy C:\projects\necrobot\PoGo.NecroBot.CLI\bin\x86\Release C:\projects\necrobot\release\necrobot /s /e'
+ - cmd: 'rmdir C:\projects\necrobot\release\necrobot\GUI /s /q'
   
 # to run your custom scripts instead of automatic MSBuild
 build_script:
