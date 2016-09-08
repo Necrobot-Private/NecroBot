@@ -20,23 +20,12 @@ skip_tags: false
 # Start builds on tags only (GitHub and BitBucket)
 skip_non_tags: false
 
-skip_commits:
-  files:
-  - .gitignore
-  - ./*.md
-  - .gitattributes
-  - KillSwitch.txt
-  - appveyor.yml
-  - build.bat
-  - ./*.gif
-  - ./.github
-
 # Including commits affecting specific files (GitHub only). More details here: /docs/appveyor-yml
 # only_commits:
-  # files:
-    # - PoGo.NecroBot.CLI/
-    # - PoGo.NecroBot.GUI/
-    # - PoGo.NecroBot.Logic/
+  files:
+    - PoGo.NecroBot.CLI/
+    - PoGo.NecroBot.GUI/
+    - PoGo.NecroBot.Logic/
 
 #	
 pull_requests:
