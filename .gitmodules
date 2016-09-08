@@ -2,7 +2,9 @@
 	path = FeroxRev
 	url = https://github.com/Necrobot-Private/PokemonGo.RocketAPI.git
 	branch = master
-[submodule "POGOProtos"]
-	path = POGOProtos
+[submodule "FeroxRev/PokemonGo.RocketAPI"]
+	path = FeroxRev/PokemonGo.RocketAPI
+	url = https://github.com/Necrobot-Private/PokemonGo.RocketAPI.git
+[submodule "POGOProtos/POGOProtos"]
+	path = POGOProtos/POGOProtos
 	url = https://github.com/Necrobot-Private/POGOProtos.git
-	branch = master
