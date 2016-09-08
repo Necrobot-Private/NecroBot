@@ -4,13 +4,10 @@
 
 # version format
 version: 0.9.8.{build}
-
-# you can use {branch} name in version format too
-# version: 1.0.{build}-{branch}
+# version: 0.9.8.{build}-{branch}
 
 # branches to build
 branches:
-  # whitelist
   only:
     - master
 
@@ -20,7 +17,7 @@ skip_tags: true
 # Start builds on tags only (GitHub and BitBucket)
 skip_non_tags: false
 
-# Including commits affecting specific files (GitHub only). More details here: /docs/appveyor-yml
+# Including commits affecting specific files (GitHub only).
 only_commits:
   files:
     - PoGo.NecroBot.CLI/
@@ -38,12 +35,8 @@ pull_requests:
 # Build worker image (VM template)
 image: Visual Studio 2015
 
-# scripts that are called at very beginning, before repo cloning
-init:
-  - git config --global core.autocrlf input
-
 # clone directory
-clone_folder: c:\projects\myproject
+clone_folder: c:\projects\necrobot
 
 # fetch repository as zip archive
 shallow_clone: false                 # default is false
@@ -75,46 +68,29 @@ assembly_info:
 # build platform, i.e. x86, x64, Any CPU. This setting is optional.
 platform: x86
 
-# to add several platforms to build matrix:
-#platform:
-#  - x86
-#  - Any CPU
-
 # build Configuration, i.e. Debug, Release, etc.
 configuration: Release
 
-# to add several configurations to build matrix:
-#configuration:
-#  - Debug
-#  - Release
-
 build:
   # MSBuild verbosity level
-  verbosity: minimal  #quiet|minimal|normal|detailed
-
+  verbosity: minimal
 
 # scripts to run before build
 before_build:
   - cmd: nuget restore
 
-# scripts to run *after* solution is built and *before* automatic packaging occurs (web apps, NuGet packages, Azure Cloud Services)
-before_package:
-
 # scripts to run after build
 after_build:
- - cmd: 'if exist C:\projects\necrobot\release rmdir C:\projects\necrobot\release /s /q'
- - cmd: 'if not exist C:\projects\necrobot\release mkdir C:\projects\necrobot\release'
- - cmd: 'if exist C:\projects\necrobot\release\necrobotgui rmdir C:\projects\necrobot\release\necrobotgui /s /q'
- - cmd: 'if not exist C:\projects\necrobot\release\necrobotgui mkdir C:\projects\necrobot\release\necrobotgui'
- - cmd: 'C:\projects\necrobot\PoGo.NecroBot.CLI\bin\x86\Release\GUI C:\projects\necrobot\release\necrobotgui /s /e'
- - cmd: 'C:\projects\necrobot\release\necrobot rmdir C:\projects\necrobot\release\necrobot /s /q'
- - cmd: 'if not exist C:\projects\necrobot\release\necrobot mkdir C:\projects\necrobot\release\necrobot'
- - cmd: 'xcopy C:\projects\necrobot\PoGo.NecroBot.CLI\bin\x86\Release C:\projects\necrobot\release\necrobot /s /e'
- - cmd: 'rmdir C:\projects\necrobot\release\necrobot\GUI /s /q'
+  - cmd: if exist C:\projects\necrobot\release rmdir C:\projects\necrobot\release /s /q
+  - cmd: if not exist C:\projects\necrobot\release mkdir C:\projects\necrobot\release
+  - cmd: if exist C:\projects\necrobot\release\necrobotgui rmdir C:\projects\necrobot\release\necrobotgui /s /q
+  - cmd: if not exist C:\projects\necrobot\release\necrobotgui mkdir C:\projects\necrobot\release\necrobotgui
+  - cmd: C:\projects\necrobot\PoGo.NecroBot.CLI\bin\x86\Release\GUI C:\projects\necrobot\release\necrobotgui /s /e
+  - cmd: C:\projects\necrobot\release\necrobot rmdir C:\projects\necrobot\release\necrobot /s /q
+  - cmd: if not exist C:\projects\necrobot\release\necrobot mkdir C:\projects\necrobot\release\necrobot
+  - cmd: xcopy C:\projects\necrobot\PoGo.NecroBot.CLI\bin\x86\Release C:\projects\necrobot\release\necrobot /s /e
+  - cmd: rmdir C:\projects\necrobot\release\necrobot\GUI /s /q
   
-# to run your custom scripts instead of automatic MSBuild
-build_script:
-
 # to disable automatic builds
 #build: off
 
@@ -141,10 +117,7 @@ artifacts:
 #     deployment configuration    #
 #---------------------------------#
 
-# providers: Local, FTP, WebDeploy, AzureCS, AzureBlob, S3, NuGet, Environment
-# provider names are case-sensitive!
 deploy:
-
   # Deploy to GitHub Releases
   - provider: GitHub
     tag: v$(appveyor_build_version)
@@ -156,29 +129,7 @@ deploy:
       prerelease: false
       force_update: false
       on:
-        branch: master                # release from master branch only
-
-# scripts to run before deployment
-before_deploy:
-
-# scripts to run after deployment
-after_deploy:
-
-# to run your custom scripts instead of provider deployments
-deploy_script:
+        branch: master
 
 # to disable deployment
 #deploy: off
-
-#---------------------------------#
-#        global handlers          #
-#---------------------------------#
-
-# on successful build
-on_success:
-
-# on build failure
-on_failure:
-
-# after build failure or success
-on_finish:
