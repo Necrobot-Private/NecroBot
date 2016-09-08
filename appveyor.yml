@@ -186,9 +186,10 @@ deploy_script:
 
 # on successful build
 on_success:
+  - rvm gemset update
   - gem install rubygems-update
   - update_rubygems
-  - gem install github_changelog_generator --user-install
+  - echo 'n' | gem install github_changelog_generator
   - github_changelog_generator --token '$($env:access_token)'
   - git config --global credential.helper store
   - ps: Add-Content '$env:USERPROFILE\.git-credentials' 'https://$($env:access_token):x-oauth-basic@github.com`n'
