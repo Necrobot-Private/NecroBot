@@ -22,14 +22,16 @@ skip_non_tags: false
 
 skip_commits:
   files:
-  - '.gitignore'
-  - './*.md'
-  - '.gitattributes'
-  - 'KillSwitch.txt'
-  - 'appveyor.yml'
-  - 'build.bat'
-  - './*.gif'
-  - './.github'
+  - .gitignore
+  - '**/*.md'
+  - '*.md'
+  - .gitattributes
+  - KillSwitch.txt
+  - appveyor.yml
+  - build.bat
+  - '**/*.gif'
+  - '*.gif'
+  - '.github/'
 
 # Including commits affecting specific files (GitHub only). More details here: /docs/appveyor-yml
 # only_commits:
