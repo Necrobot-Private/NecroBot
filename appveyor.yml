@@ -105,22 +105,29 @@ after_build:
 - cmd: >-
     if exist "C:\projects\necrobot\release" rmdir "C:\projects\necrobot\release" /s /q
 
+
     if not exist "C:\projects\necrobot\release" mkdir "C:\projects\necrobot\release"
+
 
     if exist "C:\projects\necrobot\release\necrobotgui" rmdir "C:\projects\necrobot\release\necrobotgui" /s /q
 
+
     if not exist "C:\projects\necrobot\release\necrobotgui" mkdir "C:\projects\necrobot\release\necrobotgui"
+
 
     xcopy "C:\projects\necrobot\PoGo.NecroBot.CLI\bin\x86\Release\GUI" "C:\projects\necrobot\release\necrobotgui" /s /e
 
+
     if exist "C:\projects\necrobot\release\necrobot" rmdir "C:\projects\necrobot\release\necrobot" /s /q
+
 
     if not exist "C:\projects\necrobot\release\necrobot" mkdir "C:\projects\necrobot\release\necrobot"
 
+
     xcopy "C:\projects\necrobot\PoGo.NecroBot.CLI\bin\x86\Release" "C:\projects\necrobot\release\necrobot" /s /e
 
-    rmdir "C:\projects\necrobot\release\necrobot\GUI" /s /q
 
+    rmdir "C:\projects\necrobot\release\necrobot\GUI" /s /q
 # to run your custom scripts instead of automatic MSBuild
 build_script:
 
