@@ -1,6 +1,8 @@
 # Change Log
 
 ## [v0.9.8.5](https://github.com/Necrobot-Private/NecroBot/tree/v0.9.8.5) ("09/08/2016")
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/'v0.9.8.5'...v0.9.8.5)
+
 **Closed issues:**
 
 - build.bat [\#29](https://github.com/Necrobot-Private/NecroBot/issues/29)
