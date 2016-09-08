@@ -59,7 +59,6 @@ environment:
     secure: BTFs4sc8XE9MG1VhIOZPt6Bbwfq3967JxYsRuNpxTl4=
   user_name:
     secure: pxYfjvhdqgrZKh6Yy3V7Cg==
-
 # build cache to preserve files/folders between builds
 cache:
   - packages -> **\packages.config  # preserve packages directory in the root of build folder but will reset it if packages.config is modified
@@ -190,9 +189,9 @@ on_success:
   - gem install github_changelog_generator
   - github_changelog_generator
   - git config --global credential.helper store
-  - ps: Add-Content '$env:USERPROFILE\.git-credentials' 'https://$($env:access_token):x-oauth-basic@github.com`n'
-  - git config --global user.email '$($env:user_email)'
-  - git config --global user.name '$($env:user_name)'
+  - ps: Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n"
+  - git config --global user.email "$($env:user_email)"
+  - git config --global user.name "$($env:user_name)"
   - git commit -m 'update changelog.md' 'CHANGELOG.md'
   - git push master origin
 
