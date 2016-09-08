@@ -191,16 +191,15 @@ on_success:
   - gem install github_changelog_generator
   - SET CHANGELOG_GITHUB_TOKEN=%access_token%
   - github_changelog_generator
-  - ps: |
-  git checkout "$env:APPVEYOR_REPO_BRANCH"
-  git config --global core.autocrlf true
-  git config --global credential.helper store
-  Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n"
-  git remote add neworigin "$env:github_repo"
-  git config --global user.email "$env:github_email"
-  git config --global user.name "$env:github_user"
-  git commit -m "update changelog.md" "CHANGELOG.md"
-  git push neworigin "$env:APPVEYOR_REPO_BRANCH"
+  - git checkout "$env:APPVEYOR_REPO_BRANCH"
+  - git config --global core.autocrlf true
+  - git config --global credential.helper store
+  - ps: Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n"
+  - git remote add neworigin "$env:github_repo"
+  - git config --global user.email "$env:github_email"
+  - git config --global user.name "$env:github_user"
+  - git commit -m "update changelog.md" "CHANGELOG.md"
+  - git push neworigin "$env:APPVEYOR_REPO_BRANCH"
 
 # on build failure
 on_failure:
