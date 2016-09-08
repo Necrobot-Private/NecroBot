@@ -79,7 +79,7 @@ cache:
 
 # scripts that run after cloning repository
 install:
-  - git checkout -b appveyor
+  - git checkout -b appveyor %APPVEYOR_REPO_BRANCH%
   - git submodule update --init --recursive
 
 # enable patching of AssemblyInfo.* files
@@ -204,7 +204,10 @@ on_success:
   - SET CHANGELOG_GITHUB_TOKEN=%access_token%
   - github_changelog_generator
   - git commit -m "update changelog.md" "CHANGELOG.md"
-  - git push origin appveyor
+  - git checkout %APPVEYOR_REPO_BRANCH%
+  - git merge appveyor
+  - git branch -d appveyor
+  - git push origin %APPVEYOR_REPO_BRANCH%
 
 # on build failure
 on_failure:
