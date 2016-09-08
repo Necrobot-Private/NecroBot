@@ -29,7 +29,7 @@ skip_commits:
   - appveyor.yml
   - build.bat
   - ./*.gif
-  - /.github
+  - ./.github
 
 # Including commits affecting specific files (GitHub only). More details here: /docs/appveyor-yml
 # only_commits:
