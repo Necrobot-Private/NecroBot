@@ -60,7 +60,7 @@ init:
   - ps: git config --global user.email "$env:github_email"
   - ps: git config --global user.name "$env:github_user"
   - ps: Set-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n" 
-  - ps: $env:APPVEYOR_REPO_TAG_NAME=$env:APPVEYOR_REPO_TAG_NAME.Replace("v", "")
+  - ps: if ($env:APPVEYOR_REPO_TAG -eq "true"){$env:APPVEYOR_REPO_TAG_NAME=$env:APPVEYOR_REPO_TAG_NAME.Replace("v", "")} else {$env:APPVEYOR_REPO_TAG_NAME=$env:APPVEYOR_BUILD_VERSION}
 
 # clone directory
 clone_folder: c:\projects\necrobot
