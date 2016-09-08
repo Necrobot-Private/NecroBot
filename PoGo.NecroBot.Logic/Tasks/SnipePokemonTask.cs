@@ -429,6 +429,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 });
 
                 var mapObjects = session.Client.Map.GetMapObjects().Result;
+                session.AddForts(mapObjects.Item1.MapCells.SelectMany(p => p.Forts).ToList());
                 catchablePokemon =
                     mapObjects.Item1.MapCells.SelectMany(q => q.CatchablePokemons)
                         .Where(q => pokemonIds.Contains(q.PokemonId))

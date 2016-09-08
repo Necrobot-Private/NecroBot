@@ -70,9 +70,10 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var pokestopsTuple = await GetPokeStops(session);
-            _pokestopList = pokestopsTuple.Item2;
+            var mapObjectTupe = await GetPokeStops(session);
+            _pokestopList = mapObjectTupe.Item2;
 
+            await VisitNearByGymTask.UpdateGymList(session, mapObjectTupe.Item2);
             while (_pokestopList.Any())
             {
                 cancellationToken.ThrowIfCancellationRequested();
@@ -144,6 +145,9 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 if (session.LogicSettings.SnipeAtPokestops || session.LogicSettings.UseSnipeLocationServer)
                     await SnipePokemonTask.Execute(session, cancellationToken);
+                //samuraitruong: since we has duplication code for gym. I temporary comment this line to disable my feature. keep the code as reference, will remove later.
+
+                //await VisitNearByGymTask.Execute(session, cancellationToken);
 
                 if (session.LogicSettings.EnableHumanWalkingSnipe)
                 {
@@ -413,10 +417,12 @@ namespace PoGo.NecroBot.Logic.Tasks
         //For non GPX pathing, it returns all pokestops in range.
         private static async Task<Tuple<List<FortData>, List<FortData>>> GetPokeStops(ISession session)
         {
-            List<FortData> pokeStops = await UpdateFortsData(session);
+            List<FortData> mapObjects = await UpdateFortsData(session);
+            session.AddForts(mapObjects);
+
             if (!session.LogicSettings.UseGpxPathing)
             {
-                if (pokeStops.Count <= 0)
+                if (mapObjects.Count <= 0)
                 {
                     // only send this for non GPX because otherwise we generate false positives
                     session.EventDispatcher.Send(new WarnEvent
@@ -425,36 +431,44 @@ namespace PoGo.NecroBot.Logic.Tasks
                     });
                 }
 
-                session.EventDispatcher.Send(new PokeStopListEvent { Forts = pokeStops });
-                return Tuple.Create(pokeStops, pokeStops);
+                var pokeStops = mapObjects.Where(p => p.Type == FortType.Checkpoint).ToList();
+                session.EventDispatcher.Send(new PokeStopListEvent { Forts = mapObjects });
+
+                var gyms = mapObjects.Where(p => p.Type == FortType.Gym).ToList();
+                //   session.EventDispatcher.Send(new PokeStopListEvent { Forts = mapObjects });
+                return Tuple.Create(pokeStops, gyms);
             }
 
-            if (pokeStops.Count > 0)
+            if (mapObjects.Count > 0)
             {
                 // only send when there are stops for GPX because otherwise we send empty arrays often
-                session.EventDispatcher.Send(new PokeStopListEvent { Forts = pokeStops });
+                session.EventDispatcher.Send(new PokeStopListEvent { Forts = mapObjects });
             }
             // Wasn't sure how to make this pretty. Edit as needed.
             return Tuple.Create(
-                pokeStops,
-                pokeStops.Where(
-                    i =>
+                mapObjects.Where(
+                    i =>  i.Type == FortType.Checkpoint && 
                         ( // Make sure PokeStop is within 40 meters or else it is pointless to hit it
                             LocationUtils.CalculateDistanceInMeters(
                                 session.Client.CurrentLatitude, session.Client.CurrentLongitude,
                                 i.Latitude, i.Longitude) < 40) ||
                         session.LogicSettings.MaxTravelDistanceInMeters == 0
-                ).ToList());
+                ).ToList(),
+                mapObjects.Where(p=>p.Type == FortType.Gym && LocationUtils.CalculateDistanceInMeters(
+                                session.Client.CurrentLatitude, session.Client.CurrentLongitude,
+                                p.Latitude, p.Longitude) < 40).ToList()
+                );
         }
 
         private static async Task<List<FortData>> UpdateFortsData(ISession session)
         {
             var mapObjects = await session.Client.Map.GetMapObjects();
+            session.AddForts(mapObjects.Item1.MapCells.SelectMany(p => p.Forts).ToList());
 
             var pokeStops = mapObjects.Item1.MapCells.SelectMany(i => i.Forts)
                 .Where(
                     i =>
-                        i.Type == FortType.Checkpoint &&
+                        (i.Type == FortType.Checkpoint || i.Type == FortType.Gym) &&
                         i.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime() &&
                         (
                             LocationUtils.CalculateDistanceInMeters(
