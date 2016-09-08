@@ -94,7 +94,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 if (session.LogicSettings.EnableHumanWalkingSnipe)
                 {
-                    await HumanWalkSnipeTask.Execute(session, cancellationToken);
+                    await HumanWalkSnipeTask.Execute(session, cancellationToken, pokeStop);
                 }
                 pokeStop.CooldownCompleteTimestampMs = DateTime.UtcNow.ToUnixTime() + 5 * 60 * 1000; //5 minutes to cooldown
                 session.AddForts(new List<FortData>() { pokeStop }); //replace object in memory.
@@ -336,8 +336,6 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         public static async Task SpinPokestopNearBy(ISession session, CancellationToken cancellationToken, FortData destinationFort = null)
         {
-            
-
             var allForts = session.Forts.Where(p => p.Type == FortType.Checkpoint).ToList();
 
             if (allForts.Count > 1)
@@ -362,7 +360,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                     foreach (var pokeStop in spinablePokestops)
                     {
                         var fortInfo = await session.Client.Fort.GetFort(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude);
-                        await DoActionAtPokeStop(session, cancellationToken, pokeStop, fortInfo);
+                        await DoActionAtPokeStop(session, cancellationToken, pokeStop, fortInfo, false); //not try to spin multiple time
+                        
                         pokeStop.CooldownCompleteTimestampMs = DateTime.UtcNow.ToUnixTime() + 5 * 60 * 1000;
                         spinedPokeStops.Add(pokeStop);
                         if (spinablePokestops.Count > 1)
@@ -375,7 +374,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
         }
 
-        private static async Task DoActionAtPokeStop(ISession session, CancellationToken cancellationToken,FortData pokeStop, FortDetailsResponse fortInfo)
+        private static async Task DoActionAtPokeStop(ISession session, CancellationToken cancellationToken,FortData pokeStop, FortDetailsResponse fortInfo, bool doNotTrySpin = false)
         {
             //Catch Lure Pokemon
             if (pokeStop.LureInfo != null)
@@ -385,7 +384,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 await CatchLurePokemonsTask.Execute(session, pokeStop, cancellationToken);
             }
 
-            await FarmPokestop(session, pokeStop, fortInfo, cancellationToken);
+            await FarmPokestop(session, pokeStop, fortInfo, cancellationToken, doNotTrySpin);
 
             if (++_stopsHit >= _storeRi) //TODO: OR item/pokemon bag is full //check stopsHit against storeRI random without dividing.
             {

@@ -137,7 +137,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             .ToList();
         }
 
-        public static async Task Execute(ISession session, CancellationToken cancellationToken, Func<double, double, Task> actionWhenWalking = null, Func<Task> afterCatchFunc = null)
+        public static async Task Execute(ISession session, CancellationToken cancellationToken, FortData originalPokestop)
         {
             pokestopCount++;
             pokestopCount = pokestopCount % 3;
@@ -223,16 +223,28 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 if(session.LogicSettings.UseGpxPathing)
                 {
-                    await WalkingBackGPXPath(session, cancellationToken);
+                    await WalkingBackGPXPath(session, cancellationToken,originalPokestop);
                 }
                 else
                 await UpdateFarmingPokestop(session, cancellationToken);
             }
         }
 
-        private static async Task WalkingBackGPXPath(ISession session, CancellationToken cancellationToken)
+        private static async Task WalkingBackGPXPath(ISession session, CancellationToken cancellationToken, FortData originalPokestop)
         {
-            throw new NotImplementedException();
+
+            var destination = new GeoCoordinate(session.Client.CurrentLatitude, session.Client.CurrentLongitude,
+                         LocationUtils.getElevation(session, originalPokestop.Latitude, originalPokestop.Longitude));
+
+
+            await session.Navigation.Move(destination,
+               async () =>
+               {
+                   await CatchNearbyPokemonsTask.Execute(session, cancellationToken);
+                   await UseNearbyPokestopsTask.SpinPokestopNearBy(session, cancellationToken);
+               },
+               session,
+               cancellationToken);
         }
 
         private static async Task UpdateFarmingPokestop(ISession session, CancellationToken cancellationToken)
@@ -275,7 +287,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (allowSpinPokeStop)
             {
                 //looking for neaby pokestop. spin it
-                await UseNearbyPokestopsTask.SpinPokestopNearBy(session, cancellationToken);
+                await UseNearbyPokestopsTask.SpinPokestopNearBy(session, cancellationToken, null);
             }
         }
         static void CalculateDistanceAndEstTime(SnipePokemonInfo p)
