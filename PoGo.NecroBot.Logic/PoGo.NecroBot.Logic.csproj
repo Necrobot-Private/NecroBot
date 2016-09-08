@@ -66,7 +66,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Google.Protobuf, Version=3.0.0.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)\packages\Google.Protobuf.3.0.0-beta4\lib\net45\Google.Protobuf.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\Google.Protobuf.3.0.0\lib\net45\Google.Protobuf.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="LRUCache, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -78,7 +78,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json.Schema, Version=2.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)\packages\Newtonsoft.Json.Schema.2.0.5\lib\net45\Newtonsoft.Json.Schema.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\Newtonsoft.Json.Schema.2.0.6\lib\net45\Newtonsoft.Json.Schema.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="S2Geometry, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -292,6 +292,7 @@
     <Compile Include="Tasks\Login.cs" />
     <Compile Include="Tasks\RecycleItemsTask.cs" />
     <Compile Include="Tasks\RenamePokemonTask.cs" />
+    <Compile Include="Tasks\SetMoveToTargetTask.cs" />
     <Compile Include="Tasks\SnipeMSniperTask.cs" />
     <Compile Include="Tasks\SnipePokemonTask.cs" />
     <Compile Include="Tasks\TransferDuplicatePokemonTask.cs" />
@@ -303,7 +304,6 @@
     <Compile Include="Tasks\UseIncenseConstantlyTask.cs" />
     <Compile Include="Tasks\UseIncubatorsTask.cs" />
     <Compile Include="Tasks\UseLuckyEggConstantlyTask.cs" />
-    <Compile Include="Tasks\SetMoveToTargetTask.cs" />
     <Compile Include="Tasks\UseNearbyPokestopsTask.cs" />
     <Compile Include="Utils\DelayingUtils.cs" />
     <Compile Include="Utils\DeviceInfoHelper.cs" />

@@ -36,7 +36,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
             var yoursWalk = YoursWalk.Get(yoursResult);
             session.EventDispatcher.Send(new FortTargetEvent { Name = FortInfo.Name, Distance = yoursWalk.Distance, Route = "YoursWalk" });
             List<GeoCoordinate> points = yoursWalk.Waypoints;
-            return await DoWalk(points, session, functionExecutedWhileWalking, sourceLocation, targetLocation, cancellationToken);
+            return await DoWalk(points, session, functionExecutedWhileWalking, sourceLocation, targetLocation, cancellationToken, walkSpeed);
         }
 
         private void GetYoursInstance(ISession session)
