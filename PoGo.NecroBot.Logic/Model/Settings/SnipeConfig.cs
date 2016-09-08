@@ -41,7 +41,6 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 8)]
-        public bool GetSniperInfoFromSkiplagged;
 
         [DefaultValue(20)]
         [Range(0, 999)]
