@@ -24,35 +24,40 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static async Task CheckMSniperLocation(ISession session, CancellationToken cancellationToken)
         {
             var pth = Path.Combine(session.LogicSettings.ProfilePath, "SnipeMS.json");
-
             try
             {
-                  if (!File.Exists(pth))
-                    return;
-
-                if (!await SnipePokemonTask.CheckPokeballsToSnipe(session.LogicSettings.MinPokeballsWhileSnipe + 1, session, cancellationToken))
-                    return;
-
-                var currentLatitude = session.Client.CurrentLatitude;
-                var currentLongitude = session.Client.CurrentLongitude;
-
-                var sr = new StreamReader(pth, Encoding.UTF8);
-                var jsn = sr.ReadToEnd();
-                sr.Close();
-                var mSniperLocation = JsonConvert.DeserializeObject<List<MSniperInfo>>(jsn);
-                File.Delete(pth);
-                foreach (var location in mSniperLocation)
+                if (session.LogicSettings.CatchPokemon == true &&
+                    session.LogicSettings.SnipeAtPokestops == false 
+                    )
                 {
-                    session.EventDispatcher.Send(new SnipeScanEvent
-                    {
-                        Bounds = new Location(location.Latitude, location.Longitude),
-                        PokemonId = location.Id,
-                        Source = "MSniper"
-                    });
 
-                    await OwnSnipe(session, location.Id, location.Latitude, location.Longitude, cancellationToken);
+                    if (!File.Exists(pth))
+                        return;
+
+                    if (!await SnipePokemonTask.CheckPokeballsToSnipe(session.LogicSettings.MinPokeballsWhileSnipe + 1, session, cancellationToken))
+                        return;
+
+                    var currentLatitude = session.Client.CurrentLatitude;
+                    var currentLongitude = session.Client.CurrentLongitude;
+
+                    var sr = new StreamReader(pth, Encoding.UTF8);
+                    var jsn = sr.ReadToEnd();
+                    sr.Close();
+                    var mSniperLocation = JsonConvert.DeserializeObject<List<MSniperInfo>>(jsn);
+                    File.Delete(pth);
+                    foreach (var location in mSniperLocation)
+                    {
+                        session.EventDispatcher.Send(new SnipeScanEvent
+                        {
+                            Bounds = new Location(location.Latitude, location.Longitude),
+                            PokemonId = location.Id,
+                            Source = "MSniper"
+                        });
+
+                        await OwnSnipe(session, location.Id, location.Latitude, location.Longitude, cancellationToken);
+                    }
+                    await LocationUtils.UpdatePlayerLocationWithAltitude(session, new GeoCoordinate(currentLatitude, currentLongitude, session.Client.CurrentAltitude));
                 }
-                await LocationUtils.UpdatePlayerLocationWithAltitude(session, new GeoCoordinate(currentLatitude, currentLongitude, session.Client.CurrentAltitude));
             }
             catch (Exception ex)
             {

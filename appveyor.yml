@@ -1,0 +1,56 @@
+version: 0.9.8.{build}
+branches:
+  only:
+  - master
+skip_tags: true
+configuration: Release
+platform: x86
+assembly_info:
+  patch: true
+  file: '**\AssemblyInfo.*'
+  assembly_version: '{version}'
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}'
+before_build:
+- cmd: nuget restore
+build:
+  verbosity: minimal
+after_build:
+- cmd: >-
+    if exist "C:\projects\necrobot\release" rmdir "C:\projects\necrobot\release" /s /q
+
+
+    if not exist "C:\projects\necrobot\release" mkdir "C:\projects\necrobot\release"
+
+
+    if exist "C:\projects\necrobot\release\necrobotgui" rmdir "C:\projects\necrobot\release\necrobotgui" /s /q
+
+
+    if not exist "C:\projects\necrobot\release\necrobotgui" mkdir "C:\projects\necrobot\release\necrobotgui"
+
+
+    xcopy "C:\projects\necrobot\PoGo.NecroBot.CLI\bin\x86\Release\GUI" "C:\projects\necrobot\release\necrobotgui" /s /e
+
+
+    if exist "C:\projects\necrobot\release\necrobot" rmdir "C:\projects\necrobot\release\necrobot" /s /q
+
+
+    if not exist "C:\projects\necrobot\release\necrobot" mkdir "C:\projects\necrobot\release\necrobot"
+
+
+    xcopy "C:\projects\necrobot\PoGo.NecroBot.CLI\bin\x86\Release" "C:\projects\necrobot\release\necrobot" /s /e
+
+
+    rmdir "C:\projects\necrobot\release\necrobot\GUI" /s /q
+artifacts:
+- path: '\release\necrobotgui'
+  name: NecroBot2.GUI
+- path: '\release\necrobot'
+  name: NecroBot2
+deploy:
+- provider: GitHub
+  tag: v$(appveyor_build_version)
+  release: NecroBot2 v$(appveyor_build_version)
+  auth_token:
+    secure: 6PJ3cwd4I0DRJPv7w8iFAP6iPp94a4omr0Ajl0exmZ3qEnGLdqDwihlgFBFNBHWU
+  artifact: NecroBot2;NecroBot2.GUI

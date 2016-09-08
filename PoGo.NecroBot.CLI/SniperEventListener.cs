@@ -2,14 +2,8 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.Event;
-using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.State;
-using POGOProtos.Enums;
-using POGOProtos.Inventory.Item;
-using POGOProtos.Networking.Responses;
 #endregion
 
 namespace PoGo.NecroBot.CLI
@@ -40,8 +34,10 @@ namespace PoGo.NecroBot.CLI
 
             try
             { HandleEvent(eve, session); }
-            catch
-            { }
+            catch (Exception)
+            {
+                // ignored
+            }
         }
     }
 }

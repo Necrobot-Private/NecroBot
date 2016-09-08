@@ -29,9 +29,6 @@ namespace PoGo.NecroBot.Logic.State
         public const string LatestReleaseApi =
             "https://api.github.com/repos/Necrobot-Private/NecroBot/releases/latest";
 
-        private const string LatestRelease =
-            "https://github.com/Necrobot-Private/NecroBot/releases";
-
         public static Version RemoteVersion;
 
         public async Task<IState> Execute(ISession session, CancellationToken cancellationToken)
@@ -60,14 +57,15 @@ namespace PoGo.NecroBot.Logic.State
                         session.Translation.GetTranslation(TranslationString.GotUpToDateVersion, Assembly.GetExecutingAssembly().GetName().Version.ToString(3))
                 });
                 return new LoginState();
-            } else if ( !autoUpdate )
+            }
+            if ( !autoUpdate )
             {
                 Logger.Write( "New update detected, would you like to update? Y/N", LogLevel.Update );
 
-                bool boolBreak = false;
+                var boolBreak = false;
                 while( !boolBreak )
                 {
-                    string strInput = Console.ReadLine().ToLower();
+                    var strInput = Console.ReadLine().ToLower();
 
                     switch( strInput )
                     {
@@ -107,7 +105,7 @@ namespace PoGo.NecroBot.Logic.State
                 Message = session.Translation.GetTranslation(TranslationString.FinishedDownloadingRelease)
             });
 
-            if (!UnpackFile(downloadFilePath, tempPath))
+            if (!UnpackFile(downloadFilePath, extractedDir))
                 return new LoginState();
 
             session.EventDispatcher.Send(new UpdateEvent
@@ -124,7 +122,7 @@ namespace PoGo.NecroBot.Logic.State
             });
 
             if( TransferConfig( baseDir, session ) )
-                Utils.ErrorHandler.ThrowFatalError( session.Translation.GetTranslation( TranslationString.FinishedTransferringConfig ), 5, LogLevel.Update );
+                ErrorHandler.ThrowFatalError( session.Translation.GetTranslation( TranslationString.FinishedTransferringConfig ), 5, LogLevel.Update );
 
             Process.Start(Assembly.GetEntryAssembly().Location);
             Environment.Exit(-1);
@@ -283,11 +281,11 @@ namespace PoGo.NecroBot.Logic.State
                 foreach( JProperty prop in lstNewOptions )
                     Logger.Write( prop.ToString(), LogLevel.New );
 
-                Logger.Write( "Would you like to open the Config file? Y/N", LogLevel.Info );
+                Logger.Write( "Would you like to open the Config file? Y/N" );
                 
                 while( true )
                 {
-                    string strInput = Console.ReadLine().ToLower();
+                    var strInput = Console.ReadLine().ToLower();
 
                     switch( strInput )
                     {
@@ -295,7 +293,7 @@ namespace PoGo.NecroBot.Logic.State
                             Process.Start( Path.Combine( configDir, "config.json" ) );
                             return true;
                         case "n":
-                            Utils.ErrorHandler.ThrowFatalError( session.Translation.GetTranslation( TranslationString.FinishedTransferringConfig ), 5, LogLevel.Update, true );
+                            ErrorHandler.ThrowFatalError( session.Translation.GetTranslation( TranslationString.FinishedTransferringConfig ), 5, LogLevel.Update, true );
                             return true;
                         default:
                             Logger.Write( session.Translation.GetTranslation( TranslationString.PromptError, "y", "n" ), LogLevel.Error );
@@ -312,20 +310,19 @@ namespace PoGo.NecroBot.Logic.State
             try
             {
                 // Figuring out the best method to detect new settings \\
-                List<JProperty> lstNewOptions = new List<JProperty>();
+                var lstNewOptions = new List<JProperty>();
                 
                 foreach( var newProperty in newFile.Properties() )
                 {
-                    bool boolFound = false;
+                    var boolFound = false;
                     
                     foreach( var oldProperty in oldFile.Properties() )
                     {
-                        if( newProperty.Name.Equals( oldProperty.Name ) )
-                        {
-                            boolFound = true;
-                            newFile[ newProperty.Name ] = oldProperty.Value;
-                            break;
-                        }
+                        if (!newProperty.Name.Equals(oldProperty.Name))
+                            continue;
+                        boolFound = true;
+                        newFile[ newProperty.Name ] = oldProperty.Value;
+                        break;
                     }
 
                     if( !boolFound )

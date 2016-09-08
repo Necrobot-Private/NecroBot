@@ -32,13 +32,13 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
 
             if (googleResult == null || googleResult.Directions.status.Equals("OVER_QUERY_LIMIT"))
             {
-                return await RedirectToNextFallbackStrategy(session.LogicSettings, targetLocation, functionExecutedWhileWalking, session, cancellationToken);
+                return await RedirectToNextFallbackStrategy(session.LogicSettings, targetLocation, functionExecutedWhileWalking, session, cancellationToken, walkSpeed);
             }
 
             var googleWalk = GoogleWalk.Get(googleResult);
             session.EventDispatcher.Send(new FortTargetEvent { Name = FortInfo.Name, Distance = googleResult.GetDistance(), Route = "GoogleWalk" });
             List <GeoCoordinate> points = googleWalk.Waypoints;
-            return await DoWalk(points, session, functionExecutedWhileWalking, currentLocation, targetLocation, cancellationToken);
+            return await DoWalk(points, session, functionExecutedWhileWalking, currentLocation, targetLocation, cancellationToken, walkSpeed);
         }
 
         private void GetGoogleInstance(ISession session)
