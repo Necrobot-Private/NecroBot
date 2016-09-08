@@ -191,7 +191,7 @@ on_success:
   - gem install github_changelog_generator
   - SET CHANGELOG_GITHUB_TOKEN=%access_token%
   - github_changelog_generator
-  - git checkout "$env:APPVEYOR_REPO_BRANCH"
+  - git checkout "$($env:APPVEYOR_REPO_BRANCH)"
   - git config --global core.autocrlf true
   - git config --global credential.helper store
   - ps: Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n"
