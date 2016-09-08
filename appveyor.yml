@@ -20,6 +20,16 @@ skip_tags: false
 # Start builds on tags only (GitHub and BitBucket)
 skip_non_tags: false
 
+skip_commits:
+  files:
+  - '*.md'
+  - '*.gif'
+  - '*.txt'
+  - '*.yml'
+  - '*.bat'
+  - .gitattributes
+  - .gitignore
+
 # Including commits affecting specific files (GitHub only). More details here: /docs/appveyor-yml
 # only_commits:
   # files:
