@@ -1,1 +1,0 @@
-# PokemonGo.RocketAPI

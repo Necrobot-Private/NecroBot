@@ -1,7 +1,4 @@
-version: 0.9.8.{build}
-branches:
-  only:
-  - master
+version: 0.9.7.{build}
 skip_tags: true
 configuration: Release
 platform: x86
@@ -46,11 +43,11 @@ artifacts:
 - path: '\release\necrobotgui'
   name: NecroBot2.GUI
 - path: '\release\necrobot'
-  name: NecroBot2
+  name: NecroBot2.Console
 deploy:
 - provider: GitHub
   tag: v$(appveyor_build_version)
   release: NecroBot2 v$(appveyor_build_version)
   auth_token:
     secure: 6PJ3cwd4I0DRJPv7w8iFAP6iPp94a4omr0Ajl0exmZ3qEnGLdqDwihlgFBFNBHWU
-  artifact: NecroBot2;NecroBot2.GUI
+  artifact: NecroBot2.Console;NecroBot2.GUI
