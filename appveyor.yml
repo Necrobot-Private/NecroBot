@@ -55,9 +55,11 @@ shallow_clone: false                 # default is false
 environment:
   access_token:
     secure: 6PJ3cwd4I0DRJPv7w8iFAP6iPp94a4omr0Ajl0exmZ3qEnGLdqDwihlgFBFNBHWU
-  user_email:
+  github_repo:
+    "git@github.com:Necrobot-Private/NecroBot.git"
+  github_email:
     secure: BTFs4sc8XE9MG1VhIOZPt6Bbwfq3967JxYsRuNpxTl4=
-  user_name:
+  github_user:
     secure: pxYfjvhdqgrZKh6Yy3V7Cg==
 # build cache to preserve files/folders between builds
 cache:
@@ -187,18 +189,18 @@ deploy_script:
 on_success:
   - SET PATH=C:\Ruby23\bin;%PATH%
   - gem install github_changelog_generator
-  - git config --global credential.helper store
-  - git config --global push.default matching
-  - ps: Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n"
-  - ps: Add-Content ".\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n"
-  - git config --global user.email "%user_email%"
-  - git config --global user.name "%user_name%"
-  - git init
-  - git fetch origin
   - SET CHANGELOG_GITHUB_TOKEN=%access_token%
   - github_changelog_generator
-  - git commit -m "update changelog.md" "CHANGELOG.md"
-  - git push origin
+  - ps: |    
+    git checkout "$env:APPVEYOR_REPO_BRANCH"
+    git config --global core.autocrlf true
+    git config --global credential.helper store
+    Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n"
+    git remote add neworigin "$env:github_repo"
+    git config --global user.email "$env:github_email"
+    git config --global user.name "$env:github_user"
+    git commit -m "update changelog.md" "CHANGELOG.md"
+    git push neworigin "$env:APPVEYOR_REPO_BRANCH"
 
 # on build failure
 on_failure:
