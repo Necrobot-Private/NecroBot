@@ -9,7 +9,10 @@ assembly_info:
   assembly_file_version: '{version}'
   assembly_informational_version: '{version}'
 before_build:
-- cmd: nuget restore
+- cmd: >-
+    git submodule update --init --recursive
+
+    nuget restore
 build:
   verbosity: minimal
 after_build:
