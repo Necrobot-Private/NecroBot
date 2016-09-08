@@ -3,7 +3,7 @@
 #---------------------------------#
 
 # version format
-version: 0.9.8.{build}
+version: 0.0.0.{build}.{branch}
 
 # you can use {branch} name in version format too
 # version: 1.0.{build}-{branch}
@@ -25,10 +25,11 @@ skip_commits:
   - '*.md'
   - '*.gif'
   - '*.txt'
- # - '*.yml'
+  # - '*.yml'
   - '*.bat'
   - .gitattributes
   - .gitignore
+  - .github_changelog_generator
 
 # Including commits affecting specific files (GitHub only). More details here: /docs/appveyor-yml
 # only_commits:
@@ -50,27 +51,19 @@ image: Visual Studio 2015
 
 # scripts that are called at very beginning, before repo cloning
 init:
-- ps: >-
-    git config --global core.autocrlf input
-
-    $fileContent = "-----BEGIN RSA PRIVATE KEY-----`n"
-
-    $fileContent += $env:priv_key.Replace(' ', "`n")
-
-    $fileContent += "`n-----END RSA PRIVATE KEY-----`n"
-
-    Set-Content "$env:USERPROFILE\.ssh\id_rsa" $fileContent
-
-    git config --global credential.helper store
-
-    git config --global user.email "$env:github_email"
-
-    git config --global user.name "$env:github_user"
-
-    Set-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n"
+  - ps: git config --global core.autocrlf input
+  - ps: $fileContent = "-----BEGIN RSA PRIVATE KEY-----`n"
+  - ps: $fileContent += $env:priv_key.Replace(' ', "`n")
+  - ps: $fileContent += "`n-----END RSA PRIVATE KEY-----`n"
+  - ps: Set-Content "$env:USERPROFILE\.ssh\id_rsa" $fileContent
+  - ps: git config --global credential.helper store
+  - ps: git config --global user.email "$env:github_email"
+  - ps: git config --global user.name "$env:github_user"
+  - ps: Set-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n" 
+  - ps: $env:APPVEYOR_REPO_TAG_NAME=$env:APPVEYOR_REPO_TAG_NAME.Replace("v", "")
 
 # clone directory
-clone_folder: c:\projects\NecroBot2
+clone_folder: c:\projects\necrobot
 
 # fetch repository as zip archive
 shallow_clone: false                 # default is false
@@ -97,18 +90,16 @@ environment:
 
 # scripts that run after cloning repository
 install:
-- ps: >-
-    git checkout -b "$env:APPVEYOR_BUILD_ID" "$env:APPVEYOR_REPO_BRANCH"
-
-    git submodule update --init --recursive
+  - git checkout -b appveyor %APPVEYOR_REPO_BRANCH%
+  - git submodule update --init --recursive
 
 # enable patching of AssemblyInfo.* files
 assembly_info:
   patch: true
   file: '**\AssemblyInfo.*'
-  assembly_version: '{version}'
-  assembly_file_version: '{version}'
-  assembly_informational_version: '{version}'
+  assembly_version: '$(APPVEYOR_REPO_TAG_NAME)'
+  assembly_file_version: '$(APPVEYOR_REPO_TAG_NAME)'
+  assembly_informational_version: '$(APPVEYOR_REPO_TAG_NAME)'
 
 #---------------------------------#
 #       build configuration       #
@@ -134,29 +125,25 @@ build:
   # MSBuild verbosity level
   verbosity: minimal  #quiet|minimal|normal|detailed
 
+
 # scripts to run before build
 before_build:
-  - ps: nuget restore
+  - nuget restore
 
 # scripts to run *after* solution is built and *before* automatic packaging occurs (web apps, NuGet packages, Azure Cloud Services)
 before_package:
 
 # scripts to run after build
 after_build:
-- ps: >-
-    Remove-Item "$env:APPVEYOR_BUILD_FOLDER\Release" -Recurse -ErrorAction Ignore
-
-    New-Item -ItemType Directory -Force -Path "$env:APPVEYOR_BUILD_FOLDER\Release"
-
-    New-Item -ItemType Directory -Force -Path "$env:APPVEYOR_BUILD_FOLDER\Release\NecroBot2"
-
-    New-Item -ItemType Directory -Force -Path "$env:APPVEYOR_BUILD_FOLDER\Release\NecroBot2GUI"
-
-    Copy-Item "$env:APPVEYOR_BUILD_FOLDER\PoGo.NecroBot.CLI\bin\x86\Release\*" "$env:APPVEYOR_BUILD_FOLDER\Release\NecroBot2"
-
-    Copy-Item "$env:APPVEYOR_BUILD_FOLDER\PoGo.NecroBot.CLI\bin\x86\Release\GUI\*" "$env:APPVEYOR_BUILD_FOLDER\Release\NecroBot2GUI"
-
-    Remove-Item "$env:APPVEYOR_BUILD_FOLDER\Release\NecroBot2\GUI" -Recurse -ErrorAction Ignore
+  - cmd: if exist C:\projects\necrobot\release rmdir C:\projects\necrobot\release /s /q
+  - cmd: if not exist C:\projects\necrobot\release mkdir C:\projects\necrobot\release
+  - cmd: if exist C:\projects\necrobot\release\necrobotgui rmdir C:\projects\necrobot\release\necrobotgui /s /q
+  - cmd: if not exist C:\projects\necrobot\release\necrobotgui mkdir C:\projects\necrobot\release\necrobotgui
+  - cmd: xcopy C:\projects\necrobot\PoGo.NecroBot.CLI\bin\x86\Release\GUI C:\projects\necrobot\release\necrobotgui /s /e
+  - cmd: if exist C:\projects\necrobot\release\necrobot rmdir C:\projects\necrobot\release\necrobot /s /q
+  - cmd: if not exist C:\projects\necrobot\release\necrobot mkdir C:\projects\necrobot\release\necrobot
+  - cmd: xcopy C:\projects\necrobot\PoGo.NecroBot.CLI\bin\x86\Release C:\projects\necrobot\release\necrobot /s /e
+  - cmd: rmdir C:\projects\necrobot\release\necrobot\GUI /s /q
 
 # to run your custom scripts instead of automatic MSBuild
 build_script:
@@ -177,10 +164,10 @@ test: off
 
 artifacts:
 
-  - path: '\Release\NecroBot2GUI'
+  - path: '\release\necrobotgui'
     name: NecroBot2.GUI
   
-  - path: '\Release\NecroBot2'
+  - path: '\release\necrobot'
     name: NecroBot2.Console
 
 #---------------------------------#
@@ -193,8 +180,8 @@ deploy:
 
   # Deploy to GitHub Releases
   - provider: GitHub
-    tag: $(APPVEYOR_REPO_TAG_NAME)
-    release: NecroBot2 $(APPVEYOR_REPO_TAG_NAME)
+    tag: v$(APPVEYOR_REPO_TAG_NAME)
+    release: NecroBot2 v$(APPVEYOR_REPO_TAG_NAME)
     auth_token:
       secure: 6PJ3cwd4I0DRJPv7w8iFAP6iPp94a4omr0Ajl0exmZ3qEnGLdqDwihlgFBFNBHWU 
     artifact: NecroBot2.Console;NecroBot2.GUI
@@ -223,22 +210,14 @@ deploy_script:
 
 # on successful build
 on_success:
-- ps: >-
-    $env:PATH="C:\Ruby23\bin"
-
-    gem install github_changelog_generator
-
-    github_changelog_generator --token "$env:access_token"
-
-    git commit -m "auto-update changelog.md" "CHANGELOG.md"
-
-    git checkout "$env:APPVEYOR_REPO_BRANCH"
-
-    git merge "$env:APPVEYOR_BUILD_ID"
-
-    git branch -d "$env:APPVEYOR_BUILD_ID"
-
-    git push "$env:APPVEYOR_BUILD_ID" "$env:APPVEYOR_REPO_BRANCH"
+  - SET PATH=C:\Ruby23\bin;%PATH%
+  - gem install github_changelog_generator
+  - ps: github_changelog_generator --token $env:access_token
+  - git commit -m "update changelog.md" "CHANGELOG.md"
+  - git checkout %APPVEYOR_REPO_BRANCH%
+  - git merge appveyor
+  - git branch -d appveyor
+  - git push origin %APPVEYOR_REPO_BRANCH%
 
 # on build failure
 on_failure:
