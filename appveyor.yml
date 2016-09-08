@@ -193,8 +193,10 @@ on_success:
   - ps: Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n"
   - git config --global user.email "$($env:user_email)"
   - git config --global user.name "$($env:user_name)"
+  - git init
   - git commit -m "update changelog.md" "CHANGELOG.md"
-  - git push --force-with-lease
+  - git remote add origin git@github.com:Necrobot-Private/NecroBot.git
+  - git push origin master
 
 # on build failure
 on_failure:
