@@ -95,7 +95,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                     async () =>
                     {
                         await CatchNearbyPokemonsTask.Execute(session, cancelationToken);
-                        return true;
                     },
                     session,
                     cancelationToken);

@@ -88,7 +88,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 //Catch Incense Pokemon
                                 await CatchIncensePokemonsTask.Execute(session, cancellationToken);
                                 await UseNearbyPokestopsTask.Execute(session, cancellationToken);
-                                return true;
                             },
                             session,
                             cancellationToken);

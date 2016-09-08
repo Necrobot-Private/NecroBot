@@ -21,7 +21,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
         }
 
         private const double SpeedDownTo = 10 / 3.6;
-        public async Task<PlayerUpdateResponse> Walk(GeoCoordinate targetLocation, Func<Task<bool>> functionExecutedWhileWalking, ISession session, CancellationToken cancellationToken, double walkSpeed = 0.0)
+        public async Task<PlayerUpdateResponse> Walk(GeoCoordinate targetLocation, Func<Task> functionExecutedWhileWalking, ISession session, CancellationToken cancellationToken, double walkSpeed = 0.0)
         {
             if (CurrentWalkingSpeed <= 0)
                 CurrentWalkingSpeed = session.LogicSettings.WalkingSpeedInKilometerPerHour;
