@@ -3,7 +3,7 @@
 #---------------------------------#
 
 # version format
-version: 0.0.0.{build}.{branch}
+version: 0.0.0.{build}
 
 # you can use {branch} name in version format too
 # version: 1.0.{build}-{branch}
@@ -217,7 +217,7 @@ on_success:
   - git checkout %APPVEYOR_REPO_BRANCH%
   - git merge appveyor
   - git branch -d appveyor
-  - git push origin %APPVEYOR_REPO_BRANCH%
+  - git push origin %APPVEYOR_REPO_BRANCH% -f
 
 # on build failure
 on_failure:
