@@ -40,13 +40,13 @@ image: Visual Studio 2015
 
 # scripts that are called at very beginning, before repo cloning
 init:
-  - cmd: git config --global core.autocrlf input
+  - git config --global core.autocrlf input
 
 # clone directory
 clone_folder: c:\projects\necrobot
 
 # fetch repository as zip archive
-shallow_clone: true                 # default is false
+shallow_clone: false                 # default is false
 
 # set clone depth
 #clone_depth:  5                     # clone entire repository history if not defined
@@ -67,7 +67,7 @@ cache:
 
 # scripts that run after cloning repository
 install:
-  - cmd: git submodule update --init --recursive
+  - git submodule update --init --recursive
 
 # enable patching of AssemblyInfo.* files
 assembly_info:
@@ -104,7 +104,7 @@ build:
 
 # scripts to run before build
 before_build:
-  - cmd: nuget restore
+  - nuget restore
 
 # scripts to run *after* solution is built and *before* automatic packaging occurs (web apps, NuGet packages, Azure Cloud Services)
 before_package:
@@ -186,14 +186,14 @@ deploy_script:
 
 # on successful build
 on_success:
-  - cmd: gem install github_changelog_generator
-  - cmd: github_changelog_generator --token '$($env:access_token)'
-  - cmd: git config --global credential.helper store
+  - gem install github_changelog_generator
+  - github_changelog_generator --token '$($env:access_token)'
+  - git config --global credential.helper store
   - ps: Add-Content '$env:USERPROFILE\.git-credentials' 'https://$($env:access_token):x-oauth-basic@github.com`n'
-  - cmd: git config --global user.email '$($env:user_email)'
-  - cmd: git config --global user.name '$($env:user_name)'
-  - cmd: git commit -m 'update changelog.md' 'CHANGELOG.md'
-  - cmd: git push master origin
+  - git config --global user.email '$($env:user_email)'
+  - git config --global user.name '$($env:user_name)'
+  - git commit -m 'update changelog.md' 'CHANGELOG.md'
+  - git push master origin
 
 # on build failure
 on_failure:
