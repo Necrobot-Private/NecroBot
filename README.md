@@ -58,7 +58,7 @@ This Website and Project is in no way affiliated with, authorized, maintained, s
 
 
 
-<h2>Using the Project is against the TOS and is not advised.</h2>
+<h2>Using this project for anything other than education, testing or research is not advised.</h2>
 This is not a public release, just a project with releases for code testers for education and research on any privacy issues for the end user.
 
 <hr/>
