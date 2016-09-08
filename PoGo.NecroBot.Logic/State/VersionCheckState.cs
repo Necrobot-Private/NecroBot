@@ -88,12 +88,12 @@ namespace PoGo.NecroBot.Logic.State
             });
             var remoteReleaseUrl =
                 $"https://github.com/Necrobot-Private/NecroBot/releases/download/v{RemoteVersion}/";
-            const string zipName = "Release.zip";
+            const string zipName = "NecroBot2.Console.zip";
             var downloadLink = remoteReleaseUrl + zipName;
             var baseDir = Directory.GetCurrentDirectory();
             var downloadFilePath = Path.Combine(baseDir, zipName);
             var tempPath = Path.Combine(baseDir, "tmp");
-            var extractedDir = Path.Combine(tempPath, "Release");
+            var extractedDir = Path.Combine(tempPath, "NecroBot2.Console");
             var destinationDir = baseDir + Path.DirectorySeparatorChar;
             Console.WriteLine(downloadLink);
 
