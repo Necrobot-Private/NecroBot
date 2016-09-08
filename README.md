@@ -1,7 +1,6 @@
 
 [![Stories in Ready](https://discordapp.com/api/guilds/220703917871333376/widget.png?style=banner2&time-)](https://discord.gg/KNqJAyj)
 
-[![Stories in Ready](https://badge.waffle.io/Necrobot-Private/NecroBot.svg?label=ready&title=Ready)](https://waffle.io/Necrobot-Private/NecroBot)
 [![Github All Releases](https://img.shields.io/github/downloads/Necrobot-Private/NecroBot/total.svg?maxAge=258)](https://github.com/Necrobot-Private/NecroBot/releases)
 [![GitHub license](https://img.shields.io/badge/license-AGPL-blue.svg)](https://raw.githubusercontent.com/Necrobot-Private/NecroBot/master/LICENSE.md)
 
@@ -14,7 +13,6 @@ Make sure you check out our [Wiki](https://github.com/Necrobot-Private/NecroBot/
 <br/>
 
 <h6><em>[A big part of the Donations goes to the top 3 active Contributors. Other expenses as Server costs will be covered using the Donations.]</em></h6><br/>
-![Display](necrobot1.gif)
 
 <h2><a name="features">Features</a></h2>
 
@@ -36,10 +34,10 @@ Make sure you check out our [Wiki](https://github.com/Necrobot-Private/NecroBot/
  - [Egg Hatching Automatically]
  - [Multi bot support]
  - [Snipe pokemon]
-  - [Manual Locations](https://github.com/NoxxDev/NecroBot/wiki/Manual-Locations-Sniping-Guide)
-  - [Automatic Locations](https://github.com/NoxxDev/NecroBot/wiki/Automatic-Locations-Sniping-Guide)
-  - [HumanWalk Sniping](https://github.com/NoxxDev/NecroBot/wiki/Human-walk-snipe-config)
-  - [MSniper Sniping](https://github.com/NoxxDev/NecroBot/wiki/MSniper-Manual-Sniping-Guide)
+  - [Manual Locations](https://github.com/Necrobot-Private/NecroBot/wiki/Manual-Locations-Sniping-Guide)
+  - [Automatic Locations](https://github.com/NNecrobot-Private/NecroBot/wiki/Automatic-Locations-Sniping-Guide)
+  - [HumanWalk Sniping](https://github.com/Necrobot-Private/NecroBot/wiki/Human-walk-snipe-config)
+  - [MSniper Sniping](https://github.com/Necrobot-Private/NecroBot/wiki/MSniper-Manual-Sniping-Guide)
  - [Power-Up pokemon]
  - [Telegram Remote Control Support]
 
