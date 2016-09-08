@@ -16,11 +16,163 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using PoGo.NecroBot.Logic.PoGoUtils;
+using WebSocket4Net;
 
 namespace PoGo.NecroBot.Logic.Tasks
 {
     public static class SnipeMSniperTask
     {
+        #region MSniper Location Feeder
+
+        public class PokemonCount
+        {
+            public PokemonId PokemonId { get; set; }
+            public int Count { get; set; }
+        }
+
+        public static DateTime JavaTimeStampToDateTime(double javaTimeStamp)
+        {
+            // Java timestamp is millisecods past epoch
+            var dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            dtDateTime = dtDateTime.AddSeconds(Math.Round(javaTimeStamp / 1000)).ToLocalTime();
+            return dtDateTime;
+        }
+        public class EncounterInfo : IDisposable
+        {
+            public string SpawnPointId { get; set; }
+            public double Latitude { get; set; }
+            public double Longitude { get; set; }
+            public PokemonMove Move1 { get; set; } = PokemonMove.MoveUnset;
+            public PokemonMove Move2 { get; set; } = PokemonMove.MoveUnset;
+            public double Iv { get; set; } = 0;
+            public ulong EncounterId { get; set; }
+            public PokemonId PokemonId { get; set; }
+            public DateTime ExpirationTimestamp { get; set; }
+            public DateTime LastVisitedTimeStamp { get; set; }
+            public void Dispose()
+            {
+                GC.SuppressFinalize(this);
+            }
+        }
+        public enum SocketCmd
+        {
+            Identity = 0,
+            PokemonCount = 1,
+
+        }
+
+        public static SocketCmd GetSocketCmd(this MessageReceivedEventArgs e)
+        {
+            try
+            {
+                return (SocketCmd)Enum.Parse(typeof(SocketCmd), e.Message.Split(':')[0]);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public static string GetSocketData(this MessageReceivedEventArgs e)
+        {
+            try
+            {
+                return e.Message.Split(':')[1];
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public static double minIvPercent = 1.0;
+
+        public static List<EncounterInfo> PkmnLocations = new List<EncounterInfo>();
+
+        public static List<PokemonId> blackList = new List<PokemonId>()
+        {
+            //PokemonId.Pidgeot,
+            //PokemonId.Pidgey,
+            //PokemonId.Weedle,
+            //PokemonId.Spearow
+
+        };
+        public static WebSocket msocket;
+
+        public static string UniequeId { get; set; }
+
+        public static void OpenSocket()
+        {
+            if (msocket == null || msocket.State == WebSocketState.Closed)
+            {
+                msocket = new WebSocket("ws://localhost:56000/WebSockets/NecroBotServer.ashx", "basic", WebSocketVersion.Rfc6455);
+                msocket.MessageReceived += Msocket_MessageReceived;
+                msocket.Closed += Msocket_Closed;
+                msocket.Open();
+            }
+        }
+
+        private static void Msocket_Closed(object sender, EventArgs e)
+        {
+
+        }
+
+        private static void Msocket_MessageReceived(object sender, MessageReceivedEventArgs e)
+        {
+            SocketCmd cmd = e.GetSocketCmd();
+            switch (cmd)
+            {
+                case SocketCmd.Identity:
+                    UniequeId = e.GetSocketData();
+                    break;
+
+                case SocketCmd.PokemonCount:
+                    var x = PkmnLocations.GroupBy(p => p.PokemonId)
+                        .Select(s => new { PokemonId = s.First().PokemonId, Count = s.Count() })
+                        .ToList();
+                    msocket.Send(JsonConvert.SerializeObject(x));
+                    break;
+            }
+        }
+
+        private static void SendToMSniperServer(string message)
+        {
+            try
+            {
+                msocket.Send($"{UniequeId}:{message}");
+            }
+            catch (Exception ex)
+            {
+                msocket.Close();
+                throw ex;
+            }
+        }
+
+        public static void AddToList(EncounterResponse eresponse)
+        {
+            if (!(PokemonInfo.CalculatePokemonPerfection(eresponse.WildPokemon.PokemonData) >= minIvPercent) &&
+                blackList.FindIndex(p => p == eresponse.WildPokemon.PokemonData.PokemonId) != -1 &&
+                PkmnLocations.FirstOrDefault(p => p.EncounterId == eresponse.WildPokemon.EncounterId) != null)
+                return;
+            using (var newdata = new EncounterInfo())
+            {
+                newdata.EncounterId = eresponse.WildPokemon.EncounterId;
+                newdata.LastVisitedTimeStamp = JavaTimeStampToDateTime(eresponse.WildPokemon.LastModifiedTimestampMs);
+                newdata.SpawnPointId = eresponse.WildPokemon.SpawnPointId;
+                newdata.ExpirationTimestamp = JavaTimeStampToDateTime(eresponse.WildPokemon.LastModifiedTimestampMs + eresponse.WildPokemon.TimeTillHiddenMs);
+                newdata.PokemonId = eresponse.WildPokemon.PokemonData.PokemonId;
+                newdata.Iv = PokemonInfo.CalculatePokemonPerfection(eresponse.WildPokemon.PokemonData);
+                newdata.Latitude = eresponse.WildPokemon.Latitude;
+                newdata.Longitude = eresponse.WildPokemon.Longitude;
+                newdata.Move1 = eresponse.WildPokemon.PokemonData.Move1;
+                newdata.Move2 = eresponse.WildPokemon.PokemonData.Move2;
+
+                if (PkmnLocations.FirstOrDefault(p => p.EncounterId == newdata.EncounterId &&
+                p.SpawnPointId == newdata.SpawnPointId) == null)
+                    PkmnLocations.Add(newdata);
+            }
+        }
+
+        #endregion
         public static async Task CheckMSniper(ISession session, CancellationToken cancellationToken)
         {
             var pth = Path.Combine(session.LogicSettings.ProfilePath, "SnipeMS.json");
