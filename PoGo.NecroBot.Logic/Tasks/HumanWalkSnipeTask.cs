@@ -83,7 +83,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     Source = source,
                     IV = iV
                 }
-            },false);
+            }, false);
         }
 
         public static async Task<bool> CheckPokeballsToSnipe(int minPokeballs, ISession session,
@@ -217,19 +217,14 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Type = HumanWalkSnipeEventTypes.DestinationReached,
                         UniqueId = pokemon.UniqueId
                     });
-                    //await CatchNearbyPokemonsTask.Execute(session, cancellationToken, pokemon.PokemonId,false);
-                    //await CatchIncensePokemonsTask.Execute(session, cancellationToken);
 
                     await Task.Delay(pokemon.Setting.DelayTimeAtDestination);
-                    // if (!pokemon.IsVisited)
+                    await CatchNearbyPokemonsTask.Execute(session, cancellationToken, pokemon.PokemonId, false);
+                    await Task.Delay(1000);
+                    if (!pokemon.IsVisited)
                     {
-                        await CatchNearbyPokemonsTask.Execute(session, cancellationToken, pokemon.PokemonId, false);
-                        await Task.Delay(1000);
-                        if (!pokemon.IsVisited)
-                        {
-                            await CatchLurePokemonsTask.Execute(session, cancellationToken);
+                        await CatchLurePokemonsTask.Execute(session, cancellationToken);
 
-                        }
                     }
                     pokemon.IsVisited = true;
                     pokemon.IsCatching = false;
@@ -237,7 +232,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
             while (pokemon != null && _setting.HumanWalkingSnipeTryCatchEmAll);
 
-            if (caughtAnyPokemonInThisWalk && ( !_setting.HumanWalkingSnipeAlwaysWalkBack || _setting.UseGpxPathing))
+            if (caughtAnyPokemonInThisWalk && (!_setting.HumanWalkingSnipeAlwaysWalkBack || _setting.UseGpxPathing))
             {
                 await afterCatchFunc?.Invoke();
             }
