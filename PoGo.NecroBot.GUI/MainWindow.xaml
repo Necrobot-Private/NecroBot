@@ -7,9 +7,8 @@
                       Title="NecroBot-Private Team"
                       Width="1200"
                       Height="700"
-                      Icon="Resources/Ico.ico"
                       Loaded="webWindow_Loaded"
-                      WindowStartupLocation="CenterScreen">
+                      WindowStartupLocation="CenterScreen" Icon="Resources/Ico.ico">
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
             <Button Width="60"
