@@ -416,7 +416,6 @@ namespace PoGo.NecroBot.CLI
                         ev.Latitude,
                         ev.Longitude));
                     break;
-                default:
                 case HumanWalkSnipeEventTypes.AddedSnipePokemon:
                     break;
                 case HumanWalkSnipeEventTypes.TargetedPokemon:
@@ -426,7 +425,7 @@ namespace PoGo.NecroBot.CLI
                 case HumanWalkSnipeEventTypes.QueueUpdated:
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    break;
             }
         }
 
