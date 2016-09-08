@@ -79,7 +79,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 if (session.LogicSettings.ActivateMSniper)
                 {
-                    await SnipeMSniperTask.CheckMSniperLocation(session, cancellationToken);
+                    await SnipeMSniperTask.CheckMSniper(session, cancellationToken);
 
                 }
                 _pokestopList =
