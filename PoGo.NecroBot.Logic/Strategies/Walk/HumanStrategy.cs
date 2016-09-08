@@ -25,20 +25,17 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
         {
             if (CurrentWalkingSpeed <= 0)
                 CurrentWalkingSpeed = session.LogicSettings.WalkingSpeedInKilometerPerHour;
-            if (session.LogicSettings.UseWalkingSpeedVariant)
+            if (session.LogicSettings.UseWalkingSpeedVariant && walkSpeed == 0)
                 CurrentWalkingSpeed = session.Navigation.VariantRandom(session, CurrentWalkingSpeed);
 
             var rw = new Random();
-            var speedInMetersPerSecond = CurrentWalkingSpeed / 3.6;
-            if(walkSpeed !=0)
-            {
-                speedInMetersPerSecond = walkSpeed / 3.6;
-            }
+            var speedInMetersPerSecond = (walkSpeed> 0? walkSpeed :CurrentWalkingSpeed) / 3.6;
+
             var sourceLocation = new GeoCoordinate(_client.CurrentLatitude, _client.CurrentLongitude);
 
             var nextWaypointBearing = LocationUtils.DegreeBearing(sourceLocation, targetLocation);
 
-           
+
             var nextWaypointDistance = speedInMetersPerSecond;
             var waypoint = LocationUtils.CreateWaypoint(sourceLocation, nextWaypointDistance, nextWaypointBearing);
             var requestSendDateTime = DateTime.Now;
@@ -63,16 +60,12 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
                     if (speedInMetersPerSecond > SpeedDownTo)
                         speedInMetersPerSecond = SpeedDownTo;
 
-                if (session.LogicSettings.UseWalkingSpeedVariant)
+                if (session.LogicSettings.UseWalkingSpeedVariant && walkSpeed == 0)
                 {
                     CurrentWalkingSpeed = session.Navigation.VariantRandom(session, CurrentWalkingSpeed);
-                    speedInMetersPerSecond = CurrentWalkingSpeed / 3.6;
                 }
 
-                if (walkSpeed != 0)
-                {
-                    speedInMetersPerSecond = walkSpeed / 3.6;
-                }
+                speedInMetersPerSecond = (walkSpeed > 0 ? walkSpeed : CurrentWalkingSpeed) / 3.6;
 
                 nextWaypointDistance = Math.Min(currentDistanceToTarget, millisecondsUntilGetUpdatePlayerLocationResponse / 1000 * speedInMetersPerSecond);
                 nextWaypointBearing = LocationUtils.DegreeBearing(sourceLocation, targetLocation);
@@ -86,7 +79,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
 
                 if (functionExecutedWhileWalking != null)
                     await functionExecutedWhileWalking(); // look for pokemon
-               
+
             } while (LocationUtils.CalculateDistanceInMeters(sourceLocation, targetLocation) >= (new Random()).Next(1, 10));
 
             return result;
