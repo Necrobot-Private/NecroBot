@@ -406,6 +406,7 @@ namespace PoGo.NecroBot.CLI
                     case HumanWalkSnipeEventTypes.PokestopUpdated:
                     Logger.Write(session.Translation.GetTranslation(TranslationString.HumanWalkSnipeAddedPokestop, ev.NearestDistance, ev.Pokestops.Count), LogLevel.Sniper, ConsoleColor.Yellow);
                     break;
+
                 case HumanWalkSnipeEventTypes.NotEnoughtPalls:
                     Logger.Write(session.Translation.GetTranslation(TranslationString.HumanWalkSnipeNotEnoughtBalls, ev.CurrentBalls, ev.MinBallsToSnipe), LogLevel.Sniper, ConsoleColor.Yellow);
                     break;
@@ -424,7 +425,7 @@ namespace PoGo.NecroBot.CLI
                 case HumanWalkSnipeEventTypes.QueueUpdated:
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    break;
             }
         }
 
@@ -433,13 +434,9 @@ namespace PoGo.NecroBot.CLI
             dynamic eve = evt;
 
             try
-            {
-                HandleEvent(eve, session);
-            }
+            { HandleEvent(eve, session); }
             catch
-            {
-                // ignored
-            }
+            { }
         }
     }
 }
