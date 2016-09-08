@@ -195,7 +195,7 @@ on_success:
   - git config --global user.name "$($env:user_name)"
   - git init
   - git commit -m "update changelog.md" "CHANGELOG.md"
-  - git push origin master
+  - git push master origin
 
 # on build failure
 on_failure:
