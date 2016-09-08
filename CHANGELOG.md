@@ -1,41 +1,10 @@
 # Change Log
 
-## [Unreleased](https://github.com/Necrobot-Private/NecroBot/tree/HEAD)
-
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.9.8.11...HEAD)
-
-**Implemented enhancements:**
-
-- Fix GUI build - Awesomium browser only supports x86 builds [\#26](https://github.com/Necrobot-Private/NecroBot/pull/26) ([jjskuld](https://github.com/jjskuld))
-
+## [v0.9.8.5](https://github.com/Necrobot-Private/NecroBot/tree/v0.9.8.5) ("09/08/2016")
 **Closed issues:**
 
 - build.bat [\#29](https://github.com/Necrobot-Private/NecroBot/issues/29)
 - DeviceConfig in auth.json  [\#28](https://github.com/Necrobot-Private/NecroBot/issues/28)
-- when you guys released  [\#24](https://github.com/Necrobot-Private/NecroBot/issues/24)
-
-## [v0.9.8.11](https://github.com/Necrobot-Private/NecroBot/tree/v0.9.8.11) (2016-09-08)
-**Implemented enhancements:**
-
-- add/edit [\#23](https://github.com/Necrobot-Private/NecroBot/pull/23) ([Salvationdk](https://github.com/Salvationdk))
-- Update translation.zh-TW.json [\#18](https://github.com/Necrobot-Private/NecroBot/pull/18) ([erickerich](https://github.com/erickerich))
-- Update translation.zh-TW.json [\#17](https://github.com/Necrobot-Private/NecroBot/pull/17) ([erickerich](https://github.com/erickerich))
-- Update translation.zh-TW.json [\#13](https://github.com/Necrobot-Private/NecroBot/pull/13) ([erickerich](https://github.com/erickerich))
-- ... [\#11](https://github.com/Necrobot-Private/NecroBot/pull/11) ([NzV](https://github.com/NzV))
-- fix submodule [\#10](https://github.com/Necrobot-Private/NecroBot/pull/10) ([NzV](https://github.com/NzV))
-- remove encrypt.dll dependency + code sync [\#9](https://github.com/Necrobot-Private/NecroBot/pull/9) ([NzV](https://github.com/NzV))
-
-**Fixed bugs:**
-
-- NecroBot2.GUI [\#16](https://github.com/Necrobot-Private/NecroBot/issues/16)
-- NecroBot2.GUI [\#15](https://github.com/Necrobot-Private/NecroBot/issues/15)
-- Not sniping at pokestops [\#7](https://github.com/Necrobot-Private/NecroBot/issues/7)
-- 0.9.7.2 System.ArgumentNullException: Value cannot be null. Parameter name: ptr [\#3](https://github.com/Necrobot-Private/NecroBot/issues/3)
-- New Bot is doesnt work [\#2](https://github.com/Necrobot-Private/NecroBot/issues/2)
-
-**Closed issues:**
-
-- DeviceConfig.AndroidBootloader String '' does not match regex pattern '\[a-zA-Z0-9\_\-\.\s\] [\#21](https://github.com/Necrobot-Private/NecroBot/issues/21)
 
 
 
