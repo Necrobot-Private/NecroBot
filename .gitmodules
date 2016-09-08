@@ -1,0 +1,6 @@
+[submodule "FeroxRev"]
+	path = FeroxRev
+	url = https://github.com/Necrobot-Private/PokemonGo.RocketAPI.git
+[submodule "POGOProtos"]
+	path = POGOProtos
+	url = https://github.com/Necrobot-Private/POGOProtos.git
