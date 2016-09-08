@@ -4,11 +4,12 @@
                       xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
                       xmlns:awe="http://schemas.awesomium.com/winfx"
                       x:Name="webWindow"
-                      Title="NecroBot-Private Team"
+                      Title="NecroBot-Private Team GUI"
                       Width="1200"
                       Height="700"
+                      Icon="Resources/Ico.ico"
                       Loaded="webWindow_Loaded"
-                      WindowStartupLocation="CenterScreen" Icon="Resources/Ico.ico">
+                      WindowStartupLocation="CenterScreen">
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
             <Button Width="60"

@@ -1,7 +1,4 @@
 version: 0.9.8.{build}
-branches:
-  only:
-  - master
 skip_tags: true
 configuration: Release
 platform: x86
@@ -55,7 +52,8 @@ deploy:
   tag: v$(appveyor_build_version)
   release: NecroBot2 v$(appveyor_build_version)
   auth_token:
-    secure: 6PJ3cwd4I0DRJPv7w8iFAP6iPp94a4omr0Ajl0exmZ3qEnGLdqDwihlgFBFNBHWU
+    secure: 6PJ3cwd4I0DRJPv7w8iFAP6iPp94a4omr0Ajl0exmZ3qEnGLdqDwihlgFBFNBHWU  on:
+  branch: master
   artifact: NecroBot2.Console;NecroBot2.GUI
   prerelease: true
   force_update: true
