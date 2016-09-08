@@ -142,7 +142,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public string YoursWalkHeuristic => _settings.YoursWalkConfig.YoursWalkHeuristic;
 
         public bool SnipeAtPokestops => _settings.SnipeConfig.SnipeAtPokestops;
-
+        public bool ActivateMSniper => _settings.SnipeConfig.ActivateMSniper;
         public bool UseTelegramAPI => _settings.TelegramConfig.UseTelegramAPI;
         public string TelegramAPIKey => _settings.TelegramConfig.TelegramAPIKey;
         public string TelegramPassword => _settings.TelegramConfig.TelegramPassword;

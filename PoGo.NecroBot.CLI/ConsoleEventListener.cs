@@ -120,10 +120,10 @@ namespace PoGo.NecroBot.CLI
         {
             if (fortFailedEvent.Try != 1 && fortFailedEvent.Looted == false)
             {
-                Logger.lineSelect(0, 1); // Replaces the last line to prevent spam.
+                Logger.lineSelect(); // Replaces the last line to prevent spam.
             }
 
-            if (fortFailedEvent.Looted == true)
+            if (fortFailedEvent.Looted)
             {
                 Logger.Write(
                 session.Translation.GetTranslation(TranslationString.SoftBanBypassed),
@@ -417,7 +417,16 @@ namespace PoGo.NecroBot.CLI
                         ev.Longitude));
                     break;
                 default:
+                case HumanWalkSnipeEventTypes.AddedSnipePokemon:
                     break;
+                case HumanWalkSnipeEventTypes.TargetedPokemon:
+                    break;
+                case HumanWalkSnipeEventTypes.ClientRequestUpdate:
+                    break;
+                case HumanWalkSnipeEventTypes.QueueUpdated:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 

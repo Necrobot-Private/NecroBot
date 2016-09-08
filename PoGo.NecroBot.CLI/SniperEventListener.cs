@@ -40,8 +40,10 @@ namespace PoGo.NecroBot.CLI
 
             try
             { HandleEvent(eve, session); }
-            catch
-            { }
+            catch (Exception)
+            {
+                // ignored
+            }
         }
     }
 }

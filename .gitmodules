@@ -1,8 +1,6 @@
 [submodule "FeroxRev"]
 	path = FeroxRev
 	url = https://github.com/Necrobot-Private/PokemonGo.RocketAPI.git
-	branch = master
 [submodule "POGOProtos"]
 	path = POGOProtos
 	url = https://github.com/Necrobot-Private/POGOProtos.git
-	branch = master
