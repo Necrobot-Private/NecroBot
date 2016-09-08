@@ -84,13 +84,24 @@ namespace PoGo.NecroBot.Logic.Tasks
                             session.Navigation.WalkStrategy.CalculateDistance(
                                 session.Client.CurrentLatitude, session.Client.CurrentLongitude, i.Latitude, i.Longitude, session)).ToList();
 
+                foreach (var current_pokeStop in _pokestopList)
+                {
+                    var current_pokeStop_distance = session.Navigation.WalkStrategy.CalculateDistance(
+                                session.Client.CurrentLatitude, session.Client.CurrentLongitude, current_pokeStop.Latitude, current_pokeStop.Longitude, session);
+                    var current_fortInfo = await session.Client.Fort.GetFort(current_pokeStop.Id, current_pokeStop.Latitude, current_pokeStop.Longitude);
+                    Logger.Write($"(Holmes) {current_fortInfo.Name} : {current_pokeStop_distance}", LogLevel.Info, ConsoleColor.Yellow);
+                    current_pokeStop_distance = LocationUtils.CalculateDistanceInMeters(
+                      session.Client.CurrentLatitude, session.Client.CurrentLongitude, current_pokeStop.Latitude, current_pokeStop.Longitude);
+                    Logger.Write($"(Holmes) {current_fortInfo.Name} : {current_pokeStop_distance}", LogLevel.Info, ConsoleColor.Green);
+                }
+
                 // randomize next pokestop between first and second by distance
                 var pokestopListNum = 0;
                 if (_pokestopList.Count > 1)
                     pokestopListNum = _rc.Next(0, 2);
 
-                var pokeStop = _pokestopList[pokestopListNum];
-                _pokestopList.RemoveAt(pokestopListNum);
+                var pokeStop = _pokestopList[0];
+                _pokestopList.RemoveAt(0);
 
                 // this logic should only be called when we reach a pokestop either via GPX path or normal walking
                 // as when walk-sniping, we want to get to the snipe ASAP rather than stop for lured pokemon upon
