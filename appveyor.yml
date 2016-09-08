@@ -192,7 +192,7 @@ on_success:
   - ps: Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n"
   - git config --global user.email "$($env:user_email)"
   - git config --global user.name "$($env:user_name)"
-  - git commit -m 'update changelog.md' 'CHANGELOG.md'
+  - git commit -m "update changelog.md" "CHANGELOG.md"
   - git push master origin
 
 # on build failure
