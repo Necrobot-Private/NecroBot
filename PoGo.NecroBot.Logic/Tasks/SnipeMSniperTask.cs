@@ -57,8 +57,10 @@ namespace PoGo.NecroBot.Logic.Tasks
         }
         public enum SocketCmd
         {
-            Identity = 0,
-            PokemonCount = 1,
+            None = 0,
+            Identity = 1,
+            PCount = 2,
+            PokemonList = 3,
 
         }
 
@@ -125,7 +127,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     UniequeId = e.GetSocketData();
                     break;
 
-                case SocketCmd.PokemonCount:
+                case SocketCmd.PokemonList:
                     var x = PkmnLocations.GroupBy(p => p.PokemonId)
                         .Select(s => new PokemonCount { PokemonId = s.First().PokemonId, Count = s.Count() })
                         .ToList();
