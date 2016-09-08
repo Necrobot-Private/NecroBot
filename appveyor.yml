@@ -54,3 +54,5 @@ deploy:
   auth_token:
     secure: 6PJ3cwd4I0DRJPv7w8iFAP6iPp94a4omr0Ajl0exmZ3qEnGLdqDwihlgFBFNBHWU
   artifact: NecroBot2.Console;NecroBot2.GUI
+  prerelease: true
+  force_update: true
