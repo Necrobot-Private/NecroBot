@@ -1,3 +1,4 @@
+since-tag='v0.9.8.5'
 output=CHANGELOG.md
 date-format="%m/%d/%Y"
 issues=true
@@ -9,8 +10,8 @@ author=true
 unreleased=true
 unreleased-label=true
 compare-link=true
+enhancement-labels='enhancement,Enhancement'
+bug-labels='bug,Bug'
 include-labels='bug,enhancement'
 exclude-labels='duplicate,question,invalid,wontfix'
-bug-labels='bug,Bug'
-enhancement-labels='enhancement,Enhancement'
 simple-list=false
