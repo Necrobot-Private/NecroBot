@@ -1,62 +1,185 @@
+#---------------------------------#
+#      general configuration      #
+#---------------------------------#
+
+# version format
 version: 0.9.8.{build}
+
+# you can use {branch} name in version format too
+# version: 1.0.{build}-{branch}
+
+# branches to build
+branches:
+  # whitelist
+  only:
+    - master
+
+# Do not build on tags (GitHub and BitBucket)
+skip_tags: true
+
+# Start builds on tags only (GitHub and BitBucket)
+skip_non_tags: false
+
+# Including commits affecting specific files (GitHub only). More details here: /docs/appveyor-yml
+only_commits:
+  files:
+    - PoGo.NecroBot.CLI/
+    - PoGo.NecroBot.GUI/
+    - PoGo.NecroBot.Logic/
+
+#	
 pull_requests:
   do_not_increment_build_number: true
-skip_tags: true
-configuration: Release
-platform: x86
+  
+#---------------------------------#
+#    environment configuration    #
+#---------------------------------#
+
+# Build worker image (VM template)
+image: Visual Studio 2015
+
+# scripts that are called at very beginning, before repo cloning
+init:
+  - git config --global core.autocrlf input
+
+# clone directory
+clone_folder: c:\projects\myproject
+
+# fetch repository as zip archive
+shallow_clone: false                 # default is "false"
+
+# set clone depth
+#clone_depth:  5                     # clone entire repository history if not defined
+
+# build cache to preserve files/folders between builds
+cache:
+  - packages -> **\packages.config  # preserve "packages" directory in the root of build folder but will reset it if packages.config is modified
+  - '%LocalAppData%\NuGet\Cache'
+
+# scripts that run after cloning repository
+install:
+  - cmd: git submodule update --init --recursive
+
+# enable patching of AssemblyInfo.* files
 assembly_info:
   patch: true
-  file: '**\AssemblyInfo.*'
-  assembly_version: '{version}'
-  assembly_file_version: '{version}'
-  assembly_informational_version: '{version}'
-before_build:
-- cmd: >-
-    git submodule update --init --recursive
+  file: "**\AssemblyInfo.*"
+  assembly_version: "{version}"
+  assembly_file_version: "{version}"
+  assembly_informational_version: "{version}"
 
-    nuget restore
+#---------------------------------#
+#       build configuration       #
+#---------------------------------#
+
+# build platform, i.e. x86, x64, Any CPU. This setting is optional.
+platform: x86
+
+# to add several platforms to build matrix:
+#platform:
+#  - x86
+#  - Any CPU
+
+# build Configuration, i.e. Debug, Release, etc.
+configuration: Release
+
+# to add several configurations to build matrix:
+#configuration:
+#  - Debug
+#  - Release
+
 build:
-  verbosity: minimal
+  # MSBuild verbosity level
+  verbosity: minimal  #quiet|minimal|normal|detailed
+
+
+# scripts to run before build
+before_build:
+  - cmd: nuget restore
+
+# scripts to run *after* solution is built and *before* automatic packaging occurs (web apps, NuGet packages, Azure Cloud Services)
+before_package:
+
+# scripts to run after build
 after_build:
-- cmd: >-
+  - cmd: >-
     if exist "C:\projects\necrobot\release" rmdir "C:\projects\necrobot\release" /s /q
-
-
     if not exist "C:\projects\necrobot\release" mkdir "C:\projects\necrobot\release"
-
-
     if exist "C:\projects\necrobot\release\necrobotgui" rmdir "C:\projects\necrobot\release\necrobotgui" /s /q
-
-
     if not exist "C:\projects\necrobot\release\necrobotgui" mkdir "C:\projects\necrobot\release\necrobotgui"
-
-
     xcopy "C:\projects\necrobot\PoGo.NecroBot.CLI\bin\x86\Release\GUI" "C:\projects\necrobot\release\necrobotgui" /s /e
-
-
     if exist "C:\projects\necrobot\release\necrobot" rmdir "C:\projects\necrobot\release\necrobot" /s /q
-
-
     if not exist "C:\projects\necrobot\release\necrobot" mkdir "C:\projects\necrobot\release\necrobot"
-
-
     xcopy "C:\projects\necrobot\PoGo.NecroBot.CLI\bin\x86\Release" "C:\projects\necrobot\release\necrobot" /s /e
-
-
     rmdir "C:\projects\necrobot\release\necrobot\GUI" /s /q
+
+# to run your custom scripts instead of automatic MSBuild
+build_script:
+
+# to disable automatic builds
+#build: off
+
+#---------------------------------#
+#       tests configuration       #
+#---------------------------------#
+
+# to disable automatic tests
+test: off
+
+#---------------------------------#
+#      artifacts configuration    #
+#---------------------------------#
+
 artifacts:
-- path: '\release\necrobotgui'
-  name: NecroBot2.GUI
-- path: '\release\necrobot'
-  name: NecroBot2.Console
+
+  - path: '\release\necrobotgui'
+    name: NecroBot2.GUI
+  
+  - path: '\release\necrobot'
+    name: NecroBot2.Console
+
+#---------------------------------#
+#     deployment configuration    #
+#---------------------------------#
+
+# providers: Local, FTP, WebDeploy, AzureCS, AzureBlob, S3, NuGet, Environment
+# provider names are case-sensitive!
 deploy:
-- provider: GitHub
-  tag: v$(appveyor_build_version)
-  release: NecroBot2 v$(appveyor_build_version)
-  auth_token:
-    secure: 6PJ3cwd4I0DRJPv7w8iFAP6iPp94a4omr0Ajl0exmZ3qEnGLdqDwihlgFBFNBHWU  
-  on:
-    branch: master
-  artifact: NecroBot2.Console;NecroBot2.GUI
-  prerelease: true
-  force_update: true
+
+  # Deploy to GitHub Releases
+  - provider: GitHub
+    tag: v$(appveyor_build_version)
+    release: NecroBot2 v$(appveyor_build_version)
+    auth_token:
+      secure: 6PJ3cwd4I0DRJPv7w8iFAP6iPp94a4omr0Ajl0exmZ3qEnGLdqDwihlgFBFNBHWU 
+      artifact: NecroBot2.Console;NecroBot2.GUI
+      draft: false
+      prerelease: false
+      force_update: false
+      on:
+        branch: master                # release from master branch only
+
+# scripts to run before deployment
+before_deploy:
+
+# scripts to run after deployment
+after_deploy:
+
+# to run your custom scripts instead of provider deployments
+deploy_script:
+
+# to disable deployment
+#deploy: off
+
+#---------------------------------#
+#        global handlers          #
+#---------------------------------#
+
+# on successful build
+on_success:
+
+# on build failure
+on_failure:
+
+# after build failure or success
+on_finish:
