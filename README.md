@@ -1,7 +1,6 @@
 
 [![Stories in Ready](https://discordapp.com/api/guilds/220703917871333376/widget.png?style=banner2&time-)](https://discord.gg/KNqJAyj)
 
-[![Stories in Ready](https://badge.waffle.io/Necrobot-Private/NecroBot.svg?label=ready&title=Ready)](https://waffle.io/Necrobot-Private/NecroBot)
 [![Github All Releases](https://img.shields.io/github/downloads/Necrobot-Private/NecroBot/total.svg?maxAge=258)](https://github.com/Necrobot-Private/NecroBot/releases)
 [![GitHub license](https://img.shields.io/badge/license-AGPL-blue.svg)](https://raw.githubusercontent.com/Necrobot-Private/NecroBot/master/LICENSE.md)
 
