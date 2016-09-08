@@ -5,12 +5,12 @@
                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                       x:Name="Window"
-                      Title="NecroBot GUI / WebUi Client Manager"
+                      Title="NecroBot-Private Team GUI / WebUi Client Manager"
                       Width="398.856"
                       Height="190.994"
                       Background="#FF04AEDA"
                       Closing="Window_Closing"
-                      Icon="/NecroBot.GUI;component/Resources/Icon.ico"
+                      Icon="/NecroBot2.GUI;component/Resources/Ico.ico"
                       Loaded="Window_Loaded"
                       ResizeMode="NoResize"
                       WindowStartupLocation="CenterScreen"
@@ -35,7 +35,7 @@
                Margin="0,0,0,0"
                HorizontalAlignment="Center"
                VerticalAlignment="Center"
-               Source="/NecroBot.GUI;component/Resources/downloads-metro-icon.png" />
+               Source="/NecroBot2.GUI;component/Resources/downloads-metro-icon.png" />
         <Label x:Name="Label1"
                Grid.Row="0"
                Grid.Column="1"
