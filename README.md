@@ -10,10 +10,10 @@
 ### 3. This repository is a fork updated of [NecroBot-NoxxDev](https://github.com/NoxxDev/NecroBot)
 
 <h2><a name="getting-started">Getting Started</a></h2>
-Make sure you check out our [Wiki](https://github.com/Necrobot-Private/NecroBot/wiki) to get started.
+Make sure you check out our [Wiki](https://github.com/Necrobot-Private/NecroBot/wiki) to get started.    <b><---- Wiki links will be updated soon. Stay tuned.</b>
 <br/>
 
-<h6><em>[A big part of the Donations goes to the top 3 active Contributors. Other expenses as Server costs will be covered using the Donations.]</em></h6><br/>
+
 
 <h2><a name="features">Features</a></h2>
 
