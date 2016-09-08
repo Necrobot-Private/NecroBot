@@ -187,7 +187,8 @@ deploy_script:
 on_success:
   - SET PATH=C:\Ruby23\bin;%PATH%
   - gem install github_changelog_generator
-  - github_changelog_generator -t "$($env:access_token)"
+  - export CHANGELOG_GITHUB_TOKEN="$($env:access_token)"
+  - github_changelog_generator
   - git config --global credential.helper store
   - ps: Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n"
   - git config --global user.email "$($env:user_email)"
