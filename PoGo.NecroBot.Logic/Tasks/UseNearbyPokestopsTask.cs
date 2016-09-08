@@ -90,9 +90,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 session.Client.CurrentLatitude, session.Client.CurrentLongitude, current_pokeStop.Latitude, current_pokeStop.Longitude, session);
                     var current_fortInfo = await session.Client.Fort.GetFort(current_pokeStop.Id, current_pokeStop.Latitude, current_pokeStop.Longitude);
                     Logger.Write($"(Holmes) {current_fortInfo.Name} : {current_pokeStop_distance}", LogLevel.Info, ConsoleColor.Yellow);
-                    current_pokeStop_distance = LocationUtils.CalculateDistanceInMeters(
-                      session.Client.CurrentLatitude, session.Client.CurrentLongitude, current_pokeStop.Latitude, current_pokeStop.Longitude);
-                    Logger.Write($"(Holmes) {current_fortInfo.Name} : {current_pokeStop_distance}", LogLevel.Info, ConsoleColor.Green);
+                    //current_pokeStop_distance = LocationUtils.CalculateDistanceInMeters(
+                    //  session.Client.CurrentLatitude, session.Client.CurrentLongitude, current_pokeStop.Latitude, current_pokeStop.Longitude);
+                    //Logger.Write($"(Holmes) {current_fortInfo.Name} : {current_pokeStop_distance}", LogLevel.Info, ConsoleColor.Green);
                 }
 
                 // randomize next pokestop between first and second by distance

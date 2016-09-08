@@ -141,6 +141,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 Logger.Write("Error loading data fastpokemap", LogLevel.Error, ConsoleColor.DarkRed);
             }
+            Logger.Write($"(Holmes) FetchFromFastPokemap", LogLevel.Info, ConsoleColor.Green);
             return results;
         }
 

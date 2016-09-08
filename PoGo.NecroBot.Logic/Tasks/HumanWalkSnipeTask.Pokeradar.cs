@@ -43,6 +43,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 Logger.Write("Error loading data pokeradar", LogLevel.Error, ConsoleColor.DarkRed);
             }
+            Logger.Write($"(Holmes) FetchFromPokeradar", LogLevel.Info, ConsoleColor.Green);
             return results;
         }
         private static SnipePokemonInfo Map(PokeradarWrapper.PokeradarItem item)
