@@ -29,6 +29,7 @@ skip_commits:
   - '*.bat'
   - .gitattributes
   - .gitignore
+  - .github_changelog_generator
 
 # Including commits affecting specific files (GitHub only). More details here: /docs/appveyor-yml
 # only_commits:
