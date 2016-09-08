@@ -1,6 +1,5 @@
 user='Necrobot-Private' 
 project='NecroBot' 
-since-tag='v0.9.8.5'
 output=CHANGELOG.md
 date-format="%m/%d/%Y"
 issues=true
