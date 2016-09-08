@@ -191,7 +191,7 @@ on_success:
   - gem install github_changelog_generator
   - SET CHANGELOG_GITHUB_TOKEN=%access_token%
   - github_changelog_generator
-  - ps: |    
+  - ps: |
   git checkout "$env:APPVEYOR_REPO_BRANCH"
   git config --global core.autocrlf true
   git config --global credential.helper store
