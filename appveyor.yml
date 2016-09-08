@@ -21,7 +21,7 @@ skip_tags: false
 skip_non_tags: false
 
 # Including commits affecting specific files (GitHub only). More details here: /docs/appveyor-yml
-# only_commits:
+only_commits:
   files:
     - PoGo.NecroBot.CLI/
     - PoGo.NecroBot.GUI/
