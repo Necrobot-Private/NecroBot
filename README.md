@@ -14,7 +14,6 @@ Make sure you check out our [Wiki](https://github.com/Necrobot-Private/NecroBot/
 <br/>
 
 <h6><em>[A big part of the Donations goes to the top 3 active Contributors. Other expenses as Server costs will be covered using the Donations.]</em></h6><br/>
-![Display](necrobot1.gif)
 
 <h2><a name="features">Features</a></h2>
 
@@ -36,10 +35,10 @@ Make sure you check out our [Wiki](https://github.com/Necrobot-Private/NecroBot/
  - [Egg Hatching Automatically]
  - [Multi bot support]
  - [Snipe pokemon]
-  - [Manual Locations](https://github.com/NoxxDev/NecroBot/wiki/Manual-Locations-Sniping-Guide)
-  - [Automatic Locations](https://github.com/NoxxDev/NecroBot/wiki/Automatic-Locations-Sniping-Guide)
-  - [HumanWalk Sniping](https://github.com/NoxxDev/NecroBot/wiki/Human-walk-snipe-config)
-  - [MSniper Sniping](https://github.com/NoxxDev/NecroBot/wiki/MSniper-Manual-Sniping-Guide)
+  - [Manual Locations](https://github.com/Necrobot-Private/NecroBot/wiki/Manual-Locations-Sniping-Guide)
+  - [Automatic Locations](https://github.com/NNecrobot-Private/NecroBot/wiki/Automatic-Locations-Sniping-Guide)
+  - [HumanWalk Sniping](https://github.com/Necrobot-Private/NecroBot/wiki/Human-walk-snipe-config)
+  - [MSniper Sniping](https://github.com/Necrobot-Private/NecroBot/wiki/MSniper-Manual-Sniping-Guide)
  - [Power-Up pokemon]
  - [Telegram Remote Control Support]
 
