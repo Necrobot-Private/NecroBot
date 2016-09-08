@@ -205,7 +205,7 @@ on_success:
   - ps: git config --global user.email "$env:github_email"
   - ps: git config --global user.name "$env:github_user"
   - ps: git commit -m "update changelog.md" "CHANGELOG.md"
-  - ps: git push neworigin "$env:APPVEYOR_REPO_BRANCH"
+  - ps: git push "$env:APPVEYOR_REPO_BRANCH" neworigin
 
 # on build failure
 on_failure:
