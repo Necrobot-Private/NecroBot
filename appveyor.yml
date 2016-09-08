@@ -211,8 +211,7 @@ deploy_script:
 on_success:
   - SET PATH=C:\Ruby23\bin;%PATH%
   - gem install github_changelog_generator
-  - SET CHANGELOG_GITHUB_TOKEN=%access_token%
-  - github_changelog_generator
+  - ps: github_changelog_generator --token $env:access_token
   - git commit -m "update changelog.md" "CHANGELOG.md"
   - git checkout %APPVEYOR_REPO_BRANCH%
   - git merge appveyor
