@@ -41,6 +41,15 @@ image: Visual Studio 2015
 # scripts that are called at very beginning, before repo cloning
 init:
   - git config --global core.autocrlf input
+  - ps: $fileContent = "-----BEGIN RSA PRIVATE KEY-----`n"
+  - ps: $fileContent += $env:priv_key.Replace(' ', "`n")
+  - ps: $fileContent += "`n-----END RSA PRIVATE KEY-----`n"
+  - ps: Set-Content "$env:USERPROFILE\.ssh\id_rsa" $fileContent
+  
+  - ps: git config --global credential.helper store
+  - ps: git config --global user.email "$env:github_email"
+  - ps: git config --global user.name "$env:github_user"
+  - ps: Set-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n"
 
 # clone directory
 clone_folder: c:\projects\necrobot
@@ -70,6 +79,7 @@ cache:
 
 # scripts that run after cloning repository
 install:
+  - git checkout -b appveyor
   - git submodule update --init --recursive
 
 # enable patching of AssemblyInfo.* files
@@ -193,19 +203,8 @@ on_success:
   - gem install github_changelog_generator
   - SET CHANGELOG_GITHUB_TOKEN=%access_token%
   - github_changelog_generator
-  - ps: $fileContent = "-----BEGIN RSA PRIVATE KEY-----`n"
-  - ps: $fileContent += $env:priv_key.Replace(' ', "`n")
-  - ps: $fileContent += "`n-----END RSA PRIVATE KEY-----`n"
-  - ps: Set-Content c:\users\appveyor\.ssh\id_rsa $fileContent
-  # - ps: git checkout "$env:APPVEYOR_REPO_BRANCH"
-  - ps: git config --global core.autocrlf true
-  - ps: git config --global credential.helper store
-  - ps: Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n"
-  - ps: git remote add neworigin "$env:github_repo"
-  - ps: git config --global user.email "$env:github_email"
-  - ps: git config --global user.name "$env:github_user"
-  - ps: git commit -m "update changelog.md" "CHANGELOG.md"
-  - ps: git push "$env:APPVEYOR_REPO_BRANCH" neworigin
+  - git commit -m "update changelog.md" "CHANGELOG.md"
+  - git push origin appveyor
 
 # on build failure
 on_failure:
