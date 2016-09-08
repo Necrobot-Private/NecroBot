@@ -59,7 +59,7 @@ environment:
     secure: BTFs4sc8XE9MG1VhIOZPt6Bbwfq3967JxYsRuNpxTl4=
   user_name:
     secure: pxYfjvhdqgrZKh6Yy3V7Cg==
-	
+
 # build cache to preserve files/folders between builds
 cache:
   - packages -> **\packages.config  # preserve packages directory in the root of build folder but will reset it if packages.config is modified
