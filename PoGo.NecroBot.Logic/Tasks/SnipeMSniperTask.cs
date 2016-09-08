@@ -23,10 +23,11 @@ namespace PoGo.NecroBot.Logic.Tasks
     {
         public static async Task CheckMSniperLocation(ISession session, CancellationToken cancellationToken)
         {
+            var pth = Path.Combine(session.LogicSettings.ProfilePath, "SnipeMS.json");
+
             try
             {
-                var pth = Path.Combine(session.LogicSettings.ProfilePath, "SnipeMS.json");
-                if (!File.Exists(pth))
+                  if (!File.Exists(pth))
                     return;
 
                 if (!await SnipePokemonTask.CheckPokeballsToSnipe(session.LogicSettings.MinPokeballsWhileSnipe + 1, session, cancellationToken))
