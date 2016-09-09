@@ -54,7 +54,7 @@ Make sure you check out our [Wiki](https://github.com/Necrobot-Private/NecroBot/
 
 <h2><a name="legal">Legal Disclaimer</a></h2>
 
-This Website and Project is in no way affiliated with, authorized, maintained, sponsored or endorsed by ANYONE. This is an independent and unofficial API for educational use ONLY. Do not use for any other purpose than education, testing and research.
+This Website and Project is in no way affiliated with, authorized, maintained, sponsored or endorsed by ANYONE. This is an independent and unofficial project for educational use ONLY. Do not use for any other purpose than education, testing and research.
 
 
 
