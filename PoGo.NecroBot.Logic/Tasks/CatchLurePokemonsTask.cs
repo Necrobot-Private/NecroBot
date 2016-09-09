@@ -108,7 +108,7 @@ namespace PoGo.NecroBot.Logic.Tasks
            var forts = session.Forts.Where(p=>p.Type == FortType.Checkpoint);
             List<FortData> luredNearBy = new List<FortData>();
 
-            foreach (FortData fort in luredNearBy)
+            foreach (FortData fort in forts)
             {
                 var distance =  LocationUtils.CalculateDistanceInMeters(session.Client.CurrentLatitude, session.Client.CurrentLongitude, fort.Latitude, fort.Longitude);
                 if(distance <40 && fort.LureInfo != null)
