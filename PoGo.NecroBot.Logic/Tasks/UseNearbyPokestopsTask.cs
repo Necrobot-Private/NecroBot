@@ -47,6 +47,20 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (!session.LogicSettings.UsePokeStopLimit) return false;
             if (session.Stats.PokeStopTimestamps.Count >= session.LogicSettings.PokeStopLimit)
             {
+                //check Timestamps & delete older then 24h
+                var TSminus24h = DateTime.Now.AddHours(-24).Ticks;
+                for (int i = 0; i < session.Stats.PokeStopTimestamps.Count; i++)
+                {
+                    if (session.Stats.PokeStopTimestamps[i] > TSminus24h)
+                    {
+                        session.Stats.PokeStopTimestamps.Remove(session.Stats.PokeStopTimestamps[i]);
+                    }
+                    else
+                    {
+                        i = session.Stats.PokeStopTimestamps.Count;
+                    }
+                }
+
                 // delete uesless data
                 int toRemove = session.Stats.PokeStopTimestamps.Count - session.LogicSettings.PokeStopLimit;
                 if (toRemove > 0)
@@ -61,9 +75,15 @@ namespace PoGo.NecroBot.Logic.Tasks
                     session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.PokeStopExceeds, Math.Round(limit - sec)) });
                     return true;
                 }
+                else
+                {
+                    return false;
+                }
             }
-            
-            return false;
+            else
+            {
+                return false;
+            }
         }
 
         public static async Task Execute(ISession session, CancellationToken cancellationToken)
