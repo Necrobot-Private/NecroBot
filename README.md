@@ -50,7 +50,7 @@ Make sure you check out our [Wiki](https://github.com/Necrobot-Private/NecroBot/
 ## [Credits](http://pastebin.com/Yh4ynXbv)
 
 
-## [Contributors](https://github.com/Necrobot-Private/NecroBot/blob/master/CONTRIBUTORS.md)
+
 
 <h2><a name="legal">Legal Disclaimer</a></h2>
 
