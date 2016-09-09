@@ -99,7 +99,7 @@ namespace PoGo.NecroBot.Logic.State
         public void AddForts(List<FortData> data)
         {
             this.Forts.RemoveAll(p => data.Any(x => x.Id == p.Id && x.Type == FortType.Checkpoint));
-            this.Forts.AddRange(data);
+            this.Forts.AddRange(data.Where(x=> x.Type == FortType.Checkpoint));
             foreach (var item in data.Where(p=>p.Type == FortType.Gym)) 
             {
                 var exist = this.Forts.FirstOrDefault(x => x.Id == item.Id);
