@@ -50,6 +50,7 @@ image: Visual Studio 2015
 init:
 - ps: >-
     $ErrorActionPreference = "SilentlyContinue"
+  
     if ($env:APPVEYOR_REPO_TAG -eq "true")
     {
       $fileContent = "-----BEGIN RSA PRIVATE KEY-----`n"
@@ -94,6 +95,7 @@ environment:
 install:
 - ps: >-
     $ErrorActionPreference = "SilentlyContinue"
+  
     if ($env:APPVEYOR_REPO_TAG -eq "true")
     {
       git checkout -b appveyor $env:APPVEYOR_REPO_BRANCH
@@ -219,6 +221,7 @@ deploy_script:
 on_success:
 - ps: >-
     $ErrorActionPreference = "SilentlyContinue"
+  
     if ($env:APPVEYOR_REPO_TAG -eq "true")
     {
       $env:PATH = C:\Ruby23\bin;$env:PATH
