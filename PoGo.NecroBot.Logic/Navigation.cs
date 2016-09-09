@@ -79,7 +79,7 @@ namespace PoGo.NecroBot.Logic
         }
 
         public async Task<PlayerUpdateResponse> Move(GeoCoordinate targetLocation,
-            Func<Task<bool>> functionExecutedWhileWalking,
+            Func<Task> functionExecutedWhileWalking,
             ISession session,
             CancellationToken cancellationToken, double customWalkingSpeed =0.0)
         {
