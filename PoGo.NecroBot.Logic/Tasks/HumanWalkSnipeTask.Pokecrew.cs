@@ -35,7 +35,9 @@ namespace PoGo.NecroBot.Logic.Tasks
          private static async Task<List<SnipePokemonInfo>> FetchFromPokecrew(double lat, double lng)
         {
             List<SnipePokemonInfo> results = new List<SnipePokemonInfo>();
-            if (!_setting.HumanWalkingSnipeUsePokeRadar) return results;
+            if (!_setting.HumanWalkingSnipeUsePokecrew) return results;
+
+            //var startFetchTime = DateTime.Now;
 
             try
             {
@@ -52,15 +54,16 @@ namespace PoGo.NecroBot.Logic.Tasks
                     if (pItem != null)
                     {
                         results.Add(pItem);
-                        Logger.Write($"(Holmes) {pItem.Latitude} {pItem.Longitude}", LogLevel.Info, ConsoleColor.Green);
                     }
                 }
             }
             catch (Exception)
             {
-                Logger.Write("Error loading data", LogLevel.Error, ConsoleColor.DarkRed);
+                Logger.Write("Error loading data from Pokecrew", LogLevel.Error, ConsoleColor.DarkRed);
             }
-            Logger.Write($"(Holmes) FetchFromPokecrew", LogLevel.Info, ConsoleColor.Green);
+
+            //var endFetchTime = DateTime.Now;
+            //Logger.Write($"FetchFromPokecrew spent {(endFetchTime - startFetchTime).TotalSeconds} seconds", LogLevel.Info, ConsoleColor.White);
             return results;
         }
 

@@ -50,6 +50,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             List<SnipePokemonInfo> results = new List<SnipePokemonInfo>();
             if (!_setting.HumanWalkingSnipeUseSkiplagged) return results;
 
+            //var startFetchTime = DateTime.Now;
+
             var lat1 = lat - _setting.HumanWalkingSnipeSnipingScanOffset;
             var lat2 = lat + _setting.HumanWalkingSnipeSnipingScanOffset;
             var lng1 = lng - _setting.HumanWalkingSnipeSnipingScanOffset;
@@ -73,6 +75,9 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 Logger.Write("Error loading data from skiplagged", LogLevel.Error, ConsoleColor.DarkRed);
             }
+            
+            //var endFetchTime = DateTime.Now;
+            //Logger.Write($"FetchFromSkiplagged spend {(endFetchTime - startFetchTime).TotalSeconds} seconds", LogLevel.Sniper, ConsoleColor.White);
             return results;
         }
 

@@ -14,7 +14,9 @@ namespace PoGo.NecroBot.Logic.Tasks
         private static async Task<List<SnipePokemonInfo>> FetchFromPokeZZ(double lat, double lng)
         {
             List<SnipePokemonInfo> results = new List<SnipePokemonInfo>();
-            if (!_setting.GetSniperInfoFromPokezz) return results;
+            if (!_setting.HumanWalkingSnipeUsePokeZZ) return results;
+
+            //var startFetchTime = DateTime.Now;
 
             string url = "ws://pokezz.com/socket.io/?EIO=3&transport=websocket";
             try
@@ -45,9 +47,10 @@ namespace PoGo.NecroBot.Logic.Tasks
             catch (Exception )
             {
                 Logger.Write("Error loading data from Pokezz", LogLevel.Error, ConsoleColor.DarkRed);
-
             }
 
+            //var endFetchTime = DateTime.Now;
+            //Logger.Write($"FetchFromPokeZZ spent {(endFetchTime - startFetchTime).TotalSeconds} seconds", LogLevel.Info, ConsoleColor.White);
             return results;
         }
 

@@ -37,7 +37,9 @@ namespace PoGo.NecroBot.Logic.Tasks
         private static async Task<List<SnipePokemonInfo>> FetchFromPokesnipers(double lat, double lng)
         {
             List<SnipePokemonInfo> results = new List<SnipePokemonInfo>();
-            if (!_setting.GetSniperInfoFromPokeSnipers) return results;
+            if (!_setting.HumanWalkingSnipeUsePokesnipers) return results;
+
+            //var startFetchTime = DateTime.Now;
 
             try
             {
@@ -68,6 +70,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                 Logger.Write("Error loading data from pokesnipers", LogLevel.Error, ConsoleColor.DarkRed);
             }
 
+            //var endFetchTime = DateTime.Now;
+            //Logger.Write($"FetchFromPokesnipers spent {(endFetchTime - startFetchTime).TotalSeconds} seconds", LogLevel.Info, ConsoleColor.White);
             return results;
         }
     }
