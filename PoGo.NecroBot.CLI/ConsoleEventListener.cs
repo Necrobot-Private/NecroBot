@@ -438,7 +438,7 @@ namespace PoGo.NecroBot.CLI
         //TODO - move to string translation later.
         private static void HandleEvent(GymDeployEvent ev, ISession session)
         {
-            Logger.Write($"Great!!! Your {ev.Name} now is defending for GYM {ev.Name}", LogLevel.Gym, ConsoleColor.Green);
+            Logger.Write($"Great!!! Your {ev.PokemonId.ToString()} now is defending for GYM {ev.Name}", LogLevel.Gym, ConsoleColor.Green);
         }
 
 

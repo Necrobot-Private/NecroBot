@@ -114,7 +114,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                 if(distance <40 && fort.LureInfo != null)
                 {
                     luredNearBy.Add(fort);
-
                     await Execute(session, fort, cancellationToken);
                 }
             };
