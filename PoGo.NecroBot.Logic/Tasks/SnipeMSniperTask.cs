@@ -21,7 +21,7 @@ using WebSocket4Net;
 
 namespace PoGo.NecroBot.Logic.Tasks
 {
-    public static class SnipeMSniperTask
+    public static class MSniperServiceTask
     {
         #region MSniper Location Feeder
 
@@ -59,8 +59,9 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             None = 0,
             Identity = 1,
-            PCount = 2,
-            PokemonList = 3,
+            PokemonCount = 2,
+            SendPokemon = 3,
+            SendOneSpecies = 4
 
         }
 
@@ -68,7 +69,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             try
             {
-                return (SocketCmd)Enum.Parse(typeof(SocketCmd), e.Message.Split(':')[0]);
+                return (SocketCmd)Enum.Parse(typeof(SocketCmd), e.Message.Split('|')[0]);
             }
             catch (Exception ex)
             {
@@ -79,7 +80,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             try
             {
-                return e.Message.Split(':')[1];
+                return e.Message.Split('|')[1];
             }
             catch (Exception ex)
             {
@@ -104,9 +105,9 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         public static void OpenSocket()
         {
-            if (msocket == null || msocket.State == WebSocketState.Closed)
+            if (msocket == null/* || msocket.State == WebSocketState.Closed*/)
             {
-                msocket = new WebSocket("ws://localhost:56000/WebSockets/NecroBotServer.ashx", "basic", WebSocketVersion.Rfc6455);
+                msocket = new WebSocket("ws://localhost:56000/WebSockets/NecroBotServer.ashx", "", WebSocketVersion.Rfc6455);
                 msocket.MessageReceived += Msocket_MessageReceived;
                 msocket.Closed += Msocket_Closed;
                 msocket.Open();
@@ -115,24 +116,45 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static void Msocket_Closed(object sender, EventArgs e)
         {
+            //need delay or clear PkmnLocations
 
         }
 
         private static void Msocket_MessageReceived(object sender, MessageReceivedEventArgs e)
         {
-            SocketCmd cmd = e.GetSocketCmd();
-            switch (cmd)
+            try
             {
-                case SocketCmd.Identity:
-                    UniequeId = e.GetSocketData();
-                    break;
+                SocketCmd cmd = e.GetSocketCmd();
+                switch (cmd)
+                {
+                    case SocketCmd.Identity://first request
+                        UniequeId = e.GetSocketData();
+                        SendToMSniperServer(UniequeId);//confirm
+                        break;
 
-                case SocketCmd.PokemonList:
-                    var x = PkmnLocations.GroupBy(p => p.PokemonId)
-                        .Select(s => new PokemonCount { PokemonId = s.First().PokemonId, Count = s.Count() })
-                        .ToList();
-                    msocket.Send(JsonConvert.SerializeObject(x));
-                    break;
+                    case SocketCmd.PokemonCount://server asks what is in your hand (every 4 minutes)
+                        var x = PkmnLocations.GroupBy(p => p.PokemonId)
+                            .Select(s => new PokemonCount { PokemonId = s.First().PokemonId, Count = s.Count() })
+                            .ToList();
+                        SendToMSniperServer(JsonConvert.SerializeObject(x));
+                        break;
+
+                    case SocketCmd.SendPokemon://sending encounters
+                        SendToMSniperServer(JsonConvert.SerializeObject(PkmnLocations));
+                        PkmnLocations.Clear();
+                        break;
+
+                    case SocketCmd.SendOneSpecies://server needs one type pokemon
+                        PokemonId speciesId = (PokemonId)Enum.Parse(typeof(PokemonId), e.GetSocketData());
+                        var onespecies = PkmnLocations.Where(p => p.PokemonId == speciesId).ToList();
+                        SendToMSniperServer(JsonConvert.SerializeObject(onespecies));
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                msocket.Close();
+                throw ex;
             }
         }
 
@@ -140,7 +162,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             try
             {
-                msocket.Send($"{UniequeId}:{message}");
+                msocket.Send($"{message}");
             }
             catch (Exception ex)
             {
@@ -157,6 +179,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 return;
             using (var newdata = new EncounterInfo())
             {
+                //JavaTimeStampToDateTime WRONG CONVERTER !
                 newdata.EncounterId = eresponse.WildPokemon.EncounterId;
                 newdata.LastVisitedTimeStamp = JavaTimeStampToDateTime(eresponse.WildPokemon.LastModifiedTimestampMs);
                 newdata.SpawnPointId = eresponse.WildPokemon.SpawnPointId;
@@ -177,6 +200,10 @@ namespace PoGo.NecroBot.Logic.Tasks
         #endregion
         public static async Task CheckMSniper(ISession session, CancellationToken cancellationToken)
         {
+            OpenSocket();
+            ///
+            return;//disable for now
+            
             var pth = Path.Combine(session.LogicSettings.ProfilePath, "SnipeMS.json");
             try
             {
