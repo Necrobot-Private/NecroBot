@@ -115,18 +115,18 @@
     {
       "Key": "eventPokemonUpgraded",
       "Value": "{0}\t- CP: {1}  IV: {2}%   [最佳 CP: {3}  IV: {4}%]"
-    },    
+    },
     {
       "Key": "eventItemRecycled",
       "Value": "{1} × {0}\t\t"
     },
     {
       "Key": "eventPokemonCaptureSuccess",
-          "Value": "({0}) | ({1}) {2} 等級：{3} CP：({4}/{5}) IV：{6}% | 捕獲率：{7}% | 距離{8}公尺\t\t\t\t\t\n\t\t\t  使用{9}捕捉 (剩餘{10}個) | 經驗值+{11} | {12} | 座標：{13},{14} | 技能1: {15} 技能2: {16} | 罕見: {17}\t\t\t\t"
+      "Value": "({0}) | ({1}) {2} 等級：{3} CP：({4}/{5}) IV：{6}% | 捕獲率：{7}% | 距離{8}公尺\t\t\t\t\t\n\t\t\t  使用{9}捕捉 (剩餘 {10} 個) | 經驗值+{11} | {12} | 座標：{13},{14} | 技能1: {15} 技能2: {16} | 珍稀度: {17}\t\t\t\t"
     },
     {
       "Key": "eventPokemonCaptureFailed",
-         "Value": "({0}) | ({1}) {2} 等級：{3} CP：({4}/{5}) IV：{6}% | 捕獲率：{7}% | 距離{8}公尺\t\t\t\t\t\n\t\t\t  使用{9}捕捉 (剩餘{10}個) | 座標：{11},{12} | 技能1: {13} 技能2: {14}| 罕見: {15}\t\t\t\t"
+      "Value": "({0}) | ({1}) {2} 等級：{3} CP：({4}/{5}) IV：{6}% | 捕獲率：{7}% | 距離{8}公尺\t\t\t\t\t\n\t\t\t  使用{9}捕捉 (剩餘 {10} 個) | 座標：{11},{12} | 技能1: {13} 技能2: {14}| 珍稀度: {15}\t\t\t\t"
     },
     {
       "Key": "eventNoPokeballs",
@@ -622,6 +622,78 @@
       "Value": "語言代碼已使用： {0}\t\t"
     },
     {
+      "Key": "firstStartSetupTelegramPrompt",
+      "Value": "您要啟用 Telegram 功能嗎？ {0}/{1}"
+    },
+    {
+      "Key": "firstStartSetupProxyPrompt",
+      "Value": "您要啟用 Proxy 功能嗎？ {0}/{1}"
+    },
+    {
+      "Key": "firstStartSetupAutoCompleteTutPrompt",
+      "Value": "您要啟動自動完成新手任務功能嗎？ {0}/{1}"
+    },
+    {
+      "Key": "firstStartSetupAutoCompleteTutNicknamePrompt",
+      "Value": "請輸入您想要取的暱稱"
+    },
+    {
+      "Key": "firstStartSetupAutoCompleteTutNicknameConfirm",
+      "Value": "暱稱被接受了: {0}"
+    },
+    {
+      "Key": "firstStartSetupAutoCompleteTutGenderPrompt",
+      "Value": "請輸入你想要的性別 (請使用英文: Male(男) or Female(女))"
+    },
+    {
+      "Key": "firstStartSetupAutoCompleteTutGenderConfirm",
+      "Value": "性別設定好了: {0}"
+    },
+    {
+      "Key": "firstStartSetupAutoCompleteTutStarterPrompt",
+      "Value": "請選擇你想要的御三家寶可夢 (請使用英文: Bulbasaur(妙蛙種子), Charmander(小火龍), Squirtle(傑尼龜))"
+    },
+    {
+      "Key": "firstStartSetupAutoCompleteTutStarterConfirm",
+      "Value": "御三家選擇好了: {0}"
+    },
+    {
+      "Key": "firstStartSetupWebSocketPrompt",
+      "Value": "您要啟用 WebSocket 功能嗎？ {0}/{1}"
+    },
+    {
+      "Key": "firstStartSetupWebSocketPortPrompt",
+      "Value": "Please enter your WebSocket Port"
+    },
+    {
+      "Key": "firstStartSetupWebSocketPortConfirm",
+      "Value": "Accepted Port: {0}"
+    },
+    {
+      "Key": "firstStartSetupWalkingSpeedPrompt",
+      "Value": "您想要設定行走速度嗎？ {0}/{1}"
+    },
+    {
+      "Key": "firstStartSetupWalkingSpeedKmHPrompt",
+      "Value": "請輸入您想要的行走速度 (公里/小時) Ex: 5.85 [最高 20]"
+    },
+    {
+      "Key": "firstStartSetupWalkingSpeedKmHConfirm",
+      "Value": "行走速度設定好了: {0}"
+    },
+    {
+      "Key": "firstStartSetupUseWalkingSpeedVariantPrompt",
+      "Value": "您要啟用行走速度變動功能嗎？ {0}/{1}"
+    },
+    {
+      "Key": "firstStartSetupWalkingSpeedVariantPrompt",
+      "Value": "請輸入行走速度變動值 (公里/小時) Ex: 1.2"
+    },
+    {
+      "Key": "firstStartSetupWalkingSpeedVariantConfirm",
+      "Value": "變動值設定好了: {0}"
+    },
+    {
       "Key": "promptError",
       "Value": "[錯誤] 錯誤的輸入，請輸入'{0}'或'{1}'\t\t"
     },
@@ -801,7 +873,7 @@
     },
     {
       "Key": "butterfree",
-      "Value": "巴大蝴"
+      "Value": "巴大蝶"
     },
     {
       "Key": "weedle",
@@ -809,7 +881,7 @@
     },
     {
       "Key": "kakuna",
-      "Value": "鐵殼昆"
+      "Value": "鐵殼蛹"
     },
     {
       "Key": "beedrill",
@@ -825,7 +897,7 @@
     },
     {
       "Key": "pidgeot",
-      "Value": "比鵰"
+      "Value": "大比鳥"
     },
     {
       "Key": "rattata",
@@ -949,7 +1021,7 @@
     },
     {
       "Key": "venomoth",
-      "Value": "末入蛾"
+      "Value": "摩魯蛾"
     },
     {
       "Key": "diglett",
@@ -997,11 +1069,11 @@
     },
     {
       "Key": "poliwhirl",
-      "Value": "蚊香蛙"
+      "Value": "蚊香君"
     },
     {
       "Key": "poliwrath",
-      "Value": "快泳蛙"
+      "Value": "蚊香泳士"
     },
     {
       "Key": "abra",
@@ -1009,7 +1081,7 @@
     },
     {
       "Key": "kadabra",
-      "Value": "勇吉拉"
+      "Value": "勇基拉"
     },
     {
       "Key": "alakazam",
@@ -1073,7 +1145,7 @@
     },
     {
       "Key": "slowbro",
-      "Value": "呆河馬"
+      "Value": "呆殼獸"
     },
     {
       "Key": "magnemite",
@@ -1117,7 +1189,7 @@
     },
     {
       "Key": "cloyster",
-      "Value": "鐵甲貝"
+      "Value": "刺甲貝"
     },
     {
       "Key": "gastly",
@@ -1137,11 +1209,11 @@
     },
     {
       "Key": "drowzee",
-      "Value": "素利普"
+      "Value": "催眠貘"
     },
     {
       "Key": "hypno",
-      "Value": "素利拍"
+      "Value": "引夢貘人"
     },
     {
       "Key": "krabby",
@@ -1153,11 +1225,11 @@
     },
     {
       "Key": "voltorb",
-      "Value": "雷電球"
+      "Value": "霹靂電球"
     },
     {
       "Key": "electrode",
-      "Value": "頑皮彈"
+      "Value": "頑皮雷彈"
     },
     {
       "Key": "exeggcute",
@@ -1169,7 +1241,7 @@
     },
     {
       "Key": "cubone",
-      "Value": "可拉可拉"
+      "Value": "卡拉卡拉"
     },
     {
       "Key": "marowak",
@@ -1177,11 +1249,11 @@
     },
     {
       "Key": "hitmonlee",
-      "Value": "沙瓦郎"
+      "Value": "飛腿郎"
     },
     {
       "Key": "hitmonchan",
-      "Value": "艾比郎"
+      "Value": "快拳郎"
     },
     {
       "Key": "lickitung",
@@ -1197,11 +1269,11 @@
     },
     {
       "Key": "rhyhorn",
-      "Value": "鐵甲犀牛"
+      "Value": "獨角犀牛"
     },
     {
       "Key": "rhydon",
-      "Value": "鐵甲暴龍"
+      "Value": "鑽角犀獸"
     },
     {
       "Key": "chansey",
@@ -1213,7 +1285,7 @@
     },
     {
       "Key": "kangaskhan",
-      "Value": "袋龍"
+      "Value": "袋獸"
     },
     {
       "Key": "horsea",
@@ -1241,7 +1313,7 @@
     },
     {
       "Key": "mrMime",
-      "Value": "吸盤魔偶"
+      "Value": "魔牆人偶"
     },
     {
       "Key": "scyther",
@@ -1257,11 +1329,11 @@
     },
     {
       "Key": "magmar",
-      "Value": "鴨嘴火龍"
+      "Value": "鴨嘴火獸"
     },
     {
       "Key": "pinsir",
-      "Value": "大甲"
+      "Value": "凱羅斯"
     },
     {
       "Key": "tauros",
@@ -1277,7 +1349,7 @@
     },
     {
       "Key": "lapras",
-      "Value": "乘龍"
+      "Value": "拉普拉斯"
     },
     {
       "Key": "ditto",
@@ -1289,19 +1361,19 @@
     },
     {
       "Key": "vaporeon",
-      "Value": "水精靈"
+      "Value": "水伊布"
     },
     {
       "Key": "jolteon",
-      "Value": "雷精靈"
+      "Value": "雷伊布"
     },
     {
       "Key": "flareon",
-      "Value": "火精靈"
+      "Value": "火伊布"
     },
     {
       "Key": "porygon",
-      "Value": "３Ｄ龍"
+      "Value": "多邊獸"
     },
     {
       "Key": "omanyte",
