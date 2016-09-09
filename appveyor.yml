@@ -5,6 +5,9 @@
 # version format
 version: 0.0.0.{build}
 
+# you can use {branch} name in version format too
+# version: 1.0.{build}-{branch}
+
 # branches to build
 branches:
   # whitelist
@@ -49,8 +52,6 @@ image: Visual Studio 2015
 # scripts that are called at very beginning, before repo cloning
 init:
 - ps: >-
-    $ErrorActionPreference = "SilentlyContinue"
-  
     if ($env:APPVEYOR_REPO_TAG -eq "true")
     {
       $fileContent = "-----BEGIN RSA PRIVATE KEY-----`n"
@@ -93,14 +94,8 @@ environment:
 
 # scripts that run after cloning repository
 install:
-- ps: >-
-    $ErrorActionPreference = "SilentlyContinue"
-  
-    if ($env:APPVEYOR_REPO_TAG -eq "true")
-    {
-      git checkout -b appveyor $env:APPVEYOR_REPO_BRANCH
-    }
-    git submodule update --init --recursive
+  - git checkout -b appveyor %APPVEYOR_REPO_BRANCH%
+  - git submodule update --init --recursive
 
 # enable patching of AssemblyInfo.* files
 assembly_info:
@@ -137,7 +132,7 @@ build:
 
 # scripts to run before build
 before_build:
-  - ps: nuget restore
+  - nuget restore
 
 # scripts to run *after* solution is built and *before* automatic packaging occurs (web apps, NuGet packages, Azure Cloud Services)
 before_package:
@@ -219,23 +214,29 @@ deploy_script:
 
 # on successful build
 on_success:
+- SET PATH=C:\Ruby23\bin;%PATH%
+- gem install github_changelog_generator
 - ps: >-
-    $ErrorActionPreference = "SilentlyContinue"
-  
     if ($env:APPVEYOR_REPO_TAG -eq "true")
     {
-      $env:PATH = C:\Ruby23\bin;$env:PATH
-      gem install github_changelog_generator
+      $ErrorActionPreference = "SilentlyContinue"
       github_changelog_generator --token $env:access_token
-      git add --ignore-errors "PoGo.NecroBot.CLI/Properties/AssemblyInfo.cs"
-      git add --ignore-errors "PoGo.NecroBot.GUI/Properties/AssemblyInfo.cs"
-      git add --ignore-errors "PoGo.NecroBot.Logic/Properties/AssemblyInfo.cs"
-      git add --ignore-errors "CHANGELOG.md"
-      git commit -m "v$env:APPVEYOR_REPO_TAG_NAME"
-      git checkout $env:APPVEYOR_REPO_BRANCH
-      git merge appveyor
-      git branch -d appveyor
-      git push -f origin $env:APPVEYOR_REPO_BRANCH
+      try
+      {
+        git add --ignore-errors "PoGo.NecroBot.CLI/Properties/AssemblyInfo.cs"
+        git add --ignore-errors "PoGo.NecroBot.GUI/Properties/AssemblyInfo.cs"
+        git add --ignore-errors "PoGo.NecroBot.Logic/Properties/AssemblyInfo.cs"
+        git add --ignore-errors "CHANGELOG.md"
+        git commit -m "v$env:APPVEYOR_REPO_TAG_NAME"
+        git checkout $env:APPVEYOR_REPO_BRANCH
+        git merge appveyor
+        git branch -d appveyor
+        git push --force-with-lease origin $env:APPVEYOR_REPO_BRANCH
+      }
+      catch
+      {
+        Write-Warning ("Failed to updated repo")
+      }
     }
 
 # on build failure
