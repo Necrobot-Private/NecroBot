@@ -2,7 +2,7 @@
 
 
 
-### Do NOT publish this github or discord, in any other discord server or website.
+### Do NOT publish/share/advertise this github or discord, in any other discord server or website.
 [![Stories in Ready](https://discordapp.com/api/guilds/220703917871333376/widget.png?style=banner2&time-)](https://discord.gg/7FWyWVp)
 
 [![Github All Releases](https://img.shields.io/github/downloads/Necrobot-Private/NecroBot/total.svg?maxAge=258)](https://github.com/Necrobot-Private/NecroBot/releases)
@@ -50,11 +50,11 @@ Make sure you check out our [Wiki](https://github.com/Necrobot-Private/NecroBot/
 ## [Credits](http://pastebin.com/Yh4ynXbv)
 
 
-## [Contributors](https://github.com/Necrobot-Private/NecroBot/blob/master/CONTRIBUTORS.md)
+
 
 <h2><a name="legal">Legal Disclaimer</a></h2>
 
-This Website and Project is in no way affiliated with, authorized, maintained, sponsored or endorsed by ANYONE. This is an independent and unofficial API for educational use ONLY. Do not use for any other purpose than education, testing and research.
+This Website and Project is in no way affiliated with, authorized, maintained, sponsored or endorsed by ANYONE. This is an independent and unofficial project for educational use ONLY. Do not use for any other purpose than education, testing and research.
 
 
 
