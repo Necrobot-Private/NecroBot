@@ -52,17 +52,18 @@ image: Visual Studio 2015
 # scripts that are called at very beginning, before repo cloning
 init:
 - ps: >-
- git config --global core.autocrlf input
- if ($env:APPVEYOR_REPO_TAG -eq "true"){
- $fileContent = "-----BEGIN RSA PRIVATE KEY-----`n"
- $fileContent += $env:priv_key.Replace(' ', "`n")
- $fileContent += "`n-----END RSA PRIVATE KEY-----`n"
- Set-Content "$env:USERPROFILE\.ssh\id_rsa" $fileContent
- git config --global credential.helper store
- git config --global user.email "$env:github_email"
- git config --global user.name "$env:github_user"
- Set-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n" 
- }else{$env:APPVEYOR_REPO_TAG_NAME=$env:APPVEYOR_BUILD_VERSION}
+    if ($env:APPVEYOR_REPO_TAG -eq "true")
+    {
+      $fileContent = "-----BEGIN RSA PRIVATE KEY-----`n"
+      $fileContent += $env:priv_key.Replace(' ', "`n")
+      $fileContent += "`n-----END RSA PRIVATE KEY-----`n"
+      Set-Content "$env:USERPROFILE\.ssh\id_rsa" $fileContent
+      git config --global credential.helper store
+      git config --global user.email "$env:github_email"
+      git config --global user.name "$env:github_user"
+      Set-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n"
+    }
+    else{$env:APPVEYOR_REPO_TAG_NAME=$env:APPVEYOR_BUILD_VERSION}
 
 # clone directory
 clone_folder: c:\projects\necrobot
