@@ -219,6 +219,7 @@ on_success:
 - ps: >-
     if ($env:APPVEYOR_REPO_TAG -eq "true")
     {
+      $ErrorActionPreference = "SilentlyContinue"
       github_changelog_generator --token $env:access_token
       try
       {
