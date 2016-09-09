@@ -109,7 +109,8 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             if (msocket == null/* || msocket.State == WebSocketState.Closed*/)
             {
-                msocket = new WebSocket("ws://localhost:56000/WebSockets/NecroBotServer.ashx", "", WebSocketVersion.Rfc6455);
+                //msniper.com
+                msocket = new WebSocket("ws://localhost:56000WebSockets/NecroBotServer.ashx", "", WebSocketVersion.Rfc6455);
                 msocket.MessageReceived += Msocket_MessageReceived;
                 msocket.Closed += Msocket_Closed;
                 msocket.Open();
@@ -162,7 +163,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     case SocketCmd.Identity://first request
                         UniequeId = e.GetSocketData();
                         SendToMSniperServer(UniequeId);//confirm
-                        Logger.Write($"Identity: [ {UniequeId} ] connection establisted with service", LogLevel.Info, ConsoleColor.Yellow);
+                        Logger.Write($"Identity: [ {UniequeId} ] connection establisted with service", LogLevel.Info, ConsoleColor.White);
                         break;
 
                     case SocketCmd.PokemonCount://server asks what is in your hand (every 3 minutes)
@@ -170,7 +171,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                             .Select(s => new PokemonCount { PokemonId = s.First().PokemonId, Count = s.Count() })
                             .ToList();
                         SendToMSniperServer(JsonConvert.SerializeObject(x));
-                        Logger.Write($"PokemonCount: {x.Count} amount sending", LogLevel.Info, ConsoleColor.Yellow);
+                        Logger.Write($"PokemonCount: Telling amount of pokemon [ {x.Count} ]", LogLevel.Info, ConsoleColor.White);
                         break;
 
                     case SocketCmd.SendPokemon://sending encounters
@@ -181,7 +182,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                             SendToMSniperServer(JsonConvert.SerializeObject(selected));
                             AddToVisited(selected.Select(p => p.EncounterId).ToList());
                             PkmnLocations.RemoveRange(0, 5);
-                            Logger.Write($"SendPokemon: {selected.Count} amount sending", LogLevel.Info, ConsoleColor.Yellow);
+                            Logger.Write($"SendPokemon: Sending {selected.Count} amount PokemonLocation", LogLevel.Info, ConsoleColor.White);
                         }
                         break;
 
@@ -204,18 +205,18 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 PkmnLocations.Clear();
                             }
                             SendToMSniperServer(JsonConvert.SerializeObject(oneType));
-                            Logger.Write($"SendOneSpecies: {oneType.Count} amount sending", LogLevel.Info, ConsoleColor.Yellow);
+                            Logger.Write($"SendOneSpecies: Sending {oneType.First().PokemonId.ToString()} [ {oneType.Count} ] amount", LogLevel.Info, ConsoleColor.White);
                         }
                         break;
 
                     case SocketCmd.Brodcaster://receiving encounter information from server
                         List<EncounterInfo> POKEMON_FEED = JsonConvert.DeserializeObject<List<EncounterInfo>>(e.GetSocketData());
-                        Logger.Write($"Brodcaster:  Received {POKEMON_FEED.Count} pokemon location from MSniper Service", LogLevel.Info, ConsoleColor.Yellow);
+                        Logger.Write($"Brodcaster:  Received {POKEMON_FEED.Count} pokemon location from MSniper Service", LogLevel.Info, ConsoleColor.White);
                         POKEMON_FEED = FindNew(POKEMON_FEED);
-                        Logger.Write($"Brodcaster:  but {POKEMON_FEED.Count} amount haven't visited", LogLevel.Info, ConsoleColor.Yellow);
+                        Logger.Write($"Brodcaster:  AND {POKEMON_FEED.Count} amount pokemon haven't visited", LogLevel.Info, ConsoleColor.White);
                         break;
                     case SocketCmd.None:
-                        Logger.Write("UNKNOWN ERROR", LogLevel.Info, ConsoleColor.Yellow);
+                        Logger.Write("UNKNOWN ERROR", LogLevel.Info, ConsoleColor.White);
                         //throw Exception
                         break;
                 }
