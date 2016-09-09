@@ -11,6 +11,7 @@ using POGOProtos.Map.Pokemon;
 using POGOProtos.Networking.Responses;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -109,11 +110,20 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             if (msocket == null/* || msocket.State == WebSocketState.Closed*/)
             {
-                //msniper.com
-                msocket = new WebSocket("ws://localhost:56000WebSockets/NecroBotServer.ashx", "", WebSocketVersion.Rfc6455);
-                msocket.MessageReceived += Msocket_MessageReceived;
-                msocket.Closed += Msocket_Closed;
-                msocket.Open();
+                try
+                {
+                    //msniper.com
+                    msocket = new WebSocket("ws://localhost:56000WebSockets/NecroBotServer.ashx", "", WebSocketVersion.Rfc6455);
+                    msocket.MessageReceived += Msocket_MessageReceived;
+                    msocket.Closed += Msocket_Closed;
+                    msocket.Open();
+                    Logger.Write($"Connection to LocationService", LogLevel.Info, ConsoleColor.White);
+
+                }
+                catch (Exception ex)
+                {
+                    Logger.Write(ex.Message, LogLevel.Error, ConsoleColor.Red);
+                }
             }
         }
 
@@ -248,6 +258,17 @@ namespace PoGo.NecroBot.Logic.Tasks
                 PkmnLocations.FirstOrDefault(p => p.EncounterId == eresponse.WildPokemon.EncounterId) != null &&
                 VisitedEncounterIds.FindIndex(p => p == eresponse.WildPokemon.EncounterId) != -1)
                 return;
+
+            //CONVERT TESTS
+            string _id = eresponse.WildPokemon.PokemonData.PokemonId.ToString();
+            string _lat = eresponse.WildPokemon.Latitude.ToString("G17", CultureInfo.InvariantCulture);
+            string _lon = eresponse.WildPokemon.Longitude.ToString("G17", CultureInfo.InvariantCulture);
+            long lastmodified = eresponse.WildPokemon.LastModifiedTimestampMs;
+            DateTime _lastmodified = JavaTimeStampToDateTime(lastmodified);
+            long hiddenms = eresponse.WildPokemon.TimeTillHiddenMs;
+            DateTime _expiredtime = JavaTimeStampToDateTime(lastmodified + hiddenms);
+            ///////////////////////////
+
             using (var newdata = new EncounterInfo())
             {
                 //JavaTimeStampToDateTime WRONG CONVERTER !
