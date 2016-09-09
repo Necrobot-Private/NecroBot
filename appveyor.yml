@@ -217,7 +217,8 @@ on_success:
 - ps: >-
     if ($env:APPVEYOR_REPO_TAG -eq "true")
     {
-      C:\Ruby23\bin\gem install github_changelog_generator
+      $env:PATH+="C:\Ruby23\bin"
+      gem install github_changelog_generator
       github_changelog_generator --token $env:access_token
       git add --ignore-errors "PoGo.NecroBot.CLI/Properties/AssemblyInfo.cs"
       git add --ignore-errors "PoGo.NecroBot.GUI/Properties/AssemblyInfo.cs"
