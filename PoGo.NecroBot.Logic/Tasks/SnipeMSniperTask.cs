@@ -90,7 +90,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static double minIvPercent = 1.0;
 
         public static List<EncounterInfo> PkmnLocations = new List<EncounterInfo>();
-
+        public static List<ulong> VisitedEncounterIds = new List<ulong>();
         public static List<PokemonId> blackList = new List<PokemonId>()
         {
             //PokemonId.Pidgeot,
@@ -107,7 +107,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             if (msocket == null/* || msocket.State == WebSocketState.Closed*/)
             {
-                msocket = new WebSocket("ws://localhost:56000/WebSockets/NecroBotServer.ashx", "", WebSocketVersion.Rfc6455);
+                msocket = new WebSocket("ws://msniper.com/WebSockets/NecroBotServer.ashx", "", WebSocketVersion.Rfc6455);
                 msocket.MessageReceived += Msocket_MessageReceived;
                 msocket.Closed += Msocket_Closed;
                 msocket.Open();
@@ -116,9 +116,26 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static void Msocket_Closed(object sender, EventArgs e)
         {
+            msocket.Dispose();
+            msocket = null;
+            throw new Exception("msniper socket closed");
             //need delay or clear PkmnLocations
 
         }
+
+        public static void AddToVisited(List<ulong> encounterIds)
+        {
+            encounterIds.ForEach(p =>
+            {
+                int index = VisitedEncounterIds.FindIndex(x => x == p);
+                if (index == -1)
+                {
+                    VisitedEncounterIds.Add(p);
+                }
+
+            });
+        }
+
 
         private static void Msocket_MessageReceived(object sender, MessageReceivedEventArgs e)
         {
@@ -140,14 +157,36 @@ namespace PoGo.NecroBot.Logic.Tasks
                         break;
 
                     case SocketCmd.SendPokemon://sending encounters
-                        SendToMSniperServer(JsonConvert.SerializeObject(PkmnLocations));
-                        PkmnLocations.Clear();
+                        PkmnLocations = PkmnLocations.OrderByDescending(p => p.Iv).ToList();
+                        if (PkmnLocations.Count > 5)
+                        {
+                            var selected = PkmnLocations.GetRange(0, 5);
+                            SendToMSniperServer(JsonConvert.SerializeObject(selected));
+                            AddToVisited(selected.Select(p => p.EncounterId).ToList());
+                            PkmnLocations.RemoveRange(0, 5);
+                        }
                         break;
 
                     case SocketCmd.SendOneSpecies://server needs one type pokemon
                         PokemonId speciesId = (PokemonId)Enum.Parse(typeof(PokemonId), e.GetSocketData());
                         var onespecies = PkmnLocations.Where(p => p.PokemonId == speciesId).ToList();
-                        SendToMSniperServer(JsonConvert.SerializeObject(onespecies));
+                        onespecies = onespecies.OrderByDescending(p => p.Iv).ToList();
+                        if (onespecies.Count > 0)
+                        {
+                            List<EncounterInfo> oneType;
+                            if (onespecies.Count > 5)
+                            {
+                                oneType = PkmnLocations.GetRange(0, 5);
+                                AddToVisited(oneType.Select(p => p.EncounterId).ToList());
+                                PkmnLocations.RemoveRange(0, 5);
+                            }
+                            else
+                            {
+                                oneType = PkmnLocations.GetRange(0, PkmnLocations.Count);
+                                PkmnLocations.Clear();
+                            }
+                            SendToMSniperServer(JsonConvert.SerializeObject(oneType));
+                        }
                         break;
                 }
             }
@@ -175,7 +214,8 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             if (!(PokemonInfo.CalculatePokemonPerfection(eresponse.WildPokemon.PokemonData) >= minIvPercent) &&
                 blackList.FindIndex(p => p == eresponse.WildPokemon.PokemonData.PokemonId) != -1 &&
-                PkmnLocations.FirstOrDefault(p => p.EncounterId == eresponse.WildPokemon.EncounterId) != null)
+                PkmnLocations.FirstOrDefault(p => p.EncounterId == eresponse.WildPokemon.EncounterId) != null &&
+                VisitedEncounterIds.FindIndex(p => p == eresponse.WildPokemon.EncounterId) != -1)
                 return;
             using (var newdata = new EncounterInfo())
             {
@@ -203,7 +243,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             OpenSocket();
             ///
             return;//disable for now
-            
+
             var pth = Path.Combine(session.LogicSettings.ProfilePath, "SnipeMS.json");
             try
             {
