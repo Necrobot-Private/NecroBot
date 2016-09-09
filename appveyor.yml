@@ -25,7 +25,7 @@ skip_commits:
   - '*.md'
   - '*.gif'
   - '*.txt'
-  # - '*.yml'
+  - '*.yml'
   - '*.bat'
   - .gitattributes
   - .gitignore
