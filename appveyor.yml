@@ -62,7 +62,7 @@ init:
       git config --global user.email "$env:github_email"
       git config --global user.name "$env:github_user"
       Set-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n"
-      $env:APPVEYOR_REPO_TAG_NAME=$env:APPVEYOR_REPO_TAG_NAME.Replace("v", "n")
+      $env:APPVEYOR_REPO_TAG_NAME=$env:APPVEYOR_REPO_TAG_NAME.Replace("v", "")
     }
     else{$env:APPVEYOR_REPO_TAG_NAME=$env:APPVEYOR_BUILD_VERSION}
 
