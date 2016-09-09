@@ -232,11 +232,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static async Task WalkingBackGPXPath(ISession session, CancellationToken cancellationToken, FortData originalPokestop)
         {
-
             var destination = new GeoCoordinate(session.Client.CurrentLatitude, session.Client.CurrentLongitude,
                          LocationUtils.getElevation(session, originalPokestop.Latitude, originalPokestop.Longitude));
-
-
             await session.Navigation.Move(destination,
                async () =>
                {
@@ -251,7 +248,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var nearestStop = session.Forts.OrderBy(i =>
+            var nearestStop = session.VisibleForts.OrderBy(i =>
                 LocationUtils.CalculateDistanceInMeters(session.Client.CurrentLatitude,
                     session.Client.CurrentLongitude, i.Latitude, i.Longitude)).FirstOrDefault();
 
@@ -262,8 +259,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     await Task.Delay(3000, cancellationToken);
                     var nearbyPokeStops = await UseNearbyPokestopsTask.UpdateFortsData(session);
-                    var notexists = nearbyPokeStops.Where(p => !session.Forts.Exists(x => x.Id == p.Id)).ToList();
-
+                    var notexists = nearbyPokeStops.Where(p => !session.VisibleForts.Exists(x => x.Id == p.Id)).ToList();
+                    session.AddVisibleForts(notexists);
                     session.EventDispatcher.Send(new PokeStopListEvent { Forts = notexists });
                     session.EventDispatcher.Send(new HumanWalkSnipeEvent
                     {

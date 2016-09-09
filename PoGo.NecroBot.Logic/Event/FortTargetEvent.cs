@@ -5,5 +5,6 @@
         public string Route;
         public double Distance;
         public string Name;
+        public string Type;
     }
 }

@@ -10,6 +10,8 @@ using POGOProtos.Networking.Responses;
 using PoGo.NecroBot.Logic.Service.Elevation;
 using System.Collections.Generic;
 using POGOProtos.Map.Fort;
+using System;
+using PokemonGo.RocketAPI.Extensions;
 
 #endregion
 
@@ -29,7 +31,9 @@ namespace PoGo.NecroBot.Logic.State
         SessionStats Stats { get; }
         ElevationService ElevationService { get; }
         List<FortData> Forts { get; set; }
+        List<FortData> VisibleForts { get; set; }
         void AddForts(List<FortData> mapObjects);
+        void AddVisibleForts(List<FortData> mapObjects);
     }
 
 
@@ -43,6 +47,8 @@ namespace PoGo.NecroBot.Logic.State
         public Session(ISettings settings, ILogicSettings logicSettings, ITranslation translation)
         {
             this.Forts = new List<FortData>();
+            this.VisibleForts = new List<FortData>();
+
             EventDispatcher = new EventDispatcher();
             LogicSettings = logicSettings;
 
@@ -58,6 +64,7 @@ namespace PoGo.NecroBot.Logic.State
             Stats = new SessionStats();
         }
         public List<FortData> Forts { get; set; }
+        public List<FortData> VisibleForts { get; set; }
         public GlobalSettings GlobalSettings { get; set; }
 
         public ISettings Settings { get; set; }
@@ -91,8 +98,27 @@ namespace PoGo.NecroBot.Logic.State
         }
         public void AddForts(List<FortData> data)
         {
-            this.Forts.RemoveAll(p => data.Any(x => x.Id == p.Id));
+            this.Forts.RemoveAll(p => data.Any(x => x.Id == p.Id && x.Type == FortType.Checkpoint));
             this.Forts.AddRange(data);
+            foreach (var item in data.Where(p=>p.Type == FortType.Gym)) 
+            {
+                var exist = this.Forts.FirstOrDefault(x => x.Id == item.Id);
+                if(exist != null && exist.CooldownCompleteTimestampMs > DateTime.UtcNow.ToUnixTime()) {
+                    continue;
+                }
+                else
+                {
+                    this.Forts.RemoveAll(x => x.Id == item.Id);
+                    this.Forts.Add(item);
+                }
+            }
+        }
+
+        public void AddVisibleForts(List<FortData> mapObjects)
+        {
+            var notexist = mapObjects.Where(p => !this.VisibleForts.Any(x => x.Id == p.Id));
+            this.VisibleForts.AddRange(notexist);
+
         }
     }
 }
