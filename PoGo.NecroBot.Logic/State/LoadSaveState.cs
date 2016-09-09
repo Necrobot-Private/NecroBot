@@ -86,6 +86,9 @@ namespace PoGo.NecroBot.Logic.State
                 }
             }
 
+            //Ticks -24h
+            var TSminus24h = DateTime.Now.AddHours(-24).Ticks;
+            
             List<Int64> list = new List<Int64>();
             // for pokestops
             try
@@ -98,7 +101,11 @@ namespace PoGo.NecroBot.Logic.State
                     {
                         if (c.Length > 0)
                         {
-                            list.Add(Convert.ToInt64(c));
+                            //add only values > Ticks-24h
+                            if (Convert.ToInt64(c) > TSminus24h)
+                            {
+                                list.Add(Convert.ToInt64(c));
+                            }
                         }
                     }
                 }
@@ -127,7 +134,11 @@ namespace PoGo.NecroBot.Logic.State
                     {
                         if (c.Length > 0)
                         {
-                            list.Add(Convert.ToInt64(c));
+                            //add only values > Ticks-24h
+                            if (Convert.ToInt64(c) > TSminus24h)
+                            {
+                                list.Add(Convert.ToInt64(c));
+                            }
                         }
                     }
                 }

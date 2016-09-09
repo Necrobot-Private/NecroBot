@@ -30,26 +30,48 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static bool CatchThresholdExceeds(ISession session)
         {
-            if (!session.LogicSettings.UseCatchLimit) return false;
-            if (session.Stats.PokemonTimestamps.Count >= session.LogicSettings.CatchPokemonLimit)
+			if (!session.LogicSettings.UseCatchLimit) return false;
+                        
+			if (session.Stats.PokemonTimestamps.Count >= session.LogicSettings.CatchPokemonLimit)
+			{
+                //check Timestamps & delete older then 24h
+                var TSminus24h = DateTime.Now.AddHours(-24).Ticks;
+                for (int i = 0; i < session.Stats.PokemonTimestamps.Count; i++)
+                {
+                    if (session.Stats.PokemonTimestamps[i] > TSminus24h)
+                    {
+                        session.Stats.PokemonTimestamps.Remove(session.Stats.PokemonTimestamps[i]);
+                    }
+                    else
+                    {
+                        i = session.Stats.PokemonTimestamps.Count;
+                    }
+                }
+
+				// delete useless data
+				int toRemove = session.Stats.PokemonTimestamps.Count - session.LogicSettings.CatchPokemonLimit;
+				if (toRemove > 0)
+				{
+					session.Stats.PokemonTimestamps.RemoveRange(0, toRemove);
+					UpdateTimeStampsPokemon?.Invoke();
+				}
+				var sec = (DateTime.Now - new DateTime(session.Stats.PokemonTimestamps.First())).TotalSeconds;
+				var limit = session.LogicSettings.CatchPokemonLimitMinutes * 60;
+				if (sec < limit)
+				{
+					session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.CatchExceeds, Math.Round(limit - sec))});
+					return true;
+				}
+                else
+                {
+                    return false;
+                }
+			}
+            else
             {
-                // delete uesless data
-                int toRemove = session.Stats.PokemonTimestamps.Count - session.LogicSettings.CatchPokemonLimit;
-                if (toRemove > 0)
-                {
-                    session.Stats.PokemonTimestamps.RemoveRange(0, toRemove);
-                    UpdateTimeStampsPokemon?.Invoke();
-                }
-                var sec = (DateTime.Now - new DateTime(session.Stats.PokemonTimestamps.First())).TotalSeconds;
-                var limit = session.LogicSettings.CatchPokemonLimitMinutes * 60;
-                if (sec < limit)
-                {
-                    session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.CatchExceeds, Math.Round(limit - sec))});
-                    return true;
-                }
+                return false;
             }
-            
-            return false;
+			
         }
 
         public static async Task Execute(ISession session, CancellationToken cancellationToken, dynamic encounter, MapPokemon pokemon,
