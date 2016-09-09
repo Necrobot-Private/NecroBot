@@ -2,7 +2,7 @@
 
 
 
-### Do NOT publish this github or discord, in any other discord server or website.
+### Do NOT publish/share/advertise this github or discord, in any other discord server or website.
 [![Stories in Ready](https://discordapp.com/api/guilds/220703917871333376/widget.png?style=banner2&time-)](https://discord.gg/7FWyWVp)
 
 [![Github All Releases](https://img.shields.io/github/downloads/Necrobot-Private/NecroBot/total.svg?maxAge=258)](https://github.com/Necrobot-Private/NecroBot/releases)
