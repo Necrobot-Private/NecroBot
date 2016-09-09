@@ -25,7 +25,7 @@ using PoGo.NecroBot.Logic.Event.Gym;
 
 namespace PoGo.NecroBot.Logic.Tasks
 {
-    public class VisitNearByGymTask
+    public class UseGymBattleTask
     {
         private static Dictionary<FortData, DateTime> gyms = new Dictionary<FortData, DateTime>();
         public static async Task Execute(ISession session, CancellationToken cancellationToken, FortData gym, FortDetailsResponse fortInfo)
@@ -52,22 +52,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     if (fortDetails.Result == GetGymDetailsResponse.Types.Result.Success)
                     {
                         var player = session.Profile.PlayerData;
-
-                        if (session.Profile.PlayerData.Team == TeamColor.Neutral)
-                        {
-                            var defaultTeam = session.LogicSettings.GymDefaultTeam;
-                            var teamResponse = await session.Client.Player.SetPlayerTeam(defaultTeam);
-                            if (teamResponse.Status == SetPlayerTeamResponse.Types.Status.Success)
-                            {
-                                player.Team = defaultTeam;
-                            }
-
-                            session.EventDispatcher.Send(new GymTeamJoinEvent()
-                            {
-                                Team = defaultTeam,
-                                Status = teamResponse.Status
-                            });
-                        }
+                        await EnsureJoinTeam(session, player);
 
                         //Do gym tutorial - tobe coded
 
@@ -80,23 +65,12 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                         if (player.Team != TeamColor.Neutral && fortDetails.GymState.FortData.OwnedByTeam == player.Team)
                         {
-                            var pokemon = await GetDeployablePokemon(session);
-                            if (pokemon != null)
-                            {
-                                var response = await session.Client.Fort.FortDeployPokemon(fortInfo.FortId, pokemon.Id);
-                                if (response.Result == FortDeployPokemonResponse.Types.Result.Success)
-                                {
-                                    session.EventDispatcher.Send(new GymDeployEvent()
-                                    {
-                                        PokemonId = pokemon.PokemonId,
-                                        Name = fortDetails.Name
-                                    });
-
-                                }
-                            }
+                            //trainning logic will come here
+                            await DeployPokemonToGym(session, fortInfo, fortDetails);
                         }
                         else
                         {
+                            //Battle logic code come here
                             Logger.Write($"No action, This gym is defending by other color", LogLevel.Gym, ConsoleColor.Cyan);
                         }
                     }
@@ -104,13 +78,47 @@ namespace PoGo.NecroBot.Logic.Tasks
                     {
                         Logger.Write($"You are not level 5 yet, come back later...", LogLevel.Gym, ConsoleColor.Cyan);
                     }
-
                 }
             }
-
             else
             {
                 Logger.Write($"Ignoring  Gym : {fortInfo.Name} - ", LogLevel.Gym, ConsoleColor.Cyan);
+            }
+        }
+
+        private static async Task DeployPokemonToGym(ISession session, FortDetailsResponse fortInfo, GetGymDetailsResponse fortDetails)
+        {
+            var pokemon = await GetDeployablePokemon(session);
+            if (pokemon != null)
+            {
+                var response = await session.Client.Fort.FortDeployPokemon(fortInfo.FortId, pokemon.Id);
+                if (response.Result == FortDeployPokemonResponse.Types.Result.Success)
+                {
+                    session.EventDispatcher.Send(new GymDeployEvent()
+                    {
+                        PokemonId = pokemon.PokemonId,
+                        Name = fortDetails.Name
+                    });
+                }
+            }
+        }
+
+        private static async Task EnsureJoinTeam(ISession session, POGOProtos.Data.PlayerData player)
+        {
+            if (session.Profile.PlayerData.Team == TeamColor.Neutral)
+            {
+                var defaultTeam = session.LogicSettings.GymDefaultTeam;
+                var teamResponse = await session.Client.Player.SetPlayerTeam(defaultTeam);
+                if (teamResponse.Status == SetPlayerTeamResponse.Types.Status.Success)
+                {
+                    player.Team = defaultTeam;
+                }
+
+                session.EventDispatcher.Send(new GymTeamJoinEvent()
+                {
+                    Team = defaultTeam,
+                    Status = teamResponse.Status
+                });
             }
         }
 

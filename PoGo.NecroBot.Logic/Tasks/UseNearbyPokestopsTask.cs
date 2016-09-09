@@ -88,7 +88,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 await DoActionAtPokeStop(session, cancellationToken, pokeStop, fortInfo);
 
-                await VisitNearByGymTask.Execute(session, cancellationToken, pokeStop, fortInfo);
+                await UseGymBattleTask.Execute(session, cancellationToken, pokeStop, fortInfo);
 
                 if (session.LogicSettings.SnipeAtPokestops || session.LogicSettings.UseSnipeLocationServer)
                     await SnipePokemonTask.Execute(session, cancellationToken);
@@ -349,7 +349,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 pokeStopes = pokeStopes.Where(p => LocationUtils.CalculateDistanceInMeters(p.Latitude, p.Longitude, session.Client.CurrentLatitude, session.Client.CurrentLongitude) < 40).ToList();
             }
             if (pokeStopes.Count == 1) return pokeStopes.FirstOrDefault();
-            if (session.LogicSettings.GymAllowed)
+           if (session.LogicSettings.GymAllowed)
             {
                 var gyms = pokeStopes.Where(x => x.Type == FortType.Gym &&
                 LocationUtils.CalculateDistanceInMeters(x.Latitude, x.Longitude, session.Client.CurrentLatitude, session.Client.CurrentLongitude) < session.LogicSettings.GymMaxDistance
