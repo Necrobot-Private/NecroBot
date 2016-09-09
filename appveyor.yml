@@ -217,9 +217,11 @@ on_success:
 - ps: >-
     if ($env:APPVEYOR_REPO_TAG -eq "true")
     {
-      $env:PATH+="C:\Ruby23\bin"
+      $SPATH=$env:PATH
+      $env:PATH="C:\Ruby23\bin"
       gem install github_changelog_generator
       github_changelog_generator --token $env:access_token
+      $env:PATH=$SPATH
       git add --ignore-errors "PoGo.NecroBot.CLI/Properties/AssemblyInfo.cs"
       git add --ignore-errors "PoGo.NecroBot.GUI/Properties/AssemblyInfo.cs"
       git add --ignore-errors "PoGo.NecroBot.Logic/Properties/AssemblyInfo.cs"
@@ -228,7 +230,7 @@ on_success:
       git checkout $env:APPVEYOR_REPO_BRANCH
       git merge appveyor
       git branch -d appveyor
-      git push origin --force-with-lease $env:APPVEYOR_REPO_BRANCH
+      git push --force-with-lease origin $env:APPVEYOR_REPO_BRANCH
     }
 
 # on build failure
