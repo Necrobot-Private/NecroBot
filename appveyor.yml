@@ -122,10 +122,9 @@ environment:
 # scripts that run after cloning repository
 install:
 - ps: >-
-    git submodule init "FeroxRev"
-    git submodule update "FeroxRev"
-    git submodule init "POGOProtos"
-    git submodule update "POGOProtos"
+    git submodule update --init "FeroxRev"
+
+    git submodule update --init "POGOProtos"
 
     if ($env:APPVEYOR_REPO_TAG -eq "true")
     {
