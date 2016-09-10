@@ -1,4 +1,3 @@
-since-tag='v0.9.8.5'
 date-format='%m/%d/%Y'
 output='CHANGELOG.md'
 base='HISTORY.md'

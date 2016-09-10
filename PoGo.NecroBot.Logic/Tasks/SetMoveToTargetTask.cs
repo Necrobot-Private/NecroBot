@@ -4,6 +4,7 @@ using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.State;
 using POGOProtos.Map.Fort;
 using POGOProtos.Networking.Responses;
+using System;
 
 #endregion
 
@@ -12,8 +13,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
     public class SetMoveToTargetTask
     {
-        public static bool SetMoveToTargetEnabled { get; set; }
-        public static bool SetMoveToTargetAccept { get; set; }
+        public static Boolean SetMoveToTargetEnabled { get; set; } = false;
+        public static Boolean SetMoveToTargetAccept { get; set; } = false;
         public static double SetMoveToTargetLat { get; set; }
         public static double SetMoveToTargetLng { get; set; }
 

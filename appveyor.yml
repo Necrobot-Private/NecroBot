@@ -51,16 +51,20 @@ image: Visual Studio 2015
 
 # scripts that are called at very beginning, before repo cloning
 init:
-  - ps: git config --global core.autocrlf input
-  - ps: $fileContent = "-----BEGIN RSA PRIVATE KEY-----`n"
-  - ps: $fileContent += $env:priv_key.Replace(' ', "`n")
-  - ps: $fileContent += "`n-----END RSA PRIVATE KEY-----`n"
-  - ps: Set-Content "$env:USERPROFILE\.ssh\id_rsa" $fileContent
-  - ps: git config --global credential.helper store
-  - ps: git config --global user.email "$env:github_email"
-  - ps: git config --global user.name "$env:github_user"
-  - ps: Set-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n" 
-  - ps: if ($env:APPVEYOR_REPO_TAG -eq "true"){$env:APPVEYOR_REPO_TAG_NAME=$env:APPVEYOR_REPO_TAG_NAME.Replace("v", "")} else {$env:APPVEYOR_REPO_TAG_NAME=$env:APPVEYOR_BUILD_VERSION}
+- ps: >-
+    if ($env:APPVEYOR_REPO_TAG -eq "true")
+    {
+      $fileContent = "-----BEGIN RSA PRIVATE KEY-----`n"
+      $fileContent += $env:priv_key.Replace(' ', "`n")
+      $fileContent += "`n-----END RSA PRIVATE KEY-----`n"
+      Set-Content "$env:USERPROFILE\.ssh\id_rsa" $fileContent
+      git config --global credential.helper store
+      git config --global user.email "$env:github_email"
+      git config --global user.name "$env:github_user"
+      Set-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n"
+      $env:APPVEYOR_REPO_TAG_NAME=$env:APPVEYOR_REPO_TAG_NAME.Replace("v", "")
+    }
+    else{$env:APPVEYOR_REPO_TAG_NAME=$env:APPVEYOR_BUILD_VERSION}
 
 # clone directory
 clone_folder: c:\projects\necrobot
@@ -210,14 +214,30 @@ deploy_script:
 
 # on successful build
 on_success:
-  - SET PATH=C:\Ruby23\bin;%PATH%
-  - gem install github_changelog_generator
-  - ps: github_changelog_generator --token $env:access_token
-  - git commit -m "update changelog.md" "CHANGELOG.md"
-  - git checkout %APPVEYOR_REPO_BRANCH%
-  - git merge appveyor
-  - git branch -d appveyor
-  - git push origin %APPVEYOR_REPO_BRANCH% -f
+- SET PATH=C:\Ruby23\bin;%PATH%
+- gem install github_changelog_generator
+- ps: >-
+    if ($env:APPVEYOR_REPO_TAG -eq "true")
+    {
+      $ErrorActionPreference = "SilentlyContinue"
+      github_changelog_generator --token $env:access_token
+      try
+      {
+        git add --ignore-errors "PoGo.NecroBot.CLI/Properties/AssemblyInfo.cs"
+        git add --ignore-errors "PoGo.NecroBot.GUI/Properties/AssemblyInfo.cs"
+        git add --ignore-errors "PoGo.NecroBot.Logic/Properties/AssemblyInfo.cs"
+        git add --ignore-errors "CHANGELOG.md"
+        git commit -m "v$env:APPVEYOR_REPO_TAG_NAME"
+        git checkout $env:APPVEYOR_REPO_BRANCH
+        git merge appveyor
+        git branch -d appveyor
+        git push --force-with-lease origin $env:APPVEYOR_REPO_BRANCH
+      }
+      catch
+      {
+        Write-Warning ("Failed to updated repo")
+      }
+    }
 
 # on build failure
 on_failure:
