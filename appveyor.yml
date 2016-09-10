@@ -41,39 +41,59 @@ image: Visual Studio 2015
 # scripts that are called at very beginning, before repo cloning
 init:
   - ps: >-
-     if ($env:APPVEYOR_REPO_TAG -eq "true")
-     {
-         if ($env:APPVEYOR_REPO_TAG -match "-rev")
-         {
+- ps: >-
+    if ($env:APPVEYOR_REPO_TAG -eq "true")
+    {
+        if ($env:APPVEYOR_REPO_TAG -match "-rev")
+        {
             $env:NecroBot2_IsRev = true
+
             $env:NecroBot2_Version = $env:APPVEYOR_REPO_TAG_NAME.Replace("v", "")
+
             $env:NecroBot2_Version = $env:NecroBot2_Version.Replace("-rev", ".")
+
             $env:NecroBot2_InformationalVersion = "$env:APPVEYOR_REPO_TAG_NAME"
+
             $env:APPVEYOR_Assembly_Info_File = "**\AssemblyInfoRev.*"
-         }
-         else
-         {
+        }
+        else
+        {
             $env:NecroBot2_IsRev = false
+
             $env:NecroBot2_Version = $env:APPVEYOR_REPO_TAG_NAME.Replace("v", "")
+
             $env:NecroBot2_Version = "$($env:NecroBot2_Version).0"
+
             $env:NecroBot2_InformationalVersion = "$env:APPVEYOR_REPO_TAG_NAME"
-         $env:APPVEYOR_Assembly_Info_File = "**\AssemblyInfo.*"
-         }
-         $fileContent = "-----BEGIN RSA PRIVATE KEY-----`n"
-         $fileContent += $env:priv_key.Replace(' ', "`n")
-         $fileContent += "`n-----END RSA PRIVATE KEY-----`n"
-         Set-Content "$env:USERPROFILE\.ssh\id_rsa" $fileContent
-         git config --global credential.helper store
-         git config --global user.email "$env:github_email"
-         git config --global user.name "$env:github_user"
-         Set-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n"
-     }
-     else
-     {
-         $env:NecroBot2_Version = $env:APPVEYOR_BUILD_VERSION
-         $env:NecroBot2_InformationalVersion = $env:APPVEYOR_BUILD_VERSION
-         $env:APPVEYOR_Assembly_Info_File = "**\AssemblyInfo.*"
-     }
+
+            $env:APPVEYOR_Assembly_Info_File = "**\AssemblyInfo.*"
+        }
+
+        $fileContent = "-----BEGIN RSA PRIVATE KEY-----`n"
+
+        $fileContent += $env:priv_key.Replace(' ', "`n")
+
+        $fileContent += "`n-----END RSA PRIVATE KEY-----`n"
+
+        Set-Content "$env:USERPROFILE\.ssh\id_rsa" $fileContent
+
+        git config --global credential.helper store
+
+        git config --global user.email "$env:github_email"
+
+        git config --global user.name "$env:github_user"
+
+        Set-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n"
+    }
+
+    else
+    {
+        $env:NecroBot2_Version = $env:APPVEYOR_BUILD_VERSION
+
+        $env:NecroBot2_InformationalVersion = $env:APPVEYOR_BUILD_VERSION
+
+        $env:APPVEYOR_Assembly_Info_File = "**\AssemblyInfo.*"
+    }
 
 # clone directory
 clone_folder: c:\projects\necrobot2
@@ -102,32 +122,47 @@ environment:
 
 # scripts that run after cloning repository
 install:
-  - ps: >-
-     git submodule update --init --recursive
-     if ($env:APPVEYOR_REPO_TAG -eq "true")
-     {
-         $ErrorActionPreference = "Continue"
-         $env:PATH = "C:\Ruby23\bin;$($env:PATH)"
-         gem install github_changelog_generator
-         github_changelog_generator --token $env:access_token
-         if ($env:NecroBot2_IsRev -eq true)
-         {
-             git add --ignore-errors "PoGo.NecroBot.CLI/Properties/AssemblyInfoRev.cs"
-             git add --ignore-errors "PoGo.NecroBot.GUI/Properties/AssemblyInfoRev.cs"
-             git add --ignore-errors "PoGo.NecroBot.Logic/Properties/AssemblyInfoRev.cs"
-         }
-         else
-         {
-             git add --ignore-errors "PoGo.NecroBot.CLI/Properties/AssemblyInfo.cs"
-             git add --ignore-errors "PoGo.NecroBot.GUI/Properties/AssemblyInfo.cs"
-             git add --ignore-errors "PoGo.NecroBot.Logic/Properties/AssemblyInfo.cs"
-         }
-         git commit -m "Auto-Update AssemblyInfo $env:APPVEYOR_REPO_TAG_NAME"
-         git commit -m "Auto-Update CHANGELOG.md $env:APPVEYOR_REPO_TAG_NAME" "CHANGELOG.md"
-         git pull origin $env:APPVEYOR_REPO_BRANCH
-         git push -f origin $env:APPVEYOR_REPO_BRANCH
-         if ($LastExitCode -ne 0) { $host.SetShouldExit(0) }
-      }
+- ps: >-
+    git submodule update --init --recursive
+
+    if ($env:APPVEYOR_REPO_TAG -eq "true")
+    {
+        $ErrorActionPreference = "Continue"
+
+        $env:PATH = "C:\Ruby23\bin;$($env:PATH)"
+
+        gem install github_changelog_generator
+
+        github_changelog_generator --token $env:access_token
+
+        if ($env:NecroBot2_IsRev -eq true)
+        {
+            git add --ignore-errors "PoGo.NecroBot.CLI/Properties/AssemblyInfoRev.cs"
+
+            git add --ignore-errors "PoGo.NecroBot.GUI/Properties/AssemblyInfoRev.cs"
+
+            git add --ignore-errors "PoGo.NecroBot.Logic/Properties/AssemblyInfoRev.cs"
+        }
+
+        else
+        {
+            git add --ignore-errors "PoGo.NecroBot.CLI/Properties/AssemblyInfo.cs"
+
+            git add --ignore-errors "PoGo.NecroBot.GUI/Properties/AssemblyInfo.cs"
+
+            git add --ignore-errors "PoGo.NecroBot.Logic/Properties/AssemblyInfo.cs"
+        }
+
+        git commit -m "Auto-Update AssemblyInfo $env:APPVEYOR_REPO_TAG_NAME"
+
+        git commit -m "Auto-Update CHANGELOG.md $env:APPVEYOR_REPO_TAG_NAME" "CHANGELOG.md"
+
+        git pull origin $env:APPVEYOR_REPO_BRANCH
+
+        git push -f origin $env:APPVEYOR_REPO_BRANCH
+
+        if ($LastExitCode -ne 0) { $host.SetShouldExit(0) }
+    }
 
 # enable patching of AssemblyInfo.* files
 assembly_info:
@@ -173,11 +208,17 @@ before_package:
 after_build:
   - cmd: >-
      if exist %APPVEYOR_BUILD_FOLDER%\release rmdir %APPVEYOR_BUILD_FOLDER%\release /s /q
+
      mkdir %APPVEYOR_BUILD_FOLDER%\release
+
      mkdir %APPVEYOR_BUILD_FOLDER%\release\necrobotgui
+
      xcopy %APPVEYOR_BUILD_FOLDER%\PoGo.NecroBot.CLI\bin\x86\Release\GUI %APPVEYOR_BUILD_FOLDER%\release\necrobotgui /s /e
+
      mkdir %APPVEYOR_BUILD_FOLDER%\release\necrobot
+
      xcopy %APPVEYOR_BUILD_FOLDER%\PoGo.NecroBot.CLI\bin\x86\Release %APPVEYOR_BUILD_FOLDER%\release\necrobot /s /e
+
      rmdir %APPVEYOR_BUILD_FOLDER%\release\necrobot\GUI /s /q
 
 # to run your custom scripts instead of automatic MSBuild
