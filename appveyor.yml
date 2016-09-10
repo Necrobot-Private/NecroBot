@@ -47,9 +47,9 @@ init:
         {
             $env:NecroBot2_IsRev = "true"
 
-            $env:NecroBot2_Version = "$env:APPVEYOR_REPO_TAG_NAME.Replace("v", "")"
+            $env:NecroBot2_Version = $env:APPVEYOR_REPO_TAG_NAME.Replace("v", "")
 
-            $env:NecroBot2_Version = "$env:NecroBot2_Version.Replace("-rev", ".")"
+            $env:NecroBot2_Version = $env:NecroBot2_Version.Replace("-rev", ".")
 
             $env:NecroBot2_InformationalVersion = "$env:APPVEYOR_REPO_TAG_NAME"
 
@@ -87,9 +87,9 @@ init:
 
     else
     {
-        $env:NecroBot2_Version = "$env:APPVEYOR_BUILD_VERSION"
+        $env:NecroBot2_Version = $env:APPVEYOR_BUILD_VERSION
 
-        $env:NecroBot2_InformationalVersion = "$env:APPVEYOR_BUILD_VERSION"
+        $env:NecroBot2_InformationalVersion = $env:APPVEYOR_BUILD_VERSION
 
         $env:APPVEYOR_Assembly_Info_File = "**\AssemblyInfo.*"
     }
