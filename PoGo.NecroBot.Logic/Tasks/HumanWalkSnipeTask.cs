@@ -232,7 +232,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static async Task WalkingBackGPXPath(ISession session, CancellationToken cancellationToken, FortData originalPokestop)
         {
-            var destination = new GeoCoordinate(session.Client.CurrentLatitude, session.Client.CurrentLongitude,
+            var destination = new GeoCoordinate(originalPokestop.Latitude, originalPokestop.Longitude,
                          LocationUtils.getElevation(session, originalPokestop.Latitude, originalPokestop.Longitude));
             await session.Navigation.Move(destination,
                async () =>

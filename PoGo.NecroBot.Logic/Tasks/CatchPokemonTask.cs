@@ -88,7 +88,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     ? pokemon.Longitude
                     : currentFortData.Longitude);
 
-            CatchPokemonResponse caughtPokemonResponse;
+            CatchPokemonResponse caughtPokemonResponse = null;
             var lastThrow = CatchPokemonResponse.Types.CatchStatus.CatchSuccess; // Initializing lastThrow
             var attemptCounter = 1;
             do
@@ -322,17 +322,22 @@ namespace PoGo.NecroBot.Logic.Tasks
                 attemptCounter++;
 
                 DelayingUtils.Delay(session.LogicSettings.DelayBetweenPlayerActions, 0);
-
-                if (session.LogicSettings.TransferDuplicatePokemonOnCapture && session.LogicSettings.TransferDuplicatePokemon &&
-                    sessionAllowTransfer && caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess)
-                {
-                    if (session.LogicSettings.UseNearActionRandom)
-                        await HumanRandomActionTask.TransferRandom(session, cancellationToken);
-                    else
-                        await TransferDuplicatePokemonTask.Execute(session, cancellationToken);
-                }
+               
             } while (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchMissed ||
                      caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchEscape);
+
+            if (session.LogicSettings.TransferDuplicatePokemonOnCapture && 
+                session.LogicSettings.TransferDuplicatePokemon &&
+                   sessionAllowTransfer && 
+                   caughtPokemonResponse!= null && 
+                   caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess)
+            {
+                if (session.LogicSettings.UseNearActionRandom)
+                    await HumanRandomActionTask.TransferRandom(session, cancellationToken);
+                else
+                    await TransferDuplicatePokemonTask.Execute(session, cancellationToken);
+            }
+
         }
 
         private static async Task<ItemId> GetBestBall(ISession session, dynamic encounter, float probability)

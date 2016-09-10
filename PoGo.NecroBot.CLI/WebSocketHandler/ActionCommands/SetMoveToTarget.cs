@@ -15,7 +15,7 @@ namespace PoGo.NecroBot.CLI.WebSocketHandler.ActionCommands
 
         public async Task Handle(ISession session, WebSocketSession webSocketSession, dynamic message)
         {
-            Logic.Tasks.SetMoveToTargetTask.Execute((double)message.lat, (double)message.lng);
+            await Logic.Tasks.SetMoveToTargetTask.Execute(session,(double)message.Latitude, (double)message.Longitude, (string)message.FortId);
         }
     }
 }
