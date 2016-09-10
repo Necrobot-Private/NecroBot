@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using POGOProtos.Map.Fort;
 using System;
 using PokemonGo.RocketAPI.Extensions;
+using PoGo.NecroBot.Logic.Model;
 
 #endregion
 
@@ -32,6 +33,7 @@ namespace PoGo.NecroBot.Logic.State
         ElevationService ElevationService { get; }
         List<FortData> Forts { get; set; }
         List<FortData> VisibleForts { get; set; }
+        UserTargetedLocation PriorityLocation { get; set; }
         void AddForts(List<FortData> mapObjects);
         void AddVisibleForts(List<FortData> mapObjects);
     }
@@ -39,6 +41,7 @@ namespace PoGo.NecroBot.Logic.State
 
     public class Session : ISession
     {
+        public UserTargetedLocation PriorityLocation { get; set; }
         public Session(ISettings settings, ILogicSettings logicSettings) : this(settings, logicSettings, Common.Translation.Load(logicSettings))
         {
            
