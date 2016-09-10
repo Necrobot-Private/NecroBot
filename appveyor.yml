@@ -59,9 +59,6 @@ init:
             $env:NecroBot2_InformationalVersion = "$env:APPVEYOR_REPO_TAG_NAME"
          $env:APPVEYOR_Assembly_Info_File = "**\AssemblyInfo.*"
          }
-
-         $env:APPVEYOR_Deploy=on
-
          $fileContent = "-----BEGIN RSA PRIVATE KEY-----`n"
          $fileContent += $env:priv_key.Replace(' ', "`n")
          $fileContent += "`n-----END RSA PRIVATE KEY-----`n"
@@ -76,8 +73,6 @@ init:
          $env:NecroBot2_Version = $env:APPVEYOR_BUILD_VERSION
          $env:NecroBot2_InformationalVersion = $env:APPVEYOR_BUILD_VERSION
          $env:APPVEYOR_Assembly_Info_File = "**\AssemblyInfo.*"
-
-         $env:APPVEYOR_Deploy = off
      }
 
 # clone directory
@@ -109,7 +104,7 @@ environment:
 install:
   - ps: >-
      git submodule update --init --recursive
-     if ($env:APPVEYOR_Deploy -eq "on")
+     if ($env:APPVEYOR_REPO_TAG -eq "true")
      {
          $ErrorActionPreference = "Continue"
          $env:PATH = "C:\Ruby23\bin;$($env:PATH)"
@@ -242,7 +237,7 @@ after_deploy:
 deploy_script:
 
 # to disable deployment
-deploy: $(APPVEYOR_Deploy)
+#deploy: off
 
 #---------------------------------#
 #        global handlers          #
