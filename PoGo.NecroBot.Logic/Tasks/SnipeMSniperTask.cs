@@ -76,6 +76,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
             catch (Exception ex)
             {
+                Logger.Write(ex.Message, LogLevel.Error, ConsoleColor.Red);
                 throw ex;
             }
         }
@@ -87,6 +88,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
             catch (Exception ex)
             {
+                Logger.Write(ex.Message, LogLevel.Error, ConsoleColor.Red);
                 throw ex;
             }
         }
@@ -131,8 +133,9 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             msocket.Dispose();
             msocket = null;
-            throw new Exception("msniper socket closed");
-            //need delay or clear PkmnLocations
+            Logger.Write("msniper socket closed", LogLevel.Error, ConsoleColor.Red);
+            //throw new Exception("msniper socket closed");
+            ////need delay or clear PkmnLocations
 
         }
 
@@ -241,7 +244,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             catch (Exception ex)
             {
                 msocket.Close();
-                throw ex;
+                Logger.Write(ex.Message, LogLevel.Error, ConsoleColor.Red);
+                //throw ex;
             }
         }
 
@@ -254,7 +258,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             catch (Exception ex)
             {
                 msocket.Close();
-                throw ex;
+                Logger.Write(ex.Message, LogLevel.Error, ConsoleColor.Red);
+                //throw ex;
             }
         }
 
@@ -300,9 +305,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static async Task CheckMSniper(ISession session, CancellationToken cancellationToken)
         {
             OpenSocket();
-            ///
-            return;//disable for now
-
+            
             var pth = Path.Combine(session.LogicSettings.ProfilePath, "SnipeMS.json");
             try
             {
