@@ -24,7 +24,7 @@ Make sure you check out our [Wiki](https://github.com/Necrobot-Private/NecroBot/
  - [PTC Login / Google]
  - [Get Map Objects and Inventory]
  - [Search for forts/spawns]
- - [Farm pokestops]
+ - [Farm forts]
  - [Farm all Monster in neighbourhood]
  - [Throw Berries/use best ball]
  - [Transfers duplicate Monsters]

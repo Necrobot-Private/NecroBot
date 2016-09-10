@@ -142,6 +142,11 @@
     <Compile Include="Event\FortTargetEvent.cs" />
     <Compile Include="Event\FortFailedEvent.cs" />
     <Compile Include="Event\FortUsedEvent.cs" />
+    <Compile Include="Event\Gym\GymDeployEvent.cs" />
+    <Compile Include="Event\Gym\GymDetailInfoEvent.cs" />
+    <Compile Include="Event\Gym\GymListEvent.cs" />
+    <Compile Include="Event\Gym\GymTeamJoinEvent.cs" />
+    <Compile Include="Event\Gym\GymWalkToTargetEvent.cs" />
     <Compile Include="Event\HumanWalkingEvent.cs" />
     <Compile Include="Event\HumanWalkSnipeEvent.cs" />
     <Compile Include="Event\InventoryListEvent.cs" />
@@ -153,6 +158,7 @@
     <Compile Include="Event\SnipeEvent.cs" />
     <Compile Include="Event\SnipeModeEvent.cs" />
     <Compile Include="Event\PokemonListEvent.cs" />
+    <Compile Include="Event\PokemonLevelUpEvent.cs" />
     <Compile Include="Event\SnipeScanEvent.cs" />
     <Compile Include="Event\UpgradePokemonEvent.cs" />
     <Compile Include="Event\UpdateEvent.cs" />
@@ -198,6 +204,7 @@
     <Compile Include="Model\Settings\GlobalSettings.cs" />
     <Compile Include="Model\Settings\GoogleWalkConfig.cs" />
     <Compile Include="Model\Settings\GpxConfig.cs" />
+    <Compile Include="Model\Settings\GymConfig.cs" />
     <Compile Include="Model\Settings\HumanWalkSnipeConfig.cs" />
     <Compile Include="Model\Settings\HumanWalkSnipeFilter.cs" />
     <Compile Include="Model\Settings\ItemRecycleFilter.cs" />
@@ -247,6 +254,9 @@
     <Compile Include="Tasks\GetPokeDexCount.cs" />
     <Compile Include="Tasks\HumanRandomActionTask.cs" />
     <Compile Include="Tasks\HumanWalkSnipeTask.cs" />
+    <Compile Include="Tasks\HumanWalkSnipeTask.FastPokemap.cs">
+      <DependentUpon>HumanWalkSnipeTask.cs</DependentUpon>
+    </Compile>
     <Compile Include="Tasks\HumanWalkSnipeTask.Pokecrew.cs">
       <DependentUpon>HumanWalkSnipeTask.cs</DependentUpon>
     </Compile>
@@ -267,6 +277,7 @@
     </Compile>
     <Compile Include="Tasks\InventoryListTask.cs" />
     <Compile Include="Tasks\LevelUpPokemonTask.cs" />
+    <Compile Include="Tasks\LevelUpSpecificPokemonTask.cs" />
     <Compile Include="Tasks\PokemonListTask.cs" />
     <Compile Include="Tasks\Farm.cs" />
     <Compile Include="State\Session.cs" />
@@ -302,6 +313,7 @@
     <Compile Include="Tasks\TransferPokemonTask.cs" />
     <Compile Include="Tasks\TransferWeakPokemonTask.cs" />
     <Compile Include="Tasks\UseIncenseConstantlyTask.cs" />
+    <Compile Include="Tasks\UseGymBattleTask.cs" />
     <Compile Include="Tasks\UseIncubatorsTask.cs" />
     <Compile Include="Tasks\UseLuckyEggConstantlyTask.cs" />
     <Compile Include="Tasks\UseNearbyPokestopsTask.cs" />
@@ -326,7 +338,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
-    <Compile Include="Tasks\HumanWalkSnipeTask.FastPokemap.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FeroxRev\PokemonGo.RocketAPI.csproj">
