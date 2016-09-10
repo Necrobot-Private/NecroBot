@@ -10,7 +10,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
     public interface IWalkStrategy
     {
         event UpdatePositionDelegate UpdatePositionEvent;
-        Task<PlayerUpdateResponse> Walk(GeoCoordinate targetLocation, Func<Task<bool>> functionExecutedWhileWalking, ISession session, CancellationToken cancellationToken, double customWalkingSpeed = 0.0);
+        Task<PlayerUpdateResponse> Walk(GeoCoordinate targetLocation, Func<Task> functionExecutedWhileWalking, ISession session, CancellationToken cancellationToken, double customWalkingSpeed = 0.0);
         double CalculateDistance(double sourceLat, double sourceLng, double destinationLat, double destinationLng, ISession session = null);
     }
 }

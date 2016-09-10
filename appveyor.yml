@@ -214,20 +214,29 @@ deploy_script:
 
 # on successful build
 on_success:
+- SET PATH=C:\Ruby23\bin;%PATH%
+- gem install github_changelog_generator
 - ps: >-
     if ($env:APPVEYOR_REPO_TAG -eq "true")
     {
-      C:\Ruby23\bin\gem install github_changelog_generator
+      $ErrorActionPreference = "SilentlyContinue"
       github_changelog_generator --token $env:access_token
-      git add --ignore-errors "PoGo.NecroBot.CLI/Properties/AssemblyInfo.cs"
-      git add --ignore-errors "PoGo.NecroBot.GUI/Properties/AssemblyInfo.cs"
-      git add --ignore-errors "PoGo.NecroBot.Logic/Properties/AssemblyInfo.cs"
-      git add --ignore-errors "CHANGELOG.md"
-      git commit -m "v$env:APPVEYOR_REPO_TAG_NAME"
-      git checkout $env:APPVEYOR_REPO_BRANCH
-      git merge appveyor
-      git branch -d appveyor
-      git push origin --force-with-lease $env:APPVEYOR_REPO_BRANCH
+      try
+      {
+        git add --ignore-errors "PoGo.NecroBot.CLI/Properties/AssemblyInfo.cs"
+        git add --ignore-errors "PoGo.NecroBot.GUI/Properties/AssemblyInfo.cs"
+        git add --ignore-errors "PoGo.NecroBot.Logic/Properties/AssemblyInfo.cs"
+        git add --ignore-errors "CHANGELOG.md"
+        git commit -m "v$env:APPVEYOR_REPO_TAG_NAME"
+        git checkout $env:APPVEYOR_REPO_BRANCH
+        git merge appveyor
+        git branch -d appveyor
+        git push --force-with-lease origin $env:APPVEYOR_REPO_BRANCH
+      }
+      catch
+      {
+        Write-Warning ("Failed to updated repo")
+      }
     }
 
 # on build failure

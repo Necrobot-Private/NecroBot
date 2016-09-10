@@ -89,6 +89,9 @@
   <ItemGroup>
     <Content Include="Resources\Ico.ico" />
     <Content Include="FodyWeavers.xml" />
+    <Content Include="Resources\encrypt.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Reference Include="C5, Version=2.4.5947.17248, Culture=neutral, PublicKeyToken=282361b99ded7e8e, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\C5.2.4.5947.17249\lib\net45\C5.dll</HintPath>
       <Private>True</Private>
@@ -256,6 +259,7 @@
     <Compile Include="WebSocketHandler\ActionCommands\HumanSnipePriorityPokemonHandler.cs" />
     <Compile Include="WebSocketHandler\ActionCommands\FavoritePokemonHandler.cs" />
     <Compile Include="WebSocketHandler\ActionCommands\DropItemHandler.cs" />
+    <Compile Include="WebSocketHandler\ActionCommands\LevelUpPokemonHandler.cs" />
     <Compile Include="WebSocketHandler\GetCommands\Events\ConfigResponce.cs" />
     <Compile Include="WebSocketHandler\GetCommands\Events\SnipeListResponce.cs" />
     <Compile Include="WebSocketHandler\GetCommands\Events\WebResponce.cs" />
