@@ -11,6 +11,7 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
 {
     public class GoogleResponse
     {
+        public string status { get; set; }
         public List<GoogleElevationResults> results { get; set; }
     }
 
@@ -57,9 +58,16 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
                     {
                         responseFromServer = reader.ReadToEnd();
                         GoogleResponse googleResponse = JsonConvert.DeserializeObject<GoogleResponse>(responseFromServer);
-                        if (googleResponse.results != null && 0 < googleResponse.results.Count)
+
+                        if (googleResponse.status == "OK")
                         {
-                            return googleResponse.results[0].elevation;
+                            if (googleResponse.results != null && 0 < googleResponse.results.Count)
+                                return googleResponse.results[0].elevation;
+                        }
+                        else
+                        {
+                            Logging.Logger.Write($"[REPLY] when accessing Google Elevation Service API: {googleResponse.status.ToString()}",
+                                Logging.LogLevel.Warning);
                         }
                     }
                 }
