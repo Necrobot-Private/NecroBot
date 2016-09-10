@@ -93,6 +93,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                             cancellationToken);
 
                         await eggWalker.ApplyDistance(distance, cancellationToken);
+
+                        // Return to FarmState/StateMachine if we have reached both user defined limits
+                        if ((UseNearbyPokestopsTask._pokestopLimitReached || UseNearbyPokestopsTask._pokestopTimerReached) &&
+                            (CatchPokemonTask._catchPokemonLimitReached || CatchPokemonTask._catchPokemonTimerReached))
+                            return;
+
                     } //end trkpts
                     _resumeTrackPt = 0;
                 } //end trksegs
