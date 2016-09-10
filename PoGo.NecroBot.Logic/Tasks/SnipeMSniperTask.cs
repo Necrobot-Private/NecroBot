@@ -186,28 +186,35 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     case SocketCmd.SendPokemon://sending encounters
                         PkmnLocations = PkmnLocations.OrderByDescending(p => p.Iv).ToList();
-                        if (PkmnLocations.Count > 5)
+                        int rq = 1;
+                        if (PkmnLocations.Count < int.Parse(e.GetSocketData()))
                         {
-                            var selected = PkmnLocations.GetRange(0, 5);
-                            SendToMSniperServer(JsonConvert.SerializeObject(selected));
-                            AddToVisited(selected.Select(p => p.EncounterId).ToList());
-                            PkmnLocations.RemoveRange(0, 5);
-                            Logger.Write($"SendPokemon: Sending {selected.Count} amount PokemonLocation", LogLevel.Info, ConsoleColor.White);
+                            rq = PkmnLocations.Count;
                         }
+                        else
+                        {
+                            rq = int.Parse(e.GetSocketData());
+                        }
+                        var selected = PkmnLocations.GetRange(0, rq);
+                        SendToMSniperServer(JsonConvert.SerializeObject(selected));
+                        AddToVisited(selected.Select(p => p.EncounterId).ToList());
+                        PkmnLocations.RemoveRange(0, rq);
+                        Logger.Write($"SendPokemon: Sending {selected.Count} amount PokemonLocation", LogLevel.Info, ConsoleColor.White);
                         break;
 
                     case SocketCmd.SendOneSpecies://server needs one type pokemon
-                        PokemonId speciesId = (PokemonId)Enum.Parse(typeof(PokemonId), e.GetSocketData());
+                        PokemonId speciesId = (PokemonId)Enum.Parse(typeof(PokemonId), e.GetSocketData().Split(',')[0]);
+                        int requestCount = int.Parse(e.GetSocketData().Split(',')[1]);
                         var onespecies = PkmnLocations.Where(p => p.PokemonId == speciesId).ToList();
                         onespecies = onespecies.OrderByDescending(p => p.Iv).ToList();
                         if (onespecies.Count > 0)
                         {
                             List<EncounterInfo> oneType;
-                            if (onespecies.Count > 5)
+                            if (onespecies.Count > requestCount)
                             {
-                                oneType = PkmnLocations.GetRange(0, 5);
+                                oneType = PkmnLocations.GetRange(0, requestCount);
                                 AddToVisited(oneType.Select(p => p.EncounterId).ToList());
-                                PkmnLocations.RemoveRange(0, 5);
+                                PkmnLocations.RemoveRange(0, requestCount);
                             }
                             else
                             {
