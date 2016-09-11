@@ -188,7 +188,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                             .Select(s => new PokemonCount { PokemonId = s.First().PokemonId, Count = s.Count() })
                             .ToList();
                         SendToMSniperServer(JsonConvert.SerializeObject(x));
-                        Logger.Write($"PokemonCount: Telling amount of pokemon [ {x.Count} ]", LogLevel.Info, ConsoleColor.White);
+                        //Logger.Write($"PokemonCount: Telling amount of pokemon [ {x.Count} ]", LogLevel.Info, ConsoleColor.White);
                         break;
 
                     case SocketCmd.SendPokemon://sending encounters
@@ -206,7 +206,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         SendToMSniperServer(JsonConvert.SerializeObject(selected));
                         AddToVisited(selected.Select(p => p.EncounterId).ToList());
                         PkmnLocations.RemoveRange(0, rq);
-                        Logger.Write($"SendPokemon: Sending {selected.Count} amount PokemonLocation", LogLevel.Info, ConsoleColor.White);
+                        //Logger.Write($"SendPokemon: Sending {selected.Count} amount PokemonLocation", LogLevel.Info, ConsoleColor.White);
                         break;
 
                     case SocketCmd.SendOneSpecies://server needs one type pokemon
@@ -229,13 +229,13 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 PkmnLocations.Clear();
                             }
                             SendToMSniperServer(JsonConvert.SerializeObject(oneType));
-                            Logger.Write($"SendOneSpecies: Sending {oneType.First().PokemonId.ToString()} [ {oneType.Count} ] amount", LogLevel.Info, ConsoleColor.White);
+                            //Logger.Write($"SendOneSpecies: Sending {oneType.First().PokemonId.ToString()} [ {oneType.Count} ] amount", LogLevel.Info, ConsoleColor.White);
                         }
                         break;
 
                     case SocketCmd.Brodcaster://receiving encounter information from server
                         var xcoming = JsonConvert.DeserializeObject<List<EncounterInfo>>(e.GetSocketData());
-                        Logger.Write($"Brodcaster:  Received {xcoming.Count} pokemon location from MSniper Service", LogLevel.Info, ConsoleColor.White);
+                        Logger.Write($"Brodcaster:  Received {xcoming.Count} pokemon location from MSniperService", LogLevel.Info, ConsoleColor.White);
                         xcoming = FindNew(xcoming);
                         POKEMON_FEED.AddRange(xcoming);
                         Logger.Write($"Brodcaster:  AND {xcoming.Count} amount pokemon haven't visited", LogLevel.Info, ConsoleColor.White);
