@@ -43,16 +43,17 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         public class EncounterInfo : IDisposable
         {
+            public long EncounterId { get; set; }
             public string SpawnPointId { get; set; }
+            public PokemonId PokemonId { get; set; } = PokemonId.Missingno;
             public double Latitude { get; set; }
             public double Longitude { get; set; }
             public PokemonMove Move1 { get; set; } = PokemonMove.MoveUnset;
             public PokemonMove Move2 { get; set; } = PokemonMove.MoveUnset;
-            public double Iv { get; set; } = 0;
-            public ulong EncounterId { get; set; }
-            public PokemonId PokemonId { get; set; }
-            public long TimeTillHiddenMs { get; set; }
+            public double Iv { get; set; }
+            public int TimeTillHiddenMs { get; set; }
             public long LastModifiedTimestampMs { get; set; }
+
             public void Dispose()
             {
                 GC.SuppressFinalize(this);
@@ -98,7 +99,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static double minIvPercent = 50.0;
 
         public static List<EncounterInfo> PkmnLocations = new List<EncounterInfo>();
-        public static List<ulong> VisitedEncounterIds = new List<ulong>();
+        public static List<long> VisitedEncounterIds = new List<long>();
         public static List<PokemonId> blackList = new List<PokemonId>()
         {
             PokemonId.Pidgeot,
@@ -142,7 +143,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         }
 
-        public static void AddToVisited(List<ulong> encounterIds)
+        public static void AddToVisited(List<long> encounterIds)
         {
             encounterIds.ForEach(p =>
             {
@@ -160,7 +161,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             List<EncounterInfo> newOne = new List<EncounterInfo>();
             foreach (var VARIABLE in received)
             {
-                int index = VisitedEncounterIds.FindIndex(p => p == VARIABLE.EncounterId);
+                int index = VisitedEncounterIds.FindIndex(p => (long)p == VARIABLE.EncounterId);
                 if (index == -1)
                 {
                     newOne.Add(VARIABLE);
@@ -271,13 +272,13 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             if (!(PokemonInfo.CalculatePokemonPerfection(eresponse.WildPokemon.PokemonData) >= minIvPercent) &&
                 blackList.FindIndex(p => p == eresponse.WildPokemon.PokemonData.PokemonId) != -1 &&
-                PkmnLocations.FirstOrDefault(p => p.EncounterId == eresponse.WildPokemon.EncounterId) != null &&
-                VisitedEncounterIds.FindIndex(p => p == eresponse.WildPokemon.EncounterId) != -1)
+                PkmnLocations.FirstOrDefault(p => p.EncounterId == (long)eresponse.WildPokemon.EncounterId) != null &&
+                VisitedEncounterIds.FindIndex(p => p == (long)eresponse.WildPokemon.EncounterId) != -1)
                 return;
             
             using (var newdata = new EncounterInfo())
             {
-                newdata.EncounterId = eresponse.WildPokemon.EncounterId;
+                newdata.EncounterId = (long)eresponse.WildPokemon.EncounterId;
                 newdata.LastModifiedTimestampMs = eresponse.WildPokemon.LastModifiedTimestampMs;
                 newdata.SpawnPointId = eresponse.WildPokemon.SpawnPointId;
                 newdata.TimeTillHiddenMs = eresponse.WildPokemon.TimeTillHiddenMs;
@@ -347,7 +348,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Source = "MSniperService"
                     });
 
-                    await CatchFromService(session, cancellationToken, location.EncounterId, location.SpawnPointId);
+                    await CatchFromService(session, cancellationToken, (ulong)location.EncounterId, location.SpawnPointId);
                     await Task.Delay(1000);
                 }
             }
