@@ -110,7 +110,6 @@ install:
         $env:PATH = "C:\Ruby23\bin;$($env:PATH)";
         gem install github_changelog_generator;
         github_changelog_generator --token $env:access_token;
-        if ($env:NecroBot2_IsRev -eq "true")
         git add --ignore-errors "PoGo.NecroBot.CLI/Properties/$($env:APPVEYOR_REPO_TAG_NAME).cs";
         git add --ignore-errors "PoGo.NecroBot.GUI/Properties/$($env:APPVEYOR_REPO_TAG_NAME).cs";
         git add --ignore-errors "PoGo.NecroBot.Logic/Properties/$($env:APPVEYOR_REPO_TAG_NAME).cs";
