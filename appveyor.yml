@@ -199,7 +199,7 @@ before_deploy:
 - SET PATH=C:\Ruby23\bin;%PATH%
 - gem install github_changelog_generator
 - github_changelog_generator --token %access_token% --output "CHANGELOG.md"
-- xcopy "%APPVEYOR_BUILD_FOLDER%\CHANGELOG.md" "%APPVEYOR_BUILD_FOLDER%\Changelog\CHANGELOG_%APPVEYOR_REPO_TAG_NAME%.md" /y
+- echo F | xcopy "%APPVEYOR_BUILD_FOLDER%\CHANGELOG.md" "%APPVEYOR_BUILD_FOLDER%\Changelog\CHANGELOG_%APPVEYOR_REPO_TAG_NAME%.md" /y
 - git add "PoGo.NecroBot.CLI/Properties/AssemblyInfo.cs"
 - git add "PoGo.NecroBot.GUI/Properties/AssemblyInfo.cs"
 - git add "PoGo.NecroBot.Logic/Properties/AssemblyInfo.cs"
