@@ -72,7 +72,7 @@ init:
     {
         $env:NecroBot2_Version = "$($env:APPVEYOR_BUILD_VERSION)";
         $env:NecroBot2_InformationalVersion = "$($env:APPVEYOR_BUILD_VERSION)";
-        $env:APPVEYOR_Assembly_Info_File = "AssemblyInfo";
+        $env:APPVEYOR_Assembly_Info_File = "AssemblyInfoAppveyor";
     }
 
 # clone directory
@@ -103,22 +103,6 @@ environment:
 # scripts that run after cloning repository
 install:
 - git submodule update --init --recursive
-- ps: >-
-    if ($env:APPVEYOR_REPO_TAG -eq "true")
-    {
-        $ErrorActionPreference = "Continue";
-        $env:PATH = "C:\Ruby23\bin;$($env:PATH)";
-        Start-Process "gem" -ArgumentList "install github_changelog_generator" -Wait;
-        github_changelog_generator --token $env:access_token;
-        git add "PoGo.NecroBot.CLI/Properties/$($env:APPVEYOR_Assembly_Info_File).cs";
-        git add "PoGo.NecroBot.GUI/Properties/$($env:APPVEYOR_Assembly_Info_File).cs";
-        git add "PoGo.NecroBot.Logic/Properties/$($env:APPVEYOR_Assembly_Info_File).cs";
-    }
-- git add "CHANGELOG.md"
-- git diff --quiet --exit-code --cached || git commit -m "$($env:APPVEYOR_REPO_TAG_NAME)"
-- git status
-- git pull origin %APPVEYOR_REPO_BRANCH%
-- git push origin %APPVEYOR_REPO_BRANCH%
 
 # enable patching of AssemblyInfo.* files
 assembly_info:
@@ -220,8 +204,7 @@ deploy:
   - provider: GitHub
     tag: $(APPVEYOR_REPO_TAG_NAME)
     release: NecroBot2 $(APPVEYOR_REPO_TAG_NAME)
-    auth_token:
-      secure: 6PJ3cwd4I0DRJPv7w8iFAP6iPp94a4omr0Ajl0exmZ3qEnGLdqDwihlgFBFNBHWU 
+    auth_token: $(access_token)
     artifact: NecroBot2.Console;NecroBot2.GUI
     draft: false
     prerelease: $(NecroBot2_IsRev)
@@ -232,6 +215,28 @@ deploy:
 
 # scripts to run before deployment
 before_deploy:
+- git checkout -b appveyor %APPVEYOR_REPO_BRANCH%
+- ps: >-
+    if ($env:APPVEYOR_REPO_TAG -eq "true")
+    {
+        $ErrorActionPreference = "Continue";
+        $env:PATH = "C:\Ruby23\bin;$($env:PATH)";
+        Start-Process "gem" -ArgumentList "install github_changelog_generator" -Wait;
+        github_changelog_generator --token $env:access_token;
+        git add "PoGo.NecroBot.CLI/Properties/$($env:APPVEYOR_Assembly_Info_File).cs";
+        git add "PoGo.NecroBot.GUI/Properties/$($env:APPVEYOR_Assembly_Info_File).cs";
+        git add "PoGo.NecroBot.Logic/Properties/$($env:APPVEYOR_Assembly_Info_File).cs";
+    }
+- git add "CHANGELOG.md"
+- git diff --quiet --exit-code --cached || git commit -m "$($env:APPVEYOR_REPO_TAG_NAME)"
+- git status
+- git checkout %APPVEYOR_REPO_BRANCH%
+- git merge appveyor
+- git branch -d appveyor
+- git status
+- git pull origin %APPVEYOR_REPO_BRANCH%
+- git push origin %APPVEYOR_REPO_BRANCH%
+- ps: $env:APPVEYOR_REPO_COMMIT = "$(git rev-parse master)"
 
 # scripts to run after deployment
 after_deploy:
