@@ -80,7 +80,10 @@ namespace PoGo.NecroBot.Logic.Tasks
             while (pokeStop != null)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                await SnipeMSniperTask.CheckMSniperLocation(session, cancellationToken);
+                if (session.LogicSettings.ActivateMSniper)
+                {
+                    await MSniperServiceTask.CheckMSniper(session, cancellationToken);
+                }
 
                 var fortInfo = await session.Client.Fort.GetFort(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude);
 
@@ -92,9 +95,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 if (session.LogicSettings.SnipeAtPokestops || session.LogicSettings.UseSnipeLocationServer)
                     await SnipePokemonTask.Execute(session, cancellationToken);
-
-                await SnipeMSniperTask.CheckMSniperLocation(session, cancellationToken);
-
+                
                 if (session.LogicSettings.EnableHumanWalkingSnipe)
                 {
                     await HumanWalkSnipeTask.Execute(session, cancellationToken, pokeStop);
