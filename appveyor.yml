@@ -83,7 +83,7 @@ assembly_info:
   patch: true
   file: '**\AssemblyInfo.*'
   assembly_version: '$(NecroBot2_Version)'
-#  assembly_file_version: "1.0.0.0"
+  assembly_file_version: "1.0.0.0"
   assembly_informational_version: '$(APPVEYOR_REPO_TAG_NAME)'
 
 #---------------------------------#
@@ -208,9 +208,6 @@ before_deploy:
 - git branch -d Appveyor
 - git pull "origin" "%APPVEYOR_REPO_BRANCH%"
 - git push "origin" "%APPVEYOR_REPO_BRANCH%"
-- git rev-parse master | (SET APPVEYOR_REPO_BRANCH=)
-- SET APPVEYOR_REPO_COMMIT_AUTHOR=%github_user%
-- SET APPVEYOR_REPO_COMMIT_AUTHOR_EMAIL=%github_email%
 
 # scripts to run after deployment
 after_deploy:
