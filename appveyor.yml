@@ -46,32 +46,30 @@ init:
         if ($env:APPVEYOR_REPO_TAG -match "-rev")
         {
             $env:NecroBot2_IsRev = "true";
-            $env:NecroBot2_Version = $env:APPVEYOR_REPO_TAG_NAME.Replace("v", "");
-            $env:NecroBot2_Version = $env:NecroBot2_Version.Replace("-rev", ".");
-            $env:NecroBot2_InformationalVersion = "$env:APPVEYOR_REPO_TAG_NAME";
+            $env:NecroBot2_Version = "$($env:APPVEYOR_REPO_TAG_NAME.Replace("v", "").Replace("-rev", "."))";
+            $env:NecroBot2_InformationalVersion = "$($env:APPVEYOR_REPO_TAG_NAME)";
             $env:APPVEYOR_Assembly_Info_File = "**\AssemblyInfoRev.*";
         }
         else
         {
             $env:NecroBot2_IsRev = "false";
-            $env:NecroBot2_Version = $env:APPVEYOR_REPO_TAG_NAME.Replace("v", "");
-            $env:NecroBot2_Version = "$($env:NecroBot2_Version).0";
-            $env:NecroBot2_InformationalVersion = "$env:APPVEYOR_REPO_TAG_NAME";
+            $env:NecroBot2_Version = "$($env:APPVEYOR_REPO_TAG_NAME.Replace("v", "")).0";
+            $env:NecroBot2_InformationalVersion = "$($env:APPVEYOR_REPO_TAG_NAME)";
             $env:APPVEYOR_Assembly_Info_File = "**\AssemblyInfo.*";
         }
         $fileContent = "-----BEGIN RSA PRIVATE KEY-----`n";
         $fileContent += $env:priv_key.Replace(' ', "`n");
         $fileContent += "`n-----END RSA PRIVATE KEY-----`n";
-        Set-Content "$env:USERPROFILE\.ssh\id_rsa" $fileContent;
-        git config --global credential.helper store;
-        git config --global user.email "$env:github_email";
-        git config --global user.name "$env:github_user";
+        Set-Content "$env:USERPROFILE\.ssh\id_rsa" "$($fileContent)";
+        Start-Process "git" -ArgumentList "--global credential.helper store" -Wait
+        Start-Process "git" -ArgumentList "--global user.email '$($env:github_email)'" -Wait
+        Start-Process "git" -ArgumentList "--global user.name '$($env:github_user)'" -Wait
         Set-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n";
     }
     else
     {
-        $env:NecroBot2_Version = $env:APPVEYOR_BUILD_VERSION;
-        $env:NecroBot2_InformationalVersion = $env:APPVEYOR_BUILD_VERSION;
+        $env:NecroBot2_Version = "$($env:APPVEYOR_BUILD_VERSION)";
+        $env:NecroBot2_InformationalVersion = "$($env:APPVEYOR_BUILD_VERSION)";
         $env:APPVEYOR_Assembly_Info_File = "**\AssemblyInfo.*";
     }
 
@@ -104,28 +102,32 @@ environment:
 install:
 - ps: >-
     Start-Process "git" -ArgumentList "submodule update --init --recursive" -Wait;
+    if ($LastExitCode -ne 0) 
+    { 
+        $host.SetShouldExit($LastExitCode); 
+    }
     if ($env:APPVEYOR_REPO_TAG -eq "true")
     {
         $ErrorActionPreference = "Continue";
         $env:PATH = "C:\Ruby23\bin;$($env:PATH)";
-        gem install github_changelog_generator;
-        github_changelog_generator --token $env:access_token;
+        Start-Process "gem" -ArgumentList "install github_changelog_generator" -Wait;
+        Start-Process "github_changelog_generator" -ArgumentList "--token '$($env:access_token)'" -Wait;
         if ($env:NecroBot2_IsRev -eq "true")
         {
-            git add --ignore-errors "PoGo.NecroBot.CLI/Properties/AssemblyInfoRev.cs";
-            git add --ignore-errors "PoGo.NecroBot.GUI/Properties/AssemblyInfoRev.cs";
-            git add --ignore-errors "PoGo.NecroBot.Logic/Properties/AssemblyInfoRev.cs";
+            Start-Process "git" -ArgumentList "add --ignore-errors 'PoGo.NecroBot.CLI/Properties/AssemblyInfoRev.cs'" -Wait;
+            Start-Process "git" -ArgumentList "add --ignore-errors 'PoGo.NecroBot.GUI/Properties/AssemblyInfoRev.cs'" -Wait;
+            Start-Process "git" -ArgumentList "add --ignore-errors 'PoGo.NecroBot.Logic/Properties/AssemblyInfoRev.cs'" -Wait;
         }
         else
         {
-            git add --ignore-errors "PoGo.NecroBot.CLI/Properties/AssemblyInfo.cs";
-            git add --ignore-errors "PoGo.NecroBot.GUI/Properties/AssemblyInfo.cs";
-            git add --ignore-errors "PoGo.NecroBot.Logic/Properties/AssemblyInfo.cs";
+            Start-Process "git" -ArgumentList "add --ignore-errors 'PoGo.NecroBot.CLI/Properties/AssemblyInfo.cs'" -Wait;
+            Start-Process "git" -ArgumentList "add --ignore-errors 'PoGo.NecroBot.GUI/Properties/AssemblyInfo.cs'" -Wait;
+            Start-Process "git" -ArgumentList "add --ignore-errors 'PoGo.NecroBot.Logic/Properties/AssemblyInfo.cs'" -Wait;
         }
-        git commit -m "Auto-Update AssemblyInfo $env:APPVEYOR_REPO_TAG_NAME";
-        git commit -m "Auto-Update CHANGELOG.md $env:APPVEYOR_REPO_TAG_NAME" "CHANGELOG.md";
-        git pull origin $env:APPVEYOR_REPO_BRANCH;
-        git push -f origin $env:APPVEYOR_REPO_BRANCH;
+        Start-Process "git" -ArgumentList "commit -m 'Auto-Update AssemblyInfo $($env:APPVEYOR_REPO_TAG_NAME)'" -Wait;
+        Start-Process "git" -ArgumentList "commit -m 'Auto-Update CHANGELOG.md $($env:APPVEYOR_REPO_TAG_NAME)' 'CHANGELOG.md'" -Wait;
+        Start-Process "git" -ArgumentList "pull origin $($env:APPVEYOR_REPO_BRANCH)" -Wait;
+        Start-Process "git" -ArgumentList "push origin $($env:APPVEYOR_REPO_BRANCH)" -Wait;
         if ($LastExitCode -ne 0) { $host.SetShouldExit(0); }
     }
 
@@ -257,3 +259,13 @@ on_failure:
 
 # after build failure or success
 on_finish:
+
+#---------------------------------#
+#  notifications configuration    #
+#---------------------------------#
+notifications:
+  - provider: Webhook
+    url: https://webhooks.gitter.im/e/edd3d77d0afd21a6916b
+    on_build_success: true
+    on_build_failure: true
+    on_build_status_changed: true
