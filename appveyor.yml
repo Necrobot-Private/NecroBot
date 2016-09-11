@@ -41,38 +41,21 @@ image: Visual Studio 2015
 # scripts that are called at very beginning, before repo cloning
 init:
 - ps: >-
-    $fileContent = "-----BEGIN RSA PRIVATE KEY-----`n";
-    $fileContent += $env:priv_key.Replace(' ', "`n");
-    $fileContent += "`n-----END RSA PRIVATE KEY-----`n";
-    Set-Content "$env:USERPROFILE\.ssh\id_rsa" "$($fileContent)";
-    git config --global credential.helper store;
-    git config --global user.email "$($env:github_email)";
-    git config --global user.name "$($env:github_user)";
-    Set-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n";
     if ($env:APPVEYOR_REPO_TAG -eq "true")
     {
-        if ($env:APPVEYOR_REPO_TAG -match "-rev")
-        {
-            $env:NecroBot2_IsRev = "true";
-            $env:NecroBot2_Version = "$($env:APPVEYOR_REPO_TAG_NAME.Replace('v', ''))";
-            $env:NecroBot2_Version = "$($env:NecroBot2_Version.Replace('-rev', '.'))";
-            $env:NecroBot2_InformationalVersion = "$($env:APPVEYOR_REPO_TAG_NAME)";
-            $env:APPVEYOR_Assembly_Info_File = "AssemblyInfoRev";
-        }
-        else
-        {
-            $env:NecroBot2_IsRev = "false";
-            $env:NecroBot2_Version = "$($env:APPVEYOR_REPO_TAG_NAME.Replace('v', ''))";
-            $env:NecroBot2_Version = "$($env:NecroBot2_Version).0";
-            $env:NecroBot2_InformationalVersion = "$($env:APPVEYOR_REPO_TAG_NAME)";
-            $env:APPVEYOR_Assembly_Info_File = "AssemblyInfo";
-        }
+        $fileContent = "-----BEGIN RSA PRIVATE KEY-----`n";
+        $fileContent += $env:priv_key.Replace(' ', "`n");
+        $fileContent += "`n-----END RSA PRIVATE KEY-----`n";
+        Set-Content "$env:USERPROFILE\.ssh\id_rsa" "$($fileContent)";
+        git config --global credential.helper store;
+        git config --global user.email "$($env:github_email)";
+        git config --global user.name "$($env:github_user)";
+        Set-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n";
+        $env:NecroBot2_Version = "$($env:APPVEYOR_REPO_TAG_NAME.Replace('v', ''))";
     }
     else
     {
         $env:NecroBot2_Version = "$($env:APPVEYOR_BUILD_VERSION)";
-        $env:NecroBot2_InformationalVersion = "$($env:APPVEYOR_BUILD_VERSION)";
-        $env:APPVEYOR_Assembly_Info_File = "AssemblyInfoAppveyor";
     }
 
 # clone directory
@@ -107,10 +90,10 @@ install:
 # enable patching of AssemblyInfo.* files
 assembly_info:
   patch: true
-  file: '**\$(APPVEYOR_Assembly_Info_File).*'
+  file: '**\AssemblyInfo.*'
   assembly_version: '$(NecroBot2_Version)'
   assembly_file_version: "1.0.0.0"
-  assembly_informational_version: '$(NecroBot2_InformationalVersion)'
+  assembly_informational_version: '$(APPVEYOR_REPO_TAG_NAME)'
 
 #---------------------------------#
 #       build configuration       #
@@ -207,7 +190,7 @@ deploy:
     auth_token: $(access_token)
     artifact: NecroBot2.Console;NecroBot2.GUI
     draft: false
-    prerelease: $(NecroBot2_IsRev)
+    prerelease: false
     force_update: true
     on:
       branch: master                # release from master branch only
@@ -216,27 +199,20 @@ deploy:
 # scripts to run before deployment
 before_deploy:
 - git checkout -b appveyor %APPVEYOR_REPO_BRANCH%
-- ps: >-
-    if ($env:APPVEYOR_REPO_TAG -eq "true")
-    {
-        $ErrorActionPreference = "Continue";
-        $env:PATH = "C:\Ruby23\bin;$($env:PATH)";
-        Start-Process "gem" -ArgumentList "install github_changelog_generator" -Wait;
-        github_changelog_generator --token $env:access_token;
-        git add "PoGo.NecroBot.CLI/Properties/$($env:APPVEYOR_Assembly_Info_File).cs";
-        git add "PoGo.NecroBot.GUI/Properties/$($env:APPVEYOR_Assembly_Info_File).cs";
-        git add "PoGo.NecroBot.Logic/Properties/$($env:APPVEYOR_Assembly_Info_File).cs";
-    }
+- SET PATH=C:\Ruby23\bin;%PATH%
+- gem install github_changelog_generator;
+- github_changelog_generator --token %access_token%;
+- git add "PoGo.NecroBot.CLI/Properties/%APPVEYOR_Assembly_Info_File%.cs";
+- git add "PoGo.NecroBot.GUI/Properties/%APPVEYOR_Assembly_Info_File%.cs";
+- git add "PoGo.NecroBot.Logic/Properties/%APPVEYOR_Assembly_Info_File%.cs";
 - git add "CHANGELOG.md"
-- git diff --quiet --exit-code --cached || git commit -m "$($env:APPVEYOR_REPO_TAG_NAME)"
-- git status
+- git diff --quiet --exit-code --cached || git commit -m "%APPVEYOR_REPO_TAG_NAME%"
 - git checkout %APPVEYOR_REPO_BRANCH%
 - git merge appveyor
 - git branch -d appveyor
-- git status
 - git pull origin %APPVEYOR_REPO_BRANCH%
 - git push origin %APPVEYOR_REPO_BRANCH%
-- ps: $env:APPVEYOR_REPO_COMMIT = "$(git rev-parse master)"
+- git rev-parse master | (set APPVEYOR_REPO_BRANCH=)
 
 # scripts to run after deployment
 after_deploy:
