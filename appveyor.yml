@@ -135,7 +135,7 @@ install:
 
 # enable patching of AssemblyInfo.* files
 assembly_info:
-  patch: '$(APPVEYOR_REPO_TAG)'
+  patch: true
   file: ' **\AssemblyInfo.*'
   assembly_version: '$(NecroBot2_Version)'
   assembly_file_version: "1.0.0.0"
