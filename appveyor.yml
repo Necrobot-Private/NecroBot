@@ -115,7 +115,7 @@ install:
         git add --ignore-errors "PoGo.NecroBot.GUI/Properties/$($env:APPVEYOR_REPO_TAG_NAME).cs";
         git add --ignore-errors "PoGo.NecroBot.Logic/Properties/$($env:APPVEYOR_REPO_TAG_NAME).cs";
         git commit -m "Auto-Update AssemblyInfo $($env:APPVEYOR_REPO_TAG_NAME)";
-        git commit -m "Auto-Update CHANGELOG.md $($env:APPVEYOR_REPO_TAG_NAME)" CHANGELOG.md";
+        git commit -m "Auto-Update CHANGELOG.md $($env:APPVEYOR_REPO_TAG_NAME)" "CHANGELOG.md";
         git pull origin $env:APPVEYOR_REPO_BRANCH;
         git push origin $env:APPVEYOR_REPO_BRANCH;
         if ($LastExitCode -ne 0) { $host.SetShouldExit(0); }
