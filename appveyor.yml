@@ -146,12 +146,12 @@ assembly_info:
 #---------------------------------#
 
 # build platform, i.e. x86, x64, Any CPU. This setting is optional.
-#platform: x86
+platform: x86
 
 # to add several platforms to build matrix:
-platform:
-  - x86
-  - Any CPU
+#platform:
+#  - x86
+#  - Any CPU
 
 # build Configuration, i.e. Debug, Release, etc.
 configuration: Release
@@ -175,22 +175,22 @@ before_package:
 # scripts to run after build
 after_build:
 - ps: >-
+    Remove-Item "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)" -Recurse -ErrorAction Ignore;
+    New-Item -ItemType Directory -Force -Path "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)";
+    New-Item -ItemType Directory -Force -Path "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)";
+    New-Item -ItemType Directory -Force -Path "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2";
+    New-Item -ItemType Directory -Force -Path "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2GUI";
     if (($env:PLATFORM -eq "x86") || ($env:PLATFORM -eq "x64"))
     {
-        Remove-Item "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)" -Recurse -ErrorAction Ignore;
-        New-Item -ItemType Directory -Force -Path "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)";
-        New-Item -ItemType Directory -Force -Path "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)";
-        New-Item -ItemType Directory -Force -Path "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2";
         Copy-Item "$($env:APPVEYOR_BUILD_FOLDER)\PoGo.NecroBot.CLI\bin\$($env:PLATFORM)\$($env:CONFIGURATION)" "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2" -recurse -Force;
         Remove-Item "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2\GUI" -Recurse -ErrorAction Ignore;
-        New-Item -ItemType Directory -Force -Path "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2GUI";
         Copy-Item "$($env:APPVEYOR_BUILD_FOLDER)\PoGo.NecroBot.CLI\bin\$($env:PLATFORM)\$($env:CONFIGURATION)\GUI" "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2GUI" -recurse -Force;
     }
     else if ($env:PLATFORM -eq "Any CPU")
     {
-        Remove-Item "$($env:APPVEYOR_BUILD_FOLDER)\$($env:CONFIGURATION)" -Recurse -ErrorAction Ignore;
-        New-Item -ItemType Directory -Force -Path "$($env:APPVEYOR_BUILD_FOLDER)\$($env:CONFIGURATION)";
-        Copy-Item "$($env:APPVEYOR_BUILD_FOLDER)\PoGo.NecroBot.CLI\bin\$($env:CONFIGURATION)" "$($env:APPVEYOR_BUILD_FOLDER)\$($env:CONFIGURATION)\NecroBot2" -recurse -Force;
+        Copy-Item "$($env:APPVEYOR_BUILD_FOLDER)\PoGo.NecroBot.CLI\bin\$($env:CONFIGURATION)" "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2" -recurse -Force;
+        Remove-Item "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2\GUI" -Recurse -ErrorAction Ignore;
+        Copy-Item "$($env:APPVEYOR_BUILD_FOLDER)\PoGo.NecroBot.CLI\bin\x86\$($env:CONFIGURATION)\GUI" "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2GUI" -recurse -Force;
     }
 
 # to run your custom scripts instead of automatic MSBuild
@@ -208,24 +208,12 @@ test: off
 #---------------------------------#
 
 artifacts:
-
-  - path: '\Release\NecroBot2'
-    name: NecroBot2.Console
   
   - path: '\x86\Release\NecroBot2'
-    name: NecroBot2.Console-x86
+    name: NecroBot2.Console
 
   - path: '\x86\Release\NecroBot2GUI'
-    name: NecroBot2.GUI-x86
-
-#  - path: '\Debug\NecroBot2'
-#    name: NecroBot2.Console-Debug
-#  
-#  - path: '\x86\Debug\NecroBot2'
-#    name: NecroBot2.Console-Debug-x86
-#
-#  - path: '\x86\Debug\NecroBot2GUI'
-#    name: NecroBot2.GUI-Debug-x86
+    name: NecroBot2.GUI
 
 #---------------------------------#
 #     deployment configuration    #
@@ -241,7 +229,7 @@ deploy:
     release: NecroBot2 $(APPVEYOR_REPO_TAG_NAME)
     auth_token:
       secure: 6PJ3cwd4I0DRJPv7w8iFAP6iPp94a4omr0Ajl0exmZ3qEnGLdqDwihlgFBFNBHWU 
-    artifact: NecroBot2.Console;NecroBot2.Console-x86;NecroBot2.GUI-x86
+    artifact: NecroBot2.Console;NecroBot2.GUI
     draft: false
     prerelease: $(NecroBot2_IsRev)
     force_update: true
