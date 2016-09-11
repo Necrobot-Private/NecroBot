@@ -40,6 +40,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             dtDateTime = dtDateTime.AddSeconds(Math.Round(javaTimeStamp / 1000)).ToLocalTime();
             return dtDateTime;
         }
+
         public class EncounterInfo : IDisposable
         {
             public string SpawnPointId { get; set; }
@@ -50,8 +51,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             public double Iv { get; set; } = 0;
             public ulong EncounterId { get; set; }
             public PokemonId PokemonId { get; set; }
-            public DateTime ExpirationTimestamp { get; set; }
-            public DateTime LastVisitedTimeStamp { get; set; }
+            public long TimeTillHiddenMs { get; set; }
+            public long LastModifiedTimestampMs { get; set; }
             public void Dispose()
             {
                 GC.SuppressFinalize(this);
@@ -92,17 +93,19 @@ namespace PoGo.NecroBot.Logic.Tasks
                 throw ex;
             }
         }
-        public static double minIvPercent = 1.0;
+
+        public static List<EncounterInfo> POKEMON_FEED = new List<EncounterInfo>();
+        public static double minIvPercent = 50.0;
 
         public static List<EncounterInfo> PkmnLocations = new List<EncounterInfo>();
         public static List<ulong> VisitedEncounterIds = new List<ulong>();
         public static List<PokemonId> blackList = new List<PokemonId>()
         {
-            //PokemonId.Pidgeot,
-            //PokemonId.Pidgey,
-            //PokemonId.Weedle,
-            //PokemonId.Spearow
-
+            PokemonId.Pidgeot,
+            PokemonId.Pidgey,
+            PokemonId.Weedle,
+            PokemonId.Spearow,
+            PokemonId.Zubat
         };
         public static WebSocket msocket;
 
@@ -115,7 +118,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 try
                 {
                     //msniper.com
-                    msocket = new WebSocket("ws://msniper.com/WebSockets/NecroBotServer.ashx", "", WebSocketVersion.Rfc6455);
+                    msocket = new WebSocket("ws://localhost:56000/WebSockets/NecroBotServer.ashx", "", WebSocketVersion.Rfc6455);
                     msocket.MessageReceived += Msocket_MessageReceived;
                     msocket.Closed += Msocket_Closed;
                     msocket.Open();
@@ -230,10 +233,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                         break;
 
                     case SocketCmd.Brodcaster://receiving encounter information from server
-                        List<EncounterInfo> POKEMON_FEED = JsonConvert.DeserializeObject<List<EncounterInfo>>(e.GetSocketData());
-                        Logger.Write($"Brodcaster:  Received {POKEMON_FEED.Count} pokemon location from MSniper Service", LogLevel.Info, ConsoleColor.White);
-                        POKEMON_FEED = FindNew(POKEMON_FEED);
-                        Logger.Write($"Brodcaster:  AND {POKEMON_FEED.Count} amount pokemon haven't visited", LogLevel.Info, ConsoleColor.White);
+                        var xcoming = JsonConvert.DeserializeObject<List<EncounterInfo>>(e.GetSocketData());
+                        Logger.Write($"Brodcaster:  Received {xcoming.Count} pokemon location from MSniper Service", LogLevel.Info, ConsoleColor.White);
+                        xcoming = FindNew(xcoming);
+                        POKEMON_FEED.AddRange(xcoming);
+                        Logger.Write($"Brodcaster:  AND {xcoming.Count} amount pokemon haven't visited", LogLevel.Info, ConsoleColor.White);
                         break;
                     case SocketCmd.None:
                         Logger.Write("UNKNOWN ERROR", LogLevel.Info, ConsoleColor.White);
@@ -270,24 +274,13 @@ namespace PoGo.NecroBot.Logic.Tasks
                 PkmnLocations.FirstOrDefault(p => p.EncounterId == eresponse.WildPokemon.EncounterId) != null &&
                 VisitedEncounterIds.FindIndex(p => p == eresponse.WildPokemon.EncounterId) != -1)
                 return;
-
-            //CONVERT TESTS
-            string _id = eresponse.WildPokemon.PokemonData.PokemonId.ToString();
-            string _lat = eresponse.WildPokemon.Latitude.ToString("G17", CultureInfo.InvariantCulture);
-            string _lon = eresponse.WildPokemon.Longitude.ToString("G17", CultureInfo.InvariantCulture);
-            long lastmodified = eresponse.WildPokemon.LastModifiedTimestampMs;
-            DateTime _lastmodified = JavaTimeStampToDateTime(lastmodified);
-            long hiddenms = eresponse.WildPokemon.TimeTillHiddenMs;
-            DateTime _expiredtime = JavaTimeStampToDateTime(lastmodified + hiddenms);
-            ///////////////////////////
-
+            
             using (var newdata = new EncounterInfo())
             {
-                //JavaTimeStampToDateTime WRONG CONVERTER !
                 newdata.EncounterId = eresponse.WildPokemon.EncounterId;
-                newdata.LastVisitedTimeStamp = JavaTimeStampToDateTime(eresponse.WildPokemon.LastModifiedTimestampMs);
+                newdata.LastModifiedTimestampMs = eresponse.WildPokemon.LastModifiedTimestampMs;
                 newdata.SpawnPointId = eresponse.WildPokemon.SpawnPointId;
-                newdata.ExpirationTimestamp = JavaTimeStampToDateTime(eresponse.WildPokemon.LastModifiedTimestampMs + eresponse.WildPokemon.TimeTillHiddenMs);
+                newdata.TimeTillHiddenMs = eresponse.WildPokemon.TimeTillHiddenMs;
                 newdata.PokemonId = eresponse.WildPokemon.PokemonData.PokemonId;
                 newdata.Iv = PokemonInfo.CalculatePokemonPerfection(eresponse.WildPokemon.PokemonData);
                 newdata.Latitude = eresponse.WildPokemon.Latitude;
@@ -301,10 +294,32 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
         }
 
+        public static async Task CatchFromService(ISession session, CancellationToken cancellationToken, ulong encounterId, string spawnPointGuid)
+        {
+            bool hitPokemon = true;
+
+            //default to excellent throw
+            var normalizedRecticleSize = 1.95;
+            //default spin
+            var spinModifier = 1.0;
+            
+            //round to 2 decimals
+            normalizedRecticleSize = Math.Round(normalizedRecticleSize, 2);
+            
+
+            var caughtPokemonResponse = await
+                 session.Client.Encounter.CatchPokemon(encounterId, spawnPointGuid,
+                     POGOProtos.Inventory.Item.ItemId.ItemPokeBall,normalizedRecticleSize,spinModifier,hitPokemon);
+
+            Logger.Write(caughtPokemonResponse.Status.ToString(), LogLevel.Info, ConsoleColor.White);
+        }
+
         #endregion
         public static async Task CheckMSniper(ISession session, CancellationToken cancellationToken)
         {
             OpenSocket();
+
+            return;//NEW SNIPE METHOD WILL BE ACTIVATED
             
             var pth = Path.Combine(session.LogicSettings.ProfilePath, "SnipeMS.json");
             try
@@ -315,26 +330,26 @@ namespace PoGo.NecroBot.Logic.Tasks
                 if (!await SnipePokemonTask.CheckPokeballsToSnipe(session.LogicSettings.MinPokeballsWhileSnipe + 1, session, cancellationToken))
                     return;
 
-                var currentLatitude = session.Client.CurrentLatitude;
-                var currentLongitude = session.Client.CurrentLongitude;
-
                 var sr = new StreamReader(pth, Encoding.UTF8);
                 var jsn = sr.ReadToEnd();
                 sr.Close();
-                var mSniperLocation = JsonConvert.DeserializeObject<List<MSniperInfo>>(jsn);
+
+                var mSniperLocation2 = JsonConvert.DeserializeObject<List<EncounterInfo>>(jsn);
                 File.Delete(pth);
-                foreach (var location in mSniperLocation)
+                foreach (var location in mSniperLocation2)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     session.EventDispatcher.Send(new SnipeScanEvent
                     {
                         Bounds = new Location(location.Latitude, location.Longitude),
-                        PokemonId = location.Id,
-                        Source = "MSniper"
+                        PokemonId = location.PokemonId,
+                        Source = "MSniperService"
                     });
 
-                    await SpecialSnipe(session, location.Id, location.Latitude, location.Longitude, cancellationToken);
+                    await CatchFromService(session, cancellationToken, location.EncounterId, location.SpawnPointId);
+                    await Task.Delay(1000);
                 }
-                await LocationUtils.UpdatePlayerLocationWithAltitude(session, new GeoCoordinate(currentLatitude, currentLongitude, session.Client.CurrentAltitude));
             }
             catch (Exception ex)
             {
@@ -342,8 +357,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 var ee = new ErrorEvent { Message = ex.Message };
                 if (ex.InnerException != null) ee.Message = ex.InnerException.Message;
                 session.EventDispatcher.Send(ee);
-            }
-        }
+            }        }
 
         public static async Task SpecialSnipe(ISession session, PokemonId targetPokemonId, double latitude,
            double longitude, CancellationToken cancellationToken, bool sessionAllowTransfer = true)
