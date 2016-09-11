@@ -67,6 +67,7 @@ init:
         Start-Process "git" -ArgumentList "--global user.email '$($env:github_email)'" -Wait
         Start-Process "git" -ArgumentList "--global user.name '$($env:github_user)'" -Wait
         Set-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n";
+        $env:PATH = "C:\Ruby23\bin;$($env:PATH)";
     }
     else
     {
@@ -102,36 +103,20 @@ environment:
 
 # scripts that run after cloning repository
 install:
-- ps: >-
-    Start-Process "git" -ArgumentList "submodule update --init --recursive" -NoNewWindow -Wait;
-    if ($LastExitCode -ne 0) 
-    { 
-        $host.SetShouldExit($LastExitCode); 
-    }
-    if ($env:APPVEYOR_REPO_TAG -eq "true")
-    {
-        $ErrorActionPreference = "Continue";
-        $env:PATH = "C:\Ruby23\bin;$($env:PATH)";
-        Start-Process "gem" -ArgumentList "install github_changelog_generator" -Wait;
-        Start-Process "github_changelog_generator" -ArgumentList "--token '$($env:access_token)'" -Wait;
-        if ($env:NecroBot2_IsRev -eq "true")
-        {
-            Start-Process "git" -ArgumentList "add --ignore-errors 'PoGo.NecroBot.CLI/Properties/AssemblyInfoRev.cs'" -Wait;
-            Start-Process "git" -ArgumentList "add --ignore-errors 'PoGo.NecroBot.GUI/Properties/AssemblyInfoRev.cs'" -Wait;
-            Start-Process "git" -ArgumentList "add --ignore-errors 'PoGo.NecroBot.Logic/Properties/AssemblyInfoRev.cs'" -Wait;
-        }
-        else
-        {
-            Start-Process "git" -ArgumentList "add --ignore-errors 'PoGo.NecroBot.CLI/Properties/AssemblyInfo.cs'" -Wait;
-            Start-Process "git" -ArgumentList "add --ignore-errors 'PoGo.NecroBot.GUI/Properties/AssemblyInfo.cs'" -Wait;
-            Start-Process "git" -ArgumentList "add --ignore-errors 'PoGo.NecroBot.Logic/Properties/AssemblyInfo.cs'" -Wait;
-        }
-        Start-Process "git" -ArgumentList "commit -m 'Auto-Update AssemblyInfo $($env:APPVEYOR_REPO_TAG_NAME)'" -Wait;
-        Start-Process "git" -ArgumentList "commit -m 'Auto-Update CHANGELOG.md $($env:APPVEYOR_REPO_TAG_NAME)' 'CHANGELOG.md'" -Wait;
-        Start-Process "git" -ArgumentList "pull origin $($env:APPVEYOR_REPO_BRANCH)" -Wait;
-        Start-Process "git" -ArgumentList "push origin $($env:APPVEYOR_REPO_BRANCH)" -Wait;
-        if ($LastExitCode -ne 0) { $host.SetShouldExit(0); }
-    }
+- ps: git submodule update --init --recursive
+- ps: if ($env:APPVEYOR_REPO_TAG -eq "true") {gem install github_changelog_generator}
+- ps: if ($env:APPVEYOR_REPO_TAG -eq "true") {github_changelog_generator --token $env:access_token}
+- ps: if ($env:APPVEYOR_REPO_TAG -eq "true" -and $env:NecroBot2_IsRev -eq "true") {git add --ignore-errors "PoGo.NecroBot.CLI/Properties/AssemblyInfoRev.cs"}
+- ps: if ($env:APPVEYOR_REPO_TAG -eq "true" -and $env:NecroBot2_IsRev -eq "true") {git add --ignore-errors "PoGo.NecroBot.GUI/Properties/AssemblyInfoRev.cs"}
+- ps: if ($env:APPVEYOR_REPO_TAG -eq "true" -and $env:NecroBot2_IsRev -eq "true") {git add --ignore-errors "PoGo.NecroBot.Logic/Properties/AssemblyInfoRev.cs"}
+- ps: if ($env:APPVEYOR_REPO_TAG -eq "true" -and $env:NecroBot2_IsRev -eq "false") {git add --ignore-errors "PoGo.NecroBot.CLI/Properties/AssemblyInfo.cs"}
+- ps: if ($env:APPVEYOR_REPO_TAG -eq "true" -and $env:NecroBot2_IsRev -eq "false") {git add --ignore-errors "PoGo.NecroBot.GUI/Properties/AssemblyInfo.cs"}
+- ps: if ($env:APPVEYOR_REPO_TAG -eq "true" -and $env:NecroBot2_IsRev -eq "false") {git add --ignore-errors "PoGo.NecroBot.Logic/Properties/AssemblyInfo.cs"}
+- ps: if ($env:APPVEYOR_REPO_TAG -eq "true") {git commit -m "Auto-Update AssemblyInfo $($env:APPVEYOR_REPO_TAG_NAME)"}
+- ps: if ($env:APPVEYOR_REPO_TAG -eq "true") {git commit -m "Auto-Update CHANGELOG.md $($env:APPVEYOR_REPO_TAG_NAME)" "CHANGELOG.md"}
+- ps: if ($env:APPVEYOR_REPO_TAG -eq "true") {git pull origin "$($env:APPVEYOR_REPO_BRANCH)"}
+- ps: if ($env:APPVEYOR_REPO_TAG -eq "true") {git push origin "$($env:APPVEYOR_REPO_BRANCH)"}
+
 
 # enable patching of AssemblyInfo.* files
 assembly_info:
@@ -167,7 +152,7 @@ build:
 
 # scripts to run before build
 before_build:
-  - ps: Start-Process "nuget" -ArgumentList "restore" -NoNewWindow -Wait;
+  - ps: nuget restore
 
 # scripts to run *after* solution is built and *before* automatic packaging occurs (web apps, NuGet packages, Azure Cloud Services)
 before_package:
