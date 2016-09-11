@@ -1,5 +1,6 @@
 BotStatus=ENABLED;
-The Bot has been disabled due to API changes that are not currently implemented. 
+The Bot has been disabled due to API changes that are not currently implemented.
+(This is done to protect your account)
 The entire PoGo community is working on a fix. 
 Now that you have some free down time.... 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
