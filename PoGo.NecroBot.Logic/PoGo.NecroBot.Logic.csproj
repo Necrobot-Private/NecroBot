@@ -172,6 +172,7 @@
     <Compile Include="Inventory.cs" />
     <Compile Include="Localization\Localizer.cs" />
     <Compile Include="Logging\Logger.cs" />
+    <Compile Include="Model\BotActions.cs" />
     <Compile Include="Model\Google\GoogleObjects\Address_Components.cs" />
     <Compile Include="Model\Google\GoogleObjects\Bounds.cs" />
     <Compile Include="Model\Google\GoogleObjects\DirectionsResponse.cs" />
@@ -238,6 +239,7 @@
     <Compile Include="Service\TelegramService.cs" />
     <Compile Include="Model\Settings\LogicSettings.cs" />
     <Compile Include="Service\YoursDirectionsService.cs" />
+    <Compile Include="State\BlockableScope.cs" />
     <Compile Include="State\CheckTosState.cs" />
     <Compile Include="State\SessionStats.cs" />
     <Compile Include="Strategies\Walk\BaseWalkStrategy.cs" />
@@ -310,6 +312,7 @@
     <Compile Include="Event\WarnEvent.cs" />
     <Compile Include="Tasks\TransferPokemonTask.cs" />
     <Compile Include="Tasks\TransferWeakPokemonTask.cs" />
+    <Compile Include="Tasks\UpgradeSinglePokemonTask.cs" />
     <Compile Include="Tasks\UseIncenseConstantlyTask.cs" />
     <Compile Include="Tasks\UseGymBattleTask.cs" />
     <Compile Include="Tasks\UseIncubatorsTask.cs" />
