@@ -108,7 +108,7 @@ install:
     {
         $ErrorActionPreference = "Continue";
         $env:PATH = "C:\Ruby23\bin;$($env:PATH)";
-        Start-Process "gem" -ArgumentList install github_changelog_generator" -Wait;
+        Start-Process "gem" -ArgumentList "install github_changelog_generator" -Wait;
         github_changelog_generator --token $env:access_token;
         Start-Process "git" -ArgumentList "add --ignore-errors 'PoGo.NecroBot.CLI/Properties/$($env:APPVEYOR_Assembly_Info_File).cs'" -Wait;
         Start-Process "git" -ArgumentList "add --ignore-errors 'PoGo.NecroBot.GUI/Properties/$($env:APPVEYOR_Assembly_Info_File).cs'" -Wait;
