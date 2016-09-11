@@ -103,37 +103,7 @@ environment:
 # scripts that run after cloning repository
 install:
 - ps: >-
-
-    function Start-Executable 
-    {
-        param([String] $FilePath,[String[]] $ArgumentList)
-        $OFS = " "
-        $process = New-Object System.Diagnostics.Process
-        $process.StartInfo.FileName = $FilePath
-        $process.StartInfo.Arguments = $ArgumentList
-        $process.StartInfo.UseShellExecute = $false
-        $process.StartInfo.RedirectStandardOutput = $true
-        if ( $process.Start() ) 
-        {
-            $output = $process.StandardOutput.ReadToEnd()
-            $output -replace "\r\n$",""
-            if ($output)
-            {
-                if ($output.Contains("`r`n")) {$output -split "`r`n"}
-                elseif ( $output.Contains("`n")) {$output -split "`n"}
-                else {$output}
-            }
-            Write-Host "$output"
-            $process.WaitForExit()
-            & "$Env:SystemRoot\system32\cmd.exe" /c exit $process.ExitCode
-        }
-    }
-
-    Start-Executable "git" "submodule update --init --recursive";
-    if ($LastExitCode -ne 0) 
-    { 
-        $host.SetShouldExit($LastExitCode); 
-    }
+    Start-Process "git" -ArgumentList "submodule update --init --recursive" -NoNewWindow;
     if ($env:APPVEYOR_REPO_TAG -eq "true")
     {
         $ErrorActionPreference = "Continue";
@@ -158,7 +128,7 @@ install:
         Start-Process "git" -ArgumentList "push origin $($env:APPVEYOR_REPO_BRANCH)" -Wait;
         if ($LastExitCode -ne 0) { $host.SetShouldExit(0); }
     }
-
+}
 # enable patching of AssemblyInfo.* files
 assembly_info:
   patch: true
