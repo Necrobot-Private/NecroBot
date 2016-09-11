@@ -243,10 +243,10 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 46)]
         public double EvolveKeptPokemonsAtStorageUsagePercentage = 90.0;
 
-        [DefaultValue(60)]
-        [Range(0, 250)]
+        [DefaultValue(120)]
+        [Range(0, 350)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 47)]
-        public int OrWhicheverFirst_EvolveKeptPokemonsAtThisNumber = 60;
+        public int EvolveKeptPokemonsOverrideStartIfThisManyReady = 120;
 
 
         /*Keep*/
