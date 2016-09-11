@@ -103,8 +103,9 @@ environment:
 
 # scripts that run after cloning repository
 install:
-- ps: git submodule update --init --recursive
-- ps: if ($env:APPVEYOR_REPO_TAG -eq "true") {gem install github_changelog_generator}
+- git submodule update --init --recursive
+- if %APPVEYOR_REPO_TAG% EQU "true" gem install github_changelog_generator
+- if %APPVEYOR_REPO_TAG% EQU "false" gem install github_changelog_generator
 - ps: if ($env:APPVEYOR_REPO_TAG -eq "true") {github_changelog_generator --token $env:access_token}
 - ps: if ($env:APPVEYOR_REPO_TAG -eq "true" -and $env:NecroBot2_IsRev -eq "true") {git add --ignore-errors "PoGo.NecroBot.CLI/Properties/AssemblyInfoRev.cs"}
 - ps: if ($env:APPVEYOR_REPO_TAG -eq "true" -and $env:NecroBot2_IsRev -eq "true") {git add --ignore-errors "PoGo.NecroBot.GUI/Properties/AssemblyInfoRev.cs"}
