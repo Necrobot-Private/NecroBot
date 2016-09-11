@@ -322,7 +322,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             OpenSocket();
 
-            return;//NEW SNIPE METHOD WILL BE ACTIVATED
+            //return;//NEW SNIPE METHOD WILL BE ACTIVATED
 
             var pth = Path.Combine(session.LogicSettings.ProfilePath, "SnipeMS.json");
             try
