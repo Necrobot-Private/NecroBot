@@ -1,4 +1,0 @@
-include-labels='bug,enhancement'
-exclude-labels='duplicate,question,invalid,wontfix'
-bug-labels='bug,Bug'
-enhancement-labels='enhancement,Enhancement'
