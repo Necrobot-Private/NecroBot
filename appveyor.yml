@@ -177,6 +177,7 @@ deploy:
   # Deploy to GitHub Releases
   - provider: GitHub
     tag: $(APPVEYOR_REPO_TAG_NAME)
+    description: $(NecroBot2_Release_Desc)
     release: NecroBot2 $(APPVEYOR_REPO_TAG_NAME)
     auth_token: $(access_token)
     artifact: NecroBot2.Console;NecroBot2.GUI
@@ -201,11 +202,11 @@ before_deploy:
 - git checkout -b Appveyor "%APPVEYOR_REPO_BRANCH%"
 - SET PATH = "C:\Ruby23\bin;%PATH%"
 - gem install github_changelog_generator;
-- github_changelog_generator --token %access_token%;
+- github_changelog_generator --token %access_token% --output "%APPVEYOR_BUILD_FOLDER%\Changelog\CHANGELOG_%APPVEYOR_REPO_TAG_NAME%.md";
 - git add "PoGo.NecroBot.CLI/Properties/AssemblyInfo.cs";
 - git add "PoGo.NecroBot.GUI/Properties/AssemblyInfo.cs";
 - git add "PoGo.NecroBot.Logic/Properties/AssemblyInfo.cs";
-- git add "CHANGELOG.md"
+- git add "%APPVEYOR_BUILD_FOLDER%/Changelog/CHANGELOG_%APPVEYOR_REPO_TAG_NAME%.md"
 - git diff --quiet --exit-code --cached || git commit -m "%APPVEYOR_REPO_TAG_NAME%"
 - git checkout "%APPVEYOR_REPO_BRANCH%"
 - git merge Appveyor
@@ -215,6 +216,7 @@ before_deploy:
 - git rev-parse master | (SET APPVEYOR_REPO_BRANCH=)
 - SET APPVEYOR_REPO_COMMIT_AUTHOR = "%github_user%"
 - SET APPVEYOR_REPO_COMMIT_AUTHOR_EMAIL = "%github_email%"
+- SET NecroBot2_Release_Desc=<"%APPVEYOR_BUILD_FOLDER%\Changelog\CHANGELOG_%APPVEYOR_REPO_TAG_NAME%.md"
 
 # scripts to run after deployment
 after_deploy:
