@@ -63,9 +63,9 @@ init:
         $fileContent += $env:priv_key.Replace(' ', "`n");
         $fileContent += "`n-----END RSA PRIVATE KEY-----`n";
         Set-Content "$env:USERPROFILE\.ssh\id_rsa" "$($fileContent)";
-        git --global credential.helper store
-        git --global user.email "$($env:github_email)"
-        git --global user.name "$($env:github_user)"
+        git config --global credential.helper store;
+        git config --global user.email "$($env:github_email)";
+        git config --global user.name "$($env:github_user)";
         Set-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n";
     }
     else
@@ -110,11 +110,11 @@ install:
         $env:PATH = "C:\Ruby23\bin;$($env:PATH)";
         gem install github_changelog_generator;
         github_changelog_generator --token $env:access_token;
-        git add --ignore-errors "PoGo.NecroBot.CLI/Properties/$($env:APPVEYOR_REPO_TAG_NAME).cs";
-        git add --ignore-errors "PoGo.NecroBot.GUI/Properties/$($env:APPVEYOR_REPO_TAG_NAME).cs";
-        git add --ignore-errors "PoGo.NecroBot.Logic/Properties/$($env:APPVEYOR_REPO_TAG_NAME).cs";
-        git commit -m "Auto-Update AssemblyInfo $($env:APPVEYOR_REPO_TAG_NAME)";
-        git commit -m "Auto-Update CHANGELOG.md $($env:APPVEYOR_REPO_TAG_NAME)" "CHANGELOG.md";
+        git add --ignore-errors "PoGo.NecroBot.CLI/Properties/$($env:APPVEYOR_Assembly_Info_File).cs";
+        git add --ignore-errors "PoGo.NecroBot.GUI/Properties/$($env:APPVEYOR_Assembly_Info_File).cs";
+        git add --ignore-errors "PoGo.NecroBot.Logic/Properties/$($env:APPVEYOR_Assembly_Info_File).cs";
+        git add --ignore-errors "CHANGELOG.md";
+        git commit -m "v$($env:APPVEYOR_REPO_TAG_NAME)";
         git pull origin $env:APPVEYOR_REPO_BRANCH;
         git push origin $env:APPVEYOR_REPO_BRANCH;
         if ($LastExitCode -ne 0) { $host.SetShouldExit(0); }
