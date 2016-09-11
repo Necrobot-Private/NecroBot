@@ -31,6 +31,9 @@ namespace PoGo.NecroBot.Logic.Tasks
         private static int _storeRi;
         private static int _randomNumber;
         private static List<FortData> _pokestopList;
+        public static bool _pokestopLimitReached;
+        public static bool _pokestopTimerReached;
+
         public static event UpdateTimeStampsPokestopDelegate UpdateTimeStampsPokestop;
 
         internal static void Initialize()
@@ -41,30 +44,66 @@ namespace PoGo.NecroBot.Logic.Tasks
             _storeRi = _rc.Next(8, 15);
             _randomNumber = _rc.Next(4, 11);
             _pokestopList = new List<FortData>();
+            _pokestopLimitReached = false;
+            _pokestopTimerReached = false;
         }
 
         private static bool SearchThresholdExceeds(ISession session)
         {
             if (!session.LogicSettings.UsePokeStopLimit) return false;
+            if (_pokestopLimitReached || _pokestopTimerReached) return true;
+
+            // Check if user defined max Pokestops reached
+            if (!session.Stats.PokeStopTimestamps.Any()) return false;
+            var timeDiff = (DateTime.Now - new DateTime(session.Stats.PokeStopTimestamps.First()));
+
             if (session.Stats.PokeStopTimestamps.Count >= session.LogicSettings.PokeStopLimit)
             {
-                // delete uesless data
-                int toRemove = session.Stats.PokeStopTimestamps.Count - session.LogicSettings.PokeStopLimit;
-                if (toRemove > 0)
+                session.EventDispatcher.Send(new ErrorEvent
                 {
-                    session.Stats.PokeStopTimestamps.RemoveRange(0, toRemove);
-                    UpdateTimeStampsPokestop?.Invoke();
-                }
-                var sec = (DateTime.Now - new DateTime(session.Stats.PokeStopTimestamps.First())).TotalSeconds;
-                var limit = session.LogicSettings.PokeStopLimitMinutes * 60;
-                if (sec < limit)
+                    Message = session.Translation.GetTranslation(TranslationString.PokestopLimitReached)
+                });
+
+                // Check Timestamps & delete older than 24h
+                var TSminus24h = DateTime.Now.AddHours(-24).Ticks;
+                for (int i = 0; i < session.Stats.PokeStopTimestamps.Count; i++)
                 {
-                    session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.PokeStopExceeds, Math.Round(limit - sec)) });
-                    return true;
+                    if (session.Stats.PokeStopTimestamps[i] < TSminus24h)
+                    {
+                        Console.WriteLine("Removing stored Pokestop timestamp {0}", session.Stats.PokeStopTimestamps[i]);
+                        session.Stats.PokeStopTimestamps.Remove(session.Stats.PokeStopTimestamps[i]);
+                    }
                 }
+
+                UpdateTimeStampsPokestop?.Invoke();
+                _pokestopLimitReached = true;
+                return true;
             }
 
-            return false;
+            // Check if user defined time since start reached
+            else if (timeDiff.TotalSeconds >= session.LogicSettings.PokeStopLimitMinutes * 60)
+            {
+                session.EventDispatcher.Send(new ErrorEvent
+                {
+                    Message = session.Translation.GetTranslation(TranslationString.PokestopTimerReached)
+                });
+
+                // Check Timestamps & delete older than 24h
+                var TSminus24h = DateTime.Now.AddHours(-24).Ticks;
+                for (int i = 0; i < session.Stats.PokeStopTimestamps.Count; i++)
+                {
+                    if (session.Stats.PokeStopTimestamps[i] < TSminus24h)
+                    {
+                        session.Stats.PokeStopTimestamps.Remove(session.Stats.PokeStopTimestamps[i]);
+                    }
+                }
+
+                UpdateTimeStampsPokestop?.Invoke();
+                _pokestopTimerReached = true;
+                return true;
+            }
+
+            return false; // Continue running
         }
 
         public static async Task Execute(ISession session, CancellationToken cancellationToken)
@@ -80,6 +119,11 @@ namespace PoGo.NecroBot.Logic.Tasks
             while (pokeStop != null)
             {
                 cancellationToken.ThrowIfCancellationRequested();
+                // Exit this task if both catching and looting has reached its limits
+                if ((UseNearbyPokestopsTask._pokestopLimitReached || UseNearbyPokestopsTask._pokestopTimerReached) &&
+                    (CatchPokemonTask._catchPokemonLimitReached || CatchPokemonTask._catchPokemonTimerReached))
+                    return;
+
                 await SnipeMSniperTask.CheckMSniperLocation(session, cancellationToken);
 
                 var fortInfo = pokeStop.Id == SetMoveToTargetTask.TARGET_ID ? SetMoveToTargetTask.FortInfo : await session.Client.Fort.GetFort(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude);
@@ -160,9 +204,15 @@ namespace PoGo.NecroBot.Logic.Tasks
             await CatchIncensePokemonsTask.Execute(session, cancellationToken);
 
             // Minor fix google route ignore pokestop
-            if (session.LogicSettings.UseGoogleWalk && !session.LogicSettings.UseYoursWalk && !session.LogicSettings.UseGpxPathing)
+            if (session.LogicSettings.UseGoogleWalk && 
+                !session.LogicSettings.UseYoursWalk && 
+                !session.LogicSettings.UseGpxPathing)
             {
-                await SpinPokestopNearBy(session, cancellationToken, pokeStop);
+                // Spin as long as we haven't reached the user defined limits
+                if (!_pokestopLimitReached && !_pokestopTimerReached)
+                {
+                    await SpinPokestopNearBy(session, cancellationToken, pokeStop);
+                }
             }
         }
         public static async Task<FortData> GetNextPokeStop(ISession session)
@@ -253,7 +303,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                 await CatchLurePokemonsTask.Execute(session, pokeStop, cancellationToken);
             }
 
-            await FarmPokestop(session, pokeStop, fortInfo, cancellationToken, doNotTrySpin);
+            // Spin as long as we haven't reached the user defined limits
+            if (!_pokestopLimitReached && !_pokestopTimerReached)
+            {
+                await FarmPokestop(session, pokeStop, fortInfo, cancellationToken, doNotTrySpin);
+            }
 
             if (++_stopsHit >= _storeRi) //TODO: OR item/pokemon bag is full //check stopsHit against storeRI random without dividing.
             {

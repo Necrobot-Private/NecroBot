@@ -5,6 +5,8 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using PoGo.NecroBot.Logic.Event;
+using PoGo.NecroBot.Logic.Tasks;
+using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.Model.Settings;
 using PokemonGo.RocketAPI.Exceptions;
@@ -17,10 +19,9 @@ namespace PoGo.NecroBot.Logic.State
     {
         private IState _initialState;
 
-        public Task AsyncStart(IState initialState, Session session, string subPath,
-            CancellationToken cancellationToken = default(CancellationToken))
+        public Task AsyncStart(IState initialState, Session session, string subPath)
         {
-            return Task.Run(() => Start(initialState, session, subPath, cancellationToken), cancellationToken);
+            return Task.Run(() => Start(initialState, session, subPath));
         }
 
         public void SetFailureState(IState state)
@@ -28,8 +29,7 @@ namespace PoGo.NecroBot.Logic.State
             _initialState = state;
         }
 
-        public async Task Start(IState initialState, Session session, string subPath,
-            CancellationToken cancellationToken = default(CancellationToken))
+        public async Task Start(IState initialState, Session session, string subPath)
         {
             var state = initialState;
             var profilePath = Path.Combine(Directory.GetCurrentDirectory(), subPath);
@@ -50,11 +50,36 @@ namespace PoGo.NecroBot.Logic.State
                     Logger.Write(" ##### config.json ##### ", LogLevel.Info);
                 }
             };
+
+            // We need a CTS to be able to cancel taks at all
+            // All cancelling through the tasks originates from here
+            var cts = new CancellationTokenSource();
+            var cancellationToken = cts.Token;
+
             do
             {
                 try
                 {
                     state = await state.Execute(session, cancellationToken);
+
+                    // Exit the bot if both catching and looting has reached its limits
+                    if ((UseNearbyPokestopsTask._pokestopLimitReached || UseNearbyPokestopsTask._pokestopTimerReached) &&
+                        (CatchPokemonTask._catchPokemonLimitReached || CatchPokemonTask._catchPokemonTimerReached))
+                    {
+                        session.EventDispatcher.Send(new ErrorEvent
+                        {
+                            Message = session.Translation.GetTranslation(TranslationString.ExitDueToLimitsReached)
+                        });
+
+                        cts.Cancel();
+
+                        // A bit rough here; works but can be improved
+                        Thread.Sleep(10000);
+                        state = null;
+                        cts.Dispose();
+                        Environment.Exit(0);
+                    }
+
                 }
                 catch (InvalidResponseException)
                 {
