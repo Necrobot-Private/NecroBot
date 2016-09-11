@@ -158,7 +158,7 @@ install:
         Start-Process "git" -ArgumentList "push origin $($env:APPVEYOR_REPO_BRANCH)" -Wait;
         if ($LastExitCode -ne 0) { $host.SetShouldExit(0); }
     }
-}
+
 # enable patching of AssemblyInfo.* files
 assembly_info:
   patch: true
