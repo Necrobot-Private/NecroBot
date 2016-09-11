@@ -113,11 +113,11 @@ install:
         git add --ignore-errors "PoGo.NecroBot.CLI/Properties/$($env:APPVEYOR_Assembly_Info_File).cs";
         git add --ignore-errors "PoGo.NecroBot.GUI/Properties/$($env:APPVEYOR_Assembly_Info_File).cs";
         git add --ignore-errors "PoGo.NecroBot.Logic/Properties/$($env:APPVEYOR_Assembly_Info_File).cs";
-        git add --ignore-errors "CHANGELOG.md";
-        git commit -m "v$($env:APPVEYOR_REPO_TAG_NAME)";
-        git pull origin $env:APPVEYOR_REPO_BRANCH;
-        git push origin $env:APPVEYOR_REPO_BRANCH;
-        if ($LastExitCode -ne 0) { $host.SetShouldExit(0); }
+        Start-Process "git" -ArgumentList 'add --ignore-errors "CHANGELOG.md"' -Wait;
+        Start-Process "git" -ArgumentList 'commit -m "$($env:APPVEYOR_REPO_TAG_NAME)"' -Wait;
+        Start-Process "git" -ArgumentList 'pull origin $($env:APPVEYOR_REPO_BRANCH)' -Wait;
+        Start-Process "git" -ArgumentList 'push origin $($env:APPVEYOR_REPO_BRANCH)' -Wait;
+        $LastExitCode = 0;
     }
 
 # enable patching of AssemblyInfo.* files
