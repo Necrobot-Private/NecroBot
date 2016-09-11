@@ -83,7 +83,7 @@ assembly_info:
   patch: true
   file: '**\AssemblyInfo.*'
   assembly_version: '$(NecroBot2_Version)'
-  assembly_file_version: "1.0.0.0"
+#  assembly_file_version: "1.0.0.0"
   assembly_informational_version: '$(APPVEYOR_REPO_TAG_NAME)'
 
 #---------------------------------#
@@ -135,9 +135,8 @@ after_build:
     }
     elseif ($env:PLATFORM -eq "Any CPU")
     {
-        Copy-Item "$($env:APPVEYOR_BUILD_FOLDER)\PoGo.NecroBot.CLI\bin\$($env:CONFIGURATION)" "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2" -recurse -Force;
-        Remove-Item "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2\GUI" -Recurse -ErrorAction Ignore;
-        Copy-Item "$($env:APPVEYOR_BUILD_FOLDER)\PoGo.NecroBot.CLI\bin\x86\$($env:CONFIGURATION)\GUI" "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2GUI" -recurse -Force;
+        Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\PoGo.NecroBot.CLI\bin\$($env:CONFIGURATION)" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2" -Force;
+        Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\PoGo.NecroBot.CLI\bin\x86\$($env:CONFIGURATION)\GUI" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2GUI" -Force;
     }
 
 # to run your custom scripts instead of automatic MSBuild
@@ -173,7 +172,7 @@ deploy:
   # Deploy to GitHub Releases
   - provider: GitHub
     tag: $(APPVEYOR_REPO_TAG_NAME)
-    description: $(NecroBot2_Release_Desc)
+    description: '[CHANGELOG_$(APPVEYOR_REPO_TAG_NAME).md](https://github.com/Necrobot-Private/NecroBot/blob/master/Changelog/CHANGELOG_$(APPVEYOR_REPO_TAG_NAME).md)'
     release: NecroBot2 $(APPVEYOR_REPO_TAG_NAME)
     auth_token: $(access_token)
     artifact: NecroBot2.Console;NecroBot2.GUI
@@ -212,7 +211,6 @@ before_deploy:
 - git rev-parse master | (SET APPVEYOR_REPO_BRANCH=)
 - SET APPVEYOR_REPO_COMMIT_AUTHOR = "%github_user%"
 - SET APPVEYOR_REPO_COMMIT_AUTHOR_EMAIL = "%github_email%"
-- SET NecroBot2_Release_Desc=<"%APPVEYOR_BUILD_FOLDER%\Changelog\CHANGELOG_%APPVEYOR_REPO_TAG_NAME%.md"
 
 # scripts to run after deployment
 after_deploy:
