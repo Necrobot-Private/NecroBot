@@ -114,7 +114,7 @@ install:
         Start-Process "git" -ArgumentList "add --ignore-errors 'PoGo.NecroBot.GUI/Properties/$($env:APPVEYOR_Assembly_Info_File).cs'" -Wait;
         Start-Process "git" -ArgumentList "add --ignore-errors 'PoGo.NecroBot.Logic/Properties/$($env:APPVEYOR_Assembly_Info_File).cs'" -Wait;
         Start-Process "git" -ArgumentList "add --ignore-errors 'CHANGELOG.md'" -Wait;
-        Start-Process "git" -ArgumentList commit -m '$($env:APPVEYOR_REPO_TAG_NAME)'" -Wait;
+        Start-Process "git" -ArgumentList commit -m "$($env:APPVEYOR_REPO_TAG_NAME)" -Wait;
     }
 - git status
 - git pull origin $env:APPVEYOR_REPO_BRANCH
