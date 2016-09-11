@@ -135,7 +135,7 @@ install:
 
 # enable patching of AssemblyInfo.* files
 assembly_info:
-  patch: true
+  patch: $(APPVEYOR_REPO_TAG)
   file: ' **\AssemblyInfo.*'
   assembly_version: '$(NecroBot2_Version)'
   assembly_file_version: "1.0.0.0"
@@ -168,33 +168,24 @@ build:
 
 # scripts to run before build
 before_build:
-  - ps: nuget restore
+  - ps: Start-Process "nuget" -ArgumentList "restore" -Wait;
 
 # scripts to run *after* solution is built and *before* automatic packaging occurs (web apps, NuGet packages, Azure Cloud Services)
 before_package:
 
 # scripts to run after build
 after_build:
-  - cmd: >-
-     if exist %APPVEYOR_BUILD_FOLDER%\release rmdir %APPVEYOR_BUILD_FOLDER%\release /s /q
-
-     mkdir %APPVEYOR_BUILD_FOLDER%\release
-
-     mkdir %APPVEYOR_BUILD_FOLDER%\release\necrobotgui
-
-     xcopy %APPVEYOR_BUILD_FOLDER%\PoGo.NecroBot.CLI\bin\x86\Release\GUI %APPVEYOR_BUILD_FOLDER%\release\necrobotgui /s /e
-
-     mkdir %APPVEYOR_BUILD_FOLDER%\release\necrobot
-
-     xcopy %APPVEYOR_BUILD_FOLDER%\PoGo.NecroBot.CLI\bin\x86\Release %APPVEYOR_BUILD_FOLDER%\release\necrobot /s /e
-
-     rmdir %APPVEYOR_BUILD_FOLDER%\release\necrobot\GUI /s /q
+- ps: >-
+    Remove-Item "$($env:APPVEYOR_BUILD_FOLDER)\$($env:CONFIGURATION)" -Recurse -ErrorAction Ignore;
+    New-Item -ItemType Directory -Force -Path "$($env:APPVEYOR_BUILD_FOLDER)\$($env:CONFIGURATION)";
+    New-Item -ItemType Directory -Force -Path "$($env:APPVEYOR_BUILD_FOLDER)\$($env:CONFIGURATION)\NecroBot2";
+    New-Item -ItemType Directory -Force -Path "$($env:APPVEYOR_BUILD_FOLDER)\$($env:CONFIGURATION)\NecroBot2GUI";
+    Copy-Item "$($env:APPVEYOR_BUILD_FOLDER)\PoGo.NecroBot.CLI\bin\x86\$($env:CONFIGURATION)\*" "$($env:APPVEYOR_BUILD_FOLDER)\$($env:CONFIGURATION)\NecroBot2";
+    Remove-Item "$($env:APPVEYOR_BUILD_FOLDER)\Release\NecroBot2\GUI" -Recurse -ErrorAction Ignore;
+    Copy-Item "$($env:APPVEYOR_BUILD_FOLDER)\PoGo.NecroBot.CLI\bin\x86\$($env:CONFIGURATION)\GUI\*" "$($env:APPVEYOR_BUILD_FOLDER)\$($env:CONFIGURATION)\NecroBot2GUI";
 
 # to run your custom scripts instead of automatic MSBuild
 build_script:
-
-# to disable automatic builds
-#build: off
 
 #---------------------------------#
 #       tests configuration       #
@@ -209,10 +200,10 @@ test: off
 
 artifacts:
 
-  - path: '\release\necrobotgui'
+  - path: '\$(CONFIGURATION)\NecroBot2GUI'
     name: NecroBot2.GUI
   
-  - path: '\release\necrobot'
+  - path: '\$(CONFIGURATION)\NecroBot2'
     name: NecroBot2.Console
 
 #---------------------------------#
