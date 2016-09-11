@@ -111,9 +111,9 @@ install:
         gem install github_changelog_generator;
         github_changelog_generator --token $env:access_token;
         if ($env:NecroBot2_IsRev -eq "true")
-        git" -ArgumentList "add --ignore-errors 'PoGo.NecroBot.CLI/Properties/$($env:APPVEYOR_REPO_TAG_NAME).cs'";
-        git" -ArgumentList "add --ignore-errors 'PoGo.NecroBot.GUI/Properties/$($env:APPVEYOR_REPO_TAG_NAME).cs'";
-        git" -ArgumentList "add --ignore-errors 'PoGo.NecroBot.Logic/Properties/$($env:APPVEYOR_REPO_TAG_NAME).cs'";
+        git add --ignore-errors "PoGo.NecroBot.CLI/Properties/$($env:APPVEYOR_REPO_TAG_NAME).cs";
+        git add --ignore-errors "PoGo.NecroBot.GUI/Properties/$($env:APPVEYOR_REPO_TAG_NAME).cs";
+        git add --ignore-errors "PoGo.NecroBot.Logic/Properties/$($env:APPVEYOR_REPO_TAG_NAME).cs";
         git commit -m "Auto-Update AssemblyInfo $($env:APPVEYOR_REPO_TAG_NAME)";
         git commit -m "Auto-Update CHANGELOG.md $($env:APPVEYOR_REPO_TAG_NAME)" CHANGELOG.md";
         git pull origin $env:APPVEYOR_REPO_BRANCH;
