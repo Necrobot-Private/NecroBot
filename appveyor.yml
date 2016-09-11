@@ -15,7 +15,6 @@ skip_non_tags: false
 skip_commits:
   files:
   - '**\AssemblyInfo.*'
-  - '**\CHANGELOG*.md'
 
 # Including commits affecting specific files
 only_commits:
