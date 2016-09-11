@@ -201,7 +201,7 @@ before_deploy:
 - git add "PoGo.NecroBot.CLI/Properties/AssemblyInfo.cs"
 - git add "PoGo.NecroBot.GUI/Properties/AssemblyInfo.cs"
 - git add "PoGo.NecroBot.Logic/Properties/AssemblyInfo.cs"
-- git add "%APPVEYOR_BUILD_FOLDER%/Changelog/CHANGELOG_%APPVEYOR_REPO_TAG_NAME%.md"
+- git add "Changelog/CHANGELOG_%APPVEYOR_REPO_TAG_NAME%.md"
 - git diff --quiet --exit-code --cached || git commit -m "%APPVEYOR_REPO_TAG_NAME%"
 - git checkout "%APPVEYOR_REPO_BRANCH%"
 - git merge Appveyor
