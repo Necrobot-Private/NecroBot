@@ -57,7 +57,7 @@ init:
             $env:NecroBot2_Version = "$($env:APPVEYOR_REPO_TAG_NAME.Replace('v', ''))";
             $env:NecroBot2_Version = "$($env:NecroBot2_Version).0";
             $env:NecroBot2_InformationalVersion = "$($env:APPVEYOR_REPO_TAG_NAME)";
-            $env:APPVEYOR_Assembly_Info_File = "**\AssemblyInfo.*";
+            $env:APPVEYOR_Assembly_Info_File = "AssemblyInfo";
         }
         $fileContent = "-----BEGIN RSA PRIVATE KEY-----`n";
         $fileContent += $env:priv_key.Replace(' ', "`n");
