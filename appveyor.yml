@@ -115,7 +115,7 @@ install:
         git add "PoGo.NecroBot.Logic/Properties/$($env:APPVEYOR_Assembly_Info_File).cs";
     }
 - git add "CHANGELOG.md"
-- git commit -m "$($env:APPVEYOR_REPO_TAG_NAME)"
+- git diff --quiet --exit-code --cached || git commit -m "$($env:APPVEYOR_REPO_TAG_NAME)"
 - git status
 - git pull origin %APPVEYOR_REPO_BRANCH%
 - git push origin %APPVEYOR_REPO_BRANCH%
