@@ -1,6 +1,6 @@
 date-format='%m/%d/%Y'
 output=CHANGELOG.md
-base=HISTORY.md
+base=CHANGELOG.md
 verbose=true
 author=true
 usernames-as-github-logins=false
