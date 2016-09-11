@@ -27,9 +27,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 4)]
         public bool GetSniperInfoFromPokezz;
 
-        [DefaultValue(false)]
+        [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 5)]
-        public bool GetOnlyVerifiedSniperInfoFromPokezz;
+        public bool GetOnlyVerifiedSniperInfoFromPokezz = true;
 
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 6)]
@@ -41,7 +41,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 8)]
-        public bool GetSniperInfoFromSkiplagged = true;
+        public bool GetSniperInfoFromSkiplagged;
 
         [DefaultValue(20)]
         [Range(0, 999)]
@@ -93,5 +93,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [Range(0, 999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 19)]
         public int SnipeCountLimit = 39;
+        
+        [DefaultValue(true)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 13)]
+        public bool ActivateMSniper;
     }
 }

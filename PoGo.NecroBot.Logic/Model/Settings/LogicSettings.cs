@@ -1,5 +1,6 @@
 #region using directives
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using PoGo.NecroBot.Logic.Interfaces.Configuration;
@@ -87,7 +88,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public double ForceExcellentThrowOverIv => _settings.CustomCatchConfig.ForceExcellentThrowOverIv;
         public int ForceGreatThrowOverCp => _settings.CustomCatchConfig.ForceGreatThrowOverCp;
         public int ForceExcellentThrowOverCp => _settings.CustomCatchConfig.ForceExcellentThrowOverCp;
+        public int DelayBetweenPokemonUpgrade => _settings.PokemonConfig.DelayBetweenPokemonUpgrade;
         public int DelayBetweenPokemonCatch => _settings.PokemonConfig.DelayBetweenPokemonCatch;
+
         public int DelayBetweenPlayerActions => _settings.PlayerConfig.DelayBetweenPlayerActions;
         public int EvolveActionDelay => _settings.PlayerConfig.EvolveActionDelay;
         public int TransferActionDelay => _settings.PlayerConfig.TransferActionDelay;
@@ -142,7 +145,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public string YoursWalkHeuristic => _settings.YoursWalkConfig.YoursWalkHeuristic;
 
         public bool SnipeAtPokestops => _settings.SnipeConfig.SnipeAtPokestops;
-
+        public bool ActivateMSniper => _settings.SnipeConfig.ActivateMSniper;
         public bool UseTelegramAPI => _settings.TelegramConfig.UseTelegramAPI;
         public string TelegramAPIKey => _settings.TelegramConfig.TelegramAPIKey;
         public string TelegramPassword => _settings.TelegramConfig.TelegramPassword;
@@ -198,5 +201,17 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool HumanWalkingSnipeAllowSpeedUp => _settings.HumanWalkSnipeConfig.AllowSpeedUp;
         public int HumanWalkingSnipeDelayTimeAtDestination => _settings.HumanWalkSnipeConfig.DelayTimeAtDestination;
         public bool HumanWalkingSnipeUsePogoLocationFeeder => _settings.HumanWalkSnipeConfig.UsePogoLocationFeeder;
-    }
+
+        public bool GymAllowed => _settings.GymConfig.Enable;
+        public TeamColor GymDefaultTeam =>(TeamColor)Enum.Parse(typeof(TeamColor), _settings.GymConfig.DefaultTeam);
+
+        public double GymMaxDistance => _settings.GymConfig.MaxDistance;
+        public int GymVisitTimeout => _settings.GymConfig.VisitTimeout;
+        public int GymMaxCPToDeploy => _settings.GymConfig.MaxCPToDeploy;
+        public int GymMaxLevelToDeploy => _settings.GymConfig.MaxLevelToDeploy;
+
+        public bool GymUseRandomPokemon => _settings.GymConfig.UseRandomPokemon;
+
+        public int GymNumberOfTopPokemonToBeExcluded => _settings.GymConfig.NumberOfTopPokemonToBeExcluded;
+    }                         
 }

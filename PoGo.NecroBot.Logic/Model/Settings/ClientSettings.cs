@@ -106,6 +106,11 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         #region Device Config Values
 
+        public string DevicePlatform
+        {
+            get { return _settings.Auth.DeviceConfig.DevicePlatform; }
+            set { _settings.Auth.DeviceConfig.DevicePlatform = value; }
+        }
         string DevicePackageName
         {
             get { return _settings.Auth.DeviceConfig.DevicePackageName; }

@@ -13,7 +13,6 @@ using PoGo.NecroBot.Logic;
 using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Logging;
-using PoGo.NecroBot.Logic.Model.Google;
 using PoGo.NecroBot.Logic.Model.Settings;
 using PoGo.NecroBot.Logic.Service;
 using PoGo.NecroBot.Logic.State;
@@ -53,7 +52,7 @@ namespace PoGo.NecroBot.CLI
             if (args.Length > 0)
                 _subPath = args[0];
 
-            Logger.SetLogger(new ConsoleLogger(LogLevel.LevelUp), _subPath);
+            Logger.SetLogger(new ConsoleLogger(LogLevel.Gym), _subPath);
 
             if (CheckKillSwitch())
                 return;
@@ -74,11 +73,13 @@ namespace PoGo.NecroBot.CLI
             }
             else
             {
-                settings = new GlobalSettings();
-                settings.ProfilePath = profilePath;
-                settings.ProfileConfigPath = profileConfigPath;
-                settings.GeneralConfigPath = Path.Combine(Directory.GetCurrentDirectory(), "config");
-                settings.ConsoleConfig.TranslationLanguageCode = strCulture;
+                settings = new GlobalSettings
+                {
+                    ProfilePath = profilePath,
+                    ProfileConfigPath = profileConfigPath,
+                    GeneralConfigPath = Path.Combine(Directory.GetCurrentDirectory(), "config"),
+                    ConsoleConfig = {TranslationLanguageCode = strCulture}
+                };
 
                 boolNeedsSetup = true;
             }

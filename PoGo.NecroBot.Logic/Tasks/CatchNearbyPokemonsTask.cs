@@ -102,7 +102,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 // If pokemon is not last pokemon in list, create delay between catches, else keep moving.
                 if (!Equals(pokemons.ElementAtOrDefault(pokemons.Count() - 1), pokemon))
                 {
-                    await Task.Delay(session.LogicSettings.DelayBetweenPokemonCatch, cancellationToken);
+                    await Task.Delay(session.LogicSettings.DelayBetweenPokemonUpgrade, cancellationToken);
                 }
             }
         }
@@ -110,7 +110,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static async Task<IOrderedEnumerable<MapPokemon>> GetNearbyPokemons(ISession session)
         {
             var mapObjects = await session.Client.Map.GetMapObjects();
-
+            session.AddForts(mapObjects.Item1.MapCells.SelectMany(p => p.Forts).ToList());
             var pokemons = mapObjects.Item1.MapCells.SelectMany(i => i.CatchablePokemons)
                 .OrderBy(
                     i =>

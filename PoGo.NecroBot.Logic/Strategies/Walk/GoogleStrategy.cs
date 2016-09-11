@@ -22,7 +22,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
             _googleDirectionsService = null;
         }
 
-        public override async Task<PlayerUpdateResponse> Walk(GeoCoordinate targetLocation, Func<Task<bool>> functionExecutedWhileWalking, ISession session, CancellationToken cancellationToken, double walkSpeed = 0.0)
+        public override async Task<PlayerUpdateResponse> Walk(GeoCoordinate targetLocation, Func<Task> functionExecutedWhileWalking, ISession session, CancellationToken cancellationToken, double walkSpeed = 0.0)
         {
             GetGoogleInstance(session);
 

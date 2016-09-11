@@ -15,6 +15,7 @@ using Newtonsoft.Json.Schema.Generation;
 using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.Utils;
+using PokemonGo.RocketAPI.Helpers;
 
 namespace PoGo.NecroBot.Logic.Model.Settings
 {
@@ -155,20 +156,33 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                     JsonConvert.PopulateObject(input, this, settings);
                 }
                 // Do some post-load logic to determine what device info to be using - if 'custom' is set we just take what's in the file without question
-                if (!this.DeviceConfig.DevicePackageName.Equals("random", StringComparison.InvariantCultureIgnoreCase) && !this.DeviceConfig.DevicePackageName.Equals("custom", StringComparison.InvariantCultureIgnoreCase))
+                if (this.DeviceConfig.DevicePlatform.Equals("ios", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    // User requested a specific device package, check to see if it exists and if so, set it up - otherwise fall-back to random package
-                    string keepDevId = this.DeviceConfig.DeviceId;
-                    SetDevInfoByKey(this.DeviceConfig.DevicePackageName);
-                    this.DeviceConfig.DeviceId = keepDevId;
+                    // iOS
+                    if (this.DeviceConfig.DevicePackageName.Equals("random", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        DeviceInfo randomAppleDeviceInfo = DeviceInfoHelper.GetRandomIosDevice();
+                        SetDevInfoByDeviceInfo(randomAppleDeviceInfo);
+                    }
                 }
-                if (this.DeviceConfig.DevicePackageName.Equals("random", StringComparison.InvariantCultureIgnoreCase))
+                else
                 {
-                    // Random is set, so pick a random device package and set it up - it will get saved to disk below and re-used in subsequent sessions
-                    Random rnd = new Random();
-                    int rndIdx = rnd.Next(0, DeviceInfoHelper.DeviceInfoSets.Keys.Count - 1);
-                    this.DeviceConfig.DevicePackageName = DeviceInfoHelper.DeviceInfoSets.Keys.ToArray()[rndIdx];
-                    SetDevInfoByKey(this.DeviceConfig.DevicePackageName);
+                    // Android
+                    if (!this.DeviceConfig.DevicePackageName.Equals("random", StringComparison.InvariantCultureIgnoreCase) && !this.DeviceConfig.DevicePackageName.Equals("custom", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        // User requested a specific device package, check to see if it exists and if so, set it up - otherwise fall-back to random package
+                        string keepDevId = this.DeviceConfig.DeviceId;
+                        SetDevInfoByKey(this.DeviceConfig.DevicePackageName);
+                        this.DeviceConfig.DeviceId = keepDevId;
+                    }
+                    if (this.DeviceConfig.DevicePackageName.Equals("random", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        // Random is set, so pick a random device package and set it up - it will get saved to disk below and re-used in subsequent sessions
+                        Random rnd = new Random();
+                        int rndIdx = rnd.Next(0, DeviceInfoHelper.AndroidDeviceInfoSets.Keys.Count - 1);
+                        this.DeviceConfig.DevicePackageName = DeviceInfoHelper.AndroidDeviceInfoSets.Keys.ToArray()[rndIdx];
+                        SetDevInfoByKey(this.DeviceConfig.DevicePackageName);
+                    }
                 }
                 if (string.IsNullOrEmpty(this.DeviceConfig.DeviceId) || this.DeviceConfig.DeviceId == "8525f5d8201f78b5")
                     this.DeviceConfig.DeviceId = this.RandomString(16, "0123456789abcdef"); // changed to random hex as full alphabet letters could have been flagged
@@ -302,26 +316,31 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         private void SetDevInfoByKey(string devKey)
         {
-            if (DeviceInfoHelper.DeviceInfoSets.ContainsKey(this.DeviceConfig.DevicePackageName))
+            if (DeviceInfoHelper.AndroidDeviceInfoSets.ContainsKey(this.DeviceConfig.DevicePackageName))
             {
-                this.DeviceConfig.AndroidBoardName = DeviceInfoHelper.DeviceInfoSets[this.DeviceConfig.DevicePackageName]["AndroidBoardName"];
-                this.DeviceConfig.AndroidBootloader = DeviceInfoHelper.DeviceInfoSets[this.DeviceConfig.DevicePackageName]["AndroidBootloader"];
-                this.DeviceConfig.DeviceBrand = DeviceInfoHelper.DeviceInfoSets[this.DeviceConfig.DevicePackageName]["DeviceBrand"];
-                this.DeviceConfig.DeviceId = DeviceInfoHelper.DeviceInfoSets[this.DeviceConfig.DevicePackageName]["DeviceId"];
-                this.DeviceConfig.DeviceModel = DeviceInfoHelper.DeviceInfoSets[this.DeviceConfig.DevicePackageName]["DeviceModel"];
-                this.DeviceConfig.DeviceModelBoot = DeviceInfoHelper.DeviceInfoSets[this.DeviceConfig.DevicePackageName]["DeviceModelBoot"];
-                this.DeviceConfig.DeviceModelIdentifier = DeviceInfoHelper.DeviceInfoSets[this.DeviceConfig.DevicePackageName]["DeviceModelIdentifier"];
-                this.DeviceConfig.FirmwareBrand = DeviceInfoHelper.DeviceInfoSets[this.DeviceConfig.DevicePackageName]["FirmwareBrand"];
-                this.DeviceConfig.FirmwareFingerprint = DeviceInfoHelper.DeviceInfoSets[this.DeviceConfig.DevicePackageName]["FirmwareFingerprint"];
-                this.DeviceConfig.FirmwareTags = DeviceInfoHelper.DeviceInfoSets[this.DeviceConfig.DevicePackageName]["FirmwareTags"];
-                this.DeviceConfig.FirmwareType = DeviceInfoHelper.DeviceInfoSets[this.DeviceConfig.DevicePackageName]["FirmwareType"];
-                this.DeviceConfig.HardwareManufacturer = DeviceInfoHelper.DeviceInfoSets[this.DeviceConfig.DevicePackageName]["HardwareManufacturer"];
-                this.DeviceConfig.HardwareModel = DeviceInfoHelper.DeviceInfoSets[this.DeviceConfig.DevicePackageName]["HardwareModel"];
+                SetDevInfoByDeviceInfo(DeviceInfoHelper.AndroidDeviceInfoSets[this.DeviceConfig.DevicePackageName]);
             }
             else
             {
                 throw new ArgumentException("Invalid device info package! Check your auth.config file and make sure a valid DevicePackageName is set. For simple use set it to 'random'. If you have a custom device, then set it to 'custom'.");
             }
+        }
+
+        private void SetDevInfoByDeviceInfo(DeviceInfo deviceInfo)
+        {
+            this.DeviceConfig.AndroidBoardName = deviceInfo.AndroidBoardName;
+            this.DeviceConfig.AndroidBootloader = deviceInfo.AndroidBootloader;
+            this.DeviceConfig.DeviceBrand = deviceInfo.DeviceBrand;
+            this.DeviceConfig.DeviceId = deviceInfo.DeviceId;
+            this.DeviceConfig.DeviceModel = deviceInfo.DeviceModel;
+            this.DeviceConfig.DeviceModelBoot = deviceInfo.DeviceModelBoot;
+            this.DeviceConfig.DeviceModelIdentifier = deviceInfo.DeviceModelIdentifier;
+            this.DeviceConfig.FirmwareBrand = deviceInfo.FirmwareBrand;
+            this.DeviceConfig.FirmwareFingerprint = deviceInfo.FirmwareFingerprint;
+            this.DeviceConfig.FirmwareTags = deviceInfo.FirmwareTags;
+            this.DeviceConfig.FirmwareType = deviceInfo.FirmwareType;
+            this.DeviceConfig.HardwareManufacturer = deviceInfo.HardwareManufacturer;
+            this.DeviceConfig.HardwareModel = deviceInfo.HardwareModel;
         }
 
         private WebProxy InitProxy()

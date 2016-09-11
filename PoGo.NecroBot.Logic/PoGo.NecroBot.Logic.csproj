@@ -66,7 +66,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Google.Protobuf, Version=3.0.0.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)\packages\Google.Protobuf.3.0.0-beta4\lib\net45\Google.Protobuf.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\Google.Protobuf.3.0.0\lib\net45\Google.Protobuf.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="LRUCache, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -78,7 +78,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json.Schema, Version=2.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)\packages\Newtonsoft.Json.Schema.2.0.5\lib\net45\Newtonsoft.Json.Schema.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\Newtonsoft.Json.Schema.2.0.6\lib\net45\Newtonsoft.Json.Schema.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="S2Geometry, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -142,6 +142,11 @@
     <Compile Include="Event\FortTargetEvent.cs" />
     <Compile Include="Event\FortFailedEvent.cs" />
     <Compile Include="Event\FortUsedEvent.cs" />
+    <Compile Include="Event\Gym\GymDeployEvent.cs" />
+    <Compile Include="Event\Gym\GymDetailInfoEvent.cs" />
+    <Compile Include="Event\Gym\GymListEvent.cs" />
+    <Compile Include="Event\Gym\GymTeamJoinEvent.cs" />
+    <Compile Include="Event\Gym\GymWalkToTargetEvent.cs" />
     <Compile Include="Event\HumanWalkingEvent.cs" />
     <Compile Include="Event\HumanWalkSnipeEvent.cs" />
     <Compile Include="Event\InventoryListEvent.cs" />
@@ -167,6 +172,7 @@
     <Compile Include="Inventory.cs" />
     <Compile Include="Localization\Localizer.cs" />
     <Compile Include="Logging\Logger.cs" />
+    <Compile Include="Model\BotActions.cs" />
     <Compile Include="Model\Google\GoogleObjects\Address_Components.cs" />
     <Compile Include="Model\Google\GoogleObjects\Bounds.cs" />
     <Compile Include="Model\Google\GoogleObjects\DirectionsResponse.cs" />
@@ -198,6 +204,7 @@
     <Compile Include="Model\Settings\GlobalSettings.cs" />
     <Compile Include="Model\Settings\GoogleWalkConfig.cs" />
     <Compile Include="Model\Settings\GpxConfig.cs" />
+    <Compile Include="Model\Settings\GymConfig.cs" />
     <Compile Include="Model\Settings\HumanWalkSnipeConfig.cs" />
     <Compile Include="Model\Settings\HumanWalkSnipeFilter.cs" />
     <Compile Include="Model\Settings\ItemRecycleFilter.cs" />
@@ -232,6 +239,7 @@
     <Compile Include="Service\TelegramService.cs" />
     <Compile Include="Model\Settings\LogicSettings.cs" />
     <Compile Include="Service\YoursDirectionsService.cs" />
+    <Compile Include="State\BlockableScope.cs" />
     <Compile Include="State\CheckTosState.cs" />
     <Compile Include="State\SessionStats.cs" />
     <Compile Include="Strategies\Walk\BaseWalkStrategy.cs" />
@@ -247,6 +255,9 @@
     <Compile Include="Tasks\GetPokeDexCount.cs" />
     <Compile Include="Tasks\HumanRandomActionTask.cs" />
     <Compile Include="Tasks\HumanWalkSnipeTask.cs" />
+    <Compile Include="Tasks\HumanWalkSnipeTask.FastPokemap.cs">
+      <DependentUpon>HumanWalkSnipeTask.cs</DependentUpon>
+    </Compile>
     <Compile Include="Tasks\HumanWalkSnipeTask.Pokecrew.cs">
       <DependentUpon>HumanWalkSnipeTask.cs</DependentUpon>
     </Compile>
@@ -292,6 +303,7 @@
     <Compile Include="Tasks\Login.cs" />
     <Compile Include="Tasks\RecycleItemsTask.cs" />
     <Compile Include="Tasks\RenamePokemonTask.cs" />
+    <Compile Include="Tasks\SetMoveToTargetTask.cs" />
     <Compile Include="Tasks\SnipeMSniperTask.cs" />
     <Compile Include="Tasks\SnipePokemonTask.cs" />
     <Compile Include="Tasks\TransferDuplicatePokemonTask.cs" />
@@ -300,10 +312,11 @@
     <Compile Include="Event\WarnEvent.cs" />
     <Compile Include="Tasks\TransferPokemonTask.cs" />
     <Compile Include="Tasks\TransferWeakPokemonTask.cs" />
+    <Compile Include="Tasks\UpgradeSinglePokemonTask.cs" />
     <Compile Include="Tasks\UseIncenseConstantlyTask.cs" />
+    <Compile Include="Tasks\UseGymBattleTask.cs" />
     <Compile Include="Tasks\UseIncubatorsTask.cs" />
     <Compile Include="Tasks\UseLuckyEggConstantlyTask.cs" />
-    <Compile Include="Tasks\SetMoveToTargetTask.cs" />
     <Compile Include="Tasks\UseNearbyPokestopsTask.cs" />
     <Compile Include="Utils\DelayingUtils.cs" />
     <Compile Include="Utils\DeviceInfoHelper.cs" />
@@ -326,7 +339,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
-    <Compile Include="Tasks\HumanWalkSnipeTask.FastPokemap.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FeroxRev\PokemonGo.RocketAPI.csproj">

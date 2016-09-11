@@ -429,6 +429,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 });
 
                 var mapObjects = session.Client.Map.GetMapObjects().Result;
+                session.AddForts(mapObjects.Item1.MapCells.SelectMany(p => p.Forts).ToList());
                 catchablePokemon =
                     mapObjects.Item1.MapCells.SelectMany(q => q.CatchablePokemons)
                         .Where(q => pokemonIds.Contains(q.PokemonId))
@@ -513,7 +514,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
 
                 if (!Equals(catchablePokemon.ElementAtOrDefault(catchablePokemon.Count - 1), pokemon))
-                    await Task.Delay(session.LogicSettings.DelayBetweenPokemonCatch, cancellationToken);
+                    await Task.Delay(session.LogicSettings.DelayBetweenPokemonUpgrade, cancellationToken);
             }
 
             if (!catchedPokemon)

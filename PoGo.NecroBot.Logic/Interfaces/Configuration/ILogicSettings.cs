@@ -60,7 +60,7 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         double ForceExcellentThrowOverIv { get; }
         int ForceGreatThrowOverCp { get; }
         int ForceExcellentThrowOverCp { get; }
-        int DelayBetweenPokemonCatch { get; }
+        int DelayBetweenPokemonUpgrade { get; }
         bool AutomaticallyLevelUpPokemon { get; }
         bool OnlyUpgradeFavorites { get; }
         bool UseLevelUpList { get; }
@@ -101,6 +101,7 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         string ProfileConfigPath { get; }
         string GeneralConfigPath { get; }
         bool SnipeAtPokestops { get; }
+        bool ActivateMSniper { get; }
         bool UseTelegramAPI { get; }
         string TelegramAPIKey { get; }
         string TelegramPassword { get; }
@@ -195,5 +196,14 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         int TransferActionDelay { get; }
         int RecycleActionDelay { get; }
         int RenamePokemonActionDelay { get; }
+
+        bool GymAllowed { get; }
+        TeamColor GymDefaultTeam { get; }
+        double GymMaxDistance { get; }
+        int GymMaxCPToDeploy {  get; }
+        int GymMaxLevelToDeploy { get; }
+        bool GymUseRandomPokemon { get; }
+        int GymVisitTimeout { get; }
+        int GymNumberOfTopPokemonToBeExcluded { get; }
     }
 }

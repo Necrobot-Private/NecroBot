@@ -1,13 +1,12 @@
 ﻿using System.Threading.Tasks;
 using PoGo.NecroBot.Logic.State;
 using SuperSocket.WebSocket;
-using System.Threading;
 
 namespace PoGo.NecroBot.CLI.WebSocketHandler.ActionCommands
 {
     public class SetDestination : IWebSocketRequestHandler
     {
-        public string Command { get; private set;}
+        public string Command { get; private set; }
 
         public SetDestination()
         {
@@ -16,7 +15,7 @@ namespace PoGo.NecroBot.CLI.WebSocketHandler.ActionCommands
 
         public async Task Handle(ISession session, WebSocketSession webSocketSession, dynamic message)
         {
-            Logic.Tasks.SetMoveToTargetTask.Execute((double)message.lat, (double)message.lng);
+            await Logic.Tasks.SetMoveToTargetTask.Execute(session,(double)message.Latitude, (double)message.Longitude, (string)message.FortId);
         }
     }
 }

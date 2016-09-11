@@ -10,6 +10,7 @@ using PoGo.NecroBot.Logic.State;
 using POGOProtos.Enums;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Networking.Responses;
+using PoGo.NecroBot.Logic.Event.Gym;
 #endregion
 
 namespace PoGo.NecroBot.CLI
@@ -74,15 +75,13 @@ namespace PoGo.NecroBot.CLI
         {
             Logger.Write(
                 session.Translation.GetTranslation(TranslationString.EventPokemonUpgraded,
-                session.Translation.GetPokemonTranslation(upgradePokemonEvent.Id),
+                session.Translation.GetPokemonTranslation(upgradePokemonEvent.PokemonId),
                 upgradePokemonEvent.Cp.ToString(),
                 upgradePokemonEvent.Perfection.ToString("0.00"),
                 upgradePokemonEvent.BestCp.ToString(),
-                upgradePokemonEvent.BestPerfection.ToString("0.00"),
-                LogLevel.LevelUp));
+                upgradePokemonEvent.BestPerfection.ToString("0.00")),
+                LogLevel.LevelUp);
         }
-
-
 
         private static void HandleEvent(ItemRecycledEvent itemRecycledEvent, ISession session)
         {
@@ -120,10 +119,10 @@ namespace PoGo.NecroBot.CLI
         {
             if (fortFailedEvent.Try != 1 && fortFailedEvent.Looted == false)
             {
-                Logger.lineSelect(0, 1); // Replaces the last line to prevent spam.
+                Logger.lineSelect(); // Replaces the last line to prevent spam.
             }
 
-            if (fortFailedEvent.Looted == true)
+            if (fortFailedEvent.Looted)
             {
                 Logger.Write(
                 session.Translation.GetTranslation(TranslationString.SoftBanBypassed),
@@ -416,11 +415,62 @@ namespace PoGo.NecroBot.CLI
                         ev.Latitude,
                         ev.Longitude));
                     break;
+                case HumanWalkSnipeEventTypes.AddedSnipePokemon:
+                    break;
+                case HumanWalkSnipeEventTypes.TargetedPokemon:
+                    break;
+                case HumanWalkSnipeEventTypes.ClientRequestUpdate:
+                    break;
+                case HumanWalkSnipeEventTypes.QueueUpdated:
+                    break;
                 default:
                     break;
             }
         }
 
+        private static void HandleEvent(GymDetailInfoEvent ev, ISession session)
+        {
+            Logger.Write($"Visited  Gym : {ev.Name} | Team {ev.Team}  | Gym points {ev.Point}", LogLevel.Gym, (ev.Team == TeamColor.Red) ? ConsoleColor.Red : (ev.Team == TeamColor.Yellow ? ConsoleColor.Yellow : ConsoleColor.Blue));
+        }
+
+        //TODO - move to string translation later.
+        private static void HandleEvent(GymDeployEvent ev, ISession session)
+        {
+            Logger.Write($"Great!!! Your {ev.PokemonId.ToString()} now is defending for GYM {ev.Name}", LogLevel.Gym, ConsoleColor.Green);
+        }
+
+
+        private static void HandleEvent(GymListEvent ev, ISession session)
+        {
+            Logger.Write($"{ev.Gyms.Count} gyms has been added to farming area.", LogLevel.Gym, ConsoleColor.Cyan);
+        }
+
+        private static void HandleEvent(GymWalkToTargetEvent ev, ISession session)
+        {
+            Logger.Write($"Traveling to gym : {ev.Name} | Lat: {ev.Latitude} , Lng: {ev.Longitude}| ({ev.Distance:0.00}m)", LogLevel.Gym, ConsoleColor.Cyan);
+        }
+
+        private static void HandleEvent(GymTeamJoinEvent ev, ISession session)
+        {
+            switch (ev.Status)
+            {
+                case SetPlayerTeamResponse.Types.Status.Unset:
+                    break;
+                case SetPlayerTeamResponse.Types.Status.Success:
+                    Logger.Write($"(TEAM) Joined the {ev.Team} Team!", LogLevel.Gym, (ev.Team == TeamColor.Red)? ConsoleColor.Red:(ev.Team == TeamColor.Yellow? ConsoleColor.Yellow: ConsoleColor.Blue) );
+
+                    break;
+                case SetPlayerTeamResponse.Types.Status.TeamAlreadySet:
+                     Logger.Write($"You have joined team already! ", LogLevel.Gym,color:ConsoleColor.Red);
+
+                    break;
+                case SetPlayerTeamResponse.Types.Status.Failure:
+                    Logger.Write($"Unable to join team : {ev.Team.ToString()}", color: ConsoleColor.Red);
+                    break;
+                default:
+                    break;
+            }
+        }
         internal void Listen(IEvent evt, ISession session)
         {
             dynamic eve = evt;
