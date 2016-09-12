@@ -45,9 +45,9 @@ namespace PoGo.NecroBot.Logic.Tasks
             public long LastModifiedTimestampMs { get; set; }
             public double Latitude { get; set; }
             public double Longitude { get; set; }
-            public PokemonMove Move1 { get; set; } = PokemonMove.MoveUnset;
-            public PokemonMove Move2 { get; set; } = PokemonMove.MoveUnset;
-            public PokemonId PokemonId { get; set; } = PokemonId.Missingno;
+            public PokemonMove Move1 { get; set; }
+            public PokemonMove Move2 { get; set; }
+            public PokemonId PokemonId { get; set; }
             public string SpawnPointId { get; set; }
             public int TimeTillHiddenMs { get; set; }
             public void Dispose()
@@ -143,7 +143,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             var caughtPokemonResponse = await
                  session.Client.Encounter.CatchPokemon(encounterId, spawnPointGuid,
                      POGOProtos.Inventory.Item.ItemId.ItemPokeBall, normalizedRecticleSize, spinModifier, hitPokemon);
-            
+
             Logger.Write($"{caughtPokemonResponse.Status.ToString()}  {((PokemonId)caughtPokemonResponse.CapturedPokemonId).ToString()}", LogLevel.Info, caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess ? ConsoleColor.Green : ConsoleColor.Red);
         }
 
@@ -165,7 +165,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             try
             {
-                return (SocketCmd)Enum.Parse(typeof(SocketCmd), e.Message.Split('|').First());
+                return (SocketCmd)Enum.Parse(typeof(SocketCmd), e.Message.Split(new string[] { "||" }, StringSplitOptions.None).First());
             }
             catch (Exception ex)
             {
@@ -178,7 +178,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             try
             {
-                return e.Message.Split('|')[1].Split(',');
+                return e.Message.Split(new string[] { "||" }, StringSplitOptions.None)[1].Split('|');
             }
             catch (Exception ex)
             {

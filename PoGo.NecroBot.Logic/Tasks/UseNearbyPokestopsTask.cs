@@ -124,7 +124,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                     (CatchPokemonTask._catchPokemonLimitReached || CatchPokemonTask._catchPokemonTimerReached))
                     return;
 
-                await SnipeMSniperTask.CheckMSniperLocation(session, cancellationToken);
+                if (session.LogicSettings.ActivateMSniper)
+                {
+                    await MSniperServiceTask.CheckMSniper(session, cancellationToken);
+                }
 
                 var fortInfo = pokeStop.Id == SetMoveToTargetTask.TARGET_ID ? SetMoveToTargetTask.FortInfo : await session.Client.Fort.GetFort(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude);
 
@@ -137,7 +140,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                 if (session.LogicSettings.SnipeAtPokestops || session.LogicSettings.UseSnipeLocationServer)
                     await SnipePokemonTask.Execute(session, cancellationToken);
 
-                await SnipeMSniperTask.CheckMSniperLocation(session, cancellationToken);
 
                 if (!await SetMoveToTargetTask.IsReachedDestination(pokeStop, session, cancellationToken))
                 {
@@ -157,7 +159,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             var distance = LocationUtils.CalculateDistanceInMeters(session.Client.CurrentLatitude,
                     session.Client.CurrentLongitude, pokeStop.Latitude, pokeStop.Longitude);
-            
+
             // we only move to the PokeStop, and send the associated FortTargetEvent, when not using GPX
             // also, GPX pathing uses its own EggWalker and calls the CatchPokemon tasks internally.
             if (!session.LogicSettings.UseGpxPathing)
@@ -204,8 +206,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             await CatchIncensePokemonsTask.Execute(session, cancellationToken);
 
             // Minor fix google route ignore pokestop
-            if (session.LogicSettings.UseGoogleWalk && 
-                !session.LogicSettings.UseYoursWalk && 
+            if (session.LogicSettings.UseGoogleWalk &&
+                !session.LogicSettings.UseYoursWalk &&
                 !session.LogicSettings.UseGpxPathing)
             {
                 // Spin as long as we haven't reached the user defined limits
@@ -245,7 +247,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
             if (pokeStopes.Count == 1) return pokeStopes.FirstOrDefault();
 
-           if (session.LogicSettings.GymAllowed)
+            if (session.LogicSettings.GymAllowed)
             {
                 var gyms = pokeStopes.Where(x => x.Type == FortType.Gym &&
                 LocationUtils.CalculateDistanceInMeters(x.Latitude, x.Longitude, session.Client.CurrentLatitude, session.Client.CurrentLongitude) < session.LogicSettings.GymMaxDistance
@@ -293,7 +295,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static async Task DoActionAtPokeStop(ISession session, CancellationToken cancellationToken, FortData pokeStop, FortDetailsResponse fortInfo, bool doNotTrySpin = false)
         {
-            if (pokeStop.Type != FortType.Checkpoint ) return;
+            if (pokeStop.Type != FortType.Checkpoint) return;
 
             //Catch Lure Pokemon
             if (pokeStop.LureInfo != null)
