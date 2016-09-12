@@ -1,61 +1,84 @@
 ﻿#region using directives
-
+using System.Linq;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.State;
 using POGOProtos.Map.Fort;
 using POGOProtos.Networking.Responses;
+using PokemonGo.RocketAPI.Extensions;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 #endregion
 
 namespace PoGo.NecroBot.Logic.Tasks
 {
-
     public class SetMoveToTargetTask
     {
-        public static Boolean SetMoveToTargetEnabled { get; set; } = false;
-        public static Boolean SetMoveToTargetAccept { get; set; } = false;
-        public static double SetMoveToTargetLat { get; set; }
-        public static double SetMoveToTargetLng { get; set; }
+        public static string TARGET_ID = "NECRO2_FORT";
 
+        private static FortDetailsResponse _fortInfo;
+        private static FortData _targetStop;
+        public static FortDetailsResponse FortInfo { get { return _fortInfo; } }
 
-        public static void CheckSetMoveToTargetStatus(ref FortDetailsResponse fortInfo, ref FortData pokeStop)
+        public static async Task Execute(ISession session, double lat, double lng, string fortId = "")
         {
-            if (!SetMoveToTargetEnabled)
-                return;
-            SetMoveToTargetAccept = true;
-            fortInfo.Name = "User Destination.";
-            fortInfo.Latitude = pokeStop.Latitude = SetMoveToTargetLat;
-            fortInfo.Longitude = pokeStop.Longitude = SetMoveToTargetLng;
-        }
-        public static bool CheckStopforSetMoveToTarget()
-        {
-            return SetMoveToTargetEnabled && !SetMoveToTargetAccept;
-        }
-        public static bool CheckReachTarget(ISession session)
-        {
-            if (!SetMoveToTargetEnabled || !SetMoveToTargetAccept)
-                return false;
-            session.EventDispatcher.Send(new FortUsedEvent
+            if (!string.IsNullOrEmpty(fortId))
             {
-                Id = "",
-                Name = "User Destination.",
-                Exp = 0,
-                Gems = 0,
-                Items = "",
-                Latitude = SetMoveToTargetLat,
-                Longitude = SetMoveToTargetLng,
-                InventoryFull = false
-            });
-            SetMoveToTargetAccept = false;
-            SetMoveToTargetEnabled = false;
-            return true;
+                var knownFort = session.Forts.FirstOrDefault(x => x.Id == fortId);
+                if (knownFort != null)
+                {
+                    _targetStop = knownFort;
+                    return;
+                }
+            }
+            //at this time only allow one target, can't be cancel
+            if (_targetStop == null || _targetStop.CooldownCompleteTimestampMs == 0)
+            {
+                _targetStop = new FortData()
+                {
+                    Latitude = lat,
+                    Longitude = lng,
+                    Id = TARGET_ID,
+                    Type = FortType.Checkpoint,
+                    CooldownCompleteTimestampMs = DateTime.UtcNow.AddHours(1).ToUnixTime()  //make sure bot not try to spin this fake pokestop
+                };
+
+                _fortInfo = new FortDetailsResponse()
+                {
+                    Latitude = lat,
+                    Longitude = lng,
+                    Name = "Your selected location"
+                };
+            }
         }
-        public static void Execute(double lat, double lng)
+        public static async Task<bool> IsReachedDestination(FortData destination, ISession session, CancellationToken cancellationToken)
         {
-            SetMoveToTargetLat = lat;
-            SetMoveToTargetLng = lng;
-            SetMoveToTargetEnabled = true;
+            if (destination == _targetStop && destination.Id == TARGET_ID ) 
+            {
+                _targetStop = null;
+
+                //looking for pokemon
+                await CatchNearbyPokemonsTask.Execute(session, cancellationToken);
+                //TODO - maybe looking for lure pokestop and try catch lure pokestop task
+                return true;
+            }
+            return false;
+        }
+
+        internal static async Task<FortData> GetTarget(ISession session)
+        {
+            if (_targetStop != null &&
+                !session.LogicSettings.UseGpxPathing &&
+                _targetStop.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime())
+            {
+                if (_targetStop.Id == TARGET_ID)
+                {
+                    _targetStop.CooldownCompleteTimestampMs = DateTime.UtcNow.AddHours(1).ToUnixTime();
+                }
+                return _targetStop;
+            }
+            return null;
         }
     }
 }
