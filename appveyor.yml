@@ -15,17 +15,8 @@ skip_non_tags: false
 skip_commits:
   files:
   - '**\AssemblyInfo.*'
+  - 'CHANGELOG.md'
 
-# Including commits affecting specific files
-only_commits:
-  files:
-    - PoGo.NecroBot.CLI/
-    - PoGo.NecroBot.GUI/
-    - FeroxRev/
-    - POGOProtos/
-    - packages/
-    - .gitmodules
-    - '*.yml'
 #	
 pull_requests:
   do_not_increment_build_number: true
