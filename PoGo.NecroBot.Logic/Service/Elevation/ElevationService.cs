@@ -26,7 +26,7 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
         {
             // First try Google service
             double elevation = googleService.GetElevation(lat, lng);
-            if (elevation == 0)
+            if (elevation == 0 || elevation < -200)
             {
                 // Fallback to MapQuest service
                 elevation = mapQuestService.GetElevation(lat, lng);
