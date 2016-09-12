@@ -1,9 +1,5 @@
 # Change Log
 
-## [Unreleased](https://github.com/Necrobot-Private/NecroBot/tree/HEAD)
-
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.9.8.8...HEAD)
-
 **Closed issues:**
 
 - set GymConfig...? [\#89](https://github.com/Necrobot-Private/NecroBot/issues/89)
