@@ -200,5 +200,14 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         int TransferActionDelay { get; }
         int RecycleActionDelay { get; }
         int RenamePokemonActionDelay { get; }
+
+        bool GymAllowed { get; }
+        TeamColor GymDefaultTeam { get; }
+        double GymMaxDistance { get; }
+        int GymMaxCPToDeploy {  get; }
+        int GymMaxLevelToDeploy { get; }
+        bool GymUseRandomPokemon { get; }
+        int GymVisitTimeout { get; }
+        int GymNumberOfTopPokemonToBeExcluded { get; }
     }
 }

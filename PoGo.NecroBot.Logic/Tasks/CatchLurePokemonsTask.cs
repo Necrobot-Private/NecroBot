@@ -1,5 +1,6 @@
 ﻿#region using directives
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using PoGo.NecroBot.Logic.Common;
@@ -9,6 +10,10 @@ using PoGo.NecroBot.Logic.State;
 using POGOProtos.Map.Fort;
 using POGOProtos.Map.Pokemon;
 using POGOProtos.Networking.Responses;
+using PoGo.NecroBot.Logic.Utils;
+using System.Collections.Generic;
+using System.Linq;
+using PokemonGo.RocketAPI.Extensions;
 
 #endregion
 
@@ -84,6 +89,36 @@ namespace PoGo.NecroBot.Logic.Tasks
                     });
                 }
             }
+        }
+
+        public static async Task Execute(ISession session, CancellationToken cancellationToken)     
+        {
+            //looking for any lure pokestop neaby
+
+            var mapObjects = await session.Client.Map.GetMapObjects();
+            var pokeStops = mapObjects.Item1.MapCells.SelectMany(i => i.Forts)
+                .Where(
+                    i =>
+                        (i.Type == FortType.Checkpoint) &&
+                        i.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime()
+                );
+
+            session.AddForts(pokeStops.ToList());
+
+           var forts = session.Forts.Where(p=>p.Type == FortType.Checkpoint);
+            List<FortData> luredNearBy = new List<FortData>();
+
+            foreach (FortData fort in forts)
+            {
+                var distance =  LocationUtils.CalculateDistanceInMeters(session.Client.CurrentLatitude, session.Client.CurrentLongitude, fort.Latitude, fort.Longitude);
+                if(distance <40 && fort.LureInfo != null)
+                {
+                    luredNearBy.Add(fort);
+                    await Execute(session, fort, cancellationToken);
+                }
+            };
+
+            
         }
     }
 }

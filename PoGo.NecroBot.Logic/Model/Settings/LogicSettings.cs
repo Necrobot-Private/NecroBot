@@ -1,5 +1,6 @@
 #region using directives
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using PoGo.NecroBot.Logic.Interfaces.Configuration;
@@ -202,5 +203,17 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool HumanWalkingSnipeUsePokeWatcher => _settings.HumanWalkSnipeConfig.UsePokeWatcher;
         public bool HumanWalkingSnipeUseFastPokemap => _settings.HumanWalkSnipeConfig.UseFastPokemap;
         public bool HumanWalkingSnipeUsePogoLocationFeeder => _settings.HumanWalkSnipeConfig.UsePogoLocationFeeder;
-    }
+
+        public bool GymAllowed => _settings.GymConfig.Enable;
+        public TeamColor GymDefaultTeam =>(TeamColor)Enum.Parse(typeof(TeamColor), _settings.GymConfig.DefaultTeam);
+
+        public double GymMaxDistance => _settings.GymConfig.MaxDistance;
+        public int GymVisitTimeout => _settings.GymConfig.VisitTimeout;
+        public int GymMaxCPToDeploy => _settings.GymConfig.MaxCPToDeploy;
+        public int GymMaxLevelToDeploy => _settings.GymConfig.MaxLevelToDeploy;
+
+        public bool GymUseRandomPokemon => _settings.GymConfig.UseRandomPokemon;
+
+        public int GymNumberOfTopPokemonToBeExcluded => _settings.GymConfig.NumberOfTopPokemonToBeExcluded;
+    }                         
 }
