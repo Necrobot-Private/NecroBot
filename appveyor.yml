@@ -99,7 +99,7 @@ configuration: Release
 
 build:
   # MSBuild verbosity level
-  verbosity: minimal  #quiet|minimal|normal|detailed
+  verbosity: minimal
 
 # scripts to run before build
 before_build:
