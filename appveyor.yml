@@ -14,19 +14,9 @@ skip_non_tags: false
 # Skipping commits affecting specific files
 skip_commits:
   files:
-  - '**\AssemblyInfoRev.*'
   - '**\AssemblyInfo.*'
+  - 'CHANGELOG.md'
 
-# Including commits affecting specific files
-only_commits:
-  files:
-    - PoGo.NecroBot.CLI/
-    - PoGo.NecroBot.GUI/
-    - FeroxRev/
-    - POGOProtos/
-    - packages/
-    - .gitmodules
-    - '*.yml'
 #	
 pull_requests:
   do_not_increment_build_number: true
@@ -41,38 +31,13 @@ image: Visual Studio 2015
 # scripts that are called at very beginning, before repo cloning
 init:
 - ps: >-
-    $fileContent = "-----BEGIN RSA PRIVATE KEY-----`n";
-    $fileContent += $env:priv_key.Replace(' ', "`n");
-    $fileContent += "`n-----END RSA PRIVATE KEY-----`n";
-    Set-Content "$env:USERPROFILE\.ssh\id_rsa" "$($fileContent)";
-    git config --global credential.helper store;
-    git config --global user.email "$($env:github_email)";
-    git config --global user.name "$($env:github_user)";
-    Set-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n";
     if ($env:APPVEYOR_REPO_TAG -eq "true")
     {
-        if ($env:APPVEYOR_REPO_TAG -match "-rev")
-        {
-            $env:NecroBot2_IsRev = "true";
-            $env:NecroBot2_Version = "$($env:APPVEYOR_REPO_TAG_NAME.Replace('v', ''))";
-            $env:NecroBot2_Version = "$($env:NecroBot2_Version.Replace('-rev', '.'))";
-            $env:NecroBot2_InformationalVersion = "$($env:APPVEYOR_REPO_TAG_NAME)";
-            $env:APPVEYOR_Assembly_Info_File = "AssemblyInfoRev";
-        }
-        else
-        {
-            $env:NecroBot2_IsRev = "false";
-            $env:NecroBot2_Version = "$($env:APPVEYOR_REPO_TAG_NAME.Replace('v', ''))";
-            $env:NecroBot2_Version = "$($env:NecroBot2_Version).0";
-            $env:NecroBot2_InformationalVersion = "$($env:APPVEYOR_REPO_TAG_NAME)";
-            $env:APPVEYOR_Assembly_Info_File = "AssemblyInfo";
-        }
+        $env:NecroBot2_Version = "$($env:APPVEYOR_REPO_TAG_NAME.Replace('v', ''))";
     }
     else
     {
         $env:NecroBot2_Version = "$($env:APPVEYOR_BUILD_VERSION)";
-        $env:NecroBot2_InformationalVersion = "$($env:APPVEYOR_BUILD_VERSION)";
-        $env:APPVEYOR_Assembly_Info_File = "AssemblyInfo";
     }
 
 # clone directory
@@ -103,30 +68,14 @@ environment:
 # scripts that run after cloning repository
 install:
 - git submodule update --init --recursive
-- ps: >-
-    if ($env:APPVEYOR_REPO_TAG -eq "true")
-    {
-        $ErrorActionPreference = "Continue";
-        $env:PATH = "C:\Ruby23\bin;$($env:PATH)";
-        Start-Process "gem" -ArgumentList "install github_changelog_generator" -Wait;
-        github_changelog_generator --token $env:access_token;
-        Start-Process "git" -ArgumentList "add --ignore-errors 'PoGo.NecroBot.CLI/Properties/$($env:APPVEYOR_Assembly_Info_File).cs'" -Wait;
-        Start-Process "git" -ArgumentList "add --ignore-errors 'PoGo.NecroBot.GUI/Properties/$($env:APPVEYOR_Assembly_Info_File).cs'" -Wait;
-        Start-Process "git" -ArgumentList "add --ignore-errors 'PoGo.NecroBot.Logic/Properties/$($env:APPVEYOR_Assembly_Info_File).cs'" -Wait;
-        Start-Process "git" -ArgumentList "add --ignore-errors 'CHANGELOG.md'" -Wait;
-        Start-Process "git" -ArgumentList "commit -m '$($env:APPVEYOR_REPO_TAG_NAME)'" -Wait;
-    }
-- git status
-- git pull origin %APPVEYOR_REPO_BRANCH%
-- git push origin %APPVEYOR_REPO_BRANCH%
 
 # enable patching of AssemblyInfo.* files
 assembly_info:
   patch: true
-  file: '**\$(APPVEYOR_Assembly_Info_File).*'
+  file: '**\AssemblyInfo.*'
   assembly_version: '$(NecroBot2_Version)'
   assembly_file_version: "1.0.0.0"
-  assembly_informational_version: '$(NecroBot2_InformationalVersion)'
+  assembly_informational_version: '$(APPVEYOR_REPO_TAG_NAME)'
 
 #---------------------------------#
 #       build configuration       #
@@ -165,25 +114,20 @@ after_build:
     Remove-Item "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)" -Recurse -ErrorAction Ignore;
     New-Item -ItemType Directory -Force -Path "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)";
     New-Item -ItemType Directory -Force -Path "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)";
-    New-Item -ItemType Directory -Force -Path "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2";
-    New-Item -ItemType Directory -Force -Path "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2GUI";
     if ($env:PLATFORM -eq "x86")
     {
-        Copy-Item "$($env:APPVEYOR_BUILD_FOLDER)\PoGo.NecroBot.CLI\bin\$($env:PLATFORM)\$($env:CONFIGURATION)" "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2" -recurse -Force;
-        Remove-Item "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2\GUI" -Recurse -ErrorAction Ignore;
-        Copy-Item "$($env:APPVEYOR_BUILD_FOLDER)\PoGo.NecroBot.CLI\bin\$($env:PLATFORM)\$($env:CONFIGURATION)\GUI" "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2GUI" -recurse -Force;
+        Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\PoGo.NecroBot.CLI\bin\$($env:PLATFORM)\$($env:CONFIGURATION)" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2" -Force;
+        Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2\GUI" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2GUI" -Force;
     }
     elseif ($env:PLATFORM -eq "x64")
     {
-        Copy-Item "$($env:APPVEYOR_BUILD_FOLDER)\PoGo.NecroBot.CLI\bin\$($env:PLATFORM)\$($env:CONFIGURATION)" "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2" -recurse -Force;
-        Remove-Item "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2\GUI" -Recurse -ErrorAction Ignore;
-        Copy-Item "$($env:APPVEYOR_BUILD_FOLDER)\PoGo.NecroBot.CLI\bin\$($env:PLATFORM)\$($env:CONFIGURATION)\GUI" "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2GUI" -recurse -Force;
+        Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\PoGo.NecroBot.CLI\bin\$($env:PLATFORM)\$($env:CONFIGURATION)" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2" -Force;
+        Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2\GUI" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2GUI" -Force;
     }
     elseif ($env:PLATFORM -eq "Any CPU")
     {
-        Copy-Item "$($env:APPVEYOR_BUILD_FOLDER)\PoGo.NecroBot.CLI\bin\$($env:CONFIGURATION)" "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2" -recurse -Force;
-        Remove-Item "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2\GUI" -Recurse -ErrorAction Ignore;
-        Copy-Item "$($env:APPVEYOR_BUILD_FOLDER)\PoGo.NecroBot.CLI\bin\x86\$($env:CONFIGURATION)\GUI" "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2GUI" -recurse -Force;
+        Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\PoGo.NecroBot.CLI\bin\$($env:CONFIGURATION)" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2" -Force;
+        Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\PoGo.NecroBot.CLI\bin\x86\$($env:CONFIGURATION)\GUI" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2GUI" -Force;
     }
 
 # to run your custom scripts instead of automatic MSBuild
@@ -219,19 +163,42 @@ deploy:
   # Deploy to GitHub Releases
   - provider: GitHub
     tag: $(APPVEYOR_REPO_TAG_NAME)
+    description: '[CHANGELOG.md](https://github.com/Necrobot-Private/NecroBot/blob/master/CHANGELOG.md)'
     release: NecroBot2 $(APPVEYOR_REPO_TAG_NAME)
-    auth_token:
-      secure: 6PJ3cwd4I0DRJPv7w8iFAP6iPp94a4omr0Ajl0exmZ3qEnGLdqDwihlgFBFNBHWU 
+    auth_token: $(access_token)
     artifact: NecroBot2.Console;NecroBot2.GUI
     draft: false
-    prerelease: $(NecroBot2_IsRev)
+    prerelease: false
     force_update: true
     on:
-      branch: master                # release from master branch only
       appveyor_repo_tag: true
 
 # scripts to run before deployment
 before_deploy:
+- ps: >-
+    $fileContent = "-----BEGIN RSA PRIVATE KEY-----`n";
+    $fileContent += $env:priv_key.Replace(' ', "`n");
+    $fileContent += "`n-----END RSA PRIVATE KEY-----`n";
+    Set-Content "$env:USERPROFILE\.ssh\id_rsa" "$($fileContent)";
+    Set-Content "$env:USERPROFILE\.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n";
+
+- git config --global credential.helper store
+- git config --global user.email "%github_email%"
+- git config --global user.name "%github_user%"
+- git checkout -b Appveyor "%APPVEYOR_REPO_BRANCH%"
+- SET PATH=C:\Ruby23\bin;%PATH%
+- gem install github_changelog_generator
+- github_changelog_generator --token %access_token% --output "CHANGELOG.md" --unreleased "false"
+- git add "PoGo.NecroBot.CLI/Properties/AssemblyInfo.cs"
+- git add "PoGo.NecroBot.GUI/Properties/AssemblyInfo.cs"
+- git add "PoGo.NecroBot.Logic/Properties/AssemblyInfo.cs"
+- git add "CHANGELOG.md"
+- git commit -m "%APPVEYOR_REPO_TAG_NAME%"
+- git checkout "%APPVEYOR_REPO_BRANCH%"
+- git merge Appveyor
+- git branch -d Appveyor
+- git pull "origin" "%APPVEYOR_REPO_BRANCH%"
+- git push "origin" "%APPVEYOR_REPO_BRANCH%"
 
 # scripts to run after deployment
 after_deploy:

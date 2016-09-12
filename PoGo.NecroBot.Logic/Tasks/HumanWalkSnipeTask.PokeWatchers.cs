@@ -1,25 +1,10 @@
-﻿using GeoCoordinatePortable;
-using Newtonsoft.Json;
-using PoGo.NecroBot.Logic.Common;
-using PoGo.NecroBot.Logic.Event;
-using PoGo.NecroBot.Logic.Interfaces.Configuration;
+﻿using Newtonsoft.Json;
 using PoGo.NecroBot.Logic.Logging;
-using PoGo.NecroBot.Logic.Model.Settings;
-using PoGo.NecroBot.Logic.State;
-using PoGo.NecroBot.Logic.Utils;
-using POGOProtos.Enums;
-using POGOProtos.Inventory.Item;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
-using WebSocket4Net;
 
 namespace PoGo.NecroBot.Logic.Tasks
 {
@@ -37,9 +22,10 @@ namespace PoGo.NecroBot.Logic.Tasks
         private static async Task<List<SnipePokemonInfo>> FetchFromPokeWatcher(double lat, double lng)
         {
             List<SnipePokemonInfo> results = new List<SnipePokemonInfo>();
-            //if (!_setting.HumanWalkingSnipeUseSkiplagged) return results;
+            if (!_setting.HumanWalkingSnipeUsePokeWatcher) return results;
 
-            
+            //var startFetchTime = DateTime.Now;
+
             string url = $"https://pokewatchers.com/grab/";
 
             try
@@ -51,18 +37,21 @@ namespace PoGo.NecroBot.Logic.Tasks
                 client.DefaultRequestHeaders.Host = "pokewatchers.com";
                 client.DefaultRequestHeaders.UserAgent.TryParseAdd("Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36");
 
-
                 var json = await client.GetStringAsync(url);
 
                 var list = JsonConvert.DeserializeObject<List<PokeWatcherItem>>(json);
                 results = list.Select(p => Map(p)).ToList();
             }
-            catch (Exception ex)
-            { }
+            catch (Exception)
+            {
+                Logger.Write("Error loading data from PokeWatcher", LogLevel.Error, ConsoleColor.DarkRed);
+            }
+
+            //var endFetchTime = DateTime.Now;
+            //Logger.Write($"FetchFromPokeWatcher spent {(endFetchTime - startFetchTime).TotalSeconds} seconds", LogLevel.Info, ConsoleColor.White);
             return results;
         }
 
-       
         private static SnipePokemonInfo Map(PokeWatcherItem result)
         {
             string[] arr = result.cords.Split(',');
@@ -75,7 +64,5 @@ namespace PoGo.NecroBot.Logic.Tasks
                 Source = "Pokewatchers"
             };
         }
-
     }
-
 }
