@@ -2,7 +2,6 @@
 using PoGo.NecroBot.Logic.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -45,14 +44,15 @@ namespace PoGo.NecroBot.Logic.Tasks
             return ip;
 
         }
-		private static void EnsureDataLive()
+
+        private static void EnsureDataLive()
         {
             int liveUpdateCount = 6;
 
             if (taskDataLive != null && !taskDataLive.IsCompleted) return;
-            taskDataLive = Task.Run(async  () =>  
+            taskDataLive = Task.Run(async () =>  
             {
-					while(liveUpdateCount>0)
+				while(liveUpdateCount > 0)
                 {
                     liveUpdateCount--;
                     var lat = _session.Client.CurrentLatitude;
@@ -63,6 +63,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
             });
         }
+
         private static SnipePokemonInfo Map(FastPokemapItem result)
         {
             return new SnipePokemonInfo()
@@ -77,7 +78,6 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         public static int GetId(string name)
         {
-
             var t = name[0];
             var realName = new StringBuilder(name.ToLower());
             realName[0] = t;
@@ -91,8 +91,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             }
             return 0;
-
         }
+
         private static async Task<string> DownloadContent(string url)
         {
             HttpClient client = new HttpClient();
@@ -107,19 +107,26 @@ namespace PoGo.NecroBot.Logic.Tasks
             request.Headers.Add("authority", "cache.fastpokemap.se");
 
             string result = "";
-            try {
+            try
+            {
                 var task = await client.SendAsync(request);
-                 result = await task.Content.ReadAsStringAsync();
+                result = await task.Content.ReadAsStringAsync();
             }
-			catch(Exception ex) { }
+			catch(Exception)
+            {
+
+            }
 
             return result;
-
         }
+
         private static async Task<List<SnipePokemonInfo>> FetchFromFastPokemap(double lat, double lng)
         {
             List<SnipePokemonInfo> results = new List<SnipePokemonInfo>();
-             if (!_setting.HumanWalkingSnipeUseFastPokemap) return results;
+            if (!_setting.HumanWalkingSnipeUseFastPokemap) return results;
+
+            //var startFetchTime = DateTime.Now;
+
             try
             {
                 EnsureDataLive();
@@ -135,14 +142,15 @@ namespace PoGo.NecroBot.Logic.Tasks
                         results.Add(pItem);
                     }
                 }
-
             }
             catch (Exception)
             {
                 Logger.Write("Error loading data fastpokemap", LogLevel.Error, ConsoleColor.DarkRed);
             }
+
+            //var endFetchTime = DateTime.Now;
+            //Logger.Write($"FetchFromFastPokemap spent {(endFetchTime - startFetchTime).TotalSeconds} seconds", LogLevel.Info, ConsoleColor.White);
             return results;
         }
-
     }
 }
