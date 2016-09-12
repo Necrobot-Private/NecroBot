@@ -3,9 +3,7 @@ using PoGo.NecroBot.Logic.Logging;
 using POGOProtos.Enums;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace PoGo.NecroBot.Logic.Tasks
@@ -25,11 +23,6 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static SnipePokemonInfo Map(PokesniperWrap.PokesniperItem result)
         {
-            long epochTicks = new DateTime(1970, 1, 1).Ticks;
-            var unixBase = new DateTime(1970, 1, 1);
-            long unixTime = ((result.until.AddMinutes(-15).Ticks - epochTicks) / TimeSpan.TicksPerSecond);
-            //double ticks = Math.Truncate((result.expires_at.Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
-            //unixTime = result.expires_at.AddMinutes(-15) - 
             var arr = result.coords.Split(',');
             return new SnipePokemonInfo()
             {
@@ -40,14 +33,17 @@ namespace PoGo.NecroBot.Logic.Tasks
                 Source = "Pokesnipers"
             };
         }
+
         private static async Task<List<SnipePokemonInfo>> FetchFromPokesnipers(double lat, double lng)
         {
             List<SnipePokemonInfo> results = new List<SnipePokemonInfo>();
-            // if (!_setting.HumanWalkingSnipeUsePokeRadar) return results;
+            if (!_setting.HumanWalkingSnipeUsePokesnipers) return results;
+
+            //var startFetchTime = DateTime.Now;
+
             try
             {
                 HttpClient client = new HttpClient();
-                double offset = _setting.HumanWalkingSnipeSnipingScanOffset; //0.015 
                 string url = $"http://pokesnipers.com/api/v1/pokemon.json";
 
                 var task = await client.GetStringAsync(url);
@@ -63,7 +59,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                             results.Add(pItem);
                         }
                     }
-                    catch (Exception )
+                    catch (Exception)
                     {
                         //ignore if any data failed.
                     }
@@ -73,6 +69,9 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 Logger.Write("Error loading data from pokesnipers", LogLevel.Error, ConsoleColor.DarkRed);
             }
+
+            //var endFetchTime = DateTime.Now;
+            //Logger.Write($"FetchFromPokesnipers spent {(endFetchTime - startFetchTime).TotalSeconds} seconds", LogLevel.Info, ConsoleColor.White);
             return results;
         }
     }
