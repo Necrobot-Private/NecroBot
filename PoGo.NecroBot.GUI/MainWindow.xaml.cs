@@ -197,7 +197,7 @@ namespace PoGo.NecroBot.GUI
 
             if (!webUi.IsInstalled()) return;
 
-            Title = "NecroBot / " + _settings.CurrentWebUiClient;
+            Title = "NecroBot-Private Team GUI / " + _settings.CurrentWebUiClient;
             // Tell the WebControl to load a specified target URL.
             var baseUri = new Uri(Assembly.GetEntryAssembly().Location);
             Source = new Uri(baseUri, webUi.HomeUri);
