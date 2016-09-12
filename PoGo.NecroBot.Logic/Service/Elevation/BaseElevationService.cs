@@ -68,7 +68,11 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
 
         public double GetRandomElevation(double elevation)
         {
-            return elevation + (new Random().NextDouble() * 5);
+            // Adds a random elevation to the retrieved one. This was
+            // previously set to 5 meters but since it's happening with
+            // just a few seconds in between it is deemed unrealistic. 
+            // Telling from real world examples ~1.2 meter fits better.
+            return elevation + (new Random().NextDouble() * 1.2);
         }
     }
 }

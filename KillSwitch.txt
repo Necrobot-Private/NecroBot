@@ -1,2 +1,14 @@
 BotStatus=ENABLED;
-Switch the above to DISABLED to turn off the bot and write anything on the following lines to print details of the reason
+The Bot has been disabled due to API changes that are not currently implemented.
+(This is done to protect your account)
+The entire PoGo community is working on a fix. 
+Now that you have some free down time.... 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Please visit http://www.seashepherdglobal.org/support-us/donate.html (GLOBAL-Whales) http://www.seashepherd.org/support-us (North America-No Whales) and if you can.... support the organization. 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+We are not in any way related/associated with this organization or it’s members. 
+They have a unique cause and their methods to fulfill their cause are very effective/risky/innovative. 
+They are being featured in this notification to simply increase the awareness of their cause and others like it. 
+(They are like Greenpeace... but with bigger balls!!).
+
+Thank you!
