@@ -111,7 +111,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                 var task = await client.SendAsync(request);
                  result = await task.Content.ReadAsStringAsync();
             }
-			catch(Exception ex) { }
+            catch (Exception)
+            {
+                // ignored
+            }
 
             return result;
 

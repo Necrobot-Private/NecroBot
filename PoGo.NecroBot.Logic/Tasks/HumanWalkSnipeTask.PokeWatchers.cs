@@ -57,8 +57,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                 var list = JsonConvert.DeserializeObject<List<PokeWatcherItem>>(json);
                 results = list.Select(p => Map(p)).ToList();
             }
-            catch (Exception ex)
-            { }
+            catch (Exception)
+            {
+                // ignored
+            }
             return results;
         }
 
