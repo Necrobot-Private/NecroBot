@@ -143,8 +143,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             var caughtPokemonResponse = await
                  session.Client.Encounter.CatchPokemon(encounterId, spawnPointGuid,
                      POGOProtos.Inventory.Item.ItemId.ItemPokeBall, normalizedRecticleSize, spinModifier, hitPokemon);
-
-            Logger.Write(caughtPokemonResponse.Status.ToString(), LogLevel.Info, ConsoleColor.White);
+            
+            Logger.Write($"{caughtPokemonResponse.Status.ToString()}  {((PokemonId)caughtPokemonResponse.CapturedPokemonId).ToString()}", LogLevel.Info, caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess ? ConsoleColor.Green : ConsoleColor.Red);
         }
 
         public static List<EncounterInfo> FindNew(List<EncounterInfo> received)
