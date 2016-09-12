@@ -516,7 +516,7 @@ namespace PoGo.NecroBot.Logic
                     highestPokemonForUpgrade = highestPokemonForUpgrade.Where(i => i.Favorite == 1);
                 }
 
-                var upgradeableList = (appliedFilter.LevelUpByCPorIV.ToLower().Equals("iv")) ?
+                var upgradeableList = (appliedFilter.LevelUpByCPorIv.ToLower().Equals("iv")) ?
                         highestPokemonForUpgrade.OrderByDescending(PokemonInfo.CalculatePokemonPerfection).ToList() :
                         highestPokemonForUpgrade.OrderByDescending(p => p.Cp).ToList();
                 lock (upgradePokemon)
