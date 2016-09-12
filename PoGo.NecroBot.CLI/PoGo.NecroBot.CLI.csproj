@@ -259,6 +259,7 @@
     <Compile Include="WebSocketHandler\ActionCommands\HumanSnipePriorityPokemonHandler.cs" />
     <Compile Include="WebSocketHandler\ActionCommands\FavoritePokemonHandler.cs" />
     <Compile Include="WebSocketHandler\ActionCommands\DropItemHandler.cs" />
+    <Compile Include="WebSocketHandler\ActionCommands\LevelUpPokemonHandler.cs" />
     <Compile Include="WebSocketHandler\GetCommands\Events\ConfigResponce.cs" />
     <Compile Include="WebSocketHandler\GetCommands\Events\SnipeListResponce.cs" />
     <Compile Include="WebSocketHandler\GetCommands\Events\WebResponce.cs" />
