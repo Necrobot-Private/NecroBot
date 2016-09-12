@@ -1,5 +1,53 @@
 # Change Log
 
+## [Unreleased](https://github.com/Necrobot-Private/NecroBot/tree/HEAD)
+
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.9.8.8...HEAD)
+
+**Closed issues:**
+
+- set GymConfig...? [\#89](https://github.com/Necrobot-Private/NecroBot/issues/89)
+
+## [v0.9.8.8](https://github.com/Necrobot-Private/NecroBot/tree/v0.9.8.8) (2016-09-12)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.9.8.7...v0.9.8.8)
+
+**Implemented enhancements:**
+
+- \(Doubt\) Option to not touch pokestops [\#63](https://github.com/Necrobot-Private/NecroBot/issues/63)
+- \[SUGGESTION\] Telegram Remote Control  /candie [\#59](https://github.com/Necrobot-Private/NecroBot/issues/59)
+- \[Feature Request\] Sniper info from https://pokedexs.com/ [\#51](https://github.com/Necrobot-Private/NecroBot/issues/51)
+- \(Request\) Mass evolving settings \(Pidgey Hoarding \(\(EXP Trick\)\) [\#41](https://github.com/Necrobot-Private/NecroBot/issues/41)
+- \[SUGGESTION\] - about auto re-login \(logout/terminate\) [\#27](https://github.com/Necrobot-Private/NecroBot/issues/27)
+- \[Suggestion\] Any plan to switch to PokeGOAPI-Java by Grover-c13? [\#12](https://github.com/Necrobot-Private/NecroBot/issues/12)
+- Add settings to enable / disable each human walk snipe information source [\#81](https://github.com/Necrobot-Private/NecroBot/pull/81) ([holmeschou](https://github.com/holmeschou))
+
+**Fixed bugs:**
+
+- protobuff ? [\#87](https://github.com/Necrobot-Private/NecroBot/issues/87)
+- Bot not collecting at pokestops. [\#74](https://github.com/Necrobot-Private/NecroBot/issues/74)
+- Error Level up pokemon? [\#70](https://github.com/Necrobot-Private/NecroBot/issues/70)
+- Bypass Json Schema 10 limit? [\#62](https://github.com/Necrobot-Private/NecroBot/issues/62)
+- Bot does not snipe even with SnipeAtPokestops: true, unless UseSnipeLocationServer: true [\#61](https://github.com/Necrobot-Private/NecroBot/issues/61)
+- GUI pop-up windows do not scroll [\#47](https://github.com/Necrobot-Private/NecroBot/issues/47)
+- sniper filter didnt work [\#33](https://github.com/Necrobot-Private/NecroBot/issues/33)
+- 0.9.8.1 SpeedUp messed up [\#14](https://github.com/Necrobot-Private/NecroBot/issues/14)
+- Not sniping at pokestops [\#7](https://github.com/Necrobot-Private/NecroBot/issues/7)
+
+**Closed issues:**
+
+- \(ATTENTION\) \[REPLY\] when accessing Google Elevation Service API: REQUEST\_DENIED [\#95](https://github.com/Necrobot-Private/NecroBot/issues/95)
+- Using API key with Google Elevation API enabled, start up seems unstable [\#93](https://github.com/Necrobot-Private/NecroBot/issues/93)
+- Evolve delay [\#86](https://github.com/Necrobot-Private/NecroBot/issues/86)
+- error after auto update [\#85](https://github.com/Necrobot-Private/NecroBot/issues/85)
+- \(suggestion\) select team [\#84](https://github.com/Necrobot-Private/NecroBot/issues/84)
+- MapQuest Elevation response not reliable [\#83](https://github.com/Necrobot-Private/NecroBot/issues/83)
+- Pokemon Servers might be offline / unstable. Trying again... [\#80](https://github.com/Necrobot-Private/NecroBot/issues/80)
+- 0.9.8.7 login error System.ArgumentOutOfRangeException [\#78](https://github.com/Necrobot-Private/NecroBot/issues/78)
+- Is this the right way to get Elevation api key? [\#77](https://github.com/Necrobot-Private/NecroBot/issues/77)
+- \(suggestion\) random trainer name [\#76](https://github.com/Necrobot-Private/NecroBot/issues/76)
+- The bot stops working [\#69](https://github.com/Necrobot-Private/NecroBot/issues/69)
+- Overlapping Text and "undefined" candies in individual Pokémon info [\#48](https://github.com/Necrobot-Private/NecroBot/issues/48)
+
 ## [v0.9.8.7](https://github.com/Necrobot-Private/NecroBot/tree/v0.9.8.7) (2016-09-12)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.9.8.6...v0.9.8.7)
 
@@ -62,7 +110,6 @@
 
 - build.bat [\#29](https://github.com/Necrobot-Private/NecroBot/issues/29)
 - NecroBot2.GUI [\#15](https://github.com/Necrobot-Private/NecroBot/issues/15)
-- Not sniping at pokestops [\#7](https://github.com/Necrobot-Private/NecroBot/issues/7)
 - 0.9.7.2 System.ArgumentNullException: Value cannot be null. Parameter name: ptr [\#3](https://github.com/Necrobot-Private/NecroBot/issues/3)
 - New Bot is doesnt work [\#2](https://github.com/Necrobot-Private/NecroBot/issues/2)
 
