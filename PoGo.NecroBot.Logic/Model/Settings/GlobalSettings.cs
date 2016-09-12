@@ -80,6 +80,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public YoursWalkConfig YoursWalkConfig = new YoursWalkConfig();
 
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public MapzenWalkConfig MapzenWalkConfig = new MapzenWalkConfig();
+
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public List<ItemRecycleFilter> ItemRecycleFilter = Settings.ItemRecycleFilter.ItemRecycleFilterDefault();
 
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]

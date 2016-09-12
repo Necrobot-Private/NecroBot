@@ -166,6 +166,10 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         bool UseYoursWalk { get; }
         string YoursWalkHeuristic { get; }
 
+        bool UseMapzenWalk { get; }
+        string MapzenTurnByTurnApiKey { get; }
+        string MapzenWalkHeuristic { get; }
+
         int ResumeTrack { get; }
         int ResumeTrackSeg { get; }
         int ResumeTrackPt { get; }
