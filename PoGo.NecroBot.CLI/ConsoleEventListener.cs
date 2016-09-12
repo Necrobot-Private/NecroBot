@@ -473,6 +473,17 @@ namespace PoGo.NecroBot.CLI
                     break;
             }
         }
+
+        private static void HandleEvent(EventUsedPotion ev, ISession session)
+        {
+            Logger.Write($"Used Potion: {ev.Type} on Pokemon: {ev.PokemonId} with CP: {ev.PokemonCp}. Remaning: {ev.Remaining}");   
+        }
+
+        private static void HandleEvent(EventUsedRevive ev, ISession session)
+        {
+            Logger.Write($"User Revive: {ev.Type} on Pokemon: {ev.PokemonId} with CP: {ev.PokemonCp}. Remaining: {ev.Remaining}");
+        }
+
         internal void Listen(IEvent evt, ISession session)
         {
             dynamic eve = evt;

@@ -282,7 +282,8 @@ namespace PoGo.NecroBot.Logic
         public async Task<IEnumerable<PokemonData>> GetHighestCpForGym(int limit)
         {
             var myPokemon = await GetPokemons();
-            var pokemons = myPokemon.Where(i => !i.DeployedFortId.Any() && i.Stamina == i.StaminaMax);
+            // var pokemons = myPokemon.Where(i => !i.DeployedFortId.Any() && i.Stamina == i.StaminaMax);
+            var pokemons = myPokemon.Where(i => !i.DeployedFortId.Any());
             return pokemons.OrderByDescending(x => x.Cp).ThenBy(n => n.StaminaMax).Take(limit);
         }
         

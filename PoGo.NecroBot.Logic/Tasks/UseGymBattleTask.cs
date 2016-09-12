@@ -17,6 +17,7 @@ using POGOProtos.Enums;
 using PoGo.NecroBot.Logic.Event.Gym;
 using PokemonGo.RocketAPI.Extensions;
 using PokemonGo.RocketAPI.Helpers;
+using PokemonGo.RocketAPI.Rpc;
 using POGOProtos.Data;
 using POGOProtos.Data.Battle;
 
@@ -83,9 +84,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                                         await RevivePokemon(session, pokemon);
                                     if (pokemon.Stamina < pokemon.StaminaMax)
                                         await HealPokemon(session, pokemon);
-
-                                    if (pokemon.Stamina < pokemon.StaminaMax)
-                                        return;
                                 }
                                 Thread.Sleep(4000);
 
@@ -110,7 +108,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                                 fighting = false;
                                                 break;
                                             default:
-                                                Debug.WriteLine($"Unhandled result starting gym battle:\n{result.ToString()}");
+                                                Debug.WriteLine($"Unhandled result starting gym battle:\n{result}");
                                                 break;
                                         }
                                     }
@@ -347,7 +345,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
         }
 
-        public static async Task EngageGymBattleTask(ISession session, CancellationToken cancellationToken, FortData currentFortData)
+        public static async Task EngageGymBattleTask(ISession session, CancellationToken cancellationToken, FortData currentFortData, GetGymDetailsResponse fortInfo)
         {
             bool fighting = true;
             var badassPokemon = await session.Inventory.GetHighestCpForGym(6);
@@ -662,12 +660,14 @@ namespace PoGo.NecroBot.Logic.Tasks
                 else
                 {
                     Debug.WriteLine($"Unhandled StartGymBattle response:\n{result}");
-                    currentPokemons = await session.Inventory.GetHighestCpForGym(6);
+                    Thread.Sleep(4186);
                 }
 
                 if (trys > 5)
                     return result;
 
+                // Update the state of the Gym and try to call the battle again
+                gymInfo = await session.Client.Fort.GetGymDetails(currentFortData.Id, currentFortData.Latitude, currentFortData.Longitude);
                 result = await session.Client.Fort.StartGymBattle(currentFortData.Id,
                     gymInfo.GymState.Memberships.First().PokemonData.Id,
                     pokemonDatas.Select(pokemon => pokemon.Id));
