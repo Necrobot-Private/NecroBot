@@ -92,10 +92,10 @@ namespace PoGo.NecroBot.Logic.Tasks
             GetGymDetailsResponse fortDetails, FortData gym, CancellationToken cancellationToken)
         {
             bool fighting = true;
+            var badassPokemon = await session.Inventory.GetHighestCpForGym(6);
+            var pokemonDatas = badassPokemon as PokemonData[] ?? badassPokemon.ToArray();
             while (fighting)
             {
-                var badassPokemon = await session.Inventory.GetHighestCpForGym(6);
-                var pokemonDatas = badassPokemon as PokemonData[] ?? badassPokemon.ToArray();
                 // Heal pokemon
                 foreach (var pokemon in pokemonDatas)
                 {
@@ -106,7 +106,24 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
                 Thread.Sleep(4000);
 
-                var result = await StartBattle(session, pokemonDatas, gym);
+                int tries = 0;
+                StartGymBattleResponse result;
+                do
+                {
+                    tries++;
+                    result = await StartBattle(session, pokemonDatas, gym);
+                    if (result.Result == StartGymBattleResponse.Types.Result.Unset)
+                    {
+                        // Try to refresh information about pokemons and gym
+                        await session.Inventory.RefreshCachedInventory();
+                        badassPokemon = await session.Inventory.GetHighestCpForGym(6);
+                        pokemonDatas = badassPokemon as PokemonData[] ?? badassPokemon.ToArray();
+                        Logger.Write($"Failed to Start Gym Battle at try: {tries}, waiting 20 seconds before make another one.", LogLevel.Gym, ConsoleColor.Red);
+                        Thread.Sleep(20000);
+                    }
+                } while (result.Result == StartGymBattleResponse.Types.Result.Unset && tries <= 10);
+                
+                // If we can't start battle in 10 tries, let's skip the gym
                 if (result.Result == StartGymBattleResponse.Types.Result.Unset)
                 {
                     session.EventDispatcher.Send(new GymErrorUnset { GymName = fortInfo.Name });
@@ -405,7 +422,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 $"Unhandled attack response: {attackResult}");
                             continue;
                     }
-                    Logger.Write($"{attackResult}");
+                    Debug.Write($"{attackResult}");
 
                     Thread.Sleep(5000);
                     // Sleep until last sent battle action expired
@@ -538,6 +555,9 @@ namespace PoGo.NecroBot.Logic.Tasks
             var defendingPokemon = gymInfo.GymState.Memberships.First().PokemonData.Id;
             var attackerPokemons = pokemonDatas.Select(pokemon => pokemon.Id);
             var attackingPokemonIds = attackerPokemons as ulong[] ?? attackerPokemons.ToArray();
+            Logger.Write(
+                $"Attacking Gym: {gymInfo.Name}, DefendingPokemons:\n{ string.Join("\n", gymInfo.GymState.Memberships.Select(p => p.PokemonData.PokemonId).ToList()) }, \nAttacking: { gymInfo.GymState.Memberships.First().PokemonData.PokemonId }"
+                );
             var result = await session.Client.Fort.StartGymBattle(currentFortData.Id, defendingPokemon, attackingPokemonIds);
 
             if (result.Result == StartGymBattleResponse.Types.Result.Success)
