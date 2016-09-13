@@ -441,6 +441,16 @@ namespace PoGo.NecroBot.CLI
             Logger.Write($"Great!!! Your {ev.PokemonId.ToString()} now is defending for GYM {ev.Name}", LogLevel.Gym, ConsoleColor.Green);
         }
 
+        private static void HandleEvent(GymBattleStarted ev, ISession session)
+        {
+            Logger.Write($"Battle Started with gym: {ev.GymName}...", LogLevel.Gym, ConsoleColor.Blue);
+        }
+
+        private static void HandleEvent(GymErrorUnset ev, ISession session)
+        {
+            Logger.Write($"Error starting battle with gym: {ev.GymName}. Skipping...", LogLevel.Error, ConsoleColor.Red);
+        }
+
 
         private static void HandleEvent(GymListEvent ev, ISession session)
         {

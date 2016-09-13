@@ -568,20 +568,25 @@ namespace PoGo.NecroBot.Logic.Tasks
                         {
                             BattleAction action = new BattleAction();
 
-                            //if (x == 2 && currentAttackerEnergy > move2.getEnergy())
+                            //if (x == 2 && currentAttackerEnergy > move2.GetEnergy())
                             //{
-                            // Special Attack
-                            //    now = now.AddMilliseconds(move2.getTime());
+                            //    // Special Attack
+                            //    now = now.AddMilliseconds(move2.GetTime());
                             //    action.Type = BattleActionType.ActionSpecialAttack;
-                            //    action.DurationMs = move2.getTime();
+                            //    action.DurationMs = move2.GetTime();
                             //}
                             //else
                             //{
+                            //    // Basic Attack
+                            //    now = now.AddMilliseconds(move1.GetTime());
+                            //    action.Type = BattleActionType.ActionAttack;
+                            //    action.DurationMs = move1.GetTime();
+                            //}
+
                             // Basic Attack
                             now = now.AddMilliseconds(move1.GetTime());
                             action.Type = BattleActionType.ActionAttack;
                             action.DurationMs = move1.GetTime();
-                            //}
 
                             action.ActionStartMs = now.ToUnixTime();
                             action.TargetIndex = -1;
@@ -609,9 +614,9 @@ namespace PoGo.NecroBot.Logic.Tasks
             int trys = 0;
 
             var pokemonDatas = currentPokemons as PokemonData[] ?? currentPokemons.ToArray();
-            var result = await session.Client.Fort.StartGymBattle(currentFortData.Id,
-                    gymInfo.GymState.Memberships.First().PokemonData.Id,
-                    pokemonDatas.Select(pokemon => pokemon.Id));
+            var defendingPokemon = gymInfo.GymState.Memberships.First().PokemonData.Id;
+            var attackerPokemons = pokemonDatas.Select(pokemon => pokemon.Id);
+            var result = await session.Client.Fort.StartGymBattle(currentFortData.Id, defendingPokemon, attackerPokemons);
 
             while (true)
             {
@@ -623,7 +628,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         case BattleState.Active:
                             if (result.Result == StartGymBattleResponse.Types.Result.Success)
                             {
-                                Debug.WriteLine($"Battle was started, result: {result}");
+                                session.EventDispatcher.Send(new GymBattleStarted {GymName = gymInfo.Name});
                                 return result;
                             }
                             else
@@ -657,10 +662,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     return result;
                 }
-                else
+                else if (result.Result == StartGymBattleResponse.Types.Result.Unset)
                 {
-                    Debug.WriteLine($"Unhandled StartGymBattle response:\n{result}");
-                    Thread.Sleep(4186);
+                    session.EventDispatcher.Send(new GymErrorUnset {GymName = gymInfo.Name});
                 }
 
                 if (trys > 5)
