@@ -6,8 +6,6 @@
 [![Stories in Ready](https://discordapp.com/api/guilds/220703917871333376/widget.png?style=banner2&time-)](https://discord.gg/7FWyWVp)
 
 [![Build status](https://ci.appveyor.com/api/projects/status/mvr6v0v99gscqxbn/branch/master?svg=true)](https://ci.appveyor.com/project/NzV/necrobot/branch/master)
-[![Stories in "Ready"](https://badge.waffle.io/Necrobot-Private/NecroBot.svg?label=ready&title=Ready)](http://waffle.io/Necrobot-Private/NecroBot)
-[![Stories in "In Progress"](https://badge.waffle.io/Necrobot-Private/NecroBot.svg?label=In%20Progress&title=In%20Progress)](http://waffle.io/Necrobot-Private/NecroBot)
 [![Github All Releases](https://img.shields.io/github/downloads/Necrobot-Private/NecroBot/total.svg?maxAge=258)](https://github.com/Necrobot-Private/NecroBot/releases)
 [![GitHub license](https://img.shields.io/badge/license-AGPL-blue.svg)](https://raw.githubusercontent.com/Necrobot-Private/NecroBot/master/LICENSE.md)
 

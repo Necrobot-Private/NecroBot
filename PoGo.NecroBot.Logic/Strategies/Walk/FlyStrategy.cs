@@ -23,6 +23,12 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
         {
             _client = client;
         }
+
+        public string GetWalkStrategyId()
+        {
+            return "Necrobot Flying";
+        }
+
         public async Task<PlayerUpdateResponse> Walk(GeoCoordinate targetLocation, Func<Task> functionExecutedWhileWalking, ISession session, CancellationToken cancellationToken, double walkSpeed = 0.0)
         {
             var curLocation = new GeoCoordinate(_client.CurrentLatitude, _client.CurrentLongitude);

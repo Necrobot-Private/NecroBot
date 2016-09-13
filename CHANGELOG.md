@@ -11,8 +11,6 @@
 
 - FeroxRev login-procedure error [\#87](https://github.com/Necrobot-Private/NecroBot/issues/87)
 - Bot does not snipe even with SnipeAtPokestops: true, unless UseSnipeLocationServer: true [\#61](https://github.com/Necrobot-Private/NecroBot/issues/61)
-- GUI pop-up windows do not scroll [\#47](https://github.com/Necrobot-Private/NecroBot/issues/47)
-- sniper filter didnt work [\#33](https://github.com/Necrobot-Private/NecroBot/issues/33)
 - Not sniping at pokestops [\#7](https://github.com/Necrobot-Private/NecroBot/issues/7)
 
 ## [v0.9.8.7](https://github.com/Necrobot-Private/NecroBot/tree/v0.9.8.7) (2016-09-12)

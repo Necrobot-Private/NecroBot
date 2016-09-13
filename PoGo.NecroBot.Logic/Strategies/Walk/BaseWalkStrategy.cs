@@ -28,11 +28,13 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
         public abstract Task<PlayerUpdateResponse> Walk(GeoCoordinate targetLocation, Func<Task> functionExecutedWhileWalking, ISession session, CancellationToken cancellationToken, double walkSpeed =0.0);
 
         public static FortDetailsResponse FortInfo;
-
+        
         public BaseWalkStrategy(Client client)
         {
             _client = client;
         }
+
+        public abstract string GetWalkStrategyId();
 
         /// <summary>
         /// Cell phones Gps systems can't generate accurate GEO, the average best they can is 5 meter.
@@ -51,17 +53,15 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
 
             return LocationUtils.CreateWaypoint(geo, randomDistance, randomBearingDegrees);
         }
-
+        
         public Task<PlayerUpdateResponse> RedirectToNextFallbackStrategy(ILogicSettings logicSettings, GeoCoordinate targetLocation, Func<Task> functionExecutedWhileWalking, ISession session, CancellationToken cancellationToken, double walkSpeed=0.0)
         {
-            if (this is GoogleStrategy)
-                if (logicSettings.UseYoursWalk)
-                    return new YoursNavigationStrategy(_client).Walk(targetLocation, functionExecutedWhileWalking, session, cancellationToken);
+            // If we need to fall-back, then blacklist current strategy for 1 hour.
+            session.Navigation.BlacklistStrategy(this.GetType());
 
-            var distance = LocationUtils.CalculateDistanceInMeters(session.Client.CurrentLatitude,
-                        session.Client.CurrentLongitude, FortInfo.Latitude, FortInfo.Longitude);
-            session.EventDispatcher.Send(new FortTargetEvent { Name = FortInfo.Name, Distance = distance, Route = "NecroBot" });
-            return new HumanStrategy(_client).Walk(targetLocation, functionExecutedWhileWalking, session, cancellationToken, walkSpeed);
+            IWalkStrategy nextStrategy = session.Navigation.GetStrategy(logicSettings);
+           
+            return nextStrategy.Walk(targetLocation, functionExecutedWhileWalking, session, cancellationToken);
         }
 
         public async Task<PlayerUpdateResponse> DoWalk(List<GeoCoordinate> points, ISession session, Func<Task> functionExecutedWhileWalking, GeoCoordinate sourceLocation, GeoCoordinate targetLocation, CancellationToken cancellationToken, double walkSpeed = 0.0)

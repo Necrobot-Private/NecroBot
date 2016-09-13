@@ -22,21 +22,25 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
             _googleDirectionsService = null;
         }
 
+        public override string GetWalkStrategyId()
+        {
+            return "Google Walk";
+        }
+
         public override async Task<PlayerUpdateResponse> Walk(GeoCoordinate targetLocation, Func<Task> functionExecutedWhileWalking, ISession session, CancellationToken cancellationToken, double walkSpeed = 0.0)
         {
             GetGoogleInstance(session);
 
             _minStepLengthInMeters = session.LogicSettings.DefaultStepLength;
             var currentLocation = new GeoCoordinate(_client.CurrentLatitude, _client.CurrentLongitude, _client.CurrentAltitude);
-            var googleResult = _googleDirectionsService.GetDirections(currentLocation, new List<GeoCoordinate>(), targetLocation);
+            var googleWalk = _googleDirectionsService.GetDirections(currentLocation, new List<GeoCoordinate>(), targetLocation);
 
-            if (googleResult == null || googleResult.Directions.status.Equals("OVER_QUERY_LIMIT"))
+            if (googleWalk == null)
             {
                 return await RedirectToNextFallbackStrategy(session.LogicSettings, targetLocation, functionExecutedWhileWalking, session, cancellationToken, walkSpeed);
             }
-
-            var googleWalk = GoogleWalk.Get(googleResult);
-            session.EventDispatcher.Send(new FortTargetEvent { Name = FortInfo.Name, Distance = googleResult.GetDistance(), Route = "GoogleWalk" });
+            
+            session.EventDispatcher.Send(new FortTargetEvent { Name = FortInfo.Name, Distance = googleWalk.Distance, Route = GetWalkStrategyId() });
             List <GeoCoordinate> points = googleWalk.Waypoints;
             return await DoWalk(points, session, functionExecutedWhileWalking, currentLocation, targetLocation, cancellationToken, walkSpeed);
         }
