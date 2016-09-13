@@ -69,7 +69,10 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 if (encounter.Status == EncounterResponse.Types.Status.EncounterSuccess && session.LogicSettings.CatchPokemon)
                 {
-                    MSniperServiceTask.AddToList(encounter);
+                    if (session.LogicSettings.ActivateMSniper)
+                    {
+                        MSniperServiceTask.AddToList(session, encounter);
+                    }
                     await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, sessionAllowTransfer:sessionAllowTransfer);
                 }
                 else if (encounter.Status == EncounterResponse.Types.Status.PokemonInventoryFull)

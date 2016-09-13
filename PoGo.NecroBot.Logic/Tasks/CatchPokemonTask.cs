@@ -24,31 +24,71 @@ namespace PoGo.NecroBot.Logic.Tasks
     public static class CatchPokemonTask
     {
         public static event UpdateTimeStampsPokemonDelegate UpdateTimeStampsPokemon;
-
+        public static bool _catchPokemonLimitReached  = false;
+        public static bool _catchPokemonTimerReached = false;
         public static int AmountOfBerries;
         private static Random Random => new Random((int)DateTime.Now.Ticks);
 
-        private static bool CatchThresholdExceeds(ISession session)
+        private static bool CatchThresholdExceeds(ISession session, CancellationToken cancellationToken)
         {
             if (!session.LogicSettings.UseCatchLimit) return false;
+
+            // Skip Catching if we have reached the user set limits. Note that we currently
+            // never refresh these switches. The bot will simply pause Catching and stay
+            // paused until restarted. One improvement could be to check if enough time
+            // has passed and then resume operation. I'm not sure if this functionality
+            // really is desireable though. Personally never run the but that long w/o
+            // restarting anyway. Perhaps better to shutdown instead? ~moj
+            if (_catchPokemonLimitReached || _catchPokemonTimerReached) return true;
+
+            // Check if user defined max AMOUNT of Catches reached
+            if (!session.Stats.PokemonTimestamps.Any()) return false;
+            var timeDiff = (DateTime.Now - new DateTime(session.Stats.PokemonTimestamps.First()));
+
             if (session.Stats.PokemonTimestamps.Count >= session.LogicSettings.CatchPokemonLimit)
             {
-                // delete uesless data
-                int toRemove = session.Stats.PokemonTimestamps.Count - session.LogicSettings.CatchPokemonLimit;
-                if (toRemove > 0)
+                session.EventDispatcher.Send(new ErrorEvent
                 {
-                    session.Stats.PokemonTimestamps.RemoveRange(0, toRemove);
-                    UpdateTimeStampsPokemon?.Invoke();
-                }
-                var sec = (DateTime.Now - new DateTime(session.Stats.PokemonTimestamps.First())).TotalSeconds;
-                var limit = session.LogicSettings.CatchPokemonLimitMinutes * 60;
-                if (sec < limit)
+                    Message = session.Translation.GetTranslation(TranslationString.CatchLimitReached)
+                });
+
+                // Check Timestamps & delete older than 24h
+                var TSminus24h = DateTime.Now.AddHours(-24).Ticks;
+                for (int i = 0; i < session.Stats.PokemonTimestamps.Count; i++)
                 {
-                    session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.CatchExceeds, Math.Round(limit - sec))});
-                    return true;
+                    if (session.Stats.PokemonTimestamps[i] < TSminus24h)
+                    {
+                        session.Stats.PokemonTimestamps.Remove(session.Stats.PokemonTimestamps[i]);
+                    }
                 }
+
+                UpdateTimeStampsPokemon?.Invoke();
+                _catchPokemonLimitReached = true;
+                return true;
             }
-            
+
+            // Check if user defined TIME since start reached
+            else if (timeDiff.TotalSeconds >= session.LogicSettings.CatchPokemonLimitMinutes * 60)
+            {
+                session.EventDispatcher.Send(new ErrorEvent
+                {
+                    Message = session.Translation.GetTranslation(TranslationString.CatchTimerReached)
+                });
+
+                // Check Timestamps & delete older than 24h
+                var TSminus24h = DateTime.Now.AddHours(-24).Ticks;
+                for (int i = 0; i < session.Stats.PokemonTimestamps.Count; i++)
+                {
+                    if (session.Stats.PokemonTimestamps[i] < TSminus24h)
+                    {
+                        session.Stats.PokemonTimestamps.Remove(session.Stats.PokemonTimestamps[i]);
+                    }
+                }
+                UpdateTimeStampsPokemon?.Invoke();
+                _catchPokemonTimerReached = true;
+                return true;
+            }
+
             return false;
         }
 
@@ -62,7 +102,9 @@ namespace PoGo.NecroBot.Logic.Tasks
             // If the encounter is null nothing will work below, so exit now
             if (encounter == null) return;
 
-            if (CatchThresholdExceeds(session)) return;
+            // Exit if user defined max limits reached
+            if (CatchThresholdExceeds(session, cancellationToken))
+                return;
 
             float probability = encounter.CaptureProbability?.CaptureProbability_[0];
 
@@ -88,7 +130,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     ? pokemon.Longitude
                     : currentFortData.Longitude);
 
-            CatchPokemonResponse caughtPokemonResponse;
+            CatchPokemonResponse caughtPokemonResponse = null;
             var lastThrow = CatchPokemonResponse.Types.CatchStatus.CatchSuccess; // Initializing lastThrow
             var attemptCounter = 1;
             do
@@ -322,17 +364,22 @@ namespace PoGo.NecroBot.Logic.Tasks
                 attemptCounter++;
 
                 DelayingUtils.Delay(session.LogicSettings.DelayBetweenPlayerActions, 0);
-
-                if (session.LogicSettings.TransferDuplicatePokemonOnCapture && session.LogicSettings.TransferDuplicatePokemon &&
-                    sessionAllowTransfer && caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess)
-                {
-                    if (session.LogicSettings.UseNearActionRandom)
-                        await HumanRandomActionTask.TransferRandom(session, cancellationToken);
-                    else
-                        await TransferDuplicatePokemonTask.Execute(session, cancellationToken);
-                }
+               
             } while (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchMissed ||
                      caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchEscape);
+
+            if (session.LogicSettings.TransferDuplicatePokemonOnCapture && 
+                session.LogicSettings.TransferDuplicatePokemon &&
+                   sessionAllowTransfer && 
+                   caughtPokemonResponse!= null && 
+                   caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess)
+            {
+                if (session.LogicSettings.UseNearActionRandom)
+                    await HumanRandomActionTask.TransferRandom(session, cancellationToken);
+                else
+                    await TransferDuplicatePokemonTask.Execute(session, cancellationToken);
+            }
+
         }
 
         private static async Task<ItemId> GetBestBall(ISession session, dynamic encounter, float probability)

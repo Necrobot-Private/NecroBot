@@ -52,7 +52,7 @@ namespace PoGo.NecroBot.CLI
             if (args.Length > 0)
                 _subPath = args[0];
 
-            Logger.SetLogger(new ConsoleLogger(LogLevel.Gym), _subPath);
+            Logger.SetLogger(new ConsoleLogger(LogLevel.Service), _subPath);
 
             if (CheckKillSwitch())
                 return;
@@ -69,7 +69,7 @@ namespace PoGo.NecroBot.CLI
                 // Load the settings from the config file
                 // If the current program is not the latest version, ensure we skip saving the file after loading
                 // This is to prevent saving the file with new options at their default values so we can check for differences
-                settings = GlobalSettings.Load(_subPath, !VersionCheckState.IsLatest());
+                settings = GlobalSettings.Load(_subPath, !VersionCheckState.IsLatest(), true);
             }
             else
             {
@@ -175,7 +175,7 @@ namespace PoGo.NecroBot.CLI
                 }
                 else
                 {
-                    GlobalSettings.Load(_subPath);
+                    GlobalSettings.Load(_subPath, false, true);
 
                     Logger.Write("Press a Key to continue...",
                         LogLevel.Warning);
@@ -250,7 +250,7 @@ namespace PoGo.NecroBot.CLI
             if (_session.LogicSettings.UseSnipeLocationServer || _session.LogicSettings.HumanWalkingSnipeUsePogoLocationFeeder)
                 SnipePokemonTask.AsyncStart(_session);
 
-            settings.checkProxy(_session.Translation);
+            settings.CheckProxy(_session.Translation);
 
             QuitEvent.WaitOne();
         }

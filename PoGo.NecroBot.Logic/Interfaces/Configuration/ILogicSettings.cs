@@ -162,9 +162,15 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         bool UseGoogleWalkCache { get; }
         string GoogleApiKey { get; }
         string GoogleHeuristic { get; }
+        string GoogleElevationApiKey { get; }
 
         bool UseYoursWalk { get; }
         string YoursWalkHeuristic { get; }
+
+        bool UseMapzenWalk { get; }
+        string MapzenTurnByTurnApiKey { get; }
+        string MapzenWalkHeuristic { get; }
+        string MapzenElevationApiKey { get; }
 
         int ResumeTrack { get; }
         int ResumeTrackSeg { get; }
@@ -172,24 +178,28 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
 
         bool EnableHumanWalkingSnipe { get; }
         bool HumanWalkingSnipeDisplayList { get; }
-        bool HumanWalkingSnipeSpinWhileWalking { get; }
         double HumanWalkingSnipeMaxDistance { get; }
-        bool HumanWalkingSnipeAlwaysWalkBack { get; }
         double HumanWalkingSnipeMaxEstimateTime { get; }
         bool HumanWalkingSnipeTryCatchEmAll { get; }
         int HumanWalkingSnipeCatchEmAllMinBalls { get; }
         bool HumanWalkingSnipeCatchPokemonWhileWalking { get; }
-        double HumanWalkingSnipeSnipingScanOffset { get; }
+        bool HumanWalkingSnipeSpinWhileWalking { get; }
+        bool HumanWalkingSnipeAlwaysWalkBack { get; }
         double HumanWalkingSnipeWalkbackDistanceLimit { get; }
+        double HumanWalkingSnipeSnipingScanOffset { get; }
         bool HumanWalkingSnipeIncludeDefaultLocation { get; }
-        bool HumanWalkingSnipeUsePokeRadar { get; }
-        bool HumanWalkingSnipeUseSkiplagged { get; }
-        bool HumanWalkingSnipeUseFastPokemap { get; }
         bool HumanWalkingSnipeUseSnipePokemonList { get; }
         Dictionary<PokemonId, HumanWalkSnipeFilter> HumanWalkSnipeFilters { get; }
+        bool HumanWalkingSnipeAllowSpeedUp { get; }
         double HumanWalkingSnipeMaxSpeedUpSpeed { get; }
         int HumanWalkingSnipeDelayTimeAtDestination { get; }
-        bool HumanWalkingSnipeAllowSpeedUp { get; }
+        bool HumanWalkingSnipeUsePokeRadar { get; }
+        bool HumanWalkingSnipeUseSkiplagged { get; }
+        bool HumanWalkingSnipeUsePokecrew { get; }
+        bool HumanWalkingSnipeUsePokesnipers { get; }
+        bool HumanWalkingSnipeUsePokeZZ { get; }
+        bool HumanWalkingSnipeUsePokeWatcher { get; }
+        bool HumanWalkingSnipeUseFastPokemap { get; }
         bool HumanWalkingSnipeUsePogoLocationFeeder { get; }
 
         int EvolveActionDelay { get; }

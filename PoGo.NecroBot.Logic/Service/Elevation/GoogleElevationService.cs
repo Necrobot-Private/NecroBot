@@ -11,6 +11,7 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
 {
     public class GoogleResponse
     {
+        public string status { get; set; }
         public List<GoogleElevationResults> results { get; set; }
     }
 
@@ -31,10 +32,15 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
     {
         public GoogleElevationService(ISession session, LRUCache<string, double> cache) : base(session, cache)
         {
-            if (!string.IsNullOrEmpty(session.LogicSettings.GoogleApiKey))
-                _apiKey = session.LogicSettings.GoogleApiKey;
+            if (!string.IsNullOrEmpty(session.LogicSettings.GoogleElevationApiKey))
+                _apiKey = session.LogicSettings.GoogleElevationApiKey;
         }
-                        
+
+        public override string GetServiceId()
+        {
+            return "Google Elevation Service";
+        }
+
         public override double GetElevationFromWebService(double lat, double lng)
         {
             if (string.IsNullOrEmpty(_apiKey))
@@ -57,10 +63,11 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
                     {
                         responseFromServer = reader.ReadToEnd();
                         GoogleResponse googleResponse = JsonConvert.DeserializeObject<GoogleResponse>(responseFromServer);
-                        if (googleResponse.results != null && 0 < googleResponse.results.Count)
-                        {
+
+                        if (googleResponse.status == "OK" && googleResponse.results != null && 0 < googleResponse.results.Count && googleResponse.results[0].elevation > -100)
                             return googleResponse.results[0].elevation;
-                        }
+
+                        // All error handling is handled inside of the ElevationService.
                     }
                 }
             }

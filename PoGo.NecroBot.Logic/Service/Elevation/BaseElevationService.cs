@@ -2,19 +2,16 @@
 using GeoCoordinatePortable;
 using PoGo.NecroBot.Logic.State;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PoGo.NecroBot.Logic.Service.Elevation
 {
-    public abstract class BaseElevationService
+    public abstract class BaseElevationService : IElevationService
     {
         protected ISession _session;
         protected LRUCache<string, double> _cache;
         protected string _apiKey;
 
+        public abstract string GetServiceId();
         public abstract double GetElevationFromWebService(double lat, double lng);
 
         public BaseElevationService(ISession session, LRUCache<string, double> cache)
@@ -41,10 +38,11 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
             if (!success)
             {
                 elevation = GetElevationFromWebService(lat, lng);
-                if (elevation == 0)
+                if (elevation == 0 || elevation < -100)
                 {
-                    // Error getting elevation so just return 0.
-                    return 0;
+                    // Just return the elevation without caching.  Since this is invalid elevation, we want the 
+                    // elevation service to blacklist this service and move to the next one.
+                    return elevation;
                 }
                 else
                 {
@@ -68,7 +66,11 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
 
         public double GetRandomElevation(double elevation)
         {
-            return elevation + (new Random().NextDouble() * 5);
+            // Adds a random elevation to the retrieved one. This was
+            // previously set to 5 meters but since it's happening with
+            // just a few seconds in between it is deemed unrealistic. 
+            // Telling from real world examples ~1.2 meter fits better.
+            return elevation + (new Random().NextDouble() * 1.2);
         }
     }
 }
