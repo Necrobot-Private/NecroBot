@@ -1,5 +1,8 @@
 # Change Log
 
+## [v0.9.9.0](https://github.com/Necrobot-Private/NecroBot/tree/v0.9.9.0) (2016-09-13)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.9.8.9...v0.9.9.0)
+
 ## [v0.9.8.9](https://github.com/Necrobot-Private/NecroBot/tree/v0.9.8.9) (2016-09-13)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.9.8.8...v0.9.8.9)
 
