@@ -94,10 +94,10 @@ namespace PoGo.NecroBot.Logic.Logging
                 {
                     Log(string.Concat($"[{DateTime.Now.ToString("HH:mm:ss")}] ", message), force);
                 }
-                
+
 
             }
-                
+
         }
 
         public static void lineSelect(int lineChar = 0, int linesUp = 1)
@@ -128,5 +128,6 @@ namespace PoGo.NecroBot.Logic.Logging
         LevelUp = 17,
         Gym = 18,
         Debug = 19,
+        Service = 20
     }
 }
