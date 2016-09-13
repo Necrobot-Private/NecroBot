@@ -41,7 +41,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         public class EncounterInfo : IDisposable
         {
-            public long EncounterId { get; set; }
+            public ulong EncounterId { get; set; }
             public double Iv { get; set; }
             public long LastModifiedTimestampMs { get; set; }
             public double Latitude { get; set; }
@@ -76,7 +76,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static WebSocket socket;
         public static List<EncounterInfo> LocationQueue = new List<EncounterInfo>();
         public static List<EncounterInfo> ReceivedPokemons = new List<EncounterInfo>();
-        public static List<long> VisitedEncounterIds = new List<long>();
+        public static List<ulong> VisitedEncounterIds = new List<ulong>();
         public static string UserUniequeId { get; set; } //only info
         #endregion
 
@@ -86,13 +86,13 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             if (PokemonInfo.CalculatePokemonPerfection(eresponse.WildPokemon.PokemonData) < minIvPercent ||
                 session.LogicSettings.PokemonsNotToCatch.Contains(eresponse.WildPokemon.PokemonData.PokemonId) ||
-                LocationQueue.FirstOrDefault(p => p.EncounterId == (long)eresponse.WildPokemon.EncounterId) != null ||
-                VisitedEncounterIds.Contains((long)eresponse.WildPokemon.EncounterId))
+                LocationQueue.FirstOrDefault(p => p.EncounterId == eresponse.WildPokemon.EncounterId) != null ||
+                VisitedEncounterIds.Contains(eresponse.WildPokemon.EncounterId))
                 return;
 
             using (var newdata = new EncounterInfo())
             {
-                newdata.EncounterId = (long)eresponse.WildPokemon.EncounterId;
+                newdata.EncounterId = eresponse.WildPokemon.EncounterId;
                 newdata.LastModifiedTimestampMs = eresponse.WildPokemon.LastModifiedTimestampMs;
                 newdata.SpawnPointId = eresponse.WildPokemon.SpawnPointId;
                 newdata.TimeTillHiddenMs = eresponse.WildPokemon.TimeTillHiddenMs;
@@ -109,7 +109,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
         }
 
-        public static void AddToVisited(List<long> encounterIds)
+        public static void AddToVisited(List<ulong> encounterIds)
         {
             encounterIds.ForEach(p =>
             {
@@ -136,7 +136,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 cancellationToken.ThrowIfCancellationRequested();
 
                 caughtPokemonResponse = await
-              session.Client.Encounter.CatchPokemon((ulong)encounterId.EncounterId, encounterId.SpawnPointId,
+              session.Client.Encounter.CatchPokemon(encounterId.EncounterId, encounterId.SpawnPointId,
                   POGOProtos.Inventory.Item.ItemId.ItemPokeBall, normalizedRecticleSize, spinModifier, true);
 
                 Logger.Write($"{caughtPokemonResponse.Status.ToString()}  {encounterId.PokemonId.ToString()}  {encounterId.Iv}%", LogLevel.Service, caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess ? ConsoleColor.Green : ConsoleColor.Red);
@@ -165,7 +165,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
             catch (Exception ex)
             {
-                Logger.Write(ex.Message, LogLevel.Error, ConsoleColor.Red);
+                Logger.Write(ex.Message, LogLevel.Service, ConsoleColor.Red);
                 throw ex;
             }
         }
@@ -178,7 +178,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
             catch (Exception ex)
             {
-                Logger.Write(ex.Message, LogLevel.Error, ConsoleColor.Red);
+                Logger.Write(ex.Message, LogLevel.Service, ConsoleColor.Red);
                 throw ex;
             }
         }
@@ -194,11 +194,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                     socket.MessageReceived += Msocket_MessageReceived;
                     socket.Closed += Msocket_Closed;
                     socket.Open();
-                    Logger.Write($"Connecting to NecroBot2Service", LogLevel.Service, ConsoleColor.White);
+                    Logger.Write($"Connecting to NecroBot2Service", LogLevel.Service);
                 }
                 catch (Exception ex)
                 {
-                    Logger.Write(ex.Message + "  (may be offline)", LogLevel.Error, ConsoleColor.Red);
+                    Logger.Write(ex.Message + "  (may be offline)", LogLevel.Service, ConsoleColor.Red);
                 }
             }
         }
@@ -214,7 +214,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             socket.Dispose();
             socket = null;
-            Logger.Write("Nercobot2Service connection lost", LogLevel.Error, ConsoleColor.Red);
+            Logger.Write("connection lost  (may be offline)", LogLevel.Service, ConsoleColor.Red);
             //throw new Exception("msniper socket closed");
             ////need delay or clear PkmnLocations
 
@@ -235,15 +235,15 @@ namespace PoGo.NecroBot.Logic.Tasks
                 switch (cmd)
                 {
                     case SocketCmd.IpLimit:
-                        Logger.Write("IpLimit: " + e.GetSocketData().First(), LogLevel.Service, ConsoleColor.White);
+                        Logger.Write("IpLimit: " + e.GetSocketData().First(), LogLevel.Service, ConsoleColor.Red);
                         break;
                     case SocketCmd.ServerLimit:
-                        Logger.Write("ServerLimit: " + e.GetSocketData().First(), LogLevel.Service, ConsoleColor.White);
+                        Logger.Write("ServerLimit: " + e.GetSocketData().First(), LogLevel.Service, ConsoleColor.Red);
                         break;
                     case SocketCmd.Identity://first request
                         UserUniequeId = e.GetSocketData().First();
                         SendToMSniperServer(UserUniequeId);//confirm
-                        Logger.Write($"Identity: [ {UserUniequeId} ] connection establisted", LogLevel.Service, ConsoleColor.White);
+                        Logger.Write($"Identity: [ {UserUniequeId} ] connection establisted", LogLevel.Service);
                         break;
 
                     case SocketCmd.PokemonCount://server asks what is in your hand (every 3 minutes)
@@ -301,11 +301,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                         int received = xcoming.Count;
                         xcoming = FindNew(xcoming);
                         int haventvisited = xcoming.Count;
-                        Logger.Write($"Brodcaster:  received:[{received}]  haven't visited:[{haventvisited}]", LogLevel.Service, ConsoleColor.White);
+                        Logger.Write($"Brodcaster:  received:[{received}]  haven't visited:[{haventvisited}]", LogLevel.Service);
                         ReceivedPokemons.AddRange(xcoming);
                         break;
                     case SocketCmd.None:
-                        Logger.Write("UNKNOWN ERROR", LogLevel.Service, ConsoleColor.White);
+                        Logger.Write("UNKNOWN ERROR", LogLevel.Service, ConsoleColor.Red);
                         //throw Exception
                         break;
                 }
@@ -313,7 +313,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             catch (Exception ex)
             {
                 socket.Close();
-                Logger.Write(ex.Message, LogLevel.Error, ConsoleColor.Red);
+                Logger.Write(ex.Message, LogLevel.Service, ConsoleColor.Red);
                 //throw ex;
             }
         }
@@ -327,7 +327,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             catch (Exception ex)
             {
                 socket.Close();
-                Logger.Write(ex.Message, LogLevel.Error, ConsoleColor.Red);
+                Logger.Write(ex.Message, LogLevel.Service, ConsoleColor.Red);
                 //throw ex;
             }
         }

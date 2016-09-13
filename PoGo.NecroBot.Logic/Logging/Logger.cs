@@ -81,6 +81,7 @@ namespace PoGo.NecroBot.Logic.Logging
         {
             if (_logger == null || _lastLogMessage == message)
                 return;
+
             _lastLogMessage = message;
             _logger.Write(message, level, color);
 
@@ -127,7 +128,7 @@ namespace PoGo.NecroBot.Logic.Logging
         SoftBan = 16,
         LevelUp = 17,
         Gym = 18,
-        Debug = 19,
-        Service = 20
+        Service = 19,
+        Debug = 20,
     }
 }

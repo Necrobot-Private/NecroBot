@@ -52,7 +52,7 @@ namespace PoGo.NecroBot.CLI
             if (args.Length > 0)
                 _subPath = args[0];
 
-            Logger.SetLogger(new ConsoleLogger(LogLevel.Gym), _subPath);
+            Logger.SetLogger(new ConsoleLogger(LogLevel.Service), _subPath);
 
             if (CheckKillSwitch())
                 return;
