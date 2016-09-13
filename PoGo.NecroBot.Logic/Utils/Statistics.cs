@@ -38,6 +38,12 @@ namespace PoGo.NecroBot.Logic.Utils
         {
             _exportStats = GetCurrentInfo(inventory);
             DirtyEvent?.Invoke();
+            if ((DateTime.Now - _initSessionDateTime).TotalSeconds >= 1200)
+            {
+                Logger.Write("Bot runs for 20 minutes, Closing Bot... BYE!", LogLevel.Info, force: true);
+                System.Threading.Thread.Sleep(2000);
+                Environment.Exit(0);
+            }
         }
 
         public event StatisticsDirtyDelegate DirtyEvent;

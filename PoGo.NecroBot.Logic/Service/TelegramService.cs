@@ -333,12 +333,33 @@ namespace PoGo.NecroBot.Logic.Service
                 case "/restart":
                     Process.Start(Assembly.GetEntryAssembly().Location);
                     await SendMessage(message.Chat.Id, "Restarted Bot. Closing old Instance... BYE!");
+                    System.Threading.Thread.Sleep(2000);
                     Environment.Exit(-1);
                     break;
 
                 case "/exit":
                     await SendMessage(message.Chat.Id, "Closing Bot... BYE!");
+                    System.Threading.Thread.Sleep(2000);
                     Environment.Exit(0);
+                    break;
+
+                case "/incense":
+                    await Tasks.UseIncenseConstantlyTask.Execute(_session, default(System.Threading.CancellationToken));
+                    await SendMessage(message.Chat.Id, "Used Incense.");
+                    break;
+
+                case "/dump":
+                    await Tasks.DisplayPokemonStatsTask.Execute(_session);
+                    await SendMessage(message.Chat.Id, "Dump your all Pokemons to file.");
+                    break;
+
+                case "/count":
+                    answerTextmessage += "Pokemons caught: ";
+                    answerTextmessage += _session.Stats.PokemonTimestamps.Count;
+                    answerTextmessage += "\n";
+                    answerTextmessage += "Pokestops visited: ";
+                    answerTextmessage += _session.Stats.PokeStopTimestamps.Count;
+                    await SendMessage(message.Chat.Id, answerTextmessage);
                     break;
 
                 case "/help":
