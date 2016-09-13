@@ -422,7 +422,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 $"Unhandled attack response: {attackResult}");
                             continue;
                     }
-                    Logger.Write($"{attackResult}");
+                    Debug.Write($"{attackResult}");
 
                     Thread.Sleep(5000);
                     // Sleep until last sent battle action expired
@@ -556,7 +556,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             var attackerPokemons = pokemonDatas.Select(pokemon => pokemon.Id);
             var attackingPokemonIds = attackerPokemons as ulong[] ?? attackerPokemons.ToArray();
             Logger.Write(
-                $"Attacking Gym: {gymInfo.Name}, DefendingPokemons: { gymInfo.GymState.Memberships.Select(p => p.PokemonData.Nickname) }, Attacking: { gymInfo.GymState.Memberships.First().PokemonData.Nickname }"
+                $"Attacking Gym: {gymInfo.Name}, DefendingPokemons:\n{ string.Join("\n", gymInfo.GymState.Memberships.Select(p => p.PokemonData.PokemonId).ToList()) }, \nAttacking: { gymInfo.GymState.Memberships.First().PokemonData.PokemonId }"
                 );
             var result = await session.Client.Fort.StartGymBattle(currentFortData.Id, defendingPokemon, attackingPokemonIds);
 
