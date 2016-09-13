@@ -190,7 +190,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 try
                 {
                     //msniper.com
-                    socket = new WebSocket("ws://localhost:56000/WebSockets/NecroBotServer.ashx", "", WebSocketVersion.Rfc6455);
+                    socket = new WebSocket("ws://msniper.com/WebSockets/NecroBotServer.ashx", "", WebSocketVersion.Rfc6455);
                     socket.MessageReceived += Msocket_MessageReceived;
                     socket.Closed += Msocket_Closed;
                     socket.Open();
