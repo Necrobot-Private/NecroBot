@@ -225,7 +225,9 @@
     <Compile Include="Model\Settings\UpdateConfig.cs" />
     <Compile Include="Model\Settings\UpgradeFilter.cs" />
     <Compile Include="Model\Settings\WebsocketsConfig.cs" />
+    <Compile Include="Model\Settings\MapzenWalkConfig.cs" />
     <Compile Include="Model\Settings\YoursWalkConfig.cs" />
+    <Compile Include="Model\Mapzen\MapzenWalk.cs" />
     <Compile Include="Model\Yours\YoursWalk.cs" />
     <Compile Include="Navigation.cs" />
     <Compile Include="PoGoUtils\PokemonInfo.cs" />
@@ -238,6 +240,7 @@
     <Compile Include="Service\Elevation\MapQuestElevationService.cs" />
     <Compile Include="Service\TelegramService.cs" />
     <Compile Include="Model\Settings\LogicSettings.cs" />
+    <Compile Include="Service\MapzenDirectionsService.cs" />
     <Compile Include="Service\YoursDirectionsService.cs" />
     <Compile Include="State\CheckTosState.cs" />
     <Compile Include="State\SessionStats.cs" />
@@ -247,6 +250,7 @@
     <Compile Include="Strategies\Walk\HumanPathWalkingStrategy.cs" />
     <Compile Include="Strategies\Walk\HumanStrategy.cs" />
     <Compile Include="Strategies\Walk\IWalkStrategy.cs" />
+    <Compile Include="Strategies\Walk\MapzenNavigationStrategy.cs" />
     <Compile Include="Strategies\Walk\YoursNavigationStrategy.cs" />
     <Compile Include="Tasks\EggsListTask.cs" />
     <Compile Include="Tasks\EvolveSpecificPokemonTask.cs" />
