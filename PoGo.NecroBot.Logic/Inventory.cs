@@ -407,6 +407,14 @@ namespace PoGo.NecroBot.Logic
             return families.ToList();
         }
 
+        public async Task<PokemonData> GetSinglePokemon(ulong id)
+        {
+            var inventory = await GetCachedInventory();
+            return
+                inventory.InventoryDelta.InventoryItems.Select(i => i.InventoryItemData?.PokemonData)
+                    .FirstOrDefault(p => p != null && p.PokemonId > 0 && p.Id == id);
+        }
+
         public async Task<IEnumerable<PokemonData>> GetPokemons()
         {
             var inventory = await GetCachedInventory();
