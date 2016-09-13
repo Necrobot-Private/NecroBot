@@ -421,7 +421,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             try
             {
                 await LocationUtils.UpdatePlayerLocationWithAltitude(session, new GeoCoordinate(latitude, longitude, session.Client.CurrentAltitude));
-                
+
                 session.EventDispatcher.Send(new UpdatePositionEvent
                 {
                     Longitude = longitude,
@@ -465,7 +465,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 if (encounter.Status == EncounterResponse.Types.Status.EncounterSuccess)
                 {
-                    MSniperServiceTask.AddToList(encounter);
+                    MSniperServiceTask.AddToList(session, encounter);
                     if (!LocsVisited.Contains(new PokemonLocation(latitude, longitude)))
                         LocsVisited.Add(new PokemonLocation(latitude, longitude));
                     //Also add exact pokemon location to LocsVisited, some times the server one differ a little.

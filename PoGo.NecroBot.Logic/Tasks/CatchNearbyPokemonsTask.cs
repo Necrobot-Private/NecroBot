@@ -19,7 +19,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 {
     public static class CatchNearbyPokemonsTask
     {
-        public static async Task Execute(ISession session, CancellationToken cancellationToken, PokemonId priority = PokemonId.Missingno, bool sessionAllowTransfer= true)
+        public static async Task Execute(ISession session, CancellationToken cancellationToken, PokemonId priority = PokemonId.Missingno, bool sessionAllowTransfer = true)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (!session.LogicSettings.CatchPokemon) return;
@@ -53,8 +53,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                     return;
                 }
 
-                if( ( session.LogicSettings.UsePokemonSniperFilterOnly && !session.LogicSettings.PokemonToSnipe.Pokemon.Contains( pokemon.PokemonId ) ) ||
-                    ( session.LogicSettings.UsePokemonToNotCatchFilter && session.LogicSettings.PokemonsNotToCatch.Contains( pokemon.PokemonId ) ) )
+                if ((session.LogicSettings.UsePokemonSniperFilterOnly && !session.LogicSettings.PokemonToSnipe.Pokemon.Contains(pokemon.PokemonId)) ||
+                    (session.LogicSettings.UsePokemonToNotCatchFilter && session.LogicSettings.PokemonsNotToCatch.Contains(pokemon.PokemonId)))
                 {
                     Logger.Write(session.Translation.GetTranslation(TranslationString.PokemonSkipped, session.Translation.GetPokemonTranslation(pokemon.PokemonId)));
                     continue;
@@ -69,22 +69,22 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 if (encounter.Status == EncounterResponse.Types.Status.EncounterSuccess && session.LogicSettings.CatchPokemon)
                 {
-                    MSniperServiceTask.AddToList(encounter);
-                    await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, sessionAllowTransfer:sessionAllowTransfer);
+                    MSniperServiceTask.AddToList(session, encounter);
+                    await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, sessionAllowTransfer: sessionAllowTransfer);
                 }
                 else if (encounter.Status == EncounterResponse.Types.Status.PokemonInventoryFull)
                 {
-					if (session.LogicSettings.TransferDuplicatePokemon || session.LogicSettings.TransferWeakPokemon)
-					{
-						session.EventDispatcher.Send(new WarnEvent
-						{
-							Message = session.Translation.GetTranslation(TranslationString.InvFullTransferring)
-						});
-						if(session.LogicSettings.TransferDuplicatePokemon)
-							await TransferDuplicatePokemonTask.Execute(session, cancellationToken);
-						if(session.LogicSettings.TransferWeakPokemon)
-							await TransferWeakPokemonTask.Execute(session, cancellationToken);
-					}
+                    if (session.LogicSettings.TransferDuplicatePokemon || session.LogicSettings.TransferWeakPokemon)
+                    {
+                        session.EventDispatcher.Send(new WarnEvent
+                        {
+                            Message = session.Translation.GetTranslation(TranslationString.InvFullTransferring)
+                        });
+                        if (session.LogicSettings.TransferDuplicatePokemon)
+                            await TransferDuplicatePokemonTask.Execute(session, cancellationToken);
+                        if (session.LogicSettings.TransferWeakPokemon)
+                            await TransferWeakPokemonTask.Execute(session, cancellationToken);
+                    }
                     else
                         session.EventDispatcher.Send(new WarnEvent
                         {
