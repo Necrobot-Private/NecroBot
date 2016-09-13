@@ -49,14 +49,14 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         public HumanWalkSnipeFilter(double maxDistance, double maxWalkTimes, int priority, bool catchPokemon, bool spinPokestop, bool allowSpeedUp, double speedUpSpeed, int delay = 10)
         {
-            this.MaxDistance = maxDistance;
-            this.MaxWalkTimes = maxWalkTimes;
-            this.Priority = priority;
-            this.CatchPokemonWhileWalking = catchPokemon;
-            this.SpinPokestopWhileWalking = spinPokestop;
-            this.AllowSpeedUp = allowSpeedUp;
-            this.MaxSpeedUpSpeed = speedUpSpeed;
-            this.DelayTimeAtDestination = delay;
+            MaxDistance = maxDistance;
+            MaxWalkTimes = maxWalkTimes;
+            Priority = priority;
+            CatchPokemonWhileWalking = catchPokemon;
+            SpinPokestopWhileWalking = spinPokestop;
+            AllowSpeedUp = allowSpeedUp;
+            MaxSpeedUpSpeed = speedUpSpeed;
+            DelayTimeAtDestination = delay;
         }
 
         internal static Dictionary<PokemonId, HumanWalkSnipeFilter> Default()
@@ -106,7 +106,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 { PokemonId.Omanyte, new HumanWalkSnipeFilter(1500, 300, 3, true, true,false,60.0)},
                 { PokemonId.Marowak, new HumanWalkSnipeFilter(1500, 300, 3, true, true,false,60.0)},
                 { PokemonId.Venomoth, new HumanWalkSnipeFilter(1500, 300, 3, true, true,false,60.0)},
-                { PokemonId.Vileplume, new HumanWalkSnipeFilter(1500, 300, 3, true, true,false,60.0)},
+                { PokemonId.Vileplume, new HumanWalkSnipeFilter(1500, 300, 3, true, true,false,60.0)}
             };
         }
     }

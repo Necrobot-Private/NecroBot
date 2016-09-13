@@ -1,5 +1,5 @@
 ﻿using GeoCoordinatePortable;
-using PoGo.NecroBot.Logic.Model.Yours;
+using PoGo.NecroBot.Logic.Model.Mapzen;
 using PoGo.NecroBot.Logic.State;
 using System;
 using System.IO;
@@ -7,19 +7,19 @@ using System.Net;
 
 namespace PoGo.NecroBot.Logic.Service
 {
-    class YoursDirectionsService
+    class MapzenDirectionsService
     {
         private readonly ISession _session;
-        public YoursDirectionsService(ISession session)
+        public MapzenDirectionsService(ISession session)
         {
             _session = session;
         }
 
-        public YoursWalk GetDirections(GeoCoordinate sourceLocation, GeoCoordinate destLocation)
+        public MapzenWalk GetDirections(GeoCoordinate sourceLocation, GeoCoordinate destLocation)
         {
             WebRequest request = WebRequest.Create(GetUrl(sourceLocation, destLocation));
             request.Credentials = CredentialCache.DefaultCredentials;
-
+            
             try
             {
                 using (WebResponse response = request.GetResponse())
@@ -28,25 +28,23 @@ namespace PoGo.NecroBot.Logic.Service
                     using (StreamReader reader = new StreamReader(dataStream))
                     {
                         string responseFromServer = reader.ReadToEnd();
-                        return YoursWalk.Get(responseFromServer);
+                        return MapzenWalk.Get(responseFromServer, sourceLocation, destLocation);
                     }
                 }
             }
             catch (Exception)
             {
             }
-
+            
             return null;
         }
 
         private string GetUrl(GeoCoordinate sourceLocation, GeoCoordinate destLocation)
         {
-            string url = $"http://www.yournavigation.org/api/dev/route.php?format=geojson&flat={sourceLocation.Latitude}&flon={sourceLocation.Longitude}&tlat={destLocation.Latitude}&tlon={destLocation.Longitude}&fast=1&layer=mapnik";
-            
-            if (!string.IsNullOrEmpty(_session.LogicSettings.YoursWalkHeuristic))
-                url += $"&v={_session.LogicSettings.YoursWalkHeuristic}";
-            else
-                url += $"&v=bicycle";
+            string url = "http://valhalla.mapzen.com/route?json={\"locations\":" + "[{\"lat\":" + sourceLocation.Latitude + ",\"lon\":" + sourceLocation.Longitude + "},{\"lat\":" + destLocation.Latitude + ",\"lon\":" + destLocation.Longitude + "}]," + $"\"costing\":\"{_session.LogicSettings.MapzenWalkHeuristic}\",\"directions_options\":" + "{\"narrative\":\"false\"}}";
+
+            if (!string.IsNullOrEmpty(_session.LogicSettings.MapzenTurnByTurnApiKey))
+                url += $"&api_key={_session.LogicSettings.MapzenTurnByTurnApiKey}";
 
             return url;
         }

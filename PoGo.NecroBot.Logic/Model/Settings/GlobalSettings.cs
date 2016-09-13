@@ -1,3 +1,5 @@
+#region using directives
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,6 +18,8 @@ using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.State;
 using PokemonGo.RocketAPI.Enums;
 using POGOProtos.Enums;
+
+#endregion
 
 namespace PoGo.NecroBot.Logic.Model.Settings
 {
@@ -59,6 +63,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public PokeStopConfig PokeStopConfig = new PokeStopConfig();
 
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public GymConfig GymConfig = new GymConfig();
+
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public PokemonConfig PokemonConfig = new PokemonConfig();
 
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
@@ -78,6 +85,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public YoursWalkConfig YoursWalkConfig = new YoursWalkConfig();
+
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public MapzenWalkConfig MapzenWalkConfig = new MapzenWalkConfig();
 
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public List<ItemRecycleFilter> ItemRecycleFilter = Settings.ItemRecycleFilter.ItemRecycleFilterDefault();
@@ -107,7 +117,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public Dictionary<PokemonId, HumanWalkSnipeFilter> HumanWalkSnipeFilters = HumanWalkSnipeFilter.Default();
 
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public GymConfig GymConfig = new GymConfig();
+        public Dictionary<PokemonId, UpgradeFilter> PokemonUpgradeFilters = UpgradeFilter.Default();
 
         public GlobalSettings()
         {
@@ -116,9 +126,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         public void InitializePropertyDefaultValues(object obj)
         {
-            FieldInfo[] fields = obj.GetType().GetFields();
+            var fields = obj.GetType().GetFields();
 
-            foreach (FieldInfo field in fields)
+            foreach (var field in fields)
             {
                 var d = field.GetCustomAttribute<DefaultValueAttribute>();
 
@@ -129,9 +139,8 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         public static GlobalSettings Default => new GlobalSettings();
 
-        public Dictionary<PokemonId, UpgradeFilter> PokemonUpgradeFilters = UpgradeFilter.Default();
-
         private static JSchema _schema;
+
         private static JSchema JsonSchema
         {
             get
@@ -153,7 +162,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                     SchemaReferenceHandling = SchemaReferenceHandling.None
                 };
                 // change Zone enum to generate a string property
-                var strEnumGen = new StringEnumGenerationProvider { CamelCaseText = true };
+                var strEnumGen = new StringEnumGenerationProvider {CamelCaseText = true};
                 generator.GenerationProviders.Add(strEnumGen);
                 // generate json schema 
                 var type = typeof(GlobalSettings);
@@ -200,7 +209,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         //    }
         //}
 
-        public static GlobalSettings Load(string path, bool boolSkipSave = false, bool validate = true)
+        public static GlobalSettings Load(string path, bool boolSkipSave = false, bool validate = false)
         {
             GlobalSettings settings;
             var profilePath = Path.Combine(Directory.GetCurrentDirectory(), path);
@@ -214,7 +223,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 {
                     //if the file exists, load the settings
                     string input;
-                    int count = 0;
+                    var count = 0;
                     while (true)
                     {
                         try
@@ -238,7 +247,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                     }
 
                     var jsonSettings = new JsonSerializerSettings();
-                    jsonSettings.Converters.Add(new StringEnumConverter { CamelCaseText = true });
+                    jsonSettings.Converters.Add(new StringEnumConverter {CamelCaseText = true});
                     jsonSettings.ObjectCreationHandling = ObjectCreationHandling.Replace;
                     jsonSettings.DefaultValueHandling = DefaultValueHandling.Populate;
 
@@ -256,11 +265,13 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                                 foreach (var error in errors)
                                 {
                                     Logger.Write(
-                                        "config.json [Line: " + error.LineNumber + ", Position: " + error.LinePosition + "]: " +
+                                        "config.json [Line: " + error.LineNumber + ", Position: " + error.LinePosition +
+                                        "]: " +
                                         error.Path + " " +
                                         error.Message, LogLevel.Error);
                                 }
-                                Logger.Write("Fix config.json and restart NecroBot or press a key to ignore and continue...",
+                                Logger.Write(
+                                    "Fix config.json and restart NecroBot or press a key to ignore and continue...",
                                     LogLevel.Warning);
                                 Console.ReadKey();
                             }
@@ -286,8 +297,8 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                     }
                     foreach (var filter in settings.PokemonsTransferFilter.Where(x => x.Value.Moves == null))
                     {
-                        filter.Value.Moves = (filter.Value.DeprecatedMoves != null)
-                            ? new List<List<PokemonMove>> { filter.Value.DeprecatedMoves }
+                        filter.Value.Moves = filter.Value.DeprecatedMoves != null
+                            ? new List<List<PokemonMove>> {filter.Value.DeprecatedMoves}
                             : filter.Value.Moves ?? new List<List<PokemonMove>>();
                     }
                     foreach (var filter in settings.PokemonsTransferFilter.Where(x => x.Value.MovesOperator == null))
@@ -320,9 +331,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             return shouldExit ? null : settings;
         }
 
-        public void checkProxy(ITranslation translator)
+        public void CheckProxy(ITranslation translator)
         {
-            Auth.checkProxy(translator);
+            Auth.CheckProxy(translator);
         }
 
         public static bool PromptForSetup(ITranslation translator)
@@ -331,7 +342,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
             while (true)
             {
-                string strInput = Console.ReadLine().ToLower();
+                var strInput = Console.ReadLine().ToLower();
 
                 switch (strInput)
                 {
@@ -347,9 +358,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             }
         }
 
-        public static Session SetupSettings(Session session, GlobalSettings settings, String configPath)
+        public static Session SetupSettings(Session session, GlobalSettings settings, string configPath)
         {
-            Session newSession = SetupTranslationCode(session, session.Translation, settings);
+            var newSession = SetupTranslationCode(session, session.Translation, settings);
 
             SetupAccountType(newSession.Translation, settings);
             SetupUserAccount(newSession.Translation, settings);
@@ -371,7 +382,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             Logger.Write(translator.GetTranslation(TranslationString.FirstStartLanguagePrompt, "Y", "N"), LogLevel.None);
             string strInput;
 
-            bool boolBreak = false;
+            var boolBreak = false;
             while (!boolBreak)
             {
                 strInput = Console.ReadLine().ToLower();
@@ -402,10 +413,11 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         private static void SetupProxyConfig(ITranslation translator, GlobalSettings settings)
         {
-            Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupProxyPrompt, "Y", "N"), LogLevel.None);
+            Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupProxyPrompt, "Y", "N"),
+                LogLevel.None);
             string strInput;
 
-            bool boolBreak = false;
+            var boolBreak = false;
             while (!boolBreak)
             {
                 strInput = Console.ReadLine().ToLower();
@@ -435,7 +447,8 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             settings.Auth.ProxyConfig.UseProxyPort = strInput;
             Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupProxyPortConfirm, strInput));
 
-            Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupProxyAuthPrompt, "Y", "N"), LogLevel.None);
+            Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupProxyAuthPrompt, "Y", "N"),
+                LogLevel.None);
 
             boolBreak = false;
             while (!boolBreak)
@@ -469,10 +482,11 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         private static void SetupWalkingConfig(ITranslation translator, GlobalSettings settings)
         {
-            Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupWalkingSpeedPrompt, "Y", "N"), LogLevel.None);
+            Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupWalkingSpeedPrompt, "Y", "N"),
+                LogLevel.None);
             string strInput;
 
-            bool boolBreak = false;
+            var boolBreak = false;
             while (!boolBreak)
             {
                 strInput = Console.ReadLine().ToLower();
@@ -492,9 +506,11 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
             Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupWalkingSpeedKmHPrompt));
             strInput = Console.ReadLine();
-            settings.LocationConfig.WalkingSpeedInKilometerPerHour = Double.Parse(strInput);
+            settings.LocationConfig.WalkingSpeedInKilometerPerHour = double.Parse(strInput);
             Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupWalkingSpeedKmHConfirm, strInput));
-            Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupUseWalkingSpeedVariantPrompt, "Y", "N"), LogLevel.None);
+            Logger.Write(
+                translator.GetTranslation(TranslationString.FirstStartSetupUseWalkingSpeedVariantPrompt, "Y", "N"),
+                LogLevel.None);
 
             boolBreak = false;
             while (!boolBreak)
@@ -518,17 +534,17 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
             Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupWalkingSpeedVariantPrompt));
             strInput = Console.ReadLine();
-            settings.LocationConfig.WalkingSpeedVariant = Double.Parse(strInput);
+            settings.LocationConfig.WalkingSpeedVariant = double.Parse(strInput);
             Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupWalkingSpeedVariantConfirm, strInput));
-
         }
 
         private static void SetupAutoCompleteTutConfig(ITranslation translator, GlobalSettings settings)
         {
-            Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupAutoCompleteTutPrompt, "Y", "N"), LogLevel.None);
+            Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupAutoCompleteTutPrompt, "Y", "N"),
+                LogLevel.None);
             string strInput;
 
-            bool boolBreak = false;
+            var boolBreak = false;
             while (!boolBreak)
             {
                 strInput = Console.ReadLine().ToLower();
@@ -551,25 +567,29 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupAutoCompleteTutNicknamePrompt));
             strInput = Console.ReadLine();
             settings.PlayerConfig.DesiredNickname = strInput;
-            Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupAutoCompleteTutNicknameConfirm, strInput));
+            Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupAutoCompleteTutNicknameConfirm,
+                strInput));
 
             Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupAutoCompleteTutGenderPrompt));
             strInput = Console.ReadLine();
             settings.PlayerConfig.DesiredGender = strInput;
-            Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupAutoCompleteTutGenderConfirm, strInput));
+            Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupAutoCompleteTutGenderConfirm,
+                strInput));
 
             Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupAutoCompleteTutStarterPrompt));
             strInput = Console.ReadLine();
             settings.PlayerConfig.DesiredStarter = strInput;
-            Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupAutoCompleteTutStarterConfirm, strInput));
+            Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupAutoCompleteTutStarterConfirm,
+                strInput));
         }
 
         private static void SetupWebSocketConfig(ITranslation translator, GlobalSettings settings)
         {
-            Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupWebSocketPrompt, "Y", "N"), LogLevel.None);
+            Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupWebSocketPrompt, "Y", "N"),
+                LogLevel.None);
             string strInput;
 
-            bool boolBreak = false;
+            var boolBreak = false;
             while (!boolBreak)
             {
                 strInput = Console.ReadLine().ToLower();
@@ -597,10 +617,11 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         private static void SetupTelegramConfig(ITranslation translator, GlobalSettings settings)
         {
-            Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupTelegramPrompt, "Y", "N"), LogLevel.None);
+            Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupTelegramPrompt, "Y", "N"),
+                LogLevel.None);
             string strInput;
 
-            bool boolBreak = false;
+            var boolBreak = false;
             while (!boolBreak)
             {
                 strInput = Console.ReadLine().ToLower();
@@ -633,13 +654,12 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         private static void SetupAccountType(ITranslation translator, GlobalSettings settings)
         {
-            string strInput;
             Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupAccount), LogLevel.None);
             Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupTypePrompt, "google", "ptc"));
 
             while (true)
             {
-                strInput = Console.ReadLine().ToLower();
+                var strInput = Console.ReadLine().ToLower();
 
                 switch (strInput)
                 {
@@ -652,7 +672,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                         Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupTypeConfirm, "PTC"));
                         return;
                     default:
-                        Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupTypePromptError, "google", "ptc"), LogLevel.Error);
+                        Logger.Write(
+                            translator.GetTranslation(TranslationString.FirstStartSetupTypePromptError, "google", "ptc"),
+                            LogLevel.Error);
                         break;
                 }
             }
@@ -662,7 +684,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         {
             Console.WriteLine("");
             Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupUsernamePrompt), LogLevel.None);
-            string strInput = Console.ReadLine();
+            var strInput = Console.ReadLine();
 
             if (settings.Auth.AuthConfig.AuthType == AuthType.Google)
                 settings.Auth.AuthConfig.GoogleUsername = strInput;
@@ -685,12 +707,13 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         private static void SetupConfig(ITranslation translator, GlobalSettings settings)
         {
-            Logger.Write(translator.GetTranslation(TranslationString.FirstStartDefaultLocationPrompt, "Y", "N"), LogLevel.None);
+            Logger.Write(translator.GetTranslation(TranslationString.FirstStartDefaultLocationPrompt, "Y", "N"),
+                LogLevel.None);
 
-            bool boolBreak = false;
+            var boolBreak = false;
             while (!boolBreak)
             {
-                string strInput = Console.ReadLine().ToLower();
+                var strInput = Console.ReadLine().ToLower();
 
                 switch (strInput)
                 {
@@ -713,22 +736,25 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             {
                 try
                 {
-                    string strInput = Console.ReadLine();
-                    string[] strSplit = strInput.Split(',');
+                    var strInput = Console.ReadLine();
+                    var strSplit = strInput.Split(',');
 
                     if (strSplit.Length > 1)
                     {
-                        double dblLat = double.Parse(strSplit[0].Trim(' '));
-                        double dblLong = double.Parse(strSplit[1].Trim(' '));
+                        var dblLat = double.Parse(strSplit[0].Trim(' '));
+                        var dblLong = double.Parse(strSplit[1].Trim(' '));
 
                         settings.LocationConfig.DefaultLatitude = dblLat;
                         settings.LocationConfig.DefaultLongitude = dblLong;
 
-                        Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupDefaultLatLongConfirm, $"{dblLat}, {dblLong}"));
+                        Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupDefaultLatLongConfirm,
+                            $"{dblLat}, {dblLong}"));
                     }
                     else
                     {
-                        Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupDefaultLocationError, $"{settings.LocationConfig.DefaultLatitude}, {settings.LocationConfig.DefaultLongitude}", LogLevel.Error));
+                        Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupDefaultLocationError,
+                            $"{settings.LocationConfig.DefaultLatitude}, {settings.LocationConfig.DefaultLongitude}",
+                            LogLevel.Error));
                         continue;
                     }
 
@@ -736,12 +762,14 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 }
                 catch (FormatException)
                 {
-                    Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupDefaultLocationError, $"{settings.LocationConfig.DefaultLatitude}, {settings.LocationConfig.DefaultLongitude}", LogLevel.Error));
+                    Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupDefaultLocationError,
+                        $"{settings.LocationConfig.DefaultLatitude}, {settings.LocationConfig.DefaultLongitude}",
+                        LogLevel.Error));
                 }
             }
         }
 
-        private static void SaveFiles(GlobalSettings settings, String configFile)
+        private static void SaveFiles(GlobalSettings settings, string configFile)
         {
             settings.Save(configFile);
             settings.Auth.Load(Path.Combine(settings.ProfileConfigPath, "auth.json"));
@@ -750,7 +778,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public void Save(string fullPath, bool validate = false)
         {
             var output = JsonConvert.SerializeObject(this, Formatting.Indented,
-                new StringEnumConverter { CamelCaseText = true });
+                new StringEnumConverter {CamelCaseText = true});
 
             var folder = Path.GetDirectoryName(fullPath);
             if (folder != null && !Directory.Exists(folder))
@@ -774,11 +802,13 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             foreach (var error in errors)
             {
                 Logger.Write(
-                    "config.json [Line: " + error.LineNumber + ", Position: " + error.LinePosition + "]: " + error.Path + " " +
+                    "config.json [Line: " + error.LineNumber + ", Position: " + error.LinePosition + "]: " + error.Path +
+                    " " +
                     error.Message, LogLevel.Error);
                 //"Default value is '" + error.Schema.Default + "'"
             }
-            Logger.Write("Fix config.json and restart NecroBot or press a key to ignore and continue...", LogLevel.Warning);
+            Logger.Write("Fix config.json and restart NecroBot or press a key to ignore and continue...",
+                LogLevel.Warning);
             Console.ReadKey();
         }
     }

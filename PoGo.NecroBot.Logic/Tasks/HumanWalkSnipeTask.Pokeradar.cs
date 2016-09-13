@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace PoGo.NecroBot.Logic.Tasks
@@ -28,6 +27,9 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             List<SnipePokemonInfo> results = new List<SnipePokemonInfo>();
             if (!_setting.HumanWalkingSnipeUsePokeRadar) return results;
+
+            //var startFetchTime = DateTime.Now;
+
             try
             {
                 HttpClient client = new HttpClient();
@@ -39,12 +41,16 @@ namespace PoGo.NecroBot.Logic.Tasks
                 var data = JsonConvert.DeserializeObject<PokeradarWrapper>(task);
                 results = data.data.Select(p => Map(p)).ToList();
             }
-            catch (Exception )
+            catch (Exception)
             {
-                Logger.Write("Error loading data pokeradar", LogLevel.Error, ConsoleColor.DarkRed);
+                Logger.Write("Error loading data from pokeradar", LogLevel.Error, ConsoleColor.DarkRed);
             }
+
+            //var endFetchTime = DateTime.Now;
+            //Logger.Write($"FetchFromPokeradar spent {(endFetchTime - startFetchTime).TotalSeconds} seconds", LogLevel.Info, ConsoleColor.White);
             return results;
         }
+
         private static SnipePokemonInfo Map(PokeradarWrapper.PokeradarItem item)
         {
             System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);

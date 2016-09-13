@@ -62,14 +62,6 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
-        public bool UsePokeRadar = true;
-
-        [DefaultValue(true)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
-        public bool UseSkiplagged = true;
-
-        [DefaultValue(true)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool UseSnipePokemonList = true;
 
         [DefaultValue(60.0)]
@@ -85,7 +77,37 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [Range(0, 999999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
         public int DelayTimeAtDestination = 10000;//  10 sec
-         public bool UseFastPokemap = true;
+
+        [DefaultValue(true)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
+        public bool UsePokeRadar = true;
+
+        [DefaultValue(true)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
+        public bool UseSkiplagged = true;
+
+        [DefaultValue(true)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
+        public bool UsePokecrew = true;
+
+        [DefaultValue(true)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
+        public bool UsePokesnipers = true;
+
+        [DefaultValue(true)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
+        public bool UsePokeZZ = true;
+
+        [DefaultValue(true)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
+        public bool UsePokeWatcher = true;
+
+        [DefaultValue(true)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
+        public bool UseFastPokemap = true;
+
+        [DefaultValue(false)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool UsePogoLocationFeeder = false;
     }
 }
