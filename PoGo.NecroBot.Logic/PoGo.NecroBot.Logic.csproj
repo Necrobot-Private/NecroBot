@@ -235,6 +235,9 @@
     <Compile Include="Service\BotService.cs" />
     <Compile Include="Service\Elevation\BaseElevationService.cs" />
     <Compile Include="Service\Elevation\ElevationService.cs" />
+    <Compile Include="Service\Elevation\IElevationService.cs" />
+    <Compile Include="Service\Elevation\MapzenElevationService.cs" />
+    <Compile Include="Service\Elevation\RandomElevationService.cs" />
     <Compile Include="Service\GoogleDirectionsService.cs" />
     <Compile Include="Service\Elevation\GoogleElevationService.cs" />
     <Compile Include="Service\Elevation\MapQuestElevationService.cs" />

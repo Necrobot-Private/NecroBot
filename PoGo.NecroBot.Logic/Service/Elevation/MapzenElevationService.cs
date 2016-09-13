@@ -1,6 +1,7 @@
 ﻿using Caching;
 using GeoCoordinatePortable;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using PoGo.NecroBot.Logic.State;
 using System;
 using System.Collections.Generic;
@@ -9,36 +10,17 @@ using System.Net;
 
 namespace PoGo.NecroBot.Logic.Service.Elevation
 {
-    public class GoogleResponse
+    public class MapzenElevationService : BaseElevationService
     {
-        public string status { get; set; }
-        public List<GoogleElevationResults> results { get; set; }
-    }
-
-    public class GoogleElevationResults
-    {
-        public double elevation { get; set; }
-        public double resolution { get; set; }
-        public GoogleLocation location { get; set; }
-    }
-
-    public class GoogleLocation
-    {
-        public double lat { get; set; }
-        public double lng { get; set; }
-    }
-
-    public class GoogleElevationService : BaseElevationService
-    {
-        public GoogleElevationService(ISession session, LRUCache<string, double> cache) : base(session, cache)
+        public MapzenElevationService(ISession session, LRUCache<string, double> cache) : base(session, cache)
         {
-            if (!string.IsNullOrEmpty(session.LogicSettings.GoogleElevationApiKey))
-                _apiKey = session.LogicSettings.GoogleElevationApiKey;
+            if (!string.IsNullOrEmpty(session.LogicSettings.MapzenElevationApiKey))
+                _apiKey = session.LogicSettings.MapzenElevationApiKey;
         }
 
         public override string GetServiceId()
         {
-            return "Google Elevation Service";
+            return "Mapzen Elevation Service";
         }
 
         public override double GetElevationFromWebService(double lat, double lng)
@@ -48,7 +30,7 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
 
             try
             {
-                string url = $"https://maps.googleapis.com/maps/api/elevation/json?key={_apiKey}&locations={lat},{lng}";
+                string url = $"https://elevation.mapzen.com/height?json=" + "{\"shape\":[{\"lat\":" + lat + ",\"lon\":" + lng + "}]}" + $"&api_key={_apiKey}";
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
                 request.Credentials = CredentialCache.DefaultCredentials;
                 request.UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.121 Safari/535.2";
@@ -62,10 +44,11 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
                     using (StreamReader reader = new StreamReader(dataStream))
                     {
                         responseFromServer = reader.ReadToEnd();
-                        GoogleResponse googleResponse = JsonConvert.DeserializeObject<GoogleResponse>(responseFromServer);
 
-                        if (googleResponse.status == "OK" && googleResponse.results != null && 0 < googleResponse.results.Count && googleResponse.results[0].elevation > -100)
-                            return googleResponse.results[0].elevation;
+                        JObject jsonObj = JObject.Parse(responseFromServer);
+
+                        JArray heights = (JArray)jsonObj["height"];
+                        return (double)heights[0];
 
                         // All error handling is handled inside of the ElevationService.
                     }
@@ -73,7 +56,7 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
             }
             catch(Exception)
             {
-                // If we get here for any reason, then just drop down and return 0.
+                // If we get here for any reason, then just drop down and return 0. Will cause this elevation service to be blacklisted.
             }
 
             return 0;
