@@ -17,7 +17,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool StartupWelcomeDelay;
 
         [DefaultValue(2)]
-        [Range(0, 250)]
+        [Range(0, 100)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 3)]
         public int AmountOfPokemonToDisplayOnStart = 2;
 

@@ -30,6 +30,11 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
                 _apiKey = mapQuestDemoApiKey;
         }
 
+        public override string GetServiceId()
+        {
+            return "MapQuest Elevation Service";
+        }
+
         public override double GetElevationFromWebService(double lat, double lng)
         {
             if (string.IsNullOrEmpty(_apiKey))
@@ -61,16 +66,8 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
                         {
                             return mapQuestResponse.elevationProfile[0].height;
                         }
-                        else
-                        {
-                            // Safeguard since values like -32000 has been frequently and consistently observed
-                            Logging.Logger.Write($"MapQuest Elevation response not reliable: {mapQuestResponse.elevationProfile[0].height.ToString()}",
-                                Logging.LogLevel.Warning);
-                            Logging.Logger.Write("Continuing without elevation-readings not recommended. Press any key to stop.",
-                                Logging.LogLevel.Warning);
-                            Console.ReadKey();
-                            Environment.Exit(0);
-                        }
+
+                        // All error handling is handled inside of the ElevationService.
                     }
                 }
             }

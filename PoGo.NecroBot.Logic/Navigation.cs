@@ -10,6 +10,8 @@ using POGOProtos.Networking.Responses;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Strategies.Walk;
 using PoGo.NecroBot.Logic.Event;
+using System.Collections.Generic;
+using System.Linq;
 
 #endregion
 
@@ -22,11 +24,16 @@ namespace PoGo.NecroBot.Logic
         public IWalkStrategy WalkStrategy { get; set; }
         private readonly Client _client;
         private Random WalkingRandom = new Random();
+        private List<IWalkStrategy> WalkStrategyQueue { get; set; }
+        public Dictionary<Type, DateTime> WalkStrategyBlackList = new Dictionary<Type, DateTime>();
 
         public Navigation(Client client, ILogicSettings logicSettings)
         {
             _client = client;
+            
+            InitializeWalkStrategies(logicSettings);
             WalkStrategy = GetStrategy(logicSettings);
+
         }
 
         public double VariantRandom(ISession session, double currentSpeed)
@@ -90,30 +97,67 @@ namespace PoGo.NecroBot.Logic
             return await WalkStrategy.Walk(targetLocation, functionExecutedWhileWalking, session, cancellationToken, customWalkingSpeed);
         }
 
-        private IWalkStrategy GetStrategy(ILogicSettings logicSettings)
+        private void InitializeWalkStrategies(ILogicSettings logicSettings)
         {
+            WalkStrategyQueue = new List<IWalkStrategy>();
+
             // Maybe change configuration for a Navigation Type.
             if (logicSettings.DisableHumanWalking)
             {
-                return new FlyStrategy(_client);
+                WalkStrategyQueue.Add(new FlyStrategy(_client));
             }
 
             if (logicSettings.UseGpxPathing)
             {
-                return new HumanPathWalkingStrategy(_client);
+                WalkStrategyQueue.Add(new HumanPathWalkingStrategy(_client));
             }
-
+            
             if (logicSettings.UseGoogleWalk)
             {
-                return new GoogleStrategy(_client);
+                WalkStrategyQueue.Add(new GoogleStrategy(_client));
+            }
+
+            if (logicSettings.UseMapzenWalk)
+            {
+                WalkStrategyQueue.Add(new MapzenNavigationStrategy(_client));
             }
 
             if (logicSettings.UseYoursWalk)
             {
-                return new YoursNavigationStrategy(_client);
+                WalkStrategyQueue.Add(new YoursNavigationStrategy(_client));
             }
 
-            return new HumanStrategy(_client);
+            WalkStrategyQueue.Add(new HumanStrategy(_client));
+        }
+
+        public bool IsWalkingStrategyBlacklisted(Type strategy)
+        {
+            if (!WalkStrategyBlackList.ContainsKey(strategy))
+                return false;
+
+            DateTime now = DateTime.Now;
+            DateTime blacklistExpiresAt = WalkStrategyBlackList[strategy];
+            if (blacklistExpiresAt < now)
+            {
+                // Blacklist expired
+                WalkStrategyBlackList.Remove(strategy);
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        public void BlacklistStrategy(Type strategy)
+        {
+            // Black list for 1 hour.
+            WalkStrategyBlackList[strategy] = DateTime.Now.AddHours(1);
+        }
+
+        public IWalkStrategy GetStrategy(ILogicSettings logicSettings)
+        {
+            return WalkStrategyQueue.First(q => !IsWalkingStrategyBlacklisted(q.GetType()));
         }
     }
 }

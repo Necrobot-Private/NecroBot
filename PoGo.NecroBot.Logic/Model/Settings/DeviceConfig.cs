@@ -7,10 +7,14 @@ namespace PoGo.NecroBot.Logic.Model.Settings
     [JsonObject(Title = "Device Config", Description = "Set your device settings (set \"DevicePackageName\" to \"random\" for auto-generated device). Set \"DevicePlatform\" to \"android\" or \"ios\".", ItemRequired = Required.DisallowNull)]
     public class DeviceConfig
     {
+        internal enum DevicePlatformType
+        {
+            android,
+            ios
+        }
+
         [DefaultValue("android")]
-        [MinLength(3)]
-        [MaxLength(7)]
-        [RegularExpression(@"(android|ios)")]
+        [EnumDataType(typeof(DevicePlatformType))]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public string DevicePlatform = "android";
 
