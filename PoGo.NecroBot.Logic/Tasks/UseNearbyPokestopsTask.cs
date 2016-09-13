@@ -172,7 +172,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                 var pokeStopDestination = new FortLocation(pokeStop.Latitude, pokeStop.Longitude,
                     LocationUtils.getElevation(session, pokeStop.Latitude, pokeStop.Longitude), pokeStop, fortInfo);
                 
-               
 
                 await session.Navigation.Move(pokeStopDestination,
                  async () =>
@@ -235,7 +234,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
             if (pokeStopes.Count == 1) return pokeStopes.FirstOrDefault();
 
-           if (session.LogicSettings.GymAllowed)
+           if (session.LogicSettings.GymAllowed && session.Inventory.GetPlayerStats().Result.FirstOrDefault().Level > 5)
             {
                 var gyms = pokeStopes.Where(x => x.Type == FortType.Gym &&
                 LocationUtils.CalculateDistanceInMeters(x.Latitude, x.Longitude, session.Client.CurrentLatitude, session.Client.CurrentLongitude) < session.LogicSettings.GymMaxDistance
