@@ -147,7 +147,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         fighting = false;
                         break;
                     default:
-                        Debug.WriteLine($"Unhandled result starting gym battle:\n{result}");
+                        Logger.Write($"Unhandled result starting gym battle:\n{result}");
                         break;
                 }
 
@@ -165,7 +165,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
             else
             {
-                Debug.WriteLine($"Hmmm, for some reason the gym was not taken over...");
+                Logger.Write($"Hmmm, for some reason the gym was not taken over...");
             }
         }
 
@@ -204,7 +204,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         });
                         break;
                     case UseItemReviveResponse.Types.Result.ErrorDeployedToFort:
-                        Debug.WriteLine(
+                        Logger.Write(
                             $"Pokemon: {pokemon.PokemonId} (CP: {pokemon.Cp}) is already deployed to a gym...");
                         return;
                     case UseItemReviveResponse.Types.Result.ErrorCannotUse:
@@ -231,7 +231,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         break;
 
                     case UseItemReviveResponse.Types.Result.ErrorDeployedToFort:
-                        Debug.WriteLine($"Pokemon: {pokemon.PokemonId} (CP: {pokemon.Cp}) is already deployed to a gym...");
+                        Logger.Write($"Pokemon: {pokemon.PokemonId} (CP: {pokemon.Cp}) is already deployed to a gym...");
                         return;
 
                     case UseItemReviveResponse.Types.Result.ErrorCannotUse:
@@ -262,7 +262,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         break;
 
                     case UseItemPotionResponse.Types.Result.ErrorDeployedToFort:
-                        Debug.WriteLine($"Pokemon: {pokemon.PokemonId} (CP: {pokemon.Cp}) is already deployed to a gym...");
+                        Logger.Write($"Pokemon: {pokemon.PokemonId} (CP: {pokemon.Cp}) is already deployed to a gym...");
                         return;
 
                     case UseItemPotionResponse.Types.Result.ErrorCannotUse:
@@ -291,7 +291,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         break;
 
                     case UseItemPotionResponse.Types.Result.ErrorDeployedToFort:
-                        Debug.WriteLine($"Pokemon: {pokemon.PokemonId} (CP: {pokemon.Cp}) is already deployed to a gym...");
+                        Logger.Write($"Pokemon: {pokemon.PokemonId} (CP: {pokemon.Cp}) is already deployed to a gym...");
                         return;
 
                     case UseItemPotionResponse.Types.Result.ErrorCannotUse:
@@ -320,7 +320,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         break;
 
                     case UseItemPotionResponse.Types.Result.ErrorDeployedToFort:
-                        Debug.WriteLine($"Pokemon: {pokemon.PokemonId} (CP: {pokemon.Cp}) is already deployed to a gym...");
+                        Logger.Write($"Pokemon: {pokemon.PokemonId} (CP: {pokemon.Cp}) is already deployed to a gym...");
                         return;
 
                     case UseItemPotionResponse.Types.Result.ErrorCannotUse:
@@ -349,7 +349,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         break;
 
                     case UseItemPotionResponse.Types.Result.ErrorDeployedToFort:
-                        Debug.WriteLine($"Pokemon: {pokemon.PokemonId} (CP: {pokemon.Cp}) is already deployed to a gym...");
+                        Logger.Write($"Pokemon: {pokemon.PokemonId} (CP: {pokemon.Cp}) is already deployed to a gym...");
                         return;
 
                     case UseItemPotionResponse.Types.Result.ErrorCannotUse:
@@ -398,31 +398,31 @@ namespace PoGo.NecroBot.Logic.Tasks
                         case BattleState.Active:
                             _currentAttackerEnergy = attackResult.ActiveAttacker.CurrentEnergy;
                             attacker = attackResult.ActiveAttacker.PokemonData;
-                            Debug.WriteLine(
+                            Logger.Write(
                                 $"Successful attack! - They have {attackResult.ActiveDefender.CurrentHealth} health left, we have {attackResult.ActiveAttacker.CurrentHealth} health, energy: {attackResult.ActiveAttacker.CurrentEnergy}");
                             break;
                         case BattleState.Defeated:
-                            Debug.WriteLine(
+                            Logger.Write(
                                 $"We were defeated... (AttackGym)");
                             return;
                         case BattleState.TimedOut:
-                            Debug.WriteLine(
+                            Logger.Write(
                                 $"Our attack timed out...: {attackResult}");
                             return;
                         case BattleState.StateUnset:
-                            Debug.WriteLine(
+                            Logger.Write(
                                 $"State was unset?: {attackResult}");
                             return;
                         case BattleState.Victory:
-                            Debug.WriteLine(
+                            Logger.Write(
                                 $"We were victorious!: {attackResult}");
                             return;
                         default:
-                            Debug.WriteLine(
+                            Logger.Write(
                                 $"Unhandled attack response: {attackResult}");
                             continue;
                     }
-                    Debug.WriteLine($"{attackResult}");
+                    Logger.Write($"{attackResult}");
 
                     Thread.Sleep(5000);
                     // Sleep until last sent battle action expired
@@ -438,15 +438,15 @@ namespace PoGo.NecroBot.Logic.Tasks
                     //    }
                     //    else
                     //    {
-                    //        Debug.WriteLine($"Sleeping until next attack, {currentTime.ToUnixTime()} < {attackActionz.LastOrDefault().DamageWindowsEndTimestampMss}");
+                    //        Logger.Write($"Sleeping until next attack, {currentTime.ToUnixTime()} < {attackActionz.LastOrDefault().DamageWindowsEndTimestampMss}");
                     //    }
                     //}
-                    Debug.WriteLine($"Finished sleeping, starting another attack");
+                    Logger.Write($"Finished sleeping, starting another attack");
 
                 }
                 else
                 {
-                    Debug.WriteLine($"Unexpected attack result:\n{attackResult}");
+                    Logger.Write($"Unexpected attack result:\n{attackResult}");
                     continue;
                 }
 
@@ -468,13 +468,13 @@ namespace PoGo.NecroBot.Logic.Tasks
             Random rnd = new Random();
             List<BattleAction> actions = new List<BattleAction>();
             DateTime now = DateTimeFromUnixTimestampMillis(serverMs);
-            Debug.WriteLine($"AttackGym Count: {_pos}");
+            Logger.Write($"AttackGym Count: {_pos}");
 
             if (attacker != null)
             {
                 var move1 = PokemonMoveMetaRegistry.GetMeta(attacker.Move1);
                 var move2 = PokemonMoveMetaRegistry.GetMeta(attacker.Move2);
-                Debug.WriteLine($"Retrieved Move Metadata, Move1: {move1.GetTime()} - Move2: {move2.GetTime()}");
+                Logger.Write($"Retrieved Move Metadata, Move1: {move1.GetTime()} - Move2: {move2.GetTime()}");
 
                 switch (_pos)
                 {
@@ -547,7 +547,10 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             IEnumerable<PokemonData> currentPokemons = pokemons;
             var gymInfo = await session.Client.Fort.GetGymDetails(currentFortData.Id, currentFortData.Latitude, currentFortData.Longitude);
-
+            if (gymInfo.Result != GetGymDetailsResponse.Types.Result.Success)
+            {
+                return null;
+            }
             var pokemonDatas = currentPokemons as PokemonData[] ?? currentPokemons.ToArray();
             var defendingPokemon = gymInfo.GymState.Memberships.First().PokemonData.Id;
             var attackerPokemons = pokemonDatas.Select(pokemon => pokemon.Id);
@@ -562,23 +565,23 @@ namespace PoGo.NecroBot.Logic.Tasks
                 switch (result.BattleLog.State)
                 {
                     case BattleState.Active:
-                        session.EventDispatcher.Send(new GymBattleStarted {GymName = gymInfo.Name});
+                        session.EventDispatcher.Send(new GymBattleStarted { GymName = gymInfo.Name });
                         return result;
                     case BattleState.Defeated:
-                        Debug.WriteLine($"We were defeated in battle.");
+                        Logger.Write($"We were defeated in battle.");
                         return result;
                     case BattleState.Victory:
-                        Debug.WriteLine($"We were victorious");
+                        Logger.Write($"We were victorious");
                         _pos = 0;
                         return result;
                     case BattleState.StateUnset:
-                        Debug.WriteLine($"Error occoured: {result.BattleLog.State}");
+                        Logger.Write($"Error occoured: {result.BattleLog.State}");
                         break;
                     case BattleState.TimedOut:
-                        Debug.WriteLine($"Error occoured: {result.BattleLog.State}");
+                        Logger.Write($"Error occoured: {result.BattleLog.State}");
                         break;
                     default:
-                        Debug.WriteLine($"Unhandled occoured: {result.BattleLog.State}");
+                        Logger.Write($"Unhandled occoured: {result.BattleLog.State}");
                         break;
                 }
             }
@@ -594,7 +597,6 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 return result;
             }
-
             return result;
         }
 

@@ -4,8 +4,10 @@ using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Interfaces.Configuration;
 using PoGo.NecroBot.Logic.Logging;
+using PoGo.NecroBot.Logic.Model;
 using PoGo.NecroBot.Logic.Model.Settings;
 using PoGo.NecroBot.Logic.State;
+using PoGo.NecroBot.Logic.Strategies.Walk;
 using PoGo.NecroBot.Logic.Utils;
 using POGOProtos.Enums;
 using POGOProtos.Inventory.Item;
@@ -189,7 +191,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Type = HumanWalkSnipeEventTypes.StartWalking,
                         Rarity = PokemonGradeHelper.GetPokemonGrade(pokemon.PokemonId).ToString()
                     });
-                    var snipeTarget = new GeoCoordinate(pokemon.Latitude, pokemon.Longitude,
+                    var snipeTarget = new SnipeLocation(pokemon.Latitude, pokemon.Longitude,
                            LocationUtils.getElevation(session, pokemon.Latitude, pokemon.Longitude));
 
                     await session.Navigation.Move(snipeTarget,
@@ -232,8 +234,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static async Task WalkingBackGPXPath(ISession session, CancellationToken cancellationToken, FortData originalPokestop)
         {
-            var destination = new GeoCoordinate(originalPokestop.Latitude, originalPokestop.Longitude,
-                         LocationUtils.getElevation(session, originalPokestop.Latitude, originalPokestop.Longitude));
+            var destination = new FortLocation(originalPokestop.Latitude, originalPokestop.Longitude,
+                         LocationUtils.getElevation(session, originalPokestop.Latitude, originalPokestop.Longitude), originalPokestop, null);
             await session.Navigation.Move(destination,
                async () =>
                {
