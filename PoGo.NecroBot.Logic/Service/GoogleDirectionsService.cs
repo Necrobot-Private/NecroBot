@@ -37,7 +37,8 @@ namespace PoGo.NecroBot.Logic.Service
                         googleResult = item;
                     }
                 }
-                else
+
+                if (googleResult == null)
                 {
                     var url = GetUrl(origin, waypoints, destino);
 
