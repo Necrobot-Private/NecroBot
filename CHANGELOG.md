@@ -1,5 +1,26 @@
 # Change Log
 
+## [v0.9.9.0](https://github.com/Necrobot-Private/NecroBot/tree/v0.9.9.0) (2016-09-13)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.9.8.9...v0.9.9.0)
+
+## [v0.9.8.9](https://github.com/Necrobot-Private/NecroBot/tree/v0.9.8.9) (2016-09-13)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.9.8.8...v0.9.8.9)
+
+**Implemented enhancements:**
+
+- Elevation enhancements - Add mapzen elevation service [\#99](https://github.com/Necrobot-Private/NecroBot/pull/99) ([jjskuld](https://github.com/jjskuld))
+- Navigation enhancements - Mapzen strategy added [\#98](https://github.com/Necrobot-Private/NecroBot/pull/98) ([jjskuld](https://github.com/jjskuld))
+
+**Fixed bugs:**
+
+- Bot not collecting at pokestops. [\#90](https://github.com/Necrobot-Private/NecroBot/issues/90)
+- Fix \#90 - Bot not spin pokestop. [\#100](https://github.com/Necrobot-Private/NecroBot/pull/100) ([samuraitruong](https://github.com/samuraitruong))
+
+**Merged pull requests:**
+
+- revert & fix wrong commit \#90 [\#102](https://github.com/Necrobot-Private/NecroBot/pull/102) ([samuraitruong](https://github.com/samuraitruong))
+- MSniper location service - beta ready [\#73](https://github.com/Necrobot-Private/NecroBot/pull/73) ([msx752](https://github.com/msx752))
+
 ## [v0.9.8.8](https://github.com/Necrobot-Private/NecroBot/tree/v0.9.8.8) (2016-09-12)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.9.8.7...v0.9.8.8)
 
