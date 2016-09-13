@@ -107,47 +107,37 @@ namespace PoGo.NecroBot.Logic.Tasks
                 Thread.Sleep(4000);
 
                 var result = await StartBattle(session, pokemonDatas, gym);
-                if (result != null)
+                if (result.Result == StartGymBattleResponse.Types.Result.Unset)
                 {
-                    if (result.Result == StartGymBattleResponse.Types.Result.Success)
-                    {
-                        switch (result.BattleLog.State)
-                        {
-                            case BattleState.Active:
-                                Logger.Write($"Time to start Attack Mode", LogLevel.Gym, ConsoleColor.Red);
-                                await AttackGym(session, cancellationToken, gym, result);
-                                break;
-                            case BattleState.Defeated:
-                                break;
-                            case BattleState.StateUnset:
-                                break;
-                            case BattleState.TimedOut:
-                                break;
-                            case BattleState.Victory:
-                                fighting = false;
-                                break;
-                            default:
-                                Debug.WriteLine($"Unhandled result starting gym battle:\n{result}");
-                                break;
-                        }
-                    }
-                    else if (result.Result == StartGymBattleResponse.Types.Result.Unset)
-                    {
-                        // Failed to Start Battle, abort the task
-                        return;
-                    }
-                    else
-                    {
-                        Debug.WriteLine($"Hmmm, no result?");
-                        Thread.Sleep(5000);
-                        continue;
-                    }
+                    session.EventDispatcher.Send(new GymErrorUnset { GymName = fortInfo.Name });
+                    break;
+                }
 
-                    fortDetails = await session.Client.Fort.GetGymDetails(gym.Id, gym.Latitude, gym.Longitude);
-                    if (fortDetails.GymState.FortData.OwnedByTeam == TeamColor.Neutral ||
-                        fortDetails.GymState.FortData.OwnedByTeam == session.Profile.PlayerData.Team)
+                if (result.Result != StartGymBattleResponse.Types.Result.Success) break;
+                switch (result.BattleLog.State)
+                {
+                    case BattleState.Active:
+                        Logger.Write($"Time to start Attack Mode", LogLevel.Gym, ConsoleColor.Red);
+                        await AttackGym(session, cancellationToken, gym, result);
+                        break;
+                    case BattleState.Defeated:
+                        break;
+                    case BattleState.StateUnset:
+                        break;
+                    case BattleState.TimedOut:
+                        break;
+                    case BattleState.Victory:
+                        fighting = false;
+                        break;
+                    default:
+                        Debug.WriteLine($"Unhandled result starting gym battle:\n{result}");
                         break;
                 }
+
+                fortDetails = await session.Client.Fort.GetGymDetails(gym.Id, gym.Latitude, gym.Longitude);
+                if (fortDetails.GymState.FortData.OwnedByTeam == TeamColor.Neutral ||
+                    fortDetails.GymState.FortData.OwnedByTeam == session.Profile.PlayerData.Team)
+                    break;
             }
 
             // Finished battling.. OwnedByTeam should be neutral when we reach here
@@ -621,72 +611,52 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             IEnumerable<PokemonData> currentPokemons = pokemons;
             var gymInfo = await session.Client.Fort.GetGymDetails(currentFortData.Id, currentFortData.Latitude, currentFortData.Longitude);
-            int trys = 0;
 
             var pokemonDatas = currentPokemons as PokemonData[] ?? currentPokemons.ToArray();
             var defendingPokemon = gymInfo.GymState.Memberships.First().PokemonData.Id;
             var attackerPokemons = pokemonDatas.Select(pokemon => pokemon.Id);
-            var result = await session.Client.Fort.StartGymBattle(currentFortData.Id, defendingPokemon, attackerPokemons);
+            var attackingPokemonIds = attackerPokemons as ulong[] ?? attackerPokemons.ToArray();
+            var result = await session.Client.Fort.StartGymBattle(currentFortData.Id, defendingPokemon, attackingPokemonIds);
 
-            while (true)
+            if (result.Result == StartGymBattleResponse.Types.Result.Success)
             {
-                trys++;
-                if (result.Result == StartGymBattleResponse.Types.Result.Success)
+                switch (result.BattleLog.State)
                 {
-                    switch (result.BattleLog.State)
-                    {
-                        case BattleState.Active:
-                            if (result.Result == StartGymBattleResponse.Types.Result.Success)
-                            {
-                                session.EventDispatcher.Send(new GymBattleStarted {GymName = gymInfo.Name});
-                                return result;
-                            }
-                            else
-                            {
-                                Debug.WriteLine($"Unexpected result from Server: {result}");
-                            }
-                            break;
-                        case BattleState.Defeated:
-                            Debug.WriteLine($"We were defeated in battle.");
-                            return result;
-                        case BattleState.Victory:
-                            Debug.WriteLine($"We were victorious");
-                            _pos = 0;
-                            return result;
-                        case BattleState.StateUnset:
-                            Debug.WriteLine($"Error occoured: {result.BattleLog.State}");
-                            break;
-                        case BattleState.TimedOut:
-                            Debug.WriteLine($"Error occoured: {result.BattleLog.State}");
-                            break;
-                        default:
-                            Debug.WriteLine($"Unhandled occoured: {result.BattleLog.State}");
-                            break;
-                    }
+                    case BattleState.Active:
+                        session.EventDispatcher.Send(new GymBattleStarted {GymName = gymInfo.Name});
+                        return result;
+                    case BattleState.Defeated:
+                        Debug.WriteLine($"We were defeated in battle.");
+                        return result;
+                    case BattleState.Victory:
+                        Debug.WriteLine($"We were victorious");
+                        _pos = 0;
+                        return result;
+                    case BattleState.StateUnset:
+                        Debug.WriteLine($"Error occoured: {result.BattleLog.State}");
+                        break;
+                    case BattleState.TimedOut:
+                        Debug.WriteLine($"Error occoured: {result.BattleLog.State}");
+                        break;
+                    default:
+                        Debug.WriteLine($"Unhandled occoured: {result.BattleLog.State}");
+                        break;
                 }
-                else if (result.Result == StartGymBattleResponse.Types.Result.ErrorGymBattleLockout)
-                {
-                    return result;
-                }
-                else if (result.Result == StartGymBattleResponse.Types.Result.ErrorAllPokemonFainted)
-                {
-                    return result;
-                }
-                else if (result.Result == StartGymBattleResponse.Types.Result.Unset)
-                {
-                    session.EventDispatcher.Send(new GymErrorUnset {GymName = gymInfo.Name});
-                    return result;
-                }
-
-                if (trys > 5)
-                    return result;
-
-                // Update the state of the Gym and try to call the battle again
-                gymInfo = await session.Client.Fort.GetGymDetails(currentFortData.Id, currentFortData.Latitude, currentFortData.Longitude);
-                result = await session.Client.Fort.StartGymBattle(currentFortData.Id,
-                    gymInfo.GymState.Memberships.First().PokemonData.Id,
-                    pokemonDatas.Select(pokemon => pokemon.Id));
             }
+            else if (result.Result == StartGymBattleResponse.Types.Result.ErrorGymBattleLockout)
+            {
+                return result;
+            }
+            else if (result.Result == StartGymBattleResponse.Types.Result.ErrorAllPokemonFainted)
+            {
+                return result;
+            }
+            else if (result.Result == StartGymBattleResponse.Types.Result.Unset)
+            {
+                return result;
+            }
+
+            return result;
         }
 
         private static async Task EnsureJoinTeam(ISession session, PlayerData player)
