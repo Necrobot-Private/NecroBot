@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using POGOProtos.Map.Fort;
 using System;
 using PokemonGo.RocketAPI.Extensions;
+using PoGo.NecroBot.Logic.Model;
 
 #endregion
 

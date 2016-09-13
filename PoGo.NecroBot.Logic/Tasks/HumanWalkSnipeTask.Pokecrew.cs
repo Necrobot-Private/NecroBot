@@ -2,11 +2,8 @@
 using PoGo.NecroBot.Logic.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
-using POGOProtos.Enums;
 
 namespace PoGo.NecroBot.Logic.Tasks
 {
@@ -26,11 +23,6 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static SnipePokemonInfo Map(PokecrewWrap.PokecrewItem result)
         {
-            long epochTicks = new DateTime(1970, 1, 1).Ticks;
-            var unixBase = new DateTime(1970, 1, 1);
-            long unixTime = ((result.expires_at.AddMinutes(-15).Ticks - epochTicks) / TimeSpan.TicksPerSecond);
-            //double ticks = Math.Truncate((result.expires_at.Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
-            //unixTime = result.expires_at.AddMinutes(-15) - 
             return new SnipePokemonInfo()
             {
                 Latitude = result.latitude,
@@ -43,10 +35,12 @@ namespace PoGo.NecroBot.Logic.Tasks
          private static async Task<List<SnipePokemonInfo>> FetchFromPokecrew(double lat, double lng)
         {
             List<SnipePokemonInfo> results = new List<SnipePokemonInfo>();
-            // if (!_setting.HumanWalkingSnipeUsePokeRadar) return results;
+            if (!_setting.HumanWalkingSnipeUsePokecrew) return results;
+
+            //var startFetchTime = DateTime.Now;
+
             try
             {
-
                 HttpClient client = new HttpClient();
                 double offset = _setting.HumanWalkingSnipeSnipingScanOffset; //0.015 
                 string url = $"https://api.pokecrew.com/api/v1/seens?center_latitude={lat}&center_longitude={lng}&live=true&minimal=false&northeast_latitude={lat + offset}&northeast_longitude={lng + offset}&pokemon_id=&southwest_latitude={lat - offset}&southwest_longitude={lng - offset}";
@@ -65,8 +59,11 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
             catch (Exception)
             {
-                Logger.Write("Error loading data", LogLevel.Error, ConsoleColor.DarkRed);
+                Logger.Write("Error loading data from Pokecrew", LogLevel.Error, ConsoleColor.DarkRed);
             }
+
+            //var endFetchTime = DateTime.Now;
+            //Logger.Write($"FetchFromPokecrew spent {(endFetchTime - startFetchTime).TotalSeconds} seconds", LogLevel.Info, ConsoleColor.White);
             return results;
         }
 

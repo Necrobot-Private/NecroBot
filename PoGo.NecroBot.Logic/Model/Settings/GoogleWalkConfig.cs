@@ -45,6 +45,13 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [DefaultValue(true)]
         [JsonProperty("Cache", Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 5)]
         public bool Cache = true;
+
+        [DefaultValue(null)]
+        [MinLength(0)]
+        [MaxLength(64)]
+        [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 6)]
+        // This can be the same as the GoogleAPIKey, but if so then you need to activate Elevation API for the key.
+        public string GoogleElevationAPIKey;
     }
     
 }

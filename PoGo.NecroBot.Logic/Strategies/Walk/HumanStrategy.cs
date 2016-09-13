@@ -6,6 +6,7 @@ using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Utils;
 using PokemonGo.RocketAPI;
 using POGOProtos.Networking.Responses;
+using PoGo.NecroBot.Logic.Event;
 
 namespace PoGo.NecroBot.Logic.Strategies.Walk
 {
@@ -20,9 +21,18 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
             _client = client;
         }
 
+        public string GetWalkStrategyId()
+        {
+            return "NecroBot Walk";
+        }
+
         private const double SpeedDownTo = 10 / 3.6;
         public async Task<PlayerUpdateResponse> Walk(GeoCoordinate targetLocation, Func<Task> functionExecutedWhileWalking, ISession session, CancellationToken cancellationToken, double walkSpeed = 0.0)
         {
+            var distance = LocationUtils.CalculateDistanceInMeters(session.Client.CurrentLatitude,
+                        session.Client.CurrentLongitude, BaseWalkStrategy.FortInfo.Latitude, BaseWalkStrategy.FortInfo.Longitude);
+            session.EventDispatcher.Send(new FortTargetEvent { Name = BaseWalkStrategy.FortInfo.Name, Distance = distance, Route = GetWalkStrategyId() });
+
             if (CurrentWalkingSpeed <= 0)
                 CurrentWalkingSpeed = session.LogicSettings.WalkingSpeedInKilometerPerHour;
             if (session.LogicSettings.UseWalkingSpeedVariant && walkSpeed == 0)

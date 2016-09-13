@@ -1,25 +1,9 @@
-﻿using GeoCoordinatePortable;
-using Newtonsoft.Json;
-using PoGo.NecroBot.Logic.Common;
-using PoGo.NecroBot.Logic.Event;
-using PoGo.NecroBot.Logic.Interfaces.Configuration;
+﻿using Newtonsoft.Json;
 using PoGo.NecroBot.Logic.Logging;
-using PoGo.NecroBot.Logic.Model.Settings;
-using PoGo.NecroBot.Logic.State;
-using PoGo.NecroBot.Logic.Utils;
-using POGOProtos.Enums;
-using POGOProtos.Inventory.Item;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net.Http;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
-using WebSocket4Net;
 
 namespace PoGo.NecroBot.Logic.Tasks
 {
@@ -47,6 +31,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         public int pokemon_id { get; set; }
         public string pokemon_name { get; set; }
     }
+
     public class SkiplaggedWrap
     {
         public double duration { get; set; }
@@ -56,6 +41,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             pokemons = new List<SkiplaggedItem>();
         }
     }
+
     //need refactor this class, move list snipping pokemon to session and split function out to smaller class.
     public partial class HumanWalkSnipeTask
     {
@@ -63,6 +49,8 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             List<SnipePokemonInfo> results = new List<SnipePokemonInfo>();
             if (!_setting.HumanWalkingSnipeUseSkiplagged) return results;
+
+            //var startFetchTime = DateTime.Now;
 
             var lat1 = lat - _setting.HumanWalkingSnipeSnipingScanOffset;
             var lat2 = lat + _setting.HumanWalkingSnipeSnipingScanOffset;
@@ -83,10 +71,13 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 results = GetJsonList(json);
             }
-            catch (Exception )
+            catch (Exception)
             {
                 Logger.Write("Error loading data from skiplagged", LogLevel.Error, ConsoleColor.DarkRed);
             }
+            
+            //var endFetchTime = DateTime.Now;
+            //Logger.Write($"FetchFromSkiplagged spend {(endFetchTime - startFetchTime).TotalSeconds} seconds", LogLevel.Sniper, ConsoleColor.White);
             return results;
         }
 
@@ -104,6 +95,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
             return list;
         }
+
         private static SnipePokemonInfo Map(SkiplaggedItem result)
         {
             return new SnipePokemonInfo()
@@ -113,7 +105,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 Id = result.pokemon_id,
                 ExpiredTime = UnixTimeStampToDateTime(result.expires) ,
                 Source = "Skiplagged"
-            };
+        };
         }
 
     }

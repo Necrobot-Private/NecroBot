@@ -31,6 +31,9 @@ namespace PoGo.NecroBot.Logic.Tasks
         private static int _storeRi;
         private static int _randomNumber;
         private static List<FortData> _pokestopList;
+        public static bool _pokestopLimitReached;
+        public static bool _pokestopTimerReached;
+
         public static event UpdateTimeStampsPokestopDelegate UpdateTimeStampsPokestop;
 
         internal static void Initialize()
@@ -41,30 +44,66 @@ namespace PoGo.NecroBot.Logic.Tasks
             _storeRi = _rc.Next(8, 15);
             _randomNumber = _rc.Next(4, 11);
             _pokestopList = new List<FortData>();
+            _pokestopLimitReached = false;
+            _pokestopTimerReached = false;
         }
 
         private static bool SearchThresholdExceeds(ISession session)
         {
             if (!session.LogicSettings.UsePokeStopLimit) return false;
+            if (_pokestopLimitReached || _pokestopTimerReached) return true;
+
+            // Check if user defined max Pokestops reached
+            if (!session.Stats.PokeStopTimestamps.Any()) return false;
+            var timeDiff = (DateTime.Now - new DateTime(session.Stats.PokeStopTimestamps.First()));
+
             if (session.Stats.PokeStopTimestamps.Count >= session.LogicSettings.PokeStopLimit)
             {
-                // delete uesless data
-                int toRemove = session.Stats.PokeStopTimestamps.Count - session.LogicSettings.PokeStopLimit;
-                if (toRemove > 0)
+                session.EventDispatcher.Send(new ErrorEvent
                 {
-                    session.Stats.PokeStopTimestamps.RemoveRange(0, toRemove);
-                    UpdateTimeStampsPokestop?.Invoke();
-                }
-                var sec = (DateTime.Now - new DateTime(session.Stats.PokeStopTimestamps.First())).TotalSeconds;
-                var limit = session.LogicSettings.PokeStopLimitMinutes * 60;
-                if (sec < limit)
+                    Message = session.Translation.GetTranslation(TranslationString.PokestopLimitReached)
+                });
+
+                // Check Timestamps & delete older than 24h
+                var TSminus24h = DateTime.Now.AddHours(-24).Ticks;
+                for (int i = 0; i < session.Stats.PokeStopTimestamps.Count; i++)
                 {
-                    session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.PokeStopExceeds, Math.Round(limit - sec)) });
-                    return true;
+                    if (session.Stats.PokeStopTimestamps[i] < TSminus24h)
+                    {
+                        Console.WriteLine("Removing stored Pokestop timestamp {0}", session.Stats.PokeStopTimestamps[i]);
+                        session.Stats.PokeStopTimestamps.Remove(session.Stats.PokeStopTimestamps[i]);
+                    }
                 }
+
+                UpdateTimeStampsPokestop?.Invoke();
+                _pokestopLimitReached = true;
+                return true;
             }
 
-            return false;
+            // Check if user defined time since start reached
+            else if (timeDiff.TotalSeconds >= session.LogicSettings.PokeStopLimitMinutes * 60)
+            {
+                session.EventDispatcher.Send(new ErrorEvent
+                {
+                    Message = session.Translation.GetTranslation(TranslationString.PokestopTimerReached)
+                });
+
+                // Check Timestamps & delete older than 24h
+                var TSminus24h = DateTime.Now.AddHours(-24).Ticks;
+                for (int i = 0; i < session.Stats.PokeStopTimestamps.Count; i++)
+                {
+                    if (session.Stats.PokeStopTimestamps[i] < TSminus24h)
+                    {
+                        session.Stats.PokeStopTimestamps.Remove(session.Stats.PokeStopTimestamps[i]);
+                    }
+                }
+
+                UpdateTimeStampsPokestop?.Invoke();
+                _pokestopTimerReached = true;
+                return true;
+            }
+
+            return false; // Continue running
         }
 
         public static async Task Execute(ISession session, CancellationToken cancellationToken)
@@ -80,12 +119,14 @@ namespace PoGo.NecroBot.Logic.Tasks
             while (pokeStop != null)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                if (session.LogicSettings.ActivateMSniper)
-                {
-                    await MSniperServiceTask.CheckMSniper(session, cancellationToken);
-                }
+                // Exit this task if both catching and looting has reached its limits
+                if ((UseNearbyPokestopsTask._pokestopLimitReached || UseNearbyPokestopsTask._pokestopTimerReached) &&
+                    (CatchPokemonTask._catchPokemonLimitReached || CatchPokemonTask._catchPokemonTimerReached))
+                    return;
 
-                var fortInfo = await session.Client.Fort.GetFort(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude);
+                await SnipeMSniperTask.CheckMSniperLocation(session, cancellationToken);
+
+                var fortInfo = pokeStop.Id == SetMoveToTargetTask.TARGET_ID ? SetMoveToTargetTask.FortInfo : await session.Client.Fort.GetFort(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude);
 
                 await WalkingToPokeStop(session, cancellationToken, pokeStop, fortInfo);
 
@@ -95,169 +136,21 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 if (session.LogicSettings.SnipeAtPokestops || session.LogicSettings.UseSnipeLocationServer)
                     await SnipePokemonTask.Execute(session, cancellationToken);
-                
+
+                await SnipeMSniperTask.CheckMSniperLocation(session, cancellationToken);
+
+                if (!await SetMoveToTargetTask.IsReachedDestination(pokeStop, session, cancellationToken))
+                {
+                    pokeStop.CooldownCompleteTimestampMs = DateTime.UtcNow.ToUnixTime() + (pokeStop.Type == FortType.Gym ? session.LogicSettings.GymVisitTimeout : 5) * 60 * 1000; //5 minutes to cooldown
+                    session.AddForts(new List<FortData>() { pokeStop }); //replace object in memory.
+                }
+
                 if (session.LogicSettings.EnableHumanWalkingSnipe)
                 {
                     await HumanWalkSnipeTask.Execute(session, cancellationToken, pokeStop);
                 }
-                pokeStop.CooldownCompleteTimestampMs = DateTime.UtcNow.ToUnixTime() + (pokeStop.Type == FortType.Gym ? session.LogicSettings.GymVisitTimeout : 5) * 60 * 1000; //5 minutes to cooldown
-                session.AddForts(new List<FortData>() { pokeStop }); //replace object in memory.
                 pokeStop = await GetNextPokeStop(session);
             }
-
-            //await VisitNearByGymTask.UpdateGymList(session, mapObjectTupe.Item2);
-            //while (_pokestopList.Any())
-            //{
-            //    cancellationToken.ThrowIfCancellationRequested();
-            //    await SnipeMSniperTask.CheckMSniperLocation(session, cancellationToken);
-
-            //    _pokestopList =
-            //        _pokestopList.OrderBy(
-            //            i =>
-            //                session.Navigation.WalkStrategy.CalculateDistance(
-            //                    session.Client.CurrentLatitude, session.Client.CurrentLongitude, i.Latitude, i.Longitude, session)).ToList();
-
-            //    // randomize next pokestop between first and second by distance
-            //    var pokestopListNum = 0;
-            //    if (_pokestopList.Count > 1)
-            //        pokestopListNum = _rc.Next(0, 2);
-
-            //    var pokeStop = _pokestopList[pokestopListNum];
-            //    _pokestopList.RemoveAt(pokestopListNum);
-
-            //    // this logic should only be called when we reach a pokestop either via GPX path or normal walking
-            //    // as when walk-sniping, we want to get to the snipe ASAP rather than stop for lured pokemon upon
-            //    // calling FarmPokestop; in that situation we are also always within 40m of the pokestop, so no
-            //    // need to walk to it
-            //    var fortInfo = await session.Client.Fort.GetFort(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude);
-
-            //    // we only move to the PokeStop, and send the associated FortTargetEvent, when not using GPX
-            //    // also, GPX pathing uses its own EggWalker and calls the CatchPokemon tasks internally.
-            //    if (!session.LogicSettings.UseGpxPathing)
-            //    {
-            //        // Will modify Lat,Lng and Name to fake position
-            //        SetMoveToTargetTask.CheckSetMoveToTargetStatus(ref fortInfo, ref pokeStop);
-
-            //        var eggWalker = new EggWalker(1000, session);
-
-            //        var distance = LocationUtils.CalculateDistanceInMeters(session.Client.CurrentLatitude,
-            //            session.Client.CurrentLongitude, pokeStop.Latitude, pokeStop.Longitude);
-            //        cancellationToken.ThrowIfCancellationRequested();
-
-            //        if (!session.LogicSettings.UseGoogleWalk && !session.LogicSettings.UseYoursWalk)
-            //            session.EventDispatcher.Send(new FortTargetEvent { Name = fortInfo.Name, Distance = distance, Route = "NecroBot" });
-            //        else
-            //            BaseWalkStrategy.FortInfo = fortInfo;
-
-            //        await session.Navigation.Move(new GeoCoordinate(pokeStop.Latitude, pokeStop.Longitude,
-            //            LocationUtils.getElevation(session, pokeStop.Latitude, pokeStop.Longitude)),
-            //        async () =>
-            //        {
-            //            if (SetMoveToTargetTask.CheckStopforSetMoveToTarget())
-            //                return false;
-            //            // Catch normal map Pokemon
-            //            await CatchNearbyPokemonsTask.Execute(session, cancellationToken);
-            //            //Catch Incense Pokemon
-            //            await CatchIncensePokemonsTask.Execute(session, cancellationToken);
-            //            // Minor fix google route ignore pokestop
-            //            await LookPokestops(session, pokeStop, cancellationToken);
-            //            return true;
-            //        },
-            //        session,
-            //        cancellationToken);
-
-            //        // we have moved this distance, so apply it immediately to the egg walker.
-            //        await eggWalker.ApplyDistance(distance, cancellationToken);
-            //    }
-
-            //    if (SetMoveToTargetTask.CheckReachTarget(session))
-            //        return;
-
-            //    await FortAction(session, pokeStop, fortInfo, cancellationToken);
-
-            //    if (session.LogicSettings.SnipeAtPokestops || session.LogicSettings.UseSnipeLocationServer)
-            //        await SnipePokemonTask.Execute(session, cancellationToken);
-            //    //samuraitruong: since we has duplication code for gym. I temporary comment this line to disable my feature. keep the code as reference, will remove later.
-
-            //    //await VisitNearByGymTask.Execute(session, cancellationToken);
-
-            //    if (session.LogicSettings.EnableHumanWalkingSnipe)
-            //    {
-            //        //refactore to move this code inside the task later.
-            //        await HumanWalkSnipeTask.Execute(session, cancellationToken,
-            //            async (lat, lng) =>
-            //            {
-            //                //idea of this function is to spin pokestop on way. maybe risky.
-            //                var reachablePokestops = _pokestopList.Where(i =>
-            //                    LocationUtils.CalculateDistanceInMeters(session.Client.CurrentLatitude,
-            //                        session.Client.CurrentLongitude, i.Latitude, i.Longitude) < 40
-            //                        && i.CooldownCompleteTimestampMs == 0
-            //                        ).ToList();
-            //                reachablePokestops = reachablePokestops.OrderBy(i =>
-            //                LocationUtils.CalculateDistanceInMeters(session.Client.CurrentLatitude,
-            //                session.Client.CurrentLongitude, i.Latitude, i.Longitude)).ToList();
-
-            //                foreach (var ps in reachablePokestops)
-            //                {
-            //                    if (!session.LogicSettings.UseGpxPathing)
-            //                        _pokestopList.Remove(ps);
-            //                    var fi = await session.Client.Fort.GetFort(ps.Id, ps.Latitude, ps.Longitude);
-            //                    await FarmPokestop(session, ps, fi, cancellationToken, true);
-            //                    await Task.Delay(2000, cancellationToken);
-            //                }
-            //            },
-            //            async () =>
-            //            {
-            //                // if using GPX we have to move back to the original pokestop, to resume the path.
-            //                // we do not try to use pokest;ops on the way back, as we will have used them getting
-            //                // here.
-            //                if (session.LogicSettings.UseGpxPathing)
-            //                {
-            //                    var eggWalker = new EggWalker(1000, session);
-
-            //                    var distance = LocationUtils.CalculateDistanceInMeters(session.Client.CurrentLatitude,
-            //                        session.Client.CurrentLongitude, pokeStop.Latitude, pokeStop.Longitude);
-            //                    var geo = new GeoCoordinate(pokeStop.Latitude, pokeStop.Longitude);
-
-            //                    await session.Navigation.Move(geo,
-            //                        async () =>
-            //                        {
-            //                            await CatchNearbyPokemonsTask.Execute(session, cancellationToken);
-            //                            //Catch Incense Pokemon
-            //                            await CatchIncensePokemonsTask.Execute(session, cancellationToken);
-            //                        },
-            //                        session,
-            //                        cancellationToken);
-
-            //                    await eggWalker.ApplyDistance(distance, cancellationToken);
-            //                    return;
-            //                }
-
-            //                var nearestStop = _pokestopList.OrderBy(i =>
-            //                    LocationUtils.CalculateDistanceInMeters(session.Client.CurrentLatitude,
-            //                        session.Client.CurrentLongitude, i.Latitude, i.Longitude)).FirstOrDefault();
-
-            //                if (nearestStop != null)
-            //                {
-            //                    var walkedDistance = LocationUtils.CalculateDistanceInMeters(nearestStop.Latitude, nearestStop.Longitude, session.Client.CurrentLatitude, session.Client.CurrentLongitude);
-            //                    if (walkedDistance > session.LogicSettings.HumanWalkingSnipeWalkbackDistanceLimit)
-            //                    {
-            //                        await Task.Delay(3000, cancellationToken);
-            //                        var nearbyPokeStops = await UpdateFortsData(session);
-            //                        var notexists = nearbyPokeStops.Where(p => _pokestopList.All(x => x.Id != p.Id)).ToList();
-            //                        _pokestopList.AddRange(notexists);
-            //                        session.EventDispatcher.Send(new PokeStopListEvent { Forts = _pokestopList });
-            //                        session.EventDispatcher.Send(new HumanWalkSnipeEvent
-            //                        {
-            //                            Type = HumanWalkSnipeEventTypes.PokestopUpdated,
-            //                            Pokestops = notexists,
-            //                            NearestDistance = walkedDistance
-            //                        });
-            //                    }
-            //                }
-            //            });
-            //    }
-            //}
         }
 
         private static async Task WalkingToPokeStop(ISession session, CancellationToken cancellationToken, FortData pokeStop, FortDetailsResponse fortInfo)
@@ -269,18 +162,15 @@ namespace PoGo.NecroBot.Logic.Tasks
             // also, GPX pathing uses its own EggWalker and calls the CatchPokemon tasks internally.
             if (!session.LogicSettings.UseGpxPathing)
             {
-                // Will modify Lat,Lng and Name to fake position
-                //Need refactor it to speparate from pokestop logic -> samuraitruong will do it.
-                SetMoveToTargetTask.CheckSetMoveToTargetStatus(ref fortInfo, ref pokeStop);
-
                 var eggWalker = new EggWalker(1000, session);
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                if (!session.LogicSettings.UseGoogleWalk && !session.LogicSettings.UseYoursWalk)
-                    session.EventDispatcher.Send(new FortTargetEvent { Name = fortInfo.Name, Distance = distance, Route = "NecroBot" });
-                else
-                    BaseWalkStrategy.FortInfo = fortInfo;
+                session.EventDispatcher.Send(new FortTargetEvent { Name = fortInfo.Name, Distance = distance, Route = session.Navigation.GetStrategy(session.LogicSettings).GetWalkStrategyId() });
+
+                // Always set the fort info in base walk strategy.
+                BaseWalkStrategy.FortInfo = fortInfo;
+
                 var pokeStopDestination = new GeoCoordinate(pokeStop.Latitude, pokeStop.Longitude,
                     LocationUtils.getElevation(session, pokeStop.Latitude, pokeStop.Longitude));
 
@@ -309,25 +199,30 @@ namespace PoGo.NecroBot.Logic.Tasks
         }
         private static async Task OnWalkingToPokeStopOrGym(ISession session, FortData pokeStop, CancellationToken cancellationToken)
         {
-            //TODO - refactore this call to somewhere else
-            if (SetMoveToTargetTask.CheckStopforSetMoveToTarget())
-            {
-                return;
-            }
-
             // Catch normal map Pokemon
             await CatchNearbyPokemonsTask.Execute(session, cancellationToken);
             //Catch Incense Pokemon
             await CatchIncensePokemonsTask.Execute(session, cancellationToken);
 
             // Minor fix google route ignore pokestop
-            if (session.LogicSettings.UseGoogleWalk && !session.LogicSettings.UseYoursWalk && !session.LogicSettings.UseGpxPathing)
+            if (session.LogicSettings.UseGoogleWalk && 
+                !session.LogicSettings.UseYoursWalk && 
+                !session.LogicSettings.UseGpxPathing)
             {
-                await SpinPokestopNearBy(session, cancellationToken, pokeStop);
+                // Spin as long as we haven't reached the user defined limits
+                if (!_pokestopLimitReached && !_pokestopTimerReached)
+                {
+                    await SpinPokestopNearBy(session, cancellationToken, pokeStop);
+                }
             }
         }
         public static async Task<FortData> GetNextPokeStop(ISession session)
         {
+
+            var priorityTarget = await SetMoveToTargetTask.GetTarget(session);
+            if (priorityTarget != null) return priorityTarget;
+
+
             if (session.Forts == null ||
                 session.Forts.Count == 0 ||
                 session.Forts.Count(p => p.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime()) == 0)
@@ -350,6 +245,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 pokeStopes = pokeStopes.Where(p => LocationUtils.CalculateDistanceInMeters(p.Latitude, p.Longitude, session.Client.CurrentLatitude, session.Client.CurrentLongitude) < 40).ToList();
             }
             if (pokeStopes.Count == 1) return pokeStopes.FirstOrDefault();
+
            if (session.LogicSettings.GymAllowed)
             {
                 var gyms = pokeStopes.Where(x => x.Type == FortType.Gym &&
@@ -398,7 +294,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static async Task DoActionAtPokeStop(ISession session, CancellationToken cancellationToken, FortData pokeStop, FortDetailsResponse fortInfo, bool doNotTrySpin = false)
         {
-            if (pokeStop.Type != FortType.Checkpoint) return;
+            if (pokeStop.Type != FortType.Checkpoint ) return;
 
             //Catch Lure Pokemon
             if (pokeStop.LureInfo != null)
@@ -408,7 +304,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                 await CatchLurePokemonsTask.Execute(session, pokeStop, cancellationToken);
             }
 
-            await FarmPokestop(session, pokeStop, fortInfo, cancellationToken, doNotTrySpin);
+            // Spin as long as we haven't reached the user defined limits
+            if (!_pokestopLimitReached && !_pokestopTimerReached)
+            {
+                await FarmPokestop(session, pokeStop, fortInfo, cancellationToken, doNotTrySpin);
+            }
 
             if (++_stopsHit >= _storeRi) //TODO: OR item/pokemon bag is full //check stopsHit against storeRI random without dividing.
             {
@@ -448,7 +348,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static async Task FarmPokestop(ISession session, FortData pokeStop, FortDetailsResponse fortInfo, CancellationToken cancellationToken, bool doNotRetry = false)
         {
-            if (pokeStop.CooldownCompleteTimestampMs != 0) return;
+            if (pokeStop.CooldownCompleteTimestampMs > DateTime.UtcNow.ToUnixTime()) return;
 
             FortSearchResponse fortSearch;
             var timesZeroXPawarded = 0;

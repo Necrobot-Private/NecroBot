@@ -1,4 +1,5 @@
 ﻿using GeoCoordinatePortable;
+using PoGo.NecroBot.Logic.Model.Yours;
 using PoGo.NecroBot.Logic.State;
 using System;
 using System.IO;
@@ -14,12 +15,11 @@ namespace PoGo.NecroBot.Logic.Service
             _session = session;
         }
 
-        public string GetDirections(GeoCoordinate sourceLocation, GeoCoordinate destLocation)
+        public YoursWalk GetDirections(GeoCoordinate sourceLocation, GeoCoordinate destLocation)
         {
             WebRequest request = WebRequest.Create(GetUrl(sourceLocation, destLocation));
             request.Credentials = CredentialCache.DefaultCredentials;
 
-            string responseFromServer = "";
             try
             {
                 using (WebResponse response = request.GetResponse())
@@ -27,16 +27,16 @@ namespace PoGo.NecroBot.Logic.Service
                     using (Stream dataStream = response.GetResponseStream())
                     using (StreamReader reader = new StreamReader(dataStream))
                     {
-                        responseFromServer = reader.ReadToEnd();
+                        string responseFromServer = reader.ReadToEnd();
+                        return YoursWalk.Get(responseFromServer);
                     }
                 }
             }
             catch (Exception)
             {
-                responseFromServer = "";
             }
 
-            return responseFromServer;
+            return null;
         }
 
         private string GetUrl(GeoCoordinate sourceLocation, GeoCoordinate destLocation)
