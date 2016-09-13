@@ -91,11 +91,11 @@ namespace PoGo.NecroBot.Logic.Tasks
         private static async Task StartGymAttackLogic(ISession session, FortDetailsResponse fortInfo,
             GetGymDetailsResponse fortDetails, FortData gym, CancellationToken cancellationToken)
         {
-            var badassPokemon = await session.Inventory.GetHighestCpForGym(6);
             bool fighting = true;
-            var pokemonDatas = badassPokemon as PokemonData[] ?? badassPokemon.ToArray();
             while (fighting)
             {
+                var badassPokemon = await session.Inventory.GetHighestCpForGym(6);
+                var pokemonDatas = badassPokemon as PokemonData[] ?? badassPokemon.ToArray();
                 // Heal pokemon
                 foreach (var pokemon in pokemonDatas)
                 {
@@ -345,87 +345,6 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
         }
 
-        public static async Task EngageGymBattleTask(ISession session, CancellationToken cancellationToken, FortData currentFortData, GetGymDetailsResponse fortInfo)
-        {
-            bool fighting = true;
-            var badassPokemon = await session.Inventory.GetHighestCpForGym(6);
-
-            // Start Battle
-            var gymInfo =
-                await
-                    session.Client.Fort.GetGymDetails(currentFortData.Id, currentFortData.Latitude,
-                        currentFortData.Longitude);
-
-            var pokemonDatas = badassPokemon as PokemonData[] ?? badassPokemon.ToArray();
-            while (fighting)
-            {
-                // Heal pokemon
-                foreach (var pokemon in pokemonDatas)
-                {
-                    if (pokemon.Stamina <= 0)
-                        await RevivePokemon(session, pokemon);
-                    if (pokemon.Stamina < pokemon.StaminaMax)
-                        await HealPokemon(session, pokemon);
-
-                    if (pokemon.Stamina < pokemon.StaminaMax)
-                        return;
-                }
-                Thread.Sleep(4000);
-
-                var result = await StartBattle(session, pokemonDatas, currentFortData);
-                if (result != null)
-                {
-                    if (result.Result == StartGymBattleResponse.Types.Result.Success)
-                    {
-                        switch (result.BattleLog.State)
-                        {
-                            case BattleState.Active:
-                                Debug.WriteLine($"Time to start the Attack Mode");
-                                await AttackGym(session, cancellationToken, currentFortData, result);
-                                break;
-                            case BattleState.Defeated:
-                                break;
-                            case BattleState.StateUnset:
-                                break;
-                            case BattleState.TimedOut:
-                                break;
-                            case BattleState.Victory:
-                                fighting = false;
-                                break;
-                            default:
-                                Debug.WriteLine($"Unhandled result starting gym battle:\n{result}");
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        Debug.WriteLine($"Hmmm, no result?");
-                        Thread.Sleep(5000);
-                        continue;
-                    }
-
-                    gymInfo = await
-                        session.Client.Fort.GetGymDetails(currentFortData.Id, currentFortData.Latitude,
-                        currentFortData.Longitude);
-                    if (gymInfo.GymState.FortData.OwnedByTeam == TeamColor.Neutral ||
-                        gymInfo.GymState.FortData.OwnedByTeam == session.Profile.PlayerData.Team)
-                        break;
-                }
-            }
-
-            var fortDetailsResponse = currentFortData.Id == SetMoveToTargetTask.TARGET_ID ? SetMoveToTargetTask.FortInfo : await session.Client.Fort.GetFort(currentFortData.Id, currentFortData.Latitude, currentFortData.Longitude);
-            // Finished battling.. OwnedByTeam should be neutral when we reach here
-            if (gymInfo.GymState.FortData.OwnedByTeam == TeamColor.Neutral ||
-                gymInfo.GymState.FortData.OwnedByTeam == session.Profile.PlayerData.Team)
-            {
-                await Execute(session, cancellationToken, currentFortData, fortDetailsResponse);
-            }
-            else
-            {
-                Debug.WriteLine($"Hmmm, for some reason the gym was not taken over...");
-            }
-        }
-
         private static int _currentAttackerEnergy;
 
         // ReSharper disable once UnusedParameter.Local
@@ -434,8 +353,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             long serverMs = startResponse.BattleLog.BattleStartTimestampMs;
             var lastActions = startResponse.BattleLog.BattleActions.ToList();
 
-            Debug.WriteLine($"Gym battle started; fighting trainer: {startResponse.Defender.TrainerPublicProfile.Name}");
-            Debug.WriteLine($"We are attacking: {startResponse.Defender.ActivePokemon.PokemonData.PokemonId}");
+            Logger.Write($"Gym battle started; fighting trainer: {startResponse.Defender.TrainerPublicProfile.Name}", LogLevel.Gym, ConsoleColor.Green);
+            Logger.Write($"We are attacking: {startResponse.Defender.ActivePokemon.PokemonData.PokemonId}", LogLevel.Gym, ConsoleColor.White);
             int loops = 0;
             List<BattleAction> emptyActions = new List<BattleAction>();
             BattleAction emptyAction = new BattleAction();
