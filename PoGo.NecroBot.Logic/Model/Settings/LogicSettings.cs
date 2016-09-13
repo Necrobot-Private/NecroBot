@@ -138,6 +138,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool UseGoogleWalkCache => _settings.GoogleWalkConfig.Cache;
         public string GoogleApiKey => _settings.GoogleWalkConfig.GoogleAPIKey;
         public string GoogleHeuristic => _settings.GoogleWalkConfig.GoogleHeuristic;
+        public string GoogleElevationApiKey => _settings.GoogleWalkConfig.GoogleElevationAPIKey;
 
         public bool UseYoursWalk => _settings.YoursWalkConfig.UseYoursWalk;
         public string YoursWalkHeuristic => _settings.YoursWalkConfig.YoursWalkHeuristic;
@@ -145,6 +146,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool UseMapzenWalk => _settings.MapzenWalkConfig.UseMapzenWalk;
         public string MapzenTurnByTurnApiKey => _settings.MapzenWalkConfig.MapzenTurnByTurnApiKey;
         public string MapzenWalkHeuristic => _settings.MapzenWalkConfig.MapzenWalkHeuristic;
+        public string MapzenElevationApiKey => _settings.MapzenWalkConfig.MapzenElevationApiKey;
 
         public bool SnipeAtPokestops => _settings.SnipeConfig.SnipeAtPokestops;
         public bool ActivateMSniper => _settings.SnipeConfig.ActivateMSniper;

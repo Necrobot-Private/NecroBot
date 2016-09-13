@@ -26,5 +26,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [EnumDataType(typeof(MapzenWalkTravelModes))]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 3)]
         public string MapzenWalkHeuristic = "bicycle";
+
+        [DefaultValue(null)]
+        [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 4)]
+        public string MapzenElevationApiKey;
     }
 }
