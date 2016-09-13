@@ -22,19 +22,23 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
             _yoursDirectionsService = null;
         }
 
+        public override string GetWalkStrategyId()
+        {
+            return "Yours Walk";
+        }
+
         public override async Task<PlayerUpdateResponse> Walk(GeoCoordinate targetLocation, Func<Task> functionExecutedWhileWalking, ISession session, CancellationToken cancellationToken, double walkSpeed = 0.0)
         {
             GetYoursInstance(session);
             var sourceLocation = new GeoCoordinate(_client.CurrentLatitude, _client.CurrentLongitude, _client.CurrentAltitude);
-            var yoursResult = _yoursDirectionsService.GetDirections(sourceLocation, targetLocation);
+            var yoursWalk = _yoursDirectionsService.GetDirections(sourceLocation, targetLocation);
 
-            if (string.IsNullOrEmpty(yoursResult) || yoursResult.StartsWith("<?xml version=\"1.0\"") || yoursResult.Contains("error"))
+            if (yoursWalk == null)
             {
                 return await RedirectToNextFallbackStrategy(session.LogicSettings, targetLocation, functionExecutedWhileWalking, session, cancellationToken);
             }
             
-            var yoursWalk = YoursWalk.Get(yoursResult);
-            session.EventDispatcher.Send(new FortTargetEvent { Name = FortInfo.Name, Distance = yoursWalk.Distance, Route = "YoursWalk" });
+            session.EventDispatcher.Send(new FortTargetEvent { Name = FortInfo.Name, Distance = yoursWalk.Distance, Route = GetWalkStrategyId() });
             List<GeoCoordinate> points = yoursWalk.Waypoints;
             return await DoWalk(points, session, functionExecutedWhileWalking, sourceLocation, targetLocation, cancellationToken, walkSpeed);
         }

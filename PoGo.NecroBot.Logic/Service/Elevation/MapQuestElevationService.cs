@@ -30,6 +30,11 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
                 _apiKey = mapQuestDemoApiKey;
         }
 
+        public override string GetServiceId()
+        {
+            return "MapQuest Elevation Service";
+        }
+
         public override double GetElevationFromWebService(double lat, double lng)
         {
             if (string.IsNullOrEmpty(_apiKey))
@@ -55,10 +60,14 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
                         responseFromServer = responseFromServer.Replace("handleHelloWorldResponse(", "");
                         responseFromServer = responseFromServer.Replace("]}});", "]}}");
                         MapQuestResponse mapQuestResponse = JsonConvert.DeserializeObject<MapQuestResponse>(responseFromServer);
-                        if (mapQuestResponse.elevationProfile != null && 0 < mapQuestResponse.elevationProfile.Count)
+                        if (mapQuestResponse.elevationProfile != null && 
+                            mapQuestResponse.elevationProfile.Count > 0 &&
+                            mapQuestResponse.elevationProfile[0].height > -100)
                         {
                             return mapQuestResponse.elevationProfile[0].height;
                         }
+
+                        // All error handling is handled inside of the ElevationService.
                     }
                 }
             }

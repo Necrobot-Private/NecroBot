@@ -5,6 +5,7 @@
 ### Do NOT publish/share/advertise this github or discord, in any other discord server or website.
 [![Stories in Ready](https://discordapp.com/api/guilds/220703917871333376/widget.png?style=banner2&time-)](https://discord.gg/7FWyWVp)
 
+[![Build status](https://ci.appveyor.com/api/projects/status/mvr6v0v99gscqxbn/branch/master?svg=true)](https://ci.appveyor.com/project/NzV/necrobot/branch/master)
 [![Github All Releases](https://img.shields.io/github/downloads/Necrobot-Private/NecroBot/total.svg?maxAge=258)](https://github.com/Necrobot-Private/NecroBot/releases)
 [![GitHub license](https://img.shields.io/badge/license-AGPL-blue.svg)](https://raw.githubusercontent.com/Necrobot-Private/NecroBot/master/LICENSE.md)
 
@@ -24,7 +25,7 @@ Make sure you check out our [Wiki](https://github.com/Necrobot-Private/NecroBot/
  - [PTC Login / Google]
  - [Get Map Objects and Inventory]
  - [Search for forts/spawns]
- - [Farm pokestops]
+ - [Farm forts]
  - [Farm all Monster in neighbourhood]
  - [Throw Berries/use best ball]
  - [Transfers duplicate Monsters]

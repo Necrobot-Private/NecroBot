@@ -272,9 +272,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 52)]
         public bool UseKeepMinLvl;
 
-        [DefaultValue(false)]
+        [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 53)]
-        public bool PrioritizeIvOverCp;
+        public bool PrioritizeIvOverCp = true;
 
         [DefaultValue(1)]
         [Range(0, 999)]

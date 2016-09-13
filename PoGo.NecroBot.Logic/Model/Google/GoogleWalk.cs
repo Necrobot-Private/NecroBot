@@ -10,6 +10,7 @@ namespace PoGo.NecroBot.Logic.Model.Google
     public class GoogleWalk
     {
         public List<GeoCoordinate> Waypoints { get; set; }
+        public double Distance { get; set; }
 
         public GoogleWalk(GoogleResult googleResult)
         {
@@ -17,6 +18,8 @@ namespace PoGo.NecroBot.Logic.Model.Google
                 throw new ArgumentException("Invalid google route.");
 
             var route = googleResult.Directions.routes.First();
+
+            Distance = googleResult.GetDistance();
 
             Waypoints = new List<GeoCoordinate>();
             // In some cases, player are inside build
