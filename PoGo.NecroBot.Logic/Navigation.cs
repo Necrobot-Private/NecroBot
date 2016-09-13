@@ -12,6 +12,7 @@ using PoGo.NecroBot.Logic.Strategies.Walk;
 using PoGo.NecroBot.Logic.Event;
 using System.Collections.Generic;
 using System.Linq;
+using PoGo.NecroBot.Logic.Model;
 
 #endregion
 
@@ -85,7 +86,7 @@ namespace PoGo.NecroBot.Logic
             return currentSpeed;
         }
 
-        public async Task<PlayerUpdateResponse> Move(GeoCoordinate targetLocation,
+        public async Task<PlayerUpdateResponse> Move(IGeoLocation targetLocation,
             Func<Task> functionExecutedWhileWalking,
             ISession session,
             CancellationToken cancellationToken, double customWalkingSpeed =0.0)

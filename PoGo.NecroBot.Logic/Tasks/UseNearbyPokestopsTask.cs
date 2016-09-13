@@ -16,6 +16,7 @@ using PokemonGo.RocketAPI.Extensions;
 using POGOProtos.Map.Fort;
 using POGOProtos.Networking.Responses;
 using PoGo.NecroBot.Logic.Event.Gym;
+using PoGo.NecroBot.Logic.Model;
 
 #endregion
 
@@ -166,24 +167,12 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                session.EventDispatcher.Send(new FortTargetEvent { Name = fortInfo.Name, Distance = distance, Route = session.Navigation.GetStrategy(session.LogicSettings).GetWalkStrategyId() });
-
                 // Always set the fort info in base walk strategy.
-                BaseWalkStrategy.FortInfo = fortInfo;
 
-                var pokeStopDestination = new GeoCoordinate(pokeStop.Latitude, pokeStop.Longitude,
-                    LocationUtils.getElevation(session, pokeStop.Latitude, pokeStop.Longitude));
-
-                if (pokeStop.Type == FortType.Gym)
-                {
-                    session.EventDispatcher.Send(new GymWalkToTargetEvent()
-                    {
-                        Name = fortInfo.Name,
-                        Distance = distance,
-                        Latitude = fortInfo.Latitude,
-                        Longitude = fortInfo.Longitude
-                    });
-                }
+                var pokeStopDestination = new FortLocation(pokeStop.Latitude, pokeStop.Longitude,
+                    LocationUtils.getElevation(session, pokeStop.Latitude, pokeStop.Longitude), pokeStop, fortInfo);
+                
+               
 
                 await session.Navigation.Move(pokeStopDestination,
                  async () =>
