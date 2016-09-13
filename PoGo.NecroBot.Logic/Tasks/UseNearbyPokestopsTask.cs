@@ -348,7 +348,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static async Task FarmPokestop(ISession session, FortData pokeStop, FortDetailsResponse fortInfo, CancellationToken cancellationToken, bool doNotRetry = false)
         {
-            if (pokeStop.CooldownCompleteTimestampMs != 0) return;
+            if (pokeStop.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime()) return;
 
             FortSearchResponse fortSearch;
             var timesZeroXPawarded = 0;
