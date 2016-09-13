@@ -194,7 +194,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     socket.MessageReceived += Msocket_MessageReceived;
                     socket.Closed += Msocket_Closed;
                     socket.Open();
-                    Logger.Write($"Connecting to NecroBot2Service", LogLevel.Service);
+                    Logger.Write($"Connecting to MSniperService", LogLevel.Service);
                 }
                 catch (Exception ex)
                 {
@@ -235,15 +235,15 @@ namespace PoGo.NecroBot.Logic.Tasks
                 switch (cmd)
                 {
                     case SocketCmd.IpLimit:
-                        Logger.Write("IpLimit: " + e.GetSocketData().First(), LogLevel.Service, ConsoleColor.Red);
+                        Logger.Write("(IpLimit) " + e.GetSocketData().First(), LogLevel.Service, ConsoleColor.Red);
                         break;
                     case SocketCmd.ServerLimit:
-                        Logger.Write("ServerLimit: " + e.GetSocketData().First(), LogLevel.Service, ConsoleColor.Red);
+                        Logger.Write("(ServerLimit) " + e.GetSocketData().First(), LogLevel.Service, ConsoleColor.Red);
                         break;
                     case SocketCmd.Identity://first request
                         UserUniequeId = e.GetSocketData().First();
                         SendToMSniperServer(UserUniequeId);//confirm
-                        Logger.Write($"Identity: [ {UserUniequeId} ] connection establisted", LogLevel.Service);
+                        Logger.Write($"(Identity) [ {UserUniequeId} ] connection establisted", LogLevel.Service);
                         break;
 
                     case SocketCmd.PokemonCount://server asks what is in your hand (every 3 minutes)
@@ -301,7 +301,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         int received = xcoming.Count;
                         xcoming = FindNew(xcoming);
                         int haventvisited = xcoming.Count;
-                        Logger.Write($"Brodcaster:  received:[{received}]  haven't visited:[{haventvisited}]", LogLevel.Service);
+                        Logger.Write($"(Brodcaster)  received:[{received}]  haven't visited:[{haventvisited}]", LogLevel.Service);
                         ReceivedPokemons.AddRange(xcoming);
                         break;
                     case SocketCmd.None:
