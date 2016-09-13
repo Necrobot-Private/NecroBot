@@ -34,8 +34,9 @@ namespace PoGo.NecroBot.Logic.Tasks
             PokemonCount = 2,
             SendPokemon = 3,
             SendOneSpecies = 4,
-            Brodcaster = 5
-
+            Brodcaster = 5,
+            IpLimit = 6,
+            ServerLimit = 7
         }
 
         public class EncounterInfo : IDisposable
@@ -233,6 +234,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                 SocketCmd cmd = e.GetSocketCmd();
                 switch (cmd)
                 {
+                    case SocketCmd.IpLimit:
+                        Logger.Write("IpLimit: " + e.GetSocketData().First(), LogLevel.Service, ConsoleColor.White);
+                        break;
+                    case SocketCmd.ServerLimit:
+                        Logger.Write("ServerLimit: " + e.GetSocketData().First(), LogLevel.Service, ConsoleColor.White);
+                        break;
                     case SocketCmd.Identity://first request
                         UserUniequeId = e.GetSocketData().First();
                         SendToMSniperServer(UserUniequeId);//confirm
