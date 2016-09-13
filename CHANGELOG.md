@@ -1,5 +1,21 @@
 # Change Log
 
+## [v0.9.9.1](https://github.com/Necrobot-Private/NecroBot/tree/v0.9.9.1) (2016-09-13)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.9.9.0...v0.9.9.1)
+
+**Implemented enhancements:**
+
+- Updated to latest POGOProtos \(a01a480\) [\#124](https://github.com/Necrobot-Private/NecroBot/pull/124) ([NzV](https://github.com/NzV))
+
+**Closed issues:**
+
+- Google Walk not working? [\#111](https://github.com/Necrobot-Private/NecroBot/issues/111)
+
+**Merged pull requests:**
+
+- merge [\#122](https://github.com/Necrobot-Private/NecroBot/pull/122) ([msx752](https://github.com/msx752))
+- Msniper location service - ready [\#108](https://github.com/Necrobot-Private/NecroBot/pull/108) ([msx752](https://github.com/msx752))
+
 ## [v0.9.9.0](https://github.com/Necrobot-Private/NecroBot/tree/v0.9.9.0) (2016-09-13)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.9.8.9...v0.9.9.0)
 
