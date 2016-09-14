@@ -418,7 +418,7 @@ namespace PoGo.NecroBot.Logic
         public async Task<IEnumerable<PokemonData>> GetPokemons()
         {
             var inventory = await GetCachedInventory();
-            return
+                return
                 inventory.InventoryDelta.InventoryItems.Select(i => i.InventoryItemData?.PokemonData)
                     .Where(p => p != null && p.PokemonId > 0);
         }

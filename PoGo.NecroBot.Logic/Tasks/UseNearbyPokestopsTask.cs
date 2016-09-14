@@ -133,7 +133,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 await DoActionAtPokeStop(session, cancellationToken, pokeStop, fortInfo);
 
-                await UseGymBattleTask.Execute(session, cancellationToken, pokeStop, fortInfo);
+                //await UseGymBattleTask.Execute(session, cancellationToken, pokeStop, fortInfo);
 
                 if (session.LogicSettings.SnipeAtPokestops || session.LogicSettings.UseSnipeLocationServer)
                     await SnipePokemonTask.Execute(session, cancellationToken);
@@ -171,7 +171,6 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 var pokeStopDestination = new FortLocation(pokeStop.Latitude, pokeStop.Longitude,
                     LocationUtils.getElevation(session, pokeStop.Latitude, pokeStop.Longitude), pokeStop, fortInfo);
-                
 
                 await session.Navigation.Move(pokeStopDestination,
                  async () =>
@@ -336,7 +335,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static async Task FarmPokestop(ISession session, FortData pokeStop, FortDetailsResponse fortInfo, CancellationToken cancellationToken, bool doNotRetry = false)
         {
-            if (pokeStop.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime()) return;
+            if (pokeStop.CooldownCompleteTimestampMs>  0 && pokeStop.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime()) return;
 
             FortSearchResponse fortSearch;
             var timesZeroXPawarded = 0;
