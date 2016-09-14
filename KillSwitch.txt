@@ -20,3 +20,7 @@ They are being featured in this notification to simply increase the awareness of
 (They are like Greenpeace... but with bigger balls!!).
 
 Thank you!
+
+
+Note: There is a new version (v0.9.9.2) that will let you bypass and enable botting.
+(It does NOT include new API code, you could get banned, we advise against botting right now.)
