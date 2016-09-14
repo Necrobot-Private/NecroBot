@@ -78,6 +78,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static List<EncounterInfo> ReceivedPokemons = new List<EncounterInfo>();
         public static List<ulong> VisitedEncounterIds = new List<ulong>();
         public static string UserUniequeId { get; set; } //only info
+        public static DateTime lastNotify { get; set; }
         #endregion
 
         #region MSniper Location Feeder
@@ -194,6 +195,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     socket.MessageReceived += Msocket_MessageReceived;
                     socket.Closed += Msocket_Closed;
                     socket.Open();
+                    lastNotify = DateTime.Now;
                     Logger.Write($"Connecting to MSniperService", LogLevel.Service);
                 }
                 catch (Exception ex)
@@ -301,8 +303,14 @@ namespace PoGo.NecroBot.Logic.Tasks
                         int received = xcoming.Count;
                         xcoming = FindNew(xcoming);
                         int haventvisited = xcoming.Count;
-                        Logger.Write($"(Brodcaster)  received:[{received}]  haven't visited:[{haventvisited}]", LogLevel.Service);
                         ReceivedPokemons.AddRange(xcoming);
+                        RefreshReceivedPokemons();
+                        TimeSpan ts = DateTime.Now - lastNotify;
+                        if (ts.TotalMinutes >= 5)
+                        {
+                            Logger.Write($"total active spawns:[ {ReceivedPokemons.Count} ]", LogLevel.Service);
+                            lastNotify = DateTime.Now;
+                        }
                         break;
                     case SocketCmd.None:
                         Logger.Write("UNKNOWN ERROR", LogLevel.Service, ConsoleColor.Red);
@@ -317,7 +325,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                 //throw ex;
             }
         }
-
+        private static void RefreshReceivedPokemons()
+        {
+            ReceivedPokemons = ReceivedPokemons
+                .Where(p => TimeStampToDateTime(p.LastModifiedTimestampMs + p.TimeTillHiddenMs) > DateTime.Now)
+                .ToList();
+        }
         private static void SendToMSniperServer(string message)
         {
             try
