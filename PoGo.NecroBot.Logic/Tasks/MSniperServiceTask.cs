@@ -200,7 +200,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
                 catch (Exception ex)
                 {
-                    Logger.Write(ex.Message + "  (may be offline)", LogLevel.Service, ConsoleColor.Red);
+                    TimeSpan ts = DateTime.Now - lastNotify;
+                    if (ts.TotalMinutes>5)
+                    {
+                        Logger.Write(ex.Message + "  (may be offline)", LogLevel.Service, ConsoleColor.Red);
+                    }
                 }
             }
         }
