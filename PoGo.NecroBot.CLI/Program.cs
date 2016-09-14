@@ -52,7 +52,7 @@ namespace PoGo.NecroBot.CLI
             if (args.Length > 0)
                 _subPath = args[0];
 
-            Logger.SetLogger(new ConsoleLogger(LogLevel.Gym), _subPath);
+            Logger.SetLogger(new ConsoleLogger(LogLevel.Service), _subPath);
 
             if (CheckKillSwitch())
                 return;
@@ -306,6 +306,13 @@ namespace PoGo.NecroBot.CLI
                         {
                             Console.WriteLine(strReason + $"\n");
 
+							if (PromptForKillSwitchOverride())
+							{
+								// Override
+								Logger.Write("Overriding killswitch... you have been warned!", LogLevel.Warning);
+								return false;
+							}
+							
                             Logger.Write("The bot will now close, please press enter to continue", LogLevel.Error);
                             Console.ReadLine();
                             return true;
@@ -327,6 +334,28 @@ namespace PoGo.NecroBot.CLI
         {
             Logger.Write("Exception caught, writing LogBuffer.", force: true);
             throw new Exception();
+        }
+		
+        public static bool PromptForKillSwitchOverride()
+        {
+            Logger.Write("Do you want to override killswitch to bot at your own risk?", LogLevel.Warning);
+
+            while (true)
+            {
+                var strInput = Console.ReadLine().ToLower();
+
+                switch (strInput)
+                {
+                    case "y":
+                        // Override killswitch
+                        return true;
+                    case "n":
+                        return false;
+                    default:
+                        Logger.Write("Enter y or n", LogLevel.Error);
+                        continue;
+                }
+            }
         }
     }
 }

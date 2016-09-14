@@ -248,7 +248,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     Logger.Write($"(Threw ball) {hitTxt} throw, {spinTxt}-ball, HitPokemon = {hitPokemon}...", LogLevel.Debug);		
                 }
 
-                caughtPokemonResponse =
+               caughtPokemonResponse =
                     await session.Client.Encounter.CatchPokemon(
                         encounter is EncounterResponse || encounter is IncenseEncounterResponse
                             ? pokemon.EncounterId
