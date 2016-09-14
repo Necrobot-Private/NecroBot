@@ -14,6 +14,7 @@ using POGOProtos.Inventory.Item;
 using POGOProtos.Map.Fort;
 using POGOProtos.Map.Pokemon;
 using POGOProtos.Networking.Responses;
+using POGOProtos.Data;
 
 #endregion
 
@@ -24,7 +25,7 @@ namespace PoGo.NecroBot.Logic.Tasks
     public static class CatchPokemonTask
     {
         public static event UpdateTimeStampsPokemonDelegate UpdateTimeStampsPokemon;
-        public static bool _catchPokemonLimitReached  = false;
+        public static bool _catchPokemonLimitReached = false;
         public static bool _catchPokemonTimerReached = false;
         public static int AmountOfBerries;
         private static Random Random => new Random((int)DateTime.Now.Ticks);
@@ -93,7 +94,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         }
 
         public static async Task Execute(ISession session, CancellationToken cancellationToken, dynamic encounter, MapPokemon pokemon,
-            FortData currentFortData = null, ulong encounterId = 0, bool sessionAllowTransfer =true)
+            FortData currentFortData = null, ulong encounterId = 0, bool sessionAllowTransfer = true)
         {
             using (var block = new BlockableScope(session, Model.BotActions.Catching))
             {
@@ -106,9 +107,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                 // If the encounter is null nothing will work below, so exit now
                 if (encounter == null) return;
 
-            // Exit if user defined max limits reached
-            if (CatchThresholdExceeds(session, cancellationToken))
-                return;
+                // Exit if user defined max limits reached
+                if (CatchThresholdExceeds(session, cancellationToken))
+                    return;
 
                 float probability = encounter.CaptureProbability?.CaptureProbability_[0];
 
@@ -116,23 +117,36 @@ namespace PoGo.NecroBot.Logic.Tasks
                 var pokeball = await GetBestBall(session, encounter, probability);
                 if (pokeball == ItemId.ItemUnknown) return;
 
-                //Calculate CP and IV
-                var pokemonCp = (encounter is EncounterResponse
-                                   ? encounter.WildPokemon?.PokemonData?.Cp
-                                   : encounter.PokemonData?.Cp);
-                var pokemonIv = PokemonInfo.CalculatePokemonPerfection(encounter is EncounterResponse
+                var encounteredPokemon = (encounter is EncounterResponse
                         ? encounter.WildPokemon?.PokemonData
-                        : encounter?.PokemonData);
+                        : encounter?.PokemonData) as PokemonData;
+
+                //Calculate CP and IV
+                var pokemonCp = encounteredPokemon?.Cp;
+
+                var pokemonIv = PokemonInfo.CalculatePokemonPerfection(encounteredPokemon);
+
+                var lv = PokemonInfo.GetLevel(encounteredPokemon);
 
                 // Calculate distance away
-                var distance = LocationUtils.CalculateDistanceInMeters(session.Client.CurrentLatitude,
-                    session.Client.CurrentLongitude,
-                    encounter is EncounterResponse || encounter is IncenseEncounterResponse
-                        ? pokemon.Latitude
-                        : currentFortData.Latitude,
-                    encounter is EncounterResponse || encounter is IncenseEncounterResponse
+                var latitude = encounter is EncounterResponse || encounter is IncenseEncounterResponse
+                            ? pokemon.Latitude
+                            : currentFortData.Latitude;
+                var longitude = encounter is EncounterResponse || encounter is IncenseEncounterResponse
                         ? pokemon.Longitude
-                        : currentFortData.Longitude);
+                        : currentFortData.Longitude;
+
+                var distance = LocationUtils.CalculateDistanceInMeters(session.Client.CurrentLatitude,
+                    session.Client.CurrentLongitude, latitude, longitude);
+
+                session.EventDispatcher.Send(new EncounteredEvent()
+                {
+                    Latitude = latitude,
+                    Longitude = longitude,
+                    PokemonId = encounteredPokemon.PokemonId,
+                    IV = pokemonIv,
+                    Level = (int)lv
+                });
 
                 CatchPokemonResponse caughtPokemonResponse = null;
                 var lastThrow = CatchPokemonResponse.Types.CatchStatus.CatchSuccess; // Initializing lastThrow
@@ -252,24 +266,21 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Logger.Write($"(Threw ball) {hitTxt} throw, {spinTxt}-ball, HitPokemon = {hitPokemon}...", LogLevel.Debug);
                     }
 
-               caughtPokemonResponse =
-                        await session.Client.Encounter.CatchPokemon(
-                            encounter is EncounterResponse || encounter is IncenseEncounterResponse
-                                ? pokemon.EncounterId
-                                : encounterId,
-                            encounter is EncounterResponse || encounter is IncenseEncounterResponse
-                                ? pokemon.SpawnPointId
-                                : currentFortData.Id, pokeball, normalizedRecticleSize, spinModifier, hitPokemon);
+                    caughtPokemonResponse =
+                             await session.Client.Encounter.CatchPokemon(
+                                 encounter is EncounterResponse || encounter is IncenseEncounterResponse
+                                     ? pokemon.EncounterId
+                                     : encounterId,
+                                 encounter is EncounterResponse || encounter is IncenseEncounterResponse
+                                     ? pokemon.SpawnPointId
+                                     : currentFortData.Id, pokeball, normalizedRecticleSize, spinModifier, hitPokemon);
 
-                    var lat = encounter is EncounterResponse || encounter is IncenseEncounterResponse
-                                 ? pokemon.Latitude : currentFortData.Latitude;
-                    var lng = encounter is EncounterResponse || encounter is IncenseEncounterResponse
-                                ? pokemon.Longitude : currentFortData.Longitude;
+
                     var evt = new PokemonCaptureEvent()
                     {
                         Status = caughtPokemonResponse.Status,
-                        Latitude = lat,
-                        Longitude = lng
+                        Latitude = latitude,
+                        Longitude = longitude
                     };
 
                     lastThrow = caughtPokemonResponse.Status; // sets lastThrow status

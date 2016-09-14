@@ -250,9 +250,16 @@ namespace PoGo.NecroBot.CLI
             if (_session.LogicSettings.UseSnipeLocationServer || _session.LogicSettings.HumanWalkingSnipeUsePogoLocationFeeder)
                 SnipePokemonTask.AsyncStart(_session);
 
+            BotDataSocketClient.StartAsync(_session);
+            _session.EventDispatcher.EventReceived += evt => BotDataSocketClient.Listen(evt, _session); 
             settings.CheckProxy(_session.Translation);
 
             QuitEvent.WaitOne();
+        }
+
+        private static void EventDispatcher_EventReceived(IEvent evt)
+        {
+            throw new NotImplementedException();
         }
 
         private static void SaveLocationToDisk(double lat, double lng)
