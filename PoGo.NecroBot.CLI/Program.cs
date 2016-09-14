@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Threading;
+using PoGo.NecroBot.CLI.CommandLineUtility;
 using PoGo.NecroBot.CLI.Resources;
 using PoGo.NecroBot.Logic;
 using PoGo.NecroBot.Logic.Common;
@@ -27,6 +28,8 @@ namespace PoGo.NecroBot.CLI
     {
         private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
         private static string _subPath = "";
+        private static bool _enableJsonValidation = true;
+        private static bool _ignoreKillSwitch;
 
         private static readonly Uri StrKillSwitchUri =
             new Uri("https://raw.githubusercontent.com/Necrobot-Private/Necrobot2/master/KillSwitch.txt");
@@ -49,12 +52,42 @@ namespace PoGo.NecroBot.CLI
                 QuitEvent.Set();
                 eArgs.Cancel = true;
             };
-            if (args.Length > 0)
-                _subPath = args[0];
+
+            // Command line parsing
+            var commandLine = new Arguments(args);
+            // Look for specific arguments values
+            if (commandLine["subpath"] != null && commandLine["subpath"].Length > 0)
+            {
+                _subPath = commandLine["subpath"];
+            }
+            if (commandLine["jsonvalid"] != null && commandLine["jsonvalid"].Length > 0)
+            {
+                switch (commandLine["jsonvalid"])
+                {
+                    case "true":
+                        _enableJsonValidation = true;
+                        break;
+                    case "false":
+                        _enableJsonValidation = false;
+                        break;
+                }
+            }
+            if (commandLine["killswitch"] != null && commandLine["killswitch"].Length > 0)
+            {
+                switch (commandLine["killswitch"])
+                {
+                    case "true":
+                        _ignoreKillSwitch = false;
+                        break;
+                    case "false":
+                        _ignoreKillSwitch = true;
+                        break;
+                }
+            }
 
             Logger.SetLogger(new ConsoleLogger(LogLevel.Service), _subPath);
 
-            if (CheckKillSwitch())
+            if (!_ignoreKillSwitch && CheckKillSwitch())
                 return;
 
             var profilePath = Path.Combine(Directory.GetCurrentDirectory(), _subPath);
@@ -69,7 +102,7 @@ namespace PoGo.NecroBot.CLI
                 // Load the settings from the config file
                 // If the current program is not the latest version, ensure we skip saving the file after loading
                 // This is to prevent saving the file with new options at their default values so we can check for differences
-                settings = GlobalSettings.Load(_subPath, !VersionCheckState.IsLatest(), true);
+                settings = GlobalSettings.Load(_subPath, !VersionCheckState.IsLatest(), _enableJsonValidation);
             }
             else
             {
@@ -84,9 +117,9 @@ namespace PoGo.NecroBot.CLI
                 boolNeedsSetup = true;
             }
 
-            if (args.Length > 1)
+            if (commandLine["latlng"] != null && commandLine["latlng"].Length > 0)
             {
-                var crds = args[1].Split(',');
+                var crds = commandLine["latlng"].Split(',');
                 try
                 {
                     var lat = double.Parse(crds[0]);
@@ -175,7 +208,7 @@ namespace PoGo.NecroBot.CLI
                 }
                 else
                 {
-                    GlobalSettings.Load(_subPath, false, true);
+                    GlobalSettings.Load(_subPath, false, _enableJsonValidation);
 
                     Logger.Write("Press a Key to continue...",
                         LogLevel.Warning);
@@ -247,7 +280,8 @@ namespace PoGo.NecroBot.CLI
             if (settings.TelegramConfig.UseTelegramAPI)
                 _session.Telegram = new TelegramService(settings.TelegramConfig.TelegramAPIKey, _session);
 
-            if (_session.LogicSettings.UseSnipeLocationServer || _session.LogicSettings.HumanWalkingSnipeUsePogoLocationFeeder)
+            if (_session.LogicSettings.UseSnipeLocationServer ||
+                _session.LogicSettings.HumanWalkingSnipeUsePogoLocationFeeder)
                 SnipePokemonTask.AsyncStart(_session);
 
             settings.CheckProxy(_session.Translation);
@@ -306,6 +340,13 @@ namespace PoGo.NecroBot.CLI
                         {
                             Console.WriteLine(strReason + $"\n");
 
+                            if (PromptForKillSwitchOverride())
+                            {
+                                // Override
+                                Logger.Write("Overriding killswitch... you have been warned!", LogLevel.Warning);
+                                return false;
+                            }
+
                             Logger.Write("The bot will now close, please press enter to continue", LogLevel.Error);
                             Console.ReadLine();
                             return true;
@@ -327,6 +368,28 @@ namespace PoGo.NecroBot.CLI
         {
             Logger.Write("Exception caught, writing LogBuffer.", force: true);
             throw new Exception();
+        }
+
+        public static bool PromptForKillSwitchOverride()
+        {
+            Logger.Write("Do you want to override killswitch to bot at your own risk?", LogLevel.Warning);
+
+            while (true)
+            {
+                var strInput = Console.ReadLine().ToLower();
+
+                switch (strInput)
+                {
+                    case "y":
+                        // Override killswitch
+                        return true;
+                    case "n":
+                        return false;
+                    default:
+                        Logger.Write("Enter y or n", LogLevel.Error);
+                        continue;
+                }
+            }
         }
     }
 }
