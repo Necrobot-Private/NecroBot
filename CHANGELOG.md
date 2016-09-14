@@ -1,5 +1,46 @@
 # Change Log
 
+## [v0.9.9.2](https://github.com/Necrobot-Private/NecroBot/tree/v0.9.9.2) (2016-09-14)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.9.9.1...v0.9.9.2)
+
+**Closed issues:**
+
+- Please me run porgram [\#126](https://github.com/Necrobot-Private/NecroBot/issues/126)
+- v0.9.9.1 use API 0.37.0? [\#125](https://github.com/Necrobot-Private/NecroBot/issues/125)
+
+**Merged pull requests:**
+
+- Add killswitch override prompt.  Now you can override killswitch.  [\#128](https://github.com/Necrobot-Private/NecroBot/pull/128) ([jjskuld](https://github.com/jjskuld))
+
+## [v0.9.9.1](https://github.com/Necrobot-Private/NecroBot/tree/v0.9.9.1) (2016-09-13)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.9.9.0...v0.9.9.1)
+
+**Implemented enhancements:**
+
+- Updated to latest POGOProtos \(a01a480\) [\#124](https://github.com/Necrobot-Private/NecroBot/pull/124) ([NzV](https://github.com/NzV))
+- Msniper location service - ready [\#108](https://github.com/Necrobot-Private/NecroBot/pull/108) ([msx752](https://github.com/msx752))
+
+**Fixed bugs:**
+
+- Google Walk not working [\#111](https://github.com/Necrobot-Private/NecroBot/issues/111)
+
+## [v0.9.9.0](https://github.com/Necrobot-Private/NecroBot/tree/v0.9.9.0) (2016-09-13)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.9.8.9...v0.9.9.0)
+
+## [v0.9.8.9](https://github.com/Necrobot-Private/NecroBot/tree/v0.9.8.9) (2016-09-13)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.9.8.8...v0.9.8.9)
+
+**Implemented enhancements:**
+
+- Elevation enhancements - Add mapzen elevation service [\#99](https://github.com/Necrobot-Private/NecroBot/pull/99) ([jjskuld](https://github.com/jjskuld))
+- Navigation enhancements - Mapzen strategy added [\#98](https://github.com/Necrobot-Private/NecroBot/pull/98) ([jjskuld](https://github.com/jjskuld))
+- MSniper location service - beta ready [\#73](https://github.com/Necrobot-Private/NecroBot/pull/73) ([msx752](https://github.com/msx752))
+
+**Fixed bugs:**
+
+- Bot not collecting at pokestops. [\#90](https://github.com/Necrobot-Private/NecroBot/issues/90)
+- Fix \#90 - Bot not spin pokestop. [\#100](https://github.com/Necrobot-Private/NecroBot/pull/100) ([samuraitruong](https://github.com/samuraitruong))
+
 ## [v0.9.8.8](https://github.com/Necrobot-Private/NecroBot/tree/v0.9.8.8) (2016-09-12)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.9.8.7...v0.9.8.8)
 
