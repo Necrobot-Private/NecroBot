@@ -258,18 +258,37 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                         {
                             Logger.Write("Validating config.json...");
                             var jsonObj = JObject.Parse(input);
-                            IList<ValidationError> errors;
-                            var valid = jsonObj.IsValid(JsonSchema, out errors);
-                            if (!valid)
+                            IList<ValidationError> errors = null;
+                            bool valid;
+                            try
                             {
-                                foreach (var error in errors)
+                                valid = jsonObj.IsValid(JsonSchema, out errors);
+                            }
+                            catch (JSchemaException ex)
+                            {
+                                if (ex.Message.Contains("commercial licence") || ex.Message.Contains("free-quota"))
                                 {
                                     Logger.Write(
-                                        "config.json [Line: " + error.LineNumber + ", Position: " + error.LinePosition +
-                                        "]: " +
-                                        error.Path + " " +
-                                        error.Message, LogLevel.Error);
+                                        "config.json: " + ex.Message);
+                                    valid = false;
                                 }
+                                else
+                                {
+                                    throw;
+                                }
+                            }
+                            if (!valid)
+                            {
+                                if (errors != null)
+                                    foreach (var error in errors)
+                                    {
+                                        Logger.Write(
+                                            "config.json [Line: " + error.LineNumber + ", Position: " + error.LinePosition +
+                                            "]: " +
+                                            error.Path + " " +
+                                            error.Message, LogLevel.Error);
+                                    }
+
                                 Logger.Write(
                                     "Fix config.json and restart NecroBot or press a key to ignore and continue...",
                                     LogLevel.Warning);
