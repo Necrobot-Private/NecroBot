@@ -95,7 +95,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static async Task Execute(ISession session, CancellationToken cancellationToken, dynamic encounter, MapPokemon pokemon,
             FortData currentFortData = null, ulong encounterId = 0, bool sessionAllowTransfer =true)
         {
-            using (var block = new BlockableScope(session, Model.BotActions.Catching))
+            using (var block = new BlockableScope(session, Model.BotActions.Catch))
             {
                 if (!await block.WaitToRun()) return;
 
@@ -372,7 +372,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 } while (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchMissed ||
                          caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchEscape);
 
-                session.Actions.RemoveAll(x => x == Model.BotActions.Catching);
+                session.Actions.RemoveAll(x => x == Model.BotActions.Catch);
 
                 if (session.LogicSettings.TransferDuplicatePokemonOnCapture &&
                     session.LogicSettings.TransferDuplicatePokemon &&

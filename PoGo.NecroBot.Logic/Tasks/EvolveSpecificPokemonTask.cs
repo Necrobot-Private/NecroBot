@@ -14,22 +14,29 @@ namespace PoGo.NecroBot.Logic.Tasks
     {
         public static async Task Execute(ISession session, ulong pokemonId)
         {
-            var all = await session.Inventory.GetPokemons();
-            var pokemons = all.OrderByDescending(x => x.Cp).ThenBy(n => n.StaminaMax);
-            var pokemon = pokemons.FirstOrDefault(p => p.Id == pokemonId);
 
-            if (pokemon == null) return;
-
-            var evolveResponse = await session.Client.Inventory.EvolvePokemon(pokemon.Id);
-
-            session.EventDispatcher.Send(new PokemonEvolveEvent
+            using (var blocker = new BlockableScope(session, Model.BotActions.Envolve))
             {
-                Id = pokemon.PokemonId,
-                Exp = evolveResponse.ExperienceAwarded,
-                UniqueId = pokemon.Id,
-                Result = evolveResponse.Result
-            });
-            DelayingUtils.Delay(session.LogicSettings.EvolveActionDelay, 0);
+                if (!await blocker.WaitToRun()) return;
+
+
+                var all = await session.Inventory.GetPokemons();
+                var pokemons = all.OrderByDescending(x => x.Cp).ThenBy(n => n.StaminaMax);
+                var pokemon = pokemons.FirstOrDefault(p => p.Id == pokemonId);
+
+                if (pokemon == null) return;
+
+                var evolveResponse = await session.Client.Inventory.EvolvePokemon(pokemon.Id);
+
+                session.EventDispatcher.Send(new PokemonEvolveEvent
+                {
+                    Id = pokemon.PokemonId,
+                    Exp = evolveResponse.ExperienceAwarded,
+                    UniqueId = pokemon.Id,
+                    Result = evolveResponse.Result
+                });
+                DelayingUtils.Delay(session.LogicSettings.EvolveActionDelay, 0);
+            }
         }
     }
 }

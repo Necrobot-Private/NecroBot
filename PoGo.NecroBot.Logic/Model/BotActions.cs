@@ -10,9 +10,15 @@ namespace PoGo.NecroBot.Logic.Model
     {
         Idle,
         Walking,
-        Catching,
-        Envolving,
-        Transfering,
-        Upgrading,
+        Catch,
+        Envolve,
+        Transfer,
+        Upgrade,
+        RecycleItem,
+        Favorite,
+        Eggs,
+        ListItems,
+        PokemonSettings,
+        GetProfile,
     }
 }

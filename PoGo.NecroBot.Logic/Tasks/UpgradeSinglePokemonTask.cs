@@ -54,7 +54,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         }
         public static async Task Execute(ISession session, ulong pokemonId, bool isMax = false)
         {
-            using (var block = new BlockableScope(session, Model.BotActions.Upgrading))
+            using (var block = new BlockableScope(session, Model.BotActions.Upgrade))
             {
                 if (!await block.WaitToRun()) return;
                 await session.Inventory.RefreshCachedInventory();
@@ -65,7 +65,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 if (pokemonToUpgrade == null)
                 {
-                    session.Actions.RemoveAll(x => x == Model.BotActions.Upgrading);
+                    session.Actions.RemoveAll(x => x == Model.BotActions.Upgrade);
                     return;
 
                 }
