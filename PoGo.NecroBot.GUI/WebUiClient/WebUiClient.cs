@@ -30,16 +30,20 @@ namespace PoGo.NecroBot.GUI.WebUiClient
         [JsonProperty(Required = Required.Always, DefaultValueHandling = DefaultValueHandling.Ignore, Order = 4)]
         public readonly string HtlmDefaultFilePath;
 
+        [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Ignore, Order = 5)]
+        public readonly string Version;
+
         private DateTime _lastCommitCheckDateTime = DateTime.Now;
 
         private string _lastCommitCheckRef = "";
 
-        public WebUiClient(string owner, string repoName, string htlmRootPath, string htlmDefaultFilePath)
+        public WebUiClient(string owner, string repoName, string htlmRootPath, string htlmDefaultFilePath, string version)
         {
             RepoOwner = owner;
             RepoName = repoName;
             HtlmRootPath = htlmRootPath;
             HtlmDefaultFilePath = htlmDefaultFilePath;
+            Version = version;
         }
 
         [JsonIgnore]
@@ -48,7 +52,7 @@ namespace PoGo.NecroBot.GUI.WebUiClient
         public bool IsInstalled()
         {
             var indexHtmlPath = Path.Combine(_basePath,
-                RepoName + "-" + RepoOwner + Path.DirectorySeparatorChar + "index.html");
+                RepoName + "-" + RepoOwner + Path.DirectorySeparatorChar + HtlmDefaultFilePath);
             return File.Exists(indexHtmlPath);
         }
 
@@ -56,6 +60,11 @@ namespace PoGo.NecroBot.GUI.WebUiClient
         {
             if (!IsInstalled())
                 return false;
+
+            // If we specified a specific version, then it is always up-to-date.
+            if (Version != "master")
+                return true;
+
             var referenceFile = Path.Combine(_basePath,
                 RepoName + "-" + RepoOwner + Path.DirectorySeparatorChar + RepoName + ".reference");
             if (!File.Exists(referenceFile))
@@ -83,7 +92,7 @@ namespace PoGo.NecroBot.GUI.WebUiClient
             var extTmpPath = Path.Combine(tmpPath, RepoName + "-" + RepoOwner);
             var finalPath = Path.Combine(_basePath, RepoName + "-" + RepoOwner);
             var tmpFinalPath = Path.Combine(extTmpPath,
-                RepoName + "-master" + Path.DirectorySeparatorChar + HtlmRootPath);
+                RepoName + "-" + Version + Path.DirectorySeparatorChar + HtlmRootPath);
             var referenceFile = Path.Combine(finalPath, RepoName + ".reference");
             try
             {
@@ -94,7 +103,7 @@ namespace PoGo.NecroBot.GUI.WebUiClient
                 if (File.Exists(zipPath))
                     File.Delete(zipPath);
 
-                var url = "https://github.com/" + RepoOwner + "/" + RepoName + "/archive/master.zip";
+                var url = $"https://github.com/{RepoOwner}/{RepoName}/archive/{Version}.zip";
 
                 const int bufferSize = 2048;
                 var bufferBytes = new byte[bufferSize];
