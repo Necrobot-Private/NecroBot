@@ -194,10 +194,10 @@ namespace PoGo.NecroBot.CLI
             }
 
             _session = new Session(new ClientSettings(settings), logicSettings, translation);
+            Logger.SetLoggerContext(_session);
 
             if (boolNeedsSetup)
             {
-                Logger.SetLoggerContext(_session);
                 if (GlobalSettings.PromptForSetup(_session.Translation))
                 {
                     _session = GlobalSettings.SetupSettings(_session, settings, configFile);
@@ -218,6 +218,12 @@ namespace PoGo.NecroBot.CLI
             }
 
             ProgressBar.Start("NecroBot2 is starting up", 10);
+
+            if (settings.WebsocketsConfig.UseWebsocket)
+            {
+                var websocket = new WebSocketInterface(settings.WebsocketsConfig.WebSocketPort, _session);
+                _session.EventDispatcher.EventReceived += evt => websocket.Listen(evt, _session);
+            }
 
             _session.Client.ApiFailure = new ApiFailureStrategy(_session);
             ProgressBar.Fill(20);
@@ -244,19 +250,12 @@ namespace PoGo.NecroBot.CLI
             _session.EventDispatcher.EventReceived += evt => listener.Listen(evt, _session);
             _session.EventDispatcher.EventReceived += evt => aggregator.Listen(evt, _session);
             _session.EventDispatcher.EventReceived += evt => snipeEventListener.Listen(evt, _session);
-
-            if (settings.WebsocketsConfig.UseWebsocket)
-            {
-                var websocket = new WebSocketInterface(settings.WebsocketsConfig.WebSocketPort, _session);
-                _session.EventDispatcher.EventReceived += evt => websocket.Listen(evt, _session);
-            }
-
+            
             ProgressBar.Fill(70);
 
             machine.SetFailureState(new LoginState());
             ProgressBar.Fill(80);
 
-            Logger.SetLoggerContext(_session);
             ProgressBar.Fill(90);
 
             _session.Navigation.WalkStrategy.UpdatePositionEvent +=
@@ -338,7 +337,7 @@ namespace PoGo.NecroBot.CLI
 
                         if (strStatus.ToLower().Contains("disable"))
                         {
-                            Console.WriteLine(strReason + $"\n");
+                            Logger.Write(strReason + $"\n", LogLevel.Warning);
 
                             if (PromptForKillSwitchOverride())
                             {

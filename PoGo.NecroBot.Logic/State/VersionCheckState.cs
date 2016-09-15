@@ -95,7 +95,7 @@ namespace PoGo.NecroBot.Logic.State
             var tempPath = Path.Combine(baseDir, "tmp");
             var extractedDir = Path.Combine(tempPath, "NecroBot2.Console");
             var destinationDir = baseDir + Path.DirectorySeparatorChar;
-            Console.WriteLine(downloadLink);
+            Logger.Write(downloadLink, LogLevel.Info);
 
             if (!DownloadFile(downloadLink, downloadFilePath))
                 return new LoginState();
@@ -164,7 +164,7 @@ namespace PoGo.NecroBot.Logic.State
                 try
                 {
                     client.DownloadFile(url, dest);
-                    Console.WriteLine(dest);
+                    Logger.Write(dest, LogLevel.Info);
                 }
                 catch
                 {
@@ -275,7 +275,7 @@ namespace PoGo.NecroBot.Logic.State
 
             if( lstNewOptions != null && lstNewOptions.Count > 0 )
             {
-                Console.Write( "\n" );
+                Logger.Write( "\n", LogLevel.New);
                 Logger.Write( "### New Options found ###", LogLevel.New );
 
                 foreach( JProperty prop in lstNewOptions )
@@ -341,7 +341,7 @@ namespace PoGo.NecroBot.Logic.State
             }
             catch( Exception error )
             {
-                Console.WriteLine( error.Message );
+                Logger.Write( error.Message, LogLevel.Error );
             }
 
             return null;

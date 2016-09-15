@@ -70,7 +70,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     if (session.Stats.PokeStopTimestamps[i] < TSminus24h)
                     {
-                        Console.WriteLine("Removing stored Pokestop timestamp {0}", session.Stats.PokeStopTimestamps[i]);
+                        Logger.Write($"Removing stored Pokestop timestamp {session.Stats.PokeStopTimestamps[i]}", LogLevel.Info);
                         session.Stats.PokeStopTimestamps.Remove(session.Stats.PokeStopTimestamps[i]);
                     }
                 }
