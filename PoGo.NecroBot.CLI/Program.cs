@@ -1,4 +1,4 @@
-﻿#region using directives
+#region using directives
 
 using System;
 using System.Diagnostics;
@@ -33,6 +33,8 @@ namespace PoGo.NecroBot.CLI
 
         private static readonly Uri StrKillSwitchUri =
             new Uri("https://raw.githubusercontent.com/Necrobot-Private/Necrobot2/master/KillSwitch.txt");
+        private static readonly Uri StrMasterKillSwitchUri =
+            new Uri("https://raw.githubusercontent.com/Silph-Road/NecroBot/master/PoGo.NecroBot.Logic/MKS.txt");
 
         private static Session _session;
 
@@ -85,10 +87,14 @@ namespace PoGo.NecroBot.CLI
                 }
             }
 
-            Logger.SetLogger(new ConsoleLogger(LogLevel.Service), _subPath);
 
-            if (!_ignoreKillSwitch && CheckKillSwitch())
+
+        Logger.SetLogger(new ConsoleLogger(LogLevel.Service), _subPath);
+
+            if (!_ignoreKillSwitch && CheckKillSwitch() || CheckMKillSwitch())
                 return;
+
+
 
             var profilePath = Path.Combine(Directory.GetCurrentDirectory(), _subPath);
             var profileConfigPath = Path.Combine(profilePath, "config");
@@ -317,6 +323,49 @@ namespace PoGo.NecroBot.CLI
                 File.WriteAllLines(path, fileContent.ToArray());
         }
 
+        private static bool CheckMKillSwitch()
+        {
+            using (var wC = new WebClient())
+            {
+                try
+                {
+                    var strResponse1 = WebClientExtensions.DownloadString(wC, StrMasterKillSwitchUri);
+
+                    if (strResponse1 == null)
+                        return true;
+
+                    var strSplit1 = strResponse1.Split(';');
+
+                        if (strSplit1.Length > 1)
+                        {
+                            var strStatus1 = strSplit1[0];
+                            var strReason1 = strSplit1[1];
+                            var strExitMsg = strSplit1[2];
+
+
+                            if (strStatus1.ToLower().Contains("disable"))
+                            {
+                                Logger.Write(strReason1 + $"\n", LogLevel.Warning);
+
+                                Logger.Write(strExitMsg + $"\n" + "Please press enter to continue", LogLevel.Error);
+                                Console.ReadLine();
+                                return true;
+                            }
+                            else
+                                return false;
+                        }
+                        else
+                            return false;
+                }   
+                catch (WebException)
+                {
+                    // ignored
+                }
+            }
+
+            return false;
+        }
+
         private static bool CheckKillSwitch()
         {
             using (var wC = new WebClient())
@@ -362,6 +411,7 @@ namespace PoGo.NecroBot.CLI
 
             return false;
         }
+
 
         private static void UnhandledExceptionEventHandler(object obj, UnhandledExceptionEventArgs args)
         {
