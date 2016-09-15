@@ -14,10 +14,10 @@ namespace PoGo.NecroBot.Logic.Utils
 {
     public static class LocationUtils
     {
-        public static async Task<PlayerUpdateResponse> UpdatePlayerLocationWithAltitude(ISession session, GeoCoordinate position)
+        public static async Task<PlayerUpdateResponse> UpdatePlayerLocationWithAltitude(ISession session, GeoCoordinate position, float speed)
         {
             double altitude = session.ElevationService.GetElevation(position.Latitude, position.Longitude);
-            return await session.Client.Player.UpdatePlayerLocation(position.Latitude, position.Longitude, altitude);
+            return await session.Client.Player.UpdatePlayerLocation(position.Latitude, position.Longitude, altitude, speed);
         }
 
         public static double CalculateDistanceInMeters(double sourceLat, double sourceLng, double destLat,

@@ -41,7 +41,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
                 var waypoint = LocationUtils.CreateWaypoint(curLocation, nextWaypointDistance, nextWaypointBearing);
                 var sentTime = DateTime.Now;
 
-                var result = await LocationUtils.UpdatePlayerLocationWithAltitude(session, waypoint);
+                var result = await LocationUtils.UpdatePlayerLocationWithAltitude(session, waypoint, 0); // We are setting speed to 0, so it will be randomly generated speed.
                 UpdatePositionEvent?.Invoke(waypoint.Latitude, waypoint.Longitude);
 
                 do
@@ -64,7 +64,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
                     nextWaypointBearing = LocationUtils.DegreeBearing(curLocation, targetLocation);
                     waypoint = LocationUtils.CreateWaypoint(curLocation, nextWaypointDistance, nextWaypointBearing);
                     sentTime = DateTime.Now;
-                    result = await LocationUtils.UpdatePlayerLocationWithAltitude(session, waypoint);
+                    result = await LocationUtils.UpdatePlayerLocationWithAltitude(session, waypoint, 0);  // We are setting speed to 0, so it will be randomly generated speed.
                     UpdatePositionEvent?.Invoke(waypoint.Latitude, waypoint.Longitude);
 
 
@@ -75,7 +75,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
             }
             else
             {
-                var result = await LocationUtils.UpdatePlayerLocationWithAltitude(session, targetLocation);
+                var result = await LocationUtils.UpdatePlayerLocationWithAltitude(session, targetLocation, 0);  // We are setting speed to 0, so it will be randomly generated speed.
                 UpdatePositionEvent?.Invoke(targetLocation.Latitude, targetLocation.Longitude);
                 if (functionExecutedWhileWalking != null)
                     await functionExecutedWhileWalking(); // look for pokemon

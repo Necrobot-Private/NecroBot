@@ -113,7 +113,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
 
                 var previousLocation = currentLocation; //store the current location for comparison and correction purposes
                 var requestSendDateTime = DateTime.Now;
-                result = await LocationUtils.UpdatePlayerLocationWithAltitude(session, waypoint);
+                result = await LocationUtils.UpdatePlayerLocationWithAltitude(session, waypoint, (float)speedInMetersPerSecond);
 
                 var realDistanceToTarget = LocationUtils.CalculateDistanceInMeters(currentLocation, targetLocation);
                 if (realDistanceToTarget < 30)
@@ -166,7 +166,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
 
                     previousLocation = currentLocation; //store the current location for comparison and correction purposes
                     requestSendDateTime = DateTime.Now;
-                    result = await LocationUtils.UpdatePlayerLocationWithAltitude(session, waypoint);
+                    result = await LocationUtils.UpdatePlayerLocationWithAltitude(session, waypoint, (float)speedInMetersPerSecond);
 
                     UpdatePositionEvent?.Invoke(waypoint.Latitude, waypoint.Longitude);
 
