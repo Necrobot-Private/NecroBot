@@ -18,6 +18,8 @@ namespace PoGo.NecroBot.CLI
     [SuppressMessage("ReSharper", "UnusedParameter.Local")]
     internal class ConsoleEventListener
     {
+        private static readonly DateTime _initSessionDateTime = DateTime.Now;
+
         private static void HandleEvent(ProfileEvent profileEvent, ISession session)
         {
             Logger.Write(session.Translation.GetTranslation(TranslationString.EventProfileLogin,
@@ -363,6 +365,12 @@ namespace PoGo.NecroBot.CLI
                     humanWalkingEvent.OldWalkingSpeed,
                     humanWalkingEvent.CurrentWalkingSpeed),
                     LogLevel.Info, ConsoleColor.DarkCyan);
+            if ((DateTime.Now - _initSessionDateTime).TotalSeconds >= 1200)
+            {
+                Logger.Write("Bot runs for 20 minutes, Closing Bot... BYE!", LogLevel.Info, force: true);
+                System.Threading.Thread.Sleep(2000);
+                Environment.Exit(0);
+            }
         }
 
         private static void HandleEvent(KillSwitchEvent killSwitchEvent, ISession session)
