@@ -23,5 +23,6 @@ namespace PoGo.NecroBot.Logic.Logging
         /// <param name="color">Optional. Default automatic color.</param>
         void Write(string message, LogLevel level = LogLevel.Info, ConsoleColor color = ConsoleColor.Black);
         void lineSelect(int lineChar = 0, int linesUp = 1);
+        void TurnOffLogBuffering();
     }
 }

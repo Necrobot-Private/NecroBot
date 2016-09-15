@@ -6,6 +6,7 @@ using PoGo.NecroBot.CLI.Models;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.State;
+using System.Collections.Concurrent;
 
 #endregion
 
@@ -18,6 +19,14 @@ namespace PoGo.NecroBot.CLI
     {
         private readonly LogLevel _maxLogLevel;
         private ISession _session;
+        private ConcurrentQueue<LogEvent> _messageQueue = new ConcurrentQueue<LogEvent>();
+        private bool isBuffering = true;
+
+        public void TurnOffLogBuffering()
+        {
+            if (isBuffering)
+                isBuffering = false;
+        }
 
         /// <summary>
         ///     To create a ConsoleLogger, we must define a maximum log level.
@@ -139,14 +148,31 @@ namespace PoGo.NecroBot.CLI
                     finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Error}) {message}";
                     break;
             }
-
+            
             Console.WriteLine(finalMessage);
-            //fix of null reference exception during (e.g.) the first start of the bot (session for logger not initialized in time)
-            _session?.EventDispatcher.Send(new LogEvent
+
+            // Add message to the queue
+            _messageQueue.Enqueue(new LogEvent
             {
                 Message = finalMessage,
                 Color = GetHexColor(Console.ForegroundColor)
             });
+
+            // If session is null during (e.g.) the first start of the bot (session for logger not initialized in time),
+            // then buffer the messages.
+            if (_session != null && _session.EventDispatcher != null)
+            {
+                // We cannot send out log events to the GUI until it has connected via websocket. So buffer all 
+                // messages until GUI has connected.
+                if (!isBuffering)
+                {
+                    LogEvent logEventToSend;
+                    while (_messageQueue.TryDequeue(out logEventToSend))
+                    {
+                        _session?.EventDispatcher.Send(logEventToSend);
+                    }
+                }
+            }
         }
 
         public void lineSelect(int lineChar = 0, int linesUp = 1)

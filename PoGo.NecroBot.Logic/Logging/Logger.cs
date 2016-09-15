@@ -18,6 +18,12 @@ namespace PoGo.NecroBot.Logic.Logging
         private static string _lastLogMessage;
         private static bool _isGui;
 
+        public static void TurnOffLogBuffering()
+        {
+            if (_logger != null)
+                _logger.TurnOffLogBuffering();
+        }
+
         private static void Log(string message, bool force = false)
         {
             lock (LogbufferList)
