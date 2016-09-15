@@ -70,7 +70,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     if (session.Stats.PokeStopTimestamps[i] < TSminus24h)
                     {
-                        Console.WriteLine("Removing stored Pokestop timestamp {0}", session.Stats.PokeStopTimestamps[i]);
+                        Logger.Write($"Removing stored Pokestop timestamp {session.Stats.PokeStopTimestamps[i]}", LogLevel.Info);
                         session.Stats.PokeStopTimestamps.Remove(session.Stats.PokeStopTimestamps[i]);
                     }
                 }
@@ -164,8 +164,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                 var eggWalker = new EggWalker(1000, session);
 
                 cancellationToken.ThrowIfCancellationRequested();
-
-                session.EventDispatcher.Send(new FortTargetEvent { Name = fortInfo.Name, Distance = distance, Route = session.Navigation.GetStrategy(session.LogicSettings).GetWalkStrategyId() });
 
                 // Always set the fort info in base walk strategy.
                 BaseWalkStrategy.FortInfo = fortInfo;

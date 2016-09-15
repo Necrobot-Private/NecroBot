@@ -1,4 +1,4 @@
-﻿#region using directives
+#region using directives
 
 using System;
 using System.Diagnostics;
@@ -33,6 +33,8 @@ namespace PoGo.NecroBot.CLI
 
         private static readonly Uri StrKillSwitchUri =
             new Uri("https://raw.githubusercontent.com/Necrobot-Private/Necrobot2/master/KillSwitch.txt");
+        private static readonly Uri StrMasterKillSwitchUri =
+            new Uri("https://raw.githubusercontent.com/Silph-Road/NecroBot/master/PoGo.NecroBot.Logic/MKS.txt");
 
         private static Session _session;
 
@@ -85,10 +87,14 @@ namespace PoGo.NecroBot.CLI
                 }
             }
 
-            Logger.SetLogger(new ConsoleLogger(LogLevel.Service), _subPath);
 
-            if (!_ignoreKillSwitch && CheckKillSwitch())
+
+        Logger.SetLogger(new ConsoleLogger(LogLevel.Service), _subPath);
+
+            if (!_ignoreKillSwitch && CheckKillSwitch() || CheckMKillSwitch())
                 return;
+
+
 
             var profilePath = Path.Combine(Directory.GetCurrentDirectory(), _subPath);
             var profileConfigPath = Path.Combine(profilePath, "config");
@@ -194,10 +200,10 @@ namespace PoGo.NecroBot.CLI
             }
 
             _session = new Session(new ClientSettings(settings), logicSettings, translation);
+            Logger.SetLoggerContext(_session);
 
             if (boolNeedsSetup)
             {
-                Logger.SetLoggerContext(_session);
                 if (GlobalSettings.PromptForSetup(_session.Translation))
                 {
                     _session = GlobalSettings.SetupSettings(_session, settings, configFile);
@@ -218,6 +224,12 @@ namespace PoGo.NecroBot.CLI
             }
 
             ProgressBar.Start("NecroBot2 is starting up", 10);
+
+            if (settings.WebsocketsConfig.UseWebsocket)
+            {
+                var websocket = new WebSocketInterface(settings.WebsocketsConfig.WebSocketPort, _session);
+                _session.EventDispatcher.EventReceived += evt => websocket.Listen(evt, _session);
+            }
 
             _session.Client.ApiFailure = new ApiFailureStrategy(_session);
             ProgressBar.Fill(20);
@@ -244,19 +256,12 @@ namespace PoGo.NecroBot.CLI
             _session.EventDispatcher.EventReceived += evt => listener.Listen(evt, _session);
             _session.EventDispatcher.EventReceived += evt => aggregator.Listen(evt, _session);
             _session.EventDispatcher.EventReceived += evt => snipeEventListener.Listen(evt, _session);
-
-            if (settings.WebsocketsConfig.UseWebsocket)
-            {
-                var websocket = new WebSocketInterface(settings.WebsocketsConfig.WebSocketPort, _session);
-                _session.EventDispatcher.EventReceived += evt => websocket.Listen(evt, _session);
-            }
-
+            
             ProgressBar.Fill(70);
 
             machine.SetFailureState(new LoginState());
             ProgressBar.Fill(80);
 
-            Logger.SetLoggerContext(_session);
             ProgressBar.Fill(90);
 
             _session.Navigation.WalkStrategy.UpdatePositionEvent +=
@@ -318,6 +323,49 @@ namespace PoGo.NecroBot.CLI
                 File.WriteAllLines(path, fileContent.ToArray());
         }
 
+        private static bool CheckMKillSwitch()
+        {
+            using (var wC = new WebClient())
+            {
+                try
+                {
+                    var strResponse1 = WebClientExtensions.DownloadString(wC, StrMasterKillSwitchUri);
+
+                    if (strResponse1 == null)
+                        return true;
+
+                    var strSplit1 = strResponse1.Split(';');
+
+                        if (strSplit1.Length > 1)
+                        {
+                            var strStatus1 = strSplit1[0];
+                            var strReason1 = strSplit1[1];
+                            var strExitMsg = strSplit1[2];
+
+
+                            if (strStatus1.ToLower().Contains("disable"))
+                            {
+                                Logger.Write(strReason1 + $"\n", LogLevel.Warning);
+
+                                Logger.Write(strExitMsg + $"\n" + "Please press enter to continue", LogLevel.Error);
+                                Console.ReadLine();
+                                return true;
+                            }
+                            else
+                                return false;
+                        }
+                        else
+                            return false;
+                }   
+                catch (WebException)
+                {
+                    // ignored
+                }
+            }
+
+            return false;
+        }
+
         private static bool CheckKillSwitch()
         {
             using (var wC = new WebClient())
@@ -338,7 +386,7 @@ namespace PoGo.NecroBot.CLI
 
                         if (strStatus.ToLower().Contains("disable"))
                         {
-                            Console.WriteLine(strReason + $"\n");
+                            Logger.Write(strReason + $"\n", LogLevel.Warning);
 
                             if (PromptForKillSwitchOverride())
                             {
@@ -363,6 +411,7 @@ namespace PoGo.NecroBot.CLI
 
             return false;
         }
+
 
         private static void UnhandledExceptionEventHandler(object obj, UnhandledExceptionEventArgs args)
         {
