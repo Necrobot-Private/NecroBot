@@ -248,7 +248,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var nearestStop = session.VisibleForts.OrderBy(i =>
+            var nearestStop = session.Forts.OrderBy(i =>
                 LocationUtils.CalculateDistanceInMeters(session.Client.CurrentLatitude,
                     session.Client.CurrentLongitude, i.Latitude, i.Longitude)).FirstOrDefault();
 
@@ -259,13 +259,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     await Task.Delay(3000, cancellationToken);
                     var nearbyPokeStops = await UseNearbyPokestopsTask.UpdateFortsData(session);
-                    var notexists = nearbyPokeStops.Where(p => !session.VisibleForts.Exists(x => x.Id == p.Id)).ToList();
-                    session.AddVisibleForts(notexists);
-                    session.EventDispatcher.Send(new PokeStopListEvent { Forts = notexists });
                     session.EventDispatcher.Send(new HumanWalkSnipeEvent
                     {
                         Type = HumanWalkSnipeEventTypes.PokestopUpdated,
-                        Pokestops = notexists,
+                        Pokestops = nearbyPokeStops,
                         NearestDistance = walkedDistance
                     });
                 }
