@@ -1,14 +1,33 @@
 # Change Log
 
-## [v0.9.9.2](https://github.com/Necrobot-Private/NecroBot/tree/v0.9.9.2) (2016-09-14)
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.9.9.1...v0.9.9.2)
+## [v0.9.9.3](https://github.com/Necrobot-Private/NecroBot/tree/v0.9.9.3) (2016-09-14)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.9.9.2...v0.9.9.3)
+
+**Implemented enhancements:**
+
+- \(Request\) Mass evolving settings \(Pidgey Hoarding \(\(EXP Trick\)\) [\#41](https://github.com/Necrobot-Private/NecroBot/issues/41)
+- Add CommandLine Args [\#134](https://github.com/Necrobot-Private/NecroBot/pull/134) ([NzV](https://github.com/NzV))
+
+**Fixed bugs:**
+
+- Json Schema limit error [\#133](https://github.com/Necrobot-Private/NecroBot/issues/133)
 
 **Closed issues:**
 
-- Please me run porgram [\#126](https://github.com/Necrobot-Private/NecroBot/issues/126)
-- v0.9.9.1 use API 0.37.0? [\#125](https://github.com/Necrobot-Private/NecroBot/issues/125)
+- Can't see the scroll bar [\#140](https://github.com/Necrobot-Private/NecroBot/issues/140)
+- help see in pictrue [\#139](https://github.com/Necrobot-Private/NecroBot/issues/139)
+- what key..?? please [\#138](https://github.com/Necrobot-Private/NecroBot/issues/138)
 
 **Merged pull requests:**
+
+- GUI enhancements and bug fixes - 1\) Add option to choose a release ve… [\#145](https://github.com/Necrobot-Private/NecroBot/pull/145) ([jjskuld](https://github.com/jjskuld))
+- notify flood fixed [\#144](https://github.com/Necrobot-Private/NecroBot/pull/144) ([msx752](https://github.com/msx752))
+- message flood fixed [\#135](https://github.com/Necrobot-Private/NecroBot/pull/135) ([msx752](https://github.com/msx752))
+
+## [v0.9.9.2](https://github.com/Necrobot-Private/NecroBot/tree/v0.9.9.2) (2016-09-14)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.9.9.1...v0.9.9.2)
+
+**Implemented enhancements:**
 
 - Add killswitch override prompt.  Now you can override killswitch.  [\#128](https://github.com/Necrobot-Private/NecroBot/pull/128) ([jjskuld](https://github.com/jjskuld))
 
