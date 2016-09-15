@@ -122,7 +122,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             else
             {
                 string message = "No action. No FREE slots in GYM " + fortDetails.GymState.Memberships.Count() + "/" + maxCount;
-                Logger.Write(message, LogLevel.Gym, ConsoleColor.LightCyan);
+                Logger.Write(message, LogLevel.Gym, ConsoleColor.Silver);
             }
         }
 
