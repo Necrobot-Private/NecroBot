@@ -382,7 +382,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         }
 
-        private static async Task<ItemId> GetBestBall(ISession session, dynamic encounter, float probability)
+        public static async Task<ItemId> GetBestBall(ISession session, dynamic encounter, float probability)
         {
             var pokemonCp = encounter is EncounterResponse
                 ? encounter.WildPokemon?.PokemonData?.Cp
