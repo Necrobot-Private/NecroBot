@@ -165,8 +165,6 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                session.EventDispatcher.Send(new FortTargetEvent { Name = fortInfo.Name, Distance = distance, Route = session.Navigation.GetStrategy(session.LogicSettings).GetWalkStrategyId() });
-
                 // Always set the fort info in base walk strategy.
                 BaseWalkStrategy.FortInfo = fortInfo;
 
