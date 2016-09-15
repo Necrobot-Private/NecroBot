@@ -19,6 +19,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.PoGoUtils;
+using POGOProtos.Inventory.Item;
 using WebSocket4Net;
 
 namespace PoGo.NecroBot.Logic.Tasks
@@ -132,18 +133,57 @@ namespace PoGo.NecroBot.Logic.Tasks
             normalizedRecticleSize = Math.Round(normalizedRecticleSize, 2);
 
             CatchPokemonResponse caughtPokemonResponse;
+            double lat = session.Client.CurrentLatitude;
+            double lon = session.Client.CurrentLongitude;
             do
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
+                await LocationUtils.UpdatePlayerLocationWithAltitude(session,
+                    new GeoCoordinate(encounterId.Latitude, encounterId.Longitude, session.Client.CurrentAltitude));
+
+                await Task.Delay(1000);
+
+                await session.Client.Encounter.EncounterPokemon(encounterId.EncounterId, encounterId.SpawnPointId);
+
+                await Task.Delay(1000);
+
+                await LocationUtils.UpdatePlayerLocationWithAltitude(session,
+                    new GeoCoordinate(lat, lon, session.Client.CurrentAltitude));
+
                 caughtPokemonResponse = await
-              session.Client.Encounter.CatchPokemon(encounterId.EncounterId, encounterId.SpawnPointId,
-                  POGOProtos.Inventory.Item.ItemId.ItemPokeBall, normalizedRecticleSize, spinModifier, true);
+              session.Client.Encounter.CatchPokemon(encounterId.EncounterId, encounterId.SpawnPointId, GetRandomPokeBall(session).Result
+                  , normalizedRecticleSize, spinModifier, true);
 
                 Logger.Write($"{caughtPokemonResponse.Status.ToString()}  {encounterId.PokemonId.ToString()}  {encounterId.Iv}%", LogLevel.Service, caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess ? ConsoleColor.Green : ConsoleColor.Red);
+
                 await Task.Delay(1000, cancellationToken);
             } while (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchMissed);
+
         }
+
+        static async Task<ItemId> GetRandomPokeBall(ISession session)
+        {
+            List<ItemId> random = new List<ItemId>();
+            var pokeBallsCount = await session.Inventory.GetItemAmountByType(ItemId.ItemPokeBall);
+            var greatBallsCount = await session.Inventory.GetItemAmountByType(ItemId.ItemGreatBall);
+            var ultraBallsCount = await session.Inventory.GetItemAmountByType(ItemId.ItemUltraBall);
+            var masterBallsCount = await session.Inventory.GetItemAmountByType(ItemId.ItemMasterBall);
+
+            if (pokeBallsCount > 0)
+                random.Add(ItemId.ItemPokeBall);
+            if (greatBallsCount > 0)
+                random.Add(ItemId.ItemGreatBall);
+            if (ultraBallsCount > 0)
+                random.Add(ItemId.ItemUltraBall);
+            if (masterBallsCount > 0 && !session.LogicSettings.PokemonToUseMasterball.Any())
+                random.Add(ItemId.ItemMasterBall);
+
+            Random rn = new Random();
+
+            return random[rn.Next(0, random.Count)];
+        }
+
 
         public static List<EncounterInfo> FindNew(List<EncounterInfo> received)
         {
@@ -201,7 +241,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 catch (Exception ex)
                 {
                     TimeSpan ts = DateTime.Now - lastNotify;
-                    if (ts.TotalMinutes>5)
+                    if (ts.TotalMinutes > 5)
                     {
                         Logger.Write(ex.Message + "  (may be offline)", LogLevel.Service, ConsoleColor.Red);
                     }
@@ -228,9 +268,11 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static void RefreshLocationQueue()
         {
-            LocationQueue = LocationQueue
+            var pkmns = LocationQueue
                 .Where(p => TimeStampToDateTime(p.LastModifiedTimestampMs + p.TimeTillHiddenMs) > DateTime.Now)
                 .ToList();
+            LocationQueue.Clear();
+            LocationQueue.AddRange(pkmns);
         }
 
         private static void Msocket_MessageReceived(object sender, MessageReceivedEventArgs e)
@@ -331,9 +373,11 @@ namespace PoGo.NecroBot.Logic.Tasks
         }
         private static void RefreshReceivedPokemons()
         {
-            ReceivedPokemons = ReceivedPokemons
+            var pkmns = ReceivedPokemons
                 .Where(p => TimeStampToDateTime(p.LastModifiedTimestampMs + p.TimeTillHiddenMs) > DateTime.Now)
                 .ToList();
+            ReceivedPokemons.Clear();
+            ReceivedPokemons.AddRange(pkmns);
         }
         private static void SendToMSniperServer(string message)
         {
