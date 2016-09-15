@@ -701,7 +701,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         private static void SetupUserAccount(ITranslation translator, GlobalSettings settings)
         {
-            Console.WriteLine("");
+            Logger.Write("", LogLevel.Info);
             Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupUsernamePrompt), LogLevel.None);
             var strInput = Console.ReadLine();
 
@@ -711,7 +711,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 settings.Auth.AuthConfig.PtcUsername = strInput;
             Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupUsernameConfirm, strInput));
 
-            Console.WriteLine("");
+            Logger.Write("", LogLevel.Info);
             Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupPasswordPrompt), LogLevel.None);
             strInput = Console.ReadLine();
 
