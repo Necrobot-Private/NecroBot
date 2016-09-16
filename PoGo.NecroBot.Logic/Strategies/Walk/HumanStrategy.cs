@@ -45,7 +45,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
             var requestSendDateTime = DateTime.Now;
             var requestVariantDateTime = DateTime.Now;
 
-            var result = await LocationUtils.UpdatePlayerLocationWithAltitude(session, waypoint);
+            var result = await LocationUtils.UpdatePlayerLocationWithAltitude(session, waypoint, (float)speedInMetersPerSecond);
 
             double SpeedVariantSec = rw.Next(1000, 10000);
             base.DoUpdatePositionEvent(waypoint.Latitude, waypoint.Longitude);
@@ -77,7 +77,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
                 waypoint = LocationUtils.CreateWaypoint(sourceLocation, nextWaypointDistance, nextWaypointBearing);
 
                 requestSendDateTime = DateTime.Now;
-                result = await LocationUtils.UpdatePlayerLocationWithAltitude(session, waypoint);
+                result = await LocationUtils.UpdatePlayerLocationWithAltitude(session, waypoint, (float)speedInMetersPerSecond);
 
                 base.DoUpdatePositionEvent(waypoint.Latitude, waypoint.Longitude);
 

@@ -243,6 +243,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BotDataSocketClient.cs" />
+    <Compile Include="CommandLineUtility\Arguments.cs" />
     <Compile Include="SniperEventListener.cs" />
     <Compile Include="ConsoleEventListener.cs" />
     <Compile Include="ConsoleLogger.cs" />

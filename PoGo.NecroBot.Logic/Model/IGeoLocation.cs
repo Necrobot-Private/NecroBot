@@ -1,4 +1,5 @@
-﻿using POGOProtos.Data;
+﻿using GeoCoordinatePortable;
+using POGOProtos.Data;
 using POGOProtos.Map.Fort;
 using POGOProtos.Networking.Responses;
 using System;
@@ -15,6 +16,7 @@ namespace PoGo.NecroBot.Logic.Model
         double Longitude { get; set; }
         double Altitude { get; set; }
         string Name { get; set; }
+        GeoCoordinate ToGeoCoordinate();
     }
     public class FortLocation : MapLocation
     {
@@ -53,6 +55,11 @@ namespace PoGo.NecroBot.Logic.Model
             this.Latitude = lat;
             this.Longitude = lng;
             this.Altitude = alt;
+        }
+
+        public GeoCoordinate ToGeoCoordinate()
+        {
+            return new GeoCoordinate(this.Latitude, this.Longitude, this.Altitude);
         }
     }
 
