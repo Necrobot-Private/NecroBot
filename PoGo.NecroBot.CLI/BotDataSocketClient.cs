@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using PoGo.NecroBot.Logic.Event;
+using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.State;
 using System;
 using System.Collections.Generic;
@@ -70,6 +71,7 @@ namespace PoGo.NecroBot.CLI
             //socketURL = "ws://127.0.0.1:5000/socket.io/?EIO=3&transport=websocket";
             using (var ws = new WebSocketSharp.WebSocket(socketURL))
             {
+                ws.Log.Level = WebSocketSharp.LogLevel.Error;
                 //ws.OnMessage += (sender, e) =>
                 // Console.WriteLine("New message from controller: " + e.Data);
 
@@ -78,12 +80,12 @@ namespace PoGo.NecroBot.CLI
                     try
                     {
                         ws.Connect();
-                        //Console.WriteLine("Pokemon spawn point data service connection established.");
-
+                        Logger.Write("Pokemon spawn point data service connection established.");
                         while (ws.ReadyState == WebSocketSharp.WebSocketState.Open)
                         {
                             lock (events)
                             {
+                                
                                 while (events.Count > 0)
                                 {
                                     if (ws.ReadyState == WebSocketSharp.WebSocketState.Open)
@@ -94,28 +96,28 @@ namespace PoGo.NecroBot.CLI
                                     }
                                 }
                             }
-
-                            ws.Ping();
                             await Task.Delay(3000);
+                            ws.Ping();
+
                         }
                     }
-                    catch (IOException ex)
+                    catch (IOException)
                     {
                         session.EventDispatcher.Send(new ErrorEvent
                         {
                             Message = "The connection to the data sharing location server was lost."
                         });
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
 
                     }
                     finally
                     {
+                        //everytime disconnected with server bot wil reconnect after 15 sec
                         await Task.Delay(15000, cancellationToken);
                     }
                 }
-
 
             }
 
