@@ -163,6 +163,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                 pokemon = GetNextSnipeablePokemon(session.Client.CurrentLatitude, session.Client.CurrentLongitude, !caughtAnyPokemonInThisWalk);
                 if (pokemon != null)
                 {
+                    if (session.LogicSettings.ActivateMSniper)
+                    {
+                        await MSniperServiceTask.Execute(session, cancellationToken);
+                    }
+
                     caughtAnyPokemonInThisWalk = true;
                     CalculateDistanceAndEstTime(pokemon);
                     var remainTimes = (pokemon.ExpiredTime - DateTime.Now).TotalSeconds * 0.95; //just use 90% times
@@ -193,7 +198,14 @@ namespace PoGo.NecroBot.Logic.Tasks
                            LocationUtils.getElevation(session, pokemon.Latitude, pokemon.Longitude));
 
                     await session.Navigation.Move(snipeTarget,
-                       async () => { await ActionsWhenTravelToSnipeTarget(session, cancellationToken, pokemon, catchPokemon, spinPokestop); },
+                        async () =>
+                        {
+                            if (session.LogicSettings.ActivateMSniper)
+                            {
+                                await MSniperServiceTask.Execute(session, cancellationToken);
+                            }
+                            await ActionsWhenTravelToSnipeTarget(session, cancellationToken, pokemon, catchPokemon, spinPokestop);
+                        },
                        session,
                        cancellationToken, pokemon.Setting.AllowSpeedUp ? pokemon.Setting.MaxSpeedUpSpeed : 0);
                     session.EventDispatcher.Send(new HumanWalkSnipeEvent()
@@ -221,12 +233,12 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             if (caughtAnyPokemonInThisWalk && (!_setting.HumanWalkingSnipeAlwaysWalkBack || _setting.UseGpxPathing))
             {
-                if(session.LogicSettings.UseGpxPathing)
+                if (session.LogicSettings.UseGpxPathing)
                 {
-                    await WalkingBackGPXPath(session, cancellationToken,originalPokestop);
+                    await WalkingBackGPXPath(session, cancellationToken, originalPokestop);
                 }
                 else
-                await UpdateFarmingPokestop(session, cancellationToken);
+                    await UpdateFarmingPokestop(session, cancellationToken);
             }
         }
 
@@ -237,6 +249,10 @@ namespace PoGo.NecroBot.Logic.Tasks
             await session.Navigation.Move(destination,
                async () =>
                {
+                   if (session.LogicSettings.ActivateMSniper)
+                   {
+                       await MSniperServiceTask.Execute(session, cancellationToken);
+                   }
                    await CatchNearbyPokemonsTask.Execute(session, cancellationToken);
                    await UseNearbyPokestopsTask.SpinPokestopNearBy(session, cancellationToken);
                },

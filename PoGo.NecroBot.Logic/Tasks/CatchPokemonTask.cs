@@ -270,8 +270,12 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 lastThrow = caughtPokemonResponse.Status; // sets lastThrow status
 
+                if (session.LogicSettings.ActivateMSniper)//take all encounter
+                    MSniperServiceTask.AddToList(session, encounter);
+
                 if (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess)
                 {
+                    
                     var totalExp = 0;
 
                     foreach (var xp in caughtPokemonResponse.CaptureAward.Xp)
@@ -279,7 +283,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         totalExp += xp;
                     }
                     var profile = await session.Client.Player.GetPlayer();
-
+                    
                     evt.Exp = totalExp;
                     evt.Stardust = profile.PlayerData.Currencies.ToArray()[1].Amount;
                     evt.UniqueId = caughtPokemonResponse.CapturedPokemonId;
@@ -430,7 +434,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             return ItemId.ItemUnknown;
         }
 
-        private static async Task UseBerry(ISession session, ulong encounterId, string spawnPointId)
+        public static async Task UseBerry(ISession session, ulong encounterId, string spawnPointId)
         {
             var inventoryBalls = await session.Inventory.GetItems();
             var berries = inventoryBalls.Where(p => p.ItemId == ItemId.ItemRazzBerry);

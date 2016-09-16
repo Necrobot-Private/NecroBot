@@ -71,35 +71,58 @@ namespace PoGo.NecroBot.Logic.Tasks
                         else
                         {
                             //Battle logic code come here
-                            Logger.Write($"No action, This gym is defending by other color", LogLevel.Gym, ConsoleColor.Cyan);
+                            Logger.Write($"No action... This gym is defending by other color", LogLevel.Gym, ConsoleColor.White);
                         }
                     }
                     else
                     {
-                        Logger.Write($"You are not level 5 yet, come back later...", LogLevel.Gym, ConsoleColor.Cyan);
+                        Logger.Write($"You are not level 5 yet, come back later...", LogLevel.Gym, ConsoleColor.White);
                     }
                 }
             }
             else
             {
-                Logger.Write($"Ignoring  Gym : {fortInfo.Name} - ", LogLevel.Gym, ConsoleColor.Cyan);
+                Logger.Write($"Ignoring  Gym : {fortInfo.Name} - ", LogLevel.Gym, ConsoleColor.White);
             }
         }
 
         private static async Task DeployPokemonToGym(ISession session, FortDetailsResponse fortInfo, GetGymDetailsResponse fortDetails)
         {
-            var pokemon = await GetDeployablePokemon(session);
-            if (pokemon != null)
+            var maxCount = 0;
+            var points = fortDetails.GymState.FortData.GymPoints;
+            if (points < 1600) maxCount = 1;
+            else if (points < 4000) maxCount = 2;
+            else if (points < 8000) maxCount = 3;
+            else if (points < 12000) maxCount = 4;
+            else if (points < 16000) maxCount = 5;
+            else if (points < 20000) maxCount = 6;
+            else if (points < 30000) maxCount = 7;
+            else if (points < 40000) maxCount = 8;
+            else if (points < 50000) maxCount = 9;
+            else maxCount = 10;
+
+            var availableSlots = maxCount - fortDetails.GymState.Memberships.Count();
+
+            if (availableSlots > 0)
             {
-                var response = await session.Client.Fort.FortDeployPokemon(fortInfo.FortId, pokemon.Id);
-                if (response.Result == FortDeployPokemonResponse.Types.Result.Success)
+                var pokemon = await GetDeployablePokemon(session);
+                if (pokemon != null)
                 {
-                    session.EventDispatcher.Send(new GymDeployEvent()
+                    var response = await session.Client.Fort.FortDeployPokemon(fortInfo.FortId, pokemon.Id);
+                    if (response.Result == FortDeployPokemonResponse.Types.Result.Success)
                     {
-                        PokemonId = pokemon.PokemonId,
-                        Name = fortDetails.Name
-                    });
+                        session.EventDispatcher.Send(new GymDeployEvent()
+                        {
+                            PokemonId = pokemon.PokemonId,
+                            Name = fortDetails.Name
+                        });
+                    }
                 }
+            }
+            else
+            {
+                string message = "No action. No FREE slots in GYM " + fortDetails.GymState.Memberships.Count() + "/" + maxCount;
+                Logger.Write(message, LogLevel.Gym, ConsoleColor.White);
             }
         }
 

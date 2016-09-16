@@ -18,6 +18,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using PoGo.NecroBot.Logic.Logging;
+using PoGo.NecroBot.Logic.Model;
 using PoGo.NecroBot.Logic.PoGoUtils;
 using POGOProtos.Inventory.Item;
 using WebSocket4Net;
@@ -80,17 +81,36 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static List<ulong> VisitedEncounterIds = new List<ulong>();
         public static string UserUniequeId { get; set; } //only info
         public static DateTime lastNotify { get; set; }
+        private static bool inProgress = false;
         #endregion
 
         #region MSniper Location Feeder
 
         public static void AddToList(ISession session, EncounterResponse eresponse)
         {
-            if (PokemonInfo.CalculatePokemonPerfection(eresponse.WildPokemon.PokemonData) < minIvPercent ||
-                session.LogicSettings.PokemonsNotToCatch.Contains(eresponse.WildPokemon.PokemonData.PokemonId) ||
-                LocationQueue.FirstOrDefault(p => p.EncounterId == eresponse.WildPokemon.EncounterId) != null ||
+            if ((PokemonGradeHelper.GetPokemonGrade(eresponse.WildPokemon.PokemonData.PokemonId) == PokemonGrades.VeryRare ||
+                 PokemonGradeHelper.GetPokemonGrade(eresponse.WildPokemon.PokemonData.PokemonId) == PokemonGrades.Epic ||
+                 PokemonGradeHelper.GetPokemonGrade(eresponse.WildPokemon.PokemonData.PokemonId) == PokemonGrades.Legendary))
+            {
+                //access for rare pokemons
+            }
+            else
+            {
+                if (PokemonInfo.CalculatePokemonPerfection(eresponse.WildPokemon.PokemonData) < minIvPercent)
+                {
+                    return;
+                }
+                if (session.LogicSettings.PokemonsNotToCatch.Contains(eresponse.WildPokemon.PokemonData.PokemonId))
+                {
+                    return;
+                }
+            }
+
+            if (LocationQueue.FirstOrDefault(p => p.EncounterId == eresponse.WildPokemon.EncounterId) != null ||
                 VisitedEncounterIds.Contains(eresponse.WildPokemon.EncounterId))
+            {
                 return;
+            }
 
             using (var newdata = new EncounterInfo())
             {
@@ -105,9 +125,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 newdata.Move1 = eresponse.WildPokemon.PokemonData.Move1;
                 newdata.Move2 = eresponse.WildPokemon.PokemonData.Move2;
 
-                if (LocationQueue.FirstOrDefault(p => p.EncounterId == newdata.EncounterId &&
-                p.SpawnPointId == newdata.SpawnPointId) == null)// check 2x
-                    LocationQueue.Add(newdata);
+                LocationQueue.Add(newdata);
             }
         }
 
@@ -135,6 +153,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             CatchPokemonResponse caughtPokemonResponse;
             double lat = session.Client.CurrentLatitude;
             double lon = session.Client.CurrentLongitude;
+            CatchPokemonResponse.Types.CatchStatus lastThrow = CatchPokemonResponse.Types.CatchStatus.CatchSuccess;
+            CatchPokemonTask.AmountOfBerries = 0;
             do
             {
                 cancellationToken.ThrowIfCancellationRequested();
@@ -142,48 +162,53 @@ namespace PoGo.NecroBot.Logic.Tasks
                 await LocationUtils.UpdatePlayerLocationWithAltitude(session,
                     new GeoCoordinate(encounterId.Latitude, encounterId.Longitude, session.Client.CurrentAltitude), 0); // Speed set to 0 for random speed.
 
-                await Task.Delay(1000);
+                await Task.Delay(1000, cancellationToken);
 
-                await session.Client.Encounter.EncounterPokemon(encounterId.EncounterId, encounterId.SpawnPointId);
+                var encounter = await session.Client.Encounter.EncounterPokemon(encounterId.EncounterId, encounterId.SpawnPointId);
 
-                await Task.Delay(1000);
+                await Task.Delay(1000, cancellationToken);
 
                 await LocationUtils.UpdatePlayerLocationWithAltitude(session,
                     new GeoCoordinate(lat, lon, session.Client.CurrentAltitude), 0);  // Speed set to 0 for random speed.
 
-                caughtPokemonResponse = await
-              session.Client.Encounter.CatchPokemon(encounterId.EncounterId, encounterId.SpawnPointId, GetRandomPokeBall(session).Result
-                  , normalizedRecticleSize, spinModifier, true);
+                float probability = encounter.CaptureProbability.CaptureProbability_[0];
+                int cp = encounter.WildPokemon.PokemonData.Cp;
+                int maxcp = PokemonInfo.CalculateMaxCp(encounter.WildPokemon.PokemonData);
+                double lvl = PokemonInfo.GetLevel(encounter.WildPokemon.PokemonData);
 
-                Logger.Write($"{caughtPokemonResponse.Status.ToString()}  {encounterId.PokemonId.ToString()}  {encounterId.Iv}%", LogLevel.Service, caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess ? ConsoleColor.Green : ConsoleColor.Red);
+                var bestBall = await CatchPokemonTask.GetBestBall(session, encounter, probability);
+                if (((session.LogicSettings.UseBerriesOperator.ToLower().Equals("and") &&
+                       encounterId.Iv >= session.LogicSettings.UseBerriesMinIv &&
+                       cp >= session.LogicSettings.UseBerriesMinCp &&
+                       probability < session.LogicSettings.UseBerriesBelowCatchProbability) ||
+                   (session.LogicSettings.UseBerriesOperator.ToLower().Equals("or") && (
+                       encounterId.Iv >= session.LogicSettings.UseBerriesMinIv ||
+                       cp >= session.LogicSettings.UseBerriesMinCp ||
+                       probability < session.LogicSettings.UseBerriesBelowCatchProbability))) &&
+                   lastThrow != CatchPokemonResponse.Types.CatchStatus.CatchMissed) // if last throw is a miss, no double berry
+                {
 
+                    CatchPokemonTask.AmountOfBerries++;
+                    if (CatchPokemonTask.AmountOfBerries <= session.LogicSettings.MaxBerriesToUsePerPokemon)
+                    {
+                        await CatchPokemonTask.UseBerry(session,
+                           encounter.WildPokemon.EncounterId,
+                           encounter.WildPokemon.SpawnPointId);
+                    }
+
+                }
+
+                caughtPokemonResponse = await session.Client.Encounter.CatchPokemon(encounterId.EncounterId, encounterId.SpawnPointId,
+                    bestBall, normalizedRecticleSize, spinModifier, true);
+
+
+                Logger.Write($"({caughtPokemonResponse.Status.ToString()})  {encounterId.PokemonId.ToString()}  IV: {encounterId.Iv}%  Lvl: {lvl}  CP: ({cp}/{maxcp})", LogLevel.Service, caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess ? ConsoleColor.Green : ConsoleColor.Red);
+                //CatchPokemonTask.AmountOfBerries
                 await Task.Delay(1000, cancellationToken);
-            } while (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchMissed);
+                lastThrow = caughtPokemonResponse.Status;
+            } while (lastThrow == CatchPokemonResponse.Types.CatchStatus.CatchMissed || lastThrow == CatchPokemonResponse.Types.CatchStatus.CatchEscape);
 
         }
-
-        static async Task<ItemId> GetRandomPokeBall(ISession session)
-        {
-            List<ItemId> random = new List<ItemId>();
-            var pokeBallsCount = await session.Inventory.GetItemAmountByType(ItemId.ItemPokeBall);
-            var greatBallsCount = await session.Inventory.GetItemAmountByType(ItemId.ItemGreatBall);
-            var ultraBallsCount = await session.Inventory.GetItemAmountByType(ItemId.ItemUltraBall);
-            var masterBallsCount = await session.Inventory.GetItemAmountByType(ItemId.ItemMasterBall);
-
-            if (pokeBallsCount > 0)
-                random.Add(ItemId.ItemPokeBall);
-            if (greatBallsCount > 0)
-                random.Add(ItemId.ItemGreatBall);
-            if (ultraBallsCount > 0)
-                random.Add(ItemId.ItemUltraBall);
-            if (masterBallsCount > 0 && !session.LogicSettings.PokemonToUseMasterball.Any())
-                random.Add(ItemId.ItemMasterBall);
-
-            Random rn = new Random();
-
-            return random[rn.Next(0, random.Count)];
-        }
-
 
         public static List<EncounterInfo> FindNew(List<EncounterInfo> received)
         {
@@ -230,6 +255,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 try
                 {
+                    Thread.Sleep(500);
                     //msniper.com
                     socket = new WebSocket("ws://msniper.com/WebSockets/NecroBotServer.ashx", "", WebSocketVersion.Rfc6455);
                     socket.MessageReceived += Msocket_MessageReceived;
@@ -245,6 +271,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                     {
                         Logger.Write(ex.Message + "  (may be offline)", LogLevel.Service, ConsoleColor.Red);
                     }
+                    socket?.Dispose();
+                    socket = null;
                 }
             }
         }
@@ -393,8 +421,11 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
         }
         #endregion
-        public static async Task CheckMSniper(ISession session, CancellationToken cancellationToken)
+        public static async Task Execute(ISession session, CancellationToken cancellationToken)
         {
+            if (inProgress)
+                return;
+            inProgress = true;
             OpenSocket();
 
             //return;//NEW SNIPE METHOD WILL BE ACTIVATED
@@ -403,10 +434,16 @@ namespace PoGo.NecroBot.Logic.Tasks
             try
             {
                 if (!File.Exists(pth))
+                {
+                    inProgress = false;
                     return;
+                }
 
                 if (!await SnipePokemonTask.CheckPokeballsToSnipe(session.LogicSettings.MinPokeballsWhileSnipe + 1, session, cancellationToken))
+                {
+                    inProgress = false;
                     return;
+                }
 
                 var sr = new StreamReader(pth, Encoding.UTF8);
                 var jsn = sr.ReadToEnd();
@@ -437,6 +474,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 if (ex.InnerException != null) ee.Message = ex.InnerException.Message;
                 session.EventDispatcher.Send(ee);
             }
+            inProgress = false;
         }
     }
 }
