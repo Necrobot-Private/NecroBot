@@ -90,7 +90,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         upgradeTimes++;
 
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         //make sure no exception happen
                     }
