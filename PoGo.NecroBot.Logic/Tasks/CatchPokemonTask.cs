@@ -434,7 +434,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             return ItemId.ItemUnknown;
         }
 
-        private static async Task UseBerry(ISession session, ulong encounterId, string spawnPointId)
+        public static async Task UseBerry(ISession session, ulong encounterId, string spawnPointId)
         {
             var inventoryBalls = await session.Inventory.GetItems();
             var berries = inventoryBalls.Where(p => p.ItemId == ItemId.ItemRazzBerry);
