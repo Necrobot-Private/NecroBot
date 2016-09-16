@@ -123,10 +123,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                 if ((UseNearbyPokestopsTask._pokestopLimitReached || UseNearbyPokestopsTask._pokestopTimerReached) &&
                     (CatchPokemonTask._catchPokemonLimitReached || CatchPokemonTask._catchPokemonTimerReached))
                     return;
-                if (session.LogicSettings.ActivateMSniper)
-                {
-                    await MSniperServiceTask.CheckMSniper(session, cancellationToken);
-                }
                 var fortInfo = pokeStop.Id == SetMoveToTargetTask.TARGET_ID ? SetMoveToTargetTask.FortInfo : await session.Client.Fort.GetFort(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude);
 
                 await WalkingToPokeStop(session, cancellationToken, pokeStop, fortInfo);
@@ -185,6 +181,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                 await session.Navigation.Move(pokeStopDestination,
                  async () =>
                  {
+                     if (session.LogicSettings.ActivateMSniper)
+                     {
+                         await MSniperServiceTask.Execute(session, cancellationToken);
+                     }
                      await OnWalkingToPokeStopOrGym(session, pokeStop, cancellationToken);
                  },
                              session,

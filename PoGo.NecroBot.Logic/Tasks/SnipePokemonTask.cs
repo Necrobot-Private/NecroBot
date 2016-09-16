@@ -532,10 +532,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     case EncounterResponse.Types.Status.EncounterSuccess:
 
-                        if (session.LogicSettings.ActivateMSniper)
-                        {
-                            MSniperServiceTask.AddToList(session, encounter);
-                        }
                         if (!LocsVisited.Contains(new PokemonLocation(latitude, longitude)))
                             LocsVisited.Add(new PokemonLocation(latitude, longitude));
 

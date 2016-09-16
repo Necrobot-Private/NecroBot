@@ -18,6 +18,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using PoGo.NecroBot.Logic.Logging;
+using PoGo.NecroBot.Logic.Model;
 using PoGo.NecroBot.Logic.PoGoUtils;
 using POGOProtos.Inventory.Item;
 using WebSocket4Net;
@@ -80,17 +81,35 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static List<ulong> VisitedEncounterIds = new List<ulong>();
         public static string UserUniequeId { get; set; } //only info
         public static DateTime lastNotify { get; set; }
+        private static bool inProgress = false;
         #endregion
 
         #region MSniper Location Feeder
 
         public static void AddToList(ISession session, EncounterResponse eresponse)
         {
-            if (PokemonInfo.CalculatePokemonPerfection(eresponse.WildPokemon.PokemonData) < minIvPercent ||
-                session.LogicSettings.PokemonsNotToCatch.Contains(eresponse.WildPokemon.PokemonData.PokemonId) ||
-                LocationQueue.FirstOrDefault(p => p.EncounterId == eresponse.WildPokemon.EncounterId) != null ||
-                VisitedEncounterIds.Contains(eresponse.WildPokemon.EncounterId))
+            if ((PokemonGradeHelper.GetPokemonGrade(eresponse.WildPokemon.PokemonData.PokemonId) == PokemonGrades.VeryRare ||
+               PokemonGradeHelper.GetPokemonGrade(eresponse.WildPokemon.PokemonData.PokemonId) == PokemonGrades.Epic ||
+               PokemonGradeHelper.GetPokemonGrade(eresponse.WildPokemon.PokemonData.PokemonId) == PokemonGrades.Legendary))
+            {
+                
+            }
+            if (session.LogicSettings.PokemonsNotToCatch.Contains(eresponse.WildPokemon.PokemonData.PokemonId))
+            {
                 return;
+            }
+            if (LocationQueue.FirstOrDefault(p => p.EncounterId == eresponse.WildPokemon.EncounterId) != null ||
+                VisitedEncounterIds.Contains(eresponse.WildPokemon.EncounterId))
+            {
+                return;
+            }
+            if (PokemonInfo.CalculatePokemonPerfection(eresponse.WildPokemon.PokemonData) < minIvPercent &&
+               (PokemonGradeHelper.GetPokemonGrade(eresponse.WildPokemon.PokemonData.PokemonId) != PokemonGrades.VeryRare &&
+               PokemonGradeHelper.GetPokemonGrade(eresponse.WildPokemon.PokemonData.PokemonId) != PokemonGrades.Epic &&
+               PokemonGradeHelper.GetPokemonGrade(eresponse.WildPokemon.PokemonData.PokemonId) != PokemonGrades.Legendary))
+            {
+                return;
+            }
 
             using (var newdata = new EncounterInfo())
             {
@@ -105,9 +124,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 newdata.Move1 = eresponse.WildPokemon.PokemonData.Move1;
                 newdata.Move2 = eresponse.WildPokemon.PokemonData.Move2;
 
-                if (LocationQueue.FirstOrDefault(p => p.EncounterId == newdata.EncounterId &&
-                p.SpawnPointId == newdata.SpawnPointId) == null)// check 2x
-                    LocationQueue.Add(newdata);
+                LocationQueue.Add(newdata);
             }
         }
 
@@ -158,7 +175,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 Logger.Write($"{caughtPokemonResponse.Status.ToString()}  {encounterId.PokemonId.ToString()}  {encounterId.Iv}%", LogLevel.Service, caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess ? ConsoleColor.Green : ConsoleColor.Red);
 
                 await Task.Delay(1000, cancellationToken);
-            } while (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchMissed);
+            } while (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchMissed|| caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchEscape);
 
         }
 
@@ -393,8 +410,11 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
         }
         #endregion
-        public static async Task CheckMSniper(ISession session, CancellationToken cancellationToken)
+        public static async Task Execute(ISession session, CancellationToken cancellationToken)
         {
+            if (inProgress)
+                return;
+            inProgress = true;
             OpenSocket();
 
             //return;//NEW SNIPE METHOD WILL BE ACTIVATED
@@ -403,10 +423,16 @@ namespace PoGo.NecroBot.Logic.Tasks
             try
             {
                 if (!File.Exists(pth))
+                {
+                    inProgress = false;
                     return;
+                }
 
                 if (!await SnipePokemonTask.CheckPokeballsToSnipe(session.LogicSettings.MinPokeballsWhileSnipe + 1, session, cancellationToken))
+                {
+                    inProgress = false;
                     return;
+                }
 
                 var sr = new StreamReader(pth, Encoding.UTF8);
                 var jsn = sr.ReadToEnd();
@@ -437,6 +463,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 if (ex.InnerException != null) ee.Message = ex.InnerException.Message;
                 session.EventDispatcher.Send(ee);
             }
+            inProgress = false;
         }
     }
 }

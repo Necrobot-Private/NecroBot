@@ -270,8 +270,12 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 lastThrow = caughtPokemonResponse.Status; // sets lastThrow status
 
+                if (session.LogicSettings.ActivateMSniper)//take all encounter
+                    MSniperServiceTask.AddToList(session, encounter);
+
                 if (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess)
                 {
+                    
                     var totalExp = 0;
 
                     foreach (var xp in caughtPokemonResponse.CaptureAward.Xp)
