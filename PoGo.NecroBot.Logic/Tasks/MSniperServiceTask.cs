@@ -159,53 +159,30 @@ namespace PoGo.NecroBot.Logic.Tasks
                 await LocationUtils.UpdatePlayerLocationWithAltitude(session,
                     new GeoCoordinate(encounterId.Latitude, encounterId.Longitude, session.Client.CurrentAltitude), 0); // Speed set to 0 for random speed.
 
-                await Task.Delay(1000);
+                await Task.Delay(1000, cancellationToken);
 
                 dynamic encounter = await session.Client.Encounter.EncounterPokemon(encounterId.EncounterId, encounterId.SpawnPointId);
 
-
-
-                await Task.Delay(1000);
+                await Task.Delay(1000, cancellationToken);
 
                 await LocationUtils.UpdatePlayerLocationWithAltitude(session,
                     new GeoCoordinate(lat, lon, session.Client.CurrentAltitude), 0);  // Speed set to 0 for random speed.
 
-                caughtPokemonResponse = await
-              session.Client.Encounter.CatchPokemon(encounterId.EncounterId, encounterId.SpawnPointId, GetRandomPokeBall(session).Result
-                  , normalizedRecticleSize, spinModifier, true);
+                var bestBall = await CatchPokemonTask.GetBestBall(session, encounter, encounter.CaptureProbability?.CaptureProbability_[0]);
+
+                caughtPokemonResponse = await session.Client.Encounter.CatchPokemon(encounterId.EncounterId, encounterId.SpawnPointId,
+                    bestBall, normalizedRecticleSize, spinModifier, true);
+
                 int cp = encounter.WildPokemon.PokemonData.Cp;
                 int maxcp = PokemonInfo.CalculateMaxCp(encounter.WildPokemon.PokemonData);
-
                 double lvl = PokemonInfo.GetLevel(encounter.WildPokemon.PokemonData);
-                Logger.Write($"{caughtPokemonResponse.Status.ToString()}  {encounterId.PokemonId.ToString()}  IV:{encounterId.Iv}%  Lvl:{lvl}  CP:({cp}/{maxcp})", LogLevel.Service, caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess ? ConsoleColor.Green : ConsoleColor.Red);
+
+                Logger.Write($"({caughtPokemonResponse.Status.ToString()})  {encounterId.PokemonId.ToString()}  IV: {encounterId.Iv}%  Lvl: {lvl}  CP: ({cp}/{maxcp})", LogLevel.Service, caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess ? ConsoleColor.Green : ConsoleColor.Red);
 
                 await Task.Delay(1000, cancellationToken);
             } while (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchMissed || caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchEscape);
 
         }
-
-        static async Task<ItemId> GetRandomPokeBall(ISession session)
-        {
-            List<ItemId> random = new List<ItemId>();
-            var pokeBallsCount = await session.Inventory.GetItemAmountByType(ItemId.ItemPokeBall);
-            var greatBallsCount = await session.Inventory.GetItemAmountByType(ItemId.ItemGreatBall);
-            var ultraBallsCount = await session.Inventory.GetItemAmountByType(ItemId.ItemUltraBall);
-            var masterBallsCount = await session.Inventory.GetItemAmountByType(ItemId.ItemMasterBall);
-
-            if (pokeBallsCount > 0)
-                random.Add(ItemId.ItemPokeBall);
-            if (greatBallsCount > 0)
-                random.Add(ItemId.ItemGreatBall);
-            if (ultraBallsCount > 0)
-                random.Add(ItemId.ItemUltraBall);
-            if (masterBallsCount > 0 && !session.LogicSettings.PokemonToUseMasterball.Any())
-                random.Add(ItemId.ItemMasterBall);
-
-            Random rn = new Random();
-
-            return random[rn.Next(0, random.Count)];
-        }
-
 
         public static List<EncounterInfo> FindNew(List<EncounterInfo> received)
         {
