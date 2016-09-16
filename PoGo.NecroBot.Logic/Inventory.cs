@@ -279,6 +279,14 @@ namespace PoGo.NecroBot.Logic
             return pokemons.OrderByDescending(x => x.Cp).ThenBy(n => n.StaminaMax).Take(limit);
         }
 
+        public async Task<IEnumerable<PokemonData>> GetHighestCpForGym(int limit)
+        {
+            var myPokemon = await GetPokemons();
+            // var pokemons = myPokemon.Where(i => !i.DeployedFortId.Any() && i.Stamina == i.StaminaMax);
+            var pokemons = myPokemon.Where(i => !i.DeployedFortId.Any());
+            return pokemons.OrderByDescending(x => x.Cp).ThenBy(n => n.StaminaMax).Take(limit);
+        }
+        
         public async Task<IEnumerable<PokemonData>> GetHighestsPerfect(int limit)
         {
             var myPokemon = await GetPokemons();
@@ -399,10 +407,18 @@ namespace PoGo.NecroBot.Logic
             return families.ToList();
         }
 
-        public async Task<IEnumerable<PokemonData>> GetPokemons()
+        public async Task<PokemonData> GetSinglePokemon(ulong id)
         {
             var inventory = await GetCachedInventory();
             return
+                inventory.InventoryDelta.InventoryItems.Select(i => i.InventoryItemData?.PokemonData)
+                    .FirstOrDefault(p => p != null && p.PokemonId > 0 && p.Id == id);
+        }
+
+        public async Task<IEnumerable<PokemonData>> GetPokemons()
+        {
+            var inventory = await GetCachedInventory();
+                return
                 inventory.InventoryDelta.InventoryItems.Select(i => i.InventoryItemData?.PokemonData)
                     .Where(p => p != null && p.PokemonId > 0);
         }
