@@ -283,7 +283,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         totalExp += xp;
                     }
                     var profile = await session.Client.Player.GetPlayer();
-
+                    
                     evt.Exp = totalExp;
                     evt.Stardust = profile.PlayerData.Currencies.ToArray()[1].Amount;
                     evt.UniqueId = caughtPokemonResponse.CapturedPokemonId;

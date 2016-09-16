@@ -92,7 +92,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                PokemonGradeHelper.GetPokemonGrade(eresponse.WildPokemon.PokemonData.PokemonId) == PokemonGrades.Epic ||
                PokemonGradeHelper.GetPokemonGrade(eresponse.WildPokemon.PokemonData.PokemonId) == PokemonGrades.Legendary))
             {
-                
+
             }
             if (session.LogicSettings.PokemonsNotToCatch.Contains(eresponse.WildPokemon.PokemonData.PokemonId))
             {
@@ -161,7 +161,9 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 await Task.Delay(1000);
 
-                await session.Client.Encounter.EncounterPokemon(encounterId.EncounterId, encounterId.SpawnPointId);
+                dynamic encounter = await session.Client.Encounter.EncounterPokemon(encounterId.EncounterId, encounterId.SpawnPointId);
+
+
 
                 await Task.Delay(1000);
 
@@ -171,11 +173,14 @@ namespace PoGo.NecroBot.Logic.Tasks
                 caughtPokemonResponse = await
               session.Client.Encounter.CatchPokemon(encounterId.EncounterId, encounterId.SpawnPointId, GetRandomPokeBall(session).Result
                   , normalizedRecticleSize, spinModifier, true);
+                int cp = encounter.WildPokemon.PokemonData.Cp;
+                int maxcp = PokemonInfo.CalculateMaxCp(encounter.WildPokemon.PokemonData);
 
-                Logger.Write($"{caughtPokemonResponse.Status.ToString()}  {encounterId.PokemonId.ToString()}  {encounterId.Iv}%", LogLevel.Service, caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess ? ConsoleColor.Green : ConsoleColor.Red);
+                double lvl = PokemonInfo.GetLevel(encounter.WildPokemon.PokemonData);
+                Logger.Write($"{caughtPokemonResponse.Status.ToString()}  {encounterId.PokemonId.ToString()}  IV:{encounterId.Iv}%  Lvl:{lvl}  CP:({cp}/{maxcp})", LogLevel.Service, caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess ? ConsoleColor.Green : ConsoleColor.Red);
 
                 await Task.Delay(1000, cancellationToken);
-            } while (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchMissed|| caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchEscape);
+            } while (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchMissed || caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchEscape);
 
         }
 
