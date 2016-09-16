@@ -89,24 +89,25 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static void AddToList(ISession session, EncounterResponse eresponse)
         {
             if ((PokemonGradeHelper.GetPokemonGrade(eresponse.WildPokemon.PokemonData.PokemonId) == PokemonGrades.VeryRare ||
-               PokemonGradeHelper.GetPokemonGrade(eresponse.WildPokemon.PokemonData.PokemonId) == PokemonGrades.Epic ||
-               PokemonGradeHelper.GetPokemonGrade(eresponse.WildPokemon.PokemonData.PokemonId) == PokemonGrades.Legendary))
+                 PokemonGradeHelper.GetPokemonGrade(eresponse.WildPokemon.PokemonData.PokemonId) == PokemonGrades.Epic ||
+                 PokemonGradeHelper.GetPokemonGrade(eresponse.WildPokemon.PokemonData.PokemonId) == PokemonGrades.Legendary))
             {
+                //access for rare pokemons
+            }
+            else
+            {
+                if (PokemonInfo.CalculatePokemonPerfection(eresponse.WildPokemon.PokemonData) < minIvPercent)
+                {
+                    return;
+                }
+                if (session.LogicSettings.PokemonsNotToCatch.Contains(eresponse.WildPokemon.PokemonData.PokemonId))
+                {
+                    return;
+                }
+            }
 
-            }
-            if (session.LogicSettings.PokemonsNotToCatch.Contains(eresponse.WildPokemon.PokemonData.PokemonId))
-            {
-                return;
-            }
             if (LocationQueue.FirstOrDefault(p => p.EncounterId == eresponse.WildPokemon.EncounterId) != null ||
                 VisitedEncounterIds.Contains(eresponse.WildPokemon.EncounterId))
-            {
-                return;
-            }
-            if (PokemonInfo.CalculatePokemonPerfection(eresponse.WildPokemon.PokemonData) < minIvPercent &&
-               (PokemonGradeHelper.GetPokemonGrade(eresponse.WildPokemon.PokemonData.PokemonId) != PokemonGrades.VeryRare &&
-               PokemonGradeHelper.GetPokemonGrade(eresponse.WildPokemon.PokemonData.PokemonId) != PokemonGrades.Epic &&
-               PokemonGradeHelper.GetPokemonGrade(eresponse.WildPokemon.PokemonData.PokemonId) != PokemonGrades.Legendary))
             {
                 return;
             }
@@ -254,6 +255,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 try
                 {
+                    Thread.Sleep(500);
                     //msniper.com
                     socket = new WebSocket("ws://msniper.com/WebSockets/NecroBotServer.ashx", "", WebSocketVersion.Rfc6455);
                     socket.MessageReceived += Msocket_MessageReceived;
@@ -269,6 +271,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                     {
                         Logger.Write(ex.Message + "  (may be offline)", LogLevel.Service, ConsoleColor.Red);
                     }
+                    socket?.Dispose();
+                    socket = null;
                 }
             }
         }
