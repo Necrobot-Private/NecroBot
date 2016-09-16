@@ -157,7 +157,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 cancellationToken.ThrowIfCancellationRequested();
 
                 await LocationUtils.UpdatePlayerLocationWithAltitude(session,
-                    new GeoCoordinate(encounterId.Latitude, encounterId.Longitude, session.Client.CurrentAltitude));
+                    new GeoCoordinate(encounterId.Latitude, encounterId.Longitude, session.Client.CurrentAltitude), 0); // Speed set to 0 for random speed.
 
                 await Task.Delay(1000);
 
@@ -166,7 +166,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 await Task.Delay(1000);
 
                 await LocationUtils.UpdatePlayerLocationWithAltitude(session,
-                    new GeoCoordinate(lat, lon, session.Client.CurrentAltitude));
+                    new GeoCoordinate(lat, lon, session.Client.CurrentAltitude), 0);  // Speed set to 0 for random speed.
 
                 caughtPokemonResponse = await
               session.Client.Encounter.CatchPokemon(encounterId.EncounterId, encounterId.SpawnPointId, GetRandomPokeBall(session).Result
