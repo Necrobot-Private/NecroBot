@@ -213,7 +213,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 session.Forts.Count == 0 ||
                 session.Forts.Count(p => p.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime()) == 0)
             {
-                //non pokestop . should we init or return nul?
+                //TODO : A logic need to be add for handle this  case?
             };
 
             var pokeStopes = session.Forts.Where(p => p.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime()).ToList();
