@@ -71,18 +71,18 @@ namespace PoGo.NecroBot.Logic.Tasks
                         else
                         {
                             //Battle logic code come here
-                            Logger.Write($"No action, This gym is defending by other color", LogLevel.Gym, ConsoleColor.Cyan);
+                            Logger.Write($"No action... This gym is defending by other color", LogLevel.Gym, ConsoleColor.White);
                         }
                     }
                     else
                     {
-                        Logger.Write($"You are not level 5 yet, come back later...", LogLevel.Gym, ConsoleColor.Cyan);
+                        Logger.Write($"You are not level 5 yet, come back later...", LogLevel.Gym, ConsoleColor.White);
                     }
                 }
             }
             else
             {
-                Logger.Write($"Ignoring  Gym : {fortInfo.Name} - ", LogLevel.Gym, ConsoleColor.Cyan);
+                Logger.Write($"Ignoring  Gym : {fortInfo.Name} - ", LogLevel.Gym, ConsoleColor.White);
             }
         }
 
@@ -122,7 +122,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             else
             {
                 string message = "No action. No FREE slots in GYM " + fortDetails.GymState.Memberships.Count() + "/" + maxCount;
-                Logger.Write(message, LogLevel.Gym, ConsoleColor.Gray);
+                Logger.Write(message, LogLevel.Gym, ConsoleColor.White);
             }
         }
 
