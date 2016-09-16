@@ -134,7 +134,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 await DoActionAtPokeStop(session, cancellationToken, pokeStop, fortInfo);
 
-                //await UseGymBattleTask.Execute(session, cancellationToken, pokeStop, fortInfo);
+                await UseGymBattleTask.Execute(session, cancellationToken, pokeStop, fortInfo);
 
                 if (session.LogicSettings.SnipeAtPokestops || session.LogicSettings.UseSnipeLocationServer)
                     await SnipePokemonTask.Execute(session, cancellationToken);

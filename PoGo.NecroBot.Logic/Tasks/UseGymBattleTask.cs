@@ -27,14 +27,11 @@ namespace PoGo.NecroBot.Logic.Tasks
 {
     public class UseGymBattleTask
     {
-        // ReSharper disable once UnusedMember.Local
-        private static Dictionary<FortData, DateTime> _gyms = new Dictionary<FortData, DateTime>();
         public static async Task Execute(ISession session, CancellationToken cancellationToken, FortData gym, FortDetailsResponse fortInfo)
         {
             if (!session.LogicSettings.GymAllowed || gym.Type != FortType.Gym) return;
 
             cancellationToken.ThrowIfCancellationRequested();
-            // ReSharper disable once UnusedVariable
             var distance = session.Navigation.WalkStrategy.CalculateDistance(session.Client.CurrentLatitude, session.Client.CurrentLongitude, gym.Latitude, gym.Longitude);
 
             if (fortInfo != null)
@@ -72,7 +69,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         }
                         else
                         {
-                            await StartGymAttackLogic(session, fortInfo, fortDetails, gym, cancellationToken);
+                            //await StartGymAttackLogic(session, fortInfo, fortDetails, gym, cancellationToken);
                         }
                     }
                     else

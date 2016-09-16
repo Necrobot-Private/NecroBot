@@ -223,5 +223,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool GymUseRandomPokemon => _settings.GymConfig.UseRandomPokemon;
 
         public int GymNumberOfTopPokemonToBeExcluded => _settings.GymConfig.NumberOfTopPokemonToBeExcluded;
-    }                         
+
+        public bool DataSharingEnable => _settings.DataSharingConfig.EnableSyncData;
+
+        public string DataSharingDataUrl => _settings.DataSharingConfig.DataRecieverURL;
+    }
 }

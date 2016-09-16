@@ -139,13 +139,22 @@ namespace PoGo.NecroBot.Logic.Tasks
                 var distance = LocationUtils.CalculateDistanceInMeters(session.Client.CurrentLatitude,
                     session.Client.CurrentLongitude, latitude, longitude);
 
+                
+                var unixTimeStamp = encounter.WildPokemon?.LastModifiedTimestampMs + encounter.WildPokemon?.TimeTillHiddenMs;
+                DateTime expiredDate = new DateTime(1970, 1, 1, 0, 0, 0).AddMilliseconds(Convert.ToDouble(unixTimeStamp));
+
                 session.EventDispatcher.Send(new EncounteredEvent()
                 {
                     Latitude = latitude,
                     Longitude = longitude,
                     PokemonId = encounteredPokemon.PokemonId,
                     IV = pokemonIv,
-                    Level = (int)lv
+                    Level = (int)lv,
+                    Expires = expiredDate.ToUniversalTime(),
+                    ExpireTimestamp = unixTimeStamp,
+                    SpawnPointId = encounter.WildPokemon?.SpawnPointId,
+                    EncounterId = encounter.WildPokemon?.EncounterId
+
                 });
 
                 CatchPokemonResponse caughtPokemonResponse = null;

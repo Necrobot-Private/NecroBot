@@ -60,6 +60,10 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public HumanWalkSnipeConfig HumanWalkSnipeConfig = new HumanWalkSnipeConfig();
 
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public DataSharingConfig DataSharingConfig = new DataSharingConfig();
+
+
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public PokeStopConfig PokeStopConfig = new PokeStopConfig();
 
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]

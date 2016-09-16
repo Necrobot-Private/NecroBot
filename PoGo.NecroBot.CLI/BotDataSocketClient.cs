@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Net.WebSockets;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -32,13 +33,13 @@ namespace PoGo.NecroBot.CLI
 
         private static void HandleEvent(EncounteredEvent eve)
         {
-            lock(events)
+            lock (events)
             {
                 events.Enqueue(eve);
             }
         }
 
-        private static byte[] Serialize(dynamic evt)
+        private static string Serialize(dynamic evt)
         {
             var jsonSerializerSettings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All };
 
@@ -46,98 +47,82 @@ namespace PoGo.NecroBot.CLI
             jsonSerializerSettings.Converters.Add(new IdToStringConverter());
 
             string json = JsonConvert.SerializeObject(evt, Formatting.None, jsonSerializerSettings);
-            return Encoding.Default.GetBytes(json);
+            //json = Regex.Replace(json, @"\\\\|\\(""|')|(""|')", match => {
+            //    if (match.Groups[1].Value == "\"") return "\""; // Unescape \"
+            //    if (match.Groups[2].Value == "\"") return "'";  // Replace " with '
+            //    if (match.Groups[2].Value == "'") return "\\'"; // Escape '
+            //    return match.Value;                             // Leave \\ and \' unchanged
+            //});
+            return json;
         }
 
         private static ClientWebSocket socket;
 
         public static async Task Start(Session session, CancellationToken cancellationToken)
         {
+
             System.Net.ServicePointManager.Expect100Continue = false;
 
+            cancellationToken.ThrowIfCancellationRequested();
 
-            //socket = new ClientWebSocket();
-           // await socket.ConnectAsync(new Uri("ws://localhost:4000/"), cancellationToken);
+            var socketURL = session.LogicSettings.DataSharingDataUrl;
 
-            //while(false)
-            //{
-            //    //socket.SendAsync()
-            //}
-            //socket.o
-            //WebSocket websocket = new WebSocket("ws://localhost:4000/");
-            //websocket.o += new EventHandler(websocket_Opened);
-            //websocket.Error += new EventHandler<ErrorEventArgs>(websocket_Error);
-            //websocket.Closed += new EventHandler(websocket_Closed);
-            //websocket.MessageReceived += new EventHandler(websocket_MessageReceived);
-            //websocket.Open();
-
-            while (true)
+            //socketURL = "ws://127.0.0.1:5000/socket.io/?EIO=3&transport=websocket";
+            using (var ws = new WebSocketSharp.WebSocket(socketURL))
             {
-                cancellationToken.ThrowIfCancellationRequested();
+                //ws.OnMessage += (sender, e) =>
+                // Console.WriteLine("New message from controller: " + e.Data);
 
-                try
+                while (true)
                 {
-                    socket = new ClientWebSocket();
-                    await socket.ConnectAsync(new Uri("ws://localhost:4000"), cancellationToken);
-                    //var lClient = new TcpClient();
-                    //lClient.Connect("http://localhost",//session.LogicSettings.SnipeLocationServer,
-                    //    4000);///session.LogicSettings.SnipeLocationServerPort);
-
-                    //Stream stream = lClient.GetStream();
-
-                    while (socket.CloseStatus == WebSocketCloseStatus.Empty)
+                    try
                     {
-                        try
+                        ws.Connect();
+                        //Console.WriteLine("Pokemon spawn point data service connection established.");
+
+                        while (ws.ReadyState == WebSocketSharp.WebSocketState.Open)
                         {
                             lock (events)
                             {
                                 while (events.Count > 0)
                                 {
-                                    var item = events.Dequeue();
-                                    var data = Serialize(item);
-                                    Console.WriteLine("Send pokemon data to socket server");
-                                    //stream.Write(data, 0, data.Length);     // write bytes to buffer
-                                    //stream.Flush();                                // send bytes, clear buffer
-
-                                    socket.SendAsync(new ArraySegment<byte>(data), WebSocketMessageType.Binary, true, cancellationToken);
+                                    if (ws.ReadyState == WebSocketSharp.WebSocketState.Open)
+                                    {
+                                        var item = events.Dequeue();
+                                        var data = Serialize(item);
+                                        ws.Send($"42[\"pokemon\",{data}]");
+                                    }
                                 }
-                                //int bytesAvailable = await stream.ReadAsync(by, 0, 2048);
-                                //msg = Encoding.UTF8.GetString(by, 0, bytesAvailable);
                             }
-                            //var line = sr.ReadLine();
-                            //if (line == null)
-                            //    throw new Exception("Unable to ReadLine from sniper socket");
 
-                            //var info = JsonConvert.DeserializeObject<SniperInfo>(line);
-
-                        }
-                        catch (IOException ex)
-                        {
-                            session.EventDispatcher.Send(new ErrorEvent
-                            {
-                                Message = "The connection to the data sharing location server was lost."
-                            });
-                        }
-                        finally
-                        {
-                            await Task.Delay(1000, cancellationToken);
+                            ws.Ping();
+                            await Task.Delay(3000);
                         }
                     }
-                }
-                catch (SocketException)
-                {
-                }
-                catch (Exception ex)
-                {
-                    // most likely System.IO.IOException
-                    session.EventDispatcher.Send(new ErrorEvent { Message = ex.ToString() });
+                    catch (IOException ex)
+                    {
+                        session.EventDispatcher.Send(new ErrorEvent
+                        {
+                            Message = "The connection to the data sharing location server was lost."
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+                    finally
+                    {
+                        await Task.Delay(15000, cancellationToken);
+                    }
                 }
 
-                await Task.Delay(1000, cancellationToken);
+
             }
+
         }
 
-        internal  static Task StartAsync(Session session, CancellationToken cancellationToken = default(CancellationToken))
+
+        internal static Task StartAsync(Session session, CancellationToken cancellationToken = default(CancellationToken))
         {
             return Task.Run(() => Start(session, cancellationToken), cancellationToken);
         }
