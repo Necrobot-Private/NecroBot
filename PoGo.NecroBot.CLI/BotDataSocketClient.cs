@@ -57,8 +57,6 @@ namespace PoGo.NecroBot.CLI
             return json;
         }
 
-        private static ClientWebSocket socket;
-
         public static async Task Start(Session session, CancellationToken cancellationToken)
         {
 
