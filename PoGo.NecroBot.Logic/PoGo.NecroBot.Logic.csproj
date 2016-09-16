@@ -137,6 +137,7 @@
     <Compile Include="Event\DisplayHighestsPokemonEvent.cs" />
     <Compile Include="Event\EggHatchedEvent.cs" />
     <Compile Include="Event\EggsListEvent.cs" />
+    <Compile Include="Event\EncounteredEvent.cs" />
     <Compile Include="Event\EventDispatcher.cs" />
     <Compile Include="Event\EventUsedPotion.cs" />
     <Compile Include="Event\EventUsedRevive.cs" />
@@ -205,6 +206,7 @@
     <Compile Include="Model\Settings\ClientSettings.cs" />
     <Compile Include="Model\Settings\ConsoleConfig.cs" />
     <Compile Include="Model\Settings\CustomCatchConfig.cs" />
+    <Compile Include="Model\Settings\DataSharingConfig.cs" />
     <Compile Include="Model\Settings\DeviceConfig.cs" />
     <Compile Include="Model\Settings\EvolveConfig.cs" />
     <Compile Include="Model\Settings\GlobalSettings.cs" />

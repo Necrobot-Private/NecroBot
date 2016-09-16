@@ -78,7 +78,7 @@ namespace PoGo.NecroBot.CLI
                     ProfilePath = profilePath,
                     ProfileConfigPath = profileConfigPath,
                     GeneralConfigPath = Path.Combine(Directory.GetCurrentDirectory(), "config"),
-                    ConsoleConfig = {TranslationLanguageCode = strCulture}
+                    ConsoleConfig = { TranslationLanguageCode = strCulture }
                 };
 
                 boolNeedsSetup = true;
@@ -227,7 +227,7 @@ namespace PoGo.NecroBot.CLI
             ProgressBar.Fill(90);
 
             _session.Navigation.WalkStrategy.UpdatePositionEvent +=
-                (lat, lng) => _session.EventDispatcher.Send(new UpdatePositionEvent {Latitude = lat, Longitude = lng});
+                (lat, lng) => _session.EventDispatcher.Send(new UpdatePositionEvent { Latitude = lat, Longitude = lng });
             _session.Navigation.WalkStrategy.UpdatePositionEvent += SaveLocationToDisk;
             UseNearbyPokestopsTask.UpdateTimeStampsPokestop += SaveTimeStampsPokestopToDisk;
             CatchPokemonTask.UpdateTimeStampsPokemon += SaveTimeStampsPokemonToDisk;
@@ -250,9 +250,19 @@ namespace PoGo.NecroBot.CLI
             if (_session.LogicSettings.UseSnipeLocationServer || _session.LogicSettings.HumanWalkingSnipeUsePogoLocationFeeder)
                 SnipePokemonTask.AsyncStart(_session);
 
+            if (_session.LogicSettings.DataSharingEnable)
+            {
+                BotDataSocketClient.StartAsync(_session);
+                _session.EventDispatcher.EventReceived += evt => BotDataSocketClient.Listen(evt, _session);
+            }
             settings.CheckProxy(_session.Translation);
 
             QuitEvent.WaitOne();
+        }
+
+        private static void EventDispatcher_EventReceived(IEvent evt)
+        {
+            throw new NotImplementedException();
         }
 
         private static void SaveLocationToDisk(double lat, double lng)
@@ -307,13 +317,13 @@ namespace PoGo.NecroBot.CLI
                         {
                             Console.WriteLine(strReason + $"\n");
 
-							if (PromptForKillSwitchOverride())
-							{
-								// Override
-								Logger.Write("Overriding killswitch... you have been warned!", LogLevel.Warning);
-								return false;
-							}
-							
+                            if (PromptForKillSwitchOverride())
+                            {
+                                // Override
+                                Logger.Write("Overriding killswitch... you have been warned!", LogLevel.Warning);
+                                return false;
+                            }
+
                             Logger.Write("The bot will now close, please press enter to continue", LogLevel.Error);
                             Console.ReadLine();
                             return true;
@@ -336,7 +346,7 @@ namespace PoGo.NecroBot.CLI
             Logger.Write("Exception caught, writing LogBuffer.", force: true);
             throw new Exception();
         }
-		
+
         public static bool PromptForKillSwitchOverride()
         {
             Logger.Write("Do you want to override killswitch to bot at your own risk?", LogLevel.Warning);
