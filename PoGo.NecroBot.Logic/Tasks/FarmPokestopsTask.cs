@@ -46,7 +46,13 @@ namespace PoGo.NecroBot.Logic.Tasks
                     session.Settings.DefaultLongitude,
                     LocationUtils.getElevation(session, session.Settings.DefaultLatitude,
                     session.Settings.DefaultLongitude)),
-                    null,
+                    async () =>
+                    {
+                        if (session.LogicSettings.ActivateMSniper)
+                        {
+                            await MSniperServiceTask.Execute(session, cancellationToken);
+                        }
+                    },
                     session,
                     cancellationToken);
 
