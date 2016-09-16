@@ -152,6 +152,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             CatchPokemonResponse caughtPokemonResponse;
             double lat = session.Client.CurrentLatitude;
             double lon = session.Client.CurrentLongitude;
+            CatchPokemonResponse.Types.CatchStatus lastThrow = CatchPokemonResponse.Types.CatchStatus.CatchSuccess;
+            CatchPokemonTask.AmountOfBerries = 0;
             do
             {
                 cancellationToken.ThrowIfCancellationRequested();
@@ -161,26 +163,49 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 await Task.Delay(1000, cancellationToken);
 
-                dynamic encounter = await session.Client.Encounter.EncounterPokemon(encounterId.EncounterId, encounterId.SpawnPointId);
+                var encounter = await session.Client.Encounter.EncounterPokemon(encounterId.EncounterId, encounterId.SpawnPointId);
 
                 await Task.Delay(1000, cancellationToken);
 
                 await LocationUtils.UpdatePlayerLocationWithAltitude(session,
                     new GeoCoordinate(lat, lon, session.Client.CurrentAltitude), 0);  // Speed set to 0 for random speed.
 
-                var bestBall = await CatchPokemonTask.GetBestBall(session, encounter, encounter.CaptureProbability?.CaptureProbability_[0]);
-
-                caughtPokemonResponse = await session.Client.Encounter.CatchPokemon(encounterId.EncounterId, encounterId.SpawnPointId,
-                    bestBall, normalizedRecticleSize, spinModifier, true);
-
+                float probability = encounter.CaptureProbability.CaptureProbability_[0];
                 int cp = encounter.WildPokemon.PokemonData.Cp;
                 int maxcp = PokemonInfo.CalculateMaxCp(encounter.WildPokemon.PokemonData);
                 double lvl = PokemonInfo.GetLevel(encounter.WildPokemon.PokemonData);
 
-                Logger.Write($"({caughtPokemonResponse.Status.ToString()})  {encounterId.PokemonId.ToString()}  IV: {encounterId.Iv}%  Lvl: {lvl}  CP: ({cp}/{maxcp})", LogLevel.Service, caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess ? ConsoleColor.Green : ConsoleColor.Red);
+                var bestBall = await CatchPokemonTask.GetBestBall(session, encounter, probability);
+                if (((session.LogicSettings.UseBerriesOperator.ToLower().Equals("and") &&
+                       encounterId.Iv >= session.LogicSettings.UseBerriesMinIv &&
+                       cp >= session.LogicSettings.UseBerriesMinCp &&
+                       probability < session.LogicSettings.UseBerriesBelowCatchProbability) ||
+                   (session.LogicSettings.UseBerriesOperator.ToLower().Equals("or") && (
+                       encounterId.Iv >= session.LogicSettings.UseBerriesMinIv ||
+                       cp >= session.LogicSettings.UseBerriesMinCp ||
+                       probability < session.LogicSettings.UseBerriesBelowCatchProbability))) &&
+                   lastThrow != CatchPokemonResponse.Types.CatchStatus.CatchMissed) // if last throw is a miss, no double berry
+                {
 
+                    CatchPokemonTask.AmountOfBerries++;
+                    if (CatchPokemonTask.AmountOfBerries <= session.LogicSettings.MaxBerriesToUsePerPokemon)
+                    {
+                        await CatchPokemonTask.UseBerry(session,
+                           encounter.WildPokemon.EncounterId,
+                           encounter.WildPokemon.SpawnPointId);
+                    }
+
+                }
+
+                caughtPokemonResponse = await session.Client.Encounter.CatchPokemon(encounterId.EncounterId, encounterId.SpawnPointId,
+                    bestBall, normalizedRecticleSize, spinModifier, true);
+
+
+                Logger.Write($"({caughtPokemonResponse.Status.ToString()})  {encounterId.PokemonId.ToString()}  IV: {encounterId.Iv}%  Lvl: {lvl}  CP: ({cp}/{maxcp})", LogLevel.Service, caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess ? ConsoleColor.Green : ConsoleColor.Red);
+                //CatchPokemonTask.AmountOfBerries
                 await Task.Delay(1000, cancellationToken);
-            } while (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchMissed || caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchEscape);
+                lastThrow = caughtPokemonResponse.Status;
+            } while (lastThrow == CatchPokemonResponse.Types.CatchStatus.CatchMissed || lastThrow == CatchPokemonResponse.Types.CatchStatus.CatchEscape);
 
         }
 
