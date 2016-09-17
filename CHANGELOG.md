@@ -28,7 +28,7 @@
 - Pokesnipers cannot sniper 0.9.9.2 [\#131](https://github.com/Necrobot-Private/NecroBot/issues/131)
 - Not generate the LastPos.ini when the program is closed [\#116](https://github.com/Necrobot-Private/NecroBot/issues/116)
 - Building solution got error "The name 'PokemonMoveMetaRegistry' does not exist in the current context". [\#189](https://github.com/Necrobot-Private/NecroBot/issues/189)
-- 
+
 **Merged pull requests:**
 
 - updater bug fixed [\#186](https://github.com/Necrobot-Private/NecroBot/pull/186) ([msx752](https://github.com/msx752))
