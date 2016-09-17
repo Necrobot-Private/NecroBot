@@ -33,7 +33,10 @@ namespace PoGo.NecroBot.Logic.Tasks
             foreach (var pokemon in pokemons)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-
+                if (session.LogicSettings.ActivateMSniper)
+                {
+                    await MSniperServiceTask.Execute(session, cancellationToken);
+                }
                 var allitems = await session.Inventory.GetItems();
                 var pokeBallsCount = allitems.FirstOrDefault(i => i.ItemId == ItemId.ItemPokeBall)?.Count;
                 var greatBallsCount = allitems.FirstOrDefault(i => i.ItemId == ItemId.ItemGreatBall)?.Count;
@@ -69,10 +72,6 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 if (encounter.Status == EncounterResponse.Types.Status.EncounterSuccess && session.LogicSettings.CatchPokemon)
                 {
-                    if (session.LogicSettings.ActivateMSniper)
-                    {
-                        MSniperServiceTask.AddToList(session, encounter);
-                    }
                     await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, sessionAllowTransfer:sessionAllowTransfer);
                 }
                 else if (encounter.Status == EncounterResponse.Types.Status.PokemonInventoryFull)
@@ -106,7 +105,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 // If pokemon is not last pokemon in list, create delay between catches, else keep moving.
                 if (!Equals(pokemons.ElementAtOrDefault(pokemons.Count() - 1), pokemon))
                 {
-                    await Task.Delay(session.LogicSettings.DelayBetweenPokemonCatch, cancellationToken);
+                    await Task.Delay(session.LogicSettings.DelayBetweenPokemonUpgrade, cancellationToken);
                 }
             }
         }

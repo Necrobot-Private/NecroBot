@@ -60,7 +60,7 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         double ForceExcellentThrowOverIv { get; }
         int ForceGreatThrowOverCp { get; }
         int ForceExcellentThrowOverCp { get; }
-        int DelayBetweenPokemonCatch { get; }
+        int DelayBetweenPokemonUpgrade { get; }
         bool AutomaticallyLevelUpPokemon { get; }
         bool OnlyUpgradeFavorites { get; }
         bool UseLevelUpList { get; }
@@ -215,5 +215,8 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         bool GymUseRandomPokemon { get; }
         int GymVisitTimeout { get; }
         int GymNumberOfTopPokemonToBeExcluded { get; }
+
+        bool DataSharingEnable { get; }
+        string DataSharingDataUrl { get; }
     }
 }

@@ -16,6 +16,7 @@ using PokemonGo.RocketAPI.Extensions;
 using POGOProtos.Map.Fort;
 using POGOProtos.Networking.Responses;
 using PoGo.NecroBot.Logic.Event.Gym;
+using PoGo.NecroBot.Logic.Model;
 
 #endregion
 
@@ -123,10 +124,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                 if ((UseNearbyPokestopsTask._pokestopLimitReached || UseNearbyPokestopsTask._pokestopTimerReached) &&
                     (CatchPokemonTask._catchPokemonLimitReached || CatchPokemonTask._catchPokemonTimerReached))
                     return;
-                if (session.LogicSettings.ActivateMSniper)
-                {
-                    await MSniperServiceTask.CheckMSniper(session, cancellationToken);
-                }
                 var fortInfo = pokeStop.Id == SetMoveToTargetTask.TARGET_ID ? SetMoveToTargetTask.FortInfo : await session.Client.Fort.GetFort(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude);
 
                 await WalkingToPokeStop(session, cancellationToken, pokeStop, fortInfo);
@@ -166,25 +163,17 @@ namespace PoGo.NecroBot.Logic.Tasks
                 cancellationToken.ThrowIfCancellationRequested();
 
                 // Always set the fort info in base walk strategy.
-                BaseWalkStrategy.FortInfo = fortInfo;
 
-                var pokeStopDestination = new GeoCoordinate(pokeStop.Latitude, pokeStop.Longitude,
-                    LocationUtils.getElevation(session, pokeStop.Latitude, pokeStop.Longitude));
-
-                if (pokeStop.Type == FortType.Gym)
-                {
-                    session.EventDispatcher.Send(new GymWalkToTargetEvent()
-                    {
-                        Name = fortInfo.Name,
-                        Distance = distance,
-                        Latitude = fortInfo.Latitude,
-                        Longitude = fortInfo.Longitude
-                    });
-                }
+                var pokeStopDestination = new FortLocation(pokeStop.Latitude, pokeStop.Longitude,
+                    LocationUtils.getElevation(session, pokeStop.Latitude, pokeStop.Longitude), pokeStop, fortInfo);
 
                 await session.Navigation.Move(pokeStopDestination,
                  async () =>
                  {
+                     if (session.LogicSettings.ActivateMSniper)
+                     {
+                         await MSniperServiceTask.Execute(session, cancellationToken);
+                     }
                      await OnWalkingToPokeStopOrGym(session, pokeStop, cancellationToken);
                  },
                              session,
@@ -224,7 +213,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 session.Forts.Count == 0 ||
                 session.Forts.Count(p => p.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime()) == 0)
             {
-                //non pokestop . should we init or return nul?
+                //TODO : A logic need to be add for handle this  case?
             };
 
             var pokeStopes = session.Forts.Where(p => p.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime()).ToList();
@@ -243,7 +232,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
             if (pokeStopes.Count == 1) return pokeStopes.FirstOrDefault();
 
-           if (session.LogicSettings.GymAllowed)
+           if (session.LogicSettings.GymAllowed && session.Inventory.GetPlayerStats().Result.FirstOrDefault().Level > 5)
             {
                 var gyms = pokeStopes.Where(x => x.Type == FortType.Gym &&
                 LocationUtils.CalculateDistanceInMeters(x.Latitude, x.Longitude, session.Client.CurrentLatitude, session.Client.CurrentLongitude) < session.LogicSettings.GymMaxDistance
@@ -345,7 +334,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static async Task FarmPokestop(ISession session, FortData pokeStop, FortDetailsResponse fortInfo, CancellationToken cancellationToken, bool doNotRetry = false)
         {
-            if (pokeStop.CooldownCompleteTimestampMs > DateTime.UtcNow.ToUnixTime()) return;
+            if (pokeStop.CooldownCompleteTimestampMs>  0 && pokeStop.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime()) return;
 
             FortSearchResponse fortSearch;
             var timesZeroXPawarded = 0;

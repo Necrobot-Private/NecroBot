@@ -14,6 +14,7 @@ using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Utils;
 using PokemonGo.RocketAPI.Extensions;
 using POGOProtos.Map.Fort;
+using PoGo.NecroBot.Logic.Model;
 
 #endregion
 
@@ -77,13 +78,18 @@ namespace PoGo.NecroBot.Logic.Tasks
                             });
                             break;
                         }
+                        var lat = Convert.ToDouble(trackPoints.ElementAt(curTrkPt).Lat, CultureInfo.InvariantCulture);
+                        var lng = Convert.ToDouble(trackPoints.ElementAt(curTrkPt).Lon, CultureInfo.InvariantCulture);
 
-                        var geo = new GeoCoordinate(Convert.ToDouble(trackPoints.ElementAt(curTrkPt).Lat, CultureInfo.InvariantCulture),
-                            Convert.ToDouble(trackPoints.ElementAt(curTrkPt).Lon, CultureInfo.InvariantCulture));
+                        IGeoLocation destination = new GPXPointLocation(lat, lng, LocationUtils.getElevation(session, lat, lng));
 
-                        await session.Navigation.Move(geo,
+                        await session.Navigation.Move(destination,
                             async () =>
                             {
+                                if (session.LogicSettings.ActivateMSniper)
+                                {
+                                    await MSniperServiceTask.Execute(session, cancellationToken);
+                                }
                                 await CatchNearbyPokemonsTask.Execute(session, cancellationToken);
                                 //Catch Incense Pokemon
                                 await CatchIncensePokemonsTask.Execute(session, cancellationToken);

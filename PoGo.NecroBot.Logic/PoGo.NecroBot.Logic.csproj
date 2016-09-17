@@ -137,13 +137,18 @@
     <Compile Include="Event\DisplayHighestsPokemonEvent.cs" />
     <Compile Include="Event\EggHatchedEvent.cs" />
     <Compile Include="Event\EggsListEvent.cs" />
+    <Compile Include="Event\EncounteredEvent.cs" />
     <Compile Include="Event\EventDispatcher.cs" />
+    <Compile Include="Event\EventUsedPotion.cs" />
+    <Compile Include="Event\EventUsedRevive.cs" />
     <Compile Include="Event\EvolveCountEvent.cs" />
     <Compile Include="Event\FortTargetEvent.cs" />
     <Compile Include="Event\FortFailedEvent.cs" />
     <Compile Include="Event\FortUsedEvent.cs" />
+    <Compile Include="Event\Gym\GymBattleStarted.cs" />
     <Compile Include="Event\Gym\GymDeployEvent.cs" />
     <Compile Include="Event\Gym\GymDetailInfoEvent.cs" />
+    <Compile Include="Event\Gym\GymErrorUnset.cs" />
     <Compile Include="Event\Gym\GymListEvent.cs" />
     <Compile Include="Event\Gym\GymTeamJoinEvent.cs" />
     <Compile Include="Event\Gym\GymWalkToTargetEvent.cs" />
@@ -173,6 +178,7 @@
     <Compile Include="Inventory.cs" />
     <Compile Include="Localization\Localizer.cs" />
     <Compile Include="Logging\Logger.cs" />
+    <Compile Include="Model\BotActions.cs" />
     <Compile Include="Model\Google\GoogleObjects\Address_Components.cs" />
     <Compile Include="Model\Google\GoogleObjects\Bounds.cs" />
     <Compile Include="Model\Google\GoogleObjects\DirectionsResponse.cs" />
@@ -192,6 +198,7 @@
     <Compile Include="Model\Google\GoogleObjects\ValueText.cs" />
     <Compile Include="Model\Google\GoogleResult.cs" />
     <Compile Include="Model\Google\GoogleWalk.cs" />
+    <Compile Include="Model\IGeoLocation.cs" />
     <Compile Include="Model\PokemonGrade.cs" />
     <Compile Include="Model\Settings\AuthConfig.cs" />
     <Compile Include="Model\Settings\AuthSettings.cs" />
@@ -199,6 +206,7 @@
     <Compile Include="Model\Settings\ClientSettings.cs" />
     <Compile Include="Model\Settings\ConsoleConfig.cs" />
     <Compile Include="Model\Settings\CustomCatchConfig.cs" />
+    <Compile Include="Model\Settings\DataSharingConfig.cs" />
     <Compile Include="Model\Settings\DeviceConfig.cs" />
     <Compile Include="Model\Settings\EvolveConfig.cs" />
     <Compile Include="Model\Settings\GlobalSettings.cs" />
@@ -245,6 +253,7 @@
     <Compile Include="Model\Settings\LogicSettings.cs" />
     <Compile Include="Service\MapzenDirectionsService.cs" />
     <Compile Include="Service\YoursDirectionsService.cs" />
+    <Compile Include="State\BlockableScope.cs" />
     <Compile Include="State\CheckTosState.cs" />
     <Compile Include="State\SessionStats.cs" />
     <Compile Include="Strategies\Walk\BaseWalkStrategy.cs" />
@@ -319,6 +328,7 @@
     <Compile Include="Event\WarnEvent.cs" />
     <Compile Include="Tasks\TransferPokemonTask.cs" />
     <Compile Include="Tasks\TransferWeakPokemonTask.cs" />
+    <Compile Include="Tasks\UpgradeSinglePokemonTask.cs" />
     <Compile Include="Tasks\UseIncenseConstantlyTask.cs" />
     <Compile Include="Tasks\UseGymBattleTask.cs" />
     <Compile Include="Tasks\UseIncubatorsTask.cs" />

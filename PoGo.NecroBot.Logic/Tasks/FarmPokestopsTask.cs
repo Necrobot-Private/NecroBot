@@ -14,6 +14,7 @@ using PoGo.NecroBot.Logic.Utils;
 using PokemonGo.RocketAPI.Extensions;
 using POGOProtos.Map.Fort;
 using POGOProtos.Networking.Responses;
+using PoGo.NecroBot.Logic.Model;
 
 #endregion
 
@@ -41,14 +42,22 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 var eggWalker = new EggWalker(1000, session);
 
-                await session.Navigation.Move(new GeoCoordinate(
-                    session.Settings.DefaultLatitude,
+                var defaultLocation = new MapLocation(session.Settings.DefaultLatitude,
                     session.Settings.DefaultLongitude,
-                    LocationUtils.getElevation(session, session.Settings.DefaultLatitude,
-                    session.Settings.DefaultLongitude)),
-                    null,
+                    LocationUtils.getElevation(session, session.Settings.DefaultLatitude, session.Settings.DefaultLongitude)
+                );
+
+                await session.Navigation.Move(defaultLocation,
+                    async () =>
+                    {
+                        if (session.LogicSettings.ActivateMSniper)
+                        {
+                            await MSniperServiceTask.Execute(session, cancellationToken);
+                        }
+                    },
                     session,
                     cancellationToken);
+               
 
                 // we have moved this distance, so apply it immediately to the egg walker.
                 await eggWalker.ApplyDistance(distanceFromStart, cancellationToken);

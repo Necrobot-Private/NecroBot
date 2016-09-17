@@ -532,10 +532,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     case EncounterResponse.Types.Status.EncounterSuccess:
 
-                        if (session.LogicSettings.ActivateMSniper)
-                        {
-                            MSniperServiceTask.AddToList(session, encounter);
-                        }
                         if (!LocsVisited.Contains(new PokemonLocation(latitude, longitude)))
                             LocsVisited.Add(new PokemonLocation(latitude, longitude));
 
@@ -586,7 +582,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
 
                 if (!Equals(catchablePokemon.ElementAtOrDefault(catchablePokemon.Count - 1), pokemon))
-                    await Task.Delay(session.LogicSettings.DelayBetweenPokemonCatch, cancellationToken);
+                    await Task.Delay(session.LogicSettings.DelayBetweenPokemonUpgrade, cancellationToken);
             }
 
             if (!catchedPokemon)
