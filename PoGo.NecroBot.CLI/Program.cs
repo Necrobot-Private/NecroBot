@@ -379,7 +379,7 @@ namespace PoGo.NecroBot.CLI
         private static bool CheckKillSwitch()
         {
             #if DEBUG
-            return false;
+                return false;
             #endif
 
             using (var wC = new WebClient())
