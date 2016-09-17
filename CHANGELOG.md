@@ -20,7 +20,7 @@
 
 - no looting [\#101](https://github.com/Necrobot-Private/NecroBot/issues/101)
 - Fixes auth token refresh bug (regression)
-- 
+
 **Closed issues:**
 
 - Bot starting with error \[Fresh installation of 0.9.9.6\] [\#188](https://github.com/Necrobot-Private/NecroBot/issues/188)
