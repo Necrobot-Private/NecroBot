@@ -24,7 +24,7 @@ namespace PoGo.NecroBot.Logic.State
     public class VersionCheckState : IState
     {
         public const string VersionUri =
-            "https://rawgit.com/Necrobot-Private/NecroBot/master/PoGo.NecroBot.Logic/Properties/AssemblyInfo.cs";
+            "https://raw.githubusercontent.com/Necrobot-Private/NecroBot/master/PoGo.NecroBot.Logic/Properties/AssemblyInfo.cs";
 
         public const string LatestReleaseApi =
             "https://api.github.com/repos/Necrobot-Private/NecroBot/releases/latest";
@@ -203,7 +203,7 @@ namespace PoGo.NecroBot.Logic.State
                 if (gitVersion > Assembly.GetExecutingAssembly().GetName().Version)
                     return false;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return true; //better than just doing nothing when git server down
             }
