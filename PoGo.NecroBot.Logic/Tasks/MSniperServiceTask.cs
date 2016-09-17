@@ -95,20 +95,12 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 //access for rare pokemons
             }
-            else
+            else if (PokemonInfo.CalculatePokemonPerfection(eresponse.WildPokemon.PokemonData) < minIvPercent)
             {
-                if (PokemonInfo.CalculatePokemonPerfection(eresponse.WildPokemon.PokemonData) < minIvPercent)
-                {
-                    return;
-                }
-                if (session.LogicSettings.PokemonsNotToCatch.Contains(eresponse.WildPokemon.PokemonData.PokemonId))
-                {
-                    return;
-                }
+                return;
             }
 
-            if (LocationQueue.FirstOrDefault(p => p.EncounterId == eresponse.WildPokemon.EncounterId) != null ||
-                VisitedEncounterIds.Contains(eresponse.WildPokemon.EncounterId))
+            if (LocationQueue.FirstOrDefault(p => p.EncounterId == eresponse.WildPokemon.EncounterId) != null)
             {
                 return;
             }
