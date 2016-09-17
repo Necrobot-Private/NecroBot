@@ -6,8 +6,6 @@
 
 **Closed issues:**
 
-- Building solution got error "The name 'PokemonMoveMetaRegistry' does not exist in the current context". [\#189](https://github.com/Necrobot-Private/NecroBot/issues/189)
-
 ## [v0.9.9.7](https://github.com/Necrobot-Private/NecroBot/tree/v0.9.9.7) (2016-09-17)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.9.9.6...v0.9.9.7)
 
@@ -29,7 +27,8 @@
 - \[Bug / Help Wanted\] Command arguments creates jsonvalid folder instead of disabling it [\#142](https://github.com/Necrobot-Private/NecroBot/issues/142)
 - Pokesnipers cannot sniper 0.9.9.2 [\#131](https://github.com/Necrobot-Private/NecroBot/issues/131)
 - Not generate the LastPos.ini when the program is closed [\#116](https://github.com/Necrobot-Private/NecroBot/issues/116)
-
+- Building solution got error "The name 'PokemonMoveMetaRegistry' does not exist in the current context". [\#189](https://github.com/Necrobot-Private/NecroBot/issues/189)
+- 
 **Merged pull requests:**
 
 - updater bug fixed [\#186](https://github.com/Necrobot-Private/NecroBot/pull/186) ([msx752](https://github.com/msx752))
