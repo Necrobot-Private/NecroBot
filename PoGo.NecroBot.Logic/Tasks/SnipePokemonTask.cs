@@ -193,7 +193,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             return false;
         }
 
-        public static bool CheckSnipeConditions(ISession session)
+        private static bool CheckSnipeConditions(ISession session)
         {
             if (!session.LogicSettings.UseSnipeLimit) return true;
 

@@ -466,14 +466,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Source = "MSniperService",
                         Iv = location.Iv
                     });
-                    if (location.EncounterId != 0)
-                    {
-                        await CatchFromService(session, cancellationToken, location);
-                    }
-                    else
-                    {
-                        await CatchWithSnipe(session, cancellationToken, location);
-                    }
+
+                    await CatchFromService(session, cancellationToken, location);
                     await Task.Delay(1000, cancellationToken);
                 }
             }
@@ -485,14 +479,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                 session.EventDispatcher.Send(ee);
             }
             inProgress = false;
-        }
-
-        public static async Task CatchWithSnipe(ISession session, CancellationToken cancellationToken, EncounterInfo encounterId)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-          
-            await
-                  SnipePokemonTask.Snipe(session, new List<PokemonId>() { encounterId.PokemonId }, encounterId.Latitude, encounterId.Longitude, cancellationToken);
         }
     }
 }
