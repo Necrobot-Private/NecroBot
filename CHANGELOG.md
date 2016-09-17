@@ -1,10 +1,14 @@
 # Change Log
+## [v0.9.9.6](https://github.com/Necrobot-Private/NecroBot/tree/v0.9.9.6) (2016-09-17)
+**Implemented enhancements:**
+- initial socket data feed sharing feature 
 
+**Merged pull requests:**
+-More bug fixes and updates to 0.35 api  (https://github.com/Necrobot-Private/NecroBot/commit/35f1d7a7e145f368573f0ac33e6a778dd3292109) ([jjskuld](https://github.com/jjskuld))
 ## [v0.9.9.5](https://github.com/Necrobot-Private/NecroBot/tree/v0.9.9.5) (2016-09-15)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.9.9.4...v0.9.9.5)
 
 **Merged pull requests:**
-
 - Better iOS emulation [\#158](https://github.com/Necrobot-Private/NecroBot/pull/158) ([jjskuld](https://github.com/jjskuld))
 
 ## [v0.9.9.4](https://github.com/Necrobot-Private/NecroBot/tree/v0.9.9.4) (2016-09-15)
