@@ -7,6 +7,7 @@
 **Closed issues:**
 
 - Building solution got error "The name 'PokemonMoveMetaRegistry' does not exist in the current context". [\#189](https://github.com/Necrobot-Private/NecroBot/issues/189)
+- Fixes auth token refresh bug (regression)
 
 ## [v0.9.9.7](https://github.com/Necrobot-Private/NecroBot/tree/v0.9.9.7) (2016-09-17)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.9.9.6...v0.9.9.7)
