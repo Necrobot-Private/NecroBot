@@ -117,7 +117,7 @@ namespace PoGo.NecroBot.CLI
                     ProfilePath = profilePath,
                     ProfileConfigPath = profileConfigPath,
                     GeneralConfigPath = Path.Combine(Directory.GetCurrentDirectory(), "config"),
-                    ConsoleConfig = {TranslationLanguageCode = strCulture}
+                    ConsoleConfig = { TranslationLanguageCode = strCulture }
                 };
 
                 boolNeedsSetup = true;
@@ -265,7 +265,7 @@ namespace PoGo.NecroBot.CLI
             ProgressBar.Fill(90);
 
             _session.Navigation.WalkStrategy.UpdatePositionEvent +=
-                (lat, lng) => _session.EventDispatcher.Send(new UpdatePositionEvent {Latitude = lat, Longitude = lng});
+                (lat, lng) => _session.EventDispatcher.Send(new UpdatePositionEvent { Latitude = lat, Longitude = lng });
             _session.Navigation.WalkStrategy.UpdatePositionEvent += SaveLocationToDisk;
             UseNearbyPokestopsTask.UpdateTimeStampsPokestop += SaveTimeStampsPokestopToDisk;
             CatchPokemonTask.UpdateTimeStampsPokemon += SaveTimeStampsPokemonToDisk;
@@ -289,9 +289,19 @@ namespace PoGo.NecroBot.CLI
                 _session.LogicSettings.HumanWalkingSnipeUsePogoLocationFeeder)
                 SnipePokemonTask.AsyncStart(_session);
 
+            if (_session.LogicSettings.DataSharingEnable)
+            {
+                BotDataSocketClient.StartAsync(_session);
+                _session.EventDispatcher.EventReceived += evt => BotDataSocketClient.Listen(evt, _session);
+            }
             settings.CheckProxy(_session.Translation);
 
             QuitEvent.WaitOne();
+        }
+
+        private static void EventDispatcher_EventReceived(IEvent evt)
+        {
+            throw new NotImplementedException();
         }
 
         private static void SaveLocationToDisk(double lat, double lng)

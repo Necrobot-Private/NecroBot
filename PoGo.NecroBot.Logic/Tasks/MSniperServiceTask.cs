@@ -288,7 +288,11 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             socket.Dispose();
             socket = null;
-            Logger.Write("connection lost  (may be offline)", LogLevel.Service, ConsoleColor.Red);
+            TimeSpan ts = DateTime.Now - lastNotify;
+            if (ts.TotalMinutes > 5)
+            {
+                Logger.Write("connection lost  (may be offline)", LogLevel.Service, ConsoleColor.Red);
+            }
             //throw new Exception("msniper socket closed");
             ////need delay or clear PkmnLocations
 

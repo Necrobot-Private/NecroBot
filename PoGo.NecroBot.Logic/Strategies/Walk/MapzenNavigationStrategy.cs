@@ -10,6 +10,7 @@ using POGOProtos.Networking.Responses;
 using PoGo.NecroBot.Logic.Model.Mapzen;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Utils;
+using PoGo.NecroBot.Logic.Model;
 
 namespace PoGo.NecroBot.Logic.Strategies.Walk
 {
@@ -22,25 +23,23 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
             _mapzenDirectionsService = null;
         }
 
-        public override string GetWalkStrategyId()
-        {
-            return "Mapzen Walk";
-        }
+        public override string RouteName => "Mapzen Walk";
 
-        public override async Task<PlayerUpdateResponse> Walk(GeoCoordinate targetLocation, Func<Task> functionExecutedWhileWalking, ISession session, CancellationToken cancellationToken, double walkSpeed = 0.0)
+        public override async Task<PlayerUpdateResponse> Walk(IGeoLocation targetLocation, Func<Task> functionExecutedWhileWalking, ISession session, CancellationToken cancellationToken, double walkSpeed = 0.0)
         {
             GetMapzenInstance(session);
             var sourceLocation = new GeoCoordinate(_client.CurrentLatitude, _client.CurrentLongitude, _client.CurrentAltitude);
-            MapzenWalk mapzenWalk = _mapzenDirectionsService.GetDirections(sourceLocation, targetLocation);
+            var destinaionCoordinate = new GeoCoordinate(targetLocation.Latitude, targetLocation.Longitude);
+            MapzenWalk mapzenWalk = _mapzenDirectionsService.GetDirections(sourceLocation, destinaionCoordinate);
 
             if (mapzenWalk == null)
             {
                 return await RedirectToNextFallbackStrategy(session.LogicSettings, targetLocation, functionExecutedWhileWalking, session, cancellationToken);
             }
             
-            session.EventDispatcher.Send(new FortTargetEvent { Name = FortInfo.Name, Distance = mapzenWalk.Distance, Route = GetWalkStrategyId() });
+            base.OnStartWalking(session, targetLocation, mapzenWalk.Distance);
             List<GeoCoordinate> points = mapzenWalk.Waypoints;
-            return await DoWalk(points, session, functionExecutedWhileWalking, sourceLocation, targetLocation, cancellationToken, walkSpeed);
+            return await DoWalk(points, session, functionExecutedWhileWalking, sourceLocation, destinaionCoordinate, cancellationToken, walkSpeed);
         }
 
         private void GetMapzenInstance(ISession session)

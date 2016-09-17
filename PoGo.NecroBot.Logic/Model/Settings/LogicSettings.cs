@@ -88,7 +88,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public double ForceExcellentThrowOverIv => _settings.CustomCatchConfig.ForceExcellentThrowOverIv;
         public int ForceGreatThrowOverCp => _settings.CustomCatchConfig.ForceGreatThrowOverCp;
         public int ForceExcellentThrowOverCp => _settings.CustomCatchConfig.ForceExcellentThrowOverCp;
+        public int DelayBetweenPokemonUpgrade => _settings.PokemonConfig.DelayBetweenPokemonUpgrade;
         public int DelayBetweenPokemonCatch => _settings.PokemonConfig.DelayBetweenPokemonCatch;
+
         public int DelayBetweenPlayerActions => _settings.PlayerConfig.DelayBetweenPlayerActions;
         public int EvolveActionDelay => _settings.PlayerConfig.EvolveActionDelay;
         public int TransferActionDelay => _settings.PlayerConfig.TransferActionDelay;
@@ -221,5 +223,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool GymUseRandomPokemon => _settings.GymConfig.UseRandomPokemon;
 
         public int GymNumberOfTopPokemonToBeExcluded => _settings.GymConfig.NumberOfTopPokemonToBeExcluded;
-    }                         
+
+        public bool DataSharingEnable => _settings.DataSharingConfig.EnableSyncData;
+
+        public string DataSharingDataUrl => _settings.DataSharingConfig.DataRecieverURL;
+    }
 }

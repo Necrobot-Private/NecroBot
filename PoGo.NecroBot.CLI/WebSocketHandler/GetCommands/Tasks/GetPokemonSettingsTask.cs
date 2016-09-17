@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using PoGo.NecroBot.CLI.WebSocketHandler.GetCommands.Events;
 using PoGo.NecroBot.Logic.State;
 using SuperSocket.WebSocket;
+using PoGo.NecroBot.Logic.Model;
 
 #endregion
 
@@ -13,13 +14,18 @@ namespace PoGo.NecroBot.CLI.WebSocketHandler.GetCommands.Tasks
     {
         public static async Task Execute(ISession session, WebSocketSession webSocketSession, string requestID)
         {
-            var settings = await session.Inventory.GetPokemonSettings();
-            webSocketSession.Send(EncodingHelper.Serialize(new WebResponce
+            using (var blocker = new BlockableScope(session, BotActions.PokemonSettings))
             {
-                Command = "PokemonSettings",
-                Data = settings,
-                RequestID = requestID
-            }));
+                if (!await blocker.WaitToRun()) return;
+
+                var settings = await session.Inventory.GetPokemonSettings();
+                webSocketSession.Send(EncodingHelper.Serialize(new WebResponce
+                {
+                    Command = "PokemonSettings",
+                    Data = settings,
+                    RequestID = requestID
+                }));
+            }
         }
     }
 }
