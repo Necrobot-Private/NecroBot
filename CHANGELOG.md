@@ -1,21 +1,65 @@
 # Change Log
-## [v0.9.9.6](https://github.com/Necrobot-Private/NecroBot/tree/v0.9.9.6) (2016-09-17)
+
+## [Unreleased](https://github.com/Necrobot-Private/NecroBot/tree/HEAD)
+
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.9.9.7...HEAD)
+
+**Closed issues:**
+
+## [v0.9.9.7](https://github.com/Necrobot-Private/NecroBot/tree/v0.9.9.7) (2016-09-17)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.9.9.6...v0.9.9.7)
+
 **Implemented enhancements:**
-- initial socket data feed sharing feature 
+
+- PokeRadar, PokeCrew, and PokeFastMap not available on non-humanwalk [\#132](https://github.com/Necrobot-Private/NecroBot/issues/132)
+- Request: Add Buddy Pokemon Support [\#130](https://github.com/Necrobot-Private/NecroBot/issues/130)
+
+**Fixed bugs:**
+
+- no looting [\#101](https://github.com/Necrobot-Private/NecroBot/issues/101)
+- Fixes auth token refresh bug (regression)
+
+**Closed issues:**
+
+- Bot starting with error \[Fresh installation of 0.9.9.6\] [\#188](https://github.com/Necrobot-Private/NecroBot/issues/188)
+- Error after login [\#187](https://github.com/Necrobot-Private/NecroBot/issues/187)
+- Error with latest version 0.9.9.6 [\#178](https://github.com/Necrobot-Private/NecroBot/issues/178)
+- \[Bug / Help Wanted\] Command arguments creates jsonvalid folder instead of disabling it [\#142](https://github.com/Necrobot-Private/NecroBot/issues/142)
+- Pokesnipers cannot sniper 0.9.9.2 [\#131](https://github.com/Necrobot-Private/NecroBot/issues/131)
+- Not generate the LastPos.ini when the program is closed [\#116](https://github.com/Necrobot-Private/NecroBot/issues/116)
+- Building solution got error "The name 'PokemonMoveMetaRegistry' does not exist in the current context". [\#189](https://github.com/Necrobot-Private/NecroBot/issues/189)
 
 **Merged pull requests:**
--More bug fixes and updates to 0.35 api  (https://github.com/Necrobot-Private/NecroBot/commit/35f1d7a7e145f368573f0ac33e6a778dd3292109) ([jjskuld](https://github.com/jjskuld))
+
+- updater bug fixed [\#186](https://github.com/Necrobot-Private/NecroBot/pull/186) ([msx752](https://github.com/msx752))
+- necrobot2.exe.config: crash bug fixed [\#185](https://github.com/Necrobot-Private/NecroBot/pull/185) ([msx752](https://github.com/msx752))
+
+## [v0.9.9.6](https://github.com/Necrobot-Private/NecroBot/tree/v0.9.9.6) (2016-09-17)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.9.9.5...v0.9.9.6)
+
+**Implemented enhancements:**
+
+- Priority for snipes from Msniper [\#136](https://github.com/Necrobot-Private/NecroBot/issues/136)
+- Some of my recent work [\#174](https://github.com/Necrobot-Private/NecroBot/pull/174) ([samuraitruong](https://github.com/samuraitruong))
+- msniper rare pokemon priority+ reconnect delay [\#171](https://github.com/Necrobot-Private/NecroBot/pull/171) ([msx752](https://github.com/msx752))
+- msniper:  use berry while using msniper [\#170](https://github.com/Necrobot-Private/NecroBot/pull/170) ([msx752](https://github.com/msx752))
+- msniper select bestball [\#169](https://github.com/Necrobot-Private/NecroBot/pull/169) ([msx752](https://github.com/msx752))
+- msniper sniped pokemon's HP and LVL [\#168](https://github.com/Necrobot-Private/NecroBot/pull/168) ([msx752](https://github.com/msx752))
+- msniper priority + rare pokemon filter [\#167](https://github.com/Necrobot-Private/NecroBot/pull/167) ([msx752](https://github.com/msx752))
+- Enhancement/gym [\#156](https://github.com/Necrobot-Private/NecroBot/pull/156) ([HokoriXIII](https://github.com/HokoriXIII))
+
+**Fixed bugs:**
+
+- Duplication in the logs [\#114](https://github.com/Necrobot-Private/NecroBot/issues/114)
+
 ## [v0.9.9.5](https://github.com/Necrobot-Private/NecroBot/tree/v0.9.9.5) (2016-09-15)
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.9.9.4...v0.9.9.5)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.6.4...v0.9.9.5)
 
-**Merged pull requests:**
-- Better iOS emulation [\#158](https://github.com/Necrobot-Private/NecroBot/pull/158) ([jjskuld](https://github.com/jjskuld))
-
-## [v0.9.9.4](https://github.com/Necrobot-Private/NecroBot/tree/v0.9.9.4) (2016-09-15)
 **Implemented enhancements:**
 
 - Select team automatically, set in config. [\#53](https://github.com/Necrobot-Private/NecroBot/issues/53)
 - \(Request\) Mass evolving settings \(Pidgey Hoarding \(\(EXP Trick\)\) [\#41](https://github.com/Necrobot-Private/NecroBot/issues/41)
+- Better iOS emulation [\#158](https://github.com/Necrobot-Private/NecroBot/pull/158) ([jjskuld](https://github.com/jjskuld))
 - JP - correct translation [\#151](https://github.com/Necrobot-Private/NecroBot/pull/151) ([msx752](https://github.com/msx752))
 - GUI enhancements and bug fixes - 1\) Add option to choose a release ve… [\#145](https://github.com/Necrobot-Private/NecroBot/pull/145) ([jjskuld](https://github.com/jjskuld))
 - Add CommandLine Args [\#134](https://github.com/Necrobot-Private/NecroBot/pull/134) ([NzV](https://github.com/NzV))
@@ -74,6 +118,88 @@
 
 - merge+sync [\#60](https://github.com/Necrobot-Private/NecroBot/pull/60) ([msx752](https://github.com/msx752))
 
+## [v0.6.4](https://github.com/Necrobot-Private/NecroBot/tree/v0.6.4) (2016-08-03)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.6.3...v0.6.4)
+
+## [v0.6.3](https://github.com/Necrobot-Private/NecroBot/tree/v0.6.3) (2016-08-03)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/0.6.2...v0.6.3)
+
+## [0.6.2](https://github.com/Necrobot-Private/NecroBot/tree/0.6.2) (2016-08-02)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.6.2...0.6.2)
+
+## [v0.6.2](https://github.com/Necrobot-Private/NecroBot/tree/v0.6.2) (2016-08-02)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.6.1...v0.6.2)
+
+## [v0.6.1](https://github.com/Necrobot-Private/NecroBot/tree/v0.6.1) (2016-08-02)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.6.0...v0.6.1)
+
+## [v0.6.0](https://github.com/Necrobot-Private/NecroBot/tree/v0.6.0) (2016-08-02)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.5.0...v0.6.0)
+
+## [v0.5.0](https://github.com/Necrobot-Private/NecroBot/tree/v0.5.0) (2016-07-31)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.4.0...v0.5.0)
+
+## [v0.4.0](https://github.com/Necrobot-Private/NecroBot/tree/v0.4.0) (2016-07-30)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.3.3...v0.4.0)
+
+## [v0.3.3](https://github.com/Necrobot-Private/NecroBot/tree/v0.3.3) (2016-07-29)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.3.2...v0.3.3)
+
+## [v0.3.2](https://github.com/Necrobot-Private/NecroBot/tree/v0.3.2) (2016-07-29)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.3.1...v0.3.2)
+
+## [v0.3.1](https://github.com/Necrobot-Private/NecroBot/tree/v0.3.1) (2016-07-28)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.3.0...v0.3.1)
+
+## [v0.3.0](https://github.com/Necrobot-Private/NecroBot/tree/v0.3.0) (2016-07-28)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.2.1...v0.3.0)
+
+## [v0.2.1](https://github.com/Necrobot-Private/NecroBot/tree/v0.2.1) (2016-07-28)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.2.0...v0.2.1)
+
+## [v0.2.0](https://github.com/Necrobot-Private/NecroBot/tree/v0.2.0) (2016-07-28)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.9...v0.2.0)
+
+## [v0.1.9](https://github.com/Necrobot-Private/NecroBot/tree/v0.1.9) (2016-07-27)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.8...v0.1.9)
+
+## [v0.1.8](https://github.com/Necrobot-Private/NecroBot/tree/v0.1.8) (2016-07-27)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.7...v0.1.8)
+
+## [v0.1.7](https://github.com/Necrobot-Private/NecroBot/tree/v0.1.7) (2016-07-26)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.6...v0.1.7)
+
+## [v0.1.6](https://github.com/Necrobot-Private/NecroBot/tree/v0.1.6) (2016-07-26)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.5...v0.1.6)
+
+## [v0.1.5](https://github.com/Necrobot-Private/NecroBot/tree/v0.1.5) (2016-07-26)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.4...v0.1.5)
+
+## [v0.1.4](https://github.com/Necrobot-Private/NecroBot/tree/v0.1.4) (2016-07-26)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.1.2...v0.1.4)
+
+## [v0.1.1.2](https://github.com/Necrobot-Private/NecroBot/tree/v0.1.1.2) (2016-07-26)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.1.4...v0.1.1.2)
+
+## [v0.1.1.4](https://github.com/Necrobot-Private/NecroBot/tree/v0.1.1.4) (2016-07-26)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.1.0...v0.1.1.4)
+
+## [v0.1.1.0](https://github.com/Necrobot-Private/NecroBot/tree/v0.1.1.0) (2016-07-26)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.1.1...v0.1.1.0)
+
+## [v0.1.1.1](https://github.com/Necrobot-Private/NecroBot/tree/v0.1.1.1) (2016-07-26)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.3...v0.1.1.1)
+
+## [v0.1.3](https://github.com/Necrobot-Private/NecroBot/tree/v0.1.3) (2016-07-26)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.2...v0.1.3)
+
+## [v0.1.2](https://github.com/Necrobot-Private/NecroBot/tree/v0.1.2) (2016-07-26)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.1...v0.1.2)
+
+## [v0.1.1](https://github.com/Necrobot-Private/NecroBot/tree/v0.1.1) (2016-07-26)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1-beta...v0.1.1)
+
+## [v0.1-beta](https://github.com/Necrobot-Private/NecroBot/tree/v0.1-beta) (2016-07-25)
 
 
 \* *This Change Log was automatically generated by [github_changelog_generator](https://github.com/skywinder/Github-Changelog-Generator)*
