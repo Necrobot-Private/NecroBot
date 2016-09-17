@@ -100,10 +100,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     return;
                 }
-                if (session.LogicSettings.PokemonsNotToCatch.Contains(eresponse.WildPokemon.PokemonData.PokemonId))
-                {
-                    return;
-                }
             }
 
             if (LocationQueue.FirstOrDefault(p => p.EncounterId == eresponse.WildPokemon.EncounterId) != null ||
