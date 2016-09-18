@@ -234,21 +234,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                             pokemonCp >= session.LogicSettings.UseBerriesMinCp ||
                             probability < session.LogicSettings.UseBerriesBelowCatchProbability))) &&
                         lastThrow != CatchPokemonResponse.Types.CatchStatus.CatchMissed) // if last throw is a miss, no double berry
-                    {
-
-                        AmountOfBerries++;
-                        if (AmountOfBerries <= session.LogicSettings.MaxBerriesToUsePerPokemon)
                         {
-                            await UseBerry(session, _encounterId, _spawnPointId);
-                               //encounter is EncounterResponse || encounter is IncenseEncounterResponse
-                               //    ? pokemon.EncounterId
-                               //    : _encounterId,
-                               //encounter is EncounterResponse || encounter is IncenseEncounterResponse
-                               //    ? pokemon.SpawnPointId
-                               //    : currentFortData?.Id);
+                            AmountOfBerries++;
+                            if (AmountOfBerries <= session.LogicSettings.MaxBerriesToUsePerPokemon)
+                                await UseBerry(session, _encounterId, _spawnPointId);
                         }
-
-                    }
 
                     bool hitPokemon = true;
 
@@ -338,7 +328,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     lastThrow = caughtPokemonResponse.Status;       // sets lastThrow status
 
-                    if (session.LogicSettings.ActivateMSniper)      // take all encounter
+                    // Only use EncounterResponse for MSnipe (no Incense or Lures)
+                    if (session.LogicSettings.ActivateMSniper && encounter is EncounterResponse)      
                         MSniperServiceTask.AddToList(session, encounter);
 
                     if (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess)
@@ -394,18 +385,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                     evt.Id = encounter is EncounterResponse
                         ? pokemon.PokemonId : encounter?.PokemonData.PokemonId;
                     evt.EncounterId = _encounterId;
-                    //encounter is EncounterResponse || encounter is IncenseEncounterResponse
-                    //    ? pokemon.EncounterId
-                    //    : _encounterId;
-
                     evt.Move1 = PokemonInfo.GetPokemonMove1(encounteredPokemon);
                     evt.Move2 = PokemonInfo.GetPokemonMove2(encounteredPokemon);
                     evt.Expires = pokemon?.ExpirationTimestampMs ?? 0;
                     evt.SpawnPointId = _spawnPointId;
-                        //encounter is EncounterResponse || encounter is IncenseEncounterResponse
-                        //? pokemon.SpawnPointId
-                        //: currentFortData?.Id;
-
                     evt.Level = PokemonInfo.GetLevel(encounteredPokemon);
                     evt.Cp = encounteredPokemon.Cp;
                     evt.MaxCp = PokemonInfo.CalculateMaxCp(encounteredPokemon);
