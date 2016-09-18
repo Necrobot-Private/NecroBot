@@ -2,9 +2,30 @@
 
 ## [Unreleased](https://github.com/Necrobot-Private/NecroBot/tree/HEAD)
 
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.9.9.7...HEAD)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.9.9.8...HEAD)
 
 **Closed issues:**
+
+- \(Crash report\) Using incense make the bot crash [\#193](https://github.com/Necrobot-Private/NecroBot/issues/193)
+
+## [v0.9.9.8](https://github.com/Necrobot-Private/NecroBot/tree/v0.9.9.8) (2016-09-18)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.9.9.7...v0.9.9.8)
+
+**Closed issues:**
+
+- User credentials are invalid and login failed. [\#203](https://github.com/Necrobot-Private/NecroBot/issues/203)
+- Cannot login: System.Security.Cryptography.X509Certificates issue [\#198](https://github.com/Necrobot-Private/NecroBot/issues/198)
+- Need to be add more Pokemon to evolve list.. [\#195](https://github.com/Necrobot-Private/NecroBot/issues/195)
+- Building solution got error "The name 'PokemonMoveMetaRegistry' does not exist in the current context". [\#189](https://github.com/Necrobot-Private/NecroBot/issues/189)
+- 0.9.9.6 Keep on walking to a pokeshop but it never reach it [\#184](https://github.com/Necrobot-Private/NecroBot/issues/184)
+- 0.9.9.6 'POGOProtos.Networking.Responses.DiskEncounterResponse' does not contain a definition for 'WildPokemon' [\#179](https://github.com/Necrobot-Private/NecroBot/issues/179)
+
+**Merged pull requests:**
+
+- Fix \#179 WildPokemon-error with Incense/Lures [\#206](https://github.com/Necrobot-Private/NecroBot/pull/206) ([mo0ojava](https://github.com/mo0ojava))
+- Bug fix for bot skipping pokestops [\#199](https://github.com/Necrobot-Private/NecroBot/pull/199) ([jjskuld](https://github.com/jjskuld))
+- Revert "msniper: old and new format at the same time" [\#191](https://github.com/Necrobot-Private/NecroBot/pull/191) ([msx752](https://github.com/msx752))
+- msniper: old and new format at the same time [\#190](https://github.com/Necrobot-Private/NecroBot/pull/190) ([msx752](https://github.com/msx752))
 
 ## [v0.9.9.7](https://github.com/Necrobot-Private/NecroBot/tree/v0.9.9.7) (2016-09-17)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.9.9.6...v0.9.9.7)
@@ -17,7 +38,6 @@
 **Fixed bugs:**
 
 - no looting [\#101](https://github.com/Necrobot-Private/NecroBot/issues/101)
-- Fixes auth token refresh bug (regression)
 
 **Closed issues:**
 
@@ -27,7 +47,6 @@
 - \[Bug / Help Wanted\] Command arguments creates jsonvalid folder instead of disabling it [\#142](https://github.com/Necrobot-Private/NecroBot/issues/142)
 - Pokesnipers cannot sniper 0.9.9.2 [\#131](https://github.com/Necrobot-Private/NecroBot/issues/131)
 - Not generate the LastPos.ini when the program is closed [\#116](https://github.com/Necrobot-Private/NecroBot/issues/116)
-- Building solution got error "The name 'PokemonMoveMetaRegistry' does not exist in the current context". [\#189](https://github.com/Necrobot-Private/NecroBot/issues/189)
 
 **Merged pull requests:**
 
@@ -176,16 +195,16 @@
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.4...v0.1.5)
 
 ## [v0.1.4](https://github.com/Necrobot-Private/NecroBot/tree/v0.1.4) (2016-07-26)
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.1.2...v0.1.4)
-
-## [v0.1.1.2](https://github.com/Necrobot-Private/NecroBot/tree/v0.1.1.2) (2016-07-26)
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.1.4...v0.1.1.2)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.1.4...v0.1.4)
 
 ## [v0.1.1.4](https://github.com/Necrobot-Private/NecroBot/tree/v0.1.1.4) (2016-07-26)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.1.0...v0.1.1.4)
 
 ## [v0.1.1.0](https://github.com/Necrobot-Private/NecroBot/tree/v0.1.1.0) (2016-07-26)
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.1.1...v0.1.1.0)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.1.2...v0.1.1.0)
+
+## [v0.1.1.2](https://github.com/Necrobot-Private/NecroBot/tree/v0.1.1.2) (2016-07-26)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.1.1...v0.1.1.2)
 
 ## [v0.1.1.1](https://github.com/Necrobot-Private/NecroBot/tree/v0.1.1.1) (2016-07-26)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.3...v0.1.1.1)
