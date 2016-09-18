@@ -93,8 +93,35 @@ namespace PoGo.NecroBot.Logic.Tasks
             return false;
         }
 
-        public static async Task Execute(ISession session, CancellationToken cancellationToken, dynamic encounter, MapPokemon pokemon,
-            FortData currentFortData = null, ulong encounterId = 0, bool sessionAllowTransfer = true)
+        //public static async Task Execute(ISession session, CancellationToken cancellationToken, dynamic encounter, MapPokemon pokemon,
+        //    FortData currentFortData = null, ulong encounterId = 0, bool sessionAllowTransfer = true)
+
+        // Changelog
+
+        // From CatchNearbyPokemonTask
+        // await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, sessionAllowTransfer:sessionAllowTransfer);
+        // await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, currentFortData: null, sessionAllowTransfer:sessionAllowTransfer);
+
+        // From CatchLurePokemonTask
+        // await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, currentFortData, encounterId);
+        // await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, currentFortData, sessionAllowTransfer: true);
+
+        // From CatchIncensePokemonTask
+        // await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon);
+        // await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, currentFortData: null, sessionAllowTransfer: true);
+
+        // From SnipePokemonTask
+        // await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon);
+        // await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, currentFortData: null, sessionAllowTransfer: true);
+
+
+        public static async Task Execute(ISession session, 
+                                        CancellationToken cancellationToken, 
+                                        dynamic encounter, 
+                                        MapPokemon pokemon,
+                                        FortData currentFortData, 
+                                        //ulong encounterId = 0,
+                                        bool sessionAllowTransfer)
         {
             using (var block = new BlockableScope(session, Model.BotActions.Catch))
             {
@@ -113,13 +140,54 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 float probability = encounter.CaptureProbability?.CaptureProbability_[0];
 
+
+
+                //var encounteredPokemon = (encounter is EncounterResponse
+                //        ? encounter.WildPokemon?.PokemonData
+                //        : encounter?.PokemonData) as PokemonData;
+
+                PokemonData encounteredPokemon;
+                long unixTimeStamp;
+                ulong _encounterId;
+                string _spawnPointId;
+
+                // From CatchNearbyPokemonTask and SnipePokemonTask
+                if (encounter is EncounterResponse && 
+                    (encounter?.Status == EncounterResponse.Types.Status.EncounterSuccess))
+                    {
+                        encounteredPokemon = encounter.WildPokemon?.PokemonData;
+                        unixTimeStamp = encounter.WildPokemon?.LastModifiedTimestampMs
+                            + encounter.WildPokemon?.TimeTillHiddenMs;
+                        _spawnPointId = encounter.WildPokemon?.SpawnPointId;
+                        _encounterId = encounter.WildPokemon?.EncounterId;
+                    }
+                
+                // From CatchIncensePokemonTask
+                else if (encounter is IncenseEncounterResponse && 
+                    (encounter?.Result == IncenseEncounterResponse.Types.Result.IncenseEncounterSuccess))
+                    {
+                        encounteredPokemon = encounter?.PokemonData;
+                        unixTimeStamp = pokemon.ExpirationTimestampMs;
+                        _spawnPointId = pokemon.SpawnPointId;
+                        _encounterId = pokemon.EncounterId;
+                    }
+                // From CatchLurePokemon
+                else if (encounter is DiskEncounterResponse && 
+                    encounter?.Result == DiskEncounterResponse.Types.Result.Success && 
+                    !(currentFortData == null))
+                    {
+                        encounteredPokemon = encounter?.PokemonData;
+                        unixTimeStamp = currentFortData.LureInfo.LureExpiresTimestampMs;
+                        _spawnPointId = currentFortData.Id;
+                        _encounterId = currentFortData.LureInfo.EncounterId;
+                    }
+                else return; // No success to work with, exit
+
+
                 // Check for pokeballs before proceeding
-                var pokeball = await GetBestBall(session, encounter, probability);
+                var pokeball = await GetBestBall(session, encounteredPokemon, probability);
                 if (pokeball == ItemId.ItemUnknown) return;
 
-                var encounteredPokemon = (encounter is EncounterResponse
-                        ? encounter.WildPokemon?.PokemonData
-                        : encounter?.PokemonData) as PokemonData;
 
                 //Calculate CP and IV
                 var pokemonCp = encounteredPokemon?.Cp;
@@ -138,9 +206,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 var distance = LocationUtils.CalculateDistanceInMeters(session.Client.CurrentLatitude,
                     session.Client.CurrentLongitude, latitude, longitude);
-
                 
-                var unixTimeStamp = encounter.WildPokemon?.LastModifiedTimestampMs + encounter.WildPokemon?.TimeTillHiddenMs;
+//                var unixTimeStamp = encounter.WildPokemon?.LastModifiedTimestampMs + encounter.WildPokemon?.TimeTillHiddenMs;
                 DateTime expiredDate = new DateTime(1970, 1, 1, 0, 0, 0).AddMilliseconds(Convert.ToDouble(unixTimeStamp));
 
                 session.EventDispatcher.Send(new EncounteredEvent()
@@ -152,8 +219,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                     Level = (int)lv,
                     Expires = expiredDate.ToUniversalTime(),
                     ExpireTimestamp = unixTimeStamp,
-                    SpawnPointId = encounter.WildPokemon?.SpawnPointId,
-                    EncounterId = encounter.WildPokemon?.EncounterId
+                    SpawnPointId = _spawnPointId,
+                    EncounterId = _encounterId
+                    //SpawnPointId = encounter.WildPokemon?.SpawnPointId,
+                    //EncounterId = encounter.WildPokemon?.EncounterId
 
                 });
 
@@ -166,16 +235,16 @@ namespace PoGo.NecroBot.Logic.Tasks
                         attemptCounter > session.LogicSettings.MaxPokeballsPerPokemon))
                         break;
 
-                    pokeball = await GetBestBall(session, encounter, probability);
+                    pokeball = await GetBestBall(session, encounteredPokemon, probability);
                     if (pokeball == ItemId.ItemUnknown)
                     {
                         session.EventDispatcher.Send(new NoPokeballEvent
                         {
                             Id = encounter is EncounterResponse ? pokemon.PokemonId : encounter?.PokemonData.PokemonId,
-                            Cp =
-                                (encounter is EncounterResponse
-                                    ? encounter.WildPokemon?.PokemonData?.Cp
-                                    : encounter?.PokemonData?.Cp) ?? 0
+                            Cp = encounteredPokemon.Cp
+                                //(encounter is EncounterResponse
+                                //    ? encounter.WildPokemon?.PokemonData?.Cp
+                                //    : encounter?.PokemonData?.Cp) ?? 0
                         });
                         return;
                     }
@@ -198,7 +267,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                             await UseBerry(session,
                                encounter is EncounterResponse || encounter is IncenseEncounterResponse
                                    ? pokemon.EncounterId
-                                   : encounterId,
+                                   : _encounterId,
                                encounter is EncounterResponse || encounter is IncenseEncounterResponse
                                    ? pokemon.SpawnPointId
                                    : currentFortData?.Id);
@@ -279,7 +348,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                              await session.Client.Encounter.CatchPokemon(
                                  encounter is EncounterResponse || encounter is IncenseEncounterResponse
                                      ? pokemon.EncounterId
-                                     : encounterId,
+                                     : _encounterId,
                                  encounter is EncounterResponse || encounter is IncenseEncounterResponse
                                      ? pokemon.SpawnPointId
                                      : currentFortData.Id, pokeball, normalizedRecticleSize, spinModifier, hitPokemon);
@@ -352,33 +421,57 @@ namespace PoGo.NecroBot.Logic.Tasks
                         ? pokemon.PokemonId : encounter?.PokemonData.PokemonId;
                     evt.EncounterId = encounter is EncounterResponse || encounter is IncenseEncounterResponse
                         ? pokemon.EncounterId
-                        : encounterId;
-                    evt.Move1 = PokemonInfo.GetPokemonMove1(encounter is EncounterResponse
-                        ? encounter.WildPokemon?.PokemonData
-                        : encounter?.PokemonData);
-                    evt.Move2 = PokemonInfo.GetPokemonMove2(encounter is EncounterResponse
-                        ? encounter.WildPokemon?.PokemonData
-                        : encounter?.PokemonData);
+                        : _encounterId;
+
+                    evt.Move1 = PokemonInfo.GetPokemonMove1(encounteredPokemon);
+
+                    //evt.Move1 = PokemonInfo.GetPokemonMove1(encounter is EncounterResponse
+                    //    ? encounter.WildPokemon?.PokemonData
+                    //    : encounter?.PokemonData);
+
+                    evt.Move2 = PokemonInfo.GetPokemonMove2(encounteredPokemon);
+
+                    //evt.Move2 = PokemonInfo.GetPokemonMove2(encounter is EncounterResponse
+                    //    ? encounter.WildPokemon?.PokemonData
+                    //    : encounter?.PokemonData);
+
                     evt.Expires = pokemon?.ExpirationTimestampMs ?? 0;
                     evt.SpawnPointId = encounter is EncounterResponse || encounter is IncenseEncounterResponse
                         ? pokemon.SpawnPointId
                         : currentFortData?.Id;
+
                     evt.Level =
-                        PokemonInfo.GetLevel(encounter is EncounterResponse
-                            ? encounter.WildPokemon?.PokemonData
-                            : encounter?.PokemonData);
-                    evt.Cp = encounter is EncounterResponse
-                        ? encounter.WildPokemon?.PokemonData?.Cp
-                        : encounter?.PokemonData?.Cp ?? 0;
+                        PokemonInfo.GetLevel(encounteredPokemon);
+
+                    //evt.Level =
+                    //    PokemonInfo.GetLevel(encounter is EncounterResponse
+                    //        ? encounter.WildPokemon?.PokemonData
+                    //        : encounter?.PokemonData);
+
+                    evt.Cp = encounteredPokemon.Cp;
+
+                    //evt.Cp = encounter is EncounterResponse
+                    //    ? encounter.WildPokemon?.PokemonData?.Cp
+                    //    : encounter?.PokemonData?.Cp ?? 0;
+
                     evt.MaxCp =
-                        PokemonInfo.CalculateMaxCp(encounter is EncounterResponse
-                            ? encounter.WildPokemon?.PokemonData
-                            : encounter?.PokemonData);
+                        PokemonInfo.CalculateMaxCp(encounteredPokemon);
+
+                    //evt.MaxCp =
+                    //    PokemonInfo.CalculateMaxCp(encounter is EncounterResponse
+                    //        ? encounter.WildPokemon?.PokemonData
+                    //        : encounter?.PokemonData);
+
                     evt.Perfection =
                         Math.Round(
-                            PokemonInfo.CalculatePokemonPerfection(encounter is EncounterResponse
-                                ? encounter.WildPokemon?.PokemonData
-                                : encounter?.PokemonData));
+                            PokemonInfo.CalculatePokemonPerfection(encounteredPokemon));
+
+                    //evt.Perfection =
+                    //    Math.Round(
+                    //        PokemonInfo.CalculatePokemonPerfection(encounter is EncounterResponse
+                    //            ? encounter.WildPokemon?.PokemonData
+                    //            : encounter?.PokemonData));
+
                     evt.Probability =
                         Math.Round(probability * 100, 2);
                     evt.Distance = distance;
@@ -412,19 +505,29 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
         }
 
-        public static async Task<ItemId> GetBestBall(ISession session, dynamic encounter, float probability)
+        public static async Task<ItemId> GetBestBall(ISession session, PokemonData encounteredPokemon, float probability)
         {
-            var pokemonCp = encounter is EncounterResponse
-                ? encounter.WildPokemon?.PokemonData?.Cp
-                : encounter?.PokemonData?.Cp;
-            var pokemonId = encounter is EncounterResponse
-                ? encounter.WildPokemon?.PokemonData?.PokemonId
-                : encounter?.PokemonData?.PokemonId;
+            var pokemonCp = encounteredPokemon.Cp;
+
+            //var pokemonCp = encounter is EncounterResponse
+            //    ? encounter.WildPokemon?.PokemonData?.Cp
+            //    : encounter?.PokemonData?.Cp;
+
+            var pokemonId = encounteredPokemon.PokemonId;
+
+            //var pokemonId = encounter is EncounterResponse
+            //    ? encounter.WildPokemon?.PokemonData?.PokemonId
+            //    : encounter?.PokemonData?.PokemonId;
+
             var iV =
                 Math.Round(
-                    PokemonInfo.CalculatePokemonPerfection(encounter is EncounterResponse
-                    ? encounter.WildPokemon?.PokemonData
-                    : encounter?.PokemonData), 2);
+                    PokemonInfo.CalculatePokemonPerfection(encounteredPokemon), 2);
+
+            //var iV =
+            //    Math.Round(
+            //        PokemonInfo.CalculatePokemonPerfection(encounter is EncounterResponse
+            //        ? encounter.WildPokemon?.PokemonData
+            //        : encounter?.PokemonData), 2);
 
             var pokeBallsCount = await session.Inventory.GetItemAmountByType(ItemId.ItemPokeBall);
             var greatBallsCount = await session.Inventory.GetItemAmountByType(ItemId.ItemGreatBall);

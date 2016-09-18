@@ -56,8 +56,9 @@ namespace PoGo.NecroBot.Logic.Tasks
 						PokemonId = currentFortData.LureInfo.ActivePokemonId,
 						SpawnPointId = currentFortData.Id
 					};
-					
-                    await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, currentFortData, encounterId);
+
+                    // await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, currentFortData, encounterId);
+                    await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, currentFortData, sessionAllowTransfer: true);
                 }
                 else if (encounter.Result == DiskEncounterResponse.Types.Result.PokemonInventoryFull)
                 {
