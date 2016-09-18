@@ -179,15 +179,14 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 PokemonData encounteredPokemon;
 
-                // From CatchNearbyPokemonTask and SnipePokemonTask
-                if (encounter?.Status == EncounterResponse.Types.Status.EncounterSuccess)
+                // Catch if it's a WildPokemon (MSniping not allowed for Incense pokemons)
+                if (encounter is EncounterResponse && (encounter?.Status == EncounterResponse.Types.Status.EncounterSuccess))
                 {
                     encounteredPokemon = encounter.WildPokemon?.PokemonData;
                 }
                 else return; // No success to work with
-
-
                 var bestBall = await CatchPokemonTask.GetBestBall(session, encounteredPokemon, probability);
+
                 if (((session.LogicSettings.UseBerriesOperator.ToLower().Equals("and") &&
                        encounterId.Iv >= session.LogicSettings.UseBerriesMinIv &&
                        cp >= session.LogicSettings.UseBerriesMinCp &&

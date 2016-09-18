@@ -545,7 +545,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                             Longitude = currentLongitude
                         });
 
-                        await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, currentFortData: null, sessionAllowTransfer: true);
+                        await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, 
+                            currentFortData: null, sessionAllowTransfer: true);
+
                         catchedPokemon = true;
                         break;
 
