@@ -663,7 +663,7 @@
     },
     {
       "Key": "firstStartSetupWebSocketPortPrompt",
-      "Value": "Please enter your WebSocket Port"
+      "Value": "Please enter your WebSocket Port (default 14251)"
     },
     {
       "Key": "firstStartSetupWebSocketPortConfirm",
