@@ -379,18 +379,19 @@ namespace PoGo.NecroBot.Logic.Tasks
                         break;
 
                     case SocketCmd.Brodcaster://receiving encounter information from server
-                        var xcoming = JsonConvert.DeserializeObject<List<EncounterInfo>>(e.GetSocketData().First());
-                        int received = xcoming.Count;
-                        xcoming = FindNew(xcoming);
-                        int haventvisited = xcoming.Count;
-                        ReceivedPokemons.AddRange(xcoming);
-                        RefreshReceivedPokemons();
-                        TimeSpan ts = DateTime.Now - lastNotify;
-                        if (ts.TotalMinutes >= 5)
-                        {
-                            Logger.Write($"total active spawns:[ {ReceivedPokemons.Count} ]", LogLevel.Service);
-                            lastNotify = DateTime.Now;
-                        }
+
+                        //// disabled fornow
+                        //var xcoming = JsonConvert.DeserializeObject<List<EncounterInfo>>(e.GetSocketData().First());
+                        //xcoming = FindNew(xcoming);
+                        //ReceivedPokemons.AddRange(xcoming);
+                        //
+                        //RefreshReceivedPokemons();
+                        //TimeSpan ts = DateTime.Now - lastNotify;
+                        //if (ts.TotalMinutes >= 5)
+                        //{
+                        //    Logger.Write($"total active spawns:[ {ReceivedPokemons.Count} ]", LogLevel.Service);
+                        //    lastNotify = DateTime.Now;
+                        //}
                         break;
                     case SocketCmd.None:
                         Logger.Write("UNKNOWN ERROR", LogLevel.Service, ConsoleColor.Red);
@@ -427,6 +428,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
         }
         #endregion
+
         public static async Task Execute(ISession session, CancellationToken cancellationToken)
         {
             if (inProgress)
@@ -440,7 +442,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             try
             {
                 if (!File.Exists(pth))
-                { 
+                {
                     inProgress = false;
                     return;
                 }
@@ -468,8 +470,14 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Source = "MSniperService",
                         Iv = location.Iv
                     });
-
-                    await CatchFromService(session, cancellationToken, location);
+                    if (location.EncounterId != 0)
+                    {
+                        await CatchFromService(session, cancellationToken, location);
+                    }
+                    else
+                    {
+                        await CatchWithSnipe(session, cancellationToken, location);
+                    }
                     await Task.Delay(1000, cancellationToken);
                 }
             }
@@ -481,6 +489,14 @@ namespace PoGo.NecroBot.Logic.Tasks
                 session.EventDispatcher.Send(ee);
             }
             inProgress = false;
+        }
+
+        public static async Task CatchWithSnipe(ISession session, CancellationToken cancellationToken, EncounterInfo encounterId)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            await
+                  SnipePokemonTask.Snipe(session, new List<PokemonId>() { encounterId.PokemonId }, encounterId.Latitude, encounterId.Longitude, cancellationToken);
         }
     }
 }
