@@ -1,10 +1,16 @@
+<p align="center">
+<a href="">
+    <img alt="Logo" src="http://image.prntscr.com/image/b238b63b4f044813a91f772241be8d45.jpg" width="600">
+</a>
+
 <strong><em> The contents of this repo are a proof of concept and are for educational use only </em></strong>
 
 
 
-### Do NOT publish/share/advertise this github or discord, in any other discord server or website.
+<h2>Do NOT publish/share/advertise this github or discord, in any other discord server or website.</h2>
 [![Stories in Ready](https://discordapp.com/api/guilds/220703917871333376/widget.png?style=banner2&time-)](https://discord.gg/7FWyWVp)
 
+[![Build status](https://ci.appveyor.com/api/projects/status/mvr6v0v99gscqxbn/branch/master?svg=true)](https://ci.appveyor.com/project/NzV/necrobot/branch/master)
 [![Github All Releases](https://img.shields.io/github/downloads/Necrobot-Private/NecroBot/total.svg?maxAge=258)](https://github.com/Necrobot-Private/NecroBot/releases)
 [![GitHub license](https://img.shields.io/badge/license-AGPL-blue.svg)](https://raw.githubusercontent.com/Necrobot-Private/NecroBot/master/LICENSE.md)
 
@@ -19,33 +25,7 @@ Make sure you check out our [Wiki](https://github.com/Necrobot-Private/NecroBot/
 
 
 
-<h2><a name="features">Features</a></h2>
-
- - [PTC Login / Google]
- - [Get Map Objects and Inventory]
- - [Search for forts/spawns]
- - [Farm forts]
- - [Farm all Monster in neighbourhood]
- - [Throw Berries/use best ball]
- - [Transfers duplicate Monsters]
- - [Evolve / Upgrade all Monster]
- - [Throws away unneeded items]
- - [Humanlike Walking]
- - [Humanlike Throwing]
- - [Configurable Custom Pathing]
- - [Softban bypass]
- - [AutoUpdate / VersionCheck]
- - [Multilanguage Support]
- - [Use lucky egg while evolve]
- - [Egg Hatching Automatically]
- - [Multi bot support]
- - [Snipe Monster]
-  - [Manual Locations](https://github.com/Necrobot-Private/NecroBot/wiki/Manual-Locations-Sniping-Guide)
-  - [Automatic Locations](https://github.com/NNecrobot-Private/NecroBot/wiki/Automatic-Locations-Sniping-Guide)
-  - [HumanWalk Sniping](https://github.com/Necrobot-Private/NecroBot/wiki/Human-walk-snipe-config)
-  - [MSniper Sniping](https://github.com/Necrobot-Private/NecroBot/wiki/MSniper-Manual-Sniping-Guide)
- - [Power-Up Monster]
- - [Telegram Remote Control Support]
+<h2><a name="features">Awesome Test Features</a></h2>
 
 ## [Credits](http://pastebin.com/Yh4ynXbv)
 

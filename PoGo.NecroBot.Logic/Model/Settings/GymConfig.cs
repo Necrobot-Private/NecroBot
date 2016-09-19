@@ -1,16 +1,22 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
-using POGOProtos.Enums;
 
 namespace PoGo.NecroBot.Logic.Model.Settings
 {
     [JsonObject(Title = "Gym Config", Description = "This config to setup rules for bot doing gym", ItemRequired = Required.DisallowNull)]
     public class GymConfig
     {
-        [DefaultValue(true)]
+        internal enum TeamColor
+        {
+            Yellow,
+            Red,
+            Blue
+        }
+
+        [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
-        public bool Enable = true;
+        public bool Enable;
 
         [DefaultValue(500.0)]
         [Range(0, 9999)]
@@ -18,6 +24,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public double MaxDistance = 1500.0;
 
         [DefaultValue("Yellow")]
+        [EnumDataType(typeof(TeamColor))]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
         public string DefaultTeam = "Yellow";
 
@@ -36,13 +43,12 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
-
-        public bool UseRandomPokemon = false;
+        public bool UseRandomPokemon;
 
         [DefaultValue(10)]
         [Range(0, 999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
-
         public int NumberOfTopPokemonToBeExcluded = 10;
+
     }
 }

@@ -10,6 +10,7 @@ using PokemonGo.RocketAPI;
 using POGOProtos.Networking.Responses;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Utils;
+using PoGo.NecroBot.Logic.Model;
 
 namespace PoGo.NecroBot.Logic.Strategies.Walk
 {
@@ -22,23 +23,27 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
             _googleDirectionsService = null;
         }
 
-        public override async Task<PlayerUpdateResponse> Walk(GeoCoordinate targetLocation, Func<Task> functionExecutedWhileWalking, ISession session, CancellationToken cancellationToken, double walkSpeed = 0.0)
+        public override string RouteName => "Google Walk";
+
+        public override async Task<PlayerUpdateResponse> Walk(IGeoLocation targetLocation, Func<Task> functionExecutedWhileWalking, ISession session, CancellationToken cancellationToken, double walkSpeed = 0.0)
         {
             GetGoogleInstance(session);
 
             _minStepLengthInMeters = session.LogicSettings.DefaultStepLength;
             var currentLocation = new GeoCoordinate(_client.CurrentLatitude, _client.CurrentLongitude, _client.CurrentAltitude);
-            var googleResult = _googleDirectionsService.GetDirections(currentLocation, new List<GeoCoordinate>(), targetLocation);
+            var destinaionCoordinate = new GeoCoordinate(targetLocation.Latitude, targetLocation.Longitude);
 
-            if (googleResult == null || googleResult.Directions.status.Equals("OVER_QUERY_LIMIT"))
+            var googleWalk = _googleDirectionsService.GetDirections(currentLocation, new List<GeoCoordinate>(), destinaionCoordinate);
+
+            if (googleWalk == null)
             {
                 return await RedirectToNextFallbackStrategy(session.LogicSettings, targetLocation, functionExecutedWhileWalking, session, cancellationToken, walkSpeed);
             }
+            
+            base.OnStartWalking(session, targetLocation, googleWalk.Distance);
 
-            var googleWalk = GoogleWalk.Get(googleResult);
-            session.EventDispatcher.Send(new FortTargetEvent { Name = FortInfo.Name, Distance = googleResult.GetDistance(), Route = "GoogleWalk" });
             List <GeoCoordinate> points = googleWalk.Waypoints;
-            return await DoWalk(points, session, functionExecutedWhileWalking, currentLocation, targetLocation, cancellationToken, walkSpeed);
+            return await DoWalk(points, session, functionExecutedWhileWalking, currentLocation, destinaionCoordinate, cancellationToken, walkSpeed);
         }
 
         private void GetGoogleInstance(ISession session)

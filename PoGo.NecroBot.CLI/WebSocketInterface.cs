@@ -127,6 +127,10 @@ namespace PoGo.NecroBot.CLI
             {
                 // ignored
             }
+
+            // When we first get a message from the web socket, turn off log buffering.
+            // This allows us to flush out buffered LogEvent messages to the GUI.
+            Logger.TurnOffLogBuffering();
         }
 
         private void HandleSession(WebSocketSession session)

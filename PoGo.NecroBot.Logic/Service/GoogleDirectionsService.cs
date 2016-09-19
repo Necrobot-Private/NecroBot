@@ -23,56 +23,67 @@ namespace PoGo.NecroBot.Logic.Service
             OldResults = new List<GoogleResult>();
         }
 
-        public GoogleResult GetDirections(GeoCoordinate origin, List<GeoCoordinate> waypoints, GeoCoordinate destino)
+        public GoogleWalk GetDirections(GeoCoordinate origin, List<GeoCoordinate> waypoints, GeoCoordinate destino)
         {
-            if (_cache)
+            GoogleResult googleResult = null;
+            try
             {
-                var item = OldResults.FirstOrDefault(pesquisa => IsSameAdress(origin, waypoints, destino, pesquisa));
-                if (item != null)
+                if (_cache)
                 {
-                    item.FromCache = true;
-                    return item;
-                }
-            }
-            var url = GetUrl(origin, waypoints, destino);
-
-            using (var client = new HttpClient())
-            {
-                try
-                {
-                    client.BaseAddress = new Uri("https://maps.googleapis.com/maps/api/");
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                    HttpResponseMessage responseMessage = client.GetAsync(url).Result;
-                    var resposta = responseMessage.Content.ReadAsStringAsync();
-                    var google = JsonConvert.DeserializeObject<DirectionsResponse>(resposta.Result);
-                    if (google.status.Equals("OVER_QUERY_LIMIT"))
+                    var item = OldResults.FirstOrDefault(pesquisa => IsSameAdress(origin, waypoints, destino, pesquisa));
+                    if (item != null)
                     {
-                        // If we get an error, don't cache empty GoogleResult.  Just return null.
-                        return null;
+                        item.FromCache = true;
+                        googleResult = item;
                     }
-
-                    var resultadoPesquisa = new GoogleResult
-                    {
-                        Directions = google,
-                        RequestDate = DateTime.Now,
-                        Origin = origin,
-                        Waypoints = waypoints,
-                        Destiny = destino,
-                        FromCache = false,
-                    };
-
-                    if (_cache)
-                        SaveResult(resultadoPesquisa);
-
-                    return resultadoPesquisa;
                 }
-                catch(Exception)
+
+                if (googleResult == null)
                 {
-                    return null;
+                    var url = GetUrl(origin, waypoints, destino);
+
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = new Uri("https://maps.googleapis.com/maps/api/");
+                        client.DefaultRequestHeaders.Accept.Clear();
+                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                        HttpResponseMessage responseMessage = client.GetAsync(url).Result;
+                        var resposta = responseMessage.Content.ReadAsStringAsync();
+                        var google = JsonConvert.DeserializeObject<DirectionsResponse>(resposta.Result);
+                        if (google.status.Equals("OVER_QUERY_LIMIT"))
+                        {
+                            // If we get an error, don't cache empty GoogleResult.  Just return null.
+                            return null;
+                        }
+
+                        var resultadoPesquisa = new GoogleResult
+                        {
+                            Directions = google,
+                            RequestDate = DateTime.Now,
+                            Origin = origin,
+                            Waypoints = waypoints,
+                            Destiny = destino,
+                            FromCache = false,
+                        };
+
+                        if (_cache)
+                            SaveResult(resultadoPesquisa);
+
+                        googleResult = resultadoPesquisa;
+                    }
+                }
+
+                if (googleResult != null)
+                {
+                    return GoogleWalk.Get(googleResult);
                 }
             }
+            catch(Exception)
+            {
+
+            }
+            return null;
         }
 
         private static bool IsSameAdress(GeoCoordinate origem, List<GeoCoordinate> waypoints, GeoCoordinate destino, GoogleResult googleSearch)

@@ -3,7 +3,6 @@ using PoGo.NecroBot.Logic.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using WebSocket4Net;
@@ -15,7 +14,10 @@ namespace PoGo.NecroBot.Logic.Tasks
         private static async Task<List<SnipePokemonInfo>> FetchFromPokeZZ(double lat, double lng)
         {
             List<SnipePokemonInfo> results = new List<SnipePokemonInfo>();
-            // if (!_setting.HumanWalkingSnipeUsePokeRadar) return results;
+            if (!_setting.HumanWalkingSnipeUsePokeZZ) return results;
+
+            //var startFetchTime = DateTime.Now;
+
             string url = "ws://pokezz.com/socket.io/?EIO=3&transport=websocket";
             try
             {
@@ -45,9 +47,10 @@ namespace PoGo.NecroBot.Logic.Tasks
             catch (Exception )
             {
                 Logger.Write("Error loading data from Pokezz", LogLevel.Error, ConsoleColor.DarkRed);
-
             }
 
+            //var endFetchTime = DateTime.Now;
+            //Logger.Write($"FetchFromPokeZZ spent {(endFetchTime - startFetchTime).TotalSeconds} seconds", LogLevel.Info, ConsoleColor.White);
             return results;
         }
 
@@ -73,7 +76,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                 @"(?<id>\d+)\|(?<lat>\-?\d+[\,|\.]\d+)\|(?<lon>\-?\d+[\,|\.]\d+)\|(?<expires>\d+)\|(?<verified>[1|0])\|\|");
             if (match.Success)
             {
-
                 var pokemonId = Convert.ToInt32(match.Groups["id"].Value);
                 var sniperInfo = new SnipePokemonInfo()
                 {
@@ -81,7 +83,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                     Source = "PokeZZ"
                 };
 
-                //sniperInfo.Id = pokemonId;
                 var lat = Convert.ToDouble(match.Groups["lat"].Value);
                 var lon = Convert.ToDouble(match.Groups["lon"].Value);
 
@@ -91,14 +92,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                 var expires = Convert.ToInt64(match.Groups["expires"].Value);
                 if (expires != default(long))
                 {
-                    //var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-                    //var untilTime = epoch.AddSeconds(expires).ToLocalTime();
-                    //if (untilTime < DateTime.Now)
-                    //{
-                    //    return null;
-                    //}
-                    //sniperInfo.ExpirationTimestamp = DateTime.Now.AddMinutes(15) < untilTime ?
-                    //    DateTime.Now.AddMinutes(15) : untilTime;
                     sniperInfo.ExpiredTime = UnixTimeStampToDateTime(expires);
                 }
                 return sniperInfo;

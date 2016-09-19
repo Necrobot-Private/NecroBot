@@ -272,9 +272,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 52)]
         public bool UseKeepMinLvl;
 
-        [DefaultValue(false)]
+        [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 53)]
-        public bool PrioritizeIvOverCp;
+        public bool PrioritizeIvOverCp = true;
 
         [DefaultValue(1)]
         [Range(0, 999)]
@@ -294,5 +294,10 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 57)]
         public bool DumpPokemonStats;
+
+        [DefaultValue(10000)]
+        [Range(0, 99999)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 58)]
+        public int DelayBetweenPokemonUpgrade = 10000;
     }
 }

@@ -89,9 +89,6 @@
   <ItemGroup>
     <Content Include="Resources\Ico.ico" />
     <Content Include="FodyWeavers.xml" />
-    <Content Include="Resources\encrypt.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Reference Include="C5, Version=2.4.5947.17248, Culture=neutral, PublicKeyToken=282361b99ded7e8e, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\C5.2.4.5947.17249\lib\net45\C5.dll</HintPath>
       <Private>True</Private>
@@ -239,8 +236,14 @@
     <Reference Include="Microsoft.CSharp">
       <Private>True</Private>
     </Reference>
+    <Reference Include="websocket-sharp, Version=1.0.2.59611, Culture=neutral, PublicKeyToken=5660b08a1845a91e, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebSocketSharp.1.0.3-rc11\lib\websocket-sharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BotDataSocketClient.cs" />
+    <Compile Include="CommandLineUtility\Arguments.cs" />
     <Compile Include="SniperEventListener.cs" />
     <Compile Include="ConsoleEventListener.cs" />
     <Compile Include="ConsoleLogger.cs" />
@@ -253,6 +256,7 @@
     <Compile Include="Resources\ProgressBar.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebSocketHandler\ActionCommands\UpgradePokemonHandler.cs" />
     <Compile Include="WebSocketHandler\ActionCommands\SetMoveToTarget.cs" />
     <Compile Include="WebSocketHandler\ActionCommands\SetConfigHandler.cs" />
     <Compile Include="WebSocketHandler\ActionCommands\HumanSnipeRemovePokemonHandler.cs" />
@@ -294,9 +298,9 @@
     <Compile Include="WebSocketInterface.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config">
+    <EmbeddedResource Include="App.config">
       <SubType>Designer</SubType>
-    </None>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Config\log4net.config" />
     <None Include="Config\log4net.unix.config" />

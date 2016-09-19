@@ -40,7 +40,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 session.EventDispatcher.Send(new UpgradePokemonEvent()
                 {
-                    Id = upgradeResult.UpgradedPokemon.PokemonId,
+                    PokemonId = upgradeResult.UpgradedPokemon.PokemonId,
+                    Id = upgradeResult.UpgradedPokemon.Id,
                     Cp = upgradeResult.UpgradedPokemon.Cp,
                     BestCp = bestPokemonOfType.Cp,
                     BestPerfection = PokemonInfo.CalculatePokemonPerfection(bestPokemonOfType),
@@ -59,7 +60,6 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (session.Inventory.GetStarDust() <= session.LogicSettings.GetMinStarDustForLevelUp)
                 return;
             upgradablePokemon = await session.Inventory.GetPokemonToUpgrade();
-           
                       
             if (upgradablePokemon.Count() == 0)
                 return;
@@ -86,7 +86,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                             await UpgradeSinglePokemon(session, pokemon, pokemonFamilies, pokemonSettings);
                             if (upgradedNumber >= session.LogicSettings.AmountOfTimesToUpgradeLoop)
                                 break;
-                            await Task.Delay(session.LogicSettings.DelayBetweenPlayerActions);
+                            await Task.Delay(session.LogicSettings.DelayBetweenPokemonUpgrade);
                             upgradedNumber++;
                         }
                         else

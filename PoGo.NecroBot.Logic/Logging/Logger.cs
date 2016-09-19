@@ -18,6 +18,12 @@ namespace PoGo.NecroBot.Logic.Logging
         private static string _lastLogMessage;
         private static bool _isGui;
 
+        public static void TurnOffLogBuffering()
+        {
+            if (_logger != null)
+                _logger.TurnOffLogBuffering();
+        }
+
         private static void Log(string message, bool force = false)
         {
             lock (LogbufferList)
@@ -81,6 +87,7 @@ namespace PoGo.NecroBot.Logic.Logging
         {
             if (_logger == null || _lastLogMessage == message)
                 return;
+
             _lastLogMessage = message;
             _logger.Write(message, level, color);
 
@@ -94,10 +101,10 @@ namespace PoGo.NecroBot.Logic.Logging
                 {
                     Log(string.Concat($"[{DateTime.Now.ToString("HH:mm:ss")}] ", message), force);
                 }
-                
+
 
             }
-                
+
         }
 
         public static void lineSelect(int lineChar = 0, int linesUp = 1)
@@ -127,6 +134,7 @@ namespace PoGo.NecroBot.Logic.Logging
         SoftBan = 16,
         LevelUp = 17,
         Gym = 18,
-        Debug = 19,
+        Service = 19,
+        Debug = 20,
     }
 }
