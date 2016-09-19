@@ -6,6 +6,7 @@ using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Model.Settings;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Utils;
+using POGOProtos.Data;
 using POGOProtos.Enums;
 using POGOProtos.Map.Pokemon;
 using POGOProtos.Networking.Responses;
@@ -176,7 +177,16 @@ namespace PoGo.NecroBot.Logic.Tasks
                 int maxcp = PokemonInfo.CalculateMaxCp(encounter.WildPokemon.PokemonData);
                 double lvl = PokemonInfo.GetLevel(encounter.WildPokemon.PokemonData);
 
-                var bestBall = await CatchPokemonTask.GetBestBall(session, encounter, probability);
+                PokemonData encounteredPokemon;
+
+                // Catch if it's a WildPokemon (MSniping not allowed for Incense pokemons)
+                if (encounter is EncounterResponse && (encounter?.Status == EncounterResponse.Types.Status.EncounterSuccess))
+                {
+                    encounteredPokemon = encounter.WildPokemon?.PokemonData;
+                }
+                else return; // No success to work with
+                var bestBall = await CatchPokemonTask.GetBestBall(session, encounteredPokemon, probability);
+
                 if (((session.LogicSettings.UseBerriesOperator.ToLower().Equals("and") &&
                        encounterId.Iv >= session.LogicSettings.UseBerriesMinIv &&
                        cp >= session.LogicSettings.UseBerriesMinCp &&
@@ -288,7 +298,11 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             socket.Dispose();
             socket = null;
-            Logger.Write("connection lost  (may be offline)", LogLevel.Service, ConsoleColor.Red);
+            TimeSpan ts = DateTime.Now - lastNotify;
+            if (ts.TotalMinutes > 5)
+            {
+                Logger.Write("connection lost  (may be offline)", LogLevel.Service, ConsoleColor.Red);
+            }
             //throw new Exception("msniper socket closed");
             ////need delay or clear PkmnLocations
 

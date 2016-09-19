@@ -18,7 +18,7 @@ namespace PoGo.NecroBot.CLI
     public class BotDataSocketClient
     {
         private static Queue<object> events = new Queue<object>();
-        private const int POLLING_INTERNAL = 5000;
+        private const int POLLING_INTERVAL = 15000;
         public static void Listen(IEvent evt, Session session)
         {
             dynamic eve = evt;
@@ -95,7 +95,7 @@ namespace PoGo.NecroBot.CLI
                                     }
                                 }
                             }
-                            await Task.Delay(POLLING_INTERNAL);
+                            await Task.Delay(POLLING_INTERVAL);
                             ws.Ping();
 
                         }
@@ -114,7 +114,7 @@ namespace PoGo.NecroBot.CLI
                     finally
                     {
                         //everytime disconnected with server bot wil reconnect after 15 sec
-                        await Task.Delay(POLLING_INTERNAL, cancellationToken);
+                        await Task.Delay(POLLING_INTERVAL, cancellationToken);
                     }
                 }
 
