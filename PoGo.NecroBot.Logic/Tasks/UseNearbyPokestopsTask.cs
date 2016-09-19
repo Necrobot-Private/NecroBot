@@ -331,7 +331,9 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static async Task FarmPokestop(ISession session, FortData pokeStop, FortDetailsResponse fortInfo, CancellationToken cancellationToken, bool doNotRetry = false)
         {
-            if (pokeStop.CooldownCompleteTimestampMs>  0 && pokeStop.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime()) return;
+            // If the cooldown is in the future than don't farm the pokestop.
+            if (pokeStop.CooldownCompleteTimestampMs > DateTime.UtcNow.ToUnixTime())
+                return;
 
             FortSearchResponse fortSearch;
             var timesZeroXPawarded = 0;
