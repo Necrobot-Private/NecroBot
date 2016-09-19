@@ -102,8 +102,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
             }
 
-            if (LocationQueue.FirstOrDefault(p => p.EncounterId == eresponse.WildPokemon.EncounterId) != null ||
-                VisitedEncounterIds.Contains(eresponse.WildPokemon.EncounterId))
+            if (LocationQueue.FirstOrDefault(p => p.EncounterId == eresponse.WildPokemon.EncounterId) != null/* ||
+                VisitedEncounterIds.Contains(eresponse.WildPokemon.EncounterId)*/)
             {
                 return;
             }
