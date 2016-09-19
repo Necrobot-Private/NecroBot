@@ -440,7 +440,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             try
             {
                 if (!File.Exists(pth))
-                {
+                { 
                     inProgress = false;
                     return;
                 }
