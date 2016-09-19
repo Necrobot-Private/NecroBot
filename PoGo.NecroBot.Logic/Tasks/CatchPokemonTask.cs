@@ -139,8 +139,14 @@ namespace PoGo.NecroBot.Logic.Tasks
                 var distance = LocationUtils.CalculateDistanceInMeters(session.Client.CurrentLatitude,
                     session.Client.CurrentLongitude, latitude, longitude);
 
-                
-                var unixTimeStamp = encounter.WildPokemon?.LastModifiedTimestampMs + encounter.WildPokemon?.TimeTillHiddenMs;
+                var LastModifiedTimestampMs = encounter is EncounterResponse || encounter is IncenseEncounterResponse ? encounter.WildPokemon?.LastModifiedTimestampMs :0;
+                var TimeTillHiddenMs = encounter is EncounterResponse || encounter is IncenseEncounterResponse ? encounter.WildPokemon?.TimeTillHiddenMs : 0;
+
+                var SpawnPointId = encounter is EncounterResponse || encounter is IncenseEncounterResponse ? encounter.WildPokemon?.SpawnPointId : 0;
+                var EncounterId = encounter is EncounterResponse || encounter is IncenseEncounterResponse ? encounter.WildPokemon?.EncounterId : 0;
+
+
+                var unixTimeStamp = LastModifiedTimestampMs + TimeTillHiddenMs;
                 DateTime expiredDate = new DateTime(1970, 1, 1, 0, 0, 0).AddMilliseconds(Convert.ToDouble(unixTimeStamp));
 
                 session.EventDispatcher.Send(new EncounteredEvent()
@@ -152,8 +158,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                     Level = (int)lv,
                     Expires = expiredDate.ToUniversalTime(),
                     ExpireTimestamp = unixTimeStamp,
-                    SpawnPointId = encounter.WildPokemon?.SpawnPointId,
-                    EncounterId = encounter.WildPokemon?.EncounterId
+                    SpawnPointId = SpawnPointId,
+                    EncounterId = EncounterId
 
                 });
 
@@ -179,6 +185,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                         });
                         return;
                     }
+
+                    //https://pokeassistant.com/main/pokemonstats
 
                     // Determine whether to use berries or not
                     if (((session.LogicSettings.UseBerriesOperator.ToLower().Equals("and") &&

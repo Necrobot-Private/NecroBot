@@ -20,5 +20,6 @@ namespace PoGo.NecroBot.Logic.Model
         ListItems,
         PokemonSettings,
         GetProfile,
+        UpdateProfile,
     }
 }
