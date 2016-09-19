@@ -190,10 +190,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             //Catch Incense Pokemon
             await CatchIncensePokemonsTask.Execute(session, cancellationToken);
 
-            // Minor fix google route ignore pokestop
-            if (session.LogicSettings.UseGoogleWalk && 
-                !session.LogicSettings.UseYoursWalk && 
-                !session.LogicSettings.UseGpxPathing)
+            if (!session.LogicSettings.UseGpxPathing)
             {
                 // Spin as long as we haven't reached the user defined limits
                 if (!_pokestopLimitReached && !_pokestopTimerReached)
