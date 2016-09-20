@@ -39,7 +39,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             SendOneSpecies = 4,
             Brodcaster = 5,
             IpLimit = 6,
-            ServerLimit = 7
+            ServerLimit = 7,
+            NewIvPercent=8
         }
 
         public class EncounterInfo : IDisposable
@@ -231,7 +232,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     Thread.Sleep(500);
                     //msniper.com
-                    socket = new WebSocket("ws://msniper.com/WebSockets/NecroBotServer.ashx", "", WebSocketVersion.Rfc6455);
+                    socket = new WebSocket("ws://localhost:56000/WebSockets/NecroBotServer.ashx", "", WebSocketVersion.Rfc6455);
                     socket.MessageReceived += Msocket_MessageReceived;
                     socket.Closed += Msocket_Closed;
                     socket.Open();
@@ -351,19 +352,24 @@ namespace PoGo.NecroBot.Logic.Tasks
                         break;
 
                     case SocketCmd.Brodcaster://receiving encounter information from server
+                        
+                        var xcoming = JsonConvert.DeserializeObject<List<EncounterInfo>>(e.GetSocketData().First());
+                        xcoming = FindNew(xcoming);
+                        ReceivedPokemons.AddRange(xcoming);
 
-                        //// disabled fornow
-                        //var xcoming = JsonConvert.DeserializeObject<List<EncounterInfo>>(e.GetSocketData().First());
-                        //xcoming = FindNew(xcoming);
-                        //ReceivedPokemons.AddRange(xcoming);
-                        //
-                        //RefreshReceivedPokemons();
-                        //TimeSpan ts = DateTime.Now - lastNotify;
-                        //if (ts.TotalMinutes >= 5)
-                        //{
-                        //    Logger.Write($"total active spawns:[ {ReceivedPokemons.Count} ]", LogLevel.Service);
-                        //    lastNotify = DateTime.Now;
-                        //}
+                        RefreshReceivedPokemons();
+                        TimeSpan ts = DateTime.Now - lastNotify;
+                        if (ts.TotalMinutes >= 5 && ReceivedPokemons.Count > 0)
+                        {
+                            Logger.Write($"total active spawns:[ {ReceivedPokemons.Count} ]", LogLevel.Service);
+                            lastNotify = DateTime.Now;
+                        }
+                        break;
+                    case SocketCmd.NewIvPercent:
+                        int val = 0;
+                        bool success = int.TryParse(e.GetSocketData().First(), out val);
+                        if (success)
+                            minIvPercent = val;
                         break;
                     case SocketCmd.None:
                         Logger.Write("UNKNOWN ERROR", LogLevel.Service, ConsoleColor.Red);
