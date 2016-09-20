@@ -89,7 +89,7 @@ namespace PoGo.NecroBot.CLI
 
 
 
-        Logger.SetLogger(new ConsoleLogger(LogLevel.Service), _subPath);
+            Logger.SetLogger(new ConsoleLogger(LogLevel.Service), _subPath);
 
             if (!_ignoreKillSwitch && CheckKillSwitch() || CheckMKillSwitch())
                 return;
@@ -378,6 +378,10 @@ namespace PoGo.NecroBot.CLI
 
         private static bool CheckKillSwitch()
         {
+            #if DEBUG
+                return false;
+            #endif
+
             using (var wC = new WebClient())
             {
                 try
@@ -431,7 +435,7 @@ namespace PoGo.NecroBot.CLI
 
         public static bool PromptForKillSwitchOverride()
         {
-            Logger.Write("Do you want to override killswitch to bot at your own risk?", LogLevel.Warning);
+            Logger.Write("Do you want to override killswitch to bot at your own risk? Y/N", LogLevel.Warning);
 
             while (true)
             {

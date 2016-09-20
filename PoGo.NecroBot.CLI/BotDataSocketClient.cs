@@ -18,6 +18,7 @@ namespace PoGo.NecroBot.CLI
     public class BotDataSocketClient
     {
         private static Queue<object> events = new Queue<object>();
+        private const int POLLING_INTERVAL = 15000;
         public static void Listen(IEvent evt, Session session)
         {
             dynamic eve = evt;
@@ -29,7 +30,6 @@ namespace PoGo.NecroBot.CLI
             catch
             {
             }
-            //Broadcast(Serialize(eve));
         }
 
         private static void HandleEvent(EncounteredEvent eve)
@@ -60,13 +60,14 @@ namespace PoGo.NecroBot.CLI
         public static async Task Start(Session session, CancellationToken cancellationToken)
         {
 
+            await Task.Delay(30000);//delay running 30s
+
             System.Net.ServicePointManager.Expect100Continue = false;
 
             cancellationToken.ThrowIfCancellationRequested();
 
             var socketURL = session.LogicSettings.DataSharingDataUrl;
 
-            //socketURL = "ws://127.0.0.1:5000/socket.io/?EIO=3&transport=websocket";
             using (var ws = new WebSocketSharp.WebSocket(socketURL))
             {
                 ws.Log.Level = WebSocketSharp.LogLevel.Error;
@@ -94,7 +95,7 @@ namespace PoGo.NecroBot.CLI
                                     }
                                 }
                             }
-                            await Task.Delay(3000);
+                            await Task.Delay(POLLING_INTERVAL);
                             ws.Ping();
 
                         }
@@ -113,7 +114,7 @@ namespace PoGo.NecroBot.CLI
                     finally
                     {
                         //everytime disconnected with server bot wil reconnect after 15 sec
-                        await Task.Delay(15000, cancellationToken);
+                        await Task.Delay(POLLING_INTERVAL, cancellationToken);
                     }
                 }
 

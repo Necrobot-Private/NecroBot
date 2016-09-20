@@ -193,7 +193,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             return false;
         }
 
-        public static bool CheckSnipeConditions(ISession session)
+        private static bool CheckSnipeConditions(ISession session)
         {
             if (!session.LogicSettings.UseSnipeLimit) return true;
 
@@ -545,7 +545,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                             Longitude = currentLongitude
                         });
 
-                        await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon);
+                        await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, 
+                            currentFortData: null, sessionAllowTransfer: true);
+
                         catchedPokemon = true;
                         break;
 
