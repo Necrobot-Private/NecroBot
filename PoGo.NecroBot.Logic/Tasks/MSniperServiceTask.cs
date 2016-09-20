@@ -173,7 +173,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
                 else
                 {
-                    Logger.Write($"pokemon despawned or wrong link format !", LogLevel.Service, ConsoleColor.White);
+                    Logger.Write($"Pokemon despawned or wrong link format!", LogLevel.Service, ConsoleColor.Gray);
                     return;// No success to work with
                 }
 
