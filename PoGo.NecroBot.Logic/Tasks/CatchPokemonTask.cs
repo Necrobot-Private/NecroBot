@@ -199,7 +199,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     Expires = expiredDate.ToUniversalTime(),
                     ExpireTimestamp = unixTimeStamp,
                     SpawnPointId = _spawnPointId,
-                    EncounterId = _encounterId
+                    EncounterId = _encounterId.ToString()
                 });
 
                 CatchPokemonResponse caughtPokemonResponse = null;
