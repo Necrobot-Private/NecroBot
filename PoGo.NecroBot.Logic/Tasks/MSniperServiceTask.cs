@@ -164,11 +164,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                 await LocationUtils.UpdatePlayerLocationWithAltitude(session,
                     new GeoCoordinate(lat, lon, session.Client.CurrentAltitude), 0);  // Speed set to 0 for random speed.
 
-                float probability = encounter.CaptureProbability.CaptureProbability_[0];
-                int cp = encounter.WildPokemon.PokemonData.Cp;
-                int maxcp = PokemonInfo.CalculateMaxCp(encounter.WildPokemon.PokemonData);
-                double lvl = PokemonInfo.GetLevel(encounter.WildPokemon.PokemonData);
-
                 PokemonData encounteredPokemon;
 
                 // Catch if it's a WildPokemon (MSniping not allowed for Incense pokemons)
@@ -177,6 +172,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                     encounteredPokemon = encounter.WildPokemon?.PokemonData;
                 }
                 else return; // No success to work with
+
+                float probability = encounter.CaptureProbability.CaptureProbability_[0];
+                int cp = encounter.WildPokemon.PokemonData.Cp;
+                int maxcp = PokemonInfo.CalculateMaxCp(encounter.WildPokemon.PokemonData);
+                double lvl = PokemonInfo.GetLevel(encounter.WildPokemon.PokemonData);
                 var bestBall = await CatchPokemonTask.GetBestBall(session, encounteredPokemon, probability);
 
                 if (((session.LogicSettings.UseBerriesOperator.ToLower().Equals("and") &&
