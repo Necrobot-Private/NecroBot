@@ -171,7 +171,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     encounteredPokemon = encounter.WildPokemon?.PokemonData;
                 }
-                else return; // No success to work with
+                else
+                {
+                    Logger.Write($"pokemon despawned or wrong link format !", LogLevel.Service, ConsoleColor.White);
+                    return;// No success to work with
+                }
+
 
                 float probability = encounter.CaptureProbability.CaptureProbability_[0];
                 int cp = encounter.WildPokemon.PokemonData.Cp;
