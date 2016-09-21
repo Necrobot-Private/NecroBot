@@ -1,7 +1,6 @@
 ﻿using Caching;
-using GeoCoordinatePortable;
 using Newtonsoft.Json;
-using PoGo.NecroBot.Logic.State;
+using PoGo.NecroBot.Logic.Model.Settings;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -30,10 +29,10 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
 
     public class GoogleElevationService : BaseElevationService
     {
-        public GoogleElevationService(ISession session, LRUCache<string, double> cache) : base(session, cache)
+        public GoogleElevationService(GlobalSettings settings, LRUCache<string, double> cache) : base(settings, cache)
         {
-            if (!string.IsNullOrEmpty(session.LogicSettings.GoogleElevationApiKey))
-                _apiKey = session.LogicSettings.GoogleElevationApiKey;
+            if (!string.IsNullOrEmpty(settings.GoogleWalkConfig.GoogleElevationAPIKey))
+                _apiKey = settings.GoogleWalkConfig.GoogleElevationAPIKey;
         }
 
         public override string GetServiceId()
