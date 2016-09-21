@@ -25,8 +25,12 @@ namespace PoGo.NecroBot.Logic.Model
         public FortLocation(double lat, double lng, double alt, FortData fortData, FortDetailsResponse fortInfo)  :base(lat, lng, alt)
         {
             this.FortData = fortData;
-            this.FortInfo = fortInfo;
-            this.Name = fortInfo.Name;
+
+            if (fortInfo != null)
+            {
+                this.FortInfo = fortInfo;
+                this.Name = fortInfo.Name;
+            }
         }
     }
     public class GPXPointLocation : MapLocation
