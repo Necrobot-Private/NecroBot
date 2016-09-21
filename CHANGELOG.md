@@ -1,5 +1,24 @@
 # Change Log
 
+## [Unreleased](https://github.com/Necrobot-Private/NecroBot/tree/HEAD)
+
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.2...HEAD)
+
+**Implemented enhancements:**
+
+- MSniper ideas [\#159](https://github.com/Necrobot-Private/NecroBot/issues/159)
+
+## [v1.0.0.2](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.2) (2016-09-21)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.1...v1.0.0.2)
+
+**Closed issues:**
+
+- Still Not Filtering Sniping [\#244](https://github.com/Necrobot-Private/NecroBot/issues/244)
+
+**Merged pull requests:**
+
+- Bug fix \#244 - By default do not snipe regional pokemon [\#249](https://github.com/Necrobot-Private/NecroBot/pull/249) ([jjskuld](https://github.com/jjskuld))
+
 ## [v1.0.0.1](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.1) (2016-09-21)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.0...v1.0.0.1)
 
@@ -219,22 +238,22 @@
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.5...v0.1.6)
 
 ## [v0.1.5](https://github.com/Necrobot-Private/NecroBot/tree/v0.1.5) (2016-07-26)
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.4...v0.1.5)
-
-## [v0.1.4](https://github.com/Necrobot-Private/NecroBot/tree/v0.1.4) (2016-07-26)
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.1.0...v0.1.4)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.1.0...v0.1.5)
 
 ## [v0.1.1.0](https://github.com/Necrobot-Private/NecroBot/tree/v0.1.1.0) (2016-07-26)
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.1.4...v0.1.1.0)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.4...v0.1.1.0)
+
+## [v0.1.4](https://github.com/Necrobot-Private/NecroBot/tree/v0.1.4) (2016-07-26)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.1.4...v0.1.4)
 
 ## [v0.1.1.4](https://github.com/Necrobot-Private/NecroBot/tree/v0.1.1.4) (2016-07-26)
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.1.2...v0.1.1.4)
-
-## [v0.1.1.2](https://github.com/Necrobot-Private/NecroBot/tree/v0.1.1.2) (2016-07-26)
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.1.1...v0.1.1.2)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.1.1...v0.1.1.4)
 
 ## [v0.1.1.1](https://github.com/Necrobot-Private/NecroBot/tree/v0.1.1.1) (2016-07-26)
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.3...v0.1.1.1)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.1.2...v0.1.1.1)
+
+## [v0.1.1.2](https://github.com/Necrobot-Private/NecroBot/tree/v0.1.1.2) (2016-07-26)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.3...v0.1.1.2)
 
 ## [v0.1.3](https://github.com/Necrobot-Private/NecroBot/tree/v0.1.3) (2016-07-26)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.2...v0.1.3)
