@@ -44,7 +44,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 var defaultLocation = new MapLocation(session.Settings.DefaultLatitude,
                     session.Settings.DefaultLongitude,
-                    LocationUtils.getElevation(session, session.Settings.DefaultLatitude, session.Settings.DefaultLongitude)
+                    LocationUtils.getElevation(session.ElevationService, session.Settings.DefaultLatitude, session.Settings.DefaultLongitude)
                 );
 
                 await session.Navigation.Move(defaultLocation,

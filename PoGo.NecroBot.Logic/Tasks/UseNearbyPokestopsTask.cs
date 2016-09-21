@@ -165,7 +165,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 // Always set the fort info in base walk strategy.
 
                 var pokeStopDestination = new FortLocation(pokeStop.Latitude, pokeStop.Longitude,
-                    LocationUtils.getElevation(session, pokeStop.Latitude, pokeStop.Longitude), pokeStop, fortInfo);
+                    LocationUtils.getElevation(session.ElevationService, pokeStop.Latitude, pokeStop.Longitude), pokeStop, fortInfo);
 
                 await session.Navigation.Move(pokeStopDestination,
                  async () =>

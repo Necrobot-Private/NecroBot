@@ -81,7 +81,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         var lat = Convert.ToDouble(trackPoints.ElementAt(curTrkPt).Lat, CultureInfo.InvariantCulture);
                         var lng = Convert.ToDouble(trackPoints.ElementAt(curTrkPt).Lon, CultureInfo.InvariantCulture);
 
-                        IGeoLocation destination = new GPXPointLocation(lat, lng, LocationUtils.getElevation(session, lat, lng));
+                        IGeoLocation destination = new GPXPointLocation(lat, lng, LocationUtils.getElevation(session.ElevationService, lat, lng));
 
                         await session.Navigation.Move(destination,
                             async () =>

@@ -1,7 +1,6 @@
 ﻿using Caching;
-using GeoCoordinatePortable;
 using Newtonsoft.Json;
-using PoGo.NecroBot.Logic.State;
+using PoGo.NecroBot.Logic.Model.Settings;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,7 +23,7 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
     {
         private string mapQuestDemoApiKey = $"Kmjtd|luua2qu7n9,7a=o5-lzbgq";
 
-        public MapQuestElevationService(ISession session, LRUCache<string, double> cache) : base(session, cache)
+        public MapQuestElevationService(GlobalSettings settings, LRUCache<string, double> cache) : base(settings, cache)
         {
             if (!string.IsNullOrEmpty(mapQuestDemoApiKey))
                 _apiKey = mapQuestDemoApiKey;
