@@ -1,18 +1,24 @@
 # Change Log
 
-## [Unreleased](https://github.com/Necrobot-Private/NecroBot/tree/HEAD)
+## [v1.0.0.0](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.0) (2016-09-21)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.9.9.9...v1.0.0.0)
 
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.9.9.9...HEAD)
+**Implemented enhancements:**
+
+- Hide socket exception message / stop trying make new connect when there too many failure [\#234](https://github.com/Necrobot-Private/NecroBot/pull/234) ([samuraitruong](https://github.com/samuraitruong))
+- msniper works with old and new method [\#223](https://github.com/Necrobot-Private/NecroBot/pull/223) ([msx752](https://github.com/msx752))
 
 **Fixed bugs:**
 
 - Bug checking if pokestop can be farmed [\#213](https://github.com/Necrobot-Private/NecroBot/issues/213)
+- 0.9.8.8 hangs after logging in [\#104](https://github.com/Necrobot-Private/NecroBot/issues/104)
+- display error message when encounter unsuccessful [\#235](https://github.com/Necrobot-Private/NecroBot/pull/235) ([msx752](https://github.com/msx752))
+- Fix MSniper show "Object reference not set to an instance of an object." [\#233](https://github.com/Necrobot-Private/NecroBot/pull/233) ([Prawith](https://github.com/Prawith))
+- Bug fix/better prompt error handling [\#227](https://github.com/Necrobot-Private/NecroBot/pull/227) ([jjskuld](https://github.com/jjskuld))
+- Change encounter id form double to string to avoid problem with javascript number limit [\#225](https://github.com/Necrobot-Private/NecroBot/pull/225) ([samuraitruong](https://github.com/samuraitruong))
 
 **Closed issues:**
 
-- pokemon spawn point data service connection established [\#218](https://github.com/Necrobot-Private/NecroBot/issues/218)
-- bypass screen [\#217](https://github.com/Necrobot-Private/NecroBot/issues/217)
-- Traveling to Pokestop/Gym didn't show pokestop's name [\#210](https://github.com/Necrobot-Private/NecroBot/issues/210)
 - \[Feature Request\] Snipe by order [\#180](https://github.com/Necrobot-Private/NecroBot/issues/180)
 
 ## [v0.9.9.9](https://github.com/Necrobot-Private/NecroBot/tree/v0.9.9.9) (2016-09-19)
@@ -196,10 +202,10 @@
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.5...v0.1.6)
 
 ## [v0.1.5](https://github.com/Necrobot-Private/NecroBot/tree/v0.1.5) (2016-07-26)
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.4...v0.1.5)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.1.0...v0.1.5)
 
-## [v0.1.4](https://github.com/Necrobot-Private/NecroBot/tree/v0.1.4) (2016-07-26)
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.1.1...v0.1.4)
+## [v0.1.1.0](https://github.com/Necrobot-Private/NecroBot/tree/v0.1.1.0) (2016-07-26)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.1.1...v0.1.1.0)
 
 ## [v0.1.1.1](https://github.com/Necrobot-Private/NecroBot/tree/v0.1.1.1) (2016-07-26)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.1.4...v0.1.1.1)
@@ -208,10 +214,10 @@
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.1.2...v0.1.1.4)
 
 ## [v0.1.1.2](https://github.com/Necrobot-Private/NecroBot/tree/v0.1.1.2) (2016-07-26)
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.1.0...v0.1.1.2)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.4...v0.1.1.2)
 
-## [v0.1.1.0](https://github.com/Necrobot-Private/NecroBot/tree/v0.1.1.0) (2016-07-26)
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.3...v0.1.1.0)
+## [v0.1.4](https://github.com/Necrobot-Private/NecroBot/tree/v0.1.4) (2016-07-26)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.3...v0.1.4)
 
 ## [v0.1.3](https://github.com/Necrobot-Private/NecroBot/tree/v0.1.3) (2016-07-26)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1.2...v0.1.3)
