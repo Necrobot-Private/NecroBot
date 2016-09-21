@@ -292,6 +292,12 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 await FarmPokestop(session, pokeStop, fortInfo, cancellationToken, doNotTrySpin);
             }
+            else
+            {
+                // We hit the pokestop limit but not the pokemon limit. So we want to set the cooldown on the pokestop so that
+                // we keep moving and don't walk back and forth between 2 pokestops.
+                pokeStop.CooldownCompleteTimestampMs = DateTime.UtcNow.ToUnixTime() + 5 * 60 * 1000; // 5 minutes to cooldown for pokestop.
+            }
 
             if (++_stopsHit >= _storeRi) //TODO: OR item/pokemon bag is full //check stopsHit against storeRI random without dividing.
             {
