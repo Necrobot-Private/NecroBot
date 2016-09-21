@@ -18,6 +18,7 @@ using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.State;
 using PokemonGo.RocketAPI.Enums;
 using POGOProtos.Enums;
+using PoGo.NecroBot.Logic.Service.Elevation;
 
 #endregion
 
@@ -368,9 +369,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             return promptForSetup;
         }
 
-        public static Session SetupSettings(Session session, GlobalSettings settings, string configPath)
+        public static Session SetupSettings(Session session, GlobalSettings settings, IElevationService elevationService, string configPath)
         {
-            var newSession = SetupTranslationCode(session, session.Translation, settings);
+            var newSession = SetupTranslationCode(session, elevationService, session.Translation, settings);
 
             SetupAccountType(newSession.Translation, settings);
             SetupUserAccount(newSession.Translation, settings);
@@ -387,7 +388,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             return newSession;
         }
 
-        private static Session SetupTranslationCode(Session session, ITranslation translator, GlobalSettings settings)
+        private static Session SetupTranslationCode(Session session, IElevationService elevationService, ITranslation translator, GlobalSettings settings)
         {
             if (false == PromptForBoolean(translator, translator.GetTranslation(TranslationString.FirstStartLanguagePrompt, "Y", "N")))
                 return session;
@@ -395,7 +396,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             string strInput = PromptForString(translator, translator.GetTranslation(TranslationString.FirstStartLanguageCodePrompt));
 
             settings.ConsoleConfig.TranslationLanguageCode = strInput;
-            session = new Session(new ClientSettings(settings), new LogicSettings(settings));
+            session = new Session(new ClientSettings(settings, elevationService), new LogicSettings(settings), elevationService);
             translator = session.Translation;
             Logger.Write(translator.GetTranslation(TranslationString.FirstStartLanguageConfirm, strInput));
 
