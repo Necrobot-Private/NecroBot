@@ -107,6 +107,9 @@ namespace PoGo.NecroBot.Logic.Tasks
         // ## From SnipePokemonTask
         // await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, currentFortData: null, sessionAllowTransfer: true);
 
+        // ## From MSniperServiceTask
+        // await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, currentFortData: null, sessionAllowTransfer: true);
+
         public static async Task Execute(ISession session, 
                                         CancellationToken cancellationToken, 
                                         dynamic encounter, 
@@ -202,7 +205,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     EncounterId = _encounterId.ToString(),
                     Move1 = PokemonInfo.GetPokemonMove1(encounteredPokemon).ToString(),
                     Move2 = PokemonInfo.GetPokemonMove2(encounteredPokemon).ToString(),
-            });
+                });
 
                 CatchPokemonResponse caughtPokemonResponse = null;
                 var lastThrow = CatchPokemonResponse.Types.CatchStatus.CatchSuccess; // Initializing lastThrow
