@@ -85,8 +85,16 @@
       "Value": "Nome: {0} INFO: O looting falhou, possível softban. Desbanindo em: {1}/{2}"
     },
     {
+      "Key": "gym",
+      "Value": "Gym"
+    },
+    {
+      "Key": "pokestop",
+      "Value": "Pokestop"
+    },
+    {
       "Key": "eventFortTargeted",
-      "Value": "Chegando ao Pokestop: {0} ({1}m) ({2} segundos) (rota {3})"
+      "Value": "Chegando ao {0}: {1} ({2}m) ({3} segundos) (rota {4})"
     },
     {
       "Key": "eventProfileLogin",

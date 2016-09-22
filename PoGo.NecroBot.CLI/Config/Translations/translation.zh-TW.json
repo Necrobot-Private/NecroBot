@@ -85,8 +85,16 @@
       "Value": "名稱：{0} 資訊：操作失敗，可能暫時被鎖帳號，正在解鎖：{1}/{2}。\t\t\t"
     },
     {
+      "Key": "gym",
+      "Value": "Gym"
+    },
+    {
+      "Key": "pokestop",
+      "Value": "Pokestop"
+    },
+    {
       "Key": "eventFortTargeted",
-      "Value": "前往補給站：{0} (距離{1}公尺，需要{2}秒) (route {3})\t\t\t\t"
+      "Value": "{0} 前往補給站：{1} (距離{2}公尺，需要{3}秒) (route {4})\t\t\t\t"
     },
     {
       "Key": "eventProfileLogin",

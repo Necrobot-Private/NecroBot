@@ -81,8 +81,16 @@
       "Value": "Nome: {0} INFO: O drop falhou, softban possível. Desbloqueio em: {1}/{2}"
     },
     {
+      "Key": "gym",
+      "Value": "Gym"
+    },
+    {
+      "Key": "pokestop",
+      "Value": "Pokestop"
+    },
+    {
       "Key": "eventFortTargeted",
-      "Value": "A chegar ao Pokestop: {0} em ({1}m) ({2} seconds) (route {3})"
+      "Value": "A chegar ao {0}: {1} em ({2}m) ({3} seconds) (route {4})"
     },
     {
       "Key": "eventProfileLogin",

@@ -81,8 +81,16 @@
       "Value": "Αποτυχία χρήσης Pokestop, υπαρχει πιθανότητα softban. Unban σε: {0}/{1}"
     },
     {
+      "Key": "gym",
+      "Value": "Gym"
+    },
+    {
+      "Key": "pokestop",
+      "Value":  "Pokestop"
+    },
+    {
       "Key": "eventFortTargeted",
-      "Value": "{0} σε απόσταση {1} μέτρων ({2} seconds) (route {3})"
+      "Value": "{0} {1} σε απόσταση {2} μέτρων ({3} seconds) (route {4})"
     },
     {
       "Key": "eventProfileLogin",

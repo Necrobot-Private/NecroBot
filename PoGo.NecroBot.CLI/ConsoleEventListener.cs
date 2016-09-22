@@ -11,6 +11,7 @@ using POGOProtos.Enums;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Networking.Responses;
 using PoGo.NecroBot.Logic.Event.Gym;
+using POGOProtos.Map.Fort;
 #endregion
 
 namespace PoGo.NecroBot.CLI
@@ -140,8 +141,14 @@ namespace PoGo.NecroBot.CLI
         {
             int intTimeForArrival = (int)(fortTargetEvent.Distance / (session.LogicSettings.WalkingSpeedInKilometerPerHour * 0.5));
 
+            string targetType;
+            if (fortTargetEvent.Type == FortType.Gym)
+                targetType = session.Translation.GetTranslation(TranslationString.Gym); // "Gym";
+            else
+                targetType = session.Translation.GetTranslation(TranslationString.Pokestop); // "Pokestop";
+
             Logger.Write(
-                session.Translation.GetTranslation(TranslationString.EventFortTargeted, fortTargetEvent.Name,
+                session.Translation.GetTranslation(TranslationString.EventFortTargeted, targetType, fortTargetEvent.Name,
                      Math.Round(fortTargetEvent.Distance), intTimeForArrival, fortTargetEvent.Route),
                 LogLevel.Info, ConsoleColor.Gray);
         }

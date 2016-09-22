@@ -81,8 +81,16 @@
       "Value": "Název: {0} INFO: Vybrání pokestopu selhalo, možná máte Softban. Odbanování skončí: {1}/{2}"
     },
     {
+      "Key": "gym",
+      "Value": "Gym"
+    },
+    {
+      "Key": "pokestop",
+      "Value":  "Pokestopu"
+    },
+    {
       "Key": "eventFortTargeted",
-      "Value": "Chůze k Pokestopu: {0} ({1}m) ({2} sekund) (route {3})"
+      "Value": "Chůze k {0}: {1} ({2}m) ({3} sekund) (route {4})"
     },
     {
       "Key": "eventProfileLogin",
