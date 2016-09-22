@@ -18,5 +18,7 @@ namespace PoGo.NecroBot.Logic.Event
         public double ExpireTimestamp { get; set; }
         public string SpawnPointId{ get; set; }
         public string EncounterId { get; internal set; }
+        public string Move1 { get; set; }
+        public string Move2 { get; set; }
     }
 }

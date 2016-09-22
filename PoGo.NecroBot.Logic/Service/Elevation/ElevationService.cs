@@ -1,34 +1,32 @@
 ﻿using Caching;
-using PoGo.NecroBot.Logic.State;
+using PoGo.NecroBot.Logic.Model.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PoGo.NecroBot.Logic.Service.Elevation
 {
-    public class ElevationService
+    public class ElevationService : IElevationService
     {
-        private ISession _session;
+        private GlobalSettings _settings;
         LRUCache<string, double> cache = new LRUCache<string, double>(capacity: 500);
 
         private List<IElevationService> ElevationServiceQueue = new List<IElevationService>();
         public Dictionary<Type, DateTime> ElevationServiceBlacklist = new Dictionary<Type, DateTime>();
 
-        public ElevationService(ISession session)
+        public ElevationService(GlobalSettings settings)
         {
-            _session = session;
+            _settings = settings;
 
-            if (!string.IsNullOrEmpty(session.LogicSettings.MapzenElevationApiKey))
-                ElevationServiceQueue.Add(new MapzenElevationService(session, cache));
+            if (!string.IsNullOrEmpty(settings.MapzenWalkConfig.MapzenElevationApiKey))
+                ElevationServiceQueue.Add(new MapzenElevationService(settings, cache));
 
-            ElevationServiceQueue.Add(new MapQuestElevationService(session, cache));
+            ElevationServiceQueue.Add(new MapQuestElevationService(settings, cache));
 
-            if (!string.IsNullOrEmpty(session.LogicSettings.GoogleElevationApiKey))
-                ElevationServiceQueue.Add(new GoogleElevationService(session, cache));
+            if (!string.IsNullOrEmpty(settings.GoogleWalkConfig.GoogleElevationAPIKey))
+                ElevationServiceQueue.Add(new GoogleElevationService(settings, cache));
 
-            ElevationServiceQueue.Add(new RandomElevationService(session, cache));
+            ElevationServiceQueue.Add(new RandomElevationService(settings, cache));
         }
 
         public bool IsElevationServiceBlacklisted(Type strategy)
@@ -79,7 +77,11 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
 
             return elevation;
         }
+
+        public string GetServiceId()
+        {
+            IElevationService service = GetService();
+            return service.GetServiceId();
+        }
     }
-
-
 }

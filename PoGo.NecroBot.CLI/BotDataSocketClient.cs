@@ -17,8 +17,8 @@ namespace PoGo.NecroBot.CLI
 {
     public class BotDataSocketClient
     {
-        private static Queue<object> events = new Queue<object>();
-        private const int POLLING_INTERVAL = 15000;
+        private static Queue<EncounteredEvent> events = new Queue<EncounteredEvent>();
+        private const int POLLING_INTERVAL = 10000;
         public static void Listen(IEvent evt, Session session)
         {
             dynamic eve = evt;
@@ -57,6 +57,9 @@ namespace PoGo.NecroBot.CLI
             return json;
         }
 
+        private static int retries = 0;
+        static List<EncounteredEvent> processing = new List<EncounteredEvent>();
+
         public static async Task Start(Session session, CancellationToken cancellationToken)
         {
 
@@ -70,7 +73,12 @@ namespace PoGo.NecroBot.CLI
 
             using (var ws = new WebSocketSharp.WebSocket(socketURL))
             {
-                ws.Log.Level = WebSocketSharp.LogLevel.Error;
+                ws.Log.Level = WebSocketSharp.LogLevel.Fatal;
+                ws.Log.Output = (logData, message) =>
+                 {
+                     //silenly, no log exception message to screen that scare people :)
+                 };
+                
                 //ws.OnMessage += (sender, e) =>
                 // Console.WriteLine("New message from controller: " + e.Data);
 
@@ -78,33 +86,53 @@ namespace PoGo.NecroBot.CLI
                 {
                     try
                     {
-                        ws.Connect();
-                        Logger.Write("Pokemon spawn point data service connection established.");
-                        while (ws.ReadyState == WebSocketSharp.WebSocketState.Open)
+                        if (retries++ == 5) //failed to make connection to server  times contiuing, temporary stop for 10 mins.
                         {
-                            lock (events)
+                            session.EventDispatcher.Send(new WarnEvent()
                             {
-                                
-                                while (events.Count > 0)
+                                Message = "Couldn't establish the connection to necro socket server, Bot will re-connect after 10 mins"
+                            });
+
+                            await Task.Delay(10 * 1000 * 60);
+                        }
+
+                        ws.Connect();
+                        if (ws.ReadyState == WebSocketSharp.WebSocketState.Open)
+                        {
+                            Logger.Write("Pokemon spawn point data service connection established.");
+                            retries = 0;
+
+                            while (ws.IsAlive)
+                            {
+                                lock (events)
                                 {
-                                    if (ws.ReadyState == WebSocketSharp.WebSocketState.Open)
+                                    while (events.Count > 0)
                                     {
-                                        var item = events.Dequeue();
+                                        processing.Add(events.Dequeue());
+                                    }
+                                }
+
+                                while (processing.Count > 0)
+                                {
+                                    if (ws.IsAlive)
+                                    {
+                                        var item = processing.FirstOrDefault();
                                         var data = Serialize(item);
                                         ws.Send($"42[\"pokemon\",{data}]");
+                                        processing.Remove(item);
+                                        await Task.Delay(processing.Count > 0 ? 3000 : 0);
                                     }
                                 }
                             }
                             await Task.Delay(POLLING_INTERVAL);
                             ws.Ping();
-
                         }
                     }
                     catch (IOException)
                     {
-                        session.EventDispatcher.Send(new ErrorEvent
+                        session.EventDispatcher.Send(new WarnEvent
                         {
-                            Message = "The connection to the data sharing location server was lost."
+                            Message = "Disconnect to necro socket. New connection will be established when service available..."
                         });
                     }
                     catch (Exception)
