@@ -208,6 +208,7 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         int RenamePokemonActionDelay { get; }
 
         bool GymAllowed { get; }
+        bool GymPrioritizeOverPokestop { get; }
         TeamColor GymDefaultTeam { get; }
         double GymMaxDistance { get; }
         int GymMaxCPToDeploy {  get; }

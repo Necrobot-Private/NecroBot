@@ -44,21 +44,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
             if(desination is FortLocation)
             {
                 var fortLocation = desination as FortLocation;
-                if (fortLocation.FortData.Type == POGOProtos.Map.Fort.FortType.Checkpoint)
-                {
-                    session.EventDispatcher.Send(new FortTargetEvent { Name = desination.Name, Distance = distance, Route = this.RouteName });
-                }
-                if (fortLocation.FortData.Type == POGOProtos.Map.Fort.FortType.Gym)
-                {
-                    session.EventDispatcher.Send(new GymWalkToTargetEvent()
-                    {
-                        Name = fortLocation.FortInfo.Name,
-                        Distance = distance,
-                        Latitude = fortLocation.FortInfo.Latitude,
-                        Longitude = fortLocation.FortInfo.Longitude
-                    });
-                }
-
+                session.EventDispatcher.Send(new FortTargetEvent { Name = desination.Name, Distance = distance, Route = this.RouteName, Type = fortLocation.FortData.Type });
             }
         }
 

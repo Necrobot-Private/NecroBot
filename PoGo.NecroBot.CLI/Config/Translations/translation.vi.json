@@ -85,8 +85,16 @@
       "Value": "Tên: {0} THÔNGTIN: Không nhặt được vật phẩm, có thể bị softban. Quá trình Unban: {1}/{2}"
     },
     {
+      "Key": "gym",
+      "Value": "Gym"
+    },
+    {
+      "Key": "pokestop",
+      "Value": "Pokestop"
+    },
+    {
       "Key": "eventFortTargeted",
-      "Value": "Đi đến Pokestop: {0} (xa {1}m) (trong {2} giây) (route {3})"
+      "Value": "Đi đến {0}: {1} (xa {2}m) (trong {3} giây) (route {4})"
     },
     {
       "Key": "eventProfileLogin",

@@ -4,11 +4,11 @@ using SuperSocket.WebSocket;
 
 namespace PoGo.NecroBot.CLI.WebSocketHandler.ActionCommands
 {
-    public class SetDestination : IWebSocketRequestHandler
+    public class SetMoveToTargetHandler : IWebSocketRequestHandler
     {
         public string Command { get; private set; }
 
-        public SetDestination()
+        public SetMoveToTargetHandler()
         {
             Command = "SetMoveToTarget";
         }

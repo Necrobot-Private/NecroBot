@@ -19,6 +19,7 @@ using PoGo.NecroBot.Logic.Service;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Tasks;
 using PoGo.NecroBot.Logic.Utils;
+using PoGo.NecroBot.Logic.Service.Elevation;
 
 #endregion
 
@@ -89,7 +90,7 @@ namespace PoGo.NecroBot.CLI
 
 
 
-        Logger.SetLogger(new ConsoleLogger(LogLevel.Service), _subPath);
+            Logger.SetLogger(new ConsoleLogger(LogLevel.Service), _subPath);
 
             if (!_ignoreKillSwitch && CheckKillSwitch() || CheckMKillSwitch())
                 return;
@@ -198,15 +199,15 @@ namespace PoGo.NecroBot.CLI
                     settings.LocationConfig.ResumeTrackPt = nearestPt.PtIndex;
                 }
             }
-
-            _session = new Session(new ClientSettings(settings), logicSettings, translation);
+            IElevationService elevationService = new ElevationService(settings);
+            _session = new Session(new ClientSettings(settings, elevationService), logicSettings, elevationService, translation);
             Logger.SetLoggerContext(_session);
 
             if (boolNeedsSetup)
             {
                 if (GlobalSettings.PromptForSetup(_session.Translation))
                 {
-                    _session = GlobalSettings.SetupSettings(_session, settings, configFile);
+                    _session = GlobalSettings.SetupSettings(_session, settings, elevationService, configFile);
 
                     var fileName = Assembly.GetExecutingAssembly().Location;
                     Process.Start(fileName);
@@ -378,6 +379,10 @@ namespace PoGo.NecroBot.CLI
 
         private static bool CheckKillSwitch()
         {
+            #if DEBUG
+                return false;
+            #endif
+
             using (var wC = new WebClient())
             {
                 try
@@ -431,7 +436,7 @@ namespace PoGo.NecroBot.CLI
 
         public static bool PromptForKillSwitchOverride()
         {
-            Logger.Write("Do you want to override killswitch to bot at your own risk?", LogLevel.Warning);
+            Logger.Write("Do you want to override killswitch to bot at your own risk? Y/N", LogLevel.Warning);
 
             while (true)
             {
