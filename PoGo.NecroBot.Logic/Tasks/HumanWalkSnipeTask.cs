@@ -70,12 +70,9 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         public static async Task AddSnipePokemon(string source, PokemonId id, double latitude, double longitude, DateTime expirationTimestamp, double iV = 0, ISession session = null)
         {
-            if (session != null)
-            {
-                InitSession(session);
-            }
-            if (_session == null || _session == null) return;
+            if (_session == null  || !_session.LogicSettings.EnableHumanWalkingSnipe) return;
 
+            InitSession(session);
             
             await PostProcessDataFetched(new List<SnipePokemonInfo> {
                 new SnipePokemonInfo()
