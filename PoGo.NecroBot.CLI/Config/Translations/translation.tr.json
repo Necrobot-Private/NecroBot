@@ -85,8 +85,16 @@
       "Value": "İsim: {0} BİLGİ: Eşya toplama başarısız oldu. Geçici ban yemiş olabilirsiniz. Ban açılıyor: {1}/{2}"
     },
     {
+      "Key": "gym",
+      "Value": "Gym"
+    },
+    {
+      "Key": "pokestop",
+      "Value": "PokéStop"
+    },
+    {
       "Key": "eventFortTargeted",
-      "Value": "(route {3}) {2} saniye sonra {1}m mesafedeki \"{0}\" adlı PokéStop'a varılacak."
+      "Value": "(route {4}) {3} saniye sonra {2}m mesafedeki \"{1}\" adlı {0}'a varılacak."
     },
     {
       "Key": "eventProfileLogin",

@@ -81,8 +81,16 @@
       "Value": "Name: {0} INFO: Loot sammeln fehlgeschlagen, eventueller Softban. Unban in: {1}/{2}"
     },
     {
+      "Key": "gym",
+      "Value": "Gym"
+    },
+    {
+      "Key": "pokestop",
+      "Value":  "Pokestop"
+    },
+    {
       "Key": "eventFortTargeted",
-      "Value": "{0} in ({1}m) ({2} Sekunden) (route {3})"
+      "Value": "{0} {1} in ({2}m) ({3} Sekunden) (route {4})"
     },
     {
       "Key": "eventProfileLogin",

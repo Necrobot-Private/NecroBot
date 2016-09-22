@@ -31,8 +31,8 @@ YOU WILL TRANSMIT DATA THAT CAN GET EVERYONE DETECTED AND BANNED. (ALL YOUR OLD 
 
 
 
-
-
+//========================================================================================================//
 Are you running latest version?
-Latest version: NecroBot2 v0.9.9.9
-https://github.com/Necrobot-Private/NecroBot/releases
+Latest version: NecroBot2 v1.0.0.5
+https://github.com/Necrobot-Private/NecroBot/releases/latest
+//========================================================================================================//

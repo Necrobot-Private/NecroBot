@@ -85,8 +85,16 @@
       "Value": "Nombre: {0} INFO: El avance falló, posible SoftBan. Eliminar SoftBan en: {1}/{2}"
     },
     {
+      "Key": "gym",
+      "Value": "Gym"
+    },
+    {
+      "Key": "pokestop",
+      "Value":  "Poképarada"
+    },
+    {
       "Key": "eventFortTargeted",
-      "Value": "Llegando a Poképarada: {0} en ({1}m) ({2} segundos) (Ruta {3})"
+      "Value": "Llegando a {0}: {1} en ({2}m) ({3} segundos) (Ruta {4})"
     },
     {
       "Key": "eventProfileLogin",
