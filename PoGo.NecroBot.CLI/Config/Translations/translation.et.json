@@ -113,8 +113,16 @@
       "Value": "Name: {0} INFO: Esemete vastuvõtmine ebaõnnestus, võimalik softban. Katse: {1}/{2}"
     },
     {
+      "Key": "gym",
+      "Value": "Gym"
+    },
+    {
+      "Key": "pokestop",
+      "Value": "Pokestop"
+    },
+    {
       "Key": "eventFortTargeted",
-      "Value": "{0} ({1} m pärast) ({2} seconds) (route {3})"
+      "Value": "{0} {1} ({2} m pärast) ({3} seconds) (route {4})"
     },
     {
       "Key": "eventProfileLogin",

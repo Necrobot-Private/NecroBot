@@ -85,8 +85,16 @@
       "Value": "El desplaçament ha fallat, possible SoftBan. Eliminant SoftBan en: {0}/{1} intents"
     },
     {
+      "Key": "gym",
+      "Value": "Gym"
+    },
+    {
+      "Key": "pokestop",
+      "Value":  "la Pokeparada"
+    },
+    {
       "Key": "eventFortTargeted",
-      "Value": "Viatjant cap a la Pokeparada: {0} ({1}m) ({2}segons) (route {3})"
+      "Value": "Viatjant cap a {0}: {1} ({2}m) ({3}segons) (route {4})"
     },
     {
       "Key": "eventProfileLogin",

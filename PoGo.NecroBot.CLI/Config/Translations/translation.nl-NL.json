@@ -82,8 +82,16 @@
       "Value": "Naam: {0}. Items verzamelen mislukt, mogelijke softban. Opnieuw proberen: {1}/{2}"
     },
     {
+      "Key": "gym",
+      "Value": "Gym"
+    },
+    {
+      "Key": "pokestop",
+      "Value": "Pokestop"
+    },
+    {
       "Key": "eventFortTargeted",
-      "Value": "{0} over {1} meter ({2} seconden) (route {3})"
+      "Value": "{0} {1} over {2} meter ({3} seconden) (route {4})"
     },
     {
       "Key": "eventProfileLogin",
