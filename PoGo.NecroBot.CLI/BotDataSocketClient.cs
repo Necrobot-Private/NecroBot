@@ -17,7 +17,7 @@ namespace PoGo.NecroBot.CLI
 {
     public class BotDataSocketClient
     {
-        private static Queue<EncounteredEvent> events = new Queue<EncounteredEvent>();
+        private static List<EncounteredEvent> events = new List<EncounteredEvent>();
         private const int POLLING_INTERVAL = 10000;
         public static void Listen(IEvent evt, Session session)
         {
@@ -36,7 +36,7 @@ namespace PoGo.NecroBot.CLI
         {
             lock (events)
             {
-                events.Enqueue(eve);
+                events.Add(eve);
             }
         }
 
@@ -92,8 +92,8 @@ namespace PoGo.NecroBot.CLI
                             {
                                 Message = "Couldn't establish the connection to necro socket server, Bot will re-connect after 10 mins"
                             });
-
-                            await Task.Delay(10 * 1000 * 60);
+                            retries = 0;
+                             await Task.Delay(10 * 1000 * 60);
                         }
 
                         ws.Connect();
@@ -106,26 +106,31 @@ namespace PoGo.NecroBot.CLI
                             {
                                 lock (events)
                                 {
-                                    while (events.Count > 0)
-                                    {
-                                        processing.Add(events.Dequeue());
-                                    }
+                                    processing.Clear();
+                                    processing.AddRange(events);
                                 }
 
-                                while (processing.Count > 0)
+                                if (processing.Count > 0 && ws.IsAlive)
                                 {
-                                    if (ws.IsAlive)
+                                    if (processing.Count == 1)
                                     {
-                                        var item = processing.FirstOrDefault();
-                                        var data = Serialize(item);
+                                        //serialize list will make data bigger, code ugly but save bandwidth and help socket process faster
+                                        var data = Serialize(processing.First());
                                         ws.Send($"42[\"pokemon\",{data}]");
-                                        processing.Remove(item);
-                                        await Task.Delay(processing.Count > 0 ? 3000 : 0);
+                                    }
+                                    else {
+                                        var data = Serialize(processing);
+                                        ws.Send($"42[\"pokemons\",{data}]");
                                     }
                                 }
+                                lock(events)
+                                {
+                                    events.RemoveAll(x => processing.Any(t => t.EncounterId == x.EncounterId));
+                                }
+                                await Task.Delay(POLLING_INTERVAL);
+                                ws.Ping();
                             }
-                            await Task.Delay(POLLING_INTERVAL);
-                            ws.Ping();
+                           
                         }
                     }
                     catch (IOException)
