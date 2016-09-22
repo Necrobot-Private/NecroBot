@@ -143,7 +143,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 if (session.LogicSettings.EnableHumanWalkingSnipe)
                 {
-                    await HumanWalkSnipeTask.Execute(session, cancellationToken, pokeStop);
+                    await HumanWalkSnipeTask.Execute(session, cancellationToken, pokeStop, fortInfo);
                 }
                 pokeStop = await GetNextPokeStop(session);
             }
@@ -213,8 +213,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                 //TODO : A logic need to be add for handle this  case?
             };
 
-            var pokeStopes = session.Forts.Where(p => p.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime()).ToList();
-            pokeStopes = pokeStopes.OrderBy(
+            var forts = session.Forts.Where(p => p.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime()).ToList();
+            forts = forts.OrderBy(
                         p =>
                             session.Navigation.WalkStrategy.CalculateDistance(
                                 session.Client.CurrentLatitude,
@@ -223,21 +223,32 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 p.Longitude,
                                 session)
                                 ).ToList();
+
             if (session.LogicSettings.UseGpxPathing)
             {
-                pokeStopes = pokeStopes.Where(p => LocationUtils.CalculateDistanceInMeters(p.Latitude, p.Longitude, session.Client.CurrentLatitude, session.Client.CurrentLongitude) < 40).ToList();
+                forts = forts.Where(p => LocationUtils.CalculateDistanceInMeters(p.Latitude, p.Longitude, session.Client.CurrentLatitude, session.Client.CurrentLongitude) < 40).ToList();
             }
-            if (pokeStopes.Count == 1) return pokeStopes.FirstOrDefault();
 
-           if (session.LogicSettings.GymAllowed && session.Inventory.GetPlayerStats().Result.FirstOrDefault().Level > 5)
+            if (!session.LogicSettings.GymAllowed || session.Inventory.GetPlayerStats().Result.FirstOrDefault().Level <= 5)
             {
-                var gyms = pokeStopes.Where(x => x.Type == FortType.Gym &&
-                LocationUtils.CalculateDistanceInMeters(x.Latitude, x.Longitude, session.Client.CurrentLatitude, session.Client.CurrentLongitude) < session.LogicSettings.GymMaxDistance
-                && x.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime());
-
-                if (gyms.Count() > 0) return gyms.FirstOrDefault();
+                // Filter out the gyms
+                forts = forts.Where(x => x.Type != FortType.Gym).ToList();
             }
-            return pokeStopes.Skip((int)DateTime.Now.Ticks % 2).FirstOrDefault();
+            else if (session.LogicSettings.GymPrioritizeOverPokestop)
+            {
+                // Prioritize gyms over pokestops
+                var gyms = forts.Where(x => x.Type == FortType.Gym &&
+                    LocationUtils.CalculateDistanceInMeters(x.Latitude, x.Longitude, session.Client.CurrentLatitude, session.Client.CurrentLongitude) < session.LogicSettings.GymMaxDistance);
+
+                // Return the first gym in range.
+                if (gyms.Count() > 0)
+                    return gyms.FirstOrDefault();
+            }
+
+            if (forts.Count == 1)
+                return forts.FirstOrDefault();
+
+            return forts.Skip((int)DateTime.Now.Ticks % 2).FirstOrDefault();
         }
 
         public static async Task SpinPokestopNearBy(ISession session, CancellationToken cancellationToken, FortData destinationFort = null)

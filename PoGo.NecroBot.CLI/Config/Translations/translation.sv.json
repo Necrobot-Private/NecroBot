@@ -81,8 +81,16 @@
       "Value": "Namn: {0} INFO: Ransack misslyckades, eventuellt har du blivit temporärbannad. Ban lyfter om: {1}/{2}"
     },
     {
+      "Key": "gym",
+      "Value": "Gym"
+    },
+    {
+      "Key": "pokestop",
+      "Value": "Pokestop"
+    },
+    {
       "Key": "eventFortTargeted",
-      "Value": "Anländer till Pokestop: {0} om ({1}m) ({2} seconds) (route {3})"
+      "Value": "Anländer till {0}: {1} om ({2}m) ({3} seconds) (route {4})"
     },
     {
       "Key": "eventProfileLogin",

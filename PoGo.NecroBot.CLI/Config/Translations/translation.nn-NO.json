@@ -77,8 +77,16 @@
       "Value": "XP: {0}, Gems: {1}, Items: {2}"
     },
     {
+      "Key": "gym",
+      "Value": "Gym"
+    },
+    {
+      "Key": "pokestop",
+      "Value": "Pokestop"
+    },
+    {
       "Key": "eventFortTargeted",
-      "Value": "{0} in ({1}m) ({2} seconds) (route {3})"
+      "Value": "{0} {1} in ({2}m) ({3} seconds) (route {4})"
     },
     {
       "Key": "eventProfileLogin",
