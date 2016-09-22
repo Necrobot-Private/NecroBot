@@ -410,7 +410,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             //return;//NEW SNIPE METHOD WILL BE ACTIVATED
 
-            var pth = Path.Combine(session.LogicSettings.ProfilePath, "SnipeMS.json");
+            var pth = Path.Combine(Directory.GetCurrentDirectory(), "SnipeMS.json");
             try
             {
                 if (!File.Exists(pth))
