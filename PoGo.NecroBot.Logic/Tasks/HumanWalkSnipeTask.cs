@@ -201,7 +201,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                     await session.Navigation.Move(snipeTarget,
                         async () =>
                         {
-                            
+                            if (session.LogicSettings.ActivateMSniper)
+                            {
+                                await MSniperServiceTask.Execute(session, cancellationToken);
+                            }
                             await ActionsWhenTravelToSnipeTarget(session, cancellationToken, pokemon, catchPokemon, spinPokestop);
                         },
                        session,
@@ -299,10 +302,6 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 //looking for neaby pokestop. spin it
                 await UseNearbyPokestopsTask.SpinPokestopNearBy(session, cancellationToken, null);
-            }
-            if (session.LogicSettings.ActivateMSniper)
-            {
-                await MSniperServiceTask.Execute(session, cancellationToken);
             }
         }
 
