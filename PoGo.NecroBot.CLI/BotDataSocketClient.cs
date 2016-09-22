@@ -99,7 +99,7 @@ namespace PoGo.NecroBot.CLI
                         ws.Connect();
                         if (ws.ReadyState == WebSocketSharp.WebSocketState.Open)
                         {
-                            Logger.Write("Pokemon spawn point data service connection established.");
+                            Logger.Write("Connected to necrobot data service.");
                             retries = 0;
 
                             while (ws.IsAlive)
