@@ -143,7 +143,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 if (session.LogicSettings.EnableHumanWalkingSnipe)
                 {
-                    await HumanWalkSnipeTask.Execute(session, cancellationToken, pokeStop);
+                    await HumanWalkSnipeTask.Execute(session, cancellationToken, pokeStop, fortInfo);
                 }
                 pokeStop = await GetNextPokeStop(session);
             }
