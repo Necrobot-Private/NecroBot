@@ -91,8 +91,16 @@
 
     },
     {
+      "Key": "gym",
+      "Value": "Gym"
+    },
+    {
+      "Key": "pokestop",
+      "Value": "PokeStop"
+    },
+    {
       "Key": "eventFortTargeted",
-      "Value": "ធ្វើដំណើរទៅ PokeStop: {0} ({1}វិនារទី) ({2} seconds) (route {3})"
+      "Value": "ធ្វើដំណើរទៅ {0}: {1} ({2}វិនារទី) ({3} seconds) (route {4})"
 
     },
     {

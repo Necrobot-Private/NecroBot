@@ -85,8 +85,16 @@
       "Value": "Collecte/Capture impossible, tentative dans : {1}/{2}"
     },
     {
+      "Key": "gym",
+      "Value": "Gym"
+    },
+    {
+      "Key": "pokestop",
+      "Value":  "Pokestop"
+    },
+    {
       "Key": "eventFortTargeted",
-      "Value": "{0} à {1}m | {2}s (route {3})"
+      "Value": "{0} {1} à {2}m | {3}s (route {4})"
     },
     {
       "Key": "eventProfileLogin",
