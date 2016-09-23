@@ -54,7 +54,7 @@ namespace PoGo.NecroBot.Logic.State
                 session.EventDispatcher.Send(new UpdateEvent
                 {
                     Message =
-                        session.Translation.GetTranslation(TranslationString.GotUpToDateVersion, Assembly.GetExecutingAssembly().GetName().Version.ToString(3))
+                        session.Translation.GetTranslation(TranslationString.GotUpToDateVersion, Assembly.GetExecutingAssembly().GetName().Version.ToString(4))
                 });
                 return new LoginState();
             }
