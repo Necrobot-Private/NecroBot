@@ -32,21 +32,24 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             var upgradeResult = await session.Inventory.UpgradePokemon(pokemon.Id);
 
-            var bestPokemonOfType = (session.LogicSettings.PrioritizeIvOverCp
-    ? await session.Inventory.GetHighestPokemonOfTypeByIv(upgradeResult.UpgradedPokemon)
-    : await session.Inventory.GetHighestPokemonOfTypeByCp(upgradeResult.UpgradedPokemon)) ?? upgradeResult.UpgradedPokemon;
-
-            if (upgradeResult.Result.ToString().ToLower().Contains("success"))
+            if (upgradeResult.UpgradedPokemon != null)
             {
-                session.EventDispatcher.Send(new UpgradePokemonEvent()
+                var bestPokemonOfType = (session.LogicSettings.PrioritizeIvOverCp
+                    ? await session.Inventory.GetHighestPokemonOfTypeByIv(upgradeResult.UpgradedPokemon)
+                    : await session.Inventory.GetHighestPokemonOfTypeByCp(upgradeResult.UpgradedPokemon)) ?? upgradeResult.UpgradedPokemon;
+
+                if (upgradeResult.Result.ToString().ToLower().Contains("success"))
                 {
-                    PokemonId = upgradeResult.UpgradedPokemon.PokemonId,
-                    Id = upgradeResult.UpgradedPokemon.Id,
-                    Cp = upgradeResult.UpgradedPokemon.Cp,
-                    BestCp = bestPokemonOfType.Cp,
-                    BestPerfection = PokemonInfo.CalculatePokemonPerfection(bestPokemonOfType),
-                    Perfection = PokemonInfo.CalculatePokemonPerfection(upgradeResult.UpgradedPokemon)
-                });
+                    session.EventDispatcher.Send(new UpgradePokemonEvent()
+                    {
+                        PokemonId = upgradeResult.UpgradedPokemon.PokemonId,
+                        Id = upgradeResult.UpgradedPokemon.Id,
+                        Cp = upgradeResult.UpgradedPokemon.Cp,
+                        BestCp = bestPokemonOfType.Cp,
+                        BestPerfection = PokemonInfo.CalculatePokemonPerfection(bestPokemonOfType),
+                        Perfection = PokemonInfo.CalculatePokemonPerfection(upgradeResult.UpgradedPokemon)
+                    });
+                }
             }
             return true;
 
