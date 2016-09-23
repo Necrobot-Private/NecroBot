@@ -50,10 +50,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                 await session.Navigation.Move(defaultLocation,
                     async () =>
                     {
-                        if (session.LogicSettings.ActivateMSniper)
-                        {
+                      
                             await MSniperServiceTask.Execute(session, cancellationToken);
-                        }
+                        
                     },
                     session,
                     cancellationToken);
