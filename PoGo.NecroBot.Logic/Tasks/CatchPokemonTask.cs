@@ -117,6 +117,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                                         FortData currentFortData, 
                                         bool sessionAllowTransfer)
         {
+            // If the encounter is null nothing will work below, so exit now
+            if (encounter == null) return;
+            // Exit if user defined max limits reached
+            if (CatchThresholdExceeds(session, cancellationToken))
+                return;
+
             using (var block = new BlockableScope(session, Model.BotActions.Catch))
             {
                 if (!await block.WaitToRun()) return;
@@ -125,12 +131,6 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                // If the encounter is null nothing will work below, so exit now
-                if (encounter == null) return;
-
-                // Exit if user defined max limits reached
-                if (CatchThresholdExceeds(session, cancellationToken))
-                    return;
 
                 float probability = encounter.CaptureProbability?.CaptureProbability_[0];
 
@@ -206,6 +206,15 @@ namespace PoGo.NecroBot.Logic.Tasks
                     Move1 = PokemonInfo.GetPokemonMove1(encounteredPokemon).ToString(),
                     Move2 = PokemonInfo.GetPokemonMove2(encounteredPokemon).ToString(),
                 });
+
+                if (IsNotMetWithCatchCriteria(session, encounteredPokemon, pokemonIv, lv, pokemonCp)){
+                    session.EventDispatcher.Send(new NoticeEvent
+                    {
+                        Message = session.Translation.GetTranslation(TranslationString.PokemonSkipped, encounteredPokemon.PokemonId)
+                    });
+                    Logger.Write($"Filter catch not met. {encounteredPokemon.PokemonId.ToString()} IV {pokemonIv} lv {lv} {pokemonCp} move1 {PokemonInfo.GetPokemonMove1(encounteredPokemon)} move 2 {PokemonInfo.GetPokemonMove2(encounteredPokemon)}");
+                    return;
+                };
 
                 CatchPokemonResponse caughtPokemonResponse = null;
                 var lastThrow = CatchPokemonResponse.Types.CatchStatus.CatchSuccess; // Initializing lastThrow
@@ -431,6 +440,51 @@ namespace PoGo.NecroBot.Logic.Tasks
                         await TransferDuplicatePokemonTask.Execute(session, cancellationToken);
                 }
             }
+        }
+
+        private static bool IsNotMetWithCatchCriteria(ISession session, PokemonData encounteredPokemon, double pokemonIv, double lv, int? cp)
+        {
+            if (session.LogicSettings.UsePokemonToNotCatchFilter && session.LogicSettings.PokemonsNotToCatch.Contains(encounteredPokemon.PokemonId)) return true;
+            if(session.LogicSettings.UseTransferFilterToCatch && session.LogicSettings.PokemonsTransferFilter.ContainsKey(encounteredPokemon.PokemonId))
+            {
+                var filter = session.LogicSettings.PokemonsTransferFilter[encounteredPokemon.PokemonId];
+                if(filter != null && filter.CatchOnlyPokemonMeetTransferCriteria)
+                {
+                    if(filter.KeepMinOperator =="and" 
+                        && ((cp.HasValue && cp.Value < filter.KeepMinCp)  
+                        || pokemonIv < filter.KeepMinIvPercentage 
+                        || (filter.UseKeepMinLvl && lv < filter.KeepMinLvl)))
+                    {
+                        return true;//not catch pokemon
+                    }
+
+                    if (filter.KeepMinOperator == "or" && ((!cp.HasValue || cp < filter.KeepMinCp) 
+                        && pokemonIv < filter.KeepMinIvPercentage 
+                        && (!filter.UseKeepMinLvl || lv < filter.KeepMinLvl)))
+                    {
+                        return true;//not catch pokemon
+                    }
+                    //check for move
+
+                    var move1 = PokemonInfo.GetPokemonMove1(encounteredPokemon).ToString();
+                    var move2 = PokemonInfo.GetPokemonMove2(encounteredPokemon).ToString();
+
+                    if (filter.MovesOperator == "or" && (filter.Moves.Count ==0 || filter.Moves.Any(x=>x[0] == encounteredPokemon.Move1 || x[1] == encounteredPokemon.Move2)))
+                    {
+                        return false;//catch him because he has 1 move we want.
+                    }
+                    else
+                    if (filter.MovesOperator == "and" && (filter.Moves.Count == 0 || filter.Moves.Any(x => x[0] == encounteredPokemon.Move1 && x[1] == encounteredPokemon.Move2)))
+                    {
+                        return false;//catch him because he has 2 move we want.
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         public static async Task<ItemId> GetBestBall(ISession session, PokemonData encounteredPokemon, float probability)

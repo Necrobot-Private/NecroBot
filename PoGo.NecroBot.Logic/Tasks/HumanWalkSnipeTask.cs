@@ -70,7 +70,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         public static async Task AddSnipePokemon(string source, PokemonId id, double latitude, double longitude, DateTime expirationTimestamp, double iV = 0, ISession session = null)
         {
-            if (_session == null  || !_session.LogicSettings.EnableHumanWalkingSnipe) return;
+            if (session == null  || !_session.LogicSettings.EnableHumanWalkingSnipe) return;
 
             InitSession(session);
             
@@ -161,9 +161,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                 pokemon = await GetNextSnipeablePokemon(session.Client.CurrentLatitude, session.Client.CurrentLongitude, !caughtAnyPokemonInThisWalk);
                 if (pokemon != null)
                 {
-                        await MSniperServiceTask.Execute(session, cancellationToken);
-                    
-
                     caughtAnyPokemonInThisWalk = true;
                     CalculateDistanceAndEstTime(pokemon);
                     var remainTimes = (pokemon.ExpiredTime - DateTime.Now).TotalSeconds * 0.95; //just use 90% times
@@ -241,8 +238,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             await session.Navigation.Move(destination,
                async () =>
                {
-                       await MSniperServiceTask.Execute(session, cancellationToken);
-                   
+                   await MSniperServiceTask.Execute(session, cancellationToken);
                    await CatchNearbyPokemonsTask.Execute(session, cancellationToken);
                    await UseNearbyPokestopsTask.SpinPokestopNearBy(session, cancellationToken);
                },

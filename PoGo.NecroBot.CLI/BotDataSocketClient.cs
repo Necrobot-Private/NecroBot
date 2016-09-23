@@ -62,7 +62,6 @@ namespace PoGo.NecroBot.CLI
 
         public static async Task Start(Session session, CancellationToken cancellationToken)
         {
-
             await Task.Delay(30000);//delay running 30s
 
             System.Net.ServicePointManager.Expect100Continue = false;
@@ -78,12 +77,13 @@ namespace PoGo.NecroBot.CLI
                  {
                      //silenly, no log exception message to screen that scare people :)
                  };
-                
-                //ws.OnMessage += (sender, e) =>
-                // Console.WriteLine("New message from controller: " + e.Data);
 
+                ws.OnMessage += (sender, e) => {
+                    onSocketMessageRecieved(session, sender, e);
+                };
                 while (true)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
                     try
                     {
                         if (retries++ == 5) //failed to make connection to server  times contiuing, temporary stop for 10 mins.
@@ -96,10 +96,14 @@ namespace PoGo.NecroBot.CLI
                              await Task.Delay(10 * 1000 * 60);
                         }
 
-                        ws.Connect();
+                        if (events.Count > 0)
+                        {
+                            ws.Connect();
+                        }
+
                         if (ws.ReadyState == WebSocketSharp.WebSocketState.Open)
                         {
-                            Logger.Write("Connected to necrobot data service.");
+                            //Logger.Write("Connected to necrobot data service.");
                             retries = 0;
 
                             while (ws.IsAlive)
@@ -154,7 +158,23 @@ namespace PoGo.NecroBot.CLI
             }
 
         }
-
+        private static void onSocketMessageRecieved(ISession session, object sender, WebSocketSharp.MessageEventArgs e)
+        {
+            try
+            {
+                var match = Regex.Match(e.Data, "42\\[\"pokemon\",(.*)]");
+                if (match != null && !string.IsNullOrEmpty(match.Groups[1].Value))
+                {
+                    var data = JsonConvert.DeserializeObject<EncounteredEvent>(match.Groups[1].Value);
+                    data.IsRecievedFromSocket = true;
+                    session.EventDispatcher.Send(data);
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+           
+        }
 
         internal static Task StartAsync(Session session, CancellationToken cancellationToken = default(CancellationToken))
         {
