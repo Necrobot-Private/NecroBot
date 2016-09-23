@@ -236,14 +236,14 @@ namespace PoGo.NecroBot.Logic.Tasks
                     socket.Closed += Msocket_Closed;
                     socket.Open();
                     lastNotify = DateTime.Now;
-                    Logger.Write($"Connecting to MSniperService", LogLevel.Service);
+                    //Logger.Write($"Connecting to MSniperService", LogLevel.Service);
                 }
                 catch (Exception ex)
                 {
                     TimeSpan ts = DateTime.Now - lastNotify;
                     if (ts.TotalMinutes > 5)
                     {
-                        Logger.Write(ex.Message + "  (may be offline)", LogLevel.Service, ConsoleColor.Red);
+                        //Logger.Write(ex.Message + "  (may be offline)", LogLevel.Service, ConsoleColor.Red);
                     }
                     socket?.Dispose();
                     socket = null;
@@ -265,7 +265,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             TimeSpan ts = DateTime.Now - lastNotify;
             if (ts.TotalMinutes > 5)
             {
-                Logger.Write("connection lost  (may be offline)", LogLevel.Service, ConsoleColor.Red);
+                //Logger.Write("connection lost  (may be offline)", LogLevel.Service, ConsoleColor.Red);
             }
             //throw new Exception("msniper socket closed");
             ////need delay or clear PkmnLocations
