@@ -444,6 +444,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     Type = HumanWalkSnipeEventTypes.PokemonScanned,
                     Pokemons = ApplyFilter(rarePokemons),
+                    DisplayMessage  = displayList
                 });
 
                 if (_setting.HumanWalkingSnipeDisplayList)

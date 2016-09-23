@@ -406,7 +406,7 @@ namespace PoGo.NecroBot.CLI
                     Logger.Write(session.Translation.GetTranslation(TranslationString.HumanWalkSnipeDestinationReached, ev.Latitude, ev.Longitude, ev.PauseDuration), LogLevel.Sniper);
                     break;
                 case HumanWalkSnipeEventTypes.PokemonScanned:
-                    if(ev.Pokemons != null && ev.Pokemons.Count > 0)
+                    if(ev.Pokemons != null && ev.Pokemons.Count > 0 && ev.DisplayMessage)
                     Logger.Write(session.Translation.GetTranslation(TranslationString.HumanWalkSnipeUpdate, ev.Pokemons.Count, 2, 3), LogLevel.Sniper, ConsoleColor.DarkMagenta);
                     break;
                     case HumanWalkSnipeEventTypes.PokestopUpdated:
