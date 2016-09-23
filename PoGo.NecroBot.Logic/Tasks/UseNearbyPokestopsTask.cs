@@ -134,7 +134,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 if (session.LogicSettings.SnipeAtPokestops || session.LogicSettings.UseSnipeLocationServer)
                     await SnipePokemonTask.Execute(session, cancellationToken);
-                
+
                 if (!await SetMoveToTargetTask.IsReachedDestination(pokeStop, session, cancellationToken))
                 {
                     pokeStop.CooldownCompleteTimestampMs = DateTime.UtcNow.ToUnixTime() + (pokeStop.Type == FortType.Gym ? session.LogicSettings.GymVisitTimeout : 5) * 60 * 1000; //5 minutes to cooldown
@@ -153,7 +153,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             var distance = LocationUtils.CalculateDistanceInMeters(session.Client.CurrentLatitude,
                     session.Client.CurrentLongitude, pokeStop.Latitude, pokeStop.Longitude);
-            
+
             // we only move to the PokeStop, and send the associated FortTargetEvent, when not using GPX
             // also, GPX pathing uses its own EggWalker and calls the CatchPokemon tasks internally.
             if (!session.LogicSettings.UseGpxPathing)
@@ -170,10 +170,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                 await session.Navigation.Move(pokeStopDestination,
                  async () =>
                  {
-                     if (session.LogicSettings.ActivateMSniper)
-                     {
-                         await MSniperServiceTask.Execute(session, cancellationToken);
-                     }
+                     await MSniperServiceTask.Execute(session, cancellationToken);
+
                      await OnWalkingToPokeStopOrGym(session, pokeStop, cancellationToken);
                  },
                              session,
@@ -288,7 +286,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static async Task DoActionAtPokeStop(ISession session, CancellationToken cancellationToken, FortData pokeStop, FortDetailsResponse fortInfo, bool doNotTrySpin = false)
         {
-            if (pokeStop.Type != FortType.Checkpoint ) return;
+            if (pokeStop.Type != FortType.Checkpoint) return;
 
             //Catch Lure Pokemon
             if (pokeStop.LureInfo != null)

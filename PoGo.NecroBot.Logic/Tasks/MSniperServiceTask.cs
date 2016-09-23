@@ -157,7 +157,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 await LocationUtils.UpdatePlayerLocationWithAltitude(session,
                     new GeoCoordinate(lat, lon, session.Client.CurrentAltitude), 0);  // Speed set to 0 for random speed.
             }
-            
+
             PokemonData encounteredPokemon;
 
             // Catch if it's a WildPokemon (MSniping not allowed for Incense pokemons)
@@ -229,7 +229,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 try
                 {
-                    Thread.Sleep(500);
+                    Thread.Sleep(30000);
                     //msniper.com
                     socket = new WebSocket("ws://msniper.com/WebSockets/NecroBotServer.ashx", "", WebSocketVersion.Rfc6455);
                     socket.MessageReceived += Msocket_MessageReceived;
@@ -406,7 +406,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (inProgress)
                 return;
             inProgress = true;
-            OpenSocket();
+            if (session.LogicSettings.ActivateMSniper)
+                OpenSocket();
 
             //return;//NEW SNIPE METHOD WILL BE ACTIVATED
 
