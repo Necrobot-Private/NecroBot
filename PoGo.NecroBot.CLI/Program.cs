@@ -239,7 +239,7 @@ namespace PoGo.NecroBot.CLI
             var stats = new Statistics();
 
             ProgressBar.Fill(30);
-            var strVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
+            var strVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString(4);
             stats.DirtyEvent +=
                 () =>
                     Console.Title = $"[Necrobot2 v{strVersion}] " +
