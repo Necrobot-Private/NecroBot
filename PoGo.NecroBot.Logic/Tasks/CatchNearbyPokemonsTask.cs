@@ -35,6 +35,13 @@ namespace PoGo.NecroBot.Logic.Tasks
                 cancellationToken.ThrowIfCancellationRequested();
                 await MSniperServiceTask.Execute(session, cancellationToken);
 
+                string pokemonUniqueKey = $"{pokemon.EncounterId}";
+                if(session.Cache.GetCacheItem(pokemonUniqueKey) != null)
+                {
+                    continue; //this pokemon has been skipped because not meet with catch criteria before.
+
+                }
+                
                 var allitems = await session.Inventory.GetItems();
                 var pokeBallsCount = allitems.FirstOrDefault(i => i.ItemId == ItemId.ItemPokeBall)?.Count;
                 var greatBallsCount = allitems.FirstOrDefault(i => i.ItemId == ItemId.ItemGreatBall)?.Count;

@@ -14,6 +14,7 @@ using System;
 using PokemonGo.RocketAPI.Extensions;
 using PoGo.NecroBot.Logic.Model;
 using System.Threading.Tasks;
+using System.Runtime.Caching;
 
 #endregion
 
@@ -38,6 +39,7 @@ namespace PoGo.NecroBot.Logic.State
         void AddVisibleForts(List<FortData> mapObjects);
         Task<bool> WaitUntilActionAccept(BotActions action, int timeout = 30000);
         List<BotActions> Actions { get; }
+        MemoryCache Cache { get; set; }
     }
 
 
@@ -52,7 +54,7 @@ namespace PoGo.NecroBot.Logic.State
         {
             this.Forts = new List<FortData>();
             this.VisibleForts = new List<FortData>();
-
+            this.Cache = new MemoryCache("Necrobot2");
             EventDispatcher = new EventDispatcher();
             LogicSettings = logicSettings;
 
@@ -88,6 +90,9 @@ namespace PoGo.NecroBot.Logic.State
         public SessionStats Stats { get; set; }
 
         public IElevationService ElevationService { get; set; }
+
+        public MemoryCache Cache { get; set; }
+
 
         private List<BotActions> botActions = new List<BotActions>();
         public void Reset(ISettings settings, ILogicSettings logicSettings)

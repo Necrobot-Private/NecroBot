@@ -212,6 +212,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     {
                         Message = session.Translation.GetTranslation(TranslationString.PokemonSkipped, encounteredPokemon.PokemonId)
                     });
+                    session.Cache.Add(_encounterId.ToString(), encounteredPokemon, expiredDate);
                     Logger.Write($"Filter catch not met. {encounteredPokemon.PokemonId.ToString()} IV {pokemonIv} lv {lv} {pokemonCp} move1 {PokemonInfo.GetPokemonMove1(encounteredPokemon)} move 2 {PokemonInfo.GetPokemonMove2(encounteredPokemon)}");
                     return;
                 };
