@@ -18,7 +18,7 @@ namespace PoGo.NecroBot.CLI
     public class BotDataSocketClient
     {
         private static List<EncounteredEvent> events = new List<EncounteredEvent>();
-        private const int POLLING_INTERVAL = 3000;
+        private const int POLLING_INTERVAL = 5000;
         public static void Listen(IEvent evt, Session session)
         {
             dynamic eve = evt;
@@ -82,22 +82,25 @@ namespace PoGo.NecroBot.CLI
                 {
                     onSocketMessageRecieved(session, sender, e);
                 };
+
                 while (true)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
                     try
                     {
-                        if (retries++ == 5) //failed to make connection to server  times contiuing, temporary stop for 10 mins.
+                        if (retries == 5) //failed to make connection to server  times contiuing, temporary stop for 10 mins.
                         {
                             session.EventDispatcher.Send(new WarnEvent()
                             {
                                 Message = "Couldn't establish the connection to necro socket server, Bot will re-connect after 10 mins"
                             });
+                            await Task.Delay(1 * 60 * 1000);
                             retries = 0;
                         }
 
                         if (events.Count > 0 && ws.ReadyState != WebSocketSharp.WebSocketState.Open)
                         {
+                            retries++;
                             ws.Connect();
                         }
 
