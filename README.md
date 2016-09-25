@@ -5,7 +5,12 @@
 
 <strong><em> The contents of this repo are a proof of concept and are for educational use only </em></strong>
 
-
+Donate
+------------
+> If you want to donate for the Team, you can do it with BitCoins.<br>
+> Our Wallet: 1FFbvYiaXExBzSfjoUCBJKTUxhQAQHWQFn<br>
+> We appreciate every donation!<br>
+>All Donations will be invested in a server!<br>
 
 <h2>Do NOT publish/share/advertise this Bot, GitHub or discord, in any other discord server or website.</h2>
 [![Stories in Ready](https://discordapp.com/api/guilds/220703917871333376/widget.png?style=banner2&time-)](https://discord.gg/7FWyWVp)
