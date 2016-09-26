@@ -3,7 +3,7 @@
 <strong>
 Niantic has forced minimum version of Pokebot clients to 0.39.  So all bots, map scanners, and other unauthorized clients are down until the new API has been cracked.
 
-Do not connect with any bot or else you will be flagged as a bot since all bots use the 0.35 API.
+Do not attempt to connect with any bot or else you will be flagged as a bot since all bots use the 0.35 API.
 </strong>
 
 <p align="center">
