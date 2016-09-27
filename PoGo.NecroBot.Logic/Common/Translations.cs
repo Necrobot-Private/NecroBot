@@ -262,7 +262,9 @@ namespace PoGo.NecroBot.Logic.Common
         FirstStartSetupWalkingSpeedKmHConfirm,
         FirstStartSetupUseWalkingSpeedVariantPrompt,
         FirstStartSetupWalkingSpeedVariantPrompt,
-        FirstStartSetupWalkingSpeedVariantConfirm
+        FirstStartSetupWalkingSpeedVariantConfirm,
+        MinimumClientVersionException,
+        ExitNowAfterEnterKey
     }
 
     public class Translation : ITranslation
@@ -598,7 +600,9 @@ namespace PoGo.NecroBot.Logic.Common
             new KeyValuePair<TranslationString, string>(TranslationString.HumanWalkSnipeAddedPokestop, "(HUMAN WALK) You are {0:0.00m} away from nearest pokestop. Restart farming at this place with {1} pokestops."),
             new KeyValuePair<TranslationString, string>(TranslationString.HumanWalkSnipeDestinationReached, "(HUMAN WALK) destination reached | lat: {0}, lng: {1} | wait :{2:0.00} sec"),
             new KeyValuePair<TranslationString, string>(TranslationString.HumanWalkSnipeNotEnoughtBalls, "(HUMAN WALK) Not enought balls to activate catch Em-All mode. ({0})/{1}") ,
-            new KeyValuePair<TranslationString, string>(TranslationString.HumanWalkSnipePokemonEncountered, "(HUMAN WALK) Encountered {0}  | lat :{1} , Lng : {2} | removed from snipping list")
+            new KeyValuePair<TranslationString, string>(TranslationString.HumanWalkSnipePokemonEncountered, "(HUMAN WALK) Encountered {0}  | lat :{1} , Lng : {2} | removed from snipping list"),
+            new KeyValuePair<TranslationString, string>(TranslationString.MinimumClientVersionException, "(KILLSWITCH) We have detected a Pokemon API change. The bot emulates API version {0}, which is no longer supported.  Minimum API version is now {1}."),
+            new KeyValuePair<TranslationString, string>(TranslationString.ExitNowAfterEnterKey, "The bot will now exit after hitting the enter key.")
         };
 
         [JsonProperty("PokemonStrings",
