@@ -3,9 +3,9 @@
 <h1>Pokémon Go 0.39 Forced Update - Necrobot is Down!
 </h1>
 <strong>
-Niantic has forced minimum version of Pokebot clients to 0.39.  So all bots, map scanners, and other unauthorized clients are down until the new API has been cracked.
+Niantic has forced minimum version of Pokebot clients to 0.39.  So all bots, map scanners, and other unauthorized clients are going to down until the new API has been cracked.
 
-Do not attempt to connect with any bot or else you will be flagged as a bot since all bots use the 0.35 API.
+Do not attempt to connect with any bot or else you will be flagged as a bot since all bots use the 0.35 API and real apps use 0.39 API.
 </strong>
 
 :exclamation: :exclamation: :exclamation:
