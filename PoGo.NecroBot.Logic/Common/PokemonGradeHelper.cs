@@ -179,6 +179,9 @@ namespace PoGo.NecroBot.Logic.Common
                  PokemonId.Porygon          ,
                  PokemonId.Omanyte          ,
                  PokemonId.Aerodactyl       ,
+                 PokemonId.Charizard        ,
+                 PokemonId.Blastoise        ,
+                 PokemonId.Ivysaur
 
                 }
             }       ,
