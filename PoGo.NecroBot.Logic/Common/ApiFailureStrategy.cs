@@ -74,11 +74,6 @@ namespace PoGo.NecroBot.Logic.Common
             {
                 await Task.Delay(2000);
             }
-            catch(MinimumClientVersionException ex)
-            {
-                // Re-throw this exception since we need to exit the app.
-                throw ex;
-            }
             catch (Exception ex) when (ex is InvalidResponseException || ex is TaskCanceledException)
             {
                 await Task.Delay(1000);
@@ -86,7 +81,28 @@ namespace PoGo.NecroBot.Logic.Common
 
             return ApiOperation.Retry;
         }
-        
+
+        public async Task<ApiOperation> HandleApiFailure()
+        {
+            if (_retryCount == 11)
+                return ApiOperation.Abort;
+
+            await Task.Delay(500);
+            _retryCount++;
+
+            if (_retryCount%5 == 0)
+            {
+                DoLogin();
+            }
+
+            return ApiOperation.Retry;
+        }
+
+        public void HandleApiSuccess()
+        {
+            _retryCount = 0;
+        }
+
         private async void DoLogin()
         {
             try
@@ -173,11 +189,6 @@ namespace PoGo.NecroBot.Logic.Common
                 });
 
                 await Task.Delay(5000);
-            }
-            catch(MinimumClientVersionException ex)
-            {
-                // Re-throw this exception since we need to exit the app.
-                throw ex;
             }
             catch (Exception ex)
             {
