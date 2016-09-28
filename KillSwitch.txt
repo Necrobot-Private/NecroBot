@@ -33,7 +33,7 @@ YOU WILL TRANSMIT DATA THAT CAN GET EVERYONE DETECTED AND BANNED.
 (ALL YOUR OLD ACCOUNTS INCLUDED)
 
 
-
+Read UP ^^^^^^^^
 
 //================================================================//
                 Latest version: NecroBot2 v1.0.0.6
@@ -49,5 +49,5 @@ YOU WILL TRANSMIT DATA THAT CAN GET EVERYONE DETECTED AND BANNED.
           The entire PoGo community is working on a fix. 
 
 For support/questions:
-OFFICIAL NECROBOT2 Discord: https://discord.gg/7FWyWVp
+OFFICIAL NECROBOT2 Discord: https://discord.gg/EnSAnch
 (Do NOT publish/share/advertise this Bot or Discord, in any other discord server or website)
