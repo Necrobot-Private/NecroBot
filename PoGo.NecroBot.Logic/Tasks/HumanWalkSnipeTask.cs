@@ -208,9 +208,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                         UniqueId = pokemon.UniqueId
                     });
 
-                    await Task.Delay(pokemon.Setting.DelayTimeAtDestination);
+                    await Task.Delay(pokemon.Setting.DelayTimeAtDestination, cancellationToken);
                     await CatchNearbyPokemonsTask.Execute(session, cancellationToken, pokemon.PokemonId, pokemon.Setting.AllowTransferWhileWalking);
-                    await Task.Delay(1000);
+                    await Task.Delay(1000,cancellationToken);
                     if (!pokemon.IsVisited)
                     {
                         await CatchLurePokemonsTask.Execute(session, cancellationToken);

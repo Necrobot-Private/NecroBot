@@ -54,5 +54,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
         public int NumberOfTopPokemonToBeExcluded = 10;
 
+        [DefaultValue(1)]
+        [Range(0, 10)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
+        public int CollectCoinAfterDeployed = 0;
     }
 }

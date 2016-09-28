@@ -62,7 +62,7 @@ namespace PoGo.NecroBot.CLI
 
         public static async Task Start(Session session, CancellationToken cancellationToken)
         {
-            await Task.Delay(30000);//delay running 30s
+            await Task.Delay(30000,cancellationToken);//delay running 30s
 
             System.Net.ServicePointManager.Expect100Continue = false;
 
@@ -132,7 +132,7 @@ namespace PoGo.NecroBot.CLI
                             {
                                 events.RemoveAll(x => processing.Any(t => t.EncounterId == x.EncounterId));
                             }
-                            await Task.Delay(POLLING_INTERVAL);
+                            await Task.Delay(POLLING_INTERVAL, cancellationToken);
                             ws.Ping();
                         }
                     }
