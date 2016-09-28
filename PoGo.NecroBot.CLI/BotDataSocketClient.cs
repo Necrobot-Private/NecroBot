@@ -94,7 +94,7 @@ namespace PoGo.NecroBot.CLI
                             {
                                 Message = "Couldn't establish the connection to necro socket server, Bot will re-connect after 10 mins"
                             });
-                            await Task.Delay(1 * 60 * 1000);
+                            await Task.Delay(1 * 60 * 1000, cancellationToken);
                             retries = 0;
                         }
 
