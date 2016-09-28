@@ -85,8 +85,16 @@
       "Value": "补给站:{0}|信息:正在解封:{1}/{2},您可能被封禁.\t\t\t"
     },
     {
+      "Key": "gym",
+      "Value": "Gym"
+    },
+    {
+      "Key": "pokestop",
+      "Value": "Pokestop"
+    },
+    {
       "Key": "eventFortTargeted",
-      "Value": "正在前往补给站:{0} 距离{1}米,需要{2}秒 (route {3})\t\t\t"
+      "Value": "{0} 正在前往补给站:{1} 距离{2}米,需要{3}秒 (route {4})\t\t\t"
     },
     {
       "Key": "eventProfileLogin",

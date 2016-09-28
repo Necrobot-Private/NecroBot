@@ -81,8 +81,16 @@
       "Value": "Pavadinimas: {0} INFO: Paėmimas nepavyko, įmanomas softban. Atblokuojama po: {1}/{2}"
     },
     {
+      "Key": "gym",
+      "Value": "Gym"
+    },
+    {
+      "Key": "pokestop",
+      "Value": "Pokestotelę"
+    },
+    {
       "Key": "eventFortTargeted",
-      "Value": "Atvykstama į Pokestotelę: {0} už ({1}m) ({2} seconds) (route {3})"
+      "Value": "Atvykstama į {0}: {1} už ({2}m) ({3} seconds) (route {4})"
     },
     {
       "Key": "eventProfileLogin",

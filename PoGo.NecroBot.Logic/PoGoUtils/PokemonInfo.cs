@@ -81,6 +81,9 @@ namespace PoGo.NecroBot.Logic.PoGoUtils
 
         public static double CalculatePokemonPerfection(PokemonData poke)
         {
+            if (poke == null)
+                return 0;
+
             if (Math.Abs(poke.CpMultiplier + poke.AdditionalCpMultiplier) <= 0)
                 return (poke.IndividualAttack + poke.IndividualDefense + poke.IndividualStamina)/45.0*100.0;
 

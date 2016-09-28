@@ -16,7 +16,11 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
-        public bool Enable;
+        public bool Enable = false;
+
+        [DefaultValue(true)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
+        public bool PrioritizeGymOverPokestop = true;
 
         [DefaultValue(500.0)]
         [Range(0, 9999)]

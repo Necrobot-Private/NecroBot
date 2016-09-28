@@ -85,8 +85,16 @@
       "Value": "Nev: {0} INFO: Lootolas sikertelen, lehetseges softban. Feloldas: {1}/{2} "
     },
     {
+      "Key": "gym",
+      "Value": "Gym"
+    },
+    {
+      "Key": "pokestop",
+      "Value":  "pokestopphoz"
+    },
+    {
       "Key": "eventFortTargeted",
-      "Value": "Erkezes pokestopphoz: {0} ({1}m) ({2} seconds) (route {3})"
+      "Value": "Erkezes {0}: {1} ({2}m) ({3} seconds) (route {4})"
     },
     {
       "Key": "eventProfileLogin",

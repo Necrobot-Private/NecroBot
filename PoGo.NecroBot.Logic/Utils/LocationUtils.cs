@@ -7,6 +7,7 @@ using POGOProtos.Networking.Responses;
 using PoGo.NecroBot.Logic.State;
 using PokemonGo.RocketAPI;
 using PoGo.NecroBot.Logic.Service;
+using PoGo.NecroBot.Logic.Service.Elevation;
 
 #endregion
 
@@ -36,10 +37,10 @@ namespace PoGo.NecroBot.Logic.Utils
                 destinationLocation.Latitude, destinationLocation.Longitude);
         }
 
-        public static double getElevation(ISession session, double lat, double lon)
+        public static double getElevation(IElevationService elevationService, double lat, double lon)
         {
-            if (session != null)
-                return session.ElevationService.GetElevation(lat, lon);
+            if (elevationService != null)
+                return elevationService.GetElevation(lat, lon);
 
             Random random = new Random();
             double maximum = 11.0f;

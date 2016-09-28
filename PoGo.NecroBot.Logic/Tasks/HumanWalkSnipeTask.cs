@@ -12,6 +12,7 @@ using PoGo.NecroBot.Logic.Utils;
 using POGOProtos.Enums;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Map.Fort;
+using POGOProtos.Networking.Responses;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -137,7 +138,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             .ToList();
         }
 
-        public static async Task Execute(ISession session, CancellationToken cancellationToken, FortData originalPokestop)
+        public static async Task Execute(ISession session, CancellationToken cancellationToken, FortData originalPokestop, FortDetailsResponse fortInfo)
         {
             pokestopCount++;
             pokestopCount = pokestopCount % 3;
@@ -163,10 +164,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                 pokemon = await GetNextSnipeablePokemon(session.Client.CurrentLatitude, session.Client.CurrentLongitude, !caughtAnyPokemonInThisWalk);
                 if (pokemon != null)
                 {
-                    if (session.LogicSettings.ActivateMSniper)
-                    {
                         await MSniperServiceTask.Execute(session, cancellationToken);
-                    }
+                    
 
                     caughtAnyPokemonInThisWalk = true;
                     CalculateDistanceAndEstTime(pokemon);
@@ -195,15 +194,13 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Rarity = PokemonGradeHelper.GetPokemonGrade(pokemon.PokemonId).ToString()
                     });
                     var snipeTarget = new SnipeLocation(pokemon.Latitude, pokemon.Longitude,
-                           LocationUtils.getElevation(session, pokemon.Latitude, pokemon.Longitude));
+                           LocationUtils.getElevation(session.ElevationService, pokemon.Latitude, pokemon.Longitude));
 
                     await session.Navigation.Move(snipeTarget,
                         async () =>
                         {
-                            if (session.LogicSettings.ActivateMSniper)
-                            {
                                 await MSniperServiceTask.Execute(session, cancellationToken);
-                            }
+                            
                             await ActionsWhenTravelToSnipeTarget(session, cancellationToken, pokemon, catchPokemon, spinPokestop);
                         },
                        session,
@@ -235,24 +232,23 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 if (session.LogicSettings.UseGpxPathing)
                 {
-                    await WalkingBackGPXPath(session, cancellationToken, originalPokestop);
+                    await WalkingBackGPXPath(session, cancellationToken, originalPokestop, fortInfo);
                 }
                 else
                     await UpdateFarmingPokestop(session, cancellationToken);
             }
         }
 
-        private static async Task WalkingBackGPXPath(ISession session, CancellationToken cancellationToken, FortData originalPokestop)
+        private static async Task WalkingBackGPXPath(ISession session, CancellationToken cancellationToken, FortData originalPokestop, FortDetailsResponse fortInfo)
         {
             var destination = new FortLocation(originalPokestop.Latitude, originalPokestop.Longitude,
-                         LocationUtils.getElevation(session, originalPokestop.Latitude, originalPokestop.Longitude), originalPokestop, null);
+                         LocationUtils.getElevation(session.ElevationService, originalPokestop.Latitude, originalPokestop.Longitude), originalPokestop, fortInfo);
             await session.Navigation.Move(destination,
                async () =>
                {
-                   if (session.LogicSettings.ActivateMSniper)
-                   {
+                 
                        await MSniperServiceTask.Execute(session, cancellationToken);
-                   }
+                   
                    await CatchNearbyPokemonsTask.Execute(session, cancellationToken);
                    await UseNearbyPokestopsTask.SpinPokestopNearBy(session, cancellationToken);
                },

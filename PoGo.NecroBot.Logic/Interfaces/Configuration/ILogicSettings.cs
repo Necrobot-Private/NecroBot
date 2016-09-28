@@ -60,6 +60,7 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         double ForceExcellentThrowOverIv { get; }
         int ForceGreatThrowOverCp { get; }
         int ForceExcellentThrowOverCp { get; }
+        int DelayBetweenPokemonCatch { get; }
         int DelayBetweenPokemonUpgrade { get; }
         bool AutomaticallyLevelUpPokemon { get; }
         bool OnlyUpgradeFavorites { get; }
@@ -208,6 +209,7 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         int RenamePokemonActionDelay { get; }
 
         bool GymAllowed { get; }
+        bool GymPrioritizeOverPokestop { get; }
         TeamColor GymDefaultTeam { get; }
         double GymMaxDistance { get; }
         int GymMaxCPToDeploy {  get; }

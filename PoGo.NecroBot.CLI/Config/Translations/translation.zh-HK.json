@@ -85,8 +85,16 @@
       "Value": "名稱：{0} 資訊：操作失敗，可能被封禁。正在解封：{1}/{2}"
     },
     {
+      "Key": "gym",
+      "Value": "Gym"
+    },
+    {
+      "Key": "pokestop",
+      "Value": "Pokestop"
+    },
+    {
       "Key": "eventFortTargeted",
-      "Value": "前往補給站：{0} (距離{1}公尺) ({2} seconds) (route {3})"
+      "Value": "{0} 前往補給站：{1} (距離{2}公尺) ({3} seconds) (route {4})"
     },
     {
       "Key": "eventProfileLogin",

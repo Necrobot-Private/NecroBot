@@ -135,81 +135,53 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         public static async Task CatchFromService(ISession session, CancellationToken cancellationToken, EncounterInfo encounterId)
         {
-            //default to excellent throw
-            var normalizedRecticleSize = 1.95;
-            //default spin
-            var spinModifier = 1.0;
+            cancellationToken.ThrowIfCancellationRequested();
 
-            //round to 2 decimals
-            normalizedRecticleSize = Math.Round(normalizedRecticleSize, 2);
-
-            CatchPokemonResponse caughtPokemonResponse;
             double lat = session.Client.CurrentLatitude;
             double lon = session.Client.CurrentLongitude;
-            CatchPokemonResponse.Types.CatchStatus lastThrow = CatchPokemonResponse.Types.CatchStatus.CatchSuccess;
-            CatchPokemonTask.AmountOfBerries = 0;
-            do
+
+            EncounterResponse encounter;
+            try
             {
-                cancellationToken.ThrowIfCancellationRequested();
-
                 await LocationUtils.UpdatePlayerLocationWithAltitude(session,
-                    new GeoCoordinate(encounterId.Latitude, encounterId.Longitude, session.Client.CurrentAltitude), 0); // Speed set to 0 for random speed.
+                   new GeoCoordinate(encounterId.Latitude, encounterId.Longitude, session.Client.CurrentAltitude), 0); // Speed set to 0 for random speed.
 
                 await Task.Delay(1000, cancellationToken);
 
-                var encounter = await session.Client.Encounter.EncounterPokemon(encounterId.EncounterId, encounterId.SpawnPointId);
+                encounter = await session.Client.Encounter.EncounterPokemon(encounterId.EncounterId, encounterId.SpawnPointId);
 
                 await Task.Delay(1000, cancellationToken);
-
+            }
+            finally
+            {
                 await LocationUtils.UpdatePlayerLocationWithAltitude(session,
                     new GeoCoordinate(lat, lon, session.Client.CurrentAltitude), 0);  // Speed set to 0 for random speed.
+            }
 
-                PokemonData encounteredPokemon;
+            PokemonData encounteredPokemon;
 
-                // Catch if it's a WildPokemon (MSniping not allowed for Incense pokemons)
-                if (encounter is EncounterResponse && (encounter?.Status == EncounterResponse.Types.Status.EncounterSuccess))
-                {
-                    encounteredPokemon = encounter.WildPokemon?.PokemonData;
-                }
-                else return; // No success to work with
+            // Catch if it's a WildPokemon (MSniping not allowed for Incense pokemons)
+            if (encounter?.Status == EncounterResponse.Types.Status.EncounterSuccess)
+            {
+                encounteredPokemon = encounter.WildPokemon?.PokemonData;
+            }
+            else
+            {
+                Logger.Write($"Pokemon despawned or wrong link format!", LogLevel.Service, ConsoleColor.Gray);
+                return;// No success to work with
+            }
 
-                float probability = encounter.CaptureProbability.CaptureProbability_[0];
-                int cp = encounter.WildPokemon.PokemonData.Cp;
-                int maxcp = PokemonInfo.CalculateMaxCp(encounter.WildPokemon.PokemonData);
-                double lvl = PokemonInfo.GetLevel(encounter.WildPokemon.PokemonData);
-                var bestBall = await CatchPokemonTask.GetBestBall(session, encounteredPokemon, probability);
+            var pokemon = new MapPokemon
+            {
+                EncounterId = encounterId.EncounterId,
+                ExpirationTimestampMs = encounterId.TimeTillHiddenMs,
+                Latitude = encounterId.Latitude,
+                Longitude = encounterId.Longitude,
+                PokemonId = encounteredPokemon.PokemonId,
+                SpawnPointId = encounterId.SpawnPointId
+            };
 
-                if (((session.LogicSettings.UseBerriesOperator.ToLower().Equals("and") &&
-                       encounterId.Iv >= session.LogicSettings.UseBerriesMinIv &&
-                       cp >= session.LogicSettings.UseBerriesMinCp &&
-                       probability < session.LogicSettings.UseBerriesBelowCatchProbability) ||
-                   (session.LogicSettings.UseBerriesOperator.ToLower().Equals("or") && (
-                       encounterId.Iv >= session.LogicSettings.UseBerriesMinIv ||
-                       cp >= session.LogicSettings.UseBerriesMinCp ||
-                       probability < session.LogicSettings.UseBerriesBelowCatchProbability))) &&
-                   lastThrow != CatchPokemonResponse.Types.CatchStatus.CatchMissed) // if last throw is a miss, no double berry
-                {
-
-                    CatchPokemonTask.AmountOfBerries++;
-                    if (CatchPokemonTask.AmountOfBerries <= session.LogicSettings.MaxBerriesToUsePerPokemon)
-                    {
-                        await CatchPokemonTask.UseBerry(session,
-                           encounter.WildPokemon.EncounterId,
-                           encounter.WildPokemon.SpawnPointId);
-                    }
-
-                }
-
-                caughtPokemonResponse = await session.Client.Encounter.CatchPokemon(encounterId.EncounterId, encounterId.SpawnPointId,
-                    bestBall, normalizedRecticleSize, spinModifier, true);
-
-
-                Logger.Write($"({caughtPokemonResponse.Status.ToString()})  {encounterId.PokemonId.ToString()}  IV: {encounterId.Iv}%  Lvl: {lvl}  CP: ({cp}/{maxcp})", LogLevel.Service, caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess ? ConsoleColor.Green : ConsoleColor.Red);
-                //CatchPokemonTask.AmountOfBerries
-                await Task.Delay(1000, cancellationToken);
-                lastThrow = caughtPokemonResponse.Status;
-            } while (lastThrow == CatchPokemonResponse.Types.CatchStatus.CatchMissed || lastThrow == CatchPokemonResponse.Types.CatchStatus.CatchEscape);
-
+            await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, currentFortData: null, sessionAllowTransfer: true);
         }
 
         public static List<EncounterInfo> FindNew(List<EncounterInfo> received)
@@ -257,21 +229,21 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 try
                 {
-                    Thread.Sleep(500);
+                    Thread.Sleep(30000);
                     //msniper.com
                     socket = new WebSocket("ws://msniper.com/WebSockets/NecroBotServer.ashx", "", WebSocketVersion.Rfc6455);
                     socket.MessageReceived += Msocket_MessageReceived;
                     socket.Closed += Msocket_Closed;
                     socket.Open();
                     lastNotify = DateTime.Now;
-                    Logger.Write($"Connecting to MSniperService", LogLevel.Service);
+                    //Logger.Write($"Connecting to MSniperService", LogLevel.Service);
                 }
                 catch (Exception ex)
                 {
                     TimeSpan ts = DateTime.Now - lastNotify;
                     if (ts.TotalMinutes > 5)
                     {
-                        Logger.Write(ex.Message + "  (may be offline)", LogLevel.Service, ConsoleColor.Red);
+                        //Logger.Write(ex.Message + "  (may be offline)", LogLevel.Service, ConsoleColor.Red);
                     }
                     socket?.Dispose();
                     socket = null;
@@ -293,7 +265,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             TimeSpan ts = DateTime.Now - lastNotify;
             if (ts.TotalMinutes > 5)
             {
-                Logger.Write("connection lost  (may be offline)", LogLevel.Service, ConsoleColor.Red);
+                //Logger.Write("connection lost  (may be offline)", LogLevel.Service, ConsoleColor.Red);
             }
             //throw new Exception("msniper socket closed");
             ////need delay or clear PkmnLocations
@@ -434,11 +406,12 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (inProgress)
                 return;
             inProgress = true;
-            OpenSocket();
+            if (session.LogicSettings.ActivateMSniper)
+                OpenSocket();
 
             //return;//NEW SNIPE METHOD WILL BE ACTIVATED
 
-            var pth = Path.Combine(session.LogicSettings.ProfilePath, "SnipeMS.json");
+            var pth = Path.Combine(Directory.GetCurrentDirectory(), "SnipeMS.json");
             try
             {
                 if (!File.Exists(pth))
