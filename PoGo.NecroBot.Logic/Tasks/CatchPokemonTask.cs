@@ -15,6 +15,7 @@ using POGOProtos.Map.Fort;
 using POGOProtos.Map.Pokemon;
 using POGOProtos.Networking.Responses;
 using POGOProtos.Data;
+using PoGo.NecroBot.Logic.Model.Exceptions;
 
 #endregion
 
@@ -191,8 +192,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     session.Client.CurrentLongitude, latitude, longitude);
                 
                 DateTime expiredDate = new DateTime(1970, 1, 1, 0, 0, 0).AddMilliseconds(Convert.ToDouble(unixTimeStamp));
-
-                session.EventDispatcher.Send(new EncounteredEvent()
+                var encounterEV = new EncounteredEvent()
                 {
                     Latitude = latitude,
                     Longitude = longitude,
@@ -205,7 +205,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                     EncounterId = _encounterId.ToString(),
                     Move1 = PokemonInfo.GetPokemonMove1(encounteredPokemon).ToString(),
                     Move2 = PokemonInfo.GetPokemonMove2(encounteredPokemon).ToString(),
-                });
+                };
+
+                session.EventDispatcher.Send(encounterEV);
 
                 if (IsNotMetWithCatchCriteria(session, encounteredPokemon, pokemonIv, lv, pokemonCp)){
                     session.EventDispatcher.Send(new NoticeEvent
@@ -427,7 +429,22 @@ namespace PoGo.NecroBot.Logic.Tasks
                          caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchEscape);
 
                 session.Actions.RemoveAll(x => x == Model.BotActions.Catch);
-
+                if(session.LogicSettings.AllowMultipleBot && 
+                    session.LogicSettings.Bots != null &&
+                    session.LogicSettings.Bots.Count >0 &&
+                    session.LogicSettings.MultipleBotConfig.OnRarePokemon &&
+                    session.LogicSettings.MultipleBotConfig.PokemonSwitches.ContainsKey(encounterEV.PokemonId) &&
+                    session.LogicSettings.MultipleBotConfig.PokemonSwitches[encounterEV.PokemonId].IV < encounterEV.IV)
+                {
+                    //cancel all running task.
+                    session.CancellationTokenSource.Cancel();
+                    throw new RequireSwitchAccountException()
+                    {
+                        LastLatitude = encounterEV.Latitude,
+                        LastLongitude = encounterEV.Longitude,
+                        LastEncounterPokemonId = encounterEV.PokemonId
+                    };
+                }
                 if (session.LogicSettings.TransferDuplicatePokemonOnCapture &&
                     session.LogicSettings.TransferDuplicatePokemon &&
                        sessionAllowTransfer &&

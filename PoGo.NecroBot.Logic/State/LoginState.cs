@@ -17,6 +17,11 @@ namespace PoGo.NecroBot.Logic.State
 {
     public class LoginState : IState
     {
+        public bool IsMultipleBotLogin { get; set; }
+        public LoginState(bool isMultipleBotLogin = false)
+        {
+            this.IsMultipleBotLogin = isMultipleBotLogin;//if this is true, looking for next box available then login with that bot.
+        }
         public async Task<IState> Execute(ISession session, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();

@@ -123,7 +123,6 @@ namespace PoGo.NecroBot.CLI
 
                 boolNeedsSetup = true;
             }
-
             if (commandLine["latlng"] != null && commandLine["latlng"].Length > 0)
             {
                 var crds = commandLine["latlng"].Split(',');
@@ -200,6 +199,7 @@ namespace PoGo.NecroBot.CLI
                 }
             }
             IElevationService elevationService = new ElevationService(settings);
+
             _session = new Session(new ClientSettings(settings, elevationService), logicSettings, elevationService, translation);
             Logger.SetLoggerContext(_session);
 
@@ -336,6 +336,10 @@ namespace PoGo.NecroBot.CLI
 
         private static bool CheckMKillSwitch()
         {
+            #if DEBUG
+                return false;
+            #endif
+
             using (var wC = new WebClient())
             {
                 try

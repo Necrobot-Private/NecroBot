@@ -14,6 +14,7 @@ using System;
 using PokemonGo.RocketAPI.Extensions;
 using PoGo.NecroBot.Logic.Model;
 using System.Threading.Tasks;
+using System.Threading;
 
 #endregion
 
@@ -26,7 +27,7 @@ namespace PoGo.NecroBot.Logic.State
         Client Client { get; }
         GetPlayerResponse Profile { get; set; }
         Navigation Navigation { get; }
-        ILogicSettings LogicSettings { get; }
+        ILogicSettings LogicSettings { get; set }
         ITranslation Translation { get; }
         IEventDispatcher EventDispatcher { get; }
         TelegramService Telegram { get; set; }
@@ -38,6 +39,8 @@ namespace PoGo.NecroBot.Logic.State
         void AddVisibleForts(List<FortData> mapObjects);
         Task<bool> WaitUntilActionAccept(BotActions action, int timeout = 30000);
         List<BotActions> Actions { get; }
+        CancellationTokenSource CancellationTokenSource { get; set; }
+
     }
 
 
@@ -50,6 +53,7 @@ namespace PoGo.NecroBot.Logic.State
         public List<BotActions> Actions { get { return this.botActions; } }
         public Session(ISettings settings, ILogicSettings logicSettings, IElevationService elevationService, ITranslation translation)
         {
+            this.CancellationTokenSource = new CancellationTokenSource();
             this.Forts = new List<FortData>();
             this.VisibleForts = new List<FortData>();
 
@@ -88,6 +92,7 @@ namespace PoGo.NecroBot.Logic.State
         public SessionStats Stats { get; set; }
 
         public IElevationService ElevationService { get; set; }
+        public CancellationTokenSource CancellationTokenSource { get; private set; }
 
         private List<BotActions> botActions = new List<BotActions>();
         public void Reset(ISettings settings, ILogicSettings logicSettings)

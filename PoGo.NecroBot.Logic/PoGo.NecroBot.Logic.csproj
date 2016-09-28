@@ -220,6 +220,7 @@
     <Compile Include="Model\Settings\LevelUpConfig.cs" />
     <Compile Include="Model\Settings\Location.cs" />
     <Compile Include="Model\Settings\LocationConfig.cs" />
+    <Compile Include="Model\Settings\MultipleBotConfig.cs" />
     <Compile Include="Model\Settings\PlayerConfig.cs" />
     <Compile Include="Model\Settings\PokemonConfig.cs" />
     <Compile Include="Model\Settings\PokeStopConfig.cs" />

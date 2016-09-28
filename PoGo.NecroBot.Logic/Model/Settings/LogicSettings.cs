@@ -230,5 +230,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public string DataSharingDataUrl => _settings.DataSharingConfig.DataRecieverURL;
 
         public bool UseTransferFilterToCatch => _settings.CustomCatchConfig.UseTransferFilterToCatch;
+
+        public MultipleBotConfig MultipleBotConfig => _settings.MultipleBotConfig;
+        public List<AuthConfig> Bots => _settings.Auth.Bots;
+        public bool AllowMultipleBot => _settings.Auth.AllowMultipleBot;
     }
 }

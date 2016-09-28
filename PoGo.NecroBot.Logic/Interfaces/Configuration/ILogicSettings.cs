@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using PoGo.NecroBot.Logic.Model.Settings;
 using POGOProtos.Enums;
 using POGOProtos.Inventory.Item;
+using System.Threading;
 
 #endregion
 
@@ -218,8 +219,10 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         bool GymUseRandomPokemon { get; }
         int GymVisitTimeout { get; }
         int GymNumberOfTopPokemonToBeExcluded { get; }
-
         bool DataSharingEnable { get; }
         string DataSharingDataUrl { get; }
+        MultipleBotConfig MultipleBotConfig { get; }
+        List<AuthConfig> Bots { get; }
+        bool AllowMultipleBot { get; }
     }
 }

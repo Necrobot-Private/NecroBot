@@ -124,6 +124,10 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public Dictionary<PokemonId, UpgradeFilter> PokemonUpgradeFilters = UpgradeFilter.Default();
 
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public MultipleBotConfig MultipleBotConfig = MultipleBotConfig.Default();
+
+
         public GlobalSettings()
         {
             InitializePropertyDefaultValues(this);

@@ -10,6 +10,7 @@ using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.Model.Settings;
 using PokemonGo.RocketAPI.Exceptions;
+using PoGo.NecroBot.Logic.Model.Exceptions;
 
 #endregion
 
@@ -29,7 +30,7 @@ namespace PoGo.NecroBot.Logic.State
             _initialState = state;
         }
 
-        public async Task Start(IState initialState, Session session, string subPath)
+        public async Task Start(IState initialState, ISession session, string subPath)
         {
             var state = initialState;
             var profilePath = Path.Combine(Directory.GetCurrentDirectory(), subPath);
@@ -51,16 +52,11 @@ namespace PoGo.NecroBot.Logic.State
                 }
             };
 
-            // We need a CTS to be able to cancel taks at all
-            // All cancelling through the tasks originates from here
-            var cts = new CancellationTokenSource();
-            var cancellationToken = cts.Token;
-
             do
             {
                 try
                 {
-                    state = await state.Execute(session, cancellationToken);
+                    state = await state.Execute(session, session.CancellationTokenSource.Token);
 
                     // Exit the bot if both catching and looting has reached its limits
                     if ((UseNearbyPokestopsTask._pokestopLimitReached || UseNearbyPokestopsTask._pokestopTimerReached) &&
@@ -71,15 +67,22 @@ namespace PoGo.NecroBot.Logic.State
                             Message = session.Translation.GetTranslation(TranslationString.ExitDueToLimitsReached)
                         });
 
-                        cts.Cancel();
+                        session.CancellationTokenSource.Cancel();
 
                         // A bit rough here; works but can be improved
                         Thread.Sleep(10000);
                         state = null;
-                        cts.Dispose();
+                        session.CancellationTokenSource.Dispose();
                         Environment.Exit(0);
                     }
 
+                }
+                catch (RequireSwitchAccountException rsae)
+                {
+                    session.EventDispatcher.Send(new ErrorEvent { Message = "Encountered a good pokemon , switch another bot to catch him too." });
+
+                    //return to login state
+                    state = new LoginState(true);
                 }
                 catch (InvalidResponseException)
                 {
