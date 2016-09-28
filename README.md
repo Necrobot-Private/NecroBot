@@ -20,7 +20,7 @@ Do not attempt to connect with any bot or else you will be flagged as a bot sinc
 
 
 <h2>Do NOT publish/share/advertise this Bot, GitHub or discord, in any other discord server or website.</h2>
-[![Stories in Ready](https://discordapp.com/api/guilds/220703917871333376/widget.png?style=banner2&time-)](https://discord.gg/7FWyWVp)
+[![Stories in Ready](https://discordapp.com/api/guilds/220703917871333376/widget.png?style=banner2&time-)](https://discord.gg/EnSAnch)
 
 [![Build status](https://ci.appveyor.com/api/projects/status/mvr6v0v99gscqxbn/branch/master?svg=true)](https://ci.appveyor.com/project/NzV/necrobot/branch/master)
 [![Github All Releases](https://img.shields.io/github/downloads/Necrobot-Private/NecroBot/total.svg?maxAge=258)](https://github.com/Necrobot-Private/NecroBot/releases)
