@@ -62,7 +62,7 @@ namespace PoGo.NecroBot.CLI
 
         public static async Task Start(Session session, CancellationToken cancellationToken)
         {
-            await Task.Delay(30000);//delay running 30s
+            await Task.Delay(30000,cancellationToken);//delay running 30s
 
             System.Net.ServicePointManager.Expect100Continue = false;
 
@@ -86,18 +86,19 @@ namespace PoGo.NecroBot.CLI
                     cancellationToken.ThrowIfCancellationRequested();
                     try
                     {
-                        if (retries++ == 5) //failed to make connection to server  times contiuing, temporary stop for 10 mins.
+                        if (retries == 5) //failed to make connection to server  times contiuing, temporary stop for 10 mins.
                         {
                             session.EventDispatcher.Send(new WarnEvent()
                             {
                                 Message = "Couldn't establish the connection to necro socket server, Bot will re-connect after 10 mins"
                             });
                             retries = 0;
-                             await Task.Delay(10 * 1000 * 60);
+                             await Task.Delay(1 * 1000 * 60, cancellationToken);
                         }
 
                         if (events.Count > 0)
                         {
+                            retries++;
                             ws.Connect();
                         }
 
@@ -131,7 +132,7 @@ namespace PoGo.NecroBot.CLI
                                 {
                                     events.RemoveAll(x => processing.Any(t => t.EncounterId == x.EncounterId));
                                 }
-                                await Task.Delay(POLLING_INTERVAL);
+                                await Task.Delay(POLLING_INTERVAL, cancellationToken);
                                 ws.Ping();
                             }
                            

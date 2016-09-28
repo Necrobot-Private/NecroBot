@@ -221,5 +221,6 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
 
         bool DataSharingEnable { get; }
         string DataSharingDataUrl { get; }
+        int GymCollectRewardAfter { get; }
     }
 }

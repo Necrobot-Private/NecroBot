@@ -33,7 +33,6 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             cancellationToken.ThrowIfCancellationRequested();
             var distance = session.Navigation.WalkStrategy.CalculateDistance(session.Client.CurrentLatitude, session.Client.CurrentLongitude, gym.Latitude, gym.Longitude);
-
             if (fortInfo != null)
             {
                 session.EventDispatcher.Send(new GymWalkToTargetEvent()
@@ -197,6 +196,18 @@ namespace PoGo.NecroBot.Logic.Tasks
                             PokemonId = pokemon.PokemonId,
                             Name = fortDetails.Name
                         });
+                        if (session.LogicSettings.GymCollectRewardAfter > 0) {
+                            var deployed = await session.Inventory.GetDeployedPokemons();
+                            var count = deployed.Count();
+                            if (count >= session.LogicSettings.GymCollectRewardAfter)
+                            {
+                                var collectDailyBonusResponse = await session.Client.Player.CollectDailyBonus();
+                                if(collectDailyBonusResponse.Result == CollectDailyBonusResponse.Types.Result.Success)
+                                {
+                                    Logger.Write($"Collected {count * 10} coins", LogLevel.Gym, ConsoleColor.DarkYellow);
+                                }
+                            }
+                        }
                     }
                 }
             }
