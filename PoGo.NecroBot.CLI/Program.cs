@@ -92,10 +92,10 @@ namespace PoGo.NecroBot.CLI
 
             Logger.SetLogger(new ConsoleLogger(LogLevel.Service), _subPath);
 
-            // We can now rely on killswitch from checking the minimum client version returned by the API.
-            // A manually triggered killswitch is no longer needed.
-            //if (!_ignoreKillSwitch && CheckKillSwitch() || CheckMKillSwitch())
-                //return;
+            if (!_ignoreKillSwitch && CheckKillSwitch() || CheckMKillSwitch())
+                return;
+
+
 
             var profilePath = Path.Combine(Directory.GetCurrentDirectory(), _subPath);
             var profileConfigPath = Path.Combine(profilePath, "config");
