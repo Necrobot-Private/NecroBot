@@ -109,5 +109,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool UsePogoLocationFeeder = false;
+
+        [DefaultValue(false)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
+        public bool AllowTransferWhileWalking = false;
     }
 }

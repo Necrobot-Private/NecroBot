@@ -63,6 +63,7 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         double ForceExcellentThrowOverIv { get; }
         int ForceGreatThrowOverCp { get; }
         int ForceExcellentThrowOverCp { get; }
+        int DelayBetweenPokemonCatch { get; }
         int DelayBetweenPokemonUpgrade { get; }
         bool AutomaticallyLevelUpPokemon { get; }
         bool OnlyUpgradeFavorites { get; }
@@ -196,6 +197,8 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         bool HumanWalkingSnipeAllowSpeedUp { get; }
         double HumanWalkingSnipeMaxSpeedUpSpeed { get; }
         int HumanWalkingSnipeDelayTimeAtDestination { get; }
+        bool HumanWalkingSnipeAllowTransferWhileWalking { get; }
+
         bool HumanWalkingSnipeUsePokeRadar { get; }
         bool HumanWalkingSnipeUseSkiplagged { get; }
         bool HumanWalkingSnipeUsePokecrew { get; }
@@ -219,9 +222,11 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         bool GymUseRandomPokemon { get; }
         int GymVisitTimeout { get; }
         int GymNumberOfTopPokemonToBeExcluded { get; }
+
         bool DataSharingEnable { get; }
         string DataSharingDataUrl { get; }
         MultipleBotConfig MultipleBotConfig { get; }
+        int GymCollectRewardAfter { get; }
         List<AuthConfig> Bots { get; }
         bool AllowMultipleBot { get; }
     }

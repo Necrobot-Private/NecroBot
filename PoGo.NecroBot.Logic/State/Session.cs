@@ -15,6 +15,7 @@ using PokemonGo.RocketAPI.Extensions;
 using PoGo.NecroBot.Logic.Model;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Runtime.Caching;
 
 #endregion
 
@@ -43,6 +44,7 @@ namespace PoGo.NecroBot.Logic.State
         Task<bool> WaitUntilActionAccept(BotActions action, int timeout = 30000);
         List<BotActions> Actions { get; }
         CancellationTokenSource CancellationTokenSource { get; set; }
+        MemoryCache Cache { get; set; }
         Queue<AuthConfig> Accounts { get; }
 
     }
@@ -61,7 +63,7 @@ namespace PoGo.NecroBot.Logic.State
             this.CancellationTokenSource = new CancellationTokenSource();
             this.Forts = new List<FortData>();
             this.VisibleForts = new List<FortData>();
-
+            this.Cache = new MemoryCache("Necrobot2");
             this.accounts = new Queue<AuthConfig>();
             EventDispatcher = new EventDispatcher();
             LogicSettings = logicSettings;
@@ -113,8 +115,8 @@ namespace PoGo.NecroBot.Logic.State
 
         public IElevationService ElevationService { get; set; }
         public CancellationTokenSource CancellationTokenSource { get; set; }
-
-        public Queue<AuthConfig> Accounts
+        public MemoryCache Cache { get; set; }
+	public Queue<AuthConfig> Accounts
         {
             get
             {

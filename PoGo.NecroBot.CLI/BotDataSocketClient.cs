@@ -18,7 +18,7 @@ namespace PoGo.NecroBot.CLI
     public class BotDataSocketClient
     {
         private static List<EncounteredEvent> events = new List<EncounteredEvent>();
-        private const int POLLING_INTERVAL = 10000;
+        private const int POLLING_INTERVAL = 5000;
         public static void Listen(IEvent evt, Session session)
         {
             dynamic eve = evt;
@@ -62,7 +62,7 @@ namespace PoGo.NecroBot.CLI
 
         public static async Task Start(Session session, CancellationToken cancellationToken)
         {
-            await Task.Delay(30000);//delay running 30s
+            await Task.Delay(30000,cancellationToken);//delay running 30s
 
             System.Net.ServicePointManager.Expect100Continue = false;
 
@@ -78,63 +78,62 @@ namespace PoGo.NecroBot.CLI
                      //silenly, no log exception message to screen that scare people :)
                  };
 
-                ws.OnMessage += (sender, e) => {
+                ws.OnMessage += (sender, e) =>
+                {
                     onSocketMessageRecieved(session, sender, e);
                 };
+
                 while (true)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
                     try
                     {
-                        if (retries++ == 5) //failed to make connection to server  times contiuing, temporary stop for 10 mins.
+                        if (retries == 5) //failed to make connection to server  times contiuing, temporary stop for 10 mins.
                         {
                             session.EventDispatcher.Send(new WarnEvent()
                             {
                                 Message = "Couldn't establish the connection to necro socket server, Bot will re-connect after 10 mins"
                             });
+                            await Task.Delay(1 * 60 * 1000, cancellationToken);
                             retries = 0;
-                             await Task.Delay(10 * 1000 * 60);
                         }
 
-                        if (events.Count > 0)
+                        if (events.Count > 0 && ws.ReadyState != WebSocketSharp.WebSocketState.Open)
                         {
+                            retries++;
                             ws.Connect();
                         }
 
-                        if (ws.ReadyState == WebSocketSharp.WebSocketState.Open)
+                        while (ws.ReadyState == WebSocketSharp.WebSocketState.Open)
                         {
                             //Logger.Write("Connected to necrobot data service.");
                             retries = 0;
 
-                            while (ws.IsAlive)
+                            lock (events)
                             {
-                                lock (events)
-                                {
-                                    processing.Clear();
-                                    processing.AddRange(events);
-                                }
-
-                                if (processing.Count > 0 && ws.IsAlive)
-                                {
-                                    if (processing.Count == 1)
-                                    {
-                                        //serialize list will make data bigger, code ugly but save bandwidth and help socket process faster
-                                        var data = Serialize(processing.First());
-                                        ws.Send($"42[\"pokemon\",{data}]");
-                                    }
-                                    else {
-                                        var data = Serialize(processing);
-                                        ws.Send($"42[\"pokemons\",{data}]");
-                                    }
-                                }
-                                lock(events)
-                                {
-                                    events.RemoveAll(x => processing.Any(t => t.EncounterId == x.EncounterId));
-                                }
-                                await Task.Delay(POLLING_INTERVAL);
-                                ws.Ping();
+                                processing.Clear();
+                                processing.AddRange(events);
                             }
-                           
+
+                            if (processing.Count > 0 && ws.IsAlive)
+                            {
+                                if (processing.Count == 1)
+                                {
+                                    //serialize list will make data bigger, code ugly but save bandwidth and help socket process faster
+                                    var data = Serialize(processing.First());
+                                    ws.Send($"42[\"pokemon\",{data}]");
+                                }
+                                else {
+                                    var data = Serialize(processing);
+                                    ws.Send($"42[\"pokemons\",{data}]");
+                                }
+                            }
+                            lock (events)
+                            {
+                                events.RemoveAll(x => processing.Any(t => t.EncounterId == x.EncounterId));
+                            }
+                            await Task.Delay(POLLING_INTERVAL, cancellationToken);
+                            ws.Ping();
                         }
                     }
                     catch (IOException)
@@ -146,7 +145,6 @@ namespace PoGo.NecroBot.CLI
                     }
                     catch (Exception)
                     {
-
                     }
                     finally
                     {
@@ -173,7 +171,7 @@ namespace PoGo.NecroBot.CLI
             catch (Exception ex)
             {
             }
-           
+
         }
 
         internal static Task StartAsync(Session session, CancellationToken cancellationToken = default(CancellationToken))

@@ -214,6 +214,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     {
                         Message = session.Translation.GetTranslation(TranslationString.PokemonSkipped, encounteredPokemon.PokemonId)
                     });
+                    session.Cache.Add(_encounterId.ToString(), encounteredPokemon, expiredDate);
                     Logger.Write($"Filter catch not met. {encounteredPokemon.PokemonId.ToString()} IV {pokemonIv} lv {lv} {pokemonCp} move1 {PokemonInfo.GetPokemonMove1(encounteredPokemon)} move 2 {PokemonInfo.GetPokemonMove2(encounteredPokemon)}");
                     return;
                 };
@@ -471,38 +472,39 @@ namespace PoGo.NecroBot.Logic.Tasks
                 var filter = session.LogicSettings.PokemonsTransferFilter[encounteredPokemon.PokemonId];
                 if(filter != null && filter.CatchOnlyPokemonMeetTransferCriteria)
                 {
-                    if(filter.KeepMinOperator =="and" 
+                    var move1 = PokemonInfo.GetPokemonMove1(encounteredPokemon).ToString();
+                    var move2 = PokemonInfo.GetPokemonMove2(encounteredPokemon).ToString();
+
+                    if (filter.MovesOperator == "or" && 
+                        (filter.Moves.Count > 0 &&
+                        filter.Moves.Any(x => x[0] == encounteredPokemon.Move1 && x[1] == encounteredPokemon.Move2)))
+                    {
+                        return true;//he has the moves we don't meed.
+                    }
+
+                    if (filter.KeepMinOperator =="and" 
                         && ((cp.HasValue && cp.Value < filter.KeepMinCp)  
                         || pokemonIv < filter.KeepMinIvPercentage 
-                        || (filter.UseKeepMinLvl && lv < filter.KeepMinLvl)))
+                        || (filter.UseKeepMinLvl && lv < filter.KeepMinLvl))
+                        && (
+                            filter.Moves.Count ==0 ||
+                            filter.Moves.Any(x => x[0] == encounteredPokemon.Move1 && x[1] == encounteredPokemon.Move2)
+                        ))
                     {
                         return true;//not catch pokemon
                     }
 
                     if (filter.KeepMinOperator == "or" && ((!cp.HasValue || cp < filter.KeepMinCp) 
                         && pokemonIv < filter.KeepMinIvPercentage 
-                        && (!filter.UseKeepMinLvl || lv < filter.KeepMinLvl)))
+                        && (!filter.UseKeepMinLvl || lv < filter.KeepMinLvl))
+                        && (
+                            filter.Moves.Count == 0 ||
+                            filter.Moves.Any(x => x[0] == encounteredPokemon.Move1 && x[1] == encounteredPokemon.Move2)
+                        ))
                     {
                         return true;//not catch pokemon
                     }
-                    //check for move
-
-                    var move1 = PokemonInfo.GetPokemonMove1(encounteredPokemon).ToString();
-                    var move2 = PokemonInfo.GetPokemonMove2(encounteredPokemon).ToString();
-
-                    if (filter.MovesOperator == "or" && (filter.Moves.Count ==0 || filter.Moves.Any(x=>x[0] == encounteredPokemon.Move1 || x[1] == encounteredPokemon.Move2)))
-                    {
-                        return false;//catch him because he has 1 move we want.
-                    }
-                    else
-                    if (filter.MovesOperator == "and" && (filter.Moves.Count == 0 || filter.Moves.Any(x => x[0] == encounteredPokemon.Move1 && x[1] == encounteredPokemon.Move2)))
-                    {
-                        return false;//catch him because he has 2 move we want.
-                    }
-                    else
-                    {
-                        return true;
-                    }
+ 
                 }
             }
             return false;
