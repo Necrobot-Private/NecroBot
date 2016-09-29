@@ -436,6 +436,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                     session.LogicSettings.MultipleBotConfig.PokemonSwitches.ContainsKey(encounterEV.PokemonId) &&
                     session.LogicSettings.MultipleBotConfig.PokemonSwitches[encounterEV.PokemonId].IV < encounterEV.IV)
                 {
+                    var evalNextBot = session.Accounts.Peek();
+                    var key = evalNextBot.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Google ? evalNextBot.GoogleUsername : evalNextBot.PtcUsername;
+                    key += encounterEV.EncounterId;
+
                     //cancel all running task.
                     session.CancellationTokenSource.Cancel();
                     throw new RequireSwitchAccountException()

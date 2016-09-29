@@ -10,6 +10,7 @@ using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Logging;
 using PokemonGo.RocketAPI.Enums;
 using PokemonGo.RocketAPI.Exceptions;
+using POGOProtos.Enums;
 
 #endregion
 
@@ -17,15 +18,14 @@ namespace PoGo.NecroBot.Logic.State
 {
     public class LoginState : IState
     {
-        public bool IsMultipleBotLogin { get; set; }
-        public LoginState(bool isMultipleBotLogin = false)
+        private PokemonId pokemonToCatch;
+        public LoginState(PokemonId pokemonToCatch= PokemonId.Missingno)
         {
-            this.IsMultipleBotLogin = isMultipleBotLogin;//if this is true, looking for next box available then login with that bot.
+            this.pokemonToCatch = pokemonToCatch;
         }
         public async Task<IState> Execute(ISession session, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-
             session.EventDispatcher.Send(new NoticeEvent
             {
                 Message = session.Translation.GetTranslation(TranslationString.LoggingIn, session.Settings.AuthType)
@@ -150,6 +150,10 @@ namespace PoGo.NecroBot.Logic.State
                 System.Environment.Exit(1);
             }
             
+            if(this.pokemonToCatch != PokemonId.Missingno)
+            {
+                return new BotSwitcherState(this.pokemonToCatch);
+            }
             return new LoadSaveState();
         }
 

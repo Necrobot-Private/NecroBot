@@ -80,9 +80,9 @@ namespace PoGo.NecroBot.Logic.State
                 catch (RequireSwitchAccountException rsae)
                 {
                     session.EventDispatcher.Send(new ErrorEvent { Message = "Encountered a good pokemon , switch another bot to catch him too." });
-
+                    session.ResetSessionToWithNextBot();
                     //return to login state
-                    state = new LoginState(true);
+                    state = new LoginState(rsae.LastEncounterPokemonId);
                 }
                 catch (InvalidResponseException)
                 {

@@ -27,7 +27,10 @@ namespace PoGo.NecroBot.Logic.State
         Client Client { get; }
         GetPlayerResponse Profile { get; set; }
         Navigation Navigation { get; }
-        ILogicSettings LogicSettings { get; set }
+        ILogicSettings LogicSettings { get; set; }
+
+        void ResetSessionToWithNextBot();
+
         ITranslation Translation { get; }
         IEventDispatcher EventDispatcher { get; }
         TelegramService Telegram { get; set; }
@@ -40,6 +43,7 @@ namespace PoGo.NecroBot.Logic.State
         Task<bool> WaitUntilActionAccept(BotActions action, int timeout = 30000);
         List<BotActions> Actions { get; }
         CancellationTokenSource CancellationTokenSource { get; set; }
+        Queue<AuthConfig> Accounts { get; }
 
     }
 
@@ -50,6 +54,7 @@ namespace PoGo.NecroBot.Logic.State
         {
 
         }
+        private Queue<AuthConfig> accounts;
         public List<BotActions> Actions { get { return this.botActions; } }
         public Session(ISettings settings, ILogicSettings logicSettings, IElevationService elevationService, ITranslation translation)
         {
@@ -57,6 +62,7 @@ namespace PoGo.NecroBot.Logic.State
             this.Forts = new List<FortData>();
             this.VisibleForts = new List<FortData>();
 
+            this.accounts = new Queue<AuthConfig>();
             EventDispatcher = new EventDispatcher();
             LogicSettings = logicSettings;
 
@@ -67,6 +73,20 @@ namespace PoGo.NecroBot.Logic.State
             Translation = translation;
             Reset(settings, LogicSettings);
             Stats = new SessionStats();
+
+            this.accounts = new Queue<AuthConfig>();
+            foreach (var acc in logicSettings.Bots)
+            {
+                this.accounts.Enqueue(acc);
+            }
+            this.accounts.Enqueue(new AuthConfig()
+            {
+                AuthType = settings.AuthType,
+                GooglePassword = settings.GooglePassword,
+                GoogleUsername = settings.GoogleUsername,
+                PtcPassword = settings.PtcPassword,
+                PtcUsername = settings.PtcUsername
+            });
         }
         public List<FortData> Forts { get; set; }
         public List<FortData> VisibleForts { get; set; }
@@ -92,7 +112,15 @@ namespace PoGo.NecroBot.Logic.State
         public SessionStats Stats { get; set; }
 
         public IElevationService ElevationService { get; set; }
-        public CancellationTokenSource CancellationTokenSource { get; private set; }
+        public CancellationTokenSource CancellationTokenSource { get; set; }
+
+        public Queue<AuthConfig> Accounts
+        {
+            get
+            {
+                return this.accounts;
+            }
+        }
 
         private List<BotActions> botActions = new List<BotActions>();
         public void Reset(ISettings settings, ILogicSettings logicSettings)
@@ -102,6 +130,22 @@ namespace PoGo.NecroBot.Logic.State
             // ferox wants us to set this manually
             Inventory = new Inventory(Client, logicSettings);
             Navigation = new Navigation(Client, logicSettings);
+            
+        }
+        public void ResetSessionToWithNextBot()
+        {
+            this.CancellationTokenSource = new CancellationTokenSource();
+            var nextBot = this.accounts.Dequeue();
+            this.Settings.AuthType = nextBot.AuthType;
+            this.Settings.GooglePassword = nextBot.GooglePassword;
+            this.Settings.GoogleUsername = nextBot.GoogleUsername;
+            this.Settings.PtcPassword = nextBot.PtcPassword;
+            this.Settings.PtcUsername = nextBot.PtcUsername;
+            this.Settings.DefaultAltitude = this.Client.CurrentAltitude;
+            this.Settings.DefaultLatitude = this.Client.CurrentLatitude;
+            this.Settings.DefaultLongitude = this.Client.CurrentLongitude;
+            this.Reset(this.Settings, this.LogicSettings);
+            this.accounts.Enqueue(nextBot); //put it to the last then it will cycle loop.
         }
         public void AddForts(List<FortData> data)
         {
