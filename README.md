@@ -17,9 +17,7 @@ Do not attempt to connect with any bot or else you will be flagged as a bot sinc
 </a>
 
 <strong><em> The contents of this repo are a proof of concept and are for educational use only </em></strong>
-
-
-<h2>Do NOT publish/share/advertise this Bot, GitHub or discord, in any other discord server or website.</h2>
+<h4>Join to Discord</h4>
 [![Stories in Ready](https://discordapp.com/api/guilds/220703917871333376/widget.png?style=banner2&time-)](https://discord.gg/7FWyWVp)
 
 [![Build status](https://ci.appveyor.com/api/projects/status/mvr6v0v99gscqxbn/branch/master?svg=true)](https://ci.appveyor.com/project/NzV/necrobot/branch/master)
