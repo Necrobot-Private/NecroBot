@@ -31,7 +31,6 @@ namespace PoGo.NecroBot.Logic.Tasks
         private static Random _rc; //initialize pokestop random cleanup counter first time
         private static int _storeRi;
         private static int _randomNumber;
-        private static List<FortData> _pokestopList;
         public static bool _pokestopLimitReached;
         public static bool _pokestopTimerReached;
 
@@ -44,7 +43,6 @@ namespace PoGo.NecroBot.Logic.Tasks
             _rc = new Random();
             _storeRi = _rc.Next(8, 15);
             _randomNumber = _rc.Next(4, 11);
-            _pokestopList = new List<FortData>();
             _pokestopLimitReached = false;
             _pokestopTimerReached = false;
         }
@@ -114,7 +112,6 @@ namespace PoGo.NecroBot.Logic.Tasks
             //request map objects to referesh data. keep all fort in session
 
             var mapObjectTupe = await GetPokeStops(session);
-            _pokestopList = mapObjectTupe.Item2;
             var pokeStop = await GetNextPokeStop(session);
 
             while (pokeStop != null)

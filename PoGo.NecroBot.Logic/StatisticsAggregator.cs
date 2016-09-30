@@ -1,6 +1,7 @@
 ﻿#region using directives
 
 using PoGo.NecroBot.Logic.Event;
+using PoGo.NecroBot.Logic.Exceptions;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Utils;
 using POGOProtos.Networking.Responses;
@@ -17,7 +18,7 @@ namespace PoGo.NecroBot.Logic
         {
             _stats = stats;
         }
-
+       
         public void HandleEvent(string evt, ISession session) { }
         
         private void HandleEvent(UseLuckyEggEvent event1, ISession session) { }
@@ -65,7 +66,9 @@ namespace PoGo.NecroBot.Logic
         public void HandleEvent(FortUsedEvent evt, ISession session)
         {
             _stats.TotalExperience += evt.Exp;
+            _stats.TotalPokestops++;
             _stats.Dirty(session.Inventory);
+            _stats.OnStatisticChanged(session);
         }
 
         public void HandleEvent(FortTargetEvent evt, ISession session) { }
@@ -93,6 +96,11 @@ namespace PoGo.NecroBot.Logic
 
             try
             { HandleEvent(eve, session); }
+            catch (ActiveSwitchByRuleException ex)
+            {
+                this._stats.Reset();
+                throw ex; //do not stop handle bot switcher account.
+            }
             catch { }
         }
         

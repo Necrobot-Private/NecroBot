@@ -159,6 +159,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             SnipePokemonInfo pokemon = null;
             do
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 prioritySnipeFlag = false;
                 pokemon = await GetNextSnipeablePokemon(session.Client.CurrentLatitude, session.Client.CurrentLongitude, !caughtAnyPokemonInThisWalk);
                 if (pokemon != null)

@@ -147,6 +147,7 @@ namespace PoGo.NecroBot.Logic.State
             this.Settings.DefaultLatitude = this.Client.CurrentLatitude;
             this.Settings.DefaultLongitude = this.Client.CurrentLongitude;
             this.Reset(this.Settings, this.LogicSettings);
+            this.Stats = new SessionStats();
             this.accounts.Enqueue(nextBot); //put it to the last then it will cycle loop.
         }
         public void AddForts(List<FortData> data)

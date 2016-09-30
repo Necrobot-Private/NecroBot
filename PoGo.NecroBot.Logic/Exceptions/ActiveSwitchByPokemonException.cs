@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PoGo.NecroBot.Logic.Model.Exceptions
+namespace PoGo.NecroBot.Logic.Exceptions
 {
-    public class RequireSwitchAccountException : Exception
+    public class ActiveSwitchByPokemonException : Exception
     {
         public double LastLatitude { get; set; }
         public double LastLongitude { get; set; }

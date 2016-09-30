@@ -15,7 +15,7 @@ using POGOProtos.Map.Fort;
 using POGOProtos.Map.Pokemon;
 using POGOProtos.Networking.Responses;
 using POGOProtos.Data;
-using PoGo.NecroBot.Logic.Model.Exceptions;
+using PoGo.NecroBot.Logic.Exceptions;
 
 #endregion
 
@@ -141,34 +141,34 @@ namespace PoGo.NecroBot.Logic.Tasks
                 string _spawnPointId;
 
                 // Calling from CatchNearbyPokemonTask and SnipePokemonTask
-                if (encounter is EncounterResponse && 
+                if (encounter is EncounterResponse &&
                     (encounter?.Status == EncounterResponse.Types.Status.EncounterSuccess))
-                    {
-                        encounteredPokemon = encounter.WildPokemon?.PokemonData;
-                        unixTimeStamp = encounter.WildPokemon?.LastModifiedTimestampMs
-                            + encounter.WildPokemon?.TimeTillHiddenMs;
-                        _spawnPointId = encounter.WildPokemon?.SpawnPointId;
-                        _encounterId = encounter.WildPokemon?.EncounterId;
-                    }
+                {
+                    encounteredPokemon = encounter.WildPokemon?.PokemonData;
+                    unixTimeStamp = encounter.WildPokemon?.LastModifiedTimestampMs
+                        + encounter.WildPokemon?.TimeTillHiddenMs;
+                    _spawnPointId = encounter.WildPokemon?.SpawnPointId;
+                    _encounterId = encounter.WildPokemon?.EncounterId;
+                }
                 // Calling from CatchIncensePokemonTask
-                else if (encounter is IncenseEncounterResponse && 
+                else if (encounter is IncenseEncounterResponse &&
                     (encounter?.Result == IncenseEncounterResponse.Types.Result.IncenseEncounterSuccess))
-                    {
-                        encounteredPokemon = encounter?.PokemonData;
-                        unixTimeStamp = pokemon.ExpirationTimestampMs;
-                        _spawnPointId = pokemon.SpawnPointId;
-                        _encounterId = pokemon.EncounterId;
-                    }
+                {
+                    encounteredPokemon = encounter?.PokemonData;
+                    unixTimeStamp = pokemon.ExpirationTimestampMs;
+                    _spawnPointId = pokemon.SpawnPointId;
+                    _encounterId = pokemon.EncounterId;
+                }
                 // Calling from CatchLurePokemon
-                else if (encounter is DiskEncounterResponse && 
-                    encounter?.Result == DiskEncounterResponse.Types.Result.Success && 
+                else if (encounter is DiskEncounterResponse &&
+                    encounter?.Result == DiskEncounterResponse.Types.Result.Success &&
                     !(currentFortData == null))
-                    {
-                        encounteredPokemon = encounter?.PokemonData;
-                        unixTimeStamp = currentFortData.LureInfo.LureExpiresTimestampMs;
-                        _spawnPointId = currentFortData.Id;
-                        _encounterId = currentFortData.LureInfo.EncounterId;
-                    }
+                {
+                    encounteredPokemon = encounter?.PokemonData;
+                    unixTimeStamp = currentFortData.LureInfo.LureExpiresTimestampMs;
+                    _spawnPointId = currentFortData.Id;
+                    _encounterId = currentFortData.LureInfo.EncounterId;
+                }
                 else return; // No success to work with, exit
 
                 // Check for pokeballs before proceeding
@@ -190,7 +190,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 var distance = LocationUtils.CalculateDistanceInMeters(session.Client.CurrentLatitude,
                     session.Client.CurrentLongitude, latitude, longitude);
-                
+
                 DateTime expiredDate = new DateTime(1970, 1, 1, 0, 0, 0).AddMilliseconds(Convert.ToDouble(unixTimeStamp));
                 var encounterEV = new EncounteredEvent()
                 {
@@ -209,7 +209,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 session.EventDispatcher.Send(encounterEV);
 
-                if (IsNotMetWithCatchCriteria(session, encounteredPokemon, pokemonIv, lv, pokemonCp)){
+                if (IsNotMetWithCatchCriteria(session, encounteredPokemon, pokemonIv, lv, pokemonCp))
+                {
                     session.EventDispatcher.Send(new NoticeEvent
                     {
                         Message = session.Translation.GetTranslation(TranslationString.PokemonSkipped, encounteredPokemon.PokemonId)
@@ -251,11 +252,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                             pokemonCp >= session.LogicSettings.UseBerriesMinCp ||
                             probability < session.LogicSettings.UseBerriesBelowCatchProbability))) &&
                         lastThrow != CatchPokemonResponse.Types.CatchStatus.CatchMissed) // if last throw is a miss, no double berry
-                        {
-                            AmountOfBerries++;
-                            if (AmountOfBerries <= session.LogicSettings.MaxBerriesToUsePerPokemon)
-                                await UseBerry(session, _encounterId, _spawnPointId);
-                        }
+                    {
+                        AmountOfBerries++;
+                        if (AmountOfBerries <= session.LogicSettings.MaxBerriesToUsePerPokemon)
+                            await UseBerry(session, _encounterId, _spawnPointId);
+                    }
 
                     bool hitPokemon = true;
 
@@ -346,11 +347,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                     lastThrow = caughtPokemonResponse.Status;       // sets lastThrow status
 
                     // Only use EncounterResponse for MSnipe (no Incense or Lures)
-                    if (session.LogicSettings.ActivateMSniper && encounter is EncounterResponse)      
+                    if (session.LogicSettings.ActivateMSniper && encounter is EncounterResponse)
                         MSniperServiceTask.AddToList(session, encounter);
 
                     if (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess)
-                    {                
+                    {
                         var totalExp = 0;
 
                         foreach (var xp in caughtPokemonResponse.CaptureAward.Xp)
@@ -358,7 +359,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                             totalExp += xp;
                         }
                         var profile = await session.Client.Player.GetPlayer();
-                    
+
                         evt.Exp = totalExp;
                         evt.Stardust = profile.PlayerData.Currencies.ToArray()[1].Amount;
                         evt.UniqueId = caughtPokemonResponse.CapturedPokemonId;
@@ -430,26 +431,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                          caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchEscape);
 
                 session.Actions.RemoveAll(x => x == Model.BotActions.Catch);
-                if(session.LogicSettings.AllowMultipleBot && 
-                    session.LogicSettings.Bots != null &&
-                    session.LogicSettings.Bots.Count >0 &&
-                    session.LogicSettings.MultipleBotConfig.OnRarePokemon &&
-                    session.LogicSettings.MultipleBotConfig.PokemonSwitches.ContainsKey(encounterEV.PokemonId) &&
-                    session.LogicSettings.MultipleBotConfig.PokemonSwitches[encounterEV.PokemonId].IV < encounterEV.IV)
-                {
-                    var evalNextBot = session.Accounts.Peek();
-                    var key = evalNextBot.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Google ? evalNextBot.GoogleUsername : evalNextBot.PtcUsername;
-                    key += encounterEV.EncounterId;
 
-                    //cancel all running task.
-                    session.CancellationTokenSource.Cancel();
-                    throw new RequireSwitchAccountException()
-                    {
-                        LastLatitude = encounterEV.Latitude,
-                        LastLongitude = encounterEV.Longitude,
-                        LastEncounterPokemonId = encounterEV.PokemonId
-                    };
-                }
+                ExecuteSwitcher(session, encounterEV);
+
                 if (session.LogicSettings.TransferDuplicatePokemonOnCapture &&
                     session.LogicSettings.TransferDuplicatePokemon &&
                        sessionAllowTransfer &&
@@ -460,6 +444,46 @@ namespace PoGo.NecroBot.Logic.Tasks
                         await HumanRandomActionTask.TransferRandom(session, cancellationToken);
                     else
                         await TransferDuplicatePokemonTask.Execute(session, cancellationToken);
+                }
+            }
+        }
+
+        private static void ExecuteSwitcher(ISession session, EncounteredEvent encounterEV)
+        {
+            if (session.LogicSettings.AllowMultipleBot &&
+                                session.LogicSettings.Bots != null &&
+                                session.LogicSettings.Bots.Count > 0 &&
+                                session.LogicSettings.MultipleBotConfig.OnRarePokemon &&
+                                (
+                                    session.LogicSettings.MultipleBotConfig.MinIVToSwitch < encounterEV.IV ||
+                                (
+                                session.LogicSettings.MultipleBotConfig.PokemonSwitches.ContainsKey(encounterEV.PokemonId) &&
+                                session.LogicSettings.MultipleBotConfig.PokemonSwitches[encounterEV.PokemonId].IV < encounterEV.IV)))
+            {
+                var evalNextBot = session.Accounts.Peek();
+                var key = evalNextBot.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Google ? evalNextBot.GoogleUsername : evalNextBot.PtcUsername;
+                key += encounterEV.EncounterId;
+                if (session.Cache.GetCacheItem(key) == null)
+                {
+                    var curentkey = session.Settings.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Google ? session.Settings.GoogleUsername : session.Settings.PtcUsername;
+                    curentkey += encounterEV.EncounterId;
+                    session.Cache.Add(curentkey, encounterEV, encounterEV.Expires.ToLocalTime());
+                    //cancel all running task.
+                    session.CancellationTokenSource.Cancel();
+                    throw new ActiveSwitchByPokemonException()
+                    {
+                        LastLatitude = encounterEV.Latitude,
+                        LastLongitude = encounterEV.Longitude,
+                        LastEncounterPokemonId = encounterEV.PokemonId
+                    };
+                }
+                else
+                {
+                    if (session.Accounts.Count > 2)
+                    {
+                        //switch account 2 to  & 1
+
+                    }
                 }
             }
         }

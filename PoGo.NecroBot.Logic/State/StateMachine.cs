@@ -10,7 +10,7 @@ using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.Model.Settings;
 using PokemonGo.RocketAPI.Exceptions;
-using PoGo.NecroBot.Logic.Model.Exceptions;
+using PoGo.NecroBot.Logic.Exceptions;
 
 #endregion
 
@@ -77,13 +77,21 @@ namespace PoGo.NecroBot.Logic.State
                     }
 
                 }
-                catch (RequireSwitchAccountException rsae)
+                catch (ActiveSwitchByPokemonException rsae)
                 {
-                    session.EventDispatcher.Send(new ErrorEvent { Message = "Encountered a good pokemon , switch another bot to catch him too." });
+                    session.EventDispatcher.Send(new WarnEvent { Message = "Encountered a good pokemon , switch another bot to catch him too." });
                     session.ResetSessionToWithNextBot();
                     //return to login state
                     state = new LoginState(rsae.LastEncounterPokemonId);
                 }
+                catch (ActiveSwitchByRuleException se)
+                {
+                    session.EventDispatcher.Send(new WarnEvent { Message = $"Switch bot account activated by : {se.MatchedRule.ToString()}  - {se.ReachedValue} " });
+                    session.ResetSessionToWithNextBot();
+                    //return to login state
+                    state = new LoginState();
+                }
+
                 catch (InvalidResponseException)
                 {
                     session.EventDispatcher.Send(new ErrorEvent
