@@ -36,10 +36,11 @@ namespace PoGo.NecroBot.Logic.Utils
         public int TotalStardust;
         public int LevelForRewards = -1;
 
-        public void Dirty(Inventory inventory)
+        public void Dirty(Inventory inventory, ISession session)
         {
             _exportStats = GetCurrentInfo(inventory);
             DirtyEvent?.Invoke();
+            OnStatisticChanged(session);
         }
 
         public void OnStatisticChanged(ISession session)
@@ -67,6 +68,26 @@ namespace PoGo.NecroBot.Logic.Utils
                     };
                 }
 
+                if (config.EXPSwitch > 0 && config.EXPSwitch <= this.TotalExperience)
+                {
+                    //Activate switcher by pokestop
+                    throw new ActiveSwitchByRuleException()
+                    {
+                        MatchedRule = SwitchRules.EXP,
+                        ReachedValue = this.TotalExperience
+                    };
+                }
+
+                var totalMin = (DateTime.Now - _initSessionDateTime).TotalMinutes;
+                if (config.RuntimeSwitch> 0 && config.RuntimeSwitch <= totalMin)
+                {
+                    //Activate switcher by pokestop
+                    throw new ActiveSwitchByRuleException()
+                    {
+                        MatchedRule = SwitchRules.Runtime,
+                        ReachedValue = Math.Round(totalMin, 1)
+                    };
+                }
             }
 
         }

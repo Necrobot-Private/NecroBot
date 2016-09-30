@@ -29,9 +29,6 @@ namespace PoGo.NecroBot.Logic.State
         GetPlayerResponse Profile { get; set; }
         Navigation Navigation { get; }
         ILogicSettings LogicSettings { get; set; }
-
-        void ResetSessionToWithNextBot();
-
         ITranslation Translation { get; }
         IEventDispatcher EventDispatcher { get; }
         TelegramService Telegram { get; set; }
@@ -39,6 +36,7 @@ namespace PoGo.NecroBot.Logic.State
         IElevationService ElevationService { get; set; }
         List<FortData> Forts { get; set; }
         List<FortData> VisibleForts { get; set; }
+        void ResetSessionToWithNextBot(bool currentLocation=true);
         void AddForts(List<FortData> mapObjects);
         void AddVisibleForts(List<FortData> mapObjects);
         Task<bool> WaitUntilActionAccept(BotActions action, int timeout = 30000);
@@ -46,7 +44,6 @@ namespace PoGo.NecroBot.Logic.State
         CancellationTokenSource CancellationTokenSource { get; set; }
         MemoryCache Cache { get; set; }
         Queue<AuthConfig> Accounts { get; }
-
     }
 
 
@@ -54,7 +51,6 @@ namespace PoGo.NecroBot.Logic.State
     {
         public Session(ISettings settings, ILogicSettings logicSettings, IElevationService elevationService) : this(settings, logicSettings, elevationService, Common.Translation.Load(logicSettings))
         {
-
         }
         private Queue<AuthConfig> accounts;
         public List<BotActions> Actions { get { return this.botActions; } }
@@ -65,30 +61,32 @@ namespace PoGo.NecroBot.Logic.State
             this.VisibleForts = new List<FortData>();
             this.Cache = new MemoryCache("Necrobot2");
             this.accounts = new Queue<AuthConfig>();
-            EventDispatcher = new EventDispatcher();
-            LogicSettings = logicSettings;
+            this.EventDispatcher = new EventDispatcher();
+            this.LogicSettings = logicSettings;
 
             this.ElevationService = elevationService;
             
-            Settings = settings;
+            this.Settings = settings;
 
-            Translation = translation;
-            Reset(settings, LogicSettings);
-            Stats = new SessionStats();
-
+            this.Translation = translation;
+            this.Reset(settings, LogicSettings);
+            this.Stats = new SessionStats();
             this.accounts = new Queue<AuthConfig>();
             foreach (var acc in logicSettings.Bots)
             {
                 this.accounts.Enqueue(acc);
             }
-            this.accounts.Enqueue(new AuthConfig()
+            if (!this.accounts.Any(x => x.AuthType == settings.AuthType && (x.GoogleUsername == settings.GoogleUsername || x.PtcUsername == settings.PtcUsername)))
             {
-                AuthType = settings.AuthType,
-                GooglePassword = settings.GooglePassword,
-                GoogleUsername = settings.GoogleUsername,
-                PtcPassword = settings.PtcPassword,
-                PtcUsername = settings.PtcUsername
-            });
+                this.accounts.Enqueue(new AuthConfig()
+                {
+                    AuthType = settings.AuthType,
+                    GooglePassword = settings.GooglePassword,
+                    GoogleUsername = settings.GoogleUsername,
+                    PtcPassword = settings.PtcPassword,
+                    PtcUsername = settings.PtcUsername
+                });
+            }
         }
         public List<FortData> Forts { get; set; }
         public List<FortData> VisibleForts { get; set; }
@@ -134,7 +132,7 @@ namespace PoGo.NecroBot.Logic.State
             Navigation = new Navigation(Client, logicSettings);
             
         }
-        public void ResetSessionToWithNextBot()
+        public void ResetSessionToWithNextBot(bool currentLocation = true)
         {
             this.CancellationTokenSource = new CancellationTokenSource();
             var nextBot = this.accounts.Dequeue();
@@ -143,10 +141,9 @@ namespace PoGo.NecroBot.Logic.State
             this.Settings.GoogleUsername = nextBot.GoogleUsername;
             this.Settings.PtcPassword = nextBot.PtcPassword;
             this.Settings.PtcUsername = nextBot.PtcUsername;
-            this.Settings.DefaultAltitude = this.Client.CurrentAltitude;
-            this.Settings.DefaultLatitude = this.Client.CurrentLatitude;
-            this.Settings.DefaultLongitude = this.Client.CurrentLongitude;
-            this.Reset(this.Settings, this.LogicSettings);
+            this.Settings.DefaultAltitude = currentLocation ? this.Client.CurrentAltitude : this.Settings.DefaultAltitude;
+            this.Settings.DefaultLatitude = currentLocation ? this.Client.CurrentLatitude : this.Settings.DefaultLatitude;
+            this.Settings.DefaultLongitude = currentLocation ? this.Client.CurrentLongitude : this.Settings.DefaultLongitude;
             this.Stats = new SessionStats();
             this.accounts.Enqueue(nextBot); //put it to the last then it will cycle loop.
         }

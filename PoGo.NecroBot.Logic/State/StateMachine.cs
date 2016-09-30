@@ -80,14 +80,14 @@ namespace PoGo.NecroBot.Logic.State
                 catch (ActiveSwitchByPokemonException rsae)
                 {
                     session.EventDispatcher.Send(new WarnEvent { Message = "Encountered a good pokemon , switch another bot to catch him too." });
-                    session.ResetSessionToWithNextBot();
+                    session.ResetSessionToWithNextBot(true);
                     //return to login state
                     state = new LoginState(rsae.LastEncounterPokemonId);
                 }
                 catch (ActiveSwitchByRuleException se)
                 {
                     session.EventDispatcher.Send(new WarnEvent { Message = $"Switch bot account activated by : {se.MatchedRule.ToString()}  - {se.ReachedValue} " });
-                    session.ResetSessionToWithNextBot();
+                    session.ResetSessionToWithNextBot(session.LogicSettings.MultipleBotConfig.StartFromDefaultLocation);
                     //return to login state
                     state = new LoginState();
                 }
@@ -109,6 +109,10 @@ namespace PoGo.NecroBot.Logic.State
                     session.EventDispatcher.Send(new ErrorEvent {Message = "Pokemon Servers might be offline / unstable. Trying again..."});
                     Thread.Sleep(1000);
                     session.EventDispatcher.Send(new ErrorEvent { Message = "Error: " + ex });
+                    if (state is LoginState)
+                    {
+                    }
+                    else
                     state = _initialState;
                 }
             } while (state != null);

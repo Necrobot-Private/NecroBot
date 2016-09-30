@@ -111,11 +111,11 @@ namespace PoGo.NecroBot.Logic.Tasks
         // ## From MSniperServiceTask
         // await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, currentFortData: null, sessionAllowTransfer: true);
 
-        public static async Task Execute(ISession session, 
-                                        CancellationToken cancellationToken, 
-                                        dynamic encounter, 
+        public static async Task Execute(ISession session,
+                                        CancellationToken cancellationToken,
+                                        dynamic encounter,
                                         MapPokemon pokemon,
-                                        FortData currentFortData, 
+                                        FortData currentFortData,
                                         bool sessionAllowTransfer)
         {
             // If the encounter is null nothing will work below, so exit now
@@ -456,9 +456,14 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 session.LogicSettings.MultipleBotConfig.OnRarePokemon &&
                                 (
                                     session.LogicSettings.MultipleBotConfig.MinIVToSwitch < encounterEV.IV ||
-                                (
-                                session.LogicSettings.MultipleBotConfig.PokemonSwitches.ContainsKey(encounterEV.PokemonId) &&
-                                session.LogicSettings.MultipleBotConfig.PokemonSwitches[encounterEV.PokemonId].IV < encounterEV.IV)))
+                                    (
+                                        session.LogicSettings.MultipleBotConfig.PokemonSwitches.ContainsKey(encounterEV.PokemonId) &&
+                                        (
+                                            session.LogicSettings.MultipleBotConfig.PokemonSwitches[encounterEV.PokemonId].IV < encounterEV.IV ||
+                                            (session.LogicSettings.MultipleBotConfig.PokemonSwitches[encounterEV.PokemonId].LV > 0 && session.LogicSettings.MultipleBotConfig.PokemonSwitches[encounterEV.PokemonId].LV < encounterEV.Level)
+                                        )
+                                     )
+                                ))
             {
                 var evalNextBot = session.Accounts.Peek();
                 var key = evalNextBot.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Google ? evalNextBot.GoogleUsername : evalNextBot.PtcUsername;
@@ -467,7 +472,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     var curentkey = session.Settings.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Google ? session.Settings.GoogleUsername : session.Settings.PtcUsername;
                     curentkey += encounterEV.EncounterId;
-                    session.Cache.Add(curentkey, encounterEV, encounterEV.Expires.ToLocalTime());
+                    session.Cache.Add(curentkey, encounterEV, DateTime.Now.AddMinutes(15));
                     //cancel all running task.
                     session.CancellationTokenSource.Cancel();
                     throw new ActiveSwitchByPokemonException()
@@ -491,35 +496,35 @@ namespace PoGo.NecroBot.Logic.Tasks
         private static bool IsNotMetWithCatchCriteria(ISession session, PokemonData encounteredPokemon, double pokemonIv, double lv, int? cp)
         {
             if (session.LogicSettings.UsePokemonToNotCatchFilter && session.LogicSettings.PokemonsNotToCatch.Contains(encounteredPokemon.PokemonId)) return true;
-            if(session.LogicSettings.UseTransferFilterToCatch && session.LogicSettings.PokemonsTransferFilter.ContainsKey(encounteredPokemon.PokemonId))
+            if (session.LogicSettings.UseTransferFilterToCatch && session.LogicSettings.PokemonsTransferFilter.ContainsKey(encounteredPokemon.PokemonId))
             {
                 var filter = session.LogicSettings.PokemonsTransferFilter[encounteredPokemon.PokemonId];
-                if(filter != null && filter.CatchOnlyPokemonMeetTransferCriteria)
+                if (filter != null && filter.CatchOnlyPokemonMeetTransferCriteria)
                 {
                     var move1 = PokemonInfo.GetPokemonMove1(encounteredPokemon).ToString();
                     var move2 = PokemonInfo.GetPokemonMove2(encounteredPokemon).ToString();
 
-                    if (filter.MovesOperator == "or" && 
+                    if (filter.MovesOperator == "or" &&
                         (filter.Moves.Count > 0 &&
                         filter.Moves.Any(x => x[0] == encounteredPokemon.Move1 && x[1] == encounteredPokemon.Move2)))
                     {
                         return true;//he has the moves we don't meed.
                     }
 
-                    if (filter.KeepMinOperator =="and" 
-                        && ((cp.HasValue && cp.Value < filter.KeepMinCp)  
-                        || pokemonIv < filter.KeepMinIvPercentage 
+                    if (filter.KeepMinOperator == "and"
+                        && ((cp.HasValue && cp.Value < filter.KeepMinCp)
+                        || pokemonIv < filter.KeepMinIvPercentage
                         || (filter.UseKeepMinLvl && lv < filter.KeepMinLvl))
                         && (
-                            filter.Moves.Count ==0 ||
+                            filter.Moves.Count == 0 ||
                             filter.Moves.Any(x => x[0] == encounteredPokemon.Move1 && x[1] == encounteredPokemon.Move2)
                         ))
                     {
                         return true;//not catch pokemon
                     }
 
-                    if (filter.KeepMinOperator == "or" && ((!cp.HasValue || cp < filter.KeepMinCp) 
-                        && pokemonIv < filter.KeepMinIvPercentage 
+                    if (filter.KeepMinOperator == "or" && ((!cp.HasValue || cp < filter.KeepMinCp)
+                        && pokemonIv < filter.KeepMinIvPercentage
                         && (!filter.UseKeepMinLvl || lv < filter.KeepMinLvl))
                         && (
                             filter.Moves.Count == 0 ||
@@ -528,7 +533,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     {
                         return true;//not catch pokemon
                     }
- 
+
                 }
             }
             return false;

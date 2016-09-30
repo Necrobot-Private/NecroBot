@@ -50,18 +50,18 @@ namespace PoGo.NecroBot.Logic.Tasks
                 await session.Navigation.Move(defaultLocation,
                     async () =>
                     {
-                      
-                            await MSniperServiceTask.Execute(session, cancellationToken);
-                        
+                        await MSniperServiceTask.Execute(session, cancellationToken);
                     },
                     session,
                     cancellationToken);
-               
 
                 // we have moved this distance, so apply it immediately to the egg walker.
                 await eggWalker.ApplyDistance(distanceFromStart, cancellationToken);
             }
             checkForMoveBackToDefault = false;
+
+            await CatchNearbyPokemonsTask.Execute(session, cancellationToken);
+            
             // initialize the variables in UseNearbyPokestopsTask here, as this is a fresh start.
             UseNearbyPokestopsTask.Initialize();
             await UseNearbyPokestopsTask.Execute(session, cancellationToken);
