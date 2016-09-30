@@ -294,6 +294,7 @@ namespace PoGo.NecroBot.CLI
             {
                 HumanWalkSnipeTask.StartFastPokemapAsync(_session, _session.CancellationTokenSource.Token);// that need to keep data  live 
             }
+
             if (_session.LogicSettings.DataSharingEnable)
             {
                 BotDataSocketClient.StartAsync(_session);

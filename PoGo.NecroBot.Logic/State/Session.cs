@@ -76,7 +76,9 @@ namespace PoGo.NecroBot.Logic.State
             {
                 this.accounts.Enqueue(acc);
             }
-            if (!this.accounts.Any(x => x.AuthType == settings.AuthType && (x.GoogleUsername == settings.GoogleUsername || x.PtcUsername == settings.PtcUsername)))
+            if (!this.accounts.Any(x => (x.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Ptc && x.PtcUsername == settings.PtcUsername) ||
+                                        (x.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Google && x.GoogleUsername == settings.GoogleUsername)
+                                        ))
             {
                 this.accounts.Enqueue(new AuthConfig()
                 {
@@ -145,6 +147,11 @@ namespace PoGo.NecroBot.Logic.State
             this.Settings.DefaultLatitude = currentLocation ? this.Client.CurrentLatitude : this.Settings.DefaultLatitude;
             this.Settings.DefaultLongitude = currentLocation ? this.Client.CurrentLongitude : this.Settings.DefaultLongitude;
             this.Stats = new SessionStats();
+
+            ApiFailureStrategy _apiStrategy = new ApiFailureStrategy(this);
+            Client = new Client(Settings, _apiStrategy);
+            Inventory = new Inventory(Client, this.LogicSettings);
+
             this.accounts.Enqueue(nextBot); //put it to the last then it will cycle loop.
         }
         public void AddForts(List<FortData> data)
