@@ -71,7 +71,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     FamilyCandies = family.Candy_
                 });
 
-                DelayingUtils.Delay(session.LogicSettings.TransferActionDelay, 0);
+                await DelayingUtils.DelayAsync(session.LogicSettings.TransferActionDelay, 0, cancellationToken);
             }
         }
     }

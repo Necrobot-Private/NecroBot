@@ -87,15 +87,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                         catch {
                         }
                         finally { y += step; };
-
                     }
                     x += step;
                 }
-              
             }
-
-
         }
+
         private static void StartAsyncPollingTask(ISession session, CancellationToken cancellationToken)
         {
             if (!session.LogicSettings.HumanWalkingSnipeUseFastPokemap) return;
@@ -107,12 +104,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     try
                     {
-                        cancellationToken.ThrowIfCancellationRequested();
+                        //cancellationToken.ThrowIfCancellationRequested();
                         var lat = _session.Client.CurrentLatitude;
                         var lng = _session.Client.CurrentLongitude;
                         var api = $"https://api.fastpokemap.se/?key=allow-all&ts=0&lat={lat}&lng={lng}";
                         string content =  DownloadContent(api).Result;
-                        Task.Delay(5 * 60 * 1000).Wait();
+                        Task.Delay(1 * 60 * 1000).Wait();
                     }
                     catch
                     {

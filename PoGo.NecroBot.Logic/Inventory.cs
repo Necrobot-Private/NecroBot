@@ -267,7 +267,15 @@ namespace PoGo.NecroBot.Logic
 
         public async void GetPlayerData()
         {
-            _player = await _client.Player.GetPlayer();
+            try
+            {
+                _player = await _client.Player.GetPlayer();
+
+            }
+            catch 
+            {
+                Logging.Logger.Write("Failed to load payer data", Logging.LogLevel.Error, ConsoleColor.DarkRed);
+            }
         }
 
         public async Task<PokemonData> GetHighestPokemonOfTypeByIv(PokemonData pokemon)

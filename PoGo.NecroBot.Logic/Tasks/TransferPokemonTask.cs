@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Utils;
+using System.Threading;
 
 #endregion
 
@@ -11,7 +12,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 {
     public class TransferPokemonTask
     {
-        public static async Task Execute(ISession session, ulong pokemonId)
+        public static async Task Execute(ISession session, CancellationToken cancellationToken, ulong pokemonId)
         {
             using (var blocker = new BlockableScope(session, Model.BotActions.Transfer))
             {
@@ -49,7 +50,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     FamilyCandies = family.Candy_
                 });
 
-                DelayingUtils.Delay(session.LogicSettings.TransferActionDelay, 0);
+                await DelayingUtils.DelayAsync(session.LogicSettings.TransferActionDelay, 0, cancellationToken);
             }
         }
     }

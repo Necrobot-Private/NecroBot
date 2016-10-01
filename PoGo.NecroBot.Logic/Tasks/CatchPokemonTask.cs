@@ -255,7 +255,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     {
                         AmountOfBerries++;
                         if (AmountOfBerries <= session.LogicSettings.MaxBerriesToUsePerPokemon)
-                            await UseBerry(session, _encounterId, _spawnPointId);
+                            await UseBerry(session, _encounterId, _spawnPointId, cancellationToken);
                     }
 
                     bool hitPokemon = true;
@@ -578,7 +578,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             return ItemId.ItemUnknown;
         }
 
-        public static async Task UseBerry(ISession session, ulong encounterId, string spawnPointId)
+        public static async Task UseBerry(ISession session, ulong encounterId, string spawnPointId, CancellationToken cancellationToken)
         {
             var inventoryBalls = await session.Inventory.GetItems();
             var berries = inventoryBalls.Where(p => p.ItemId == ItemId.ItemRazzBerry);
@@ -587,7 +587,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (berry == null || berry.Count <= 0)
                 return;
 
-            DelayingUtils.Delay(session.LogicSettings.DelayBetweenPlayerActions, 500);
+            DelayingUtils.DelayAsync(session.LogicSettings.DelayBetweenPlayerActions, 500, cancellationToken);
 
             var useCaptureItem = await session.Client.Encounter.UseCaptureItem(encounterId, ItemId.ItemRazzBerry, spawnPointId);
             berry.Count -= 1;

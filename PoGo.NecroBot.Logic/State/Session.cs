@@ -132,11 +132,12 @@ namespace PoGo.NecroBot.Logic.State
             // ferox wants us to set this manually
             Inventory = new Inventory(Client, logicSettings);
             Navigation = new Navigation(Client, logicSettings);
-            
+            Navigation.WalkStrategy.UpdatePositionEvent +=
+                (lat, lng) => this.EventDispatcher.Send(new UpdatePositionEvent { Latitude = lat, Longitude = lng });
         }
+
         public void ResetSessionToWithNextBot(bool currentLocation = true)
         {
-            this.CancellationTokenSource = new CancellationTokenSource();
             var nextBot = this.accounts.Dequeue();
             this.Settings.AuthType = nextBot.AuthType;
             this.Settings.GooglePassword = nextBot.GooglePassword;
@@ -148,9 +149,12 @@ namespace PoGo.NecroBot.Logic.State
             this.Settings.DefaultLongitude = currentLocation ? this.Client.CurrentLongitude : this.Settings.DefaultLongitude;
             this.Stats = new SessionStats();
 
-            ApiFailureStrategy _apiStrategy = new ApiFailureStrategy(this);
-            Client = new Client(Settings, _apiStrategy);
-            Inventory = new Inventory(Client, this.LogicSettings);
+            //ApiFailureStrategy _apiStrategy = new ApiFailureStrategy(this);
+            //Client = new Client(Settings, _apiStrategy);
+            //Inventory = new Inventory(Client, this.LogicSettings);
+            this.Reset(this.Settings, this.LogicSettings);
+            CancellationTokenSource.Cancel();
+            this.CancellationTokenSource = new CancellationTokenSource();
 
             this.accounts.Enqueue(nextBot); //put it to the last then it will cycle loop.
         }

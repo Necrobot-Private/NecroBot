@@ -89,6 +89,11 @@ namespace PoGo.NecroBot.CLI
 
         private void HandleEvent(PokeStopListEvent evt)
         {
+            if(_lastPokeStopList != null)
+            {
+                _lastPokeStopList.Forts.AddRange(evt.Forts);
+            }
+            else
             _lastPokeStopList = evt;
         }
 

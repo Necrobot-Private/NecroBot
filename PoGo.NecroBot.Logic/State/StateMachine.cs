@@ -81,7 +81,6 @@ namespace PoGo.NecroBot.Logic.State
                 {
                     session.EventDispatcher.Send(new WarnEvent { Message = "Encountered a good pokemon , switch another bot to catch him too." });
                     session.ResetSessionToWithNextBot(true);
-                    //return to login state
                     state = new LoginState(rsae.LastEncounterPokemonId);
                 }
                 catch (ActiveSwitchByRuleException se)
