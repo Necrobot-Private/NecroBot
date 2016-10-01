@@ -21,6 +21,11 @@ namespace PoGo.NecroBot.Logic
 
         public void HandleEvent(string evt, ISession session) { }
 
+        public void HandleEvent(BotSwitchedEvent evt, ISession session) {
+            _stats.Reset();
+        }
+
+
         private void HandleEvent(UseLuckyEggEvent event1, ISession session) { }
 
         public void HandleEvent(UpdateEvent evt, ISession session) { }

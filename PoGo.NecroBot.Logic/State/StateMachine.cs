@@ -32,6 +32,8 @@ namespace PoGo.NecroBot.Logic.State
 
         public async Task Start(IState initialState, ISession session, string subPath)
         {
+            GlobalSettings globalSettings = null;
+
             var state = initialState;
             var profilePath = Path.Combine(Directory.GetCurrentDirectory(), subPath);
             var profileConfigPath = Path.Combine(profilePath, "config");
@@ -45,7 +47,8 @@ namespace PoGo.NecroBot.Logic.State
             {
                 if (e.ChangeType == WatcherChangeTypes.Changed)
                 {
-                    session.LogicSettings = new LogicSettings(GlobalSettings.Load(subPath));
+                    globalSettings = GlobalSettings.Load(subPath);
+                    session.LogicSettings = new LogicSettings(globalSettings);
                     configWatcher.EnableRaisingEvents = !configWatcher.EnableRaisingEvents;
                     configWatcher.EnableRaisingEvents = !configWatcher.EnableRaisingEvents;
                     Logger.Write(" ##### config.json ##### ", LogLevel.Info);
@@ -80,13 +83,21 @@ namespace PoGo.NecroBot.Logic.State
                 catch (ActiveSwitchByPokemonException rsae)
                 {
                     session.EventDispatcher.Send(new WarnEvent { Message = "Encountered a good pokemon , switch another bot to catch him too." });
-                    session.ResetSessionToWithNextBot(true);
+                    session.ResetSessionToWithNextBot(session.Client.CurrentLatitude, session.Client.CurrentLongitude, session.Client.CurrentAltitude);
                     state = new LoginState(rsae.LastEncounterPokemonId);
                 }
                 catch (ActiveSwitchByRuleException se)
                 {
                     session.EventDispatcher.Send(new WarnEvent { Message = $"Switch bot account activated by : {se.MatchedRule.ToString()}  - {se.ReachedValue} " });
-                    session.ResetSessionToWithNextBot(session.LogicSettings.MultipleBotConfig.StartFromDefaultLocation);
+                    if(session.LogicSettings.MultipleBotConfig.StartFromDefaultLocation)
+                    {
+                        session.ResetSessionToWithNextBot(globalSettings.LocationConfig.DefaultLatitude, globalSettings.LocationConfig.DefaultLongitude, session.Client.CurrentAltitude);
+
+                    }
+                    else
+                    {
+                        session.ResetSessionToWithNextBot(); //current location
+                    }
                     //return to login state
                     state = new LoginState();
                 }

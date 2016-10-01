@@ -36,7 +36,7 @@ namespace PoGo.NecroBot.Logic.State
         IElevationService ElevationService { get; set; }
         List<FortData> Forts { get; set; }
         List<FortData> VisibleForts { get; set; }
-        void ResetSessionToWithNextBot(bool currentLocation=true);
+        void ResetSessionToWithNextBot(double lat = 0, double lng = 0, double att = 0);
         void AddForts(List<FortData> mapObjects);
         void AddVisibleForts(List<FortData> mapObjects);
         Task<bool> WaitUntilActionAccept(BotActions action, int timeout = 30000);
@@ -136,7 +136,7 @@ namespace PoGo.NecroBot.Logic.State
                 (lat, lng) => this.EventDispatcher.Send(new UpdatePositionEvent { Latitude = lat, Longitude = lng });
         }
 
-        public void ResetSessionToWithNextBot(bool currentLocation = true)
+        public void ResetSessionToWithNextBot(double lat=0, double lng=0, double att=0)
         {
             var nextBot = this.accounts.Dequeue();
             this.Settings.AuthType = nextBot.AuthType;
@@ -144,9 +144,9 @@ namespace PoGo.NecroBot.Logic.State
             this.Settings.GoogleUsername = nextBot.GoogleUsername;
             this.Settings.PtcPassword = nextBot.PtcPassword;
             this.Settings.PtcUsername = nextBot.PtcUsername;
-            this.Settings.DefaultAltitude = currentLocation ? this.Client.CurrentAltitude : this.Settings.DefaultAltitude;
-            this.Settings.DefaultLatitude = currentLocation ? this.Client.CurrentLatitude : this.Settings.DefaultLatitude;
-            this.Settings.DefaultLongitude = currentLocation ? this.Client.CurrentLongitude : this.Settings.DefaultLongitude;
+            this.Settings.DefaultAltitude = att == 0 ? this.Client.CurrentAltitude : att;
+            this.Settings.DefaultLatitude = lat == 0 ? this.Client.CurrentLatitude : lat;
+            this.Settings.DefaultLongitude = lng ==0 ? this.Client.CurrentLongitude : lng;
             this.Stats = new SessionStats();
 
             //ApiFailureStrategy _apiStrategy = new ApiFailureStrategy(this);
@@ -157,6 +157,7 @@ namespace PoGo.NecroBot.Logic.State
             this.CancellationTokenSource = new CancellationTokenSource();
 
             this.accounts.Enqueue(nextBot); //put it to the last then it will cycle loop.
+            this.EventDispatcher.Send(new BotSwitchedEvent() { });
         }
         public void AddForts(List<FortData> data)
         {

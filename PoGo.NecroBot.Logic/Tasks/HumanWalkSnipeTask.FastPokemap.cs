@@ -51,20 +51,18 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             var scanOffset = session.LogicSettings.HumanWalkingSnipeSnipingScanOffset;
 
-            var offset = 0.025;
-
-            var step = offset / 5;
+            var step = scanOffset / 5;
             while (true)
             {
                 await Task.Delay(30 * 1000);//sleep for 30 sec
-                Logger.Write("Overkill fastpokemap to collect data :))");
+                //Logger.Write("Overkill fastpokemap to collect data :))");
                 double lat = session.Client.CurrentLatitude;
                 double lng = session.Client.CurrentLongitude;
 
                 List<Task<List<FastPokemapItem>>> task = new List<Task<List<FastPokemapItem>>>();
-                for (var x = -offset; x <= offset;)
+                for (var x = -scanOffset; x <= scanOffset;)
                 {
-                    for (var y = -offset; y <= offset;)
+                    for (var y = -scanOffset; y <= scanOffset;)
                     {
                         try {
                             var scanLat = lat + x;
