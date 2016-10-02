@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 using POGOProtos.Enums;
 using PoGo.NecroBot.Logic.State;
 using System.Threading;
+using PoGo.NecroBot.Logic.Utils;
+using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace PoGo.NecroBot.Logic.Tasks
 {
@@ -35,13 +38,14 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static string GetIP()
         {
+            string p = @"\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}";
 
             if (string.IsNullOrEmpty(ip))
             {
                 var client = new HttpClient();
-                var task = client.GetStringAsync("http://checkip.dyndns.org");
+                var task = client.GetStringAsync("http://checkip.dyndns.org/");
                 task.Wait();
-                ip = task.Result.Split(':')[1].Trim();
+                ip = Regex.Match(task.Result, p).Value;
             }
             return ip;
 
@@ -49,45 +53,64 @@ namespace PoGo.NecroBot.Logic.Tasks
         
         public static async Task StartFastPokemapAsync(ISession session , CancellationToken cancellationToken)
         {
-            var scanOffset = session.LogicSettings.HumanWalkingSnipeSnipingScanOffset;
+            double defaultLatitude = session.Settings.DefaultLatitude;
+            double defaultLongitude = session.Settings.DefaultLongitude;
 
-            var step = scanOffset / 5;
             while (true)
             {
                 await Task.Delay(30 * 1000);//sleep for 30 sec
-                //Logger.Write("Overkill fastpokemap to collect data :))");
+
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
+                var scanOffset = session.LogicSettings.HumanWalkingSnipeSnipingScanOffset;
+                //scanOffset = 0.065;
+                var step = scanOffset / 5;
+
+                Logger.Write($"Execute map scan data Offset: {scanOffset} :))");
                 double lat = session.Client.CurrentLatitude;
                 double lng = session.Client.CurrentLongitude;
-
-                List<Task<List<FastPokemapItem>>> task = new List<Task<List<FastPokemapItem>>>();
-                for (var x = -scanOffset; x <= scanOffset;)
+                await OffsetScanFPM(scanOffset, step, lat, lng);
+                if(LocationUtils.CalculateDistanceInMeters(session.Client.CurrentLatitude, session.Client.CurrentLongitude, defaultLatitude, defaultLongitude) >1000)
                 {
-                    for (var y = -scanOffset; y <= scanOffset;)
-                    {
-                        try {
-                            var scanLat = lat + x;
-                            var scanLng = lng + y;
-                            string scanurl = $"https://cache.fastpokemap.se/?key=2fe7ce70-90b8-460a-bffb-d7f3b4b74cc2&ts=57c9d27c&compute={GetIP()}&lat={scanLat}&lng={scanLng}";
-
-                            var json = await DownloadContent(scanurl);
-                            var data = JsonConvert.DeserializeObject<List<FastPokemapItem>>(json);
-                            List<SnipePokemonInfo> chunk = new List<SnipePokemonInfo>();
-                            foreach (var item in data)
-                            {
-                                var pItem = Map(item);
-                                if (pItem != null && pItem.Id > 0)
-                                {
-                                    chunk.Add(pItem);
-                                }
-                            }
-                            PostProcessDataFetched(chunk, false);
-                        }
-                        catch {
-                        }
-                        finally { y += step; };
-                    }
-                    x += step;
+                    await OffsetScanFPM(scanOffset, step, defaultLatitude, defaultLongitude);
                 }
+                sw.Stop();
+
+                Logger.Write($"Map scan finished! Time elapsed {sw.Elapsed.ToString(@"mm\:ss")}");
+            }
+        }
+
+        private static async Task OffsetScanFPM(double scanOffset, double step, double lat, double lng)
+        {
+            for (var x = -scanOffset; x <= scanOffset;)
+            {
+                for (var y = -scanOffset; y <= scanOffset;)
+                {
+                    try
+                    {
+                        var scanLat = lat + x;
+                        var scanLng = lng + y;
+                        string scanurl = $"https://cache.fastpokemap.se/?key=2fe7ce70-90b8-460a-bffb-d7f3b4b74cc2&ts=57c9d27c&compute={GetIP()}&lat={scanLat}&lng={scanLng}";
+
+                        var json = await DownloadContent(scanurl);
+                        var data = JsonConvert.DeserializeObject<List<FastPokemapItem>>(json);
+                        List<SnipePokemonInfo> chunk = new List<SnipePokemonInfo>();
+                        foreach (var item in data)
+                        {
+                            var pItem = Map(item);
+                            if (pItem != null && pItem.Id > 0)
+                            {
+                                chunk.Add(pItem);
+                            }
+                        }
+                        PostProcessDataFetched(chunk, false);
+                    }
+                    catch
+                    {
+                    }
+                    finally { y += step; };
+                }
+                x += step;
             }
         }
 
@@ -100,13 +123,22 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
 				while(true)
                 {
-                    try
+                    try                                                
                     {
+                        string key = "d39dbc96-e963-4747-89f6-15b18441b6a5";
+                        string ts = "6ff886bc";
                         //cancellationToken.ThrowIfCancellationRequested();
-                        var lat = _session.Client.CurrentLatitude;
-                        var lng = _session.Client.CurrentLongitude;
-                        var api = $"https://api.fastpokemap.se/?key=allow-all&ts=0&lat={lat}&lng={lng}";
-                        string content =  DownloadContent(api).Result;
+                        string content = "";
+                        do
+                        {
+                            var lat = _session.Client.CurrentLatitude;
+                            var lng = _session.Client.CurrentLongitude;
+                            var api = $"https://api.fastpokemap.se/?key={key}&ts={ts}&lat={lat}&lng={lng}";
+                            content = DownloadContent(api).Result;
+                            Task.Delay(2000).Wait();
+                        }
+                        while (content.Contains("error"));
+
                         Task.Delay(1 * 60 * 1000).Wait();
                     }
                     catch
@@ -183,13 +215,12 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (!_setting.HumanWalkingSnipeUseFastPokemap) return results;
 
             //var startFetchTime = DateTime.Now;
-
             try
             {
-                string key = "2fe7ce70-90b8-460a-bffb-d7f3b4b74cc2";//allow-all
-                string ts = "57c9d27c";
+                string key = "20d638c9-c5b3-40cf-bf8b-1c9c52cc2cc2";//allow-all
+                string ts = "18503bfe";
 
-                string url = $"https://cache.fastpokemap.se/?key={key}&ts={ts}&compute={GetIP()}&lat={lat}&lng={lng}";
+                string url = $"https://cache.fastpokemap.se/?key={key}&ts={ts}&lat={lat}&lng={lng}";
                 
                 var json = await DownloadContent(url);
                 var data = JsonConvert.DeserializeObject<List<FastPokemapItem>>(json);

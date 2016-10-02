@@ -161,7 +161,7 @@ namespace PoGo.NecroBot.Logic.State
 
         private async Task LogLoginHistory(ISession session, CancellationToken cancellationToken)
         {
-            string logFile = "config\\login.log";
+            string logFile = $"config\\login{DateTime.Now:ddMMyyyy}.log";
             if(!File.Exists(logFile) )
             {
                 File.CreateText(logFile);
