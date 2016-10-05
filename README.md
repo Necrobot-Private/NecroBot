@@ -3,9 +3,9 @@
 <h1>Pokémon Go 0.39 Forced Update - Necrobot is Down!
 </h1>
 <strong>
-Niantic has forced minimum version of Pokebot clients to 0.39.  So all bots, map scanners, and other unauthorized clients are down until the new API has been cracked.
+Niantic has forced minimum version of Pokebot clients to 0.39.  So all bots, map scanners, and other unauthorized clients are going to go down until the new API has been cracked.
 
-Do not attempt to connect with any bot or else you will be flagged as a bot since all bots use the 0.35 API.
+Do not attempt to connect with any bot or else you will be flagged as a bot since all bots use the 0.35 API and real apps use 0.39 API.
 </strong>
 
 :exclamation: :exclamation: :exclamation:
@@ -17,9 +17,7 @@ Do not attempt to connect with any bot or else you will be flagged as a bot sinc
 </a>
 
 <strong><em> The contents of this repo are a proof of concept and are for educational use only </em></strong>
-
-
-<h2>Do NOT publish/share/advertise this Bot, GitHub or discord, in any other discord server or website.</h2>
+<h4>Join to Discord</h4>
 [![Stories in Ready](https://discordapp.com/api/guilds/220703917871333376/widget.png?style=banner2&time-)](https://discord.gg/7FWyWVp)
 
 [![Build status](https://ci.appveyor.com/api/projects/status/mvr6v0v99gscqxbn/branch/master?svg=true)](https://ci.appveyor.com/project/NzV/necrobot/branch/master)
