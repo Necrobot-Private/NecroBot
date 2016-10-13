@@ -1,7 +1,5 @@
 ﻿using Caching;
-using GeoCoordinatePortable;
-using Newtonsoft.Json;
-using PoGo.NecroBot.Logic.State;
+using PoGo.NecroBot.Logic.Model.Settings;
 using System;
 
 namespace PoGo.NecroBot.Logic.Service.Elevation
@@ -12,7 +10,7 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
         private double maxElevation = 50;
         private Random rand = new Random();
 
-        public RandomElevationService(ISession session, LRUCache<string, double> cache) : base(session, cache)
+        public RandomElevationService(GlobalSettings settings, LRUCache<string, double> cache) : base(settings, cache)
         {
         }
 

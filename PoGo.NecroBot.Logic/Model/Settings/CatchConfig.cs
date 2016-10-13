@@ -18,7 +18,12 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 PokemonId.Rattata,
                 PokemonId.Spearow,
                 PokemonId.Zubat,
-                PokemonId.Doduo
+                PokemonId.Doduo,
+                //criteria: regional
+                PokemonId.Tauros,
+                PokemonId.Kangaskhan,
+                PokemonId.MrMime,
+                PokemonId.Farfetchd
             };
         }
 

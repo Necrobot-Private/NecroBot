@@ -117,6 +117,18 @@ namespace PoGo.NecroBot.Logic.State
                 await Task.Delay(2000, cancellationToken);
                 Environment.Exit(0);
             }
+            catch (MinimumClientVersionException ex)
+            {
+                // We need to terminate the client.
+                session.EventDispatcher.Send(new ErrorEvent
+                {
+                    Message = session.Translation.GetTranslation(TranslationString.MinimumClientVersionException, ex.CurrentApiVersion.ToString(), ex.MinimumClientVersion.ToString())
+                });
+
+                Logger.Write(session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey, LogLevel.Error));
+                Console.ReadKey();
+                System.Environment.Exit(1);
+            }
             catch (Exception e)
             {
                 Logger.Write(e.ToString());

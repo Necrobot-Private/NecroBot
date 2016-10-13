@@ -85,8 +85,16 @@
       "Value": "名称: {0} 注意:ルートの構成に失敗しました。ペナルティを受けた可能性があります。解除まで: {1}/{2}"
     },
     {
+      "Key": "gym",
+      "Value": "Gym"
+    },
+    {
+      "Key": "pokestop",
+      "Value": "ポケストップ"
+    },
+    {
       "Key": "eventFortTargeted",
-      "Value": "次のポケストップへ移動中です: {0} ({1}m) ({2} 秒) (route {3})"
+      "Value": "次の{0}へ移動中です: {1} ({2}m) ({3} 秒) (route {4})"
     },
     {
       "Key": "eventProfileLogin",

@@ -89,8 +89,16 @@
       "Value": "PokeStop: {0} INFO: Gagal mengambil barang, kemungkinan SoftBan. Lepaskan dalam: {1}/{2}"
     },
     {
+      "Key": "gym",
+      "Value": "Gym"
+    },
+    {
+      "Key": "pokestop",
+      "Value":  "PokeStop"
+    },
+    {
       "Key": "eventFortTargeted",
-      "Value": "Jalan ke PokeStop/Gym: {0} | Jarak: {1} meter | Waktu tempuh: {2} detik | Menggunakan: Rute {3}"
+      "Value": "Jalan ke {0}: {1} | Jarak: {2} meter | Waktu tempuh: {3} detik | Menggunakan: Rute {4}"
     },
     {
       "Key": "eventProfileLogin",

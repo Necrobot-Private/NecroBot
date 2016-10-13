@@ -3,6 +3,7 @@ using PoGo.NecroBot.Logic.Utils;
 using PokemonGo.RocketAPI;
 using PokemonGo.RocketAPI.Enums;
 using Google.Protobuf;
+using PoGo.NecroBot.Logic.Service.Elevation;
 
 namespace PoGo.NecroBot.Logic.Model.Settings
 {
@@ -11,10 +12,12 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         // Never spawn at the same position.
         private readonly Random _rand = new Random();
         private readonly GlobalSettings _settings;
+        private readonly IElevationService _elevationService;
 
-        public ClientSettings(GlobalSettings settings)
+        public ClientSettings(GlobalSettings settings, IElevationService elevationService)
         {
             _settings = settings;
+            _elevationService = elevationService;
         }
 
 
@@ -210,13 +213,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         {
             get
             {
-                return
-                    LocationUtils.getElevation(null, _settings.LocationConfig.DefaultLatitude, _settings.LocationConfig.DefaultLongitude) +
-                    _rand.NextDouble() *
-                    ((double)5 / Math.Cos(LocationUtils.getElevation(null, _settings.LocationConfig.DefaultLatitude, _settings.LocationConfig.DefaultLongitude)));
+                return LocationUtils.getElevation(_elevationService, _settings.LocationConfig.DefaultLatitude, _settings.LocationConfig.DefaultLongitude);
             }
-
-
+            
             set { }
         }
     }

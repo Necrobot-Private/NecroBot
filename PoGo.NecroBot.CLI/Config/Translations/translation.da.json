@@ -113,8 +113,16 @@
       "Value": "Navn: {0} INFO: Det lykkedes ikke at samle, måske softban? Unban om: {1}/{2}"
     },
     {
+      "Key": "gym",
+      "Value": "Gym"
+    },
+    {
+      "Key": "pokestop",
+      "Value":  "Pokestop"
+    },
+    {
       "Key": "eventFortTargeted",
-      "Value": "{0} om ({1}m) ({2}sekunder) (route {3})"
+      "Value": "{0} {1} om ({2}m) ({3}sekunder) (route {4})"
     },
     {
       "Key": "eventProfileLogin",

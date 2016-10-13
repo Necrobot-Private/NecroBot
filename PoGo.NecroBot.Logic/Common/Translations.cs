@@ -39,6 +39,8 @@ namespace PoGo.NecroBot.Logic.Common
         FarmPokestopsNoUsableFound,
         EventFortUsed,
         EventFortFailed,
+        Gym,
+        Pokestop,
         EventFortTargeted,
         EventProfileLogin,
         EventUsedLuckyEgg,
@@ -171,6 +173,9 @@ namespace PoGo.NecroBot.Logic.Common
         EventUsedIncense,
         SnipeServerOffline,
         PromptError,
+        PromptErrorDouble,
+        PromptErrorInteger,
+        PromptErrorString,
         SoftBanBypassed,
         FirstStartLanguagePrompt,
         FirstStartLanguageCodePrompt,
@@ -257,7 +262,9 @@ namespace PoGo.NecroBot.Logic.Common
         FirstStartSetupWalkingSpeedKmHConfirm,
         FirstStartSetupUseWalkingSpeedVariantPrompt,
         FirstStartSetupWalkingSpeedVariantPrompt,
-        FirstStartSetupWalkingSpeedVariantConfirm
+        FirstStartSetupWalkingSpeedVariantConfirm,
+        MinimumClientVersionException,
+        ExitNowAfterEnterKey
     }
 
     public class Translation : ITranslation
@@ -286,8 +293,10 @@ namespace PoGo.NecroBot.Logic.Common
                 "Name: {0} XP: {1}, Gems: {2}, Items: {3}, Lat: {4}, Long: {5}, Alt: {6}"),
             new KeyValuePair<TranslationString, string>(TranslationString.EventFortFailed,
                 "Name: {0} INFO: Looting failed, possible softban. Unban in: {1}/{2}"),
+            new KeyValuePair<TranslationString, string>(TranslationString.Gym, "Gym") ,
+            new KeyValuePair<TranslationString, string>(TranslationString.Pokestop, "Pokestop"),
             new KeyValuePair<TranslationString, string>(TranslationString.EventFortTargeted,
-                "Traveling to Pokestop/Gym: {0} ({1}m) ({2} seconds) (route {3})"),
+                "Traveling to {0}: {1} ({2}m) ({3} seconds) (route {4})"),
             new KeyValuePair<TranslationString, string>(TranslationString.EventProfileLogin, "Playing as {0}"),
             new KeyValuePair<TranslationString, string>(TranslationString.EventUsedIncense,
                 "Used Incense, remaining: {0}"),
@@ -528,7 +537,7 @@ namespace PoGo.NecroBot.Logic.Common
             new KeyValuePair<TranslationString, string>(TranslationString.FirstStartSetupAutoCompleteTutStarterPrompt, "Please enter your desired Starter (ENGLISH NAME: Bulbasaur, Charmander, Squirtle)"),
             new KeyValuePair<TranslationString, string>(TranslationString.FirstStartSetupAutoCompleteTutStarterConfirm, "Accepted Starter: {0}"),
             new KeyValuePair<TranslationString, string>(TranslationString.FirstStartSetupWebSocketPrompt, "Would you like to enable the WebSocket Feature? {0}/{1}"),
-            new KeyValuePair<TranslationString, string>(TranslationString.FirstStartSetupWebSocketPortPrompt, "Please enter your WebSocket Port"),
+            new KeyValuePair<TranslationString, string>(TranslationString.FirstStartSetupWebSocketPortPrompt, "Please enter your WebSocket Port (default 14251)"),
             new KeyValuePair<TranslationString, string>(TranslationString.FirstStartSetupWebSocketPortConfirm, "Accepted Port: {0}"),
             new KeyValuePair<TranslationString, string>(TranslationString.FirstStartSetupWalkingSpeedPrompt, "Would you like to edit the Walking Speed Settings? {0}/{1}"),
             new KeyValuePair<TranslationString, string>(TranslationString.FirstStartSetupWalkingSpeedKmHPrompt, "Please enter your desired walking speed (km/h) Ex: 5.85 [MAX 20]"),
@@ -537,6 +546,9 @@ namespace PoGo.NecroBot.Logic.Common
             new KeyValuePair<TranslationString, string>(TranslationString.FirstStartSetupWalkingSpeedVariantPrompt, "Please enter the walking speed variant (km/h) Ex: 1.2"),
             new KeyValuePair<TranslationString, string>(TranslationString.FirstStartSetupWalkingSpeedVariantConfirm, "Accepted Variant: {0}"),
             new KeyValuePair<TranslationString, string>(TranslationString.PromptError, "[INPUT ERROR] Error with input, please enter '{0}' or '{1}"),
+            new KeyValuePair<TranslationString, string>(TranslationString.PromptErrorDouble, "[INPUT ERROR] Error with input, please enter a valid number"),
+            new KeyValuePair<TranslationString, string>(TranslationString.PromptErrorInteger, "[INPUT ERROR] Error with input, please enter a valid integer number"),
+            new KeyValuePair<TranslationString, string>(TranslationString.PromptErrorString, "[INPUT ERROR] Error with input, please enter one of the following options: {0}"),
             new KeyValuePair<TranslationString, string>(TranslationString.FirstStartAutoGenSettings, "Config/Auth file automatically generated and must be completed before continuing"),
             new KeyValuePair<TranslationString, string>(TranslationString.FirstStartSetupAccount, "### Setting up new USER ACCOUNT ###"),
             new KeyValuePair<TranslationString, string>(TranslationString.FirstStartSetupTypePrompt, "Please choose an account type: {0}/{1}"),
@@ -588,7 +600,9 @@ namespace PoGo.NecroBot.Logic.Common
             new KeyValuePair<TranslationString, string>(TranslationString.HumanWalkSnipeAddedPokestop, "(HUMAN WALK) You are {0:0.00m} away from nearest pokestop. Restart farming at this place with {1} pokestops."),
             new KeyValuePair<TranslationString, string>(TranslationString.HumanWalkSnipeDestinationReached, "(HUMAN WALK) destination reached | lat: {0}, lng: {1} | wait :{2:0.00} sec"),
             new KeyValuePair<TranslationString, string>(TranslationString.HumanWalkSnipeNotEnoughtBalls, "(HUMAN WALK) Not enought balls to activate catch Em-All mode. ({0})/{1}") ,
-            new KeyValuePair<TranslationString, string>(TranslationString.HumanWalkSnipePokemonEncountered, "(HUMAN WALK) Encountered {0}  | lat :{1} , Lng : {2} | removed from snipping list")
+            new KeyValuePair<TranslationString, string>(TranslationString.HumanWalkSnipePokemonEncountered, "(HUMAN WALK) Encountered {0}  | lat :{1} , Lng : {2} | removed from snipping list"),
+            new KeyValuePair<TranslationString, string>(TranslationString.MinimumClientVersionException, "(KILLSWITCH) We have detected a Pokemon API change. The bot emulates API version {0}, which is no longer supported.  Minimum API version is now {1}."),
+            new KeyValuePair<TranslationString, string>(TranslationString.ExitNowAfterEnterKey, "The bot will now exit after hitting the enter key.")
         };
 
         [JsonProperty("PokemonStrings",
