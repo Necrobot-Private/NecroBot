@@ -238,7 +238,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     lastNotify = DateTime.Now;
                     //Logger.Write($"Connecting to MSniperService", LogLevel.Service);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     TimeSpan ts = DateTime.Now - lastNotify;
                     if (ts.TotalMinutes > 5)
