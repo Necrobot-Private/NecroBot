@@ -60,7 +60,7 @@
     <ManifestKeyFile>PoGo.NecroBot.CLI_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resources\Ico.ico</ApplicationIcon>
+    <ApplicationIcon>Ico.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -87,6 +87,7 @@
     <StartupObject>PoGo.NecroBot.CLI.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="Ico.ico" />
     <Content Include="Resources\Ico.ico" />
     <Content Include="FodyWeavers.xml" />
     <Reference Include="C5, Version=2.4.5947.17248, Culture=neutral, PublicKeyToken=282361b99ded7e8e, processorArchitecture=MSIL">
