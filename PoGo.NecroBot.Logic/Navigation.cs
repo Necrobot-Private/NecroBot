@@ -3,7 +3,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using GeoCoordinatePortable;
 using PoGo.NecroBot.Logic.Interfaces.Configuration;
 using PokemonGo.RocketAPI;
 using POGOProtos.Networking.Responses;
