@@ -12,6 +12,7 @@ using POGOProtos.Map.Pokemon;
 using POGOProtos.Networking.Responses;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,7 @@ using System.Threading.Tasks;
 using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.Model;
 using PoGo.NecroBot.Logic.PoGoUtils;
+using POGOProtos.Inventory.Item;
 using WebSocket4Net;
 
 namespace PoGo.NecroBot.Logic.Tasks

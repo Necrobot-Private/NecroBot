@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using C5;
 using GeoCoordinatePortable;
 
 namespace PoGo.NecroBot.Logic.Model.Google.GoogleObjects
