@@ -1,8 +1,8 @@
-[submodule "POGOProtos"]
-	path = POGOProtos
-	url = https://github.com/Necrobot-Private/POGOProtos.git
+[submodule "POGOProtos-Necro"]
+	path = POGOProtos-Necro
+	url = https://github.com/Furtif/POGOProtos-Necro.git
 	branch = master
-[submodule "FeroxRev"]
-	path = FeroxRev
-	url = https://github.com/Necrobot-Private/PokemonGo.RocketAPI.git
+[submodule "PokemonGo.RocketAPI-Necro"]
+	path = PokemonGo.RocketAPI-Necro
+	url = https://github.com/Furtif/PokemonGo.RocketAPI-Necro.git
 	branch = master
