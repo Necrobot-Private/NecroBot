@@ -168,7 +168,7 @@ namespace PoGo.NecroBot.CLI
                     session.EventDispatcher.Send(data);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
 
