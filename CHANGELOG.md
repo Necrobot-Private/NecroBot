@@ -1,5 +1,11 @@
 # Change Log
 
+## [v1.0.0.9](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.9) (2016-11-07)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.6...v1.0.0.9)
+
+**Implemented enhancements:**
+- Support for 0.43 API
+
 ## [v1.0.0.6](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.6) (2016-09-23)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.5...v1.0.0.6)
 
