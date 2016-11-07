@@ -264,7 +264,8 @@ namespace PoGo.NecroBot.Logic.Common
         FirstStartSetupWalkingSpeedVariantPrompt,
         FirstStartSetupWalkingSpeedVariantConfirm,
         MinimumClientVersionException,
-        ExitNowAfterEnterKey
+        ExitNowAfterEnterKey,
+        CaptchaShown
     }
 
     public class Translation : ITranslation
@@ -602,7 +603,8 @@ namespace PoGo.NecroBot.Logic.Common
             new KeyValuePair<TranslationString, string>(TranslationString.HumanWalkSnipeNotEnoughtBalls, "(HUMAN WALK) Not enought balls to activate catch Em-All mode. ({0})/{1}") ,
             new KeyValuePair<TranslationString, string>(TranslationString.HumanWalkSnipePokemonEncountered, "(HUMAN WALK) Encountered {0}  | lat :{1} , Lng : {2} | removed from snipping list"),
             new KeyValuePair<TranslationString, string>(TranslationString.MinimumClientVersionException, "(KILLSWITCH) We have detected a Pokemon API change. The bot emulates API version {0}, which is no longer supported.  Minimum API version is now {1}."),
-            new KeyValuePair<TranslationString, string>(TranslationString.ExitNowAfterEnterKey, "The bot will now exit after hitting the enter key.")
+            new KeyValuePair<TranslationString, string>(TranslationString.ExitNowAfterEnterKey, "The bot will now exit after hitting the enter key."),
+            new KeyValuePair<TranslationString, string>(TranslationString.CaptchaShown, "Captcha is being shown and will need to be solved.")
         };
 
         [JsonProperty("PokemonStrings",
