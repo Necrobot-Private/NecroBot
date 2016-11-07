@@ -70,12 +70,9 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         public static async Task AddSnipePokemon(string source, PokemonId id, double latitude, double longitude, DateTime expirationTimestamp, double iV = 0, ISession session = null)
         {
-            if (session != null)
-            {
-                InitSession(session);
-            }
-            if (_session == null || _session == null) return;
+            if (session == null  || !_session.LogicSettings.EnableHumanWalkingSnipe) return;
 
+            InitSession(session);
             
             await PostProcessDataFetched(new List<SnipePokemonInfo> {
                 new SnipePokemonInfo()
@@ -140,6 +137,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         public static async Task Execute(ISession session, CancellationToken cancellationToken, FortData originalPokestop, FortDetailsResponse fortInfo)
         {
+            StartAsyncPollingTask(session, cancellationToken);
+
             pokestopCount++;
             pokestopCount = pokestopCount % 3;
 
@@ -164,9 +163,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                 pokemon = await GetNextSnipeablePokemon(session.Client.CurrentLatitude, session.Client.CurrentLongitude, !caughtAnyPokemonInThisWalk);
                 if (pokemon != null)
                 {
-                        await MSniperServiceTask.Execute(session, cancellationToken);
-                    
-
                     caughtAnyPokemonInThisWalk = true;
                     CalculateDistanceAndEstTime(pokemon);
                     var remainTimes = (pokemon.ExpiredTime - DateTime.Now).TotalSeconds * 0.95; //just use 90% times
@@ -199,8 +195,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                     await session.Navigation.Move(snipeTarget,
                         async () =>
                         {
-                                await MSniperServiceTask.Execute(session, cancellationToken);
-                            
                             await ActionsWhenTravelToSnipeTarget(session, cancellationToken, pokemon, catchPokemon, spinPokestop);
                         },
                        session,
@@ -215,15 +209,16 @@ namespace PoGo.NecroBot.Logic.Tasks
                     });
 
                     await Task.Delay(pokemon.Setting.DelayTimeAtDestination);
-                    await CatchNearbyPokemonsTask.Execute(session, cancellationToken, pokemon.PokemonId, false);
+                    await CatchNearbyPokemonsTask.Execute(session, cancellationToken, pokemon.PokemonId, pokemon.Setting.AllowTransferWhileWalking);
                     await Task.Delay(1000);
                     if (!pokemon.IsVisited)
                     {
                         await CatchLurePokemonsTask.Execute(session, cancellationToken);
-
                     }
                     pokemon.IsVisited = true;
                     pokemon.IsCatching = false;
+                    await TransferDuplicatePokemonTask.Execute(session, cancellationToken);
+                    await TransferWeakPokemonTask.Execute(session, cancellationToken);
                 }
             }
             while (pokemon != null && _setting.HumanWalkingSnipeTryCatchEmAll);
@@ -246,9 +241,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             await session.Navigation.Move(destination,
                async () =>
                {
-                 
-                       await MSniperServiceTask.Execute(session, cancellationToken);
-                   
+                   await MSniperServiceTask.Execute(session, cancellationToken);
                    await CatchNearbyPokemonsTask.Execute(session, cancellationToken);
                    await UseNearbyPokestopsTask.SpinPokestopNearBy(session, cancellationToken);
                },
@@ -297,6 +290,10 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 //looking for neaby pokestop. spin it
                 await UseNearbyPokestopsTask.SpinPokestopNearBy(session, cancellationToken, null);
+            }
+            if (session.LogicSettings.ActivateMSniper)
+            {
+                await MSniperServiceTask.Execute(session, cancellationToken);
             }
         }
 
@@ -426,7 +423,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                         _setting.HumanWalkingSnipeSpinWhileWalking,
                         _setting.HumanWalkingSnipeAllowSpeedUp,
                         _setting.HumanWalkingSnipeMaxSpeedUpSpeed,
-                        _setting.HumanWalkingSnipeDelayTimeAtDestination);
+                        _setting.HumanWalkingSnipeDelayTimeAtDestination,
+                        _setting.HumanWalkingSnipeAllowTransferWhileWalking);
 
                     if (_setting.HumanWalkSnipeFilters.Any(x => x.Key == item.PokemonId))
                     {
@@ -450,6 +448,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     Type = HumanWalkSnipeEventTypes.PokemonScanned,
                     Pokemons = ApplyFilter(rarePokemons),
+                    DisplayMessage  = displayList
                 });
 
                 if (_setting.HumanWalkingSnipeDisplayList)

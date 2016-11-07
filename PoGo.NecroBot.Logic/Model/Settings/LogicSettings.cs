@@ -211,6 +211,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool HumanWalkingSnipeUsePokeWatcher => _settings.HumanWalkSnipeConfig.UsePokeWatcher;
         public bool HumanWalkingSnipeUseFastPokemap => _settings.HumanWalkSnipeConfig.UseFastPokemap;
         public bool HumanWalkingSnipeUsePogoLocationFeeder => _settings.HumanWalkSnipeConfig.UsePogoLocationFeeder;
+        public bool HumanWalkingSnipeAllowTransferWhileWalking => _settings.HumanWalkSnipeConfig.AllowTransferWhileWalking;
 
         public bool GymAllowed => _settings.GymConfig.Enable;
         public bool GymPrioritizeOverPokestop => _settings.GymConfig.PrioritizeGymOverPokestop;
@@ -228,5 +229,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool DataSharingEnable => _settings.DataSharingConfig.EnableSyncData;
 
         public string DataSharingDataUrl => _settings.DataSharingConfig.DataRecieverURL;
+
+        public bool UseTransferFilterToCatch => _settings.CustomCatchConfig.UseTransferFilterToCatch;
     }
 }

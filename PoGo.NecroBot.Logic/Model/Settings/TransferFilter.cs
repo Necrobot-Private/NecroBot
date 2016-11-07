@@ -20,7 +20,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         }
 
         public TransferFilter(int keepMinCp, int keepMinLvl, bool useKeepMinLvl, float keepMinIvPercentage, string keepMinOperator, int keepMinDuplicatePokemon,
-            List<List<PokemonMove>> moves = null, List<PokemonMove> deprecatedMoves = null, string movesOperator = "or")
+            List<List<PokemonMove>> moves = null, List<PokemonMove> deprecatedMoves = null, string movesOperator = "or", bool catchOnlyPokemonMeetTransferCriteria = false)
         {
             KeepMinCp = keepMinCp;
             KeepMinLvl = keepMinLvl;
@@ -32,6 +32,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 ? new List<List<PokemonMove>> { deprecatedMoves }
                 : moves ?? new List<List<PokemonMove>>();
             MovesOperator = movesOperator;
+            CatchOnlyPokemonMeetTransferCriteria = catchOnlyPokemonMeetTransferCriteria;
         }
 
         [DefaultValue(1250)]
@@ -75,6 +76,10 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [EnumDataType(typeof(Operator))]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 9)]
         public string MovesOperator { get; set; }
+
+        [DefaultValue(false)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 10)]
+        public bool CatchOnlyPokemonMeetTransferCriteria { get; set; }
 
         internal static Dictionary<PokemonId, TransferFilter> TransferFilterDefault()
         {

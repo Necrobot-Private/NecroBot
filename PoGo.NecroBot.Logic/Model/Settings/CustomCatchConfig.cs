@@ -59,5 +59,10 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [Range(0, 9999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 11)]
         public int ForceExcellentThrowOverCp = 1500;
+
+        [DefaultValue(true)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 12)]
+        public bool UseTransferFilterToCatch = false;
+
     }
 }
