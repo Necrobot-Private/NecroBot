@@ -86,6 +86,26 @@ namespace PoGo.NecroBot.Logic.Common
 
             return ApiOperation.Retry;
         }
+
+        public void HandleCaptcha(string challengeUrl, ICaptchaResponseHandler captchaResponseHandler)
+        {
+            // TODO Show captcha get token and pass it back.
+            // string token = "";
+            // captchaResponseHandler.SetCaptchaToken(token);
+
+            _session.EventDispatcher.Send(new ErrorEvent
+            {
+                Message = _session.Translation.GetTranslation(TranslationString.CaptchaShown)
+            });
+
+            _session.EventDispatcher.Send(new WarnEvent
+            {
+                Message = _session.Translation.GetTranslation(TranslationString.RequireInputText)
+            });
+
+            Console.ReadKey();
+            Environment.Exit(0);
+        }
         
         private async void DoLogin()
         {
