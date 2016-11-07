@@ -12,7 +12,8 @@ namespace PoGo.NecroBot.Logic.Exceptions
         Pokestop,
         Pokemon,
         EXP,
-        Runtime
+        Runtime,
+        PokestopSoftban
     }
     public class ActiveSwitchByRuleException : Exception
     {

@@ -36,14 +36,17 @@ namespace PoGo.NecroBot.Logic.State
         IElevationService ElevationService { get; set; }
         List<FortData> Forts { get; set; }
         List<FortData> VisibleForts { get; set; }
-        void ResetSessionToWithNextBot(double lat = 0, double lng = 0, double att = 0);
+        void ResetSessionToWithNextBot(AuthConfig authConfig=null,double lat = 0, double lng = 0, double att = 0);
         void AddForts(List<FortData> mapObjects);
         void AddVisibleForts(List<FortData> mapObjects);
         Task<bool> WaitUntilActionAccept(BotActions action, int timeout = 30000);
         List<BotActions> Actions { get; }
         CancellationTokenSource CancellationTokenSource { get; set; }
         MemoryCache Cache { get; set; }
-        Queue<AuthConfig> Accounts { get; }
+        List<AuthConfig> Accounts { get; }
+        DateTime LoggedTime { get; set; }
+
+        void BlockCurrentBot(int expired = 15);
     }
 
 
@@ -52,7 +55,8 @@ namespace PoGo.NecroBot.Logic.State
         public Session(ISettings settings, ILogicSettings logicSettings, IElevationService elevationService) : this(settings, logicSettings, elevationService, Common.Translation.Load(logicSettings))
         {
         }
-        private Queue<AuthConfig> accounts;
+        public DateTime LoggedTime { get; set; }
+        private List<AuthConfig> accounts;
         public List<BotActions> Actions { get { return this.botActions; } }
         public Session(ISettings settings, ILogicSettings logicSettings, IElevationService elevationService, ITranslation translation)
         {
@@ -60,7 +64,7 @@ namespace PoGo.NecroBot.Logic.State
             this.Forts = new List<FortData>();
             this.VisibleForts = new List<FortData>();
             this.Cache = new MemoryCache("Necrobot2");
-            this.accounts = new Queue<AuthConfig>();
+            this.accounts = new List<AuthConfig>();
             this.EventDispatcher = new EventDispatcher();
             this.LogicSettings = logicSettings;
 
@@ -71,16 +75,12 @@ namespace PoGo.NecroBot.Logic.State
             this.Translation = translation;
             this.Reset(settings, LogicSettings);
             this.Stats = new SessionStats();
-            this.accounts = new Queue<AuthConfig>();
-            foreach (var acc in logicSettings.Bots)
-            {
-                this.accounts.Enqueue(acc);
-            }
+            this.accounts.AddRange(logicSettings.Bots);
             if (!this.accounts.Any(x => (x.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Ptc && x.PtcUsername == settings.PtcUsername) ||
                                         (x.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Google && x.GoogleUsername == settings.GoogleUsername)
                                         ))
             {
-                this.accounts.Enqueue(new AuthConfig()
+                this.accounts.Add(new AuthConfig()
                 {
                     AuthType = settings.AuthType,
                     GooglePassword = settings.GooglePassword,
@@ -116,7 +116,7 @@ namespace PoGo.NecroBot.Logic.State
         public IElevationService ElevationService { get; set; }
         public CancellationTokenSource CancellationTokenSource { get; set; }
         public MemoryCache Cache { get; set; }
-	public Queue<AuthConfig> Accounts
+	public List<AuthConfig> Accounts
         {
             get
             {
@@ -136,28 +136,32 @@ namespace PoGo.NecroBot.Logic.State
                 (lat, lng) => this.EventDispatcher.Send(new UpdatePositionEvent { Latitude = lat, Longitude = lng });
         }
 
-        public void ResetSessionToWithNextBot(double lat=0, double lng=0, double att=0)
+        public void ResetSessionToWithNextBot(AuthConfig bot = null, double lat=0, double lng=0, double att=0)
         {
-            var nextBot = this.accounts.Dequeue();
-            this.Settings.AuthType = nextBot.AuthType;
-            this.Settings.GooglePassword = nextBot.GooglePassword;
-            this.Settings.GoogleUsername = nextBot.GoogleUsername;
-            this.Settings.PtcPassword = nextBot.PtcPassword;
-            this.Settings.PtcUsername = nextBot.PtcUsername;
-            this.Settings.DefaultAltitude = att == 0 ? this.Client.CurrentAltitude : att;
-            this.Settings.DefaultLatitude = lat == 0 ? this.Client.CurrentLatitude : lat;
-            this.Settings.DefaultLongitude = lng ==0 ? this.Client.CurrentLongitude : lng;
-            this.Stats = new SessionStats();
+            var currentAccount = this.accounts.FirstOrDefault(x => (x.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Ptc && x.PtcUsername == this.Settings.PtcUsername) ||
+                                        (x.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Google && x.GoogleUsername == this.Settings.GoogleUsername));
+            currentAccount.RuntimeTotal += (DateTime.Now - LoggedTime).TotalMinutes;
+            this.accounts = this.accounts.OrderByDescending(p=>p.RuntimeTotal).ToList();
 
-            //ApiFailureStrategy _apiStrategy = new ApiFailureStrategy(this);
-            //Client = new Client(Settings, _apiStrategy);
-            //Inventory = new Inventory(Client, this.LogicSettings);
-            this.Reset(this.Settings, this.LogicSettings);
-            CancellationTokenSource.Cancel();
-            this.CancellationTokenSource = new CancellationTokenSource();
+            var nextBot = bot != null? bot : this.accounts.LastOrDefault(p=>p != currentAccount && p.ReleaseBlockTime< DateTime.Now);
+            if (nextBot != null)
+            {
+                this.Settings.AuthType = nextBot.AuthType;
+                this.Settings.GooglePassword = nextBot.GooglePassword;
+                this.Settings.GoogleUsername = nextBot.GoogleUsername;
+                this.Settings.PtcPassword = nextBot.PtcPassword;
+                this.Settings.PtcUsername = nextBot.PtcUsername;
+                this.Settings.DefaultAltitude = att == 0 ? this.Client.CurrentAltitude : att;
+                this.Settings.DefaultLatitude = lat == 0 ? this.Client.CurrentLatitude : lat;
+                this.Settings.DefaultLongitude = lng == 0 ? this.Client.CurrentLongitude : lng;
+                this.Stats = new SessionStats();
+                this.Reset(this.Settings, this.LogicSettings);
+                CancellationTokenSource.Cancel();
+                this.CancellationTokenSource = new CancellationTokenSource();
 
-            this.accounts.Enqueue(nextBot); //put it to the last then it will cycle loop.
-            this.EventDispatcher.Send(new BotSwitchedEvent() { });
+                this.EventDispatcher.Send(new BotSwitchedEvent() { });
+            }
+
         }
         public void AddForts(List<FortData> data)
         {
@@ -195,6 +199,14 @@ namespace PoGo.NecroBot.Logic.State
                 await Task.Delay(1000);
             }
             return false; //timedout
+        }
+
+        public void BlockCurrentBot(int expired = 60)
+        {
+            var currentAccount = this.accounts.FirstOrDefault(x => (x.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Ptc && x.PtcUsername == this.Settings.PtcUsername) ||
+                                       (x.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Google && x.GoogleUsername == this.Settings.GoogleUsername));
+
+            currentAccount.ReleaseBlockTime = DateTime.Now.AddMinutes(expired);
         }
     }
 }

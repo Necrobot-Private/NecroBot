@@ -53,6 +53,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         
         public static async Task StartFastPokemapAsync(ISession session , CancellationToken cancellationToken)
         {
+            return;
             double defaultLatitude = session.Settings.DefaultLatitude;
             double defaultLongitude = session.Settings.DefaultLongitude;
 
@@ -66,8 +67,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                 //scanOffset = 0.065;
                 var step = scanOffset / 5;
 
-                Logger.Write($"Execute map scan data Offset: {scanOffset} :))");
+                //Logger.Write($"Execute map scan data Offset: {scanOffset} :))");
                 double lat = session.Client.CurrentLatitude;
+
                 double lng = session.Client.CurrentLongitude;
                 await OffsetScanFPM(scanOffset, step, lat, lng);
                 if(LocationUtils.CalculateDistanceInMeters(session.Client.CurrentLatitude, session.Client.CurrentLongitude, defaultLatitude, defaultLongitude) >1000)
@@ -76,7 +78,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
                 sw.Stop();
 
-                Logger.Write($"Map scan finished! Time elapsed {sw.Elapsed.ToString(@"mm\:ss")}");
+                //Logger.Write($"Map scan finished! Time elapsed {sw.Elapsed.ToString(@"mm\:ss")}");
             }
         }
 
@@ -116,6 +118,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static void StartAsyncPollingTask(ISession session, CancellationToken cancellationToken)
         {
+            return;
             if (!session.LogicSettings.HumanWalkingSnipeUseFastPokemap) return;
 
             if (taskDataLive != null && !taskDataLive.IsCompleted) return;
@@ -211,6 +214,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static async Task<List<SnipePokemonInfo>> FetchFromFastPokemap(double lat, double lng)
         {
+            return new List<SnipePokemonInfo>();
             List<SnipePokemonInfo> results = new List<SnipePokemonInfo>();
             if (!_setting.HumanWalkingSnipeUseFastPokemap) return results;
 

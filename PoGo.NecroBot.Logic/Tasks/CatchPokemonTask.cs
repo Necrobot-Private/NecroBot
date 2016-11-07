@@ -16,6 +16,7 @@ using POGOProtos.Map.Pokemon;
 using POGOProtos.Networking.Responses;
 using POGOProtos.Data;
 using PoGo.NecroBot.Logic.Exceptions;
+using PoGo.NecroBot.Logic.Model.Settings;
 
 #endregion
 
@@ -465,31 +466,37 @@ namespace PoGo.NecroBot.Logic.Tasks
                                      )
                                 ))
             {
-                var evalNextBot = session.Accounts.Peek();
-                var key = evalNextBot.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Google ? evalNextBot.GoogleUsername : evalNextBot.PtcUsername;
-                key += encounterEV.EncounterId;
-                if (session.Cache.GetCacheItem(key) == null)
+                var curentkey = session.Settings.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Google ? session.Settings.GoogleUsername : session.Settings.PtcUsername;
+                curentkey += encounterEV.EncounterId;
+
+                session.Cache.Add(curentkey, encounterEV, DateTime.Now.AddMinutes(15));
+                AuthConfig evalNextBot = null;
+
+                foreach (var bot in session.Accounts.OrderByDescending(p=>p.RuntimeTotal))
                 {
-                    var curentkey = session.Settings.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Google ? session.Settings.GoogleUsername : session.Settings.PtcUsername;
-                    curentkey += encounterEV.EncounterId;
-                    session.Cache.Add(curentkey, encounterEV, DateTime.Now.AddMinutes(15));
+                    if (bot.ReleaseBlockTime > DateTime.Now) continue;
+                    var key = bot.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Google ? bot.GoogleUsername : bot.PtcUsername;
+                    key += encounterEV.EncounterId;
+                    if (session.Cache.GetCacheItem(key) == null)
+                    {
+                        evalNextBot = bot;
+                        break;
+                    }
+                }
+               
+                if (evalNextBot != null)
+                {
                     //cancel all running task.
                     session.CancellationTokenSource.Cancel();
                     throw new ActiveSwitchByPokemonException()
                     {
                         LastLatitude = encounterEV.Latitude,
                         LastLongitude = encounterEV.Longitude,
-                        LastEncounterPokemonId = encounterEV.PokemonId
+                        LastEncounterPokemonId = encounterEV.PokemonId   ,
+                        Bot = evalNextBot
                     };
                 }
-                else
-                {
-                    if (session.Accounts.Count > 2)
-                    {
-                        //switch account 2 to  & 1
-
-                    }
-                }
+               
             }
         }
 

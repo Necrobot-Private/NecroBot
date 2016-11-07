@@ -36,6 +36,7 @@ namespace PoGo.NecroBot.CLI
             {
                 Name = "NecroWebSocket",
                 Mode = SocketMode.Tcp,
+                MaxRequestLength = int.MaxValue ,
                 Certificate = new CertificateConfig
                 {
                     FilePath = @"cert.pfx",
@@ -128,7 +129,7 @@ namespace PoGo.NecroBot.CLI
                 if (handle != null)
                     await handle;
             }
-            catch
+            catch (Exception ex)
             {
                 // ignored
             }

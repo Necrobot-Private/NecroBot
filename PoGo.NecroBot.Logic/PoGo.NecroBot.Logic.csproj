@@ -81,6 +81,10 @@
       <HintPath>$(SolutionDir)\packages\Newtonsoft.Json.Schema.2.0.6\lib\net45\Newtonsoft.Json.Schema.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PushbulletSharp, Version=2.3.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\PushBulletSharp.2.3.3\lib\portable-windows8+net45\PushbulletSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="S2Geometry, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\S2Geometry.1.0.3\lib\portable-net45+wp8+win8\S2Geometry.dll</HintPath>
       <Private>True</Private>
@@ -262,6 +266,7 @@
     <Compile Include="State\BlockableScope.cs" />
     <Compile Include="State\BotSwitcherState.cs" />
     <Compile Include="State\CheckTosState.cs" />
+    <Compile Include="State\CatchState.cs" />
     <Compile Include="State\SessionStats.cs" />
     <Compile Include="Strategies\Walk\BaseWalkStrategy.cs" />
     <Compile Include="Strategies\Walk\FlyStrategy.cs" />

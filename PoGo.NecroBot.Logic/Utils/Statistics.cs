@@ -45,11 +45,13 @@ namespace PoGo.NecroBot.Logic.Utils
 
         public void OnStatisticChanged(ISession session)
         {
+
             var config = session.LogicSettings.MultipleBotConfig;
             if (session.LogicSettings.AllowMultipleBot)
             {
                 if (config.PokestopSwitch > 0 && config.PokestopSwitch <= this.TotalPokestops)
                 {
+                    session.CancellationTokenSource.Cancel();
                     //Activate switcher by pokestop
                     throw new ActiveSwitchByRuleException()
                     {
@@ -60,6 +62,7 @@ namespace PoGo.NecroBot.Logic.Utils
 
                 if (config.PokemonSwitch > 0 && config.PokemonSwitch <= this.TotalPokemons)
                 {
+                    session.CancellationTokenSource.Cancel();
                     //Activate switcher by pokestop
                     throw new ActiveSwitchByRuleException()
                     {
@@ -70,6 +73,7 @@ namespace PoGo.NecroBot.Logic.Utils
 
                 if (config.EXPSwitch > 0 && config.EXPSwitch <= this.TotalExperience)
                 {
+                    session.CancellationTokenSource.Cancel();
                     //Activate switcher by pokestop
                     throw new ActiveSwitchByRuleException()
                     {
@@ -81,6 +85,7 @@ namespace PoGo.NecroBot.Logic.Utils
                 var totalMin = (DateTime.Now - _initSessionDateTime).TotalMinutes;
                 if (config.RuntimeSwitch> 0 && config.RuntimeSwitch <= totalMin)
                 {
+                    session.CancellationTokenSource.Cancel();
                     //Activate switcher by pokestop
                     throw new ActiveSwitchByRuleException()
                     {

@@ -329,14 +329,17 @@ namespace PoGo.NecroBot.Logic.Tasks
                 rarePokemons.RemoveAll(p => p.ExpiredTime < DateTime.Now);
             }
            // Console.WriteLine("#END GetNextSnipeablePokemon");
-            rarePokemons.ForEach(CalculateDistanceAndEstTime);
-
+           lock(threadLocker)
+            {
+                rarePokemons.ForEach(CalculateDistanceAndEstTime);
+            }
             //remove list not reach able (expired)
             if (rarePokemons.Count > 0)
             {
                 var ordered = rarePokemons.Where(p => !p.IsVisited &&
                     !p.IsFake &&
                     (p.Setting.Priority == 0 || (
+                    p.Distance > 10 &&
                     p.Distance < p.Setting.MaxDistance &&
                     p.EstimatedTime < p.Setting.MaxWalkTimes)
                     && p.ExpiredTime > DateTime.Now.AddSeconds(p.EstimatedTime)

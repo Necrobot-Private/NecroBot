@@ -151,7 +151,8 @@ namespace PoGo.NecroBot.Logic.State
                 Console.ReadKey();
                 System.Environment.Exit(1);
             }
-            
+
+            session.LoggedTime = DateTime.Now;
             if(this.pokemonToCatch != PokemonId.Missingno)
             {
                 return new BotSwitcherState(this.pokemonToCatch);
@@ -161,7 +162,7 @@ namespace PoGo.NecroBot.Logic.State
 
         private async Task LogLoginHistory(ISession session, CancellationToken cancellationToken)
         {
-            string logFile = $"config\\login{DateTime.Now:ddMMyyyy}.log";
+            string logFile = $"config\\login{DateTime.Now:dd-MM-yyyy}.log";
             if(!File.Exists(logFile) )
             {
                 File.CreateText(logFile);

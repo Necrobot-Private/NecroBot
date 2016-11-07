@@ -17,6 +17,7 @@ using POGOProtos.Map.Fort;
 using POGOProtos.Networking.Responses;
 using PoGo.NecroBot.Logic.Event.Gym;
 using PoGo.NecroBot.Logic.Model;
+using PoGo.NecroBot.Logic.Exceptions;
 
 #endregion
 
@@ -348,6 +349,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 return;
 
             FortSearchResponse fortSearch;
+            bool awarded = false;
             var timesZeroXPawarded = 0;
             var fortTry = 0; //Current check
             const int retryNumber = 50; //How many times it needs to check to clear softban
@@ -419,7 +421,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Altitude = session.Client.CurrentAltitude,
                         InventoryFull = fortSearch.Result == FortSearchResponse.Types.Result.InventoryFull
                     });
-
+                    awarded = true;
                     if (fortSearch.Result == FortSearchResponse.Types.Result.InventoryFull)
                         _storeRi = 1;
 
@@ -435,6 +437,16 @@ namespace PoGo.NecroBot.Logic.Tasks
             } while (fortTry < retryNumber - zeroCheck);
             //Stop trying if softban is cleaned earlier or if 40 times fort looting failed.
 
+            if(fortTry >= retryNumber - zeroCheck)
+            {
+                session.CancellationTokenSource.Cancel();
+                //Activate switcher by pokestop
+                throw new ActiveSwitchByRuleException()
+                {
+                    MatchedRule = SwitchRules.PokestopSoftban,
+                    ReachedValue = 1
+                };
+            }
             if (session.LogicSettings.RandomlyPauseAtStops && !doNotRetry)
             {
                 if (++_randomStop >= _randomNumber)

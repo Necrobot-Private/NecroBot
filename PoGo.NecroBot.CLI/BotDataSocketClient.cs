@@ -2,6 +2,7 @@
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.State;
+using PoGo.NecroBot.Logic.Tasks;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -166,6 +167,14 @@ namespace PoGo.NecroBot.CLI
                     var data = JsonConvert.DeserializeObject<EncounteredEvent>(match.Groups[1].Value);
                     data.IsRecievedFromSocket = true;
                     session.EventDispatcher.Send(data);
+                    return;
+                }
+                match = Regex.Match(e.Data, "42\\[\"fpm\",(.*)]");
+                if (match != null && !string.IsNullOrEmpty(match.Groups[1].Value))
+                {
+                    //var data = JsonConvert.DeserializeObject<List<Logic.Tasks.HumanWalkSnipeTask.FastPokemapItem>>(match.Groups[1].Value);
+                    HumanWalkSnipeTask.AddFastPokemapItem(match.Groups[1].Value);
+                    return;
                 }
             }
             catch (Exception ex)

@@ -83,20 +83,27 @@ namespace PoGo.NecroBot.Logic.State
                 catch (ActiveSwitchByPokemonException rsae)
                 {
                     session.EventDispatcher.Send(new WarnEvent { Message = "Encountered a good pokemon , switch another bot to catch him too." });
-                    session.ResetSessionToWithNextBot(session.Client.CurrentLatitude, session.Client.CurrentLongitude, session.Client.CurrentAltitude);
+                    session.ResetSessionToWithNextBot(rsae.Bot,session.Client.CurrentLatitude, session.Client.CurrentLongitude, session.Client.CurrentAltitude);
                     state = new LoginState(rsae.LastEncounterPokemonId);
                 }
                 catch (ActiveSwitchByRuleException se)
                 {
                     session.EventDispatcher.Send(new WarnEvent { Message = $"Switch bot account activated by : {se.MatchedRule.ToString()}  - {se.ReachedValue} " });
-                    if(session.LogicSettings.MultipleBotConfig.StartFromDefaultLocation)
+                    if (se.MatchedRule == SwitchRules.PokestopSoftban)
                     {
-                        session.ResetSessionToWithNextBot(globalSettings.LocationConfig.DefaultLatitude, globalSettings.LocationConfig.DefaultLongitude, session.Client.CurrentAltitude);
-
+                        session.BlockCurrentBot();
+                        session.ResetSessionToWithNextBot();
                     }
                     else
                     {
-                        session.ResetSessionToWithNextBot(); //current location
+                        if (session.LogicSettings.MultipleBotConfig.StartFromDefaultLocation)
+                        {
+                            session.ResetSessionToWithNextBot(null, globalSettings.LocationConfig.DefaultLatitude, globalSettings.LocationConfig.DefaultLongitude, session.Client.CurrentAltitude);
+                        }
+                        else
+                        {
+                            session.ResetSessionToWithNextBot(); //current location
+                        }
                     }
                     //return to login state
                     state = new LoginState();
