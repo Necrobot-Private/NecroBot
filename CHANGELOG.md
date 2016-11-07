@@ -1,9 +1,18 @@
 # Change Log
 
+## [v1.0.0.10](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.10) (2016-11-07)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.9...v1.0.0.10)
+
+**Fixed bugs:**
+
+- Generate random iOS device info for the API if Android info is read from auth.json.  Note that the iOS device settings are not saved.
+
+
 ## [v1.0.0.9](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.9) (2016-11-07)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.6...v1.0.0.9)
 
 **Implemented enhancements:**
+
 - Support for 0.43 API
 
 ## [v1.0.0.6](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.6) (2016-09-23)
