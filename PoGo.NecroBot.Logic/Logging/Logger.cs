@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using PoGo.NecroBot.Logic.State;
+using System.Collections.Concurrent;
 
 #endregion
 
@@ -12,11 +13,9 @@ namespace PoGo.NecroBot.Logic.Logging
     public static class Logger
     {
         private static List<ILogger> _loggers = new List<ILogger>();
-        private static string _path;
-        private static DateTime _lastLogTime;
-        private static readonly IList<string> LogbufferList = new List<string>();
+        
+        private static ConcurrentQueue<string> LogbufferList = new ConcurrentQueue<string>();
         private static string _lastLogMessage;
-        private static bool _isGui;
 
         public static void TurnOffLogBuffering()
         {
@@ -25,33 +24,7 @@ namespace PoGo.NecroBot.Logic.Logging
                 logger?.TurnOffLogBuffering();
             }
         }
-
-        private static void Log(string message, bool force = false)
-        {
-            lock (LogbufferList)
-            {
-                LogbufferList.Add(message);
-
-                if (_lastLogTime.AddSeconds(60).Ticks > DateTime.Now.Ticks && !force)
-                    return;
-
-                using (
-                    var log =
-                        File.AppendText(Path.Combine(_path,
-                            $"NecroBot2-{DateTime.Today.ToString("yyyy-MM-dd")}-{DateTime.Now.ToString("HH")}.txt"))
-                    )
-                {
-                    foreach (var line in LogbufferList)
-                    {
-                        log.WriteLine(line);
-                    }
-                    _lastLogTime = DateTime.Now;
-                    log.Flush();
-                    LogbufferList.Clear();
-                }
-            }
-        }
-
+        
         /// <summary>
         ///   Add a logger.
         /// </summary>
@@ -60,14 +33,6 @@ namespace PoGo.NecroBot.Logic.Logging
         {
             if (!_loggers.Contains(logger))
                 _loggers.Add(logger);
-
-            _isGui = isGui;
-            if (!_isGui)
-            {
-                _path = Path.Combine(Directory.GetCurrentDirectory(), subPath, "Logs");
-                Directory.CreateDirectory(_path);
-                Log($"Initializing NecroBot2 logger at time {DateTime.Now}...");
-            }
         }
 
         /// <summary>
@@ -76,8 +41,11 @@ namespace PoGo.NecroBot.Logic.Logging
         /// <param name="session">Context</param>
         public static void SetLoggerContext(ISession session)
         {
-            foreach(var logger in _loggers)
+            LoggingStrings.SetStrings(session);
+            foreach (var logger in _loggers)
+            {
                 logger?.SetSession(session);
+            }
         }
 
         /// <summary>
@@ -94,27 +62,165 @@ namespace PoGo.NecroBot.Logic.Logging
             _lastLogMessage = message;
             foreach(var logger in _loggers)
                 logger?.Write(message, level, color);
-
-            if (!_isGui)
-            {
-                if (level == LogLevel.Debug)
-                {
-                    Log(string.Concat($"[{DateTime.Now.ToString("HH:mm:ss")}] ", message), force);
-                }
-                else
-                {
-                    Log(string.Concat($"[{DateTime.Now.ToString("HH:mm:ss")}] ", message), force);
-                }
-
-
-            }
-
         }
 
         public static void lineSelect(int lineChar = 0, int linesUp = 1)
         {
             foreach(var logger in _loggers)
                 logger?.lineSelect(lineChar, linesUp);
+        }
+
+        public static string GetFinalMessage(string message, LogLevel level, ConsoleColor color)
+        {
+            string finalMessage;
+
+            switch (level)
+            {
+                case LogLevel.Error:
+                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.Red : color;
+                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Error}) {message}";
+                    break;
+                case LogLevel.Warning:
+                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.DarkYellow : color;
+                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Attention}) {message}";
+                    break;
+                case LogLevel.Info:
+                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.DarkCyan : color;
+                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Info}) {message}";
+                    break;
+                case LogLevel.Pokestop:
+                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.Cyan : color;
+                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Pokestop}) {message}";
+                    break;
+                case LogLevel.Farming:
+                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.Magenta : color;
+                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Farming}) {message}";
+                    break;
+                case LogLevel.Sniper:
+                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.White : color;
+                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Sniper}) {message}";
+                    break;
+                case LogLevel.Recycling:
+                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.DarkMagenta : color;
+                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Recycling}) {message}";
+                    break;
+                case LogLevel.Caught:
+                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.Green : color;
+                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Pkmn}) {message}";
+                    break;
+                case LogLevel.Flee:
+                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.DarkYellow : color;
+                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Pkmn}) {message}";
+                    break;
+                case LogLevel.Transfer:
+                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.DarkGreen : color;
+                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Transferred}) {message}";
+                    break;
+                case LogLevel.Evolve:
+                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.DarkGreen : color;
+                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Evolved}) {message}";
+                    break;
+                case LogLevel.Berry:
+                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.DarkYellow : color;
+                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Berry}) {message}";
+                    break;
+                case LogLevel.Egg:
+                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.DarkYellow : color;
+                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Egg}) {message}";
+                    break;
+                case LogLevel.Debug:
+                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.Gray : color;
+                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Debug}) {message}";
+                    break;
+                case LogLevel.Update:
+                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.White : color;
+                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Update}) {message}";
+                    break;
+                case LogLevel.New:
+                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.Green : color;
+                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.New}) {message}";
+                    break;
+                case LogLevel.SoftBan:
+                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.Red : color;
+                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.SoftBan}) {message}";
+                    break;
+                case LogLevel.LevelUp:
+                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.Magenta : color;
+                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Pkmn}) {message}";
+                    break;
+
+                case LogLevel.Gym:
+                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.Magenta : color;
+                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Gym}) {message}";
+                    break;
+                case LogLevel.Service:
+                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.White : color;
+                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Service}) {message}";
+                    break;
+                default:
+                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.White : color;
+                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Error}) {message}";
+                    break;
+            }
+            return finalMessage;
+        }
+
+        public static string GetHexColor(ConsoleColor color)
+        {
+            switch (color)
+            {
+                case ConsoleColor.Black:
+                    return "#000000";
+
+                case ConsoleColor.Blue:
+                    return "#0000FF";
+
+                case ConsoleColor.Cyan:
+                    return "#00FFFF";
+
+                case ConsoleColor.DarkBlue:
+                    return "#000080";
+
+                case ConsoleColor.DarkCyan:
+                    return "#008B8B";
+
+                case ConsoleColor.DarkGray:
+                    return "#808080";
+
+                case ConsoleColor.DarkGreen:
+                    return "#008000";
+
+                case ConsoleColor.DarkMagenta:
+                    return "#800080";
+
+                case ConsoleColor.DarkRed:
+                    return "#800000";
+
+                case ConsoleColor.DarkYellow:
+                    return "#808000";
+
+                case ConsoleColor.Gray:
+                    return "#C0C0C0";
+
+                case ConsoleColor.Green:
+                    return "#00FF00";
+
+                case ConsoleColor.Magenta:
+                    return "#FF00FF";
+
+                case ConsoleColor.Red:
+                    return "#FF0000";
+
+                case ConsoleColor.White:
+                    return "#FFFFFF";
+
+                case ConsoleColor.Yellow:
+                    return "#FFFF00";
+
+                default:
+                    // Grey
+                    return "#C0C0C0";
+            }
         }
     }
 
