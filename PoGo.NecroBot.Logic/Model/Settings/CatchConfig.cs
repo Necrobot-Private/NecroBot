@@ -12,13 +12,13 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             return new List<PokemonId>
             {
                 //criteria: most common
-                PokemonId.Caterpie,
-                PokemonId.Weedle,
-                PokemonId.Pidgey,
-                PokemonId.Rattata,
-                PokemonId.Spearow,
-                PokemonId.Zubat,
-                PokemonId.Doduo,
+                //PokemonId.Caterpie,
+                //PokemonId.Weedle,
+                //PokemonId.Pidgey,
+                //PokemonId.Rattata,
+                //PokemonId.Spearow,
+                //PokemonId.Zubat,
+                //PokemonId.Doduo,
                 //criteria: regional
                 PokemonId.Tauros,
                 PokemonId.Kangaskhan,
