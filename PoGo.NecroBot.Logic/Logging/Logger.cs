@@ -11,7 +11,7 @@ namespace PoGo.NecroBot.Logic.Logging
 {
     public static class Logger
     {
-        private static ILogger _logger;
+        private static List<ILogger> _loggers = new List<ILogger>();
         private static string _path;
         private static DateTime _lastLogTime;
         private static readonly IList<string> LogbufferList = new List<string>();
@@ -20,8 +20,10 @@ namespace PoGo.NecroBot.Logic.Logging
 
         public static void TurnOffLogBuffering()
         {
-            if (_logger != null)
-                _logger.TurnOffLogBuffering();
+            foreach (var logger in _loggers)
+            {
+                logger?.TurnOffLogBuffering();
+            }
         }
 
         private static void Log(string message, bool force = false)
@@ -51,14 +53,14 @@ namespace PoGo.NecroBot.Logic.Logging
         }
 
         /// <summary>
-        ///     Set the logger. All future requests to <see cref="Write(string,LogLevel,ConsoleColor)" /> will use that logger, any
-        ///     old will be
-        ///     unset.
+        ///   Add a logger.
         /// </summary>
         /// <param name="logger"></param>
-        public static void SetLogger(ILogger logger, string subPath = "", bool isGui = false)
+        public static void AddLogger(ILogger logger, string subPath = "", bool isGui = false)
         {
-            _logger = logger;
+            if (!_loggers.Contains(logger))
+                _loggers.Add(logger);
+
             _isGui = isGui;
             if (!_isGui)
             {
@@ -69,12 +71,13 @@ namespace PoGo.NecroBot.Logic.Logging
         }
 
         /// <summary>
-        ///     Sets Context for the logger
+        ///     Sets Context for the loggers
         /// </summary>
         /// <param name="session">Context</param>
         public static void SetLoggerContext(ISession session)
         {
-            _logger?.SetSession(session);
+            foreach(var logger in _loggers)
+                logger?.SetSession(session);
         }
 
         /// <summary>
@@ -85,11 +88,12 @@ namespace PoGo.NecroBot.Logic.Logging
         /// <param name="color">Optional. Default is automatic color.</param>
         public static void Write(string message, LogLevel level = LogLevel.Info, ConsoleColor color = ConsoleColor.Black, bool force = false)
         {
-            if (_logger == null || _lastLogMessage == message)
+            if (_loggers.Count == 0 || _lastLogMessage == message)
                 return;
 
             _lastLogMessage = message;
-            _logger.Write(message, level, color);
+            foreach(var logger in _loggers)
+                logger?.Write(message, level, color);
 
             if (!_isGui)
             {
@@ -109,7 +113,8 @@ namespace PoGo.NecroBot.Logic.Logging
 
         public static void lineSelect(int lineChar = 0, int linesUp = 1)
         {
-            _logger.lineSelect(lineChar, linesUp);
+            foreach(var logger in _loggers)
+                logger?.lineSelect(lineChar, linesUp);
         }
     }
 
