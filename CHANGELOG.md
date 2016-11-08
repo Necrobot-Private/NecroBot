@@ -1,5 +1,11 @@
 # Change Log
 
+## [v1.0.0.13](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.13) (2016-11-07)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.12...v1.0.0.13)
+
+**Fixed bugs:**
+
+- Change default settings to allow all pokemon to be caught (except for regional pokemon).
 
 ## [v1.0.0.12](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.12) (2016-11-07)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.11...v1.0.0.12)
