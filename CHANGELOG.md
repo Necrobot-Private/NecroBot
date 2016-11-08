@@ -1,5 +1,14 @@
 # Change Log
 
+
+## [v1.0.0.12](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.12) (2016-11-07)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.11...v1.0.0.12)
+
+**Implemented enhancements:**
+
+- Only regenerate device info once if device package name is set to "random". 
+- Regenerate iOS device info and save to auth.config if using Android device info.
+
 ## [v1.0.0.11](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.11) (2016-11-07)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.10...v1.0.0.11)
 
