@@ -1,5 +1,13 @@
 # Change Log
 
+
+## [v1.0.0.15](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.15) (2016-11-08)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.14...v1.0.0.15)
+
+**Fixed bugs:**
+
+- Bug fix 2 for http://www.mypogosnipers.com/ and http://msniper.com pokemon disappearing too fast.
+
 ## [v1.0.0.14](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.14) (2016-11-08)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.13...v1.0.0.14)
 
