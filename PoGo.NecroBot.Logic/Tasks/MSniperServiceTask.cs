@@ -114,7 +114,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                 if (newdata.TimeTillHiddenMs == 0)
                 {
                     Random rn = new Random();
-                    newdata.TimeTillHiddenMs = rn.Next(450, 481);
+                    newdata.TimeTillHiddenMs = rn.Next(450, 481) * 1000;
+                }
+                else
+                {
+
                 }
                 newdata.PokemonId = eresponse.WildPokemon.PokemonData.PokemonId;
                 newdata.Iv = PokemonInfo.CalculatePokemonPerfection(eresponse.WildPokemon.PokemonData);
