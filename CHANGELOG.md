@@ -1,5 +1,14 @@
 # Change Log
 
+## [v1.0.0.11](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.11) (2016-11-07)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.10...v1.0.0.11)
+
+**Implemented enhancements:**
+
+- Captcha checking - for now we are checking if there is a captcha being required and will display message to user and have the bot exit.
+- Disabled human snipe online sources to avoid errors in console
+- Allow common pokemon to be sniped again (to avoid getting questions about why they are being skipped).
+
 ## [v1.0.0.10](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.10) (2016-11-07)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.9...v1.0.0.10)
 
