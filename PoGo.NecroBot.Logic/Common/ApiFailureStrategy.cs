@@ -100,7 +100,7 @@ namespace PoGo.NecroBot.Logic.Common
 
             _session.EventDispatcher.Send(new WarnEvent
             {
-                Message = _session.Translation.GetTranslation(TranslationString.RequireInputText)
+                Message = _session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey)
             });
 
             Console.ReadKey();
