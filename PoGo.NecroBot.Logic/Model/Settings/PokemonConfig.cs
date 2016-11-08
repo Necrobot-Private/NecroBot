@@ -282,9 +282,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public int KeepMinDuplicatePokemon = 1;
 
         /*NotCatch*/
-        [DefaultValue(false)]
+        [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 55)]
-        public bool UsePokemonToNotCatchFilter = false;
+        public bool UsePokemonToNotCatchFilter = true;
 
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 56)]
