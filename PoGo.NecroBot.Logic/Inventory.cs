@@ -35,7 +35,7 @@ namespace PoGo.NecroBot.Logic
         private IEnumerable<PokemonSettings> _pokemonSettings;
 
         private readonly List<ItemId> _revives = new List<ItemId> { ItemId.ItemRevive, ItemId.ItemMaxRevive };
-        private GetInventoryResponse _cachedInventory;
+        private GetInventoryResponse _cachedInventory = null;
         private DateTime _lastRefresh;
 
         public Inventory(Client client, ILogicSettings logicSettings)
@@ -267,7 +267,11 @@ namespace PoGo.NecroBot.Logic
 
         public async void GetPlayerData()
         {
-            _player = await _client.Player.GetPlayer();
+            for (int i = 0; i < 3; i++)
+            {
+                _player = await _client.Player.GetPlayer();
+                if (_player != null) break;
+            }
         }
 
         public async Task<PokemonData> GetHighestPokemonOfTypeByIv(PokemonData pokemon)
@@ -587,8 +591,12 @@ namespace PoGo.NecroBot.Logic
             await ss.WaitAsync();
             try
             {
-                _lastRefresh = now;
-                _cachedInventory = await _client.Inventory.GetInventory();
+                for (int i = 0; i < 3; i++)
+                {
+                    _lastRefresh = now;
+                    _cachedInventory = await _client.Inventory.GetInventory();
+                    if (_cachedInventory != null && _cachedInventory.InventoryDelta.InventoryItems.Count > 0) break;
+                }
                 return _cachedInventory;
             }
             finally
