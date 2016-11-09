@@ -2,11 +2,8 @@
 
 using System;
 using System.Text;
-using PoGo.NecroBot.CLI.Models;
-using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.State;
-using System.Collections.Concurrent;
 
 #endregion
 
@@ -18,15 +15,6 @@ namespace PoGo.NecroBot.CLI
     internal class ConsoleLogger : ILogger
     {
         private readonly LogLevel _maxLogLevel;
-        private ISession _session;
-        private ConcurrentQueue<LogEvent> _messageQueue = new ConcurrentQueue<LogEvent>();
-        private bool isBuffering = true;
-
-        public void TurnOffLogBuffering()
-        {
-            if (isBuffering)
-                isBuffering = false;
-        }
 
         /// <summary>
         ///     To create a ConsoleLogger, we must define a maximum log level.
@@ -38,10 +26,14 @@ namespace PoGo.NecroBot.CLI
             _maxLogLevel = maxLogLevel;
         }
 
+        public void TurnOffLogBuffering()
+        {
+            // No need for buffering
+        }
+
         public void SetSession(ISession session)
         {
-            _session = session;
-            LoggingStrings.SetStrings(_session);
+            // No need for session
         }
 
         /// <summary>
@@ -57,185 +49,13 @@ namespace PoGo.NecroBot.CLI
             if (level > _maxLogLevel)
                 return;
 
-            // ReSharper disable once SwitchStatementMissingSomeCases
-            string finalMessage;
-
-            switch (level)
-            {
-                case LogLevel.Error:
-                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.Red : color;
-                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Error}) {message}";
-                    break;
-                case LogLevel.Warning:
-                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.DarkYellow : color;
-                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Attention}) {message}";
-                    break;
-                case LogLevel.Info:
-                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.DarkCyan : color;
-                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Info}) {message}";
-                    break;
-                case LogLevel.Pokestop:
-                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.Cyan : color;
-                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Pokestop}) {message}";
-                    break;
-                case LogLevel.Farming:
-                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.Magenta : color;
-                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Farming}) {message}";
-                    break;
-                case LogLevel.Sniper:
-                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.White : color;
-                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Sniper}) {message}";
-                    break;
-                case LogLevel.Recycling:
-                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.DarkMagenta : color;
-                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Recycling}) {message}";
-                    break;
-                case LogLevel.Caught:
-                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.Green : color;
-                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Pkmn}) {message}";
-                    break;
-                case LogLevel.Flee:
-                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.DarkYellow : color;
-                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Pkmn}) {message}";
-                    break;
-                case LogLevel.Transfer:
-                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.DarkGreen : color;
-                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Transferred}) {message}";
-                    break;
-                case LogLevel.Evolve:
-                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.DarkGreen : color;
-                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Evolved}) {message}";
-                    break;
-                case LogLevel.Berry:
-                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.DarkYellow : color;
-                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Berry}) {message}";
-                    break;
-                case LogLevel.Egg:
-                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.DarkYellow : color;
-                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Egg}) {message}";
-                    break;
-                case LogLevel.Debug:
-                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.Gray : color;
-                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Debug}) {message}";
-                    break;
-                case LogLevel.Update:
-                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.White : color;
-                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Update}) {message}";
-                    break;
-                case LogLevel.New:
-                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.Green : color;
-                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.New}) {message}";
-                    break;
-                case LogLevel.SoftBan:
-                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.Red : color;
-                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.SoftBan}) {message}";
-                    break;
-                case LogLevel.LevelUp:
-                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.Magenta : color;
-                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Pkmn}) {message}";
-                    break;
-
-                case LogLevel.Gym:
-                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.Magenta : color;
-                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Gym}) {message}";
-                    break;
-                case LogLevel.Service:
-                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.White : color;
-                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Service}) {message}";
-                    break;
-                default:
-                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.White : color;
-                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Error}) {message}";
-                    break;
-            }
-            
+            var finalMessage = Logger.GetFinalMessage(message, level, color);
             Console.WriteLine(finalMessage);
-
-            // Add message to the queue
-            _messageQueue.Enqueue(new LogEvent
-            {
-                Message = finalMessage,
-                Color = GetHexColor(Console.ForegroundColor)
-            });
-
-            // If session is null during (e.g.) the first start of the bot (session for logger not initialized in time),
-            // then buffer the messages.
-            if (_session != null && _session.EventDispatcher != null)
-            {
-                // We cannot send out log events to the GUI until it has connected via websocket. So buffer all 
-                // messages until GUI has connected.
-                if (!isBuffering)
-                {
-                    LogEvent logEventToSend;
-                    while (_messageQueue.TryDequeue(out logEventToSend))
-                    {
-                        _session?.EventDispatcher.Send(logEventToSend);
-                    }
-                }
-            }
         }
 
         public void lineSelect(int lineChar = 0, int linesUp = 1)
         {
             Console.SetCursorPosition(lineChar, Console.CursorTop - linesUp);
-        }
-
-        public string GetHexColor(ConsoleColor color)
-        {
-            switch (color)
-            {
-                case ConsoleColor.Black:
-                    return "#000000";
-
-                case ConsoleColor.Blue:
-                    return "#0000FF";
-
-                case ConsoleColor.Cyan:
-                    return "#00FFFF";
-
-                case ConsoleColor.DarkBlue:
-                    return "#000080";
-
-                case ConsoleColor.DarkCyan:
-                    return "#008B8B";
-
-                case ConsoleColor.DarkGray:
-                    return "#808080";
-
-                case ConsoleColor.DarkGreen:
-                    return "#008000";
-
-                case ConsoleColor.DarkMagenta:
-                    return "#800080";
-
-                case ConsoleColor.DarkRed:
-                    return "#800000";
-
-                case ConsoleColor.DarkYellow:
-                    return "#808000";
-
-                case ConsoleColor.Gray:
-                    return "#C0C0C0";
-
-                case ConsoleColor.Green:
-                    return "#00FF00";
-
-                case ConsoleColor.Magenta:
-                    return "#FF00FF";
-
-                case ConsoleColor.Red:
-                    return "#FF0000";
-
-                case ConsoleColor.White:
-                    return "#FFFFFF";
-
-                case ConsoleColor.Yellow:
-                    return "#FFFF00";
-
-                default:
-                    // Grey
-                    return "#C0C0C0";
-            }
         }
     }
 }
