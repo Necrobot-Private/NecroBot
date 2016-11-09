@@ -31,8 +31,8 @@ namespace PoGo.NecroBot.Logic
         private readonly ILogicSettings _logicSettings;
         private GetPlayerResponse _player = null;
         private int _level = 0;
-        private DownloadItemTemplatesResponse _templates;
-        private IEnumerable<PokemonSettings> _pokemonSettings;
+        private DownloadItemTemplatesResponse _templates = null;
+        private IEnumerable<PokemonSettings> _pokemonSettings = null;
 
         private readonly List<ItemId> _revives = new List<ItemId> { ItemId.ItemRevive, ItemId.ItemMaxRevive };
         private GetInventoryResponse _cachedInventory = null;
@@ -450,10 +450,24 @@ namespace PoGo.NecroBot.Logic
 
         public async Task<IEnumerable<PokemonSettings>> GetPokemonSettings()
         {
-            if (_templates == null || _pokemonSettings == null)
+            var ss = new SemaphoreSlim(1);
+
+            await ss.WaitAsync();
+            try
             {
-                _templates = await _client.Download.GetItemTemplates();
-                _pokemonSettings = _templates.ItemTemplates.Select(i => i.PokemonSettings).Where(p => p != null && p.FamilyId != PokemonFamilyId.FamilyUnset);
+                if (_templates == null || _pokemonSettings == null)
+                {
+                    for (int j = 0; j < 3; j++)
+                    {
+                        _templates = await _client.Download.GetItemTemplates();
+                        _pokemonSettings = _templates.ItemTemplates.Select(i => i.PokemonSettings).Where(p => p != null && p.FamilyId != PokemonFamilyId.FamilyUnset);
+                        if (_templates.ItemTemplates.Count > 10) break;
+                    }
+                }
+            }
+            finally
+            {
+                ss.Release();
             }
 
             return _pokemonSettings;
