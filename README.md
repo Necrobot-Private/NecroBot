@@ -1,7 +1,7 @@
 <h1>Pokémon Go 0.45 API is now Forced :(
 </h1>
 <strong>
-Our bot will not let you bot since it is still emulating 0.43.3 API. Disabling the killswitch or botting with another bot will 100% get you banned.
+Our bot will not let you bot since it is still emulating 0.43.3 API. Disabling the killswitch or botting with another bot will 100% get you banned. We are working with PogoDev to reverse the 0.45.0 hashing function. Please be patient.
 </strong>
 
 <p align="center">
