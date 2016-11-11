@@ -188,7 +188,6 @@ before_deploy:
 - git checkout -b Appveyor "%APPVEYOR_REPO_BRANCH%"
 - SET PATH=C:\Ruby23\bin;%PATH%
 - gem install github_changelog_generator
-- github_changelog_generator --token %access_token% --output "CHANGELOG.md" --unreleased "false"
 - git add "PoGo.NecroBot.CLI/Properties/AssemblyInfo.cs"
 - git add "PoGo.NecroBot.GUI/Properties/AssemblyInfo.cs"
 - git add "PoGo.NecroBot.Logic/Properties/AssemblyInfo.cs"

@@ -124,6 +124,18 @@ namespace PoGo.NecroBot.Logic.State
                 await Task.Delay(2000, cancellationToken);
                 Environment.Exit(0);
             }
+            catch (MinimumClientVersionException ex)
+            {
+                // We need to terminate the client.
+                session.EventDispatcher.Send(new ErrorEvent
+                {
+                    Message = session.Translation.GetTranslation(TranslationString.MinimumClientVersionException, ex.CurrentApiVersion.ToString(), ex.MinimumClientVersion.ToString())
+                });
+
+                Logger.Write(session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey, LogLevel.Error));
+                Console.ReadKey();
+                System.Environment.Exit(1);
+            }
             catch (Exception e)
             {
                 Logger.Write(e.ToString());
@@ -163,15 +175,18 @@ namespace PoGo.NecroBot.Logic.State
         private async Task LogLoginHistory(ISession session, CancellationToken cancellationToken)
         {
             string logFile = $"config\\login{DateTime.Now:dd-MM-yyyy}.log";
-            if(!File.Exists(logFile) )
-            {
-                File.CreateText(logFile);
-            }
+            //if(!File.Exists(logFile) )
+            //{
+            //    File.CreateText(logFile);
+            //}
 
             await Task.Run(() =>
             {
-                string username = session.Settings.AuthType == AuthType.Ptc ? session.Settings.PtcUsername : session.Settings.GoogleUsername;
-                File.AppendAllText(logFile, $"{DateTime.Now:dd-MM-yyyy hh:mm:ss}\t\t{username}\r\n");
+                try {
+                    string username = session.Settings.AuthType == AuthType.Ptc ? session.Settings.PtcUsername : session.Settings.GoogleUsername;
+                    File.AppendAllText(logFile, $"{DateTime.Now:dd-MM-yyyy hh:mm:ss}\t\t{username}\r\n");
+                }
+                catch(Exception ex) { }
             });
         }
 

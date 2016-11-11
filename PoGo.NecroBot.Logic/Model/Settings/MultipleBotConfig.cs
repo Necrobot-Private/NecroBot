@@ -52,36 +52,44 @@ namespace PoGo.NecroBot.Logic.Model.Settings
     [JsonObject(Title = "Multiple Bot Config", Description = "Use this to setup the condition when we switch to next bot", ItemRequired = Required.DisallowNull)]
     public class MultipleBotConfig
     {
+        [ExcelConfig (Description = "Bot will switch to new account after x minutes ", Position = 1)]
         [DefaultValue(55)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public int RuntimeSwitch = 55;
 
+        [ExcelConfig(Description = "Allow bot switch account when encountered with a rare pokemon that you definied in the list", Position = 2)]
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
         public bool OnRarePokemon = true;
 
+        [ExcelConfig(Description = "Allow bot switch account when encountered with pokemon IV higher than this value", Position = 3)]
         [DefaultValue(90.0)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 3)]
         public double MinIVToSwitch = 95.0;
 
+        [ExcelConfig(Description = "Bot will switch to new account after collect this EXP in one login session ", Position = 4)]
         [DefaultValue(25000)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 3)]
-        public double EXPSwitch = 25000;
+        public int EXPSwitch = 25000;
 
+        [ExcelConfig(Description = "Bot will switch to new account after x  pokestop farm", Position = 5)]
         [DefaultValue(500)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 4)]
-        public double PokestopSwitch = 500;
+        public int PokestopSwitch = 500;
 
+        [ExcelConfig(Description = "Bot will switch to new account after x  pokemon catch ", Position = 6)]
         [DefaultValue(200)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 5)]
-        public double PokemonSwitch = 200;
+        public int PokemonSwitch = 200;
 
+        [ExcelConfig(Description = "Bot will switch to new account after x pokemon catch in 1 hours - not being used atm ", Position = 7)]
         [DefaultValue(100)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 6)]
-        public double PokemonPerHourSwitch= 100; //only apply if runtime > 1h. 
-
+        public int PokemonPerHourSwitch = 100; //only apply if runtime > 1h. 
+        [ExcelConfig(Description = "Tell bot to start at default location", Position = 8)]
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 7)]
+
         public bool StartFromDefaultLocation = true; //only apply if runtime > 1h. 
 
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 8)]

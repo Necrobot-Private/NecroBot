@@ -195,10 +195,15 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                     {
                         var randomAppleDeviceInfo = DeviceInfoHelper.GetRandomIosDevice();
                         SetDevInfoByDeviceInfo(randomAppleDeviceInfo);
+
+                        // After generating iOS settings, automatically set the package name to "custom", so that we don't regenerate settings every time we start.
+                        DeviceConfig.DevicePackageName = "custom";
                     }
                 }
                 else
                 {
+                    // We cannot emulate Android at the moment, so if we got here, then regenerate the settings with random iOS device.
+                    /*
                     // Android
                     if (!DeviceConfig.DevicePackageName.Equals("random", StringComparison.InvariantCultureIgnoreCase) &&
                         !DeviceConfig.DevicePackageName.Equals("custom", StringComparison.InvariantCultureIgnoreCase))
@@ -216,6 +221,12 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                         DeviceConfig.DevicePackageName = DeviceInfoHelper.AndroidDeviceInfoSets.Keys.ToArray()[rndIdx];
                         SetDevInfoByKey();
                     }
+                    */
+                    DeviceConfig.DevicePlatform = "ios";
+                    DeviceConfig.DevicePackageName = "custom";
+
+                    var randomAppleDeviceInfo = DeviceInfoHelper.GetRandomIosDevice();
+                    SetDevInfoByDeviceInfo(randomAppleDeviceInfo);
                 }
                 if (string.IsNullOrEmpty(DeviceConfig.DeviceId) || DeviceConfig.DeviceId == "8525f5d8201f78b5")
                     DeviceConfig.DeviceId = RandomString(16, "0123456789abcdef");

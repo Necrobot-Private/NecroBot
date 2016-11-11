@@ -37,60 +37,79 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public string ProfilePath;
 
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [ExcelConfig(SheetName = "ConsoleConfig", Description = "Setting up the console output")]
         public ConsoleConfig ConsoleConfig = new ConsoleConfig();
 
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [ExcelConfig(SheetName = "UpdateConfig", Description = "Setting up the auto checking for every time bot start up")]
         public UpdateConfig UpdateConfig = new UpdateConfig();
+
+        [ExcelConfig(SheetName = "WebsocketsConfig", Description = "Setting up the web socket that allow bot to communicate with Visualizer.")]
 
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public WebsocketsConfig WebsocketsConfig = new WebsocketsConfig();
 
+        [ExcelConfig(SheetName = "LocationConfig", Description = "Setting up location setting for bot.")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public LocationConfig LocationConfig = new LocationConfig();
 
+        [ExcelConfig(SheetName = "TelegramConfig", Description = "Setting up Telegram API to allow control bot from Telegram .")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public TelegramConfig TelegramConfig = new TelegramConfig();
 
+        [ExcelConfig(SheetName = "GPXConfig", Description = "Setup GPS Pathing for bot.")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public GpxConfig GPXConfig = new GpxConfig();
 
+        [ExcelConfig(SheetName = "SnipeConfig", Description = "Setting up option for snipe.")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public SnipeConfig SnipeConfig = new SnipeConfig();
 
+        [ExcelConfig(SheetName = "HumanWalkSnipeConfig", Description = "Setting up option for human walk snipe.")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public HumanWalkSnipeConfig HumanWalkSnipeConfig = new HumanWalkSnipeConfig();
 
+        [ExcelConfig(SheetName = "DataSharingConfig", Description = "Setting up data socket sharing.")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public DataSharingConfig DataSharingConfig = new DataSharingConfig();
 
-
+        [ExcelConfig(SheetName = "PokeStopConfig", Description = "Setting up for farming pokestop.")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public PokeStopConfig PokeStopConfig = new PokeStopConfig();
 
+        [ExcelConfig(SheetName = "GymConfig", Description = "Setting up for gym and battle.")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public GymConfig GymConfig = new GymConfig();
 
+        [ExcelConfig(SheetName = "PokemonConfig", Description = "Setting up for pokemon catching, evolve, transfer, upgrade.")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public PokemonConfig PokemonConfig = new PokemonConfig();
 
+        [ExcelConfig(SheetName = "RecycleConfig", Description = "Setting up for inventory cleanup.")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public ItemRecycleConfig RecycleConfig = new ItemRecycleConfig();
 
+        [ExcelConfig(SheetName = "CustomCatchConfig", Description = "Setting up for some custom parametter for catching.")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public CustomCatchConfig CustomCatchConfig = new CustomCatchConfig();
 
+        [ExcelConfig(SheetName = "PlayerConfig", Description = "Setting up for some custom parametter for bot perfom user action.")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public PlayerConfig PlayerConfig = new PlayerConfig();
 
+        [ExcelConfig(SheetName = "SoftBanConfig", Description = "Setting up for softban resolve.")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public SoftBanConfig SoftBanConfig = new SoftBanConfig();
 
+        [ExcelConfig (SheetName = "GoogleWalkConfig", Description = "Setup parametter for google walk such as api key, account, rules..")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public GoogleWalkConfig GoogleWalkConfig = new GoogleWalkConfig();
 
+        [ExcelConfig(SheetName = "YoursWalkConfig", Description = "Setup parametter for YoursWalkConfig walk such as api key, account, rules..")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public YoursWalkConfig YoursWalkConfig = new YoursWalkConfig();
 
+        [ExcelConfig(SheetName = "MapzenWalkConfig", Description = "Setup parametter for MapzenWalkConfig walk such as api key, account, rules..")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public MapzenWalkConfig MapzenWalkConfig = new MapzenWalkConfig();
 
@@ -124,6 +143,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public Dictionary<PokemonId, UpgradeFilter> PokemonUpgradeFilters = UpgradeFilter.Default();
 
+        [ExcelConfig (Description ="Setting up bot to use multiple account" , SheetName = "MultipleBotConfig")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public MultipleBotConfig MultipleBotConfig = MultipleBotConfig.Default();
 

@@ -31,7 +31,7 @@ namespace PoGo.NecroBot.CLI
         private static string _subPath = "";
         private static bool _enableJsonValidation = true;
         private static bool _ignoreKillSwitch;
-
+                                                                 
         private static readonly Uri StrKillSwitchUri =
             new Uri("https://raw.githubusercontent.com/Necrobot-Private/Necrobot2/master/KillSwitch.txt");
         private static readonly Uri StrMasterKillSwitchUri =
@@ -92,10 +92,8 @@ namespace PoGo.NecroBot.CLI
 
             Logger.SetLogger(new ConsoleLogger(LogLevel.Service), _subPath);
 
-            if (!_ignoreKillSwitch && CheckKillSwitch() || CheckMKillSwitch())
-                return;
-
-
+            //if (!_ignoreKillSwitch && CheckKillSwitch() || CheckMKillSwitch())
+            //    return;
 
             var profilePath = Path.Combine(Directory.GetCurrentDirectory(), _subPath);
             var profileConfigPath = Path.Combine(profilePath, "config");
@@ -239,7 +237,7 @@ namespace PoGo.NecroBot.CLI
             var stats = new Statistics();
 
             ProgressBar.Fill(30);
-            var strVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
+            var strVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString(4);
             stats.DirtyEvent +=
                 () =>
                     Console.Title = $"[Necrobot2 v{strVersion}] " +
@@ -388,10 +386,6 @@ namespace PoGo.NecroBot.CLI
 
         private static bool CheckKillSwitch()
         {
-            #if DEBUG
-                return false;
-            #endif
-
             using (var wC = new WebClient())
             {
                 try

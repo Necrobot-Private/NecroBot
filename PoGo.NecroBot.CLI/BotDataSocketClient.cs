@@ -177,7 +177,7 @@ namespace PoGo.NecroBot.CLI
                     return;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
 
