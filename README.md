@@ -9,6 +9,14 @@
     <img alt="Logo" src="http://image.prntscr.com/image/b238b63b4f044813a91f772241be8d45.jpg" width="600">
 </a>
 
+<h2>Screenshots</h2>
+Gui App
+<img src="http://i.imgur.com/Ph1sU94r.png"/>
+<img src="http://i.imgur.com/4Dj2RjNr.png"/>
+Console App
+<img src="http://i.imgur.com/z6UfTm8.png"/>
+
+
 <strong><em> The contents of this repo are a proof of concept and are for educational use only </em></strong>
 <h4>Join to Discord</h4>
 [![Stories in Ready](https://discordapp.com/api/guilds/220703917871333376/widget.png?style=banner2&time-)](https://discord.gg/7FWyWVp)
