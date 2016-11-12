@@ -342,9 +342,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool UsePokemonToNotCatchFilter = true;
 
         [ExcelConfig(Description = "UsePokemonSniperFilterOnly", Position = 56)]
-        [DefaultValue(true)]
+        [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 56)]
-        public bool UsePokemonSniperFilterOnly = true;
+        public bool UsePokemonSniperFilterOnly = false;
 
         /*Dump Stats*/
         [ExcelConfig(Description = "Allow bot dump list pokemon to csv file", Position = 57)]

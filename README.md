@@ -1,7 +1,6 @@
-<h1>Pokémon Go 0.43 API Works!
+<h1>Pokémon Go 0.45 API is now Supported!
 </h1>
 <strong>
-We are now compatible with Pokemon Go API 0.43!!
 </strong>
 
 <p align="center">

@@ -227,12 +227,21 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
                     var randomAppleDeviceInfo = DeviceInfoHelper.GetRandomIosDevice();
                     SetDevInfoByDeviceInfo(randomAppleDeviceInfo);
-                }
-                if (string.IsNullOrEmpty(DeviceConfig.DeviceId) || DeviceConfig.DeviceId == "8525f5d8201f78b5")
-                    DeviceConfig.DeviceId = RandomString(16, "0123456789abcdef");
-                        // changed to random hex as full alphabet letters could have been flagged
 
-                // Jurann: Note that some device IDs I saw when adding devices had smaller numbers, only 12 or 14 chars instead of 16 - probably not important but noted here anyway
+                    // Clear out the android fields.
+                    DeviceConfig.AndroidBoardName = null;
+                    DeviceConfig.AndroidBootloader = null;
+                    DeviceConfig.DeviceModelIdentifier = null;
+                    DeviceConfig.FirmwareTags = null;
+                    DeviceConfig.FirmwareFingerprint = null;
+                }
+
+                if (string.IsNullOrEmpty(DeviceConfig.DeviceId) || DeviceConfig.DeviceId == "8525f5d8201f78b5")
+                {
+                    // Changed to random hex as full alphabet letters could have been flagged
+                    // iOS device ids are 16 bytes (32 chars long)
+                    DeviceConfig.DeviceId = RandomString(32, "0123456789abcdef");
+                }
 
                 if (!boolSkipSave)
                     Save(_filePath);

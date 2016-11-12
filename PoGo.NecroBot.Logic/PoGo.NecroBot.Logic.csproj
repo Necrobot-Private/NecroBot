@@ -185,7 +185,10 @@
     <Compile Include="Interfaces\Configuration\ILogicSettings.cs" />
     <Compile Include="Inventory.cs" />
     <Compile Include="Localization\Localizer.cs" />
+    <Compile Include="Logging\WebSocketLogger.cs" />
+    <Compile Include="Logging\FileLogger.cs" />
     <Compile Include="Logging\Logger.cs" />
+    <Compile Include="Logging\LoggingStrings.cs" />
     <Compile Include="Model\BotActions.cs" />
     <Compile Include="Exceptions\ActiveSwitchByPokemonException.cs" />
     <Compile Include="Model\Google\GoogleObjects\Address_Components.cs" />

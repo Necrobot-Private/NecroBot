@@ -111,6 +111,15 @@ namespace PoGo.NecroBot.Logic.Tasks
                 newdata.LastModifiedTimestampMs = eresponse.WildPokemon.LastModifiedTimestampMs;
                 newdata.SpawnPointId = eresponse.WildPokemon.SpawnPointId;
                 newdata.TimeTillHiddenMs = eresponse.WildPokemon.TimeTillHiddenMs;
+                if (newdata.TimeTillHiddenMs == 0)
+                {
+                    Random rn = new Random();
+                    newdata.TimeTillHiddenMs = rn.Next(450, 481) * 1000;
+                }
+                else
+                {
+
+                }
                 newdata.PokemonId = eresponse.WildPokemon.PokemonData.PokemonId;
                 newdata.Iv = PokemonInfo.CalculatePokemonPerfection(eresponse.WildPokemon.PokemonData);
                 newdata.Latitude = eresponse.WildPokemon.Latitude;

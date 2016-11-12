@@ -1,5 +1,32 @@
 # Change Log
 
+## [v1.0.0.16](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.16) (2016-11-11)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.15...v1.0.0.16)
+
+**Fixed bugs:**
+
+- Support for 0.45 API
+
+## [v1.0.0.15](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.15) (2016-11-08)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.14...v1.0.0.15)
+
+**Fixed bugs:**
+
+- Bug fix 2 for http://www.mypogosnipers.com/ and http://msniper.com pokemon disappearing too fast.
+
+## [v1.0.0.14](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.14) (2016-11-08)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.13...v1.0.0.14)
+
+**Fixed bugs:**
+
+- Bug fix for http://www.mypogosnipers.com/ and http://msniper.com pokemon disappearing too fast.
+
+## [v1.0.0.13](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.13) (2016-11-08)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.12...v1.0.0.13)
+
+**Fixed bugs:**
+
+- Change default settings to allow all pokemon to be caught (except for regional pokemon).
 
 ## [v1.0.0.12](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.12) (2016-11-07)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.11...v1.0.0.12)
