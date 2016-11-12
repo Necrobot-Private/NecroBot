@@ -6,16 +6,8 @@
 <p align="center">
 
 <a href="">
-    <img alt="Logo" src="http://image.prntscr.com/image/b238b63b4f044813a91f772241be8d45.jpg" width="600">
+    <img alt="Logo" src="http://image.prntscr.com/image/b238b63b4f044813a91f772241be8d45.jpg" width="450">
 </a>
-
-<h2>Screenshots</h2>
-Gui App
-<img src="http://i.imgur.com/Ph1sU94r.png"/>
-<img src="http://i.imgur.com/4Dj2RjNr.png"/>
-Console App
-<img src="http://i.imgur.com/z6UfTm8.png"/>
-
 
 <strong><em> The contents of this repo are a proof of concept and are for educational use only </em></strong>
 <h4>Join to Discord</h4>
@@ -25,10 +17,20 @@ Console App
 [![Github All Releases](https://img.shields.io/github/downloads/Necrobot-Private/NecroBot/total.svg?maxAge=258)](https://github.com/Necrobot-Private/NecroBot/releases)
 [![GitHub license](https://img.shields.io/badge/license-AGPL-blue.svg)](https://raw.githubusercontent.com/Necrobot-Private/NecroBot/master/LICENSE.md)
 
-
 ### 1. This repository is a fork updated of [NecroBot-NECROBOTIO](https://github.com/NECROBOTIO/NecroBot)
 ### 2. This repository is a fork updated of [NecroBot-NecronomiconCoding](https://github.com/NecronomiconCoding/NecroBot)
 ### 3. This repository is a fork updated of [NecroBot-NoxxDev](https://github.com/NoxxDev/NecroBot)
+
+<h2>Screenshots</h2>
+
+- Gui App
+
+<img src="http://i.imgur.com/Ph1sU94r.png" width="430">
+<img src="http://i.imgur.com/4Dj2RjNr.png" width="430">
+
+- Console App
+
+<img src="http://i.imgur.com/z6UfTm8.png" width="430">
 
 <h2><a name="getting-started">Getting Started</a></h2>
 Make sure you check out our [Wiki](https://github.com/Necrobot-Private/NecroBot/wiki) to get started.    <b><---- Wiki links will be updated soon. Stay tuned.</b>
