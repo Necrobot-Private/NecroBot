@@ -37,6 +37,8 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         bool FastSoftBanBypass { get; }
         bool EvolveAllPokemonWithEnoughCandy { get; }
         bool KeepPokemonsThatCanEvolve { get; }
+
+        bool UseTransferFilterToCatch { get; }
         bool TransferDuplicatePokemon { get; }
         bool TransferDuplicatePokemonOnCapture { get; }
         bool UseEggIncubators { get; }
@@ -194,6 +196,8 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         bool HumanWalkingSnipeAllowSpeedUp { get; }
         double HumanWalkingSnipeMaxSpeedUpSpeed { get; }
         int HumanWalkingSnipeDelayTimeAtDestination { get; }
+        bool HumanWalkingSnipeAllowTransferWhileWalking { get; }
+
         bool HumanWalkingSnipeUsePokeRadar { get; }
         bool HumanWalkingSnipeUseSkiplagged { get; }
         bool HumanWalkingSnipeUsePokecrew { get; }

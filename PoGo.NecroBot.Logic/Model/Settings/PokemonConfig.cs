@@ -286,9 +286,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 55)]
         public bool UsePokemonToNotCatchFilter = true;
 
-        [DefaultValue(true)]
+        [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 56)]
-        public bool UsePokemonSniperFilterOnly = true;
+        public bool UsePokemonSniperFilterOnly = false;
 
         /*Dump Stats*/
         [DefaultValue(false)]

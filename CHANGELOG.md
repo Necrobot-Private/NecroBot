@@ -1,5 +1,65 @@
 # Change Log
 
+## [v1.0.0.16](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.16) (2016-11-11)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.15...v1.0.0.16)
+
+**Fixed bugs:**
+
+- Support for 0.45 API
+
+## [v1.0.0.15](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.15) (2016-11-08)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.14...v1.0.0.15)
+
+**Fixed bugs:**
+
+- Bug fix 2 for http://www.mypogosnipers.com/ and http://msniper.com pokemon disappearing too fast.
+
+## [v1.0.0.14](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.14) (2016-11-08)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.13...v1.0.0.14)
+
+**Fixed bugs:**
+
+- Bug fix for http://www.mypogosnipers.com/ and http://msniper.com pokemon disappearing too fast.
+
+## [v1.0.0.13](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.13) (2016-11-08)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.12...v1.0.0.13)
+
+**Fixed bugs:**
+
+- Change default settings to allow all pokemon to be caught (except for regional pokemon).
+
+## [v1.0.0.12](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.12) (2016-11-07)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.11...v1.0.0.12)
+
+**Implemented enhancements:**
+
+- Only regenerate device info once if device package name is set to "random". 
+- Regenerate iOS device info and save to auth.config if using Android device info.
+
+## [v1.0.0.11](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.11) (2016-11-07)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.10...v1.0.0.11)
+
+**Implemented enhancements:**
+
+- Captcha checking - for now we are checking if there is a captcha being required and will display message to user and have the bot exit.
+- Disabled human snipe online sources to avoid errors in console
+- Allow common pokemon to be sniped again (to avoid getting questions about why they are being skipped).
+
+## [v1.0.0.10](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.10) (2016-11-07)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.9...v1.0.0.10)
+
+**Fixed bugs:**
+
+- Generate random iOS device info for the API if Android info is read from auth.json.  Note that the iOS device settings are not saved.
+
+
+## [v1.0.0.9](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.9) (2016-11-07)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.6...v1.0.0.9)
+
+**Implemented enhancements:**
+
+- Support for 0.43 API
+
 ## [v1.0.0.6](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.6) (2016-09-23)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.5...v1.0.0.6)
 

@@ -1,52 +1,11 @@
-BotStatus=DISABLED;
+BotStatus=ENABLED;
 //================================================================//
-         THE BOT DOES NOT WORK WITH NEW 0.39.0 API UPDATE.
+                THE BOT ABOUT TO GO LIVE AGAIN :-)
 //================================================================//
-   We cannot give an estimate to when it will start working again.
+             HUGE SHOUTOUT to jjskuld for his hardwork.
 //================================================================//
-          The entire PoGo community is working on a fix. 
-          
-          
+                         Updated: 11/7/16
 
-Now that you have some free down time.... 
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-Please visit:
-http://www.seashepherdglobal.org/support-us/donate.html (GLOBAL - Can/Does Protect Whales) 
-OR
-http://www.seashepherd.org/support-us (North America - Cannot Protect Whales Directly) 
-
-and if you can.... support the organization. 
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-We are not in any way related/associated with this organization or it’s members. 
-They have a unique cause and their methods to fulfill their cause are very effective/risky/innovative. 
-They are being featured in this notification to simply increase the awareness of their cause and others like it. 
-(They are like Greenpeace... but with bigger balls!!).
-
-Thank you!
-
-
-BEFORE YOU PROCEED TO TRY TO BOT AT YOUR OWN RISK:
-
-IF YOU ARE CAUGHT TRYING TO USE OLD API.
-YOU WILL TRANSMIT DATA THAT CAN GET EVERYONE DETECTED AND BANNED. 
-(ALL YOUR OLD ACCOUNTS INCLUDED)
-
-
-Read UP ^^^^^^^^
-
-//================================================================//
-                Latest version: NecroBot2 v1.0.0.6
-    https://github.com/Necrobot-Private/NecroBot/releases/latest
-//================================================================//
-
-
-//================================================================//
-         THE BOT DOES NOT WORK WITH NEW 0.39.0 API UPDATE.
-//================================================================//
-   We cannot give an estimate to when it will start working again.
-//================================================================//
-          The entire PoGo community is working on a fix. 
 
 For support/questions:
 OFFICIAL NECROBOT2 Discord: https://discord.gg/7FWyWVp

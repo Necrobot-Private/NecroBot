@@ -17,8 +17,8 @@ namespace PoGo.NecroBot.CLI
 {
     public class BotDataSocketClient
     {
-        private static Queue<EncounteredEvent> events = new Queue<EncounteredEvent>();
-        private const int POLLING_INTERVAL = 10000;
+        private static List<EncounteredEvent> events = new List<EncounteredEvent>();
+        private const int POLLING_INTERVAL = 5000;
         public static void Listen(IEvent evt, Session session)
         {
             dynamic eve = evt;
@@ -36,7 +36,7 @@ namespace PoGo.NecroBot.CLI
         {
             lock (events)
             {
-                events.Enqueue(eve);
+                events.Add(eve);
             }
         }
 
@@ -62,7 +62,6 @@ namespace PoGo.NecroBot.CLI
 
         public static async Task Start(Session session, CancellationToken cancellationToken)
         {
-
             await Task.Delay(30000);//delay running 30s
 
             System.Net.ServicePointManager.Expect100Continue = false;
@@ -78,51 +77,60 @@ namespace PoGo.NecroBot.CLI
                  {
                      //silenly, no log exception message to screen that scare people :)
                  };
-                
-                //ws.OnMessage += (sender, e) =>
-                // Console.WriteLine("New message from controller: " + e.Data);
+
+                ws.OnMessage += (sender, e) =>
+                {
+                    onSocketMessageRecieved(session, sender, e);
+                };
 
                 while (true)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
                     try
                     {
-                        if (retries++ == 5) //failed to make connection to server  times contiuing, temporary stop for 10 mins.
+                        if (retries == 5) //failed to make connection to server  times contiuing, temporary stop for 10 mins.
                         {
                             session.EventDispatcher.Send(new WarnEvent()
                             {
                                 Message = "Couldn't establish the connection to necro socket server, Bot will re-connect after 10 mins"
                             });
-
-                            await Task.Delay(10 * 1000 * 60);
+                            await Task.Delay(1 * 60 * 1000);
+                            retries = 0;
                         }
 
-                        ws.Connect();
-                        if (ws.ReadyState == WebSocketSharp.WebSocketState.Open)
+                        if (events.Count > 0 && ws.ReadyState != WebSocketSharp.WebSocketState.Open)
                         {
-                            Logger.Write("Pokemon spawn point data service connection established.");
+                            retries++;
+                            ws.Connect();
+                        }
+
+                        while (ws.ReadyState == WebSocketSharp.WebSocketState.Open)
+                        {
+                            //Logger.Write("Connected to necrobot data service.");
                             retries = 0;
 
-                            while (ws.IsAlive)
+                            lock (events)
                             {
-                                lock (events)
-                                {
-                                    while (events.Count > 0)
-                                    {
-                                        processing.Add(events.Dequeue());
-                                    }
-                                }
+                                processing.Clear();
+                                processing.AddRange(events);
+                            }
 
-                                while (processing.Count > 0)
+                            if (processing.Count > 0 && ws.IsAlive)
+                            {
+                                if (processing.Count == 1)
                                 {
-                                    if (ws.IsAlive)
-                                    {
-                                        var item = processing.FirstOrDefault();
-                                        var data = Serialize(item);
-                                        ws.Send($"42[\"pokemon\",{data}]");
-                                        processing.Remove(item);
-                                        await Task.Delay(processing.Count > 0 ? 3000 : 0);
-                                    }
+                                    //serialize list will make data bigger, code ugly but save bandwidth and help socket process faster
+                                    var data = Serialize(processing.First());
+                                    ws.Send($"42[\"pokemon\",{data}]");
                                 }
+                                else {
+                                    var data = Serialize(processing);
+                                    ws.Send($"42[\"pokemons\",{data}]");
+                                }
+                            }
+                            lock (events)
+                            {
+                                events.RemoveAll(x => processing.Any(t => t.EncounterId == x.EncounterId));
                             }
                             await Task.Delay(POLLING_INTERVAL);
                             ws.Ping();
@@ -137,7 +145,6 @@ namespace PoGo.NecroBot.CLI
                     }
                     catch (Exception)
                     {
-
                     }
                     finally
                     {
@@ -149,7 +156,23 @@ namespace PoGo.NecroBot.CLI
             }
 
         }
+        private static void onSocketMessageRecieved(ISession session, object sender, WebSocketSharp.MessageEventArgs e)
+        {
+            try
+            {
+                var match = Regex.Match(e.Data, "42\\[\"pokemon\",(.*)]");
+                if (match != null && !string.IsNullOrEmpty(match.Groups[1].Value))
+                {
+                    var data = JsonConvert.DeserializeObject<EncounteredEvent>(match.Groups[1].Value);
+                    data.IsRecievedFromSocket = true;
+                    session.EventDispatcher.Send(data);
+                }
+            }
+            catch (Exception)
+            {
+            }
 
+        }
 
         internal static Task StartAsync(Session session, CancellationToken cancellationToken = default(CancellationToken))
         {

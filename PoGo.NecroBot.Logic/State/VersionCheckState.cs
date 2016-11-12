@@ -203,7 +203,7 @@ namespace PoGo.NecroBot.Logic.State
                 if (gitVersion > Assembly.GetExecutingAssembly().GetName().Version)
                     return false;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return true; //better than just doing nothing when git server down
             }

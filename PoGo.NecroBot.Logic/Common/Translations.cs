@@ -264,7 +264,8 @@ namespace PoGo.NecroBot.Logic.Common
         FirstStartSetupWalkingSpeedVariantPrompt,
         FirstStartSetupWalkingSpeedVariantConfirm,
         MinimumClientVersionException,
-        ExitNowAfterEnterKey
+        ExitNowAfterEnterKey,
+        CaptchaShown
     }
 
     public class Translation : ITranslation
@@ -465,7 +466,7 @@ namespace PoGo.NecroBot.Logic.Common
             new KeyValuePair<TranslationString, string>(TranslationString.ShowPokeSkillTemplate,
                 "\n CP: {0} | IV: {1}% | Move: {2} + {3} | Name: {4}"),
             new KeyValuePair<TranslationString, string>(TranslationString.HelpTemplate,
-                "Commands: \n \n /help - Show commands. \n /top <cp/iv> <amount> - Shows you top Pokemons. \n /all <cp/iv> - Shows you all Pokemons. \n /profile - Shows you profile. \n /loc - Shows you location. \n /items - Shows your items. \n /status - Shows you the Status of the Bot. \n /pokedex - Shows you Pokedex. \n /restart - Restart NcroBot. \n /exit - Close NecroBot."),
+                "Commands: \n \n /help - Show commands. \n /top <cp/iv> <amount> - Shows you top Pokemons. \n /all <cp/iv> - Shows you all Pokemons. \n /profile - Shows you profile. \n /loc - Shows you location. \n /items - Shows your items. \n /status - Shows you the Status of the Bot. \n /pokedex - Shows you Pokedex. \n /restart - Restart NecroBot. \n /exit - Close NecroBot."),
             new KeyValuePair<TranslationString, string>(TranslationString.StatsXpTemplateString,
                 "{0} (Advance in {1}h {2}m | {3:n0}/{4:n0} XP)"),
             new KeyValuePair<TranslationString, string>(TranslationString.RequireInputText,
@@ -602,7 +603,8 @@ namespace PoGo.NecroBot.Logic.Common
             new KeyValuePair<TranslationString, string>(TranslationString.HumanWalkSnipeNotEnoughtBalls, "(HUMAN WALK) Not enought balls to activate catch Em-All mode. ({0})/{1}") ,
             new KeyValuePair<TranslationString, string>(TranslationString.HumanWalkSnipePokemonEncountered, "(HUMAN WALK) Encountered {0}  | lat :{1} , Lng : {2} | removed from snipping list"),
             new KeyValuePair<TranslationString, string>(TranslationString.MinimumClientVersionException, "(KILLSWITCH) We have detected a Pokemon API change. The bot emulates API version {0}, which is no longer supported.  Minimum API version is now {1}."),
-            new KeyValuePair<TranslationString, string>(TranslationString.ExitNowAfterEnterKey, "The bot will now exit after hitting the enter key.")
+            new KeyValuePair<TranslationString, string>(TranslationString.ExitNowAfterEnterKey, "The bot will now exit after hitting the enter key."),
+            new KeyValuePair<TranslationString, string>(TranslationString.CaptchaShown, "Captcha is being shown and will need to be solved.")
         };
 
         [JsonProperty("PokemonStrings",
