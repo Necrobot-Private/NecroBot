@@ -22,5 +22,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
         public string DataRecieverURL = "ws://necrosocket.herokuapp.com/socket.io/?EIO=3&transport=websocket";
 
+        [ExcelConfig(Description = "Allow bot auto snipe pokemon whenever has feed send back from server", Position = 3)]
+        [DefaultValue(true)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
+        public bool AutoSnipe = true;
     }
 }

@@ -23,6 +23,7 @@ using PoGo.NecroBot.Logic.Model;
 using PoGo.NecroBot.Logic.PoGoUtils;
 using POGOProtos.Inventory.Item;
 using WebSocket4Net;
+using PoGo.NecroBot.Logic.Exceptions;
 
 namespace PoGo.NecroBot.Logic.Tasks
 {
@@ -409,6 +410,25 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
         }
         #endregion
+        public static void AddSnipeItem(ISession session, EncounterInfo item)
+        {
+            SnipeFilter filter = new SnipeFilter()
+            {
+                SnipeIV = session.LogicSettings.MinIVForAutoSnipe
+            };
+
+            if(session.LogicSettings.PokemonSnipeFilters.ContainsKey(item.PokemonId))
+            {
+                filter = session.LogicSettings.PokemonSnipeFilters[item.PokemonId];
+            }
+
+            if (filter.SnipeIV < item.Iv)
+            {
+                liveData.Add(item);
+            }
+        }
+
+        private static List<EncounterInfo> liveData = new List<EncounterInfo>();
 
         public static async Task Execute(ISession session, CancellationToken cancellationToken)
         {
@@ -423,7 +443,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             var pth = Path.Combine(Directory.GetCurrentDirectory(), "SnipeMS.json");
             try
             {
-                if (!File.Exists(pth))
+                if (!File.Exists(pth) && liveData.Count == 0)
                 {
                     inProgress = false;
                     return;
@@ -434,13 +454,21 @@ namespace PoGo.NecroBot.Logic.Tasks
                     inProgress = false;
                     return;
                 }
+                List<EncounterInfo> mSniperLocation2 = new List<EncounterInfo>();
+                if (File.Exists(pth))
+                {
+                    var sr = new StreamReader(pth, Encoding.UTF8);
+                    var jsn = sr.ReadToEnd();
+                    sr.Close();
 
-                var sr = new StreamReader(pth, Encoding.UTF8);
-                var jsn = sr.ReadToEnd();
-                sr.Close();
+                    mSniperLocation2 = JsonConvert.DeserializeObject<List<EncounterInfo>>(jsn);
+                    File.Delete(pth);
+                    if (mSniperLocation2 == null) mSniperLocation2 = new List<EncounterInfo>();
+                }
 
-                var mSniperLocation2 = JsonConvert.DeserializeObject<List<EncounterInfo>>(jsn);
-                File.Delete(pth);
+                mSniperLocation2.AddRange(liveData);
+                liveData.Clear();
+
                 foreach (var location in mSniperLocation2)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
@@ -462,6 +490,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                     }
                     await Task.Delay(1000, cancellationToken);
                 }
+            }
+            catch(ActiveSwitchByRuleException ex )
+            {
+                throw ex;
             }
             catch (Exception ex)
             {

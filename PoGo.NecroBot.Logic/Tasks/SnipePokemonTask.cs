@@ -27,6 +27,7 @@ using POGOProtos.Networking.Responses;
 using Quobject.Collections.Immutable;
 using Quobject.SocketIoClientDotNet.Client;
 using Socket = Quobject.SocketIoClientDotNet.Client.Socket;
+using PoGo.NecroBot.Logic.Exceptions;
 
 #endregion
 
@@ -644,6 +645,10 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 scanResult = JsonConvert.DeserializeObject<ScanResult>(fullresp);
             }
+            catch(ActiveSwitchByRuleException asx)
+            {
+                throw asx;
+            }
             catch (Exception ex)
             {
                 // most likely System.IO.IOException
@@ -934,6 +939,10 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 var fullresp = "{ \"pokemons\":" + response + "}".Replace("Mr_mime", "MrMime");
                 scanResultPokewatchers = JsonConvert.DeserializeObject<ScanResultPokewatchers>(fullresp);
+            }
+            catch(ActiveSwitchByRuleException ex1)
+            {
+                throw ex1;
             }
             catch (Exception ex)
             {

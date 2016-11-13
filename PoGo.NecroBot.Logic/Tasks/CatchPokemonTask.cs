@@ -112,6 +112,8 @@ namespace PoGo.NecroBot.Logic.Tasks
         // ## From MSniperServiceTask
         // await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, currentFortData: null, sessionAllowTransfer: true);
 
+        private static int CatchFleeContinuouslyCount = 0;
+
         public static async Task Execute(ISession session,
                                         CancellationToken cancellationToken,
                                         dynamic encounter,
@@ -132,7 +134,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                 AmountOfBerries = 0;
 
                 cancellationToken.ThrowIfCancellationRequested();
-
 
                 float probability = encounter.CaptureProbability?.CaptureProbability_[0];
 
@@ -431,6 +432,24 @@ namespace PoGo.NecroBot.Logic.Tasks
                 } while (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchMissed ||
                          caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchEscape);
 
+                if(caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchFlee)
+                {
+                    CatchFleeContinuouslyCount++;
+                    if(CatchFleeContinuouslyCount > 10)
+                    {
+                        CatchFleeContinuouslyCount = 0;
+                        throw new ActiveSwitchByRuleException()
+                        {
+                            MatchedRule = SwitchRules.CatchFlee,
+                            ReachedValue = 10
+                        };
+                    }
+                }
+                else
+                {
+                    //reset if not catch flee.
+                    CatchFleeContinuouslyCount = 0;
+                }
                 session.Actions.RemoveAll(x => x == Model.BotActions.Catch);
 
                 ExecuteSwitcher(session, encounterEV);
@@ -451,6 +470,11 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static void ExecuteSwitcher(ISession session, EncounteredEvent encounterEV)
         {
+            //if distance is very far. that is snip pokemon
+
+            if (LocationUtils.CalculateDistanceInMeters(encounterEV.Latitude, encounterEV.Longitude, session.Client.CurrentLatitude, session.Client.CurrentLongitude) > 2000)
+                return;
+
             if (session.LogicSettings.AllowMultipleBot &&
                                 session.LogicSettings.Bots != null &&
                                 session.LogicSettings.Bots.Count > 0 &&

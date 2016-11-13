@@ -61,6 +61,10 @@
       <HintPath>$(SolutionDir)\packages\EngineIoClientDotNet.0.9.22\lib\net45\EngineIoClientDotNet.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="EPPlus, Version=4.1.0.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.4.1.0\lib\net40\EPPlus.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="GeoCoordinatePortable, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\GeoCoordinate.1.1.0\lib\portable-net45+wp80+win+wpa81\GeoCoordinatePortable.dll</HintPath>
       <Private>True</Private>
@@ -243,6 +247,7 @@
     <Compile Include="Model\Settings\SoftBanConfig.cs" />
     <Compile Include="Model\Settings\TelegramConfig.cs" />
     <Compile Include="Model\Settings\TransferConfig.cs" />
+    <Compile Include="Model\Settings\SnipeFIlter.cs" />
     <Compile Include="Model\Settings\TransferFilter.cs" />
     <Compile Include="Model\Settings\UpdateConfig.cs" />
     <Compile Include="Model\Settings\UpgradeFilter.cs" />
@@ -351,6 +356,7 @@
     <Compile Include="Utils\DelayingUtils.cs" />
     <Compile Include="Utils\EggWalker.cs" />
     <Compile Include="Utils\ErrorHandler.cs" />
+    <Compile Include="Utils\ExcelConfigHelper.cs" />
     <Compile Include="Utils\GPXReader.cs" />
     <Compile Include="Logging\ILogger.cs" />
     <Compile Include="Utils\JitterUtils.cs" />
@@ -367,6 +373,7 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
+    <EmbeddedResource Include="config.xlsm" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

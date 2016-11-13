@@ -19,6 +19,7 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         int PokeStopLimit { get; }
         int PokeStopLimitMinutes { get; }
         int SnipeCountLimit { get; }
+        int MinIVForAutoSnipe { get; }
         int SnipeRestSeconds { get; }
         bool TransferWeakPokemon { get; }
         bool DisableHumanWalking { get; }
@@ -157,6 +158,7 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         ICollection<PokemonId> PokemonToUseMasterball { get; }
 
         Dictionary<PokemonId, TransferFilter> PokemonsTransferFilter { get; }
+        Dictionary<PokemonId, SnipeFilter> PokemonSnipeFilters { get; }
         Dictionary<PokemonId, UpgradeFilter> PokemonUpgradeFilters { get; }
         SnipeSettings PokemonToSnipe { get; }
 

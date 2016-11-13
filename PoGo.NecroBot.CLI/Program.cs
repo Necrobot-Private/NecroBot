@@ -20,6 +20,7 @@ using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Tasks;
 using PoGo.NecroBot.Logic.Utils;
 using PoGo.NecroBot.Logic.Service.Elevation;
+using System.Configuration;
 
 #endregion
 
@@ -92,22 +93,32 @@ namespace PoGo.NecroBot.CLI
             Logger.AddLogger(new FileLogger(LogLevel.Service), _subPath);
             Logger.AddLogger(new WebSocketLogger(LogLevel.Service), _subPath);
 
-            //if (!_ignoreKillSwitch && CheckKillSwitch() || CheckMKillSwitch())
-            //    return;
+            if (!_ignoreKillSwitch && CheckKillSwitch() || CheckMKillSwitch())
+                return;
 
             var profilePath = Path.Combine(Directory.GetCurrentDirectory(), _subPath);
             var profileConfigPath = Path.Combine(profilePath, "config");
             var configFile = Path.Combine(profileConfigPath, "config.json");
+            var excelConfigFile = Path.Combine(profileConfigPath, "config.xlsm");
 
             GlobalSettings settings;
             var boolNeedsSetup = false;
-
+            bool excelConfigAllow = Convert.ToBoolean(ConfigurationManager.AppSettings["UseExcelConfig"]);
+            excelConfigAllow = true;
             if (File.Exists(configFile))
             {
                 // Load the settings from the config file
                 // If the current program is not the latest version, ensure we skip saving the file after loading
                 // This is to prevent saving the file with new options at their default values so we can check for differences
                 settings = GlobalSettings.Load(_subPath, !VersionCheckState.IsLatest(), _enableJsonValidation);
+                if(excelConfigAllow)
+                {
+                    if(!File.Exists(excelConfigFile)) {
+                        ExcelConfigHelper.MigrateFromObject(settings, excelConfigFile);
+                    }
+                    else
+                    settings = ExcelConfigHelper.ReadExcel(settings, excelConfigFile);
+                }
             }
             else
             {
@@ -219,6 +230,11 @@ namespace PoGo.NecroBot.CLI
                         LogLevel.Warning);
                     Console.ReadKey();
                     return;
+                }
+
+                if(excelConfigAllow)
+                {
+                    ExcelConfigHelper.MigrateFromObject(settings, excelConfigFile);
                 }
             }
 

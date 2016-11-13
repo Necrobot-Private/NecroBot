@@ -9,44 +9,54 @@ namespace PoGo.NecroBot.Logic.Model.Settings
     [JsonObject(Description = "", ItemRequired = Required.DisallowNull)] //Dont set Title
     public class HumanWalkSnipeFilter
     {
+        public HumanWalkSnipeFilter() { }
         [DefaultValue(300.0)]
         [Range(0, 9999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
+        [ExcelConfig(Key ="AL")]
         public double MaxDistance { get; set; }
 
+        [ExcelConfig(Key = "AM")]
         [DefaultValue(1)]
         [Range(0, 9999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
         public int Priority { get; set; }
 
+        [ExcelConfig(Key = "AN")]
         [DefaultValue(200.0)]
         [Range(0, 9999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 3)]
         public double MaxWalkTimes { get; set; }
 
+        [ExcelConfig(Key = "AO")]
         [DefaultValue(true)]
         [Range(0, 9999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 4)]
         public bool CatchPokemonWhileWalking { get; set; }
 
+        [ExcelConfig(Key = "AP")]
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 5)]
         public bool SpinPokestopWhileWalking { get; set; }
 
+        [ExcelConfig(Key = "AR")]
         [DefaultValue(60.0)]
         [Range(0, 999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 6)]
         public double MaxSpeedUpSpeed { get; set; }
 
+        [ExcelConfig(Key = "AQ")]
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 7)]
         public bool AllowSpeedUp { get; set; }
 
+        [ExcelConfig(Key = "AS")]
         [DefaultValue(10000)]
         [Range(0, 999999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 8)]
         public int DelayTimeAtDestination { get; set; }
 
+        [ExcelConfig(Key = "AT")]
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 9)]
         public bool AllowTransferWhileWalking { get; set; }

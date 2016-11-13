@@ -17,6 +17,10 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         public TransferFilter()
         {
+            MovesOperator = "and";
+            Moves = new List<List<PokemonMove>>();
+            DeprecatedMoves = new List<PokemonMove>();
+            
         }
 
         public TransferFilter(int keepMinCp, int keepMinLvl, bool useKeepMinLvl, float keepMinIvPercentage, string keepMinOperator, int keepMinDuplicatePokemon,
@@ -34,17 +38,19 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             MovesOperator = movesOperator;
             CatchOnlyPokemonMeetTransferCriteria = catchOnlyPokemonMeetTransferCriteria;
         }
-
+        [ExcelConfig(Key = "R")]
         [DefaultValue(1250)]
         [Range(0, 9999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public int KeepMinCp { get; set; }
 
+        [ExcelConfig (Key ="Q")]
         [DefaultValue(90)]
         [Range(0, 100)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
         public float KeepMinIvPercentage { get; set; }
 
+        [ExcelConfig(Key = "S")]
         [DefaultValue(6)]
         [Range(0, 99)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 3)]
@@ -54,16 +60,19 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 4)]
         public bool UseKeepMinLvl { get; set; }
 
+        [ExcelConfig(Key = "V")]
         [DefaultValue("or")]
         [EnumDataType(typeof(Operator))]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 5)]
         public string KeepMinOperator { get; set; }
 
+        [ExcelConfig(Key = "U")]
         [DefaultValue(1)]
         [Range(0, 999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 6)]
         public int KeepMinDuplicatePokemon { get; set; }
 
+        [ExcelConfig(Key = "T")]
         [DefaultValue(null)]
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 7)]
         public List<List<PokemonMove>> Moves { get; set; }
@@ -114,7 +123,6 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 {PokemonId.Arcanine, new TransferFilter(1800, 6, false, 80, "or", 1,new List<List<PokemonMove>>() { new List<PokemonMove>() { PokemonMove.FireFangFast,PokemonMove.FireBlast }},null,"and")},
                 {PokemonId.Snorlax, new TransferFilter(2600, 6, false, 90, "or", 1,new List<List<PokemonMove>>() { new List<PokemonMove>() { PokemonMove.ZenHeadbuttFast,PokemonMove.HyperBeam }},null,"and")},
                 {PokemonId.Dragonite, new TransferFilter(2600, 6, false, 90, "or", 1,new List<List<PokemonMove>>() { new List<PokemonMove>() { PokemonMove.DragonBreath,PokemonMove.DragonClaw }},null,"and")},
-
             };
         }
     }

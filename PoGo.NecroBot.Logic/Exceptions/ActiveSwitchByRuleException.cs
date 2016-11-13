@@ -13,7 +13,8 @@ namespace PoGo.NecroBot.Logic.Exceptions
         Pokemon,
         EXP,
         Runtime,
-        PokestopSoftban
+        PokestopSoftban,
+        CatchFlee
     }
     public class ActiveSwitchByRuleException : Exception
     {

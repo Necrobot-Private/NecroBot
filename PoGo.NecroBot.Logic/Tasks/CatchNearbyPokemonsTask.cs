@@ -45,7 +45,9 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
 
             foreach (var pokemon in pokemons)
-            {                               
+            {
+                await MSniperServiceTask.Execute(session, cancellationToken);
+                                          
                 cancellationToken.ThrowIfCancellationRequested();
                 string pokemonUniqueKey = $"{pokemon.EncounterId}";
 

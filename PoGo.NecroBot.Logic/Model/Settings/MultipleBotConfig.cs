@@ -12,12 +12,24 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
     public class BotSwitch
     {
+        [ExcelConfig(Key ="AV")]
         public int IV { get; set; }
+        [ExcelConfig(Key = "AW")]
         public int LV { get; set; }
+        [ExcelConfig(Key = "AY")]
+        public string Operator { get; set; }
+
+        [ExcelConfig(Key = "AX")]
+        public List<List<PokemonMove>> Moves { get; set; }
+        [ExcelConfig(Key = "AZ")]
         public double RemainTimes { get; set; }
 
+        public BotSwitch() {
+            this.Moves = new List<List<PokemonMove>>();
+        }
         public BotSwitch(int iv, int lv, double remain)
         {
+            this.Moves = new List<List<PokemonMove>>();
             this.IV = iv;
             this.LV = lv;
             this.RemainTimes = remain;

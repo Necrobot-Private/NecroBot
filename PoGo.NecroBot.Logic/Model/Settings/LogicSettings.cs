@@ -16,7 +16,6 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         private readonly GlobalSettings _settings;
 
         public LogicSettings(GlobalSettings settings)
-
         {
             _settings = settings;
         }
@@ -133,6 +132,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public ICollection<PokemonId> PokemonToUseMasterball => _settings.PokemonToUseMasterball;
         public Dictionary<PokemonId, TransferFilter> PokemonsTransferFilter => _settings.PokemonsTransferFilter;
         public Dictionary<PokemonId, UpgradeFilter> PokemonUpgradeFilters => _settings.PokemonUpgradeFilters;
+        public Dictionary<PokemonId, SnipeFilter> PokemonSnipeFilters => _settings.SnipePokemonFilter;
 
         public bool StartupWelcomeDelay => _settings.ConsoleConfig.StartupWelcomeDelay;
         public bool UseGoogleWalk => _settings.GoogleWalkConfig.UseGoogleWalk;
@@ -235,5 +235,6 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public MultipleBotConfig MultipleBotConfig => _settings.MultipleBotConfig;
         public List<AuthConfig> Bots => _settings.Auth.Bots;
         public bool AllowMultipleBot => _settings.Auth.AllowMultipleBot;
+        public int MinIVForAutoSnipe => _settings.SnipeConfig.MinIVForAutoSnipe;
     }
 }

@@ -37,12 +37,14 @@ namespace PoGo.NecroBot.Logic.State
             var state = initialState;
             var profilePath = Path.Combine(Directory.GetCurrentDirectory(), subPath);
             var profileConfigPath = Path.Combine(profilePath, "config");
-
+            globalSettings = GlobalSettings.Load(subPath);
+      
             FileSystemWatcher configWatcher = new FileSystemWatcher();
             configWatcher.Path = profileConfigPath;
             configWatcher.Filter = "config.json";
             configWatcher.NotifyFilter = NotifyFilters.LastWrite;
             configWatcher.EnableRaisingEvents = true;
+
             configWatcher.Changed += (sender, e) =>
             {
                 if (e.ChangeType == WatcherChangeTypes.Changed)
@@ -52,6 +54,24 @@ namespace PoGo.NecroBot.Logic.State
                     configWatcher.EnableRaisingEvents = !configWatcher.EnableRaisingEvents;
                     configWatcher.EnableRaisingEvents = !configWatcher.EnableRaisingEvents;
                     Logger.Write(" ##### config.json ##### ", LogLevel.Info);
+                }
+            };
+
+            FileSystemWatcher excelConfigWatcher = new FileSystemWatcher();
+            excelConfigWatcher.Path = profileConfigPath;
+            excelConfigWatcher.Filter = "config.xlsm";
+            excelConfigWatcher.NotifyFilter = NotifyFilters.LastWrite;
+            excelConfigWatcher.EnableRaisingEvents = true;
+
+            excelConfigWatcher.Changed += (sender, e) =>
+            {
+                if (e.ChangeType == WatcherChangeTypes.Changed)
+                {
+                    //globalSettings = GlobalSettings.Load(subPath);
+                    //session.LogicSettings = new LogicSettings(globalSettings);
+                    //configWatcher.EnableRaisingEvents = !configWatcher.EnableRaisingEvents;
+                    //configWatcher.EnableRaisingEvents = !configWatcher.EnableRaisingEvents;
+                    Logger.Write(" ##### config.xlsm ##### ", LogLevel.Info);
                 }
             };
 
@@ -92,6 +112,12 @@ namespace PoGo.NecroBot.Logic.State
                     if (se.MatchedRule == SwitchRules.PokestopSoftban)
                     {
                         session.BlockCurrentBot();
+                        session.ResetSessionToWithNextBot();
+                    }
+                    else 
+                    if(se.MatchedRule == SwitchRules.CatchFlee)
+                    {
+                        session.BlockCurrentBot(60);
                         session.ResetSessionToWithNextBot();
                     }
                     else

@@ -48,7 +48,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExcelConfigHelper.cs" />
     <Compile Include="PokemonConfig.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -64,10 +63,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FeroxRev\PokemonGo.RocketAPI.csproj">
-      <Project>{05d2da44-1b8e-4cf7-94ed-4d52451cd095}</Project>
-      <Name>PokemonGo.RocketAPI</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PoGo.NecroBot.CLI\PoGo.NecroBot.CLI.csproj">
       <Project>{1fea147e-f704-497b-a538-00b053b5f672}</Project>
       <Name>PoGo.NecroBot.CLI</Name>

@@ -153,10 +153,9 @@ namespace PoGo.NecroBot.CLI
                         await Task.Delay(POLLING_INTERVAL, cancellationToken);
                     }
                 }
-
             }
-
         }
+        
         private static void onSocketMessageRecieved(ISession session, object sender, WebSocketSharp.MessageEventArgs e)
         {
             try
@@ -167,11 +166,21 @@ namespace PoGo.NecroBot.CLI
                     var data = JsonConvert.DeserializeObject<EncounteredEvent>(match.Groups[1].Value);
                     data.IsRecievedFromSocket = true;
                     session.EventDispatcher.Send(data);
+                    MSniperServiceTask.AddSnipeItem(session, new MSniperServiceTask.EncounterInfo()
+                    {
+                        Latitude = data.Latitude,
+                        Longitude = data.Longitude,
+                        EncounterId = (ulong)Convert.ToInt64(data.EncounterId),
+                        SpawnPointId = data.SpawnPointId  ,
+                        PokemonId = data.PokemonId ,
+                        Iv = data.IV
+                    });
                     return;
                 }
                 match = Regex.Match(e.Data, "42\\[\"fpm\",(.*)]");
                 if (match != null && !string.IsNullOrEmpty(match.Groups[1].Value))
                 {
+                    
                     //var data = JsonConvert.DeserializeObject<List<Logic.Tasks.HumanWalkSnipeTask.FastPokemapItem>>(match.Groups[1].Value);
                     HumanWalkSnipeTask.AddFastPokemapItem(match.Groups[1].Value);
                     return;
