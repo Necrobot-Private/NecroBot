@@ -5,45 +5,45 @@ using PoGo.NecroBot.Logic.State;
 
 #endregion
 
-namespace PoGo.NecroBot.CLI.Models
+namespace PoGo.NecroBot.Logic.Logging
 {
-    internal class LoggingStrings
+    public class LoggingStrings
     {
-        internal static string Attention;
+        public static string Attention;
 
-        internal static string Berry;
+        public static string Berry;
 
-        internal static string Debug;
+        public static string Debug;
 
-        internal static string Egg;
+        public static string Egg;
 
-        internal static string Error;
+        public static string Error;
 
-        internal static string Evolved;
+        public static string Evolved;
 
-        internal static string Farming;
+        public static string Farming;
 
-        internal static string Info;
+        public static string Info;
 
-        internal static string Pkmn;
+        public static string Pkmn;
 
-        internal static string Pokestop;
+        public static string Pokestop;
 
-        internal static string Recycling;
+        public static string Recycling;
 
-        internal static string Sniper;
+        public static string Sniper;
 
-        internal static string Transferred;
+        public static string Transferred;
 
-        internal static string Update;
+        public static string Update;
 
-        internal static string New;
+        public static string New;
 
-        internal static string SoftBan;
-        internal static string Gym;
+        public static string SoftBan;
+        public static string Gym;
 
-        internal static string Service;
-        internal static void SetStrings(ISession session)
+        public static string Service;
+        public static void SetStrings(ISession session)
         {
             Attention =
                 session?.Translation.GetTranslation(
