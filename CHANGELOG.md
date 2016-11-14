@@ -1,5 +1,18 @@
 # Change Log
 
+## [v1.0.0.17](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.17) (2016-11-14)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.16...v1.0.0.17)
+
+**Feature:**
+
+- signalr integration for new msniper.com
+
+## [v1.0.0.16](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.16) (2016-11-11)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.15...v1.0.0.16)
+
+**Fixed bugs:**
+
+- Support for 0.45 API
 
 ## [v1.0.0.15](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.15) (2016-11-08)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.14...v1.0.0.15)

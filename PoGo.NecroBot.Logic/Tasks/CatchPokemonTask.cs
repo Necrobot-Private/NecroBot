@@ -172,7 +172,11 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 // Check for pokeballs before proceeding
                 var pokeball = await GetBestBall(session, encounteredPokemon, probability);
-                if (pokeball == ItemId.ItemUnknown) return;
+                if (pokeball == ItemId.ItemUnknown)
+                {
+                    Logger.Write(session.Translation.GetTranslation(TranslationString.ZeroPokeballInv));
+                    return;
+                }
 
                 // Calculate CP and IV
                 var pokemonCp = encounteredPokemon?.Cp;

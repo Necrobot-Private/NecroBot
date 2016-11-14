@@ -223,11 +223,11 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                     SetDevInfoByDeviceInfo(randomAppleDeviceInfo);
 
                     // Clear out the android fields.
-                    DeviceConfig.AndroidBoardName = "";
-                    DeviceConfig.AndroidBootloader = "";
-                    DeviceConfig.DeviceModelIdentifier = "";
-                    DeviceConfig.FirmwareTags = "";
-                    DeviceConfig.FirmwareFingerprint = "";
+                    DeviceConfig.AndroidBoardName = null;
+                    DeviceConfig.AndroidBootloader = null;
+                    DeviceConfig.DeviceModelIdentifier = null;
+                    DeviceConfig.FirmwareTags = null;
+                    DeviceConfig.FirmwareFingerprint = null;
                 }
 
                 if (string.IsNullOrEmpty(DeviceConfig.DeviceId) || DeviceConfig.DeviceId == "8525f5d8201f78b5")
