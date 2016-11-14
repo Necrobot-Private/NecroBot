@@ -3,7 +3,7 @@
 ## [v1.0.0.17](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.17) (2016-11-14)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.16...v1.0.0.17)
 
-**Fixed bugs:**
+**Feature:**
 
 - signalr integration for new msniper.com
 
