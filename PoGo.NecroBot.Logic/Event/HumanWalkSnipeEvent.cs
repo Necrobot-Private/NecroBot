@@ -49,5 +49,6 @@ namespace PoGo.NecroBot.Logic.Event
         public List<HumanWalkSnipeTask.SnipePokemonInfo> Pokemons { get; internal set; }
         public string UniqueId { get; internal set; }
         public int PauseDuration { get; internal set; }
+        public bool DisplayMessage { get; internal set; }
     }
 }

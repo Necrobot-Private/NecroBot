@@ -85,8 +85,16 @@
       "Value": "Nazwa: {0}  INFO: Zbieranie przedmiotów nie powiodła się, prawdopodobnie masz SoftBana. Odbanowanie za: {1}/{2}"
     },
     {
+      "Key": "gym",
+      "Value": "Gym"
+    },
+    {
+      "Key": "pokestop",
+      "Value": "PokeStopu"
+    },
+    {
       "Key": "eventFortTargeted",
-      "Value": "Dotarcie do PokeStopu: {0} za ({1}m) ({2}s) (route {3})"
+      "Value": "Dotarcie do {0}: {1} za ({2}m) ({3}s) (route {4})"
     },
     {
       "Key": "eventProfileLogin",

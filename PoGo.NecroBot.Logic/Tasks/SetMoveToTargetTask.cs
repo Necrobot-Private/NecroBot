@@ -23,34 +23,37 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         public static async Task Execute(ISession session, double lat, double lng, string fortId = "")
         {
-            if (!string.IsNullOrEmpty(fortId))
+            await Task.Run(() =>
             {
-                var knownFort = session.Forts.FirstOrDefault(x => x.Id == fortId);
-                if (knownFort != null)
+                if (!string.IsNullOrEmpty(fortId))
                 {
-                    _targetStop = knownFort;
-                    return;
+                    var knownFort = session.Forts.FirstOrDefault(x => x.Id == fortId);
+                    if (knownFort != null)
+                    {
+                        _targetStop = knownFort;
+                        return;
+                    }
                 }
-            }
-            //at this time only allow one target, can't be cancel
-            if (_targetStop == null || _targetStop.CooldownCompleteTimestampMs == 0)
-            {
-                _targetStop = new FortData()
+                //at this time only allow one target, can't be cancel
+                if (_targetStop == null || _targetStop.CooldownCompleteTimestampMs == 0)
                 {
-                    Latitude = lat,
-                    Longitude = lng,
-                    Id = TARGET_ID,
-                    Type = FortType.Checkpoint,
-                    CooldownCompleteTimestampMs = DateTime.UtcNow.AddHours(1).ToUnixTime()  //make sure bot not try to spin this fake pokestop
-                };
+                    _targetStop = new FortData()
+                    {
+                        Latitude = lat,
+                        Longitude = lng,
+                        Id = TARGET_ID,
+                        Type = FortType.Checkpoint,
+                        CooldownCompleteTimestampMs = DateTime.UtcNow.AddHours(1).ToUnixTime()  //make sure bot not try to spin this fake pokestop
+                    };
 
-                _fortInfo = new FortDetailsResponse()
-                {
-                    Latitude = lat,
-                    Longitude = lng,
-                    Name = "Your selected location"
-                };
-            }
+                    _fortInfo = new FortDetailsResponse()
+                    {
+                        Latitude = lat,
+                        Longitude = lng,
+                        Name = "Your selected location"
+                    };
+                }
+            });
         }
         public static async Task<bool> IsReachedDestination(FortData destination, ISession session, CancellationToken cancellationToken)
         {
@@ -78,6 +81,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
                 return _targetStop;
             }
+            await Task.Delay(0);//to avoid waning, nothing todo.
             return null;
         }
     }

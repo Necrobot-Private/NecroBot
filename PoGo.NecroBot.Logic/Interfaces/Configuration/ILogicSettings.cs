@@ -37,6 +37,8 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         bool FastSoftBanBypass { get; }
         bool EvolveAllPokemonWithEnoughCandy { get; }
         bool KeepPokemonsThatCanEvolve { get; }
+
+        bool UseTransferFilterToCatch { get; }
         bool TransferDuplicatePokemon { get; }
         bool TransferDuplicatePokemonOnCapture { get; }
         bool UseEggIncubators { get; }
@@ -61,6 +63,7 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         int ForceGreatThrowOverCp { get; }
         int ForceExcellentThrowOverCp { get; }
         int DelayBetweenPokemonCatch { get; }
+        int DelayBetweenPokemonUpgrade { get; }
         bool AutomaticallyLevelUpPokemon { get; }
         bool OnlyUpgradeFavorites { get; }
         bool UseLevelUpList { get; }
@@ -193,6 +196,8 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         bool HumanWalkingSnipeAllowSpeedUp { get; }
         double HumanWalkingSnipeMaxSpeedUpSpeed { get; }
         int HumanWalkingSnipeDelayTimeAtDestination { get; }
+        bool HumanWalkingSnipeAllowTransferWhileWalking { get; }
+
         bool HumanWalkingSnipeUsePokeRadar { get; }
         bool HumanWalkingSnipeUseSkiplagged { get; }
         bool HumanWalkingSnipeUsePokecrew { get; }
@@ -208,6 +213,7 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         int RenamePokemonActionDelay { get; }
 
         bool GymAllowed { get; }
+        bool GymPrioritizeOverPokestop { get; }
         TeamColor GymDefaultTeam { get; }
         double GymMaxDistance { get; }
         int GymMaxCPToDeploy {  get; }
@@ -215,5 +221,8 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         bool GymUseRandomPokemon { get; }
         int GymVisitTimeout { get; }
         int GymNumberOfTopPokemonToBeExcluded { get; }
+
+        bool DataSharingEnable { get; }
+        string DataSharingDataUrl { get; }
     }
 }

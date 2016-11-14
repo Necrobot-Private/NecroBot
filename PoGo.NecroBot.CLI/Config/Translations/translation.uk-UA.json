@@ -81,8 +81,16 @@
       "Value": "Назва: {0} ІНФО: Не вдалося отримати предмети, можливо софтбан. Розбан через: {1} / {2}"
     },
     {
+      "Key": "gym",
+      "Value": "Gym"
+    },
+    {
+      "Key": "pokestop",
+      "Value": "Pokestop"
+    },
+    {
       "Key": "eventFortTargeted",
-      "Value": "Прямуємо до <{0}>, дистанція ({1} м) ({2} seconds) (route {3})"
+      "Value": "{0} Прямуємо до <{1}>, дистанція ({2} м) ({3} seconds) (route {4})"
     },
     {
       "Key": "eventProfileLogin",

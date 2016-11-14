@@ -85,8 +85,16 @@
       "Value": "Nume: {0} INFO: Colectare eșuată, posibil softban. Debanare în: {1}/{2}"
     },
     {
+      "Key": "gym",
+      "Value": "Gym"
+    },
+    {
+      "Key": "pokestop",
+      "Value": "pokestopul"
+    },
+    {
       "Key": "eventFortTargeted",
-      "Value": "Călătoresc la pokestopul \"{0}\" ({1}m) ({2} secunde) (route {3})"
+      "Value": "Călătoresc la {0} \"{1}\" ({2}m) ({3} secunde) (route {4})"
     },
     {
       "Key": "eventProfileLogin",

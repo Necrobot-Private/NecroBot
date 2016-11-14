@@ -65,8 +65,8 @@
       <HintPath>$(SolutionDir)\packages\GeoCoordinate.1.1.0\lib\portable-net45+wp80+win+wpa81\GeoCoordinatePortable.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Google.Protobuf, Version=3.0.0.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)\packages\Google.Protobuf.3.0.0\lib\net45\Google.Protobuf.dll</HintPath>
+    <Reference Include="Google.Protobuf, Version=3.1.0.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Google.Protobuf.3.1.0\lib\net45\Google.Protobuf.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="LRUCache, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -112,6 +112,7 @@
       <HintPath>$(SolutionDir)\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\System.Runtime.InteropServices.RuntimeInformation.4.0.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
       <Private>True</Private>
@@ -137,13 +138,18 @@
     <Compile Include="Event\DisplayHighestsPokemonEvent.cs" />
     <Compile Include="Event\EggHatchedEvent.cs" />
     <Compile Include="Event\EggsListEvent.cs" />
+    <Compile Include="Event\EncounteredEvent.cs" />
     <Compile Include="Event\EventDispatcher.cs" />
+    <Compile Include="Event\EventUsedPotion.cs" />
+    <Compile Include="Event\EventUsedRevive.cs" />
     <Compile Include="Event\EvolveCountEvent.cs" />
     <Compile Include="Event\FortTargetEvent.cs" />
     <Compile Include="Event\FortFailedEvent.cs" />
     <Compile Include="Event\FortUsedEvent.cs" />
+    <Compile Include="Event\Gym\GymBattleStarted.cs" />
     <Compile Include="Event\Gym\GymDeployEvent.cs" />
     <Compile Include="Event\Gym\GymDetailInfoEvent.cs" />
+    <Compile Include="Event\Gym\GymErrorUnset.cs" />
     <Compile Include="Event\Gym\GymListEvent.cs" />
     <Compile Include="Event\Gym\GymTeamJoinEvent.cs" />
     <Compile Include="Event\Gym\GymWalkToTargetEvent.cs" />
@@ -160,6 +166,7 @@
     <Compile Include="Event\PokemonListEvent.cs" />
     <Compile Include="Event\PokemonLevelUpEvent.cs" />
     <Compile Include="Event\SnipeScanEvent.cs" />
+    <Compile Include="Event\NicknameUpdateEvent.cs" />
     <Compile Include="Event\UpgradePokemonEvent.cs" />
     <Compile Include="Event\UpdateEvent.cs" />
     <Compile Include="Event\PokemonCaptureEvent.cs" />
@@ -172,7 +179,11 @@
     <Compile Include="Interfaces\Configuration\ILogicSettings.cs" />
     <Compile Include="Inventory.cs" />
     <Compile Include="Localization\Localizer.cs" />
+    <Compile Include="Logging\WebSocketLogger.cs" />
+    <Compile Include="Logging\FileLogger.cs" />
     <Compile Include="Logging\Logger.cs" />
+    <Compile Include="Logging\LoggingStrings.cs" />
+    <Compile Include="Model\BotActions.cs" />
     <Compile Include="Model\Google\GoogleObjects\Address_Components.cs" />
     <Compile Include="Model\Google\GoogleObjects\Bounds.cs" />
     <Compile Include="Model\Google\GoogleObjects\DirectionsResponse.cs" />
@@ -192,6 +203,7 @@
     <Compile Include="Model\Google\GoogleObjects\ValueText.cs" />
     <Compile Include="Model\Google\GoogleResult.cs" />
     <Compile Include="Model\Google\GoogleWalk.cs" />
+    <Compile Include="Model\IGeoLocation.cs" />
     <Compile Include="Model\PokemonGrade.cs" />
     <Compile Include="Model\Settings\AuthConfig.cs" />
     <Compile Include="Model\Settings\AuthSettings.cs" />
@@ -199,6 +211,7 @@
     <Compile Include="Model\Settings\ClientSettings.cs" />
     <Compile Include="Model\Settings\ConsoleConfig.cs" />
     <Compile Include="Model\Settings\CustomCatchConfig.cs" />
+    <Compile Include="Model\Settings\DataSharingConfig.cs" />
     <Compile Include="Model\Settings\DeviceConfig.cs" />
     <Compile Include="Model\Settings\EvolveConfig.cs" />
     <Compile Include="Model\Settings\GlobalSettings.cs" />
@@ -232,7 +245,6 @@
     <Compile Include="Navigation.cs" />
     <Compile Include="PoGoUtils\PokemonInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Service\BotService.cs" />
     <Compile Include="Service\Elevation\BaseElevationService.cs" />
     <Compile Include="Service\Elevation\ElevationService.cs" />
     <Compile Include="Service\Elevation\IElevationService.cs" />
@@ -245,6 +257,7 @@
     <Compile Include="Model\Settings\LogicSettings.cs" />
     <Compile Include="Service\MapzenDirectionsService.cs" />
     <Compile Include="Service\YoursDirectionsService.cs" />
+    <Compile Include="State\BlockableScope.cs" />
     <Compile Include="State\CheckTosState.cs" />
     <Compile Include="State\SessionStats.cs" />
     <Compile Include="Strategies\Walk\BaseWalkStrategy.cs" />
@@ -307,11 +320,10 @@
     <Compile Include="State\StateMachine.cs" />
     <Compile Include="Tasks\FarmPokestopsGPXTask.cs" />
     <Compile Include="Tasks\FarmPokestopsTask.cs" />
-    <Compile Include="Tasks\Login.cs" />
     <Compile Include="Tasks\RecycleItemsTask.cs" />
     <Compile Include="Tasks\RenamePokemonTask.cs" />
     <Compile Include="Tasks\SetMoveToTargetTask.cs" />
-    <Compile Include="Tasks\SnipeMSniperTask.cs" />
+    <Compile Include="Tasks\MSniperServiceTask.cs" />
     <Compile Include="Tasks\SnipePokemonTask.cs" />
     <Compile Include="Tasks\TransferDuplicatePokemonTask.cs" />
     <Compile Include="Event\UseLuckyEggEvent.cs" />
@@ -319,13 +331,13 @@
     <Compile Include="Event\WarnEvent.cs" />
     <Compile Include="Tasks\TransferPokemonTask.cs" />
     <Compile Include="Tasks\TransferWeakPokemonTask.cs" />
+    <Compile Include="Tasks\UpgradeSinglePokemonTask.cs" />
     <Compile Include="Tasks\UseIncenseConstantlyTask.cs" />
     <Compile Include="Tasks\UseGymBattleTask.cs" />
     <Compile Include="Tasks\UseIncubatorsTask.cs" />
     <Compile Include="Tasks\UseLuckyEggConstantlyTask.cs" />
     <Compile Include="Tasks\UseNearbyPokestopsTask.cs" />
     <Compile Include="Utils\DelayingUtils.cs" />
-    <Compile Include="Utils\DeviceInfoHelper.cs" />
     <Compile Include="Utils\EggWalker.cs" />
     <Compile Include="Utils\ErrorHandler.cs" />
     <Compile Include="Utils\GPXReader.cs" />

@@ -7,6 +7,7 @@ using POGOProtos.Networking.Responses;
 using PoGo.NecroBot.Logic.State;
 using PokemonGo.RocketAPI;
 using PoGo.NecroBot.Logic.Service;
+using PoGo.NecroBot.Logic.Service.Elevation;
 
 #endregion
 
@@ -14,10 +15,10 @@ namespace PoGo.NecroBot.Logic.Utils
 {
     public static class LocationUtils
     {
-        public static async Task<PlayerUpdateResponse> UpdatePlayerLocationWithAltitude(ISession session, GeoCoordinate position)
+        public static async Task<PlayerUpdateResponse> UpdatePlayerLocationWithAltitude(ISession session, GeoCoordinate position, float speed)
         {
             double altitude = session.ElevationService.GetElevation(position.Latitude, position.Longitude);
-            return await session.Client.Player.UpdatePlayerLocation(position.Latitude, position.Longitude, altitude);
+            return await session.Client.Player.UpdatePlayerLocation(position.Latitude, position.Longitude, altitude, speed);
         }
 
         public static double CalculateDistanceInMeters(double sourceLat, double sourceLng, double destLat,
@@ -36,10 +37,10 @@ namespace PoGo.NecroBot.Logic.Utils
                 destinationLocation.Latitude, destinationLocation.Longitude);
         }
 
-        public static double getElevation(ISession session, double lat, double lon)
+        public static double getElevation(IElevationService elevationService, double lat, double lon)
         {
-            if (session != null)
-                return session.ElevationService.GetElevation(lat, lon);
+            if (elevationService != null)
+                return elevationService.GetElevation(lat, lon);
 
             Random random = new Random();
             double maximum = 11.0f;

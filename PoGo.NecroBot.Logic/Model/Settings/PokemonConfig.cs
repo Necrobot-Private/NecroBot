@@ -282,17 +282,22 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public int KeepMinDuplicatePokemon = 1;
 
         /*NotCatch*/
-        [DefaultValue(false)]
+        [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 55)]
-        public bool UsePokemonToNotCatchFilter;
+        public bool UsePokemonToNotCatchFilter = true;
 
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 56)]
-        public bool UsePokemonSniperFilterOnly;
+        public bool UsePokemonSniperFilterOnly = false;
 
         /*Dump Stats*/
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 57)]
         public bool DumpPokemonStats;
+
+        [DefaultValue(10000)]
+        [Range(0, 99999)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 58)]
+        public int DelayBetweenPokemonUpgrade = 10000;
     }
 }

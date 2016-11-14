@@ -478,7 +478,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 await
                     LocationUtils.UpdatePlayerLocationWithAltitude(session,
-                        new GeoCoordinate(latitude, longitude, session.Client.CurrentAltitude));
+                        new GeoCoordinate(latitude, longitude, session.Client.CurrentAltitude), 0); // Set speed to 0 for random speed.
 
                 session.EventDispatcher.Send(new UpdatePositionEvent
                 {
@@ -498,7 +498,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 await
                     LocationUtils.UpdatePlayerLocationWithAltitude(session,
-                        new GeoCoordinate(currentLatitude, currentLongitude, session.Client.CurrentAltitude));
+                        new GeoCoordinate(currentLatitude, currentLongitude, session.Client.CurrentAltitude), 0); // Set speed to 0 for random speed.
             }
 
             if (catchablePokemon.Count == 0)
@@ -516,7 +516,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     await
                         LocationUtils.UpdatePlayerLocationWithAltitude(session,
-                            new GeoCoordinate(latitude, longitude, session.Client.CurrentAltitude));
+                            new GeoCoordinate(latitude, longitude, session.Client.CurrentAltitude), 0); // Set speed to 0 for random speed.
 
                     encounter =
                         session.Client.Encounter.EncounterPokemon(pokemon.EncounterId, pokemon.SpawnPointId).Result;
@@ -525,7 +525,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     await
                         LocationUtils.UpdatePlayerLocationWithAltitude(session,
-                            new GeoCoordinate(currentLatitude, currentLongitude, session.Client.CurrentAltitude));
+                            new GeoCoordinate(currentLatitude, currentLongitude, session.Client.CurrentAltitude), 0); // Set speed to 0 for random speed.
                 }
 
                 switch (encounter.Status)
@@ -545,7 +545,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                             Longitude = currentLongitude
                         });
 
-                        await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon);
+                        await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, 
+                            currentFortData: null, sessionAllowTransfer: true);
+
                         catchedPokemon = true;
                         break;
 

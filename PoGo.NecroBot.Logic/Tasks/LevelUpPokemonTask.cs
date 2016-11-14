@@ -32,20 +32,24 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             var upgradeResult = await session.Inventory.UpgradePokemon(pokemon.Id);
 
-            var bestPokemonOfType = (session.LogicSettings.PrioritizeIvOverCp
-    ? await session.Inventory.GetHighestPokemonOfTypeByIv(upgradeResult.UpgradedPokemon)
-    : await session.Inventory.GetHighestPokemonOfTypeByCp(upgradeResult.UpgradedPokemon)) ?? upgradeResult.UpgradedPokemon;
-
-            if (upgradeResult.Result.ToString().ToLower().Contains("success"))
+            if (upgradeResult.UpgradedPokemon != null)
             {
-                session.EventDispatcher.Send(new UpgradePokemonEvent()
+                var bestPokemonOfType = (session.LogicSettings.PrioritizeIvOverCp
+                    ? await session.Inventory.GetHighestPokemonOfTypeByIv(upgradeResult.UpgradedPokemon)
+                    : await session.Inventory.GetHighestPokemonOfTypeByCp(upgradeResult.UpgradedPokemon)) ?? upgradeResult.UpgradedPokemon;
+
+                if (upgradeResult.Result.ToString().ToLower().Contains("success"))
                 {
-                    Id = upgradeResult.UpgradedPokemon.PokemonId,
-                    Cp = upgradeResult.UpgradedPokemon.Cp,
-                    BestCp = bestPokemonOfType.Cp,
-                    BestPerfection = PokemonInfo.CalculatePokemonPerfection(bestPokemonOfType),
-                    Perfection = PokemonInfo.CalculatePokemonPerfection(upgradeResult.UpgradedPokemon)
-                });
+                    session.EventDispatcher.Send(new UpgradePokemonEvent()
+                    {
+                        PokemonId = upgradeResult.UpgradedPokemon.PokemonId,
+                        Id = upgradeResult.UpgradedPokemon.Id,
+                        Cp = upgradeResult.UpgradedPokemon.Cp,
+                        BestCp = bestPokemonOfType.Cp,
+                        BestPerfection = PokemonInfo.CalculatePokemonPerfection(bestPokemonOfType),
+                        Perfection = PokemonInfo.CalculatePokemonPerfection(upgradeResult.UpgradedPokemon)
+                    });
+                }
             }
             return true;
 
@@ -59,7 +63,6 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (session.Inventory.GetStarDust() <= session.LogicSettings.GetMinStarDustForLevelUp)
                 return;
             upgradablePokemon = await session.Inventory.GetPokemonToUpgrade();
-           
                       
             if (upgradablePokemon.Count() == 0)
                 return;
@@ -86,7 +89,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                             await UpgradeSinglePokemon(session, pokemon, pokemonFamilies, pokemonSettings);
                             if (upgradedNumber >= session.LogicSettings.AmountOfTimesToUpgradeLoop)
                                 break;
-                            await Task.Delay(session.LogicSettings.DelayBetweenPlayerActions);
+                            await Task.Delay(session.LogicSettings.DelayBetweenPokemonUpgrade);
                             upgradedNumber++;
                         }
                         else

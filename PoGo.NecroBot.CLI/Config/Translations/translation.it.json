@@ -85,8 +85,16 @@
       "Value": "Raccolta oggetti fallita, possibile softban. Unban in: {1}/{2}"
     },
     {
+      "Key": "gym",
+      "Value": "Gym"
+    },
+    {
+      "Key": "pokestop",
+      "Value":  "PokeStop"
+    },
+    {
       "Key": "eventFortTargeted",
-      "Value": "Camminando verso il Pokestop: {0} ({1}m) ({2} secondi) (route {3})"
+      "Value": "Camminando verso il {0}: {1} ({2}m) ({3} secondi) (route {4})"
     },
     {
       "Key": "eventProfileLogin",

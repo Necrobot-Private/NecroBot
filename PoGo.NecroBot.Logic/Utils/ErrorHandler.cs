@@ -17,11 +17,11 @@ namespace PoGo.NecroBot.Logic.Utils
             if( strMessage != null)
                 Logger.Write( strMessage, level );
 
-            Console.Write( "Ending Application... " );
+            Logger.Write( "Ending Application... ", LogLevel.Error );
 
             for( int i = timeout; i > 0; i-- )
             {
-                Console.Write( "\b" + i );
+                Logger.Write( "\b" + i, LogLevel.Error );
                 System.Threading.Thread.Sleep( 1000 );
             }
 

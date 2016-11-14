@@ -24,7 +24,34 @@ namespace PoGo.NecroBot.Logic.Common
             _session = session;
         }
 
-        public async Task<ApiOperation> HandleApiFailure()
+        public void HandleApiSuccess(RequestEnvelope request, ResponseEnvelope response)
+        {
+            if (response.StatusCode == ResponseEnvelope.Types.StatusCode.BadRequest)
+            {
+                for (var i = 0; i < request.Requests.Count; i++)
+                {
+                    if (request.Requests[i].RequestType != RequestType.GetInventory || !response.Returns[i].IsEmpty)
+                        continue;
+
+                    _session.EventDispatcher.Send(new ErrorEvent
+                    {
+                        Message = _session.Translation.GetTranslation(TranslationString.AccountBanned)
+                    });
+
+                    _session.EventDispatcher.Send(new WarnEvent
+                    {
+                        Message = _session.Translation.GetTranslation(TranslationString.RequireInputText)
+                    });
+
+                    Console.ReadKey();
+                    Environment.Exit(0);
+                }
+            }
+
+            _retryCount = 0;
+        }
+
+        public async Task<ApiOperation> HandleApiFailure(RequestEnvelope request, ResponseEnvelope response)
         {
             if (_retryCount == 11)
                 return ApiOperation.Abort;
@@ -32,19 +59,54 @@ namespace PoGo.NecroBot.Logic.Common
             await Task.Delay(500);
             _retryCount++;
 
-            if (_retryCount % 5 == 0)
+            if (_retryCount%5 != 0)
+                return ApiOperation.Retry;
+
+            try
             {
                 DoLogin();
+            }
+            catch (PtcOfflineException)
+            {
+                await Task.Delay(20000);
+            }
+            catch (AccessTokenExpiredException)
+            {
+                await Task.Delay(2000);
+            }
+            catch(MinimumClientVersionException ex)
+            {
+                // Re-throw this exception since we need to exit the app.
+                throw ex;
+            }
+            catch (Exception ex) when (ex is InvalidResponseException || ex is TaskCanceledException)
+            {
+                await Task.Delay(1000);
             }
 
             return ApiOperation.Retry;
         }
 
-        public void HandleApiSuccess()
+        public void HandleCaptcha(string challengeUrl, ICaptchaResponseHandler captchaResponseHandler)
         {
-            _retryCount = 0;
-        }
+            // TODO Show captcha get token and pass it back.
+            // string token = "";
+            // captchaResponseHandler.SetCaptchaToken(token);
 
+            _session.EventDispatcher.Send(new ErrorEvent
+            {
+                Message = _session.Translation.GetTranslation(TranslationString.CaptchaShown)
+            });
+
+            _session.EventDispatcher.Send(new WarnEvent
+            {
+                Message = _session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey)
+            });
+
+            Console.ReadKey();
+            Environment.Exit(0);
+        }
+        
         private async void DoLogin()
         {
             try
@@ -121,7 +183,7 @@ namespace PoGo.NecroBot.Logic.Common
             }
             catch (InvalidResponseException)
             {
-                _session.EventDispatcher.Send(new ErrorEvent()
+                _session.EventDispatcher.Send(new ErrorEvent
                 {
                     Message = _session.Translation.GetTranslation(TranslationString.InvalidResponse)
                 });
@@ -132,6 +194,11 @@ namespace PoGo.NecroBot.Logic.Common
 
                 await Task.Delay(5000);
             }
+            catch(MinimumClientVersionException ex)
+            {
+                // Re-throw this exception since we need to exit the app.
+                throw ex;
+            }
             catch (Exception ex)
             {
                 _session.EventDispatcher.Send(new ErrorEvent
@@ -139,63 +206,6 @@ namespace PoGo.NecroBot.Logic.Common
                     Message = (ex.InnerException ?? ex).ToString()
                 });
             }
-        }
-        public void HandleApiSuccess(RequestEnvelope request, ResponseEnvelope response)
-        {
-            if (response.StatusCode == 3)
-            {
-                for (int i = 0; i < request.Requests.Count; i++)
-                {
-                    if (request.Requests[i].RequestType == RequestType.GetInventory && response.Returns[i].IsEmpty)
-                    {
-                        _session.EventDispatcher.Send(new ErrorEvent
-                        {
-                            Message = _session.Translation.GetTranslation(TranslationString.AccountBanned)
-                        });
-
-                        _session.EventDispatcher.Send(new WarnEvent
-                        {
-                            Message = _session.Translation.GetTranslation(TranslationString.RequireInputText)
-                        });
-
-                        Console.ReadKey();
-                        Environment.Exit(0);
-                    }
-                }
-            }
-
-            _retryCount = 0;
-        }
-
-        public async Task<ApiOperation> HandleApiFailure(RequestEnvelope request, ResponseEnvelope response)
-        {
-            if (_retryCount == 11)
-                return ApiOperation.Abort;
-
-            await Task.Delay(500);
-            _retryCount++;
-
-            if (_retryCount % 5 == 0)
-            {
-                try
-                {
-                    DoLogin();
-                }
-                catch (PtcOfflineException)
-                {
-                    await Task.Delay(20000);
-                }
-                catch (AccessTokenExpiredException)
-                {
-                    await Task.Delay(2000);
-                }
-                catch (Exception ex) when (ex is InvalidResponseException || ex is TaskCanceledException)
-                {
-                    await Task.Delay(1000);
-                }
-            }
-
-            return ApiOperation.Retry;
         }
     }
 }

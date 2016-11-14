@@ -139,17 +139,38 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                         // validate Json using JsonSchema
                         Logger.Write("Validating auth.json...");
                         var jsonObj = JObject.Parse(input);
-                        IList<ValidationError> errors;
-                        var valid = jsonObj.IsValid(JsonSchema, out errors);
-                        if (!valid)
+                        IList<ValidationError> errors = null;
+                        bool valid;
+                        try
                         {
-                            foreach (var error in errors)
+                            valid = jsonObj.IsValid(JsonSchema, out errors);
+                        }
+                        catch (JSchemaException ex)
+                        {
+                            if (ex.Message.Contains("commercial licence") || ex.Message.Contains("free-quota"))
                             {
                                 Logger.Write(
-                                    "auth.json [Line: " + error.LineNumber + ", Position: " + error.LinePosition + "]: " +
-                                    error.Path + " " +
-                                    error.Message, LogLevel.Error);
+                                    "auth.json: " + ex.Message);
+                                valid = false;
                             }
+                            else
+                            {
+                                throw;
+                            }
+                        }
+                        if (!valid)
+                        {
+                            if (errors != null)
+                            {
+                                foreach (var error in errors)
+                                {
+                                    Logger.Write(
+                                        "auth.json [Line: " + error.LineNumber + ", Position: " + error.LinePosition + "]: " +
+                                        error.Path + " " +
+                                        error.Message, LogLevel.Error);
+                                }
+                            }
+
                             Logger.Write("Fix auth.json and restart NecroBot or press a key to ignore and continue...",
                                 LogLevel.Warning);
                             Console.ReadKey();
@@ -168,10 +189,15 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                     {
                         var randomAppleDeviceInfo = DeviceInfoHelper.GetRandomIosDevice();
                         SetDevInfoByDeviceInfo(randomAppleDeviceInfo);
+
+                        // After generating iOS settings, automatically set the package name to "custom", so that we don't regenerate settings every time we start.
+                        DeviceConfig.DevicePackageName = "custom";
                     }
                 }
                 else
                 {
+                    // We cannot emulate Android at the moment, so if we got here, then regenerate the settings with random iOS device.
+                    /*
                     // Android
                     if (!DeviceConfig.DevicePackageName.Equals("random", StringComparison.InvariantCultureIgnoreCase) &&
                         !DeviceConfig.DevicePackageName.Equals("custom", StringComparison.InvariantCultureIgnoreCase))
@@ -189,12 +215,27 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                         DeviceConfig.DevicePackageName = DeviceInfoHelper.AndroidDeviceInfoSets.Keys.ToArray()[rndIdx];
                         SetDevInfoByKey();
                     }
-                }
-                if (string.IsNullOrEmpty(DeviceConfig.DeviceId) || DeviceConfig.DeviceId == "8525f5d8201f78b5")
-                    DeviceConfig.DeviceId = RandomString(16, "0123456789abcdef");
-                        // changed to random hex as full alphabet letters could have been flagged
+                    */
+                    DeviceConfig.DevicePlatform = "ios";
+                    DeviceConfig.DevicePackageName = "custom";
 
-                // Jurann: Note that some device IDs I saw when adding devices had smaller numbers, only 12 or 14 chars instead of 16 - probably not important but noted here anyway
+                    var randomAppleDeviceInfo = DeviceInfoHelper.GetRandomIosDevice();
+                    SetDevInfoByDeviceInfo(randomAppleDeviceInfo);
+
+                    // Clear out the android fields.
+                    DeviceConfig.AndroidBoardName = null;
+                    DeviceConfig.AndroidBootloader = null;
+                    DeviceConfig.DeviceModelIdentifier = null;
+                    DeviceConfig.FirmwareTags = null;
+                    DeviceConfig.FirmwareFingerprint = null;
+                }
+
+                if (string.IsNullOrEmpty(DeviceConfig.DeviceId) || DeviceConfig.DeviceId == "8525f5d8201f78b5")
+                {
+                    // Changed to random hex as full alphabet letters could have been flagged
+                    // iOS device ids are 16 bytes (32 chars long)
+                    DeviceConfig.DeviceId = RandomString(32, "0123456789abcdef");
+                }
 
                 if (!boolSkipSave)
                     Save(_filePath);

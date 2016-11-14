@@ -1,10 +1,7 @@
 ﻿using Caching;
-using GeoCoordinatePortable;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using PoGo.NecroBot.Logic.State;
+using PoGo.NecroBot.Logic.Model.Settings;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net;
 
@@ -12,10 +9,10 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
 {
     public class MapzenElevationService : BaseElevationService
     {
-        public MapzenElevationService(ISession session, LRUCache<string, double> cache) : base(session, cache)
+        public MapzenElevationService(GlobalSettings settings, LRUCache<string, double> cache) : base(settings, cache)
         {
-            if (!string.IsNullOrEmpty(session.LogicSettings.MapzenElevationApiKey))
-                _apiKey = session.LogicSettings.MapzenElevationApiKey;
+            if (!string.IsNullOrEmpty(settings.MapzenWalkConfig.MapzenElevationApiKey))
+                _apiKey = settings.MapzenWalkConfig.MapzenElevationApiKey;
         }
 
         public override string GetServiceId()

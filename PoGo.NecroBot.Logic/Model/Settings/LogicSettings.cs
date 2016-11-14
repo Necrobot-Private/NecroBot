@@ -88,7 +88,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public double ForceExcellentThrowOverIv => _settings.CustomCatchConfig.ForceExcellentThrowOverIv;
         public int ForceGreatThrowOverCp => _settings.CustomCatchConfig.ForceGreatThrowOverCp;
         public int ForceExcellentThrowOverCp => _settings.CustomCatchConfig.ForceExcellentThrowOverCp;
+        public int DelayBetweenPokemonUpgrade => _settings.PokemonConfig.DelayBetweenPokemonUpgrade;
         public int DelayBetweenPokemonCatch => _settings.PokemonConfig.DelayBetweenPokemonCatch;
+
         public int DelayBetweenPlayerActions => _settings.PlayerConfig.DelayBetweenPlayerActions;
         public int EvolveActionDelay => _settings.PlayerConfig.EvolveActionDelay;
         public int TransferActionDelay => _settings.PlayerConfig.TransferActionDelay;
@@ -209,8 +211,10 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool HumanWalkingSnipeUsePokeWatcher => _settings.HumanWalkSnipeConfig.UsePokeWatcher;
         public bool HumanWalkingSnipeUseFastPokemap => _settings.HumanWalkSnipeConfig.UseFastPokemap;
         public bool HumanWalkingSnipeUsePogoLocationFeeder => _settings.HumanWalkSnipeConfig.UsePogoLocationFeeder;
+        public bool HumanWalkingSnipeAllowTransferWhileWalking => _settings.HumanWalkSnipeConfig.AllowTransferWhileWalking;
 
         public bool GymAllowed => _settings.GymConfig.Enable;
+        public bool GymPrioritizeOverPokestop => _settings.GymConfig.PrioritizeGymOverPokestop;
         public TeamColor GymDefaultTeam =>(TeamColor)Enum.Parse(typeof(TeamColor), _settings.GymConfig.DefaultTeam);
 
         public double GymMaxDistance => _settings.GymConfig.MaxDistance;
@@ -221,5 +225,11 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool GymUseRandomPokemon => _settings.GymConfig.UseRandomPokemon;
 
         public int GymNumberOfTopPokemonToBeExcluded => _settings.GymConfig.NumberOfTopPokemonToBeExcluded;
-    }                         
+
+        public bool DataSharingEnable => _settings.DataSharingConfig.EnableSyncData;
+
+        public string DataSharingDataUrl => _settings.DataSharingConfig.DataRecieverURL;
+
+        public bool UseTransferFilterToCatch => _settings.CustomCatchConfig.UseTransferFilterToCatch;
+    }
 }

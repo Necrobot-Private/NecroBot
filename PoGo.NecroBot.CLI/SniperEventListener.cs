@@ -34,6 +34,21 @@ namespace PoGo.NecroBot.CLI
                 session
                 );
         }
+
+        public static void HandleEvent(EncounteredEvent ev, ISession session)
+        {
+            if (!ev.IsRecievedFromSocket) return;
+
+            Logic.Tasks.HumanWalkSnipeTask.AddSnipePokemon("mypogosnipers.com",
+                ev.PokemonId,
+                ev.Latitude,
+                ev.Longitude,
+                ev.Expires,
+                ev.IV,
+                session
+                );
+        }
+
         internal void Listen(IEvent evt, ISession session)
         {
             dynamic eve = evt;

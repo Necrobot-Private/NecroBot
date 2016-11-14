@@ -36,6 +36,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     PokemonId = incensePokemon.PokemonId,
                     SpawnPointId = incensePokemon.EncounterLocation
                 };
+                if (session.Cache.Get(incensePokemon.EncounterId.ToString()) != null) return; //pokemon been ignore before
 
                 if( ( session.LogicSettings.UsePokemonSniperFilterOnly && !session.LogicSettings.PokemonToSnipe.Pokemon.Contains( pokemon.PokemonId ) ) ||
                     ( session.LogicSettings.UsePokemonToNotCatchFilter && session.LogicSettings.PokemonsNotToCatch.Contains( pokemon.PokemonId ) ) )
@@ -56,7 +57,10 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     if (encounter.Result == IncenseEncounterResponse.Types.Result.IncenseEncounterSuccess && session.LogicSettings.CatchPokemon)
                     {
-                        await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon);
+
+                        //await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon);
+                        await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, 
+                            currentFortData: null, sessionAllowTransfer: true);
                     }
                     else if (encounter.Result == IncenseEncounterResponse.Types.Result.PokemonInventoryFull)
                     {

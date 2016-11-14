@@ -6,6 +6,8 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using POGOProtos.Enums;
+using PoGo.NecroBot.Logic.State;
+using System.Threading;
 
 namespace PoGo.NecroBot.Logic.Tasks
 {
@@ -45,21 +47,29 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         }
 
-        private static void EnsureDataLive()
+        private static void StartAsyncPollingTask(ISession session, CancellationToken cancellationToken)
         {
-            int liveUpdateCount = 6;
+            if (!session.LogicSettings.HumanWalkingSnipeUseFastPokemap) return;
 
             if (taskDataLive != null && !taskDataLive.IsCompleted) return;
-            taskDataLive = Task.Run(async () =>  
+            taskDataLive = Task.Run(() =>  
             {
-				while(liveUpdateCount > 0)
+				while(true)
                 {
-                    liveUpdateCount--;
-                    var lat = _session.Client.CurrentLatitude;
-                    var lng = _session.Client.CurrentLongitude;
-                    var api = $"https://api.fastpokemap.se/?key=allow-all&ts=0&lat={lat}&lng={lng}";
-                    await DownloadContent(api);
-                    await Task.Delay(10000);
+                    try
+                    {
+                        cancellationToken.ThrowIfCancellationRequested();
+                        var lat = _session.Client.CurrentLatitude;
+                        var lng = _session.Client.CurrentLongitude;
+                        var api = $"https://api.fastpokemap.se/?key=allow-all&ts=0&lat={lat}&lng={lng}";
+                        string content =  DownloadContent(api).Result;
+                        Task.Delay(5 * 60 * 1000).Wait();
+                    }
+                    catch
+                    {
+                        
+                    }
+                    
                 }
             });
         }
@@ -129,7 +139,6 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             try
             {
-                EnsureDataLive();
                 string url = $"https://cache.fastpokemap.se/?key=allow-all&ts=0&compute={GetIP()}&lat={lat}&lng={lng}";
                 
                 var json = await DownloadContent(url);

@@ -11,6 +11,7 @@ using POGOProtos.Enums;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Networking.Responses;
 using PoGo.NecroBot.Logic.Event.Gym;
+using POGOProtos.Map.Fort;
 #endregion
 
 namespace PoGo.NecroBot.CLI
@@ -75,15 +76,13 @@ namespace PoGo.NecroBot.CLI
         {
             Logger.Write(
                 session.Translation.GetTranslation(TranslationString.EventPokemonUpgraded,
-                session.Translation.GetPokemonTranslation(upgradePokemonEvent.Id),
+                session.Translation.GetPokemonTranslation(upgradePokemonEvent.PokemonId),
                 upgradePokemonEvent.Cp.ToString(),
                 upgradePokemonEvent.Perfection.ToString("0.00"),
                 upgradePokemonEvent.BestCp.ToString(),
-                upgradePokemonEvent.BestPerfection.ToString("0.00"),
-                LogLevel.LevelUp));
+                upgradePokemonEvent.BestPerfection.ToString("0.00")),
+                LogLevel.LevelUp);
         }
-
-
 
         private static void HandleEvent(ItemRecycledEvent itemRecycledEvent, ISession session)
         {
@@ -142,8 +141,14 @@ namespace PoGo.NecroBot.CLI
         {
             int intTimeForArrival = (int)(fortTargetEvent.Distance / (session.LogicSettings.WalkingSpeedInKilometerPerHour * 0.5));
 
+            string targetType;
+            if (fortTargetEvent.Type == FortType.Gym)
+                targetType = session.Translation.GetTranslation(TranslationString.Gym); // "Gym";
+            else
+                targetType = session.Translation.GetTranslation(TranslationString.Pokestop); // "Pokestop";
+
             Logger.Write(
-                session.Translation.GetTranslation(TranslationString.EventFortTargeted, fortTargetEvent.Name,
+                session.Translation.GetTranslation(TranslationString.EventFortTargeted, targetType, fortTargetEvent.Name,
                      Math.Round(fortTargetEvent.Distance), intTimeForArrival, fortTargetEvent.Route),
                 LogLevel.Info, ConsoleColor.Gray);
         }
@@ -401,7 +406,7 @@ namespace PoGo.NecroBot.CLI
                     Logger.Write(session.Translation.GetTranslation(TranslationString.HumanWalkSnipeDestinationReached, ev.Latitude, ev.Longitude, ev.PauseDuration), LogLevel.Sniper);
                     break;
                 case HumanWalkSnipeEventTypes.PokemonScanned:
-                    if(ev.Pokemons != null && ev.Pokemons.Count > 0)
+                    if(ev.Pokemons != null && ev.Pokemons.Count > 0 && ev.DisplayMessage)
                     Logger.Write(session.Translation.GetTranslation(TranslationString.HumanWalkSnipeUpdate, ev.Pokemons.Count, 2, 3), LogLevel.Sniper, ConsoleColor.DarkMagenta);
                     break;
                     case HumanWalkSnipeEventTypes.PokestopUpdated:
@@ -441,6 +446,16 @@ namespace PoGo.NecroBot.CLI
             Logger.Write($"Great!!! Your {ev.PokemonId.ToString()} now is defending for GYM {ev.Name}", LogLevel.Gym, ConsoleColor.Green);
         }
 
+        private static void HandleEvent(GymBattleStarted ev, ISession session)
+        {
+            Logger.Write($"Battle Started with gym: {ev.GymName}...", LogLevel.Gym, ConsoleColor.Blue);
+        }
+
+        private static void HandleEvent(GymErrorUnset ev, ISession session)
+        {
+            Logger.Write($"Error starting battle with gym: {ev.GymName}. Skipping...", LogLevel.Error, ConsoleColor.Red);
+        }
+
 
         private static void HandleEvent(GymListEvent ev, ISession session)
         {
@@ -473,6 +488,17 @@ namespace PoGo.NecroBot.CLI
                     break;
             }
         }
+
+        private static void HandleEvent(EventUsedPotion ev, ISession session)
+        {
+            Logger.Write($"Used Potion: {ev.Type} on Pokemon: {ev.PokemonId} with CP: {ev.PokemonCp}. Remaning: {ev.Remaining}");   
+        }
+
+        private static void HandleEvent(EventUsedRevive ev, ISession session)
+        {
+            Logger.Write($"User Revive: {ev.Type} on Pokemon: {ev.PokemonId} with CP: {ev.PokemonCp}. Remaining: {ev.Remaining}");
+        }
+
         internal void Listen(IEvent evt, ISession session)
         {
             dynamic eve = evt;

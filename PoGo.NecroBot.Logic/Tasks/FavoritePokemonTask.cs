@@ -43,19 +43,23 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         public static async Task Execute(ISession session, ulong pokemonId, bool favorite)
         {
-            var all = await session.Inventory.GetPokemons();
-            var pokemon = all.FirstOrDefault(p => p.Id == pokemonId);
-            if (pokemon != null)
+            using (var blocker = new BlockableScope(session, Model.BotActions.Favorite))
             {
-                var perfection = Math.Round(PokemonInfo.CalculatePokemonPerfection(pokemon));
+                if (!await blocker.WaitToRun()) return;
 
-                await session.Client.Inventory.SetFavoritePokemon(pokemonId, favorite);
-
-                session.EventDispatcher.Send(new NoticeEvent
+                var all = await session.Inventory.GetPokemons();
+                var pokemon = all.FirstOrDefault(p => p.Id == pokemonId);
+                if (pokemon != null)
                 {
-                    Message =
-        session.Translation.GetTranslation(TranslationString.PokemonFavorite, perfection, session.Translation.GetPokemonTranslation(pokemon.PokemonId), pokemon.Cp)
-                });
+                    var perfection = Math.Round(PokemonInfo.CalculatePokemonPerfection(pokemon));
+
+                    await session.Client.Inventory.SetFavoritePokemon(pokemonId, favorite);
+
+                    session.EventDispatcher.Send(new NoticeEvent
+                    {
+                        Message = session.Translation.GetTranslation(TranslationString.PokemonFavorite, perfection, session.Translation.GetPokemonTranslation(pokemon.PokemonId), pokemon.Cp)
+                    });
+                }
             }
         }
     }

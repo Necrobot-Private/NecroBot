@@ -10,6 +10,7 @@ using POGOProtos.Networking.Responses;
 using PoGo.NecroBot.Logic.Model.Yours;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Utils;
+using PoGo.NecroBot.Logic.Model;
 
 namespace PoGo.NecroBot.Logic.Strategies.Walk
 {
@@ -22,25 +23,23 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
             _yoursDirectionsService = null;
         }
 
-        public override string GetWalkStrategyId()
-        {
-            return "Yours Walk";
-        }
+        public override string RouteName => "Yours Walk";
 
-        public override async Task<PlayerUpdateResponse> Walk(GeoCoordinate targetLocation, Func<Task> functionExecutedWhileWalking, ISession session, CancellationToken cancellationToken, double walkSpeed = 0.0)
+        public override async Task<PlayerUpdateResponse> Walk(IGeoLocation targetLocation, Func<Task> functionExecutedWhileWalking, ISession session, CancellationToken cancellationToken, double walkSpeed = 0.0)
         {
             GetYoursInstance(session);
+            var destinaionCoordinate = new GeoCoordinate(targetLocation.Latitude, targetLocation.Longitude);
             var sourceLocation = new GeoCoordinate(_client.CurrentLatitude, _client.CurrentLongitude, _client.CurrentAltitude);
-            var yoursWalk = _yoursDirectionsService.GetDirections(sourceLocation, targetLocation);
+            var yoursWalk = _yoursDirectionsService.GetDirections(sourceLocation, destinaionCoordinate);
 
             if (yoursWalk == null)
             {
                 return await RedirectToNextFallbackStrategy(session.LogicSettings, targetLocation, functionExecutedWhileWalking, session, cancellationToken);
             }
-            
-            session.EventDispatcher.Send(new FortTargetEvent { Name = FortInfo.Name, Distance = yoursWalk.Distance, Route = GetWalkStrategyId() });
+
+            base.OnStartWalking(session, targetLocation, yoursWalk.Distance);
             List<GeoCoordinate> points = yoursWalk.Waypoints;
-            return await DoWalk(points, session, functionExecutedWhileWalking, sourceLocation, targetLocation, cancellationToken, walkSpeed);
+            return await DoWalk(points, session, functionExecutedWhileWalking, sourceLocation, destinaionCoordinate, cancellationToken, walkSpeed);
         }
 
         private void GetYoursInstance(ISession session)

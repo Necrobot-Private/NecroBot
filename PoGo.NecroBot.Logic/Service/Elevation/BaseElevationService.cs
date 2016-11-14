@@ -1,5 +1,6 @@
 ﻿using Caching;
 using GeoCoordinatePortable;
+using PoGo.NecroBot.Logic.Model.Settings;
 using PoGo.NecroBot.Logic.State;
 using System;
 
@@ -7,16 +8,16 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
 {
     public abstract class BaseElevationService : IElevationService
     {
-        protected ISession _session;
+        protected GlobalSettings _settings;
         protected LRUCache<string, double> _cache;
         protected string _apiKey;
 
         public abstract string GetServiceId();
         public abstract double GetElevationFromWebService(double lat, double lng);
 
-        public BaseElevationService(ISession session, LRUCache<string, double> cache)
+        public BaseElevationService(GlobalSettings settings, LRUCache<string, double> cache)
         {
-            _session = session;
+            _settings = settings;
             _cache = cache;
         }
 
