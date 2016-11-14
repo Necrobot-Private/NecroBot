@@ -295,6 +295,10 @@ namespace PoGo.NecroBot.CLI
             }
             settings.CheckProxy(_session.Translation);
 
+            if (_session.LogicSettings.ActivateMSniper)
+            {
+                MSniperServiceTask.ConnectToService();
+            }
             QuitEvent.WaitOne();
         }
 
