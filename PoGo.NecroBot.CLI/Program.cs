@@ -229,8 +229,7 @@ namespace PoGo.NecroBot.CLI
                 var websocket = new WebSocketInterface(settings.WebsocketsConfig.WebSocketPort, _session);
                 _session.EventDispatcher.EventReceived += evt => websocket.Listen(evt, _session);
             }
-
-            _session.Client.ApiFailure = new ApiFailureStrategy(_session);
+            
             ProgressBar.Fill(20);
 
             var machine = new StateMachine();
