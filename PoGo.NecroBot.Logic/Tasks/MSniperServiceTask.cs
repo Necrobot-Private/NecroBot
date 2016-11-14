@@ -491,7 +491,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     await Task.Delay(1000, cancellationToken);
                 }
             }
-            catch(ActiveSwitchByRuleException ex )
+            catch (ActiveSwitchByRuleException ex)
             {
                 throw ex;
             }
@@ -502,7 +502,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                 if (ex.InnerException != null) ee.Message = ex.InnerException.Message;
                 session.EventDispatcher.Send(ee);
             }
-            inProgress = false;
+            finally
+            {
+                inProgress = false;
+            }
         }
 
         public static async Task CatchWithSnipe(ISession session, CancellationToken cancellationToken, EncounterInfo encounterId)

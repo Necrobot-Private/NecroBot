@@ -20,15 +20,20 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             this.Moves = moves;
         }
 
-        [ExcelConfig(Key = "AI")]
-        [DefaultValue(1250)]
-        [Range(0, 9999)]
+        [ExcelConfig(Key = "Enable Snipe", Description = "Enable snipe filter for this, if not set it will apply global setting", Position = 1)]
+        [DefaultValue(false)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
+        public bool EnableSnipe { get; set; }
+
+        [ExcelConfig(Key = "Snipe Min IV" , Description ="Min Pokemon IV for auto snipe", Position =2)]
+        [DefaultValue(76)]
+        [Range(0, 100)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public int SnipeIV {get; set;}
 
-        [ExcelConfig(Key = "AJ")]
+        [ExcelConfig(Key = "Moves" , Description ="Defined list of moves that you want snipe", Position =3)]
         [DefaultValue(null)]
-        [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 7)]
+        [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
         public List<List<PokemonMove>> Moves { get; set; }
           
         internal static Dictionary<PokemonId, SnipeFilter> SniperFilterDefault()

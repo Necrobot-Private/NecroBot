@@ -104,7 +104,7 @@ namespace PoGo.NecroBot.CLI
             GlobalSettings settings;
             var boolNeedsSetup = false;
             bool excelConfigAllow = Convert.ToBoolean(ConfigurationManager.AppSettings["UseExcelConfig"]);
-            excelConfigAllow = true;
+            excelConfigAllow = false;
             if (File.Exists(configFile))
             {
                 // Load the settings from the config file

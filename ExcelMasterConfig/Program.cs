@@ -2,6 +2,7 @@
 using PoGo.NecroBot.Logic.Utils;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ namespace ExcelMasterConfig
             var settings = GlobalSettings.Load("");
 
             ExcelConfigHelper.MigrateFromObject(settings, "config\\config_migrated.xlsm");
+            Process.Start("config\\config_migrated.xlsm");
             return;
 
             var newseting = ExcelConfigHelper.ReadExcel(settings, "config\\config_migrated.xlsm");
