@@ -316,14 +316,14 @@ namespace PoGo.NecroBot.Logic.Service
                     if (_session.LogicSettings.UseCatchLimit)
                     {
                         answerTextmessage += String.Format("\nCATCH LIMIT: {0}/{1}",
-                                    _session.Stats.PokemonTimestamps.Count,
+                                    _session.Stats.GetNumPokemonsInLast24Hours(),
                                     _session.LogicSettings.CatchPokemonLimit);
                     }
 
                     if (_session.LogicSettings.UsePokeStopLimit)
                     {
                         answerTextmessage += String.Format("\nPOKESTOP LIMIT: {0}/{1}",
-                                    _session.Stats.PokeStopTimestamps.Count,
+                                    _session.Stats.GetNumPokestopsInLast24Hours(),
                                     _session.LogicSettings.PokeStopLimit);
                     }
 
