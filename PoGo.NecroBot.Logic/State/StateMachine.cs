@@ -93,12 +93,11 @@ namespace PoGo.NecroBot.Logic.State
                         session.CancellationTokenSource.Cancel();
 
                         // A bit rough here; works but can be improved
-                        Thread.Sleep(10000);
+                        await Task.Delay(10000);
                         state = null;
                         session.CancellationTokenSource.Dispose();
                         Environment.Exit(0);
                     }
-
                 }
                 catch (ActiveSwitchByPokemonException rsae)
                 {
@@ -137,10 +136,8 @@ namespace PoGo.NecroBot.Logic.State
 
                 catch (InvalidResponseException)
                 {
-                    session.EventDispatcher.Send(new ErrorEvent
-                    {
-                        Message = "Niantic Servers unstable, throttling API Calls."
-                    });
+                    session.EventDispatcher.Send(new ErrorEvent { Message = "Niantic Servers unstable, throttling API Calls." });
+                    await Task.Delay(1000);
                 }
                 catch (OperationCanceledException)
                 {
@@ -155,14 +152,49 @@ namespace PoGo.NecroBot.Logic.State
                         Message = session.Translation.GetTranslation(TranslationString.MinimumClientVersionException, ex.CurrentApiVersion.ToString(), ex.MinimumClientVersion.ToString())
                     });
 
-                    Logger.Write(session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey, LogLevel.Error));
+                    session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey) });
                     Console.ReadKey();
                     System.Environment.Exit(1);
+                }
+                catch (LoginFailedException)
+                {
+                    session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.AccountBanned) });
+                    session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey) });
+                    Console.ReadKey();
+                    System.Environment.Exit(1);
+                }
+                catch (PtcOfflineException)
+                {
+                    session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.PtcOffline) });
+                    session.EventDispatcher.Send(new NoticeEvent { Message = session.Translation.GetTranslation(TranslationString.TryingAgainIn, 15) });
+
+                    await Task.Delay(15000);
+                    state = _initialState;
+                }
+                catch (GoogleOfflineException)
+                {
+                    session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.GoogleOffline) });
+                    session.EventDispatcher.Send(new NoticeEvent { Message = session.Translation.GetTranslation(TranslationString.TryingAgainIn, 15) });
+
+                    await Task.Delay(15000);
+                    state = _initialState;
+                }
+                catch (AccessTokenExpiredException)
+                {
+                    session.EventDispatcher.Send(new NoticeEvent { Message = "Access Token Expired. Logging in again..." });
+                    state = _initialState;
+                }
+                catch (CaptchaException)
+                {
+                    // TODO Show the captcha.
+                    session.EventDispatcher.Send(new WarnEvent { Message = session.Translation.GetTranslation(TranslationString.CaptchaShown) });
+                    session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey) });
+                    Console.ReadKey();
+                    Environment.Exit(0);
                 }
                 catch (Exception ex)
                 {
                     session.EventDispatcher.Send(new ErrorEvent {Message = "Pokemon Servers might be offline / unstable. Trying again..."});
-                    Thread.Sleep(1000);
                     session.EventDispatcher.Send(new ErrorEvent { Message = "Error: " + ex });
                     if (state is LoginState)
                     {

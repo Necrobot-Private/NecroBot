@@ -74,7 +74,7 @@ namespace PoGo.NecroBot.Logic.State
 
             this.Translation = translation;
             this.Reset(settings, LogicSettings);
-            this.Stats = new SessionStats();
+            this.Stats = new SessionStats(this);
             this.accounts.AddRange(logicSettings.Bots);
             if (!this.accounts.Any(x => (x.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Ptc && x.PtcUsername == settings.PtcUsername) ||
                                         (x.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Google && x.GoogleUsername == settings.GoogleUsername)
@@ -127,8 +127,7 @@ namespace PoGo.NecroBot.Logic.State
         private List<BotActions> botActions = new List<BotActions>();
         public void Reset(ISettings settings, ILogicSettings logicSettings)
         {
-            ApiFailureStrategy _apiStrategy = new ApiFailureStrategy(this);
-            Client = new Client(Settings, _apiStrategy);
+            Client = new Client(Settings);
             // ferox wants us to set this manually
             Inventory = new Inventory(Client, logicSettings);
             Navigation = new Navigation(Client, logicSettings);
@@ -154,7 +153,7 @@ namespace PoGo.NecroBot.Logic.State
                 this.Settings.DefaultAltitude = att == 0 ? this.Client.CurrentAltitude : att;
                 this.Settings.DefaultLatitude = lat == 0 ? this.Client.CurrentLatitude : lat;
                 this.Settings.DefaultLongitude = lng == 0 ? this.Client.CurrentLongitude : lng;
-                this.Stats = new SessionStats();
+                this.Stats = new SessionStats(this);
                 this.Reset(this.Settings, this.LogicSettings);
                 CancellationTokenSource.Cancel();
                 this.CancellationTokenSource = new CancellationTokenSource();

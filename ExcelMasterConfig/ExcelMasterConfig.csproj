@@ -37,6 +37,14 @@
       <HintPath>..\packages\EPPlus.4.1.0\lib\net40\EPPlus.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Google.Protobuf, Version=3.1.0.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Protobuf.3.1.0\lib\net45\Google.Protobuf.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="POGOProtos.NetStandard1, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\POGOProtos.NetStandard1.2.1.0\lib\net45\POGOProtos.NetStandard1.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -74,10 +82,6 @@
     <ProjectReference Include="..\PoGo.NecroBot.Logic\PoGo.NecroBot.Logic.csproj">
       <Project>{0739e40d-c589-4aeb-93e5-ee8cd6773c60}</Project>
       <Name>PoGo.NecroBot.Logic</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\POGOProtos\POGOProtos.csproj">
-      <Project>{a03a7bb2-4f0b-467b-84b2-9a76e6aae6fb}</Project>
-      <Name>POGOProtos</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

@@ -23,8 +23,6 @@ using PoGo.NecroBot.Logic.Exceptions;
 
 namespace PoGo.NecroBot.Logic.Tasks
 {
-    public delegate void UpdateTimeStampsPokestopDelegate();
-
     public class UseNearbyPokestopsTask
     {
         private static int _stopsHit;
@@ -34,8 +32,6 @@ namespace PoGo.NecroBot.Logic.Tasks
         private static int _randomNumber;
         public static bool _pokestopLimitReached;
         public static bool _pokestopTimerReached;
-
-        public static event UpdateTimeStampsPokestopDelegate UpdateTimeStampsPokestop;
 
         internal static void Initialize()
         {
@@ -53,29 +49,18 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (!session.LogicSettings.UsePokeStopLimit) return false;
             if (_pokestopLimitReached || _pokestopTimerReached) return true;
 
-            // Check if user defined max Pokestops reached
-            if (!session.Stats.PokeStopTimestamps.Any()) return false;
-            var timeDiff = (DateTime.Now - new DateTime(session.Stats.PokeStopTimestamps.First()));
+            session.Stats.CleanOutExpiredStats();
 
-            if (session.Stats.PokeStopTimestamps.Count >= session.LogicSettings.PokeStopLimit)
+            // Check if user defined max Pokestops reached
+            var timeDiff = (DateTime.Now - session.Stats.StartTime);
+
+            if (session.Stats.GetNumPokestopsInLast24Hours() >= session.LogicSettings.PokeStopLimit)
             {
                 session.EventDispatcher.Send(new ErrorEvent
                 {
                     Message = session.Translation.GetTranslation(TranslationString.PokestopLimitReached)
                 });
-
-                // Check Timestamps & delete older than 24h
-                var TSminus24h = DateTime.Now.AddHours(-24).Ticks;
-                for (int i = 0; i < session.Stats.PokeStopTimestamps.Count; i++)
-                {
-                    if (session.Stats.PokeStopTimestamps[i] < TSminus24h)
-                    {
-                        Logger.Write($"Removing stored Pokestop timestamp {session.Stats.PokeStopTimestamps[i]}", LogLevel.Info);
-                        session.Stats.PokeStopTimestamps.Remove(session.Stats.PokeStopTimestamps[i]);
-                    }
-                }
-
-                UpdateTimeStampsPokestop?.Invoke();
+                
                 _pokestopLimitReached = true;
                 return true;
             }
@@ -87,18 +72,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     Message = session.Translation.GetTranslation(TranslationString.PokestopTimerReached)
                 });
-
-                // Check Timestamps & delete older than 24h
-                var TSminus24h = DateTime.Now.AddHours(-24).Ticks;
-                for (int i = 0; i < session.Stats.PokeStopTimestamps.Count; i++)
-                {
-                    if (session.Stats.PokeStopTimestamps[i] < TSminus24h)
-                    {
-                        session.Stats.PokeStopTimestamps.Remove(session.Stats.PokeStopTimestamps[i]);
-                    }
-                }
-
-                UpdateTimeStampsPokestop?.Invoke();
+                
                 _pokestopTimerReached = true;
                 return true;
             }
@@ -427,9 +401,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     if (session.LogicSettings.UsePokeStopLimit)
                     {
-                        session.Stats.PokeStopTimestamps.Add(DateTime.Now.Ticks);
-                        UpdateTimeStampsPokestop?.Invoke();
-                        Logger.Write($"(POKESTOP LIMIT) {session.Stats.PokeStopTimestamps.Count}/{session.LogicSettings.PokeStopLimit}",
+                        session.Stats.AddPokestopTimestamp(DateTime.Now.Ticks);
+                        Logger.Write($"(POKESTOP LIMIT) {session.Stats.GetNumPokestopsInLast24Hours()}/{session.LogicSettings.PokeStopLimit}",
                             LogLevel.Info, ConsoleColor.Yellow);
                     }
                     break; //Continue with program as loot was succesfull.
