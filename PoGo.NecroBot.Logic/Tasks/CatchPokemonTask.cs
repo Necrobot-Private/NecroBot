@@ -20,11 +20,8 @@ using POGOProtos.Data;
 
 namespace PoGo.NecroBot.Logic.Tasks
 {
-    public delegate void UpdateTimeStampsPokemonDelegate();
-
     public static class CatchPokemonTask
     {
-        public static event UpdateTimeStampsPokemonDelegate UpdateTimeStampsPokemon;
         public static bool _catchPokemonLimitReached = false;
         public static bool _catchPokemonTimerReached = false;
         public static int AmountOfBerries;
@@ -42,28 +39,18 @@ namespace PoGo.NecroBot.Logic.Tasks
             // restarting anyway. Perhaps better to shutdown instead? ~moj
             if (_catchPokemonLimitReached || _catchPokemonTimerReached) return true;
 
-            // Check if user defined max AMOUNT of Catches reached
-            if (!session.Stats.PokemonTimestamps.Any()) return false;
-            var timeDiff = (DateTime.Now - new DateTime(session.Stats.PokemonTimestamps.First()));
+            session.Stats.CleanOutExpiredStats();
 
-            if (session.Stats.PokemonTimestamps.Count >= session.LogicSettings.CatchPokemonLimit)
+            var timeDiff = (DateTime.Now - session.Stats.StartTime);
+            
+            // Check if user defined max AMOUNT of Catches reached
+            if (session.Stats.GetNumPokemonsInLast24Hours() >= session.LogicSettings.CatchPokemonLimit)
             {
                 session.EventDispatcher.Send(new ErrorEvent
                 {
                     Message = session.Translation.GetTranslation(TranslationString.CatchLimitReached)
                 });
-
-                // Check Timestamps & delete older than 24h
-                var TSminus24h = DateTime.Now.AddHours(-24).Ticks;
-                for (int i = 0; i < session.Stats.PokemonTimestamps.Count; i++)
-                {
-                    if (session.Stats.PokemonTimestamps[i] < TSminus24h)
-                    {
-                        session.Stats.PokemonTimestamps.Remove(session.Stats.PokemonTimestamps[i]);
-                    }
-                }
-
-                UpdateTimeStampsPokemon?.Invoke();
+                
                 _catchPokemonLimitReached = true;
                 return true;
             }
@@ -75,17 +62,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     Message = session.Translation.GetTranslation(TranslationString.CatchTimerReached)
                 });
-
-                // Check Timestamps & delete older than 24h
-                var TSminus24h = DateTime.Now.AddHours(-24).Ticks;
-                for (int i = 0; i < session.Stats.PokemonTimestamps.Count; i++)
-                {
-                    if (session.Stats.PokemonTimestamps[i] < TSminus24h)
-                    {
-                        session.Stats.PokemonTimestamps.Remove(session.Stats.PokemonTimestamps[i]);
-                    }
-                }
-                UpdateTimeStampsPokemon?.Invoke();
+                
                 _catchPokemonTimerReached = true;
                 return true;
             }
@@ -384,9 +361,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                         if (session.LogicSettings.UseCatchLimit)
                         {
-                            session.Stats.PokemonTimestamps.Add(DateTime.Now.Ticks);
-                            UpdateTimeStampsPokemon?.Invoke();
-                            Logger.Write($"(CATCH LIMIT) {session.Stats.PokemonTimestamps.Count}/{session.LogicSettings.CatchPokemonLimit}",
+                            session.Stats.AddPokemonTimestamp(DateTime.Now.Ticks);
+                            Logger.Write($"(CATCH LIMIT) {session.Stats.GetNumPokemonsInLast24Hours()}/{session.LogicSettings.CatchPokemonLimit}",
                                 LogLevel.Info, ConsoleColor.Yellow);
                         }
                     }
