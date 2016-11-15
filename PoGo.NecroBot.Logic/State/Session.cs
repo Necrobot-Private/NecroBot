@@ -64,7 +64,7 @@ namespace PoGo.NecroBot.Logic.State
 
             Translation = translation;
             Reset(settings, LogicSettings);
-            Stats = new SessionStats();
+            Stats = new SessionStats(this);
         }
         public List<FortData> Forts { get; set; }
         public List<FortData> VisibleForts { get; set; }
@@ -97,8 +97,7 @@ namespace PoGo.NecroBot.Logic.State
         private List<BotActions> botActions = new List<BotActions>();
         public void Reset(ISettings settings, ILogicSettings logicSettings)
         {
-            ApiFailureStrategy _apiStrategy = new ApiFailureStrategy(this);
-            Client = new Client(Settings, _apiStrategy);
+            Client = new Client(Settings);
             // ferox wants us to set this manually
             Inventory = new Inventory(Client, logicSettings);
             Navigation = new Navigation(Client, logicSettings);
