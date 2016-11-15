@@ -19,6 +19,7 @@ using POGOProtos.Inventory.Item;
 using POGOProtos.Networking.Responses;
 using POGOProtos.Settings.Master;
 using Caching;
+using PokemonGo.RocketAPI.Extensions;
 
 #endregion
 
@@ -36,8 +37,7 @@ namespace PoGo.NecroBot.Logic
 
         private readonly List<ItemId> _revives = new List<ItemId> { ItemId.ItemRevive, ItemId.ItemMaxRevive };
         private GetInventoryResponse _cachedInventory = null;
-        private DateTime _lastRefresh;
-
+        
         public Inventory(Client client, ILogicSettings logicSettings)
         {
             _client = client;
@@ -94,8 +94,7 @@ namespace PoGo.NecroBot.Logic
         {
             if (_player == null) GetPlayerData();
             var now = DateTime.UtcNow;
-
-            if (_cachedInventory != null && _lastRefresh.AddSeconds(60).Ticks > now.Ticks)
+            if (_cachedInventory != null && _cachedInventory.InventoryDelta.NewTimestampMs + 60*1000 > now.ToUnixTime())
                 return _cachedInventory;
 
             return await RefreshCachedInventory();
@@ -267,7 +266,7 @@ namespace PoGo.NecroBot.Logic
 
         public async void GetPlayerData()
         {
-            for (int i = 0; i < 3; i++)
+            while(true)
             {
                 _player = await _client.Player.GetPlayer();
                 if (_player != null) break;
@@ -384,8 +383,9 @@ namespace PoGo.NecroBot.Logic
 
         public async Task<List<InventoryItem>> GetPokeDexItems()
         {
-            List<InventoryItem> PokeDex = new List<InventoryItem>();
-            var inventory = await _client.Inventory.GetInventory();
+            //using cached inventory rather than API calls always!
+            //var inventory = await _client.Inventory.GetInventory();
+            var inventory = await GetCachedInventory();
 
             return (from items in inventory.InventoryDelta.InventoryItems
                     where items.InventoryItemData?.PokedexEntry != null
@@ -457,11 +457,15 @@ namespace PoGo.NecroBot.Logic
             {
                 if (_templates == null || _pokemonSettings == null)
                 {
-                    for (int j = 0; j < 3; j++)
+                    while(true)
                     {
-                        _templates = await _client.Download.GetItemTemplates();
-                        _pokemonSettings = _templates.ItemTemplates.Select(i => i.PokemonSettings).Where(p => p != null && p.FamilyId != PokemonFamilyId.FamilyUnset);
-                        if (_templates.ItemTemplates.Count > 10) break;
+                        var templatesResponse = await _client.Download.GetItemTemplates();
+                        if (templatesResponse.ItemTemplates.Count > 10)
+                        {
+                            _templates = templatesResponse;
+                            _pokemonSettings = _templates.ItemTemplates.Select(i => i.PokemonSettings).Where(p => p != null && p.FamilyId != PokemonFamilyId.FamilyUnset);
+                            break;
+                        }
                     }
                 }
             }
@@ -599,17 +603,36 @@ namespace PoGo.NecroBot.Logic
 
         public async Task<GetInventoryResponse> RefreshCachedInventory()
         {
-            var now = DateTime.UtcNow;
             var ss = new SemaphoreSlim(10);
 
             await ss.WaitAsync();
             try
             {
-                for (int i = 0; i < 3; i++)
+                while(true)
                 {
-                    _lastRefresh = now;
-                    _cachedInventory = await _client.Inventory.GetInventory();
-                    if (_cachedInventory != null && _cachedInventory.InventoryDelta.InventoryItems.Count > 0) break;
+                    //use lastRefresh information for server request if available
+                    var inventoryResponse = await _client.Inventory.GetInventory(_cachedInventory?.InventoryDelta.NewTimestampMs);
+                    if (inventoryResponse != null)
+                    {
+                        if (inventoryResponse.InventoryDelta.InventoryItems.Count > 0)
+                        {
+                            _cachedInventory = inventoryResponse;
+                            break;
+                        }
+                        else //no items info received
+                        {
+                            //at least copy timestamps
+                            if (_cachedInventory != null)
+                            {
+                                _cachedInventory.InventoryDelta.OriginalTimestampMs = _cachedInventory.InventoryDelta.NewTimestampMs;
+                                _cachedInventory.InventoryDelta.NewTimestampMs = inventoryResponse.InventoryDelta.NewTimestampMs;
+                                if (_cachedInventory.InventoryDelta.InventoryItems.Count > 0)
+                                {
+                                    break; //we already have some items => probably no need to update now
+                                }
+                            }
+                        }
+                    }
                 }
                 return _cachedInventory;
             }
