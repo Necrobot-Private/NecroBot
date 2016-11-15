@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.0.0.18](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.18) (2016-11-14)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.17...v1.0.0.18)
+
+**Fixed bugs:**
+
+- Fixes #310 - PTC auth token refresh bug.
+
 ## [v1.0.0.17](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.17) (2016-11-14)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.16...v1.0.0.17)
 
