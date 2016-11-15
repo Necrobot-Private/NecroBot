@@ -64,7 +64,7 @@ namespace PoGo.NecroBot.Logic.State
 
             Translation = translation;
             Reset(settings, LogicSettings);
-            Stats = new SessionStats();
+            Stats = new SessionStats(this);
         }
         public List<FortData> Forts { get; set; }
         public List<FortData> VisibleForts { get; set; }
