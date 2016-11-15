@@ -144,7 +144,7 @@ namespace PoGo.NecroBot.Logic.State
                 session.Stats.PokemonTimestamps.Add(l);
             }
 
-            await Task.Delay(100, cancellationToken);
+            await Task.Delay(3000, cancellationToken);
             return new InfoState();
         }
 
