@@ -259,6 +259,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             var profilePath = Path.Combine(Directory.GetCurrentDirectory(), path);
             var profileConfigPath = Path.Combine(profilePath, "config");
             var configFile = Path.Combine(profileConfigPath, "config.json");
+            var schemaFile = Path.Combine(profileConfigPath, "config.schema.json");
             var shouldExit = false;
 
             if (File.Exists(configFile))
@@ -300,8 +301,12 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                         // validate Json using JsonSchema
                         if (validate)
                         {
+                            JObject jsonObj = JObject.Parse(input);
+
+                            // Migrate before validation.
+                            MigrateSettings(jsonObj, configFile, schemaFile);
+
                             Logger.Write("Validating config.json...");
-                            var jsonObj = JObject.Parse(input);
                             IList<ValidationError> errors = null;
                             bool valid;
                             try
@@ -392,6 +397,50 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             }
 
             return shouldExit ? null : settings;
+        }
+
+        private static void MigrateSettings(JObject settings, string configFile, string schemaFile)
+        {
+            if (settings["UpdateConfig"]?["SchemaVersion"] == null)
+            {
+                // The is the first time setup for old config.json files without the SchemaVersion.
+                // Just set this to 0 so that we can handle the upgrade in case 0.
+                settings["UpdateConfig"]["SchemaVersion"] = 0;
+            }
+
+            int schemaVersion = (int)settings["UpdateConfig"]["SchemaVersion"];
+            if (schemaVersion == UpdateConfig.CURRENT_SCHEMA_VERSION)
+            {
+                Logger.Write("Configuration is up-to-date. Schema version: " + schemaVersion);
+                return;
+            }
+
+            // Backup old config file.
+            string backupPath = configFile.Replace(".json", $"-{schemaVersion}.backup.json");
+            Logger.Write($"Backing up config.json to: {backupPath}", LogLevel.Info);
+            File.Copy(configFile, backupPath);
+
+            // Add future schema migrations below.
+            int version;
+            for (version = schemaVersion; version < UpdateConfig.CURRENT_SCHEMA_VERSION; version++)
+            {
+                Logger.Write($"Migrating configuration from schema version {version} to {version + 1}", LogLevel.Info);
+                switch(version)
+                {
+                    case 0:
+                        settings["UpdateConfig"]["SchemaVersion"] = UpdateConfig.CURRENT_SCHEMA_VERSION;
+                        break;
+                    case 1:
+                        // TODO Add schema migrations from version 1 to 2 here.
+                        break;
+
+                    case 2:
+                        // TODO Add schema migrations from version 2 to 3 here.
+                        break;
+
+                    // Add more here.
+                }
+            }
         }
 
         public void CheckProxy(ITranslation translator)
