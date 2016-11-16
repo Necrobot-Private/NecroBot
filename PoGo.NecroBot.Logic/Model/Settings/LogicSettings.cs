@@ -24,6 +24,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public string ProfilePath => _settings.ProfilePath;
         public string ProfileConfigPath => _settings.ProfileConfigPath;
         public string GeneralConfigPath => _settings.GeneralConfigPath;
+        public int SchemaVersion => _settings.UpdateConfig.SchemaVersion;
         public bool CheckForUpdates => _settings.UpdateConfig.CheckForUpdates;
         public bool AutoUpdate => _settings.UpdateConfig.AutoUpdate;
         public bool TransferConfigAndAuthOnUpdate => _settings.UpdateConfig.TransferConfigAndAuthOnUpdate;

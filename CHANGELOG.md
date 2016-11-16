@@ -3,6 +3,8 @@
 ## [v1.0.0.19](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.19) (2016-11-14)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.18...v1.0.0.19)
 
+- Fixes #336 - Re-designed pokestop and pokemon limit to be a rolling limit over past 24 hours. Also fixed the limits being double-counted whenever the bot relogged.
+
 ## [v1.0.0.18](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.18) (2016-11-14)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.17...v1.0.0.18)
 
