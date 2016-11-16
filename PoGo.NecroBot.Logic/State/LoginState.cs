@@ -165,7 +165,7 @@ namespace PoGo.NecroBot.Logic.State
                     System.Environment.Exit(1);
                 }
             }
-            catch(ActiveSwitchByRuleException ignoreEXP)
+            catch(ActiveSwitchByRuleException)
             {
                 //sometime the switch active happen same time with login by token expired. we need ignore it 
             }
@@ -192,7 +192,7 @@ namespace PoGo.NecroBot.Logic.State
                     string username = session.Settings.AuthType == AuthType.Ptc ? session.Settings.PtcUsername : session.Settings.GoogleUsername;
                     File.AppendAllText(logFile, $"{DateTime.Now:dd-MM-yyyy hh:mm:ss}\t\t{username}\r\n");
                 }
-                catch(Exception ex) { }
+                catch(Exception) { }
             });
         }
 

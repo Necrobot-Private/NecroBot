@@ -338,10 +338,6 @@ namespace PoGo.NecroBot.CLI
         
         private static bool CheckMKillSwitch()
         {
-            #if DEBUG
-                return false;
-            #endif
-
             using (var wC = new WebClient())
             {
                 try

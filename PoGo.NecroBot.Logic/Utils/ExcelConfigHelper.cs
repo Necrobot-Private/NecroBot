@@ -750,7 +750,7 @@ namespace PoGo.NecroBot.Logic.Utils
                     pmove1, pmove2
                 });
                 }
-                catch (Exception ex) { }
+                catch (Exception) { }
 
             }
             return results;
