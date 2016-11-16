@@ -598,7 +598,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (berry == null || berry.Count <= 0)
                 return;
 
-            DelayingUtils.DelayAsync(session.LogicSettings.DelayBetweenPlayerActions, 500, cancellationToken);
+            await DelayingUtils.DelayAsync(session.LogicSettings.DelayBetweenPlayerActions, 500, cancellationToken);
 
             var useCaptureItem = await session.Client.Encounter.UseCaptureItem(encounterId, ItemId.ItemRazzBerry, spawnPointId);
             berry.Count -= 1;
