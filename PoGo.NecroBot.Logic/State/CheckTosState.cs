@@ -104,7 +104,7 @@ namespace PoGo.NecroBot.Logic.State
                     await DelayingUtils.DelayAsync(3000, 2000);
                 }
             }
-            return new FarmState();
+            return new InfoState();
         }
 
         public async Task<bool> CatchFirstPokemon(ISession session)

@@ -15,7 +15,7 @@ namespace PoGo.NecroBot.Logic.State
             cancellationToken.ThrowIfCancellationRequested();
             await DisplayPokemonStatsTask.Execute(session);
 
-            return new CheckTosState();
+            return new FarmState();
         }
     }
 }
