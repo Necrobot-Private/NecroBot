@@ -88,7 +88,13 @@ namespace PoGo.NecroBot.CLI
                         break;
                 }
             }
-            
+
+            bool excelConfigAllow = false;
+            if (commandLine["use_excel_config"] != null)
+            {
+                excelConfigAllow = true;
+            }
+
             Logger.AddLogger(new ConsoleLogger(LogLevel.Service), _subPath);
             Logger.AddLogger(new FileLogger(LogLevel.Service), _subPath);
             Logger.AddLogger(new WebSocketLogger(LogLevel.Service), _subPath);
@@ -103,8 +109,7 @@ namespace PoGo.NecroBot.CLI
 
             GlobalSettings settings;
             var boolNeedsSetup = false;
-            bool excelConfigAllow = Convert.ToBoolean(ConfigurationManager.AppSettings["UseExcelConfig"]);
-            excelConfigAllow = false;
+            
             if (File.Exists(configFile))
             {
                 // Load the settings from the config file
@@ -284,7 +289,7 @@ namespace PoGo.NecroBot.CLI
             
             ProgressBar.Fill(100);
 
-            machine.AsyncStart(new VersionCheckState(), _session, _subPath);
+            machine.AsyncStart(new VersionCheckState(), _session, _subPath, excelConfigAllow);
 
             try
             {

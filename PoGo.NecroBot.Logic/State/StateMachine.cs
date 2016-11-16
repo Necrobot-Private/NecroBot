@@ -11,6 +11,7 @@ using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.Model.Settings;
 using PokemonGo.RocketAPI.Exceptions;
 using PoGo.NecroBot.Logic.Exceptions;
+using PoGo.NecroBot.Logic.Utils;
 
 #endregion
 
@@ -20,9 +21,9 @@ namespace PoGo.NecroBot.Logic.State
     {
         private IState _initialState;
 
-        public Task AsyncStart(IState initialState, Session session, string subPath)
+        public Task AsyncStart(IState initialState, Session session, string subPath, bool excelConfigAllowed=false)
         {
-            return Task.Run(() => Start(initialState, session, subPath));
+            return Task.Run(() => Start(initialState, session, subPath, excelConfigAllowed));
         }
 
         public void SetFailureState(IState state)
@@ -30,7 +31,7 @@ namespace PoGo.NecroBot.Logic.State
             _initialState = state;
         }
 
-        public async Task Start(IState initialState, ISession session, string subPath)
+        public async Task Start(IState initialState, ISession session, string subPath, bool excelConfigAllowed = false)
         {
             GlobalSettings globalSettings = null;
 
@@ -57,23 +58,31 @@ namespace PoGo.NecroBot.Logic.State
                 }
             };
 
-            FileSystemWatcher excelConfigWatcher = new FileSystemWatcher();
-            excelConfigWatcher.Path = profileConfigPath;
-            excelConfigWatcher.Filter = "config.xlsm";
-            excelConfigWatcher.NotifyFilter = NotifyFilters.LastWrite;
-            excelConfigWatcher.EnableRaisingEvents = true;
-
-            excelConfigWatcher.Changed += (sender, e) =>
+            //watch the excel config file
+            if (excelConfigAllowed)
             {
-                if (e.ChangeType == WatcherChangeTypes.Changed)
+                Task.Run(async () =>
                 {
-                    //globalSettings = GlobalSettings.Load(subPath);
-                    //session.LogicSettings = new LogicSettings(globalSettings);
-                    //configWatcher.EnableRaisingEvents = !configWatcher.EnableRaisingEvents;
-                    //configWatcher.EnableRaisingEvents = !configWatcher.EnableRaisingEvents;
-                    Logger.Write(" ##### config.xlsm ##### ", LogLevel.Info);
-                }
-            };
+                    while (true)
+                    {
+                        try
+                        {
+                            FileInfo inf = new FileInfo($"{profileConfigPath}\\config.xlsm");
+                            if (inf.LastWriteTime > DateTime.Now.AddSeconds(-5))
+                            {
+                                globalSettings = ExcelConfigHelper.ReadExcel(globalSettings, inf.FullName);
+                                session.LogicSettings = new LogicSettings(globalSettings);
+                                Logger.Write(" ##### config.xlsm ##### ", LogLevel.Info);
+                            }
+                            await Task.Delay(5000);
+                        }
+                        catch (Exception ex)
+                        {
+
+                        }
+                    }
+                });
+            }
 
             do
             {

@@ -462,10 +462,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 (
                                     session.LogicSettings.MultipleBotConfig.MinIVToSwitch < encounterEV.IV ||
                                     (
-                                        session.LogicSettings.MultipleBotConfig.PokemonSwitches.ContainsKey(encounterEV.PokemonId) &&
+                                        session.LogicSettings.BotSwitchPokemonFilters.ContainsKey(encounterEV.PokemonId) &&
                                         (
-                                            session.LogicSettings.MultipleBotConfig.PokemonSwitches[encounterEV.PokemonId].IV < encounterEV.IV ||
-                                            (session.LogicSettings.MultipleBotConfig.PokemonSwitches[encounterEV.PokemonId].LV > 0 && session.LogicSettings.MultipleBotConfig.PokemonSwitches[encounterEV.PokemonId].LV < encounterEV.Level)
+                                            session.LogicSettings.BotSwitchPokemonFilters[encounterEV.PokemonId].IV < encounterEV.IV ||
+                                            (session.LogicSettings.BotSwitchPokemonFilters[encounterEV.PokemonId].LV > 0 && session.LogicSettings.BotSwitchPokemonFilters[encounterEV.PokemonId].LV < encounterEV.Level)
                                         )
                                      )
                                 ))

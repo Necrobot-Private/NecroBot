@@ -3,6 +3,7 @@ using POGOProtos.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,53 +11,76 @@ using System.Threading.Tasks;
 namespace PoGo.NecroBot.Logic.Model.Settings
 {
 
-    public class BotSwitch
+    public class BotSwitchPokemonFilter
     {
-        [ExcelConfig(Key ="AV")]
+        [JsonIgnore]
+        [ExcelConfig(IsPrimaryKey = true, Key = "Allow Switch", Description = "Allow bot use invidual filter for switch", Position = 1)]
+        public bool AllowBotSwitch { get; set; }
+
+        [ExcelConfig(Key = "Min IV", Description = "When this pokemon has IV > this value, bot will switch account", Position = 2)]
+        [Range(0, 100)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public int IV { get; set; }
-        [ExcelConfig(Key = "AW")]
+
+
+        [ExcelConfig(Key = "Min LV", Description = "When this pokemon has LV > this value, bot will switch account", Position = 3)]
+        [Range(0, 100)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
+
+
         public int LV { get; set; }
-        [ExcelConfig(Key = "AY")]
+
+        [ExcelConfig(Key = "Move", Description = "When wild pokemon has the move match , bot will change account to catch", Position = 4)]
+        [Range(0, 100)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 3)]
+        public List<List<PokemonMove>> Moves { get; set; }
+
+
+        [ExcelConfig(Key = "Remain times", Description = "Number of second since pokemon disappear ", Position = 5)]
+        [Range(0, 900)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
+
+        public int RemainTimes { get; set; }
+
+        [ExcelConfig(Key = "Operator", Description = "The operator to check ", Position = 6)]
+        [EnumDataType(typeof(Operator))]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public string Operator { get; set; }
 
-        [ExcelConfig(Key = "AX")]
-        public List<List<PokemonMove>> Moves { get; set; }
-        [ExcelConfig(Key = "AZ")]
-        public double RemainTimes { get; set; }
-
-        public BotSwitch() {
+        public BotSwitchPokemonFilter() {
             this.Moves = new List<List<PokemonMove>>();
         }
-        public BotSwitch(int iv, int lv, double remain)
+        public BotSwitchPokemonFilter(int iv, int lv, int remain)
         {
+            this.Operator = "or";
             this.Moves = new List<List<PokemonMove>>();
             this.IV = iv;
             this.LV = lv;
             this.RemainTimes = remain;
         }
-        public static Dictionary<PokemonId, BotSwitch> Default()
+        public static Dictionary<PokemonId, BotSwitchPokemonFilter> Default()
         {
-            return new Dictionary<PokemonId, BotSwitch>()
+            return new Dictionary<PokemonId, BotSwitchPokemonFilter>()
             {
-                { PokemonId.Lickitung, new BotSwitch(30, 0, 60) },
-                { PokemonId.Dragonite, new BotSwitch(10, 0, 60) },
-                { PokemonId.Lapras, new BotSwitch(10, 0, 60) },
-                { PokemonId.Exeggutor, new BotSwitch(10, 0, 60) },
-                { PokemonId.Magmar, new BotSwitch(70, 0, 60) },
-                { PokemonId.Arcanine, new BotSwitch(10, 0, 60) },
-                { PokemonId.Beedrill, new BotSwitch(10, 0, 60) },
-                { PokemonId.Blastoise, new BotSwitch(10, 0, 60) },
-                { PokemonId.Charizard, new BotSwitch(10, 0, 60) },
-                { PokemonId.Venusaur, new BotSwitch(10, 200, 60) },
-                { PokemonId.Vileplume, new BotSwitch(10, 0, 60) },
-                { PokemonId.Vaporeon, new BotSwitch(10, 0, 60) },
-                { PokemonId.Dragonair, new BotSwitch(70, 0, 60) },
-                { PokemonId.Dratini, new BotSwitch(90, 200, 60) },
-                { PokemonId.Snorlax, new BotSwitch(30, 0, 60) },
-                { PokemonId.Kangaskhan, new BotSwitch(80, 0, 60) },
-                { PokemonId.Ninetales, new BotSwitch(10, 0, 60) },
-                { PokemonId.Electabuzz, new BotSwitch(10, 0, 60) },
-                { PokemonId.Magikarp, new BotSwitch(95, 0, 60) },
+                { PokemonId.Lickitung, new BotSwitchPokemonFilter(30, 0, 60) },
+                { PokemonId.Dragonite, new BotSwitchPokemonFilter(10, 0, 60) },
+                { PokemonId.Lapras, new BotSwitchPokemonFilter(10, 0, 60) },
+                { PokemonId.Exeggutor, new BotSwitchPokemonFilter(10, 0, 60) },
+                { PokemonId.Magmar, new BotSwitchPokemonFilter(70, 0, 60) },
+                { PokemonId.Arcanine, new BotSwitchPokemonFilter(10, 0, 60) },
+                { PokemonId.Beedrill, new BotSwitchPokemonFilter(10, 0, 60) },
+                { PokemonId.Blastoise, new BotSwitchPokemonFilter(10, 0, 60) },
+                { PokemonId.Charizard, new BotSwitchPokemonFilter(10, 0, 60) },
+                { PokemonId.Venusaur, new BotSwitchPokemonFilter(10, 200, 60) },
+                { PokemonId.Vileplume, new BotSwitchPokemonFilter(10, 0, 60) },
+                { PokemonId.Vaporeon, new BotSwitchPokemonFilter(10, 0, 60) },
+                { PokemonId.Dragonair, new BotSwitchPokemonFilter(70, 0, 60) },
+                { PokemonId.Dratini, new BotSwitchPokemonFilter(90, 200, 60) },
+                { PokemonId.Snorlax, new BotSwitchPokemonFilter(30, 0, 60) },
+                { PokemonId.Kangaskhan, new BotSwitchPokemonFilter(80, 0, 60) },
+                { PokemonId.Ninetales, new BotSwitchPokemonFilter(10, 0, 60) },
+                { PokemonId.Electabuzz, new BotSwitchPokemonFilter(10, 0, 60) },
+                { PokemonId.Magikarp, new BotSwitchPokemonFilter(95, 0, 60) },
             };
         }
     }
@@ -103,10 +127,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 7)]
 
         public bool StartFromDefaultLocation = true; //only apply if runtime > 1h. 
-
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 8)]
-        public Dictionary<PokemonId, BotSwitch> PokemonSwitches = BotSwitch.Default();
-
+        
         public static MultipleBotConfig Default()
         {
             return new MultipleBotConfig();

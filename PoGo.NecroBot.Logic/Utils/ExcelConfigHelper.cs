@@ -27,10 +27,8 @@ namespace PoGo.NecroBot.Logic.Utils
         {
             var assembly = Assembly.GetExecutingAssembly();
             var resourceName = "PoGo.NecroBot.Logic.config.xlsm";
-            foreach (var item in setting.PokemonsTransferFilter)
-            {
-                item.Value.AllowTransfer = true;
-            }
+
+            BackwardCompitableUpdate(setting);
 
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
             using (var package = new ExcelPackage(stream))
@@ -54,7 +52,7 @@ namespace PoGo.NecroBot.Logic.Utils
                             Type keyType = type.GetGenericArguments()[0];
                             Type valueType = type.GetGenericArguments()[1];
 
-                            MethodInfo method = typeof(ExcelConfigHelper).GetMethod("BuildDictionaryData", BindingFlags.Public | BindingFlags.Static | BindingFlags.NonPublic);
+                            MethodInfo method = typeof(ExcelConfigHelper).GetMethod("BuildDictionaryDataSheet", BindingFlags.Public | BindingFlags.Static | BindingFlags.NonPublic);
                             MethodInfo genericMethod = method.MakeGenericMethod(valueType);
                             genericMethod.Invoke(null, new object[] { workSheet, configProp });
 
@@ -63,6 +61,7 @@ namespace PoGo.NecroBot.Logic.Utils
                         {
                             BuildCustomObjectData(workSheet, configProp);
                         }
+
                         workSheet.Protection.IsProtected = true;
                     }
 
@@ -71,7 +70,40 @@ namespace PoGo.NecroBot.Logic.Utils
             }
         }
 
-        private static void BuildDictionaryData<T>(ExcelWorksheet sheet, Dictionary<PokemonId, T> dictionary)
+        private static void BackwardCompitableUpdate(GlobalSettings setting)
+        {      
+            foreach (var item in setting.PokemonsTransferFilter)
+            {
+                item.Value.AllowTransfer = true;
+            }
+            foreach (var item in setting.PokemonsNotToTransfer)
+            {
+                if (setting.PokemonsTransferFilter.ContainsKey(item))
+                {
+                    setting.PokemonsTransferFilter[item].DoNotTransfer = true;
+                }
+                else
+                {
+                    setting.PokemonsTransferFilter.Add(item, new TransferFilter()
+                    {
+                        AllowTransfer = true,
+                        DoNotTransfer = true
+                    });
+                }
+            }
+            foreach (var item in setting.PokemonsToEvolve)
+            {
+                if(!setting.EvolvePokemonFilter.ContainsKey(item))
+                {
+                    setting.EvolvePokemonFilter.Add(item, new EvolveFilter()
+                    {
+                       
+                    });
+                }
+            }
+        }
+
+        private static void BuildDictionaryDataSheet<T>(ExcelWorksheet sheet, Dictionary<PokemonId, T> dictionary)
         {
             //Dictionary<PokemonId, object> dictionary = input;
             var type = dictionary.GetType();
@@ -149,7 +181,7 @@ namespace PoGo.NecroBot.Logic.Utils
                     workSheet.Cells[exAtt.Position + OFFSET_START, 1].AutoFitColumns();
                     workSheet.Cells[exAtt.Position + OFFSET_START, 2].AutoFitColumns();
                     workSheet.Cells[exAtt.Position + OFFSET_START, 3].AutoFitColumns();
-
+                    //AddValidationForType(workSheet, cfg, $"B{exAtt.Position + OFFSET_START}");
                     if (propValue is Boolean)
                     {
                         var validation = workSheet.DataValidations.AddListValidation($"B{exAtt.Position + OFFSET_START}");
@@ -250,6 +282,7 @@ namespace PoGo.NecroBot.Logic.Utils
                     }
                 }
             }
+            workSheet.Cells[workSheet.Dimension.Address].AutoFitColumns();
         }
 
         public static string GetCol(int col)
@@ -300,6 +333,8 @@ namespace PoGo.NecroBot.Logic.Utils
                     workSheet.Cells[2, 1].Value = excelAtt.Description;
 
                     workSheet.Cells[$"A1:C1"].Merge = true; ;
+                    workSheet.Cells[$"A2:C2"].Merge = true; ;
+
                     workSheet.Cells["A1:C1"].Style.Font.Size = 16;
                     workSheet.Row(1).CustomHeight = true;
                     workSheet.Row(1).Height = 30;
@@ -377,73 +412,6 @@ namespace PoGo.NecroBot.Logic.Utils
             workSheet.Protection.IsProtected = true;
         }
 
-        private static void MigrateMultipleBOTSwitcherPokemonFilter(ExcelWorksheet pokemonFilter, GlobalSettings setting)
-        {
-            for (int i = 3; i < 153; i++)
-            {
-                var id = Convert.ToInt32(pokemonFilter.Cells[$"A{i}"].Value);
-                var pid = (PokemonId)id;
-                pokemonFilter.Cells[$"AU{i}"].AddComment(pid.ToString(), "necrobot2");
-                if (setting.MultipleBotConfig.PokemonSwitches.ContainsKey(pid))
-                {
-                    var f = setting.MultipleBotConfig.PokemonSwitches[pid];
-                    pokemonFilter.Cells[$"AU{i}"].Value = true;
-                    pokemonFilter.Cells[$"AV{i}"].Value = f.IV;
-                    pokemonFilter.Cells[$"AW{i}"].Value = f.LV;
-                    pokemonFilter.Cells[$"AY{i}"].Value = "OR";
-                    pokemonFilter.Cells[$"AZ{i}"].Value = f.RemainTimes;
-                }
-                else
-                {
-                    pokemonFilter.Cells[$"AU{i}"].Value = false;
-                }
-            }
-            AddListValidation(pokemonFilter, $"AU:AU", "Multiple BOT - Allow switcher validation", "Boolean value only", "TRUE", "FALSE");
-            AddListValidation(pokemonFilter, $"AY:AY", "Multiple BOT - Switcher operator validation", "Only accept Or or AND", "OR", "AND");
-            AddNumberValidation(pokemonFilter, $"AV:AV", "Multiple BOT - Min IV validation", "Number from 0 to 100", 0, 100);
-            AddNumberValidation(pokemonFilter, $"AW:AW", "Multiple BOT - Min LV validation", "Number from 0 to 50", 0, 50);
-            AddNumberValidation(pokemonFilter, $"AZ:AZ", "Multiple BOT - Remain times validation", "Number from 0 to 600", 0, 600);
-
-        }
-
-        private static void MigrateHumanWalkSnipePokemonFilter(ExcelWorksheet pokemonFilter, GlobalSettings setting)
-        {
-            for (int i = 3; i < 153; i++)
-            {
-                var id = Convert.ToInt32(pokemonFilter.Cells[$"A{i}"].Value);
-                var pid = (PokemonId)id;
-                pokemonFilter.Cells[$"AK{i}"].AddComment(pid.ToString(), "necrobot2");
-                if (setting.HumanWalkSnipeFilters.ContainsKey(pid))
-                {
-                    var f = setting.HumanWalkSnipeFilters[pid];
-                    pokemonFilter.Cells[$"AK{i}"].Value = true;
-                    pokemonFilter.Cells[$"AL{i}"].Value = f.MaxDistance;
-                    pokemonFilter.Cells[$"AM{i}"].Value = f.Priority;
-                    pokemonFilter.Cells[$"AN{i}"].Value = f.MaxWalkTimes;
-                    pokemonFilter.Cells[$"AO{i}"].Value = f.CatchPokemonWhileWalking;
-                    pokemonFilter.Cells[$"AP{i}"].Value = f.SpinPokestopWhileWalking;
-                    pokemonFilter.Cells[$"AQ{i}"].Value = f.AllowSpeedUp;
-                    pokemonFilter.Cells[$"AR{i}"].Value = f.MaxSpeedUpSpeed;
-                    pokemonFilter.Cells[$"AS{i}"].Value = f.DelayTimeAtDestination;
-                    pokemonFilter.Cells[$"AT{i}"].Value = f.AllowTransferWhileWalking;
-                }
-                else
-                {
-                    pokemonFilter.Cells[$"AK{i}"].Value = false;
-                }
-            }
-            AddListValidation(pokemonFilter, $"AO:AO", "Human walk sniper  - Allow catch validation", "Boolean value only", "TRUE", "FALSE");
-            AddListValidation(pokemonFilter, $"AK:AK", "Human walk sniper [Boolean] validation", "Boolean value only", "TRUE", "FALSE");
-            AddListValidation(pokemonFilter, $"AP:AP", "Human walk sniper  - Allow pokestop validation", "Boolean value only", "TRUE", "FALSE");
-            AddListValidation(pokemonFilter, $"AQ:AQ", "Human walk sniper  - Allow speedup validation", "Boolean value only", "TRUE", "FALSE");
-            AddListValidation(pokemonFilter, $"AT:AT", "Human walk sniper  - Allow transfer validation", "Boolean value only", "TRUE", "FALSE");
-            AddNumberValidation(pokemonFilter, $"AL:AL", "Human walk sniper - Max Distance walk validation", "Number from 0 to 10000", 0, 10000);
-            AddNumberValidation(pokemonFilter, $"AM:AM", "Human walk sniper - Priority validation", "Number from 0 to 10", 0, 10);
-            AddNumberValidation(pokemonFilter, $"AN:AN", "Human walk sniper - Max travel time validation", "Number from 0 to 900", 0, 900);
-            AddNumberValidation(pokemonFilter, $"AR:AR", "Human walk sniper - Max speed up speed validation", "Number from 0 to 300", 0, 300);
-            AddNumberValidation(pokemonFilter, $"AS:AS", "Human walk sniper - Delay validation", "Number from 0 to 30000", 0, 30000);
-
-        }
         public static void SetValue(object inputObject, string propertyName, object propertyVal)
         {
             //find out the type
@@ -523,19 +491,26 @@ namespace PoGo.NecroBot.Logic.Utils
                 }
                 var pkmSheet = package.Workbook.Worksheets["Pokemons"];
                 setting.ItemRecycleFilter = ReadItemRecycleFilter(package);
-                /*setting.PokemonsToIgnore = ReadListPokemon(pkmSheet, "J", false);
-                setting.PokemonsNotToTransfer = ReadListPokemon(pkmSheet, "P", false);
-                setting.PokemonsToEvolve = ReadListPokemon(pkmSheet, "AF", true);
-                setting.PokemonsToLevelUp = ReadListPokemon(pkmSheet, "W", true);
-                setting.PokemonToSnipe.Pokemon = ReadListPokemon(pkmSheet, "AH", true);
-                setting.HumanWalkSnipeFilters = ReadListObjectAsDictionary<HumanWalkSnipeFilter>(pkmSheet, "AK", true);
-                setting.ItemRecycleFilter = ReadItemRecycleFilter(package);
-                setting.MultipleBotConfig.PokemonSwitches = ReadListObjectAsDictionary<BotSwitch>(pkmSheet, "AU", true);
-                setting.PokemonsTransferFilter = ReadListObjectAsDictionary<TransferFilter>(pkmSheet, "P", true);
-                setting.SnipePokemonFilter = ReadListObjectAsDictionary<SnipeFilter>(pkmSheet, "AH", true);
-                */
+
+            }
+
+            return ConvertToBackwardCompitable(setting);
+        }
+
+        private static GlobalSettings ConvertToBackwardCompitable(GlobalSettings setting)
+        {
+            if (setting.PokemonsTransferFilter != null)
+            {
+                setting.PokemonsNotToTransfer = setting.PokemonsTransferFilter.Where(p => p.Value.DoNotTransfer).Select(p => p.Key).ToList();
+            }
+            setting.PokemonsToEvolve = setting.EvolvePokemonFilter.Select(x => x.Key).ToList();
+
+            if(setting.SnipePokemonFilter!= null)
+            {
+                setting.PokemonToSnipe.Pokemon = setting.SnipePokemonFilter.Select(p => p.Key).ToList();
             }
             return setting;
+
         }
 
         private static Dictionary<PokemonId, T> ReadSheetAsDictionary<T>(ExcelWorksheet ws)
