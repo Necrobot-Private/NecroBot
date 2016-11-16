@@ -120,10 +120,7 @@ namespace PoGo.NecroBot.Logic.State
             {
                 Message = session.Translation.GetTranslation(TranslationString.UpdateFinished)
             });
-
-            if( TransferConfig( baseDir, session ) )
-                ErrorHandler.ThrowFatalError( session.Translation.GetTranslation( TranslationString.FinishedTransferringConfig ), 5, LogLevel.Update );
-
+            
             Process.Start(Assembly.GetEntryAssembly().Location);
             Environment.Exit(-1);
             return null;
@@ -219,7 +216,7 @@ namespace PoGo.NecroBot.Logic.State
             var oldfiles = Directory.GetFiles(destFolder);
             foreach (var old in oldfiles)
             {
-                if (old.Contains("vshost") || old.Contains(".gpx")) continue;
+                if (old.Contains("vshost") || old.Contains(".gpx") || old.Contains("config.json") || old.Contains("auth.json") ||  old.Contains("SessionStats.db") || old.Contains("LastPos.ini")) continue;
                 File.Move(old, old + ".old");
             }
 
@@ -250,103 +247,7 @@ namespace PoGo.NecroBot.Logic.State
             }
             return true;
         }
-
-        private static bool TransferConfig(string baseDir, ISession session)
-        {
-            if (!session.LogicSettings.TransferConfigAndAuthOnUpdate)
-                return false;
-
-            var configDir = Path.Combine(baseDir, "Config");
-            if (!Directory.Exists(configDir))
-                return false;
-
-            var oldConf = GetJObject(Path.Combine(configDir, "config.json.old"));
-            var oldAuth = GetJObject(Path.Combine(configDir, "auth.json.old"));
-            GlobalSettings.Load("");
-
-            var newConf = GetJObject(Path.Combine(configDir, "config.json"));
-            var newAuth = GetJObject(Path.Combine(configDir, "auth.json"));
-
-            List<JProperty> lstNewOptions = TransferJson(oldConf, newConf);
-            TransferJson(oldAuth, newAuth);
-            
-            File.WriteAllText(Path.Combine(configDir, "config.json"), newConf.ToString());
-            File.WriteAllText(Path.Combine(configDir, "auth.json"), newAuth.ToString());
-
-            if( lstNewOptions != null && lstNewOptions.Count > 0 )
-            {
-                Logger.Write( "\n", LogLevel.New);
-                Logger.Write( "### New Options found ###", LogLevel.New );
-
-                foreach( JProperty prop in lstNewOptions )
-                    Logger.Write( prop.ToString(), LogLevel.New );
-
-                Logger.Write( "Would you like to open the Config file? Y/N" );
-                
-                while( true )
-                {
-                    var strInput = Console.ReadLine().ToLower();
-
-                    switch( strInput )
-                    {
-                        case "y":
-                            Process.Start( Path.Combine( configDir, "config.json" ) );
-                            return true;
-                        case "n":
-                            ErrorHandler.ThrowFatalError( session.Translation.GetTranslation( TranslationString.FinishedTransferringConfig ), 5, LogLevel.Update, true );
-                            return true;
-                        default:
-                            Logger.Write( session.Translation.GetTranslation( TranslationString.PromptError, "y", "n" ), LogLevel.Error );
-                            continue;
-                    }
-                }
-            }
-            
-            return true;
-        }
-
-        private static List<JProperty> TransferJson(JObject oldFile, JObject newFile)
-        {
-            try
-            {
-                // Figuring out the best method to detect new settings \\
-                var lstNewOptions = new List<JProperty>();
-                
-                foreach( var newProperty in newFile.Properties() )
-                {
-                    var boolFound = false;
-                    
-                    foreach( var oldProperty in oldFile.Properties() )
-                    {
-                        if (!newProperty.Name.Equals(oldProperty.Name))
-                            continue;
-                        boolFound = true;
-                        newFile[ newProperty.Name ] = oldProperty.Value;
-                        break;
-                    }
-
-                    if( !boolFound )
-                        lstNewOptions.Add( newProperty );
-                }
-
-                return lstNewOptions;
-
-                /*foreach (var newProperty in newFile.Properties())
-                    foreach (var oldProperty in oldFile.Properties())
-                        if (newProperty.Name.Equals(oldProperty.Name))
-                        {
-                            newFile[newProperty.Name] = oldProperty.Value;
-                            break;
-                        }*/
-            }
-            catch( Exception error )
-            {
-                Logger.Write( error.Message, LogLevel.Error );
-            }
-
-            return null;
-        }
-
+        
         public static bool UnpackFile(string sourceTarget, string destPath)
         {
             var source = sourceTarget;
