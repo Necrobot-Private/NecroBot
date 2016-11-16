@@ -22,16 +22,12 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public int IV { get; set; }
 
-
         [ExcelConfig(Key = "Min LV", Description = "When this pokemon has LV > this value, bot will switch account", Position = 3)]
-        [Range(0, 100)]
+        [Range(0, 999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
-
-
         public int LV { get; set; }
 
         [ExcelConfig(Key = "Move", Description = "When wild pokemon has the move match , bot will change account to catch", Position = 4)]
-        [Range(0, 100)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 3)]
         public List<List<PokemonMove>> Moves { get; set; }
 

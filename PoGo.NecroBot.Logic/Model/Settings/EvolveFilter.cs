@@ -39,7 +39,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         [ExcelConfig(Key = "Evolve Min LV", Description = "Min LV for auto evolve", Position = 3)]
         [DefaultValue(95)]
-        [Range(0, 100)]
+        [Range(0, 999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public int MinLV { get; set; }
 

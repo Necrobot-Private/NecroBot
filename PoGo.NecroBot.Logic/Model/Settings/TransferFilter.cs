@@ -63,7 +63,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         [ExcelConfig(Key = "KeepMinLvl", Position = 5, Description = "Pokemon with LV lower than this value will be transfered")]
         [DefaultValue(6)]
-        [Range(0, 99)]
+        [Range(0, 999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 3)]
         public int KeepMinLvl { get; set; }
 
