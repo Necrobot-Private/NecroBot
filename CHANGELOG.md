@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.0.0.22](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.22) (2016-11-16)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.19...v1.0.0.22)
+
+- Bug fix in API layer causing requests to randomly fail (seen in MoveNext() or inventory calls).
+- Bug fix for config file being lost when upgrading.  New mechanism for upgrading config.json introduced.
+- Bug fix for incorrect log level during first time startup.
+
 ## [v1.0.0.19](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.19) (2016-11-14)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.18...v1.0.0.19)
 
