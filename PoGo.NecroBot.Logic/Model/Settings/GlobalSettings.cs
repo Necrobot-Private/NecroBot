@@ -677,11 +677,11 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             Console.ReadKey();
         }
 
-        private static bool PromptForBoolean(ITranslation translator, string initialPrompt, string errorPrompt = null)
+        public static bool PromptForBoolean(ITranslation translator, string initialPrompt, string errorPrompt = null)
         {
-            Logger.Write(initialPrompt, LogLevel.Info);
             while (true)
             {
+                Logger.Write(initialPrompt, LogLevel.Info);
                 var strInput = Console.ReadLine().ToLower();
 
                 switch (strInput)
@@ -700,11 +700,11 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             }
         }
 
-        private static double PromptForDouble(ITranslation translator, string initialPrompt, string errorPrompt = null)
+        public static double PromptForDouble(ITranslation translator, string initialPrompt, string errorPrompt = null)
         {
-            Logger.Write(initialPrompt, LogLevel.Info);
             while (true)
             {
+                Logger.Write(initialPrompt, LogLevel.Info);
                 var strInput = Console.ReadLine();
 
                 double doubleVal;
@@ -722,11 +722,11 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             }
         }
 
-        private static int PromptForInteger(ITranslation translator, string initialPrompt, string errorPrompt = null)
+        public static int PromptForInteger(ITranslation translator, string initialPrompt, string errorPrompt = null)
         {
-            Logger.Write(initialPrompt, LogLevel.Info);
             while (true)
             {
+                Logger.Write(initialPrompt, LogLevel.Info);
                 var strInput = Console.ReadLine();
 
                 int intVal;
@@ -744,12 +744,11 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             }
         }
 
-        private static string PromptForString(ITranslation translator, string initialPrompt, string[] validStrings = null, string errorPrompt = null, bool caseSensitive = true)
+        public static string PromptForString(ITranslation translator, string initialPrompt, string[] validStrings = null, string errorPrompt = null, bool caseSensitive = true)
         {
-            Logger.Write(initialPrompt, LogLevel.Info);
-
             while (true)
             {
+                Logger.Write(initialPrompt, LogLevel.Info);
                 // For now this just reads from the console, but in the future, we may change this to read from the GUI.
                 string strInput = Console.ReadLine();
 
@@ -774,7 +773,6 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 }
                 Logger.Write(errorPrompt, LogLevel.Error);
             }
-
         }
     }
 }
