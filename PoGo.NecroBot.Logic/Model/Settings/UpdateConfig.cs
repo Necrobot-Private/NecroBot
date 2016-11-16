@@ -17,7 +17,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
         
         [ExcelConfig(Description = "Allow bot automatically update latest version", Position = 2)]
-public bool CheckForUpdates = true;
+        public bool CheckForUpdates = true;
 
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 3)]

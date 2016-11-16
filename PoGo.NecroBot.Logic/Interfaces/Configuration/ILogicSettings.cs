@@ -161,7 +161,7 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         Dictionary<PokemonId, SnipeFilter> PokemonSnipeFilters { get; }
         Dictionary<PokemonId, UpgradeFilter> PokemonUpgradeFilters { get; }
 
-       Dictionary<PokemonId, BotSwitchPokemonFilter> BotSwitchPokemonFilters { get; }
+        Dictionary<PokemonId, BotSwitchPokemonFilter> BotSwitchPokemonFilters { get; }
 
         SnipeSettings PokemonToSnipe { get; }
 
