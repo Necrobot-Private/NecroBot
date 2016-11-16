@@ -432,7 +432,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             SetupWebSocketConfig(newSession.Translation, settings);
             SaveFiles(settings, configPath);
 
-            Logger.Write(session.Translation.GetTranslation(TranslationString.FirstStartSetupCompleted), LogLevel.None);
+            Logger.Write(session.Translation.GetTranslation(TranslationString.FirstStartSetupCompleted), LogLevel.Info);
 
             return newSession;
         }
@@ -547,7 +547,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         private static void SetupAccountType(ITranslation translator, GlobalSettings settings)
         {
-            Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupAccount), LogLevel.None);
+            Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupAccount), LogLevel.Info);
 
             string accountType = PromptForString(translator, translator.GetTranslation(TranslationString.FirstStartSetupTypePrompt, "google", "ptc"), new string[] { "google", "ptc" }, translator.GetTranslation(TranslationString.FirstStartSetupTypePromptError, "google", "ptc"), false);
             
@@ -584,7 +584,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 settings.Auth.AuthConfig.PtcPassword = strInput;
             Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupPasswordConfirm, strInput));
 
-            Logger.Write(translator.GetTranslation(TranslationString.FirstStartAccountCompleted), LogLevel.None);
+            Logger.Write(translator.GetTranslation(TranslationString.FirstStartAccountCompleted), LogLevel.Info);
         }
 
         private static void SetupConfig(ITranslation translator, GlobalSettings settings)
@@ -595,7 +595,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 return;
             }
             
-            Logger.Write(translator.GetTranslation(TranslationString.FirstStartDefaultLocation), LogLevel.None);
+            Logger.Write(translator.GetTranslation(TranslationString.FirstStartDefaultLocation), LogLevel.Info);
             Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupDefaultLatLongPrompt));
             while (true)
             {
@@ -679,7 +679,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         private static bool PromptForBoolean(ITranslation translator, string initialPrompt, string errorPrompt = null)
         {
-            Logger.Write(initialPrompt, LogLevel.None);
+            Logger.Write(initialPrompt, LogLevel.Info);
             while (true)
             {
                 var strInput = Console.ReadLine().ToLower();
@@ -702,7 +702,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         private static double PromptForDouble(ITranslation translator, string initialPrompt, string errorPrompt = null)
         {
-            Logger.Write(initialPrompt, LogLevel.None);
+            Logger.Write(initialPrompt, LogLevel.Info);
             while (true)
             {
                 var strInput = Console.ReadLine();
@@ -724,7 +724,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         private static int PromptForInteger(ITranslation translator, string initialPrompt, string errorPrompt = null)
         {
-            Logger.Write(initialPrompt, LogLevel.None);
+            Logger.Write(initialPrompt, LogLevel.Info);
             while (true)
             {
                 var strInput = Console.ReadLine();
@@ -746,7 +746,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         private static string PromptForString(ITranslation translator, string initialPrompt, string[] validStrings = null, string errorPrompt = null, bool caseSensitive = true)
         {
-            Logger.Write(initialPrompt, LogLevel.None);
+            Logger.Write(initialPrompt, LogLevel.Info);
 
             while (true)
             {
