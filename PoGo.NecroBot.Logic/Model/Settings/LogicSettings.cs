@@ -228,6 +228,8 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         public bool DataSharingEnable => _settings.DataSharingConfig.EnableSyncData;
 
+        public bool AllowAutoSnipe => _settings.DataSharingConfig.AutoSnipe;
+
         public string DataSharingDataUrl => _settings.DataSharingConfig.DataRecieverURL;
 
         public bool UseTransferFilterToCatch => _settings.CustomCatchConfig.UseTransferFilterToCatch;

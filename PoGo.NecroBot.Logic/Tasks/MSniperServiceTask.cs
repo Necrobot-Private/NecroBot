@@ -40,7 +40,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             public double Longitude { get; set; }
             public double Iv { get; set; }
         }
-
+          
         public class HubData
         {
             [JsonProperty("H")]
@@ -616,6 +616,10 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 foreach (var location in mSniperLocation2)
                 {
+                    if (session.Cache[location.EncounterId.ToString()] != null) continue;
+
+                    session.Cache.Add(location.EncounterId.ToString(), true, DateTime.Now.AddMinutes(15)); 
+
                     cancellationToken.ThrowIfCancellationRequested();
 
                     session.EventDispatcher.Send(new SnipeScanEvent

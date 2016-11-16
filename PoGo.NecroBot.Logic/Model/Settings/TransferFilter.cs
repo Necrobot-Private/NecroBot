@@ -6,15 +6,15 @@ using POGOProtos.Enums;
 
 namespace PoGo.NecroBot.Logic.Model.Settings
 {
+    public enum Operator
+    {
+        or,
+        and
+    }
+
     [JsonObject(Description = "", ItemRequired = Required.DisallowNull)] //Dont set Title
     public class TransferFilter
     {
-        internal enum Operator
-        {
-            or,
-            and
-        }
-
         public TransferFilter()
         {
             MovesOperator = "and";
@@ -41,7 +41,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         }
         
         [JsonIgnore]
-        [ExcelConfig(Key = "Allow Transfer", Position = 1, Description = "If TRUE bot will transfer this type of pokemon when match with filter condition.")]
+        [ExcelConfig(IsPrimaryKey =true, Key = "Allow Transfer", Position = 1, Description = "If TRUE bot will transfer this type of pokemon when match with filter condition.")]
         public bool AllowTransfer { get; set; }
 
         [ExcelConfig(Key = "KeepMinCp", Position =2 , Description = "Pokemon with CP lower than this value will be transfered")]

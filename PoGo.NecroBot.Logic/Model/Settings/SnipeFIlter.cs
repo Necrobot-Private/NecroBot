@@ -20,7 +20,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             this.Moves = moves;
         }
 
-        [ExcelConfig(Key = "Enable Snipe", Description = "Enable snipe filter for this, if not set it will apply global setting", Position = 1)]
+        [ExcelConfig(IsPrimaryKey = true,Key = "Enable Snipe", Description = "Enable snipe filter for this, if not set it will apply global setting", Position = 1)]
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public bool EnableSnipe { get; set; }

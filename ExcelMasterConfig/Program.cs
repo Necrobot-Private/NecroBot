@@ -14,10 +14,10 @@ namespace ExcelMasterConfig
         static void Main(string[] args)
         {
             var settings = GlobalSettings.Load("");
-
+            //settings.PokemonsTransferFilter = null;
             ExcelConfigHelper.MigrateFromObject(settings, "config\\config_migrated.xlsm");
             Process.Start("config\\config_migrated.xlsm");
-            return;
+            //return;
 
             var newseting = ExcelConfigHelper.ReadExcel(settings, "config\\config_migrated.xlsm");
             Console.WriteLine(newseting.ConsoleConfig.TranslationLanguageCode);
@@ -27,18 +27,18 @@ namespace ExcelMasterConfig
             Console.WriteLine(newseting.ConsoleConfig.DetailedCountsBeforeRecycling);
             Console.WriteLine(newseting.RecycleConfig.TotalAmountOfPokeballsToKeep);
 
-            foreach (var item in newseting.ItemRecycleFilter)
-            {
-                Console.WriteLine($"{item.Key} => {item.Value}");
-            }
-            foreach (var item in newseting.PokemonToSnipe.Pokemon)
-            {
-                Console.WriteLine($"Pokemon to snipe ... {item}");
-            }
-            foreach (var item in newseting.HumanWalkSnipeFilters)
-            {
-                Console.WriteLine($"Pokemon to snipe ... {item.Key} => {item.Value.MaxDistance}");
-            }
+            //foreach (var item in newseting.ItemRecycleFilter)
+            //{
+            //    Console.WriteLine($"{item.Key} => {item.Value}");
+            //}
+            //foreach (var item in newseting.PokemonToSnipe.Pokemon)
+            //{
+            //    Console.WriteLine($"Pokemon to snipe ... {item}");
+            //}
+            //foreach (var item in newseting.HumanWalkSnipeFilters)
+            //{
+            //    Console.WriteLine($"Pokemon to snipe ... {item.Key} => {item.Value.MaxDistance}");
+            //}
 
             foreach (var item in newseting.PokemonsTransferFilter)
             {

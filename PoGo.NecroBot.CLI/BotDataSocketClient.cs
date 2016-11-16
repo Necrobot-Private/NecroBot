@@ -166,15 +166,18 @@ namespace PoGo.NecroBot.CLI
                     var data = JsonConvert.DeserializeObject<EncounteredEvent>(match.Groups[1].Value);
                     data.IsRecievedFromSocket = true;
                     session.EventDispatcher.Send(data);
-                    MSniperServiceTask.AddSnipeItem(session, new MSniperServiceTask.MSniperInfo2()
+                    if (session.LogicSettings.AllowAutoSnipe)
                     {
-                        Latitude = data.Latitude,
-                        Longitude = data.Longitude,
-                        EncounterId = (ulong)Convert.ToInt64(data.EncounterId),
-                        SpawnPointId = data.SpawnPointId  ,
-                        PokemonId = (short)data.PokemonId ,
-                        Iv = data.IV
-                    });
+                        MSniperServiceTask.AddSnipeItem(session, new MSniperServiceTask.MSniperInfo2()
+                        {
+                            Latitude = data.Latitude,
+                            Longitude = data.Longitude,
+                            EncounterId = (ulong)Convert.ToInt64(data.EncounterId),
+                            SpawnPointId = data.SpawnPointId,
+                            PokemonId = (short)data.PokemonId,
+                            Iv = data.IV
+                        });
+                    }
                     return;
                 }
                 match = Regex.Match(e.Data, "42\\[\"fpm\",(.*)]");

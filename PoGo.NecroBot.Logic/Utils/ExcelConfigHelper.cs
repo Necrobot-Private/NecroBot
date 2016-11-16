@@ -22,8 +22,8 @@ namespace PoGo.NecroBot.Logic.Utils
         private static int OFFSET_START = 4;
         private static int COL_OFFSET = 9;
 
-        
-        public static void MigrateFromObject(GlobalSettings setting,  string destination)
+
+        public static void MigrateFromObject(GlobalSettings setting, string destination)
         {
             var assembly = Assembly.GetExecutingAssembly();
             var resourceName = "PoGo.NecroBot.Logic.config.xlsm";
@@ -38,18 +38,11 @@ namespace PoGo.NecroBot.Logic.Utils
                 var pokemonFilter = package.Workbook.Worksheets["Pokemons"];
                 pokemonFilter.Protection.IsProtected = true;
                 pokemonFilter.Cells["J2:AZ153"].Style.Locked = false;
-                //MigrateCatchPokemonFilter(pokemonFilter, setting);
-                //MigrateTransferPokemonFilter(pokemonFilter, setting);
-                //MigrateUpgradePokemonFilter(pokemonFilter, setting);
-                //MigrateEvolvePokemonFilter(pokemonFilter, setting);
-                //MigrateSnipePokemonFilter(pokemonFilter, setting);
-                //MigrateHumanWalkSnipePokemonFilter(pokemonFilter, setting);
-                //MigrateMultipleBOTSwitcherPokemonFilter(pokemonFilter, setting);
-                //MigrateItemRecycleFilter(package, setting);
+                MigrateItemRecycleFilter(package, setting);
 
                 foreach (var item in setting.GetType().GetFields())
                 {
-                    var att = item.GetCustomAttributes< ExcelConfigAttribute>(true).FirstOrDefault();
+                    var att = item.GetCustomAttributes<ExcelConfigAttribute>(true).FirstOrDefault();
                     if (att != null)
                     {
                         ExcelWorksheet workSheet = BuildSheetHeader(package, item, att);
@@ -62,17 +55,9 @@ namespace PoGo.NecroBot.Logic.Utils
                             Type valueType = type.GetGenericArguments()[1];
 
                             MethodInfo method = typeof(ExcelConfigHelper).GetMethod("BuildDictionaryData", BindingFlags.Public | BindingFlags.Static | BindingFlags.NonPublic);
-                            //var  genericType = typeof(ExcelConfigHelper).MakeGenericType(workSheet.GetType(), item.FieldType);
-                            MethodInfo getPropertiesMethodInfo =
-    method.MakeGenericMethod(valueType);
+                            MethodInfo genericMethod = method.MakeGenericMethod(valueType);
+                            genericMethod.Invoke(null, new object[] { workSheet, configProp });
 
-                            getPropertiesMethodInfo.Invoke(null, new object[] { workSheet, configProp });
-                            //BuildDictionaryData(workSheet, configProp);
-
-                            //MethodInfo method = typeof(ExcelConfigHelper).GetMethod("BuildDictionaryData", BindingFlags.Public | BindingFlags.Static);
-                            //MethodInfo generic = method.MakeGenericMethod();
-                            //generic.Invoke(null, new object[] { workSheet, configProp });
-                            //BuildDictionaryData(workSheet, configProp);
                         }
                         else
                         {
@@ -92,20 +77,29 @@ namespace PoGo.NecroBot.Logic.Utils
             var type = dictionary.GetType();
             Type keyType = type.GetGenericArguments()[0];
             Type valueType = type.GetGenericArguments()[1];
+            int col = 0;
             for (int i = 1; i <= 151; i++)
             {
                 int id = sheet.Cells[4 + i, 1].GetValue<int>();
                 var pokemonId = (PokemonId)id;
-                foreach (var prop in valueType.GetProperties())
+                if (dictionary.ContainsKey(pokemonId))
                 {
-                    var att = prop.GetCustomAttribute<ExcelConfigAttribute>();
-                    if (att != null)
+                    var obj = dictionary[pokemonId];
+
+                    foreach (var prop in valueType.GetProperties())
                     {
-                        if (dictionary.ContainsKey(pokemonId))
+                        var att = prop.GetCustomAttribute<ExcelConfigAttribute>();
+                        if (att != null)
                         {
-                            var obj = dictionary[pokemonId];
+                            col = Math.Max(col, att.Position);
+                            if(att.IsPrimaryKey)
+                            {
+                                sheet.Cells[4 + i, COL_OFFSET + att.Position].Value = true;
+                                continue;
+                            }
                             var val = prop.GetValue(obj);
-                            if(prop.PropertyType == typeof(List<List<PokemonMove>>) && val != null)
+
+                            if (prop.PropertyType == typeof(List<List<PokemonMove>>) && val != null)
                             {
                                 sheet.Cells[4 + i, COL_OFFSET + att.Position].Value = "[]";
                             }
@@ -117,14 +111,22 @@ namespace PoGo.NecroBot.Logic.Utils
                         }
                         else
                         {
-
+                           //maybe throw exception, 
                         }
                     }
                 }
 
-                
+
             }
-           
+            //sheet.Cells[$"A1:{GetCol(col)}:253"].AutoFilter = true;
+            sheet.Cells[sheet.Dimension.Address].AutoFitColumns();
+            for (int i = 3; i <= COL_OFFSET; i++)
+            {
+                sheet.Column(i).Hidden = true;
+            }
+            sheet.Protection.AllowAutoFilter = true;
+            sheet.Protection.AllowDeleteRows = false;
+            sheet.Protection.AllowInsertColumns = false;
         }
 
         private static void BuildCustomObjectData(ExcelWorksheet workSheet, object configProp)
@@ -252,7 +254,7 @@ namespace PoGo.NecroBot.Logic.Utils
 
         public static string GetCol(int col)
         {
-            return Convert.ToChar(col+64).ToString();
+            return Convert.ToChar(col + 64).ToString();
         }
         private static ExcelWorksheet BuildSheetHeader(ExcelPackage package, FieldInfo item, object att)
         {
@@ -274,10 +276,6 @@ namespace PoGo.NecroBot.Logic.Utils
                     workSheet.Cells[1, 1].Value = excelAtt.SheetName;
                     workSheet.Cells[2, 1].Value = excelAtt.Description;
 
-                    workSheet.Cells[$"A1:{GetCol(COL_OFFSET + pos)}1"].Merge = true;
-                    workSheet.Cells[$"A2:{GetCol(COL_OFFSET + pos)}2"].Merge = true;
-                    workSheet.Cells[$"A1:{GetCol(COL_OFFSET + pos)}1"].Style.Font.Size = 16;
-
                     foreach (var vtp in valueType.GetProperties())
                     {
                         var att1 = vtp.GetCustomAttributes<ExcelConfigAttribute>(true).FirstOrDefault();
@@ -286,13 +284,15 @@ namespace PoGo.NecroBot.Logic.Utils
                         workSheet.Cells[4, colIndex].Value = att1 == null ? vtp.Name : att1.Key;
                         if (att1 != null)
                         {
-                            
+
                             workSheet.Cells[4, colIndex].AddComment(att1.Description, "necrobot2");
-                            AddValidationForType(workSheet,vtp, $"{GetCol(colIndex)}:{GetCol(colIndex)}");
+                            AddValidationForType(workSheet, vtp, $"{GetCol(colIndex)}5:{GetCol(colIndex)}153");
                         }
                         pos++;
                     }
-
+                    workSheet.Cells[$"A1:{GetCol(COL_OFFSET + pos)}1"].Merge = true;
+                    workSheet.Cells[$"A2:{GetCol(COL_OFFSET + pos)}2"].Merge = true;
+                    workSheet.Cells[$"A1:{GetCol(COL_OFFSET + pos)}1"].Style.Font.Size = 16;
                 }
                 else {
                     workSheet = package.Workbook.Worksheets.Add(excelAtt.SheetName);
@@ -321,23 +321,23 @@ namespace PoGo.NecroBot.Logic.Utils
         private static void AddValidationForType(ExcelWorksheet sheet, PropertyInfo vtp, string address)
         {
             var type = vtp.PropertyType;
-            if(type == typeof(bool))
+            if (type == typeof(bool))
             {
                 AddListValidation(sheet, address, $"{type.Name}- Validation", "TRUE or FALSE only", "TRUE", "FALSE");
             }
             if (type == typeof(int) || type == typeof(float) || type == typeof(double) || type == typeof(long))
             {
                 var range = vtp.GetCustomAttribute<RangeAttribute>();
-                if(range != null)
+                if (range != null)
                 {
                     AddNumberValidation(sheet, address, $"{ type.Name} - Validation", $"Any number from {range.Minimum} to {range.Maximum}", (int)range.Minimum, (int)range.Maximum);
                 }
                 else
-                {  }
+                { }
             }
 
             var enumtype = vtp.GetCustomAttribute<EnumDataTypeAttribute>();
-            if(enumtype != null)
+            if (enumtype != null)
             {
                 AddEnumValidation(sheet, address, $"{type.Name}- Validation", "Select item from the list", enumtype);
             }
@@ -484,22 +484,36 @@ namespace PoGo.NecroBot.Logic.Utils
                         var ws = package.Workbook.Worksheets[att.SheetName];
                         var configProp = item.GetValue(setting);
 
-                        foreach (var cfg in configProp.GetType().GetFields())
+                        if (item.FieldType.IsGenericType && item.FieldType.GetGenericTypeDefinition() == typeof(Dictionary<,>))
                         {
-                            var peAtt = cfg.GetCustomAttributes(typeof(ExcelConfigAttribute), true).Cast<ExcelConfigAttribute>().FirstOrDefault();
-                            if (peAtt != null)
+                            var type = item.FieldType;
+                            Type keyType = type.GetGenericArguments()[0];
+                            Type valueType = type.GetGenericArguments()[1];
+
+                            MethodInfo method = typeof(ExcelConfigHelper).GetMethod("ReadSheetAsDictionary", BindingFlags.Public | BindingFlags.Static | BindingFlags.NonPublic);
+                            MethodInfo genericMethod = method.MakeGenericMethod(valueType);
+                            configProp = genericMethod.Invoke(null, new object[] { ws });
+
+                            //configProp = ReadSheetAsDictionary<TransferFilter>(ws);
+                        }
+                        else {
+                            foreach (var cfg in configProp.GetType().GetFields())
                             {
-                                string key = string.IsNullOrEmpty(peAtt.Key) ? cfg.Name : peAtt.Key;
-                                string keyFromExcel = ws.Cells[$"A{peAtt.Position + OFFSET_START}"].Value.ToString();
-                                if (keyFromExcel == key)
+                                var peAtt = cfg.GetCustomAttributes(typeof(ExcelConfigAttribute), true).Cast<ExcelConfigAttribute>().FirstOrDefault();
+                                if (peAtt != null)
                                 {
-                                    var value = ws.Cells[$"B{peAtt.Position + OFFSET_START}"].Value;
-                                    var convertedValue = System.Convert.ChangeType(value, cfg.FieldType);
-                                    cfg.SetValue(configProp, convertedValue);
-                                }
-                                else
-                                {
-                                    throw new Exception($"Invalid excel config for {att.SheetName}-> {key}");
+                                    string key = string.IsNullOrEmpty(peAtt.Key) ? cfg.Name : peAtt.Key;
+                                    string keyFromExcel = ws.Cells[$"A{peAtt.Position + OFFSET_START}"].Value.ToString();
+                                    if (keyFromExcel == key)
+                                    {
+                                        var value = ws.Cells[$"B{peAtt.Position + OFFSET_START}"].Value;
+                                        var convertedValue = System.Convert.ChangeType(value, cfg.FieldType);
+                                        cfg.SetValue(configProp, convertedValue);
+                                    }
+                                    else
+                                    {
+                                        throw new Exception($"Invalid excel config for {att.SheetName}-> {key}");
+                                    }
                                 }
                             }
                         }
@@ -508,7 +522,8 @@ namespace PoGo.NecroBot.Logic.Utils
                     }
                 }
                 var pkmSheet = package.Workbook.Worksheets["Pokemons"];
-                setting.PokemonsToIgnore = ReadListPokemon(pkmSheet, "J", false);
+                setting.ItemRecycleFilter = ReadItemRecycleFilter(package);
+                /*setting.PokemonsToIgnore = ReadListPokemon(pkmSheet, "J", false);
                 setting.PokemonsNotToTransfer = ReadListPokemon(pkmSheet, "P", false);
                 setting.PokemonsToEvolve = ReadListPokemon(pkmSheet, "AF", true);
                 setting.PokemonsToLevelUp = ReadListPokemon(pkmSheet, "W", true);
@@ -518,8 +533,48 @@ namespace PoGo.NecroBot.Logic.Utils
                 setting.MultipleBotConfig.PokemonSwitches = ReadListObjectAsDictionary<BotSwitch>(pkmSheet, "AU", true);
                 setting.PokemonsTransferFilter = ReadListObjectAsDictionary<TransferFilter>(pkmSheet, "P", true);
                 setting.SnipePokemonFilter = ReadListObjectAsDictionary<SnipeFilter>(pkmSheet, "AH", true);
+                */
             }
             return setting;
+        }
+
+        private static Dictionary<PokemonId, T> ReadSheetAsDictionary<T>(ExcelWorksheet ws)
+        {
+            Dictionary<PokemonId, T> results = new Dictionary<PokemonId, T>();
+            for (int i = 5; i < 153; i++)
+            {
+                T obj = Activator.CreateInstance<T>();
+
+                var id = ws.Cells[i, 1].GetValue<int>();
+                var pokemonId = (PokemonId)id;
+
+                foreach (var prop in typeof(T).GetProperties())
+                {
+                    var attr = prop.GetCustomAttribute<ExcelConfigAttribute>();
+                    if (attr != null)
+                    {
+                        var celvalue = ws.Cells[i, COL_OFFSET + attr.Position].Value;
+                        if (celvalue == null && attr.IsPrimaryKey) break;
+
+                        if (celvalue != null)
+                        {
+                            if (prop.PropertyType == typeof(List<List<PokemonMove>>) && celvalue != null)
+                            {
+                                prop.SetValue(obj, ParseMoves(celvalue.ToString()));
+                            }
+                            else {
+                                var convertedVal = Convert.ChangeType(celvalue, prop.PropertyType);
+                                prop.SetValue(obj, convertedVal);
+                                if (attr.IsPrimaryKey && (bool)convertedVal)
+                                {
+                                    results.Add(pokemonId, obj);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return results;
         }
 
         private static List<ItemRecycleFilter> ReadItemRecycleFilter(ExcelPackage package)
@@ -598,7 +653,7 @@ namespace PoGo.NecroBot.Logic.Utils
                 {
                     pokemonFilter.Cells[$"P{i}"].Value = false;
                 }
-                
+
                 if (setting.PokemonsTransferFilter.ContainsKey(pid))
                 {
                     pokemonFilter.Cells[$"P{i}"].Value = true;
@@ -630,7 +685,7 @@ namespace PoGo.NecroBot.Logic.Utils
             {
                 string address = $"{column}{i}";
                 var isAllow = Convert.ToBoolean(sheet.Cells[address].GetValue<string>());
-                if(isAllow == compare)
+                if (isAllow == compare)
                 {
                     int id = sheet.Cells[$"A{i}"].GetValue<int>();
 
@@ -641,7 +696,7 @@ namespace PoGo.NecroBot.Logic.Utils
             return results;
         }
 
-        public static Dictionary<PokemonId,T> ReadListObjectAsDictionary<T>(ExcelWorksheet sheet, string column, bool compare)
+        public static Dictionary<PokemonId, T> ReadListObjectAsDictionary<T>(ExcelWorksheet sheet, string column, bool compare)
         {
             Dictionary<PokemonId, T> results = new Dictionary<PokemonId, T>();
             for (int i = 3; i < 153; i++)
@@ -658,18 +713,18 @@ namespace PoGo.NecroBot.Logic.Utils
                     foreach (var fi in typeof(T).GetProperties())
                     {
                         var attr = fi.GetCustomAttributes<ExcelConfigAttribute>(true).FirstOrDefault();
-                        if(attr != null)
+                        if (attr != null)
                         {
                             string addr = $"{attr.Key}{i}";
                             var v = sheet.Cells[addr].Value;
-                            if (fi.PropertyType == typeof( List<List<PokemonMove>>) && v!= null)
+                            if (fi.PropertyType == typeof(List<List<PokemonMove>>) && v != null)
                             {
                                 fi.SetValue(obj, ParseMoves(v.ToString()));
                             }
                             else {
-                                if(v == null)
+                                if (v == null)
                                 {
-                                   //throw exception
+                                    //throw exception
 
                                 }
                                 var converted = Convert.ChangeType(v, fi.PropertyType);
@@ -696,7 +751,7 @@ namespace PoGo.NecroBot.Logic.Utils
                         }
                     }
 
-                    results.Add(pokemonId,obj);
+                    results.Add(pokemonId, obj);
                 }
             }
             return results;
@@ -710,7 +765,8 @@ namespace PoGo.NecroBot.Logic.Utils
             var matches = Regex.Matches(moves, regexPattern);
             foreach (Match match in matches)
             {
-                try {
+                try
+                {
                     string move1 = match.Groups[1].Value;
                     string move2 = match.Groups[2].Value;
                     PokemonMove pmove1 = (PokemonMove)Enum.Parse(typeof(PokemonMove), move1.Replace(" ", ""));
@@ -718,7 +774,8 @@ namespace PoGo.NecroBot.Logic.Utils
                     results.Add(new List<PokemonMove>() {
                     pmove1, pmove2
                 });
-                }catch(Exception ex) { }
+                }
+                catch (Exception ex) { }
 
             }
             return results;
@@ -801,7 +858,7 @@ namespace PoGo.NecroBot.Logic.Utils
             }
         }
 
-public static void AddNumberValidation(ExcelWorksheet workSheet, string address, string errorTitle, string promptTitle, int? minValue, int? maxValue)
+        public static void AddNumberValidation(ExcelWorksheet workSheet, string address, string errorTitle, string promptTitle, int? minValue, int? maxValue)
         {
             var validation = workSheet.DataValidations.AddIntegerValidation(address);
             validation.ShowErrorMessage = true;

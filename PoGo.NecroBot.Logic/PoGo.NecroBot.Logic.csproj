@@ -95,7 +95,7 @@
     </Reference>
     <Reference Include="PushbulletSharp, Version=2.3.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\PushBulletSharp.2.3.3\lib\portable-windows8+net45\PushbulletSharp.dll</HintPath>
-       </Reference>
+    </Reference>
     <Reference Include="POGOProtos.NetStandard1, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\POGOProtos.NetStandard1.2.1.0\lib\net45\POGOProtos.NetStandard1.dll</HintPath>
       <Private>True</Private>
@@ -147,7 +147,7 @@
       <HintPath>$(SolutionDir)\packages\WebSocket4Net.0.14.1\lib\net45\WebSocket4Net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-</ItemGroup>
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\PokemonGradeHelper.cs" />
     <Compile Include="DataDumper\IDumper.cs" />
@@ -235,6 +235,7 @@
     <Compile Include="Model\Settings\DataSharingConfig.cs" />
     <Compile Include="Model\Settings\DeviceConfig.cs" />
     <Compile Include="Model\Settings\EvolveConfig.cs" />
+    <Compile Include="Model\Settings\CatchFilter.cs" />
     <Compile Include="Model\Settings\ExcelConfigAttribute.cs" />
     <Compile Include="Model\Settings\GlobalSettings.cs" />
     <Compile Include="Model\Settings\GoogleWalkConfig.cs" />
@@ -253,11 +254,12 @@
     <Compile Include="Model\Settings\ProxyConfig.cs" />
     <Compile Include="Model\Settings\ItemRecycleConfig.cs" />
     <Compile Include="Model\Settings\SnipeConfig.cs" />
+    <Compile Include="Model\Settings\EvolveFilter.cs" />
     <Compile Include="Model\Settings\SnipeSettings.cs" />
     <Compile Include="Model\Settings\SoftBanConfig.cs" />
     <Compile Include="Model\Settings\TelegramConfig.cs" />
     <Compile Include="Model\Settings\TransferConfig.cs" />
-    <Compile Include="Model\Settings\SnipeFIlter.cs" />
+    <Compile Include="Model\Settings\SnipeFilter.cs" />
     <Compile Include="Model\Settings\TransferFilter.cs" />
     <Compile Include="Model\Settings\UpdateConfig.cs" />
     <Compile Include="Model\Settings\UpgradeFilter.cs" />

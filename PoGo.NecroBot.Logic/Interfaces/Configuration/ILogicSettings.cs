@@ -227,6 +227,8 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
 
         bool DataSharingEnable { get; }
         string DataSharingDataUrl { get; }
+
+        bool AllowAutoSnipe { get; }
         MultipleBotConfig MultipleBotConfig { get; }
         int GymCollectRewardAfter { get; }
         List<AuthConfig> Bots { get; }

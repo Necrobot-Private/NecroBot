@@ -12,6 +12,7 @@ using PokemonGo.RocketAPI.Enums;
 using PokemonGo.RocketAPI.Exceptions;
 using POGOProtos.Enums;
 using System.IO;
+using PoGo.NecroBot.Logic.Exceptions;
 
 #endregion
 
@@ -142,26 +143,31 @@ namespace PoGo.NecroBot.Logic.State
                 await Task.Delay(20000, cancellationToken);
                 return this;
             }
+            try {
+                await DownloadProfile(session);
+                if (session.Profile == null)
+                {
+                    await Task.Delay(20000, cancellationToken);
+                    Logger.Write("Due to login failure your player profile could not be retrieved. Press any key to re-try login.", LogLevel.Warning);
+                    Console.ReadKey();
+                }
 
-            await DownloadProfile(session);
-            if (session.Profile == null)
-            {
-                await Task.Delay(20000, cancellationToken);
-                Logger.Write("Due to login failure your player profile could not be retrieved. Press any key to re-try login.", LogLevel.Warning);
-                Console.ReadKey();
+                int maxTheoreticalItems = session.LogicSettings.TotalAmountOfPokeballsToKeep +
+                    session.LogicSettings.TotalAmountOfPotionsToKeep +
+                    session.LogicSettings.TotalAmountOfRevivesToKeep +
+                    session.LogicSettings.TotalAmountOfBerriesToKeep;
+
+                if (maxTheoreticalItems > session.Profile.PlayerData.MaxItemStorage)
+                {
+                    Logger.Write(session.Translation.GetTranslation(TranslationString.MaxItemsCombinedOverMaxItemStorage, maxTheoreticalItems, session.Profile.PlayerData.MaxItemStorage), LogLevel.Error);
+                    Logger.Write("Press any key to exit, then fix your configuration and run the bot again.", LogLevel.Warning);
+                    Console.ReadKey();
+                    System.Environment.Exit(1);
+                }
             }
-
-            int maxTheoreticalItems = session.LogicSettings.TotalAmountOfPokeballsToKeep +
-                session.LogicSettings.TotalAmountOfPotionsToKeep +
-                session.LogicSettings.TotalAmountOfRevivesToKeep +
-                session.LogicSettings.TotalAmountOfBerriesToKeep;
-
-            if (maxTheoreticalItems > session.Profile.PlayerData.MaxItemStorage)
+            catch(ActiveSwitchByRuleException ignoreEXP)
             {
-                Logger.Write(session.Translation.GetTranslation(TranslationString.MaxItemsCombinedOverMaxItemStorage, maxTheoreticalItems, session.Profile.PlayerData.MaxItemStorage), LogLevel.Error);
-                Logger.Write("Press any key to exit, then fix your configuration and run the bot again.", LogLevel.Warning);
-                Console.ReadKey();
-                System.Environment.Exit(1);
+                //sometime the switch active happen same time with login by token expired. we need ignore it 
             }
 
             session.LoggedTime = DateTime.Now;

@@ -130,7 +130,6 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public List<PokemonId> PokemonsToIgnore = CatchConfig.PokemonsToIgnoreDefault();
 
         [ExcelConfig(SheetName = "PokemonsTransferFilter", Description = "Setting up pokemon filter rules")]
-
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public Dictionary<PokemonId, TransferFilter> PokemonsTransferFilter = TransferFilter.TransferFilterDefault();
 
@@ -140,9 +139,11 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public List<PokemonId> PokemonToUseMasterball = CatchConfig.PokemonsToUseMasterballDefault();
 
+        [ExcelConfig(Description = "Setting up human walk snipe filter by pokemon", SheetName = "HumanWalkSnipeFilter")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public Dictionary<PokemonId, HumanWalkSnipeFilter> HumanWalkSnipeFilters = HumanWalkSnipeFilter.Default();
 
+        [ExcelConfig(Description = "Setting up pokemon filter for level up", SheetName = "PokemonUpgradeFilter")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public Dictionary<PokemonId, UpgradeFilter> PokemonUpgradeFilters = UpgradeFilter.Default();
 
@@ -153,6 +154,14 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [ExcelConfig(SheetName = "SnipePokemonFilter", Description ="Setup list pokemon for auto snipe")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public Dictionary<PokemonId, SnipeFilter> SnipePokemonFilter = SnipeFilter.SniperFilterDefault();
+
+        [ExcelConfig(SheetName = "EvolvePokemonFilter", Description = "Setup list pokemon for auto evolve")]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public Dictionary<PokemonId, EvolveFilter> EvolvePokemonFilter = EvolveFilter.Default();
+
+        [ExcelConfig(SheetName = "CatchPokemonFilter", Description = "Setup list pokemon for catch")]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public Dictionary<PokemonId, CatchFilter> CatchPokemonFilter = CatchFilter.Default();
 
         public GlobalSettings()
         {
