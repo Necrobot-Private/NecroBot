@@ -569,11 +569,11 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             if (filter.SnipeIV < item.Iv)
             {
-                liveData.Add(item);
+                autoSnipePokemons.Add(item);
             }
         }
 
-        private static List<MSniperInfo2> liveData = new List<MSniperInfo2>();
+        private static List<MSniperInfo2> autoSnipePokemons = new List<MSniperInfo2>();
 
         public static async Task Execute(ISession session, CancellationToken cancellationToken)
         {
@@ -588,7 +588,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             var pth = Path.Combine(Directory.GetCurrentDirectory(), "SnipeMS.json");
             try
             {
-                if (!File.Exists(pth) && liveData.Count == 0)
+                if (!File.Exists(pth) && autoSnipePokemons.Count == 0)
                 {
                     inProgress = false;
                     return;
@@ -611,8 +611,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                     if (mSniperLocation2 == null) mSniperLocation2 = new List<MSniperInfo2>();
                 }
 
-                mSniperLocation2.AddRange(liveData);
-                liveData.Clear();
+                mSniperLocation2.AddRange(autoSnipePokemons);
+                autoSnipePokemons.Clear();
 
                 foreach (var location in mSniperLocation2)
                 {
