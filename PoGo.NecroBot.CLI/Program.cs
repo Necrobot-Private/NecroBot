@@ -119,10 +119,15 @@ namespace PoGo.NecroBot.CLI
                 if(excelConfigAllow)
                 {
                     if(!File.Exists(excelConfigFile)) {
+
+                        Logger.Write("Migrating existing json confix to excel config, please check the config.xlsm in your config folder");
+
                         ExcelConfigHelper.MigrateFromObject(settings, excelConfigFile);
                     }
                     else
                     settings = ExcelConfigHelper.ReadExcel(settings, excelConfigFile);
+
+                    Logger.Write("Bot will run with your excel config, loading excel config");
                 }
             }
             else
