@@ -55,6 +55,12 @@ namespace PoGo.NecroBot.Logic.Tasks
             public List<string> List { get; set; }
         }
 
+        private static HubConnection _connection;
+        private static IHubProxy _msniperHub;
+        private static string _botIdentiy;
+        private static string _msniperServiceUrl = "http://msniper.com/signalr";
+        public static double minIvPercent = 50.0;
+        public static bool isConnected = false;
         public static void AsyncConnectToService()
         {
             Task.Run(() => ConnectToService());
@@ -91,7 +97,6 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
 
         }
-
         private static void Connection_Closed()
         {
             //Logger.Write("connection closed, trying to reconnect in 10secs", LogLevel.Service);
@@ -134,10 +139,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                             _msniperHub.Invoke("RecvPokemons", LocationQueue);
                             LocationQueue.RemoveRange(0, LocationQueue.Count);
                         }
-                        break;
-
-                    case "MSniperServiceR":
-
                         break;
 
                     case "Exceptions":
@@ -224,15 +225,12 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         #region Variables
 
-        private static HubConnection _connection;
-        private static IHubProxy _msniperHub;
-        private static string _botIdentiy;
-        private static string _msniperServiceUrl = "http://msniper.com/signalr";
-        public static double minIvPercent = 50.0;
-        public static bool isConnected = false;
-
+        //public static WebSocket socket;
         public static List<EncounterInfo> LocationQueue = new List<EncounterInfo>();
+        //public static List<EncounterInfo> ReceivedPokemons = new List<EncounterInfo>();
         public static List<ulong> VisitedEncounterIds = new List<ulong>();
+        //public static string UserUniequeId { get; set; } //only info
+        //public static DateTime lastNotify { get; set; }
         private static bool inProgress = false;
         #endregion
 
@@ -360,7 +358,61 @@ namespace PoGo.NecroBot.Logic.Tasks
             });
             return newOne;
         }
-        
+
+        //public static SocketCmd GetSocketCmd(this MessageReceivedEventArgs e)
+        //{
+        //    try
+        //    {
+        //        return (SocketCmd)Enum.Parse(typeof(SocketCmd), e.Message.Split(new string[] { "||" }, StringSplitOptions.None).First());
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Logger.Write(ex.Message, LogLevel.Service, ConsoleColor.Red);
+        //        throw ex;
+        //    }
+        //}
+
+        //public static string[] GetSocketData(this MessageReceivedEventArgs e)
+        //{
+        //    try
+        //    {
+        //        return e.Message.Split(new string[] { "||" }, StringSplitOptions.None)[1].Split('|');
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Logger.Write(ex.Message, LogLevel.Service, ConsoleColor.Red);
+        //        throw ex;
+        //    }
+        //}
+
+        //public static void OpenSocket()
+        //{
+        //    if (socket == null/* || msocket.State == WebSocketState.Closed*/)
+        //    {
+        //        try
+        //        {
+        //            Thread.Sleep(30000);
+        //            //msniper.com
+        //            socket = new WebSocket("ws://msniper.com/WebSockets/NecroBotServer.ashx", "", WebSocketVersion.Rfc6455);
+        //            socket.MessageReceived += Msocket_MessageReceived;
+        //            socket.Closed += Msocket_Closed;
+        //            socket.Open();
+        //            lastNotify = DateTime.Now;
+        //            //Logger.Write($"Connecting to MSniperService", LogLevel.Service);
+        //        }
+        //        catch (Exception)
+        //        {
+        //            TimeSpan ts = DateTime.Now - lastNotify;
+        //            if (ts.TotalMinutes > 5)
+        //            {
+        //                //Logger.Write(ex.Message + "  (may be offline)", LogLevel.Service, ConsoleColor.Red);
+        //            }
+        //            socket?.Dispose();
+        //            socket = null;
+        //        }
+        //    }
+        //}
+
         public static DateTime TimeStampToDateTime(double timeStamp)
         {
             // Java timestamp is millisecods past epoch
@@ -368,6 +420,19 @@ namespace PoGo.NecroBot.Logic.Tasks
             dtDateTime = dtDateTime.AddSeconds(Math.Round(timeStamp / 1000)).ToLocalTime();
             return dtDateTime;
         }
+        //private static void Msocket_Closed(object sender, EventArgs e)
+        //{
+        //    socket.Dispose();
+        //    socket = null;
+        //    TimeSpan ts = DateTime.Now - lastNotify;
+        //    if (ts.TotalMinutes > 5)
+        //    {
+        //        //Logger.Write("connection lost  (may be offline)", LogLevel.Service, ConsoleColor.Red);
+        //    }
+        //    //throw new Exception("msniper socket closed");
+        //    ////need delay or clear PkmnLocations
+
+        //}
 
         private static void RefreshLocationQueue()
         {
@@ -378,6 +443,124 @@ namespace PoGo.NecroBot.Logic.Tasks
             LocationQueue.AddRange(pkmns);
         }
 
+        //private static void Msocket_MessageReceived(object sender, MessageReceivedEventArgs e)
+        //{
+        //    try
+        //    {
+        //        SocketCmd cmd = e.GetSocketCmd();
+        //        switch (cmd)
+        //        {
+        //            case SocketCmd.IpLimit:
+        //                Logger.Write("(IpLimit) " + e.GetSocketData().First(), LogLevel.Service, ConsoleColor.Red);
+        //                break;
+        //            case SocketCmd.ServerLimit:
+        //                Logger.Write("(ServerLimit) " + e.GetSocketData().First(), LogLevel.Service, ConsoleColor.Red);
+        //                break;
+        //            case SocketCmd.Identity://first request
+        //                UserUniequeId = e.GetSocketData().First();
+        //                SendToMSniperServer(UserUniequeId);//confirm
+        //                Logger.Write($"(Identity) [ {UserUniequeId} ] connection establisted", LogLevel.Service);
+        //                break;
+
+        //            case SocketCmd.PokemonCount://server asks what is in your hand (every 3 minutes)
+        //                RefreshLocationQueue();
+        //                var x = LocationQueue.GroupBy(p => p.PokemonName)
+        //                    .Select(s => new PokemonCount { PokemonId = s.First().GetPokemonName(), Count = s.Count() })
+        //                    .ToList();
+        //                SendToMSniperServer(JsonConvert.SerializeObject(x));
+        //                break;
+
+        //            case SocketCmd.SendPokemon://sending encounters
+        //                RefreshLocationQueue();
+        //                LocationQueue = LocationQueue.OrderByDescending(p => p.Iv).ToList();
+        //                int rq = 1;
+        //                if (LocationQueue.Count < int.Parse(e.GetSocketData().First()))
+        //                {
+        //                    rq = LocationQueue.Count;
+        //                }
+        //                else
+        //                {
+        //                    rq = int.Parse(e.GetSocketData().First());
+        //                }
+        //                var selected = LocationQueue.GetRange(0, rq);
+        //                SendToMSniperServer(JsonConvert.SerializeObject(selected));
+        //                AddToVisited(selected.Select(p => p.GetEncounterId()).ToList());
+        //                LocationQueue.RemoveRange(0, rq);
+        //                break;
+
+        //            case SocketCmd.SendOneSpecies://server needs one type pokemon
+        //                RefreshLocationQueue();
+        //                PokemonId speciesId = (PokemonId)Enum.Parse(typeof(PokemonId), e.GetSocketData().First());
+        //                int requestCount = int.Parse(e.GetSocketData()[1]);
+        //                var onespecies = LocationQueue.Where(p => p.GetPokemonName() == speciesId).ToList();
+        //                onespecies = onespecies.OrderByDescending(p => p.Iv).ToList();
+        //                if (onespecies.Count > 0)
+        //                {
+        //                    List<EncounterInfo> oneType;
+        //                    if (onespecies.Count > requestCount)
+        //                    {
+        //                        oneType = LocationQueue.GetRange(0, requestCount);
+        //                        AddToVisited(oneType.Select(p => p.GetEncounterId()).ToList());
+        //                        LocationQueue.RemoveRange(0, requestCount);
+        //                    }
+        //                    else
+        //                    {
+        //                        oneType = LocationQueue.GetRange(0, LocationQueue.Count);
+        //                        LocationQueue.Clear();
+        //                    }
+        //                    SendToMSniperServer(JsonConvert.SerializeObject(oneType));
+        //                }
+        //                break;
+
+        //            case SocketCmd.Brodcaster://receiving encounter information from server
+
+        //                //// disabled fornow
+        //                //var xcoming = JsonConvert.DeserializeObject<List<EncounterInfo>>(e.GetSocketData().First());
+        //                //xcoming = FindNew(xcoming);
+        //                //ReceivedPokemons.AddRange(xcoming);
+        //                //
+        //                //RefreshReceivedPokemons();
+        //                //TimeSpan ts = DateTime.Now - lastNotify;
+        //                //if (ts.TotalMinutes >= 5)
+        //                //{
+        //                //    Logger.Write($"total active spawns:[ {ReceivedPokemons.Count} ]", LogLevel.Service);
+        //                //    lastNotify = DateTime.Now;
+        //                //}
+        //                break;
+        //            case SocketCmd.None:
+        //                Logger.Write("UNKNOWN ERROR", LogLevel.Service, ConsoleColor.Red);
+        //                //throw Exception
+        //                break;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        socket.Close();
+        //        Logger.Write(ex.Message, LogLevel.Service, ConsoleColor.Red);
+        //        //throw ex;
+        //    }
+        //}
+        //private static void RefreshReceivedPokemons()
+        //{
+        //    var pkmns = ReceivedPokemons
+        //        .Where(p => TimeStampToDateTime(p.Expiration) > DateTime.Now)
+        //        .ToList();
+        //    ReceivedPokemons.Clear();
+        //    ReceivedPokemons.AddRange(pkmns);
+        //}
+        //private static void SendToMSniperServer(string message)
+        //{
+        //    try
+        //    {
+        //        socket.Send($"{message}");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        socket.Close();
+        //        Logger.Write(ex.Message, LogLevel.Service, ConsoleColor.Red);
+        //        //throw ex;
+        //    }
+        //}
         #endregion
         public static void AddSnipeItem(ISession session, MSniperInfo2 item)
         {
@@ -431,6 +614,10 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (inProgress)
                 return;
             inProgress = true;
+            //if (session.LogicSettings.ActivateMSniper)
+            //    OpenSocket();
+
+            //return;//NEW SNIPE METHOD WILL BE ACTIVATED
 
             var pth = Path.Combine(Directory.GetCurrentDirectory(), "SnipeMS.json");
             try
