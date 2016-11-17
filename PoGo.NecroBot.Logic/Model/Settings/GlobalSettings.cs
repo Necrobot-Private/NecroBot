@@ -399,11 +399,8 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             settings.ProfileConfigPath = profileConfigPath;
             settings.GeneralConfigPath = Path.Combine(Directory.GetCurrentDirectory(), "config");
 
-            if (!settings.UpdateConfig.AutoUpdate)
-            {
-                settings.Save(configFile);
-                settings.Auth.Load(Path.Combine(profileConfigPath, "auth.json"), validate);
-            }
+            settings.Save(configFile);
+            settings.Auth.Load(Path.Combine(profileConfigPath, "auth.json"), validate);
 
             return shouldExit ? null : settings;
         }
