@@ -168,11 +168,7 @@ namespace PoGo.NecroBot.CLI
                     data.IsRecievedFromSocket = true;
                     session.EventDispatcher.Send(data);
                     if (session.LogicSettings.AllowAutoSnipe)
-                    {
-                        if(data.PokemonId == PokemonId.Lapras)
-                        {
-                            Console.WriteLine("FUCK LAP");
-                        }
+                    {   
                         var move1 = PokemonMove.Absorb;
                         var move2 = PokemonMove.Absorb;
                         Enum.TryParse< PokemonMove>( data.Move1, true, out move1);
