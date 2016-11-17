@@ -1,5 +1,13 @@
 # Change Log
 
+## [v1.0.0.23](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.23) (2016-11-16)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.22...v1.0.0.23)
+
+**Fixed bugs:**
+
+- Fixes #320 - Fix login for first time users who have not accepted ToS.
+- Fixes #351 - Backup config file is now given a unique name with timestamp to avoid collisions.
+
 ## [v1.0.0.22](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.22) (2016-11-16)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.19...v1.0.0.22)
 
