@@ -26,7 +26,6 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public int SchemaVersion => _settings.UpdateConfig.SchemaVersion;
         public bool CheckForUpdates => _settings.UpdateConfig.CheckForUpdates;
         public bool AutoUpdate => _settings.UpdateConfig.AutoUpdate;
-        public bool TransferConfigAndAuthOnUpdate => _settings.UpdateConfig.TransferConfigAndAuthOnUpdate;
         public bool UseWebsocket => _settings.WebsocketsConfig.UseWebsocket;
         public bool CatchPokemon => _settings.PokemonConfig.CatchPokemon;
         public int CatchPokemonLimit => _settings.PokemonConfig.CatchPokemonLimit;
@@ -97,10 +96,6 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public int RecycleActionDelay => _settings.PlayerConfig.RecycleActionDelay;
         public int RenamePokemonActionDelay => _settings.PlayerConfig.RenamePokemonActionDelay;
         public bool UseNearActionRandom => _settings.PlayerConfig.UseNearActionRandom;
-        public bool AutoCompleteTutorial => _settings.PlayerConfig.AutoCompleteTutorial;
-        public string DesiredNickname => _settings.PlayerConfig.DesiredNickname;
-        public string DesiredGender => _settings.PlayerConfig.DesiredGender;
-        public string DesiredStarter => _settings.PlayerConfig.DesiredStarter;
         public bool UsePokemonToNotCatchFilter => _settings.PokemonConfig.UsePokemonToNotCatchFilter;
         public bool UsePokemonSniperFilterOnly => _settings.PokemonConfig.UsePokemonSniperFilterOnly;
         public int KeepMinDuplicatePokemon => _settings.PokemonConfig.KeepMinDuplicatePokemon;

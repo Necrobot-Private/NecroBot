@@ -323,7 +323,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                 return;
 
             FortSearchResponse fortSearch;
-            bool awarded = false;
             var timesZeroXPawarded = 0;
             var fortTry = 0; //Current check
             const int retryNumber = 50; //How many times it needs to check to clear softban
@@ -395,7 +394,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Altitude = session.Client.CurrentAltitude,
                         InventoryFull = fortSearch.Result == FortSearchResponse.Types.Result.InventoryFull
                     });
-                    awarded = true;
                     if (fortSearch.Result == FortSearchResponse.Types.Result.InventoryFull)
                         _storeRi = 1;
 

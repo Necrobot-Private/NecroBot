@@ -76,7 +76,7 @@ namespace PoGo.NecroBot.Logic.State
                             }
                             await Task.Delay(5000);
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
 
                         }
