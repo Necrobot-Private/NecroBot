@@ -20,7 +20,7 @@ namespace PoGo.NecroBot.CLI.WebSocketHandler.ActionCommands
 
         public async Task Handle(ISession session, WebSocketSession webSocketSession, dynamic message)
         {
-            await TransferPokemonTask.Execute(session, (ulong) message.PokemonId);
+            await TransferPokemonTask.Execute(session, session.CancellationTokenSource.Token, (ulong) message.PokemonId);
         }
     }
 }

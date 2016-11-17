@@ -588,10 +588,12 @@ namespace PoGo.NecroBot.Logic.PoGoUtils
 
         public static int GetCandy(PokemonData pokemon, List<Candy> PokemonFamilies, IEnumerable<PokemonSettings> PokemonSettings)
         {
+            if (PokemonFamilies == null || PokemonSettings == null) return 0;
+
             var setting = PokemonSettings.FirstOrDefault(q => pokemon != null && q.PokemonId.Equals(pokemon.PokemonId));
             var family = PokemonFamilies.FirstOrDefault(q => setting != null && q.FamilyId.Equals(setting.FamilyId));
 
-            return family.Candy_;
+            return family != null? family.Candy_:0;
         }
 
         public static int GetPowerUpLevel(PokemonData poke)

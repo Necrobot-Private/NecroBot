@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
@@ -36,5 +37,10 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [MaxLength(32)]
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 5)]
         public string PtcPassword;
+
+        [JsonIgnore]
+        public double RuntimeTotal = 0;
+        [JsonIgnore]
+        public DateTime ReleaseBlockTime { get; internal set; }
     }
 }

@@ -2,6 +2,8 @@
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.State;
+using PoGo.NecroBot.Logic.Tasks;
+using POGOProtos.Enums;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -62,7 +64,7 @@ namespace PoGo.NecroBot.CLI
 
         public static async Task Start(Session session, CancellationToken cancellationToken)
         {
-            await Task.Delay(30000);//delay running 30s
+            await Task.Delay(30000,cancellationToken);//delay running 30s
 
             System.Net.ServicePointManager.Expect100Continue = false;
 
@@ -94,7 +96,7 @@ namespace PoGo.NecroBot.CLI
                             {
                                 Message = "Couldn't establish the connection to necro socket server, Bot will re-connect after 10 mins"
                             });
-                            await Task.Delay(1 * 60 * 1000);
+                            await Task.Delay(1 * 60 * 1000, cancellationToken);
                             retries = 0;
                         }
 
@@ -132,7 +134,7 @@ namespace PoGo.NecroBot.CLI
                             {
                                 events.RemoveAll(x => processing.Any(t => t.EncounterId == x.EncounterId));
                             }
-                            await Task.Delay(POLLING_INTERVAL);
+                            await Task.Delay(POLLING_INTERVAL, cancellationToken);
                             ws.Ping();
                         }
                     }
@@ -152,10 +154,9 @@ namespace PoGo.NecroBot.CLI
                         await Task.Delay(POLLING_INTERVAL, cancellationToken);
                     }
                 }
-
             }
-
         }
+        
         private static void onSocketMessageRecieved(ISession session, object sender, WebSocketSharp.MessageEventArgs e)
         {
             try
@@ -166,10 +167,44 @@ namespace PoGo.NecroBot.CLI
                     var data = JsonConvert.DeserializeObject<EncounteredEvent>(match.Groups[1].Value);
                     data.IsRecievedFromSocket = true;
                     session.EventDispatcher.Send(data);
+                    if (session.LogicSettings.AllowAutoSnipe)
+                    {
+                        if(data.PokemonId == PokemonId.Lapras)
+                        {
+                            Console.WriteLine("FUCK LAP");
+                        }
+                        var move1 = PokemonMove.Absorb;
+                        var move2 = PokemonMove.Absorb;
+                        Enum.TryParse< PokemonMove>( data.Move1, true, out move1);
+                        Enum.TryParse<PokemonMove>(data.Move1, true, out move2);
+                        MSniperServiceTask.AddSnipeItem(session, new MSniperServiceTask.MSniperInfo2()
+                        {
+                            Latitude = data.Latitude,
+                            Longitude = data.Longitude,
+                            EncounterId = Convert.ToUInt64(data.EncounterId),
+                            SpawnPointId = data.SpawnPointId,
+                            PokemonId = (short)data.PokemonId,
+                            Iv = data.IV,
+                            Move1 =  move1,
+                            Move2 = move2
+                        });
+                    }
+                    return;
+                }
+                match = Regex.Match(e.Data, "42\\[\"fpm\",(.*)]");
+                if (match != null && !string.IsNullOrEmpty(match.Groups[1].Value))
+                {
+                    
+                    //var data = JsonConvert.DeserializeObject<List<Logic.Tasks.HumanWalkSnipeTask.FastPokemapItem>>(match.Groups[1].Value);
+                    HumanWalkSnipeTask.AddFastPokemapItem(match.Groups[1].Value);
+                    return;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                #if DEBUG
+                Logger.Write("ERROR TO ADD SNIPE< DEBUG ONLY " + ex.Message, LogLevel.Info, ConsoleColor.Yellow);
+                #endif
             }
 
         }

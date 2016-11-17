@@ -10,6 +10,9 @@ using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Logging;
 using PokemonGo.RocketAPI.Enums;
 using PokemonGo.RocketAPI.Exceptions;
+using POGOProtos.Enums;
+using System.IO;
+using PoGo.NecroBot.Logic.Exceptions;
 
 #endregion
 
@@ -17,10 +20,14 @@ namespace PoGo.NecroBot.Logic.State
 {
     public class LoginState : IState
     {
+        private PokemonId pokemonToCatch;
+        public LoginState(PokemonId pokemonToCatch= PokemonId.Missingno)
+        {
+            this.pokemonToCatch = pokemonToCatch;
+        }
         public async Task<IState> Execute(ISession session, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-
             session.EventDispatcher.Send(new NoticeEvent
             {
                 Message = session.Translation.GetTranslation(TranslationString.LoggingIn, session.Settings.AuthType)
@@ -33,6 +40,7 @@ namespace PoGo.NecroBot.Logic.State
                 if (session.Settings.AuthType == AuthType.Google || session.Settings.AuthType == AuthType.Ptc)
                 {
                     await session.Client.Login.DoLogin();
+                    await LogLoginHistory(session, cancellationToken); 
                 }
                 else
                 {
@@ -135,29 +143,57 @@ namespace PoGo.NecroBot.Logic.State
                 await Task.Delay(20000, cancellationToken);
                 return this;
             }
+            try {
+                await DownloadProfile(session);
+                if (session.Profile == null)
+                {
+                    await Task.Delay(20000, cancellationToken);
+                    Logger.Write("Due to login failure your player profile could not be retrieved. Press any key to re-try login.", LogLevel.Warning);
+                    Console.ReadKey();
+                }
 
-            await DownloadProfile(session);
-            if (session.Profile == null)
+                int maxTheoreticalItems = session.LogicSettings.TotalAmountOfPokeballsToKeep +
+                    session.LogicSettings.TotalAmountOfPotionsToKeep +
+                    session.LogicSettings.TotalAmountOfRevivesToKeep +
+                    session.LogicSettings.TotalAmountOfBerriesToKeep;
+
+                if (maxTheoreticalItems > session.Profile.PlayerData.MaxItemStorage)
+                {
+                    Logger.Write(session.Translation.GetTranslation(TranslationString.MaxItemsCombinedOverMaxItemStorage, maxTheoreticalItems, session.Profile.PlayerData.MaxItemStorage), LogLevel.Error);
+                    Logger.Write("Press any key to exit, then fix your configuration and run the bot again.", LogLevel.Warning);
+                    Console.ReadKey();
+                    System.Environment.Exit(1);
+                }
+            }
+            catch(ActiveSwitchByRuleException)
             {
-                await Task.Delay(20000, cancellationToken);
-                Logger.Write("Due to login failure your player profile could not be retrieved. Press any key to re-try login.", LogLevel.Warning);
-                Console.ReadKey();
+                //sometime the switch active happen same time with login by token expired. we need ignore it 
             }
 
-            int maxTheoreticalItems = session.LogicSettings.TotalAmountOfPokeballsToKeep +
-                session.LogicSettings.TotalAmountOfPotionsToKeep +
-                session.LogicSettings.TotalAmountOfRevivesToKeep +
-                session.LogicSettings.TotalAmountOfBerriesToKeep;
-
-            if (maxTheoreticalItems > session.Profile.PlayerData.MaxItemStorage)
+            session.LoggedTime = DateTime.Now;
+            if(this.pokemonToCatch != PokemonId.Missingno)
             {
-                Logger.Write(session.Translation.GetTranslation(TranslationString.MaxItemsCombinedOverMaxItemStorage, maxTheoreticalItems, session.Profile.PlayerData.MaxItemStorage), LogLevel.Error);
-                Logger.Write("Press any key to exit, then fix your configuration and run the bot again.", LogLevel.Warning);
-                Console.ReadKey();
-                System.Environment.Exit(1);
+                return new BotSwitcherState(this.pokemonToCatch);
             }
-            
             return new LoadSaveState();
+        }
+
+        private async Task LogLoginHistory(ISession session, CancellationToken cancellationToken)
+        {
+            string logFile = $"config\\login{DateTime.Now:dd-MM-yyyy}.log";
+            //if(!File.Exists(logFile) )
+            //{
+            //    File.CreateText(logFile);
+            //}
+
+            await Task.Run(() =>
+            {
+                try {
+                    string username = session.Settings.AuthType == AuthType.Ptc ? session.Settings.PtcUsername : session.Settings.GoogleUsername;
+                    File.AppendAllText(logFile, $"{DateTime.Now:dd-MM-yyyy hh:mm:ss}\t\t{username}\r\n");
+                }
+                catch(Exception) { }
+            });
         }
 
         private static async Task CheckLogin(ISession session, CancellationToken cancellationToken)

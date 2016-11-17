@@ -21,20 +21,24 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             transit
         }
 
+        [ExcelConfig (Description ="Use google api to resolve path for destination", Position = 1)]
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public bool UseGoogleWalk = true;
 
+        [ExcelConfig(Description = "Set step lenght in met for 1 step", Position = 2)]
         [DefaultValue(1.3d)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
         public double DefaultStepLength = 1.3d;
 
+        [ExcelConfig(Description = "Set heuristic for google algorithm detection - driving, walking, bicycling, transit", Position = 3)]
         [DefaultValue("walking")]
         [EnumDataType(typeof(GoogleWalkTravelModes))]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 3)]
         //https://developers.google.com/maps/documentation/directions/intro?hl=pt-br#TravelModes
         public string GoogleHeuristic = "walking";
 
+        [ExcelConfig(Description = "The APK key will be use to connect to google service", Position = 4)]
         [DefaultValue(null)]
         [MinLength(0)]
         [MaxLength(64)]
@@ -42,10 +46,12 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         // If you have a key, nowadays a single contract is $16.000,00 USD. With a key you can deactivate Cache
         public string GoogleAPIKey;
 
+        [ExcelConfig(Description = "Allow bot use cache ", Position = 5)]
         [DefaultValue(true)]
         [JsonProperty("Cache", Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 5)]
         public bool Cache = true;
 
+        [ExcelConfig(Description = "The APK key will be use to connect to google elevation service", Position = 6)]
         [DefaultValue(null)]
         [MinLength(0)]
         [MaxLength(64)]

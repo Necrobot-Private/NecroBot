@@ -29,7 +29,7 @@ namespace PoGo.NecroBot.Logic.Utils
             }
         }
 
-        public static async Task DelayAsync(int delay, int defdelay)
+        public static async Task DelayAsync(int delay, int defdelay, CancellationToken token)
         {
             if (delay > defdelay)
             {
@@ -38,11 +38,11 @@ namespace PoGo.NecroBot.Logic.Utils
                 var randomMax = (int)(delay * (1 + randomFactor));
                 var randomizedDelay = RandomDevice.Next(randomMin, randomMax);
 
-                await Task.Delay(randomizedDelay);
+                await Task.Delay(randomizedDelay, token);
             }
             else if (defdelay > 0)
             {
-                await Task.Delay(defdelay);
+                await Task.Delay(defdelay, token);
             }
         }
     }

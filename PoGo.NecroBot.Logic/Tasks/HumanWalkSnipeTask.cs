@@ -159,6 +159,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             SnipePokemonInfo pokemon = null;
             do
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 prioritySnipeFlag = false;
                 pokemon = await GetNextSnipeablePokemon(session.Client.CurrentLatitude, session.Client.CurrentLongitude, !caughtAnyPokemonInThisWalk);
                 if (pokemon != null)
@@ -172,7 +173,10 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     bool catchPokemon = (pokemon.EstimatedTime + catchPokemonTimeEST) < remainTimes && pokemon.Setting.CatchPokemonWhileWalking;
                     bool spinPokestop = pokemon.Setting.SpinPokestopWhileWalking && (pokemon.EstimatedTime + catchPokemonTimeEST + spinPokestopEST) < remainTimes;
-                    pokemon.IsCatching = true;
+                    lock (threadLocker)
+                    {
+                        pokemon.IsCatching = true;
+                    }
                     session.EventDispatcher.Send(new HumanWalkSnipeEvent()
                     {
                         PokemonId = pokemon.PokemonId,
@@ -195,6 +199,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     await session.Navigation.Move(snipeTarget,
                         async () =>
                         {
+                            cancellationToken.ThrowIfCancellationRequested();
                             await ActionsWhenTravelToSnipeTarget(session, cancellationToken, pokemon, catchPokemon, spinPokestop);
                         },
                        session,
@@ -208,15 +213,20 @@ namespace PoGo.NecroBot.Logic.Tasks
                         UniqueId = pokemon.UniqueId
                     });
 
-                    await Task.Delay(pokemon.Setting.DelayTimeAtDestination);
+                    //await Task.Delay(pokemon.Setting.DelayTimeAtDestination, cancellationToken);
                     await CatchNearbyPokemonsTask.Execute(session, cancellationToken, pokemon.PokemonId, pokemon.Setting.AllowTransferWhileWalking);
-                    await Task.Delay(1000);
+                    await Task.Delay(1000,cancellationToken);
                     if (!pokemon.IsVisited)
                     {
                         await CatchLurePokemonsTask.Execute(session, cancellationToken);
                     }
-                    pokemon.IsVisited = true;
-                    pokemon.IsCatching = false;
+
+                    lock (threadLocker)
+                    {
+                        pokemon.IsVisited = true;
+                        pokemon.IsCatching = false;
+                    }
+
                     await TransferDuplicatePokemonTask.Execute(session, cancellationToken);
                     await TransferWeakPokemonTask.Execute(session, cancellationToken);
                 }
@@ -313,17 +323,23 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 await FetchData(lat, lng);
             }
-
-            rarePokemons.RemoveAll(p => p.ExpiredTime < DateTime.Now);
-
-            rarePokemons.ForEach(CalculateDistanceAndEstTime);
-
+            //Console.WriteLine("#############GetNextSnipeablePokemon");
+            //lock(threadLocker)
+            {
+                rarePokemons.RemoveAll(p => p.ExpiredTime < DateTime.Now);
+            }
+           // Console.WriteLine("#END GetNextSnipeablePokemon");
+           lock(threadLocker)
+            {
+                rarePokemons.ForEach(CalculateDistanceAndEstTime);
+            }
             //remove list not reach able (expired)
             if (rarePokemons.Count > 0)
             {
                 var ordered = rarePokemons.Where(p => !p.IsVisited &&
                     !p.IsFake &&
                     (p.Setting.Priority == 0 || (
+                    p.Distance > 10 &&
                     p.Distance < p.Setting.MaxDistance &&
                     p.EstimatedTime < p.Setting.MaxWalkTimes)
                     && p.ExpiredTime > DateTime.Now.AddSeconds(p.EstimatedTime)
@@ -347,7 +363,11 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (lastUpdated < DateTime.Now.AddSeconds(-30) && silent && rarePokemons != null && rarePokemons.Count > 0)
             {
                 rarePokemons.ForEach(CalculateDistanceAndEstTime);
-                rarePokemons = rarePokemons.OrderBy(p => p.Setting.Priority).ThenBy(p => p.Distance).ToList();
+                //lock(threadLocker)
+                {
+                    rarePokemons = rarePokemons.OrderBy(p => p.Setting.Priority).ThenBy(p => p.Distance).ToList();
+                }
+
                 _session.EventDispatcher.Send(new HumanWalkSnipeEvent()
                 {
                     Type = HumanWalkSnipeEventTypes.ClientRequestUpdate,
@@ -395,6 +415,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                 return default(T);
         }
 
+        private static object threadLocker = new object();
+
         private static async Task PostProcessDataFetched(IEnumerable<SnipePokemonInfo> pokemons, bool displayList = true)
         {
             var rw = new Random();
@@ -402,48 +424,57 @@ namespace PoGo.NecroBot.Logic.Tasks
             int count = 0;
             await Task.Run(() =>
             {
-                foreach (var item in pokemons)
+                lock (threadLocker)
                 {
-                    //the pokemon data already in the list
-                    if (rarePokemons.Any(x => x.UniqueId == item.UniqueId ||
-                    (LocationUtils.CalculateDistanceInMeters(x.Latitude, x.Longitude, item.Latitude, item.Longitude) < 10 && item.Id == x.Id)))
+                    foreach (var item in pokemons)
                     {
-                        continue;
-                    }
-                    //check if pokemon in the snip list
-                    if (!pokemonToBeSnipedIds.Any(x => x == item.PokemonId)) continue;
+                        #region ITEM PROCESSING
+                        //the pokemon data already in the list
+                        if (rarePokemons.Any(x => x.UniqueId == item.UniqueId ||
+                        (LocationUtils.CalculateDistanceInMeters(x.Latitude, x.Longitude, item.Latitude, item.Longitude) < 10 && item.Id == x.Id)))
+                        {
+                            continue;
+                        }
+                        //check if pokemon in the snip list
+                        if (!pokemonToBeSnipedIds.Any(x => x == item.PokemonId)) continue;
 
-                    count++;
-                    var snipeSetting = _setting.HumanWalkSnipeFilters.FirstOrDefault(x => x.Key == item.PokemonId);
+                        count++;
+                        var snipeSetting = _setting.HumanWalkSnipeFilters.FirstOrDefault(x => x.Key == item.PokemonId);
 
-                    HumanWalkSnipeFilter config = new HumanWalkSnipeFilter(_setting.HumanWalkingSnipeMaxDistance,
-                        _setting.HumanWalkingSnipeMaxEstimateTime,
-                        3, //default priority
-                        _setting.HumanWalkingSnipeTryCatchEmAll,
-                        _setting.HumanWalkingSnipeSpinWhileWalking,
-                        _setting.HumanWalkingSnipeAllowSpeedUp,
-                        _setting.HumanWalkingSnipeMaxSpeedUpSpeed,
-                        _setting.HumanWalkingSnipeDelayTimeAtDestination,
-                        _setting.HumanWalkingSnipeAllowTransferWhileWalking);
+                        HumanWalkSnipeFilter config = new HumanWalkSnipeFilter(_setting.HumanWalkingSnipeMaxDistance,
+                            _setting.HumanWalkingSnipeMaxEstimateTime,
+                            3, //default priority
+                            _setting.HumanWalkingSnipeTryCatchEmAll,
+                            _setting.HumanWalkingSnipeSpinWhileWalking,
+                            _setting.HumanWalkingSnipeAllowSpeedUp,
+                            _setting.HumanWalkingSnipeMaxSpeedUpSpeed,
+                            _setting.HumanWalkingSnipeDelayTimeAtDestination,
+                            _setting.HumanWalkingSnipeAllowTransferWhileWalking);
 
-                    if (_setting.HumanWalkSnipeFilters.Any(x => x.Key == item.PokemonId))
-                    {
-                        config = _setting.HumanWalkSnipeFilters.First(x => x.Key == item.PokemonId).Value;
-                    }
-                    item.Setting = Clone<HumanWalkSnipeFilter>(config);
+                        if (_setting.HumanWalkSnipeFilters.Any(x => x.Key == item.PokemonId))
+                        {
+                            config = _setting.HumanWalkSnipeFilters.First(x => x.Key == item.PokemonId).Value;
+                        }
+                        item.Setting = Clone<HumanWalkSnipeFilter>(config);
 
-                    CalculateDistanceAndEstTime(item);
+                        CalculateDistanceAndEstTime(item);
 
-                    if (item.Distance < 10000 && item.Distance != 0)  //only add if distance <10km
-                    {
-                        rarePokemons.Add(item);
+                        if (item.Distance < 10000 && item.Distance != 0)  //only add if distance <10km
+                        {
+                            rarePokemons.Add(item);
+                        }
+                        #endregion
                     }
                 }
-
-                rarePokemons = rarePokemons.OrderBy(p => p.Setting.Priority).ThenBy(p => p.Distance).ToList();
             });
+
             if (count > 0)
             {
+                lock(threadLocker)
+                {
+                    rarePokemons = rarePokemons.OrderBy(p => p.Setting.Priority).ThenBy(p => p.Distance).ToList();
+                }
+
                 _session.EventDispatcher.Send(new HumanWalkSnipeEvent()
                 {
                     Type = HumanWalkSnipeEventTypes.PokemonScanned,
@@ -457,13 +488,13 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     if (ordered.Count > 0 && displayList)
                     {
-                        Logger.Write(string.Format("     Source      |  Name               |    Distance    |   Expires        |  Travel times   | Catchable"));
+                        Logger.Write(string.Format("             Source            |  Name               |    Distance    |   Expires        |  Travel times   | Catchable"));
                         foreach (var pokemon in ordered)
                         {
                             string name = _session.Translation.GetPokemonTranslation(pokemon.PokemonId);
-                            name += "".PadLeft(16 - name.Length, ' ');
+                            name += "".PadLeft(30 - name.Length, ' ');
                             string source = pokemon.Source;
-                            source += "".PadLeft(16 - source.Length, ' ');
+                            source += "".PadLeft(30 - source.Length, ' ');
                             Logger.Write(string.Format(" {0} |  {1}  |  {2:0.00}m  \t|  {3:mm} min {3:ss} sec  |  {4:00} min {5:00} sec  | {6}",
                                 source,
                                 name,
@@ -557,16 +588,19 @@ namespace PoGo.NecroBot.Logic.Tasks
             //in some case, we caught the pokemon before data refresh, we need add a fake pokemon to list to avoid it add back and waste time 
             if (!exist && pokemonToBeSnipedIds.Any(p => p == id))
             {
-                rarePokemons.Add(new SnipePokemonInfo()
+                //lock(threadLocker)
                 {
-                    Latitude = latitude,
-                    Longitude = longitude,
-                    Id = (int)id,
-                    IsFake = true,
-                    IsVisited = true,
-                    ExpiredTime = DateTime.Now.AddMinutes(14),
-                    Setting = new HumanWalkSnipeFilter(1, 1, 100, false, false, false, 0),//not being used. just fake to make code valid
-                });
+                    rarePokemons.Add(new SnipePokemonInfo()
+                    {
+                        Latitude = latitude,
+                        Longitude = longitude,
+                        Id = (int)id,
+                        IsFake = true,
+                        IsVisited = true,
+                        ExpiredTime = DateTime.Now.AddMinutes(14),
+                        Setting = new HumanWalkSnipeFilter(1, 1, 100, false, false, false, 0),//not being used. just fake to make code valid
+                    });
+                }
             }
         }
 
@@ -574,16 +608,19 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             return Task.Run(() =>
             {
-                var ele = rarePokemons.FirstOrDefault(p => p.UniqueId == id);
-                if (ele != null)
+                //lock(threadLocker)
                 {
-                    ele.IsVisited = true; //set pokemon to visited, then it won't appear on the list
-                    rarePokemons = rarePokemons.OrderBy(p => p.Setting.Priority).ThenBy(p => p.Distance).ToList();
-                    _session.EventDispatcher.Send(new HumanWalkSnipeEvent()
+                    var ele = rarePokemons.FirstOrDefault(p => p.UniqueId == id);
+                    if (ele != null)
                     {
-                        Type = HumanWalkSnipeEventTypes.QueueUpdated,
-                        Pokemons = ApplyFilter(rarePokemons),
-                    });
+                        ele.IsVisited = true; //set pokemon to visited, then it won't appear on the list
+                        rarePokemons = rarePokemons.OrderBy(p => p.Setting.Priority).ThenBy(p => p.Distance).ToList();
+                        _session.EventDispatcher.Send(new HumanWalkSnipeEvent()
+                        {
+                            Type = HumanWalkSnipeEventTypes.QueueUpdated,
+                            Pokemons = ApplyFilter(rarePokemons),
+                        });
+                    }
                 }
             });
 

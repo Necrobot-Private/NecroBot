@@ -35,7 +35,7 @@ namespace PoGo.NecroBot.Logic.State
                 {
                     Message = "Just read the Niantic ToS, looks legit, accepting!"
                 });
-                await DelayingUtils.DelayAsync(9000, 2000);
+                await DelayingUtils.DelayAsync(9000, 2000, cancellationToken);
             }
             if (!tutState.Contains(TutorialState.AvatarSelection))
             {
@@ -84,11 +84,11 @@ namespace PoGo.NecroBot.Logic.State
             }
             if (!tutState.Contains(TutorialState.PokemonCapture))
             {
-                await CatchFirstPokemon(session);
+                await CatchFirstPokemon(session, cancellationToken);
             }
             if (!tutState.Contains(TutorialState.NameSelection))
             {
-                await SelectNickname(session);
+                await SelectNickname(session, cancellationToken);
             }
             if (!tutState.Contains(TutorialState.FirstTimeExperienceComplete))
             {
@@ -101,12 +101,12 @@ namespace PoGo.NecroBot.Logic.State
                 {
                     Message = "First time experience complete, looks like i just spinned an virtual pokestop :P"
                 });
-                await DelayingUtils.DelayAsync(3000, 2000);
+                await DelayingUtils.DelayAsync(3000, 2000, cancellationToken);
             }
             return new InfoState();
         }
 
-        public async Task<bool> CatchFirstPokemon(ISession session)
+        public async Task<bool> CatchFirstPokemon(ISession session, CancellationToken cancellationToken)
         {
             var firstPokeList = new List<PokemonId>
             {
@@ -139,7 +139,7 @@ namespace PoGo.NecroBot.Logic.State
             var firstPoke = firstPokeList[firstpokenum];
 
             var res = await session.Client.Encounter.EncounterTutorialComplete(firstPoke);
-            await DelayingUtils.DelayAsync(7000, 2000);
+            await DelayingUtils.DelayAsync(7000, 2000, cancellationToken);
             if (res.Result != EncounterTutorialCompleteResponse.Types.Result.Success) return false;
             session.EventDispatcher.Send(new NoticeEvent()
             {
@@ -148,7 +148,7 @@ namespace PoGo.NecroBot.Logic.State
             return true;
         }
 
-        public async Task<bool> SelectNickname(ISession session)
+        public async Task<bool> SelectNickname(ISession session, CancellationToken cancellationToken)
         {
             while (true)
             {
@@ -226,6 +226,7 @@ namespace PoGo.NecroBot.Logic.State
                         TutorialState.NameSelection
                     });
 
+                    await DelayingUtils.DelayAsync(3000, 2000, cancellationToken);
                     return res.Status == ClaimCodenameResponse.Types.Status.Success;
                 }
             }

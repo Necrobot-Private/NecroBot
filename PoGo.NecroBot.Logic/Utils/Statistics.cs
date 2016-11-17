@@ -10,6 +10,7 @@ using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.State;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Networking.Responses;
+using PoGo.NecroBot.Logic.Exceptions;
 
 #endregion
 
@@ -23,21 +24,77 @@ namespace PoGo.NecroBot.Logic.Utils
 
     public class Statistics
     {
-        private readonly DateTime _initSessionDateTime = DateTime.Now;
-        
+        private DateTime _initSessionDateTime = DateTime.Now;
+
         private StatsExport _exportStats;
         private string _playerName;
         public int TotalExperience;
         public int TotalItemsRemoved;
-        public int TotalPokemons;
+        public int TotalPokemons = 0;
+        public int TotalPokestops = 0;
         public int TotalPokemonTransferred;
         public int TotalStardust;
         public int LevelForRewards = -1;
 
-        public void Dirty(Inventory inventory)
+        public void Dirty(Inventory inventory, ISession session)
         {
             _exportStats = GetCurrentInfo(inventory);
             DirtyEvent?.Invoke();
+            OnStatisticChanged(session);
+        }
+
+        public void OnStatisticChanged(ISession session)
+        {
+
+            var config = session.LogicSettings.MultipleBotConfig;
+            if (session.LogicSettings.AllowMultipleBot)
+            {
+                if (config.PokestopSwitch > 0 && config.PokestopSwitch <= this.TotalPokestops)
+                {
+                    session.CancellationTokenSource.Cancel();
+                    //Activate switcher by pokestop
+                    throw new ActiveSwitchByRuleException()
+                    {
+                        MatchedRule = SwitchRules.Pokestop,
+                        ReachedValue = this.TotalPokestops
+                    };
+                }
+
+                if (config.PokemonSwitch > 0 && config.PokemonSwitch <= this.TotalPokemons)
+                {
+                    session.CancellationTokenSource.Cancel();
+                    //Activate switcher by pokestop
+                    throw new ActiveSwitchByRuleException()
+                    {
+                        MatchedRule = SwitchRules.Pokemon,
+                        ReachedValue = this.TotalPokemons
+                    };
+                }
+
+                if (config.EXPSwitch > 0 && config.EXPSwitch <= this.TotalExperience)
+                {
+                    session.CancellationTokenSource.Cancel();
+                    //Activate switcher by pokestop
+                    throw new ActiveSwitchByRuleException()
+                    {
+                        MatchedRule = SwitchRules.EXP,
+                        ReachedValue = this.TotalExperience
+                    };
+                }
+
+                var totalMin = (DateTime.Now - _initSessionDateTime).TotalMinutes;
+                if (config.RuntimeSwitch> 0 && config.RuntimeSwitch <= totalMin)
+                {
+                    session.CancellationTokenSource.Cancel();
+                    //Activate switcher by pokestop
+                    throw new ActiveSwitchByRuleException()
+                    {
+                        MatchedRule = SwitchRules.Runtime,
+                        ReachedValue = Math.Round(totalMin, 1)
+                    };
+                }
+            }
+
         }
 
         public event StatisticsDirtyDelegate DirtyEvent;
@@ -55,7 +112,7 @@ namespace PoGo.NecroBot.Logic.Utils
             if (stat != null)
             {
                 var ep = stat.NextLevelXp - stat.PrevLevelXp - (stat.Experience - stat.PrevLevelXp);
-                var time = Math.Round(ep/(TotalExperience/GetRuntime()), 2);
+                var time = Math.Round(ep / (TotalExperience / GetRuntime()), 2);
                 var hours = 0.00;
                 var minutes = 0.00;
                 if (double.IsInfinity(time) == false && time > 0)
@@ -63,26 +120,26 @@ namespace PoGo.NecroBot.Logic.Utils
                     hours = Math.Truncate(TimeSpan.FromHours(time).TotalHours);
                     minutes = TimeSpan.FromHours(time).Minutes;
                 }
-                
-                if( LevelForRewards == -1 || stat.Level >= LevelForRewards )
-                {
-                    LevelUpRewardsResponse Result = Execute( inventory ).Result;
 
-                    if( Result.ToString().ToLower().Contains( "awarded_already" ) )
+                if (LevelForRewards == -1 || stat.Level >= LevelForRewards)
+                {
+                    LevelUpRewardsResponse Result = Execute(inventory).Result;
+
+                    if (Result.ToString().ToLower().Contains("awarded_already"))
                         LevelForRewards = stat.Level + 1;
 
-                    if( Result.ToString().ToLower().Contains( "success" ) )
+                    if (Result.ToString().ToLower().Contains("success"))
                     {
-                        Logger.Write( "Leveled up: " + stat.Level, LogLevel.Info );
+                        Logger.Write("Leveled up: " + stat.Level, LogLevel.Info);
 
                         RepeatedField<ItemAward> items = Result.ItemsAwarded;
 
-                        if( items.Any<ItemAward>() )
+                        if (items.Any<ItemAward>())
                         {
-                            Logger.Write( "- Received Items -", LogLevel.Info );
-                            foreach( ItemAward item in items )
+                            Logger.Write("- Received Items -", LogLevel.Info);
+                            foreach (ItemAward item in items)
                             {
-                                Logger.Write( $"[ITEM] {item.ItemId} x {item.ItemCount} ", LogLevel.Info );
+                                Logger.Write($"[ITEM] {item.ItemId} x {item.ItemCount} ", LogLevel.Info);
                             }
                         }
                     }
@@ -106,21 +163,32 @@ namespace PoGo.NecroBot.Logic.Utils
             return output;
         }
 
+        internal void Reset()
+        {
+            this.TotalExperience = 0;
+            this.TotalItemsRemoved = 0;
+            this.TotalPokemons = 0;
+            this.TotalPokestops = 0;
+            this.TotalStardust = 0;
+            this.TotalPokemonTransferred = 0;
+            this._initSessionDateTime = DateTime.Now;
+        }
+
         public async Task<LevelUpRewardsResponse> Execute(ISession ctx)
         {
             var Result = await ctx.Inventory.GetLevelUpRewards(LevelForRewards);
             return Result;
         }
 
-        public async Task<LevelUpRewardsResponse> Execute( Inventory inventory )
+        public async Task<LevelUpRewardsResponse> Execute(Inventory inventory)
         {
-            var Result = await inventory.GetLevelUpRewards( inventory );
+            var Result = await inventory.GetLevelUpRewards(inventory);
             return Result;
         }
 
         public double GetRuntime()
         {
-            return (DateTime.Now - _initSessionDateTime).TotalSeconds/3600;
+            return (DateTime.Now - _initSessionDateTime).TotalSeconds / 3600;
         }
 
         public string GetTemplatedStats(string template, string xpTemplate)
@@ -128,8 +196,8 @@ namespace PoGo.NecroBot.Logic.Utils
             var xpStats = string.Format(xpTemplate, _exportStats.Level, _exportStats.HoursUntilLvl,
                 _exportStats.MinutesUntilLevel, _exportStats.CurrentXp, _exportStats.LevelupXp);
 
-            return string.Format(template, _playerName, FormatRuntime(), xpStats, TotalExperience/GetRuntime(),
-                TotalPokemons/GetRuntime(),
+            return string.Format(template, _playerName, FormatRuntime(), xpStats, TotalExperience / GetRuntime(),
+                TotalPokestops / GetRuntime(),
                 TotalStardust, TotalPokemonTransferred, TotalItemsRemoved);
         }
 
