@@ -25,7 +25,6 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         bool DisableHumanWalking { get; }
         bool CheckForUpdates { get; }
         bool AutoUpdate { get; }
-        bool TransferConfigAndAuthOnUpdate { get; }
         float KeepMinIvPercentage { get; }
         int KeepMinCp { get; }
         int KeepMinLvl { get; }

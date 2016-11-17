@@ -26,7 +26,6 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public int SchemaVersion => _settings.UpdateConfig.SchemaVersion;
         public bool CheckForUpdates => _settings.UpdateConfig.CheckForUpdates;
         public bool AutoUpdate => _settings.UpdateConfig.AutoUpdate;
-        public bool TransferConfigAndAuthOnUpdate => _settings.UpdateConfig.TransferConfigAndAuthOnUpdate;
         public bool UseWebsocket => _settings.WebsocketsConfig.UseWebsocket;
         public bool CatchPokemon => _settings.PokemonConfig.CatchPokemon;
         public int CatchPokemonLimit => _settings.PokemonConfig.CatchPokemonLimit;

@@ -446,7 +446,8 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                         break;
 
                     case 2:
-                        // TODO Add schema migrations from version 2 to 3 here.
+                        // Remove the TransferConfigAndAuthOnUpdate setting since we always transfer now.
+                        ((JObject)settings["UpdateConfig"]).Remove("TransferConfigAndAuthOnUpdate");
                         break;
 
                     // Add more here.
