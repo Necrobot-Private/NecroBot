@@ -223,7 +223,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         private static IHubProxy _msniperHub;
         private static string _botIdentiy;
         private static string _msniperServiceUrl = "http://msniper.com/signalr";
-        public static double minIvPercent = 45;
+        public static double minIvPercent = 75;
         public static bool isConnected = false;
         public static List<EncounterInfo> LocationQueue = new List<EncounterInfo>();
         public static List<string> VisitedEncounterIds = new List<string>();
