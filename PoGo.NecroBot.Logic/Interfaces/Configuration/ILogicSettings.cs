@@ -23,7 +23,6 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         bool DisableHumanWalking { get; }
         bool CheckForUpdates { get; }
         bool AutoUpdate { get; }
-        bool TransferConfigAndAuthOnUpdate { get; }
         float KeepMinIvPercentage { get; }
         int KeepMinCp { get; }
         int KeepMinLvl { get; }
@@ -140,10 +139,6 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         bool UsePokeStopLimit { get; }
         bool UseCatchLimit { get; }
         bool UseNearActionRandom { get; }
-        bool AutoCompleteTutorial { get; }
-        string DesiredNickname { get; }
-        string DesiredGender { get; }
-        string DesiredStarter { get; }
         ICollection<KeyValuePair<ItemId, int>> ItemRecycleFilter { get; }
 
         ICollection<PokemonId> PokemonsToEvolve { get; }

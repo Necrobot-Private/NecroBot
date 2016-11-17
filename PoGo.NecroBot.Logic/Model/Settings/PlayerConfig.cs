@@ -7,19 +7,6 @@ namespace PoGo.NecroBot.Logic.Model.Settings
     [JsonObject(Title = "Player Config", Description = "Set your player settings.", ItemRequired = Required.DisallowNull)]
     public class PlayerConfig
     {
-        internal enum Gender
-        {
-            Male,
-            Female
-        }
-
-        internal enum Starter
-        {
-            Bulbasaur,
-            Charmander,
-            Squirtle
-        }
-
         [DefaultValue(10000)]
         [Range(0, 999999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
@@ -48,25 +35,5 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 6)]
         public bool UseNearActionRandom = true;
-
-        [DefaultValue(false)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 7)]
-        public bool AutoCompleteTutorial;
-
-        [DefaultValue("Nickname")]
-        [MinLength(0)]
-        [MaxLength(15)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 8)]
-        public string DesiredNickname = "Nickname";
-
-        [DefaultValue("Male")]
-        [EnumDataType(typeof(Gender))]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 9)]
-        public string DesiredGender = "Male";
-
-        [DefaultValue("Squirtle")]
-        [EnumDataType(typeof(Starter))]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 10)]
-        public string DesiredStarter = "Squirtle";
     }
 }
