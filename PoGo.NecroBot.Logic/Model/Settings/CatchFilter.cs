@@ -64,11 +64,11 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         {
             return new Dictionary<PokemonId, CatchFilter>
             {
-                { PokemonId.Lapras, new CatchFilter(0, 0,0 ) }   ,
-                { PokemonId.Dratini, new CatchFilter(0, 0,0 ) } ,
+                { PokemonId.Lapras, new CatchFilter(0, 0,0 ) },
+                { PokemonId.Dratini, new CatchFilter(0, 0,0 ) },
                 { PokemonId.Dragonite, new CatchFilter(0, 0,0 ) },
-                { PokemonId.Snorlax, new CatchFilter(0, 0,0 ) } ,
-                { PokemonId.Zubat, new CatchFilter(100,100,100,"and" ,new List<List<PokemonMove>>() { }) }
+                { PokemonId.Snorlax, new CatchFilter(0, 0,0 ) },
+                { PokemonId.Zubat, new CatchFilter(100,100,100,"and", new List<List<PokemonMove>>() { }) }
             };
         }
     }
