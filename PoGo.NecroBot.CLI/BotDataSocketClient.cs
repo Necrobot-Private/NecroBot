@@ -169,13 +169,19 @@ namespace PoGo.NecroBot.CLI
                     session.EventDispatcher.Send(data);
                     if (session.LogicSettings.AllowAutoSnipe)
                     {
-                        var move1 = (PokemonMove)Enum.Parse(typeof(PokemonMove), data.Move1, true);
-                        var move2 = (PokemonMove)Enum.Parse(typeof(PokemonMove), data.Move2, true);
+                        if(data.PokemonId == PokemonId.Lapras)
+                        {
+                            Console.WriteLine("FUCK LAP");
+                        }
+                        var move1 = PokemonMove.Absorb;
+                        var move2 = PokemonMove.Absorb;
+                        Enum.TryParse< PokemonMove>( data.Move1, true, out move1);
+                        Enum.TryParse<PokemonMove>(data.Move1, true, out move2);
                         MSniperServiceTask.AddSnipeItem(session, new MSniperServiceTask.MSniperInfo2()
                         {
                             Latitude = data.Latitude,
                             Longitude = data.Longitude,
-                            EncounterId = (ulong)Convert.ToInt64(data.EncounterId),
+                            EncounterId = Convert.ToUInt64(data.EncounterId),
                             SpawnPointId = data.SpawnPointId,
                             PokemonId = (short)data.PokemonId,
                             Iv = data.IV,
@@ -194,8 +200,11 @@ namespace PoGo.NecroBot.CLI
                     return;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                #if DEBUG
+                Logger.Write("ERROR TO ADD SNIPE< DEBUG ONLY " + ex.Message, LogLevel.Info, ConsoleColor.Yellow);
+                #endif
             }
 
         }

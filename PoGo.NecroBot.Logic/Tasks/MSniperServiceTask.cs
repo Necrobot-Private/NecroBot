@@ -568,13 +568,19 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 filter = session.LogicSettings.PokemonSnipeFilters[pokemonId];
             }
+            //hack, this case we can't determite move :)
 
+            if(filter.SnipeIV < item.Iv && item.Move1 == PokemonMove.Absorb && item.Move2 == PokemonMove.Absorb )
+            {
+                autoSnipePokemons.Add(item);
+                return;
+            }
             //ugly but readable
-            if((string.IsNullOrEmpty(filter.Operator) || filter.Operator == Operator.or.ToString()) && 
+            if ((string.IsNullOrEmpty(filter.Operator) || filter.Operator == Operator.or.ToString()) &&
                 (filter.SnipeIV < item.Iv
-                || (filter.Moves != null 
-                    && filter.Moves.Count > 0 
-                    && filter.Moves.Any(x=> x[0] == item.Move1 && x[1] == item.Move2))
+                || (filter.Moves != null
+                    && filter.Moves.Count > 0
+                    && filter.Moves.Any(x => x[0] == item.Move1 && x[1] == item.Move2))
                 ))
 
             {
@@ -585,7 +591,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (filter.Operator == Operator.and.ToString() &&
                (filter.SnipeIV < item.Iv
                && (filter.Moves != null
-                   && filter.Moves.Count >  0
+                   && filter.Moves.Count > 0
                    && filter.Moves.Any(x => x[0] == item.Move1 && x[1] == item.Move2))
                ))
             {
