@@ -113,9 +113,7 @@ namespace PoGo.NecroBot.CLI
             if (File.Exists(configFile))
             {
                 // Load the settings from the config file
-                // If the current program is not the latest version, ensure we skip saving the file after loading
-                // This is to prevent saving the file with new options at their default values so we can check for differences
-                settings = GlobalSettings.Load(_subPath, !VersionCheckState.IsLatest(), _enableJsonValidation);
+                settings = GlobalSettings.Load(_subPath, _enableJsonValidation);
                 if(excelConfigAllow)
                 {
                     if(!File.Exists(excelConfigFile)) {
@@ -234,7 +232,7 @@ namespace PoGo.NecroBot.CLI
                 }
                 else
                 {
-                    GlobalSettings.Load(_subPath, false, _enableJsonValidation);
+                    GlobalSettings.Load(_subPath, _enableJsonValidation);
 
                     Logger.Write("Press a Key to continue...",
                         LogLevel.Warning);
