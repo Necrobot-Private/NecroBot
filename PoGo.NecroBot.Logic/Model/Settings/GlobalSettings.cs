@@ -259,7 +259,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         //    }
         //}
 
-        public static GlobalSettings Load(string path, bool boolSkipSave = false, bool validate = false)
+        public static GlobalSettings Load(string path, bool validate = false)
         {
             GlobalSettings settings;
             var profilePath = Path.Combine(Directory.GetCurrentDirectory(), path);
@@ -399,11 +399,8 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             settings.ProfileConfigPath = profileConfigPath;
             settings.GeneralConfigPath = Path.Combine(Directory.GetCurrentDirectory(), "config");
 
-            if (!boolSkipSave || !settings.UpdateConfig.AutoUpdate)
-            {
-                settings.Save(configFile);
-                settings.Auth.Load(Path.Combine(profileConfigPath, "auth.json"), boolSkipSave, validate);
-            }
+            settings.Save(configFile);
+            settings.Auth.Load(Path.Combine(profileConfigPath, "auth.json"), validate);
 
             return shouldExit ? null : settings;
         }

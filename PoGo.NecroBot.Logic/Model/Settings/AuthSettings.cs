@@ -129,7 +129,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         //    }
         //}
 
-        public void Load(string path, bool boolSkipSave = false, bool validate = false)
+        public void Load(string path, bool validate = false)
         {
             try
             {
@@ -243,8 +243,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                     DeviceConfig.DeviceId = RandomString(32, "0123456789abcdef");
                 }
 
-                if (!boolSkipSave)
-                    Save(_filePath);
+                Save(_filePath);
             }
             catch (JsonReaderException exception)
             {

@@ -39,6 +39,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         [ExcelConfig(Key = "Operator", Description = "Operator logic check between move and IV", Position = 4)]
         [EnumDataType(typeof(Operator))]
+        [DefaultValue("or")]
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
         public string Operator { get; set; }
 
