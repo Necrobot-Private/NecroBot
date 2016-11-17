@@ -35,7 +35,7 @@ namespace PoGo.NecroBot.Logic.Utils
             {
                 var pokemonFilter = package.Workbook.Worksheets["Pokemons"];
                 pokemonFilter.Protection.IsProtected = true;
-                pokemonFilter.Cells["J2:AZ153"].Style.Locked = false;
+                pokemonFilter.Cells["J2:AZ155"].Style.Locked = false;
                 MigrateItemRecycleFilter(package, setting);
 
                 foreach (var item in setting.GetType().GetFields())
@@ -319,7 +319,7 @@ namespace PoGo.NecroBot.Logic.Utils
                         {
 
                             workSheet.Cells[4, colIndex].AddComment(att1.Description, "necrobot2");
-                            AddValidationForType(workSheet, vtp, $"{GetCol(colIndex)}5:{GetCol(colIndex)}153");
+                            AddValidationForType(workSheet, vtp, $"{GetCol(colIndex)}5:{GetCol(colIndex)}155");
                         }
                         pos++;
                     }
@@ -516,7 +516,7 @@ namespace PoGo.NecroBot.Logic.Utils
         private static Dictionary<PokemonId, T> ReadSheetAsDictionary<T>(ExcelWorksheet ws)
         {
             Dictionary<PokemonId, T> results = new Dictionary<PokemonId, T>();
-            for (int i = 5; i < 153; i++)
+            for (int i = 5; i <= 155; i++)
             {
                 T obj = Activator.CreateInstance<T>();
 
@@ -545,6 +545,7 @@ namespace PoGo.NecroBot.Logic.Utils
                                     results.Add(pokemonId, obj);
                                 }
                             }
+                            
                         }
                     }
                 }
@@ -578,103 +579,10 @@ namespace PoGo.NecroBot.Logic.Utils
             return result;
         }
 
-        private static void MigrateEvolvePokemonFilter(ExcelWorksheet pokemonFilter, GlobalSettings setting)
-        {
-            for (int i = 3; i < 153; i++)
-            {
-                var id = Convert.ToInt32(pokemonFilter.Cells[$"A{i}"].Value);
-                var pid = (PokemonId)id;
-                pokemonFilter.Cells[$"AF{i}"].AddComment(pid.ToString(), "necrobot2");
-                if (setting.PokemonsToEvolve.Contains(pid))
-                {
-                    pokemonFilter.Cells[$"AF{i}"].Value = true;
-                }
-                else
-                {
-                    pokemonFilter.Cells[$"AF{i}"].Value = false;
-                }
-            }
-            AddListValidation(pokemonFilter, $"AF:AF", "Evolve Transfer [Boolean] validation", "Boolean value only", "TRUE", "FALSE");
-        }
-
-        private static void MigrateSnipePokemonFilter(ExcelWorksheet pokemonFilter, GlobalSettings setting)
-        {
-            for (int i = 3; i < 153; i++)
-            {
-                var id = Convert.ToInt32(pokemonFilter.Cells[$"A{i}"].Value);
-                var pid = (PokemonId)id;
-                pokemonFilter.Cells[$"AH{i}"].AddComment(pid.ToString(), "necrobot2");
-                if (setting.PokemonToSnipe.Pokemon.Contains(pid))
-                {
-                    pokemonFilter.Cells[$"AH{i}"].Value = true;
-                }
-                else
-                {
-                    pokemonFilter.Cells[$"AH{i}"].Value = false;
-                }
-            }
-            AddListValidation(pokemonFilter, $"AH:AH", "Allow sniper [Boolean] validation", "Boolean value only", "TRUE", "FALSE");
-        }
-
-        private static void MigrateTransferPokemonFilter(ExcelWorksheet pokemonFilter, GlobalSettings setting)
-        {
-            for (int i = 3; i < 153; i++)
-            {
-                var id = Convert.ToInt32(pokemonFilter.Cells[$"A{i}"].Value);
-                var pid = (PokemonId)id;
-                pokemonFilter.Cells[$"P{i}"].AddComment(pid.ToString(), "necrobot2");
-
-                if (setting.PokemonsNotToTransfer.Contains(pid))
-                {
-                    pokemonFilter.Cells[$"P{i}"].Value = false;
-                }
-
-                if (setting.PokemonsTransferFilter.ContainsKey(pid))
-                {
-                    pokemonFilter.Cells[$"P{i}"].Value = true;
-
-                    var p = setting.PokemonsTransferFilter[pid];
-
-                    pokemonFilter.Cells[$"Q{i}"].Value = p.KeepMinIvPercentage;
-                    pokemonFilter.Cells[$"R{i}"].Value = p.KeepMinCp;
-                    pokemonFilter.Cells[$"S{i}"].Value = p.KeepMinLvl;
-                    pokemonFilter.Cells[$"U{i}"].Value = p.KeepMinDuplicatePokemon;
-                    pokemonFilter.Cells[$"V{i}"].Value = p.KeepMinOperator;
-                }
-                else
-                {
-                    pokemonFilter.Cells[$"P{i}"].Value = false;
-                }
-            }
-            AddListValidation(pokemonFilter, $"P3:P153", "Allow Transfer [Boolean] validation", "Boolean value only", "TRUE", "FALSE");
-            AddListValidation(pokemonFilter, $"V3:V153", "Transfer Operator- Validation", "OR or AND only", "OR", "AND");
-            AddNumberValidation(pokemonFilter, $"Q3:Q153", "MinIV - Transfer Validation", "IV : 0 -> 100", 0, 100);
-            AddNumberValidation(pokemonFilter, $"R3:R153", "MinCP - Transfer Validation", "CP : 0 -> 5000", 0, 5000);
-            AddNumberValidation(pokemonFilter, $"S3:S153", "MinLV - Transfer Validation", "LV : 0 -> 50", 0, 50);
-            AddNumberValidation(pokemonFilter, $"U3:U153", "Keep duplication - Transfer Validation", "LV : 0 -> 1000", 0, 1000);
-        }
-        public static List<PokemonId> ReadListPokemon(ExcelWorksheet sheet, string column, bool compare)
-        {
-            List<PokemonId> results = new List<PokemonId>();
-            for (int i = 3; i < 153; i++)
-            {
-                string address = $"{column}{i}";
-                var isAllow = Convert.ToBoolean(sheet.Cells[address].GetValue<string>());
-                if (isAllow == compare)
-                {
-                    int id = sheet.Cells[$"A{i}"].GetValue<int>();
-
-                    var pokemonId = (PokemonId)id;
-                    results.Add(pokemonId);
-                }
-            }
-            return results;
-        }
-
         public static Dictionary<PokemonId, T> ReadListObjectAsDictionary<T>(ExcelWorksheet sheet, string column, bool compare)
         {
             Dictionary<PokemonId, T> results = new Dictionary<PokemonId, T>();
-            for (int i = 3; i < 153; i++)
+            for (int i = 4; i <= 155; i++)
             {
                 string address = $"{column}{i}";
                 var isAllow = Convert.ToBoolean(sheet.Cells[address].GetValue<string>());
@@ -755,43 +663,7 @@ namespace PoGo.NecroBot.Logic.Utils
             }
             return results;
         }
-        private static void MigrateUpgradePokemonFilter(ExcelWorksheet pokemonFilter, GlobalSettings setting)
-        {
-            for (int i = 3; i < 153; i++)
-            {
-                var id = Convert.ToInt32(pokemonFilter.Cells[$"A{i}"].Value);
-                var pid = (PokemonId)id;
-                pokemonFilter.Cells[$"W{i}"].AddComment(pid.ToString(), "necrobot2");
-                if (!setting.PokemonUpgradeFilters.ContainsKey(pid))
-                {
-                    pokemonFilter.Cells[$"W{i}"].Value = false;
-                }
-                else
-                {
-                    pokemonFilter.Cells[$"W{i}"].Value = true;
-
-                    var p = setting.PokemonUpgradeFilters[pid];
-
-                    pokemonFilter.Cells[$"X{i}"].Value = p.UpgradePokemonIvMinimum;
-                    pokemonFilter.Cells[$"Y{i}"].Value = p.UpgradePokemonCpMinimum;
-                    pokemonFilter.Cells[$"AB{i}"].Value = p.OnlyUpgradeFavorites;
-                    pokemonFilter.Cells[$"AD{i}"].Value = p.UpgradePokemonMinimumStatsOperator;
-                    pokemonFilter.Cells[$"AE{i}"].Value = p.LevelUpByCPorIv;
-
-                }
-            }
-            AddListValidation(pokemonFilter, $"W3:W153", "Allow Upgrade [Boolean] validation", "Boolean value only", "TRUE", "FALSE");
-            AddListValidation(pokemonFilter, $"AD3:AD3", "Upgrade Operator- Validation", "OR or AND only", "OR", "AND");
-            AddNumberValidation(pokemonFilter, $"X3:X153", "MinIV - Upgrade Validation", "IV : 0 -> 100", 0, 100);
-            AddNumberValidation(pokemonFilter, $"Y3:Y153", "MinCP - Upgrade Validation", "CP : 0 -> 5000", 0, 5000);
-            AddNumberValidation(pokemonFilter, $"Z3:Z153", "MinLV - Upgrade Validation", "LV : 0 -> 50", 0, 50);
-            AddNumberValidation(pokemonFilter, $"AA3:AA153", "Min Candy - Upgrade Validation", "LV : 0 -> 10000", 0, 10000);
-
-            AddListValidation(pokemonFilter, $"AB3:AB153", "Upgrade favorite only - Validation", "Boolean value only", "TRUE", "FALSE");
-            AddListValidation(pokemonFilter, $"AE3:AE153", "Upgrade priority - Validation", "IV or CP ", "IV", "CP");
-        }
-
-
+      
         public static void AddListValidation(ExcelWorksheet pokemonFilter, string address, string errorTitle, string promptTitle, params string[] values)
         {
             var validation = pokemonFilter.DataValidations.AddListValidation(address);
@@ -864,50 +736,6 @@ namespace PoGo.NecroBot.Logic.Utils
                 validation.Prompt = $"Please enter a valid number from {validation.Formula.Value} to {validation.Formula2.Value}";
                 validation.Error = $"Please enter a valid number from {validation.Formula.Value} to {validation.Formula2.Value}";
             }
-
-        }
-
-        private static void MigrateCatchPokemonFilter(ExcelWorksheet pokemonFilter, GlobalSettings setting)
-        {
-
-            for (int i = 3; i < 153; i++)
-            {
-                var id = Convert.ToInt32(pokemonFilter.Cells[$"A{i}"].Value);
-                var pid = (PokemonId)id;
-                if (setting.PokemonsToIgnore.Contains(pid))
-                {
-                    pokemonFilter.Cells[$"J{i}"].AddComment(pid.ToString(), "necrobot2");
-                    pokemonFilter.Cells[$"J{i}"].Value = "FALSE";
-                }
-                else
-                {
-                    pokemonFilter.Cells[$"J{i}"].Value = "TRUE";
-                    pokemonFilter.Cells[$"K{i}"].Value = 10;
-                    pokemonFilter.Cells[$"L{i}"].Value = 10;
-                    pokemonFilter.Cells[$"M{i}"].Value = 1;
-                    pokemonFilter.Cells[$"O{i}"].Value = "AND";
-                }
-                if (setting.PokemonsTransferFilter.ContainsKey(pid))
-                {
-                    var tfilter = setting.PokemonsTransferFilter[pid];
-                    if (tfilter.CatchOnlyPokemonMeetTransferCriteria)
-                    {
-                        pokemonFilter.Cells[$"J{i}"].Value = "TRUE";
-                        pokemonFilter.Cells[$"K{i}"].Value = tfilter.KeepMinIvPercentage;
-                        pokemonFilter.Cells[$"L{i}"].Value = tfilter.KeepMinCp;
-                        pokemonFilter.Cells[$"M{i}"].Value = tfilter.KeepMinLvl;
-                        pokemonFilter.Cells[$"O{i}"].Value = tfilter.KeepMinOperator.ToUpper();
-                    }
-                }
-            }
-
-            AddListValidation(pokemonFilter, $"J3:J153", "Allow Catch - [Boolean] validation", "Boolean value only", "TRUE", "FALSE");
-
-            AddListValidation(pokemonFilter, $"O3:O153", "Catch Operator- Validation", "OR or AND only", "OR", "AND");
-
-            AddNumberValidation(pokemonFilter, $"K3:K153", "MinIV - Catch Validation", "IV : 0 -> 100", 0, 100);
-            AddNumberValidation(pokemonFilter, $"L3:L153", "MinCP - Catch Validation", "CP : 0 -> 5000", 0, 5000);
-            AddNumberValidation(pokemonFilter, $"M3:M153", "MinLV - Catch Validation", "LV : 0 -> 50", 0, 50);
 
         }
     }

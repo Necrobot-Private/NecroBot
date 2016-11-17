@@ -90,7 +90,7 @@ namespace PoGo.NecroBot.CLI
             }
 
             bool excelConfigAllow = false;
-            if (commandLine["use_excel_config"] != null)
+            if (commandLine["provider"] != null && commandLine["provider"] =="excel")
             {
                 excelConfigAllow = true;
             }
