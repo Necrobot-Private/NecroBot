@@ -6,7 +6,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
     [JsonObject(Title = "Update Config", Description = "Set your update settings.", ItemRequired = Required.DisallowNull)]
     public class UpdateConfig
     {
-        public const int CURRENT_SCHEMA_VERSION = 2;
+        public const int CURRENT_SCHEMA_VERSION = 3;
 
         [DefaultValue(CURRENT_SCHEMA_VERSION)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
@@ -19,9 +19,5 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 3)]
         public bool AutoUpdate = true;
-
-        [DefaultValue(true)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 4)]
-        public bool TransferConfigAndAuthOnUpdate = true;
     }
 }
