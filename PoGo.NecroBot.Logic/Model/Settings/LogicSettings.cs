@@ -16,7 +16,6 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         private readonly GlobalSettings _settings;
 
         public LogicSettings(GlobalSettings settings)
-
         {
             _settings = settings;
         }
@@ -129,6 +128,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public ICollection<PokemonId> PokemonToUseMasterball => _settings.PokemonToUseMasterball;
         public Dictionary<PokemonId, TransferFilter> PokemonsTransferFilter => _settings.PokemonsTransferFilter;
         public Dictionary<PokemonId, UpgradeFilter> PokemonUpgradeFilters => _settings.PokemonUpgradeFilters;
+        public Dictionary<PokemonId, SnipeFilter> PokemonSnipeFilters => _settings.SnipePokemonFilter;
 
         public bool StartupWelcomeDelay => _settings.ConsoleConfig.StartupWelcomeDelay;
         public bool UseGoogleWalk => _settings.GoogleWalkConfig.UseGoogleWalk;
@@ -208,7 +208,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool HumanWalkingSnipeUseFastPokemap => _settings.HumanWalkSnipeConfig.UseFastPokemap;
         public bool HumanWalkingSnipeUsePogoLocationFeeder => _settings.HumanWalkSnipeConfig.UsePogoLocationFeeder;
         public bool HumanWalkingSnipeAllowTransferWhileWalking => _settings.HumanWalkSnipeConfig.AllowTransferWhileWalking;
-
+        public int GymCollectRewardAfter => _settings.GymConfig.CollectCoinAfterDeployed;
         public bool GymAllowed => _settings.GymConfig.Enable;
         public bool GymPrioritizeOverPokestop => _settings.GymConfig.PrioritizeGymOverPokestop;
         public TeamColor GymDefaultTeam =>(TeamColor)Enum.Parse(typeof(TeamColor), _settings.GymConfig.DefaultTeam);
@@ -224,8 +224,18 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         public bool DataSharingEnable => _settings.DataSharingConfig.EnableSyncData;
 
+        public bool AllowAutoSnipe => _settings.DataSharingConfig.AutoSnipe;
+
         public string DataSharingDataUrl => _settings.DataSharingConfig.DataRecieverURL;
 
         public bool UseTransferFilterToCatch => _settings.CustomCatchConfig.UseTransferFilterToCatch;
+
+        public MultipleBotConfig MultipleBotConfig => _settings.MultipleBotConfig;
+        public List<AuthConfig> Bots => _settings.Auth.Bots;
+        public bool AllowMultipleBot => _settings.Auth.AllowMultipleBot;
+        public int MinIVForAutoSnipe => _settings.SnipeConfig.MinIVForAutoSnipe;
+        public Dictionary<PokemonId, BotSwitchPokemonFilter> BotSwitchPokemonFilters => _settings.BotSwitchPokemonFilters;
+
+
     }
 }

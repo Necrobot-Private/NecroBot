@@ -111,6 +111,9 @@
     </Reference>
     <Reference Include="POGOProtos.NetStandard1, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\POGOProtos.NetStandard1.2.1.0\lib\net45\POGOProtos.NetStandard1.dll</HintPath>
+    </Reference>
+    <Reference Include="PushbulletSharp, Version=2.3.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\PushBulletSharp.2.3.3\lib\portable-windows8+net45\PushbulletSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="S2Geometry, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -263,6 +266,7 @@
     <Compile Include="Resources\ProgressBar.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebSocketHandler\ActionCommands\FastpokemapHandler.cs" />
     <Compile Include="WebSocketHandler\ActionCommands\SetTrainerNicknameHandler.cs" />
     <Compile Include="WebSocketHandler\ActionCommands\UpgradePokemonHandler.cs" />
     <Compile Include="WebSocketHandler\ActionCommands\SetMoveToTargetHandler.cs" />
@@ -405,10 +409,13 @@
     <None Include="Config\Translations\translation.zh-HK.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="RunWithExcelConfig.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FeroxRev\PokemonGo.RocketAPI.csproj">
-      <Project>{05D2DA44-1B8E-4CF7-94ED-4D52451CD095}</Project>
+      <Project>{05d2da44-1b8e-4cf7-94ed-4d52451cd095}</Project>
       <Name>PokemonGo.RocketAPI</Name>
     </ProjectReference>
     <ProjectReference Include="..\PoGo.NecroBot.Logic\PoGo.NecroBot.Logic.csproj">

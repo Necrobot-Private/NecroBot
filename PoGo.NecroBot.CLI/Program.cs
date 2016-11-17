@@ -20,6 +20,7 @@ using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Tasks;
 using PoGo.NecroBot.Logic.Utils;
 using PoGo.NecroBot.Logic.Service.Elevation;
+using System.Configuration;
 
 #endregion
 
@@ -31,7 +32,7 @@ namespace PoGo.NecroBot.CLI
         private static string _subPath = "";
         private static bool _enableJsonValidation = true;
         private static bool _ignoreKillSwitch;
-
+                                                                 
         private static readonly Uri StrKillSwitchUri =
             new Uri("https://raw.githubusercontent.com/Necrobot-Private/Necrobot2/master/KillSwitch.txt");
         private static readonly Uri StrMasterKillSwitchUri =
@@ -87,7 +88,13 @@ namespace PoGo.NecroBot.CLI
                         break;
                 }
             }
-            
+
+            bool excelConfigAllow = false;
+            if (commandLine["provider"] != null && commandLine["provider"] =="excel")
+            {
+                excelConfigAllow = true;
+            }
+
             Logger.AddLogger(new ConsoleLogger(LogLevel.Service), _subPath);
             Logger.AddLogger(new FileLogger(LogLevel.Service), _subPath);
             Logger.AddLogger(new WebSocketLogger(LogLevel.Service), _subPath);
@@ -98,16 +105,30 @@ namespace PoGo.NecroBot.CLI
             var profilePath = Path.Combine(Directory.GetCurrentDirectory(), _subPath);
             var profileConfigPath = Path.Combine(profilePath, "config");
             var configFile = Path.Combine(profileConfigPath, "config.json");
+            var excelConfigFile = Path.Combine(profileConfigPath, "config.xlsm");
 
             GlobalSettings settings;
             var boolNeedsSetup = false;
-
+            
             if (File.Exists(configFile))
             {
                 // Load the settings from the config file
                 // If the current program is not the latest version, ensure we skip saving the file after loading
                 // This is to prevent saving the file with new options at their default values so we can check for differences
                 settings = GlobalSettings.Load(_subPath, !VersionCheckState.IsLatest(), _enableJsonValidation);
+                if(excelConfigAllow)
+                {
+                    if(!File.Exists(excelConfigFile)) {
+
+                        Logger.Write("Migrating existing json confix to excel config, please check the config.xlsm in your config folder");
+
+                        ExcelConfigHelper.MigrateFromObject(settings, excelConfigFile);
+                    }
+                    else
+                    settings = ExcelConfigHelper.ReadExcel(settings, excelConfigFile);
+
+                    Logger.Write("Bot will run with your excel config, loading excel config");
+                }
             }
             else
             {
@@ -121,7 +142,6 @@ namespace PoGo.NecroBot.CLI
 
                 boolNeedsSetup = true;
             }
-
             if (commandLine["latlng"] != null && commandLine["latlng"].Length > 0)
             {
                 var crds = commandLine["latlng"].Split(',');
@@ -198,6 +218,7 @@ namespace PoGo.NecroBot.CLI
                 }
             }
             IElevationService elevationService = new ElevationService(settings);
+
             _session = new Session(new ClientSettings(settings, elevationService), logicSettings, elevationService, translation);
             Logger.SetLoggerContext(_session);
 
@@ -219,6 +240,11 @@ namespace PoGo.NecroBot.CLI
                         LogLevel.Warning);
                     Console.ReadKey();
                     return;
+                }
+
+                if(excelConfigAllow)
+                {
+                    ExcelConfigHelper.MigrateFromObject(settings, excelConfigFile);
                 }
             }
 
@@ -268,7 +294,7 @@ namespace PoGo.NecroBot.CLI
             
             ProgressBar.Fill(100);
 
-            machine.AsyncStart(new VersionCheckState(), _session, _subPath);
+            machine.AsyncStart(new VersionCheckState(), _session, _subPath, excelConfigAllow);
 
             try
             {
@@ -284,6 +310,11 @@ namespace PoGo.NecroBot.CLI
             if (_session.LogicSettings.UseSnipeLocationServer ||
                 _session.LogicSettings.HumanWalkingSnipeUsePogoLocationFeeder)
                 SnipePokemonTask.AsyncStart(_session);
+
+            if(_session.LogicSettings.EnableHumanWalkingSnipe && _session.LogicSettings.HumanWalkingSnipeUseFastPokemap)
+            {
+                HumanWalkSnipeTask.StartFastPokemapAsync(_session, _session.CancellationTokenSource.Token);// that need to keep data  live 
+            }
 
             if (_session.LogicSettings.DataSharingEnable)
             {

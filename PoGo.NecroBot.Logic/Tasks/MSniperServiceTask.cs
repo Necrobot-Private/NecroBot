@@ -24,6 +24,7 @@ using PoGo.NecroBot.Logic.Model;
 using PoGo.NecroBot.Logic.PoGoUtils;
 using POGOProtos.Inventory.Item;
 using WebSocket4Net;
+using PoGo.NecroBot.Logic.Exceptions;
 
 namespace PoGo.NecroBot.Logic.Tasks
 {
@@ -38,8 +39,10 @@ namespace PoGo.NecroBot.Logic.Tasks
             public double Latitude { get; set; }
             public double Longitude { get; set; }
             public double Iv { get; set; }
+            public PokemonMove Move1 { get;  set; }
+            public PokemonMove Move2 { get;  set; }
         }
-
+          
         public class HubData
         {
             [JsonProperty("H")]
@@ -86,7 +89,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     }
                     break;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     //Logger.Write("service: " +e.Message, LogLevel.Error);
                     Thread.Sleep(500);
@@ -146,7 +149,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         break;
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
             }
         }
@@ -552,6 +555,52 @@ namespace PoGo.NecroBot.Logic.Tasks
         //    }
         //}
         #endregion
+        public static void AddSnipeItem(ISession session, MSniperInfo2 item)
+        {
+            SnipeFilter filter = new SnipeFilter()
+            {
+                SnipeIV = session.LogicSettings.MinIVForAutoSnipe
+            };
+
+            var pokemonId = (PokemonId)item.PokemonId;
+
+            if (session.LogicSettings.PokemonSnipeFilters.ContainsKey(pokemonId))
+            {
+                filter = session.LogicSettings.PokemonSnipeFilters[pokemonId];
+            }
+            //hack, this case we can't determite move :)
+
+            if(filter.SnipeIV < item.Iv && item.Move1 == PokemonMove.Absorb && item.Move2 == PokemonMove.Absorb )
+            {
+                autoSnipePokemons.Add(item);
+                return;
+            }
+            //ugly but readable
+            if ((string.IsNullOrEmpty(filter.Operator) || filter.Operator == Operator.or.ToString()) &&
+                (filter.SnipeIV < item.Iv
+                || (filter.Moves != null
+                    && filter.Moves.Count > 0
+                    && filter.Moves.Any(x => x[0] == item.Move1 && x[1] == item.Move2))
+                ))
+
+            {
+                autoSnipePokemons.Add(item);
+            }
+
+
+            if (filter.Operator == Operator.and.ToString() &&
+               (filter.SnipeIV < item.Iv
+               && (filter.Moves != null
+                   && filter.Moves.Count > 0
+                   && filter.Moves.Any(x => x[0] == item.Move1 && x[1] == item.Move2))
+               ))
+            {
+                autoSnipePokemons.Add(item);
+            }
+
+        }
+
+        private static List<MSniperInfo2> autoSnipePokemons = new List<MSniperInfo2>();
 
         public static async Task Execute(ISession session, CancellationToken cancellationToken)
         {
@@ -566,7 +615,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             var pth = Path.Combine(Directory.GetCurrentDirectory(), "SnipeMS.json");
             try
             {
-                if (!File.Exists(pth))
+                if (!File.Exists(pth) && autoSnipePokemons.Count == 0)
                 {
                     inProgress = false;
                     return;
@@ -577,15 +626,27 @@ namespace PoGo.NecroBot.Logic.Tasks
                     inProgress = false;
                     return;
                 }
+                List<MSniperInfo2> mSniperLocation2 = new List<MSniperInfo2>();
+                if (File.Exists(pth))
+                {
+                    var sr = new StreamReader(pth, Encoding.UTF8);
+                    var jsn = sr.ReadToEnd();
+                    sr.Close();
 
-                var sr = new StreamReader(pth, Encoding.UTF8);
-                var jsn = sr.ReadToEnd();
-                sr.Close();
+                    mSniperLocation2 = JsonConvert.DeserializeObject<List<MSniperInfo2>>(jsn);
+                    File.Delete(pth);
+                    if (mSniperLocation2 == null) mSniperLocation2 = new List<MSniperInfo2>();
+                }
 
-                var mSniperLocation2 = JsonConvert.DeserializeObject<List<MSniperInfo2>>(jsn);
-                File.Delete(pth);
+                mSniperLocation2.AddRange(autoSnipePokemons);
+                autoSnipePokemons.Clear();
+
                 foreach (var location in mSniperLocation2)
                 {
+                    if (session.Cache[location.EncounterId.ToString()] != null) continue;
+
+                    session.Cache.Add(location.EncounterId.ToString(), true, DateTime.Now.AddMinutes(15)); 
+
                     cancellationToken.ThrowIfCancellationRequested();
 
                     session.EventDispatcher.Send(new SnipeScanEvent
@@ -606,6 +667,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                     await Task.Delay(1000, cancellationToken);
                 }
             }
+            catch (ActiveSwitchByRuleException ex)
+            {
+                throw ex;
+            }
             catch (Exception ex)
             {
                 File.Delete(pth);
@@ -613,7 +678,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                 if (ex.InnerException != null) ee.Message = ex.InnerException.Message;
                 session.EventDispatcher.Send(ee);
             }
-            inProgress = false;
+            finally
+            {
+                inProgress = false;
+            }
         }
 
         public static async Task CatchWithSnipe(ISession session, CancellationToken cancellationToken, MSniperInfo2 encounterId)
