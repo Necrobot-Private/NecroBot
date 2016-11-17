@@ -56,7 +56,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         private static IHubProxy _msniperHub;
         private static string _botIdentiy;
         private static string _msniperServiceUrl = "http://msniper.com/signalr";
-        public static double minIvPercent = 45.0;
+        public static double minIvPercent = 50.0;
         public static bool isConnected = false;
         public static void AsyncConnectToService()
         {
@@ -235,7 +235,9 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         public static void AddToList(ISession session, EncounterResponse eresponse)
         {
-            if ((PokemonGradeHelper.GetPokemonGrade(eresponse.WildPokemon.PokemonData.PokemonId) == PokemonGrades.VeryRare ||
+
+            if (PokemonGradeHelper.GetPokemonGrade(eresponse.WildPokemon.PokemonData.PokemonId) == PokemonGrades.Rare || (
+                PokemonGradeHelper.GetPokemonGrade(eresponse.WildPokemon.PokemonData.PokemonId) == PokemonGrades.VeryRare ||
                  PokemonGradeHelper.GetPokemonGrade(eresponse.WildPokemon.PokemonData.PokemonId) == PokemonGrades.Epic ||
                  PokemonGradeHelper.GetPokemonGrade(eresponse.WildPokemon.PokemonData.PokemonId) == PokemonGrades.Legendary))
             {
@@ -246,7 +248,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                 return;
             }
 
-            if (LocationQueue.FirstOrDefault(p => p.EncounterId == eresponse.WildPokemon.EncounterId.ToString()) != null)
+            if (LocationQueue.FirstOrDefault(p =>
+            p.EncounterId == eresponse.WildPokemon.EncounterId.ToString() &&
+            p.SpawnPointId == eresponse.WildPokemon.SpawnPointId &&
+            p.PokemonName.ToLower() == eresponse.WildPokemon.PokemonData.PokemonId.ToString().ToLower()
+
+            ) != null)
             {
                 return;
             }
