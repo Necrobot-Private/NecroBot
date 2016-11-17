@@ -305,6 +305,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                                     LogLevel.Warning);
                                 Console.ReadKey();
                             }
+
+                            // Now we know it's valid so update input with the migrated version.
+                            input = jsonObj.ToString();
                         }
 
                         settings = JsonConvert.DeserializeObject<GlobalSettings>(input, jsonSettings);
