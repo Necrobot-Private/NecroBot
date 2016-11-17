@@ -84,6 +84,7 @@ namespace PoGo.NecroBot.Logic.State
                 });
             }
 
+            int apiCallFailured = 0;
             do
             {
                 try
@@ -147,6 +148,14 @@ namespace PoGo.NecroBot.Logic.State
                 {
                     session.EventDispatcher.Send(new ErrorEvent { Message = "Niantic Servers unstable, throttling API Calls." });
                     await Task.Delay(1000);
+                    apiCallFailured++;
+                    if(apiCallFailured > 20)
+                    {
+                        apiCallFailured = 0;
+                        session.BlockCurrentBot(30);
+                        session.ResetSessionToWithNextBot();
+                        state = new LoginState();
+                    }
                 }
                 catch (OperationCanceledException)
                 {
