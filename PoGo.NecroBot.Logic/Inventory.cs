@@ -267,17 +267,7 @@ namespace PoGo.NecroBot.Logic
 
         public async void GetPlayerData()
         {
-            for (int i = 0; i < 3; i++)
-            {
-              try{
-                    _player = await _client.Player.GetPlayer();
-                    if (_player != null) break;
-                }
-            catch
-                {
-                    Logging.Logger.Write("Failed to load payer data", Logging.LogLevel.Error, ConsoleColor.DarkRed);
-                }
-            }
+            _player = await _client.Player.GetPlayer();
         }
 
         public async Task<PokemonData> GetHighestPokemonOfTypeByIv(PokemonData pokemon)
@@ -462,26 +452,11 @@ namespace PoGo.NecroBot.Logic
 
         public async Task<IEnumerable<PokemonSettings>> GetPokemonSettings()
         {
-            var ss = new SemaphoreSlim(1);
-
-            await ss.WaitAsync();
-            try
+            if (_templates == null || _pokemonSettings == null)
             {
-                if (_templates == null || _pokemonSettings == null)
-                {
-                    for (int j = 0; j < 3; j++)
-                    {
-                        _templates = await _client.Download.GetItemTemplates();
-                        _pokemonSettings = _templates.ItemTemplates.Select(i => i.PokemonSettings).Where(p => p != null && p.FamilyId != PokemonFamilyId.FamilyUnset);
-                        if (_templates.ItemTemplates.Count > 10) break;
-                    }
-                }
+                _templates = await _client.Download.GetItemTemplates();
+                _pokemonSettings = _templates.ItemTemplates.Select(i => i.PokemonSettings).Where(p => p != null && p.FamilyId != PokemonFamilyId.FamilyUnset);
             }
-            finally
-            {
-                ss.Release();
-            }
-
             return _pokemonSettings;
         }
 
@@ -619,12 +594,8 @@ namespace PoGo.NecroBot.Logic
             await ss.WaitAsync();
             try
             {
-                for (int i = 0; i < 3; i++)
-                {
-                    _lastRefresh = now;
-                    _cachedInventory = await _client.Inventory.GetInventory();
-                    if (_cachedInventory != null && _cachedInventory.InventoryDelta.InventoryItems.Count > 0) break;
-                }
+                _lastRefresh = now;
+                _cachedInventory = await _client.Inventory.GetInventory();
                 return _cachedInventory;
             }
             finally
