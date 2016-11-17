@@ -101,7 +101,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     if (pokemon.Stamina < pokemon.StaminaMax)
                         await HealPokemon(session, pokemon);
                 }
-                Thread.Sleep(4000);
+                await Task.Delay(4000);
 
                 int tries = 0;
                 StartGymBattleResponse result;
@@ -116,7 +116,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         badassPokemon = await session.Inventory.GetHighestCpForGym(6);
                         pokemonDatas = badassPokemon as PokemonData[] ?? badassPokemon.ToArray();
                         Logger.Write($"Failed to Start Gym Battle at try: {tries}, waiting 20 seconds before make another one.", LogLevel.Gym, ConsoleColor.Red);
-                        Thread.Sleep(20000);
+                        await Task.Delay(20000);
                     }
                 } while (result.Result == StartGymBattleResponse.Types.Result.Unset && tries <= 10);
                 
@@ -456,12 +456,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                     }
                     Debug.Write($"{attackResult}");
 
-                    Thread.Sleep(5000);
+                    await Task.Delay(5000);
                     // Sleep until last sent battle action expired
                     //bool sleep = true;
                     //while (attackActionz.LastOrDefault() != null && sleep)
                     //{
-                    //    Thread.Sleep(1000);
+                    //    await Task.Delay(1000);
                     //    DateTime currentTime = DateTime.Now;
                     //    if (currentTime.ToUnixTime() > attackActionz.LastOrDefault().DamageWindowsEndTimestampMss)
                     //    {
