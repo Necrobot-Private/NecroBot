@@ -488,13 +488,13 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     if (ordered.Count > 0 && displayList)
                     {
-                        Logger.Write(string.Format("     Source      |  Name               |    Distance    |   Expires        |  Travel times   | Catchable"));
+                        Logger.Write(string.Format("             Source            |  Name               |    Distance    |   Expires        |  Travel times   | Catchable"));
                         foreach (var pokemon in ordered)
                         {
                             string name = _session.Translation.GetPokemonTranslation(pokemon.PokemonId);
-                            name += "".PadLeft(16 - name.Length, ' ');
+                            name += "".PadLeft(30 - name.Length, ' ');
                             string source = pokemon.Source;
-                            source += "".PadLeft(16 - source.Length, ' ');
+                            source += "".PadLeft(30 - source.Length, ' ');
                             Logger.Write(string.Format(" {0} |  {1}  |  {2:0.00}m  \t|  {3:mm} min {3:ss} sec  |  {4:00} min {5:00} sec  | {6}",
                                 source,
                                 name,
