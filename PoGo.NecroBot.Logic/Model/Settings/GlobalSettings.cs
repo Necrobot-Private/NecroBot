@@ -19,6 +19,7 @@ using PoGo.NecroBot.Logic.State;
 using PokemonGo.RocketAPI.Enums;
 using POGOProtos.Enums;
 using PoGo.NecroBot.Logic.Service.Elevation;
+using PokemonGo.RocketAPI.Extensions;
 
 #endregion
 
@@ -377,7 +378,8 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             }
 
             // Backup old config file.
-            string backupPath = configFile.Replace(".json", $"-{schemaVersion}.backup.json");
+            long ts = DateTime.UtcNow.ToUnixTime(); // Add timestamp to avoid file conflicts
+            string backupPath = configFile.Replace(".json", $"-{schemaVersion}-{ts}.backup.json");
             Logger.Write($"Backing up config.json to: {backupPath}", LogLevel.Info);
             File.Copy(configFile, backupPath);
 
@@ -388,11 +390,12 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 Logger.Write($"Migrating configuration from schema version {version} to {version + 1}", LogLevel.Info);
                 switch(version)
                 {
-                    case 0:
-                        settings["UpdateConfig"]["SchemaVersion"] = UpdateConfig.CURRENT_SCHEMA_VERSION;
-                        break;
                     case 1:
-                        // TODO Add schema migrations from version 1 to 2 here.
+                        // Delete the auto complete tutorial settings.
+                        ((JObject)settings["PlayerConfig"]).Remove("AutoCompleteTutorial");
+                        ((JObject)settings["PlayerConfig"]).Remove("DesiredNickname");
+                        ((JObject)settings["PlayerConfig"]).Remove("DesiredGender");
+                        ((JObject)settings["PlayerConfig"]).Remove("DesiredStarter");
                         break;
 
                     case 2:
@@ -402,6 +405,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                     // Add more here.
                 }
             }
+
+            // After migration we need to update the schema version to the latest version.
+            settings["UpdateConfig"]["SchemaVersion"] = UpdateConfig.CURRENT_SCHEMA_VERSION;
         }
 
         public void CheckProxy(ITranslation translator)
@@ -428,7 +434,6 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             SetupWalkingConfig(newSession.Translation, settings);
             SetupTelegramConfig(newSession.Translation, settings);
             SetupProxyConfig(newSession.Translation, settings);
-            SetupAutoCompleteTutConfig(newSession.Translation, settings);
             SetupWebSocketConfig(newSession.Translation, settings);
             SaveFiles(settings, configPath);
 
@@ -494,30 +499,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             settings.LocationConfig.WalkingSpeedVariant = PromptForDouble(translator, translator.GetTranslation(TranslationString.FirstStartSetupWalkingSpeedVariantPrompt));
             Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupWalkingSpeedVariantConfirm, settings.LocationConfig.WalkingSpeedVariant.ToString()));
         }
-
-        private static void SetupAutoCompleteTutConfig(ITranslation translator, GlobalSettings settings)
-        {
-            if (false == PromptForBoolean(translator, translator.GetTranslation(TranslationString.FirstStartSetupAutoCompleteTutPrompt, "Y", "N")))
-                return;
-
-            settings.PlayerConfig.AutoCompleteTutorial = true;
-
-            string strInput = PromptForString(translator, translator.GetTranslation(TranslationString.FirstStartSetupAutoCompleteTutNicknamePrompt));
-            settings.PlayerConfig.DesiredNickname = strInput;
-            Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupAutoCompleteTutNicknameConfirm,
-                strInput));
-
-            strInput = PromptForString(translator, translator.GetTranslation(TranslationString.FirstStartSetupAutoCompleteTutGenderPrompt));
-            settings.PlayerConfig.DesiredGender = strInput;
-            Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupAutoCompleteTutGenderConfirm,
-                strInput));
-
-            strInput = PromptForString(translator, translator.GetTranslation(TranslationString.FirstStartSetupAutoCompleteTutStarterPrompt));
-            settings.PlayerConfig.DesiredStarter = strInput;
-            Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupAutoCompleteTutStarterConfirm,
-                strInput));
-        }
-
+        
         private static void SetupWebSocketConfig(ITranslation translator, GlobalSettings settings)
         {
             if (false == PromptForBoolean(translator, translator.GetTranslation(TranslationString.FirstStartSetupWebSocketPrompt, "Y", "N")))

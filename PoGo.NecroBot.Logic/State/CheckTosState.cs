@@ -11,6 +11,7 @@ using POGOProtos.Networking.Responses;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Utils;
 using PoGo.NecroBot.Logic.Model.Settings;
+using PoGo.NecroBot.Logic.Common;
 
 #endregion
 
@@ -38,7 +39,7 @@ namespace PoGo.NecroBot.Logic.State
             }
             if (!tutState.Contains(TutorialState.AvatarSelection))
             {
-                string genderString = GlobalSettings.PromptForString(session.Translation, "Enter desired gender for your avatar (\"Male\" or \"Female\")", new string[] { "Male", "Female" }, "You didn't set a valid gender.", false);
+                string genderString = GlobalSettings.PromptForString(session.Translation, session.Translation.GetTranslation(TranslationString.FirstStartSetupAutoCompleteTutGenderPrompt), new string[] { "Male", "Female" }, "You didn't set a valid gender.", false);
 
                 Gender gen;
                 switch (genderString)
@@ -113,7 +114,7 @@ namespace PoGo.NecroBot.Logic.State
                 PokemonId.Charmander,
                 PokemonId.Squirtle
             };
-            string pokemonString = GlobalSettings.PromptForString(session.Translation, "Enter pokemon you want to catch first (\"Bulbasaur\", \"Charmander\", or \"Squirtle\")", new string[] { "Bulbasaur", "Charmander", "Squirtle" }, "You didn't enter a valid pokemon.", false);
+            string pokemonString = GlobalSettings.PromptForString(session.Translation, session.Translation.GetTranslation(TranslationString.FirstStartSetupAutoCompleteTutStarterPrompt), new string[] { "Bulbasaur", "Charmander", "Squirtle" }, "You didn't enter a valid pokemon.", false);
             var firstpokenum = 0;
             switch (pokemonString)
             {
@@ -151,7 +152,7 @@ namespace PoGo.NecroBot.Logic.State
         {
             while (true)
             {
-                string nickname = GlobalSettings.PromptForString(session.Translation, "Enter desired nickname for your avatar (max length 15 characters)", null, "You entered an invalid nickname.");
+                string nickname = GlobalSettings.PromptForString(session.Translation, session.Translation.GetTranslation(TranslationString.FirstStartSetupAutoCompleteTutNicknamePrompt), null, "You entered an invalid nickname.");
 
                 if (nickname.Length > 15 || nickname.Length == 0)
                 {
