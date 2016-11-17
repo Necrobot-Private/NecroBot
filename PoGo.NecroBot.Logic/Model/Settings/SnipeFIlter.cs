@@ -14,15 +14,16 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             Moves = new List<List<PokemonMove>>();
         }
 
-        public SnipeFilter(int keepMinIvPercentage, List<List<PokemonMove>> moves = null)
+        public SnipeFilter(int snipeMinIV, List<List<PokemonMove>> moves = null)
         {
-            this.SnipeIV = keepMinIvPercentage;
+            this.Operator = "or";
+            this.SnipeIV = snipeMinIV;
             this.Moves = moves;
         }
 
+        [JsonIgnore]
         [ExcelConfig(IsPrimaryKey = true,Key = "Enable Snipe", Description = "Enable snipe filter for this, if not set it will apply global setting", Position = 1)]
         [DefaultValue(false)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public bool EnableSnipe { get; set; }
 
         [ExcelConfig(Key = "Snipe Min IV" , Description ="Min Pokemon IV for auto snipe", Position =2)]
@@ -35,7 +36,12 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [DefaultValue(null)]
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
         public List<List<PokemonMove>> Moves { get; set; }
-          
+
+        [ExcelConfig(Key = "Operator", Description = "Operator logic check between move and IV", Position = 4)]
+        [EnumDataType(typeof(Operator))]
+        [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
+        public string Operator { get; set; }
+
         internal static Dictionary<PokemonId, SnipeFilter> SniperFilterDefault()
         {
             return new Dictionary<PokemonId, SnipeFilter>

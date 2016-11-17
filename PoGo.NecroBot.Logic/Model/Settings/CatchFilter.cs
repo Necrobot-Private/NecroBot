@@ -28,7 +28,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         [ExcelConfig(IsPrimaryKey = true, Key = "Enable Catch filter", Description = "Allow bot check for filter for catch this pokemon", Position = 1)]
         [DefaultValue(false)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
+        [JsonIgnore]
         public bool EnableCatchFilter { get; set; }
 
         [ExcelConfig(Key = "Min IV" , Description ="Min IV for catch", Position =2)]

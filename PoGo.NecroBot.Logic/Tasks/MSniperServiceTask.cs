@@ -39,6 +39,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             public double Latitude { get; set; }
             public double Longitude { get; set; }
             public double Iv { get; set; }
+            public PokemonMove Move1 { get;  set; }
+            public PokemonMove Move2 { get;  set; }
         }
           
         public class HubData
@@ -567,10 +569,29 @@ namespace PoGo.NecroBot.Logic.Tasks
                 filter = session.LogicSettings.PokemonSnipeFilters[pokemonId];
             }
 
-            if (filter.SnipeIV < item.Iv)
+            //ugly but readable
+            if((string.IsNullOrEmpty(filter.Operator) || filter.Operator == Operator.or.ToString()) && 
+                (filter.SnipeIV < item.Iv
+                || (filter.Moves != null 
+                    && filter.Moves.Count > 0 
+                    && filter.Moves.Any(x=> x[0] == item.Move1 && x[1] == item.Move2))
+                ))
+
             {
                 autoSnipePokemons.Add(item);
             }
+
+
+            if (filter.Operator == Operator.and.ToString() &&
+               (filter.SnipeIV < item.Iv
+               && (filter.Moves != null
+                   && filter.Moves.Count >  0
+                   && filter.Moves.Any(x => x[0] == item.Move1 && x[1] == item.Move2))
+               ))
+            {
+                autoSnipePokemons.Add(item);
+            }
+
         }
 
         private static List<MSniperInfo2> autoSnipePokemons = new List<MSniperInfo2>();

@@ -3,6 +3,7 @@ using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Tasks;
+using POGOProtos.Enums;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -168,6 +169,8 @@ namespace PoGo.NecroBot.CLI
                     session.EventDispatcher.Send(data);
                     if (session.LogicSettings.AllowAutoSnipe)
                     {
+                        var move1 = (PokemonMove)Enum.Parse(typeof(PokemonMove), data.Move1, true);
+                        var move2 = (PokemonMove)Enum.Parse(typeof(PokemonMove), data.Move2, true);
                         MSniperServiceTask.AddSnipeItem(session, new MSniperServiceTask.MSniperInfo2()
                         {
                             Latitude = data.Latitude,
@@ -175,7 +178,9 @@ namespace PoGo.NecroBot.CLI
                             EncounterId = (ulong)Convert.ToInt64(data.EncounterId),
                             SpawnPointId = data.SpawnPointId,
                             PokemonId = (short)data.PokemonId,
-                            Iv = data.IV
+                            Iv = data.IV,
+                            Move1 =  move1,
+                            Move2 = move2
                         });
                     }
                     return;
