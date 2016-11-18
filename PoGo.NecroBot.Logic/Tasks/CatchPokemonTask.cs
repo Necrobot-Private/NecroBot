@@ -412,14 +412,15 @@ namespace PoGo.NecroBot.Logic.Tasks
                 } while (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchMissed ||
                          caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchEscape);
 
-                if(caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchFlee)
+                if (MultipleBotConfig.IsMultiBotActive(session.LogicSettings))
                 {
-                    CatchFleeContinuouslyCount++;
-                    if(CatchFleeContinuouslyCount > 10)
+                    if (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchFlee)
                     {
-                        CatchFleeContinuouslyCount = 0;
-                        if (MultipleBotConfig.IsMultiBotActive(session.LogicSettings))
+                        CatchFleeContinuouslyCount++;
+                        if (CatchFleeContinuouslyCount > 10)
                         {
+                            CatchFleeContinuouslyCount = 0;
+
                             throw new ActiveSwitchByRuleException()
                             {
                                 MatchedRule = SwitchRules.CatchFlee,
@@ -427,15 +428,17 @@ namespace PoGo.NecroBot.Logic.Tasks
                             };
                         }
                     }
+                    else
+                    {
+                        //reset if not catch flee.
+                        CatchFleeContinuouslyCount = 0;
+                    }
                 }
-                else
-                {
-                    //reset if not catch flee.
-                    CatchFleeContinuouslyCount = 0;
-                }
+
                 session.Actions.RemoveAll(x => x == Model.BotActions.Catch);
 
-                ExecuteSwitcher(session, encounterEV);
+                if (MultipleBotConfig.IsMultiBotActive(session.LogicSettings))
+                    ExecuteSwitcher(session, encounterEV);
 
                 if (session.LogicSettings.TransferDuplicatePokemonOnCapture &&
                     session.LogicSettings.TransferDuplicatePokemon &&
