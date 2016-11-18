@@ -47,7 +47,10 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         {
             return new Dictionary<PokemonId, SnipeFilter>
             {
-                { PokemonId.Lapras, new SnipeFilter(0, new List<List<PokemonMove>>() { }) }
+                { PokemonId.Lapras, new SnipeFilter(0, new List<List<PokemonMove>>() { }) },
+                { PokemonId.Dragonite, new SnipeFilter(0, new List<List<PokemonMove>>() { }) },
+                { PokemonId.Snorlax, new SnipeFilter(0, new List<List<PokemonMove>>() { }) },
+                { PokemonId.Dratini, new SnipeFilter(0, new List<List<PokemonMove>>() { }) }
             };
         }
     }

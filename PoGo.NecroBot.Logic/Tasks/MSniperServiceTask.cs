@@ -557,6 +557,8 @@ namespace PoGo.NecroBot.Logic.Tasks
         #endregion
         public static void AddSnipeItem(ISession session, MSniperInfo2 item)
         {
+            if (OutOffBallBlock > DateTime.Now) return;
+
             SnipeFilter filter = new SnipeFilter()
             {
                 SnipeIV = session.LogicSettings.MinIVForAutoSnipe
@@ -587,7 +589,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                 autoSnipePokemons.Add(item);
             }
 
-
             if (filter.Operator == Operator.and.ToString() &&
                (filter.SnipeIV < item.Iv
                && (filter.Moves != null
@@ -602,6 +603,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static List<MSniperInfo2> autoSnipePokemons = new List<MSniperInfo2>();
 
+        private static DateTime OutOffBallBlock = DateTime.MinValue;
+
         public static async Task Execute(ISession session, CancellationToken cancellationToken)
         {
             if (inProgress)
@@ -615,8 +618,9 @@ namespace PoGo.NecroBot.Logic.Tasks
             var pth = Path.Combine(Directory.GetCurrentDirectory(), "SnipeMS.json");
             try
             {
-                if (!File.Exists(pth) && autoSnipePokemons.Count == 0)
+                if ((!File.Exists(pth) && autoSnipePokemons.Count == 0) || OutOffBallBlock > DateTime.Now)
                 {
+                    autoSnipePokemons.Clear();
                     inProgress = false;
                     return;
                 }
@@ -624,6 +628,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                 if (!await SnipePokemonTask.CheckPokeballsToSnipe(session.LogicSettings.MinPokeballsWhileSnipe + 1, session, cancellationToken))
                 {
                     inProgress = false;
+                    session.EventDispatcher.Send(new WarnEvent()
+                    {
+                        Message = "Your are out of ball because snipe so fast, you can reduce snipe speed by update MinIVForAutoSnipe or SnipePokemonFilters, Auto snipe will be disable in 5 mins"
+                    });
+
+                    OutOffBallBlock = DateTime.Now.AddMinutes(5);
                     return;
                 }
                 List<MSniperInfo2> mSniperLocation2 = new List<MSniperInfo2>();
