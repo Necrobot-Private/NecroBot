@@ -267,6 +267,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             var configFile = Path.Combine(profileConfigPath, "config.json");
             var schemaFile = Path.Combine(profileConfigPath, "config.schema.json");
             var shouldExit = false;
+            int schemaVersionBeforeUpgrade = 0;
 
             if (File.Exists(configFile))
             {
@@ -311,6 +312,12 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
                             // Migrate before validation.
                             MigrateSettings(jsonObj, configFile, schemaFile);
+
+                            // Save the original schema version since we need to pass it to AuthSettings for migration.
+                            schemaVersionBeforeUpgrade = (int)jsonObj["UpdateConfig"]["SchemaVersion"];
+
+                            // After migration we need to update the schema version to the latest version.
+                            jsonObj["UpdateConfig"]["SchemaVersion"] = UpdateConfig.CURRENT_SCHEMA_VERSION;
 
                             Logger.Write("Validating config.json...");
                             IList<ValidationError> errors = null;
@@ -400,7 +407,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             settings.GeneralConfigPath = Path.Combine(Directory.GetCurrentDirectory(), "config");
 
             settings.Save(configFile);
-            settings.Auth.Load(Path.Combine(profileConfigPath, "auth.json"), validate);
+            settings.Auth.Load(Path.Combine(profileConfigPath, "auth.json"), Path.Combine(profileConfigPath, "auth.schema.json"), schemaVersionBeforeUpgrade, validate);
 
             return shouldExit ? null : settings;
         }
@@ -450,9 +457,6 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                     // Add more here.
                 }
             }
-
-            // After migration we need to update the schema version to the latest version.
-            settings["UpdateConfig"]["SchemaVersion"] = UpdateConfig.CURRENT_SCHEMA_VERSION;
         }
 
         public void CheckProxy(ITranslation translator)
@@ -664,7 +668,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         private static void SaveFiles(GlobalSettings settings, string configFile)
         {
             settings.Save(configFile);
-            settings.Auth.Load(Path.Combine(settings.ProfileConfigPath, "auth.json"));
+            settings.Auth.Load(Path.Combine(settings.ProfileConfigPath, "auth.json"), Path.Combine(settings.ProfileConfigPath, "auth.schema.json"), settings.UpdateConfig.SchemaVersion);
         }
 
         public void Save(string fullPath, bool validate = false)
