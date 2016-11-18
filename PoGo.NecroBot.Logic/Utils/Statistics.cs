@@ -46,65 +46,54 @@ namespace PoGo.NecroBot.Logic.Utils
 
         public void OnStatisticChanged(ISession session)
         {
-
-            var config = session.LogicSettings.MultipleBotConfig;
-            if (session.LogicSettings.AllowMultipleBot)
+            if (MultipleBotConfig.IsMultiBotActive(session.LogicSettings))
             {
+                var config = session.LogicSettings.MultipleBotConfig;
+
                 if (config.PokestopSwitch > 0 && config.PokestopSwitch <= this.TotalPokestops)
                 {
                     session.CancellationTokenSource.Cancel();
-                    if (MultipleBotConfig.IsMultiBotActive(session.LogicSettings))
+                    
+                    //Activate switcher by pokestop
+                    throw new ActiveSwitchByRuleException()
                     {
-                        //Activate switcher by pokestop
-                        throw new ActiveSwitchByRuleException()
-                        {
-                            MatchedRule = SwitchRules.Pokestop,
-                            ReachedValue = this.TotalPokestops
-                        };
-                    }
+                        MatchedRule = SwitchRules.Pokestop,
+                        ReachedValue = this.TotalPokestops
+                    };
                 }
 
                 if (config.PokemonSwitch > 0 && config.PokemonSwitch <= this.TotalPokemons)
                 {
                     session.CancellationTokenSource.Cancel();
-                    if (MultipleBotConfig.IsMultiBotActive(session.LogicSettings))
+                    //Activate switcher by pokestop
+                    throw new ActiveSwitchByRuleException()
                     {
-                        //Activate switcher by pokestop
-                        throw new ActiveSwitchByRuleException()
-                        {
-                            MatchedRule = SwitchRules.Pokemon,
-                            ReachedValue = this.TotalPokemons
-                        };
-                    }
+                        MatchedRule = SwitchRules.Pokemon,
+                        ReachedValue = this.TotalPokemons
+                    };
                 }
 
                 if (config.EXPSwitch > 0 && config.EXPSwitch <= this.TotalExperience)
                 {
                     session.CancellationTokenSource.Cancel();
-                    if (MultipleBotConfig.IsMultiBotActive(session.LogicSettings))
+                    //Activate switcher by pokestop
+                    throw new ActiveSwitchByRuleException()
                     {
-                        //Activate switcher by pokestop
-                        throw new ActiveSwitchByRuleException()
-                        {
-                            MatchedRule = SwitchRules.EXP,
-                            ReachedValue = this.TotalExperience
-                        };
-                    }
+                        MatchedRule = SwitchRules.EXP,
+                        ReachedValue = this.TotalExperience
+                    };
                 }
 
                 var totalMin = (DateTime.Now - _initSessionDateTime).TotalMinutes;
                 if (config.RuntimeSwitch> 0 && config.RuntimeSwitch <= totalMin)
                 {
                     session.CancellationTokenSource.Cancel();
-                    if (MultipleBotConfig.IsMultiBotActive(session.LogicSettings))
+                    //Activate switcher by pokestop
+                    throw new ActiveSwitchByRuleException()
                     {
-                        //Activate switcher by pokestop
-                        throw new ActiveSwitchByRuleException()
-                        {
-                            MatchedRule = SwitchRules.Runtime,
-                            ReachedValue = Math.Round(totalMin, 1)
-                        };
-                    }
+                        MatchedRule = SwitchRules.Runtime,
+                        ReachedValue = Math.Round(totalMin, 1)
+                    };
                 }
             }
 
