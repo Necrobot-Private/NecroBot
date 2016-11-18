@@ -132,7 +132,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         public static bool IsMultiBotActive(ILogicSettings logicSettings)
         {
-            return logicSettings.Bots != null && logicSettings.Bots.Count > 1;
+            return logicSettings.AllowMultipleBot && logicSettings.Bots != null && logicSettings.Bots.Count > 1;
         }
     }
 }
