@@ -1,5 +1,20 @@
 # Change Log
 
+## [v1.0.0.25](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.25) (2016-11-17)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.24...v1.0.0.25)
+
+**Fixed bugs:**
+
+- Fixes #363 - Do not attempt to multi-bot if not more than 1 bot is set up.
+
+## [v1.0.0.24](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.24) (2016-11-17)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.23...v1.0.0.24)
+
+**Implemented Enhancements**
+
+- Multi-bot Support
+- Auto-snipe from mypogosnipers.com
+
 ## [v1.0.0.23](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.23) (2016-11-16)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.22...v1.0.0.23)
 
