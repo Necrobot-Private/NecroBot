@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using PoGo.NecroBot.Logic.Interfaces.Configuration;
 using POGOProtos.Enums;
 using System;
 using System.Collections.Generic;
@@ -127,6 +128,11 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public static MultipleBotConfig Default()
         {
             return new MultipleBotConfig();
+        }
+
+        public static bool IsMultiBotActive(ILogicSettings logicSettings)
+        {
+            return logicSettings.AllowMultipleBot && logicSettings.Bots != null && logicSettings.Bots.Count > 1;
         }
     }
 }

@@ -18,6 +18,7 @@ using POGOProtos.Networking.Responses;
 using PoGo.NecroBot.Logic.Event.Gym;
 using PoGo.NecroBot.Logic.Model;
 using PoGo.NecroBot.Logic.Exceptions;
+using PoGo.NecroBot.Logic.Model.Settings;
 
 #endregion
 
@@ -411,12 +412,15 @@ namespace PoGo.NecroBot.Logic.Tasks
             if(fortTry >= retryNumber - zeroCheck)
             {
                 session.CancellationTokenSource.Cancel();
-                //Activate switcher by pokestop
-                throw new ActiveSwitchByRuleException()
+                if (MultipleBotConfig.IsMultiBotActive(session.LogicSettings))
                 {
-                    MatchedRule = SwitchRules.PokestopSoftban,
-                    ReachedValue = 1
-                };
+                    //Activate switcher by pokestop
+                    throw new ActiveSwitchByRuleException()
+                    {
+                        MatchedRule = SwitchRules.PokestopSoftban,
+                        ReachedValue = 1
+                    };
+                }
             }
             if (session.LogicSettings.RandomlyPauseAtStops && !doNotRetry)
             {
