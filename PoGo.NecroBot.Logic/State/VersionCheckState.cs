@@ -216,7 +216,7 @@ namespace PoGo.NecroBot.Logic.State
             var oldfiles = Directory.GetFiles(destFolder);
             foreach (var old in oldfiles)
             {
-                if (old.Contains("vshost") || old.Contains(".gpx") || old.Contains("config.json") || old.Contains("auth.json") ||  old.Contains("SessionStats.db") || old.Contains("LastPos.ini")) continue;
+                if (old.Contains("vshost") || old.Contains(".gpx") || old.Contains("config.json") || old.Contains("config.xlsm") || old.Contains("auth.json") ||  old.Contains("SessionStats.db") || old.Contains("LastPos.ini")) continue;
                 File.Move(old, old + ".old");
             }
 
