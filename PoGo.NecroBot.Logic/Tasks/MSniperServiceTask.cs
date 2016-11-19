@@ -30,21 +30,20 @@ namespace PoGo.NecroBot.Logic.Tasks
         #region signalr msniper service
 
         public static bool isConnected = false;
-        public static double minIvPercent = 1.0;
+        public static double minIvPercent = 0.0;//no iv filter
         private static string _botIdentiy;
         private static HubConnection _connection;
         private static IHubProxy _msniperHub;
         private static string _msniperServiceUrl = "http://msniper.com/signalr";
         public static void ConnectToService()
         {
-            Thread.Sleep(10000);
-
             while (true)
             {
                 try
                 {
                     if (!isConnected)
                     {
+                        Thread.Sleep(10000);
                         _connection = new HubConnection(_msniperServiceUrl, useDefaultUrl: false);
                         _msniperHub = _connection.CreateHubProxy("msniperHub");
                         _connection.Received += Connection_Received;
@@ -396,6 +395,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         public static async Task Execute(ISession session, CancellationToken cancellationToken)
         {
+            ConnectToService();//run-time connection checker, not good but enough
+
             if (inProgress || OutOffBallBlock > DateTime.Now)
                 return;
             inProgress = true;
