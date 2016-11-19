@@ -289,7 +289,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             });
         }
 
-        public static async Task CatchFromService(ISession session, CancellationToken cancellationToken, MSniperInfo2 encounterId)
+        public static async Task<bool> CatchFromService(ISession session, CancellationToken cancellationToken, MSniperInfo2 encounterId)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -324,7 +324,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             else
             {
                 Logger.Write($"Pokemon despawned or wrong link format!", LogLevel.Service, ConsoleColor.Gray);
-                return;// No success to work with
+                return true;// No success to work with
             }
 
             var pokemon = new MapPokemon
@@ -336,7 +336,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                 SpawnPointId = encounterId.SpawnPointId
             };
 
+            if (encounter.Status == EncounterResponse.Types.Status.PokemonInventoryFull)
+            {
+                return false;
+            }
             await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, currentFortData: null, sessionAllowTransfer: true);
+            return true;
         }
 
         public static List<EncounterInfo> FindNew(List<EncounterInfo> received)
@@ -647,8 +652,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                     File.Delete(pth);
                     if (mSniperLocation2 == null) mSniperLocation2 = new List<MSniperInfo2>();
                 }
-
-                mSniperLocation2.AddRange(autoSnipePokemons);
+                autoSnipePokemons.Reverse();
+                mSniperLocation2.AddRange(autoSnipePokemons.Take(10)); 
                 autoSnipePokemons.Clear();
 
                 foreach (var location in mSniperLocation2)
@@ -668,7 +673,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                     });
                     if (location.EncounterId != 0)
                     {
-                        await CatchFromService(session, cancellationToken, location);
+                        if(!await CatchFromService(session, cancellationToken, location))
+                        {
+                            //inventory full, break snipe
+                            break;
+                        }
                     }
                     else
                     {
