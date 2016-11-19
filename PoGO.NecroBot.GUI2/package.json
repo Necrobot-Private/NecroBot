@@ -1,5 +1,5 @@
 {
-  "name": "necrobot2-gui",
+  "name": "NecroBot2-GUI",
   "version": "1.0.0",
   "description": "Necrobot2 GUI (PokeEase Fork)",
   "main": "main.js",
@@ -13,6 +13,7 @@
   "author": "GitHub",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^1.4.7"
+    "electron": "^1.4.7",
+    "electron-packager": "^8.3.0"
   }
 }
