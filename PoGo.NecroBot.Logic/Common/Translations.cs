@@ -298,7 +298,7 @@ namespace PoGo.NecroBot.Logic.Common
             new KeyValuePair<TranslationString, string>(TranslationString.Gym, "Gym") ,
             new KeyValuePair<TranslationString, string>(TranslationString.Pokestop, "Pokestop"),
             new KeyValuePair<TranslationString, string>(TranslationString.EventFortTargeted,
-                "Traveling to {0}: {1} ({2}m) ({3} seconds) (route {4})"),
+                "Traveling to {0}: {1} ({2} m) ({3} seconds) (route {4})"),
             new KeyValuePair<TranslationString, string>(TranslationString.EventProfileLogin, "Playing as {0}"),
             new KeyValuePair<TranslationString, string>(TranslationString.EventUsedIncense,
                 "Used Incense, remaining: {0}"),
@@ -309,7 +309,7 @@ namespace PoGo.NecroBot.Logic.Common
             new KeyValuePair<TranslationString, string>(TranslationString.EventPokemonEvolvedFailed,
                 "Failed {0}. Result was {1}, stopping evolving {2}"),
             new KeyValuePair<TranslationString, string>(TranslationString.EventPokemonTransferred,
-                "{0}\t- CP: {1}  IV: {2}%   [Best CP: {3}  IV: {4}%] (Candies: {5})")  ,
+                "{0}\t- CP: {1}  IV: {2}%   [Best CP: {3}  IV: {4}%] (Candies: {5})"),
              new KeyValuePair<TranslationString, string>(TranslationString.EventPokemonUpgraded,
                 "{0}\t- CP: {1}  IV: {2}%   [Best CP: {3}  IV: {4}%]"),
 
@@ -319,7 +319,7 @@ namespace PoGo.NecroBot.Logic.Common
             new KeyValuePair<TranslationString, string>(TranslationString.EventPokemonCaptureSuccess,
                 "({0}) | ({1}) {2} Lvl: {3} CP: ({4}/{5}) IV: {6}% | Chance: {7}% | {8}m dist | with a {9} ({10} left). | {11} EXP earned | {12} | lat: {13} long: {14} | Move1: {15} Move2: {16} | Rarity :{17}"),
             new KeyValuePair<TranslationString, string>(TranslationString.EventPokemonCaptureFailed,
-                "({0}) | ({1}) {2} Lvl: {3} CP: ({4}/{5}) IV: {6}% | Chance: {7}% | {8}m dist | with a {9} ({10} left). | lat: {11} long: {12} | Move1: {13} Move2: {14}| Rarity :{15}"),
+                "({0}) | ({1}) {2} Lvl: {3} CP: ({4}/{5}) IV: {6}% | Chance: {7}% | {8}m dist | with a {9} ({10} left). | lat: {11} long: {12} | Move1: {13} Move2: {14} | Rarity :{15}"),
 
 
             new KeyValuePair<TranslationString, string>(TranslationString.EventNoPokeballs,
@@ -418,7 +418,7 @@ namespace PoGo.NecroBot.Logic.Common
                 "Looking for lure Pokemon..."),
             new KeyValuePair<TranslationString, string>(TranslationString.PokemonSkipped, "Skipped {0}"),
             new KeyValuePair<TranslationString, string>(TranslationString.ZeroPokeballInv,
-                "You have no pokeballs in your inventory, no more Pokemon can be caught!. Bot will ignore catch pokemon for {0} minute(s)"),
+                "Out of Pokeballs. Waiting {0} minute(s) until catching again."),
             new KeyValuePair<TranslationString, string>(TranslationString.CurrentPokeballInv,
                 "Pokeballs: {0} | Greatballs: {1} | Ultraballs: {2} | Masterballs: {3}"),
             new KeyValuePair<TranslationString, string>(TranslationString.CurrentPotionInv,
@@ -428,7 +428,7 @@ namespace PoGo.NecroBot.Logic.Common
             new KeyValuePair<TranslationString, string>(TranslationString.CurrentMiscItemInv,
                 "Berries: {0} | Incense: {1} | LuckyEggs: {2} | Lures: {3}"),
             new KeyValuePair<TranslationString, string>(TranslationString.MaxItemsCombinedOverMaxItemStorage,
-                "[Configuration Invalid] Your maximum items combined (balls+potions+revives={0}) is over your max item storage ({1})"),
+                "[Configuration Invalid] Your maximum items combined (Balls+Potions+Revives={0}) is over your max item storage ({1})"),
             new KeyValuePair<TranslationString, string>(TranslationString.RecyclingQuietly, "Recycling Quietly..."),
             new KeyValuePair<TranslationString, string>(TranslationString.InvFullTransferring,
                 "Pokemon Inventory is full, transferring Pokemon..."),
@@ -444,7 +444,7 @@ namespace PoGo.NecroBot.Logic.Common
             new KeyValuePair<TranslationString, string>(TranslationString.PokemonRename,
                 "Pokemon {0} ({1}) renamed from {2} to {3}."),
             new KeyValuePair<TranslationString, string>(TranslationString.PokemonFavorite,
-                "{0}% perfect {1} (CP {2}) *favorited*."),
+                "{0}% perfect {1} (CP {2}) *Favorited*."),
             new KeyValuePair<TranslationString, string>(TranslationString.PokemonIgnoreFilter,
                 "[Pokemon ignore filter] - Ignoring {0} as defined in settings"),
             new KeyValuePair<TranslationString, string>(TranslationString.CatchStatusAttempt, "CatchAttempt"),
@@ -606,7 +606,7 @@ namespace PoGo.NecroBot.Logic.Common
             new KeyValuePair<TranslationString, string>(TranslationString.MinimumClientVersionException, "(KILLSWITCH) We have detected a Pokemon API change. The bot emulates API version {0}, which is no longer supported.  Minimum API version is now {1}."),
             new KeyValuePair<TranslationString, string>(TranslationString.ExitNowAfterEnterKey, "The bot will now exit after hitting the enter key."),
             new KeyValuePair<TranslationString, string>(TranslationString.CaptchaShown, "Captcha is being shown and will need to be solved."),
-            new KeyValuePair<TranslationString, string>(TranslationString.CatchPokemonDisable,"Pokeball too low, bot will temporary disable catching wild pokemon for {0} min  or until you has {1} ball in bag") 
+            new KeyValuePair<TranslationString, string>(TranslationString.CatchPokemonDisable,"Too few Pokeballs. Temporarily disabling the catching of wild Pokemon for {0} min or until we have {1} balls again.")
         };
 
         [JsonProperty("PokemonStrings",
@@ -996,7 +996,10 @@ namespace PoGo.NecroBot.Logic.Common
             var translationPath = Path.Combine(logicSettings.GeneralConfigPath, "translations");
             var fullPath = Path.Combine(translationPath, "translation." + translationsLanguageCode + ".json");
 
-            if (File.Exists(fullPath))
+            // Load existing translationsfiles except if using default English.
+            // This file has to be rebuilt from default values to prevent an old/outdated
+            // translation being used.
+            if (File.Exists(fullPath) && translationsLanguageCode != "en")
             {
                 var input = File.ReadAllText(fullPath);
 
