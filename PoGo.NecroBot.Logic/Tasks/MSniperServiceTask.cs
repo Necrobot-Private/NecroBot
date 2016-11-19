@@ -1,13 +1,10 @@
 ﻿using GeoCoordinatePortable;
 using Microsoft.AspNet.SignalR.Client;
 using Newtonsoft.Json;
-using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Exceptions;
 using PoGo.NecroBot.Logic.Logging;
-using PoGo.NecroBot.Logic.Model;
 using PoGo.NecroBot.Logic.Model.Settings;
-using PoGo.NecroBot.Logic.PoGoUtils;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Utils;
 using POGOProtos.Data;
@@ -27,14 +24,25 @@ namespace PoGo.NecroBot.Logic.Tasks
 {
     public static class MSniperServiceTask
     {
-        #region signalr msniper service
+        #region Variables
 
+        public static List<EncounterInfo> LocationQueue = new List<EncounterInfo>();
+        public static List<string> VisitedEncounterIds = new List<string>();
+        private static List<MSniperInfo2> autoSnipePokemons = new List<MSniperInfo2>();
+        private static bool inProgress = false;
+        private static DateTime OutOffBallBlock = DateTime.MinValue;
         public static bool isConnected = false;
         public static double minIvPercent = 0.0;//no iv filter
         private static string _botIdentiy;
         private static HubConnection _connection;
         private static IHubProxy _msniperHub;
         private static string _msniperServiceUrl = "http://msniper.com/signalr";
+
+        #endregion Variables
+
+        #region signalr msniper service
+
+
         public static void ConnectToService()
         {
             while (true)
@@ -88,11 +96,14 @@ namespace PoGo.NecroBot.Logic.Tasks
                         RefreshLocationQueue();
                         if (LocationQueue.Count > 0)
                         {
-                            LocationQueue = LocationQueue.OrderByDescending(p => p.Iv).ToList();
                             //Logger.Write($"pokemons are sending.. {LocationQueue.Count} count", LogLevel.Service);
-                            AddToVisited(LocationQueue.Select(p => p.GetEncounterId()).ToList());
-                            _msniperHub.Invoke("RecvPokemons", LocationQueue);
-                            LocationQueue.RemoveRange(0, LocationQueue.Count);
+                            var findingSendables = FindNew(LocationQueue);
+                            AddToVisited(findingSendables);
+                            _msniperHub.Invoke("RecvPokemons", findingSendables);
+                            findingSendables.ForEach(p =>
+                            {
+                                LocationQueue.Remove(p);
+                            });
                         }
                         break;
 
@@ -121,11 +132,12 @@ namespace PoGo.NecroBot.Logic.Tasks
         //{
         //    Logger.Write("reconnected", LogLevel.Service);
         //}
+
         #endregion signalr msniper service
 
         #region Classes
 
-        public class EncounterInfo : IDisposable
+        public class EncounterInfo : IEvent
         {
             public string EncounterId { get; set; }
             public long Expiration { get; set; }
@@ -134,15 +146,11 @@ namespace PoGo.NecroBot.Logic.Tasks
             public string Longitude { get; set; }
             public string Move1 { get; set; }
             public string Move2 { get; set; }
+            public int PokemonId { get; set; }
             public string PokemonName { get; set; }
             public string SpawnPointId { get; set; }
             //public long LastModifiedTimestampMs { get; set; }
-            public int TimeTillHiddenMs { get; set; }
-
-            public void Dispose()
-            {
-                GC.SuppressFinalize(this);
-            }
+            //public int TimeTillHiddenMs { get; set; }
 
             public ulong GetEncounterId()
             {
@@ -161,7 +169,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             public PokemonId GetPokemonName()
             {
-                return (PokemonId)Enum.Parse(typeof(PokemonId), PokemonName);
+                return (PokemonId)PokemonId;
             }
         }
 
@@ -188,69 +196,37 @@ namespace PoGo.NecroBot.Logic.Tasks
             public short PokemonId { get; set; }
             public string SpawnPointId { get; set; }
         }
+
         #endregion Classes
 
-        #region Variables
-
-        public static List<EncounterInfo> LocationQueue = new List<EncounterInfo>();
-        public static List<ulong> VisitedEncounterIds = new List<ulong>();
-        private static List<MSniperInfo2> autoSnipePokemons = new List<MSniperInfo2>();
-        private static bool inProgress = false;
-        private static DateTime OutOffBallBlock = DateTime.MinValue;
-
-        #endregion Variables
 
         #region MSniper Location Feeder
 
-        public static void AddToList(ISession session, EncounterResponse eresponse)
+        public static void AddToList(IEvent evt)
         {
-            if ((PokemonGradeHelper.GetPokemonGrade(eresponse.WildPokemon.PokemonData.PokemonId) == PokemonGrades.VeryRare ||
-                 PokemonGradeHelper.GetPokemonGrade(eresponse.WildPokemon.PokemonData.PokemonId) == PokemonGrades.Epic ||
-                 PokemonGradeHelper.GetPokemonGrade(eresponse.WildPokemon.PokemonData.PokemonId) == PokemonGrades.Legendary))
+            if (evt is EncounterInfo)
             {
-                //access for rare pokemons
-            }
-            else if (PokemonInfo.CalculatePokemonPerfection(eresponse.WildPokemon.PokemonData) < minIvPercent)
-            {
-                return;
-            }
-
-            if (LocationQueue.FirstOrDefault(p => p.EncounterId == eresponse.WildPokemon.EncounterId.ToString()) != null)
-            {
-                return;
-            }
-
-            using (var newdata = new EncounterInfo())
-            {
-                newdata.EncounterId = eresponse.WildPokemon.EncounterId.ToString();
-                newdata.Iv = Math.Round(PokemonInfo.CalculatePokemonPerfection(eresponse.WildPokemon.PokemonData), 2);
-                newdata.Latitude = eresponse.WildPokemon.Latitude.ToString("G17", CultureInfo.InvariantCulture);
-                newdata.Longitude = eresponse.WildPokemon.Longitude.ToString("G17", CultureInfo.InvariantCulture);
-                newdata.PokemonName = eresponse.WildPokemon.PokemonData.PokemonId.ToString();
-                newdata.SpawnPointId = eresponse.WildPokemon.SpawnPointId;
-                newdata.Move1 = eresponse.WildPokemon.PokemonData.Move1.ToString();
-                newdata.Move2 = eresponse.WildPokemon.PokemonData.Move2.ToString();
-
-                newdata.TimeTillHiddenMs = eresponse.WildPokemon.TimeTillHiddenMs;
-                if (newdata.TimeTillHiddenMs == 0)
+                var xx = TimeStampToDateTime((evt as EncounterInfo).Expiration);
+                var ff = DateTime.Now;
+                if ((ff - xx).TotalMinutes < 1)
                 {
-                    Random rn = new Random();
-                    newdata.TimeTillHiddenMs = rn.Next(450, 481) * 1000;
+                    (evt as EncounterInfo).Expiration += 500000;
+                    LocationQueue.Add(evt as EncounterInfo);
                 }
-                newdata.Expiration = eresponse.WildPokemon.LastModifiedTimestampMs + newdata.TimeTillHiddenMs;
-
-                LocationQueue.Add(newdata);
+                else
+                {
+                    //we need exact expiry time,so here is disabled
+                }
             }
         }
 
-        public static void AddToVisited(List<ulong> encounterIds)
+        public static void AddToVisited(List<EncounterInfo> encounterIds)
         {
             encounterIds.ForEach(p =>
             {
-                if (!VisitedEncounterIds.Contains(p))
-                {
-                    VisitedEncounterIds.Add(p);
-                }
+                string query = $"{p.EncounterId}-{p.SpawnPointId}";
+                if (!VisitedEncounterIds.Contains(query))
+                    VisitedEncounterIds.Add(query);
             });
         }
 
@@ -311,12 +287,10 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static List<EncounterInfo> FindNew(List<EncounterInfo> received)
         {
             List<EncounterInfo> newOne = new List<EncounterInfo>();
-            received.ForEach(x =>
+            received.ForEach(p =>
             {
-                if (!VisitedEncounterIds.Contains(x.GetEncounterId()))
-                {
-                    newOne.Add(x);
-                }
+                if (!VisitedEncounterIds.Contains($"{p.EncounterId}-{p.SpawnPointId}"))
+                    newOne.Add(p);
             });
             return newOne;
         }
@@ -344,6 +318,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             if (OutOffBallBlock > DateTime.Now) return;
 
+            item.Iv = Math.Round(item.Iv, 2);
             SnipeFilter filter = new SnipeFilter()
             {
                 SnipeIV = session.LogicSettings.MinIVForAutoSnipe
@@ -395,7 +370,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         public static async Task Execute(ISession session, CancellationToken cancellationToken)
         {
-            ConnectToService();//run-time connection checker, not good but enough
+            if (session.LogicSettings.ActivateMSniper)
+                ConnectToService();//run-time connection checker, not good but enough
 
             if (inProgress || OutOffBallBlock > DateTime.Now)
                 return;

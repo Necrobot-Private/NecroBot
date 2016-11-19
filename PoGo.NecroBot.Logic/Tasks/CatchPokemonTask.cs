@@ -1,6 +1,7 @@
 ﻿#region using directives
 
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -183,6 +184,22 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 var distance = LocationUtils.CalculateDistanceInMeters(session.Client.CurrentLatitude,
                     session.Client.CurrentLongitude, latitude, longitude);
+                if (session.LogicSettings.ActivateMSniper)
+                {
+                    var newdata = new MSniperServiceTask.EncounterInfo();
+                    newdata.EncounterId = _encounterId.ToString();
+                    newdata.Iv = Math.Round(pokemonIv, 2);
+                    newdata.Latitude = latitude.ToString("G17", CultureInfo.InvariantCulture);
+                    newdata.Longitude = longitude.ToString("G17", CultureInfo.InvariantCulture);
+                    newdata.PokemonId = (int)(encounteredPokemon?.PokemonId ?? 0);
+                    newdata.PokemonName = encounteredPokemon?.PokemonId.ToString();
+                    newdata.SpawnPointId = _spawnPointId;
+                    newdata.Move1 = PokemonInfo.GetPokemonMove1(encounteredPokemon).ToString();
+                    newdata.Move2 = PokemonInfo.GetPokemonMove2(encounteredPokemon).ToString();
+                    newdata.Expiration = unixTimeStamp;
+
+                    session.EventDispatcher.Send(newdata);
+                }
 
                 DateTime expiredDate = new DateTime(1970, 1, 1, 0, 0, 0).AddMilliseconds(Convert.ToDouble(unixTimeStamp));
                 var encounterEV = new EncounteredEvent()
@@ -338,10 +355,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     };
 
                     lastThrow = caughtPokemonResponse.Status;       // sets lastThrow status
-
-                    // Only use EncounterResponse for MSnipe (no Incense or Lures)
-                    if (session.LogicSettings.ActivateMSniper && encounter is EncounterResponse)
-                        MSniperServiceTask.AddToList(session, encounter);
+                    
 
                     if (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess)
                     {
