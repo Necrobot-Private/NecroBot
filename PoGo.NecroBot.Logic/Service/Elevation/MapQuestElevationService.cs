@@ -70,6 +70,10 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
                     }
                 }
             }
+            catch(Exceptions.ActiveSwitchByRuleException ex)
+            {
+                throw ex;
+            }
             catch(Exception)
             {
                 // If we get here for any reason, then just drop down and return 0.

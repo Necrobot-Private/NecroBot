@@ -1,5 +1,6 @@
 ﻿using OfficeOpenXml;
 using OfficeOpenXml.DataValidation;
+using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.Model.Settings;
 using POGOProtos.Enums;
 using POGOProtos.Inventory.Item;
@@ -21,7 +22,6 @@ namespace PoGo.NecroBot.Logic.Utils
     {
         private static int OFFSET_START = 4;
         private static int COL_OFFSET = 9;
-
 
         public static void MigrateFromObject(GlobalSettings setting, string destination)
         {
@@ -165,66 +165,91 @@ namespace PoGo.NecroBot.Logic.Utils
         {
             foreach (var cfg in configProp.GetType().GetFields())
             {
-                var att2 = cfg.GetCustomAttributes(typeof(ExcelConfigAttribute), true).FirstOrDefault();
-                if (att2 != null)
-                {
-                    var exAtt = att2 as ExcelConfigAttribute;
-                    string configKey = string.IsNullOrEmpty(exAtt.Key) ? cfg.Name : exAtt.Key;
-                    var propValue = cfg.GetValue(configProp);
-                    workSheet.Cells[exAtt.Position + OFFSET_START, 1].Value = configKey;
-                    workSheet.Cells[exAtt.Position + OFFSET_START, 2].Value = propValue;
-                    workSheet.Cells[exAtt.Position + OFFSET_START, 2].Style.Locked = false;
-                    workSheet.Cells[exAtt.Position + OFFSET_START, 2].Style.Font.Bold = true;
-                    workSheet.Cells[exAtt.Position + OFFSET_START, 2].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                    workSheet.Cells[exAtt.Position + OFFSET_START, 3].Value = exAtt.Description;
-                    workSheet.Cells[exAtt.Position + OFFSET_START, 3].Style.Locked = false;
-                    workSheet.Cells[exAtt.Position + OFFSET_START, 1].AutoFitColumns();
-                    workSheet.Cells[exAtt.Position + OFFSET_START, 2].AutoFitColumns();
-                    workSheet.Cells[exAtt.Position + OFFSET_START, 3].AutoFitColumns();
-                    //AddValidationForType(workSheet, cfg, $"B{exAtt.Position + OFFSET_START}");
-                    if (propValue is Boolean)
-                    {
-                        var validation = workSheet.DataValidations.AddListValidation($"B{exAtt.Position + OFFSET_START}");
-                        validation.ShowErrorMessage = true;
-                        validation.ErrorStyle = ExcelDataValidationWarningStyle.stop;
-                        validation.Error = "Please select from list";
-                        validation.ErrorTitle = $"{configKey} Validation";
-                        validation.Formula.Values.Add("TRUE");
-                        validation.Formula.Values.Add("FALSE");
-                        validation.PromptTitle = "Boolean only";
-                        validation.Prompt = "Only TRUE or FALSE are accepted";
-                        validation.ShowInputMessage = true;
-                        //data validation
-                    }
+                WriteOnePropertyToSheet(workSheet, configProp, cfg);
+            }
+            workSheet.Cells[workSheet.Dimension.Address].AutoFitColumns();
+        }
 
-                    if (propValue is int || propValue is double)
+        private static void WriteOnePropertyToSheet(ExcelWorksheet workSheet, object configProp, FieldInfo cfg)
+        {
+            var att2 = cfg.GetCustomAttributes(typeof(ExcelConfigAttribute), true).FirstOrDefault();
+            if (att2 != null)
+            {
+                var exAtt = att2 as ExcelConfigAttribute;
+                string configKey = string.IsNullOrEmpty(exAtt.Key) ? cfg.Name : exAtt.Key;
+                var propValue = cfg.GetValue(configProp);
+                workSheet.Cells[exAtt.Position + OFFSET_START, 1].Value = configKey;
+                workSheet.Cells[exAtt.Position + OFFSET_START, 2].Value = propValue;
+                workSheet.Cells[exAtt.Position + OFFSET_START, 2].Style.Locked = false;
+                workSheet.Cells[exAtt.Position + OFFSET_START, 2].Style.Font.Bold = true;
+                workSheet.Cells[exAtt.Position + OFFSET_START, 2].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                workSheet.Cells[exAtt.Position + OFFSET_START, 3].Value = exAtt.Description;
+                workSheet.Cells[exAtt.Position + OFFSET_START, 3].Style.Locked = false;
+                workSheet.Cells[exAtt.Position + OFFSET_START, 1].AutoFitColumns();
+                workSheet.Cells[exAtt.Position + OFFSET_START, 2].AutoFitColumns();
+                workSheet.Cells[exAtt.Position + OFFSET_START, 3].AutoFitColumns();
+                //AddValidationForType(workSheet, cfg, $"B{exAtt.Position + OFFSET_START}");
+                if (propValue is Boolean)
+                {
+                    var validation = workSheet.DataValidations.AddListValidation($"B{exAtt.Position + OFFSET_START}");
+                    validation.ShowErrorMessage = true;
+                    validation.ErrorStyle = ExcelDataValidationWarningStyle.stop;
+                    validation.Error = "Please select from list";
+                    validation.ErrorTitle = $"{configKey} Validation";
+                    validation.Formula.Values.Add("TRUE");
+                    validation.Formula.Values.Add("FALSE");
+                    validation.PromptTitle = "Boolean only";
+                    validation.Prompt = "Only TRUE or FALSE are accepted";
+                    validation.ShowInputMessage = true;
+                    //data validation
+                }
+
+                if (propValue is int || propValue is double)
+                {
+                    var validation = workSheet.DataValidations.AddIntegerValidation($"B{exAtt.Position + OFFSET_START}");
+                    validation.ShowErrorMessage = true;
+                    validation.Error = "Please enter a valid number";
+                    validation.ErrorTitle = $"{configKey} Validation";
+                    validation.ErrorStyle = ExcelDataValidationWarningStyle.stop;
+                    validation.PromptTitle = "Enter a integer value here";
+                    validation.Prompt = "Please enter a negative number here";
+                    validation.ShowInputMessage = true;
+                    validation.ShowErrorMessage = true;
+                    validation.Operator = ExcelDataValidationOperator.between;
+                    validation.Formula.Value = 0;
+                    validation.Formula2.Value = int.MaxValue;
+                    var range = cfg.GetCustomAttributes(typeof(RangeAttribute), true).Cast<RangeAttribute>().FirstOrDefault();
+                    if (range != null)
                     {
-                        var validation = workSheet.DataValidations.AddIntegerValidation($"B{exAtt.Position + OFFSET_START}");
-                        validation.ShowErrorMessage = true;
-                        validation.Error = "Please enter a valid number";
+                        validation.Formula.Value = (int)range.Minimum;
+                        validation.Formula2.Value = (int)range.Maximum;
+                        validation.Prompt = $"Please enter a valid number from {validation.Formula.Value} to {validation.Formula2.Value}";
+                        validation.Error = $"Please enter a valid number from {validation.Formula.Value} to {validation.Formula2.Value}";
+                    }
+                }
+                if (propValue is string)
+                {
+                    var maxLength = cfg.GetCustomAttributes(typeof(MaxLengthAttribute), true).Cast<MaxLengthAttribute>().FirstOrDefault();
+                    var minLength = cfg.GetCustomAttributes(typeof(MinLengthAttribute), true).Cast<MinLengthAttribute>().FirstOrDefault();
+                    if (maxLength != null && minLength != null)
+                    {
+                        var validation = workSheet.DataValidations.AddTextLengthValidation($"B{exAtt.Position + OFFSET_START}");
                         validation.ErrorTitle = $"{configKey} Validation";
                         validation.ErrorStyle = ExcelDataValidationWarningStyle.stop;
-                        validation.PromptTitle = "Enter a integer value here";
-                        validation.Prompt = "Please enter a negative number here";
+                        validation.PromptTitle = "String Validation";
                         validation.ShowInputMessage = true;
                         validation.ShowErrorMessage = true;
+
+                        validation.Error = $"Please enter a string from {minLength.Length} to {maxLength.Length} characters";
+                        validation.Prompt = $"Please enter a string from {minLength.Length} to {maxLength.Length} characters";
+
                         validation.Operator = ExcelDataValidationOperator.between;
-                        validation.Formula.Value = 0;
-                        validation.Formula2.Value = int.MaxValue;
-                        var range = cfg.GetCustomAttributes(typeof(RangeAttribute), true).Cast<RangeAttribute>().FirstOrDefault();
-                        if (range != null)
-                        {
-                            validation.Formula.Value = (int)range.Minimum;
-                            validation.Formula2.Value = (int)range.Maximum;
-                            validation.Prompt = $"Please enter a valid number from {validation.Formula.Value} to {validation.Formula2.Value}";
-                            validation.Error = $"Please enter a valid number from {validation.Formula.Value} to {validation.Formula2.Value}";
-                        }
+                        validation.Formula.Value = minLength.Length;
+                        validation.Formula2.Value = maxLength.Length;
                     }
-                    if (propValue is string)
+                    else
                     {
-                        var maxLength = cfg.GetCustomAttributes(typeof(MaxLengthAttribute), true).Cast<MaxLengthAttribute>().FirstOrDefault();
-                        var minLength = cfg.GetCustomAttributes(typeof(MinLengthAttribute), true).Cast<MinLengthAttribute>().FirstOrDefault();
-                        if (maxLength != null && minLength != null)
+                        if (minLength != null)
                         {
                             var validation = workSheet.DataValidations.AddTextLengthValidation($"B{exAtt.Position + OFFSET_START}");
                             validation.ErrorTitle = $"{configKey} Validation";
@@ -233,56 +258,36 @@ namespace PoGo.NecroBot.Logic.Utils
                             validation.ShowInputMessage = true;
                             validation.ShowErrorMessage = true;
 
-                            validation.Error = $"Please enter a string from {minLength.Length} to {maxLength.Length} characters";
-                            validation.Prompt = $"Please enter a string from {minLength.Length} to {maxLength.Length} characters";
+                            validation.Error = $"Please enter a string atleast {minLength.Length} characters";
+                            validation.Prompt = $"Please enter a string atleast {minLength.Length} characters";
 
-                            validation.Operator = ExcelDataValidationOperator.between;
+                            validation.Operator = ExcelDataValidationOperator.greaterThan;
                             validation.Formula.Value = minLength.Length;
-                            validation.Formula2.Value = maxLength.Length;
                         }
-                        else
-                        {
-                            if (minLength != null)
-                            {
-                                var validation = workSheet.DataValidations.AddTextLengthValidation($"B{exAtt.Position + OFFSET_START}");
-                                validation.ErrorTitle = $"{configKey} Validation";
-                                validation.ErrorStyle = ExcelDataValidationWarningStyle.stop;
-                                validation.PromptTitle = "String Validation";
-                                validation.ShowInputMessage = true;
-                                validation.ShowErrorMessage = true;
-
-                                validation.Error = $"Please enter a string atleast {minLength.Length} characters";
-                                validation.Prompt = $"Please enter a string atleast {minLength.Length} characters";
-
-                                validation.Operator = ExcelDataValidationOperator.greaterThan;
-                                validation.Formula.Value = minLength.Length;
-                            }
-                        }
-
                     }
-                    var enumDataType = cfg.GetCustomAttributes(typeof(EnumDataTypeAttribute), true).Cast<EnumDataTypeAttribute>().FirstOrDefault();
-                    if (enumDataType != null)
+
+                }
+                var enumDataType = cfg.GetCustomAttributes(typeof(EnumDataTypeAttribute), true).Cast<EnumDataTypeAttribute>().FirstOrDefault();
+                if (enumDataType != null)
+                {
+                    var validation = workSheet.DataValidations.AddListValidation($"B{exAtt.Position + OFFSET_START}");
+                    validation.ErrorTitle = $"{configKey} Validation";
+                    validation.ErrorStyle = ExcelDataValidationWarningStyle.stop;
+                    validation.PromptTitle = $"{configKey} Validation";
+                    validation.ShowInputMessage = true;
+                    validation.ShowErrorMessage = true;
+
+                    List<string> values = new List<string>();
+                    foreach (var v in Enum.GetValues(enumDataType.EnumType))
                     {
-                        var validation = workSheet.DataValidations.AddListValidation($"B{exAtt.Position + OFFSET_START}");
-                        validation.ErrorTitle = $"{configKey} Validation";
-                        validation.ErrorStyle = ExcelDataValidationWarningStyle.stop;
-                        validation.PromptTitle = $"{configKey} Validation";
-                        validation.ShowInputMessage = true;
-                        validation.ShowErrorMessage = true;
-
-                        List<string> values = new List<string>();
-                        foreach (var v in Enum.GetValues(enumDataType.EnumType))
-                        {
-                            validation.Formula.Values.Add(v.ToString());
-                            values.Add(v.ToString());
-                        }
-                        string value = String.Join(",", values);
-                        validation.Error = $"Please select data from a list: {value}";
-                        validation.Prompt = $"Please select data from a list: {value}";
+                        validation.Formula.Values.Add(v.ToString());
+                        values.Add(v.ToString());
                     }
+                    string value = String.Join(",", values);
+                    validation.Error = $"Please select data from a list: {value}";
+                    validation.Prompt = $"Please select data from a list: {value}";
                 }
             }
-            workSheet.Cells[workSheet.Dimension.Address].AutoFitColumns();
         }
 
         public static string GetCol(int col)
@@ -317,7 +322,6 @@ namespace PoGo.NecroBot.Logic.Utils
                         workSheet.Cells[4, colIndex].Value = att1 == null ? vtp.Name : att1.Key;
                         if (att1 != null)
                         {
-
                             workSheet.Cells[4, colIndex].AddComment(att1.Description, "necrobot2");
                             AddValidationForType(workSheet, vtp, $"{GetCol(colIndex)}5:{GetCol(colIndex)}155");
                         }
@@ -441,6 +445,21 @@ namespace PoGo.NecroBot.Logic.Utils
         }
         public static GlobalSettings ReadExcel(GlobalSettings setting, string configFile)
         {
+            if(File.Exists(configFile +".tmp"))
+            {
+                //need rename the config.xlsm by the .tmp file 
+                try
+                {
+                    File.Delete(configFile);//remove existing config file
+                    File.Move(configFile + ".tmp", configFile);
+                    //File.Delete(configFile + ".tmp");
+                }
+                catch (Exception )
+                {
+                    Logger.Write("Seem that you are opening config.xlsm, You need to close it for migration new config.");
+                }
+            }
+            bool needSave = false;
             using (FileStream stream = File.Open(configFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             using (var package = new ExcelPackage(stream))
             {
@@ -471,7 +490,7 @@ namespace PoGo.NecroBot.Logic.Utils
                                 if (peAtt != null)
                                 {
                                     string key = string.IsNullOrEmpty(peAtt.Key) ? cfg.Name : peAtt.Key;
-                                    string keyFromExcel = ws.Cells[$"A{peAtt.Position + OFFSET_START}"].Value.ToString();
+                                    string keyFromExcel = ws.Cells[$"A{peAtt.Position + OFFSET_START}"].GetValue<string>();
                                     if (keyFromExcel == key)
                                     {
                                         var value = ws.Cells[$"B{peAtt.Position + OFFSET_START}"].Value;
@@ -479,8 +498,9 @@ namespace PoGo.NecroBot.Logic.Utils
                                         cfg.SetValue(configProp, convertedValue);
                                     }
                                     else
-                                    {
-                                        throw new Exception($"Invalid excel config for {att.SheetName}-> {key}");
+                                    {    //migrate config
+                                        needSave = true;
+                                        WriteOnePropertyToSheet(ws, configProp, cfg);
                                     }
                                 }
                             }
@@ -491,9 +511,12 @@ namespace PoGo.NecroBot.Logic.Utils
                 }
                 var pkmSheet = package.Workbook.Worksheets["Pokemons"];
                 setting.ItemRecycleFilter = ReadItemRecycleFilter(package);
-
+                if (needSave || hasUpdate)
+                {
+                    package.SaveAs(new FileInfo(configFile +".tmp"));  //use to migrate new config, hack hack hack
+                }
             }
-
+           
             return ConvertToBackwardCompitable(setting);
         }
 
@@ -513,8 +536,10 @@ namespace PoGo.NecroBot.Logic.Utils
 
         }
 
+        private static bool hasUpdate;
         private static Dictionary<PokemonId, T> ReadSheetAsDictionary<T>(ExcelWorksheet ws)
         {
+            hasUpdate = hasUpdate || SyncHeader<T>(ws);
             Dictionary<PokemonId, T> results = new Dictionary<PokemonId, T>();
             for (int i = 5; i <= 155; i++)
             {
@@ -529,8 +554,8 @@ namespace PoGo.NecroBot.Logic.Utils
                     if (attr != null)
                     {
                         var celvalue = ws.Cells[i, COL_OFFSET + attr.Position].Value;
-                        if (celvalue == null && attr.IsPrimaryKey) break;
-
+                        if (celvalue == null && attr.IsPrimaryKey) continue;
+                        
                         if (celvalue != null)
                         {
                             if (prop.PropertyType == typeof(List<List<PokemonMove>>) && celvalue != null)
@@ -545,12 +570,42 @@ namespace PoGo.NecroBot.Logic.Utils
                                     results.Add(pokemonId, obj);
                                 }
                             }
-                            
                         }
+                        else
+                        {
+                                ws.Cells[i, COL_OFFSET + attr.Position].Value = prop.GetValue(obj);
+                        }
+
                     }
                 }
             }
             return results;
+        }
+
+        private static bool SyncHeader<T>(ExcelWorksheet ws)
+        {
+            bool needUpdate = false;
+            var type = typeof(T);
+            foreach (var fi in type.GetProperties())
+            {
+                var attr = fi.GetCustomAttributes<ExcelConfigAttribute>(true).FirstOrDefault();
+                if (attr != null)
+                {
+                    var cell = ws.Cells[4, attr.Position + COL_OFFSET];
+
+                    var cellHeader = ws.Cells[4, attr.Position + COL_OFFSET].Value;
+                    if (cellHeader != null) {
+                        cell.Value = attr.Key;
+                    }
+                    else
+                    {
+                        needUpdate = true;
+                        cell.Value = attr.Key;
+                        AddValidationForType(ws, fi, $"{GetCol(attr.Position + COL_OFFSET)}5:{GetCol(attr.Position + COL_OFFSET)}155");
+                    }
+                }
+            }
+            return needUpdate;
         }
 
         private static List<ItemRecycleFilter> ReadItemRecycleFilter(ExcelPackage package)
