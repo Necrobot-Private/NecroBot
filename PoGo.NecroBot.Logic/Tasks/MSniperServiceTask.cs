@@ -378,10 +378,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (inProgress || OutOffBallBlock > DateTime.Now)
                 return;
             inProgress = true;
-
-            if (session.LogicSettings.ActivateMSniper)
-                ConnectToService();//run-time connection checker, not good but enough
-
+            
             var pth = Path.Combine(Directory.GetCurrentDirectory(), "SnipeMS.json");
             try
             {
