@@ -15,5 +15,12 @@
   "devDependencies": {
     "electron": "^1.4.7",
     "electron-packager": "^8.3.0"
+  },
+  "scripts": {
+    "pack": "build --dir",
+    "dist": "build"
+  },
+  "build": {
+    "appId": "necrobot2.gui",
   }
 }
