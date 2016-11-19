@@ -411,15 +411,16 @@ namespace PoGo.NecroBot.Logic.Tasks
             } while (fortTry < retryNumber - zeroCheck);
             //Stop trying if softban is cleaned earlier or if 40 times fort looting failed.
 
-            if(fortTry >= retryNumber - zeroCheck)
+            if (MultipleBotConfig.IsMultiBotActive(session.LogicSettings))
             {
+                if (fortTry >= retryNumber - zeroCheck)
+                {
                 softbanCount++;
 
                 //only check if PokestopSoftbanCount > 0
                 if (MultipleBotConfig.IsMultiBotActive(session.LogicSettings) && 
                     session.LogicSettings.MultipleBotConfig.PokestopSoftbanCount >0 && 
                     session.LogicSettings.MultipleBotConfig.PokestopSoftbanCount <= softbanCount)
-                {
                     softbanCount = 0;
                     session.CancellationTokenSource.Cancel();
 
@@ -435,6 +436,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 softbanCount = 0; //reset softban count
             }
+
             if (session.LogicSettings.RandomlyPauseAtStops && !doNotRetry)
             {
                 if (++_randomStop >= _randomNumber)
