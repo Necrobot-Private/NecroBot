@@ -54,6 +54,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Thread.Sleep(10000);
                         _connection = new HubConnection(_msniperServiceUrl, useDefaultUrl: false);
                         _msniperHub = _connection.CreateHubProxy("msniperHub");
+                        _msniperHub.On<MSniperInfo2>("msvc", p =>
+                        {
+                            autoSnipePokemons.Add(p);
+                        });
                         _connection.Received += Connection_Received;
                         _connection.Reconnecting += Connection_Reconnecting;
                         //_connection.Reconnected += Connection_Reconnected;
