@@ -111,6 +111,7 @@ namespace PoGo.NecroBot.Logic.Common
         LookingForIncensePokemon,
         PokemonSkipped,
         ZeroPokeballInv,
+        CatchPokemonDisable,
         CurrentPokeballInv,
         CurrentPotionInv,
         CurrentReviveInv,
@@ -373,7 +374,7 @@ namespace PoGo.NecroBot.Logic.Common
             new KeyValuePair<TranslationString, string>(TranslationString.LogEntrySoftBan, "SOFTBAN"),
             new KeyValuePair<TranslationString, string>(TranslationString.LoggingIn, "Logging in using {0}"),
             new KeyValuePair<TranslationString, string>(TranslationString.PtcOffline,
-                "PTC Servers are probably down OR your credentials are wrong. Try google"),
+                "PTC Servers are probably down OR your credentials are wrong."),
             new KeyValuePair<TranslationString, string>(TranslationString.AccessTokenExpired,
                 "PTC Login Token expired. Relogging..."),
             new KeyValuePair<TranslationString, string>(TranslationString.InvalidResponse,
@@ -417,7 +418,7 @@ namespace PoGo.NecroBot.Logic.Common
                 "Looking for lure Pokemon..."),
             new KeyValuePair<TranslationString, string>(TranslationString.PokemonSkipped, "Skipped {0}"),
             new KeyValuePair<TranslationString, string>(TranslationString.ZeroPokeballInv,
-                "You have no pokeballs in your inventory, no more Pokemon can be caught!"),
+                "You have no pokeballs in your inventory, no more Pokemon can be caught!. Bot will ignore catch pokemon for {0} minute(s)"),
             new KeyValuePair<TranslationString, string>(TranslationString.CurrentPokeballInv,
                 "Pokeballs: {0} | Greatballs: {1} | Ultraballs: {2} | Masterballs: {3}"),
             new KeyValuePair<TranslationString, string>(TranslationString.CurrentPotionInv,
@@ -604,7 +605,8 @@ namespace PoGo.NecroBot.Logic.Common
             new KeyValuePair<TranslationString, string>(TranslationString.HumanWalkSnipePokemonEncountered, "(HUMAN WALK) Encountered {0}  | lat :{1} , Lng : {2} | removed from snipping list"),
             new KeyValuePair<TranslationString, string>(TranslationString.MinimumClientVersionException, "(KILLSWITCH) We have detected a Pokemon API change. The bot emulates API version {0}, which is no longer supported.  Minimum API version is now {1}."),
             new KeyValuePair<TranslationString, string>(TranslationString.ExitNowAfterEnterKey, "The bot will now exit after hitting the enter key."),
-            new KeyValuePair<TranslationString, string>(TranslationString.CaptchaShown, "Captcha is being shown and will need to be solved.")
+            new KeyValuePair<TranslationString, string>(TranslationString.CaptchaShown, "Captcha is being shown and will need to be solved."),
+            new KeyValuePair<TranslationString, string>(TranslationString.CatchPokemonDisable,"Pokeball too low, bot will temporary disable catching wild pokemon for {0} min  or until you has {1} ball in bag") 
         };
 
         [JsonProperty("PokemonStrings",

@@ -137,9 +137,13 @@ namespace PoGo.NecroBot.Logic
 
                         }).ToList();
             }
-            catch (Exception e)
+            catch(Exceptions.ActiveSwitchByRuleException e)
             {
                 throw e;
+            }
+            catch (Exception e)
+            {
+                //throw e; 
             }
 
             var myPokemonSettings = await GetPokemonSettings();

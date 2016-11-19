@@ -79,9 +79,12 @@ namespace PoGo.NecroBot.Logic.Service
                     return GoogleWalk.Get(googleResult);
                 }
             }
-            catch(Exception)
+            catch (Exceptions.ActiveSwitchByRuleException ex)
             {
-
+                throw ex;
+            }
+            catch (Exception)
+            {
             }
             return null;
         }

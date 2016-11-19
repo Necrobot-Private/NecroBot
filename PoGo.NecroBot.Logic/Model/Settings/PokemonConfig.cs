@@ -357,5 +357,17 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [Range(0, 99999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 58)]
         public int DelayBetweenPokemonUpgrade = 10000;
+
+        [DefaultValue(5)]
+        [ExcelConfig(Description = "Temporary disable catch pokemon for certain minutes if bot run out of balls", Position = 59)]
+        [Range(0, 120)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 59)]
+        public int OutOfBallCatchBlockTime = 5;
+
+        [DefaultValue(50)]
+        [ExcelConfig(Description = "Number of balls you want to save for snipe or manual play - it mean if total ball less than this value, catch pokemon will be deactive", Position = 60)]
+        [Range(0, 999)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 60)]
+        public int PokeballToKeepForSnipe = 50;
     }
 }

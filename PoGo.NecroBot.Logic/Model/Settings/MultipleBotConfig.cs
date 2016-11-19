@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using PoGo.NecroBot.Logic.Interfaces.Configuration;
 using POGOProtos.Enums;
 using System;
 using System.Collections.Generic;
@@ -118,15 +119,29 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [DefaultValue(100)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 6)]
         public int PokemonPerHourSwitch = 100; //only apply if runtime > 1h. 
+
         [ExcelConfig(Description = "Tell bot to start at default location", Position = 8)]
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 7)]
 
         public bool StartFromDefaultLocation = true; //only apply if runtime > 1h. 
-        
+
+
+        [ExcelConfig(Description = "How many time pokestop softban triger bot switch, 0 is mean doesn't not switch", Position = 9)]
+        [DefaultValue(5)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 7)]
+        [Range(0, 100)]
+        public int PokestopSoftbanCount = 5; //only apply if runtime > 1h. 
+
+
         public static MultipleBotConfig Default()
         {
             return new MultipleBotConfig();
+        }
+
+        public static bool IsMultiBotActive(ILogicSettings logicSettings)
+        {
+            return logicSettings.AllowMultipleBot && logicSettings.Bots != null && logicSettings.Bots.Count > 1;
         }
     }
 }

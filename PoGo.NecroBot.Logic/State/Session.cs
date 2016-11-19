@@ -36,7 +36,7 @@ namespace PoGo.NecroBot.Logic.State
         IElevationService ElevationService { get; set; }
         List<FortData> Forts { get; set; }
         List<FortData> VisibleForts { get; set; }
-        void ResetSessionToWithNextBot(AuthConfig authConfig=null,double lat = 0, double lng = 0, double att = 0);
+        void ResetSessionToWithNextBot(AuthConfig authConfig = null, double lat = 0, double lng = 0, double att = 0);
         void AddForts(List<FortData> mapObjects);
         void AddVisibleForts(List<FortData> mapObjects);
         Task<bool> WaitUntilActionAccept(BotActions action, int timeout = 30000);
@@ -45,6 +45,7 @@ namespace PoGo.NecroBot.Logic.State
         MemoryCache Cache { get; set; }
         List<AuthConfig> Accounts { get; }
         DateTime LoggedTime { get; set; }
+        DateTime CatchBlockTime { get; set; }
 
         void BlockCurrentBot(int expired = 15);
     }
@@ -69,7 +70,7 @@ namespace PoGo.NecroBot.Logic.State
             this.LogicSettings = logicSettings;
 
             this.ElevationService = elevationService;
-            
+
             this.Settings = settings;
 
             this.Translation = translation;
@@ -116,7 +117,7 @@ namespace PoGo.NecroBot.Logic.State
         public IElevationService ElevationService { get; set; }
         public CancellationTokenSource CancellationTokenSource { get; set; }
         public MemoryCache Cache { get; set; }
-	public List<AuthConfig> Accounts
+        public List<AuthConfig> Accounts
         {
             get
             {
@@ -124,6 +125,7 @@ namespace PoGo.NecroBot.Logic.State
             }
         }
 
+        public DateTime CatchBlockTime { get; set; }
         private List<BotActions> botActions = new List<BotActions>();
         public void Reset(ISettings settings, ILogicSettings logicSettings)
         {
@@ -135,14 +137,16 @@ namespace PoGo.NecroBot.Logic.State
                 (lat, lng) => this.EventDispatcher.Send(new UpdatePositionEvent { Latitude = lat, Longitude = lng });
         }
 
-        public void ResetSessionToWithNextBot(AuthConfig bot = null, double lat=0, double lng=0, double att=0)
+        public void ResetSessionToWithNextBot(AuthConfig bot = null, double lat = 0, double lng = 0, double att = 0)
         {
+            this.CatchBlockTime = DateTime.Now; //remove any block
+            
             var currentAccount = this.accounts.FirstOrDefault(x => (x.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Ptc && x.PtcUsername == this.Settings.PtcUsername) ||
                                         (x.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Google && x.GoogleUsername == this.Settings.GoogleUsername));
             currentAccount.RuntimeTotal += (DateTime.Now - LoggedTime).TotalMinutes;
-            this.accounts = this.accounts.OrderByDescending(p=>p.RuntimeTotal).ToList();
+            this.accounts = this.accounts.OrderByDescending(p => p.RuntimeTotal).ToList();
 
-            var nextBot = bot != null? bot : this.accounts.LastOrDefault(p=>p != currentAccount && p.ReleaseBlockTime< DateTime.Now);
+            var nextBot = bot != null ? bot : this.accounts.LastOrDefault(p => p != currentAccount && p.ReleaseBlockTime < DateTime.Now);
             if (nextBot != null)
             {
                 this.Settings.AuthType = nextBot.AuthType;

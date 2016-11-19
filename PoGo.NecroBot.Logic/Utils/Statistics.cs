@@ -11,6 +11,7 @@ using PoGo.NecroBot.Logic.State;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Networking.Responses;
 using PoGo.NecroBot.Logic.Exceptions;
+using PoGo.NecroBot.Logic.Model.Settings;
 
 #endregion
 
@@ -45,13 +46,14 @@ namespace PoGo.NecroBot.Logic.Utils
 
         public void OnStatisticChanged(ISession session)
         {
-
-            var config = session.LogicSettings.MultipleBotConfig;
-            if (session.LogicSettings.AllowMultipleBot)
+            if (MultipleBotConfig.IsMultiBotActive(session.LogicSettings))
             {
+                var config = session.LogicSettings.MultipleBotConfig;
+
                 if (config.PokestopSwitch > 0 && config.PokestopSwitch <= this.TotalPokestops)
                 {
                     session.CancellationTokenSource.Cancel();
+                    
                     //Activate switcher by pokestop
                     throw new ActiveSwitchByRuleException()
                     {

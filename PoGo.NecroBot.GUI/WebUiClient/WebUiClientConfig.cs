@@ -30,7 +30,7 @@ namespace PoGo.NecroBot.GUI.WebUiClient
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore, Order = 3)]
         public Dictionary<string, WebUiClient> WebUiClients = new Dictionary<string, WebUiClient>
         {
-            { "PokeEase Fork By NecroBot2 Team", new WebUiClient("jjskuld", "PokeEase", "public", "index.html", "2.0.1")},
+            { "PokeEase Fork By NecroBot2 Team", new WebUiClient("Necrobot-Private", "PokeEase", "public", "index.html", "2.0.1")},
             { "PokeEase", new WebUiClient("GediminasMasaitis", "PokeEase", "src", "PokeEase.html", "master")},
            // {"NecrobotVisualizer", new WebUiClient("nicoschmitt", "necrobotvisualizer", "app", "index.html", "master")},
            // {"NecrobotJavanHawk", new WebUiClient("AndikaTanpaH", "NecrobotJavanHawk", "app", "index.html", "master")}

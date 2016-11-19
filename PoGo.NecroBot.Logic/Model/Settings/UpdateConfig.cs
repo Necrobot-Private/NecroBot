@@ -6,7 +6,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
     [JsonObject(Title = "Update Config", Description = "Set your update settings.", ItemRequired = Required.DisallowNull)]
     public class UpdateConfig
     {
-        public const int CURRENT_SCHEMA_VERSION = 3;
+        public const int CURRENT_SCHEMA_VERSION = 5;
 
         [DefaultValue(CURRENT_SCHEMA_VERSION)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
