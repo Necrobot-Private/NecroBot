@@ -37,6 +37,10 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore, Order = 3)]
         public DeviceConfig DeviceConfig = new DeviceConfig();
 
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 4)]
+        [DefaultValue(false)]
+        public bool AllowMultipleBot = false;
+
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Ignore, Order = 5)]
         public List<AuthConfig> Bots= new List<AuthConfig>();
 
@@ -303,9 +307,6 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                         settings["DeviceConfig"]["FirmwareFingerprint"] = null;
                         break;
 
-                    case 4:
-                        ((JObject)settings).Remove("AllowMultipleBot");
-                        break;
                     // Add more here.
                 }
             }

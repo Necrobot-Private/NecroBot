@@ -230,5 +230,6 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         MultipleBotConfig MultipleBotConfig { get; }
         int GymCollectRewardAfter { get; }
         List<AuthConfig> Bots { get; }
+        bool AllowMultipleBot { get; }
     }
 }
