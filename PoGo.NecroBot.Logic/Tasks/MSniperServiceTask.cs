@@ -36,7 +36,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         private static string _botIdentiy;
         private static HubConnection _connection;
         private static IHubProxy _msniperHub;
-        private static string _msniperServiceUrl = "http://localhost:55774/signalr";
+        private static string _msniperServiceUrl = "http://msniper.com/signalr";
 
         #endregion Variables
 
