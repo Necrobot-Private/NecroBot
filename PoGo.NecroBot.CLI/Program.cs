@@ -324,6 +324,7 @@ namespace PoGo.NecroBot.CLI
             if (_session.LogicSettings.ActivateMSniper)
             {
                 MSniperServiceTask.ConnectToService();
+                _session.EventDispatcher.EventReceived += evt => MSniperServiceTask.AddToList(evt);
             }
             QuitEvent.WaitOne();
         }
