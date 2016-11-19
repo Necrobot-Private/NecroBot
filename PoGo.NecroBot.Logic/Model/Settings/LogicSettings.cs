@@ -28,6 +28,10 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool AutoUpdate => _settings.UpdateConfig.AutoUpdate;
         public bool UseWebsocket => _settings.WebsocketsConfig.UseWebsocket;
         public bool CatchPokemon => _settings.PokemonConfig.CatchPokemon;
+        public int OutOfBallCatchBlockTime => _settings.PokemonConfig.OutOfBallCatchBlockTime;
+        public int PokeballToKeepForSnipe => _settings.PokemonConfig.PokeballToKeepForSnipe;
+        public int PokeballsToKeepForSnipe => _settings.PokemonConfig.PokeballToKeepForSnipe;
+
         public int CatchPokemonLimit => _settings.PokemonConfig.CatchPokemonLimit;
         public int CatchPokemonLimitMinutes => _settings.PokemonConfig.CatchPokemonLimitMinutes;
         public int PokeStopLimit => _settings.PokeStopConfig.PokeStopLimit;
@@ -235,7 +239,6 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool AllowMultipleBot => _settings.Auth.AllowMultipleBot;
         public int MinIVForAutoSnipe => _settings.SnipeConfig.MinIVForAutoSnipe;
         public Dictionary<PokemonId, BotSwitchPokemonFilter> BotSwitchPokemonFilters => _settings.BotSwitchPokemonFilters;
-
 
     }
 }

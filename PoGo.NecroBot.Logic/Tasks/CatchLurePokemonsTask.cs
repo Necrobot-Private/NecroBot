@@ -24,7 +24,8 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static async Task Execute(ISession session, FortData currentFortData, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            if (!session.LogicSettings.CatchPokemon) return;
+            if (!session.LogicSettings.CatchPokemon || 
+                session.CatchBlockTime > DateTime.Now) return;
 
             Logger.Write(session.Translation.GetTranslation(TranslationString.LookingForLurePokemon), LogLevel.Debug);
 

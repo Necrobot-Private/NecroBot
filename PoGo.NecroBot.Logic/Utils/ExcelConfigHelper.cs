@@ -460,7 +460,7 @@ namespace PoGo.NecroBot.Logic.Utils
                 }
             }
             bool needSave = false;
-            using (FileStream stream = File.Open(configFile, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
+            using (FileStream stream = File.Open(configFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             using (var package = new ExcelPackage(stream))
             {
                 foreach (var item in setting.GetType().GetFields())

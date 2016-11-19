@@ -314,6 +314,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                     new GeoCoordinate(lat, lon, session.Client.CurrentAltitude), 0);  // Speed set to 0 for random speed.
             }
 
+            if (encounter.Status == EncounterResponse.Types.Status.PokemonInventoryFull)
+            {
+                return false;
+            }
             PokemonData encounteredPokemon;
 
             // Catch if it's a WildPokemon (MSniping not allowed for Incense pokemons)
@@ -336,12 +340,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                 SpawnPointId = encounterId.SpawnPointId
             };
 
-            if (encounter.Status == EncounterResponse.Types.Status.PokemonInventoryFull)
-            {
-                return false;
-            }
-            await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, currentFortData: null, sessionAllowTransfer: true);
-            return true;
+           
+            return await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, currentFortData: null, sessionAllowTransfer: true);
         }
 
         public static List<EncounterInfo> FindNew(List<EncounterInfo> received)
@@ -612,7 +612,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         public static async Task Execute(ISession session, CancellationToken cancellationToken)
         {
-            if (inProgress)
+            if (inProgress || OutOffBallBlock > DateTime.Now)
                 return;
             inProgress = true;
             //if (session.LogicSettings.ActivateMSniper)
@@ -624,15 +624,13 @@ namespace PoGo.NecroBot.Logic.Tasks
             try
             {
                 if ((!File.Exists(pth) && autoSnipePokemons.Count == 0) || OutOffBallBlock > DateTime.Now)
-                {
+                { 
                     autoSnipePokemons.Clear();
-                    inProgress = false;
                     return;
                 }
 
                 if (!await SnipePokemonTask.CheckPokeballsToSnipe(session.LogicSettings.MinPokeballsWhileSnipe + 1, session, cancellationToken))
                 {
-                    inProgress = false;
                     session.EventDispatcher.Send(new WarnEvent()
                     {
                         Message = "Your are out of ball because snipe so fast, you can reduce snipe speed by update MinIVForAutoSnipe or SnipePokemonFilters, Auto snipe will be disable in 5 mins"
@@ -675,13 +673,13 @@ namespace PoGo.NecroBot.Logic.Tasks
                     {
                         if(!await CatchFromService(session, cancellationToken, location))
                         {
-                            //inventory full, break snipe
+                            //inventory full, out of ball break snipe
                             break;
                         }
                     }
                     else
                     {
-                        await CatchWithSnipe(session, cancellationToken, location);
+                        await CatchWithSnipe(session, location, cancellationToken);
                     }
                     await Task.Delay(1000, cancellationToken);
                 }
@@ -703,7 +701,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
         }
 
-        public static async Task CatchWithSnipe(ISession session, CancellationToken cancellationToken, MSniperInfo2 encounterId)
+        public static async Task CatchWithSnipe(ISession session,  MSniperInfo2 encounterId, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
