@@ -1,5 +1,5 @@
 {
-  "name": "Necrobot2 GUI",
+  "name": "necrobot2-gui",
   "version": "1.0.0",
   "description": "Necrobot2 GUI (PokeEase Fork)",
   "main": "main.js",
