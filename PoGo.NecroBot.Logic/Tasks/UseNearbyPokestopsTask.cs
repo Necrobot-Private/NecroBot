@@ -342,7 +342,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 fortSearch =
                     await session.Client.Fort.SearchFort(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude);
                 if (fortSearch.ExperienceAwarded > 0 && timesZeroXPawarded > 0) timesZeroXPawarded = 0;
-                if (fortSearch.ExperienceAwarded == 0)
+                if (fortSearch.ExperienceAwarded == 0 && fortSearch.Result != FortSearchResponse.Types.Result.InventoryFull)
                 {
                     timesZeroXPawarded++;
 
@@ -415,21 +415,23 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 if (fortTry >= retryNumber - zeroCheck)
                 {
-                softbanCount++;
+                    softbanCount++;
 
-                //only check if PokestopSoftbanCount > 0
-                if (MultipleBotConfig.IsMultiBotActive(session.LogicSettings) && 
-                    session.LogicSettings.MultipleBotConfig.PokestopSoftbanCount >0 && 
-                    session.LogicSettings.MultipleBotConfig.PokestopSoftbanCount <= softbanCount)
-                    softbanCount = 0;
-                    session.CancellationTokenSource.Cancel();
-
-                    //Activate switcher by pokestop
-                    throw new ActiveSwitchByRuleException()
+                    //only check if PokestopSoftbanCount > 0
+                    if (MultipleBotConfig.IsMultiBotActive(session.LogicSettings) &&
+                        session.LogicSettings.MultipleBotConfig.PokestopSoftbanCount > 0 &&
+                        session.LogicSettings.MultipleBotConfig.PokestopSoftbanCount <= softbanCount)
                     {
-                        MatchedRule = SwitchRules.PokestopSoftban,
-                        ReachedValue = softbanCount
-                    };
+                        softbanCount = 0;
+                        session.CancellationTokenSource.Cancel();
+
+                        //Activate switcher by pokestop
+                        throw new ActiveSwitchByRuleException()
+                        {
+                            MatchedRule = SwitchRules.PokestopSoftban,
+                            ReachedValue = softbanCount
+                        };
+                    }
                 }
             }
             else
