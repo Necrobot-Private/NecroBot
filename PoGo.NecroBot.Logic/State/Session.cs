@@ -16,6 +16,7 @@ using PoGo.NecroBot.Logic.Model;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Runtime.Caching;
+using PoGo.NecroBot.Logic.Logging;
 
 #endregion
 
@@ -136,7 +137,7 @@ namespace PoGo.NecroBot.Logic.State
             Navigation.WalkStrategy.UpdatePositionEvent +=
                 (lat, lng) => this.EventDispatcher.Send(new UpdatePositionEvent { Latitude = lat, Longitude = lng });
         }
-
+        //TODO : Need add BotManager to manage all feature related to multibot, 
         public void ResetSessionToWithNextBot(AuthConfig bot = null, double lat = 0, double lng = 0, double att = 0)
         {
             this.CatchBlockTime = DateTime.Now; //remove any block
@@ -161,8 +162,17 @@ namespace PoGo.NecroBot.Logic.State
                 this.Reset(this.Settings, this.LogicSettings);
                 CancellationTokenSource.Cancel();
                 this.CancellationTokenSource = new CancellationTokenSource();
+                
+                this.EventDispatcher.Send(new BotSwitchedEvent() {
+                });
 
-                this.EventDispatcher.Send(new BotSwitchedEvent() { });
+                if(this.LogicSettings.MultipleBotConfig.DisplayList)
+                {
+                    foreach (var item in this.accounts)
+                    {
+                        Logger.Write($"{item.PtcUsername}{item.GoogleUsername} \tRuntime : {item.RuntimeTotal:0.00} min ");
+                    }
+                }
             }
 
         }
