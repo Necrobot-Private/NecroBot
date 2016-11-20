@@ -41,7 +41,11 @@ namespace PoGo.NecroBot.Logic.State
         public void InitializeDatabase(ISession session)
         {
             string username = session.Settings.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Ptc ? session.Settings.PtcUsername : session.Settings.GoogleUsername;
-
+            if (!string.IsNullOrEmpty(username))
+            {
+                //firsttime setup , don't need to initial database
+                return;
+            }
             var path = Path.Combine(session.LogicSettings.ProfileConfigPath, username);
             
             if(!Directory.Exists(path))

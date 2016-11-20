@@ -56,6 +56,7 @@ namespace PoGo.NecroBot.Logic.State
     {
         public Session(ISettings settings, ILogicSettings logicSettings, IElevationService elevationService) : this(settings, logicSettings, elevationService, Common.Translation.Load(logicSettings))
         {
+            LoggedTime = DateTime.Now;
         }
         public DateTime LoggedTime { get; set; }
         private List<AuthConfig> accounts;
