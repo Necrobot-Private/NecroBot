@@ -398,7 +398,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                         InventoryFull = fortSearch.Result == FortSearchResponse.Types.Result.InventoryFull
                     });
                     if (fortSearch.Result == FortSearchResponse.Types.Result.InventoryFull)
+                    {
+                        await RecycleItemsTask.Execute(session, cancellationToken);
                         _storeRi = 1;
+                    }
 
                     if (session.LogicSettings.UsePokeStopLimit)
                     {

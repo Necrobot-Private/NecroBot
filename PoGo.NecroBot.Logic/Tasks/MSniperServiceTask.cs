@@ -318,10 +318,18 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         #endregion MSniper Location Feeder
 
-        public static void AddSnipeItem(ISession session, MSniperInfo2 item)
+        public static void AddSnipeItem(ISession session, MSniperInfo2 item, bool byPassValidation = false)
         {
-            if (OutOffBallBlock > DateTime.Now) return;
+            if (OutOffBallBlock > DateTime.Now ||
+                autoSnipePokemons.Exists(x => x.EncounterId == item.EncounterId) ||
+                session.Cache[item.EncounterId.ToString()] != null) return;
 
+            if(byPassValidation)
+            {
+                autoSnipePokemons.Add(item);
+                Logger.Write("Manual snipe item queued");
+                return;
+            }
             item.Iv = Math.Round(item.Iv, 2);
             SnipeFilter filter = new SnipeFilter()
             {
@@ -374,7 +382,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         public static async Task Execute(ISession session, CancellationToken cancellationToken)
         {
-
+            {
+            }
             if (inProgress || OutOffBallBlock > DateTime.Now)
                 return;
             inProgress = true;

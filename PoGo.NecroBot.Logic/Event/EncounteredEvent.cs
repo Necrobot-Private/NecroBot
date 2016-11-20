@@ -21,5 +21,6 @@ namespace PoGo.NecroBot.Logic.Event
         public string Move1 { get; set; }
         public string Move2 { get; set; }
         public bool IsRecievedFromSocket { get; set; }
+        public string RecieverId { get; set; }
     }
 }
