@@ -1,4 +1,11 @@
 # Change Log
+## [v1.0.0.31](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.30) (2016-11-20)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.30...v1.0.0.31)
+## Feature
+- mypogosnipers now has manually snipe Support
+- multibot will use separate database file
+- force recycle task if bag full to avoid fake softban
+
 ## [v1.0.0.30](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.30) (2016-11-20)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.29...v1.0.0.30)
 
