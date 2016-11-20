@@ -21,6 +21,8 @@ using PoGo.NecroBot.Logic.Tasks;
 using PoGo.NecroBot.Logic.Utils;
 using PoGo.NecroBot.Logic.Service.Elevation;
 using System.Configuration;
+using System.Text;
+using System.Collections.Generic;
 
 #endregion
 
@@ -292,6 +294,36 @@ namespace PoGo.NecroBot.CLI
             
             ProgressBar.Fill(100);
 
+            if(_session.LogicSettings.AllowMultipleBot && _session.LogicSettings.MultipleBotConfig.SelectAccountOnStartUp)
+            {
+               
+                byte index = 0;
+                Console.WriteLine();
+                Console.WriteLine();
+                Logger.Write("PLEASE SELECT AN ACCOUNT TO START.");
+                List<Char> availableOption = new List<char>();
+                foreach (var item in _session.Accounts)
+                {
+                    var ch =  (char)(index + 65 );
+                    availableOption.Add(ch);
+                    Logger.Write($"{ch}. {item.GoogleUsername}{item.PtcUsername}");
+                    index++;
+                };
+
+                char select = ' ';
+                do
+                { 
+                    select = Console.ReadKey(true).KeyChar;         
+                    Console.WriteLine(select);
+                    select = Char.ToUpper(select);
+                }
+                while (!availableOption.Contains(select));
+
+                var bot = _session.Accounts[select - 65];
+                
+                _session.ResetSessionToWithNextBot(bot);
+
+            }
             machine.AsyncStart(new VersionCheckState(), _session, _subPath, excelConfigAllow);
 
             try

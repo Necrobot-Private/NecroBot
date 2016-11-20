@@ -123,9 +123,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [ExcelConfig(Description = "Tell bot to start at default location", Position = 8)]
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 7)]
-
         public bool StartFromDefaultLocation = true; //only apply if runtime > 1h. 
-
 
         [ExcelConfig(Description = "How many time pokestop softban triger bot switch, 0 is mean doesn't not switch", Position = 9)]
         [DefaultValue(5)]
@@ -133,6 +131,16 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [Range(0, 100)]
         public int PokestopSoftbanCount = 5; //only apply if runtime > 1h. 
 
+
+        [ExcelConfig(Description = "Display bot list (include ran time) on switch", Position = 10)]
+        [DefaultValue(true)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 9)]
+        public bool DisplayList = true;
+
+        [ExcelConfig(Description = "Bot will display a list of account that you setup in auth.config then ask you to select which account you want to start with.", Position = 11)]
+        [DefaultValue(false)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 9)]
+        public bool SelectAccountOnStartUp = false;
 
         public static MultipleBotConfig Default()
         {

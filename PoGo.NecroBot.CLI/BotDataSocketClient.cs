@@ -237,7 +237,8 @@ namespace PoGo.NecroBot.CLI
 
                 //not your snipe item, return need more encrypt here and configuration to allow catch others item
                 if (string.IsNullOrEmpty(session.LogicSettings.DataSharingIdentifiation) ||
-                    data.RecieverId != session.LogicSettings.DataSharingIdentifiation) return;
+                    string.IsNullOrEmpty(data.RecieverId) || 
+                    data.RecieverId.ToLower() != session.LogicSettings.DataSharingIdentifiation.ToLower()) return;
 
                 var move1 = PokemonMove.Absorb;
                 var move2 = PokemonMove.Absorb;
