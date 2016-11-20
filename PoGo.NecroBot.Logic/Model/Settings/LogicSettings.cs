@@ -227,7 +227,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public int GymNumberOfTopPokemonToBeExcluded => _settings.GymConfig.NumberOfTopPokemonToBeExcluded;
 
         public bool DataSharingEnable => _settings.DataSharingConfig.EnableSyncData;
-
+        public string DataSharingIdentifiation => _settings.DataSharingConfig.DataServiceIdentification;
         public bool AllowAutoSnipe => _settings.DataSharingConfig.AutoSnipe;
 
         public string DataSharingDataUrl => _settings.DataSharingConfig.DataRecieverURL;

@@ -225,9 +225,9 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         int GymVisitTimeout { get; }
         int GymNumberOfTopPokemonToBeExcluded { get; }
 
+        string DataSharingIdentifiation { get; }
         bool DataSharingEnable { get; }
         string DataSharingDataUrl { get; }
-
         bool AllowAutoSnipe { get; }
         MultipleBotConfig MultipleBotConfig { get; }
         int GymCollectRewardAfter { get; }
