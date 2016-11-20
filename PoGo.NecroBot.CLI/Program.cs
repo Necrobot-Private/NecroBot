@@ -57,7 +57,6 @@ namespace PoGo.NecroBot.CLI
                 eArgs.Cancel = true;
             };
 
-
             // Command line parsing
             var commandLine = new Arguments(args);
             // Look for specific arguments values
