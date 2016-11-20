@@ -31,7 +31,7 @@ namespace PoGo.NecroBot.Logic.State
         }
 
         public SessionStats(ISession session)
-        {
+        {                                                                                                                           
             StartTime = DateTime.Now;
 
             InitializeDatabase(session);
@@ -40,7 +40,21 @@ namespace PoGo.NecroBot.Logic.State
 
         public void InitializeDatabase(ISession session)
         {
-            var path = Path.Combine(session.LogicSettings.ProfileConfigPath, DB_NAME);
+            string username = session.Settings.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Ptc ? session.Settings.PtcUsername : session.Settings.GoogleUsername;
+            if (string.IsNullOrEmpty(username))
+            {
+                //firsttime setup , don't need to initial database
+                return;
+            }
+            var path = Path.Combine(session.LogicSettings.ProfileConfigPath, username);
+            
+            if(!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+
+            path = Path.Combine(path, DB_NAME);
+
             db = new LiteDatabase(path);
             pokestopTimestampCollection = db.GetCollection<PokeStopTimestamp>(POKESTOP_STATS_COLLECTION);
             pokemonTimestampCollection = db.GetCollection<PokemonTimestamp>(POKEMON_STATS_COLLECTION);

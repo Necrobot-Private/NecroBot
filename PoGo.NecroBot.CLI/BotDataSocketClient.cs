@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Net.WebSockets;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -62,9 +63,24 @@ namespace PoGo.NecroBot.CLI
         private static int retries = 0;
         static List<EncounteredEvent> processing = new List<EncounteredEvent>();
 
+        public static String SHA256Hash(String value)
+        {
+            StringBuilder Sb = new StringBuilder();
+            using (SHA256 hash = SHA256Managed.Create())
+            {
+                Encoding enc = Encoding.UTF8;
+                Byte[] result = hash.ComputeHash(enc.GetBytes(value));
+
+                foreach (Byte b in result)
+                    Sb.Append(b.ToString("x2"));
+            }
+
+            return Sb.ToString();
+        }
+
         public static async Task Start(Session session, CancellationToken cancellationToken)
         {
-            await Task.Delay(30000,cancellationToken);//delay running 30s
+            await Task.Delay(30000, cancellationToken);//delay running 30s
 
             System.Net.ServicePointManager.Expect100Continue = false;
 
@@ -156,53 +172,90 @@ namespace PoGo.NecroBot.CLI
                 }
             }
         }
-        
+
         private static void onSocketMessageRecieved(ISession session, object sender, WebSocketSharp.MessageEventArgs e)
         {
             try
             {
-                var match = Regex.Match(e.Data, "42\\[\"pokemon\",(.*)]");
-                if (match != null && !string.IsNullOrEmpty(match.Groups[1].Value))
-                {
-                    var data = JsonConvert.DeserializeObject<EncounteredEvent>(match.Groups[1].Value);
-                    data.IsRecievedFromSocket = true;
-                    session.EventDispatcher.Send(data);
-                    if (session.LogicSettings.AllowAutoSnipe)
-                    {   
-                        var move1 = PokemonMove.Absorb;
-                        var move2 = PokemonMove.Absorb;
-                        Enum.TryParse< PokemonMove>( data.Move1, true, out move1);
-                        Enum.TryParse<PokemonMove>(data.Move1, true, out move2);
-                        MSniperServiceTask.AddSnipeItem(session, new MSniperServiceTask.MSniperInfo2()
-                        {
-                            Latitude = data.Latitude,
-                            Longitude = data.Longitude,
-                            EncounterId = Convert.ToUInt64(data.EncounterId),
-                            SpawnPointId = data.SpawnPointId,
-                            PokemonId = (short)data.PokemonId,
-                            Iv = data.IV,
-                            Move1 =  move1,
-                            Move2 = move2
-                        });
-                    }
-                    return;
-                }
-                match = Regex.Match(e.Data, "42\\[\"fpm\",(.*)]");
-                if (match != null && !string.IsNullOrEmpty(match.Groups[1].Value))
-                {
-                    
-                    //var data = JsonConvert.DeserializeObject<List<Logic.Tasks.HumanWalkSnipeTask.FastPokemapItem>>(match.Groups[1].Value);
-                    HumanWalkSnipeTask.AddFastPokemapItem(match.Groups[1].Value);
-                    return;
-                }
+                OnSnipePokemon(session, e.Data);
+                OnPokemonData(session, e.Data);
+                ONFPMBridgeData(session, e.Data);
             }
             catch (Exception ex)
             {
-                #if DEBUG
+#if DEBUG
                 Logger.Write("ERROR TO ADD SNIPE< DEBUG ONLY " + ex.Message, LogLevel.Info, ConsoleColor.Yellow);
-                #endif
+#endif
             }
 
+        }
+
+        private static void ONFPMBridgeData(ISession session, string message)
+        {
+            var match = Regex.Match(message, "42\\[\"fpm\",(.*)]");
+            if (match != null && !string.IsNullOrEmpty(match.Groups[1].Value))
+            {
+                //var data = JsonConvert.DeserializeObject<List<Logic.Tasks.HumanWalkSnipeTask.FastPokemapItem>>(match.Groups[1].Value);
+                HumanWalkSnipeTask.AddFastPokemapItem(match.Groups[1].Value);
+            }
+        }
+
+        private static void OnPokemonData(ISession session, string message)
+        {
+            var match = Regex.Match(message, "42\\[\"pokemon\",(.*)]");
+            if (match != null && !string.IsNullOrEmpty(match.Groups[1].Value))
+            {
+                var data = JsonConvert.DeserializeObject<EncounteredEvent>(match.Groups[1].Value);
+                data.IsRecievedFromSocket = true;
+                session.EventDispatcher.Send(data);
+                if (session.LogicSettings.AllowAutoSnipe)
+                {
+                    var move1 = PokemonMove.Absorb;
+                    var move2 = PokemonMove.Absorb;
+                    Enum.TryParse<PokemonMove>(data.Move1, true, out move1);
+                    Enum.TryParse<PokemonMove>(data.Move1, true, out move2);
+                    MSniperServiceTask.AddSnipeItem(session, new MSniperServiceTask.MSniperInfo2()
+                    {
+                        Latitude = data.Latitude,
+                        Longitude = data.Longitude,
+                        EncounterId = Convert.ToUInt64(data.EncounterId),
+                        SpawnPointId = data.SpawnPointId,
+                        PokemonId = (short)data.PokemonId,
+                        Iv = data.IV,
+                        Move1 = move1,
+                        Move2 = move2
+                    });
+                }
+            }
+        }
+        private static void OnSnipePokemon(ISession session, string message)
+        {
+            var match = Regex.Match(message, "42\\[\"snipe-pokemon\",(.*)]");
+            if (match != null && !string.IsNullOrEmpty(match.Groups[1].Value))
+            {
+                var data = JsonConvert.DeserializeObject<EncounteredEvent>(match.Groups[1].Value);
+
+                //not your snipe item, return need more encrypt here and configuration to allow catch others item
+                if (string.IsNullOrEmpty(session.LogicSettings.DataSharingIdentifiation) ||
+                    string.IsNullOrEmpty(data.RecieverId) || 
+                    data.RecieverId.ToLower() != session.LogicSettings.DataSharingIdentifiation.ToLower()) return;
+
+                var move1 = PokemonMove.Absorb;
+                var move2 = PokemonMove.Absorb;
+                Enum.TryParse<PokemonMove>(data.Move1, true, out move1);
+                Enum.TryParse<PokemonMove>(data.Move1, true, out move2);
+                MSniperServiceTask.AddSnipeItem(session, new MSniperServiceTask.MSniperInfo2()
+                {
+                    Latitude = data.Latitude,
+                    Longitude = data.Longitude,
+                    EncounterId = Convert.ToUInt64(data.EncounterId),
+                    SpawnPointId = data.SpawnPointId,
+                    PokemonId = (short)data.PokemonId,
+                    Iv = data.IV,
+                    Move1 = move1,
+                    Move2 = move2
+                }, true);
+            }
         }
 
         internal static Task StartAsync(Session session, CancellationToken cancellationToken = default(CancellationToken))
