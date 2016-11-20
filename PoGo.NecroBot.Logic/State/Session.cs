@@ -145,7 +145,11 @@ namespace PoGo.NecroBot.Logic.State
             
             var currentAccount = this.accounts.FirstOrDefault(x => (x.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Ptc && x.PtcUsername == this.Settings.PtcUsername) ||
                                         (x.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Google && x.GoogleUsername == this.Settings.GoogleUsername));
-            currentAccount.RuntimeTotal += (DateTime.Now - LoggedTime).TotalMinutes;
+            if (LoggedTime != DateTime.MinValue)
+            {
+                currentAccount.RuntimeTotal += (DateTime.Now - LoggedTime).TotalMinutes;
+            }
+
             this.accounts = this.accounts.OrderByDescending(p => p.RuntimeTotal).ToList();
 
             var nextBot = bot != null ? bot : this.accounts.LastOrDefault(p => p != currentAccount && p.ReleaseBlockTime < DateTime.Now);
