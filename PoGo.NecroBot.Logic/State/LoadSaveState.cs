@@ -87,7 +87,7 @@ namespace PoGo.NecroBot.Logic.State
             }
             
             await Task.Delay(3000, cancellationToken);
-            return new CheckTosState();
+            return new LoginState();
         }
 
         private static Tuple<double, double> LoadPositionFromDisk(ISession session)
