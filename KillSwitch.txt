@@ -1,10 +1,10 @@
-BotStatus=ENABLED;
+BotStatus=DISABLED;
 //================================================================//
-                THE BOT ABOUT TO GO LIVE AGAIN :-)
+                POKEMON GO FORCING 0.47 API
 //================================================================//
-             HUGE SHOUTOUT to jjskuld for his hardwork.
+THIS BOT IS USING 0.45 API CONTINUED BOTTING WILL FLAG ACCOUNT FOR BAN
 //================================================================//
-                         Updated: 11/7/16
+                         Updated: 11/21/16
 
 
 For support/questions:
