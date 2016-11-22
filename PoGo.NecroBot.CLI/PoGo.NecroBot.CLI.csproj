@@ -460,9 +460,9 @@
       <Project>{05d2da44-1b8e-4cf7-94ed-4d52451cd095}</Project>
       <Name>PokemonGo.RocketAPI</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PoGo.NecroBot.LIB\PoGo.NecroBot.Logic.Mini.csproj">
-      <Project>{0739E40D-C589-4AEB-93E5-EE8CD6773C60}</Project>
-      <Name>PoGo.NecroBot.Logic.Mini</Name>
+    <ProjectReference Include="..\PoGo.NecroBot.Logic\PoGo.NecroBot.Logic.csproj">
+      <Project>{ab1b97cf-4a35-45ba-9ff3-2625fd0ddceb}</Project>
+      <Name>PoGo.NecroBot.Logic</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
