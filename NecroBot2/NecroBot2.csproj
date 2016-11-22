@@ -378,7 +378,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="packages.config" />
-    <None Include="cert.pfx">
+    <None Include="$(SolutionDir)\PoGo.NecroBot.CLI\cert.pfx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Images\Miscs\question.png" />
@@ -612,7 +612,7 @@
       <Project>{05d2da44-1b8e-4cf7-94ed-4d52451cd095}</Project>
       <Name>PokemonGo.RocketAPI</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PoGo.NecroBot.Logic.Mini\PoGo.NecroBot.Logic.Mini.csproj">
+    <ProjectReference Include="$(SolutionDir)\PoGo.NecroBot.Logic.Mini\PoGo.NecroBot.Logic.Mini.csproj">
       <Project>{0739e40d-c589-4aeb-93e5-ee8cd6773c60}</Project>
       <Name>PoGo.NecroBot.Logic.Mini</Name>
     </ProjectReference>
