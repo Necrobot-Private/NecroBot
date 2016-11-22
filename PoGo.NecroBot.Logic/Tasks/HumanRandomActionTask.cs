@@ -28,8 +28,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 await EvolvePokemonTask.Execute(session, cancellationToken);
                         break;
                     case 2:
+                        // Handling of Eggs and Incubators preferably needs to happen every time.
+                        // While monitoring the previous setting of 50% propability we ended up with 
+                        // over an hour of execution without setting any new Eggs for incubation (entering
+                        // UseEggIncubators).
                         if (session.LogicSettings.UseEggIncubators)
-                            if (ActionRandom.Next(1, 10) > 4)
+                            if (ActionRandom.Next(1, 10) > 0)
                                 await UseIncubatorsTask.Execute(session, cancellationToken);
                         break;
                     case 3:
