@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NecroBot2", "NecroBot2\NecroBot2.csproj", "{1FEA147E-F704-497B-A538-00B053B5F672}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PoGo.NecroBot.Logic.Mini", "PoGo.NecroBot.LIB\PoGo.NecroBot.Logic.Mini.csproj", "{0739E40D-C589-4AEB-93E5-EE8CD6773C60}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PoGo.NecroBot.Logic.Mini", "PoGo.NecroBot.Logic.Mini\PoGo.NecroBot.Logic.Mini.csproj", "{0739E40D-C589-4AEB-93E5-EE8CD6773C60}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PoGo.NecroBot.CLI", "PoGo.NecroBot.CLI\PoGo.NecroBot.CLI.csproj", "{A4B28C82-4633-472B-853F-59DD7716AD1C}"
 EndProject
