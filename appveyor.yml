@@ -131,7 +131,7 @@ after_build:
         Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\PoGo.NecroBot.CLI\bin\$($env:CONFIGURATION)" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2" -Force;
         Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\PoGo.NecroBot.CLI\bin\x86\$($env:CONFIGURATION)\GUI" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2GUI" -Force;
     }
-    Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\PoGo.NecroBot.GUI.Electron\dist\win-unpacked" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2GUI.Electron" -Force;
+    Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\PoGo.NecroBot.GUI.Electron\dist\win-ia32-unpacked" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2GUI.Electron" -Force;
         
 
 # to run your custom scripts instead of automatic MSBuild
