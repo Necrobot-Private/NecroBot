@@ -16,15 +16,15 @@ using GMap.NET;
 using GMap.NET.MapProviders;
 using GMap.NET.WindowsForms;
 using PokemonGo.RocketAPI.Helpers;
-using PoGo.NecroBot.LIB;
-using PoGo.NecroBot.LIB.Common;
-using PoGo.NecroBot.LIB.Event;
-using PoGo.NecroBot.LIB.Logging;
-using PoGo.NecroBot.LIB.PoGoUtils;
-using PoGo.NecroBot.LIB.Service;
-using PoGo.NecroBot.LIB.State;
-using PoGo.NecroBot.LIB.Tasks;
-using PoGo.NecroBot.LIB.Utils;
+using PoGo.NecroBot.Logic.Mini;
+using PoGo.NecroBot.Logic.Mini.Common;
+using PoGo.NecroBot.Logic.Mini.Event;
+using PoGo.NecroBot.Logic.Mini.Logging;
+using PoGo.NecroBot.Logic.Mini.PoGoUtils;
+using PoGo.NecroBot.Logic.Mini.Service;
+using PoGo.NecroBot.Logic.Mini.State;
+using PoGo.NecroBot.Logic.Mini.Tasks;
+using PoGo.NecroBot.Logic.Mini.Utils;
 using PoGo.NecroBot.FORM.Helpers;
 using PoGo.NecroBot.FORM.Models;
 using POGOProtos.Data;
@@ -32,7 +32,7 @@ using POGOProtos.Inventory;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Map.Fort;
 using POGOProtos.Map.Pokemon;
-using Logger = PoGo.NecroBot.LIB.Logging.Logger;
+using Logger = PoGo.NecroBot.Logic.Mini.Logging.Logger;
 
 namespace PoGo.NecroBot.FORM.Forms
 {

@@ -13,7 +13,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("PoGo.NecroBot.LIB")]
+[assembly: AssemblyProduct("PoGo.NecroBot.Logic.Mini")]
 [assembly: AssemblyCopyright("Copyright NecroBot-Private Team © 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

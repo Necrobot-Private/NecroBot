@@ -7,8 +7,8 @@
     <ProjectGuid>{0739E40D-C589-4AEB-93E5-EE8CD6773C60}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PoGo.NecroBot.LIB</RootNamespace>
-    <AssemblyName>PoGo.NecroBot.LIB</AssemblyName>
+    <RootNamespace>PoGo.NecroBot.Logic.Mini</RootNamespace>
+    <AssemblyName>PoGo.NecroBot.Logic.Mini</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

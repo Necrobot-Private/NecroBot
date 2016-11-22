@@ -5,12 +5,12 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using PokemonGo.RocketAPI.Exceptions;
-using PoGo.NecroBot.LIB.Event;
-using PoGo.NecroBot.LIB.Logging;
+using PoGo.NecroBot.Logic.Mini.Event;
+using PoGo.NecroBot.Logic.Mini.Logging;
 
 #endregion
 
-namespace PoGo.NecroBot.LIB.State
+namespace PoGo.NecroBot.Logic.Mini.State
 {
     public class StateMachine
     {

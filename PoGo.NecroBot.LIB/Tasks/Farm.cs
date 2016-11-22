@@ -1,11 +1,11 @@
 ﻿#region using directives
 
 using System.Threading;
-using PoGo.NecroBot.LIB.State;
+using PoGo.NecroBot.Logic.Mini.State;
 
 #endregion
 
-namespace PoGo.NecroBot.LIB.Tasks
+namespace PoGo.NecroBot.Logic.Mini.Tasks
 {
     public interface IFarm
     {

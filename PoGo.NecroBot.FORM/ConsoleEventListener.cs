@@ -3,10 +3,10 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using PoGo.NecroBot.LIB.Common;
-using PoGo.NecroBot.LIB.Event;
-using PoGo.NecroBot.LIB.Logging;
-using PoGo.NecroBot.LIB.State;
+using PoGo.NecroBot.Logic.Mini.Common;
+using PoGo.NecroBot.Logic.Mini.Event;
+using PoGo.NecroBot.Logic.Mini.Logging;
+using PoGo.NecroBot.Logic.Mini.State;
 using PoGo.NecroBot.FORM.Forms;
 using POGOProtos.Enums;
 using POGOProtos.Inventory.Item;

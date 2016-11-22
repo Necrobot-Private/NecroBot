@@ -3,7 +3,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 
-namespace PoGo.NecroBot.LIB.Utils
+namespace PoGo.NecroBot.Logic.Mini.Utils
 {
     public static class WebUtils
     {

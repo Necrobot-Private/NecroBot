@@ -3,13 +3,13 @@
 using System;
 using PokemonGo.RocketAPI.Enums;
 using PokemonGo.RocketAPI.Exceptions;
-using PoGo.NecroBot.LIB.Common;
-using PoGo.NecroBot.LIB.Event;
-using PoGo.NecroBot.LIB.State;
+using PoGo.NecroBot.Logic.Mini.Common;
+using PoGo.NecroBot.Logic.Mini.Event;
+using PoGo.NecroBot.Logic.Mini.State;
 
 #endregion
 
-namespace PoGo.NecroBot.LIB.Tasks
+namespace PoGo.NecroBot.Logic.Mini.Tasks
 {
     public interface ILogin
     {

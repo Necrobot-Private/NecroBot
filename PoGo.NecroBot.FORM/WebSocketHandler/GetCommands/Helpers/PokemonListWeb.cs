@@ -1,4 +1,4 @@
-﻿using PoGo.NecroBot.LIB.PoGoUtils;
+﻿using PoGo.NecroBot.Logic.Mini.PoGoUtils;
 using POGOProtos.Data;
 
 namespace PoGo.NecroBot.FORM.WebSocketHandler.GetCommands.Helpers

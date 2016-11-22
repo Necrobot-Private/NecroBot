@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using PoGo.NecroBot.LIB.State;
+using PoGo.NecroBot.Logic.Mini.State;
 using PoGo.NecroBot.FORM.WebSocketHandler.GetCommands.Tasks;
 using SuperSocket.WebSocket;
 

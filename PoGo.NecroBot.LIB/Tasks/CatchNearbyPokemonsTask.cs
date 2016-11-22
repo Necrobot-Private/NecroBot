@@ -4,18 +4,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using PoGo.NecroBot.LIB.Common;
-using PoGo.NecroBot.LIB.Event;
-using PoGo.NecroBot.LIB.Logging;
-using PoGo.NecroBot.LIB.State;
-using PoGo.NecroBot.LIB.Utils;
+using PoGo.NecroBot.Logic.Mini.Common;
+using PoGo.NecroBot.Logic.Mini.Event;
+using PoGo.NecroBot.Logic.Mini.Logging;
+using PoGo.NecroBot.Logic.Mini.State;
+using PoGo.NecroBot.Logic.Mini.Utils;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Map.Pokemon;
 using POGOProtos.Networking.Responses;
 
 #endregion
 
-namespace PoGo.NecroBot.LIB.Tasks
+namespace PoGo.NecroBot.Logic.Mini.Tasks
 {
     public static class CatchNearbyPokemonsTask
     {

@@ -2,11 +2,11 @@
 
 using System;
 using System.IO;
-using PoGo.NecroBot.LIB.State;
+using PoGo.NecroBot.Logic.Mini.State;
 
 #endregion
 
-namespace PoGo.NecroBot.LIB.DataDumper
+namespace PoGo.NecroBot.Logic.Mini.DataDumper
 {
     public static class Dumper
     {

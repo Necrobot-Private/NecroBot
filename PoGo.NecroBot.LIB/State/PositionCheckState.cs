@@ -4,13 +4,13 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using PoGo.NecroBot.LIB.Common;
-using PoGo.NecroBot.LIB.Event;
-using PoGo.NecroBot.LIB.Utils;
+using PoGo.NecroBot.Logic.Mini.Common;
+using PoGo.NecroBot.Logic.Mini.Event;
+using PoGo.NecroBot.Logic.Mini.Utils;
 
 #endregion
 
-namespace PoGo.NecroBot.LIB.State
+namespace PoGo.NecroBot.Logic.Mini.State
 {
     public class PositionCheckState : IState
     {

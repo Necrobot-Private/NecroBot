@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using PoGo.NecroBot.LIB.State;
+using PoGo.NecroBot.Logic.Mini.State;
 using PoGo.NecroBot.FORM.WebSocketHandler.GetCommands.Events;
 using PoGo.NecroBot.FORM.WebSocketHandler.GetCommands.Helpers;
 using POGOProtos.Inventory.Item;

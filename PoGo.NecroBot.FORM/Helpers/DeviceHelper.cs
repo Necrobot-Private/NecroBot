@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
-using PoGo.NecroBot.LIB.Utils;
+using PoGo.NecroBot.Logic.Mini.Utils;
 
 namespace PoGo.NecroBot.FORM.Helpers
 {

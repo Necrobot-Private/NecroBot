@@ -1,4 +1,4 @@
-﻿using PoGo.NecroBot.LIB.Event;
+﻿using PoGo.NecroBot.Logic.Mini.Event;
 
 namespace PoGo.NecroBot.FORM.WebSocketHandler.GetCommands.Events
 {

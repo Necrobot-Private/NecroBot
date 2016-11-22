@@ -2,11 +2,11 @@
 
 using System.Threading;
 using System.Threading.Tasks;
-using PoGo.NecroBot.LIB.Tasks;
+using PoGo.NecroBot.Logic.Mini.Tasks;
 
 #endregion
 
-namespace PoGo.NecroBot.LIB.State
+namespace PoGo.NecroBot.Logic.Mini.State
 {
     public class FarmState : IState
     {

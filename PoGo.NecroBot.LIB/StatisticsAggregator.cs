@@ -1,13 +1,13 @@
 ﻿#region using directives
 
-using PoGo.NecroBot.LIB.Event;
-using PoGo.NecroBot.LIB.State;
-using PoGo.NecroBot.LIB.Utils;
+using PoGo.NecroBot.Logic.Mini.Event;
+using PoGo.NecroBot.Logic.Mini.State;
+using PoGo.NecroBot.Logic.Mini.Utils;
 using POGOProtos.Networking.Responses;
 
 #endregion
 
-namespace PoGo.NecroBot.LIB
+namespace PoGo.NecroBot.Logic.Mini
 {
     public class StatisticsAggregator
     {

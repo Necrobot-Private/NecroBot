@@ -3,11 +3,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using PoGo.NecroBot.LIB.State;
+using PoGo.NecroBot.Logic.Mini.State;
 
 #endregion
 
-namespace PoGo.NecroBot.LIB.Logging
+namespace PoGo.NecroBot.Logic.Mini.Logging
 {
     public static class Logger
     {

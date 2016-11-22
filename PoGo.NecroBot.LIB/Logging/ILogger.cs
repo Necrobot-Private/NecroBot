@@ -1,11 +1,11 @@
 ﻿#region using directives
 
 using System;
-using PoGo.NecroBot.LIB.State;
+using PoGo.NecroBot.Logic.Mini.State;
 
 #endregion
 
-namespace PoGo.NecroBot.LIB.Logging
+namespace PoGo.NecroBot.Logic.Mini.Logging
 {
     public interface ILogger
     {

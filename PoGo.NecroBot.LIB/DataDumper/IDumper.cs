@@ -1,4 +1,4 @@
-﻿namespace PoGo.NecroBot.LIB.DataDumper
+﻿namespace PoGo.NecroBot.Logic.Mini.DataDumper
 {
     public interface IDumper
     {

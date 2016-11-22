@@ -1,11 +1,11 @@
 ﻿using System.Threading.Tasks;
-using PoGo.NecroBot.LIB.Logging;
-using PoGo.NecroBot.LIB.State;
+using PoGo.NecroBot.Logic.Mini.Logging;
+using PoGo.NecroBot.Logic.Mini.State;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Networking.Responses;
-using PoGo.NecroBot.LIB.Utils;
+using PoGo.NecroBot.Logic.Mini.Utils;
 
-namespace PoGo.NecroBot.LIB.Tasks
+namespace PoGo.NecroBot.Logic.Mini.Tasks
 {
     public class RecycleSpecificItemTask
     {

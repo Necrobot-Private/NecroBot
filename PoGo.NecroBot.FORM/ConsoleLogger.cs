@@ -2,8 +2,8 @@
 
 using System;
 using System.Drawing;
-using PoGo.NecroBot.LIB.Logging;
-using PoGo.NecroBot.LIB.State;
+using PoGo.NecroBot.Logic.Mini.Logging;
+using PoGo.NecroBot.Logic.Mini.State;
 using PoGo.NecroBot.FORM.Forms;
 using PoGo.NecroBot.FORM.Models;
 

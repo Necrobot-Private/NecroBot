@@ -1,6 +1,6 @@
 ﻿using POGOProtos.Map.Fort;
 
-namespace PoGo.NecroBot.LIB.Event
+namespace PoGo.NecroBot.Logic.Mini.Event
 {
     public class LootPokestopEvent : IEvent
     {

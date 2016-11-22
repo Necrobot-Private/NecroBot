@@ -6,14 +6,14 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using PoGo.NecroBot.LIB.Logging;
-using PoGo.NecroBot.LIB.Utils;
+using PoGo.NecroBot.Logic.Mini.Logging;
+using PoGo.NecroBot.Logic.Mini.Utils;
 
 #endregion
 
 
 
-namespace PoGo.NecroBot.LIB.Common
+namespace PoGo.NecroBot.Logic.Mini.Common
 {
     public interface ITranslation
     {

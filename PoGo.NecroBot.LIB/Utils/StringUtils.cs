@@ -7,7 +7,7 @@ using POGOProtos.Inventory.Item;
 
 #endregion
 
-namespace PoGo.NecroBot.LIB.Utils
+namespace PoGo.NecroBot.Logic.Mini.Utils
 {
     public static class StringUtils
     {

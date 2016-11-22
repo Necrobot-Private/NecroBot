@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Net;
 using System.Windows.Forms;
-using PoGo.NecroBot.LIB.Logging;
-using PoGo.NecroBot.LIB.State;
-using PoGo.NecroBot.LIB.Utils;
+using PoGo.NecroBot.Logic.Mini.Logging;
+using PoGo.NecroBot.Logic.Mini.State;
+using PoGo.NecroBot.Logic.Mini.Utils;
 
 namespace PoGo.NecroBot.FORM.Helpers
 {

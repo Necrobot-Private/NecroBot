@@ -1,5 +1,5 @@
-using PoGo.NecroBot.LIB.Common;
-using PoGo.NecroBot.LIB.State;
+using PoGo.NecroBot.Logic.Mini.Common;
+using PoGo.NecroBot.Logic.Mini.State;
 
 namespace PoGo.NecroBot.FORM.Models
 {

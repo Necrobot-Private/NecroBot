@@ -10,7 +10,7 @@ using POGOProtos.Settings.Master;
 
 #endregion
 
-namespace PoGo.NecroBot.LIB.PoGoUtils
+namespace PoGo.NecroBot.Logic.Mini.PoGoUtils
 {
     public struct BaseStats
     {

@@ -5,14 +5,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using PoGo.NecroBot.LIB.DataDumper;
-using PoGo.NecroBot.LIB.Event;
-using PoGo.NecroBot.LIB.PoGoUtils;
-using PoGo.NecroBot.LIB.State;
+using PoGo.NecroBot.Logic.Mini.DataDumper;
+using PoGo.NecroBot.Logic.Mini.Event;
+using PoGo.NecroBot.Logic.Mini.PoGoUtils;
+using PoGo.NecroBot.Logic.Mini.State;
 
 #endregion
 
-namespace PoGo.NecroBot.LIB.Tasks
+namespace PoGo.NecroBot.Logic.Mini.Tasks
 {
     public class DisplayPokemonStatsTask
     {

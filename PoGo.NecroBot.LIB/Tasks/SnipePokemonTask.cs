@@ -13,10 +13,10 @@ using System.Threading.Tasks;
 using CloudFlareUtilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using PoGo.NecroBot.LIB.Common;
-using PoGo.NecroBot.LIB.Event;
-using PoGo.NecroBot.LIB.PoGoUtils;
-using PoGo.NecroBot.LIB.State;
+using PoGo.NecroBot.Logic.Mini.Common;
+using PoGo.NecroBot.Logic.Mini.Event;
+using PoGo.NecroBot.Logic.Mini.PoGoUtils;
+using PoGo.NecroBot.Logic.Mini.State;
 using POGOProtos.Enums;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Map.Pokemon;
@@ -27,7 +27,7 @@ using Socket = Quobject.SocketIoClientDotNet.Client.Socket;
 
 #endregion
 
-namespace PoGo.NecroBot.LIB.Tasks
+namespace PoGo.NecroBot.Logic.Mini.Tasks
 {
     public class SniperInfo
     {

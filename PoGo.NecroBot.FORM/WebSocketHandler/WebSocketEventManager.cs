@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using PoGo.NecroBot.LIB.State;
+using PoGo.NecroBot.Logic.Mini.State;
 using SuperSocket.WebSocket;
 
 namespace PoGo.NecroBot.FORM.WebSocketHandler

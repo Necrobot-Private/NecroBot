@@ -6,7 +6,7 @@ using POGOProtos.Inventory.Item;
 
 #endregion
 
-namespace PoGo.NecroBot.LIB
+namespace PoGo.NecroBot.Logic.Mini
 {
     public class Location
     {
