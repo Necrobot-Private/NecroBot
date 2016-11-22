@@ -254,3 +254,5 @@ paket-files/
 *.sln.iml
 
 node_modules
+PoGo.NecroBot.GUI.Electron/dist
+
