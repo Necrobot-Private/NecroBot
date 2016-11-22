@@ -43,7 +43,7 @@ namespace PoGo.NecroBot.Logic.Mini.State
     public class VersionCheckState : IState
 {
         public const string VersionUri =
-            "https://raw.githubusercontent.com/Necrobot-Private/NecroBot/master/PoGo.NecroBot.FORM/Properties/AssemblyInfo.cs";
+            "https://raw.githubusercontent.com/Necrobot-Private/NecroBot/master/NecroBot2/Properties/AssemblyInfo.cs";
 
         public const string LatestReleaseApi =
             "https://api.github.com/repos/Necrobot-Private/NecroBot/releases/latest"; public static Version RemoteVersion;
@@ -106,12 +106,12 @@ namespace PoGo.NecroBot.Logic.Mini.State
             });
             var remoteReleaseUrl =
                 $"https://github.com/Necrobot-Private/NecroBot/releases/download/v{RemoteVersion}/";
-            const string zipName = "NecroBot2.Form.zip";
+            const string zipName = "NecroBot2.zip";
             var downloadLink = remoteReleaseUrl + zipName;
             var baseDir = Directory.GetCurrentDirectory();
             var downloadFilePath = Path.Combine(baseDir, zipName);
             var tempPath = Path.Combine(baseDir, "tmp");
-            var extractedDir = Path.Combine(tempPath, "NecroBot2.Form");
+            var extractedDir = Path.Combine(tempPath, "NecroBot2");
             var destinationDir = baseDir + Path.DirectorySeparatorChar;
             Logger.Write(downloadLink, LogLevel.Info);
 
