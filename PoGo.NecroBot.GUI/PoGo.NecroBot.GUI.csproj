@@ -111,7 +111,7 @@
       <HintPath>$(SolutionDir)\packages\Awesomium.1.7.5.1\lib\Awesomium.Windows.Controls.dll</HintPath>
     </Reference>
     <Reference Include="MahApps.Metro, Version=1.3.0.0, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
-      <HintPath>..\packages\MahApps.Metro.1.3.0\lib\net45\MahApps.Metro.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\MahApps.Metro.1.3.0\lib\net45\MahApps.Metro.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -121,7 +121,7 @@
     <Reference Include="System" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\MahApps.Metro.1.3.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\MahApps.Metro.1.3.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Xml" />
@@ -198,11 +198,11 @@
   <Choose>
     <When Condition="('$(SolutionName)'=='Awesomium.NET') Or ('$(SolutionName)'=='Awesomium.Windows')">
       <ItemGroup>
-        <ProjectReference Include="$(SolutionDir)\$(SolutionDir)\$(SolutionDir)\$(SolutionDir)\Awesomium.Core\Awesomium.Core.csproj">
+        <ProjectReference Include="$(SolutionDir)\packages\Awesomium.Core\Awesomium.Core.csproj">
           <Project>{3F0E79AA-7D2D-41C7-8A6B-F02E6A4B3093}</Project>
           <Name>Awesomium.Core %28Awesomium.Core\Awesomium.Core%29</Name>
         </ProjectReference>
-        <ProjectReference Include="$(SolutionDir)\$(SolutionDir)\$(SolutionDir)\$(SolutionDir)\Awesomium.Windows.Controls\Awesomium.Windows.Controls.csproj">
+        <ProjectReference Include="$(SolutionDir)\packages\Awesomium.Windows.Controls\Awesomium.Windows.Controls.csproj">
           <Project>{B5131F8C-42FA-49AC-B800-F8E17D95C59E}</Project>
           <Name>Awesomium.Windows.Controls %28Awesomium.Windows.Controls\Awesomium.Windows.Controls%29</Name>
         </ProjectReference>
