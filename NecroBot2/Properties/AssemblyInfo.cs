@@ -12,10 +12,10 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("NecroBot-Private for Pokémon GO")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("NecroBot-Private Team")]
 [assembly: AssemblyProduct("NecroBot2")]
 [assembly: AssemblyCopyright("Copyright NecroBot-Private Team © 2016")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyTrademark("NecroBot-Private Team")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
