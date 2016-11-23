@@ -6,25 +6,25 @@ Modified Version of NecroBot2 and RocketBot
 
 # Images
 ## Home
-![alt tag](https://raw.githubusercontent.com/HackePokeBot-Go/HackePokeBot/master/Img/home.png)  
+![alt tag](https://raw.githubusercontent.com/Necrobot-Private/NecroBot/tree/59cae0fd5b5f2e0b26df6caa80b789342fecc623/NecroBot2/Imghome.png)  
 ## Settings Auth
-![alt tag](https://raw.githubusercontent.com/HackePokeBot-Go/HackePokeBot/master/Img/settings.png)  
+![alt tag](https://raw.githubusercontent.com/Necrobot-Private/NecroBot/tree/59cae0fd5b5f2e0b26df6caa80b789342fecc623/NecroBot2/Img/settings.png)  
 ## Settings Device
-![alt tag](https://raw.githubusercontent.com/HackePokeBot-Go/HackePokeBot/master/Img/settings1.png)  
+![alt tag](https://raw.githubusercontent.com/Necrobot-Private/NecroBot/tree/59cae0fd5b5f2e0b26df6caa80b789342fecc623/NecroBot2/Img/settings1.png)  
 ## Settings Pokemon Catch
-![alt tag](https://raw.githubusercontent.com/HackePokeBot-Go/HackePokeBot/master/Img/settings2.png)  
+![alt tag](https://raw.githubusercontent.com/Necrobot-Private/NecroBot/tree/59cae0fd5b5f2e0b26df6caa80b789342fecc623/NecroBot2/Img/settings2.png)  
 ## Settings Pokemon Transfer
-![alt tag](https://raw.githubusercontent.com/HackePokeBot-Go/HackePokeBot/master/Img/settings3.png)
+![alt tag](https://raw.githubusercontent.com/Necrobot-Private/NecroBot/tree/59cae0fd5b5f2e0b26df6caa80b789342fecc623/NecroBot2/Img/settings3.png)
 ## Settings Pokemon PowerUp
-![alt tag](https://raw.githubusercontent.com/HackePokeBot-Go/HackePokeBot/master/Img/settings4.png)  
+![alt tag](https://raw.githubusercontent.com/Necrobot-Private/NecroBot/tree/59cae0fd5b5f2e0b26df6caa80b789342fecc623/NecroBot2/Img/settings4.png)  
 ## Settings Pokemon Evolve
-![alt tag](https://raw.githubusercontent.com/HackePokeBot-Go/HackePokeBot/master/Img/settings5.png)  
+![alt tag](https://raw.githubusercontent.com/Necrobot-Private/NecroBot/tree/59cae0fd5b5f2e0b26df6caa80b789342fecc623/NecroBot2/Img/settings5.png)  
 ## Settings Items
-![alt tag](https://raw.githubusercontent.com/HackePokeBot-Go/HackePokeBot/master/Img/settings6.png)  
+![alt tag](https://raw.githubusercontent.com/Necrobot-Private/NecroBot/tree/59cae0fd5b5f2e0b26df6caa80b789342fecc623/NecroBot2/Img/settings6.png)  
 ## Settings Advanced Settings
-![alt tag](https://raw.githubusercontent.com/HackePokeBot-Go/HackePokeBot/master/Img/settings7.png) 
+![alt tag](https://raw.githubusercontent.com/Necrobot-Private/NecroBot/tree/59cae0fd5b5f2e0b26df6caa80b789342fecc623/NecroBot2/Img/settings7.png) 
 ## Run
-![alt tag](https://raw.githubusercontent.com/HackePokeBot-Go/HackePokeBot/master/Img/run.png)  
+![alt tag](https://raw.githubusercontent.com/Necrobot-Private/NecroBot/tree/59cae0fd5b5f2e0b26df6caa80b789342fecc623/NecroBot2/Img/run.png)  
 #
 
 ## Features
