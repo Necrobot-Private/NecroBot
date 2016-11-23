@@ -9,6 +9,7 @@ using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Utils;
 using POGOProtos.Map.Pokemon;
 using POGOProtos.Networking.Responses;
+using System;
 
 #endregion
 
@@ -19,7 +20,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static async Task Execute(ISession session, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            if (!session.LogicSettings.CatchPokemon) return;
+            if (!session.LogicSettings.CatchPokemon || session.CatchBlockTime > DateTime.Now) return;
             
             Logger.Write(session.Translation.GetTranslation(TranslationString.LookingForIncensePokemon), LogLevel.Debug);
 

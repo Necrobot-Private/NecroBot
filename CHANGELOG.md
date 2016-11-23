@@ -1,4 +1,71 @@
 # Change Log
+## [v1.0.0.32](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.30) (2016-11-20)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.30...v1.0.0.32)
+## Feature
+- mypogosnipers now has manually snipe Support
+- multibot will use separate database file
+- force recycle task if bag full to avoid fake softban
+
+## [v1.0.0.30](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.30) (2016-11-20)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.29...v1.0.0.30)
+
+## Feature
+
+- http://msniper.com/ has new snipe method without msniper application :)
+  **( it can snipe on mobile phone but i didn't try)**
+
+## [v1.0.0.29](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.29) (2016-11-19)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.26...v1.0.0.29)
+
+
+## [v1.0.0.26](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.26) (2016-11-18)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.25...v1.0.0.26)
+
+**Fixed bugs:**
+
+- Fixes #371 - More multi bot bug fixes.
+
+## [v1.0.0.25](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.25) (2016-11-17)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.24...v1.0.0.25)
+
+**Fixed bugs:**
+
+- Fixes #363 - Do not attempt to multi-bot if not more than 1 bot is set up.
+
+## [v1.0.0.24](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.24) (2016-11-17)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.23...v1.0.0.24)
+
+**Implemented Enhancements**
+
+- Multi-bot Support
+- Auto-snipe from mypogosnipers.com
+
+## [v1.0.0.23](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.23) (2016-11-16)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.22...v1.0.0.23)
+
+**Fixed bugs:**
+
+- Fixes #320 - Fix login for first time users who have not accepted ToS.
+- Fixes #351 - Backup config file is now given a unique name with timestamp to avoid collisions.
+
+## [v1.0.0.22](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.22) (2016-11-16)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.19...v1.0.0.22)
+
+- Bug fix in API layer causing requests to randomly fail (seen in MoveNext() or inventory calls).
+- Bug fix for config file being lost when upgrading.  New mechanism for upgrading config.json introduced.
+- Bug fix for incorrect log level during first time startup.
+
+## [v1.0.0.19](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.19) (2016-11-14)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.18...v1.0.0.19)
+
+- Fixes #336 - Re-designed pokestop and pokemon limit to be a rolling limit over past 24 hours. Also fixed the limits being double-counted whenever the bot relogged.
+
+## [v1.0.0.18](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.18) (2016-11-14)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.17...v1.0.0.18)
+
+**Fixed bugs:**
+
+- Fixes #310 - PTC auth token refresh bug.
 
 ## [v1.0.0.17](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.17) (2016-11-14)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.16...v1.0.0.17)

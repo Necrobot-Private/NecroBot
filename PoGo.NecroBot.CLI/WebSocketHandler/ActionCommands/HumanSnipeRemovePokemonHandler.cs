@@ -21,8 +21,6 @@ namespace PoGo.NecroBot.CLI.WebSocketHandler.ActionCommands
         public async Task Handle(ISession session, WebSocketSession webSocketSession, dynamic message)
         {
             await HumanWalkSnipeTask.RemovePokemonFromQueue(session, (string) message.Id);
-            await Task.Delay(1000);
-                // Logic.Tasks.RecycleItemsTask.DropItem(session, (ItemId)message.ItemId, (int)message.Count);
         }
     }
 }

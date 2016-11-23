@@ -10,6 +10,8 @@ using POGOProtos.Enums;
 using POGOProtos.Networking.Responses;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Utils;
+using PoGo.NecroBot.Logic.Model.Settings;
+using PoGo.NecroBot.Logic.Common;
 
 #endregion
 
@@ -21,93 +23,90 @@ namespace PoGo.NecroBot.Logic.State
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            if (session.LogicSettings.AutoCompleteTutorial)
+            var tutState = session.Profile.PlayerData.TutorialState;
+            if (!tutState.Contains(TutorialState.LegalScreen))
             {
-                var tutState = session.Profile.PlayerData.TutorialState;
-                if (!tutState.Contains(TutorialState.LegalScreen))
+                await
+                    session.Client.Misc.MarkTutorialComplete(new RepeatedField<TutorialState>()
+                    {
+                        TutorialState.LegalScreen
+                    });
+                session.EventDispatcher.Send(new NoticeEvent()
                 {
-                    await
-                        session.Client.Misc.MarkTutorialComplete(new RepeatedField<TutorialState>()
-                        {
-                            TutorialState.LegalScreen
-                        });
+                    Message = "Just read the Niantic ToS, looks legit, accepting!"
+                });
+                await DelayingUtils.DelayAsync(9000, 2000, cancellationToken);
+            }
+            if (!tutState.Contains(TutorialState.AvatarSelection))
+            {
+                string genderString = GlobalSettings.PromptForString(session.Translation, session.Translation.GetTranslation(TranslationString.FirstStartSetupAutoCompleteTutGenderPrompt), new string[] { "Male", "Female" }, "You didn't set a valid gender.", false);
+
+                Gender gen;
+                switch (genderString)
+                {
+                    case "Male":
+                    case "male":
+                        gen = Gender.Male;
+                        break;
+                    case "Female":
+                    case "female":
+                        gen = Gender.Female;
+                        break;
+                    default:
+                        // We should never get here, since the prompt should only allow valid options.
+                        gen = Gender.Male;
+                        break;
+                }
+                var avatarRes = await session.Client.Player.SetAvatar(new PlayerAvatar()
+                {
+                    Backpack = 0,
+                    Eyes = 0,
+                    Gender = gen,
+                    Hair = 0,
+                    Hat = 0,
+                    Pants = 0,
+                    Shirt = 0,
+                    Shoes = 0,
+                    Skin = 0
+                });
+                if (avatarRes.Status == SetAvatarResponse.Types.Status.AvatarAlreadySet ||
+                    avatarRes.Status == SetAvatarResponse.Types.Status.Success)
+                {
+                    await session.Client.Misc.MarkTutorialComplete(new RepeatedField<TutorialState>()
+                    {
+                        TutorialState.AvatarSelection
+                    });
                     session.EventDispatcher.Send(new NoticeEvent()
                     {
-                        Message = "Just read the Niantic ToS, looks legit, accepting!"
+                        Message = $"Selected your avatar, now you are {gen}!"
                     });
-                    await DelayingUtils.DelayAsync(9000, 2000);
-                }
-                if (!tutState.Contains(TutorialState.AvatarSelection))
-                {
-                    var gen = Gender.Male;
-                    switch (session.LogicSettings.DesiredGender)
-                    {
-                        case "Male":
-                            gen = Gender.Male;
-                            break;
-                        case "Female":
-                            gen = Gender.Female;
-                            break;
-                        default:
-                            session.EventDispatcher.Send(new NoticeEvent()
-                            {
-                                Message = "You didn't set a valid gender, setting to default: MALE"
-                            });
-                            //I know it is useless, but I prefer keep it
-                            gen = Gender.Male;
-                            break;
-                    }
-                    var avatarRes = await session.Client.Player.SetAvatar(new PlayerAvatar()
-                    {
-                        Backpack = 0,
-                        Eyes = 0,
-                        Gender = gen,
-                        Hair = 0,
-                        Hat = 0,
-                        Pants = 0,
-                        Shirt = 0,
-                        Shoes = 0,
-                        Skin = 0
-                    });
-                    if (avatarRes.Status == SetAvatarResponse.Types.Status.AvatarAlreadySet ||
-                        avatarRes.Status == SetAvatarResponse.Types.Status.Success)
-                    {
-                        await session.Client.Misc.MarkTutorialComplete(new RepeatedField<TutorialState>()
-                        {
-                            TutorialState.AvatarSelection
-                        });
-                        session.EventDispatcher.Send(new NoticeEvent()
-                        {
-                            Message = $"Selected your avatar, now you are {gen}!"
-                        });
-                    }
-                }
-                if (!tutState.Contains(TutorialState.PokemonCapture))
-                {
-                    await CatchFirstPokemon(session);
-                }
-                if (!tutState.Contains(TutorialState.NameSelection))
-                {
-                    await SelectNicnname(session);
-                }
-                if (!tutState.Contains(TutorialState.FirstTimeExperienceComplete))
-                {
-                    await
-                        session.Client.Misc.MarkTutorialComplete(new RepeatedField<TutorialState>()
-                        {
-                            TutorialState.FirstTimeExperienceComplete
-                        });
-                    session.EventDispatcher.Send(new NoticeEvent()
-                    {
-                        Message = "First time experience complete, looks like i just spinned an virtual pokestop :P"
-                    });
-                    await DelayingUtils.DelayAsync(3000, 2000);
                 }
             }
-            return new FarmState();
+            if (!tutState.Contains(TutorialState.PokemonCapture))
+            {
+                await CatchFirstPokemon(session, cancellationToken);
+            }
+            if (!tutState.Contains(TutorialState.NameSelection))
+            {
+                await SelectNickname(session, cancellationToken);
+            }
+            if (!tutState.Contains(TutorialState.FirstTimeExperienceComplete))
+            {
+                await
+                    session.Client.Misc.MarkTutorialComplete(new RepeatedField<TutorialState>()
+                    {
+                        TutorialState.FirstTimeExperienceComplete
+                    });
+                session.EventDispatcher.Send(new NoticeEvent()
+                {
+                    Message = "First time experience complete, looks like i just spinned an virtual pokestop :P"
+                });
+                await DelayingUtils.DelayAsync(3000, 2000, cancellationToken);
+            }
+            return new InfoState();
         }
 
-        public async Task<bool> CatchFirstPokemon(ISession session)
+        public async Task<bool> CatchFirstPokemon(ISession session, CancellationToken cancellationToken)
         {
             var firstPokeList = new List<PokemonId>
             {
@@ -115,24 +114,24 @@ namespace PoGo.NecroBot.Logic.State
                 PokemonId.Charmander,
                 PokemonId.Squirtle
             };
+            string pokemonString = GlobalSettings.PromptForString(session.Translation, session.Translation.GetTranslation(TranslationString.FirstStartSetupAutoCompleteTutStarterPrompt), new string[] { "Bulbasaur", "Charmander", "Squirtle" }, "You didn't enter a valid pokemon.", false);
             var firstpokenum = 0;
-            switch (session.LogicSettings.DesiredStarter)
+            switch (pokemonString)
             {
                 case "Bulbasaur":
+                case "bulbasaur":
                     firstpokenum = 0;
                     break;
                 case "Charmander":
+                case "charmander":
                     firstpokenum = 1;
                     break;
                 case "Squirtle":
+                case "squirtle":
                     firstpokenum = 2;
                     break;
                 default:
-                    session.EventDispatcher.Send(new NoticeEvent()
-                    {
-                        Message = "You didn't set a valid starter, setting to default: Bulbasaur"
-                    });
-                    //I know it is useless, but I prefer keep it
+                    // We should never get here.
                     firstpokenum = 0;
                     break;
             }
@@ -140,7 +139,7 @@ namespace PoGo.NecroBot.Logic.State
             var firstPoke = firstPokeList[firstpokenum];
 
             var res = await session.Client.Encounter.EncounterTutorialComplete(firstPoke);
-            await DelayingUtils.DelayAsync(7000, 2000);
+            await DelayingUtils.DelayAsync(7000, 2000, cancellationToken);
             if (res.Result != EncounterTutorialCompleteResponse.Types.Result.Success) return false;
             session.EventDispatcher.Send(new NoticeEvent()
             {
@@ -149,80 +148,88 @@ namespace PoGo.NecroBot.Logic.State
             return true;
         }
 
-        public async Task<bool> SelectNicnname(ISession session)
+        public async Task<bool> SelectNickname(ISession session, CancellationToken cancellationToken)
         {
-            if (string.IsNullOrEmpty(session.LogicSettings.DesiredNickname))
+            while (true)
             {
-                session.EventDispatcher.Send(new NoticeEvent()
-                {
-                    Message = "You didn't pick the desired nickname!"
-                });
-                return false;
-            }
+                string nickname = GlobalSettings.PromptForString(session.Translation, session.Translation.GetTranslation(TranslationString.FirstStartSetupAutoCompleteTutNicknamePrompt), null, "You entered an invalid nickname.");
 
-            if (session.LogicSettings.DesiredNickname.Length > 15)
-            {
-                session.EventDispatcher.Send(new NoticeEvent()
+                if (nickname.Length > 15 || nickname.Length == 0)
                 {
-                    Message = "You selected too long Desired name, max length: 15!"
-                });
-                return false;
-            }
-			
-            var res = await session.Client.Misc.ClaimCodename(session.LogicSettings.DesiredNickname);
-            if (res.Status == ClaimCodenameResponse.Types.Status.Success)
-            {
-                session.EventDispatcher.Send(new NoticeEvent()
-                {
-                    Message = $"Your name is now: {res.Codename}"
-                });
-                await session.Client.Misc.MarkTutorialComplete(new RepeatedField<TutorialState>()
-                        {
-                            TutorialState.NameSelection
-                        });
-            }
-            else if (res.Status == ClaimCodenameResponse.Types.Status.CodenameChangeNotAllowed || res.Status == ClaimCodenameResponse.Types.Status.CurrentOwner)
-            {
-                await session.Client.Misc.MarkTutorialComplete(new RepeatedField<TutorialState>()
-                        {
-                            TutorialState.NameSelection
-                        });
-            }
-            else
-            {
-                var errorText = "Niantic error";
+                    session.EventDispatcher.Send(new ErrorEvent()
+                    {
+                        Message = "Your desired nickname is too long (max length 15 characters)!"
+                    });
+                    continue;
+                }
+
+                var res = await session.Client.Misc.ClaimCodename(nickname);
+
+                bool markTutorialComplete = false;
+                string errorText = null;
+                string warningText = null;
+                string infoText = null;
                 switch (res.Status)
                 {
                     case ClaimCodenameResponse.Types.Status.Unset:
                         errorText = "Unset, somehow";
                         break;
                     case ClaimCodenameResponse.Types.Status.Success:
-                        errorText = "No errors, nickname changed";
+                        infoText = $"Your name is now: {res.Codename}";
+                        markTutorialComplete = true;
                         break;
                     case ClaimCodenameResponse.Types.Status.CodenameNotAvailable:
-                        errorText = "That nickname isn't available, pick another one and restart the bot!";
+                        errorText = $"That nickname ({nickname}) isn't available, pick another one!";
                         break;
                     case ClaimCodenameResponse.Types.Status.CodenameNotValid:
-                        errorText = "That nickname isn't valid, pick another one!";
+                        errorText = $"That nickname ({nickname}) isn't valid, pick another one!";
                         break;
                     case ClaimCodenameResponse.Types.Status.CurrentOwner:
-                        errorText = "You already own that nickname!";
+                        warningText = $"You already own that nickname!";
+                        markTutorialComplete = true;
                         break;
                     case ClaimCodenameResponse.Types.Status.CodenameChangeNotAllowed:
-                        errorText = "You can't change your nickname anymore!";
+                        warningText = "You can't change your nickname anymore!";
+                        markTutorialComplete = true;
+                        break;
+                    default:
+                        errorText = "Unknown Niantic error while changing nickname.";
                         break;
                 }
-
-                session.EventDispatcher.Send(new NoticeEvent()
+                
+                if (!string.IsNullOrEmpty(infoText))
                 {
-                    Message = $"Name selection failed! Error: {errorText}"
-                });
+                    session.EventDispatcher.Send(new NoticeEvent()
+                    {
+                        Message = infoText
+                    });
+                }
+                else if (!string.IsNullOrEmpty(warningText))
+                {
+                    session.EventDispatcher.Send(new WarnEvent()
+                    {
+                        Message = warningText
+                    });
+                }
+                else if (!string.IsNullOrEmpty(errorText))
+                {
+                    session.EventDispatcher.Send(new ErrorEvent()
+                    {
+                        Message = errorText
+                    });
+                }
 
-                // Pause here so the user can restart the bot.
-                Console.ReadKey();
+                if (markTutorialComplete)
+                {
+                    await session.Client.Misc.MarkTutorialComplete(new RepeatedField<TutorialState>()
+                    {
+                        TutorialState.NameSelection
+                    });
+
+                    await DelayingUtils.DelayAsync(3000, 2000, cancellationToken);
+                    return res.Status == ClaimCodenameResponse.Types.Status.Success;
+                }
             }
-            await DelayingUtils.DelayAsync(3000, 2000);
-            return res.Status == ClaimCodenameResponse.Types.Status.Success;
         }
     }
 }

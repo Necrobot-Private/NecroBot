@@ -33,7 +33,6 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             cancellationToken.ThrowIfCancellationRequested();
             var distance = session.Navigation.WalkStrategy.CalculateDistance(session.Client.CurrentLatitude, session.Client.CurrentLongitude, gym.Latitude, gym.Longitude);
-
             if (fortInfo != null)
             {
                 session.EventDispatcher.Send(new GymWalkToTargetEvent()
@@ -102,7 +101,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     if (pokemon.Stamina < pokemon.StaminaMax)
                         await HealPokemon(session, pokemon);
                 }
-                Thread.Sleep(4000);
+                await Task.Delay(4000);
 
                 int tries = 0;
                 StartGymBattleResponse result;
@@ -117,7 +116,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         badassPokemon = await session.Inventory.GetHighestCpForGym(6);
                         pokemonDatas = badassPokemon as PokemonData[] ?? badassPokemon.ToArray();
                         Logger.Write($"Failed to Start Gym Battle at try: {tries}, waiting 20 seconds before make another one.", LogLevel.Gym, ConsoleColor.Red);
-                        Thread.Sleep(20000);
+                        await Task.Delay(20000);
                     }
                 } while (result.Result == StartGymBattleResponse.Types.Result.Unset && tries <= 10);
                 
@@ -197,6 +196,18 @@ namespace PoGo.NecroBot.Logic.Tasks
                             PokemonId = pokemon.PokemonId,
                             Name = fortDetails.Name
                         });
+                        if (session.LogicSettings.GymCollectRewardAfter > 0) {
+                            var deployed = await session.Inventory.GetDeployedPokemons();
+                            var count = deployed.Count();
+                            if (count >= session.LogicSettings.GymCollectRewardAfter)
+                            {
+                                var collectDailyBonusResponse = await session.Client.Player.CollectDailyBonus();
+                                if(collectDailyBonusResponse.Result == CollectDailyBonusResponse.Types.Result.Success)
+                                {
+                                    Logger.Write($"Collected {count * 10} coins", LogLevel.Gym, ConsoleColor.DarkYellow);
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -445,12 +456,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                     }
                     Debug.Write($"{attackResult}");
 
-                    Thread.Sleep(5000);
+                    await Task.Delay(5000);
                     // Sleep until last sent battle action expired
                     //bool sleep = true;
                     //while (attackActionz.LastOrDefault() != null && sleep)
                     //{
-                    //    Thread.Sleep(1000);
+                    //    await Task.Delay(1000);
                     //    DateTime currentTime = DateTime.Now;
                     //    if (currentTime.ToUnixTime() > attackActionz.LastOrDefault().DamageWindowsEndTimestampMss)
                     //    {
@@ -509,8 +520,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                             action.ActionStartMs = now.ToUnixTime();
                             action.TargetIndex = -1;
                             action.ActivePokemonId = attacker.Id;
-                            action.DamageWindowsStartTimestampMs = now.ToUnixTime() - 200;
-                            action.DamageWindowsEndTimestampMs = now.ToUnixTime();
+                           // action.DamageWindowsStartTimestampMss = now.ToUnixTime() - 200;
+                            //action.DamageWindowsEndTimestampMss = now.ToUnixTime();
                             actions.Add(action);
                         }
                         _pos++;
@@ -548,10 +559,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                             action.ActionStartMs = now.ToUnixTime();
                             action.TargetIndex = -1;
                             action.ActivePokemonId = attacker.Id;
-                            action.DamageWindowsStartTimestampMs = now.ToUnixTime() - 200;
-                            action.DamageWindowsEndTimestampMs = now.ToUnixTime();
+                            //action.DamageWindowsStartTimestampMss = now.ToUnixTime() - 200;
+                            //action.DamageWindowsEndTimestampMss = now.ToUnixTime();
 
-
+                                    //
                             actions.Add(action);
                         }
                         _pos++;

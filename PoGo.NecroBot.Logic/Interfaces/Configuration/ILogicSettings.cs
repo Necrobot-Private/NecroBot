@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using PoGo.NecroBot.Logic.Model.Settings;
 using POGOProtos.Enums;
 using POGOProtos.Inventory.Item;
+using System.Threading;
 
 #endregion
 
@@ -13,17 +14,19 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
     {
         bool UseWebsocket { get; }
         bool CatchPokemon { get; }
+        int OutOfBallCatchBlockTime { get; }
+        int PokeballsToKeepForSnipe { get; }            
         int CatchPokemonLimit { get; }
         int CatchPokemonLimitMinutes { get; }
         int PokeStopLimit { get; }
         int PokeStopLimitMinutes { get; }
         int SnipeCountLimit { get; }
+        int MinIVForAutoSnipe { get; }
         int SnipeRestSeconds { get; }
         bool TransferWeakPokemon { get; }
         bool DisableHumanWalking { get; }
         bool CheckForUpdates { get; }
         bool AutoUpdate { get; }
-        bool TransferConfigAndAuthOnUpdate { get; }
         float KeepMinIvPercentage { get; }
         int KeepMinCp { get; }
         int KeepMinLvl { get; }
@@ -140,10 +143,6 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         bool UsePokeStopLimit { get; }
         bool UseCatchLimit { get; }
         bool UseNearActionRandom { get; }
-        bool AutoCompleteTutorial { get; }
-        string DesiredNickname { get; }
-        string DesiredGender { get; }
-        string DesiredStarter { get; }
         ICollection<KeyValuePair<ItemId, int>> ItemRecycleFilter { get; }
 
         ICollection<PokemonId> PokemonsToEvolve { get; }
@@ -156,7 +155,11 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         ICollection<PokemonId> PokemonToUseMasterball { get; }
 
         Dictionary<PokemonId, TransferFilter> PokemonsTransferFilter { get; }
+        Dictionary<PokemonId, SnipeFilter> PokemonSnipeFilters { get; }
         Dictionary<PokemonId, UpgradeFilter> PokemonUpgradeFilters { get; }
+
+        Dictionary<PokemonId, BotSwitchPokemonFilter> BotSwitchPokemonFilters { get; }
+
         SnipeSettings PokemonToSnipe { get; }
 
         bool StartupWelcomeDelay { get; }
@@ -222,7 +225,14 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         int GymVisitTimeout { get; }
         int GymNumberOfTopPokemonToBeExcluded { get; }
 
+        string DataSharingIdentifiation { get; }
         bool DataSharingEnable { get; }
         string DataSharingDataUrl { get; }
+        bool AllowAutoSnipe { get; }
+        MultipleBotConfig MultipleBotConfig { get; }
+        int GymCollectRewardAfter { get; }
+        List<AuthConfig> Bots { get; }
+        bool AllowMultipleBot { get; }
+        
     }
 }

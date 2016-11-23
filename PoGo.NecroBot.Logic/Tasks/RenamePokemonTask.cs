@@ -54,9 +54,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                             session.Translation.GetTranslation(TranslationString.PokemonRename, session.Translation.GetPokemonTranslation(pokemon.PokemonId),
                                 pokemon.Id, oldNickname, newNickname)
                     });
-                }
 
-                DelayingUtils.Delay(session.LogicSettings.RenamePokemonActionDelay, 500);
+                    //Delay only if the pokemon was really renamed!
+                    DelayingUtils.Delay(session.LogicSettings.RenamePokemonActionDelay, 500);
+                }
             }
         }
     }

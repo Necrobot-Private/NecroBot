@@ -52,6 +52,23 @@ namespace PoGo.NecroBot.Logic.Tasks
             return results;
         }
 
+        public static async Task AddFastPokemapItem(dynamic data)
+        {
+            var list = JsonConvert.DeserializeObject<List<FastPokemapItem>>(data.ToString());
+
+            List<SnipePokemonInfo> result = new List<SnipePokemonInfo>();
+            foreach (var item in list)
+            {
+                var snipeItem = Map(item);
+                if(snipeItem != null)
+                {
+                    result.Add(snipeItem);
+                }
+            }
+            await PostProcessDataFetched(result, false);
+            
+        }
+
         private static SnipePokemonInfo Map(PokeWatcherItem result)
         {
             string[] arr = result.cords.Split(',');

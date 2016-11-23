@@ -20,6 +20,9 @@ using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Tasks;
 using PoGo.NecroBot.Logic.Utils;
 using PoGo.NecroBot.Logic.Service.Elevation;
+using System.Configuration;
+using System.Text;
+using System.Collections.Generic;
 
 #endregion
 
@@ -31,7 +34,7 @@ namespace PoGo.NecroBot.CLI
         private static string _subPath = "";
         private static bool _enableJsonValidation = true;
         private static bool _ignoreKillSwitch;
-
+                                                                 
         private static readonly Uri StrKillSwitchUri =
             new Uri("https://raw.githubusercontent.com/Necrobot-Private/Necrobot2/master/KillSwitch.txt");
         private static readonly Uri StrMasterKillSwitchUri =
@@ -87,7 +90,13 @@ namespace PoGo.NecroBot.CLI
                         break;
                 }
             }
-            
+
+            bool excelConfigAllow = false;
+            if (commandLine["provider"] != null && commandLine["provider"] =="excel")
+            {
+                excelConfigAllow = true;
+            }
+
             Logger.AddLogger(new ConsoleLogger(LogLevel.Service), _subPath);
             Logger.AddLogger(new FileLogger(LogLevel.Service), _subPath);
             Logger.AddLogger(new WebSocketLogger(LogLevel.Service), _subPath);
@@ -98,16 +107,28 @@ namespace PoGo.NecroBot.CLI
             var profilePath = Path.Combine(Directory.GetCurrentDirectory(), _subPath);
             var profileConfigPath = Path.Combine(profilePath, "config");
             var configFile = Path.Combine(profileConfigPath, "config.json");
+            var excelConfigFile = Path.Combine(profileConfigPath, "config.xlsm");
 
             GlobalSettings settings;
             var boolNeedsSetup = false;
-
+            
             if (File.Exists(configFile))
             {
                 // Load the settings from the config file
-                // If the current program is not the latest version, ensure we skip saving the file after loading
-                // This is to prevent saving the file with new options at their default values so we can check for differences
-                settings = GlobalSettings.Load(_subPath, !VersionCheckState.IsLatest(), _enableJsonValidation);
+                settings = GlobalSettings.Load(_subPath, _enableJsonValidation);
+                if(excelConfigAllow)
+                {
+                    if(!File.Exists(excelConfigFile)) {
+
+                        Logger.Write("Migrating existing json confix to excel config, please check the config.xlsm in your config folder");
+
+                        ExcelConfigHelper.MigrateFromObject(settings, excelConfigFile);
+                    }
+                    else
+                    settings = ExcelConfigHelper.ReadExcel(settings, excelConfigFile);
+
+                    Logger.Write("Bot will run with your excel config, loading excel config");
+                }
             }
             else
             {
@@ -121,7 +142,6 @@ namespace PoGo.NecroBot.CLI
 
                 boolNeedsSetup = true;
             }
-
             if (commandLine["latlng"] != null && commandLine["latlng"].Length > 0)
             {
                 var crds = commandLine["latlng"].Split(',');
@@ -198,6 +218,7 @@ namespace PoGo.NecroBot.CLI
                 }
             }
             IElevationService elevationService = new ElevationService(settings);
+
             _session = new Session(new ClientSettings(settings, elevationService), logicSettings, elevationService, translation);
             Logger.SetLoggerContext(_session);
 
@@ -213,12 +234,17 @@ namespace PoGo.NecroBot.CLI
                 }
                 else
                 {
-                    GlobalSettings.Load(_subPath, false, _enableJsonValidation);
+                    GlobalSettings.Load(_subPath, _enableJsonValidation);
 
                     Logger.Write("Press a Key to continue...",
                         LogLevel.Warning);
                     Console.ReadKey();
                     return;
+                }
+
+                if(excelConfigAllow)
+                {
+                    ExcelConfigHelper.MigrateFromObject(settings, excelConfigFile);
                 }
             }
 
@@ -229,8 +255,7 @@ namespace PoGo.NecroBot.CLI
                 var websocket = new WebSocketInterface(settings.WebsocketsConfig.WebSocketPort, _session);
                 _session.EventDispatcher.EventReceived += evt => websocket.Listen(evt, _session);
             }
-
-            _session.Client.ApiFailure = new ApiFailureStrategy(_session);
+            
             ProgressBar.Fill(20);
 
             var machine = new StateMachine();
@@ -266,12 +291,40 @@ namespace PoGo.NecroBot.CLI
             _session.Navigation.WalkStrategy.UpdatePositionEvent +=
                 (lat, lng) => _session.EventDispatcher.Send(new UpdatePositionEvent { Latitude = lat, Longitude = lng });
             _session.Navigation.WalkStrategy.UpdatePositionEvent += SaveLocationToDisk;
-            UseNearbyPokestopsTask.UpdateTimeStampsPokestop += SaveTimeStampsPokestopToDisk;
-            CatchPokemonTask.UpdateTimeStampsPokemon += SaveTimeStampsPokemonToDisk;
-
+            
             ProgressBar.Fill(100);
 
-            machine.AsyncStart(new VersionCheckState(), _session, _subPath);
+            if(_session.LogicSettings.AllowMultipleBot && _session.LogicSettings.MultipleBotConfig.SelectAccountOnStartUp)
+            {
+               
+                byte index = 0;
+                Console.WriteLine();
+                Console.WriteLine();
+                Logger.Write("PLEASE SELECT AN ACCOUNT TO START.");
+                List<Char> availableOption = new List<char>();
+                foreach (var item in _session.Accounts)
+                {
+                    var ch =  (char)(index + 65 );
+                    availableOption.Add(ch);
+                    Logger.Write($"{ch}. {item.GoogleUsername}{item.PtcUsername}");
+                    index++;
+                };
+
+                char select = ' ';
+                do
+                { 
+                    select = Console.ReadKey(true).KeyChar;         
+                    Console.WriteLine(select);
+                    select = Char.ToUpper(select);
+                }
+                while (!availableOption.Contains(select));
+
+                var bot = _session.Accounts[select - 65];
+                
+                _session.ResetSessionToWithNextBot(bot);
+
+            }
+            machine.AsyncStart(new VersionCheckState(), _session, _subPath, excelConfigAllow);
 
             try
             {
@@ -288,6 +341,11 @@ namespace PoGo.NecroBot.CLI
                 _session.LogicSettings.HumanWalkingSnipeUsePogoLocationFeeder)
                 SnipePokemonTask.AsyncStart(_session);
 
+            if(_session.LogicSettings.EnableHumanWalkingSnipe && _session.LogicSettings.HumanWalkingSnipeUseFastPokemap)
+            {
+                HumanWalkSnipeTask.StartFastPokemapAsync(_session, _session.CancellationTokenSource.Token);// that need to keep data  live 
+            }
+
             if (_session.LogicSettings.DataSharingEnable)
             {
                 BotDataSocketClient.StartAsync(_session);
@@ -298,6 +356,7 @@ namespace PoGo.NecroBot.CLI
             if (_session.LogicSettings.ActivateMSniper)
             {
                 MSniperServiceTask.ConnectToService();
+                _session.EventDispatcher.EventReceived += evt => MSniperServiceTask.AddToList(evt);
             }
             QuitEvent.WaitOne();
         }
@@ -312,30 +371,7 @@ namespace PoGo.NecroBot.CLI
             var coordsPath = Path.Combine(_session.LogicSettings.ProfileConfigPath, "LastPos.ini");
             File.WriteAllText(coordsPath, $"{lat}:{lng}");
         }
-
-        private static void SaveTimeStampsPokestopToDisk()
-        {
-            if (_session == null) return;
-
-            var path = Path.Combine(_session.LogicSettings.ProfileConfigPath, "PokestopTS.txt");
-            var fileContent = _session.Stats.PokeStopTimestamps.Select(t => t.ToString()).ToList();
-
-            if (fileContent.Count > 0)
-                File.WriteAllLines(path, fileContent.ToArray());
-        }
-
-        private static void SaveTimeStampsPokemonToDisk()
-        {
-            if (_session == null) return;
-
-            var path = Path.Combine(_session.LogicSettings.ProfileConfigPath, "PokemonTS.txt");
-
-            var fileContent = _session.Stats.PokemonTimestamps.Select(t => t.ToString()).ToList();
-
-            if (fileContent.Count > 0)
-                File.WriteAllLines(path, fileContent.ToArray());
-        }
-
+        
         private static bool CheckMKillSwitch()
         {
             using (var wC = new WebClient())

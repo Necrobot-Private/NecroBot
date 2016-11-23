@@ -16,7 +16,6 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         private readonly GlobalSettings _settings;
 
         public LogicSettings(GlobalSettings settings)
-
         {
             _settings = settings;
         }
@@ -24,11 +23,15 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public string ProfilePath => _settings.ProfilePath;
         public string ProfileConfigPath => _settings.ProfileConfigPath;
         public string GeneralConfigPath => _settings.GeneralConfigPath;
+        public int SchemaVersion => _settings.UpdateConfig.SchemaVersion;
         public bool CheckForUpdates => _settings.UpdateConfig.CheckForUpdates;
         public bool AutoUpdate => _settings.UpdateConfig.AutoUpdate;
-        public bool TransferConfigAndAuthOnUpdate => _settings.UpdateConfig.TransferConfigAndAuthOnUpdate;
         public bool UseWebsocket => _settings.WebsocketsConfig.UseWebsocket;
         public bool CatchPokemon => _settings.PokemonConfig.CatchPokemon;
+        public int OutOfBallCatchBlockTime => _settings.PokemonConfig.OutOfBallCatchBlockTime;
+        public int PokeballToKeepForSnipe => _settings.PokemonConfig.PokeballToKeepForSnipe;
+        public int PokeballsToKeepForSnipe => _settings.PokemonConfig.PokeballToKeepForSnipe;
+
         public int CatchPokemonLimit => _settings.PokemonConfig.CatchPokemonLimit;
         public int CatchPokemonLimitMinutes => _settings.PokemonConfig.CatchPokemonLimitMinutes;
         public int PokeStopLimit => _settings.PokeStopConfig.PokeStopLimit;
@@ -97,10 +100,6 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public int RecycleActionDelay => _settings.PlayerConfig.RecycleActionDelay;
         public int RenamePokemonActionDelay => _settings.PlayerConfig.RenamePokemonActionDelay;
         public bool UseNearActionRandom => _settings.PlayerConfig.UseNearActionRandom;
-        public bool AutoCompleteTutorial => _settings.PlayerConfig.AutoCompleteTutorial;
-        public string DesiredNickname => _settings.PlayerConfig.DesiredNickname;
-        public string DesiredGender => _settings.PlayerConfig.DesiredGender;
-        public string DesiredStarter => _settings.PlayerConfig.DesiredStarter;
         public bool UsePokemonToNotCatchFilter => _settings.PokemonConfig.UsePokemonToNotCatchFilter;
         public bool UsePokemonSniperFilterOnly => _settings.PokemonConfig.UsePokemonSniperFilterOnly;
         public int KeepMinDuplicatePokemon => _settings.PokemonConfig.KeepMinDuplicatePokemon;
@@ -133,6 +132,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public ICollection<PokemonId> PokemonToUseMasterball => _settings.PokemonToUseMasterball;
         public Dictionary<PokemonId, TransferFilter> PokemonsTransferFilter => _settings.PokemonsTransferFilter;
         public Dictionary<PokemonId, UpgradeFilter> PokemonUpgradeFilters => _settings.PokemonUpgradeFilters;
+        public Dictionary<PokemonId, SnipeFilter> PokemonSnipeFilters => _settings.SnipePokemonFilter;
 
         public bool StartupWelcomeDelay => _settings.ConsoleConfig.StartupWelcomeDelay;
         public bool UseGoogleWalk => _settings.GoogleWalkConfig.UseGoogleWalk;
@@ -212,7 +212,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool HumanWalkingSnipeUseFastPokemap => _settings.HumanWalkSnipeConfig.UseFastPokemap;
         public bool HumanWalkingSnipeUsePogoLocationFeeder => _settings.HumanWalkSnipeConfig.UsePogoLocationFeeder;
         public bool HumanWalkingSnipeAllowTransferWhileWalking => _settings.HumanWalkSnipeConfig.AllowTransferWhileWalking;
-
+        public int GymCollectRewardAfter => _settings.GymConfig.CollectCoinAfterDeployed;
         public bool GymAllowed => _settings.GymConfig.Enable;
         public bool GymPrioritizeOverPokestop => _settings.GymConfig.PrioritizeGymOverPokestop;
         public TeamColor GymDefaultTeam =>(TeamColor)Enum.Parse(typeof(TeamColor), _settings.GymConfig.DefaultTeam);
@@ -227,9 +227,18 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public int GymNumberOfTopPokemonToBeExcluded => _settings.GymConfig.NumberOfTopPokemonToBeExcluded;
 
         public bool DataSharingEnable => _settings.DataSharingConfig.EnableSyncData;
+        public string DataSharingIdentifiation => _settings.DataSharingConfig.DataServiceIdentification;
+        public bool AllowAutoSnipe => _settings.DataSharingConfig.AutoSnipe;
 
         public string DataSharingDataUrl => _settings.DataSharingConfig.DataRecieverURL;
 
         public bool UseTransferFilterToCatch => _settings.CustomCatchConfig.UseTransferFilterToCatch;
+
+        public MultipleBotConfig MultipleBotConfig => _settings.MultipleBotConfig;
+        public List<AuthConfig> Bots => _settings.Auth.Bots;
+        public bool AllowMultipleBot => _settings.Auth.AllowMultipleBot;
+        public int MinIVForAutoSnipe => _settings.SnipeConfig.MinIVForAutoSnipe;
+        public Dictionary<PokemonId, BotSwitchPokemonFilter> BotSwitchPokemonFilters => _settings.BotSwitchPokemonFilters;
+
     }
 }

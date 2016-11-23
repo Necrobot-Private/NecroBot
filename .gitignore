@@ -252,3 +252,7 @@ paket-files/
 # JetBrains Rider
 .idea/
 *.sln.iml
+
+node_modules
+PoGo.NecroBot.GUI.Electron/dist
+

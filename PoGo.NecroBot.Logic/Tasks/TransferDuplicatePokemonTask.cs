@@ -67,7 +67,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 // This is to remedy too quick transfers, often happening within a second of the
                 // previous action otherwise
 
-                DelayingUtils.Delay(session.LogicSettings.TransferActionDelay, 0);
+                await DelayingUtils.DelayAsync(session.LogicSettings.TransferActionDelay, 0, cancellationToken);
             }
         }
     }

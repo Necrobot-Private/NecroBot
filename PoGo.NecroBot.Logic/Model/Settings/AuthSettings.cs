@@ -18,6 +18,7 @@ using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.Utils;
 using PokemonGo.RocketAPI.Helpers;
+using PokemonGo.RocketAPI.Extensions;
 
 #endregion
 
@@ -35,6 +36,13 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public ProxyConfig ProxyConfig = new ProxyConfig();
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore, Order = 3)]
         public DeviceConfig DeviceConfig = new DeviceConfig();
+
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 4)]
+        [DefaultValue(false)]
+        public bool AllowMultipleBot = false;
+
+        [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Ignore, Order = 5)]
+        public List<AuthConfig> Bots= new List<AuthConfig>();
 
         private JSchema _schema;
 
@@ -123,11 +131,11 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         //    }
         //}
 
-        public void Load(string path, bool boolSkipSave = false, bool validate = false)
+        public void Load(string configFile, string schemaFile, int schemaVersion, bool validate = false)
         {
             try
             {
-                _filePath = path;
+                _filePath = configFile;
 
                 if (File.Exists(_filePath))
                 {
@@ -136,9 +144,13 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
                     if (validate)
                     {
+                        var jsonObj = JObject.Parse(input);
+
+                        // Migrate before validation.
+                        MigrateSettings(schemaVersion, jsonObj, configFile, schemaFile);
+
                         // validate Json using JsonSchema
                         Logger.Write("Validating auth.json...");
-                        var jsonObj = JObject.Parse(input);
                         IList<ValidationError> errors = null;
                         bool valid;
                         try
@@ -175,6 +187,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                                 LogLevel.Warning);
                             Console.ReadKey();
                         }
+
+                        // Now we know it's valid so update input with the migrated version.
+                        input = jsonObj.ToString();
                     }
 
                     var settings = new JsonSerializerSettings();
@@ -237,8 +252,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                     DeviceConfig.DeviceId = RandomString(32, "0123456789abcdef");
                 }
 
-                if (!boolSkipSave)
-                    Save(_filePath);
+                Save(_filePath);
             }
             catch (JsonReaderException exception)
             {
@@ -261,6 +275,40 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                         LogLevel.Error);
                 else
                     Logger.Write("JSON Exception: " + exception.Message, LogLevel.Error);
+            }
+        }
+
+        private static void MigrateSettings(int schemaVersion, JObject settings, string configFile, string schemaFile)
+        {
+            if (schemaVersion == UpdateConfig.CURRENT_SCHEMA_VERSION)
+            {
+                Logger.Write("Auth Configuration is up-to-date. Schema version: " + schemaVersion);
+                return;
+            }
+
+            // Backup old config file.
+            long ts = DateTime.UtcNow.ToUnixTime(); // Add timestamp to avoid file conflicts
+            string backupPath = configFile.Replace(".json", $"-{schemaVersion}-{ts}.backup.json");
+            Logger.Write($"Backing up auth.json to: {backupPath}", LogLevel.Info);
+            File.Copy(configFile, backupPath);
+
+            // Add future schema migrations below.
+            int version;
+            for (version = schemaVersion; version < UpdateConfig.CURRENT_SCHEMA_VERSION; version++)
+            {
+                Logger.Write($"Migrating auth configuration from schema version {version} to {version + 1}", LogLevel.Info);
+                switch (version)
+                {
+                    case 3:
+                        settings["DeviceConfig"]["AndroidBoardName"] = null;
+                        settings["DeviceConfig"]["AndroidBootloader"] = null;
+                        settings["DeviceConfig"]["DeviceModelIdentifier"] = null;
+                        settings["DeviceConfig"]["FirmwareTags"] = null;
+                        settings["DeviceConfig"]["FirmwareFingerprint"] = null;
+                        break;
+
+                    // Add more here.
+                }
             }
         }
 

@@ -85,7 +85,7 @@ namespace PoGo.NecroBot.Logic
 
             return currentSpeed;
         }
-
+        private object ensureOneWalkEvent = new object();
         public async Task<PlayerUpdateResponse> Move(IGeoLocation targetLocation,
             Func<Task> functionExecutedWhileWalking,
             ISession session,
