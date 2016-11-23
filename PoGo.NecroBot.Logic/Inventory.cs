@@ -140,7 +140,7 @@ namespace PoGo.NecroBot.Logic
             {
                 throw e;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 //throw e; 
             }

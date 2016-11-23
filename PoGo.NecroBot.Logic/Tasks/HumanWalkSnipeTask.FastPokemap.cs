@@ -105,7 +105,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 chunk.Add(pItem);
                             }
                         }
-                        PostProcessDataFetched(chunk, false);
+                        await PostProcessDataFetched(chunk, false);
                     }
                     catch
                     {
