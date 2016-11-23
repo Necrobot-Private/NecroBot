@@ -384,8 +384,6 @@
     <Content Include="Resources\device info.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="supersocket.cmd" />
-    <None Include="supersocket.sh" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Images\Items\ItemBlukBerry.png" />
