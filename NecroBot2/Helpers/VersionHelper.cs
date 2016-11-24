@@ -17,8 +17,8 @@ namespace NecroBot2.Helpers
             {
                 Logger.Write("You can find it at https://github.com/Necrobot-Private/Necrobot2/releases");
                 Logger.Write("Your version is " + Application.ProductVersion);
-                Logger.Write("GitHub version is " + VersionCheckState.RemoteVersion);
                 VersionCheckState.IsLatest();
+                Logger.Write("GitHub version is " + VersionCheckState.RemoteVersion);
             }
             catch (Exception)
             {
