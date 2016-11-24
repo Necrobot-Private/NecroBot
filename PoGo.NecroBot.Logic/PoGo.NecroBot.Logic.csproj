@@ -327,7 +327,6 @@
     <Compile Include="Tasks\LevelUpPokemonTask.cs" />
     <Compile Include="Tasks\LevelUpSpecificPokemonTask.cs" />
     <Compile Include="Tasks\PokemonListTask.cs" />
-    <Compile Include="Tasks\Farm.cs" />
     <Compile Include="State\Session.cs" />
     <Compile Include="Event\ErrorEvent.cs" />
     <Compile Include="State\FarmState.cs" />
