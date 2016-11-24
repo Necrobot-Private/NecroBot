@@ -568,7 +568,7 @@ Global
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug NecroBot2|x86.Build.0 = Debug|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug PoGo.NecroBot.GUI.Electron|Android.ActiveCfg = Debug|Any CPU
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug PoGo.NecroBot.GUI.Electron|Android.Build.0 = Debug|Any CPU
-		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug PoGo.NecroBot.GUI.Electron|Any CPU.ActiveCfg = Debug|Any CPU
+		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug PoGo.NecroBot.GUI.Electron|Any CPU.ActiveCfg = Debug|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug PoGo.NecroBot.GUI.Electron|iOS.ActiveCfg = Debug|Any CPU
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug PoGo.NecroBot.GUI.Electron|iOS.Build.0 = Debug|Any CPU
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug PoGo.NecroBot.GUI.Electron|Windows Phone (Universal).ActiveCfg = Debug|Any CPU
@@ -1406,6 +1406,7 @@ Global
 		{EC029F6B-9B25-40F1-BCA4-F95F70B6CE8F}.Debug|Android.Deploy.0 = Debug|Android
 		{EC029F6B-9B25-40F1-BCA4-F95F70B6CE8F}.Debug|Any CPU.ActiveCfg = Debug|Android
 		{EC029F6B-9B25-40F1-BCA4-F95F70B6CE8F}.Debug|Any CPU.Build.0 = Debug|Android
+		{EC029F6B-9B25-40F1-BCA4-F95F70B6CE8F}.Debug|Any CPU.Deploy.0 = Debug|Android
 		{EC029F6B-9B25-40F1-BCA4-F95F70B6CE8F}.Debug|iOS.ActiveCfg = Debug|iOS
 		{EC029F6B-9B25-40F1-BCA4-F95F70B6CE8F}.Debug|iOS.Build.0 = Debug|iOS
 		{EC029F6B-9B25-40F1-BCA4-F95F70B6CE8F}.Debug|iOS.Deploy.0 = Debug|iOS
@@ -1547,6 +1548,7 @@ Global
 		{EC029F6B-9B25-40F1-BCA4-F95F70B6CE8F}.Release|Android.Deploy.0 = Release|Android
 		{EC029F6B-9B25-40F1-BCA4-F95F70B6CE8F}.Release|Any CPU.ActiveCfg = Release|Android
 		{EC029F6B-9B25-40F1-BCA4-F95F70B6CE8F}.Release|Any CPU.Build.0 = Release|Android
+		{EC029F6B-9B25-40F1-BCA4-F95F70B6CE8F}.Release|Any CPU.Deploy.0 = Release|Android
 		{EC029F6B-9B25-40F1-BCA4-F95F70B6CE8F}.Release|iOS.ActiveCfg = Release|iOS
 		{EC029F6B-9B25-40F1-BCA4-F95F70B6CE8F}.Release|iOS.Build.0 = Release|iOS
 		{EC029F6B-9B25-40F1-BCA4-F95F70B6CE8F}.Release|iOS.Deploy.0 = Release|iOS
