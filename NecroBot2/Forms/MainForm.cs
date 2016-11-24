@@ -78,23 +78,20 @@ namespace NecroBot2.Forms
             InitializePokemonForm();
             InitializeMap();
             VersionHelper.CheckVersion();
+            showMoreCheckBox.Enabled = false;
+            btnRefresh.Enabled = false;
             if (BoolNeedsSetup)
             {
-                startStopBotToolStripMenuItem.Enabled = false;
-                showMoreCheckBox.Enabled = false;
-                btnRefresh.Enabled = false;
+                startStopBotToolStripMenuItem.Text = "■ Exit";
                 Logger.Write("First time here? Go to settings to set your basic info.",LogLevel.Error);
             }
              else
             {
-                btnRefresh.Enabled = false;
                 GlobalSettings.Load("");
             }
             if (VersionHelper.CheckKillSwitch())
             {
-                startStopBotToolStripMenuItem.Enabled = false;
-                showMoreCheckBox.Enabled = false;
-                btnRefresh.Enabled = false;
+                startStopBotToolStripMenuItem.Text = "■ Exit";
             }
         }
 
