@@ -1,5 +1,5 @@
 <!-- title -->
-# HackePokeBot
+# NecroBot2
 Modified Version of NecroBot2 and RocketBot
 <!-- disclaimer -->
 ## The contents of this repo are a proof of concept and are for educational use only
