@@ -336,6 +336,7 @@ namespace PoGo.NecroBot.Logic
 
         public async Task<IEnumerable<ItemData>> GetItemsToRecycle(ISession session)
         {
+            await RefreshCachedInventory();
             var itemsToRecycle = new List<ItemData>();
             var myItems = (await GetItems()).ToList();
             if (myItems == null)

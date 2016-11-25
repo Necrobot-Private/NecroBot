@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Runtime.Caching;
 using PoGo.NecroBot.Logic.Logging;
+using PoGo.NecroBot.Logic.Utils;
 
 #endregion
 
@@ -155,6 +156,9 @@ namespace PoGo.NecroBot.Logic.State
             var nextBot = bot != null ? bot : this.accounts.LastOrDefault(p => p != currentAccount && p.ReleaseBlockTime < DateTime.Now);
             if (nextBot != null)
             {
+                Logger.Write($"Switching to {nextBot.GoogleUsername}{nextBot.PtcUsername}...");
+                PushNotificationClient.SendPushNotificationV2($"Account changed to {nextBot.GoogleUsername}{nextBot.PtcUsername}",$"Previous account {currentAccount.GoogleUsername}{currentAccount.PtcUsername} runtime total {currentAccount.RuntimeTotal} min" );
+
                 this.Settings.AuthType = nextBot.AuthType;
                 this.Settings.GooglePassword = nextBot.GooglePassword;
                 this.Settings.GoogleUsername = nextBot.GoogleUsername;

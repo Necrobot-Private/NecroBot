@@ -137,6 +137,10 @@ namespace PoGo.NecroBot.Logic.State
                 Console.ReadKey();
                 System.Environment.Exit(1);
             }
+            catch(CaptchaException captcha)
+            {
+                throw captcha;
+            }
             catch (Exception e)
             {
                 Logger.Write(e.ToString());
@@ -169,7 +173,7 @@ namespace PoGo.NecroBot.Logic.State
             {
                 //sometime the switch active happen same time with login by token expired. we need ignore it 
             }
-
+            
             session.LoggedTime = DateTime.Now;
             if(this.pokemonToCatch != PokemonId.Missingno)
             {

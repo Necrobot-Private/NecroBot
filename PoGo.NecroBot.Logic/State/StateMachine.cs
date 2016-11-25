@@ -160,7 +160,10 @@ namespace PoGo.NecroBot.Logic.State
                 catch (OperationCanceledException)
                 {
                     session.EventDispatcher.Send(new ErrorEvent {Message = "Current Operation was canceled."});
-                    state = _initialState;
+                    session.BlockCurrentBot(30);
+                    session.ResetSessionToWithNextBot();
+                    state = new LoginState();
+
                 }
                 catch (MinimumClientVersionException ex)
                 {
@@ -204,11 +207,16 @@ namespace PoGo.NecroBot.Logic.State
                 }
                 catch (CaptchaException)
                 {
+
+                    PushNotificationClient.SendPushNotificationV2($"Captcha required {session.Settings.PtcUsername}{session.Settings.GoogleUsername}", session.Translation.GetTranslation(TranslationString.CaptchaShown));
                     // TODO Show the captcha.
                     session.EventDispatcher.Send(new WarnEvent { Message = session.Translation.GetTranslation(TranslationString.CaptchaShown) });
                     session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey) });
-                    Console.ReadKey();
-                    Environment.Exit(0);
+                   // Console.ReadKey();
+                    //Environment.Exit(0);
+                    session.BlockCurrentBot(60);
+                    session.ResetSessionToWithNextBot();
+                    state = new LoginState();
                 }
                 catch (Exception ex)
                 {

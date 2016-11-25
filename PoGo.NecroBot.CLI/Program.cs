@@ -101,8 +101,8 @@ namespace PoGo.NecroBot.CLI
             Logger.AddLogger(new FileLogger(LogLevel.Service), _subPath);
             Logger.AddLogger(new WebSocketLogger(LogLevel.Service), _subPath);
 
-            if (!_ignoreKillSwitch && CheckKillSwitch() || CheckMKillSwitch())
-                return;
+            //if (!_ignoreKillSwitch && CheckKillSwitch() || CheckMKillSwitch())
+            //    return;
 
             var profilePath = Path.Combine(Directory.GetCurrentDirectory(), _subPath);
             var profileConfigPath = Path.Combine(profilePath, "config");
@@ -300,7 +300,7 @@ namespace PoGo.NecroBot.CLI
                 byte index = 0;
                 Console.WriteLine();
                 Console.WriteLine();
-                Logger.Write("PLEASE SELECT AN ACCOUNT TO START.");
+                Logger.Write("PLEASE SELECT AN ACCOUNT TO START. AUTO START AFTER 30 SEC");
                 List<Char> availableOption = new List<char>();
                 foreach (var item in _session.Accounts)
                 {
@@ -311,17 +311,36 @@ namespace PoGo.NecroBot.CLI
                 };
 
                 char select = ' ';
-                do
-                { 
-                    select = Console.ReadKey(true).KeyChar;         
-                    Console.WriteLine(select);
-                    select = Char.ToUpper(select);
-                }
-                while (!availableOption.Contains(select));
+                DateTime timeoutvalue = DateTime.Now.AddSeconds(30);
 
-                var bot = _session.Accounts[select - 65];
-                
-                _session.ResetSessionToWithNextBot(bot);
+                while (DateTime.Now < timeoutvalue && !availableOption.Contains(select))
+                {
+                    if (Console.KeyAvailable)
+                    {
+                        ConsoleKeyInfo cki = Console.ReadKey();
+                        select = cki.KeyChar;
+                        select = Char.ToUpper(select);
+                       if(!availableOption.Contains(select))
+                        {
+                            Console.Out.WriteLine("Please select an account from list");
+                        }
+                    }
+                    else
+                    {
+                        Thread.Sleep(100);
+                    }
+                }
+                if (!availableOption.Contains(select))
+                {
+                    var r = (new Random()).Next(0, availableOption.Count - 1);
+                    select = availableOption.ElementAt(r);
+                }
+
+                 if (availableOption.Contains(select))
+                {
+                    var bot = _session.Accounts[select - 65];
+                    _session.ResetSessionToWithNextBot(bot);
+                }
 
             }
             machine.AsyncStart(new VersionCheckState(), _session, _subPath, excelConfigAllow);

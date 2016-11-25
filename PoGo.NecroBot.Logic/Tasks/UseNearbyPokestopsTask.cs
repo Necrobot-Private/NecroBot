@@ -426,7 +426,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                         session.LogicSettings.MultipleBotConfig.PokestopSoftbanCount <= softbanCount)
                     {
                         softbanCount = 0;
-                        session.CancellationTokenSource.Cancel();
 
                         //Activate switcher by pokestop
                         throw new ActiveSwitchByRuleException()
