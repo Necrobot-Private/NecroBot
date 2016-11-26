@@ -3,7 +3,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using PoGo.NecroBot.Logic.Mini.Event;
-using PoGo.NecroBot.Logic.Mini.PoGoUtils;
+using PoGo.NecroBot.Logic.PoGoUtils;
 using PoGo.NecroBot.Logic.Mini.State;
 using PoGo.NecroBot.Logic.Mini.Utils;
 

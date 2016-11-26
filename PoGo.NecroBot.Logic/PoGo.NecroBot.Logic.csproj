@@ -246,7 +246,6 @@
     <Compile Include="Mini\Logging\ILogger.cs" />
     <Compile Include="Mini\Logging\Logger.cs" />
     <Compile Include="Mini\Navigation.cs" />
-    <Compile Include="Mini\PoGoUtils\PokemonInfo.cs" />
     <Compile Include="Mini\Service\BotService.cs" />
     <Compile Include="Mini\Service\TelegramService.cs" />
     <Compile Include="Mini\Settings.cs" />

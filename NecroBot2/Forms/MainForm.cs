@@ -20,7 +20,7 @@ using PoGo.NecroBot.Logic.Mini;
 using PoGo.NecroBot.Logic.Mini.Common;
 using PoGo.NecroBot.Logic.Mini.Event;
 using PoGo.NecroBot.Logic.Mini.Logging;
-using PoGo.NecroBot.Logic.Mini.PoGoUtils;
+using PoGo.NecroBot.Logic.PoGoUtils;
 using PoGo.NecroBot.Logic.Mini.Service;
 using PoGo.NecroBot.Logic.Mini.State;
 using PoGo.NecroBot.Logic.Mini.Tasks;

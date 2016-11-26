@@ -9,7 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using PoGo.NecroBot.Logic.Mini.Event;
-using PoGo.NecroBot.Logic.Mini.PoGoUtils;
+using PoGo.NecroBot.Logic.PoGoUtils;
 using PoGo.NecroBot.Logic.Mini.State;
 using POGOProtos.Inventory.Item;
 

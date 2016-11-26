@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using PokemonGo.RocketAPI;
-using PoGo.NecroBot.Logic.Mini.PoGoUtils;
+using PoGo.NecroBot.Logic.PoGoUtils;
 using PoGo.NecroBot.Logic.Mini.State;
 using PoGo.NecroBot.Logic.Mini.Utils;
 using POGOProtos.Data;

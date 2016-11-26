@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using PoGo.NecroBot.Logic.Mini.Common;
 using PoGo.NecroBot.Logic.Mini.Event;
-using PoGo.NecroBot.Logic.Mini.PoGoUtils;
+using PoGo.NecroBot.Logic.PoGoUtils;
 using PoGo.NecroBot.Logic.Mini.State;
 
 #endregion

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using PoGo.NecroBot.Logic.Mini.Common;
 using PoGo.NecroBot.Logic.Mini.Event;
-using PoGo.NecroBot.Logic.Mini.PoGoUtils;
+using PoGo.NecroBot.Logic.PoGoUtils;
 using PoGo.NecroBot.Logic.Mini.State;
 using POGOProtos.Data;
 using POGOProtos.Enums;
