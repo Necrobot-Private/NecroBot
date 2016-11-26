@@ -242,7 +242,7 @@ namespace NecroBot2.Forms
             this.pkmnName.AspectName = "PokemonId";
             this.pkmnName.AspectToStringFormat = "";
             this.pkmnName.Text = "Name";
-            this.pkmnName.Width = 120;
+            this.pkmnName.Width = 80;
             // 
             // pkmnCP
             // 
@@ -290,8 +290,8 @@ namespace NecroBot2.Forms
             // pkmnEvolveTimes
             // 
             this.pkmnEvolveTimes.AspectName = "EvolveTimes";
-            this.pkmnEvolveTimes.Text = "# Evolves";
-            this.pkmnEvolveTimes.Width = 66;
+            this.pkmnEvolveTimes.Text = "Evolves";
+            this.pkmnEvolveTimes.Width = 20;
             // 
             // pkmnNickname
             // 
