@@ -129,7 +129,7 @@ after_build:
     elseif ($env:PLATFORM -eq "Any CPU")
     {
         Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\PoGo.NecroBot.CLI\bin\$($env:CONFIGURATION)" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2" -Force;
-        Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\PoGo.NecroBot.CLI\bin\x86\$($env:CONFIGURATION)\GUI" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2GUI" -Force;
+        Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2\GUI" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2GUI" -Force;
     }
     Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\PoGo.NecroBot.GUI.Electron\dist\win-ia32-unpacked" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2GUI.Electron" -Force;
         
@@ -150,7 +150,7 @@ test: off
 
 artifacts:
   
-  - path: '\$(PLATFORM)\$(CONFIGURATION)\NecroBot2'
+  - path: '\$(PLATFORM)\$(CONFIGURATION)\NecroBotCLI'
     name: NecroBot2.Console
 
   - path: '\$(PLATFORM)\$(CONFIGURATION)\NecroBot2GUI'
@@ -158,6 +158,9 @@ artifacts:
     
   - path: '\$(PLATFORM)\$(CONFIGURATION)\NecroBot2GUI.Electron'
     name: NecroBot2.GUI.Electron
+
+    - path: '\$(PLATFORM)\$(CONFIGURATION)\NecroBot2'
+    name: NecroBot2
 
 #---------------------------------#
 #     deployment configuration    #
