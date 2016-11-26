@@ -6,25 +6,25 @@ Modified Version of NecroBot2 and RocketBot
 
 # Images
 ## Home
-![alt tag](https://github.com/Necrobot-Private/NecroBot/blob/b8d0cec486da3d3f982e4d962926af6c64e48b30/NecroBot2/Img/home.png)  
+![alt tag](https://github.com/Necrobot-Private/NecroBot/blob/8311b945c2d503b5263f21d37b6b751a22479388/NecroBot2/Img/home.png)  
 ## Settings Auth
-![alt tag](https://github.com/Necrobot-Private/NecroBot/blob/b8d0cec486da3d3f982e4d962926af6c64e48b30/NecroBot2/Img/settings.png)  
+![alt tag](https://github.com/Necrobot-Private/NecroBot/blob/8311b945c2d503b5263f21d37b6b751a22479388/NecroBot2/Img/settings.png)  
 ## Settings Device
-![alt tag](https://github.com/Necrobot-Private/NecroBot/blob/b8d0cec486da3d3f982e4d962926af6c64e48b30/NecroBot2/Img/settings1.png)  
+![alt tag](https://github.com/Necrobot-Private/NecroBot/blob/8311b945c2d503b5263f21d37b6b751a22479388/NecroBot2/Img/settings1.png)  
 ## Settings Pokemon Catch
-![alt tag](https://github.com/Necrobot-Private/NecroBot/blob/b8d0cec486da3d3f982e4d962926af6c64e48b30/NecroBot2/Img/settings2.png)  
+![alt tag](https://github.com/Necrobot-Private/NecroBot/blob/8311b945c2d503b5263f21d37b6b751a22479388/NecroBot2/Img/settings2.png)  
 ## Settings Pokemon Transfer
-![alt tag](https://github.com/Necrobot-Private/NecroBot/blob/b8d0cec486da3d3f982e4d962926af6c64e48b30/NecroBot2/Img/settings3.png)
+![alt tag](https://github.com/Necrobot-Private/NecroBot/blob/8311b945c2d503b5263f21d37b6b751a22479388/NecroBot2/Img/settings3.png)
 ## Settings Pokemon PowerUp
-![alt tag](https://github.com/Necrobot-Private/NecroBot/blob/b8d0cec486da3d3f982e4d962926af6c64e48b30/NecroBot2/Img/settings4.png)  
+![alt tag](https://github.com/Necrobot-Private/NecroBot/blob/8311b945c2d503b5263f21d37b6b751a22479388/NecroBot2/Img/settings4.png)  
 ## Settings Pokemon Evolve
-![alt tag](https://github.com/Necrobot-Private/NecroBot/blob/b8d0cec486da3d3f982e4d962926af6c64e48b30/NecroBot2/Img/settings5.png)  
+![alt tag](https://github.com/Necrobot-Private/NecroBot/blob/8311b945c2d503b5263f21d37b6b751a22479388/NecroBot2/Img/settings5.png)  
 ## Settings Items
-![alt tag](https://github.com/Necrobot-Private/NecroBot/blob/b8d0cec486da3d3f982e4d962926af6c64e48b30/NecroBot2/Img/settings6.png)  
+![alt tag](https://github.com/Necrobot-Private/NecroBot/blob/8311b945c2d503b5263f21d37b6b751a22479388/NecroBot2/Img/settings6.png)  
 ## Settings Advanced Settings
-![alt tag](https://github.com/Necrobot-Private/NecroBot/blob/b8d0cec486da3d3f982e4d962926af6c64e48b30/NecroBot2/Img/settings7.png) 
+![alt tag](https://github.com/Necrobot-Private/NecroBot/blob/8311b945c2d503b5263f21d37b6b751a22479388/NecroBot2/Img/settings7.png) 
 ## Run
-![alt tag](https://github.com/Necrobot-Private/NecroBot/blob/b8d0cec486da3d3f982e4d962926af6c64e48b30/NecroBot2/Img/run.png)  
+![alt tag](https://github.com/Necrobot-Private/NecroBot/blob/8311b945c2d503b5263f21d37b6b751a22479388/NecroBot2/Img/run.png)  
 #
 
 ## Features
