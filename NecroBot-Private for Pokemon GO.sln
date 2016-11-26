@@ -664,7 +664,7 @@ Global
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release NecroBot2|x86.Build.0 = Release|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release PoGo.NecroBot.GUI.Electron|Android.ActiveCfg = Debug|Any CPU
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release PoGo.NecroBot.GUI.Electron|Android.Build.0 = Debug|Any CPU
-		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release PoGo.NecroBot.GUI.Electron|Any CPU.ActiveCfg = Debug|Any CPU
+		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release PoGo.NecroBot.GUI.Electron|Any CPU.ActiveCfg = Debug|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release PoGo.NecroBot.GUI.Electron|iOS.ActiveCfg = Debug|Any CPU
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release PoGo.NecroBot.GUI.Electron|iOS.Build.0 = Debug|Any CPU
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release PoGo.NecroBot.GUI.Electron|Windows Phone (Universal).ActiveCfg = Debug|Any CPU
