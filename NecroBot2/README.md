@@ -147,3 +147,6 @@ Use pull request to submit your code. Remember, submit to *Beta-Build* branch! :
 ## EvolveAllGivenPokemons
 * *false* - Evolves no Pokémon.
 * *true* - Evolves all Pokémon.
+
+## [Credits](https://github.com/Necrobot-Private)
+
