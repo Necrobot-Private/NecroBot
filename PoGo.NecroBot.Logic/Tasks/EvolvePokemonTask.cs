@@ -45,8 +45,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     var pokemonNeededInInventory = (maxStorage - totalEggs.Count()) * session.LogicSettings.EvolveKeptPokemonsAtStorageUsagePercentage / 100.0f;
                     var needPokemonToStartEvolve = Math.Round(
-                        Math.Max(0,
-                            Math.Min(pokemonNeededInInventory, session.Profile.PlayerData.MaxPokemonStorage)));
+                        Math.Max(0, Math.Min(session.LogicSettings.EvolveKeptPokemonsOverrideStartIfThisManyReady,
+                            Math.Min(pokemonNeededInInventory, session.Profile.PlayerData.MaxPokemonStorage))));
 
                     var deltaCount = needPokemonToStartEvolve - totalPokemon.Count();
                     if (session.LogicSettings.UseLuckyEggsWhileEvolving)
