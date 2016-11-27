@@ -3,14 +3,14 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using PoGo.NecroBot.Logic.Mini.Event;
+using PoGo.NecroBot.Logic.Forms_Gui.Event;
 using PoGo.NecroBot.Logic.PoGoUtils;
-using PoGo.NecroBot.Logic.Mini.State;
-using PoGo.NecroBot.Logic.Mini.Utils;
+using PoGo.NecroBot.Logic.Forms_Gui.State;
+using PoGo.NecroBot.Logic.Forms_Gui.Utils;
 
 #endregion
 
-namespace PoGo.NecroBot.Logic.Mini.Tasks
+namespace PoGo.NecroBot.Logic.Forms_Gui.Tasks
 {
     public class PokemonListTask
     {

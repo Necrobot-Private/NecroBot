@@ -3,17 +3,17 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using PoGo.NecroBot.Logic.Mini.Common;
-using PoGo.NecroBot.Logic.Mini.Event;
-using PoGo.NecroBot.Logic.Mini.Logging;
-using PoGo.NecroBot.Logic.Mini.State;
-using PoGo.NecroBot.Logic.Mini.Utils;
+using PoGo.NecroBot.Logic.Forms_Gui.Common;
+using PoGo.NecroBot.Logic.Forms_Gui.Event;
+using PoGo.NecroBot.Logic.Forms_Gui.Logging;
+using PoGo.NecroBot.Logic.Forms_Gui.State;
+using PoGo.NecroBot.Logic.Forms_Gui.Utils;
 using POGOProtos.Map.Pokemon;
 using POGOProtos.Networking.Responses;
 
 #endregion
 
-namespace PoGo.NecroBot.Logic.Mini.Tasks
+namespace PoGo.NecroBot.Logic.Forms_Gui.Tasks
 {
     public delegate void PokemonsEncounterDelegate(List<MapPokemon> pokemons);
 

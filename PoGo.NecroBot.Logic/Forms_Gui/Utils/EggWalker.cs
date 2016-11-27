@@ -2,12 +2,12 @@
 
 using System.Threading;
 using System.Threading.Tasks;
-using PoGo.NecroBot.Logic.Mini.State;
-using PoGo.NecroBot.Logic.Mini.Tasks;
+using PoGo.NecroBot.Logic.Forms_Gui.State;
+using PoGo.NecroBot.Logic.Forms_Gui.Tasks;
 
 #endregion
 
-namespace PoGo.NecroBot.Logic.Mini.Utils
+namespace PoGo.NecroBot.Logic.Forms_Gui.Utils
 {
     internal class EggWalker
     {

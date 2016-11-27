@@ -1,10 +1,10 @@
 ﻿#region using directives
 
-using PoGo.NecroBot.Logic.Mini.Common;
+using PoGo.NecroBot.Logic.Forms_Gui.Common;
 
 #endregion
 
-namespace PoGo.NecroBot.Logic.Mini.Localization
+namespace PoGo.NecroBot.Logic.Forms_Gui.Localization
 {
     public interface ILocalizer
     {

@@ -2,11 +2,11 @@
 
 using System.Threading;
 using System.Threading.Tasks;
-using PoGo.NecroBot.Logic.Mini.Tasks;
+using PoGo.NecroBot.Logic.Forms_Gui.Tasks;
 
 #endregion
 
-namespace PoGo.NecroBot.Logic.Mini.State
+namespace PoGo.NecroBot.Logic.Forms_Gui.State
 {
     public class InfoState : IState
     {

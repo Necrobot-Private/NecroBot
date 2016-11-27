@@ -2,11 +2,11 @@
 
 using System;
 using System.IO;
-using PoGo.NecroBot.Logic.Mini.State;
+using PoGo.NecroBot.Logic.Forms_Gui.State;
 
 #endregion
 
-namespace PoGo.NecroBot.Logic.Mini.DataDumper
+namespace PoGo.NecroBot.Logic.Forms_Gui.DataDumper
 {
     public static class Dumper
     {

@@ -7,8 +7,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using PokemonGo.RocketAPI;
 using PoGo.NecroBot.Logic.PoGoUtils;
-using PoGo.NecroBot.Logic.Mini.State;
-using PoGo.NecroBot.Logic.Mini.Utils;
+using PoGo.NecroBot.Logic.Forms_Gui.State;
+using PoGo.NecroBot.Logic.Forms_Gui.Utils;
 using POGOProtos.Data;
 using POGOProtos.Data.Player;
 using POGOProtos.Enums;
@@ -19,7 +19,7 @@ using POGOProtos.Settings.Master;
 
 #endregion
 
-namespace PoGo.NecroBot.Logic.Mini
+namespace PoGo.NecroBot.Logic.Forms_Gui
 {
     public class Inventory
     {

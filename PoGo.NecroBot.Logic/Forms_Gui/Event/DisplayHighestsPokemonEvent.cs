@@ -7,7 +7,7 @@ using POGOProtos.Enums;
 
 #endregion
 
-namespace PoGo.NecroBot.Logic.Mini.Event
+namespace PoGo.NecroBot.Logic.Forms_Gui.Event
 {
     public class DisplayHighestsPokemonEvent : IEvent
     {

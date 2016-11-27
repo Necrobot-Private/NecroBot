@@ -1,4 +1,4 @@
-﻿namespace PoGo.NecroBot.Logic.Mini.Event
+﻿namespace PoGo.NecroBot.Logic.Forms_Gui.Event
 {
     public delegate void EventDelegate(IEvent evt);
 

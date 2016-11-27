@@ -5,7 +5,7 @@ using POGOProtos.Map.Fort;
 
 #endregion
 
-namespace PoGo.NecroBot.Logic.Mini.Event
+namespace PoGo.NecroBot.Logic.Forms_Gui.Event
 {
     public class PokeStopListEvent : IEvent
     {

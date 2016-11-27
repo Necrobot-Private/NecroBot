@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 using Google.Protobuf;
 using PokemonGo.RocketAPI.Enums;
 using PokemonGo.RocketAPI.Exceptions;
-using PoGo.NecroBot.Logic.Mini.Common;
-using PoGo.NecroBot.Logic.Mini.Event;
-using PoGo.NecroBot.Logic.Mini.Logging;
+using PoGo.NecroBot.Logic.Forms_Gui.Common;
+using PoGo.NecroBot.Logic.Forms_Gui.Event;
+using PoGo.NecroBot.Logic.Forms_Gui.Logging;
 
 #endregion
 
-namespace PoGo.NecroBot.Logic.Mini.State
+namespace PoGo.NecroBot.Logic.Forms_Gui.State
 {
     public class LoginState : IState
     {

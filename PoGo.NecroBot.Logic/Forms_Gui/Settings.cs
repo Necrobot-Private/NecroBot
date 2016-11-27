@@ -13,17 +13,17 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using PokemonGo.RocketAPI;
 using PokemonGo.RocketAPI.Enums;
-using PoGo.NecroBot.Logic.Mini.Common;
-using PoGo.NecroBot.Logic.Mini.Logging;
-using PoGo.NecroBot.Logic.Mini.State;
-using PoGo.NecroBot.Logic.Mini.Utils;
+using PoGo.NecroBot.Logic.Forms_Gui.Common;
+using PoGo.NecroBot.Logic.Forms_Gui.Logging;
+using PoGo.NecroBot.Logic.Forms_Gui.State;
+using PoGo.NecroBot.Logic.Forms_Gui.Utils;
 using POGOProtos.Enums;
 using POGOProtos.Inventory.Item;
 using Google.Protobuf;
 
 #endregion
 
-namespace PoGo.NecroBot.Logic.Mini
+namespace PoGo.NecroBot.Logic.Forms_Gui
 {
     public class AuthSettings
     {

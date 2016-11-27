@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using PoGo.NecroBot.Logic.Mini.Logging;
+using PoGo.NecroBot.Logic.Forms_Gui.Logging;
 using PoGo.NecroBot.Logic.PoGoUtils;
-using PoGo.NecroBot.Logic.Mini.State;
+using PoGo.NecroBot.Logic.Forms_Gui.State;
 using POGOProtos.Data;
 
 #endregion
 
-namespace PoGo.NecroBot.Logic.Mini.Tasks
+namespace PoGo.NecroBot.Logic.Forms_Gui.Tasks
 {
     internal class LevelUpPokemonTask
     {

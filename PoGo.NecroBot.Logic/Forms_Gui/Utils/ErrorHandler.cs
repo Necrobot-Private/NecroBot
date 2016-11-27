@@ -2,9 +2,9 @@
 using System.Diagnostics;
 using System.Reflection;
 using System.Threading;
-using PoGo.NecroBot.Logic.Mini.Logging;
+using PoGo.NecroBot.Logic.Forms_Gui.Logging;
 
-namespace PoGo.NecroBot.Logic.Mini.Utils
+namespace PoGo.NecroBot.Logic.Forms_Gui.Utils
 {
     internal class ErrorHandler
     {

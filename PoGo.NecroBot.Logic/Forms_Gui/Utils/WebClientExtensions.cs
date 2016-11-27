@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
-namespace PoGo.NecroBot.Logic.Mini.Utils
+namespace PoGo.NecroBot.Logic.Forms_Gui.Utils
 {
     public static class WebClientExtensions
     {

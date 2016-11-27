@@ -5,8 +5,8 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using PoGo.NecroBot.Logic.Mini.Logging;
-using PoGo.NecroBot.Logic.Mini.State;
+using PoGo.NecroBot.Logic.Forms_Gui.Logging;
+using PoGo.NecroBot.Logic.Forms_Gui.State;
 using POGOProtos.Networking.Responses;
 
 #endregion
@@ -15,7 +15,7 @@ using POGOProtos.Networking.Responses;
 
 #endregion
 
-namespace PoGo.NecroBot.Logic.Mini.Utils
+namespace PoGo.NecroBot.Logic.Forms_Gui.Utils
 {
     public delegate void StatisticsDirtyDelegate();
 

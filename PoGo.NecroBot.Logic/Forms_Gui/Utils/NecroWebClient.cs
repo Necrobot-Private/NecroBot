@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 
-namespace PoGo.NecroBot.Logic.Mini.Utils
+namespace PoGo.NecroBot.Logic.Forms_Gui.Utils
 {
     public class NecroWebClient : WebClient
     {

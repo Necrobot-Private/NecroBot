@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using POGOProtos.Map.Fort;
 
-namespace PoGo.NecroBot.Logic.Mini.Event
+namespace PoGo.NecroBot.Logic.Forms_Gui.Event
 {
     public class OptimizeRouteEvent : IEvent
     {
