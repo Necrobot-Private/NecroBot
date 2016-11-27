@@ -123,6 +123,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool VerboseRecycling => _settings.RecycleConfig.VerboseRecycling;
         public double RecycleInventoryAtUsagePercentage => _settings.RecycleConfig.RecycleInventoryAtUsagePercentage;
         public double EvolveKeptPokemonsAtStorageUsagePercentage => _settings.PokemonConfig.EvolveKeptPokemonsAtStorageUsagePercentage;
+        public int EvolveKeptPokemonsOverrideStartIfThisManyReady => _settings.PokemonConfig.EvolveKeptPokemonsOverrideStartIfThisManyReady;
         public ICollection<KeyValuePair<ItemId, int>> ItemRecycleFilter => _settings.ItemRecycleFilter.Select(itemRecycleFilter => new KeyValuePair<ItemId, int>(itemRecycleFilter.Key, itemRecycleFilter.Value)).ToList();
         public ICollection<PokemonId> PokemonsToEvolve => _settings.PokemonsToEvolve;
         public ICollection<PokemonId> PokemonsToLevelUp => _settings.PokemonsToLevelUp;

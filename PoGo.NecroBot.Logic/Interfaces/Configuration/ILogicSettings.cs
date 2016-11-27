@@ -139,6 +139,7 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         bool VerboseRecycling { get; }
         double RecycleInventoryAtUsagePercentage { get; }
         double EvolveKeptPokemonsAtStorageUsagePercentage { get; }
+        int EvolveKeptPokemonsOverrideStartIfThisManyReady { get; }
         bool UseSnipeLimit { get; }
         bool UsePokeStopLimit { get; }
         bool UseCatchLimit { get; }
