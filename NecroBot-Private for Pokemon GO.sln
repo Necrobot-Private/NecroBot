@@ -442,7 +442,7 @@ Global
 		{AB1B97CF-4A35-45BA-9FF3-2625FD0DDCEB}.Release|x86.ActiveCfg = Release|x86
 		{AB1B97CF-4A35-45BA-9FF3-2625FD0DDCEB}.Release|x86.Build.0 = Release|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug CLI|Android.ActiveCfg = Debug|x86
-		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug CLI|Any CPU.ActiveCfg = Debug|x86
+		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug CLI|Any CPU.ActiveCfg = Debug|Any CPU
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug CLI|iOS.ActiveCfg = Debug|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug CLI|Windows Phone (Universal).ActiveCfg = Debug|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug CLI|Windows Phone 8.ActiveCfg = Debug|x86
@@ -453,8 +453,8 @@ Global
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug CLI|x86.ActiveCfg = Debug|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug GUI|Android.ActiveCfg = Debug|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug GUI|Android.Build.0 = Debug|x86
-		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug GUI|Any CPU.ActiveCfg = Debug|x86
-		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug GUI|Any CPU.Build.0 = Debug|x86
+		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug GUI|Any CPU.ActiveCfg = Debug|Any CPU
+		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug GUI|Any CPU.Build.0 = Debug|Any CPU
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug GUI|iOS.ActiveCfg = Debug|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug GUI|iOS.Build.0 = Debug|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug GUI|Windows Phone (Universal).ActiveCfg = Debug|x86
@@ -472,7 +472,7 @@ Global
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug GUI|x86.ActiveCfg = Debug|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug GUI|x86.Build.0 = Debug|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug NecroBot2|Android.ActiveCfg = Debug|x86
-		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug NecroBot2|Any CPU.ActiveCfg = Debug|x86
+		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug NecroBot2|Any CPU.ActiveCfg = Debug|Any CPU
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug NecroBot2|iOS.ActiveCfg = Debug|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug NecroBot2|Windows Phone (Universal).ActiveCfg = Debug|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug NecroBot2|Windows Phone 8.ActiveCfg = Debug|x86
@@ -482,7 +482,7 @@ Global
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug NecroBot2|Windows-x86.ActiveCfg = Debug|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug NecroBot2|x86.ActiveCfg = Debug|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug PoGo.NecroBot.GUI.Electron|Android.ActiveCfg = Debug|x86
-		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug PoGo.NecroBot.GUI.Electron|Any CPU.ActiveCfg = Debug|x86
+		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug PoGo.NecroBot.GUI.Electron|Any CPU.ActiveCfg = Debug|Any CPU
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug PoGo.NecroBot.GUI.Electron|iOS.ActiveCfg = Debug|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug PoGo.NecroBot.GUI.Electron|Windows Phone (Universal).ActiveCfg = Debug|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug PoGo.NecroBot.GUI.Electron|Windows Phone 8.ActiveCfg = Debug|x86
@@ -493,8 +493,8 @@ Global
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug PoGo.NecroBot.GUI.Electron|x86.ActiveCfg = Debug|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug|Android.ActiveCfg = Debug|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug|Android.Build.0 = Debug|x86
-		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug|Any CPU.Build.0 = Debug|x86
+		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug|iOS.ActiveCfg = Debug|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug|iOS.Build.0 = Debug|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug|Windows Phone (Universal).ActiveCfg = Debug|x86
@@ -512,7 +512,7 @@ Global
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug|x86.ActiveCfg = Debug|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Debug|x86.Build.0 = Debug|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release CLI|Android.ActiveCfg = Release|x86
-		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release CLI|Any CPU.ActiveCfg = Release|x86
+		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release CLI|Any CPU.ActiveCfg = Release|Any CPU
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release CLI|iOS.ActiveCfg = Release|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release CLI|Windows Phone (Universal).ActiveCfg = Release|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release CLI|Windows Phone 8.ActiveCfg = Release|x86
@@ -523,8 +523,8 @@ Global
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release CLI|x86.ActiveCfg = Release|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release GUI|Android.ActiveCfg = Release|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release GUI|Android.Build.0 = Release|x86
-		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release GUI|Any CPU.ActiveCfg = Release|x86
-		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release GUI|Any CPU.Build.0 = Release|x86
+		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release GUI|Any CPU.ActiveCfg = Release|Any CPU
+		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release GUI|Any CPU.Build.0 = Release|Any CPU
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release GUI|iOS.ActiveCfg = Release|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release GUI|iOS.Build.0 = Release|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release GUI|Windows Phone (Universal).ActiveCfg = Release|x86
@@ -542,7 +542,7 @@ Global
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release GUI|x86.ActiveCfg = Release|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release GUI|x86.Build.0 = Release|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release NecroBot2|Android.ActiveCfg = Release|x86
-		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release NecroBot2|Any CPU.ActiveCfg = Release|x86
+		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release NecroBot2|Any CPU.ActiveCfg = Release|Any CPU
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release NecroBot2|iOS.ActiveCfg = Release|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release NecroBot2|Windows Phone (Universal).ActiveCfg = Release|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release NecroBot2|Windows Phone 8.ActiveCfg = Release|x86
@@ -552,7 +552,7 @@ Global
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release NecroBot2|Windows-x86.ActiveCfg = Release|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release NecroBot2|x86.ActiveCfg = Release|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release PoGo.NecroBot.GUI.Electron|Android.ActiveCfg = Release|x86
-		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release PoGo.NecroBot.GUI.Electron|Any CPU.ActiveCfg = Release|x86
+		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release PoGo.NecroBot.GUI.Electron|Any CPU.ActiveCfg = Release|Any CPU
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release PoGo.NecroBot.GUI.Electron|iOS.ActiveCfg = Release|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release PoGo.NecroBot.GUI.Electron|Windows Phone (Universal).ActiveCfg = Release|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release PoGo.NecroBot.GUI.Electron|Windows Phone 8.ActiveCfg = Release|x86
@@ -563,8 +563,8 @@ Global
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release PoGo.NecroBot.GUI.Electron|x86.ActiveCfg = Release|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release|Android.ActiveCfg = Release|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release|Android.Build.0 = Release|x86
-		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release|Any CPU.ActiveCfg = Release|x86
-		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release|Any CPU.Build.0 = Release|x86
+		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release|iOS.ActiveCfg = Release|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release|iOS.Build.0 = Release|x86
 		{A201C888-58C4-4BBC-81B0-50089012B59D}.Release|Windows Phone (Universal).ActiveCfg = Release|x86
