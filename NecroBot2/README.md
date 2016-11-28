@@ -148,7 +148,6 @@ Use pull request to submit your code. Remember, submit to *Beta-Build* branch! :
 * *false* - Evolves no Pokémon.
 * *true* - Evolves all Pokémon.
 
-## [Necrobot-Private](https://github.com/Necrobot-Private/NecroBot)
+## Credits [Necrobot-Private](https://github.com/Necrobot-Private/NecroBot)
 
-## [RocketBot](https://github.com/TheUnnameOrganization/RocketBot)
-
+## Credits [RocketBot](https://github.com/TheUnnameOrganization/RocketBot)
