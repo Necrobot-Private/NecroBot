@@ -71,10 +71,6 @@ In order to help us fix the problem, please take a screenshot of the error you g
 ### Suggestions/ideas
 Tell us what you think we can do better in [issues] (https://github.com/Necrobot-Private/NecroBot/issues).  
 Give detailed discription to help us understand what you are looking for. Add [Suggestion] to the title to help us quickly identify the category of the issue. Your suggestion might not be accept, but hey, maybe we will accept your suggestion next time! :)
-## For developers:
-You can contribute to the project by helping us on coding.  
-Fork this project and create a new branch to add your code or fix a known issue.  
-Use pull request to submit your code. Remember, submit to *Beta-Build* branch! :D
 
 # Settings
 ## AuthType
