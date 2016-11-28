@@ -242,7 +242,6 @@
     <Compile Include="Forms_Gui\Event\WarnEvent.cs" />
     <Compile Include="Forms_Gui\ILogicSettings.cs" />
     <Compile Include="Forms_Gui\Inventory.cs" />
-    <Compile Include="Forms_Gui\Localization\Localizer.cs" />
     <Compile Include="Forms_Gui\Logging\ILogger.cs" />
     <Compile Include="Forms_Gui\Logging\Logger.cs" />
     <Compile Include="Forms_Gui\Navigation.cs" />
