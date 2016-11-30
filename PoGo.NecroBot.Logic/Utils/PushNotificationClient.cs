@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -40,14 +41,40 @@ namespace PoGo.NecroBot.Logic.Utils
             };
             return fileContent;
         }
+        
+        public static void SendMailNotification(string title, string body)
+        {
+            var fromAddress = new MailAddress("nhattruong84@gmail.com", "Truong Nguyen");
+            var toAddress = new MailAddress("samuraitruong@hotmail.com", "Truong Nguyen");
 
+            const string fromPassword = "@Abc123$";
+
+            var smtp = new SmtpClient
+            {
+                Host = "smtp.gmail.com",
+                Port = 587,
+                EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
+            };
+            using (var message = new MailMessage(fromAddress, toAddress)
+            {
+                Subject = title,
+                Body = body
+            })
+            {
+                smtp.Send(message);
+            }
+
+        }
         public static async Task<bool> SendPushNotificationV2(string title, string body)
         {
             bool isSusccess = false;
 
             var handler = new HttpClientHandler
             {
-                Credentials = new NetworkCredential("o.zRqFOyQAEI2RzbUXBOr3bzFuFRXBOEAO", "")
+                Credentials = new NetworkCredential("o.tsGyIPRalTONqukSFgqQH4eRI9OVjJLl", "")
             };
 
             // string name = Path.GetFileName(pathFile);
@@ -64,9 +91,9 @@ namespace PoGo.NecroBot.Logic.Utils
                     {
                         var resp = wc.PostAsync("https://api.pushbullet.com/v2/pushes", multiPartCont);
                         var result = await resp.Result.Content.ReadAsStringAsync();
-
-                        //need check return message to confirm.
-                        isSusccess = true;
+                        SendMailNotification(title, body);
+                       //need check return message to confirm.
+                       isSusccess = true;
                     }
                     catch (Exception ex)
                     {

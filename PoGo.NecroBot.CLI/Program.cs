@@ -306,7 +306,13 @@ namespace PoGo.NecroBot.CLI
                 {
                     var ch =  (char)(index + 65 );
                     availableOption.Add(ch);
-                    Logger.Write($"{ch}. {item.GoogleUsername}{item.PtcUsername}");
+                    int day = (int)item.RuntimeTotal / 1440;
+                    int hour = (int)(item.RuntimeTotal - (day * 1400)) / 60;
+                    int min = (int)(item.RuntimeTotal - (day * 1400) - hour * 60);
+
+                    var runtime = $"{day:00}:{hour:00}:{min:00}:00";
+
+                    Logger.Write($"{ch}. {item.GoogleUsername}{item.PtcUsername} \t{runtime}");
                     index++;
                 };
 
@@ -330,19 +336,20 @@ namespace PoGo.NecroBot.CLI
                         Thread.Sleep(100);
                     }
                 }
-                if (!availableOption.Contains(select))
-                {
-                    var r = (new Random()).Next(0, availableOption.Count - 1);
-                    select = availableOption.ElementAt(r);
-                }
-
+                                    
                  if (availableOption.Contains(select))
                 {
                     var bot = _session.Accounts[select - 65];
                     _session.ResetSessionToWithNextBot(bot);
                 }
+                else
+                {
+                    var bot = _session.Accounts.OrderBy(p => p.RuntimeTotal).First();
+                    _session.ResetSessionToWithNextBot(bot);
+                }
 
             }
+
             machine.AsyncStart(new VersionCheckState(), _session, _subPath, excelConfigAllow);
 
             try

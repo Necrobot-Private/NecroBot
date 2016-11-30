@@ -154,12 +154,18 @@ namespace PoGo.NecroBot.Logic.Tasks
                 await eggWalker.ApplyDistance(distance, cancellationToken);
             }
         }
+        private static DateTime lastCatch = DateTime.Now;
         private static async Task OnWalkingToPokeStopOrGym(ISession session, FortData pokeStop, CancellationToken cancellationToken)
         {
-            // Catch normal map Pokemon
-            await CatchNearbyPokemonsTask.Execute(session, cancellationToken);
-            //Catch Incense Pokemon
-            await CatchIncensePokemonsTask.Execute(session, cancellationToken);
+            //to avoid api call when walking.
+            if(lastCatch< DateTime.Now.AddSeconds(-2))
+            {
+                // Catch normal map Pokemon
+                await CatchNearbyPokemonsTask.Execute(session, cancellationToken);
+                //Catch Incense Pokemon
+                await CatchIncensePokemonsTask.Execute(session, cancellationToken);
+                lastCatch = DateTime.Now;
+            }
 
             if (!session.LogicSettings.UseGpxPathing)
             {

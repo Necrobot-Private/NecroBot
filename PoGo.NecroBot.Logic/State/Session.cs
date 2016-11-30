@@ -18,6 +18,7 @@ using System.Threading;
 using System.Runtime.Caching;
 using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.Utils;
+using System.IO;
 
 #endregion
 
@@ -93,6 +94,19 @@ namespace PoGo.NecroBot.Logic.State
                     PtcUsername = settings.PtcUsername
                 });
             }
+            if (File.Exists("runtime.log"))
+            {
+                var lines = File.ReadAllLines("runtime.log");
+                foreach (var item in lines)
+                {
+                    var arr = item.Split(';');
+                    var acc = this.accounts.FirstOrDefault(p => p.PtcUsername == arr[0] || p.GoogleUsername == arr[1]);
+                    if (acc != null)
+                    {
+                        acc.RuntimeTotal = Convert.ToDouble(arr[1]);
+                    }
+                }
+            }
         }
         public List<FortData> Forts { get; set; }
         public List<FortData> VisibleForts { get; set; }
@@ -157,7 +171,23 @@ namespace PoGo.NecroBot.Logic.State
             if (nextBot != null)
             {
                 Logger.Write($"Switching to {nextBot.GoogleUsername}{nextBot.PtcUsername}...");
-                PushNotificationClient.SendPushNotificationV2($"Account changed to {nextBot.GoogleUsername}{nextBot.PtcUsername}",$"Previous account {currentAccount.GoogleUsername}{currentAccount.PtcUsername} runtime total {currentAccount.RuntimeTotal} min" );
+                string body = "";
+
+                File.Delete("runtime.log");
+                List<string> logs = new List<string>();
+
+                foreach (var item in this.Accounts)
+                {
+                    
+                    int day = (int)item.RuntimeTotal / 1440;
+                    int hour = (int)(item.RuntimeTotal - (day * 1400)) / 60;
+                    int min = (int)(item.RuntimeTotal - (day * 1400) - hour * 60);
+
+                    body = body + $"{item.GoogleUsername}{item.PtcUsername}     {day:00}:{hour:00}:{min:00}:00\r\n";
+                    logs.Add($"{item.GoogleUsername}{item.PtcUsername};{item.RuntimeTotal}");
+                }
+                File.AppendAllLines("runtime.log", logs);
+                PushNotificationClient.SendPushNotificationV2($"Account changed to {nextBot.GoogleUsername}{nextBot.PtcUsername}",body);
 
                 this.Settings.AuthType = nextBot.AuthType;
                 this.Settings.GooglePassword = nextBot.GooglePassword;

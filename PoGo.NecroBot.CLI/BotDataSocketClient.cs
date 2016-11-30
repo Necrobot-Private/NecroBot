@@ -248,7 +248,7 @@ namespace PoGo.NecroBot.CLI
                 {
                     Latitude = data.Latitude,
                     Longitude = data.Longitude,
-                    EncounterId = Convert.ToUInt64(data.EncounterId),
+                    EncounterId = data.EncounterId.Contains("-")?0:Convert.ToUInt64(data.EncounterId),
                     SpawnPointId = data.SpawnPointId,
                     PokemonId = (short)data.PokemonId,
                     Iv = data.IV,

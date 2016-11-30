@@ -321,8 +321,8 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static void AddSnipeItem(ISession session, MSniperInfo2 item, bool byPassValidation = false)
         {
             if (OutOffBallBlock > DateTime.Now ||
-                autoSnipePokemons.Exists(x => x.EncounterId == item.EncounterId) ||
-                session.Cache[item.EncounterId.ToString()] != null) return;
+                autoSnipePokemons.Exists(x => x.EncounterId == item.EncounterId && item.EncounterId>0) ||
+                (item.EncounterId > 0 && session.Cache[item.EncounterId.ToString()] != null)) return;
 
             if(byPassValidation)
             {
