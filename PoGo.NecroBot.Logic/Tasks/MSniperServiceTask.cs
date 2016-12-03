@@ -424,7 +424,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 foreach (var location in mSniperLocation2)
                 {
-                    if (session.Cache[location.EncounterId.ToString()] != null) continue;
+                    if (location.EncounterId> 0 && session.Cache[location.EncounterId.ToString()] != null) continue;
 
                     session.Cache.Add(location.EncounterId.ToString(), true, DateTime.Now.AddMinutes(15));
 

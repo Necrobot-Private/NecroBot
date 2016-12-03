@@ -491,7 +491,7 @@ namespace PoGo.NecroBot.CLI
         private static void UnhandledExceptionEventHandler(object obj, UnhandledExceptionEventArgs args)
         {
             Logger.Write("Exception caught, writing LogBuffer.", force: true);
-            throw new Exception();
+            //throw new Exception();
         }
 
         public static bool PromptForKillSwitchOverride()

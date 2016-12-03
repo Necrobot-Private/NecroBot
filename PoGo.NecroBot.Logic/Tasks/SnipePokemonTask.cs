@@ -465,8 +465,8 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static async Task Snipe(ISession session, IEnumerable<PokemonId> pokemonIds, double latitude,
             double longitude, CancellationToken cancellationToken)
         {
-            if (LocsVisited.Contains(new PokemonLocation(latitude, longitude)))
-                return;
+            //if (LocsVisited.Contains(new PokemonLocation(latitude, longitude)))
+            //    return;
 
             var currentLatitude = session.Client.CurrentLatitude;
             var currentLongitude = session.Client.CurrentLongitude;
@@ -488,7 +488,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 });
 
                 var mapObjects = session.Client.Map.GetMapObjects().Result;
-                session.AddForts(mapObjects.Item1.MapCells.SelectMany(p => p.Forts).ToList());
+                //session.AddForts(mapObjects.Item1.MapCells.SelectMany(p => p.Forts).ToList());
                 catchablePokemon =
                     mapObjects.Item1.MapCells.SelectMany(q => q.CatchablePokemons)
                         .Where(q => pokemonIds.Contains(q.PokemonId))

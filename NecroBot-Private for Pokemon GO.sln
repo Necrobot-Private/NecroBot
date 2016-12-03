@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokemonGo.RocketAPI", "Fero
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelMasterConfig", "..\ExcelMasterConfig\ExcelMasterConfig.csproj", "{CC62A611-AA2F-4D64-B0C8-C65BC320D4CE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PoGo.Necrobot.Window", "PoGo.Necrobot.Window\PoGo.Necrobot.Window.csproj", "{462F0601-DA74-4226-AF72-654F5EDFF020}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug CLI|Any CPU = Debug CLI|Any CPU
@@ -137,6 +139,30 @@ Global
 		{CC62A611-AA2F-4D64-B0C8-C65BC320D4CE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CC62A611-AA2F-4D64-B0C8-C65BC320D4CE}.Release|x86.ActiveCfg = Release|Any CPU
 		{CC62A611-AA2F-4D64-B0C8-C65BC320D4CE}.Release|x86.Build.0 = Release|Any CPU
+		{462F0601-DA74-4226-AF72-654F5EDFF020}.Debug CLI|Any CPU.ActiveCfg = Debug|Any CPU
+		{462F0601-DA74-4226-AF72-654F5EDFF020}.Debug CLI|Any CPU.Build.0 = Debug|Any CPU
+		{462F0601-DA74-4226-AF72-654F5EDFF020}.Debug CLI|x86.ActiveCfg = Debug|Any CPU
+		{462F0601-DA74-4226-AF72-654F5EDFF020}.Debug CLI|x86.Build.0 = Debug|Any CPU
+		{462F0601-DA74-4226-AF72-654F5EDFF020}.Debug GUI|Any CPU.ActiveCfg = Debug|Any CPU
+		{462F0601-DA74-4226-AF72-654F5EDFF020}.Debug GUI|Any CPU.Build.0 = Debug|Any CPU
+		{462F0601-DA74-4226-AF72-654F5EDFF020}.Debug GUI|x86.ActiveCfg = Debug|Any CPU
+		{462F0601-DA74-4226-AF72-654F5EDFF020}.Debug GUI|x86.Build.0 = Debug|Any CPU
+		{462F0601-DA74-4226-AF72-654F5EDFF020}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{462F0601-DA74-4226-AF72-654F5EDFF020}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{462F0601-DA74-4226-AF72-654F5EDFF020}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{462F0601-DA74-4226-AF72-654F5EDFF020}.Debug|x86.Build.0 = Debug|Any CPU
+		{462F0601-DA74-4226-AF72-654F5EDFF020}.Release CLI|Any CPU.ActiveCfg = Release|Any CPU
+		{462F0601-DA74-4226-AF72-654F5EDFF020}.Release CLI|Any CPU.Build.0 = Release|Any CPU
+		{462F0601-DA74-4226-AF72-654F5EDFF020}.Release CLI|x86.ActiveCfg = Release|Any CPU
+		{462F0601-DA74-4226-AF72-654F5EDFF020}.Release CLI|x86.Build.0 = Release|Any CPU
+		{462F0601-DA74-4226-AF72-654F5EDFF020}.Release GUI|Any CPU.ActiveCfg = Release|Any CPU
+		{462F0601-DA74-4226-AF72-654F5EDFF020}.Release GUI|Any CPU.Build.0 = Release|Any CPU
+		{462F0601-DA74-4226-AF72-654F5EDFF020}.Release GUI|x86.ActiveCfg = Release|Any CPU
+		{462F0601-DA74-4226-AF72-654F5EDFF020}.Release GUI|x86.Build.0 = Release|Any CPU
+		{462F0601-DA74-4226-AF72-654F5EDFF020}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{462F0601-DA74-4226-AF72-654F5EDFF020}.Release|Any CPU.Build.0 = Release|Any CPU
+		{462F0601-DA74-4226-AF72-654F5EDFF020}.Release|x86.ActiveCfg = Release|Any CPU
+		{462F0601-DA74-4226-AF72-654F5EDFF020}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

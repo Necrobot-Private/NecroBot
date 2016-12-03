@@ -130,8 +130,15 @@ namespace PoGo.NecroBot.Logic.Service
             };
             foreach (var item in this.handlers)
             {
-                handled = await item.OnCommand(_session, messagetext[0].ToLower(), OnMessageCallback);
-                if (handled) break;
+                try
+                {
+                    handled = await item.OnCommand(_session, message.Text, OnMessageCallback);
+                    if (handled) break;
+                }
+                catch (Exception ex)
+                {
+                }
+                
             }
             
             if(!handled)

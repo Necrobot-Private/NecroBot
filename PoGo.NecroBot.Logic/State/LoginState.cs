@@ -169,6 +169,10 @@ namespace PoGo.NecroBot.Logic.State
                     System.Environment.Exit(1);
                 }
             }
+            catch(CaptchaException ex)
+            {
+                throw ex;
+            }
             catch(ActiveSwitchByRuleException)
             {
                 //sometime the switch active happen same time with login by token expired. we need ignore it 
@@ -236,6 +240,10 @@ namespace PoGo.NecroBot.Logic.State
             catch (System.UriFormatException e)
             {
                 session.EventDispatcher.Send(new ErrorEvent { Message = e.ToString() });
+            }
+            catch(CaptchaException ex)
+            {
+                throw ex;
             }
             catch (Exception ex)
             {

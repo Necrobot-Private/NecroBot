@@ -228,6 +228,7 @@
     <Compile Include="Model\PokemonGrade.cs" />
     <Compile Include="Model\Settings\AuthConfig.cs" />
     <Compile Include="Model\Settings\AuthSettings.cs" />
+    <Compile Include="Model\Settings\BaseConfig.cs" />
     <Compile Include="Model\Settings\CatchConfig.cs" />
     <Compile Include="Model\Settings\ClientSettings.cs" />
     <Compile Include="Model\Settings\ConsoleConfig.cs" />
@@ -280,6 +281,9 @@
     <Compile Include="Service\Elevation\GoogleElevationService.cs" />
     <Compile Include="Service\Elevation\MapQuestElevationService.cs" />
     <Compile Include="Service\TelegramCommand\AccountsCommand.cs" />
+    <Compile Include="Service\TelegramCommand\SnipeCommand.cs" />
+    <Compile Include="Service\TelegramCommand\RecycleCommand.cs" />
+    <Compile Include="Service\TelegramCommand\LogsCommand.cs" />
     <Compile Include="Service\TelegramCommand\RestartCommand.cs" />
     <Compile Include="Service\TelegramCommand\ExitCommand.cs" />
     <Compile Include="Service\TelegramCommand\TopCommand.cs" />
