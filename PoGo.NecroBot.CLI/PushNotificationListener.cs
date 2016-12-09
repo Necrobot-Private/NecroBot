@@ -20,7 +20,7 @@ namespace PoGo.NecroBot.CLI
     {
         private static void HandleEvent(ErrorEvent errorEvent, ISession session)
         {
-            PushNotificationClient.SendPushNotificationV2("Error occured", errorEvent.Message);
+            PushNotificationClient.SendNotification(session, "Error occured", errorEvent.Message);
         }
 
         public static void HandleEvent(SnipePokemonFoundEvent ev, ISession session)

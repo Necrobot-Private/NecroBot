@@ -112,7 +112,7 @@ namespace PoGo.NecroBot.Logic.State
                 catch (ActiveSwitchByPokemonException rsae)
                 {
                     session.EventDispatcher.Send(new WarnEvent { Message = "Encountered a good pokemon , switch another bot to catch him too." });
-                    session.ResetSessionToWithNextBot(rsae.Bot,session.Client.CurrentLatitude, session.Client.CurrentLongitude, session.Client.CurrentAltitude);
+                    session.ReInitSessionWithNextBot(rsae.Bot,session.Client.CurrentLatitude, session.Client.CurrentLongitude, session.Client.CurrentAltitude);
                     state = new LoginState(rsae.LastEncounterPokemonId);
                 }
                 catch (ActiveSwitchByRuleException se)
@@ -121,23 +121,23 @@ namespace PoGo.NecroBot.Logic.State
                     if (se.MatchedRule == SwitchRules.PokestopSoftban)
                     {
                         session.BlockCurrentBot();
-                        session.ResetSessionToWithNextBot();
+                        session.ReInitSessionWithNextBot();
                     }
                     else 
                     if(se.MatchedRule == SwitchRules.CatchFlee)
                     {
                         session.BlockCurrentBot(60);
-                        session.ResetSessionToWithNextBot();
+                        session.ReInitSessionWithNextBot();
                     }
                     else
                     {
                         if (session.LogicSettings.MultipleBotConfig.StartFromDefaultLocation)
                         {
-                            session.ResetSessionToWithNextBot(null, globalSettings.LocationConfig.DefaultLatitude, globalSettings.LocationConfig.DefaultLongitude, session.Client.CurrentAltitude);
+                            session.ReInitSessionWithNextBot(null, globalSettings.LocationConfig.DefaultLatitude, globalSettings.LocationConfig.DefaultLongitude, session.Client.CurrentAltitude);
                         }
                         else
                         {
-                            session.ResetSessionToWithNextBot(); //current location
+                            session.ReInitSessionWithNextBot(); //current location
                         }
                     }
                     //return to login state
@@ -153,7 +153,7 @@ namespace PoGo.NecroBot.Logic.State
                     {
                         apiCallFailured = 0;
                         session.BlockCurrentBot(30);
-                        session.ResetSessionToWithNextBot();
+                        session.ReInitSessionWithNextBot();
                         state = new LoginState();
                     }
                 }
@@ -161,7 +161,7 @@ namespace PoGo.NecroBot.Logic.State
                 {
                     session.EventDispatcher.Send(new ErrorEvent {Message = "Current Operation was canceled."});
                     session.BlockCurrentBot(30);
-                    session.ResetSessionToWithNextBot();
+                    session.ReInitSessionWithNextBot();
                     state = new LoginState();
 
                 }
@@ -208,14 +208,14 @@ namespace PoGo.NecroBot.Logic.State
                 catch (CaptchaException)
                 {
 
-                    PushNotificationClient.SendPushNotificationV2($"Captcha required {session.Settings.PtcUsername}{session.Settings.GoogleUsername}", session.Translation.GetTranslation(TranslationString.CaptchaShown));
+                    PushNotificationClient.SendNotification(session,$"Captcha required {session.Settings.PtcUsername}{session.Settings.GoogleUsername}", session.Translation.GetTranslation(TranslationString.CaptchaShown));
                     // TODO Show the captcha.
                     session.EventDispatcher.Send(new WarnEvent { Message = session.Translation.GetTranslation(TranslationString.CaptchaShown) });
                     session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey) });
                    // Console.ReadKey();
                     //Environment.Exit(0);
                     session.BlockCurrentBot(60);
-                    session.ResetSessionToWithNextBot();
+                    session.ReInitSessionWithNextBot();
                     state = new LoginState();
                 }
                 catch (Exception ex)

@@ -340,12 +340,12 @@ namespace PoGo.NecroBot.CLI
                  if (availableOption.Contains(select))
                 {
                     var bot = _session.Accounts[select - 65];
-                    _session.ResetSessionToWithNextBot(bot);
+                    _session.ReInitSessionWithNextBot(bot);
                 }
                 else
                 {
                     var bot = _session.Accounts.OrderBy(p => p.RuntimeTotal).First();
-                    _session.ResetSessionToWithNextBot(bot);
+                    _session.ReInitSessionWithNextBot(bot);
                 }
 
             }

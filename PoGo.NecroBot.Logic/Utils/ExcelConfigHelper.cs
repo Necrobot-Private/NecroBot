@@ -72,10 +72,11 @@ namespace PoGo.NecroBot.Logic.Utils
 
         private static void BackwardCompitableUpdate(GlobalSettings setting)
         {      
-            foreach (var item in setting.PokemonsTransferFilter)
-            {
-                item.Value.AllowTransfer = true;
-            }
+            //foreach (var item in setting.PokemonsTransferFilter)
+            //{
+            //    setting.PokemonsTransferFilter[item].AllowTransfer = true;
+            //    item.Value.AllowTransfer = true;
+            //}
             foreach (var item in setting.PokemonsNotToTransfer)
             {
                 if (setting.PokemonsTransferFilter.ContainsKey(item))

@@ -9,6 +9,8 @@
                       Width="800" BorderThickness="1">
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
+            <Button Content="Save 1" Click="Button_Click_3" />
+            
             <Button Content="settings" />
             <Button>
                 <StackPanel Orientation="Horizontal">
@@ -16,12 +18,12 @@
                    Height="20"
                    Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
                         <Rectangle.OpacityMask>
-                            <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_cup}" />
+                            <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_save}" />
                         </Rectangle.OpacityMask>
                     </Rectangle>
                     <TextBlock Margin="4 0 0 0"
                    VerticalAlignment="Center"
-                   Text="deploy cupcakes" />
+                   Text="Save" />
                 </StackPanel>
             </Button>
         </Controls:WindowCommands>
@@ -34,9 +36,7 @@
             <TabControl x:Name="tabControl"  TabStripPlacement="Left" 
                         HorizontalContentAlignment="Stretch" 
                         ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                        Controls:TabControlHelper.IsUnderlined="False">
-                <TextBox x:Name="textBox1" HorizontalAlignment="Left" Height="23" Margin="727,108,-77,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-            </TabControl>
+                        Controls:TabControlHelper.IsUnderlined="False"/>
         </ScrollViewer>
     </Grid>
 </Controls:MetroWindow>

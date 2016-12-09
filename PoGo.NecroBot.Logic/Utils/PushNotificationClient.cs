@@ -1,4 +1,5 @@
 ﻿using PoGo.NecroBot.Logic.Event;
+using PoGo.NecroBot.Logic.Model.Settings;
 using PoGo.NecroBot.Logic.State;
 using System;
 using System.Collections.Generic;
@@ -41,40 +42,71 @@ namespace PoGo.NecroBot.Logic.Utils
             };
             return fileContent;
         }
-        
-        public static void SendMailNotification(string title, string body)
+
+        public static async Task SendMailNotification(NotificationConfig cfg, string title, string body)
         {
-            var fromAddress = new MailAddress("nhattruong84@gmail.com", "Truong Nguyen");
-            var toAddress = new MailAddress("samuraitruong@hotmail.com", "Truong Nguyen");
-
-            const string fromPassword = "@Abc123$";
-
-            var smtp = new SmtpClient
+            await Task.Run(() =>
             {
-                Host = "smtp.gmail.com",
-                Port = 587,
-                EnableSsl = true,
-                DeliveryMethod = SmtpDeliveryMethod.Network,
-                UseDefaultCredentials = false,
-                Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
-            };
-            using (var message = new MailMessage(fromAddress, toAddress)
-            {
-                Subject = title,
-                Body = body
-            })
-            {
-                smtp.Send(message);
-            }
+                var fromAddress = new MailAddress(cfg.GmailUsername);
+                //var toAddress = new MailAddress(cfg.Recipients);
 
+                string fromPassword = cfg.GmailPassword;
+
+                var smtp = new SmtpClient
+                {
+                    Host = "smtp.gmail.com",
+                    Port = 587,
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
+                };
+
+                using (var message = new MailMessage()
+                {
+                    Subject = title,
+                    Body = body
+                })
+                {
+                    message.From = fromAddress;
+                    foreach (var item in cfg.Recipients.Split(';'))
+                    {
+                        message.To.Add(item);
+                    }
+                    smtp.Send(message);
+                }
+            });
         }
-        public static async Task<bool> SendPushNotificationV2(string title, string body)
+
+        public static async Task SendNotification(ISession session, string title, string body)
+        {
+            var cfg = session.LogicSettings.NotificationConfig;
+            try
+            {
+                if (cfg.EnableEmailNotification)
+                {
+                    await SendMailNotification(cfg, title, body);
+                }
+
+                if (cfg.EnablePushBulletNotification)
+                {
+                    await SendPushNotificationV2(cfg.PushBulletApiKey, title, body);
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                session.EventDispatcher.Send(new WarnEvent() { Message = session.Translation.GetTranslation(Common.TranslationString.FailedSendNotification) });
+            }
+           
+        }
+        public static async Task<bool> SendPushNotificationV2(string apiKey, string title, string body)
         {
             bool isSusccess = false;
 
             var handler = new HttpClientHandler
             {
-                Credentials = new NetworkCredential("o.tsGyIPRalTONqukSFgqQH4eRI9OVjJLl", "")
+                Credentials = new NetworkCredential(apiKey, "")
             };
 
             // string name = Path.GetFileName(pathFile);
@@ -91,9 +123,7 @@ namespace PoGo.NecroBot.Logic.Utils
                     {
                         var resp = wc.PostAsync("https://api.pushbullet.com/v2/pushes", multiPartCont);
                         var result = await resp.Result.Content.ReadAsStringAsync();
-                        SendMailNotification(title, body);
-                       //need check return message to confirm.
-                       isSusccess = true;
+                        isSusccess = true;
                     }
                     catch (Exception ex)
                     {

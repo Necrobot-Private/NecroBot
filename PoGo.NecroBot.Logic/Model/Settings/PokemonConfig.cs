@@ -98,7 +98,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [DefaultValue(90)]
         [Range(0, 100)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 13)]
-        public int UseBerriesMinIv{ get; set; }
+        public float UseBerriesMinIv{ get; set; }
 
         [ExcelConfig(Description = "Specify max catch chance  will be use berries when catch", Position = 14)]
         [DefaultValue(0.20)]

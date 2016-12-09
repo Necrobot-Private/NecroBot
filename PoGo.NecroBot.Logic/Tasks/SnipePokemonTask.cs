@@ -480,7 +480,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 await
                     LocationUtils.UpdatePlayerLocationWithAltitude(session,
                         new GeoCoordinate(latitude, longitude, session.Client.CurrentAltitude), 0); // Set speed to 0 for random speed.
-
+                await Task.Delay(5000);
                 session.EventDispatcher.Send(new UpdatePositionEvent
                 {
                     Longitude = longitude,

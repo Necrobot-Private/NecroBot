@@ -54,7 +54,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public int GetMinStarDustForLevelUp => _settings.PokemonConfig.GetMinStarDustForLevelUp;
         public bool UseLuckyEggConstantly => _settings.PokemonConfig.UseLuckyEggConstantly;
         public bool UseIncenseConstantly => _settings.PokemonConfig.UseIncenseConstantly;
-        public int UseBerriesMinCp => _settings.PokemonConfig.UseBerriesMinCp;
+        public float UseBerriesMinCp => _settings.PokemonConfig.UseBerriesMinCp;
         public float UseBerriesMinIv => _settings.PokemonConfig.UseBerriesMinIv;
         public double UseBerriesBelowCatchProbability => _settings.PokemonConfig.UseBerriesBelowCatchProbability;
         public string UseBerriesOperator => _settings.PokemonConfig.UseBerriesOperator;
@@ -240,5 +240,6 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public int MinIVForAutoSnipe => _settings.SnipeConfig.MinIVForAutoSnipe;
         public Dictionary<PokemonId, BotSwitchPokemonFilter> BotSwitchPokemonFilters => _settings.BotSwitchPokemonFilters;
 
+        public NotificationConfig NotificationConfig => _settings.NotificationConfig;
     }
 }

@@ -214,11 +214,14 @@ namespace PoGo.NecroBot.CLI
                     var move2 = PokemonMove.Absorb;
                     Enum.TryParse<PokemonMove>(data.Move1, true, out move1);
                     Enum.TryParse<PokemonMove>(data.Move1, true, out move2);
+                    ulong encounterid = 0;
+                    ulong.TryParse(data.EncounterId, out encounterid);
+
                     MSniperServiceTask.AddSnipeItem(session, new MSniperServiceTask.MSniperInfo2()
                     {
                         Latitude = data.Latitude,
                         Longitude = data.Longitude,
-                        EncounterId = Convert.ToUInt64(data.EncounterId),
+                        EncounterId = encounterid,
                         SpawnPointId = data.SpawnPointId,
                         PokemonId = (short)data.PokemonId,
                         Iv = data.IV,

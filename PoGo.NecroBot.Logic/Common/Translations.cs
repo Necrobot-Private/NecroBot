@@ -266,7 +266,8 @@ namespace PoGo.NecroBot.Logic.Common
         FirstStartSetupWalkingSpeedVariantConfirm,
         MinimumClientVersionException,
         ExitNowAfterEnterKey,
-        CaptchaShown
+        CaptchaShown,
+        FailedSendNotification
     }
 
     public class Translation : ITranslation
@@ -606,7 +607,8 @@ namespace PoGo.NecroBot.Logic.Common
             new KeyValuePair<TranslationString, string>(TranslationString.MinimumClientVersionException, "(KILLSWITCH) We have detected a Pokemon API change. The bot emulates API version {0}, which is no longer supported.  Minimum API version is now {1}."),
             new KeyValuePair<TranslationString, string>(TranslationString.ExitNowAfterEnterKey, "The bot will now exit after hitting the enter key."),
             new KeyValuePair<TranslationString, string>(TranslationString.CaptchaShown, "Captcha is being shown and will need to be solved."),
-            new KeyValuePair<TranslationString, string>(TranslationString.CatchPokemonDisable,"Too few Pokeballs. Temporarily disabling the catching of wild Pokemon for {0} min or until we have {1} balls again.")
+            new KeyValuePair<TranslationString, string>(TranslationString.CatchPokemonDisable,"Too few Pokeballs. Temporarily disabling the catching of wild Pokemon for {0} min or until we have {1} balls again.")   ,
+            new KeyValuePair<TranslationString, string>(TranslationString.FailedSendNotification,"Notification sending failed.")
         };
 
         [JsonProperty("PokemonStrings",

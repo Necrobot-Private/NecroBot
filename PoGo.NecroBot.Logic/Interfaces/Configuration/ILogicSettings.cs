@@ -10,6 +10,7 @@ using System.Threading;
 
 namespace PoGo.NecroBot.Logic.Interfaces.Configuration
 {
+
     public interface ILogicSettings
     {
         bool UseWebsocket { get; }
@@ -83,7 +84,7 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         bool UseLuckyEggConstantly { get; }
         int MaxBerriesToUsePerPokemon { get; }
         bool UseIncenseConstantly { get; }
-        int UseBerriesMinCp { get; }
+        float UseBerriesMinCp { get; }
         float UseBerriesMinIv { get; }
         double UseBerriesBelowCatchProbability { get; }
         string UseBerriesOperator { get; }
@@ -148,6 +149,7 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         ICollection<PokemonId> PokemonsToEvolve { get; }
         ICollection<PokemonId> PokemonsToLevelUp { get; }
 
+        NotificationConfig NotificationConfig { get; }
         ICollection<PokemonId> PokemonsNotToTransfer { get; }
 
         ICollection<PokemonId> PokemonsNotToCatch { get; }

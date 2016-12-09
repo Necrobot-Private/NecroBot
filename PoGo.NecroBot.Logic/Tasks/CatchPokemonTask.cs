@@ -436,19 +436,19 @@ namespace PoGo.NecroBot.Logic.Tasks
                 } while (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchMissed ||
                          caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchEscape);
 
-                if (MultipleBotConfig.IsMultiBotActive(session.LogicSettings))
+                if (session.LogicSettings.AllowMultipleBot)
                 {
                     if (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchFlee)
                     {
                         CatchFleeContinuouslyCount++;
-                        if (CatchFleeContinuouslyCount > 10)
+                        if (CatchFleeContinuouslyCount > session.LogicSettings.MultipleBotConfig.CatchFleeCount)
                         {
                             CatchFleeContinuouslyCount = 0;
 
                             throw new ActiveSwitchByRuleException()
                             {
                                 MatchedRule = SwitchRules.CatchFlee,
-                                ReachedValue = 10
+                                ReachedValue = session.LogicSettings.MultipleBotConfig.CatchFleeCount
                             };
                         }
                     }

@@ -39,7 +39,7 @@ namespace PoGo.NecroBot.Logic.State
         IElevationService ElevationService { get; set; }
         List<FortData> Forts { get; set; }
         List<FortData> VisibleForts { get; set; }
-        void ResetSessionToWithNextBot(AuthConfig authConfig = null, double lat = 0, double lng = 0, double att = 0);
+        void ReInitSessionWithNextBot(AuthConfig authConfig = null, double lat = 0, double lng = 0, double att = 0);
         void AddForts(List<FortData> mapObjects);
         void AddVisibleForts(List<FortData> mapObjects);
         Task<bool> WaitUntilActionAccept(BotActions action, int timeout = 30000);
@@ -104,6 +104,7 @@ namespace PoGo.NecroBot.Logic.State
                     if (acc != null)
                     {
                         acc.RuntimeTotal = Convert.ToDouble(arr[1]);
+                        
                     }
                 }
             }
@@ -154,7 +155,7 @@ namespace PoGo.NecroBot.Logic.State
                 (lat, lng) => this.EventDispatcher.Send(new UpdatePositionEvent { Latitude = lat, Longitude = lng });
         }
         //TODO : Need add BotManager to manage all feature related to multibot, 
-        public void ResetSessionToWithNextBot(AuthConfig bot = null, double lat = 0, double lng = 0, double att = 0)
+        public void ReInitSessionWithNextBot(AuthConfig bot = null, double lat = 0, double lng = 0, double att = 0)
         {
             this.CatchBlockTime = DateTime.Now; //remove any block
             
@@ -166,6 +167,11 @@ namespace PoGo.NecroBot.Logic.State
             }
 
             this.accounts = this.accounts.OrderByDescending(p => p.RuntimeTotal).ToList();
+            var first = this.accounts.First();
+            if(first.RuntimeTotal >= 100000)
+            {
+                first.RuntimeTotal = this.accounts.Min(p => p.RuntimeTotal);
+            }
 
             var nextBot = bot != null ? bot : this.accounts.LastOrDefault(p => p != currentAccount && p.ReleaseBlockTime < DateTime.Now);
             if (nextBot != null)
@@ -187,7 +193,7 @@ namespace PoGo.NecroBot.Logic.State
                     logs.Add($"{item.GoogleUsername}{item.PtcUsername};{item.RuntimeTotal}");
                 }
                 File.AppendAllLines("runtime.log", logs);
-                PushNotificationClient.SendPushNotificationV2($"Account changed to {nextBot.GoogleUsername}{nextBot.PtcUsername}",body);
+                PushNotificationClient.SendNotification(this,$"Account changed to {nextBot.GoogleUsername}{nextBot.PtcUsername}",body);
 
                 this.Settings.AuthType = nextBot.AuthType;
                 this.Settings.GooglePassword = nextBot.GooglePassword;
