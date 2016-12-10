@@ -2,7 +2,7 @@
 [![Github All Releases](https://img.shields.io/github/downloads/Necrobot-Private/NecroBot/total.svg?maxAge=258)](https://github.com/Necrobot-Private/NecroBot/releases)
 [![GitHub license](https://img.shields.io/badge/license-AGPL-blue.svg)](https://raw.githubusercontent.com/Necrobot-Private/NecroBot/master/LICENSE.md)
 
-<h1>Pokémon Go 0.47 API is now being forced so the bot killswitch has been activated! Stay tuned for updates.</h1>
+<h1>Pokémon Go 0.49.1 API is now being forced so the bot killswitch has been activated! Stay tuned for updates.</h1>
 
 
 <p align="center">
