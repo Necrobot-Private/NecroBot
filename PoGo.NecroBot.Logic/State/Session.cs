@@ -39,7 +39,7 @@ namespace PoGo.NecroBot.Logic.State
         IElevationService ElevationService { get; set; }
         List<FortData> Forts { get; set; }
         List<FortData> VisibleForts { get; set; }
-        void ReInitSessionWithNextBot(AuthConfig authConfig = null, double lat = 0, double lng = 0, double att = 0);
+        bool ReInitSessionWithNextBot(AuthConfig authConfig = null, double lat = 0, double lng = 0, double att = 0);
         void AddForts(List<FortData> mapObjects);
         void AddVisibleForts(List<FortData> mapObjects);
         Task<bool> WaitUntilActionAccept(BotActions action, int timeout = 30000);
@@ -155,7 +155,7 @@ namespace PoGo.NecroBot.Logic.State
                 (lat, lng) => this.EventDispatcher.Send(new UpdatePositionEvent { Latitude = lat, Longitude = lng });
         }
         //TODO : Need add BotManager to manage all feature related to multibot, 
-        public void ReInitSessionWithNextBot(AuthConfig bot = null, double lat = 0, double lng = 0, double att = 0)
+        public bool ReInitSessionWithNextBot(AuthConfig bot = null, double lat = 0, double lng = 0, double att = 0)
         {
             this.CatchBlockTime = DateTime.Now; //remove any block
             
@@ -219,6 +219,7 @@ namespace PoGo.NecroBot.Logic.State
                     }
                 }
             }
+            return nextBot != null;
 
         }
         public void AddForts(List<FortData> data)

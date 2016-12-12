@@ -207,16 +207,20 @@ namespace PoGo.NecroBot.Logic.State
                 }
                 catch (CaptchaException)
                 {
-
-                    PushNotificationClient.SendNotification(session,$"Captcha required {session.Settings.PtcUsername}{session.Settings.GoogleUsername}", session.Translation.GetTranslation(TranslationString.CaptchaShown));
+                    PushNotificationClient.SendNotification(session,$"Captcha required {session.Settings.PtcUsername}{session.Settings.GoogleUsername}", session.Translation.GetTranslation(TranslationString.CaptchaShown), true);
                     // TODO Show the captcha.
                     session.EventDispatcher.Send(new WarnEvent { Message = session.Translation.GetTranslation(TranslationString.CaptchaShown) });
-                    session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey) });
-                   // Console.ReadKey();
-                    //Environment.Exit(0);
-                    session.BlockCurrentBot(60);
-                    session.ReInitSessionWithNextBot();
-                    state = new LoginState();
+                    if (session.LogicSettings.AllowMultipleBot)
+                    {
+                        session.BlockCurrentBot(15);
+                        session.ReInitSessionWithNextBot();
+                        state = new LoginState();
+                    }
+                    else {
+                        session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey) });
+                        Console.ReadKey();
+                        Environment.Exit(0);
+                    }
                 }
                 catch (Exception ex)
                 {

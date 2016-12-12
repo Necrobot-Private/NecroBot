@@ -376,6 +376,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             cancellationToken.ThrowIfCancellationRequested();
 
+
             await
                   SnipePokemonTask.Snipe(session, new List<PokemonId>() { (PokemonId)encounterId.PokemonId }, encounterId.Latitude, encounterId.Longitude, cancellationToken);
         }

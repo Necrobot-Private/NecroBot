@@ -18,6 +18,7 @@ using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 using System.Threading.Tasks;
 using PoGo.NecroBot.Logic.Service.TelegramCommand;
+using System.IO;
 
 #endregion
 
@@ -30,6 +31,9 @@ namespace PoGo.NecroBot.Logic.Service
         private bool _loggedIn;
         private readonly ISession _session;
         private List<ICommand> handlers;
+        private long lastChatId = 0;
+        private const string LOG_FILE = "config\\telegram.id";
+
         public TelegramService(string apiKey, ISession session)
         {
             try
@@ -54,6 +58,21 @@ namespace PoGo.NecroBot.Logic.Service
                 _bot.StartReceiving();
 
                 _session.EventDispatcher.Send(new NoticeEvent { Message = "Using TelegramAPI with " + me.Username });
+
+                if(File.Exists(LOG_FILE))
+                {
+                    var s = File.ReadAllText(LOG_FILE);
+                    if(!string.IsNullOrEmpty(s))
+                    {
+                        lastChatId = Convert.ToInt64(s);
+                        SendMessage(_session.Translation.GetTranslation(TranslationString.TelegramBotStarted));
+                    }
+                    else
+                    {
+                        _session.EventDispatcher.Send(new NoticeEvent() { Message = _session.Translation.GetTranslation(TranslationString.TelegramNeedChatId) });
+                    }
+                    
+                }
             }
             catch (Exception)
             {
@@ -73,7 +92,8 @@ namespace PoGo.NecroBot.Logic.Service
             {
                 return;
             }
-
+            lastChatId = message.Chat.Id;
+            File.WriteAllText(LOG_FILE, lastChatId.ToString());
             var messagetext = message.Text.ToLower().Split(' ');
 
             if (!_loggedIn && messagetext[0].ToLower().Contains("/login"))
@@ -151,6 +171,12 @@ namespace PoGo.NecroBot.Logic.Service
         private async void SendLocation(long chatId, double currentLatitude, double currentLongitude)
         {
             await _bot.SendLocationAsync(chatId, (float)currentLatitude, (float)currentLongitude);
+        }
+
+        public async Task SendMessage(string message)
+        {
+            if (string.IsNullOrEmpty(message) || lastChatId ==0) return;
+            await _bot.SendTextMessageAsync(lastChatId, message, replyMarkup: new ReplyKeyboardHide());
         }
 
         private async Task SendMessage(long chatId, string message)

@@ -47,7 +47,7 @@ namespace PoGo.NecroBot.Logic.Utils
         {
             await Task.Run(() =>
             {
-                var fromAddress = new MailAddress(cfg.GmailUsername);
+                var fromAddress = new MailAddress(cfg.GmailUsername, "Necrobot Notifier");
                 //var toAddress = new MailAddress(cfg.Recipients);
 
                 string fromPassword = cfg.GmailPassword;
@@ -78,7 +78,7 @@ namespace PoGo.NecroBot.Logic.Utils
             });
         }
 
-        public static async Task SendNotification(ISession session, string title, string body)
+        public static async Task SendNotification(ISession session, string title, string body, bool push = false)
         {
             var cfg = session.LogicSettings.NotificationConfig;
             try
@@ -88,11 +88,15 @@ namespace PoGo.NecroBot.Logic.Utils
                     await SendMailNotification(cfg, title, body);
                 }
 
-                if (cfg.EnablePushBulletNotification)
+                if (push)
                 {
-                    await SendPushNotificationV2(cfg.PushBulletApiKey, title, body);
+                    if (cfg.EnablePushBulletNotification)
+                    {
+                        await SendPushNotificationV2(cfg.PushBulletApiKey, title, body);
+                    }
+
+                    await session.Telegram.SendMessage($"{title}\r\n{body}");
                 }
-                
             }
             catch (Exception ex)
             {

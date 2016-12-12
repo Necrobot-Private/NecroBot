@@ -31,7 +31,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
                     Latitude = Convert.ToDouble(pokemonData[1].Trim()),
                     Longitude = Convert.ToDouble(pokemonData[2].Trim())
                 }, true);
-                Callback("Snipe pokemon added");
+                //Callback("Snipe pokemon added");
                 return true;
             }
             return false;

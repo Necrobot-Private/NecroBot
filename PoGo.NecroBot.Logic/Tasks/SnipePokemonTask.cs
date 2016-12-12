@@ -475,25 +475,36 @@ namespace PoGo.NecroBot.Logic.Tasks
             session.EventDispatcher.Send(new SnipeModeEvent {Active = true});
 
             List<MapPokemon> catchablePokemon;
+            int retry = 5;
+
             try
             {
-                await
-                    LocationUtils.UpdatePlayerLocationWithAltitude(session,
-                        new GeoCoordinate(latitude, longitude, session.Client.CurrentAltitude), 0); // Set speed to 0 for random speed.
-                await Task.Delay(5000);
-                session.EventDispatcher.Send(new UpdatePositionEvent
+                do
                 {
-                    Longitude = longitude,
-                    Latitude = latitude
-                });
+                    retry--;
+                    await
+                        LocationUtils.UpdatePlayerLocationWithAltitude(session,
+                            new GeoCoordinate(latitude, longitude, 10d), 0); // Set speed to 0 for random speed.
+                    await Task.Delay(1000);
+                    latitude += 0.00000001;
+                    longitude += 0.00000001;
 
-                var mapObjects = session.Client.Map.GetMapObjects().Result;
-                //session.AddForts(mapObjects.Item1.MapCells.SelectMany(p => p.Forts).ToList());
-                catchablePokemon =
-                    mapObjects.Item1.MapCells.SelectMany(q => q.CatchablePokemons)
-                        .Where(q => pokemonIds.Contains(q.PokemonId))
-                        .OrderByDescending(pokemon => PokemonInfo.CalculateMaxCpMultiplier(pokemon.PokemonId))
-                        .ToList();
+                    session.EventDispatcher.Send(new UpdatePositionEvent
+                    {
+                        Longitude = longitude,
+                        Latitude = latitude
+                    });
+                    await Task.Delay(1000);
+                    var mapObjects = session.Client.Map.GetMapObjects().Result;
+                    //session.AddForts(mapObjects.Item1.MapCells.SelectMany(p => p.Forts).ToList());
+                    catchablePokemon =
+                        mapObjects.Item1.MapCells.SelectMany(q => q.CatchablePokemons)
+                            .Where(q => pokemonIds.Contains(q.PokemonId))
+                            .OrderByDescending(pokemon => PokemonInfo.CalculateMaxCpMultiplier(pokemon.PokemonId))
+                            .ToList();
+                } while (catchablePokemon.Count == 0 && retry > 0);
+                
+
             }
             finally
             {
