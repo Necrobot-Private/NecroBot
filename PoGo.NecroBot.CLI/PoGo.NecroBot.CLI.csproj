@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1FEA147E-F704-497B-A538-00B053B5F672}</ProjectGuid>
+    <ProjectGuid>{A4B28C82-4633-472B-853F-59DD7716AD1C}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PoGo.NecroBot.CLI</RootNamespace>
