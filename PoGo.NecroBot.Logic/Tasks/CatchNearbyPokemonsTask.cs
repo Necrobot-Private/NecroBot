@@ -12,7 +12,6 @@ using POGOProtos.Inventory.Item;
 using POGOProtos.Map.Pokemon;
 using POGOProtos.Networking.Responses;
 using POGOProtos.Enums;
-using System.Collections;
 using System;
 
 #endregion

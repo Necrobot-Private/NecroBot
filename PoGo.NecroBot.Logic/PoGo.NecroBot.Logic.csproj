@@ -62,7 +62,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="EPPlus, Version=4.1.0.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPPlus.4.1.0\lib\net40\EPPlus.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\EPPlus.4.1.0\lib\net40\EPPlus.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="GeoCoordinatePortable, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -93,12 +93,12 @@
       <HintPath>$(SolutionDir)\packages\Newtonsoft.Json.Schema.2.0.6\lib\net45\Newtonsoft.Json.Schema.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="PushbulletSharp, Version=2.3.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\PushBulletSharp.2.3.3\lib\portable-windows8+net45\PushbulletSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="POGOProtos.NetStandard1, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)\packages\POGOProtos.NetStandard1.2.1.0\lib\net45\POGOProtos.NetStandard1.dll</HintPath>
+    <Reference Include="POGOProtos.NetStandard1, Version=2.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\POGOProtos.NetStandard1.2.3.0\lib\net45\POGOProtos.NetStandard1.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="PushbulletSharp, Version=2.3.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\PushBulletSharp.2.3.3\lib\portable-windows8+net45\PushbulletSharp.dll</HintPath>
     </Reference>
     <Reference Include="S2Geometry, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\S2Geometry.1.0.3\lib\portable-net45+wp8+win8\S2Geometry.dll</HintPath>
@@ -203,6 +203,108 @@
     <Compile Include="Logging\FileLogger.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="Logging\LoggingStrings.cs" />
+    <Compile Include="Forms_Gui\Common\Translations.cs" />
+    <Compile Include="Forms_Gui\DataDumper\Dumper.cs" />
+    <Compile Include="Forms_Gui\DataDumper\IDumper.cs" />
+    <Compile Include="Forms_Gui\Event\DisplayHighestsPokemonEvent.cs" />
+    <Compile Include="Forms_Gui\Event\EggHatchedEvent.cs" />
+    <Compile Include="Forms_Gui\Event\EggIncubatorStatusEvent.cs" />
+    <Compile Include="Forms_Gui\Event\EggsListEvent.cs" />
+    <Compile Include="Forms_Gui\Event\ErrorEvent.cs" />
+    <Compile Include="Forms_Gui\Event\EventDispatcher.cs" />
+    <Compile Include="Forms_Gui\Event\EvolveCountEvent.cs" />
+    <Compile Include="Forms_Gui\Event\FortFailedEvent.cs" />
+    <Compile Include="Forms_Gui\Event\FortTargetEvent.cs" />
+    <Compile Include="Forms_Gui\Event\FortUsedEvent.cs" />
+    <Compile Include="Forms_Gui\Event\GetHumanizeRouteEvent.cs" />
+    <Compile Include="Forms_Gui\Event\HumanWalkingEvent.cs" />
+    <Compile Include="Forms_Gui\Event\IEvent.cs" />
+    <Compile Include="Forms_Gui\Event\InventoryListEvent.cs" />
+    <Compile Include="Forms_Gui\Event\ItemRecycledEvent.cs" />
+    <Compile Include="Forms_Gui\Event\LootPokestopEvent.cs" />
+    <Compile Include="Forms_Gui\Event\NoPokeballEvent.cs" />
+    <Compile Include="Forms_Gui\Event\NoticeEvent.cs" />
+    <Compile Include="Forms_Gui\Event\OptimizeRouteEvent.cs" />
+    <Compile Include="Forms_Gui\Event\PokemonCaptureEvent.cs" />
+    <Compile Include="Forms_Gui\Event\PokemonEvolveEvent.cs" />
+    <Compile Include="Forms_Gui\Event\PokemonListEvent.cs" />
+    <Compile Include="Forms_Gui\Event\PokemonsEncounterEvent.cs" />
+    <Compile Include="Forms_Gui\Event\PokeStopListEvent.cs" />
+    <Compile Include="Forms_Gui\Event\ProfileEvent.cs" />
+    <Compile Include="Forms_Gui\Event\SnipeEvent.cs" />
+    <Compile Include="Forms_Gui\Event\SnipeModeEvent.cs" />
+    <Compile Include="Forms_Gui\Event\SnipeScanEvent.cs" />
+    <Compile Include="Forms_Gui\Event\TransferPokemonEvent.cs" />
+    <Compile Include="Forms_Gui\Event\UpdateEvent.cs" />
+    <Compile Include="Forms_Gui\Event\UpdatePositionEvent.cs" />
+    <Compile Include="Forms_Gui\Event\UseBerryEvent.cs" />
+    <Compile Include="Forms_Gui\Event\UseLuckyEggEvent.cs" />
+    <Compile Include="Forms_Gui\Event\WarnEvent.cs" />
+    <Compile Include="Forms_Gui\ILogicSettings.cs" />
+    <Compile Include="Forms_Gui\Inventory.cs" />
+    <Compile Include="Forms_Gui\Logging\ILogger.cs" />
+    <Compile Include="Forms_Gui\Logging\Logger.cs" />
+    <Compile Include="Forms_Gui\Navigation.cs" />
+    <Compile Include="Forms_Gui\Service\BotService.cs" />
+    <Compile Include="Forms_Gui\Service\TelegramService.cs" />
+    <Compile Include="Forms_Gui\Settings.cs" />
+    <Compile Include="Forms_Gui\State\FarmState.cs" />
+    <Compile Include="Forms_Gui\State\InfoState.cs" />
+    <Compile Include="Forms_Gui\State\IState.cs" />
+    <Compile Include="Forms_Gui\State\LoginState.cs" />
+    <Compile Include="Forms_Gui\State\PositionCheckState.cs" />
+    <Compile Include="Forms_Gui\State\Session.cs" />
+    <Compile Include="Forms_Gui\State\StateMachine.cs" />
+    <Compile Include="Forms_Gui\State\VersionCheckState.cs" />
+    <Compile Include="Forms_Gui\StatisticsAggregator.cs" />
+    <Compile Include="Forms_Gui\Tasks\CatchIncensePokemonsTask.cs" />
+    <Compile Include="Forms_Gui\Tasks\CatchLurePokemonsTask.cs" />
+    <Compile Include="Forms_Gui\Tasks\CatchNearbyPokemonsTask.cs" />
+    <Compile Include="Forms_Gui\Tasks\CatchPokemonTask.cs" />
+    <Compile Include="Forms_Gui\Tasks\DisplayPokemonStatsTask.cs" />
+    <Compile Include="Forms_Gui\Tasks\EggsListTask.cs" />
+    <Compile Include="Forms_Gui\Tasks\EvolvePokemonTask.cs" />
+    <Compile Include="Forms_Gui\Tasks\EvolveSpecificPokemonTask.cs" />
+    <Compile Include="Forms_Gui\Tasks\Farm.cs" />
+    <Compile Include="Forms_Gui\Tasks\FarmPokestopsGPXTask.cs" />
+    <Compile Include="Forms_Gui\Tasks\FarmPokestopsTask.cs" />
+    <Compile Include="Forms_Gui\Tasks\FavoritePokemonTask.cs" />
+    <Compile Include="Forms_Gui\Tasks\GetPokeDexCount.cs" />
+    <Compile Include="Forms_Gui\Tasks\InventoryListTask.cs" />
+    <Compile Include="Forms_Gui\Tasks\LevelUpPokemonTask.cs" />
+    <Compile Include="Forms_Gui\Tasks\LevelUpSpecificPokemonTask.cs" />
+    <Compile Include="Forms_Gui\Tasks\Login.cs" />
+    <Compile Include="Forms_Gui\Tasks\PokemonListTask.cs" />
+    <Compile Include="Forms_Gui\Tasks\RecycleItemsTask.cs" />
+    <Compile Include="Forms_Gui\Tasks\RecycleSpecificItemTask.cs" />
+    <Compile Include="Forms_Gui\Tasks\RenamePokemonTask.cs" />
+    <Compile Include="Forms_Gui\Tasks\RenameSpecificPokemonTask.cs" />
+    <Compile Include="Forms_Gui\Tasks\SnipePokemonTask.cs" />
+    <Compile Include="Forms_Gui\Tasks\TransferDuplicatePokemonTask.cs" />
+    <Compile Include="Forms_Gui\Tasks\TransferSpecificPokemonTask.cs" />
+    <Compile Include="Forms_Gui\Tasks\TransferWeakPokemonTask.cs" />
+    <Compile Include="Forms_Gui\Tasks\UseIncenseConstantlyTask.cs" />
+    <Compile Include="Forms_Gui\Tasks\UseIncenseTask.cs" />
+    <Compile Include="Forms_Gui\Tasks\UseIncubatorsTask.cs" />
+    <Compile Include="Forms_Gui\Tasks\UseLuckyEggConstantlyTask.cs" />
+    <Compile Include="Forms_Gui\Tasks\UseLuckyEggTask.cs" />
+    <Compile Include="Forms_Gui\Tasks\UseNearbyPokestopsTask.cs" />
+    <Compile Include="Forms_Gui\Utils\DelayingUtils.cs" />
+    <Compile Include="Forms_Gui\Utils\DeviceInfoHelper.cs" />
+    <Compile Include="Forms_Gui\Utils\dijkstras.cs" />
+    <Compile Include="Forms_Gui\Utils\EggWalker.cs" />
+    <Compile Include="Forms_Gui\Utils\ErrorHandler.cs" />
+    <Compile Include="Forms_Gui\Utils\GPXReader.cs" />
+    <Compile Include="Forms_Gui\Utils\JitterUtils.cs" />
+    <Compile Include="Forms_Gui\Utils\LocationUtils.cs" />
+    <Compile Include="Forms_Gui\Utils\NecroWebClient.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms_Gui\Utils\RouteOptimizeUtil.cs" />
+    <Compile Include="Forms_Gui\Utils\Statistics.cs" />
+    <Compile Include="Forms_Gui\Utils\StringUtils.cs" />
+    <Compile Include="Forms_Gui\Utils\WebClientExtensions.cs" />
+    <Compile Include="Forms_Gui\Utils\WebUtils.cs" />
     <Compile Include="Model\BotActions.cs" />
     <Compile Include="Exceptions\ActiveSwitchByPokemonException.cs" />
     <Compile Include="Model\Google\GoogleObjects\Address_Components.cs" />
@@ -388,7 +490,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FeroxRev\PokemonGo.RocketAPI.csproj">
+    <ProjectReference Include="$(SolutionDir)\FeroxRev\PokemonGo.RocketAPI.csproj">
       <Project>{05d2da44-1b8e-4cf7-94ed-4d52451cd095}</Project>
       <Name>PokemonGo.RocketAPI</Name>
     </ProjectReference>
