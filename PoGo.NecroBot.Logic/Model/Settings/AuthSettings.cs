@@ -73,10 +73,13 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 generator.GenerationProviders.Add(strEnumGen);
                 // generate json schema 
                 var type = typeof(AuthSettings);
-                var schema = generator.Generate(type);
-                schema.Title = type.Name;
-                //
-                _schema = schema;
+                try {
+                    var schema = generator.Generate(type);
+                    schema.Title = type.Name;
+                    //
+                    _schema = schema;
+                }
+                catch(Exception ex) { }
                 return _schema;
             }
         }
@@ -276,6 +279,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 else
                     Logger.Write("JSON Exception: " + exception.Message, LogLevel.Error);
             }
+            
         }
 
         private static void MigrateSettings(int schemaVersion, JObject settings, string configFile, string schemaFile)

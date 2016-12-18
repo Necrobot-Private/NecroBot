@@ -28,6 +28,7 @@ using Quobject.Collections.Immutable;
 using Quobject.SocketIoClientDotNet.Client;
 using Socket = Quobject.SocketIoClientDotNet.Client.Socket;
 using PoGo.NecroBot.Logic.Exceptions;
+using PokemonGo.RocketAPI.Exceptions;
 
 #endregion
 
@@ -660,7 +661,13 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 throw asx;
             }
+            catch (CaptchaException cex)
+            {
+                throw cex;
+            }
+
             catch (Exception ex)
+
             {
                 // most likely System.IO.IOException
                 session.EventDispatcher.Send(new ErrorEvent {Message = ex.Message});
@@ -711,6 +718,11 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                         pokemons.Add(pokezzElement);
                     }
+                    catch (CaptchaException cex)
+                    {
+                        throw cex;
+                    }
+                 
                     catch (Exception)
                     {
                         // Just in case Pokezz changes their implementation, let's catch the error and set the error flag.

@@ -149,6 +149,18 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 12)]
         public int CatchFleeCount{ get; set; }
 
+        [ExcelConfig(Description = "Switch on catch limit", Position = 13)]
+        [DefaultValue(true)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 13)]
+        public bool SwitchOnCatchLimit { get; set; }
+
+
+        [ExcelConfig(Description = "Switch on pokestop limit", Position = 14)]
+        [DefaultValue(true)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 14)]
+        public bool SwitchOnPokestopLimit { get; set; }
+
+
         public static MultipleBotConfig Default()
         {
             return new MultipleBotConfig();

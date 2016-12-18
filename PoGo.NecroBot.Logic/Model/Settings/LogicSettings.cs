@@ -66,6 +66,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public double WalkingSpeedVariant => _settings.LocationConfig.WalkingSpeedVariant;
         public bool ShowVariantWalking => _settings.LocationConfig.ShowVariantWalking;
         public bool FastSoftBanBypass => _settings.SoftBanConfig.FastSoftBanBypass;
+        public int ByPassSpinCount  =>  _settings.SoftBanConfig.ByPassSpinCount;
         public bool EvolveAllPokemonWithEnoughCandy => _settings.PokemonConfig.EvolveAllPokemonWithEnoughCandy;
         public bool KeepPokemonsThatCanEvolve => _settings.PokemonConfig.KeepPokemonsThatCanEvolve;
         public bool TransferDuplicatePokemon => _settings.PokemonConfig.TransferDuplicatePokemon;

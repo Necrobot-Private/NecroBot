@@ -100,7 +100,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                         // Return to FarmState/StateMachine if we have reached both user defined limits
                         if ((UseNearbyPokestopsTask._pokestopLimitReached || UseNearbyPokestopsTask._pokestopTimerReached) &&
-                            (CatchPokemonTask._catchPokemonLimitReached || CatchPokemonTask._catchPokemonTimerReached))
+                            session.Stats.CatchThresholdExceeds(session))
                             return;
 
                     } //end trkpts

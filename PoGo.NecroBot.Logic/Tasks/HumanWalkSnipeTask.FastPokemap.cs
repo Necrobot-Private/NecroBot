@@ -175,6 +175,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 var p = (PokemonId)Enum.Parse(typeof(PokemonId), realName.ToString());
                 return (int)p;
             }
+            
             catch (Exception)
             {
 

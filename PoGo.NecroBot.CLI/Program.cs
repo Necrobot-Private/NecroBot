@@ -312,7 +312,7 @@ namespace PoGo.NecroBot.CLI
 
                     var runtime = $"{day:00}:{hour:00}:{min:00}:00";
 
-                    Logger.Write($"{ch}. {item.GoogleUsername}{item.PtcUsername} \t{runtime}");
+                    Logger.Write($"{ch}. {item.GoogleUsername}{item.PtcUsername} \t\t{runtime}");
                     index++;
                 };
 

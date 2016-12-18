@@ -93,7 +93,7 @@ namespace PoGo.NecroBot.Logic.State
 
                     // Exit the bot if both catching and looting has reached its limits
                     if ((UseNearbyPokestopsTask._pokestopLimitReached || UseNearbyPokestopsTask._pokestopTimerReached) &&
-                        (CatchPokemonTask._catchPokemonLimitReached || CatchPokemonTask._catchPokemonTimerReached))
+                        session.Stats.CatchThresholdExceeds(session))
                     {
                         session.EventDispatcher.Send(new ErrorEvent
                         {
@@ -118,6 +118,7 @@ namespace PoGo.NecroBot.Logic.State
                 catch (ActiveSwitchByRuleException se)
                 {
                     session.EventDispatcher.Send(new WarnEvent { Message = $"Switch bot account activated by : {se.MatchedRule.ToString()}  - {se.ReachedValue} " });
+                    
                     if (se.MatchedRule == SwitchRules.PokestopSoftban)
                     {
                         session.BlockCurrentBot();
@@ -131,6 +132,11 @@ namespace PoGo.NecroBot.Logic.State
                     }
                     else
                     {
+                        if(se.MatchedRule == SwitchRules.CatchLimitReached || se.MatchedRule == SwitchRules.SpinPokestopReached)
+                        {
+                            PushNotificationClient.SendNotification(session, $"{se.MatchedRule} - {session.Settings.GoogleUsername}{session.Settings.PtcUsername}", "This bot has reach limit, it will be blocked for 60 mins for safety.", true);
+                            session.BlockCurrentBot(60);
+                        }
                         if (session.LogicSettings.MultipleBotConfig.StartFromDefaultLocation)
                         {
                             session.ReInitSessionWithNextBot(null, globalSettings.LocationConfig.DefaultLatitude, globalSettings.LocationConfig.DefaultLongitude, session.Client.CurrentAltitude);
@@ -148,14 +154,18 @@ namespace PoGo.NecroBot.Logic.State
                 {
                     session.EventDispatcher.Send(new ErrorEvent { Message = "Niantic Servers unstable, throttling API Calls." });
                     await Task.Delay(1000);
-                    apiCallFailured++;
-                    if(apiCallFailured > 20)
+                    if (session.LogicSettings.AllowMultipleBot)
                     {
-                        apiCallFailured = 0;
-                        session.BlockCurrentBot(30);
-                        session.ReInitSessionWithNextBot();
-                        state = new LoginState();
+                        apiCallFailured++;
+                        if (apiCallFailured > 20)
+                        {
+                            apiCallFailured = 0;
+                            session.BlockCurrentBot(30);
+                            session.ReInitSessionWithNextBot();
+                        }
                     }
+                    state = new LoginState();
+
                 }
                 catch (OperationCanceledException)
                 {
@@ -177,12 +187,21 @@ namespace PoGo.NecroBot.Logic.State
                     Console.ReadKey();
                     System.Environment.Exit(1);
                 }
-                catch (LoginFailedException)
+                catch (LoginFailedException ex)
                 {
-                    session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.AccountBanned) });
-                    session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey) });
-                    Console.ReadKey();
-                    System.Environment.Exit(1);
+                    if (session.LogicSettings.AllowMultipleBot)
+                    {
+                        PushNotificationClient.SendNotification(session, $"Banned!!!! {session.Settings.PtcUsername}{session.Settings.GoogleUsername}", session.Translation.GetTranslation(TranslationString.AccountBanned), true);
+                        session.BlockCurrentBot(24 * 60); //need remove acc
+                        session.ReInitSessionWithNextBot();
+                        state = new LoginState();
+                    }
+                    else {
+                        session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.AccountBanned) });
+                        session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey) });
+                        Console.ReadKey();
+                        System.Environment.Exit(1);
+                    }
                 }
                 catch (PtcOfflineException)
                 {
@@ -205,15 +224,19 @@ namespace PoGo.NecroBot.Logic.State
                     session.EventDispatcher.Send(new NoticeEvent { Message = "Access Token Expired. Logging in again..." });
                     state = _initialState;
                 }
-                catch (CaptchaException)
+                catch (CaptchaException captchaException)
                 {
+                    var resolved = CaptchaManager.ManualResolveCaptcha(session, captchaException.Url);
                     PushNotificationClient.SendNotification(session,$"Captcha required {session.Settings.PtcUsername}{session.Settings.GoogleUsername}", session.Translation.GetTranslation(TranslationString.CaptchaShown), true);
                     // TODO Show the captcha.
                     session.EventDispatcher.Send(new WarnEvent { Message = session.Translation.GetTranslation(TranslationString.CaptchaShown) });
                     if (session.LogicSettings.AllowMultipleBot)
                     {
                         session.BlockCurrentBot(15);
-                        session.ReInitSessionWithNextBot();
+                        if(!session.ReInitSessionWithNextBot())
+                        {
+                            await Task.Delay(30 * 60 * 1000);
+                        }
                         state = new LoginState();
                     }
                     else {

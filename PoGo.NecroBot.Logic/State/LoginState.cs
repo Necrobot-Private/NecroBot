@@ -25,6 +25,7 @@ namespace PoGo.NecroBot.Logic.State
         {
             this.pokemonToCatch = pokemonToCatch;
         }
+
         public async Task<IState> Execute(ISession session, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -54,14 +55,15 @@ namespace PoGo.NecroBot.Logic.State
             {
                 throw ae.Flatten().InnerException;
             }
-            catch (LoginFailedException)
+            catch (LoginFailedException ex)
             {
                 session.EventDispatcher.Send(new ErrorEvent
                 {
                     Message = session.Translation.GetTranslation(TranslationString.LoginInvalid)
                 });
+                
                 await Task.Delay(2000, cancellationToken);
-                Environment.Exit(0);
+                throw ex;
             }
             catch (Exception ex) when (ex is PtcOfflineException || ex is AccessTokenExpiredException)
             {
