@@ -242,5 +242,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public Dictionary<PokemonId, BotSwitchPokemonFilter> BotSwitchPokemonFilters => _settings.BotSwitchPokemonFilters;
 
         public NotificationConfig NotificationConfig => _settings.NotificationConfig;
+
+        public CaptchaConfig CaptchaConfig => _settings.CaptchaConfig;
     }
 }

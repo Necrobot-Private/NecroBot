@@ -12,6 +12,7 @@ using PoGo.NecroBot.Logic.Model.Settings;
 using PokemonGo.RocketAPI.Exceptions;
 using PoGo.NecroBot.Logic.Exceptions;
 using PoGo.NecroBot.Logic.Utils;
+using PoGo.NecroBot.Logic.Captcha;
 
 #endregion
 
@@ -189,9 +190,10 @@ namespace PoGo.NecroBot.Logic.State
                 }
                 catch (LoginFailedException ex)
                 {
+                    PushNotificationClient.SendNotification(session, $"Banned!!!! {session.Settings.PtcUsername}{session.Settings.GoogleUsername}", session.Translation.GetTranslation(TranslationString.AccountBanned), true);
+
                     if (session.LogicSettings.AllowMultipleBot)
                     {
-                        PushNotificationClient.SendNotification(session, $"Banned!!!! {session.Settings.PtcUsername}{session.Settings.GoogleUsername}", session.Translation.GetTranslation(TranslationString.AccountBanned), true);
                         session.BlockCurrentBot(24 * 60); //need remove acc
                         session.ReInitSessionWithNextBot();
                         state = new LoginState();
@@ -226,23 +228,31 @@ namespace PoGo.NecroBot.Logic.State
                 }
                 catch (CaptchaException captchaException)
                 {
-                    var resolved = CaptchaManager.ManualResolveCaptcha(session, captchaException.Url);
-                    PushNotificationClient.SendNotification(session,$"Captcha required {session.Settings.PtcUsername}{session.Settings.GoogleUsername}", session.Translation.GetTranslation(TranslationString.CaptchaShown), true);
-                    // TODO Show the captcha.
-                    session.EventDispatcher.Send(new WarnEvent { Message = session.Translation.GetTranslation(TranslationString.CaptchaShown) });
-                    if (session.LogicSettings.AllowMultipleBot)
+                   var resolved = await CaptchaManager.SolveCaptcha(session, captchaException.Url);
+                    if (!resolved)
                     {
-                        session.BlockCurrentBot(15);
-                        if(!session.ReInitSessionWithNextBot())
+                        PushNotificationClient.SendNotification(session, $"Captcha required {session.Settings.PtcUsername}{session.Settings.GoogleUsername}", session.Translation.GetTranslation(TranslationString.CaptchaShown), true);
+                        session.EventDispatcher.Send(new WarnEvent { Message = session.Translation.GetTranslation(TranslationString.CaptchaShown) });
+                        if (session.LogicSettings.AllowMultipleBot)
                         {
-                            await Task.Delay(30 * 60 * 1000);
+                            session.BlockCurrentBot(15);
+                            if (!session.ReInitSessionWithNextBot())
+                            {
+                                await PushNotificationClient.SendNotification(session, "All accounts are being blocked", "Non of yours account available to switch, bot will sleep for 30 mins", true);
+                                await Task.Delay(30 * 60 * 1000);
+                            }
+                            state = new LoginState();
                         }
-                        state = new LoginState();
+                        else {
+                            session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey) });
+                            Console.ReadKey();
+                            Environment.Exit(0);
+                        }
                     }
-                    else {
-                        session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey) });
-                        Console.ReadKey();
-                        Environment.Exit(0);
+                    else
+                    {
+                        //resolve captcha
+                        state = new LoginState();
                     }
                 }
                 catch (Exception ex)
