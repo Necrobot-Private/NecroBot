@@ -44,7 +44,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\PoGo.NecroBot.CLI\bin\Debug\GUI\</OutputPath>
+    <OutputPath>$(SolutionDir)\PoGo.NecroBot.CLI\bin\x86\Debug\GUI\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
@@ -53,7 +53,46 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <OutputPath>..\PoGo.NecroBot.CLI\bin\Release\GUI\</OutputPath>
+    <OutputPath>$(SolutionDir)\PoGo.NecroBot.CLI\bin\Release\GUI\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug FORM|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug FORM\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug FORM|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>$(SolutionDir)\PoGo.NecroBot.CLI\bin\x86\Debug\GUI\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release FORM|x86'">
+    <OutputPath>bin\x86\Release FORM\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release FORM|AnyCPU'">
+    <OutputPath>$(SolutionDir)\PoGo.NecroBot.CLI\bin\x86\Release\GUI\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
@@ -87,7 +126,7 @@
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="websocket-sharp, Version=1.0.2.59611, Culture=neutral, PublicKeyToken=5660b08a1845a91e, processorArchitecture=MSIL">
-      <HintPath>..\packages\WebSocketSharp.1.0.3-rc11\lib\websocket-sharp.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\WebSocketSharp.1.0.3-rc11\lib\websocket-sharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="WindowsBase" />
@@ -155,11 +194,11 @@
   <Choose>
     <When Condition="('$(SolutionName)'=='Awesomium.NET') Or ('$(SolutionName)'=='Awesomium.Windows')">
       <ItemGroup>
-        <ProjectReference Include="..\..\..\..\Awesomium.Core\Awesomium.Core.csproj">
+        <ProjectReference Include="$(SolutionDir)\$(SolutionDir)\$(SolutionDir)\$(SolutionDir)\Awesomium.Core\Awesomium.Core.csproj">
           <Project>{3F0E79AA-7D2D-41C7-8A6B-F02E6A4B3093}</Project>
           <Name>Awesomium.Core %28Awesomium.Core\Awesomium.Core%29</Name>
         </ProjectReference>
-        <ProjectReference Include="..\..\..\..\Awesomium.Windows.Controls\Awesomium.Windows.Controls.csproj">
+        <ProjectReference Include="$(SolutionDir)\$(SolutionDir)\$(SolutionDir)\$(SolutionDir)\Awesomium.Windows.Controls\Awesomium.Windows.Controls.csproj">
           <Project>{B5131F8C-42FA-49AC-B800-F8E17D95C59E}</Project>
           <Name>Awesomium.Windows.Controls %28Awesomium.Windows.Controls\Awesomium.Windows.Controls%29</Name>
         </ProjectReference>
