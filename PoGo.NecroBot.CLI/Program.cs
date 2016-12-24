@@ -20,8 +20,6 @@ using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Tasks;
 using PoGo.NecroBot.Logic.Utils;
 using PoGo.NecroBot.Logic.Service.Elevation;
-using System.Configuration;
-using System.Text;
 using System.Collections.Generic;
 
 #endregion

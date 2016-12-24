@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.Linq;
 using PoGo.NecroBot.Logic.Utils;
-using GeoCoordinatePortable;
 using POGOProtos.Networking.Responses;
 using POGOProtos.Map.Pokemon;
 using POGOProtos.Enums;

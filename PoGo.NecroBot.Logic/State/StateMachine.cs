@@ -2,7 +2,6 @@
 
 using System;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Tasks;
@@ -61,27 +60,27 @@ namespace PoGo.NecroBot.Logic.State
             //watch the excel config file
             if (excelConfigAllowed)
             {
-                Task.Run(async () =>
-                {
-                    while (true)
-                    {
-                        try
-                        {
-                            FileInfo inf = new FileInfo($"{profileConfigPath}\\config.xlsm");
-                            if (inf.LastWriteTime > DateTime.Now.AddSeconds(-5))
-                            {
-                                globalSettings = ExcelConfigHelper.ReadExcel(globalSettings, inf.FullName);
-                                session.LogicSettings = new LogicSettings(globalSettings);
-                                Logger.Write(" ##### config.xlsm ##### ", LogLevel.Info);
-                            }
-                            await Task.Delay(5000);
-                        }
-                        catch (Exception)
-                        {
+                await Task.Run(async () =>
+                 {
+                     while (true)
+                     {
+                         try
+                         {
+                             FileInfo inf = new FileInfo($"{profileConfigPath}\\config.xlsm");
+                             if (inf.LastWriteTime > DateTime.Now.AddSeconds(-5))
+                             {
+                                 globalSettings = ExcelConfigHelper.ReadExcel(globalSettings, inf.FullName);
+                                 session.LogicSettings = new LogicSettings(globalSettings);
+                                 Logger.Write(" ##### config.xlsm ##### ", LogLevel.Info);
+                             }
+                             await Task.Delay(5000);
+                         }
+                         catch (Exception)
+                         {
 
-                        }
-                    }
-                });
+                         }
+                     }
+                 });
             }
 
             int apiCallFailured = 0;
