@@ -14,8 +14,8 @@ namespace PoGo.NecroBot.Logic.Tasks
     {
         public static async Task<bool> Execute(ISession session, CancellationToken cancellationToken, string url)
         {
-            TwoCaptchaService service = new TwoCaptchaService();
-            var tokenResponse = await service.SolveCaptcha(session, url);
+            TwoCaptchaService service = new TwoCaptchaService(session);
+            var tokenResponse = await service.SolveCaptcha(url);
             if (tokenResponse != null)
             {
                 session.Client.SetCaptchaToken(tokenResponse);

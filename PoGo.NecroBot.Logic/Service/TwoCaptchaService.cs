@@ -3,6 +3,7 @@ using PoGo.NecroBot.Logic.Model;
 using PoGo.NecroBot.Logic.State;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -14,20 +15,25 @@ namespace PoGo.NecroBot.Logic.Service
 {
     public class TwoCaptchaService
     {
-        private readonly string CaptchaKey = "## Your Captcha Key ##";
         private readonly string CaptchaIn = "http://2captcha.com/in.php?";
         private readonly string CaptchaOut = "http://2captcha.com/res.php?";
-        public async Task<string> SolveCaptcha(ISession session, string url)
+        private ISession _session;
+
+        public TwoCaptchaService(ISession session)
         {
-            session.EventDispatcher.Send(new NoticeEvent { Message = "Getting Site Key for Captcha" });
+            _session = session;
+        }
+        public async Task<string> SolveCaptcha(string url)
+        {
+            _session.EventDispatcher.Send(new NoticeEvent { Message = "Getting Site Key for Captcha" });
             var siteResponse = await GetCaptchaSiteResponse(url);
             var m = Regex.Match(siteResponse, "data-sitekey=\"(.*)\"");
             var siteKey = m.Groups[1];
-            session.EventDispatcher.Send(new NoticeEvent { Message = "Sending Captcha Solve Request to 2Captcha" });
+            _session.EventDispatcher.Send(new NoticeEvent { Message = "Sending Captcha Solve Request to 2Captcha" });
             MethodResult result = await SendCaptchaSolveRequest(url, siteKey.Value);
             if (result.Success)
             {
-                var response = await GetSolvedCaptchaResult(session, result.CaptchaId);
+                var response = await GetSolvedCaptchaResult(result.CaptchaId);
                 if (response.Success)
                 {
                     return response.CaptchaResponse;
@@ -46,25 +52,25 @@ namespace PoGo.NecroBot.Logic.Service
             }
         }
 
-        private async Task<MethodResult> GetSolvedCaptchaResult(ISession session, string captchaId)
+        private async Task<MethodResult> GetSolvedCaptchaResult(string captchaId)
         {
             var methodResult = new MethodResult();
-            var postData = $"key={CaptchaKey}&action=get&id={captchaId}";
+            var postData = $"key={_session.LogicSettings.TwoCaptchaKey}&action=get&id={captchaId}";
 
             try
             {
-                session.EventDispatcher.Send(new NoticeEvent { Message = "Trying to get solve Captcha from 2Captcha" });
+                _session.EventDispatcher.Send(new NoticeEvent { Message = "Trying to get solve Captcha from 2Captcha" });
                 string result = await SendRecaptchav2RequestTask(CaptchaOut, postData);
                 while (result.Contains("CAPCHA_NOT_READY"))
                 {
-                    session.EventDispatcher.Send(new NoticeEvent { Message = "Captcha not ready yet" });
+                    _session.EventDispatcher.Send(new NoticeEvent { Message = "Captcha not ready yet" });
                     await Task.Delay(3000);
                     result = await SendRecaptchav2RequestTask(CaptchaOut, postData);
                 }
 
                 if (result.Contains("OK|"))
                 {
-                    session.EventDispatcher.Send(new NoticeEvent { Message = "Captcha Solved. Getting back response" });
+                    _session.EventDispatcher.Send(new NoticeEvent { Message = "Getting back response from 2Captcha" });
                     methodResult.CaptchaResponse = result.Substring(3, result.Length - 3);
                     methodResult.Success = true;
                 }
@@ -87,7 +93,7 @@ namespace PoGo.NecroBot.Logic.Service
         {
             var methodResult = new MethodResult();
             var postData =
-                    $"key={CaptchaKey}&method=userrecaptcha&googlekey={siteKey}&pageurl={url}";
+                    $"key={_session.LogicSettings.TwoCaptchaKey}&method=userrecaptcha&googlekey={siteKey}&pageurl={url}";
             try
             {
                 string result = await SendRecaptchav2RequestTask(CaptchaIn, postData);

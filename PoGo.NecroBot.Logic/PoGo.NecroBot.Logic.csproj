@@ -229,6 +229,7 @@
     <Compile Include="Model\PokemonGrade.cs" />
     <Compile Include="Model\Settings\AuthConfig.cs" />
     <Compile Include="Model\Settings\AuthSettings.cs" />
+    <Compile Include="Model\Settings\CaptchaConfig.cs" />
     <Compile Include="Model\Settings\CatchConfig.cs" />
     <Compile Include="Model\Settings\ClientSettings.cs" />
     <Compile Include="Model\Settings\ConsoleConfig.cs" />
