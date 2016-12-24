@@ -47,7 +47,7 @@ namespace NecroBot2.Helpers
                         if (strStatus.ToLower().Contains("disable"))
                         {
                             Logger.Write(strReason + $"\n", LogLevel.Warning);
-                            Logger.Write("The bot will now close.", LogLevel.Error);
+                            Logger.Write("The robot should be closed.", LogLevel.Warning);
                             return true;
                         }
                     }
