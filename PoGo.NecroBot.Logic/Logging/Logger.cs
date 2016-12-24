@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using PoGo.NecroBot.Logic.State;
 using System.Collections.Concurrent;
 
