@@ -37,5 +37,6 @@
  * [MarVinPL] (https://github.com/MarVinPL)
  * [CreativiTimothy] (https://github.com/CreativiTimothy)
  * [chamingkk] (https://github.com/chamingkk)
+ * [--=FurtiF™=--] (https://github.com/Furtif)
  * [fedyay]
  * [Brazuca87]
