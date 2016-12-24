@@ -225,6 +225,7 @@
     <Compile Include="Model\Google\GoogleResult.cs" />
     <Compile Include="Model\Google\GoogleWalk.cs" />
     <Compile Include="Model\IGeoLocation.cs" />
+    <Compile Include="Model\MethodResult.cs" />
     <Compile Include="Model\PokemonGrade.cs" />
     <Compile Include="Model\Settings\AuthConfig.cs" />
     <Compile Include="Model\Settings\AuthSettings.cs" />
@@ -282,6 +283,7 @@
     <Compile Include="Service\TelegramService.cs" />
     <Compile Include="Model\Settings\LogicSettings.cs" />
     <Compile Include="Service\MapzenDirectionsService.cs" />
+    <Compile Include="Service\TwoCaptchaService.cs" />
     <Compile Include="Service\YoursDirectionsService.cs" />
     <Compile Include="State\BlockableScope.cs" />
     <Compile Include="State\BotSwitcherState.cs" />
@@ -352,6 +354,7 @@
     <Compile Include="Tasks\SetMoveToTargetTask.cs" />
     <Compile Include="Tasks\MSniperServiceTask.cs" />
     <Compile Include="Tasks\SnipePokemonTask.cs" />
+    <Compile Include="Tasks\SolveCaptchaTask.cs" />
     <Compile Include="Tasks\TransferDuplicatePokemonTask.cs" />
     <Compile Include="Event\UseLuckyEggEvent.cs" />
     <Compile Include="State\VersionCheckState.cs" />

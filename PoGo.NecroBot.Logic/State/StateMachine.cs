@@ -202,13 +202,13 @@ namespace PoGo.NecroBot.Logic.State
                     session.EventDispatcher.Send(new NoticeEvent { Message = "Access Token Expired. Logging in again..." });
                     state = _initialState;
                 }
-                catch (CaptchaException)
+                catch (CaptchaException ex)
                 {
-                    // TODO Show the captcha.
-                    session.EventDispatcher.Send(new WarnEvent { Message = session.Translation.GetTranslation(TranslationString.CaptchaShown) });
-                    session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey) });
-                    Console.ReadKey();
-                    Environment.Exit(0);
+                    session.EventDispatcher.Send(new NoticeEvent { Message = "Trying to Solve Captcha" });
+                    // Not checking for success since we need a new URL in case it failed. Need to add that
+                    await SolveCaptchaTask.Execute(session, session.CancellationTokenSource.Token, ex.Url);
+                    session.EventDispatcher.Send(new NoticeEvent { Message = "Captcha Solved. (Possibly)" });
+                    state = _initialState;
                 }
                 catch (Exception ex)
                 {
