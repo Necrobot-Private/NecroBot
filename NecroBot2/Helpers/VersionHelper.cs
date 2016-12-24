@@ -46,6 +46,20 @@ namespace NecroBot2.Helpers
 
                         if (strStatus.ToLower().Contains("disable"))
                         {
+                            DialogResult result = MessageBox.Show(strReason, "OLD API", MessageBoxButtons.YesNo);
+                            switch (result)
+                            {
+                                case DialogResult.Yes:
+                                    {
+                                        DialogResult result1 = MessageBox.Show("Risk of BAN !!!!", "Sure??", MessageBoxButtons.YesNo);
+                                        switch (result1)
+                                        {
+                                            case DialogResult.No: { Application.Exit(); break; }
+                                        }
+                                        break;
+                                    }
+                                case DialogResult.No: { Application.Exit(); break; }
+                            }
                             Logger.Write(strReason + $"\n", LogLevel.Warning);
                             Logger.Write("The robot should be closed.", LogLevel.Warning);
                             return true;
