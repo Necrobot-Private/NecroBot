@@ -20,6 +20,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             _settings = settings;
         }
 
+        public string TwoCaptchaKey => _settings.CaptchaConfig.TwoCaptchaKey;
         public string ProfilePath => _settings.ProfilePath;
         public string ProfileConfigPath => _settings.ProfileConfigPath;
         public string GeneralConfigPath => _settings.GeneralConfigPath;

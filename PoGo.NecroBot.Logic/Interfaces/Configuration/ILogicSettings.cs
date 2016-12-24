@@ -12,6 +12,7 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
 {
     public interface ILogicSettings
     {
+        string TwoCaptchaKey { get; }
         bool UseWebsocket { get; }
         bool CatchPokemon { get; }
         int OutOfBallCatchBlockTime { get; }

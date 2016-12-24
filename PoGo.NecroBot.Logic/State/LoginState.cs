@@ -13,6 +13,7 @@ using PokemonGo.RocketAPI.Exceptions;
 using POGOProtos.Enums;
 using System.IO;
 using PoGo.NecroBot.Logic.Exceptions;
+using PoGo.NecroBot.Logic.Tasks;
 
 #endregion
 
@@ -136,6 +137,13 @@ namespace PoGo.NecroBot.Logic.State
                 Logger.Write(session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey, LogLevel.Error));
                 Console.ReadKey();
                 System.Environment.Exit(1);
+            }
+            catch(CaptchaException ex)
+            {
+                session.EventDispatcher.Send(new NoticeEvent { Message = "Trying to Solve Captcha" });
+                await SolveCaptchaTask.Execute(session, session.CancellationTokenSource.Token, ex.Url);
+                session.EventDispatcher.Send(new NoticeEvent { Message = "Captcha Solved. (Possibly)" });
+                return await Execute(session, cancellationToken);
             }
             catch (Exception e)
             {

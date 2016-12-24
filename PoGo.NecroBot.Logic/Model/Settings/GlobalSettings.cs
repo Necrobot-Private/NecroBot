@@ -62,6 +62,10 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public GpxConfig GPXConfig = new GpxConfig();
 
+        [ExcelConfig(SheetName = "CaptchaConfig", Description = "Setup Captcha config for Bot.")]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public CaptchaConfig CaptchaConfig = new CaptchaConfig();
+
         [ExcelConfig(SheetName = "SnipeConfig", Description = "Setting up option for snipe.")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public SnipeConfig SnipeConfig = new SnipeConfig();
