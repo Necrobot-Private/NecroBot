@@ -78,7 +78,7 @@ namespace NecroBot2.Forms
             InitializePokemonForm();
             InitializeMap();
             VersionHelper.CheckVersion();
-            showMoreCheckBox.Enabled = false;
+//            showMoreCheckBox.Enabled = false;
             btnRefresh.Enabled = false;
             if (BoolNeedsSetup)
             {
