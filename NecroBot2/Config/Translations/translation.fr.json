@@ -281,7 +281,7 @@
     },
     {
       "Key": "gotUpToDateVersion",
-      "Value": "NecroBot2.Form {0} est à jour."
+      "Value": "L'application est à jour: {0}."
     },
     {
       "Key": "autoUpdaterDisabled",
