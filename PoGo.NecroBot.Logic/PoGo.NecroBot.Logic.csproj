@@ -110,7 +110,7 @@
     <Reference Include="Newtonsoft.Json.Schema, Version=2.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\Newtonsoft.Json.Schema.2.0.6\lib\net45\Newtonsoft.Json.Schema.dll</HintPath>
       <Private>True</Private>
-  
+   </Reference>
     <Reference Include="POGOProtos.NetStandard1, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\POGOProtos.NetStandard1.2.1.0\lib\net45\POGOProtos.NetStandard1.dll</HintPath>
       <Private>True</Private>
@@ -174,6 +174,7 @@
       <HintPath>$(SolutionDir)\packages\WebSocket4Net.0.14.1\lib\net45\WebSocket4Net.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Captcha\Anti-Captcha\AnticaptchaApiWrapper.cs" />
