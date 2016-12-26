@@ -31,7 +31,6 @@ namespace PoGo.NecroBot.Logic.Captcha
         {
             if(string.IsNullOrEmpty(APIKey) || string.IsNullOrEmpty(APISecret))
             {
-
                 Logging.Logger.Write($"(CAPTCHA) - CaptchaSolutions API key or API Secret  not setup properly.", Logging.LogLevel.Error);
 
                 return string.Empty;

@@ -46,54 +46,49 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [ExcelConfig(Position = 7, Description = "The 2Captcha API Key")]
 
         public string TwoCaptchaAPIKey { get; set; }
-
-        [DefaultValue("201.33.206.229:3128")]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 8)]
-        [ExcelConfig(Position = 8, Description = "Proxy for 2Captcha workers")]
-        public string TwoCaptchaProxy { get; set; }
-
+     
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 4)]
-        [ExcelConfig(Position = 9, Description = "Enable Auto captcha solve with Anti-Captcha")]
+        [ExcelConfig(Position = 8, Description = "Enable Auto captcha solve with Anti-Captcha")]
         public bool EnableAntiCaptcha { get; set; }
 
 
         [DefaultValue("201.33.206.229")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 4)]
-        [ExcelConfig(Position = 10, Description = "Anti captcha API KEY")]
+        [ExcelConfig(Position = 9, Description = "Anti captcha API KEY")]
         public string AntiCaptchaAPIKey { get; set; }
 
         [DefaultValue("")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 4)]
-        [ExcelConfig(Position = 11, Description = "Proxy host use by captcha service")]
+        [ExcelConfig(Position = 10, Description = "Proxy host use by captcha service")]
         public string ProxyHost { get; set; }
 
 
         [DefaultValue(3128)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 4)]
-        [ExcelConfig(Position = 12, Description = "Proxy port use by captcha service")]
+        [ExcelConfig(Position = 11, Description = "Proxy port use by captcha service")]
         public int  ProxyPort{ get; set; }
 
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 4)]
-        [ExcelConfig(Position = 13, Description = "Enable Auto captcha solve with CaptchaSolutions.com")]
+        [ExcelConfig(Position = 12, Description = "Enable Auto captcha solve with CaptchaSolutions.com")]
 
         public bool EnableCaptchaSolutions { get; internal set; }
 
         [DefaultValue("")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 4)]
-        [ExcelConfig(Position = 14, Description = "CaptchaSolutions API KEY")]
+        [ExcelConfig(Position = 13, Description = "CaptchaSolutions API KEY")]
 
         public string CaptchaSolutionAPIKey { get; internal set; }
         [DefaultValue("")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 4)]
-        [ExcelConfig(Position = 15, Description = "Captcha Solutions Secret key")]
+        [ExcelConfig(Position = 14, Description = "Captcha Solutions Secret key")]
 
         public string CaptchaSolutionsSecretKey { get; internal set; }
 
         [DefaultValue(120)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 4)]
-        [ExcelConfig(Position = 16, Description = "Timeout for auto captcha solving")]
+        [ExcelConfig(Position = 15, Description = "Timeout for auto captcha solving")]
         public int AutoCaptchaTimeout { get; internal set; }
     }
 }

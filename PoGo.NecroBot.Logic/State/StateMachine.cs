@@ -110,30 +110,39 @@ namespace PoGo.NecroBot.Logic.State
                         Environment.Exit(0);
                     }
                 }
+                catch (AccountNotVerifiedException ex)
+                {
+                    if (session.LogicSettings.AllowMultipleBot)
+                    {
+
+
+                    }
+                    else Environment.Exit(0);
+                }
                 catch (ActiveSwitchByPokemonException rsae)
                 {
                     session.EventDispatcher.Send(new WarnEvent { Message = "Encountered a good pokemon , switch another bot to catch him too." });
-                    session.ReInitSessionWithNextBot(rsae.Bot,session.Client.CurrentLatitude, session.Client.CurrentLongitude, session.Client.CurrentAltitude);
+                    session.ReInitSessionWithNextBot(rsae.Bot, session.Client.CurrentLatitude, session.Client.CurrentLongitude, session.Client.CurrentAltitude);
                     state = new LoginState(rsae.LastEncounterPokemonId);
                 }
                 catch (ActiveSwitchByRuleException se)
                 {
                     session.EventDispatcher.Send(new WarnEvent { Message = $"Switch bot account activated by : {se.MatchedRule.ToString()}  - {se.ReachedValue} " });
-                    
+
                     if (se.MatchedRule == SwitchRules.PokestopSoftban)
                     {
                         session.BlockCurrentBot();
                         session.ReInitSessionWithNextBot();
                     }
-                    else 
-                    if(se.MatchedRule == SwitchRules.CatchFlee)
+                    else
+                    if (se.MatchedRule == SwitchRules.CatchFlee)
                     {
                         session.BlockCurrentBot(60);
                         session.ReInitSessionWithNextBot();
                     }
                     else
                     {
-                        if(se.MatchedRule == SwitchRules.CatchLimitReached || se.MatchedRule == SwitchRules.SpinPokestopReached)
+                        if (se.MatchedRule == SwitchRules.CatchLimitReached || se.MatchedRule == SwitchRules.SpinPokestopReached)
                         {
                             PushNotificationClient.SendNotification(session, $"{se.MatchedRule} - {session.Settings.GoogleUsername}{session.Settings.PtcUsername}", "This bot has reach limit, it will be blocked for 60 mins for safety.", true);
                             session.BlockCurrentBot(60);
@@ -170,7 +179,7 @@ namespace PoGo.NecroBot.Logic.State
                 }
                 catch (OperationCanceledException)
                 {
-                    session.EventDispatcher.Send(new ErrorEvent {Message = "Current Operation was canceled."});
+                    session.EventDispatcher.Send(new ErrorEvent { Message = "Current Operation was canceled." });
                     session.BlockCurrentBot(30);
                     session.ReInitSessionWithNextBot();
                     state = new LoginState();
@@ -228,7 +237,7 @@ namespace PoGo.NecroBot.Logic.State
                 }
                 catch (CaptchaException captchaException)
                 {
-                   var resolved = await CaptchaManager.SolveCaptcha(session, captchaException.Url);
+                    var resolved = await CaptchaManager.SolveCaptcha(session, captchaException.Url);
                     if (!resolved)
                     {
                         PushNotificationClient.SendNotification(session, $"Captcha required {session.Settings.PtcUsername}{session.Settings.GoogleUsername}", session.Translation.GetTranslation(TranslationString.CaptchaShown), true);
@@ -257,13 +266,13 @@ namespace PoGo.NecroBot.Logic.State
                 }
                 catch (Exception ex)
                 {
-                    session.EventDispatcher.Send(new ErrorEvent {Message = "Pokemon Servers might be offline / unstable. Trying again..."});
+                    session.EventDispatcher.Send(new ErrorEvent { Message = "Pokemon Servers might be offline / unstable. Trying again..." });
                     session.EventDispatcher.Send(new ErrorEvent { Message = "Error: " + ex });
                     if (state is LoginState)
                     {
                     }
                     else
-                    state = _initialState;
+                        state = _initialState;
                 }
             } while (state != null);
             configWatcher.EnableRaisingEvents = false;

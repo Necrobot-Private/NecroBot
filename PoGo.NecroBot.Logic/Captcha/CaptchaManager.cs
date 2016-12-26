@@ -39,12 +39,20 @@ namespace PoGo.NecroBot.Logic.Captcha
                 captchaRespose = await client.ResolveCaptcha(POKEMON_GO_GOOGLE_KEY, captchaUrl);
                 //captchaRespose = await GetCaptchaResposeBy2Captcha(session, captchaUrl);
             }
-           
-            //if (session.LogicSettings.CaptchaConfig.EnableAntiCaptcha && !string.IsNullOrEmpty(session.LogicSettings.CaptchaConfig.AntiCaptchaAPIKey))
-            //{
-            //    Logger.Write("Auto resolving captcha by using anti captcha service");
-            //    captchaRespose = await GetCaptchaResposeByAntiCaptcha(session, captchaUrl);
-            //}
+
+            if (session.LogicSettings.CaptchaConfig.EnableAntiCaptcha && !string.IsNullOrEmpty(session.LogicSettings.CaptchaConfig.AntiCaptchaAPIKey))
+            {
+                Logger.Write("Auto resolving captcha by using anti captcha service");
+                captchaRespose = await GetCaptchaResposeByAntiCaptcha(session, captchaUrl);
+            }
+
+            if (session.LogicSettings.CaptchaConfig.Enable2Captcha && !string.IsNullOrEmpty(session.LogicSettings.CaptchaConfig.TwoCaptchaAPIKey))
+            {
+                Logger.Write("Auto resolving captcha by using 2Captcha service");
+                captchaRespose = await GetCaptchaResposeBy2Captcha (session, captchaUrl);
+            }
+
+            
             //captchaRespose = "";
             if (string.IsNullOrEmpty(captchaRespose))
             {
@@ -72,56 +80,58 @@ namespace PoGo.NecroBot.Logic.Captcha
         private static async Task<bool> Resolve(ISession session, string captchaRespose)
         {
             if (string.IsNullOrEmpty(captchaRespose)) return false;
+            /*
+       var deviceInfo = new DeviceInfo()
+       {
+           //AndroidBoardName = session.Settings.AndroidBoardName,
+           //AndroidBootloader = session.Settings.AndroidBootloader,
+           DeviceBrand = session.Settings.DeviceBrand,
+           DeviceId = session.Settings.DeviceId,
+           DeviceModel = session.Settings.DeviceModel,
+           DeviceModelBoot = session.Settings.DeviceModelBoot,
+           //DeviceModelIdentifier = session.Settings.DeviceModelIdentifier,
+           FirmwareBrand = session.Settings.FirmwareBrand,
+           //FirmwareFingerprint = session.Settings.FirmwareFingerprint,
+           // FirmwareTags = session.Settings.FirmwareTags,
+           FirmwareType = session.Settings.FirmwareType,
+           HardwareManufacturer = session.Settings.HardwareManufacturer,
+           HardwareModel = session.Settings.HardwareManufacturer
+       };
+       ILoginProvider loginProvider = null;
+       if (session.Settings.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Ptc)
+       {
+           loginProvider = new PtcLoginProvider(session.Settings.PtcUsername, session.Settings.PtcPassword);
+       }
+       else
+       {
+           loginProvider = new GoogleLoginProvider(session.Settings.GoogleUsername, session.Settings.GooglePassword);
+       }
 
-            var deviceInfo = new DeviceInfo()
-            {
-                //AndroidBoardName = session.Settings.AndroidBoardName,
-                //AndroidBootloader = session.Settings.AndroidBootloader,
-                DeviceBrand = session.Settings.DeviceBrand,
-                DeviceId = session.Settings.DeviceId,
-                DeviceModel = session.Settings.DeviceModel,
-                DeviceModelBoot = session.Settings.DeviceModelBoot,
-                //DeviceModelIdentifier = session.Settings.DeviceModelIdentifier,
-                FirmwareBrand = session.Settings.FirmwareBrand,
-                //FirmwareFingerprint = session.Settings.FirmwareFingerprint,
-                // FirmwareTags = session.Settings.FirmwareTags,
-                FirmwareType = session.Settings.FirmwareType,
-                HardwareManufacturer = session.Settings.HardwareManufacturer,
-                HardwareModel = session.Settings.HardwareManufacturer
-            };
-            ILoginProvider loginProvider = null;
-            if (session.Settings.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Ptc)
-            {
-                loginProvider = new PtcLoginProvider(session.Settings.PtcUsername, session.Settings.PtcPassword);
-            }
-            else
-            {
-                loginProvider = new GoogleLoginProvider(session.Settings.GoogleUsername, session.Settings.GooglePassword);
-            }
+       var newSession = await GetSession(loginProvider, session.Client.CurrentLatitude, session.Client.CurrentLongitude, true, deviceInfo);
 
-            var newSession = await GetSession(loginProvider, session.Client.CurrentLatitude, session.Client.CurrentLongitude, true, deviceInfo);
+       await Task.Delay(5000);
+       //session.Client.SetCaptchaToken(token);
+       //var verified = session.Client.Player.VerifyChallenge(token.Trim()).Result;
+       var verified = newSession.RpcClient.SendRemoteProcedureCallAsync(new POGOProtos.Networking.Requests.Request()
+       {
+           RequestType = POGOProtos.Networking.Requests.RequestType.VerifyChallenge,
+           RequestMessage = (new VerifyChallengeMessage()
+           {
+               Token =  captchaRespose
+           }).ToByteString()
+       }).Result;
 
-            await Task.Delay(5000);
-            //session.Client.SetCaptchaToken(token);
-            //var verified = session.Client.Player.VerifyChallenge(token.Trim()).Result;
-            var verified = newSession.RpcClient.SendRemoteProcedureCallAsync(new POGOProtos.Networking.Requests.Request()
-            {
-                RequestType = POGOProtos.Networking.Requests.RequestType.VerifyChallenge,
-                RequestMessage = (new VerifyChallengeMessage()
-                {
-                    Token =  captchaRespose
-                }).ToByteString()
-            }).Result;
 
-            
-            var vres = VerifyChallengeResponse.Parser.ParseFrom(verified);
-            if (!vres.Success)
+       var vres = VerifyChallengeResponse.Parser.ParseFrom(verified);
+*/
+            var verifyChallengeResponse = await session.Client.Player.VerifyChallenge(captchaRespose);
+            if (!verifyChallengeResponse.Success)
             {
-                Logging.Logger.Write($"Failed to resolve captcha, try resolved captcha by official app. ");
+                Logging.Logger.Write($"(CAPTCHA) Failed to resolve captcha, try resolved captcha by official app. ");
                 return false;
             }
-            Logging.Logger.Write($"Great!!! Captcha resolved ", color:ConsoleColor.Green);
-            return vres.Success;
+            Logging.Logger.Write($"(CAPTCHA) Great!!! Captcha has been by passed", color:ConsoleColor.Green);
+            return verifyChallengeResponse.Success;
 
         }
 
@@ -156,7 +166,7 @@ namespace PoGo.NecroBot.Logic.Captcha
             {
                 TwoCaptchaClient client = new TwoCaptchaClient(session.LogicSettings.CaptchaConfig.TwoCaptchaAPIKey);
 
-                result = await client.SolveRecaptchaV2(POKEMON_GO_GOOGLE_KEY, captchaUrl, session.LogicSettings.CaptchaConfig.TwoCaptchaProxy, ProxyType.HTTP);
+                result = await client.SolveRecaptchaV2(POKEMON_GO_GOOGLE_KEY, captchaUrl, string.Empty, ProxyType.HTTP);
                 solved = !string.IsNullOrEmpty(result);
             }
             if(solved)
