@@ -22,20 +22,20 @@ namespace PoGo.NecroBot.CLI
     {
         private static List<EncounteredEvent> events = new List<EncounteredEvent>();
         private const int POLLING_INTERVAL = 5000;
-        public static void Listen(IEvent evt, Session session)
+        public static void Listen(IEvent evt, ISession session)
         {
             dynamic eve = evt;
 
             try
             {
-                HandleEvent(eve);
+                HandleEvent(eve,  session);
             }
             catch
             {
             }
         }
 
-        private static void HandleEvent(EncounteredEvent eve)
+        private static void HandleEvent(EncounteredEvent eve, ISession session)
         {
             lock (events)
             {
@@ -101,6 +101,7 @@ namespace PoGo.NecroBot.CLI
                     onSocketMessageRecieved(session, sender, e);
                 };
 
+                ws.Connect();
                 while (true)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
@@ -200,6 +201,14 @@ namespace PoGo.NecroBot.CLI
             }
         }
 
+        public static bool CheckIfPokemonBeenCaught(double lat, double lng, PokemonId id , ISession session)
+        {
+            string uniqueCacheKey = $"{session.Settings.PtcUsername}{session.Settings.GoogleUsername}{Math.Round(lat, 6)}{id}{Math.Round(lng, 6)}";
+            if (session.Cache.Get(uniqueCacheKey) != null) return true;
+
+            return false;
+
+        }
         private static void OnPokemonData(ISession session, string message)
         {
             var match = Regex.Match(message, "42\\[\"pokemon\",(.*)]");
@@ -214,17 +223,24 @@ namespace PoGo.NecroBot.CLI
                     var move2 = PokemonMove.Absorb;
                     Enum.TryParse<PokemonMove>(data.Move1, true, out move1);
                     Enum.TryParse<PokemonMove>(data.Move1, true, out move2);
-                    MSniperServiceTask.AddSnipeItem(session, new MSniperServiceTask.MSniperInfo2()
+                    ulong encounterid = 0;
+                    ulong.TryParse(data.EncounterId, out encounterid);
+                    bool caught = CheckIfPokemonBeenCaught(data.Latitude, data.Longitude, data.PokemonId, session);
+                    if (!caught)
                     {
-                        Latitude = data.Latitude,
-                        Longitude = data.Longitude,
-                        EncounterId = Convert.ToUInt64(data.EncounterId),
-                        SpawnPointId = data.SpawnPointId,
-                        PokemonId = (short)data.PokemonId,
-                        Iv = data.IV,
-                        Move1 = move1,
-                        Move2 = move2
-                    });
+                        MSniperServiceTask.AddSnipeItem(session, new MSniperServiceTask.MSniperInfo2()
+                        {
+                            Latitude = data.Latitude,
+                            Longitude = data.Longitude,
+                            EncounterId = encounterid,
+                            SpawnPointId = data.SpawnPointId,
+                            PokemonId = (short)data.PokemonId,
+                            Iv = data.IV,
+                            Move1 = move1,
+                            Move2 = move2
+                        });
+                    }
+                
                 }
             }
         }
@@ -244,11 +260,19 @@ namespace PoGo.NecroBot.CLI
                 var move2 = PokemonMove.Absorb;
                 Enum.TryParse<PokemonMove>(data.Move1, true, out move1);
                 Enum.TryParse<PokemonMove>(data.Move1, true, out move2);
+
+                bool caught = CheckIfPokemonBeenCaught(data.Latitude, data.Longitude, data.PokemonId, session);
+                if(caught)
+                {
+                    Logger.Write("[SNIPE IGNORED] - Your snipe pokemon has already been cautgh by bot", LogLevel.Sniper);
+                    return;
+                }
+
                 MSniperServiceTask.AddSnipeItem(session, new MSniperServiceTask.MSniperInfo2()
                 {
                     Latitude = data.Latitude,
                     Longitude = data.Longitude,
-                    EncounterId = Convert.ToUInt64(data.EncounterId),
+                    EncounterId = data.EncounterId.Contains("-")?0:Convert.ToUInt64(data.EncounterId),
                     SpawnPointId = data.SpawnPointId,
                     PokemonId = (short)data.PokemonId,
                     Iv = data.IV,

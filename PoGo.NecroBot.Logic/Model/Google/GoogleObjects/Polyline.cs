@@ -9,9 +9,9 @@ namespace PoGo.NecroBot.Logic.Model.Google.GoogleObjects
     {
         public string points { get; set; }
 
-        public List<GeoCoordinate> DecodePoly()
+        public List<GeoCoordinatePortable.GeoCoordinate> DecodePoly()
         {
-            var poly = new List<GeoCoordinate>();
+            var poly = new List<GeoCoordinatePortable.GeoCoordinate>();
             if (string.IsNullOrEmpty(points))
                 throw new ArgumentNullException("polyline");
 

@@ -111,7 +111,7 @@ namespace PoGo.NecroBot.Logic
 
             var myPokemonList = myPokemon.ToList();
 
-            var pokemonToTransfer = myPokemonList.Where(p => !pokemonsNotToTransfer.Contains(p.PokemonId) && p.DeployedFortId == string.Empty && p.Favorite == 0).ToList();
+            var pokemonToTransfer = myPokemonList.Where(p => !pokemonsNotToTransfer.Contains(p.PokemonId) && p.DeployedFortId == string.Empty && p.Favorite == 0 && p.BuddyTotalKmWalked ==0).ToList();
 
             try
             {
@@ -336,6 +336,7 @@ namespace PoGo.NecroBot.Logic
 
         public async Task<IEnumerable<ItemData>> GetItemsToRecycle(ISession session)
         {
+            await RefreshCachedInventory();
             var itemsToRecycle = new List<ItemData>();
             var myItems = (await GetItems()).ToList();
             if (myItems == null)
