@@ -24,6 +24,7 @@ using System.Configuration;
 using System.Text;
 using System.Collections.Generic;
 using PokemonGo.RocketAPI.Hash;
+using PoGo.NecroBot.CLI.Forms;
 
 #endregion
 
@@ -43,8 +44,11 @@ namespace PoGo.NecroBot.CLI
 
         private static Session _session;
 
+        [STAThread]
         private static void Main(string[] args)
         {
+            
+
             var strCulture = Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName;
 
             var culture = CultureInfo.CreateSpecificCulture("en");
@@ -221,20 +225,27 @@ namespace PoGo.NecroBot.CLI
             IElevationService elevationService = new ElevationService(settings);
 
             //validation auth.config
+           if(boolNeedsSetup)
+            {
+                AuthAPIForm form = new AuthAPIForm(true);
+                if (form.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    settings.Auth.APIConfig = form.Config;
+                }
+            }
             var apiCfg = settings.Auth.APIConfig;
 
             if (apiCfg.UsePogoDevAPI)
             {
                 if (string.IsNullOrEmpty(apiCfg.AuthAPIKey))
                 {
+
                     Logger.Write("You select pogodev API but not provide API Key, please press any key to exit and correct you auth.json, \r\n The Pogodev API key call be purchased at - https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer", LogLevel.Error);
 
                     Console.ReadKey();
                     Environment.Exit(0);
                 }
                 //TODO - test api call to valida auth key
-
-
             }
             else
             if (apiCfg.UseLegacyAPI)

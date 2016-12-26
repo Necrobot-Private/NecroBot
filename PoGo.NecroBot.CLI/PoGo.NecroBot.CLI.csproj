@@ -171,6 +171,7 @@
     <Reference Include="System.Core">
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Data" />
     <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\System.Diagnostics.DiagnosticSource.4.0.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
       <Private>True</Private>
@@ -255,6 +256,7 @@
     <Reference Include="Microsoft.CSharp">
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="WebDriver, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
@@ -273,6 +275,12 @@
   <ItemGroup>
     <Compile Include="BotDataSocketClient.cs" />
     <Compile Include="CommandLineUtility\Arguments.cs" />
+    <Compile Include="Forms\AuthAPIForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AuthAPIForm.Designer.cs">
+      <DependentUpon>AuthAPIForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="InterceptKey.cs" />
     <Compile Include="PushNotificationListener.cs" />
     <Compile Include="SniperEventListener.cs" />
@@ -444,6 +452,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\AuthAPIForm.resx">
+      <DependentUpon>AuthAPIForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
