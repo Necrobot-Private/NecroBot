@@ -6,9 +6,6 @@ using OpenQA.Selenium.Support.UI;
 using PoGo.NecroBot.Logic.Captcha.Anti_Captcha;
 using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.State;
-using POGOLib.Official.LoginProviders;
-using POGOLib.Official.Net.Authentication;
-using POGOLib.Official.Net.Authentication.Data;
 using POGOProtos.Networking.Requests.Messages;
 using POGOProtos.Networking.Responses;
 using System;
@@ -174,33 +171,6 @@ namespace PoGo.NecroBot.Logic.Captcha
                 Logger.Write("Captcha has been resolved automatically by 2Captcha ");
             }
             return result;
-        }
-
-        private static async Task<POGOLib.Official.Net.Session> GetSession(ILoginProvider loginProvider, double initLat, double initLong, bool mayCache = false, DeviceInfo deviceInfo = null)
-        {
-            var cacheDir = Path.Combine(Directory.GetCurrentDirectory(), "Cache");
-            var fileName = Path.Combine(cacheDir, $"{loginProvider.UserId}-{loginProvider.ProviderId}.json");
-
-            if (mayCache)
-            {
-                if (!Directory.Exists(cacheDir))
-                    Directory.CreateDirectory(cacheDir);
-
-                if (File.Exists(fileName))
-                {
-                    var accessToken = JsonConvert.DeserializeObject<AccessToken>(File.ReadAllText(fileName));
-
-                    if (!accessToken.IsExpired)
-                        return Login.GetSession(loginProvider, accessToken, initLat, initLong, deviceInfo);
-                }
-            }
-
-            var session = await Login.GetSession(loginProvider, initLat, initLong, deviceInfo);
-
-            //if (mayCache)
-            //    SaveAccessToken(session.AccessToken);
-
-            return session;
         }
 
         public static async Task<string> GetCaptchaResposeManually(ISession session, string url)
