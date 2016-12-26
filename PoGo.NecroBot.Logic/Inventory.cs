@@ -18,7 +18,6 @@ using POGOProtos.Inventory;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Networking.Responses;
 using POGOProtos.Settings.Master;
-using Caching;
 
 #endregion
 
@@ -141,7 +140,7 @@ namespace PoGo.NecroBot.Logic
             {
                 throw e;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 //throw e; 
             }
