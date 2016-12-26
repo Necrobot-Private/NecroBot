@@ -225,7 +225,7 @@ namespace PoGo.NecroBot.CLI
             IElevationService elevationService = new ElevationService(settings);
 
             //validation auth.config
-           if(boolNeedsSetup)
+            if (boolNeedsSetup)
             {
                 AuthAPIForm form = new AuthAPIForm(true);
                 if (form.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -233,31 +233,33 @@ namespace PoGo.NecroBot.CLI
                     settings.Auth.APIConfig = form.Config;
                 }
             }
-            var apiCfg = settings.Auth.APIConfig;
+            else {
+                var apiCfg = settings.Auth.APIConfig;
 
-            if (apiCfg.UsePogoDevAPI)
-            {
-                if (string.IsNullOrEmpty(apiCfg.AuthAPIKey))
+                if (apiCfg.UsePogoDevAPI)
                 {
+                    if (string.IsNullOrEmpty(apiCfg.AuthAPIKey))
+                    {
 
-                    Logger.Write("You select pogodev API but not provide API Key, please press any key to exit and correct you auth.json, \r\n The Pogodev API key call be purchased at - https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer", LogLevel.Error);
+                        Logger.Write("You select pogodev API but not provide API Key, please press any key to exit and correct you auth.json, \r\n The Pogodev API key call be purchased at - https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer", LogLevel.Error);
 
+                        Console.ReadKey();
+                        Environment.Exit(0);
+                    }
+                    //TODO - test api call to valida auth key
+                }
+                else
+                if (apiCfg.UseLegacyAPI)
+                {
+                    Logger.Write("You bot will start after 15 second, You are running bot with  Legacy API (0.45) it will increase your risk to be banned and trigger captcha. Config captcha in config.json to auto resolve them", LogLevel.Warning);
+                    Thread.Sleep(15000);
+                }
+                else
+                {
+                    Logger.Write("Atleast 1 authentication method is selected, please correct your auth.json, ", LogLevel.Error);
                     Console.ReadKey();
                     Environment.Exit(0);
                 }
-                //TODO - test api call to valida auth key
-            }
-            else
-            if (apiCfg.UseLegacyAPI)
-            {
-                Logger.Write("You bot will start after 15 second, You are running bot with  Legacy API (0.45) it will increase your risk to be banned and trigger captcha. Config captcha in config.json to auto resolve them", LogLevel.Warning);
-                Thread.Sleep(15000);
-            }
-            else
-            {
-                Logger.Write("Atleast 1 authentication method is selected, please correct your auth.json, ", LogLevel.Error);
-                Console.ReadKey();
-                Environment.Exit(0);
             }
 
             _session = new Session(new ClientSettings(settings, elevationService), logicSettings, elevationService, translation);
