@@ -90,7 +90,7 @@ namespace PoGo.NecroBot.Logic
             return await GetLevelUpRewards(inv.GetPlayerStats().Result.FirstOrDefault().Level);
         }
 
-        private async Task<GetInventoryResponse> GetCachedInventory()
+        public async Task<GetInventoryResponse> GetCachedInventory()
         {
             if (_player == null) GetPlayerData();
             var now = DateTime.UtcNow;
@@ -101,6 +101,13 @@ namespace PoGo.NecroBot.Logic
             return await RefreshCachedInventory();
         }
 
+        public async Task<IEnumerable<AppliedItems>> GetAppliedItems()
+        {
+            var inventory = await GetCachedInventory();
+            return inventory.InventoryDelta.InventoryItems
+             .Select(i => i.InventoryItemData?.AppliedItems)
+             .Where(p => p != null);
+        }
 
         public async Task<IEnumerable<PokemonData>> GetDuplicatePokemonToTransfer(
                 IEnumerable<PokemonId> pokemonsNotToTransfer, IEnumerable<PokemonId> pokemonsToEvolve,
