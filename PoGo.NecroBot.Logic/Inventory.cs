@@ -259,7 +259,6 @@ namespace PoGo.NecroBot.Logic
             }
             else
             lookupItem.Candy_ += change;
-
         }
 
         public async Task<IEnumerable<EggIncubator>> GetEggIncubators()
