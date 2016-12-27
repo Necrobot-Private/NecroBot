@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NecroBot2", "NecroBot2\NecroBot2.csproj", "{42B07AE9-E643-4212-A7DB-0611F9059670}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PoGo.NecroBot.CLI", "PoGo.NecroBot.CLI\PoGo.NecroBot.CLI.csproj", "{1FEA147E-F704-497B-A538-00B053B5F672}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PoGo.NecroBot.Logic", "PoGo.NecroBot.Logic\PoGo.NecroBot.Logic.csproj", "{0739E40D-C589-4AEB-93E5-EE8CD6773C60}"
@@ -12,8 +14,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokemonGo.RocketAPI", "FeroxRev\PokemonGo.RocketAPI.csproj", "{05D2DA44-1B8E-4CF7-94ED-4D52451CD095}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PoGo.Necrobot.Window", "PoGo.Necrobot.Window\PoGo.Necrobot.Window.csproj", "{462F0601-DA74-4226-AF72-654F5EDFF020}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NecroBot2", "NecroBot2\NecroBot2.csproj", "{42B07AE9-E643-4212-A7DB-0611F9059670}"
 EndProject
 Project("{262852C6-CD72-467D-83FE-5EEB1973A190}") = "PoGo.NecroBot.GUI.Electron", "PoGo.NecroBot.GUI.Electron\PoGo.NecroBot.GUI.Electron.jsproj", "{EC029F6B-9B25-40F1-BCA4-F95F70B6CE8F}"
 EndProject
