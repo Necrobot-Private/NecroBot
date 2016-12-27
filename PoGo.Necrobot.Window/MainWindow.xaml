@@ -1,0 +1,42 @@
+﻿<Controls:MetroWindow x:Class="PoGo.Necrobot.Window.MainWindow"
+                      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+	                  xmlns:Behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                      Title="Necrobot 2 - Window GUI"
+                      Height="600"
+                      Width="800" BorderThickness="1">
+    <Controls:MetroWindow.RightWindowCommands>
+        <Controls:WindowCommands>
+            <Button Content="Save 1" Click="Button_Click_3" />
+            
+            <Button Content="settings" />
+            <Button>
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle Width="20"
+                   Height="20"
+                   Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_save}" />
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                    <TextBlock Margin="4 0 0 0"
+                   VerticalAlignment="Center"
+                   Text="Save" />
+                </StackPanel>
+            </Button>
+        </Controls:WindowCommands>
+    </Controls:MetroWindow.RightWindowCommands>
+    <i:Interaction.Behaviors>
+    </i:Interaction.Behaviors>
+
+    <Grid x:Name="gridMain">
+        <ScrollViewer  HorizontalScrollBarVisibility="Auto"  VerticalScrollBarVisibility="Auto">
+            <TabControl x:Name="tabControl"  TabStripPlacement="Left" 
+                        HorizontalContentAlignment="Stretch" 
+                        ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                        Controls:TabControlHelper.IsUnderlined="False"/>
+        </ScrollViewer>
+    </Grid>
+</Controls:MetroWindow>

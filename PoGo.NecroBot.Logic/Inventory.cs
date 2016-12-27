@@ -90,7 +90,7 @@ namespace PoGo.NecroBot.Logic
             return await GetLevelUpRewards(inv.GetPlayerStats().Result.FirstOrDefault().Level);
         }
 
-        private async Task<GetInventoryResponse> GetCachedInventory()
+        public async Task<GetInventoryResponse> GetCachedInventory()
         {
             if (_player == null) GetPlayerData();
             var now = DateTime.UtcNow;
@@ -101,6 +101,13 @@ namespace PoGo.NecroBot.Logic
             return await RefreshCachedInventory();
         }
 
+        public async Task<IEnumerable<AppliedItems>> GetAppliedItems()
+        {
+            var inventory = await GetCachedInventory();
+            return inventory.InventoryDelta.InventoryItems
+             .Select(i => i.InventoryItemData?.AppliedItems)
+             .Where(p => p != null);
+        }
 
         public async Task<IEnumerable<PokemonData>> GetDuplicatePokemonToTransfer(
                 IEnumerable<PokemonId> pokemonsNotToTransfer, IEnumerable<PokemonId> pokemonsToEvolve,
@@ -111,7 +118,7 @@ namespace PoGo.NecroBot.Logic
 
             var myPokemonList = myPokemon.ToList();
 
-            var pokemonToTransfer = myPokemonList.Where(p => !pokemonsNotToTransfer.Contains(p.PokemonId) && p.DeployedFortId == string.Empty && p.Favorite == 0).ToList();
+            var pokemonToTransfer = myPokemonList.Where(p => !pokemonsNotToTransfer.Contains(p.PokemonId) && p.DeployedFortId == string.Empty && p.Favorite == 0 && p.BuddyTotalKmWalked ==0).ToList();
 
             try
             {
@@ -336,6 +343,7 @@ namespace PoGo.NecroBot.Logic
 
         public async Task<IEnumerable<ItemData>> GetItemsToRecycle(ISession session)
         {
+            await RefreshCachedInventory();
             var itemsToRecycle = new List<ItemData>();
             var myItems = (await GetItems()).ToList();
             if (myItems == null)

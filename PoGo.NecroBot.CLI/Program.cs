@@ -23,6 +23,8 @@ using PoGo.NecroBot.Logic.Service.Elevation;
 using System.Configuration;
 using System.Text;
 using System.Collections.Generic;
+using PokemonGo.RocketAPI.Hash;
+using PoGo.NecroBot.CLI.Forms;
 
 #endregion
 
@@ -42,8 +44,11 @@ namespace PoGo.NecroBot.CLI
 
         private static Session _session;
 
+        [STAThread]
         private static void Main(string[] args)
         {
+            
+
             var strCulture = Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName;
 
             var culture = CultureInfo.CreateSpecificCulture("en");
@@ -101,8 +106,8 @@ namespace PoGo.NecroBot.CLI
             Logger.AddLogger(new FileLogger(LogLevel.Service), _subPath);
             Logger.AddLogger(new WebSocketLogger(LogLevel.Service), _subPath);
 
-            if (!_ignoreKillSwitch && CheckKillSwitch() || CheckMKillSwitch())
-                return;
+
+           
 
             var profilePath = Path.Combine(Directory.GetCurrentDirectory(), _subPath);
             var profileConfigPath = Path.Combine(profilePath, "config");
@@ -176,6 +181,10 @@ namespace PoGo.NecroBot.CLI
                 }
             }
 
+            //Only check killswitch if use legacyAPI
+            //if (settings.Auth.APIConfig.UseLegacyAPI  && (!_ignoreKillSwitch && CheckKillSwitch() || CheckMKillSwitch()))
+            //    return;
+
             var logicSettings = new LogicSettings(settings);
             var translation = Translation.Load(logicSettings);
 
@@ -219,6 +228,44 @@ namespace PoGo.NecroBot.CLI
             }
             IElevationService elevationService = new ElevationService(settings);
 
+            //validation auth.config
+            if (boolNeedsSetup)
+            {
+                AuthAPIForm form = new AuthAPIForm(true);
+                if (form.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    settings.Auth.APIConfig = form.Config;
+                }
+            }
+            else {
+                var apiCfg = settings.Auth.APIConfig;
+
+                if (apiCfg.UsePogoDevAPI)
+                {
+                    if (string.IsNullOrEmpty(apiCfg.AuthAPIKey))
+                    {
+
+                        Logger.Write("You select pogodev API but not provide API Key, please press any key to exit and correct you auth.json, \r\n The Pogodev API key call be purchased at - https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer", LogLevel.Error);
+
+                        Console.ReadKey();
+                        Environment.Exit(0);
+                    }
+                    //TODO - test api call to valida auth key
+                }
+                else
+                if (apiCfg.UseLegacyAPI)
+                {
+                    Logger.Write("You bot will start after 15 second, You are running bot with  Legacy API (0.45) it will increase your risk to be banned and trigger captcha. Config captcha in config.json to auto resolve them", LogLevel.Warning);
+                    Thread.Sleep(15000);
+                }
+                else
+                {
+                    Logger.Write("Atleast 1 authentication method is selected, please correct your auth.json, ", LogLevel.Error);
+                    Console.ReadKey();
+                    Environment.Exit(0);
+                }
+            }
+
             _session = new Session(new ClientSettings(settings, elevationService), logicSettings, elevationService, translation);
             Logger.SetLoggerContext(_session);
 
@@ -258,6 +305,7 @@ namespace PoGo.NecroBot.CLI
             
             ProgressBar.Fill(20);
 
+           
             var machine = new StateMachine();
             var stats = new Statistics();
 
@@ -300,30 +348,56 @@ namespace PoGo.NecroBot.CLI
                 byte index = 0;
                 Console.WriteLine();
                 Console.WriteLine();
-                Logger.Write("PLEASE SELECT AN ACCOUNT TO START.");
+                Logger.Write("PLEASE SELECT AN ACCOUNT TO START. AUTO START AFTER 30 SEC");
                 List<Char> availableOption = new List<char>();
                 foreach (var item in _session.Accounts)
                 {
                     var ch =  (char)(index + 65 );
                     availableOption.Add(ch);
-                    Logger.Write($"{ch}. {item.GoogleUsername}{item.PtcUsername}");
+                    int day = (int)item.RuntimeTotal / 1440;
+                    int hour = (int)(item.RuntimeTotal - (day * 1400)) / 60;
+                    int min = (int)(item.RuntimeTotal - (day * 1400) - hour * 60);
+
+                    var runtime = $"{day:00}:{hour:00}:{min:00}:00";
+
+                    Logger.Write($"{ch}. {item.GoogleUsername}{item.PtcUsername} \t\t{runtime}");
                     index++;
                 };
 
                 char select = ' ';
-                do
-                { 
-                    select = Console.ReadKey(true).KeyChar;         
-                    Console.WriteLine(select);
-                    select = Char.ToUpper(select);
-                }
-                while (!availableOption.Contains(select));
+                DateTime timeoutvalue = DateTime.Now.AddSeconds(30);
 
-                var bot = _session.Accounts[select - 65];
-                
-                _session.ResetSessionToWithNextBot(bot);
+                while (DateTime.Now < timeoutvalue && !availableOption.Contains(select))
+                {
+                    if (Console.KeyAvailable)
+                    {
+                        ConsoleKeyInfo cki = Console.ReadKey();
+                        select = cki.KeyChar;
+                        select = Char.ToUpper(select);
+                       if(!availableOption.Contains(select))
+                        {
+                            Console.Out.WriteLine("Please select an account from list");
+                        }
+                    }
+                    else
+                    {
+                        Thread.Sleep(100);
+                    }
+                }
+                                    
+                 if (availableOption.Contains(select))
+                {
+                    var bot = _session.Accounts[select - 65];
+                    _session.ReInitSessionWithNextBot(bot);
+                }
+                else
+                {
+                    var bot = _session.Accounts.OrderBy(p => p.RuntimeTotal).First();
+                    _session.ReInitSessionWithNextBot(bot);
+                }
 
             }
+
             machine.AsyncStart(new VersionCheckState(), _session, _subPath, excelConfigAllow);
 
             try
@@ -465,7 +539,7 @@ namespace PoGo.NecroBot.CLI
         private static void UnhandledExceptionEventHandler(object obj, UnhandledExceptionEventArgs args)
         {
             Logger.Write("Exception caught, writing LogBuffer.", force: true);
-            throw new Exception();
+            //throw new Exception();
         }
 
         public static bool PromptForKillSwitchOverride()
