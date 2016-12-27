@@ -106,8 +106,8 @@ namespace PoGo.NecroBot.CLI
             Logger.AddLogger(new FileLogger(LogLevel.Service), _subPath);
             Logger.AddLogger(new WebSocketLogger(LogLevel.Service), _subPath);
 
-            //if (!_ignoreKillSwitch && CheckKillSwitch() || CheckMKillSwitch())
-            //    return;
+
+           
 
             var profilePath = Path.Combine(Directory.GetCurrentDirectory(), _subPath);
             var profileConfigPath = Path.Combine(profilePath, "config");
@@ -180,6 +180,10 @@ namespace PoGo.NecroBot.CLI
                     // ignored
                 }
             }
+
+            //Only check killswitch if use legacyAPI
+            //if (settings.Auth.APIConfig.UseLegacyAPI  && (!_ignoreKillSwitch && CheckKillSwitch() || CheckMKillSwitch()))
+            //    return;
 
             var logicSettings = new LogicSettings(settings);
             var translation = Translation.Load(logicSettings);
