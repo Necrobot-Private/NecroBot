@@ -233,6 +233,7 @@
     <Compile Include="Tasks\UseLuckyEggTask.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\Ico.ico" />
     <None Include="App.config" />
     <None Include="cert.pfx" />
     <None Include="Config\log4net.config" />
@@ -505,7 +506,6 @@
     <Content Include="Resources\encrypt.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Forms\ItemBox.resx">
