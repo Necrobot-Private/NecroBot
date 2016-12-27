@@ -240,6 +240,28 @@ namespace PoGo.NecroBot.Logic
             return results;
         }
 
+        public async Task UpdateCandy(Candy family, int change)
+        {
+            var lookupItem = (from item in _cachedInventory.InventoryDelta.InventoryItems
+                             where item.InventoryItemData?.Candy != null
+                             where item.InventoryItemData?.Candy.FamilyId == family.FamilyId
+                             select item.InventoryItemData.Candy).FirstOrDefault();
+            if(lookupItem == null && change >0)
+            {
+                family.Candy_ = change;
+                _cachedInventory.InventoryDelta.InventoryItems.Add(new InventoryItem()
+                {
+                    InventoryItemData = new InventoryItemData()
+                    {
+                        Candy = family
+                    }
+                });
+            }
+            else
+            lookupItem.Candy_ += change;
+
+        }
+
         public async Task<IEnumerable<EggIncubator>> GetEggIncubators()
         {
             var inventory = await GetCachedInventory();
@@ -544,7 +566,12 @@ namespace PoGo.NecroBot.Logic
             if (_level == 0 || level > _level)
             {
                 _level = level;
-                return await _client.Player.GetLevelUpRewards(level);
+                 
+                var rewards = await _client.Player.GetLevelUpRewards(level);
+                foreach (var item in rewards.ItemsAwarded)
+                {
+                    await UpdateInventoryItem(item.ItemId, item.ItemCount);
+                }
             }
 
             return new LevelUpRewardsResponse();

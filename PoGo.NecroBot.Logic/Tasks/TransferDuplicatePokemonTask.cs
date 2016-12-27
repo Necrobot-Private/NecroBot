@@ -21,11 +21,12 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (!session.LogicSettings.TransferDuplicatePokemon) return;
             if (session.LogicSettings.UseBulkTransferPokemon)
             {
+                int buff = 100;
                 //check for bag, if bag is nearly full, then process bulk transfer.
                 var maxStorage = session.Profile.PlayerData.MaxPokemonStorage;
                 var totalPokemon = (await session.Inventory.GetPokemons());
                 var totalEggs = await session.Inventory.GetEggs();
-                if ((maxStorage - totalEggs.Count() - 233) > totalPokemon.Count()) return;
+                if ((maxStorage - totalEggs.Count() - buff) > totalPokemon.Count()) return;
             }
 
             if (session.LogicSettings.AutoFavoritePokemon)
@@ -55,10 +56,15 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (session.LogicSettings.UseBulkTransferPokemon)
             {
                 var t = await session.Client.Inventory.TransferPokemons(orderedPokemon.Select(x => x.Id).ToList());
-                foreach (var duplicatePokemon in orderedPokemon)
+                if (t.Result == POGOProtos.Networking.Responses.ReleasePokemonResponse.Types.Result.Success)
                 {
-                    await PrintPokemonInfo(session, pokemonSettings, pokemonFamilies, duplicatePokemon);
+                    foreach (var duplicatePokemon in orderedPokemon)
+                    {
+                        await session.Inventory.DeletePokemonFromInvById(duplicatePokemon.Id);
+                        await PrintPokemonInfo(session, pokemonSettings, pokemonFamilies, duplicatePokemon);
+                    }
                 }
+                else session.EventDispatcher.Send(new WarnEvent() { Message = session.Translation.GetTranslation(Common.TranslationString.BulkTransferFailed, orderedPokemon.Count()) });
             }
             else
                 foreach (var duplicatePokemon in orderedPokemon)
@@ -80,7 +86,6 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static async Task PrintPokemonInfo(ISession session, System.Collections.Generic.IEnumerable<POGOProtos.Settings.Master.PokemonSettings> pokemonSettings, System.Collections.Generic.List<POGOProtos.Inventory.Candy> pokemonFamilies, POGOProtos.Data.PokemonData duplicatePokemon)
         {
-           await session.Inventory.DeletePokemonFromInvById(duplicatePokemon.Id);
             var bestPokemonOfType = (session.LogicSettings.PrioritizeIvOverCp
                 ? await session.Inventory.GetHighestPokemonOfTypeByIv(duplicatePokemon)
                 : await session.Inventory.GetHighestPokemonOfTypeByCp(duplicatePokemon)) ?? duplicatePokemon;

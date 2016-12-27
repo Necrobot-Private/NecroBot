@@ -111,12 +111,24 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static async Task Evolve(ISession session, List<PokemonData> pokemonToEvolve)
         {
+            var pokemonSettings = await session.Inventory.GetPokemonSettings();
+            var pokemonFamilies = await session.Inventory.GetPokemonFamilies();
+
+            
+
             foreach (var pokemon in pokemonToEvolve)
             {
+                var setting =
+                pokemonSettings.FirstOrDefault(q => pokemon != null && q.PokemonId == pokemon.PokemonId);
+                var family = pokemonFamilies.FirstOrDefault(q => setting != null && q.FamilyId == setting.FamilyId);
+
+                if (family.Candy_ < setting.CandyToEvolve) continue;
                 // no cancellationToken.ThrowIfCancellationRequested here, otherwise the lucky egg would be wasted.
                 var evolveResponse = await session.Client.Inventory.EvolvePokemon(pokemon.Id);
                 if(evolveResponse.Result == POGOProtos.Networking.Responses.EvolvePokemonResponse.Types.Result.Success)
                 {
+                    family.Candy_ += -setting.CandyToEvolve;
+                    await session.Inventory.UpdateCandy(family, -setting.CandyToEvolve);
                     await session.Inventory.DeletePokemonFromInvById(pokemon.Id);
                     await session.Inventory.AddPokemonToCache(evolveResponse.EvolvedPokemonData);
                 }

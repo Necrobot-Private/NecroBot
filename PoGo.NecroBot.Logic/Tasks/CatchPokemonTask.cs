@@ -335,6 +335,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                             data.Id = caughtPokemonResponse.CapturedPokemonId;
 
                             await session.Inventory.AddPokemonToCache(data);
+                            
                         }
                             foreach (var xp in caughtPokemonResponse.CaptureAward.Xp)
                         {
@@ -355,6 +356,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                         if (family != null)
                         {
+                            await session.Inventory.UpdateCandy(family, caughtPokemonResponse.CaptureAward.Candy.Sum());
                             family.Candy_ += caughtPokemonResponse.CaptureAward.Candy.Sum();
                             evt.FamilyCandies = family.Candy_;
                         }
