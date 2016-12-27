@@ -21,7 +21,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (!session.LogicSettings.TransferDuplicatePokemon) return;
             if (session.LogicSettings.UseBulkTransferPokemon)
             {
-                int buff = 100;
+                int buff = session.LogicSettings.BulkTransferStogareBuffer;
                 //check for bag, if bag is nearly full, then process bulk transfer.
                 var maxStorage = session.Profile.PlayerData.MaxPokemonStorage;
                 var totalPokemon = (await session.Inventory.GetPokemons());

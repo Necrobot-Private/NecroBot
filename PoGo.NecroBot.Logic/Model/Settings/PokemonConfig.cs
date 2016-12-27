@@ -384,6 +384,12 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [DefaultValue(true)]
         [ExcelConfig(Description = "Transfer multiple pokemon at 1 time - that will increase bot speed and reduce api call", Position = 61)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 61)]
-        public bool UseBulkTransferPokemon { get; internal set; }
+        public bool UseBulkTransferPokemon { get;  set; }
+
+        [DefaultValue(10)]
+        [ExcelConfig(Description = "Bot will transfer pokemons only when MaxStogare < pokemon + buffer", Position = 62)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 62)]
+        public int BulkTransferStogareBuffer { get;  set; }
+
     }
 }
