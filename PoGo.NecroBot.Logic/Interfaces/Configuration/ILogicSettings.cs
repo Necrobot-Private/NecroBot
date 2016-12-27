@@ -47,6 +47,7 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         bool UseTransferFilterToCatch { get; }
         bool TransferDuplicatePokemon { get; }
         bool TransferDuplicatePokemonOnCapture { get; }
+        bool UseBulkTransferPokemon { get; }
         bool UseEggIncubators { get; }
         bool UseLimitedEggIncubators { get; }
         int UseGreatBallAboveCp { get; }

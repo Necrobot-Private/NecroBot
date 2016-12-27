@@ -24,7 +24,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            await session.Inventory.RefreshCachedInventory();
+            //await session.Inventory.RefreshCachedInventory();
 
             var pokemonToEvolveTask = await session.Inventory.GetPokemonToEvolve(session.LogicSettings.PokemonsToEvolve);
             var pokemonToEvolve = pokemonToEvolveTask.Where(p => p != null).ToList();
@@ -77,7 +77,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         {
                             await UseLuckyEgg(session);
                         }
-                        await evolve(session, pokemonToEvolve);
+                        await Evolve(session, pokemonToEvolve);
                     }
                 }
                 else if (session.LogicSettings.EvolveAllPokemonWithEnoughCandy || session.LogicSettings.EvolveAllPokemonAboveIv)
@@ -86,14 +86,14 @@ namespace PoGo.NecroBot.Logic.Tasks
                     {
                         await UseLuckyEgg(session);
                     }
-                    await evolve(session, pokemonToEvolve);
+                    await Evolve(session, pokemonToEvolve);
                 }
             }
         }
 
         public static async Task UseLuckyEgg(ISession session)
         {
-            await session.Inventory.RefreshCachedInventory();
+            //await session.Inventory.RefreshCachedInventory();
 
             var inventoryContent = await session.Inventory.GetItems();
 
@@ -109,13 +109,17 @@ namespace PoGo.NecroBot.Logic.Tasks
             DelayingUtils.Delay(session.LogicSettings.DelayBetweenPlayerActions, 0);
         }
 
-        private static async Task evolve(ISession session, List<PokemonData> pokemonToEvolve)
+        private static async Task Evolve(ISession session, List<PokemonData> pokemonToEvolve)
         {
             foreach (var pokemon in pokemonToEvolve)
             {
                 // no cancellationToken.ThrowIfCancellationRequested here, otherwise the lucky egg would be wasted.
                 var evolveResponse = await session.Client.Inventory.EvolvePokemon(pokemon.Id);
-
+                if(evolveResponse.Result == POGOProtos.Networking.Responses.EvolvePokemonResponse.Types.Result.Success)
+                {
+                    await session.Inventory.DeletePokemonFromInvById(pokemon.Id);
+                    await session.Inventory.AddPokemonToCache(evolveResponse.EvolvedPokemonData);
+                }
                 session.EventDispatcher.Send(new PokemonEvolveEvent
                 {
                     Id = pokemon.PokemonId,

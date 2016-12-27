@@ -24,7 +24,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             cancellationToken.ThrowIfCancellationRequested();
 
             // Refresh inventory so that the player stats are fresh
-            await session.Inventory.RefreshCachedInventory();
+            //await session.Inventory.RefreshCachedInventory();
 
             var playerStats = (await session.Inventory.GetPlayerStats()).FirstOrDefault();
             if (playerStats == null)
