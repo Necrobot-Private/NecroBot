@@ -45,7 +45,7 @@ function createWindow () {
 
   // and load the index.html of the app.
   mainWindow.loadURL(url.format({
-    pathname: path.join(__dirname, 'PokeEase-Necrobot-Private/index.html'),
+    pathname: path.join(__dirname, 'wwww/index.html'),
     protocol: 'file:',
     slashes: true
   }))
