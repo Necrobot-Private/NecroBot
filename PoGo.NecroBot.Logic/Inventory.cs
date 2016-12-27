@@ -106,7 +106,7 @@ namespace PoGo.NecroBot.Logic
             if (_player == null) GetPlayerData();
             var now = DateTime.UtcNow;
 
-            if (_cachedInventory != null && _lastRefresh.AddSeconds(120).Ticks > now.Ticks)
+            if (_cachedInventory != null && _lastRefresh.AddSeconds(5*60).Ticks > now.Ticks)
                 return _cachedInventory;
 
             return await RefreshCachedInventory();
