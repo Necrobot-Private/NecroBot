@@ -174,6 +174,12 @@
   <ItemGroup>
     <Compile Include="ConsoleEventListener.cs" />
     <Compile Include="ConsoleLogger.cs" />
+    <Compile Include="Forms\AuthAPIForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AuthAPIForm.Designer.cs">
+      <DependentUpon>AuthAPIForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\SettingForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -580,6 +586,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\AuthAPIForm.resx">
+      <DependentUpon>AuthAPIForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ItemBox.resx">
       <DependentUpon>ItemBox.cs</DependentUpon>
     </EmbeddedResource>

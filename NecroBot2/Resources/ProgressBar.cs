@@ -5,7 +5,7 @@ using System.IO;
 
 #endregion
 
-namespace PoGo.NecroBot.CLI.Resources
+namespace NecroBot2.Resources
 {
     internal class ProgressBar
     {
