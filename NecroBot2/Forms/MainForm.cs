@@ -376,12 +376,7 @@ namespace NecroBot2.Forms
                 startStopBotToolStripMenuItem.Text = "■ Exit";
                 Logger.Write("First time here? Go to settings to set your basic info.", LogLevel.Error);
             }
-            else
-            {
-                GlobalSettings.Load(_subPath, _enableJsonValidation);
-                return;
-            }
-
+            
             /*
             if (boolNeedsSetup)
             {
@@ -448,10 +443,38 @@ namespace NecroBot2.Forms
             //ProgressBar.Fill(80);
 
             //ProgressBar.Fill(90);
-
+            /*
             _session.Navigation.WalkStrategy.UpdatePositionEvent +=
                 (lat, lng) => _session.EventDispatcher.Send(new UpdatePositionEvent { Latitude = lat, Longitude = lng });
             _session.Navigation.WalkStrategy.UpdatePositionEvent += SaveLocationToDisk;
+            */
+            _session.Navigation.WalkStrategy.UpdatePositionEvent +=
+                (lat, lng) => _session.EventDispatcher.Send(new UpdatePositionEvent { Latitude = lat, Longitude = lng });
+            _session.Navigation.WalkStrategy.UpdatePositionEvent += Navigation_UpdatePositionEvent;
+
+            RouteOptimizeUtil.RouteOptimizeEvent +=
+                optimizedroute =>
+                    _session.EventDispatcher.Send(new OptimizeRouteEvent { OptimizedRoute = optimizedroute });
+            RouteOptimizeUtil.RouteOptimizeEvent += InitializePokestopsAndRoute;
+
+            Navigation.GetHumanizeRouteEvent +=
+                (route, destination) =>
+                    _session.EventDispatcher.Send(new GetHumanizeRouteEvent { Route = route, Destination = destination });
+            Navigation.GetHumanizeRouteEvent += UpdateMap;
+
+            Logic.Tasks.FarmPokestopsTask.LootPokestopEvent +=
+                pokestop => _session.EventDispatcher.Send(new LootPokestopEvent { Pokestop = pokestop });
+            Logic.Tasks.FarmPokestopsTask.LootPokestopEvent += UpdateMap;
+
+            Logic.Tasks.CatchNearbyPokemonsTask.PokemonEncounterEvent +=
+                mappokemons =>
+                    _session.EventDispatcher.Send(new PokemonsEncounterEvent { EncounterPokemons = mappokemons });
+            Logic.Tasks.CatchNearbyPokemonsTask.PokemonEncounterEvent += UpdateMap;
+
+            Logic.Tasks.CatchIncensePokemonsTask.PokemonEncounterEvent +=
+                mappokemons =>
+                    _session.EventDispatcher.Send(new PokemonsEncounterEvent { EncounterPokemons = mappokemons });
+            Logic.Tasks.CatchIncensePokemonsTask.PokemonEncounterEvent += UpdateMap;
 
             //ProgressBar.Fill(100);
 
