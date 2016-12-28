@@ -259,6 +259,10 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 await Task.Delay(1000, cancellationToken);
             }
+            catch (CaptchaException ex)
+            {
+                throw ex;
+            }
             finally
             {
                 await LocationUtils.UpdatePlayerLocationWithAltitude(session,

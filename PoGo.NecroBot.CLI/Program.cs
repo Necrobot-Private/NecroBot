@@ -256,11 +256,14 @@ namespace PoGo.NecroBot.CLI
                 if (apiCfg.UseLegacyAPI)
                 {
                     Logger.Write("You bot will start after 15 second, You are running bot with  Legacy API (0.45) it will increase your risk to be banned and trigger captcha. Config captcha in config.json to auto resolve them", LogLevel.Warning);
+
+                    #if RELEASE
                     Thread.Sleep(15000);
+                    #endif
                 }
                 else
                 {
-                    Logger.Write("Atleast 1 authentication method is selected, please correct your auth.json, ", LogLevel.Error);
+                    Logger.Write("At least 1 authentication method is selected, please correct your auth.json, ", LogLevel.Error);
                     Console.ReadKey();
                     Environment.Exit(0);
                 }

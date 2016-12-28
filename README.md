@@ -1,9 +1,14 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/mvr6v0v99gscqxbn/branch/master?svg=true)](https://ci.appveyor.com/project/NzV/necrobot/branch/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/g1dtrcdnjjbxugw6?svg=true)](https://ci.appveyor.com/project/jjskuld/necrobot/branch/master)
 [![Github All Releases](https://img.shields.io/github/downloads/Necrobot-Private/NecroBot/total.svg?maxAge=258)](https://github.com/Necrobot-Private/NecroBot/releases)
 [![GitHub license](https://img.shields.io/badge/license-AGPL-blue.svg)](https://raw.githubusercontent.com/Necrobot-Private/NecroBot/master/LICENSE.md)
 
-<h1>Pokémon Go 0.51.1 API is now being forced so the bot killswitch has been activated! Stay tuned for updates.</h1>
+<h1>Necrobot2 now supports Pokémon Go 0.51.2 API using public hashing server from PogoDev.</h1>
 
+<p>
+Necrobot2 itself is free but now you will need to purchase an API key to run the bot.
+<br/>
+See https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer for pricing for API keys.
+</p>
 
 <p align="center">
 
