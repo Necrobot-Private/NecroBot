@@ -12,7 +12,6 @@ using POGOProtos.Inventory.Item;
 using POGOProtos.Networking.Responses;
 using PoGo.NecroBot.Logic.Event.Gym;
 using POGOProtos.Map.Fort;
-using NecroBot2.Forms;
 #endregion
 
 namespace NecroBot2
@@ -43,7 +42,6 @@ namespace NecroBot2
             if (!warnEvent.RequireInput) return;
             Logger.Write(session.Translation.GetTranslation(TranslationString.RequireInputText), LogLevel.Warning);
         }
-
         private static void HandleEvent(UseLuckyEggEvent useLuckyEggEvent, ISession session)
         {
             Logger.Write(session.Translation.GetTranslation(TranslationString.EventUsedLuckyEgg, useLuckyEggEvent.Count),
@@ -369,9 +367,6 @@ namespace NecroBot2
                     humanWalkingEvent.OldWalkingSpeed,
                     humanWalkingEvent.CurrentWalkingSpeed),
                     LogLevel.Info, ConsoleColor.DarkCyan);
-            if (session.LogicSettings.ShowVariantWalking)
-                MainForm.SetSpeedLable("Current Speed: " + Math.Round(humanWalkingEvent.CurrentWalkingSpeed, 2) +
-                                       " km/h");
         }
 
         private static void HandleEvent(KillSwitchEvent killSwitchEvent, ISession session)
