@@ -186,7 +186,7 @@ namespace PoGo.NecroBot.Logic.State
             {
                 return new BotSwitcherState(this.pokemonToCatch);
             }
-            return new LoadSaveState();
+            return new CheckTosState();
         }
 
         private async Task LogLoginHistory(ISession session, CancellationToken cancellationToken)

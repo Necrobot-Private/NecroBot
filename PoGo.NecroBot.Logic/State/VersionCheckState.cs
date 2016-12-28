@@ -44,7 +44,7 @@ namespace PoGo.NecroBot.Logic.State
                     Message = session.Translation.GetTranslation( TranslationString.CheckForUpdatesDisabled, Assembly.GetExecutingAssembly().GetName().Version.ToString( 3 ) )
                 } );
 
-                return new LoginState();
+                return new LoadSaveState();
             }
 
             var autoUpdate = session.LogicSettings.AutoUpdate;
@@ -56,7 +56,7 @@ namespace PoGo.NecroBot.Logic.State
                     Message =
                         session.Translation.GetTranslation(TranslationString.GotUpToDateVersion, Assembly.GetExecutingAssembly().GetName().Version.ToString(4))
                 });
-                return new LoginState();
+                return new LoadSaveState();
             }
             if ( !autoUpdate )
             {
@@ -74,7 +74,7 @@ namespace PoGo.NecroBot.Logic.State
                             break;
                         case "n":
                             Logger.Write( "Update Skipped", LogLevel.Update );
-                            return new LoginState();
+                            return new LoadSaveState();
                         default:
                             Logger.Write( session.Translation.GetTranslation( TranslationString.PromptError, "Y", "N" ), LogLevel.Error );
                             continue;
@@ -98,7 +98,7 @@ namespace PoGo.NecroBot.Logic.State
             Logger.Write(downloadLink, LogLevel.Info);
 
             if (!DownloadFile(downloadLink, downloadFilePath))
-                return new LoginState();
+                return new LoadSaveState();
 
             session.EventDispatcher.Send(new UpdateEvent
             {
@@ -106,7 +106,7 @@ namespace PoGo.NecroBot.Logic.State
             });
 
             if (!UnpackFile(downloadFilePath, extractedDir))
-                return new LoginState();
+                return new LoadSaveState();
 
             session.EventDispatcher.Send(new UpdateEvent
             {
@@ -114,7 +114,7 @@ namespace PoGo.NecroBot.Logic.State
             });
 
             if (!MoveAllFiles(extractedDir, destinationDir))
-                return new LoginState();
+                return new LoadSaveState();
 
             session.EventDispatcher.Send(new UpdateEvent
             {
