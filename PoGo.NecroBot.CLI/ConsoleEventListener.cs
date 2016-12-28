@@ -42,7 +42,6 @@ namespace PoGo.NecroBot.CLI
             if (!warnEvent.RequireInput) return;
             Logger.Write(session.Translation.GetTranslation(TranslationString.RequireInputText), LogLevel.Warning);
         }
-
         private static void HandleEvent(UseLuckyEggEvent useLuckyEggEvent, ISession session)
         {
             Logger.Write(session.Translation.GetTranslation(TranslationString.EventUsedLuckyEgg, useLuckyEggEvent.Count),
