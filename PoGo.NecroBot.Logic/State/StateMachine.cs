@@ -110,6 +110,12 @@ namespace PoGo.NecroBot.Logic.State
                         Environment.Exit(0);
                     }
                 }
+                catch (APIBadRequestException ex)
+                {
+                    Logger.Write("Bad Request - If you see this message please conpy error log & screenshot send back to dev asap.", level: LogLevel.Error);
+                    Logger.Write( ex.StackTrace, level: LogLevel.Error);
+                    state = new LoginState();
+                }
                 catch (AccountNotVerifiedException ex)
                 {
                     if (session.LogicSettings.AllowMultipleBot)

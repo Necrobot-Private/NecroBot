@@ -50,6 +50,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             var orderedPokemon = duplicatePokemons.OrderBy(poke => poke.Cp);
 
+            if (orderedPokemon.Count() == 0) return;
+
             var pokemonSettings = await session.Inventory.GetPokemonSettings();
             var pokemonFamilies = await session.Inventory.GetPokemonFamilies();
 

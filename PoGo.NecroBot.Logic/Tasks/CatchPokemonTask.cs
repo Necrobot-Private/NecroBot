@@ -329,12 +329,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                     {
                         var totalExp = 0;
 
-                        PokemonData data = encounter?.WildPokemon?.PokemonData;
-                        if (data != null)
+                        if (encounteredPokemon != null)
                         {
-                            data.Id = caughtPokemonResponse.CapturedPokemonId;
-
-                            await session.Inventory.AddPokemonToCache(data);
+                            encounteredPokemon.Id = caughtPokemonResponse.CapturedPokemonId;
+                            await session.Inventory.AddPokemonToCache(encounteredPokemon);
                             
                         }
                             foreach (var xp in caughtPokemonResponse.CaptureAward.Xp)

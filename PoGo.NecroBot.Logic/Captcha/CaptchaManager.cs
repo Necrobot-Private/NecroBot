@@ -26,110 +26,120 @@ namespace PoGo.NecroBot.Logic.Captcha
 
         public static async Task<bool> SolveCaptcha(ISession session, string captchaUrl)
         {
-            string captchaRespose = "";
+            string captchaResponse = "";
             var cfg = session.LogicSettings.CaptchaConfig;
+            bool resolved = false;
+            bool needGetNewCaptcha = false;
+            int retry = cfg.AutoCaptchaRetries;
 
-            if (cfg.EnableCaptchaSolutions)
+            while (retry-- > 0 && !resolved)
             {
-                Logger.Write("Auto resolving captcha by using captcha solution service, please wait..........");
-                CaptchaSolutionClient client = new CaptchaSolutionClient(cfg.CaptchaSolutionAPIKey, cfg.CaptchaSolutionsSecretKey, cfg.AutoCaptchaTimeout);
-                captchaRespose = await client.ResolveCaptcha(POKEMON_GO_GOOGLE_KEY, captchaUrl);
-                //captchaRespose = await GetCaptchaResposeBy2Captcha(session, captchaUrl);
-            }
+                //Use captcha solution to resolve captcha
+                if (cfg.EnableCaptchaSolutions)
+                {
+                    if (needGetNewCaptcha)
+                    {
+                        captchaUrl = await GetNewCaptchaURL(session);
+                    }
 
-            if (session.LogicSettings.CaptchaConfig.EnableAntiCaptcha && !string.IsNullOrEmpty(session.LogicSettings.CaptchaConfig.AntiCaptchaAPIKey))
-            {
-                Logger.Write("Auto resolving captcha by using anti captcha service");
-                captchaRespose = await GetCaptchaResposeByAntiCaptcha(session, captchaUrl);
-            }
+                    Logger.Write("Auto resolving captcha by using captcha solution service, please wait..........");
+                    CaptchaSolutionClient client = new CaptchaSolutionClient(cfg.CaptchaSolutionAPIKey, cfg.CaptchaSolutionsSecretKey, cfg.AutoCaptchaTimeout);
+                    captchaResponse = await client.ResolveCaptcha(POKEMON_GO_GOOGLE_KEY, captchaUrl);
+                    needGetNewCaptcha = true;
+                    if (!string.IsNullOrEmpty(captchaResponse))
+                    {
+                        resolved = await Resolve(session, captchaResponse);
+                    }
 
-            if (session.LogicSettings.CaptchaConfig.Enable2Captcha && !string.IsNullOrEmpty(session.LogicSettings.CaptchaConfig.TwoCaptchaAPIKey))
-            {
-                Logger.Write("Auto resolving captcha by using 2Captcha service");
-                captchaRespose = await GetCaptchaResposeBy2Captcha (session, captchaUrl);
-            }
+                }
 
+                //Anty captcha
+                if (!resolved && session.LogicSettings.CaptchaConfig.EnableAntiCaptcha && !string.IsNullOrEmpty(session.LogicSettings.CaptchaConfig.AntiCaptchaAPIKey))
+                {
+                    if (needGetNewCaptcha)
+                    {
+                        captchaUrl = await GetNewCaptchaURL(session);
+                    }
+                    if (string.IsNullOrEmpty(captchaUrl)) return true;
+
+                    Logger.Write("Auto resolving captcha by using anti captcha service");
+                    captchaResponse = await GetCaptchaResposeByAntiCaptcha(session, captchaUrl);
+                    needGetNewCaptcha = true;
+                    if (!string.IsNullOrEmpty(captchaResponse))
+                    {
+                        resolved = await Resolve(session, captchaResponse);
+                    }
+
+                }
+
+                //use 2 captcha
+                if (!resolved && session.LogicSettings.CaptchaConfig.Enable2Captcha && !string.IsNullOrEmpty(session.LogicSettings.CaptchaConfig.TwoCaptchaAPIKey))
+                {
+                    if (needGetNewCaptcha)
+                    {
+                        captchaUrl = await GetNewCaptchaURL(session);
+
+                    }
+                    if (string.IsNullOrEmpty(captchaUrl)) return true;
+
+                    Logger.Write("Auto resolving captcha by using 2Captcha service");
+                    captchaResponse = await GetCaptchaResposeBy2Captcha(session, captchaUrl);
+                    needGetNewCaptcha = true;
+                    if (!string.IsNullOrEmpty(captchaResponse))
+                    {
+                        resolved = await Resolve(session, captchaResponse);
+                    }
+                }
+            }
             
             //captchaRespose = "";
-            if (string.IsNullOrEmpty(captchaRespose))
+            if (!resolved)
             {
+                if(needGetNewCaptcha)
+                {
+                    captchaUrl = await GetNewCaptchaURL(session);
+                }
 
                 if (session.LogicSettings.CaptchaConfig.PlaySoundOnCaptcha)
                 {
                     SystemSounds.Asterisk.Play();
                 }
-                captchaRespose = await GetCaptchaResposeManually(session, captchaUrl);
-
+                captchaResponse = await GetCaptchaResposeManually(session, captchaUrl);
+                resolved = await Resolve(session, captchaResponse);
             }
-
-            bool resolved = false;
-            try
-            {
-                resolved = await Resolve(session, captchaRespose);
-            }
-            catch(Exception ex )
-            {
-                Console.WriteLine(ex.Message);
-            }
+           
             return resolved;
+        }
+
+        private static async Task<string> GetNewCaptchaURL(ISession session)
+        {
+            var res = await session.Client.Player.CheckChallenge();
+            if(res.ShowChallenge )
+            {
+                return res.ChallengeUrl;
+            }
+            return string.Empty;
         }
 
         private static async Task<bool> Resolve(ISession session, string captchaRespose)
         {
             if (string.IsNullOrEmpty(captchaRespose)) return false;
-            /*
-       var deviceInfo = new DeviceInfo()
-       {
-           //AndroidBoardName = session.Settings.AndroidBoardName,
-           //AndroidBootloader = session.Settings.AndroidBootloader,
-           DeviceBrand = session.Settings.DeviceBrand,
-           DeviceId = session.Settings.DeviceId,
-           DeviceModel = session.Settings.DeviceModel,
-           DeviceModelBoot = session.Settings.DeviceModelBoot,
-           //DeviceModelIdentifier = session.Settings.DeviceModelIdentifier,
-           FirmwareBrand = session.Settings.FirmwareBrand,
-           //FirmwareFingerprint = session.Settings.FirmwareFingerprint,
-           // FirmwareTags = session.Settings.FirmwareTags,
-           FirmwareType = session.Settings.FirmwareType,
-           HardwareManufacturer = session.Settings.HardwareManufacturer,
-           HardwareModel = session.Settings.HardwareManufacturer
-       };
-       ILoginProvider loginProvider = null;
-       if (session.Settings.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Ptc)
-       {
-           loginProvider = new PtcLoginProvider(session.Settings.PtcUsername, session.Settings.PtcPassword);
-       }
-       else
-       {
-           loginProvider = new GoogleLoginProvider(session.Settings.GoogleUsername, session.Settings.GooglePassword);
-       }
-
-       var newSession = await GetSession(loginProvider, session.Client.CurrentLatitude, session.Client.CurrentLongitude, true, deviceInfo);
-
-       await Task.Delay(5000);
-       //session.Client.SetCaptchaToken(token);
-       //var verified = session.Client.Player.VerifyChallenge(token.Trim()).Result;
-       var verified = newSession.RpcClient.SendRemoteProcedureCallAsync(new POGOProtos.Networking.Requests.Request()
-       {
-           RequestType = POGOProtos.Networking.Requests.RequestType.VerifyChallenge,
-           RequestMessage = (new VerifyChallengeMessage()
-           {
-               Token =  captchaRespose
-           }).ToByteString()
-       }).Result;
-
-
-       var vres = VerifyChallengeResponse.Parser.ParseFrom(verified);
-*/
-            var verifyChallengeResponse = await session.Client.Player.VerifyChallenge(captchaRespose);
-            if (!verifyChallengeResponse.Success)
+            try
             {
-                Logging.Logger.Write($"(CAPTCHA) Failed to resolve captcha, try resolved captcha by official app. ");
-                return false;
+                var verifyChallengeResponse = await session.Client.Player.VerifyChallenge(captchaRespose);
+                if (!verifyChallengeResponse.Success)
+                {
+                    Logging.Logger.Write($"(CAPTCHA) Failed to resolve captcha, try resolved captcha by official app. ");
+                    return false;
+                }
+                Logging.Logger.Write($"(CAPTCHA) Great!!! Captcha has been by passed", color: ConsoleColor.Green);
+                return verifyChallengeResponse.Success;
             }
-            Logging.Logger.Write($"(CAPTCHA) Great!!! Captcha has been by passed", color:ConsoleColor.Green);
-            return verifyChallengeResponse.Success;
-
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return false;
         }
 
         private static async Task<string> GetCaptchaResposeByAntiCaptcha(ISession session, string captchaUrl)
