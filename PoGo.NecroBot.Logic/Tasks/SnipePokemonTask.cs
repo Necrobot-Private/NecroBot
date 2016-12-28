@@ -174,8 +174,8 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            // Refresh inventory so that the player stats are fresh
-            await session.Inventory.RefreshCachedInventory();
+           // Refresh inventory so that the player stats are fresh
+           //await session.Inventory.RefreshCachedInventory();
 
             var pokeBallsCount = await session.Inventory.GetItemAmountByType(ItemId.ItemPokeBall);
             pokeBallsCount += await session.Inventory.GetItemAmountByType(ItemId.ItemGreatBall);
@@ -507,6 +507,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                 
 
             }
+            catch(CaptchaException ex)
+            {
+                throw ex;
+            }
             finally
             {
                 await
@@ -534,6 +538,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                     encounter =
                         session.Client.Encounter.EncounterPokemon(pokemon.EncounterId, pokemon.SpawnPointId).Result;
                 }
+                catch (CaptchaException ex)
+                {
+                    throw ex;
+                }
                 finally
                 {
                     await
@@ -558,8 +566,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                             Longitude = currentLongitude
                         });
 
-                        await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, 
+                         await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, 
                             currentFortData: null, sessionAllowTransfer: true);
+
 
                         catchedPokemon = true;
                         break;

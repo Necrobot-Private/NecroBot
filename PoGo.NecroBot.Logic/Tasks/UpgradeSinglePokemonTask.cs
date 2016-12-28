@@ -58,7 +58,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             using (var block = new BlockableScope(session, Model.BotActions.Upgrade))
             {
                 if (!await block.WaitToRun()) return;
-                await session.Inventory.RefreshCachedInventory();
+                //await session.Inventory.RefreshCachedInventory();
 
                 if (session.Inventory.GetStarDust() <= session.LogicSettings.GetMinStarDustForLevelUp)
                     return;

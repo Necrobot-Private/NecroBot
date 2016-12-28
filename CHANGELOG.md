@@ -1,4 +1,18 @@
 # Change Log
+## [v1.0.0.36](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.37) (2016-12-27)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.36...v1.0.0.37)
+## Feature
+- Optimize to reduce request & API Call 
+
+## [v1.0.0.36](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.36) (2016-12-27)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.33...v1.0.0.36)
+## Feature
+- Add support for Hash Server 0.51
+- Add captcha support manual & auto resolve
+- Add notification service 
+- Snipe by telegram command (/snipe Pokemon,Lat,Long )
+
+
 ## [v1.0.0.32](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.30) (2016-11-20)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.30...v1.0.0.32)
 ## Feature
