@@ -21,21 +21,22 @@ using POGOProtos.Inventory.Item;
 using POGOProtos.Map.Fort;
 using POGOProtos.Map.Pokemon;
 using PokemonGo.RocketAPI.Helpers;
-using PoGo.NecroBot.Logic;
 using PoGo.NecroBot.Logic.PoGoUtils;
 using PoGo.NecroBot.Logic.Common;
-using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.Service;
 using PoGo.NecroBot.Logic.State;
-using PoGo.NecroBot.Logic.Tasks;
 using PoGo.NecroBot.Logic.Utils;
 using PoGo.NecroBot.Logic.Model.Settings;
 using PoGo.NecroBot.Logic.Service.Elevation;
 using Logger = PoGo.NecroBot.Logic.Logging.Logger;
 using NecroBot2.Helpers;
 using NecroBot2.Models;
-using NecroBot2.Tasks;
+using NecroBot2.Logic.Tasks;
+using NecroBot2.Logic;
+using NecroBot2.Logic.Event;
+using PoGo.NecroBot.Logic.Event;
+using PoGo.NecroBot.Logic;
 
 namespace NecroBot2.Forms
 {
@@ -45,6 +46,7 @@ namespace NecroBot2.Forms
         public static SynchronizationContext SynchronizationContext;
         private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
         private static readonly string subPath = "";
+        private static bool _enableJsonValidation = true;
         private static Session _session;
         public static bool BoolNeedsSetup;
         private static GMapMarker _playerMarker;
@@ -91,7 +93,7 @@ namespace NecroBot2.Forms
             }
             else
             {
-                GlobalSettings.Load("");
+                GlobalSettings.Load("", _enableJsonValidation);
             }
          }
 
@@ -134,7 +136,7 @@ namespace NecroBot2.Forms
 
             _logger = new ConsoleLogger(LogLevel.LevelUp);
             Logger.AddLogger(_logger, subPath);
-
+           
             var profilePath = Path.Combine(Directory.GetCurrentDirectory(), subPath);
             var profileConfigPath = Path.Combine(profilePath, "config");
             var authFile = Path.Combine(profileConfigPath, "auth.json");
@@ -145,7 +147,7 @@ namespace NecroBot2.Forms
 
             if (File.Exists(configFile))
             {
-                _settings = GlobalSettings.Load(subPath, true);
+                _settings = GlobalSettings.Load(subPath, _enableJsonValidation);
           //      _settings.Auth(authFile);
             }
             else
@@ -194,7 +196,7 @@ namespace NecroBot2.Forms
                         _session.Translation.GetTranslation(TranslationString.StatsTemplateString),
                         _session.Translation.GetTranslation(TranslationString.StatsXpTemplateString)));
 
-            var aggregator = new StatisticsAggregator(stats);
+            var aggregator = new PoGo.NecroBot.Logic.StatisticsAggregator(stats);
             var listener = new ConsoleEventListener();
 
             _session.EventDispatcher.EventReceived += evt => listener.Listen(evt, _session);
@@ -206,14 +208,13 @@ namespace NecroBot2.Forms
             _session.Navigation.WalkStrategy.UpdatePositionEvent +=
                 (lat, lng) => _session.EventDispatcher.Send(new UpdatePositionEvent { Latitude = lat, Longitude = lng });
             _session.Navigation.WalkStrategy.UpdatePositionEvent += Navigation_UpdatePositionEvent;
-//TODO : 
-/*
+
             RouteOptimizeUtil.RouteOptimizeEvent +=
                 optimizedroute =>
-                    _session.EventDispatcher.Send(new RouteOptimizeEvent { OptimizedRoute = optimizedroute });
+                    _session.EventDispatcher.Send(new OptimizeRouteEvent { OptimizedRoute = optimizedroute });
             RouteOptimizeUtil.RouteOptimizeEvent += InitializePokestopsAndRoute;
 
-            _session.Navigation.GetHumanizeRouteEvent +=
+            Navigation.GetHumanizeRouteEvent +=
                 (route, destination) =>
                     _session.EventDispatcher.Send(new GetHumanizeRouteEvent { Route = route, Destination = destination });
             Navigation.GetHumanizeRouteEvent += UpdateMap;
@@ -231,7 +232,7 @@ namespace NecroBot2.Forms
                 mappokemons =>
                     _session.EventDispatcher.Send(new PokemonsEncounterEvent { EncounterPokemons = mappokemons });
             CatchIncensePokemonsTask.PokemonEncounterEvent += UpdateMap;
-*/
+
         }
 
         private async Task StartBot()
@@ -689,7 +690,7 @@ namespace NecroBot2.Forms
             SetState(false);
             foreach (var pokemon in pokemons)
             {
-                await LevelUpSpecificPokemonTask.Execute(_session, pokemon.Id);
+                await Logic.Tasks.LevelUpSpecificPokemonTask.Execute(_session, pokemon.Id);
             }
             await ReloadPokemonList();
         }
@@ -699,7 +700,7 @@ namespace NecroBot2.Forms
             SetState(false);
             foreach (var pokemon in pokemons)
             {
-                await EvolveSpecificPokemonTask.Execute(_session, pokemon.Id);
+                await Logic.Tasks.EvolveSpecificPokemonTask.Execute(_session, pokemon.Id);
             }
             await ReloadPokemonList();
         }
