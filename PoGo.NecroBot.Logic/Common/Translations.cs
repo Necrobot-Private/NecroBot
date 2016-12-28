@@ -269,7 +269,8 @@ namespace PoGo.NecroBot.Logic.Common
         CaptchaShown,
         FailedSendNotification,
         TelegramBotStarted,
-        TelegramNeedChatId
+        TelegramNeedChatId,
+        BulkTransferFailed
     }
 
     public class Translation : ITranslation
@@ -410,6 +411,7 @@ namespace PoGo.NecroBot.Logic.Common
                 "Finished downloading newest Release..."),
             new KeyValuePair<TranslationString, string>(TranslationString.FinishedUnpackingFiles,
                 "Finished unpacking files..."),
+             
             new KeyValuePair<TranslationString, string>(TranslationString.FinishedTransferringConfig,
                 "Finished transferring your config to the new version..."),
             new KeyValuePair<TranslationString, string>(TranslationString.UpdateFinished,
@@ -435,6 +437,9 @@ namespace PoGo.NecroBot.Logic.Common
             new KeyValuePair<TranslationString, string>(TranslationString.RecyclingQuietly, "Recycling Quietly..."),
             new KeyValuePair<TranslationString, string>(TranslationString.InvFullTransferring,
                 "Pokemon Inventory is full, transferring Pokemon..."),
+            new KeyValuePair<TranslationString, string>(TranslationString.BulkTransferFailed,
+                "Bulk transfer {0} pokemons was failed..."),
+
             new KeyValuePair<TranslationString, string>(TranslationString.InvFullTransferManually,
                 "Pokemon Inventory is full! Please transfer Pokemon manually or set TransferDuplicatePokemon to true in settings..."),
             new KeyValuePair<TranslationString, string>(TranslationString.InvFullPokestopLooting,

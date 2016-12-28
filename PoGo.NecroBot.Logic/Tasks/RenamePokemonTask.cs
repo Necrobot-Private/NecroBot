@@ -20,7 +20,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            await session.Inventory.RefreshCachedInventory();
+            //await session.Inventory.RefreshCachedInventory();
 
             var pokemons = await session.Inventory.GetPokemons();
 
@@ -46,15 +46,21 @@ namespace PoGo.NecroBot.Logic.Tasks
                 if ((!session.LogicSettings.RenameOnlyAboveIv || perfection >= session.LogicSettings.KeepMinIvPercentage) &&
                     newNickname != oldNickname && pokemon.Favorite == 0)
                 {
-                    await session.Client.Inventory.NicknamePokemon(pokemon.Id, newNickname);
+                    var result = await session.Client.Inventory.NicknamePokemon(pokemon.Id, newNickname);
 
-                    session.EventDispatcher.Send(new NoticeEvent
+                    if (result.Result == POGOProtos.Networking.Responses.NicknamePokemonResponse.Types.Result.Success)
                     {
-                        Message =
-                            session.Translation.GetTranslation(TranslationString.PokemonRename, session.Translation.GetPokemonTranslation(pokemon.PokemonId),
-                                pokemon.Id, oldNickname, newNickname)
-                    });
+                        pokemon.Nickname = newNickname;
+                        await session.Inventory.DeletePokemonFromInvById(pokemon.Id);
+                        await session.Inventory.AddPokemonToCache(pokemon);
 
+                        session.EventDispatcher.Send(new NoticeEvent
+                        {
+                            Message =
+                                session.Translation.GetTranslation(TranslationString.PokemonRename, session.Translation.GetPokemonTranslation(pokemon.PokemonId),
+                                    pokemon.Id, oldNickname, newNickname)
+                        });
+                    }
                     //Delay only if the pokemon was really renamed!
                     DelayingUtils.Delay(session.LogicSettings.RenamePokemonActionDelay, 500);
                 }
