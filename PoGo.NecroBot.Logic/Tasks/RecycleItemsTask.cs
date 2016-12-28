@@ -99,6 +99,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             foreach (var item in items)
             {
+                if (item.Count <= 0) continue;
+
                 cancellationToken.ThrowIfCancellationRequested();
 
                 await session.Client.Inventory.RecycleItem(item.ItemId, item.Count);
@@ -123,7 +125,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 itemsToKeep = Math.Min(itemsToKeep, maxItemToKeep);
             }
             itemsToRecycle = itemCount - itemsToKeep;
-            if (itemsToRecycle != 0)
+            if (itemsToRecycle > 0)
             {
                 _diff -= itemsToRecycle;
                 cancellationToken.ThrowIfCancellationRequested();

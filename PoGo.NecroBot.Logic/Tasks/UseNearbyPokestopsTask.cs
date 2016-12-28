@@ -300,7 +300,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             if (session.Stats.SearchThresholdExceeds(session))
             {
-                if (session.LogicSettings.MultipleBotConfig.SwitchOnPokestopLimit)
+                if (session.LogicSettings.AllowMultipleBot && session.LogicSettings.MultipleBotConfig.SwitchOnPokestopLimit)
                 {
                     throw new Exceptions.ActiveSwitchByRuleException() { MatchedRule = SwitchRules.SpinPokestopReached, ReachedValue = session.LogicSettings.PokeStopLimit };
                 }

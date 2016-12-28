@@ -130,6 +130,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     await session.Inventory.DeletePokemonFromInvById(pokemon.Id);
                     await session.Inventory.AddPokemonToCache(evolveResponse.EvolvedPokemonData);
                 }
+                Console.WriteLine("Evole tsssfdfdf");
                 session.EventDispatcher.Send(new PokemonEvolveEvent
                 {
                     Id = pokemon.PokemonId,
