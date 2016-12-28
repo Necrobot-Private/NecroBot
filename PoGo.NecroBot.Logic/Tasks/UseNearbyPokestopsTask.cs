@@ -375,6 +375,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Altitude = session.Client.CurrentAltitude,
                         InventoryFull = fortSearch.Result == FortSearchResponse.Types.Result.InventoryFull
                     });
+                    foreach (var item in fortSearch.ItemsAwarded)
+                    {
+                        await session.Inventory.UpdateInventoryItem(item.ItemId, item.ItemCount);
+                    }
                     if (fortSearch.Result == FortSearchResponse.Types.Result.InventoryFull)
                     {
                         await RecycleItemsTask.Execute(session, cancellationToken);
