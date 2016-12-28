@@ -134,7 +134,12 @@ namespace PoGo.NecroBot.Logic.State
                 catch (ActiveSwitchByRuleException se)
                 {
                     session.EventDispatcher.Send(new WarnEvent { Message = $"Switch bot account activated by : {se.MatchedRule.ToString()}  - {se.ReachedValue} " });
-
+                    if (se.MatchedRule == SwitchRules.EmptyMap)
+                    {
+                        session.BlockCurrentBot(90);
+                        session.ReInitSessionWithNextBot();
+                    }
+                    else
                     if (se.MatchedRule == SwitchRules.PokestopSoftban)
                     {
                         session.BlockCurrentBot();

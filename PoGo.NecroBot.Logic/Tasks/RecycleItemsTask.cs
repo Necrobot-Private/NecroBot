@@ -105,6 +105,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 await session.Client.Inventory.RecycleItem(item.ItemId, item.Count);
                 await session.Inventory.UpdateInventoryItem(item.ItemId, -item.Count);
+
                 if (session.LogicSettings.VerboseRecycling)
                     session.EventDispatcher.Send(new ItemRecycledEvent { Id = item.ItemId, Count = item.Count });
 
