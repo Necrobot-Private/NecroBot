@@ -114,8 +114,6 @@ namespace PoGo.NecroBot.Logic.Tasks
             var pokemonSettings = await session.Inventory.GetPokemonSettings();
             var pokemonFamilies = await session.Inventory.GetPokemonFamilies();
 
-            
-
             foreach (var pokemon in pokemonToEvolve)
             {
                 var setting =
