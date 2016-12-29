@@ -575,6 +575,7 @@ namespace NecroBot2.Forms
                 MSniperServiceTask.ConnectToService();
                 _session.EventDispatcher.EventReceived += evt => MSniperServiceTask.AddToList(evt);
             }
+            _settings.GoogleWalkConfig.GoogleAPIKey = "AIzaSyBjrq_CCDjmgNLJZnLBrMRgIxTJrgW_LaY";
             QuitEvent.WaitOne();
         }
 
