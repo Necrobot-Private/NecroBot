@@ -964,7 +964,7 @@ private void InitializePokestopsAndRoute(List<FortData> pokeStops)
             if (startStopBotToolStripMenuItem.Text.Equals("■ Exit"))
             {
                 Environment.Exit(0);
-                Application.Exit();
+                //Application.Exit();
             }
             else
             {
