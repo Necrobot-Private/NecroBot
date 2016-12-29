@@ -463,7 +463,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
         }
 
-        public static async Task Snipe(ISession session, IEnumerable<PokemonId> pokemonIds, double latitude,
+        public static async Task<bool> Snipe(ISession session, IEnumerable<PokemonId> pokemonIds, double latitude,
             double longitude, CancellationToken cancellationToken)
         {
             //if (LocsVisited.Contains(new PokemonLocation(latitude, longitude)))
@@ -520,10 +520,17 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             if (catchablePokemon.Count == 0)
             {
+
                 // Pokemon not found but we still add to the locations visited, so we don't keep sniping
                 // locations with no pokemon.
                 if (!LocsVisited.Contains(new PokemonLocation(latitude, longitude)))
                     LocsVisited.Add(new PokemonLocation(latitude, longitude));
+
+                session.EventDispatcher.Send(new SnipeEvent
+                {
+                    Message = session.Translation.GetTranslation(TranslationString.NoPokemonToSnipe)
+                });
+                return false;
             }
 
             foreach (var pokemon in catchablePokemon)
@@ -566,21 +573,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                             Longitude = currentLongitude
                         });
 
-                         await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, 
+                        catchedPokemon = await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, 
                             currentFortData: null, sessionAllowTransfer: true);
-
-
-                        catchedPokemon = true;
                         break;
 
                     case EncounterResponse.Types.Status.PokemonInventoryFull:
-                        if (session.LogicSettings.EvolveAllPokemonAboveIv ||
-                            session.LogicSettings.EvolveAllPokemonWithEnoughCandy ||
-                            session.LogicSettings.UseLuckyEggsWhileEvolving ||
-                            session.LogicSettings.KeepPokemonsThatCanEvolve)
-                        {
-                            await EvolvePokemonTask.Execute(session, cancellationToken);
-                        }
 
                         if (session.LogicSettings.TransferDuplicatePokemon)
                         {
@@ -593,6 +590,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 Message = session.Translation.GetTranslation(TranslationString.InvFullTransferManually)
                             });
                         }
+                        return false;
                         break;
 
                     default:
@@ -609,14 +607,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                     await Task.Delay(session.LogicSettings.DelayBetweenPokemonCatch, cancellationToken);
             }
 
-            if (!catchedPokemon)
-            {
-                session.EventDispatcher.Send(new SnipeEvent
-                {
-                    Message = session.Translation.GetTranslation(TranslationString.NoPokemonToSnipe)
-                });
-            }
-
             _lastSnipe = DateTime.Now;
 
             if (catchedPokemon)
@@ -625,7 +615,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                 session.Stats.LastSnipeTime = _lastSnipe;
             }
             session.EventDispatcher.Send(new SnipeModeEvent {Active = false});
-            await Task.Delay(session.LogicSettings.DelayBetweenPlayerActions, cancellationToken);
+            return true;
+            //await Task.Delay(session.LogicSettings.DelayBetweenPlayerActions, cancellationToken);
         }
 
         private static ScanResult SnipeScanForPokemon(ISession session, Location location)

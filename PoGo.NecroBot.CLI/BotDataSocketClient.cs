@@ -238,7 +238,7 @@ namespace PoGo.NecroBot.CLI
                             Iv = data.IV,
                             Move1 = move1,
                             Move2 = move2
-                        });
+                        }).Wait();
                     }
                 
                 }
@@ -278,7 +278,7 @@ namespace PoGo.NecroBot.CLI
                     Iv = data.IV,
                     Move1 = move1,
                     Move2 = move2
-                }, true);
+                }, true).Wait();
             }
         }
 

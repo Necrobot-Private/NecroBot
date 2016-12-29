@@ -254,7 +254,6 @@ namespace PoGo.NecroBot.Logic
         
         public async Task UpdateCandy(Candy family, int change)
         {
-            return; //in testing, may not need to use this function any more sinceInventory update 
             var lookupItem = (from item in _cachedInventory.InventoryDelta.InventoryItems
                              where item.InventoryItemData?.Candy != null
                              where item.InventoryItemData?.Candy.FamilyId == family.FamilyId
