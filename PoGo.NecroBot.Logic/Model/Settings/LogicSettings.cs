@@ -248,5 +248,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public NotificationConfig NotificationConfig => _settings.NotificationConfig;
 
         public CaptchaConfig CaptchaConfig => _settings.CaptchaConfig;
+
+        public bool SnipeAllVerifiedPokemon => _settings.SnipeConfig.AutoSnipeAllVerifiedPokemon;
     }
 }

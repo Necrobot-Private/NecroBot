@@ -354,6 +354,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                 return;
             }
 
+            if (session.LogicSettings.SnipeAllVerifiedPokemon && item.EncounterId != 0)
+            {
+                autoSnipePokemons.Add(item);
+                return;
+            }
+
             //hack, this case we can't determite move :)
 
             if (filter.VerifiedOnly && item.EncounterId == 0) return;
@@ -398,7 +404,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (session.Stats.CatchThresholdExceeds(session)) return;
 
             if (inProgress || OutOffBallBlock > DateTime.Now)
-            return;
+                return;
             inProgress = true;
 
             var pth = Path.Combine(Directory.GetCurrentDirectory(), "SnipeMS.json");
