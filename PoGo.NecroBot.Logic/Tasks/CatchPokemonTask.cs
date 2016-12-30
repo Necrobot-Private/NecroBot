@@ -431,6 +431,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     {
                         //reset if not catch flee.
                         CatchFleeContinuouslyCount = 0;
+                        MSniperServiceTask.UnblockSnipe();
                     }
                 }
 
