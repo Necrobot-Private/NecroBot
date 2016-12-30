@@ -220,6 +220,22 @@ namespace PoGo.NecroBot.Logic.State
                     state = new LoginState();
 
                 }
+                catch (LoginFailedException ex)
+                {
+                    PushNotificationClient.SendNotification(session, $"Banned!!!! {session.Settings.PtcUsername}{session.Settings.GoogleUsername}", session.Translation.GetTranslation(TranslationString.AccountBanned), true);
+
+                    if (session.LogicSettings.AllowMultipleBot)
+                    {
+                        session.BlockCurrentBot(24 * 60); //need remove acc
+                        session.ReInitSessionWithNextBot();
+                        state = new LoginState();
+                    }
+                    else {
+                        session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey) });
+                        Console.ReadKey();
+                        System.Environment.Exit(1);
+                    }
+                }
                 catch (MinimumClientVersionException ex)
                 {
                     // We need to terminate the client.
@@ -242,25 +258,6 @@ namespace PoGo.NecroBot.Logic.State
                     
                 }
                 
-                catch (LoginFailedException ex)
-                {
-                    PushNotificationClient.SendNotification(session, $"Banned!!!! {session.Settings.PtcUsername}{session.Settings.GoogleUsername}", session.Translation.GetTranslation(TranslationString.AccountBanned), true);
-
-                    session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.AccountBanned)  + "\r\n" + ex.Message});
-
-
-                    if (session.LogicSettings.AllowMultipleBot)
-                    {
-                        session.BlockCurrentBot(24 * 60); //need remove acc
-                        session.ReInitSessionWithNextBot();
-                        state = new LoginState();
-                    }
-                    else {
-                        session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey) });
-                        Console.ReadKey();
-                        System.Environment.Exit(1);
-                    }
-                }
                 catch (PtcOfflineException)
                 {
                     session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.PtcOffline) });

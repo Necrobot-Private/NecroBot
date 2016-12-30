@@ -13,6 +13,7 @@ using POGOProtos.Enums;
 using POGOProtos.Map.Pokemon;
 using POGOProtos.Networking.Responses;
 using PokemonGo.RocketAPI.Exceptions;
+using PokemonGo.RocketAPI.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -201,6 +202,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             public DateTime AddedTime { get;  set; }
             public ulong EncounterId { get; set; }
+            public double ExpiredTime { get; set; }
             public double Iv { get; set; }
             public double Latitude { get; set; }
             public double Longitude { get; set; }
@@ -393,7 +395,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             item.AddedTime = DateTime.Now;
             //just keep pokemon in last 2 min
-            autoSnipePokemons.RemoveAll(x => x.AddedTime.AddMinutes(2) < DateTime.Now);
+            autoSnipePokemons.RemoveAll(x => x.AddedTime.AddMinutes(2) < DateTime.Now);// || (x.ExpiredTime > 0 && x.ExpiredTime < DateTime.Now.ToUnixTime()));
             pokedexSnipePokemons.RemoveAll(x => x.AddedTime.AddMinutes(2) < DateTime.Now);
 
             if (OutOffBallBlock > DateTime.Now ||
@@ -413,7 +415,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     session.EventDispatcher.Send(new WarnEvent() { Message = session.Translation.GetTranslation(TranslationString.SnipePokemonNotInPokedex, session.Translation.GetPokemonTranslation((PokemonId)item.PokemonId)) });
                     pokedexSnipePokemons.Add(item);//Add as hight priority snipe entry
-
+                    return;
                 }
             }
             SnipeFilter filter = new SnipeFilter()
@@ -528,7 +530,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
                 else {
 
-                    autoSnipePokemons.RemoveAll(x => x.AddedTime.AddMinutes(2) < DateTime.Now);
+                    autoSnipePokemons.RemoveAll(x => x.AddedTime.AddMinutes(2) < DateTime.Now);// || ( x.ExpiredTime >0  && x.ExpiredTime < DateTime.Now.ToUnixTime()));
                     autoSnipePokemons.OrderByDescending(x => x.PokemonId).ThenByDescending(x => x.AddedTime);
                     var batch = autoSnipePokemons.Take(5);
                     //mSniperLocation2.AddRange(autoSnipePokemons.Take(10));
