@@ -50,6 +50,7 @@ namespace NecroBot2.Forms
         private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
         private static string _subPath = "";
         private static bool _enableJsonValidation = true;
+        private static bool _excelConfigAllow = false;
         //private static bool _ignoreKillSwitch;
 
         private static readonly Uri StrKillSwitchUri =
@@ -93,8 +94,6 @@ namespace NecroBot2.Forms
             InitializePokemonForm();
             InitializeMap();
             VersionHelper.CheckVersion();
-            //VersionHelper.CheckKillSwitch();
-            //showMoreCheckBox.Enabled = false;
             btnRefresh.Enabled = false;
         }
 
@@ -459,19 +458,19 @@ namespace NecroBot2.Forms
                     _session.EventDispatcher.Send(new GetHumanizeRouteEvent { Route = route, Destination = destination });
             Navigation.GetHumanizeRouteEvent += UpdateMap;
 
-            Logic.Tasks.FarmPokestopsTask.LootPokestopEvent +=
+            FarmPokestopsTask.LootPokestopEvent +=
                 pokestop => _session.EventDispatcher.Send(new LootPokestopEvent { Pokestop = pokestop });
-            Logic.Tasks.FarmPokestopsTask.LootPokestopEvent += UpdateMap;
+            FarmPokestopsTask.LootPokestopEvent += UpdateMap;
 
-            Logic.Tasks.CatchNearbyPokemonsTask.PokemonEncounterEvent +=
+            CatchNearbyPokemonsTask.PokemonEncounterEvent +=
                 mappokemons =>
                     _session.EventDispatcher.Send(new PokemonsEncounterEvent { EncounterPokemons = mappokemons });
-            Logic.Tasks.CatchNearbyPokemonsTask.PokemonEncounterEvent += UpdateMap;
+            CatchNearbyPokemonsTask.PokemonEncounterEvent += UpdateMap;
 
-            Logic.Tasks.CatchIncensePokemonsTask.PokemonEncounterEvent +=
+            CatchIncensePokemonsTask.PokemonEncounterEvent +=
                 mappokemons =>
                     _session.EventDispatcher.Send(new PokemonsEncounterEvent { EncounterPokemons = mappokemons });
-            Logic.Tasks.CatchIncensePokemonsTask.PokemonEncounterEvent += UpdateMap;
+            CatchIncensePokemonsTask.PokemonEncounterEvent += UpdateMap;
 
             //ProgressBar.Fill(100);
 
@@ -531,11 +530,12 @@ namespace NecroBot2.Forms
             }
             _machine = machine;
             _settings = settings;
+            _excelConfigAllow = excelConfigAllow;
         }
 
         private async Task StartBot()
         {
-            await _machine.AsyncStart(new Logic.State.VersionCheckState(), _session, _subPath, false);// excelConfigAllow);
+            await _machine.AsyncStart(new Logic.State.VersionCheckState(), _session, _subPath,  _excelConfigAllow);
             /*
             try
             {
@@ -545,7 +545,7 @@ namespace NecroBot2.Forms
             {
             }
             */
-
+          
             if (_settings.TelegramConfig.UseTelegramAPI)
                 _session.Telegram = new TelegramService(_settings.TelegramConfig.TelegramAPIKey, _session);
 
@@ -943,6 +943,7 @@ private void InitializePokestopsAndRoute(List<FortData> pokeStops)
                 Instance.Invoke(new Action<string>(SetStatusText), text);
                 return;
             }
+            Instance.Text = text;
             Instance.statusLabel.Text = text;
         }
 
@@ -960,7 +961,6 @@ private void InitializePokestopsAndRoute(List<FortData> pokeStops)
             if (startStopBotToolStripMenuItem.Text.Equals("■ Exit"))
             {
                 Environment.Exit(0);
-                //Application.Exit();
             }
             else
             {
@@ -1138,7 +1138,7 @@ private void InitializePokestopsAndRoute(List<FortData> pokeStops)
             SetState(false);
             foreach (var pokemon in pokemons)
             {
-                await Logic.Tasks.LevelUpSpecificPokemonTask.Execute(_session, pokemon.Id);
+                await LevelUpSpecificPokemonTask.Execute(_session, pokemon.Id);
             }
             await ReloadPokemonList();
         }
@@ -1148,7 +1148,7 @@ private void InitializePokestopsAndRoute(List<FortData> pokeStops)
             SetState(false);
             foreach (var pokemon in pokemons)
             {
-                await Logic.Tasks.EvolveSpecificPokemonTask.Execute(_session, pokemon.Id);
+                await EvolveSpecificPokemonTask.Execute(_session, pokemon.Id);
             }
             await ReloadPokemonList();
         }

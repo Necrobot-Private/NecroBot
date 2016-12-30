@@ -265,20 +265,16 @@ namespace NecroBot2.Forms
 
             cbDisableHumanWalking.Checked = _setting.LocationConfig.DisableHumanWalking;
             cbUseWalkingSpeedVariant.Checked = _setting.LocationConfig.UseWalkingSpeedVariant;
-            tbWalkingSpeedVariantInKilometerPerHour.Text =
-                _setting.LocationConfig.WalkingSpeedVariant.ToString(CultureInfo.InvariantCulture);
+            tbWalkingSpeedVariantInKilometerPerHour.Text = _setting.LocationConfig.WalkingSpeedVariant.ToString(CultureInfo.InvariantCulture);
             cbShowWalkingSpeed.Checked = _setting.LocationConfig.ShowVariantWalking;
             tbMaxSpawnLocationOffset.Text = _setting.LocationConfig.MaxSpawnLocationOffset.ToString();
             tbMaxTravelDistanceInMeters.Text = _setting.LocationConfig.MaxTravelDistanceInMeters.ToString();
-
             tbDelayBetweenPlayerActions.Text = _setting.PlayerConfig.DelayBetweenPlayerActions.ToString();
             tbDelayBetweenPokemonCatch.Text = _setting.PokemonConfig.DelayBetweenPokemonCatch.ToString();
             //TODO:
             //tbDelayBetweenRecycle.Text = _setting.DelayBetweenRecycle.ToString();
-
             cbRandomizeRecycle.Checked = _setting.RecycleConfig.RandomizeRecycle;
             tbRandomRecycleValue.Text = _setting.RecycleConfig.RandomRecycleValue.ToString();
-
             cbEnableHumanizedThrows.Checked = _setting.CustomCatchConfig.EnableHumanizedThrows;
             tbNiceThrowChance.Text = _setting.CustomCatchConfig.NiceThrowChance.ToString();
             tbGreatThrowChance.Text = _setting.CustomCatchConfig.GreatThrowChance.ToString();
@@ -479,7 +475,6 @@ namespace NecroBot2.Forms
                     _setting.Auth.AuthConfig.PtcUsername = UserLoginBox.Text;
                     _setting.Auth.AuthConfig.PtcPassword = UserPasswordBox.Text;
                 }
-                
                 _setting.GoogleWalkConfig.GoogleAPIKey = GoogleApiBox.Text == "" ? null : GoogleApiBox.Text;
                 _setting.Auth.ProxyConfig.UseProxy = useProxyCb.Checked == true ? true : false;
                 _setting.Auth.ProxyConfig.UseProxyHost = proxyHostTb.Text == "" ? null : proxyHostTb.Text;
@@ -502,7 +497,8 @@ namespace NecroBot2.Forms
                 _setting.Auth.DeviceConfig.FirmwareType = FirmwareTypeTb.Text == "" ? null: FirmwareTypeTb.Text;
                 _setting.Auth.DeviceConfig.FirmwareFingerprint = FirmwareFingerprintTb.Text == "" ? null : FirmwareFingerprintTb.Text;
                 _setting.Auth.Save(AuthFilePath);
-#endregion
+                
+                #endregion
 
                 #region NecroBot2.Form Settings
 

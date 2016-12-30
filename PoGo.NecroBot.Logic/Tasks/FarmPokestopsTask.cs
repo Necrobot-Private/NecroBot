@@ -22,6 +22,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 {
     public static class FarmPokestopsTask
     {
+        public delegate void LootPokestopDelegate(FortData pokestop);
+
         private static bool checkForMoveBackToDefault = true;
         public static async Task Execute(ISession session, CancellationToken cancellationToken)
         {
@@ -67,5 +69,12 @@ namespace PoGo.NecroBot.Logic.Tasks
             UseNearbyPokestopsTask.Initialize();
             await UseNearbyPokestopsTask.Execute(session, cancellationToken);
         }
+    
+    private static void OnLootPokestopEvent(FortData pokestop)
+    {
+        LootPokestopEvent?.Invoke(pokestop);
+    }
+
+    public static event LootPokestopDelegate LootPokestopEvent;
     }
 }

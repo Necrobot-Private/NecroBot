@@ -10,14 +10,17 @@ using PoGo.NecroBot.Logic.Utils;
 using POGOProtos.Map.Pokemon;
 using POGOProtos.Networking.Responses;
 using System;
+using System.Collections.Generic;
 
 #endregion
 
 namespace PoGo.NecroBot.Logic.Tasks
 {
+    public delegate void PokemonsEncounterDelegate(List<MapPokemon> pokemons);
+
     public static class CatchIncensePokemonsTask
     {
-        public static async Task Execute(ISession session, CancellationToken cancellationToken)
+         public static async Task Execute(ISession session, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (!session.LogicSettings.CatchPokemon || session.CatchBlockTime > DateTime.Now) return;
@@ -92,6 +95,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                     }
                 }
             }
+        }
+        public static event PokemonsEncounterDelegate PokemonEncounterEvent;
+
+        private static void OnPokemonEncounterEvent(List<MapPokemon> pokemons)
+        {
+            PokemonEncounterEvent?.Invoke(pokemons);
         }
     }
 }

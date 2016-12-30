@@ -3,6 +3,7 @@
 using System.Threading.Tasks;
 using PoGo.NecroBot.Logic.State;
 using SuperSocket.WebSocket;
+using PoGo.NecroBot.Logic.Tasks;
 
 #endregion
 
@@ -19,7 +20,7 @@ namespace NecroBot2.WebSocketHandler.ActionCommands
 
         public async Task Handle(ISession session, WebSocketSession webSocketSession, dynamic message)
         {
-            await Logic.Tasks.LevelUpSpecificPokemonTask.Execute(session, (ulong)message.PokemonId);
+            await LevelUpSpecificPokemonTask.Execute(session, (ulong)message.PokemonId);
         }
     }
 }

@@ -15,6 +15,7 @@ using POGOProtos.Enums;
 using System.Collections;
 using System;
 using PoGo.NecroBot.Logic.Exceptions;
+using System.Collections.Generic;
 
 #endregion
 
@@ -22,6 +23,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 {
     public static class CatchNearbyPokemonsTask
     {
+        public delegate void PokemonsEncounterDelegate(List<MapPokemon> pokemons);
+
         public static async Task Execute(ISession session, CancellationToken cancellationToken, PokemonId priority = PokemonId.Missingno, bool sessionAllowTransfer = true)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -159,6 +162,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                             i.Latitude, i.Longitude));
 
             return pokemons;
+        }
+        public static event PokemonsEncounterDelegate PokemonEncounterEvent;
+
+        private static void OnPokemonEncounterEvent(List<MapPokemon> pokemons)
+        {
+            PokemonEncounterEvent?.Invoke(pokemons);
         }
     }
 }
