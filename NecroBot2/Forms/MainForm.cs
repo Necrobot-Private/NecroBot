@@ -126,8 +126,6 @@ namespace NecroBot2.Forms
 
         private void InitializeBot()
         {
-
-
             var strCulture = Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName;
 
             var culture = CultureInfo.CreateSpecificCulture("en");
@@ -186,8 +184,8 @@ namespace NecroBot2.Forms
             */
 
             Logger.AddLogger(new ConsoleLogger(LogLevel.Service), _subPath);
-            //Logger.AddLogger(new FileLogger(LogLevel.Service), _subPath);
-            //Logger.AddLogger(new WebSocketLogger(LogLevel.Service), _subPath);
+            Logger.AddLogger(new FileLogger(LogLevel.Service), _subPath);
+            Logger.AddLogger(new WebSocketLogger(LogLevel.Service), _subPath);
 
 
 
@@ -391,22 +389,18 @@ namespace NecroBot2.Forms
             {
                 ExcelConfigHelper.MigrateFromObject(settings, excelConfigFile);
             }
-            /*
-        }
 
+            //ProgressBar.Start("NecroBot2 is starting up", 10);
 
-        ProgressBar.Start("NecroBot2 is starting up", 10);
-        
+            
+            if (settings.WebsocketsConfig.UseWebsocket)
+            {
+                var websocket = new WebSocketInterface(settings.WebsocketsConfig.WebSocketPort, _session);
+                _session.EventDispatcher.EventReceived += evt => websocket.Listen(evt, _session);
+            }
+            
 
-        if (settings.WebsocketsConfig.UseWebsocket)
-        {
-            var websocket = new WebSocketInterface(settings.WebsocketsConfig.WebSocketPort, _session);
-            _session.EventDispatcher.EventReceived += evt => websocket.Listen(evt, _session);
-        }
-
-        ProgressBar.Fill(20);
-        */
-        
+            //ProgressBar.Fill(20);
 
             var machine = new StateMachine();
             var stats = new Statistics();
@@ -415,10 +409,13 @@ namespace NecroBot2.Forms
             var strVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString(4);
             stats.DirtyEvent +=
                 () =>
+                {
                     SetStatusText($"[Necrobot2 v{strVersion}] " +
                                     stats.GetTemplatedStats(
                                         _session.Translation.GetTranslation(TranslationString.StatsTemplateString),
                                         _session.Translation.GetTranslation(TranslationString.StatsXpTemplateString)));
+                };                   
+                           
             //ProgressBar.Fill(40);
 
             var aggregator = new StatisticsAggregator(stats);
@@ -437,16 +434,11 @@ namespace NecroBot2.Forms
             //ProgressBar.Fill(80);
 
             //ProgressBar.Fill(90);
-            /*
+            
             _session.Navigation.WalkStrategy.UpdatePositionEvent +=
                 (lat, lng) => _session.EventDispatcher.Send(new UpdatePositionEvent { Latitude = lat, Longitude = lng });
             _session.Navigation.WalkStrategy.UpdatePositionEvent += SaveLocationToDisk;
-            */
-
-            _session.Navigation.WalkStrategy.UpdatePositionEvent +=
-                (lat, lng) => _session.EventDispatcher.Send(new UpdatePositionEvent { Latitude = lat, Longitude = lng });
             _session.Navigation.WalkStrategy.UpdatePositionEvent += Navigation_UpdatePositionEvent;
-            _session.Navigation.WalkStrategy.UpdatePositionEvent += SaveLocationToDisk;
 
             RouteOptimizeUtil.RouteOptimizeEvent +=
                 optimizedroute =>
@@ -572,6 +564,7 @@ namespace NecroBot2.Forms
                 MSniperServiceTask.ConnectToService();
                 _session.EventDispatcher.EventReceived += evt => MSniperServiceTask.AddToList(evt);
             }
+            _settings.Auth.CheckProxy(_session.Translation);
             QuitEvent.WaitOne();
         }
 

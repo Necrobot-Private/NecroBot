@@ -57,6 +57,9 @@
     <ManifestCertificateThumbprint>FABFDFD920EF90E9348A803A9225ADFB5B8BF8AB</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
+    <ManifestKeyFile>NecroBot2_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
     <ApplicationIcon>Resources\Ico.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
@@ -335,7 +338,6 @@
     </Compile>
     <Compile Include="Helpers\MachineIdHelper.cs" />
     <Compile Include="Helpers\ResourceHelper.cs" />
-    <Compile Include="Helpers\RouteOptimizeUtil.cs" />
     <Compile Include="Helpers\S2GMapDrawer.cs" />
     <Compile Include="Helpers\TimeHelper.cs" />
     <Compile Include="Helpers\VersionHelper.cs" />

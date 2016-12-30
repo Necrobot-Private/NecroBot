@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using POGOProtos.Map.Fort;
 
-namespace NecroBot2.Helpers
+namespace PoGo.NecroBot.Logic.Utils
 {
     public delegate void RouteOptimizeDelegate(List<FortData> optimizedRoute);
 

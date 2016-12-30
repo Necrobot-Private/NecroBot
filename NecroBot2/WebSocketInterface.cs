@@ -59,7 +59,7 @@ namespace NecroBot2
                 }
             };
 
-            /*
+            
             var setupComplete = _server.Setup(config);
 
             if (setupComplete == false)
@@ -67,12 +67,12 @@ namespace NecroBot2
                 Logger.Write(translations.GetTranslation(TranslationString.WebSocketFailStart, port), LogLevel.Error);
                 return;
             }
-            */
+            
 
             _server.NewMessageReceived += HandleMessage;
             _server.NewSessionConnected += HandleSession;
 
-            //_server.Start();
+            _server.Start();
         }
 
         private void Broadcast(string message)

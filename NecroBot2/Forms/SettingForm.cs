@@ -449,17 +449,22 @@ namespace NecroBot2.Forms
 
         private void saveBtn_Click(object sender, EventArgs e)
         {
-            if (UserLoginBox.Text.Length == 0 || UserPasswordBox.Text.Length == 0 || GoogleApiBox.Text.Length == 0)
+            if (UserLoginBox.Text.Length == 0 || UserPasswordBox.Text.Length == 0)
             {
                 MessageBox.Show(
                     @"You haven't complete entering your basic information yet." + Environment.NewLine +
-                    @"Either Username, Password or Google API key is empty. Please complete them before saving.",
+                    @"Either Username, Password is empty. Please complete them before saving.",
                     @"Incomplete information", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             else
             {
                 #region Auth Settings
 
+                var lastPosFile = Path.Combine(_setting.ProfileConfigPath, "LastPos.ini");
+                if (File.Exists(lastPosFile))
+                {
+                    File.Delete(lastPosFile);
+                }
                 _setting.Auth.AuthConfig.AuthType = authTypeCb.Text == @"Google" ? AuthType.Google : AuthType.Ptc;
                 if (_setting.Auth.AuthConfig.AuthType == AuthType.Google)
                 {
@@ -785,7 +790,7 @@ namespace NecroBot2.Forms
 
         private void enableAdvSettingCb_Click(object sender, EventArgs e)
         {
-//            proxyGb.Visible = _setting.EnableAdvancedSettings = enableAdvSettingCb.Checked;
+            //proxyGb.Visible = _setting.EnableAdvancedSettings = enableAdvSettingCb.Checked;
             if (enableAdvSettingCb.Checked)
             {
                 _tabAdvSettingTab.Enabled = true;
