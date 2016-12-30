@@ -361,12 +361,6 @@ namespace NecroBot2.Forms
             _session = new Session(new ClientSettings(settings, elevationService), logicSettings, elevationService, translation);
             Logger.SetLoggerContext(_session);
 
-            if (boolNeedsSetup)
-            {
-                startStopBotToolStripMenuItem.Text = "■ Exit";
-                Logger.Write("First time here? Go to settings to set your basic info.", LogLevel.Error);
-            }
-            
             /*
             if (boolNeedsSetup)
             {
@@ -386,6 +380,12 @@ namespace NecroBot2.Forms
                 }
             }
             */
+            if (boolNeedsSetup)
+            {
+                startStopBotToolStripMenuItem.Text = "■ Exit";
+                Logger.Write("First time here? Go to settings to set your basic info.", LogLevel.Error);
+            }
+
 
             if (excelConfigAllow)
             {
@@ -920,10 +920,12 @@ private void InitializePokestopsAndRoute(List<FortData> pokeStops)
                 Instance.Invoke(new Action<Color, string>(ColoredConsoleWrite), color, message);
                 return;
             }
-            Instance.logTextBox.SelectionStart = Instance.logTextBox.Text.Length +1;
-            Instance.logTextBox.ScrollToCaret();
+            //Instance.logTextBox.SelectionStart = Instance.logTextBox.Text.Length +1;
+            //Instance.logTextBox.ScrollToCaret();
             Instance.logTextBox.SelectionColor = color;
-            Instance.logTextBox.AppendText(message);
+            Instance.logTextBox.AppendText(message + "\n");
+            Instance.logTextBox.Select(Instance.logTextBox.Text.Length, +1);
+            Instance.logTextBox.ScrollToCaret();
         }
 
         public static void SetSpeedLable(string text)

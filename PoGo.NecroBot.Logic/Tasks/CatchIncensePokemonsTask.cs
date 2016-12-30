@@ -20,7 +20,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
     public static class CatchIncensePokemonsTask
     {
-         public static async Task Execute(ISession session, CancellationToken cancellationToken)
+        public static async Task Execute(ISession session, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             if (!session.LogicSettings.CatchPokemon || session.CatchBlockTime > DateTime.Now) return;
