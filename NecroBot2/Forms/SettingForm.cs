@@ -479,46 +479,28 @@ namespace NecroBot2.Forms
                     _setting.Auth.AuthConfig.PtcUsername = UserLoginBox.Text;
                     _setting.Auth.AuthConfig.PtcPassword = UserPasswordBox.Text;
                 }
-                if (GoogleApiBox.Text == null)
-                    _setting.GoogleWalkConfig.GoogleAPIKey = null;
+                
+                _setting.GoogleWalkConfig.GoogleAPIKey = GoogleApiBox.Text == "" ? null : GoogleApiBox.Text;
                 _setting.Auth.ProxyConfig.UseProxy = useProxyCb.Checked == true ? true : false;
-                if (proxyHostTb.Text == "")
-                    _setting.Auth.ProxyConfig.UseProxyHost = null;
-                if (proxyPortTb.Text == "")
-                    _setting.Auth.ProxyConfig.UseProxyPort = null;
+                _setting.Auth.ProxyConfig.UseProxyHost = proxyHostTb.Text == "" ? null : proxyHostTb.Text;
+                _setting.Auth.ProxyConfig.UseProxyPort = proxyPortTb.Text == "" ? null : proxyPortTb.Text;
                 _setting.Auth.ProxyConfig.UseProxyAuthentication = useProxyAuthCb.Checked == true ? true : false;
-                if (proxyUserTb.Text == "")
-                    _setting.Auth.ProxyConfig.UseProxyUsername = null;
-                if (proxyPwTb.Text == "")
-                    _setting.Auth.ProxyConfig.UseProxyPassword = proxyPwTb.Text;
+                _setting.Auth.ProxyConfig.UseProxyUsername = proxyUserTb.Text == "" ? null : proxyUserTb.Text;
+                _setting.Auth.ProxyConfig.UseProxyPassword = proxyPwTb.Text == "" ? null : proxyPwTb.Text;
                 _setting.Auth.DeviceConfig.DevicePackageName = "custom";
-                if (DeviceIdTb.Text == "")
-                    _setting.Auth.DeviceConfig.DeviceId = null;
-                if (AndroidBoardNameTb.Text == "")
-                    _setting.Auth.DeviceConfig.AndroidBoardName = null;
-                if (AndroidBootloaderTb.Text == "")
-                    _setting.Auth.DeviceConfig.AndroidBootloader = null;
-                if (DeviceBrandTb.Text == "")
-                    _setting.Auth.DeviceConfig.DeviceBrand = null;
-                if (DeviceModelTb.Text == "")
-                    _setting.Auth.DeviceConfig.DeviceModel = null;
-                if (DeviceModelIdentifierTb.Text == "")
-                    _setting.Auth.DeviceConfig.DeviceModelIdentifier = null;
-                if (DeviceModelBootTb.Text == "")
-                    _setting.Auth.DeviceConfig.DeviceModelBoot = null;
-                if (HardwareManufacturerTb.Text == "")
-                    _setting.Auth.DeviceConfig.HardwareManufacturer = null;
-                if (HardwareModelTb.Text == "")
-                    _setting.Auth.DeviceConfig.HardwareModel = null;
-                if (FirmwareBrandTb.Text == "")
-                    _setting.Auth.DeviceConfig.FirmwareBrand = null;
-                if (FirmwareTagsTb.Text == "")
-                    _setting.Auth.DeviceConfig.FirmwareTags = null;
-                if (FirmwareTypeTb.Text == "")
-                    _setting.Auth.DeviceConfig.FirmwareType = null;
-                if (FirmwareFingerprintTb.Text == "")
-                    _setting.Auth.DeviceConfig.FirmwareFingerprint = null;
-
+                _setting.Auth.DeviceConfig.DeviceId = DeviceIdTb.Text == "" ? null : DeviceIdTb.Text;
+                _setting.Auth.DeviceConfig.AndroidBoardName = AndroidBoardNameTb.Text == "" ? null : AndroidBoardNameTb.Text;
+                _setting.Auth.DeviceConfig.AndroidBootloader = AndroidBootloaderTb.Text == "" ? null : AndroidBootloaderTb.Text;
+                _setting.Auth.DeviceConfig.DeviceBrand = DeviceBrandTb.Text == "" ? null : DeviceBrandTb.Text;
+                _setting.Auth.DeviceConfig.DeviceModel = DeviceModelTb.Text == "" ? null : DeviceModelTb.Text;
+                _setting.Auth.DeviceConfig.DeviceModelIdentifier = DeviceModelIdentifierTb.Text == "" ? null : DeviceModelIdentifierTb.Text;
+                _setting.Auth.DeviceConfig.DeviceModelBoot = DeviceModelBootTb.Text == "" ? null : DeviceModelBootTb.Text;
+                _setting.Auth.DeviceConfig.HardwareManufacturer = HardwareManufacturerTb.Text == "" ? null : HardwareManufacturerTb.Text;
+                _setting.Auth.DeviceConfig.HardwareModel = HardwareModelTb.Text == "" ? null : HardwareModelTb.Text;
+                _setting.Auth.DeviceConfig.FirmwareBrand = FirmwareBrandTb.Text == "" ? null : FirmwareBrandTb.Text;
+                _setting.Auth.DeviceConfig.FirmwareTags = FirmwareTagsTb.Text == "" ? null : FirmwareTagsTb.Text;
+                _setting.Auth.DeviceConfig.FirmwareType = FirmwareTypeTb.Text == "" ? null: FirmwareTypeTb.Text;
+                _setting.Auth.DeviceConfig.FirmwareFingerprint = FirmwareFingerprintTb.Text == "" ? null : FirmwareFingerprintTb.Text;
                 _setting.Auth.Save(AuthFilePath);
 #endregion
 
