@@ -206,7 +206,7 @@ namespace PoGo.NecroBot.Logic.State
                 this.Settings.DefaultLongitude = lng == 0 ? this.Client.CurrentLongitude : lng;
                 this.Stats = new SessionStats(this);
                 this.Reset(this.Settings, this.LogicSettings);
-                CancellationTokenSource.Cancel();
+                //CancellationTokenSource.Cancel();
                 this.CancellationTokenSource = new CancellationTokenSource();
                 
                 this.EventDispatcher.Send(new BotSwitchedEvent() {
