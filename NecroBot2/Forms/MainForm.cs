@@ -54,9 +54,9 @@ namespace NecroBot2.Forms
         private static bool _ignoreKillSwitch;
 
         private static readonly Uri StrKillSwitchUri =
-            new Uri("https://raw.githubusercontent.com/Necrobot-Private/Necrobot2/master/KillSwitch.txt");
+            new Uri("https://raw.githubusercontent.com/Furtif/NecroBot/Graphical_Interfaces/KillSwitch.txt");
         private static readonly Uri StrMasterKillSwitchUri =
-            new Uri("https://raw.githubusercontent.com/Silph-Road/NecroBot/master/PoGo.NecroBot.Logic/MKS.txt");
+            new Uri("https://raw.githubusercontent.com/Furtif/NecroBot/Graphical_Interfaces/PoGo.NecroBot.Logic/MKS.txt");
 
         private static Session _session;
 
@@ -538,7 +538,7 @@ namespace NecroBot2.Forms
 
         private async Task StartBot()
         {
-            await _machine.AsyncStart(new VersionCheckState(), _session, _subPath, false);// excelConfigAllow);
+            await _machine.AsyncStart(new Logic.State.VersionCheckState(), _session, _subPath, false);// excelConfigAllow);
             /*
             try
             {
