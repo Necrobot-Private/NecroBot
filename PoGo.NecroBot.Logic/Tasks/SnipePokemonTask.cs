@@ -29,6 +29,7 @@ using Quobject.SocketIoClientDotNet.Client;
 using Socket = Quobject.SocketIoClientDotNet.Client.Socket;
 using PoGo.NecroBot.Logic.Exceptions;
 using PokemonGo.RocketAPI.Exceptions;
+using PoGo.NecroBot.Logic.Captcha;
 
 #endregion
 
@@ -478,6 +479,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             List<MapPokemon> catchablePokemon;
             int retry = 5;
 
+            bool isCaptchaShow = false;
+
             try
             {
                 do
@@ -509,10 +512,12 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
             catch(CaptchaException ex)
             {
+                isCaptchaShow = true;
                 throw ex;
             }
             finally
             {
+                  if(!isCaptchaShow)
                 await
                     LocationUtils.UpdatePlayerLocationWithAltitude(session,
                         new GeoCoordinate(currentLatitude, currentLongitude, session.Client.CurrentAltitude), 0); // Set speed to 0 for random speed.
@@ -533,6 +538,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 return false;
             }
 
+            isCaptchaShow = false;
             foreach (var pokemon in catchablePokemon)
             {
                 EncounterResponse encounter;
@@ -547,10 +553,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
                 catch (CaptchaException ex)
                 {
+                    isCaptchaShow = true;
                     throw ex;
                 }
                 finally
-                {
+                {   if(!isCaptchaShow)
                     await
                         LocationUtils.UpdatePlayerLocationWithAltitude(session,
                             new GeoCoordinate(currentLatitude, currentLongitude, session.Client.CurrentAltitude), 0); // Set speed to 0 for random speed.

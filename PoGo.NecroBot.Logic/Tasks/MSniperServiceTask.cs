@@ -32,6 +32,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static List<string> VisitedEncounterIds = new List<string>();
         private static List<MSniperInfo2> autoSnipePokemons = new List<MSniperInfo2>();
         private static List<MSniperInfo2> manualSnipePokemons = new List<MSniperInfo2>();
+        private static List<MSniperInfo2> pokedexSnipePokemons = new List<MSniperInfo2>();
         private static bool inProgress = false;
         private static DateTime OutOffBallBlock = DateTime.MinValue;
         public static bool isConnected = false;
@@ -198,6 +199,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         public class MSniperInfo2
         {
+            public DateTime AddedTime { get;  set; }
             public ulong EncounterId { get; set; }
             public double Iv { get; set; }
             public double Latitude { get; set; }
@@ -241,14 +243,18 @@ namespace PoGo.NecroBot.Logic.Tasks
             });
         }
 
-        public static void UnblockSnipe()
+        public static void UnblockSnipe(bool spinned = true)
         {
             snipeFailedCount = 0;
+            waitNextPokestop = spinned;
         }
         static DateTime lastPrintMessageTime = DateTime.Now;
 
         private static bool CheckSnipeConditions(ISession session)
         {
+            if (waitNextPokestop) return false;
+            if (session.LoggedTime > DateTime.Now.AddMinutes(1)) return false; //only snipe after login 1 min.
+
             if (snipeFailedCount >= 3) return false;
             if (session.Stats.CatchThresholdExceeds(session)) return false;
 
@@ -265,6 +271,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                 });
 
             }
+            if (session.Stats.LastSnipeTime.AddMilliseconds(session.LogicSettings.MinDelayBetweenSnipes) > DateTime.Now) return false;
+
             if (session.Stats.SnipeCount < session.LogicSettings.SnipeCountLimit)
                 return true;
 
@@ -383,7 +391,11 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         public static async Task AddSnipeItem(ISession session, MSniperInfo2 item, bool byPassValidation = false)
         {
-            autoSnipePokemons = autoSnipePokemons.Skip(Math.Max(0, autoSnipePokemons.Count - 50)).ToList(); //TODO , remove by expired time, but just need keep last 50 pokemon is good enought.
+            item.AddedTime = DateTime.Now;
+            //just keep pokemon in last 2 min
+            autoSnipePokemons.RemoveAll(x => x.AddedTime.AddMinutes(2) < DateTime.Now);
+            pokedexSnipePokemons.RemoveAll(x => x.AddedTime.AddMinutes(2) < DateTime.Now);
+
             if (OutOffBallBlock > DateTime.Now ||
                 
                 autoSnipePokemons.Exists(x => x.EncounterId == item.EncounterId && item.EncounterId > 0) ||
@@ -395,10 +407,12 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 var pokedex = await session.Inventory.GetPokeDexItems();
 
-                if (!pokedex.Exists(x => x.InventoryItemData?.PokedexEntry?.PokemonId == (PokemonId)item.PokemonId) && !manualSnipePokemons.Exists(p=>p.PokemonId == item.PokemonId))
+                if (!pokedex.Exists(x => x.InventoryItemData?.PokedexEntry?.PokemonId == (PokemonId)item.PokemonId) && 
+                    !pokedexSnipePokemons.Exists(p=>p.PokemonId == item.PokemonId) &&
+                    (!session.LogicSettings.AutosnipeVerifiedOnly || (session.LogicSettings.AutosnipeVerifiedOnly && item.EncounterId >0)))
                 {
                     session.EventDispatcher.Send(new WarnEvent() { Message = session.Translation.GetTranslation(TranslationString.SnipePokemonNotInPokedex, session.Translation.GetPokemonTranslation((PokemonId)item.PokemonId)) });
-                    manualSnipePokemons.Add(item);//Add as hight priority snipe entry
+                    pokedexSnipePokemons.Add(item);//Add as hight priority snipe entry
 
                 }
             }
@@ -463,6 +477,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         }
 
         static int snipeFailedCount = 0;
+        static bool waitNextPokestop = true;
         public static async Task Execute(ISession session, CancellationToken cancellationToken)
         {
             if (!CheckSnipeConditions(session)) return;
@@ -499,21 +514,49 @@ namespace PoGo.NecroBot.Logic.Tasks
                     File.Delete(pth);
                     if (mSniperLocation2 == null) mSniperLocation2 = new List<MSniperInfo2>();
                 }
+                if(pokedexSnipePokemons.Count >0)
+                {
+                    mSniperLocation2.Add(pokedexSnipePokemons.OrderByDescending(x=>x.PokemonId).FirstOrDefault());
+                    pokedexSnipePokemons.Clear();
+
+                }
                 if (manualSnipePokemons.Count > 0)
                 {
+                    
                     mSniperLocation2.AddRange(manualSnipePokemons);
                     manualSnipePokemons.Clear();
                 }
                 else {
-                    autoSnipePokemons.Reverse();
-                    mSniperLocation2.AddRange(autoSnipePokemons.Take(10));
-                    autoSnipePokemons.Clear();
+
+                    autoSnipePokemons.RemoveAll(x => x.AddedTime.AddMinutes(2) < DateTime.Now);
+                    autoSnipePokemons.OrderByDescending(x => x.PokemonId).ThenByDescending(x => x.AddedTime);
+                    var batch = autoSnipePokemons.Take(5);
+                    //mSniperLocation2.AddRange(autoSnipePokemons.Take(10));
+                    //autoSnipePokemons.Clear();
+                    if (batch!= null && batch.Count()>0)
+                    {
+                        mSniperLocation2.AddRange(batch);
+                        autoSnipePokemons.RemoveAll(x=> batch.Contains(x));
+                    }
                 }
                 foreach (var location in mSniperLocation2)
                 {
                     if (session.Stats.CatchThresholdExceeds(session)) break;
 
+                    if (pokedexSnipePokemons.Count > 0) break;
+
                     if (location.EncounterId > 0 && session.Cache[location.EncounterId.ToString()] != null) continue;
+
+                    if (!await SnipePokemonTask.CheckPokeballsToSnipe(session.LogicSettings.MinPokeballsWhileSnipe + 1, session, cancellationToken))
+                    {
+                        session.EventDispatcher.Send(new WarnEvent()
+                        {
+                            Message = session.Translation.GetTranslation(Common.TranslationString.AutoSnipeDisabled)
+                        });
+
+                        OutOffBallBlock = DateTime.Now.AddMinutes(5);
+                        break;
+                    }
 
                     //If bot already catch the same pokemon, and very close this location. 
                     string uniqueCacheKey = $"{session.Settings.PtcUsername}{session.Settings.GoogleUsername}{Math.Round(location.Latitude, 6)}{location.PokemonId}{Math.Round(location.Longitude, 6)}";
@@ -544,6 +587,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     await Task.Delay(1000, cancellationToken);
                     session.Stats.LastSnipeTime = DateTime.Now;
                     session.Stats.SnipeCount++;
+                    waitNextPokestop = true;
                 }
             }
             catch (ActiveSwitchByRuleException ex)
@@ -556,6 +600,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
             catch (Exception ex)
             {
+                if (ex.InnerException != null && ex.InnerException is CaptchaException) throw ex.InnerException;
+
                 File.Delete(pth);
                 var ee = new ErrorEvent { Message = ex.Message };
                 if (ex.InnerException != null) ee.Message = ex.InnerException.Message;

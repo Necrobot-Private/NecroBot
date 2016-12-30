@@ -413,7 +413,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         }
 
                     }
-                    MSniperServiceTask.UnblockSnipe();
+                    MSniperServiceTask.UnblockSnipe(false);
                     if (fortSearch.Result == FortSearchResponse.Types.Result.InventoryFull)
                     {
                         await RecycleItemsTask.Execute(session, cancellationToken);
