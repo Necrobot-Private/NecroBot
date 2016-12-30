@@ -17,7 +17,7 @@ using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.Model.Settings;
 using PoGo.NecroBot.Logic.Utils;
 using PoGo.NecroBot.Logic.State;
-
+using System.Windows.Forms;
 
 #endregion
 
@@ -60,10 +60,12 @@ namespace NecroBot2.Logic.State
                 });
                 return new LoginState();
             }
+            
             if ( !autoUpdate )
             {
                 Logger.Write( "New update detected, would you like to update? Y/N", LogLevel.Update );
 
+                /*
                 var boolBreak = false;
                 while( !boolBreak )
                 {
@@ -81,6 +83,17 @@ namespace NecroBot2.Logic.State
                             Logger.Write( session.Translation.GetTranslation( TranslationString.PromptError, "Y", "N" ), LogLevel.Error );
                             continue;
                     }
+                }
+                */
+                DialogResult result = MessageBox.Show("New update detected, would you like to update? Y/N", Application.ProductName + " - Update", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                switch (result)
+                {
+                    case DialogResult.Yes: { break; }
+                    case DialogResult.No:
+                        {
+                            Logger.Write("Update Skipped", LogLevel.Update);
+                            return new LoginState();
+                        }
                 }
             }
 

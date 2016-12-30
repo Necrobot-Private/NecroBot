@@ -649,11 +649,13 @@ namespace NecroBot2.Forms
 
                         if (strStatus.ToLower().Contains("disable"))
                         {
-                            Logger.Write(strReason + $"\n", LogLevel.Warning);
+                            //Logger.Write(strReason + $"\n", LogLevel.Warning);
+                            Logger.Write(strReason, LogLevel.Warning);
 
                             if (PromptForKillSwitchOverride())
                             {
                                 // Override
+                                /*
                                 Logger.Write("Overriding killswitch... you have been warned!", LogLevel.Warning);
                                 return false;
                             }
@@ -661,10 +663,28 @@ namespace NecroBot2.Forms
                             Logger.Write("The bot will now close, please press enter to continue", LogLevel.Error);
                             //Console.ReadLine();
                             return true;
+                            */
+                                DialogResult result = MessageBox.Show(strReason, Application.ProductName + " - Use Old API detected", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                                switch (result)
+                                {
+                                    case DialogResult.Yes:
+                                        {
+                                            DialogResult result1 = MessageBox.Show("!!! You risk permanent BAN !!!\n\n " + Application.ProductName + " is not responsible for any banned account.\n\n Are you sure you want to continue?", Application.ProductName + " -Are you sure??", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                                            switch (result1)
+                                            {
+                                                case DialogResult.No: { Application.Exit(); break; }
+                                            }
+                                            break;
+                                        }
+                                    case DialogResult.No: { Application.Exit(); break; }
+                                }
+                                Logger.Write(strReason, LogLevel.Warning);
+                                Logger.Write("The robot should be closed.", LogLevel.Warning);
+                            }
                         }
+                        else
+                            return false;
                     }
-                    else
-                        return false;
                 }
                 catch (WebException)
                 {
@@ -686,6 +706,7 @@ namespace NecroBot2.Forms
         {
             Logger.Write("Do you want to override killswitch to bot at your own risk? Y/N", LogLevel.Warning);
 
+            /*
             while (true)
             {
                 var strInput = Console.ReadLine().ToLower();
@@ -702,9 +723,17 @@ namespace NecroBot2.Forms
                         continue;
                 }
             }
+            */
+            DialogResult result = MessageBox.Show("Do you want to override killswitch to bot at your own risk? Y/N", Application.ProductName + " - Use Old API detected", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            switch (result)
+            {
+                case DialogResult.Yes: return true;
+                case DialogResult.No: return false;
+            }
+            return false;
         }
-    
-private void InitializePokestopsAndRoute(List<FortData> pokeStops)
+
+        private void InitializePokestopsAndRoute(List<FortData> pokeStops)
         {
             SynchronizationContext.Post(o =>
             {
