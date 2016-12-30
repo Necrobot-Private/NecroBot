@@ -179,6 +179,10 @@ namespace PoGo.NecroBot.Logic.State
             {
                 //sometime the switch active happen same time with login by token expired. we need ignore it 
             }
+            catch (APIBadRequestException ex)
+            {
+                throw new LoginFailedException();
+            }
             
             session.LoggedTime = DateTime.Now;
             if(this.pokemonToCatch != PokemonId.Missingno)
