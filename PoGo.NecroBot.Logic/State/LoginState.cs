@@ -54,7 +54,7 @@ namespace PoGo.NecroBot.Logic.State
             {
                 throw ae.Flatten().InnerException;
             }
-            catch (LoginFailedException ex)
+            catch (APIBadRequestException ex)
             {
                 session.EventDispatcher.Send(new ErrorEvent
                 {
@@ -62,7 +62,7 @@ namespace PoGo.NecroBot.Logic.State
                 });
                 
                 await Task.Delay(2000, cancellationToken);
-                throw ex;
+                throw new LoginFailedException();
             }
             catch (Exception ex) when (ex is PtcOfflineException || ex is AccessTokenExpiredException)
             {

@@ -182,6 +182,7 @@ namespace PoGo.NecroBot.CLI
                 OnPokemonData(session, e.Data);
                 ONFPMBridgeData(session, e.Data);
             }
+
             catch (Exception ex)
             {
 #if DEBUG
@@ -238,7 +239,8 @@ namespace PoGo.NecroBot.CLI
                             PokemonId = (short)data.PokemonId,
                             Iv = data.IV,
                             Move1 = move1,
-                            Move2 = move2
+                            Move2 = move2       ,
+                            ExpiredTime =data.ExpireTimestamp
                         }).Wait();
                     }
                 
@@ -280,6 +282,7 @@ namespace PoGo.NecroBot.CLI
                     PokemonId = (short)data.PokemonId,
                     Iv = data.IV,
                     Move1 = move1,
+                    ExpiredTime = data.ExpireTimestamp        ,
                     Move2 = move2
                 }, true).Wait();
             }
