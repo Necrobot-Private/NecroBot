@@ -95,7 +95,7 @@ namespace NecroBot2.Logic.State
             var baseDir = Directory.GetCurrentDirectory();
             var downloadFilePath = Path.Combine(baseDir, zipName);
             var tempPath = Path.Combine(baseDir, "tmp");
-            var extractedDir = Path.Combine(tempPath, "NecroBot2.GUI");
+            var extractedDir = Path.Combine(tempPath, "Release");
             var destinationDir = baseDir + Path.DirectorySeparatorChar;
             Logger.Write(downloadLink, LogLevel.Info);
 

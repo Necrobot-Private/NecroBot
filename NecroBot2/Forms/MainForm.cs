@@ -29,7 +29,6 @@ using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Utils;
 using PoGo.NecroBot.Logic.Model.Settings;
 using PoGo.NecroBot.Logic.Service.Elevation;
-using Logger = PoGo.NecroBot.Logic.Logging.Logger;
 using NecroBot2.Helpers;
 using NecroBot2.Models;
 using NecroBot2.Logic.Tasks;
@@ -51,7 +50,7 @@ namespace NecroBot2.Forms
         private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
         private static string _subPath = "";
         private static bool _enableJsonValidation = true;
-        private static bool _ignoreKillSwitch;
+        //private static bool _ignoreKillSwitch;
 
         private static readonly Uri StrKillSwitchUri =
             new Uri("https://raw.githubusercontent.com/Furtif/NecroBot/Graphical_Interfaces/KillSwitch.txt");
@@ -71,7 +70,6 @@ namespace NecroBot2.Forms
         private readonly GMapOverlay _searchAreaOverlay = new GMapOverlay("areas");
 
         private PointLatLng _currentLatLng;
-        private ConsoleLogger _logger;
         private StateMachine _machine;
         private List<PointLatLng> _routePoints;
         private GlobalSettings _settings;
@@ -95,20 +93,10 @@ namespace NecroBot2.Forms
             InitializePokemonForm();
             InitializeMap();
             VersionHelper.CheckVersion();
-            VersionHelper.CheckKillSwitch();
+            //VersionHelper.CheckKillSwitch();
             //showMoreCheckBox.Enabled = false;
             btnRefresh.Enabled = false;
-   /*         if (boolNeedsSetup)
-            {
-                startStopBotToolStripMenuItem.Text = "■ Exit";
-                Logger.Write("First time here? Go to settings to set your basic info.", LogLevel.Error);
-            }
-            else
-            {
-            
-         //       GlobalSettings.Load(_subPath, _enableJsonValidation);
-            }*/
-         }
+        }
 
         private void InitializeMap()
         {
@@ -404,6 +392,7 @@ namespace NecroBot2.Forms
 
 
         ProgressBar.Start("NecroBot2 is starting up", 10);
+        */
 
         if (settings.WebsocketsConfig.UseWebsocket)
         {
@@ -411,8 +400,8 @@ namespace NecroBot2.Forms
             _session.EventDispatcher.EventReceived += evt => websocket.Listen(evt, _session);
         }
 
-        ProgressBar.Fill(20);
-        */
+        //ProgressBar.Fill(20);
+        
 
             var machine = new StateMachine();
             var stats = new Statistics();
@@ -431,11 +420,11 @@ namespace NecroBot2.Forms
             //ProgressBar.Fill(50);
             var listener = new ConsoleEventListener();
             //ProgressBar.Fill(60);
-            //var snipeEventListener = new SniperEventListener();
+            var snipeEventListener = new SniperEventListener();
 
             _session.EventDispatcher.EventReceived += evt => listener.Listen(evt, _session);
             _session.EventDispatcher.EventReceived += evt => aggregator.Listen(evt, _session);
-            //_session.EventDispatcher.EventReceived += evt => snipeEventListener.Listen(evt, _session);
+            _session.EventDispatcher.EventReceived += evt => snipeEventListener.Listen(evt, _session);
 
             //ProgressBar.Fill(70);
 
@@ -448,9 +437,11 @@ namespace NecroBot2.Forms
                 (lat, lng) => _session.EventDispatcher.Send(new UpdatePositionEvent { Latitude = lat, Longitude = lng });
             _session.Navigation.WalkStrategy.UpdatePositionEvent += SaveLocationToDisk;
             */
+
             _session.Navigation.WalkStrategy.UpdatePositionEvent +=
                 (lat, lng) => _session.EventDispatcher.Send(new UpdatePositionEvent { Latitude = lat, Longitude = lng });
             _session.Navigation.WalkStrategy.UpdatePositionEvent += Navigation_UpdatePositionEvent;
+            _session.Navigation.WalkStrategy.UpdatePositionEvent += SaveLocationToDisk;
 
             RouteOptimizeUtil.RouteOptimizeEvent +=
                 optimizedroute =>
@@ -561,13 +552,13 @@ namespace NecroBot2.Forms
                 await HumanWalkSnipeTask.StartFastPokemapAsync(_session, _session.CancellationTokenSource.Token);// that need to keep data  live 
             }
 
-            /*
+            
             if (_session.LogicSettings.DataSharingEnable)
             {
-                BotDataSocketClient.StartAsync(_session);
+                await BotDataSocketClient.StartAsync(_session);
                 _session.EventDispatcher.EventReceived += evt => BotDataSocketClient.Listen(evt, _session);
             }
-            */
+            
             _settings.CheckProxy(_session.Translation);
 
             if (_session.LogicSettings.ActivateMSniper)
@@ -575,7 +566,6 @@ namespace NecroBot2.Forms
                 MSniperServiceTask.ConnectToService();
                 _session.EventDispatcher.EventReceived += evt => MSniperServiceTask.AddToList(evt);
             }
-            _settings.GoogleWalkConfig.GoogleAPIKey = "AIzaSyBjrq_CCDjmgNLJZnLBrMRgIxTJrgW_LaY";
             QuitEvent.WaitOne();
         }
 
