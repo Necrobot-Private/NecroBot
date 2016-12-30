@@ -795,14 +795,18 @@ namespace NecroBot2.Forms
             {
                 _tabAdvSettingTab.Enabled = true;
                 tabControl.TabPages.Add(_tabAdvSettingTab);
+                proxyGb.Visible = true;
+                
             }
             else
             {
                 _tabAdvSettingTab.Enabled = false;
                 tabControl.TabPages.Remove(_tabAdvSettingTab);
+                proxyGb.Visible = false;
             }
         }
 
         #endregion
-    }
+
+     }
 }
