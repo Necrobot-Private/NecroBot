@@ -10,7 +10,7 @@ namespace NecroBot2.Helpers
     public class VersionHelper
     {
         private static readonly Uri StrKillSwitchUri =
-                    new Uri("https://raw.githubusercontent.com/Furtif/Necrobot/Graphical_Interface/KillSwitch.txt");
+                    new Uri("https://raw.githubusercontent.com/Furtif/Necrobot/Graphical_Interfaces/KillSwitch.txt");
         public static void CheckVersion()
         {           
             try
@@ -18,7 +18,7 @@ namespace NecroBot2.Helpers
                 Logger.Write("You can find it at https://github.com/Furtif/NecroBot/releases");
                 Logger.Write("Your version is " + Application.ProductVersion);
                 Logic.State.VersionCheckState.IsLatest();
-                Logger.Write("GitHub version is " + VersionCheckState.RemoteVersion);
+                Logger.Write("GitHub version is " + Logic.State.VersionCheckState.RemoteVersion);
             }
             catch (Exception)
             {

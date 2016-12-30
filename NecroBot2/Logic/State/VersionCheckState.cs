@@ -26,7 +26,7 @@ namespace NecroBot2.Logic.State
     public class VersionCheckState : IState
     {
         public const string VersionUri =
-            "https://raw.githubusercontent.com/Furtif/NecroBot/Graphical_Interface/NecroBot2/Properties/AssemblyInfo.cs";
+            "https://raw.githubusercontent.com/Furtif/NecroBot/Graphical_Interfaces/NecroBot2/Properties/AssemblyInfo.cs";
 
         public const string LatestReleaseApi =
             "https://api.github.com/repos/Furtif/NecroBot/releases/latest";
