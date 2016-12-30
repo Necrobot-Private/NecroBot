@@ -232,7 +232,7 @@ namespace PoGo.NecroBot.Logic.State
                     Console.ReadKey();
                     System.Environment.Exit(1);
                 }
-                catch(TokenRefreshException ex)
+                /*catch (TokenRefreshException ex)
                 {
                     session.EventDispatcher.Send(new ErrorEvent() { Message = ex.Message });
 
@@ -240,7 +240,7 @@ namespace PoGo.NecroBot.Logic.State
                         session.ReInitSessionWithNextBot();
                     state = new LoginState();
                     
-                }
+                }*/
                 
                 catch (LoginFailedException ex)
                 {
