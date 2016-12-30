@@ -175,10 +175,13 @@ namespace NecroBot2.Forms
                         break;
                 }
             }
+            */
 
             bool excelConfigAllow = false;
+            /*
             if (commandLine["provider"] != null && commandLine["provider"] == "excel")
             {
+
                 excelConfigAllow = true;
             }
             */
@@ -202,7 +205,7 @@ namespace NecroBot2.Forms
             {
                 // Load the settings from the config file
                 settings = GlobalSettings.Load(_subPath, _enableJsonValidation);
-                /*
+                
                 if (excelConfigAllow)
                 {
                     if (!File.Exists(excelConfigFile))
@@ -217,7 +220,7 @@ namespace NecroBot2.Forms
 
                     Logger.Write("Bot will run with your excel config, loading excel config");
                 }
-                */
+                
             }
             else
             {
@@ -383,16 +386,18 @@ namespace NecroBot2.Forms
                     return;
                 }
             }
+            */
 
             if (excelConfigAllow)
             {
                 ExcelConfigHelper.MigrateFromObject(settings, excelConfigFile);
             }
+            /*
         }
 
 
         ProgressBar.Start("NecroBot2 is starting up", 10);
-        */
+        
 
         if (settings.WebsocketsConfig.UseWebsocket)
         {
@@ -400,7 +405,8 @@ namespace NecroBot2.Forms
             _session.EventDispatcher.EventReceived += evt => websocket.Listen(evt, _session);
         }
 
-        //ProgressBar.Fill(20);
+        ProgressBar.Fill(20);
+        */
         
 
             var machine = new StateMachine();
