@@ -41,7 +41,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             var unusedEggs = (await session.Inventory.GetEggs())
                 .Where(x => string.IsNullOrEmpty(x.EggIncubatorId))
-                .OrderBy(x => x.EggKmWalkedTarget - x.EggKmWalkedStart)
+                .OrderBy(x => x.CreationTimeMs)
+                //.OrderBy(x => x.EggKmWalkedTarget - x.EggKmWalkedStart)
                 .ToList();
 
             var rememberedIncubatorsFilePath = Path.Combine(session.LogicSettings.ProfilePath, "temp", "incubators.json");
