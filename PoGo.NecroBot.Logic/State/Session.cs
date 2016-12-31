@@ -19,6 +19,7 @@ using System.Runtime.Caching;
 using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.Utils;
 using System.IO;
+using PoGo.NecroBot.Logic.Tasks;
 
 #endregion
 
@@ -159,7 +160,7 @@ namespace PoGo.NecroBot.Logic.State
         public bool ReInitSessionWithNextBot(AuthConfig bot = null, double lat = 0, double lng = 0, double att = 0)
         {
             this.CatchBlockTime = DateTime.Now; //remove any block
-            
+            MSniperServiceTask.BlockSnipe();
             var currentAccount = this.accounts.FirstOrDefault(x => (x.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Ptc && x.PtcUsername == this.Settings.PtcUsername) ||
                                         (x.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Google && x.GoogleUsername == this.Settings.GoogleUsername));
             if (LoggedTime != DateTime.MinValue)
