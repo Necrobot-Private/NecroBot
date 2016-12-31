@@ -28,7 +28,7 @@ namespace PoGo.NecroBot.Logic.Tasks
     public static class MSniperServiceTask
     {
         #region Variables
-
+        private const int SNIPE_SAFE_TIME = 120;
         public static List<EncounterInfo> LocationQueue = new List<EncounterInfo>();
         public static List<string> VisitedEncounterIds = new List<string>();
         private static List<MSniperInfo2> autoSnipePokemons = new List<MSniperInfo2>();
@@ -305,6 +305,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             double lat = session.Client.CurrentLatitude;
             double lon = session.Client.CurrentLongitude;
 
+            bool captchaShowed = false;
             EncounterResponse encounter;
             try
             {
@@ -315,7 +316,6 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 encounter = await session.Client.Encounter.EncounterPokemon(encounterId.EncounterId, encounterId.SpawnPointId);
 
-                await Task.Delay(1000, cancellationToken);
             }
             catch (CaptchaException ex)
             {
@@ -323,10 +323,12 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
             catch(Exception ex)
             {
+                captchaShowed = true;
                 return false;
             }
             finally
             {
+                if(!captchaShowed)
                 await LocationUtils.UpdatePlayerLocationWithAltitude(session,
                     new GeoCoordinate(lat, lon, session.Client.CurrentAltitude), 0);  // Speed set to 0 for random speed.
             }
@@ -346,7 +348,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             else
             {
                 Logger.Write($"Pokemon despawned or wrong link format!", LogLevel.Service, ConsoleColor.Gray);
-                return true;// No success to work with
+                return false;
+                //return await CatchWithSnipe(session, encounterId, cancellationToken);// No success to work with
             }
 
             var pokemon = new MapPokemon
@@ -395,11 +398,10 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             item.AddedTime = DateTime.Now;
             //just keep pokemon in last 2 min
-            autoSnipePokemons.RemoveAll(x => x.AddedTime.AddMinutes(2) < DateTime.Now);// || (x.ExpiredTime > 0 && x.ExpiredTime < DateTime.Now.ToUnixTime()));
+            autoSnipePokemons.RemoveAll(x => x.AddedTime.AddSeconds(SNIPE_SAFE_TIME) < DateTime.Now);// || (x.ExpiredTime > 0 && x.ExpiredTime < DateTime.Now.ToUnixTime()));
             pokedexSnipePokemons.RemoveAll(x => x.AddedTime.AddMinutes(2) < DateTime.Now);
 
             if (OutOffBallBlock > DateTime.Now ||
-                
                 autoSnipePokemons.Exists(x => x.EncounterId == item.EncounterId && item.EncounterId > 0) ||
                 (item.EncounterId > 0 && session.Cache[item.EncounterId.ToString()] != null) ||
                 (session.LogicSettings.SnipeIgnoreUnknownIv && item.Iv == 0 && !byPassValidation) ) return;
@@ -491,7 +493,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 if ((!File.Exists(pth) && autoSnipePokemons.Count == 0) || OutOffBallBlock > DateTime.Now)
                 {
-                    autoSnipePokemons.Clear();
+                    //autoSnipePokemons.Clear();
                     return;
                 }
 
@@ -530,8 +532,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
                 else {
 
-                    autoSnipePokemons.RemoveAll(x => x.AddedTime.AddMinutes(2) < DateTime.Now);// || ( x.ExpiredTime >0  && x.ExpiredTime < DateTime.Now.ToUnixTime()));
-                    autoSnipePokemons.OrderByDescending(x => x.PokemonId).ThenByDescending(x => x.AddedTime);
+                    autoSnipePokemons.RemoveAll(x => x.AddedTime.AddSeconds(SNIPE_SAFE_TIME) < DateTime.Now);// || ( x.ExpiredTime >0  && x.ExpiredTime < DateTime.Now.ToUnixTime()));
+                    autoSnipePokemons.OrderByDescending(x=> PokemonGradeHelper.GetPokemonGrade((PokemonId) x.PokemonId))
+                                     .ThenByDescending(x=>x.Iv)
+                                     .ThenByDescending(x => x.PokemonId)
+                                     .ThenByDescending(x => x.AddedTime);
+
                     var batch = autoSnipePokemons.Take(5);
                     //mSniperLocation2.AddRange(autoSnipePokemons.Take(10));
                     //autoSnipePokemons.Clear();
@@ -559,6 +565,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                         OutOffBallBlock = DateTime.Now.AddMinutes(5);
                         break;
                     }
+
+                    if (location.AddedTime.AddSeconds(SNIPE_SAFE_TIME) < DateTime.Now) continue;
 
                     //If bot already catch the same pokemon, and very close this location. 
                     string uniqueCacheKey = $"{session.Settings.PtcUsername}{session.Settings.GoogleUsername}{Math.Round(location.Latitude, 6)}{location.PokemonId}{Math.Round(location.Longitude, 6)}";
