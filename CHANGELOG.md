@@ -1,4 +1,13 @@
 # Change Log
+
+## [v1.0.0.45](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.45) (2016-12-27)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.40...v1.0.0.45)
+## Feature
+- Improve autosniper feature
+- Allow snipe pokemon not in dex
+- Fix misc bug
+
+
 ## [v1.0.0.36](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.37) (2016-12-27)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.36...v1.0.0.37)
 ## Feature
