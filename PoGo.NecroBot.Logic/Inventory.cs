@@ -47,6 +47,7 @@ namespace PoGo.NecroBot.Logic
              {
                  //Console.WriteLine("################# INVENTORY UPDATE ######################");
                  _cachedInventory = refreshedInventoryData;
+                 _lastRefresh = DateTime.Now;
              };
         }
 
@@ -430,8 +431,8 @@ namespace PoGo.NecroBot.Logic
 
         public async Task<List<InventoryItem>> GetPokeDexItems()
         {
-            List<InventoryItem> PokeDex = new List<InventoryItem>();
-            var inventory = await _client.Inventory.GetInventory();
+            //List<InventoryItem> PokeDex = new List<InventoryItem>();
+            var inventory = await GetCachedInventory(); 
 
             return (from items in inventory.InventoryDelta.InventoryItems
                     where items.InventoryItemData?.PokedexEntry != null
