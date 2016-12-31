@@ -28,7 +28,7 @@ namespace PoGo.NecroBot.Logic.Tasks
     public static class MSniperServiceTask
     {
         #region Variables
-        private const int SNIPE_SAFE_TIME = 120;
+        private const int SNIPE_SAFE_TIME = 180;
         public static List<EncounterInfo> LocationQueue = new List<EncounterInfo>();
         public static List<string> VisitedEncounterIds = new List<string>();
         private static List<MSniperInfo2> autoSnipePokemons = new List<MSniperInfo2>();
@@ -538,7 +538,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                      .ThenByDescending(x => x.PokemonId)
                                      .ThenByDescending(x => x.AddedTime);
 
-                    var batch = autoSnipePokemons.Take(5);
+                    var batch = autoSnipePokemons.Take(10);
                     //mSniperLocation2.AddRange(autoSnipePokemons.Take(10));
                     //autoSnipePokemons.Clear();
                     if (batch!= null && batch.Count()>0)
