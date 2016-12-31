@@ -308,6 +308,13 @@ namespace PoGo.NecroBot.Logic.State
                         state = new LoginState();
                     }
                 }
+                catch (HasherException ex)
+                {
+                    session.EventDispatcher.Send(new ErrorEvent { Message = ex.Message });
+                    session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey) });
+                    Console.ReadKey();
+                    System.Environment.Exit(1);
+                }
                 catch (Exception ex)
                 {
                     session.EventDispatcher.Send(new ErrorEvent { Message = "Pokemon Servers might be offline / unstable. Trying again..." });
