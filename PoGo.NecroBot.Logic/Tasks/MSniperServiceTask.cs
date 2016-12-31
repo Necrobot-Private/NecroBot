@@ -189,6 +189,12 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
         }
 
+        static bool isBlocking = true; //turn it on when account switching, do not add or run snipe
+        public static void BlockSnipe()
+        {
+            isBlocking = true;
+        }
+
         public class HubData
         {
             [JsonProperty("H")]
@@ -250,6 +256,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         public static void UnblockSnipe(bool spinned = true)
         {
+            isBlocking = false;//block release whenever first pokestop looted.
+
             snipeFailedCount = 0;
             waitNextPokestop = spinned;
         }
@@ -401,6 +409,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         public static async Task AddSnipeItem(ISession session, MSniperInfo2 item, bool byPassValidation = false)
         {
+            if (isBlocking) return;
             lock (locker)
             {
                 item.AddedTime = DateTime.Now;
@@ -562,7 +571,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
                 foreach (var location in mSniperLocation2)
                 {
-                    if (session.Stats.CatchThresholdExceeds(session)) break;
+                    if (session.Stats.CatchThresholdExceeds(session) || isBlocking) break;
                     lock (locker)
                     {
                         if (pokedexSnipePokemons.Count > 0) break;

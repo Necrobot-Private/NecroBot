@@ -180,13 +180,13 @@ namespace PoGo.NecroBot.CLI
             {
                 OnSnipePokemon(session, e.Data);
                 OnPokemonData(session, e.Data);
-                ONFPMBridgeData(session, e.Data);
+                //ONFPMBridgeData(session, e.Data); //Nolonger use
             }
 
             catch (Exception ex)
             {
 #if DEBUG
-                Logger.Write("ERROR TO ADD SNIPE< DEBUG ONLY " + ex.Message, LogLevel.Info, ConsoleColor.Yellow);
+                Logger.Write("ERROR TO ADD SNIPE< DEBUG ONLY " + ex.Message + "\r\n " + ex.StackTrace, LogLevel.Info, ConsoleColor.Yellow);
 #endif
             }
 
