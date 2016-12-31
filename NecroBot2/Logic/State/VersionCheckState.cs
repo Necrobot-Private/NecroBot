@@ -269,8 +269,7 @@ namespace NecroBot2.Logic.State
             var dest = destPath;
             try
             {
-                //TODO: Fix this
-                //ZipFile.ExtractToDirectory(source, dest);
+                ZipFile.ExtractToDirectory(source, dest);
             }
             catch (Exception)
             {
