@@ -1,5 +1,4 @@
 ﻿using MahApps.Metro.Controls;
-using PoGo.NecroBot.Logic.Model.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +18,8 @@ using System.ComponentModel.DataAnnotations;
 using POGOProtos.Enums;
 using PoGo.NecroBot.Logic;
 using PoGo.Necrobot.Window;
+using PoGo.NecroBot.Logic.Model.Settings;
+using PoGo.Necrobot.Window.Converters;
 
 namespace PoGo.Necrobot.Window
 {
@@ -27,17 +28,65 @@ namespace PoGo.Necrobot.Window
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
+
+        public GlobalSettings Settings { get; set; }
+        MetroWindow main;
+        private string fileName;
+        public MainWindow(MetroWindow parent, string filename)
+        {
+            main = parent;
+            this.Settings = GlobalSettings.Load(filename);
+            BackwardCompitableUpdate(this.Settings);
+            this.fileName = filename;
+            InitializeComponent();
+            InitForm();
+            this.WindowState = WindowState.Maximized;
+        }
+        private static void BackwardCompitableUpdate(GlobalSettings setting)
+        {
+            //foreach (var item in setting.PokemonsTransferFilter)
+            //{
+            //    setting.PokemonsTransferFilter[item].AllowTransfer = true;
+            //    item.Value.AllowTransfer = true;
+            //}
+            foreach (var item in setting.PokemonsNotToTransfer)
+            {
+                if (setting.PokemonsTransferFilter.ContainsKey(item))
+                {
+                    setting.PokemonsTransferFilter[item].DoNotTransfer = true;
+                }
+                else
+                {
+                    setting.PokemonsTransferFilter.Add(item, new TransferFilter()
+                    {
+                        AllowTransfer = true,
+                        DoNotTransfer = true
+                    });
+                }
+            }
+            foreach (var item in setting.PokemonsToEvolve)
+            {
+                if (!setting.EvolvePokemonFilter.ContainsKey(item))
+                {
+                    setting.EvolvePokemonFilter.Add(item, new EvolveFilter()
+                    {
+
+                    });
+                }
+            }
+        }
         public MainWindow()
         {
             InitializeComponent();
             InitForm();
             this.WindowState = WindowState.Maximized;
-
         }
+        
+
         public void InitForm1()
         {
-            GlobalSettings setting = new GlobalSettings();
-            foreach (var item in setting.GetType().GetFields())
+            GlobalSettings Settings = new GlobalSettings();
+            foreach (var item in Settings.GetType().GetFields())
             {
                 var att = item.GetCustomAttributes<ExcelConfigAttribute>(true).FirstOrDefault();
                 if (att != null)
@@ -81,7 +130,7 @@ namespace PoGo.Necrobot.Window
             foreach (var item in type.GetProperties())
             {
                 var att = item.GetCustomAttribute<ExcelConfigAttribute>(true);
-                if (att != null)
+                if (att != null && !att.IsPrimaryKey)
                 {
                     var dataGridControl = GetDataGridInputControl(item);
                     grid.Columns.Add(dataGridControl);
@@ -89,7 +138,21 @@ namespace PoGo.Necrobot.Window
             }
             return grid;
         }
+        private static GlobalSettings ConvertToBackwardCompitable(GlobalSettings setting)
+        {
+            if (setting.PokemonsTransferFilter != null)
+            {
+                setting.PokemonsNotToTransfer = setting.PokemonsTransferFilter.Where(p => p.Value.DoNotTransfer).Select(p => p.Key).ToList();
+            }
+            setting.PokemonsToEvolve = setting.EvolvePokemonFilter.Select(x => x.Key).ToList();
 
+            if (setting.SnipePokemonFilter != null)
+            {
+                setting.PokemonToSnipe.Pokemon = setting.SnipePokemonFilter.Select(p => p.Key).ToList();
+            }
+            return setting;
+
+        }
         private DataGridColumn GetDataGridInputControl(PropertyInfo item)
         {
             var att = item.GetCustomAttribute<ExcelConfigAttribute>(true);
@@ -97,12 +160,14 @@ namespace PoGo.Necrobot.Window
             var binding = new Binding($"Value.{item.Name}")
             {
                 Mode = BindingMode.TwoWay,
+                
                 // Converter = new   ObservableCollectionConverter()
             };
             string header = $"{att.Key}";
             var enumDataTypeAtt = item.GetCustomAttribute<EnumDataTypeAttribute>(true);
             if (enumDataTypeAtt != null)
             {
+                binding.Converter = new OperatorConverter();
 
                 DataGridComboBoxColumn ddrop = new DataGridComboBoxColumn()
                 {
@@ -112,6 +177,22 @@ namespace PoGo.Necrobot.Window
                 ddrop.SelectedItemBinding = binding;
                 ddrop.SelectedValueBinding = binding;
                 return ddrop;
+            }
+
+            if(item.PropertyType == typeof(List<List<PokemonMove>>))
+            {
+                binding.Converter = new MoveConverter();
+
+                DataGridTextColumn txt = new DataGridTextColumn()
+                {
+                    Binding = binding,
+                    Header = header,
+                    Width = 120,
+                    IsReadOnly = false
+                };
+
+                return txt;
+
             }
 
             if (item.PropertyType == typeof(string) ||
@@ -146,7 +227,39 @@ namespace PoGo.Necrobot.Window
                 IsReadOnly = false,
             };
         }
+        private DataGridTemplateColumn BuildComboMoves()
+        {
+            // Create The Column
+            DataGridTemplateColumn accountColumn = new DataGridTemplateColumn();
+            accountColumn.Header = "Moves";
 
+            Binding bind = new Binding("Moves");
+            bind.Mode = BindingMode.OneWay;
+
+            // Create the TextBlock
+            FrameworkElementFactory textFactory = new FrameworkElementFactory(typeof(TextBlock));
+            textFactory.SetBinding(TextBlock.TextProperty, bind);
+            DataTemplate textTemplate = new DataTemplate();
+            textTemplate.VisualTree = textFactory;
+
+            // Create the ComboBox
+            Binding comboBind = new Binding("Move");
+            comboBind.Mode = BindingMode.OneWay;
+
+            FrameworkElementFactory comboFactory = new FrameworkElementFactory(typeof(ComboBox));
+            comboFactory.SetValue(ComboBox.IsTextSearchEnabledProperty, true);
+           // comboFactory.SetValue(ComboBox.ItemsSourceProperty, this.Accounts);
+            comboFactory.SetBinding(ComboBox.SelectedItemProperty, comboBind);
+
+            DataTemplate comboTemplate = new DataTemplate();
+            comboTemplate.VisualTree = comboFactory;
+
+            // Set the Templates to the Column
+            accountColumn.CellTemplate = textTemplate;
+            accountColumn.CellEditingTemplate = comboTemplate;
+
+            return accountColumn;
+        }
         public UIElement BuildForm(FieldInfo fi, object source)
         {
             var type = source.GetType();
@@ -258,26 +371,24 @@ namespace PoGo.Necrobot.Window
             return new TextBox();
         }
 
-        GlobalSettings setting;
         public void InitForm()
         {
-            setting = new GlobalSettings();
-            this.DataContext = setting;
-            foreach (var item in setting.GetType().GetFields())
+            this.DataContext = Settings;
+            foreach (var item in Settings.GetType().GetFields())
             {
                 var att = item.GetCustomAttributes<ExcelConfigAttribute>(true).FirstOrDefault();
                 if (att != null)
                 {
                     string name = string.IsNullOrEmpty(att.Key) ? item.Name : att.Key;
-                    var tabItem = new TabItem() { Content = BuildForm(item, item.GetValue(setting)), Header = name, FontSize = 10 };
+                    var tabItem = new TabItem() { Content = BuildForm(item, item.GetValue(Settings)), Header = name, FontSize = 11 };
                     tabControl.Items.Add(tabItem);
                 }
             }
         }
 
-        private void Button_Click_3(object sender, RoutedEventArgs e)
+        private void btnSave_click(object sender, RoutedEventArgs e)
         {
-            foreach (var item in setting.GetType().GetFields())
+            foreach (var item in Settings.GetType().GetFields())
             {
                 var att = item.GetCustomAttributes<ExcelConfigAttribute>(true).FirstOrDefault();
                 if (att != null)
@@ -294,12 +405,27 @@ namespace PoGo.Necrobot.Window
                         var genericType = t.MakeGenericType(keyType, valueType);
                         var method = genericType.GetMethod("GetDictionary");
                         var dict = method.Invoke(obj, null);
-                        item.SetValue(setting, dict);
+                        item.SetValue(Settings, dict);
                     }
                 }
             }
-            setting.Save("configs\\test.json");
+            //code to back compitable.
+            var backCombitable = ConvertToBackwardCompitable(this.Settings);
+            if (!string.IsNullOrEmpty(fileName))  {
+                if (MessageBox.Show("Do you want to overwrite file : ", "Save config", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
+                {
+                    Settings.Save(fileName);
+                    this.Close();
 
+                }
+            }
+
+        }
+
+        private void MetroWindow_Closed(object sender, EventArgs e)
+        {
+            main.Visibility =  Visibility.Visible;
+           // this.Owner.Visibility = Visibility.Visible;
         }
     }
 }
