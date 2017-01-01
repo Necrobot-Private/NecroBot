@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.0.0.46](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.46) (2017-01-01)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.45...v1.0.0.46)
+## Feature
+- FIX bug - Crash when swith account during snipe
+- FIX bug - Manual snipe doesn't work if not enable autosnipe
+- FIX bug - Envole pokemon duplicate not print the message
+
 ## [v1.0.0.45](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.45) (2016-12-27)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.40...v1.0.0.45)
 ## Feature

@@ -66,6 +66,12 @@ namespace PoGo.NecroBot.Logic.State
             }
             catch (Exception ex) when (ex is PtcOfflineException || ex is AccessTokenExpiredException)
             {
+
+
+
+
+
+
                 session.EventDispatcher.Send(new ErrorEvent
                 {
                     Message = session.Translation.GetTranslation(TranslationString.PtcOffline)
