@@ -40,6 +40,7 @@ using System.Reflection;
 using System.Diagnostics;
 using PoGo.NecroBot.Logic.Tasks;
 using System.Net;
+using PokemonGo.RocketAPI.Extensions;
 
 namespace NecroBot2.Forms
 {
@@ -434,36 +435,31 @@ namespace NecroBot2.Forms
             //ProgressBar.Fill(80);
 
             //ProgressBar.Fill(90);
-            
+
             _session.Navigation.WalkStrategy.UpdatePositionEvent +=
                 (lat, lng) => _session.EventDispatcher.Send(new UpdatePositionEvent { Latitude = lat, Longitude = lng });
             _session.Navigation.WalkStrategy.UpdatePositionEvent += SaveLocationToDisk;
             _session.Navigation.WalkStrategy.UpdatePositionEvent += Navigation_UpdatePositionEvent;
-
+                        
             RouteOptimizeUtil.RouteOptimizeEvent +=
-                optimizedroute =>
-                    _session.EventDispatcher.Send(new OptimizeRouteEvent { OptimizedRoute = optimizedroute });
+                optimizedroute => _session.EventDispatcher.Send(new OptimizeRouteEvent { OptimizedRoute = optimizedroute });
             RouteOptimizeUtil.RouteOptimizeEvent += InitializePokestopsAndRoute;
 
             Navigation.GetHumanizeRouteEvent +=
-                (route, destination) =>
-                    _session.EventDispatcher.Send(new GetHumanizeRouteEvent { Route = route, Destination = destination });
+                (route, destination) => _session.EventDispatcher.Send(new GetHumanizeRouteEvent { Route = route, Destination = destination });
             Navigation.GetHumanizeRouteEvent += UpdateMap;
 
-            FarmPokestopsTask.LootPokestopEvent +=
+            UseNearbyPokestopsTask.LootPokestopEvent +=
                 pokestop => _session.EventDispatcher.Send(new LootPokestopEvent { Pokestop = pokestop });
-            FarmPokestopsTask.LootPokestopEvent += UpdateMap;
+            UseNearbyPokestopsTask.LootPokestopEvent += UpdateMap;
 
             CatchNearbyPokemonsTask.PokemonEncounterEvent +=
-                mappokemons =>
-                    _session.EventDispatcher.Send(new PokemonsEncounterEvent { EncounterPokemons = mappokemons });
+                mappokemons => _session.EventDispatcher.Send(new PokemonsEncounterEvent { EncounterPokemons = mappokemons });
             CatchNearbyPokemonsTask.PokemonEncounterEvent += UpdateMap;
 
             CatchIncensePokemonsTask.PokemonEncounterEvent +=
-                mappokemons =>
-                    _session.EventDispatcher.Send(new PokemonsEncounterEvent { EncounterPokemons = mappokemons });
+                mappokemons => _session.EventDispatcher.Send(new PokemonsEncounterEvent { EncounterPokemons = mappokemons });
             CatchIncensePokemonsTask.PokemonEncounterEvent += UpdateMap;
-            
 
             //ProgressBar.Fill(100);
 
@@ -943,8 +939,6 @@ namespace NecroBot2.Forms
                 Instance.Invoke(new Action<Color, string>(ColoredConsoleWrite), color, message);
                 return;
             }
-            //Instance.logTextBox.SelectionStart = Instance.logTextBox.Text.Length +1;
-            //Instance.logTextBox.ScrollToCaret();
             Instance.logTextBox.SelectionColor = color;
             Instance.logTextBox.AppendText(message + "\n");
             Instance.logTextBox.Select(Instance.logTextBox.Text.Length, +1);
