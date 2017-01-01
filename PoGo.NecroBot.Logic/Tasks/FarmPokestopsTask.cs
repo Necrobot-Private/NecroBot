@@ -69,6 +69,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             UseNearbyPokestopsTask.Initialize();
             await UseNearbyPokestopsTask.Execute(session, cancellationToken);
 
+            //TODO: Fix this
+            /*
             //add pokeStops to Map
             var pokestopList = await GetPokeStops(session);
             //get optimized route
@@ -152,6 +154,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 while (fortTry < retryNumber - zeroCheck);
             }
             //end code to add pokestops to map
+            */
         }
 
         private static async Task<List<FortData>> GetPokeStops(ISession session)
