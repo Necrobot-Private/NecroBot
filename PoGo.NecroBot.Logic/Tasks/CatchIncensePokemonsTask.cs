@@ -40,6 +40,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                     PokemonId = incensePokemon.PokemonId,
                     SpawnPointId = incensePokemon.EncounterLocation
                 };
+
+                //add delegate function
+                OnPokemonEncounterEvent(new List<MapPokemon> { pokemon });
+
                 if (session.Cache.Get(incensePokemon.EncounterId.ToString()) != null) return; //pokemon been ignore before
 
                 if( ( session.LogicSettings.UsePokemonSniperFilterOnly && !session.LogicSettings.PokemonToSnipe.Pokemon.Contains( pokemon.PokemonId ) ) ||

@@ -46,6 +46,10 @@ namespace PoGo.NecroBot.Logic.Tasks
             var nearbyPokemons = await GetNearbyPokemons(session);
             var priorityPokemon = nearbyPokemons.Where(p => p.PokemonId == priority).FirstOrDefault();
             var pokemons= nearbyPokemons.Where(p => p.PokemonId != priority).ToList();
+
+            //add pokemons to map
+            OnPokemonEncounterEvent(pokemons.ToList());
+
             EncounterResponse encounter = null;
             //if that is snipe pokemon and inventories if full, execute transfer to get more room for pokemon
             if (priorityPokemon != null)
@@ -163,6 +167,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             return pokemons;
         }
+
         public static event PokemonsEncounterDelegate PokemonEncounterEvent;
 
         private static void OnPokemonEncounterEvent(List<MapPokemon> pokemons)

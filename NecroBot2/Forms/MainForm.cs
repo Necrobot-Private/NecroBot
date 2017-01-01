@@ -463,6 +463,7 @@ namespace NecroBot2.Forms
                 mappokemons =>
                     _session.EventDispatcher.Send(new PokemonsEncounterEvent { EncounterPokemons = mappokemons });
             CatchIncensePokemonsTask.PokemonEncounterEvent += UpdateMap;
+            
 
             //ProgressBar.Fill(100);
 
