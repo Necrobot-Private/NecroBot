@@ -440,10 +440,10 @@ namespace NecroBot2.Forms
                 (lat, lng) => _session.EventDispatcher.Send(new UpdatePositionEvent { Latitude = lat, Longitude = lng });
             _session.Navigation.WalkStrategy.UpdatePositionEvent += SaveLocationToDisk;
             _session.Navigation.WalkStrategy.UpdatePositionEvent += Navigation_UpdatePositionEvent;
-                        
-            RouteOptimizeUtil.RouteOptimizeEvent +=
-                optimizedroute => _session.EventDispatcher.Send(new OptimizeRouteEvent { OptimizedRoute = optimizedroute });
-            RouteOptimizeUtil.RouteOptimizeEvent += InitializePokestopsAndRoute;
+
+            Navigation.LoadPokestopsEvent +=
+                pokeStops => _session.EventDispatcher.Send(new LoadPokestopsEvent { PokeStops = pokeStops });
+            Navigation.LoadPokestopsEvent += InitializePokestopsAndRoute;
 
             Navigation.GetHumanizeRouteEvent +=
                 (route, destination) => _session.EventDispatcher.Send(new GetHumanizeRouteEvent { Route = route, Destination = destination });

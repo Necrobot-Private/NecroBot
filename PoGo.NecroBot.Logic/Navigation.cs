@@ -17,12 +17,17 @@ using System.Net;
 using System.Diagnostics;
 using System.IO;
 using Newtonsoft.Json.Linq;
+using POGOProtos.Map.Fort;
+using PoGo.NecroBot.Logic.Utils;
+using PokemonGo.RocketAPI.Extensions;
 
 #endregion
 
 namespace PoGo.NecroBot.Logic
 {
     public delegate void GetHumanizeRouteDelegate(List<GeoCoordinate> route, GeoCoordinate destination);
+    public delegate void LoadPokestopsDelegate(List<FortData> pokeStops);
+
 
     public delegate void UpdatePositionDelegate(double lat, double lng);
 
@@ -111,6 +116,9 @@ namespace PoGo.NecroBot.Logic
             foreach (var item in route)
                 points.Add(new GeoCoordinate(item.ToArray()[1], item.ToArray()[0]));
 
+            //get pokeStops to map
+            var pokeStops = await GetPokeStops(session);
+            OnLoadPokestopsEvent(pokeStops);
             OnGetHumanizeRouteEvent(points, targetLocation.ToGeoCoordinate());
             //end code add routes
 
@@ -266,6 +274,32 @@ namespace PoGo.NecroBot.Logic
             return result;
         }
         //end functions routes map
+
+        private static async Task<List<FortData>> GetPokeStops(ISession session)
+        {
+            var mapObjects = await session.Client.Map.GetMapObjects();
+
+            // Wasn't sure how to make this pretty. Edit as needed.
+            var pokeStops = mapObjects.Item1.MapCells.SelectMany(i => i.Forts)
+                .Where(
+                    i =>
+                        i.Type == FortType.Checkpoint &&
+                        i.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime() &&
+                        ( // Make sure PokeStop is within max travel distance, unless it's set to 0.
+                            LocationUtils.CalculateDistanceInMeters(
+                                session.Settings.DefaultLatitude, session.Settings.DefaultLongitude,
+                                i.Latitude, i.Longitude) < session.LogicSettings.MaxTravelDistanceInMeters ||
+                            session.LogicSettings.MaxTravelDistanceInMeters == 0)
+                );
+
+            return pokeStops.ToList();
+        }
+        private static void OnLoadPokestopsEvent(List<FortData> pokeStops)
+        {
+            LoadPokestopsEvent?.Invoke(pokeStops);
+        }
+
+        public static event LoadPokestopsDelegate LoadPokestopsEvent;
 
         public static event GetHumanizeRouteDelegate GetHumanizeRouteEvent;
 

@@ -22,25 +22,6 @@ namespace PoGo.NecroBot.Logic.Tasks
 {
     public static class FarmPokestopsTask
     {
-        public static async Task<List<FortData>> GetPokeStops(ISession session)
-        {
-            var mapObjects = await session.Client.Map.GetMapObjects();
-
-            // Wasn't sure how to make this pretty. Edit as needed.
-            var pokeStops = mapObjects.Item1.MapCells.SelectMany(i => i.Forts)
-                .Where(
-                    i =>
-                        i.Type == FortType.Checkpoint &&
-                        i.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime() &&
-                        ( // Make sure PokeStop is within max travel distance, unless it's set to 0.
-                            LocationUtils.CalculateDistanceInMeters(
-                                session.Settings.DefaultLatitude, session.Settings.DefaultLongitude,
-                                i.Latitude, i.Longitude) < session.LogicSettings.MaxTravelDistanceInMeters ||
-                            session.LogicSettings.MaxTravelDistanceInMeters == 0)
-                );
-
-            return pokeStops.ToList();
-        }
 
         private static bool checkForMoveBackToDefault = true;
         public static async Task Execute(ISession session, CancellationToken cancellationToken)

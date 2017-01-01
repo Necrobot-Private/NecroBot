@@ -429,7 +429,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Utils\PushNotificationClient.cs" />
-    <Compile Include="Utils\RouteOptimizeUtil.cs" />
     <Compile Include="Utils\Statistics.cs" />
     <Compile Include="Utils\StringUtils.cs" />
     <Compile Include="Utils\WebClientExtensions.cs" />
