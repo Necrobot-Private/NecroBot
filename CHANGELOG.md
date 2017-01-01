@@ -1,6 +1,6 @@
 # Change Log
 
-## [v1.0.0.46](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.46) (2017-01-0127)
+## [v1.0.0.46](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.46) (2017-01-01)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.45...v1.0.0.46)
 ## Feature
 - FIX bug - Crash when swith account during snipe
