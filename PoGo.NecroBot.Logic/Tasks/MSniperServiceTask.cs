@@ -510,9 +510,9 @@ namespace PoGo.NecroBot.Logic.Tasks
             var pth = Path.Combine(Directory.GetCurrentDirectory(), "SnipeMS.json");
             try
             {
-                if ((!File.Exists(pth) && autoSnipePokemons.Count == 0) || OutOffBallBlock > DateTime.Now)
+                if (OutOffBallBlock > DateTime.Now || (
+                    File.Exists(pth) && autoSnipePokemons.Count ==0 && manualSnipePokemons.Count ==0 && pokedexSnipePokemons.Count ==0))
                 {
-                    autoSnipePokemons.Clear();
                     return;
                 }
 
