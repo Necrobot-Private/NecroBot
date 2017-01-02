@@ -87,7 +87,7 @@ namespace NecroBot2
                     MainForm.ColoredConsoleWrite(Color.Magenta, finalMessage);
                     break;
                 case LogLevel.Flee:
-                    MainForm.ColoredConsoleWrite(Color.Yellow, finalMessage);
+                    MainForm.ColoredConsoleWrite(Color.Orange, finalMessage);
                     break;
                 case LogLevel.Gym:
                     MainForm.ColoredConsoleWrite(Color.Magenta, finalMessage);
@@ -120,7 +120,7 @@ namespace NecroBot2
                     MainForm.ColoredConsoleWrite(Color.Red, finalMessage);
                     break;
                 case LogLevel.Transfer:
-                    MainForm.ColoredConsoleWrite(Color.Yellow, finalMessage);
+                    MainForm.ColoredConsoleWrite(Color.Aquamarine, finalMessage);
                     break;
                 case LogLevel.Update:
                     MainForm.ColoredConsoleWrite(Color.White, finalMessage);
