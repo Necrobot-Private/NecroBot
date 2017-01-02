@@ -419,6 +419,8 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static async Task AddSnipeItem(ISession session, MSniperInfo2 item, bool byPassValidation = false)
         {
             if (isBlocking) return;
+            if (Math.Abs(item.Latitude) > 90 || Math.Abs(item.Longitude) > 180) return;
+
             lock (locker)
             {
                 item.AddedTime = DateTime.Now;
