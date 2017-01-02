@@ -6,13 +6,19 @@
                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                       Title="Necrobot 2 - Window GUI"
                       Height="600"
-                      Width="800" BorderThickness="1">
+                      Width="800" 
+                      BorderThickness="0" 
+                      GlowBrush="Black"
+                      ResizeMode="CanResizeWithGrip"
+
+                      WindowTransitionsEnabled="False"
+                      WindowStartupLocation="CenterScreen" Closed="MetroWindow_Closed"
+                      >
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
-            <Button Content="Save 1" Click="Button_Click_3" />
             
-            <Button Content="settings" />
-            <Button>
+            <Button Content="settings" Visibility="Hidden" />
+            <Button Click="btnSave_click" Name="btnSave">
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="20"
                    Height="20"
