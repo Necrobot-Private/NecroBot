@@ -1,4 +1,12 @@
 # Change Log
+## [v1.0.0.47](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.47) (2017-01-02)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.46...v1.0.0.47)
+## Bugs & Enhancements
+- FIX Bug - Bulk transfer not working number of pokemons > 100
+- FIX Bug - Fix berry displaye wrong (-1 remaining)
+- Fix Bug - Multi account didn't switch if there only 1 bot config in auth.json
+- Enhancement -Allow enter MinSNipeIV =101 to exclude pokemon to snipe
+
 
 ## [v1.0.0.46](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.46) (2017-01-01)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.45...v1.0.0.46)
