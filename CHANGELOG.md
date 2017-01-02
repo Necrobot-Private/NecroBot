@@ -1,5 +1,5 @@
 # Change Log
-## [v1.0.0.46](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.47) (2017-01-02)
+## [v1.0.0.47](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.47) (2017-01-02)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.46...v1.0.0.47)
 ## Bugs & Enhancements
 - FIX Bug - Bulk transfer not working number of pokemons > 100
