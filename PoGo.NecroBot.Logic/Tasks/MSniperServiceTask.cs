@@ -330,18 +330,25 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
             catch (CaptchaException ex)
             {
+                captchaShowed = true;
                 throw ex;
             }
             catch (Exception ex)
             {
-                captchaShowed = true;
                 return false;
             }
             finally
             {
                 if (!captchaShowed)
-                    await LocationUtils.UpdatePlayerLocationWithAltitude(session,
+                {
+                    //TODO - What if udpate location failed 
+                    var response = await LocationUtils.UpdatePlayerLocationWithAltitude(session,
                         new GeoCoordinate(lat, lon, session.Client.CurrentAltitude), 0);  // Speed set to 0 for random speed.
+
+                    
+                }
+                else
+                    session.Client.Player.SetCoordinates(lat, lon, session.Client.CurrentAltitude); //only reset d
             }
 
             if (encounter.Status == EncounterResponse.Types.Status.PokemonInventoryFull)

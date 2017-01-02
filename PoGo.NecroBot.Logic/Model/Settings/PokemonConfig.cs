@@ -391,5 +391,10 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 62)]
         public int BulkTransferStogareBuffer { get;  set; }
 
+        [DefaultValue(100)]
+        [ExcelConfig(Description = "Maximun number of pokemon in 1 transfer", Position = 63)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 63)]
+        [Range(1,100)]
+        public int BulkTransferSize { get; internal set; }
     }
 }
