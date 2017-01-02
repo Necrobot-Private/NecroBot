@@ -739,7 +739,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="$(SolutionDir)\FeroxRev\PokemonGo.RocketAPI.csproj">
+    <ProjectReference Include="..\FeroxRev\PokemonGo.RocketAPI.csproj">
       <Project>{05d2da44-1b8e-4cf7-94ed-4d52451cd095}</Project>
       <Name>PokemonGo.RocketAPI</Name>
     </ProjectReference>

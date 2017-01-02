@@ -10,10 +10,10 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 
 [assembly: AssemblyTitle("NecroBot-Private for Pokémon GO")]
-[assembly: AssemblyDescription("Graphical Interface")]
+[assembly: AssemblyDescription("Graphic Interface")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("NecroBot-Private Team")]
-[assembly: AssemblyProduct("NecroBot2")]
+[assembly: AssemblyProduct("RocketBot 2.4.2.1 | NecroBot2 Logic :")]
 [assembly: AssemblyCopyright("Copyright NecroBot-Private Team © 2016")]
 [assembly: AssemblyTrademark("NecroBot-Private Team")]
 [assembly: AssemblyCulture("")]
