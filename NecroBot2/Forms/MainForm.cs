@@ -443,10 +443,13 @@ namespace NecroBot2.Forms
             _session.Navigation.WalkStrategy.UpdatePositionEvent += SaveLocationToDisk;
             _session.Navigation.WalkStrategy.UpdatePositionEvent += Navigation_UpdatePositionEvent;
 
+            Navigation.LoadPokestopsEvent +=
+                pokeStops => _session.EventDispatcher.Send(new LoadPokestopsEvent { PokeStops = pokeStops });
+            Navigation.LoadPokestopsEvent += InitializePokestopsAndRoute;
+
             Navigation.GetHumanizeRouteEvent +=
-                (route, destination, pokestops) => _session.EventDispatcher.Send(new GetHumanizeRouteEvent { Route = route, Destination = destination, pokeStops = pokestops });
+                (route, destination) => _session.EventDispatcher.Send(new GetHumanizeRouteEvent { Route = route, Destination = destination });
             Navigation.GetHumanizeRouteEvent += UpdateMap;
-            Navigation.GetHumanizeRouteEvent += InitializePokestopsAndRoute;
 
             UseNearbyPokestopsTask.LootPokestopEvent +=
                 pokestop => _session.EventDispatcher.Send(new LootPokestopEvent { Pokestop = pokestop });
@@ -722,7 +725,7 @@ namespace NecroBot2.Forms
             return false;
         }
 
-        private void InitializePokestopsAndRoute(List<GeoCoordinate> route, GeoCoordinate destination,List<FortData> pokeStops)
+        private void InitializePokestopsAndRoute(List<FortData> pokeStops)
         {
             SynchronizationContext.Post(o =>
             {
@@ -740,11 +743,11 @@ namespace NecroBot2.Forms
                 togglePrecalRoute.Enabled = true;
                 if (togglePrecalRoute.Checked)
                 {
-                    var _route = new GMapRoute(routePoint, "Walking Path")
+                    var route = new GMapRoute(routePoint, "Walking Path")
                     {
                         Stroke = new Pen(Color.FromArgb(128, 0, 179, 253), 4)
                     };
-                    _pokestopsOverlay.Routes.Add(_route);
+                    _pokestopsOverlay.Routes.Add(route);
                 }
 
                 foreach (var pokeStop in pokeStops)
@@ -838,7 +841,7 @@ namespace NecroBot2.Forms
             }, null);
         }
 
-        private void UpdateMap(List<GeoCoordinate> route, GeoCoordinate destination, List<FortData> pokeStops)
+        private void UpdateMap(List<GeoCoordinate> route, GeoCoordinate destination)
         {
             var routePointLatLngs = new List<PointLatLng>();
             foreach (var item in route)

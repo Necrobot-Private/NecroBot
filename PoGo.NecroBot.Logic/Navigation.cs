@@ -25,7 +25,10 @@ using PokemonGo.RocketAPI.Extensions;
 
 namespace PoGo.NecroBot.Logic
 {
-    public delegate void GetHumanizeRouteDelegate(List<GeoCoordinate> route, GeoCoordinate destination, List<FortData>pokeStops);
+    public delegate void GetHumanizeRouteDelegate(List<GeoCoordinate> route, GeoCoordinate destination);
+    public delegate void LoadPokestopsDelegate(List<FortData> pokeStops);
+
+
     public delegate void UpdatePositionDelegate(double lat, double lng);
 
     public class Navigation
@@ -115,7 +118,8 @@ namespace PoGo.NecroBot.Logic
 
             //get pokeStops to map
             var pokeStops = await GetPokeStops(session);
-            OnGetHumanizeRouteEvent(points, targetLocation.ToGeoCoordinate(), pokeStops);
+            OnLoadPokestopsEvent(pokeStops);
+            OnGetHumanizeRouteEvent(points, targetLocation.ToGeoCoordinate());
             //end code add routes
 
             // If the stretegies become bigger, create a factory for easy management
@@ -289,13 +293,18 @@ namespace PoGo.NecroBot.Logic
 
             return pokeStops.ToList();
         }
+        private static void OnLoadPokestopsEvent(List<FortData> pokeStops)
+        {
+            LoadPokestopsEvent?.Invoke(pokeStops);
+        }
 
+        public static event LoadPokestopsDelegate LoadPokestopsEvent;
 
         public static event GetHumanizeRouteDelegate GetHumanizeRouteEvent;
 
-        protected virtual void OnGetHumanizeRouteEvent(List<GeoCoordinate> route, GeoCoordinate destination, List<FortData> pokeStops)
+        protected virtual void OnGetHumanizeRouteEvent(List<GeoCoordinate> route, GeoCoordinate destination)
         {
-            GetHumanizeRouteEvent?.Invoke(route, destination, pokeStops);
+            GetHumanizeRouteEvent?.Invoke(route, destination);
         }
         //end functions routes map
     }
