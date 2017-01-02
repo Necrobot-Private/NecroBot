@@ -326,7 +326,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                 await Task.Delay(1000, cancellationToken);
 
                 encounter = await session.Client.Encounter.EncounterPokemon(encounterId.EncounterId, encounterId.SpawnPointId);
-
+                
+               
             }
             catch (CaptchaException ex)
             {
@@ -354,6 +355,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (encounter.Status == EncounterResponse.Types.Status.PokemonInventoryFull)
             {
                 Logger.Write("Pokemon bag full, snipe cancel");
+                await TransferDuplicatePokemonTask.Execute(session, cancellationToken);
                 return false;
             }
             PokemonData encounteredPokemon;

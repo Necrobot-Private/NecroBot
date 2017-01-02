@@ -57,7 +57,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             if (session.LogicSettings.UseBulkTransferPokemon)
             {
-                int page = orderedPokemon.Count() / session.LogicSettings.BulkTransferSize;
+                int page = orderedPokemon.Count() / session.LogicSettings.BulkTransferSize + 1;
                 for (int i = 0; i < page; i++)
                 {
                     var batchTransfer = orderedPokemon.Skip(i * session.LogicSettings.BulkTransferSize).Take(session.LogicSettings.BulkTransferSize);
