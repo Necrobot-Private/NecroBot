@@ -296,9 +296,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         [ExcelConfig(Description = "Specify the pokemon to keep for mass evolve", Position = 47)]
         [DefaultValue(120)]
-        [Range(0, 350)]
+        [Range(0, 999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 47)]
-        public int EvolveKeptPokemonsOverrideStartIfThisManyReady = 120;
+        public int EvolveKeptPokemonIfBagHasOverThisManyPokemon = 120;
         
         /*Keep*/
         [ExcelConfig(Description = "Allow bot keep low candy pokemon for evolve", Position = 47)]
