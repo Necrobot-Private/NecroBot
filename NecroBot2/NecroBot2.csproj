@@ -316,7 +316,6 @@
     <Compile Include="Helpers\DeviceInfoHelper.cs" />
     <Compile Include="Logic\Event\GetHumanizeRouteEvent.cs" />
     <Compile Include="Logic\Event\LootPokestopEvent.cs" />
-    <Compile Include="Logic\Event\LoadPokestopsEvent.cs" />
     <Compile Include="Logic\Event\PokemonsEncounterEvent.cs" />
     <Compile Include="Logic\State\VersionCheckState.cs" />
     <Compile Include="Helpers\DeviceHelper.cs" />
