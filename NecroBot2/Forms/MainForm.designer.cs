@@ -183,7 +183,7 @@ namespace NecroBot2.Forms
             // 
             // olvPokemonList
             // 
-            this.olvPokemonList.AllColumns.Add(this.pkmnName);
+			this.olvPokemonList.AllColumns.Add(this.pkmnName);
             this.olvPokemonList.AllColumns.Add(this.pkmnCP);
             this.olvPokemonList.AllColumns.Add(this.pkmnAtkIV);
             this.olvPokemonList.AllColumns.Add(this.pkmnDefIV);
@@ -448,6 +448,8 @@ namespace NecroBot2.Forms
             this.followTrainerCheckBox.UseVisualStyleBackColor = false;
             this.followTrainerCheckBox.Visible = false;
             this.followTrainerCheckBox.CheckedChanged += new System.EventHandler(this.followTrainerCheckBox_CheckedChanged);
+            this.followTrainerCheckBox.Checked = true;
+            this.followTrainerCheckBox.CheckState = System.Windows.Forms.CheckState.Indeterminate;
             // 
             // showMoreCheckBox
             // 
