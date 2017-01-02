@@ -30,7 +30,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         [ExcelConfig(Key = "Snipe Min IV" , Description ="Min Pokemon IV for auto snipe", Position =2)]
         [DefaultValue(76)]
-        [Range(0, 101)]
+        [Range(0, 100)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public int SnipeIV {get; set;}
 
