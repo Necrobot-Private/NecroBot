@@ -91,16 +91,16 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             var multiConfig = session.LogicSettings.MultipleBotConfig;
 
-            if (session.Stats.CatchThresholdExceeds(session) && multiConfig.SwitchOnCatchLimit && session.LogicSettings.AllowMultipleBot)
+            if (session.Stats.CatchThresholdExceeds(session, false) && multiConfig.SwitchOnCatchLimit && session.LogicSettings.AllowMultipleBot)
             {
                 throw new ActiveSwitchByRuleException(SwitchRules.CatchLimitReached, session.LogicSettings.CatchPokemonLimit);
             }
-            if (session.Stats.SearchThresholdExceeds(session) && multiConfig.SwitchOnPokestopLimit && session.LogicSettings.AllowMultipleBot)
+            if (session.Stats.SearchThresholdExceeds(session, false) && multiConfig.SwitchOnPokestopLimit && session.LogicSettings.AllowMultipleBot)
             {
                 throw new ActiveSwitchByRuleException(SwitchRules.SpinPokestopReached, session.LogicSettings.PokeStopLimit);
             }
 
-            if (session.Stats.CatchThresholdExceeds(session) && session.Stats.SearchThresholdExceeds(session))
+            if (session.Stats.CatchThresholdExceeds(session,false) && session.Stats.SearchThresholdExceeds(session,false))
             {
                 if (session.LogicSettings.AllowMultipleBot)
                 {
@@ -323,7 +323,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (pokeStop.CooldownCompleteTimestampMs > DateTime.UtcNow.ToUnixTime())
                 return;
 
-            if (session.Stats.SearchThresholdExceeds(session))
+            if (session.Stats.SearchThresholdExceeds(session, true))
             {
                 if (session.LogicSettings.AllowMultipleBot && session.LogicSettings.MultipleBotConfig.SwitchOnPokestopLimit)
                 {
@@ -413,6 +413,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         }
 
                     }
+                    MSniperServiceTask.UnblockSnipe(false);
                     if (fortSearch.Result == FortSearchResponse.Types.Result.InventoryFull)
                     {
                         await RecycleItemsTask.Execute(session, cancellationToken);

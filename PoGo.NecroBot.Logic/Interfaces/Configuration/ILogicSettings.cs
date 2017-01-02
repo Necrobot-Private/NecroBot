@@ -241,6 +241,6 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         bool AllowMultipleBot { get; }
         CaptchaConfig CaptchaConfig { get;  }
         int BulkTransferStogareBuffer { get;  }
-        bool SnipeAllVerifiedPokemon { get; }
+        bool AutosnipeVerifiedOnly { get;  }
     }
 }
