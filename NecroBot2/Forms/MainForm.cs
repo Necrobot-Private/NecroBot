@@ -440,13 +440,13 @@ namespace NecroBot2.Forms
 
             _session.Navigation.WalkStrategy.UpdatePositionEvent +=
                 (lat, lng) => _session.EventDispatcher.Send(new UpdatePositionEvent { Latitude = lat, Longitude = lng });
-            _session.Navigation.WalkStrategy.UpdatePositionEvent += SaveLocationToDisk;
+            //_session.Navigation.WalkStrategy.UpdatePositionEvent += SaveLocationToDisk;
             _session.Navigation.WalkStrategy.UpdatePositionEvent += Navigation_UpdatePositionEvent;
 
             Navigation.GetHumanizeRouteEvent +=
                 (route, destination, pokestops) => _session.EventDispatcher.Send(new GetHumanizeRouteEvent { Route = route, Destination = destination, pokeStops = pokestops });
             Navigation.GetHumanizeRouteEvent += UpdateMap;
-            Navigation.GetHumanizeRouteEvent += InitializePokestopsAndRoute;
+            //Navigation.GetHumanizeRouteEvent += InitializePokestopsAndRoute;
 
             UseNearbyPokestopsTask.LootPokestopEvent +=
                 pokestop => _session.EventDispatcher.Send(new LootPokestopEvent { Pokestop = pokestop });
@@ -722,7 +722,7 @@ namespace NecroBot2.Forms
             return false;
         }
 
-        private void InitializePokestopsAndRoute(List<GeoCoordinate> route, GeoCoordinate destination,List<FortData> pokeStops)
+        private void InitializePokestopsAndRoute(List<FortData> pokeStops)
         {
             SynchronizationContext.Post(o =>
             {
@@ -776,7 +776,7 @@ namespace NecroBot2.Forms
 
             _currentLatLng = latlng;
             UpdateMap();
-            //SaveLocationToDisk(lat, lng);
+            SaveLocationToDisk(lat, lng);
         }
 
         private void showMoreCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -850,6 +850,7 @@ namespace NecroBot2.Forms
                 Stroke = new Pen(Color.FromArgb(128, 0, 179, 253), 4) { DashStyle = DashStyle.Dash }
             };
             _playerRouteOverlay.Routes.Add(routes);
+            InitializePokestopsAndRoute(pokeStops);
             /* Logger.Write("new call");
              List<PointLatLng> routePointLatLngs = new List<PointLatLng>();
              Logger.Write("new route size: " +route.Count);
