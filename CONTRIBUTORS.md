@@ -40,3 +40,4 @@
  * [--=FurtiF™=--] (https://github.com/Furtif)
  * [fedyay]
  * [Brazuca87]
+ * [HardKnoxNi69a] (https://github.com/HardKnoxNi69a)
