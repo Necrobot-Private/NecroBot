@@ -38,6 +38,6 @@
  * [CreativiTimothy] (https://github.com/CreativiTimothy)
  * [chamingkk] (https://github.com/chamingkk)
  * [--=FurtiF™=--] (https://github.com/Furtif)
- * [fedyay]h
+ * [fedyay]
  * [Brazuca87]
  * [HardKnoxNi69a] (https://github.com/HardKnoxNi69a)
