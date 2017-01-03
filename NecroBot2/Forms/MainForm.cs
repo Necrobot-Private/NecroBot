@@ -99,6 +99,7 @@ namespace NecroBot2.Forms
             InitializeMap();
             VersionHelper.CheckVersion();
             btnRefresh.Enabled = false;
+            startStopBotToolStripMenuItem.Text = "▶ Start NecroBot2";
         }
 
         private void InitializeMap()
