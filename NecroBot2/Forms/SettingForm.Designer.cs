@@ -298,7 +298,7 @@
             // cancelBtn
             // 
             this.cancelBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cancelBtn.Location = new System.Drawing.Point(864, 540);
+            this.cancelBtn.Location = new System.Drawing.Point(858, 540);
             this.cancelBtn.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.cancelBtn.Name = "cancelBtn";
             this.cancelBtn.Size = new System.Drawing.Size(104, 32);
@@ -331,13 +331,13 @@
             this.tabAuth.Controls.Add(this.GoogleApiLabel);
             this.tabAuth.Controls.Add(this.tbWalkingSpeed);
             this.tabAuth.Controls.Add(this.TravelSpeedText);
+            this.tabAuth.Controls.Add(this.ResetLocationBtn);
+            this.tabAuth.Controls.Add(this.FindAdressBtn);
+            this.tabAuth.Controls.Add(this.AdressBox);
             this.tabAuth.Controls.Add(this.cbLanguage);
             this.tabAuth.Controls.Add(this.label26);
             this.tabAuth.Controls.Add(this.proxyGb);
-            this.tabAuth.Controls.Add(this.ResetLocationBtn);
             this.tabAuth.Controls.Add(this.trackBar);
-            this.tabAuth.Controls.Add(this.AdressBox);
-            this.tabAuth.Controls.Add(this.FindAdressBtn);
             this.tabAuth.Controls.Add(this.gMapCtrl);
             this.tabAuth.Controls.Add(this.UserLoginBox);
             this.tabAuth.Controls.Add(this.UserPasswordBox);
@@ -528,10 +528,10 @@
             // ResetLocationBtn
             // 
             this.ResetLocationBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.ResetLocationBtn.Location = new System.Drawing.Point(810, 448);
+            this.ResetLocationBtn.Location = new System.Drawing.Point(810, 432);
             this.ResetLocationBtn.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.ResetLocationBtn.Name = "ResetLocationBtn";
-            this.ResetLocationBtn.Size = new System.Drawing.Size(148, 25);
+            this.ResetLocationBtn.Size = new System.Drawing.Size(148, 30);
             this.ResetLocationBtn.TabIndex = 26;
             this.ResetLocationBtn.Text = "Reset Location";
             this.ResetLocationBtn.UseVisualStyleBackColor = true;
@@ -541,7 +541,7 @@
             // 
             this.trackBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.trackBar.BackColor = System.Drawing.SystemColors.Info;
-            this.trackBar.Location = new System.Drawing.Point(902, 5);
+            this.trackBar.Location = new System.Drawing.Point(912, 0);
             this.trackBar.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.trackBar.Maximum = 18;
             this.trackBar.Minimum = 2;
@@ -559,7 +559,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.AdressBox.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.AdressBox.ForeColor = System.Drawing.Color.Gray;
-            this.AdressBox.Location = new System.Drawing.Point(330, 445);
+            this.AdressBox.Location = new System.Drawing.Point(330, 432);
             this.AdressBox.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.AdressBox.Name = "AdressBox";
             this.AdressBox.Size = new System.Drawing.Size(358, 30);
@@ -572,10 +572,10 @@
             // FindAdressBtn
             // 
             this.FindAdressBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.FindAdressBtn.Location = new System.Drawing.Point(694, 448);
+            this.FindAdressBtn.Location = new System.Drawing.Point(694, 432);
             this.FindAdressBtn.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.FindAdressBtn.Name = "FindAdressBtn";
-            this.FindAdressBtn.Size = new System.Drawing.Size(110, 25);
+            this.FindAdressBtn.Size = new System.Drawing.Size(110, 30);
             this.FindAdressBtn.TabIndex = 25;
             this.FindAdressBtn.Text = "Find Location";
             this.FindAdressBtn.UseVisualStyleBackColor = true;
@@ -608,7 +608,7 @@
             this.gMapCtrl.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
             this.gMapCtrl.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
             this.gMapCtrl.ShowTileGridLines = false;
-            this.gMapCtrl.Size = new System.Drawing.Size(628, 430);
+            this.gMapCtrl.Size = new System.Drawing.Size(628, 462);
             this.gMapCtrl.TabIndex = 22;
             this.gMapCtrl.Zoom = 0D;
             this.gMapCtrl.OnMapZoomChanged += new GMap.NET.MapZoomChanged(this.gMapCtrl_OnMapZoomChanged);
@@ -674,7 +674,7 @@
             this.authTypeCb.FormattingEnabled = true;
             this.authTypeCb.Items.AddRange(new object[] {
             "Google",
-            "ptc"});
+            "PTC"});
             this.authTypeCb.Location = new System.Drawing.Point(140, 43);
             this.authTypeCb.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.authTypeCb.Name = "authTypeCb";
@@ -746,7 +746,7 @@
             this.tabDevice.Location = new System.Drawing.Point(4, 29);
             this.tabDevice.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tabDevice.Name = "tabDevice";
-            this.tabDevice.Size = new System.Drawing.Size(969, 474);
+            this.tabDevice.Size = new System.Drawing.Size(964, 474);
             this.tabDevice.TabIndex = 0;
             this.tabDevice.Text = "Device";
             // 
@@ -1087,7 +1087,7 @@
             this.tabPokemon.Controls.Add(this.tcPokemonDetail);
             this.tabPokemon.Location = new System.Drawing.Point(4, 29);
             this.tabPokemon.Name = "tabPokemon";
-            this.tabPokemon.Size = new System.Drawing.Size(969, 474);
+            this.tabPokemon.Size = new System.Drawing.Size(964, 474);
             this.tabPokemon.TabIndex = 3;
             this.tabPokemon.Text = "Pokemon";
             // 
@@ -1411,7 +1411,7 @@
             this.groupBox2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox2.Size = new System.Drawing.Size(420, 280);
+            this.groupBox2.Size = new System.Drawing.Size(420, 279);
             this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Ignore";
@@ -1419,7 +1419,7 @@
             // cbIgnoreAll
             // 
             this.cbIgnoreAll.AutoSize = true;
-            this.cbIgnoreAll.Location = new System.Drawing.Point(6, 17);
+            this.cbIgnoreAll.Location = new System.Drawing.Point(0, 17);
             this.cbIgnoreAll.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.cbIgnoreAll.Name = "cbIgnoreAll";
             this.cbIgnoreAll.Size = new System.Drawing.Size(93, 24);
@@ -1436,10 +1436,10 @@
             this.clbIgnore.CheckOnClick = true;
             this.clbIgnore.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.clbIgnore.FormattingEnabled = true;
-            this.clbIgnore.Location = new System.Drawing.Point(6, 44);
+            this.clbIgnore.Location = new System.Drawing.Point(3, 55);
             this.clbIgnore.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.clbIgnore.Name = "clbIgnore";
-            this.clbIgnore.Size = new System.Drawing.Size(407, 202);
+            this.clbIgnore.Size = new System.Drawing.Size(407, 224);
             this.clbIgnore.TabIndex = 0;
             // 
             // tBMaxBerriesToUsePerPokemon
@@ -1497,11 +1497,11 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.groupBox1.Controls.Add(this.cbNotTransferAll);
             this.groupBox1.Controls.Add(this.clbTransfer);
-            this.groupBox1.Location = new System.Drawing.Point(476, 4);
+            this.groupBox1.Location = new System.Drawing.Point(548, 4);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox1.Size = new System.Drawing.Size(246, 439);
+            this.groupBox1.Size = new System.Drawing.Size(406, 435);
             this.groupBox1.TabIndex = 20;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Exclude Transfer";
@@ -1509,7 +1509,7 @@
             // cbNotTransferAll
             // 
             this.cbNotTransferAll.AutoSize = true;
-            this.cbNotTransferAll.Location = new System.Drawing.Point(6, 24);
+            this.cbNotTransferAll.Location = new System.Drawing.Point(6, 18);
             this.cbNotTransferAll.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.cbNotTransferAll.Name = "cbNotTransferAll";
             this.cbNotTransferAll.Size = new System.Drawing.Size(93, 24);
@@ -1529,7 +1529,7 @@
             this.clbTransfer.Location = new System.Drawing.Point(6, 50);
             this.clbTransfer.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.clbTransfer.Name = "clbTransfer";
-            this.clbTransfer.Size = new System.Drawing.Size(234, 378);
+            this.clbTransfer.Size = new System.Drawing.Size(399, 378);
             this.clbTransfer.TabIndex = 0;
             // 
             // groupBox8
@@ -1842,11 +1842,11 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.groupBox4.Controls.Add(this.cbPowerUpAll);
             this.groupBox4.Controls.Add(this.clbPowerUp);
-            this.groupBox4.Location = new System.Drawing.Point(465, 4);
+            this.groupBox4.Location = new System.Drawing.Point(547, 4);
             this.groupBox4.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox4.Size = new System.Drawing.Size(220, 439);
+            this.groupBox4.Size = new System.Drawing.Size(408, 435);
             this.groupBox4.TabIndex = 5;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Power Up";
@@ -1874,7 +1874,7 @@
             this.clbPowerUp.Location = new System.Drawing.Point(6, 50);
             this.clbPowerUp.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.clbPowerUp.Name = "clbPowerUp";
-            this.clbPowerUp.Size = new System.Drawing.Size(207, 378);
+            this.clbPowerUp.Size = new System.Drawing.Size(399, 378);
             this.clbPowerUp.TabIndex = 0;
             // 
             // cbAutoPowerUp
@@ -2022,11 +2022,11 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.groupBox3.Controls.Add(this.cbEvolveAll);
             this.groupBox3.Controls.Add(this.clbEvolve);
-            this.groupBox3.Location = new System.Drawing.Point(497, 4);
+            this.groupBox3.Location = new System.Drawing.Point(548, 4);
             this.groupBox3.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox3.Size = new System.Drawing.Size(220, 441);
+            this.groupBox3.Size = new System.Drawing.Size(406, 434);
             this.groupBox3.TabIndex = 16;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Evolve";
@@ -2034,7 +2034,7 @@
             // cbEvolveAll
             // 
             this.cbEvolveAll.AutoSize = true;
-            this.cbEvolveAll.Location = new System.Drawing.Point(7, 18);
+            this.cbEvolveAll.Location = new System.Drawing.Point(7, 17);
             this.cbEvolveAll.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.cbEvolveAll.Name = "cbEvolveAll";
             this.cbEvolveAll.Size = new System.Drawing.Size(93, 24);
@@ -2051,10 +2051,10 @@
             this.clbEvolve.CheckOnClick = true;
             this.clbEvolve.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.clbEvolve.FormattingEnabled = true;
-            this.clbEvolve.Location = new System.Drawing.Point(7, 50);
+            this.clbEvolve.Location = new System.Drawing.Point(6, 50);
             this.clbEvolve.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.clbEvolve.Name = "clbEvolve";
-            this.clbEvolve.Size = new System.Drawing.Size(207, 378);
+            this.clbEvolve.Size = new System.Drawing.Size(399, 378);
             this.clbEvolve.TabIndex = 0;
             // 
             // tabItems
@@ -2068,7 +2068,7 @@
             this.tabItems.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tabItems.Name = "tabItems";
             this.tabItems.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.tabItems.Size = new System.Drawing.Size(969, 474);
+            this.tabItems.Size = new System.Drawing.Size(964, 474);
             this.tabItems.TabIndex = 2;
             this.tabItems.Text = "Items";
             // 
@@ -2245,7 +2245,7 @@
             this.tabAdvSetting.Controls.Add(this.groupBox15);
             this.tabAdvSetting.Location = new System.Drawing.Point(4, 29);
             this.tabAdvSetting.Name = "tabAdvSetting";
-            this.tabAdvSetting.Size = new System.Drawing.Size(969, 474);
+            this.tabAdvSetting.Size = new System.Drawing.Size(964, 474);
             this.tabAdvSetting.TabIndex = 4;
             this.tabAdvSetting.Text = "Advanced Settings";
             // 
@@ -2620,7 +2620,7 @@
             // saveBtn
             // 
             this.saveBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.saveBtn.Location = new System.Drawing.Point(568, 540);
+            this.saveBtn.Location = new System.Drawing.Point(556, 540);
             this.saveBtn.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.saveBtn.Name = "saveBtn";
             this.saveBtn.Size = new System.Drawing.Size(286, 32);
