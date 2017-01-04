@@ -977,15 +977,15 @@ namespace NecroBot2.Forms
 
         private void startStopBotToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (startStopBotToolStripMenuItem.Text.Equals("■ Exit"))
+            if (startStopBotToolStripMenuItem.Text.Equals(@"■ Exit NecroBot2"))
             {
-                Environment.Exit(0);
+                Environment.Exit(-1);
             }
             else
             {
-                startStopBotToolStripMenuItem.Text = "■ Exit";
+                startStopBotToolStripMenuItem.Text = @"■ Exit NecroBot2";
                 btnRefresh.Enabled = true;
-                settingToolStripMenuItem.Enabled = false;
+                //settingToolStripMenuItem.Enabled = false;
                 Task.Run(StartBot);
             }
         }
