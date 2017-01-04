@@ -106,9 +106,6 @@ namespace PoGo.NecroBot.CLI
             Logger.AddLogger(new FileLogger(LogLevel.Service), _subPath);
             Logger.AddLogger(new WebSocketLogger(LogLevel.Service), _subPath);
 
-
-           
-
             var profilePath = Path.Combine(Directory.GetCurrentDirectory(), _subPath);
             var profileConfigPath = Path.Combine(profilePath, "config");
             var configFile = Path.Combine(profileConfigPath, "config.json");
