@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using PoGo.NecroBot.Logic.PoGoUtils;
+using PoGo.NecroBot.Logic.Service;
 using POGOProtos.Data;
 using POGOProtos.Inventory;
 using POGOProtos.Settings.Master;
