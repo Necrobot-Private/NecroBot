@@ -1,4 +1,9 @@
 # Change Log
+## [v1.0.0.50](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.50) (2017-01-04)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.47...v1.0.0.50)
+## Bugs & Enhancements
+- Enhancement - Add reconnection mechanism when PF hash server down - bot wont exist 
+
 ## [v1.0.0.47](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.47) (2017-01-02)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.46...v1.0.0.47)
 ## Bugs & Enhancements
