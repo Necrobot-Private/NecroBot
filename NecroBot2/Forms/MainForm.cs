@@ -73,14 +73,14 @@ namespace NecroBot2.Forms
         private StateMachine _machine;
         private List<PointLatLng> _routePoints;
         private GlobalSettings _settings;
-        public string[] _args;
+        public string[] args;
 
-        public MainForm(string[] args)
+        public MainForm(string[] _args)
         {
             InitializeComponent();
             SynchronizationContext = SynchronizationContext.Current;
             Instance = this;
-            _args = args;
+            args = _args;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -144,7 +144,7 @@ namespace NecroBot2.Forms
             };
 */
             // Command line parsing
-            var commandLine = new Arguments(_args);
+            var commandLine = new Arguments(args);
             // Look for specific arguments values
             if (commandLine["subpath"] != null && commandLine["subpath"].Length > 0)
             {
