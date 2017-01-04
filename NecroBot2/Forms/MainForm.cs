@@ -32,15 +32,12 @@ using PoGo.NecroBot.Logic.Service.Elevation;
 using NecroBot2.Helpers;
 using NecroBot2.Models;
 using NecroBot2.Logic.Tasks;
-using NecroBot2.Logic;
 using NecroBot2.Logic.Event;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic;
 using System.Reflection;
-using System.Diagnostics;
 using PoGo.NecroBot.Logic.Tasks;
 using System.Net;
-using PokemonGo.RocketAPI.Extensions;
 using NecroBot2.CommandLineUtility;
 
 namespace NecroBot2.Forms

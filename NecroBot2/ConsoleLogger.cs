@@ -1,7 +1,6 @@
 #region using directives
 
 using System;
-using System.Text;
 using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.State;
 using NecroBot2.Forms;
