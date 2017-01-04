@@ -30,6 +30,7 @@ namespace PoGo.NecroBot.CLI
             Logger.Write(errorEvent.ToString(), LogLevel.Error, force: true);
         }
 
+
         private static void HandleEvent(NoticeEvent noticeEvent, ISession session)
         {
             Logger.Write(noticeEvent.ToString());
