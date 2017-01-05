@@ -121,6 +121,7 @@
             // 
             // btnCancel
             // 
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Location = new System.Drawing.Point(142, 226);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
@@ -148,6 +149,7 @@
             this.ShowInTaskbar = false;
             this.Text = "APIConfig";
             this.TopMost = true;
+            this.Load += new System.EventHandler(this.AuthAPIForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
