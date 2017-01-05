@@ -6,6 +6,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -78,6 +79,10 @@ namespace PoGo.NecroBot.CLI.Forms
             }
             this.DialogResult = DialogResult.OK;
             this.Close();
+        }
+
+        private void AuthAPIForm_Load(object sender, EventArgs e)
+        {
         }
     }
 }

@@ -25,6 +25,7 @@ using System.Text;
 using System.Collections.Generic;
 using PokemonGo.RocketAPI.Hash;
 using PoGo.NecroBot.CLI.Forms;
+using System.Threading.Tasks;
 
 #endregion
 
@@ -47,8 +48,7 @@ namespace PoGo.NecroBot.CLI
         [STAThread]
         private static void Main(string[] args)
         {
-            
-
+            System.Windows.Forms.Application.EnableVisualStyles();
             var strCulture = Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName;
 
             var culture = CultureInfo.CreateSpecificCulture("en");
@@ -432,6 +432,18 @@ namespace PoGo.NecroBot.CLI
                 MSniperServiceTask.ConnectToService();
                 _session.EventDispatcher.EventReceived += evt => MSniperServiceTask.AddToList(evt);
             }
+
+            Thread.Sleep(10000);
+            Thread mThread = new Thread(delegate ()
+            {
+                var infoForm = new InfoForm();
+                infoForm.ShowDialog();
+            });
+
+            mThread.SetApartmentState(ApartmentState.STA);
+
+            mThread.Start();
+
             QuitEvent.WaitOne();
         }
 
