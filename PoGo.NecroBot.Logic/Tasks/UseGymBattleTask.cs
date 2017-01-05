@@ -112,7 +112,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                 do
                 {
                     tries++;
-                    try {
+                    try
+                    {
                         result = await StartBattle(session, pokemonDatas, gym);
                         if (result.Result == StartGymBattleResponse.Types.Result.Unset)
                         {
@@ -124,7 +125,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                             await Task.Delay(2000);
                         }
                     }
-                    catch(APIBadRequestException ex)
+                    catch (APIBadRequestException ex)
                     {
                         Logger.Write("Start battle failed....", LogLevel.Warning);
                     }
@@ -423,18 +424,22 @@ namespace PoGo.NecroBot.Logic.Tasks
             List<BattleAction> emptyActions = new List<BattleAction>();
             BattleAction emptyAction = new BattleAction();
             PokemonData attacker = null;
+            PokemonData defender = null;
             _currentAttackerEnergy = 0;
+            var lastState = BattleState.StateUnset;
             while (true)
             {
-                var attackActionz = await GetActions(session, serverMs, attacker, _currentAttackerEnergy);
+                var attackActionz = await GetActions(session, serverMs, attacker, defender, _currentAttackerEnergy);
                 try
                 {
+                    var last = lastActions.LastOrDefault();
+
                     var attackResult =
                         await session.Client.Fort.AttackGym
                         (
                             currentFortData.Id,
                             startResponse.BattleId,
-                            (loops > 0 ? attackActionz : emptyActions),
+                            (last == null || lastState == BattleState.Victory?  emptyActions : attackActionz),
                             (loops > 0 ? lastActions.Last() : emptyAction)
 
                         );
@@ -444,6 +449,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     if (attackResult.Result == AttackGymResponse.Types.Result.Success)
                     {
+
+                        defender = attackResult.ActiveDefender?.PokemonData;
 
                         switch (attackResult.BattleLog.State)
                         {
@@ -457,6 +464,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 if (attackResult.ActiveAttacker.CurrentHealth <= 0) attacker = null;
 
                                 break;
+                               
                             case BattleState.Defeated:
                                 Logger.Write(
                                     $"We were defeated... (AttackGym)");
@@ -469,11 +477,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 Logger.Write(
                                     $"State was unset?: {attackResult}");
                                 return;
-                            
+
                             case BattleState.Victory:
                                 Logger.Write(
                                     $"We were victorious!: ");
-                                return;
+
                                 break;
                             default:
                                 Logger.Write(
@@ -529,30 +537,28 @@ namespace PoGo.NecroBot.Logic.Tasks
         }
 
         private static int _pos;
-        public static async Task<List<BattleAction>> GetActions(ISession sessison, long serverMs, PokemonData attacker, int energy)
+        public static async Task<List<BattleAction>> GetActions(ISession sessison, long serverMs, PokemonData attacker, PokemonData defender, int energy)
         {
             Random rnd = new Random();
             List<BattleAction> actions = new List<BattleAction>();
             DateTime now = DateTimeFromUnixTimestampMillis(serverMs);
-            Logger.Write($"AttackGym Count: {_pos}");
+            //Logger.Write($"AttackGym Count: {_pos}");
 
             var inventory = sessison.Inventory;
 
-            if (attacker != null)
+            if (attacker != null && defender != null)
             {
                 var move1 = PokemonMoveMetaRegistry.GetMeta(attacker.Move1);
                 var move2 = PokemonMoveMetaRegistry.GetMeta(attacker.Move2);
-                Logger.Write($"Retrieved Move Metadata, Move1: {move1.GetTime()} - Move2: {move2.GetTime()}");
+                //  Logger.Write($"Retrieved Move Metadata, Move1: {move1.GetTime()} - Move2: {move2.GetTime()}");
 
                 var moveSetting = await inventory.GetMoveSetting(attacker.Move1);
 
                 var specialMove = await inventory.GetMoveSetting(attacker.Move2);
 
-                if (Math.Abs(specialMove.EnergyDelta) < energy)
-                {
                     BattleAction action2 = new BattleAction();
                     now = now.AddMilliseconds(specialMove.DurationMs);
-                    action2.Type = BattleActionType.ActionSpecialAttack;
+                    action2.Type = Math.Abs(specialMove.EnergyDelta) < energy? BattleActionType.ActionSpecialAttack : BattleActionType.ActionAttack;
                     action2.DurationMs = specialMove.DurationMs;
                     action2.ActionStartMs = now.ToUnixTime();
                     action2.TargetIndex = -1;
@@ -563,88 +569,20 @@ namespace PoGo.NecroBot.Logic.Tasks
                     actions.Add(action2);
 
                     return actions;
-                }
-
-                BattleAction action1 = new BattleAction();
-                now = now.AddMilliseconds(moveSetting.DurationMs);
-                action1.Type = BattleActionType.ActionAttack;
-                action1.DurationMs = move1.GetTime();
-                action1.ActionStartMs = now.ToUnixTime();
-                action1.TargetIndex = -1;
-                action1.ActivePokemonId = attacker.Id;
-
-                // action.DamageWindowsStartTimestampMss = now.ToUnixTime() - 200;
-                //action.DamageWindowsEndTimestampMss = now.ToUnixTime();
-                actions.Add(action1);
-
-                return actions;
-
-                switch (_pos)
-                {
-                    case 0:
-                        for (int x = 0; x < 3; x++)
-                        {
-                            BattleAction action = new BattleAction();
-                            now = now.AddMilliseconds(move1.GetTime());
-                            action.Type = BattleActionType.ActionAttack;
-                            action.DurationMs = move1.GetTime();
-                            action.ActionStartMs = now.ToUnixTime();
-                            action.TargetIndex = -1;
-                            action.ActivePokemonId = attacker.Id;
-
-                            // action.DamageWindowsStartTimestampMss = now.ToUnixTime() - 200;
-                            //action.DamageWindowsEndTimestampMss = now.ToUnixTime();
-                            actions.Add(action);
-                        }
-                        _pos++;
-                        break;
-
-                    case 1:
-                        _pos++;
-                        break;
-
-                    default:
-                        for (int x = 0; x < 3; x++)
-                        {
-                            BattleAction action = new BattleAction();
-
-                            //if (x == 2 && currentAttackerEnergy > move2.GetEnergy())
-                            //{
-                            //    // Special Attack
-                            //    now = now.AddMilliseconds(move2.GetTime());
-                            //    action.Type = BattleActionType.ActionSpecialAttack;
-                            //    action.DurationMs = move2.GetTime();
-                            //}
-                            //else
-                            //{
-                            //    // Basic Attack
-                            //    now = now.AddMilliseconds(move1.GetTime());
-                            //    action.Type = BattleActionType.ActionAttack;
-                            //    action.DurationMs = move1.GetTime();
-                            //}
-
-                            // Basic Attack
-                            now = now.AddMilliseconds(move1.GetTime());
-                            action.Type = BattleActionType.ActionAttack;
-                            action.DurationMs = move1.GetTime();
-
-                            action.ActionStartMs = now.ToUnixTime();
-                            action.TargetIndex = -1;
-                            action.ActivePokemonId = attacker.Id;
-                            //action.DamageWindowsStartTimestampMss = now.ToUnixTime() - 200;
-                            //action.DamageWindowsEndTimestampMss = now.ToUnixTime();
-
-                            //
-                            actions.Add(action);
-                        }
-                        _pos++;
-                        break;
-                }
             }
+            BattleAction action1 = new BattleAction();
+            now = now.AddMilliseconds(500);
+            action1.Type = BattleActionType.ActionAttack;
+            action1.DurationMs = 500;
+            action1.ActionStartMs = now.ToUnixTime();
+            action1.TargetIndex = -1;
+            if(defender != null)
+            action1.ActivePokemonId = attacker.Id;
 
-
+            actions.Add(action1);
 
             return actions;
+
         }
 
         private static async Task<StartGymBattleResponse> StartBattle(ISession session, IEnumerable<PokemonData> pokemons, FortData currentFortData)
