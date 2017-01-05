@@ -33,6 +33,8 @@ namespace PoGo.NecroBot.Logic.Tasks
         private static int _randomNumber;
         public static bool _pokestopLimitReached;
         public static bool _pokestopTimerReached;
+        private static double lastPokestopLat =0;
+        private static double lastPokestopLng = 0;
 
         internal static void Initialize()
         {
@@ -83,6 +85,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     await HumanWalkSnipeTask.Execute(session, cancellationToken, pokeStop, fortInfo);
                 }
+                
                 pokeStop = await GetNextPokeStop(session);
             }
         }

@@ -5,6 +5,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -20,7 +21,7 @@ namespace PoGo.NecroBot.CLI.Forms
 
         private void InfoForm_Load(object sender, EventArgs e)
         {
-
+            this.Text = "Necrobot 2 - " + FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion;
         }
 
         private void pictureBox2_Click(object sender, EventArgs e)
@@ -30,14 +31,14 @@ namespace PoGo.NecroBot.CLI.Forms
 
         private void link_click(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start(((LinkLabel) sender).Text);
-           
+            Process.Start(((LinkLabel)sender).Text);
+
         }
-            private int count = 45;
+        private int count = 60;
         private void timer1_Tick(object sender, EventArgs e)
         {
 
-            if(count--<=0)
+            if (count-- <= 0)
             {
                 this.Close();
             }

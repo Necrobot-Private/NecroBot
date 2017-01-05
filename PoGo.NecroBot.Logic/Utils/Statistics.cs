@@ -85,7 +85,7 @@ namespace PoGo.NecroBot.Logic.Utils
                 }
 
                 var totalMin = (DateTime.Now - _initSessionDateTime).TotalMinutes;
-                if (config.RuntimeSwitch> 0 && config.RuntimeSwitch <= totalMin && !session.Stats.IsSnipping)
+                if (config.RuntimeSwitch> 0 && config.RuntimeSwitch <= totalMin)
                 {
                     session.CancellationTokenSource.Cancel();
                     //Activate switcher by pokestop

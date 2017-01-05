@@ -654,6 +654,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
             finally
             {
+                
                 inProgress = false;
                 session.Stats.IsSnipping = false;
             }
