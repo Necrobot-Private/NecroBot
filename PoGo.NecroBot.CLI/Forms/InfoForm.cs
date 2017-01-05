@@ -42,5 +42,10 @@ namespace PoGo.NecroBot.CLI.Forms
                 this.Close();
             }
         }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://github.com/Necrobot-Private/NecroBot/releases");
+        }
     }
 }
