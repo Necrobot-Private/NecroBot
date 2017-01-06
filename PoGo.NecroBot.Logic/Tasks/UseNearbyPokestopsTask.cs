@@ -26,6 +26,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 {
     public class UseNearbyPokestopsTask
     {
+        //add delegate
         public delegate void LootPokestopDelegate(FortData pokestop);
 
         private static int _stopsHit;
@@ -561,6 +562,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             return pokeStops.ToList();
         }
 
+        //add delegate event
         private static void OnLootPokestopEvent(FortData pokestop)
         {
             LootPokestopEvent?.Invoke(pokestop);
