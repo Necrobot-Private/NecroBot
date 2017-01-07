@@ -36,7 +36,7 @@ namespace PoGo.NecroBot.CLI
         private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
         private static string _subPath = "";
         private static bool _enableJsonValidation = true;
-        private static bool _ignoreKillSwitch;
+        //private static bool _ignoreKillSwitch;
                                                                  
         private static readonly Uri StrKillSwitchUri =
             new Uri("https://raw.githubusercontent.com/Necrobot-Private/Necrobot2/master/KillSwitch.txt");
@@ -88,10 +88,10 @@ namespace PoGo.NecroBot.CLI
                 switch (commandLine["killswitch"])
                 {
                     case "true":
-                        _ignoreKillSwitch = false;
+                        //_ignoreKillSwitch = false;
                         break;
                     case "false":
-                        _ignoreKillSwitch = true;
+                        //_ignoreKillSwitch = true;
                         break;
                 }
             }
