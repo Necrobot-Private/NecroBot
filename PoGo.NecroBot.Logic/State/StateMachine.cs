@@ -110,14 +110,28 @@ namespace PoGo.NecroBot.Logic.State
                         Environment.Exit(0);
                     }
                 }
-                catch (AccountNotVerifiedException ex)
+                catch (APIBadRequestException ex)
+                {
+                    Logger.Write("Bad Request - If you see this message please conpy error log & screenshot send back to dev asap.", level: LogLevel.Error);
+
+                    session.EventDispatcher.Send(new ErrorEvent() { Message = ex.Message });
+                    Logger.Write(ex.StackTrace, level: LogLevel.Error);
+
+                    if (session.LogicSettings.AllowMultipleBot)
+                        session.ReInitSessionWithNextBot();
+                    state = new LoginState();
+                }
+                catch (AccountNotVerifiedException)
                 {
                     if (session.LogicSettings.AllowMultipleBot)
                     {
-
-
+                        session.ReInitSessionWithNextBot();
+                        state = new LoginState();
                     }
-                    else Environment.Exit(0);
+                    else {
+                        Console.Read();
+                        Environment.Exit(0);
+                    }
                 }
                 catch (ActiveSwitchByPokemonException rsae)
                 {
@@ -128,7 +142,12 @@ namespace PoGo.NecroBot.Logic.State
                 catch (ActiveSwitchByRuleException se)
                 {
                     session.EventDispatcher.Send(new WarnEvent { Message = $"Switch bot account activated by : {se.MatchedRule.ToString()}  - {se.ReachedValue} " });
-
+                    if (se.MatchedRule == SwitchRules.EmptyMap)
+                    {
+                        session.BlockCurrentBot(90);
+                        session.ReInitSessionWithNextBot();
+                    }
+                    else
                     if (se.MatchedRule == SwitchRules.PokestopSoftban)
                     {
                         session.BlockCurrentBot();
@@ -145,11 +164,17 @@ namespace PoGo.NecroBot.Logic.State
                         if (se.MatchedRule == SwitchRules.CatchLimitReached || se.MatchedRule == SwitchRules.SpinPokestopReached)
                         {
                             PushNotificationClient.SendNotification(session, $"{se.MatchedRule} - {session.Settings.GoogleUsername}{session.Settings.PtcUsername}", "This bot has reach limit, it will be blocked for 60 mins for safety.", true);
+                            session.EventDispatcher.Send(new WarnEvent() { Message = "You reach limited. bot will sleep for 60 min" });
+
                             session.BlockCurrentBot(60);
+
                             if (!session.LogicSettings.AllowMultipleBot)
                             {
-                                session.EventDispatcher.Send(new WarnEvent() { Message = "You reach limited. bot will sleep for 60 min" });
                                 await Task.Delay(60 * 1000 * 60);
+                            }
+                            else
+                            {
+                                session.ReInitSessionWithNextBot();
                             }
                         }
                         else {
@@ -187,10 +212,29 @@ namespace PoGo.NecroBot.Logic.State
                 catch (OperationCanceledException)
                 {
                     session.EventDispatcher.Send(new ErrorEvent { Message = "Current Operation was canceled." });
-                    session.BlockCurrentBot(30);
-                    session.ReInitSessionWithNextBot();
+                    if (session.LogicSettings.AllowMultipleBot)
+                    {
+                        session.BlockCurrentBot(30);
+                        session.ReInitSessionWithNextBot();
+                    }
                     state = new LoginState();
 
+                }
+                catch (LoginFailedException)
+                {
+                    PushNotificationClient.SendNotification(session, $"Banned!!!! {session.Settings.PtcUsername}{session.Settings.GoogleUsername}", session.Translation.GetTranslation(TranslationString.AccountBanned), true);
+
+                    if (session.LogicSettings.AllowMultipleBot)
+                    {
+                        session.BlockCurrentBot(24 * 60); //need remove acc
+                        session.ReInitSessionWithNextBot();
+                        state = new LoginState();
+                    }
+                    else {
+                        session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey) });
+                        Console.ReadKey();
+                        System.Environment.Exit(1);
+                    }
                 }
                 catch (MinimumClientVersionException ex)
                 {
@@ -204,23 +248,16 @@ namespace PoGo.NecroBot.Logic.State
                     Console.ReadKey();
                     System.Environment.Exit(1);
                 }
-                catch (LoginFailedException ex)
+                catch(TokenRefreshException ex)
                 {
-                    PushNotificationClient.SendNotification(session, $"Banned!!!! {session.Settings.PtcUsername}{session.Settings.GoogleUsername}", session.Translation.GetTranslation(TranslationString.AccountBanned), true);
+                    session.EventDispatcher.Send(new ErrorEvent() { Message = ex.Message });
 
                     if (session.LogicSettings.AllowMultipleBot)
-                    {
-                        session.BlockCurrentBot(24 * 60); //need remove acc
                         session.ReInitSessionWithNextBot();
-                        state = new LoginState();
-                    }
-                    else {
-                        session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.AccountBanned) });
-                        session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey) });
-                        Console.ReadKey();
-                        System.Environment.Exit(1);
-                    }
+                    state = new LoginState();
+                    
                 }
+                
                 catch (PtcOfflineException)
                 {
                     session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.PtcOffline) });
@@ -270,6 +307,14 @@ namespace PoGo.NecroBot.Logic.State
                         //resolve captcha
                         state = new LoginState();
                     }
+                }
+                catch (HasherException ex)
+                {
+                    session.EventDispatcher.Send(new ErrorEvent { Message = ex.Message });
+                  //  session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey) });
+                    state = new IdleState();
+                    //Console.ReadKey();
+                    //System.Environment.Exit(1);
                 }
                 catch (Exception ex)
                 {

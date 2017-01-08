@@ -25,6 +25,7 @@ using System.Text;
 using System.Collections.Generic;
 using PokemonGo.RocketAPI.Hash;
 using PoGo.NecroBot.CLI.Forms;
+using System.Threading.Tasks;
 
 #endregion
 
@@ -35,7 +36,7 @@ namespace PoGo.NecroBot.CLI
         private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
         private static string _subPath = "";
         private static bool _enableJsonValidation = true;
-        private static bool _ignoreKillSwitch;
+        //private static bool _ignoreKillSwitch;
                                                                  
         private static readonly Uri StrKillSwitchUri =
             new Uri("https://raw.githubusercontent.com/Necrobot-Private/Necrobot2/master/KillSwitch.txt");
@@ -47,8 +48,7 @@ namespace PoGo.NecroBot.CLI
         [STAThread]
         private static void Main(string[] args)
         {
-            
-
+            System.Windows.Forms.Application.EnableVisualStyles();
             var strCulture = Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName;
 
             var culture = CultureInfo.CreateSpecificCulture("en");
@@ -88,10 +88,10 @@ namespace PoGo.NecroBot.CLI
                 switch (commandLine["killswitch"])
                 {
                     case "true":
-                        _ignoreKillSwitch = false;
+                        //_ignoreKillSwitch = false;
                         break;
                     case "false":
-                        _ignoreKillSwitch = true;
+                        //_ignoreKillSwitch = true;
                         break;
                 }
             }
@@ -105,9 +105,6 @@ namespace PoGo.NecroBot.CLI
             Logger.AddLogger(new ConsoleLogger(LogLevel.Service), _subPath);
             Logger.AddLogger(new FileLogger(LogLevel.Service), _subPath);
             Logger.AddLogger(new WebSocketLogger(LogLevel.Service), _subPath);
-
-
-           
 
             var profilePath = Path.Combine(Directory.GetCurrentDirectory(), _subPath);
             var profileConfigPath = Path.Combine(profilePath, "config");
@@ -435,6 +432,18 @@ namespace PoGo.NecroBot.CLI
                 MSniperServiceTask.ConnectToService();
                 _session.EventDispatcher.EventReceived += evt => MSniperServiceTask.AddToList(evt);
             }
+
+            Thread.Sleep(10000);
+            Thread mThread = new Thread(delegate ()
+            {
+                var infoForm = new InfoForm();
+                infoForm.ShowDialog();
+            });
+
+            mThread.SetApartmentState(ApartmentState.STA);
+
+            mThread.Start();
+
             QuitEvent.WaitOne();
         }
 

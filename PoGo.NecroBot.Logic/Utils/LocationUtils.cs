@@ -18,17 +18,25 @@ namespace PoGo.NecroBot.Logic.Utils
         public static async Task<PlayerUpdateResponse> UpdatePlayerLocationWithAltitude(ISession session, GeoCoordinate position, float speed)
         {
             double altitude = session.ElevationService.GetElevation(position.Latitude, position.Longitude);
-            return await session.Client.Player.UpdatePlayerLocation(position.Latitude, position.Longitude, altitude, speed);
+             //need retry to make sure we back to ogirinal location
+
+            var result =  await session.Client.Player.UpdatePlayerLocation(position.Latitude, position.Longitude, altitude, speed);
+            return result;
         }
 
         public static double CalculateDistanceInMeters(double sourceLat, double sourceLng, double destLat,
             double destLng)
             // from http://stackoverflow.com/questions/6366408/calculating-distance-between-two-latitude-and-longitude-geocoordinates
         {
-            var sourceLocation = new GeoCoordinate(sourceLat, sourceLng);
-            var targetLocation = new GeoCoordinate(destLat, destLng);
-
-            return sourceLocation.GetDistanceTo(targetLocation);
+            try {
+                var sourceLocation = new GeoCoordinate(sourceLat, sourceLng);
+                var targetLocation = new GeoCoordinate(destLat, destLng);
+                return sourceLocation.GetDistanceTo(targetLocation);
+            }
+            catch ( ArgumentOutOfRangeException)
+            {
+                return double.MaxValue;
+            }
         }
 
         public static double CalculateDistanceInMeters(GeoCoordinate sourceLocation, GeoCoordinate destinationLocation)

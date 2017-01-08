@@ -1,4 +1,33 @@
 # Change Log
+## [v1.0.0.50](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.50) (2017-01-04)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.47...v1.0.0.50)
+## Bugs & Enhancements
+- Enhancement - Add reconnection mechanism when PF hash server down - bot wont exist 
+
+## [v1.0.0.47](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.47) (2017-01-02)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.46...v1.0.0.47)
+## Bugs & Enhancements
+- FIX Bug - Bulk transfer not working number of pokemons > 100
+- FIX Bug - Fix berry displaye wrong (-1 remaining)
+- Fix Bug - Multi account didn't switch if there only 1 bot config in auth.json
+- Enhancement -Allow enter MinSNipeIV =101 to exclude pokemon to snipe
+
+
+## [v1.0.0.46](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.46) (2017-01-01)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.45...v1.0.0.46)
+## Feature
+- FIX bug - Crash when swith account during snipe
+- FIX bug - Manual snipe doesn't work if not enable autosnipe
+- FIX bug - Envole pokemon duplicate not print the message
+
+## [v1.0.0.45](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.45) (2016-12-27)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.40...v1.0.0.45)
+## Feature
+- Improve autosniper feature
+- Allow snipe pokemon not in dex
+- Fix misc bug
+
+
 ## [v1.0.0.36](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.37) (2016-12-27)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.36...v1.0.0.37)
 ## Feature

@@ -19,6 +19,7 @@ using System.Runtime.Caching;
 using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.Utils;
 using System.IO;
+using PoGo.NecroBot.Logic.Tasks;
 
 #endregion
 
@@ -147,19 +148,19 @@ namespace PoGo.NecroBot.Logic.State
         private List<BotActions> botActions = new List<BotActions>();
         public void Reset(ISettings settings, ILogicSettings logicSettings)
         {
-            
             Client = new Client(settings);
             // ferox wants us to set this manually
             Inventory = new Inventory(Client, logicSettings);
             Navigation = new Navigation(Client, logicSettings);
             Navigation.WalkStrategy.UpdatePositionEvent +=
                 (lat, lng) => this.EventDispatcher.Send(new UpdatePositionEvent { Latitude = lat, Longitude = lng });
+          
         }
         //TODO : Need add BotManager to manage all feature related to multibot, 
         public bool ReInitSessionWithNextBot(AuthConfig bot = null, double lat = 0, double lng = 0, double att = 0)
         {
             this.CatchBlockTime = DateTime.Now; //remove any block
-            
+            MSniperServiceTask.BlockSnipe();
             var currentAccount = this.accounts.FirstOrDefault(x => (x.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Ptc && x.PtcUsername == this.Settings.PtcUsername) ||
                                         (x.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Google && x.GoogleUsername == this.Settings.GoogleUsername));
             if (LoggedTime != DateTime.MinValue)
@@ -206,7 +207,7 @@ namespace PoGo.NecroBot.Logic.State
                 this.Settings.DefaultLongitude = lng == 0 ? this.Client.CurrentLongitude : lng;
                 this.Stats = new SessionStats(this);
                 this.Reset(this.Settings, this.LogicSettings);
-                CancellationTokenSource.Cancel();
+                //CancellationTokenSource.Cancel();
                 this.CancellationTokenSource = new CancellationTokenSource();
                 
                 this.EventDispatcher.Send(new BotSwitchedEvent() {
@@ -225,6 +226,8 @@ namespace PoGo.NecroBot.Logic.State
         }
         public void AddForts(List<FortData> data)
         {
+            data.RemoveAll(x => LocationUtils.CalculateDistanceInMeters(x.Latitude, x.Longitude, this.Settings.DefaultLatitude, this.Settings.DefaultLongitude) > 10000);
+
             this.Forts.RemoveAll(p => data.Any(x => x.Id == p.Id && x.Type == FortType.Checkpoint));
             this.Forts.AddRange(data.Where(x => x.Type == FortType.Checkpoint));
             foreach (var item in data.Where(p => p.Type == FortType.Gym))

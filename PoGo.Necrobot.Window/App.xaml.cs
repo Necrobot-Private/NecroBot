@@ -13,5 +13,9 @@ namespace PoGo.Necrobot.Window
     /// </summary>
     public partial class App : Application
     {
+        public App()
+        {
+            //ShutdownMode = ShutdownMode.OnLastWindowClose;
+        }
     }
 }

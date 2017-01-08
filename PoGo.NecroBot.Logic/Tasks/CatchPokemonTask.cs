@@ -69,7 +69,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             // Exit if user defined max limits reached
             if (session.Stats.CatchThresholdExceeds(session))
             {
-                if(session.LogicSettings.MultipleBotConfig.SwitchOnCatchLimit)
+                if(session.LogicSettings.AllowMultipleBot && session.LogicSettings.MultipleBotConfig.SwitchOnCatchLimit)
                 {
                     throw new Exceptions.ActiveSwitchByRuleException() { MatchedRule = SwitchRules.CatchLimitReached, ReachedValue = session.LogicSettings.CatchPokemonLimit };
                 }
@@ -313,7 +313,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                      : currentFortData.Id, pokeball, normalizedRecticleSize, spinModifier, hitPokemon);
 
                    
-                   await session.Inventory.UpdateInventoryItem(pokeball, -1);
+                    session.Inventory.UpdateInventoryItem(pokeball, -1);
 
                     var evt = new PokemonCaptureEvent()
                     {
@@ -329,12 +329,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                     {
                         var totalExp = 0;
 
-                        PokemonData data = encounter?.WildPokemon?.PokemonData;
-                        if (data != null)
+                        if (encounteredPokemon != null)
                         {
-                            data.Id = caughtPokemonResponse.CapturedPokemonId;
-
-                            await session.Inventory.AddPokemonToCache(data);
+                            encounteredPokemon.Id = caughtPokemonResponse.CapturedPokemonId;
+                            await session.Inventory.AddPokemonToCache(encounteredPokemon);
                             
                         }
                             foreach (var xp in caughtPokemonResponse.CaptureAward.Xp)
@@ -433,6 +431,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     {
                         //reset if not catch flee.
                         CatchFleeContinuouslyCount = 0;
+                        MSniperServiceTask.UnblockSnipe();
                     }
                 }
 
@@ -460,7 +459,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             //if distance is very far. that is snip pokemon
 
-            if (LocationUtils.CalculateDistanceInMeters(encounterEV.Latitude, encounterEV.Longitude, session.Client.CurrentLatitude, session.Client.CurrentLongitude) > 2000)
+            if (session.Stats.IsSnipping || LocationUtils.CalculateDistanceInMeters(encounterEV.Latitude, encounterEV.Longitude, session.Client.CurrentLatitude, session.Client.CurrentLongitude) > 250)//assume that all pokemon catch from 250+m is snipe
                 return;
 
             if (MultipleBotConfig.IsMultiBotActive(session.LogicSettings) &&
@@ -607,10 +606,11 @@ namespace PoGo.NecroBot.Logic.Tasks
             await DelayingUtils.DelayAsync(session.LogicSettings.DelayBetweenPlayerActions, 500, cancellationToken);
 
             var useCaptureItem = await session.Client.Encounter.UseCaptureItem(encounterId, ItemId.ItemRazzBerry, spawnPointId);
-            berry.Count -= 1;
-            await session.Inventory.UpdateInventoryItem(berry.ItemId, -1);
+            //berry.Count -= 1;
 
-            session.EventDispatcher.Send(new UseBerryEvent { BerryType = ItemId.ItemRazzBerry, Count = berry.Count });
+            session.EventDispatcher.Send(new UseBerryEvent { BerryType = ItemId.ItemRazzBerry, Count = berry.Count -1});
+            session.Inventory.UpdateInventoryItem(berry.ItemId, -1);
+
         }
     }
 }

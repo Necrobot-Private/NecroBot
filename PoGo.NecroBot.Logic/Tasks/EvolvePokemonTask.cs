@@ -45,7 +45,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     var pokemonNeededInInventory = (maxStorage - totalEggs.Count()) * session.LogicSettings.EvolveKeptPokemonsAtStorageUsagePercentage / 100.0f;
                     var needPokemonToStartEvolve = Math.Round(
-                        Math.Max(0, Math.Min(session.LogicSettings.EvolveKeptPokemonsOverrideStartIfThisManyReady,
+                        Math.Max(0, Math.Min(session.LogicSettings.EvolveKeptPokemonIfBagHasOverThisManyPokemon,
                             Math.Min(pokemonNeededInInventory, session.Profile.PlayerData.MaxPokemonStorage))));
 
                     var deltaCount = needPokemonToStartEvolve - totalPokemon.Count();
@@ -114,8 +114,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             var pokemonSettings = await session.Inventory.GetPokemonSettings();
             var pokemonFamilies = await session.Inventory.GetPokemonFamilies();
 
-            
-
+            int sequence = 1;
             foreach (var pokemon in pokemonToEvolve)
             {
                 var setting =
@@ -125,19 +124,21 @@ namespace PoGo.NecroBot.Logic.Tasks
                 if (family.Candy_ < setting.CandyToEvolve) continue;
                 // no cancellationToken.ThrowIfCancellationRequested here, otherwise the lucky egg would be wasted.
                 var evolveResponse = await session.Client.Inventory.EvolvePokemon(pokemon.Id);
-                if(evolveResponse.Result == POGOProtos.Networking.Responses.EvolvePokemonResponse.Types.Result.Success)
+                if (evolveResponse.Result == POGOProtos.Networking.Responses.EvolvePokemonResponse.Types.Result.Success)
                 {
                     family.Candy_ += -setting.CandyToEvolve;
                     await session.Inventory.UpdateCandy(family, -setting.CandyToEvolve);
                     await session.Inventory.DeletePokemonFromInvById(pokemon.Id);
                     await session.Inventory.AddPokemonToCache(evolveResponse.EvolvedPokemonData);
                 }
+
                 session.EventDispatcher.Send(new PokemonEvolveEvent
                 {
                     Id = pokemon.PokemonId,
                     Exp = evolveResponse.ExperienceAwarded,
                     UniqueId = pokemon.Id,
-                    Result = evolveResponse.Result
+                    Result = evolveResponse.Result,
+                    Sequence = pokemonToEvolve.Count() ==1?0:sequence++
                 });
 
                 if (!pokemonToEvolve.Last().Equals(pokemon))
