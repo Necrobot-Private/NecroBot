@@ -38,7 +38,7 @@ namespace PoGo.NecroBot.Logic
         private GetInventoryResponse _cachedInventory = null;
         private DateTime _lastRefresh;
 
-        public Inventory(Client client, ILogicSettings logicSettings)
+        public Inventory(Client client, ILogicSettings logicSettings, Action<GetInventoryResponse> onUpdated = null)
         {
             _client = client;
             _logicSettings = logicSettings;
@@ -48,6 +48,10 @@ namespace PoGo.NecroBot.Logic
                  //Console.WriteLine("################# INVENTORY UPDATE ######################");
                  _cachedInventory = refreshedInventoryData;
                  _lastRefresh = DateTime.Now;
+                 if(onUpdated!= null)
+                 {
+                     onUpdated(_cachedInventory);
+                 }
              };
         }
 
@@ -110,13 +114,19 @@ namespace PoGo.NecroBot.Logic
 
         public async Task<GetInventoryResponse> GetCachedInventory()
         {
-            if (_player == null) GetPlayerData();
+            lock(_cachedInventory)
+            {
+                if (_player == null) GetPlayerData();
+            }
+
             var now = DateTime.UtcNow;
+            lock (_cachedInventory)
+            {
+                if (_cachedInventory != null && _lastRefresh.AddSeconds(5 * 60).Ticks > now.Ticks)
+                    return _cachedInventory;
+            }
 
-            if (_cachedInventory != null && _lastRefresh.AddSeconds(5 * 60).Ticks > now.Ticks)
-                return _cachedInventory;
-
-            return await RefreshCachedInventory();
+          return await RefreshCachedInventory();
         }
 
         public async Task<IEnumerable<AppliedItems>> GetAppliedItems()
@@ -585,9 +595,11 @@ namespace PoGo.NecroBot.Logic
                 if (settings.EvolutionIds.Count == 0)
                     continue;
                 //DO NOT CHANGE! TESTED AND WORKS
+                //TRUONG: temporary change 1 to 2 to fix not enought resource when evolve. not a big deal when we keep few candy 
+
                 var pokemonCandyNeededAlready =
                     (pokemonToEvolve.Count(
-                        p => pokemonSettings.Single(x => x.PokemonId == p.PokemonId).FamilyId == settings.FamilyId) + 1) *
+                        p => pokemonSettings.Single(x => x.PokemonId == p.PokemonId).FamilyId == settings.FamilyId) + 2) * 
                     settings.CandyToEvolve;
 
                 if (familyCandy.Candy_ >= pokemonCandyNeededAlready)

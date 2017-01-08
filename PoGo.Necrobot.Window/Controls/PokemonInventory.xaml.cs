@@ -1,0 +1,111 @@
+﻿using PoGo.Necrobot.Window.Model;
+using PoGo.NecroBot.Logic.State;
+using PoGo.NecroBot.Logic.Tasks;
+using POGOProtos.Data;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace PoGo.Necrobot.Window.Controls
+{
+    public delegate void PokemonItemSelected(PokemonDataViewModel selected);
+
+    /// <summary>
+    /// Interaction logic for PokemonInventory.xaml
+    /// </summary>
+    public partial class PokemonInventory : UserControl
+    {
+        public ISession Session { get; set; }
+        public event PokemonItemSelected OnPokemonItemSelected;
+
+        //public static readonly DependencyProperty PokemonsProperty =
+        // DependencyProperty.Register("Pokemons", typeof(string),
+        //   typeof(List<PokemonData>), new PropertyMetadata(""));
+
+        //public List<PokemonData> Pokemons
+        //{
+        //    get { return (List<PokemonData>)GetValue(PokemonsProperty); }
+        //    set { SetValue(PokemonsProperty, value); }
+        //}
+        public PokemonInventory()
+        {
+            InitializeComponent();
+
+            // gridData.ItemsSource = this.DataContext as List<PokemonData>;
+        }
+
+        private void gridData_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var data = DataContext as PokemonListModel;
+            var count = data.Pokemons.Count(x => x.IsSelected);
+            //TODO : Thought it will better to use binding.
+            btnTransferAll.Content = $"Transfer all ({count})";
+            if (count > 1)
+            {
+                btnTransferAll.IsEnabled = true;
+            }
+
+            OnPokemonItemSelected?.Invoke(null);
+        }
+
+        private void btnTransfer_Click(object sender, RoutedEventArgs e)
+        {
+            var model = this.DataContext as PokemonListModel;
+
+            ulong pokemonId = (ulong)((Button)sender).CommandParameter;
+            model.Transfer(pokemonId);
+            var button = sender as Button;
+            //button.Content = "Transfering...";
+            //button.IsEnabled = false;
+
+            Task.Run(async () =>
+            {
+                await TransferPokemonTask.Execute(Session, Session.CancellationTokenSource.Token, new List<ulong> { pokemonId });
+
+            });
+
+        }
+
+        private void btnTransferAll_Click(object sender, RoutedEventArgs e)
+        {
+            var data = DataContext as PokemonListModel;
+            var pokemonToTransfer = data.Pokemons
+                .Where(x => x.IsSelected && !x.IsTransfering)
+                .Select(x=>x.Id)
+                .ToList();
+            data.Transfer(pokemonToTransfer);
+            if (MessageBox.Show("Do you want to transfer all selected pokemon","Bulk transfer", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                Task.Run(async () =>
+                {
+                    await TransferPokemonTask.Execute(Session, Session.CancellationTokenSource.Token, pokemonToTransfer);
+
+                });
+            }
+        }
+        //ICommand transferPokemonCommand;
+        //public ICommand TransferPokemonCommand
+        //{
+        //    get
+        //    {
+        //        if (transferPokemonCommand == null)
+        //        {
+        //            transferPokemonCommand = new RelayCommand(param => this.ShowCustomer());
+        //        }
+        //        return transferPokemonCommand;
+        //    }
+        //}
+
+    }
+}

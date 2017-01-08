@@ -20,6 +20,7 @@ using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.Utils;
 using System.IO;
 using PoGo.NecroBot.Logic.Tasks;
+using PoGo.NecroBot.Logic.Event.Inventory;
 
 #endregion
 
@@ -150,7 +151,9 @@ namespace PoGo.NecroBot.Logic.State
         {
             Client = new Client(settings);
             // ferox wants us to set this manually
-            Inventory = new Inventory(Client, logicSettings);
+            Inventory = new Inventory(Client, logicSettings, (args)=> {
+                this.EventDispatcher.Send(new InventoryRefreshedEvent(args) );
+            });
             Navigation = new Navigation(Client, logicSettings);
             Navigation.WalkStrategy.UpdatePositionEvent +=
                 (lat, lng) => this.EventDispatcher.Send(new UpdatePositionEvent { Latitude = lat, Longitude = lng });
@@ -174,7 +177,8 @@ namespace PoGo.NecroBot.Logic.State
             {
                 first.RuntimeTotal = this.accounts.Min(p => p.RuntimeTotal);
             }
-
+            this.Forts.Clear();
+            this.VisibleForts.Clear();
             var nextBot = bot != null ? bot : this.accounts.LastOrDefault(p => p != currentAccount && p.ReleaseBlockTime < DateTime.Now);
             if (nextBot != null)
             {
@@ -220,6 +224,12 @@ namespace PoGo.NecroBot.Logic.State
                         Logger.Write($"{item.PtcUsername}{item.GoogleUsername} \tRuntime : {item.RuntimeTotal:0.00} min ");
                     }
                 }
+            }
+            else
+            {
+                
+                PushNotificationClient.SendNotification(this, "All accounts are being blocked", "Non of yours account available to switch, bot will sleep for 15 mins", true);
+                Task.Delay(15 * 60 * 1000).Wait();
             }
             return nextBot != null;
 

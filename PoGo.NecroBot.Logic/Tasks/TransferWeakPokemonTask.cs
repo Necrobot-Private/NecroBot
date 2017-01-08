@@ -103,7 +103,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             session.EventDispatcher.Send(new TransferPokemonEvent
             {
-                Id = pokemon.PokemonId,
+                Id = pokemon.Id,
+                PokemonId = pokemon.PokemonId,
                 Perfection = PokemonInfo.CalculatePokemonPerfection(pokemon),
                 Cp = pokemon.Cp,
                 BestCp = bestPokemonOfType.Cp,

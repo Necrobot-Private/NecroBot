@@ -126,7 +126,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 var evolveResponse = await session.Client.Inventory.EvolvePokemon(pokemon.Id);
                 if (evolveResponse.Result == POGOProtos.Networking.Responses.EvolvePokemonResponse.Types.Result.Success)
                 {
-                    family.Candy_ += -setting.CandyToEvolve;
+                    family.Candy_ -= setting.CandyToEvolve;
                     await session.Inventory.UpdateCandy(family, -setting.CandyToEvolve);
                     await session.Inventory.DeletePokemonFromInvById(pokemon.Id);
                     await session.Inventory.AddPokemonToCache(evolveResponse.EvolvedPokemonData);

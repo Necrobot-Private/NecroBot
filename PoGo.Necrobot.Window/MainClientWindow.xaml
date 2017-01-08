@@ -1,0 +1,77 @@
+﻿<Controls:MetroWindow x:Class="PoGo.Necrobot.Window.MainClientWindow"
+          xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                  xmlns:Behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                      xmlns:local="clr-namespace:PoGo.Necrobot.Window.Controls"
+                      Title="Necrobot 2 - Window GUI"
+                      Height="768"
+                      Width="1024" 
+                      BorderThickness="0" 
+                      GlowBrush="Black"
+                      ResizeMode="CanResizeWithGrip"
+
+                      WindowTransitionsEnabled="False"
+                      WindowStartupLocation="CenterScreen" Loaded="MetroWindow_Loaded">
+    <DockPanel LastChildFill="True">
+        <GroupBox x:Name="grbPlayerInfo"
+                  DockPanel.Dock="Top" Height="180" Header="Playing As : ">
+            <local:PlayerInfo DataContext="{Binding Path=PlayerInfo}" Margin="10,0,-2,26"/>
+        </GroupBox>
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock Name="lblStatus" />
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock Name="lblCount" />
+            </StatusBarItem>
+        </StatusBar>
+
+        <TabControl TabStripPlacement="Left" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Name="tabMain">
+            <TabControl.Resources>
+                <Style TargetType="{x:Type TabItem}">
+                    <Setter Property="HeaderTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <ContentPresenter Content="{TemplateBinding Content}">
+                                    <ContentPresenter.LayoutTransform>
+                                        <RotateTransform Angle="270" />
+                                    </ContentPresenter.LayoutTransform>
+                                </ContentPresenter>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Padding" Value="3" />
+                </Style>
+            </TabControl.Resources>
+            <TabItem Header="  MAP &amp; JOURNEY  ">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="7*" />
+                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+                    <local:MapControl x:Name="botMap" ></local:MapControl>
+                    <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+                    <TextBlock Grid.Column="2" FontSize="55" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap">Right side</TextBlock>
+                </Grid>
+            </TabItem>
+            <TabItem Header="DEBUG">
+                <RichTextBox DockPanel.Dock="Top" x:Name="richTextBox" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" >
+                    <FlowDocument>
+                        <Paragraph>
+                            <Run Text="RichTextBox"/>
+                        </Paragraph>
+                    </FlowDocument>
+                </RichTextBox>
+            </TabItem>
+            <TabItem Header="{Binding Path= PokemonTabHeader, FallbackValue=Pokemon}" Name="tabPokemons">
+                <local:PokemonInventory x:Name="ctrPokemonInventory" DataContext="{Binding Path=PokemonList}" OnPokemonItemSelected="PokemonInventory_OnPokemonItemSelected" ></local:PokemonInventory>
+            </TabItem>
+            <TabItem  Header="   Inventory (50/350)   " Content="Inventory"/>
+        </TabControl>
+    </DockPanel>
+    
+
+</Controls:MetroWindow>

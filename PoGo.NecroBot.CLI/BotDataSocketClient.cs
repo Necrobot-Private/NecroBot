@@ -224,7 +224,7 @@ namespace PoGo.NecroBot.CLI
                     var move1 = PokemonMove.MoveUnset;
                     var move2 = PokemonMove.MoveUnset;
                     Enum.TryParse<PokemonMove>(data.Move1, true, out move1);
-                    Enum.TryParse<PokemonMove>(data.Move1, true, out move2);
+                    Enum.TryParse<PokemonMove>(data.Move2, true, out move2);
                     ulong encounterid = 0;
                     ulong.TryParse(data.EncounterId, out encounterid);
                     bool caught = CheckIfPokemonBeenCaught(data.Latitude, data.Longitude, data.PokemonId, encounterid, session);
