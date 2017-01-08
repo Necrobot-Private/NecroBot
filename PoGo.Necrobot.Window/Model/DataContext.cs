@@ -16,6 +16,8 @@ namespace PoGo.Necrobot.Window.Model
         public List<PokemonData> internalPokemons;
 
         public PokemonListModel PokemonList { get; set; }
+        public SidebarViewModel Sidebar { get; set; }
+
         public List<PokemonData> Pokemons
         {
             get
@@ -32,6 +34,7 @@ namespace PoGo.Necrobot.Window.Model
 
         public DataContext()
         {
+            Sidebar = new SidebarViewModel();
             internalPokemons = new List<PokemonData>();
             PokemonList = new PokemonListModel()
             {

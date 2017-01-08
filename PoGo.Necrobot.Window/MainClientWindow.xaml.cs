@@ -20,6 +20,7 @@ using PoGo.Necrobot.Window.Win32;
 using PoGo.NecroBot.Logic.Event.Player;
 using PoGo.Necrobot.Window.Model;
 using PoGo.NecroBot.Logic;
+using PoGo.NecroBot.Logic.Logging;
 
 namespace PoGo.Necrobot.Window
 {
@@ -28,14 +29,14 @@ namespace PoGo.Necrobot.Window
     /// </summary>
     public partial class MainClientWindow : MetroWindow
     {
-        
+
         public MainClientWindow()
         {
             InitializeComponent();
 
             datacontext = new Model.DataContext()
             {
-                PlayerInfo = new PlayerInfoModel() { Exp = 0}
+                PlayerInfo = new PlayerInfoModel() { Exp = 0 }
             };
 
             this.DataContext = datacontext;
@@ -58,7 +59,7 @@ namespace PoGo.Necrobot.Window
                 settingWindow.Show();
             }
         }
-        
+
         private void Grid_Loaded(object sender, RoutedEventArgs e)
         {
 
@@ -67,9 +68,61 @@ namespace PoGo.Necrobot.Window
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
         {
             ConsoleHelper.AllocConsole();
+            UILogger logger = new UILogger();
+            logger.LogToUI = this.LogToConsoleTab;
+
+            Logger.AddLogger(logger, string.Empty);
+
             Task.Run(() =>
             {
                 NecroBot.CLI.Program.RunBotWithParameters(this.OnBotStartedEventHandler, new string[] { });
+            });
+            ConsoleHelper.HideConsoleWindow();
+        }
+        private DateTime lastClearLog = DateTime.Now;
+        private void LogToConsoleTab(string message, LogLevel level, string color)
+        {
+
+            if(color == "Black" && level == LogLevel.LevelUp) color = "DarkCyan";
+
+            Dictionary<LogLevel, string> colors = new Dictionary<LogLevel, string>()
+            {
+                { LogLevel.Error, "red" },
+                { LogLevel.Caught, "green" },
+                { LogLevel.Info, "DarkCyan" } ,
+                { LogLevel.Warning, "DarkYellow" } ,
+                { LogLevel.Pokestop,"Cyan" }  ,
+                { LogLevel.Farming,"Magenta" },
+                { LogLevel.Sniper,"White" },
+                { LogLevel.Recycling,"DarkMagenta" },
+                { LogLevel.Flee,"DarkYellow" },
+                { LogLevel.Transfer,"DarkGreen" },
+                { LogLevel.Evolve,"DarkGreen" },
+                { LogLevel.Berry,"DarkYellow" },
+                { LogLevel.Egg,"DarkYellow" },
+                { LogLevel.Debug,"Gray" },
+                { LogLevel.Update,"White" },
+                { LogLevel.New,"Green" },
+                { LogLevel.SoftBan,"Red" },
+                { LogLevel.LevelUp,"Magenta" },
+                { LogLevel.Gym,"Magenta" },
+                { LogLevel.Service ,"White" }
+            };
+
+            if (string.IsNullOrEmpty(color) || color== "Black") color = colors[level];
+
+            this.Invoke(() =>
+            {
+                if (lastClearLog.AddMinutes(15) < DateTime.Now)
+                {
+                    consoleLog.Document.Blocks.Clear();
+                    lastClearLog = DateTime.Now;
+                }
+                if (string.IsNullOrEmpty(color) || color == "Black") color = "white";
+
+                consoleLog.AppendText(message + "\r\n", color);
+
+                consoleLog.ScrollToEnd();
             });
         }
 
@@ -88,7 +141,7 @@ namespace PoGo.Necrobot.Window
             var stat = this.playerStats.GetCurrent();
 
             this.datacontext.PlayerInfo.Runtime = this.playerStats.GetCurrent().FormatRuntime();
-            this.datacontext.PlayerInfo.EXPPerHour = (int) (stat.TotalExperience / stat.GetRuntime());
+            this.datacontext.PlayerInfo.EXPPerHour = (int)(stat.TotalExperience / stat.GetRuntime());
             this.datacontext.PlayerInfo.PKMPerHour = (int)(stat.TotalPokemons / stat.GetRuntime());
             this.datacontext.PlayerInfo.TimeToLevelUp = $"{this.playerStats.GetCurrent().StatsExport.HoursUntilLvl:00}h :{this.playerStats.GetCurrent().StatsExport.MinutesUntilLevel:00}m";
             this.datacontext.PlayerInfo.Level = this.playerStats.GetCurrent().StatsExport.Level;

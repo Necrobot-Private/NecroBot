@@ -26,6 +26,10 @@ namespace PoGo.Necrobot.Window
 
             }
         }
+        public void OnBotEvent(PokemonCaptureEvent inventory)
+        {
+            this.datacontext.Sidebar.AddOrUpdate(new CatchPokemonViewModel(inventory));
+        }
         public void OnBotEvent(InventoryRefreshedEvent inventory)
         {
             if (currentSession.Profile == null || currentSession.Profile.PlayerData == null) return;

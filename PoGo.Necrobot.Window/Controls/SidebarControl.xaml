@@ -18,7 +18,7 @@
         </Control.Resources>
 
         <Grid>
-            <ListBox ItemsSource="{Binding ElementName=UI, Path=ListOfBuildings}" />
+            <ListBox ItemsSource="{Binding Path=HistoryItems}" />
         </Grid>
 
 </UserControl>

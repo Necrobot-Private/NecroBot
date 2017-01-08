@@ -52,9 +52,9 @@
                         <ColumnDefinition Width="5" />
                         <ColumnDefinition Width="auto" />
                     </Grid.ColumnDefinitions>
-                    <local:MapControl x:Name="botMap" ></local:MapControl>
+                    <local:MapControl x:Name="botMap" Grid.Column="0"></local:MapControl>
                     <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
-                    <TextBlock Grid.Column="2" FontSize="55" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap">Right side</TextBlock>
+                    <local:SidebarControl DataContext="{Binding Path=Sidebar}" x:Name="sidebarControl" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinWidth="150"></local:SidebarControl>
                 </Grid>
             </TabItem>
             <TabItem Header="DEBUG">
@@ -66,6 +66,17 @@
                     </FlowDocument>
                 </RichTextBox>
             </TabItem>
+
+            <TabItem Header="   CONSOLE   ">
+                <RichTextBox DockPanel.Dock="Top" x:Name="consoleLog" HorizontalAlignment="Stretch" Background="Black"  VerticalAlignment="Stretch" FontSize="14.667" >
+                    <FlowDocument>
+                        <Paragraph>
+                            <Run Text="RichTextBox"/>
+                        </Paragraph>
+                    </FlowDocument>
+                </RichTextBox>
+            </TabItem>
+            
             <TabItem Header="{Binding Path= PokemonTabHeader, FallbackValue=Pokemon}" Name="tabPokemons">
                 <local:PokemonInventory x:Name="ctrPokemonInventory" DataContext="{Binding Path=PokemonList}" OnPokemonItemSelected="PokemonInventory_OnPokemonItemSelected" ></local:PokemonInventory>
             </TabItem>
