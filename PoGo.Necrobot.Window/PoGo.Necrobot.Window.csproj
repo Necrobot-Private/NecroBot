@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PoGo.Necrobot.Window</RootNamespace>
-    <AssemblyName>PoGo.Necrobot.Window</AssemblyName>
+    <AssemblyName>NecroBot2.Win</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -138,6 +138,15 @@
     <Compile Include="Controls\PokemonInventory.xaml.cs">
       <DependentUpon>PokemonInventory.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SidebarControl.xaml.cs">
+      <DependentUpon>SidebarControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Sidebars\CatchPokemonItem.xaml.cs">
+      <DependentUpon>CatchPokemonItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Sidebars\PokestopItem.xaml.cs">
+      <DependentUpon>PokestopItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\TrolleyTooltip.xaml.cs">
       <DependentUpon>TrolleyTooltip.xaml</DependentUpon>
     </Compile>
@@ -154,10 +163,13 @@
     <Compile Include="MainClientWindow.xaml.UIEvents.cs">
       <DependentUpon>MainClientWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Model\CatchPokemonViewModel.cs" />
     <Compile Include="Model\DataContext.cs" />
     <Compile Include="Model\PlayerInfoModel.cs" />
     <Compile Include="Model\PokemonDataViewModel.cs" />
     <Compile Include="Model\PokemonListModel.cs" />
+    <Compile Include="Model\PokestopItemViewModel.cs" />
+    <Compile Include="Model\SidebarItemViewModel.cs" />
     <Compile Include="Model\ViewModelBase.cs" />
     <Compile Include="SplashScreen.xaml.cs">
       <DependentUpon>SplashScreen.xaml</DependentUpon>
@@ -200,6 +212,18 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\PokemonInventory.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SidebarControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Sidebars\CatchPokemonItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Sidebars\PokestopItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -16,7 +16,7 @@
                       WindowStartupLocation="CenterScreen" Loaded="MetroWindow_Loaded">
     <DockPanel LastChildFill="True">
         <GroupBox x:Name="grbPlayerInfo"
-                  DockPanel.Dock="Top" Height="180" Header="Playing As : ">
+                  DockPanel.Dock="Top" Height="125" Header="Playing As : ">
             <local:PlayerInfo DataContext="{Binding Path=PlayerInfo}" Margin="10,0,-2,26"/>
         </GroupBox>
         <StatusBar DockPanel.Dock="Bottom">

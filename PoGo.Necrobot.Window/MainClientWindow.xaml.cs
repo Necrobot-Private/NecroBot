@@ -90,7 +90,7 @@ namespace PoGo.Necrobot.Window
             this.datacontext.PlayerInfo.Runtime = this.playerStats.GetCurrent().FormatRuntime();
             this.datacontext.PlayerInfo.EXPPerHour = (int) (stat.TotalExperience / stat.GetRuntime());
             this.datacontext.PlayerInfo.PKMPerHour = (int)(stat.TotalPokemons / stat.GetRuntime());
-            this.datacontext.PlayerInfo.TimeToLevelUp = $"{this.playerStats.GetCurrent().StatsExport.HoursUntilLvl:00}h :{this.playerStats.GetCurrent().StatsExport.HoursUntilLvl:00}m";
+            this.datacontext.PlayerInfo.TimeToLevelUp = $"{this.playerStats.GetCurrent().StatsExport.HoursUntilLvl:00}h :{this.playerStats.GetCurrent().StatsExport.MinutesUntilLevel:00}m";
             this.datacontext.PlayerInfo.Level = this.playerStats.GetCurrent().StatsExport.Level;
             this.datacontext.PlayerInfo.Startdust = this.playerStats.GetCurrent().TotalStardust;
         }
