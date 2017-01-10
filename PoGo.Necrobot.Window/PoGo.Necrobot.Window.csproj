@@ -110,6 +110,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\ItemsInventory.xaml.cs">
+      <DependentUpon>ItemsInventory.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\MapControl.xaml.cs">
       <DependentUpon>MapControl.xaml</DependentUpon>
     </Compile>
@@ -153,7 +156,12 @@
     <Compile Include="Controls\TrolleyTooltip.xaml.cs">
       <DependentUpon>TrolleyTooltip.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\FavoriteTextConverter.cs" />
+    <Compile Include="Converters\CheckAllowEvolveConverter.cs" />
+    <Compile Include="Converters\FriendlyEvolveTextConverter.cs" />
     <Compile Include="Converters\FriendlyTransferTextConverter.cs" />
+    <Compile Include="Converters\AllowTransferCheckConverter.cs" />
+    <Compile Include="Converters\ItemIdToImageConverter.cs" />
     <Compile Include="Converters\VisibleWhenGreateThenZeroConverter.cs" />
     <Compile Include="Converters\InverseBooleanConverter.cs" />
     <Compile Include="Converters\MoveConverter.cs" />
@@ -171,6 +179,8 @@
     </Compile>
     <Compile Include="Model\CatchPokemonViewModel.cs" />
     <Compile Include="Model\DataContext.cs" />
+    <Compile Include="Model\ItemsListDataModel.cs" />
+    <Compile Include="Model\ItemsViewModel.cs" />
     <Compile Include="Model\PlayerInfoModel.cs" />
     <Compile Include="Model\PokemonDataViewModel.cs" />
     <Compile Include="Model\PokemonListModel.cs" />
@@ -183,6 +193,10 @@
     </Compile>
     <Compile Include="UILogger.cs" />
     <Compile Include="Win32\ConsoleHelper.cs" />
+    <Page Include="Controls\ItemsInventory.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\MapControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -239,7 +253,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="AppConfigWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -247,8 +261,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="AppConfigWindow.xaml.cs">
+      <DependentUpon>AppConfigWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Resources\Icons.xaml">

@@ -58,7 +58,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Cp = pokemon.Cp,
                         BestCp = bestPokemonOfType.Cp,
                         BestPerfection = Logic.PoGoUtils.PokemonInfo.CalculatePokemonPerfection(bestPokemonOfType),
-                        FamilyCandies = family.Candy_
+                        FamilyCandies = family.Candy_  ,
+                        FamilyId = family.FamilyId
                     });
                 }
 

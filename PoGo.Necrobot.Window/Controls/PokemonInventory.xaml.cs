@@ -94,6 +94,52 @@ namespace PoGo.Necrobot.Window.Controls
                 });
             }
         }
+
+        private void btnEvolve_Click(object sender, RoutedEventArgs e)
+        {
+            var model = this.DataContext as PokemonListModel;
+
+            ulong pokemonId = (ulong)((Button)sender).CommandParameter;
+            model.Evolve(pokemonId);
+           
+            Task.Run(async () =>
+            {
+                await EvolveSpecificPokemonTask.Execute(Session, pokemonId );
+
+            });
+        }
+
+        private void btnFavorit_Click(object sender, RoutedEventArgs e)
+        {
+            var model = this.DataContext as PokemonListModel;
+
+            ulong pokemonId = (ulong)((Button)sender).CommandParameter;
+           bool state =  model.Favorite(pokemonId);
+
+            Task.Run(async () =>
+            {
+                await FavoritePokemonTask.Execute(Session,pokemonId, state);
+
+            });
+        }
+
+        private void Select_Checked(object sender, RoutedEventArgs e)
+        {
+            ulong pokemonId = (ulong)((CheckBox)sender).CommandParameter;
+
+            var data = DataContext as PokemonListModel;
+            var count = data.Pokemons.Count(x => x.IsSelected);
+            //TODO : Thought it will better to use binding.
+            btnTransferAll.Content = $"Transfer all ({count})";
+            if (count > 1)
+            {
+                btnTransferAll.IsEnabled = true;
+            }
+
+            OnPokemonItemSelected?.Invoke(null);
+
+
+        }
         //ICommand transferPokemonCommand;
         //public ICommand TransferPokemonCommand
         //{

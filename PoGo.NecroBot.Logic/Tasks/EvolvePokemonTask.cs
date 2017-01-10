@@ -132,13 +132,16 @@ namespace PoGo.NecroBot.Logic.Tasks
                     await session.Inventory.AddPokemonToCache(evolveResponse.EvolvedPokemonData);
                 }
 
+
                 session.EventDispatcher.Send(new PokemonEvolveEvent
                 {
                     Id = pokemon.PokemonId,
                     Exp = evolveResponse.ExperienceAwarded,
                     UniqueId = pokemon.Id,
                     Result = evolveResponse.Result,
-                    Sequence = pokemonToEvolve.Count() ==1?0:sequence++
+                    Sequence = pokemonToEvolve.Count() ==1?0:sequence++ ,
+                    Family = family,
+                    PokemonSetting = setting
                 });
 
                 if (!pokemonToEvolve.Last().Equals(pokemon))

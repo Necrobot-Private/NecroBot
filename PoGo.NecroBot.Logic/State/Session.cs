@@ -151,8 +151,11 @@ namespace PoGo.NecroBot.Logic.State
         {
             Client = new Client(settings);
             // ferox wants us to set this manually
-            Inventory = new Inventory(Client, logicSettings, (args)=> {
-                this.EventDispatcher.Send(new InventoryRefreshedEvent(args) );
+            Inventory = new Inventory(this,Client, logicSettings, (args)=> {
+                var candy = this.Inventory.GetPokemonFamilies().Result.ToList();
+                var pokemonSettings = this.Inventory.GetPokemonSettings().Result.ToList();
+
+                this.EventDispatcher.Send(new InventoryRefreshedEvent(args,pokemonSettings, candy) );
             });
             Navigation = new Navigation(Client, logicSettings);
             Navigation.WalkStrategy.UpdatePositionEvent +=

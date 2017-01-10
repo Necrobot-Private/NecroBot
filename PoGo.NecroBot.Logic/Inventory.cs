@@ -19,6 +19,7 @@ using POGOProtos.Inventory.Item;
 using POGOProtos.Networking.Responses;
 using POGOProtos.Settings.Master;
 using Caching;
+using PoGo.NecroBot.Logic.Event.Inventory;
 
 #endregion
 
@@ -37,9 +38,11 @@ namespace PoGo.NecroBot.Logic
         private readonly List<ItemId> _revives = new List<ItemId> { ItemId.ItemRevive, ItemId.ItemMaxRevive };
         private GetInventoryResponse _cachedInventory = null;
         private DateTime _lastRefresh;
+        private ISession ownerSession;
 
-        public Inventory(Client client, ILogicSettings logicSettings, Action<GetInventoryResponse> onUpdated = null)
+        public Inventory(ISession session, Client client, ILogicSettings logicSettings, Action<GetInventoryResponse> onUpdated = null)
         {
+            this.ownerSession = session;
             _client = client;
             _logicSettings = logicSettings;
             //Inventory update will be call everytime getMabObject call
@@ -65,6 +68,17 @@ namespace PoGo.NecroBot.Logic
             ItemId.ItemMasterBall
         };
 
+        internal async Task MarkAsFavorite(PokemonData pokemon)
+        {
+            pokemon.Favorite = 1;
+            var all = await GetPokemons();
+            var pkm = all.FirstOrDefault(x => x.Id == pokemon.Id);
+            if(pkm != null)
+            {
+                pkm.Favorite = 1;
+            }
+        }
+
         private readonly List<ItemId> _potions = new List<ItemId>
         {
             ItemId.ItemPotion,
@@ -80,6 +94,10 @@ namespace PoGo.NecroBot.Logic
                 if (item.InventoryItemData != null && item.InventoryItemData.Item != null && item.InventoryItemData.Item.ItemId == itemId)
                 {
                     item.InventoryItemData.Item.Count += count;
+                    this.ownerSession.EventDispatcher.Send(new InventoryItemUpdateEvent()
+                    {
+                        Item = item.InventoryItemData.Item
+                    }) ;
                 }
             }
         }

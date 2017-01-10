@@ -26,7 +26,7 @@ namespace PoGo.Necrobot.Window
 
         public void Write(string message, LogLevel level = LogLevel.Info, ConsoleColor color = ConsoleColor.Black)
         {
-            if(LogToUI != null)
+            if(LogToUI != null && level != LogLevel.Debug)
             {
                 message = Logger.GetFinalMessage(message, level, color);
                 LogToUI(message, level, color.ToString());

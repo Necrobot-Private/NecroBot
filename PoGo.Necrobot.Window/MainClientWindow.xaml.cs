@@ -43,22 +43,6 @@ namespace PoGo.Necrobot.Window
 
         }
 
-        private void btnOpen_Click(object sender, RoutedEventArgs e)
-        {
-            var openDlg = new OpenFileDialog()
-            {
-                AddExtension = false,
-                DefaultExt = "*.json",
-            };
-            if (openDlg.ShowDialog() == true)
-            {
-                string filename = openDlg.FileName;
-
-                MainWindow settingWindow = new MainWindow(this, filename);
-                this.Hide();
-                settingWindow.Show();
-            }
-        }
 
         private void Grid_Loaded(object sender, RoutedEventArgs e)
         {
@@ -133,6 +117,8 @@ namespace PoGo.Necrobot.Window
             this.currentSession = session;
             this.playerStats = stat;
             this.ctrPokemonInventory.Session = session;
+            this.ctrlItemControl.Session = session;
+            this.datacontext.PokemonList.Session = session;
             botMap.SetDefaultPosition(session.Settings.DefaultLatitude, session.Settings.DefaultLongitude);
         }
 
@@ -152,6 +138,30 @@ namespace PoGo.Necrobot.Window
         {
             var numberSelected = datacontext.PokemonList.Pokemons.Count(x => x.IsSelected);
             lblCount.Text = $"Select : {numberSelected}";
+        }
+        bool isConsoleShowing = false;
+        private void menuConsole_Click(object sender, RoutedEventArgs e)
+        {
+            if(isConsoleShowing)
+            {
+                consoleMenuText.Text= "Show Console";
+                ConsoleHelper.HideConsoleWindow();
+            }
+            else
+            {
+
+                consoleMenuText.Text = "Close Console";
+                ConsoleHelper.ShowConsoleWindow();
+
+            }
+
+            isConsoleShowing = !isConsoleShowing;
+        }
+        
+        private void menuSetting_Click(object sender, RoutedEventArgs e)
+        {
+            var configWindow = new AppConfigWindow(this, System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "config\\config.json"));
+            configWindow.ShowDialog();
         }
     }
 }

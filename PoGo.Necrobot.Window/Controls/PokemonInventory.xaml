@@ -10,6 +10,10 @@
     <Control.Resources>
         <cv:InverseBooleanConverter x:Key="InverseBooleanConverter" />
         <cv:FriendlyTransferTextConverter x:Key="FriendlyTransferTextConverter" />
+        <cv:FriendlyEvolveTextConverter x:Key="FriendlyEvolveTextConverter" />
+        <cv:CheckAllowEvolveConverter x:Key="CheckAllowEvolveConverter" />
+        <cv:FavoriteTextConverter x:Key="FavoriteTextConverter"/>
+        <cv:AllowTransferCheckConverter x:Key="AllowTransferCheckConverter"/>
     </Control.Resources>
     <StackPanel>
 
@@ -19,7 +23,7 @@
         </StackPanel>
         <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto">
             <DataGrid x:Name="gridData"   
-               MaxHeight="800"
+               MaxHeight="600"
               EnableRowVirtualization="True"
               AutoGenerateColumns="false"
               VerticalAlignment="Stretch" 
@@ -31,22 +35,56 @@
       ScrollViewer.VerticalScrollBarVisibility="Visible"
       ScrollViewer.HorizontalScrollBarVisibility="Visible" >
                 <DataGrid.Columns>
-                    <DataGridCheckBoxColumn Binding="{Binding IsSelected}" Header="Selected"/>
-                    <DataGridTextColumn Binding="{Binding PokemonName}" Header="Name"/>
-                    <DataGridTextColumn Binding="{Binding IV, StringFormat=\{0:0.00\}}" Header="IV"/>
-                    <DataGridTextColumn Binding="{Binding CP, StringFormat=\{0\}}" Header="CP"/>
-                    <DataGridTextColumn Binding="{Binding Level, StringFormat=\{0\}}" Header="Level"/>
-                    <DataGridTextColumn Binding="{Binding HP, StringFormat=\{0\}}" Header="HP"/>
-                    <DataGridTextColumn Binding="{Binding MaxHP, StringFormat=\{0\}}" Header="MaxHP"/>
+                    <DataGridTemplateColumn Header="Selected" IsReadOnly="False">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox Margin="15,0,0,0" IsChecked="{Binding IsSelected, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Checked="Select_Checked" CommandParameter="{Binding Path=Id}"  Click="Select_Checked"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
+                    <!--<DataGridCheckBoxColumn Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" Header="Selected"/>-->
+                    <DataGridTextColumn Binding="{Binding PokemonName}" Header="Name" MinWidth="120"/>
+                    <DataGridTextColumn Binding="{Binding IV, StringFormat=\{0:0.00\}}" Header="IV" MinWidth="60" IsReadOnly="True"/>
+                    <DataGridTextColumn Binding="{Binding CP, StringFormat=\{0\}}" Header="CP" MinWidth="60" IsReadOnly="True"/>
+                    <DataGridTextColumn Binding="{Binding Level, StringFormat=\{0\}}" Header="Level" MinWidth="60" IsReadOnly="True"/>
+                    <DataGridTextColumn Binding="{Binding HP, StringFormat=\{0\}}" Header="HP" MinWidth="60" IsReadOnly="True"/>
+                    <DataGridTextColumn Binding="{Binding MaxHP, StringFormat=\{0\}}" Header="MaxHP" MinWidth="60" IsReadOnly="True"/>
+                    <DataGridTextColumn Binding="{Binding Candy, StringFormat=\{0\}}" Header="Candy" MinWidth="90" IsReadOnly="True"/>
                     <DataGridTemplateColumn Header="Actions">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel  Orientation="Horizontal"  >
-                                    <Button Margin="0,0,10,0" Click="btnTransfer_Click" CommandParameter="{Binding Id}"  IsEnabled="{Binding Path=IsTransfering, Converter={StaticResource ResourceKey=InverseBooleanConverter}}" Content="{Binding Path=IsTransfering, Converter={StaticResource ResourceKey= FriendlyTransferTextConverter}}"/>
-                                    <Button Margin="0,0,10,0" Content="Evolve"/>
+                                    <Button Margin="0,0,10,0" Click="btnTransfer_Click" CommandParameter="{Binding Id}" Content="{Binding Path=IsTransfering, Converter={StaticResource ResourceKey= FriendlyTransferTextConverter}}">
+                                        <Button.IsEnabled>
+                                            <MultiBinding Converter="{StaticResource AllowTransferCheckConverter}">
+                                                <Binding Path="IsTransfering"/>
+                                                <Binding Path="Favorited"/>
+                                            </MultiBinding>
+                                        </Button.IsEnabled>
+                                    </Button>
+                                    <Button Margin="0,0,10,0"  Click="btnEvolve_Click" CommandParameter="{Binding Id}" Content="{Binding Path=IsEvolving, Converter={StaticResource ResourceKey=FriendlyEvolveTextConverter}}">
+                                        <Button.IsEnabled>
+                                            <MultiBinding Converter="{StaticResource ResourceKey=CheckAllowEvolveConverter}">
+                                                <Binding Path="AllowEvolve"></Binding>
+                                                <Binding Path="IsEvolving"></Binding>
+                                                <Binding Path="IsTransfering"></Binding>
+                                            </MultiBinding>
+                                        </Button.IsEnabled>
+                                        
+                                    </Button>
                                     <Button Margin="0,0,10,0" Content="Power up"/>
-                                    <Button Margin="0,0,10,0" IsEnabled="{Binding IsFavoried, Converter={StaticResource InverseBooleanConverter}}" Content="Favorite"/>
+                                    <Button Margin="0,0,10,0" Click="btnFavorit_Click" CommandParameter="{Binding Id}">
+                                        <Button.Content>
+                                            <MultiBinding Converter="{StaticResource ResourceKey=FavoriteTextConverter}">
+                                                <Binding Path="IsFavoriting"></Binding>
+                                                <Binding Path="Favorited"></Binding>
+                                                <Binding Path="IsTransfering"></Binding>
+                                                <Binding Path="IsEvolving"></Binding>
+                                            </MultiBinding>
+                                            
+                                        </Button.Content>
+                                    </Button>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

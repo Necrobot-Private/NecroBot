@@ -16,10 +16,10 @@ namespace PoGo.Necrobot.Window.Controls.MapMarkers
       Popup Popup;
       Label Label;
       GMapMarker Marker;
-      MainWindow MainWindow;
+        MainClientWindow MainWindow;
 
         public string ImageIcon{ get; set; }
-        public ImageMarker(MainWindow window, GMapMarker marker, string title, string image)
+        public ImageMarker(MainClientWindow window, GMapMarker marker, string title, string image)
       {
          this.InitializeComponent();
          this.ImageIcon = image;

@@ -18,12 +18,13 @@ namespace PoGo.Necrobot.Window.Model
         public PokemonListModel PokemonList { get; set; }
         public SidebarViewModel Sidebar { get; set; }
 
+        public ItemsListViewModel ItemsList { get; set; }
         public List<PokemonData> Pokemons
         {
             get
             {
                 return internalPokemons;
-            } 
+            }
             set
             {
                 this.internalPokemons = value;
@@ -32,8 +33,11 @@ namespace PoGo.Necrobot.Window.Model
             }
         }
 
+        public int MaxItemStogare { get; set; }
         public DataContext()
         {
+            MaxItemStogare = 350;
+            ItemsList = new ItemsListViewModel();
             Sidebar = new SidebarViewModel();
             internalPokemons = new List<PokemonData>();
             PokemonList = new PokemonListModel()
@@ -50,6 +54,14 @@ namespace PoGo.Necrobot.Window.Model
             }
         }
 
+        public string ItemsTabHeader
+        {
+            get
+            {
+                return $"   ITEMS ({ ItemsList.Items.Sum(x=>x.ItemCount)} / {MaxItemStogare})   ";
+
+            }
+        }
 
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PoGo.NecroBot.Logic.State;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace PoGo.Necrobot.Window.Model
     public class ViewModelBase    : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+        public ISession Session { get; set; }
         public void RaisePropertyChanged(string propertyName)
         {
             PropertyChangedEventHandler handler = PropertyChanged;

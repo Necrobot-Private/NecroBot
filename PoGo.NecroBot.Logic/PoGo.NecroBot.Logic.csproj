@@ -211,6 +211,8 @@
     <Compile Include="Event\HumanWalkingEvent.cs" />
     <Compile Include="Event\HumanWalkSnipeEvent.cs" />
     <Compile Include="Event\InventoryListEvent.cs" />
+    <Compile Include="Event\Inventory\FavoriteEvent.cs" />
+    <Compile Include="Event\Inventory\InventoryItemUpdateEvent.cs" />
     <Compile Include="Event\Inventory\InventoryRefreshedEvent.cs" />
     <Compile Include="Event\ItemRecycledEvent.cs" />
     <Compile Include="Event\KillSwitchEvent.cs" />

@@ -4,6 +4,7 @@ using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Event.Inventory;
 using PoGo.NecroBot.Logic.Event.Player;
 using PoGo.NecroBot.Logic.State;
+using POGOProtos.Inventory.Item;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,14 @@ namespace PoGo.Necrobot.Window
 
             }
         }
+        public void OnBotEvent(FavoriteEvent ev)
+        {
+            this.datacontext.PokemonList.OnFavorited(ev);
+        }
+        public void OnBotEvent(PokemonEvolveEvent ev)
+        {
+            this.datacontext.PokemonList.OnEvolved(ev);
+        }
         public void OnBotEvent(PokemonCaptureEvent inventory)
         {
             this.datacontext.Sidebar.AddOrUpdate(new CatchPokemonViewModel(inventory));
@@ -37,19 +46,33 @@ namespace PoGo.Necrobot.Window
             var data = inventory.Inventory;
             //currentSession.Inventory.GetPokemons()?.Result?.ToList() ;
             var maxPokemonStogare = currentSession.Profile?.PlayerData?.MaxPokemonStorage;
+            var maxItemStogare = currentSession.Profile?.PlayerData?.MaxItemStorage;
             var pokemons = data.InventoryDelta.InventoryItems
                 .Select(x => x.InventoryItemData?.PokemonData)
                 .Where(x => x != null && !x.IsEgg)
                 .ToList();
 
-            this.datacontext.PokemonList.Update( pokemons);
 
-            //UIUpdateSafe(() =>
-            // {
-            //  tabPokemons.Header = $"   POKEMONS ({this.datacontext.Pokemons.Count}/{maxPokemonStogare})  ";
-            //});
+            var items = data.InventoryDelta.InventoryItems.Select(x => x.InventoryItemData?.Item).Where(x => x != null).ToList();
+            this.datacontext.MaxItemStogare = maxItemStogare.Value;
+            this.datacontext.ItemsList.Update(items);
+            this.datacontext.PokemonList.Update( pokemons, inventory.Candies, inventory.PokemonSettings);
+            this.datacontext.RaisePropertyChanged("PokemonTabHeader");
+            this.datacontext.RaisePropertyChanged("ItemsTabHeader");
+            this.datacontext.RaisePropertyChanged("MaxItemStogare");
+            UIUpdateSafe(() =>
+             {
+                 tabPokemons.Header = $"   POKEMONS ({this.datacontext.Pokemons.Count}/{maxPokemonStogare})  ";
+                 //tabItems.Header = $"   POKEMONS ({this.datacontext.Pokemons.Count}/{maxPokemonStogare})  ";
+
+             });
         }
 
+        public void OnBotEvent(InventoryItemUpdateEvent e)
+        {
+            this.datacontext.ItemsList.Update(new List<ItemData> { e.Item });
+            this.datacontext.RaisePropertyChanged("ItemsTabHeader");
+        }
         public void OnBotEvent(LoggedEvent userLogged)
         {
             grbPlayerInfo.Header = "Playing as : " + userLogged.Profile.PlayerData.Username;
@@ -66,7 +89,7 @@ namespace PoGo.Necrobot.Window
         }
         public void OnBotEvent(TransferPokemonEvent transferedPkm)
         {
-            this.datacontext.PokemonList.Remove(transferedPkm.Id);
+            this.datacontext.PokemonList.OnTransfer(transferedPkm);
         }
         public void OnBotEvent(FortUsedEvent ev)
         {
