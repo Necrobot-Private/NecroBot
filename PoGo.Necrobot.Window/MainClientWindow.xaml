@@ -1,0 +1,138 @@
+﻿<Controls:MetroWindow x:Class="PoGo.Necrobot.Window.MainClientWindow"
+          xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                  xmlns:Behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                      xmlns:local="clr-namespace:PoGo.Necrobot.Window.Controls"
+                      Title="Necrobot 2 - Window GUI"
+                      Height="768"
+                      Width="1024" 
+                      BorderThickness="0" 
+                      GlowBrush="Black"
+                      ResizeMode="CanResizeWithGrip"
+
+                      WindowTransitionsEnabled="False"
+                      WindowStartupLocation="CenterScreen" Loaded="MetroWindow_Loaded">
+
+    <Controls:MetroWindow.RightWindowCommands>
+        <Controls:WindowCommands>
+                                              
+            <Button x:Name="menuConsole" Click="menuConsole_Click" >
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle Width="20"
+                   Height="20"
+                   Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_console}" />
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                    <TextBlock Margin="4 0 0 0"   Name="consoleMenuText"
+                   VerticalAlignment="Center"
+                   Text="Show Console" />
+                </StackPanel>
+
+            </Button>
+            <Button Click="menuSetting_Click" Name="menuSetting">
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle Width="20"
+                   Height="20"
+                   Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_settings}" />
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                    <TextBlock Margin="4 0 0 0"
+                   VerticalAlignment="Center"
+                   Text="Settings" />
+                </StackPanel>
+            </Button>
+        </Controls:WindowCommands>
+    </Controls:MetroWindow.RightWindowCommands>
+    
+    <DockPanel LastChildFill="True">
+        <GroupBox x:Name="grbPlayerInfo"
+                  DockPanel.Dock="Top" Height="125" Header="Playing As : ">
+            <local:PlayerInfo DataContext="{Binding Path=PlayerInfo}" Margin="10,0,-2,26"/>
+        </GroupBox>
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock Name="lblStatus" />
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock Name="lblCount" />
+            </StatusBarItem>
+        </StatusBar>
+
+        <TabControl TabStripPlacement="Left" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Name="tabMain">
+            <TabControl.Resources>
+                <Style TargetType="{x:Type TabItem}">
+                    <Setter Property="HeaderTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <ContentPresenter Content="{TemplateBinding Content}">
+                                    <ContentPresenter.LayoutTransform>
+                                        <RotateTransform Angle="270" />
+                                    </ContentPresenter.LayoutTransform>
+                                </ContentPresenter>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Padding" Value="3" />
+                </Style>
+            </TabControl.Resources>
+            <TabItem Header="  MAP &amp; JOURNEY  ">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="7*" />
+                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+                    <local:MapControl x:Name="botMap" Grid.Column="0"></local:MapControl>
+                    <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+                    <local:SidebarControl DataContext="{Binding Path=Sidebar}" x:Name="sidebarControl" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinWidth="150"></local:SidebarControl>
+                </Grid>
+            </TabItem>
+            <TabItem Header="DEBUG">
+                <RichTextBox DockPanel.Dock="Top" x:Name="richTextBox" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" >
+                    <FlowDocument>
+                        <Paragraph>
+                            <Run Text=""/>
+                        </Paragraph>
+                    </FlowDocument>
+                </RichTextBox>
+            </TabItem>
+
+            <TabItem Header="   CONSOLE   ">
+                <RichTextBox 
+                    ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                    ScrollViewer.VerticalScrollBarVisibility="Auto"
+                    ScrollViewer.CanContentScroll="True" 
+                    DockPanel.Dock="Top" 
+                    x:Name="consoleLog" 
+                    HorizontalAlignment="Stretch" 
+                    Background="Black"  
+                    VerticalAlignment="Stretch" 
+                    FontSize="14.667" >
+                    <FlowDocument>
+                        <Paragraph>
+                            <Run Text=""/>
+                        </Paragraph>
+                    </FlowDocument>
+                </RichTextBox>
+            </TabItem>
+            
+            <TabItem Header="{Binding Path= PokemonTabHeader, FallbackValue=Pokemon}" Name="tabPokemons">
+                <local:PokemonInventory x:Name="ctrPokemonInventory" DataContext="{Binding Path=PokemonList}" OnPokemonItemSelected="PokemonInventory_OnPokemonItemSelected" ></local:PokemonInventory>
+            </TabItem>
+            <TabItem Name="tabItems" Header="{Binding Path=ItemsTabHeader, FallbackValue=Pokemon}" >
+               
+                    
+                <local:ItemsInventory DataContext="{Binding Path=ItemsList}" x:Name="ctrlItemControl"  />
+            </TabItem>
+
+        </TabControl>
+    </DockPanel>
+    
+
+</Controls:MetroWindow>
