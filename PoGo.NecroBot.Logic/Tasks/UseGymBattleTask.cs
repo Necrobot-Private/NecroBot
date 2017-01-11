@@ -139,7 +139,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         await Task.Delay(500);
                         result = await StartBattle(session, gym, pokemonDatas, defenders.FirstOrDefault(x=>x.Id == defenderPokemonId));
                     }
-                    catch (APIBadRequestException ex)
+                    catch (APIBadRequestException)
                     {
                         Logger.Write("SHIT", LogLevel.Warning);
                     }
@@ -567,9 +567,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
 
 
-                catch (APIBadRequestException ex)
+                catch (APIBadRequestException)
                 {
-                    Logger.Write("Shit!!!! Bad request send toserver -", LogLevel.Warning);
+                    Logger.Write("Shit!!!! Bad request send to server -", LogLevel.Warning);
                 };
             }
             return lastActions;
@@ -582,7 +582,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             return UnixEpoch.AddMilliseconds(millis);
         }
 
-        private static int _pos;
+        //private static int _pos;
         public static async Task<List<BattleAction>> GetActions(ISession sessison, long serverMs, PokemonData attacker, PokemonData defender, int energy)
         {
             Random rnd = new Random();
@@ -664,7 +664,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         return result;
                     case BattleState.Victory:
                         Logger.Write($"We were victorious");
-                        _pos = 0;
+                        //_pos = 0;
                         return result;
                     case BattleState.StateUnset:
                         Logger.Write($"Error occoured: {result.BattleLog.State}");

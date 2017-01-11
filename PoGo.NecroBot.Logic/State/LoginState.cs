@@ -55,7 +55,7 @@ namespace PoGo.NecroBot.Logic.State
             {
                 throw ae.Flatten().InnerException;
             }
-            catch (APIBadRequestException ex)
+            catch (APIBadRequestException)
             {
                 session.EventDispatcher.Send(new ErrorEvent
                 {
@@ -186,7 +186,7 @@ namespace PoGo.NecroBot.Logic.State
             {
 
             }
-            catch (OperationCanceledException op)
+		catch (OperationCanceledException)
             {
                 //just continue login if this happen, most case is bot switching...
             }
@@ -195,7 +195,7 @@ namespace PoGo.NecroBot.Logic.State
                 throw ex;
             }
 
-            catch (APIBadRequestException ex)
+            catch (APIBadRequestException)
             {
                 throw new LoginFailedException();
             }

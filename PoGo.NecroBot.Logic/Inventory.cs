@@ -87,7 +87,7 @@ namespace PoGo.NecroBot.Logic
             ItemId.ItemMaxPotion
         };
 
-        public async Task UpdateInventoryItem(ItemId itemId, int count)
+        public void UpdateInventoryItem(ItemId itemId, int count)
         {
             foreach (var item in this._cachedInventory.InventoryDelta.InventoryItems)
             {
@@ -194,7 +194,7 @@ namespace PoGo.NecroBot.Logic
             {
                 throw e;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 //throw e; 
             }
@@ -284,6 +284,8 @@ namespace PoGo.NecroBot.Logic
 
         public async Task UpdateCandy(Candy family, int change)
         {
+            await Task.Delay(0); // Just added to get rid of compiler warning. Remove this if async code is used below.
+
             var lookupItem = (from item in _cachedInventory.InventoryDelta.InventoryItems
                               where item.InventoryItemData?.Candy != null
                               where item.InventoryItemData?.Candy.FamilyId == family.FamilyId
@@ -638,7 +640,7 @@ namespace PoGo.NecroBot.Logic
                 var rewards = await _client.Player.GetLevelUpRewards(level);
                 foreach (var item in rewards.ItemsAwarded)
                 {
-                    await UpdateInventoryItem(item.ItemId, item.ItemCount);
+                    UpdateInventoryItem(item.ItemId, item.ItemCount);
                 }
             }
 
