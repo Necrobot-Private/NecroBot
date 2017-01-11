@@ -87,19 +87,22 @@ namespace PoGo.NecroBot.Logic
             ItemId.ItemMaxPotion
         };
 
-        public void UpdateInventoryItem(ItemId itemId, int count)
+        public async Task  UpdateInventoryItem(ItemId itemId, int count)
         {
-            foreach (var item in this._cachedInventory.InventoryDelta.InventoryItems)
-            {
-                if (item.InventoryItemData != null && item.InventoryItemData.Item != null && item.InventoryItemData.Item.ItemId == itemId)
-                {
-                    item.InventoryItemData.Item.Count += count;
-                    this.ownerSession.EventDispatcher.Send(new InventoryItemUpdateEvent()
-                    {
-                        Item = item.InventoryItemData.Item
-                    }) ;
-                }
-            }
+            await Task.Run(() =>
+           {
+               foreach (var item in this._cachedInventory.InventoryDelta.InventoryItems)
+               {
+                   if (item.InventoryItemData != null && item.InventoryItemData.Item != null && item.InventoryItemData.Item.ItemId == itemId)
+                   {
+                       item.InventoryItemData.Item.Count += count;
+                       this.ownerSession.EventDispatcher.Send(new InventoryItemUpdateEvent()
+                       {
+                           Item = item.InventoryItemData.Item
+                       });
+                   }
+               }
+           });
         }
 
         public async Task<int> GetCachedPokeballCount(ItemId pokeballId)
