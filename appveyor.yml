@@ -120,9 +120,8 @@ after_build:
     {
         Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\PoGo.NecroBot.CLI\bin\$($env:PLATFORM)\$($env:CONFIGURATION)" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2" -Force;
         Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2\GUI" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2GUI" -Force;
-        Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2\WINDOW" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2WINDOWGUI" -Force;
-    }
-    }
+        Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\PoGo.NecroBot.Window\bin\$($env:PLATFORM)\$($env:CONFIGURATION)" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2.Win" -Force;
+        
     elseif ($env:PLATFORM -eq "x64")
     {
         Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\PoGo.NecroBot.CLI\bin\$($env:PLATFORM)\$($env:CONFIGURATION)" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2" -Force;
@@ -163,7 +162,7 @@ artifacts:
   - path: '\$(PLATFORM)\$(CONFIGURATION)\NecroBot2GUI.Electron'
     name: NecroBot2.GUI.Electron
   - path: '\$(PLATFORM)\$(CONFIGURATION)\NecroBot2.Win'
-    name: NecroBot2.GUI.WPF
+    name: NecroBot2.WIN
 #---------------------------------#
 #     deployment configuration    #
 #---------------------------------#
@@ -178,7 +177,7 @@ deploy:
     description: '[CHANGELOG.md](https://github.com/Necrobot-Private/NecroBot/blob/master/CHANGELOG.md)'
     release: NecroBot2 $(APPVEYOR_REPO_TAG_NAME)
     auth_token: $(access_token)
-    artifact: NecroBot2.Console;NecroBot2.GUI;NecroBot2.GUI.Electron;NecroBot2.GUI.WPF
+    artifact: NecroBot2.Console;NecroBot2.GUI;NecroBot2.GUI.Electron;NecroBot2.WIN
     draft: false
     prerelease: false
     force_update: true
