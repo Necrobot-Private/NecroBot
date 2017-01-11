@@ -26,13 +26,13 @@ namespace PoGo.Necrobot.Window
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : MetroWindow
+    public partial class AppConfigWindow : MetroWindow
     {
 
         public GlobalSettings Settings { get; set; }
         MetroWindow main;
         private string fileName;
-        public MainWindow(MetroWindow parent, string filename)
+        public AppConfigWindow(MetroWindow parent, string filename)
         {
             main = parent;
             this.Settings = GlobalSettings.Load(filename);
@@ -75,7 +75,7 @@ namespace PoGo.Necrobot.Window
                 }
             }
         }
-        public MainWindow()
+        public AppConfigWindow()
         {
             InitializeComponent();
             InitForm();
@@ -269,7 +269,7 @@ namespace PoGo.Necrobot.Window
                 Type keyType = type.GetGenericArguments()[0];
                 Type valueType = type.GetGenericArguments()[1];
 
-                MethodInfo method = typeof(MainWindow).GetMethod("BuildDictionaryForm");
+                MethodInfo method = typeof(AppConfigWindow).GetMethod("BuildDictionaryForm");
                 MethodInfo genericMethod = method.MakeGenericMethod(valueType);
                 return (UIElement)genericMethod.Invoke(this, new object[] { fi, source });
             }

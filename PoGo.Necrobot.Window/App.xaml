@@ -1,7 +1,7 @@
 ﻿<Application x:Class="PoGo.Necrobot.Window.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             StartupUri="SplashScreen.xaml">
+             StartupUri="MainClientWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
