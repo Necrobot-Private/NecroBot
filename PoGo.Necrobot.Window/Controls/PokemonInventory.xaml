@@ -51,6 +51,8 @@
                     <DataGridTextColumn Binding="{Binding HP, StringFormat=\{0\}}" Header="HP" MinWidth="60" IsReadOnly="True"/>
                     <DataGridTextColumn Binding="{Binding MaxHP, StringFormat=\{0\}}" Header="MaxHP" MinWidth="60" IsReadOnly="True"/>
                     <DataGridTextColumn Binding="{Binding Candy, StringFormat=\{0\}}" Header="Candy" MinWidth="90" IsReadOnly="True"/>
+                    <DataGridTextColumn Binding="{Binding Move1, StringFormat=\{0\}}" Header="Move1" MinWidth="90" IsReadOnly="True"/>
+                    <DataGridTextColumn Binding="{Binding Move2, StringFormat=\{0\}}" Header="Move2" MinWidth="90" IsReadOnly="True"/>
                     <DataGridTemplateColumn Header="Actions">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>

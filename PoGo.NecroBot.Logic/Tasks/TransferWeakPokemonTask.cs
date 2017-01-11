@@ -42,7 +42,9 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             if (session.LogicSettings.KeepPokemonsThatCanEvolve)
                 pokemonsFiltered =
-                    pokemonDatas.Where(pokemon => !session.LogicSettings.PokemonsToEvolve.Contains(pokemon.PokemonId))
+                    pokemonDatas.Where(pokemon => !session.LogicSettings.PokemonsToEvolve.Contains(pokemon.PokemonId) &&
+                    pokemon.Favorite ==0 && 
+                    pokemon.BuddyTotalKmWalked ==0)
                         .ToList().OrderBy( poke => poke.Cp );
 
             var orderedPokemon = pokemonsFiltered.OrderBy( poke => poke.Cp );

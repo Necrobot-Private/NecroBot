@@ -24,6 +24,8 @@ namespace PoGo.Necrobot.Window.Model
             this.Level = (int)PokemonInfo.GetLevel(pokemon);
             this.Favorited = pokemon.Favorite > 0;
             this.IsSelected = false;
+            this.Move1 = pokemon.Move1.ToString();
+            this.Move2 = pokemon.Move2.ToString();
             if (setting != null && candy != null)
             {
                 this.PokemonSettings = setting;
@@ -58,6 +60,9 @@ namespace PoGo.Necrobot.Window.Model
 
             }
         }
+        public string Move1 { get; set; }
+        public string Move2 { get; set; }
+
         private bool isEvolving;
         public bool IsEvolving
         {

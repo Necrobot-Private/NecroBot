@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:PoGo.Necrobot.Window.Controls"
              mc:Ignorable="d" Height="115" Width="875">
     
-    <Grid Margin="10,10,10,0">
+    <Grid Margin="10,10,0,35">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"></ColumnDefinition>
             <ColumnDefinition Width="3*"></ColumnDefinition>
@@ -15,9 +15,9 @@
             
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"></RowDefinition>
-            <RowDefinition Height="30"></RowDefinition>
-            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="25"></RowDefinition>
+            <RowDefinition Height="25"></RowDefinition>
+            <RowDefinition Height="0"></RowDefinition>
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Column="0" Grid.Row="0">
