@@ -200,6 +200,9 @@
     <Compile Include="Controls\Sidebars\PokestopItem.xaml.cs">
       <DependentUpon>PokestopItem.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SniperControl.xaml.cs">
+      <DependentUpon>SniperControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\TrolleyTooltip.xaml.cs">
       <DependentUpon>TrolleyTooltip.xaml</DependentUpon>
     </Compile>
@@ -295,6 +298,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\Sidebars\PokestopItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SniperControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -451,7 +458,7 @@ foreach (var item in filesToCleanup)
   <Import Project="..\packages\Selenium.WebDriver.ChromeDriver.2.27.0\build\Selenium.WebDriver.ChromeDriver.targets" Condition="Exists('..\packages\Selenium.WebDriver.ChromeDriver.2.27.0\build\Selenium.WebDriver.ChromeDriver.targets')" />
   <PropertyGroup>
     <PostBuildEvent>cd "$(TargetDir)"
-del *.config1</PostBuildEvent>
+del *.config</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
