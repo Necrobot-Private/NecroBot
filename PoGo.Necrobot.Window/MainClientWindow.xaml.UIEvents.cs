@@ -128,7 +128,7 @@ namespace PoGo.Necrobot.Window
             this.Invoke(() =>
             {
                 dynamic eve = evt;
-                richTextBox.AppendText(evt.ToString() + "\r\n");
+                ///richTextBox.AppendText(evt.ToString() + "\r\n");
 
                 try
                 {
