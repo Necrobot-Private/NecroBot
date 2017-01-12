@@ -650,7 +650,7 @@ namespace PoGo.NecroBot.Logic
                 var rewards = await _client.Player.GetLevelUpRewards(level);
                 foreach (var item in rewards.ItemsAwarded)
                 {
-                    UpdateInventoryItem(item.ItemId, item.ItemCount);
+                    await UpdateInventoryItem(item.ItemId, item.ItemCount);
                 }
             }
 
