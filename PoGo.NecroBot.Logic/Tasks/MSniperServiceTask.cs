@@ -445,6 +445,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     (session.LogicSettings.AutosnipeVerifiedOnly && (item.EncounterId > 0 || (item.Move1 != PokemonMove.MoveUnset && item.Move2 != PokemonMove.MoveUnset)))))
                 {
                     session.EventDispatcher.Send(new WarnEvent() { Message = session.Translation.GetTranslation(TranslationString.SnipePokemonNotInPokedex, session.Translation.GetPokemonTranslation((PokemonId)item.PokemonId)) });
+                    item.Priority = 0;
                     pokedexSnipePokemons.Add(item);//Add as hight priority snipe entry
                     return;
                 }
@@ -465,6 +466,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 if (byPassValidation)
                 {
+                    item.Priority = -1;
                     manualSnipePokemons.Add(item);
 
                     Logger.Write($"(MANUAL SNIPER) Pokemon added |  {(PokemonId)item.PokemonId} [{item.Latitude},{item.Longitude}] IV {item.Iv}%");
