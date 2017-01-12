@@ -92,6 +92,9 @@ namespace PoGo.Necrobot.Window
         {
             this.datacontext.UI.PlayerStatus = "Playing";
             this.datacontext.UI.PlayerName = userLogged.Profile.PlayerData.Username;
+            this.datacontext.RaisePropertyChanged("UI");
+            lblAccount.Content = $"{this.datacontext.UI.PlayerStatus} as : {this.datacontext.UI.PlayerName}";
+
         }
         public void OnBotEvent(ProfileEvent profile)
         {
@@ -102,9 +105,11 @@ namespace PoGo.Necrobot.Window
             */
             this.playerProfile = profile.Profile;
 
-
             this.datacontext.UI.PlayerStatus = "Playing";
             this.datacontext.UI.PlayerName = profile.Profile.PlayerData.Username;
+            this.datacontext.RaisePropertyChanged("UI");
+
+            lblAccount.Content = $"{this.datacontext.UI.PlayerStatus} as : {this.datacontext.UI.PlayerName}";
 
         }
         public void OnBotEvent(TransferPokemonEvent transferedPkm)

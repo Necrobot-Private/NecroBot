@@ -37,6 +37,7 @@ namespace PoGo.Necrobot.Window.Model
         public int MaxItemStogare { get; set; }
         public DataContext()
         {
+            UI = new UIViewModel();
             MaxItemStogare = 350;
             ItemsList = new ItemsListViewModel();
             Sidebar = new SidebarViewModel();
