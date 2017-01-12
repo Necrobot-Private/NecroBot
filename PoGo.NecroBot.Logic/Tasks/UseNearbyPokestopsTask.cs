@@ -407,7 +407,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     {
                         foreach (var item in fortSearch.ItemsAwarded)
                         {
-                            session.Inventory.UpdateInventoryItem(item.ItemId, item.ItemCount);
+                            await session.Inventory.UpdateInventoryItem(item.ItemId, item.ItemCount);
                         }
                         if (fortSearch.PokemonDataEgg != null)
                         {

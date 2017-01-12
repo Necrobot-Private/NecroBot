@@ -75,7 +75,8 @@ namespace PoGo.Necrobot.Window
         }
         public void OnBotEvent(LoggedEvent userLogged)
         {
-            grbPlayerInfo.Header = "Playing as : " + userLogged.Profile.PlayerData.Username;
+            this.datacontext.UI.PlayerStatus = "Playing";
+            this.datacontext.UI.PlayerName = userLogged.Profile.PlayerData.Username;
         }
         public void OnBotEvent(ProfileEvent profile)
         {
@@ -85,7 +86,8 @@ namespace PoGo.Necrobot.Window
             this.datacontext.PlayerInfo.LevelExp  = stats.FirstOrDefault(x => x.NextLevelXp > 0).NextLevelXp;
             this.playerProfile = profile.Profile;
 
-            grbPlayerInfo.Header = "Playing as : " + profile.Profile.PlayerData.Username;
+            this.datacontext.UI.PlayerStatus = "Playing";
+            this.datacontext.UI.PlayerName = profile.Profile.PlayerData.Username;
         }
         public void OnBotEvent(TransferPokemonEvent transferedPkm)
         {

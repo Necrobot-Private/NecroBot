@@ -15,6 +15,7 @@ namespace PoGo.Necrobot.Window.Model
     {
         public PokemonDataViewModel(PokemonData pokemon, PokemonSettings setting = null, Candy candy = null)
         {
+            this.PokemonData = pokemon;
             this.Id = pokemon.Id;
             this.PokemonName = pokemon.PokemonId;
             this.HP = pokemon.Stamina;
@@ -135,5 +136,22 @@ namespace PoGo.Necrobot.Window.Model
 
         public PokemonSettings PokemonSettings { get; private set; }
         public bool IsFavoriting { get; set; }
+
+        public string PokemonIcon
+        {
+            get
+            {
+                if ((int)PokemonData.PokemonId > 151)
+                {
+                    
+                    return $"https://rankedboost.com/wp-content/plugins/ice/riot/poksimages/pokemons2/{(int)PokemonData.PokemonId:000}.png";
+
+                }
+
+                return $"https://rankedboost.com/wp-content/plugins/ice/riot/poksimages/pokemons/{(int)PokemonData.PokemonId:000}.png";
+            }
+        }
+
+        public PokemonData PokemonData { get; set; }
     }
 }

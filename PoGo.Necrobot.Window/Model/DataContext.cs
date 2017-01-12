@@ -11,6 +11,7 @@ namespace PoGo.Necrobot.Window.Model
 {
     public class DataContext : ViewModelBase
     {
+        public UIViewModel UI { get; set; }
         public PlayerInfoModel PlayerInfo { get; set; }
         public string AA { get; set; }
         public List<PokemonData> internalPokemons;

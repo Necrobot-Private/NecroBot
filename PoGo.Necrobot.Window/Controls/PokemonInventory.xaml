@@ -42,9 +42,16 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-
+                    <DataGridTemplateColumn Header="Pokemon" IsReadOnly="true">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image Source="{Binding PokemonIcon}" Width="50" ToolTip="{Binding PokemonName}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    
                     <!--<DataGridCheckBoxColumn Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" Header="Selected"/>-->
-                    <DataGridTextColumn Binding="{Binding PokemonName}" Header="Name" MinWidth="120"/>
+                    <DataGridTextColumn Binding="{Binding PokemonName}" Header="Name" MinWidth="120" />
                     <DataGridTextColumn Binding="{Binding IV, StringFormat=\{0:0.00\}}" Header="IV" MinWidth="60" IsReadOnly="True"/>
                     <DataGridTextColumn Binding="{Binding CP, StringFormat=\{0\}}" Header="CP" MinWidth="60" IsReadOnly="True"/>
                     <DataGridTextColumn Binding="{Binding Level, StringFormat=\{0\}}" Header="Level" MinWidth="60" IsReadOnly="True"/>
