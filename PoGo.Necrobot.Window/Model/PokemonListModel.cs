@@ -41,7 +41,25 @@ namespace PoGo.Necrobot.Window.Model
           //  });
         }
 
-        internal void OnFavorited(FavoriteEvent ev)
+        internal void OnUpgradeEnd(FinishUpgradeEvent e)
+        {
+            var id = e.PokemonId;
+            var model = Get(id);
+            model.AllowPowerup = e.AllowUpgrade;
+            model.PowerupText = "Upgrade";
+        }
+
+        internal void OnUpgraded(UpgradePokemonEvent e)
+        {
+            var id = e.Pokemon.Id;
+            var model = Get(id);
+            model.PokemonData = e.Pokemon;
+            model.CP = e.Cp;
+            model.Candy = e.FamilyCandies;
+            model.HP = e.Pokemon.Stamina;
+
+        }
+        public void OnFavorited(FavoriteEvent ev)
         {
             var result = ev.FavoritePokemonResponse.Result == POGOProtos.Networking.Responses.SetFavoritePokemonResponse.Types.Result.Success;
             var id = ev.Pokemon.Id;
@@ -134,6 +152,20 @@ namespace PoGo.Necrobot.Window.Model
             if (pkm != null)
             {
                 pkm.IsEvolving = true;
+            }
+        }
+        
+        
+        public void Powerup(ulong pokemonId)
+        {
+            var pkm = Pokemons.FirstOrDefault(x => x.Id == pokemonId);
+
+            if (pkm != null)
+            {
+                pkm.AllowPowerup = false;
+                pkm.PowerupText = "Upgrading...";
+                pkm.RaisePropertyChanged("PowerupText");
+                pkm.RaisePropertyChanged("AllowPowerup");
             }
         }
     }

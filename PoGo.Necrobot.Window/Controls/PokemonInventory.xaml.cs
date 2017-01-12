@@ -140,6 +140,19 @@ namespace PoGo.Necrobot.Window.Controls
 
 
         }
+
+        private void btnPowerup_Click(object sender, RoutedEventArgs e)
+        {
+            var model = this.DataContext as PokemonListModel;
+
+            ulong pokemonId = (ulong)((Button)sender).CommandParameter;
+             model.Powerup(pokemonId);
+
+            Task.Run(async () =>
+            {
+                await UpgradeSinglePokemonTask.Execute(Session, pokemonId, false);
+            });
+        }
         //ICommand transferPokemonCommand;
         //public ICommand TransferPokemonCommand
         //{

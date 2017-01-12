@@ -14,6 +14,7 @@
         <cv:CheckAllowEvolveConverter x:Key="CheckAllowEvolveConverter" />
         <cv:FavoriteTextConverter x:Key="FavoriteTextConverter"/>
         <cv:AllowTransferCheckConverter x:Key="AllowTransferCheckConverter"/>
+        <cv:IVToColorConverter x:Key="IVToColorConverter"    />
     </Control.Resources>
     <StackPanel>
 
@@ -42,10 +43,19 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-
+                    <DataGridTemplateColumn Header="Pokemon" IsReadOnly="true">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image Source="{Binding PokemonIcon}" Width="50" ToolTip="{Binding PokemonName}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    
                     <!--<DataGridCheckBoxColumn Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" Header="Selected"/>-->
-                    <DataGridTextColumn Binding="{Binding PokemonName}" Header="Name" MinWidth="120"/>
-                    <DataGridTextColumn Binding="{Binding IV, StringFormat=\{0:0.00\}}" Header="IV" MinWidth="60" IsReadOnly="True"/>
+                    <DataGridTextColumn Binding="{Binding PokemonName}" Header="Name" MinWidth="120" />
+                    <DataGridTextColumn Binding="{Binding IV, StringFormat=\{0:0.00\}}" Header="IV" MinWidth="60" IsReadOnly="True">
+                        
+                    </DataGridTextColumn>
                     <DataGridTextColumn Binding="{Binding CP, StringFormat=\{0\}}" Header="CP" MinWidth="60" IsReadOnly="True"/>
                     <DataGridTextColumn Binding="{Binding Level, StringFormat=\{0\}}" Header="Level" MinWidth="60" IsReadOnly="True"/>
                     <DataGridTextColumn Binding="{Binding HP, StringFormat=\{0\}}" Header="HP" MinWidth="60" IsReadOnly="True"/>
@@ -75,7 +85,7 @@
                                         </Button.IsEnabled>
                                         
                                     </Button>
-                                    <Button Margin="0,0,10,0" Content="Power up"/>
+                                    <Button Margin="0,0,10,0" Content="{Binding PowerupText, FallbackValue=Power Up}" IsEnabled="{Binding AllowPowerup, FallbackValue=false}" Click="btnPowerup_Click" CommandParameter="{Binding Id}"/>
                                     <Button Margin="0,0,10,0" Click="btnFavorit_Click" CommandParameter="{Binding Id}">
                                         <Button.Content>
                                             <MultiBinding Converter="{StaticResource ResourceKey=FavoriteTextConverter}">
