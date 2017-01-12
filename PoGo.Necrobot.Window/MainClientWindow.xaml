@@ -51,8 +51,22 @@
     </Controls:MetroWindow.RightWindowCommands>
     
     <DockPanel LastChildFill="True">
-        <GroupBox x:Name="grbPlayerInfo"
-                  DockPanel.Dock="Top" Height="125" Header="Playing As : ">
+        <GroupBox x:Name="grbPlayerInfo" DockPanel.Dock="Top" Height="150" >
+            <GroupBox.Header>
+                <DockPanel LastChildFill="True">
+                    <Button Content="Hide" DockPanel.Dock="Right" Name="btnHideInfo" Click="btnHideInfo_Click"></Button>
+                    <Label Content="Logging in ..... check console window for detail" Name="lblAccount" Foreground="White" FontWeight="Bold">
+                        <!--<Label.Content>
+                            <MultiBinding StringFormat="{}{0} as : {1}">
+                                <Binding Path="UI.PlayerStatus"></Binding>
+                                <Binding Path="UI.PlayerName"></Binding>
+                            </MultiBinding>
+
+                        </Label.Content>-->
+                        
+                    </Label>
+                </DockPanel>
+            </GroupBox.Header>
             <local:PlayerInfo DataContext="{Binding Path=PlayerInfo}" Margin="10,0,-2,26"/>
         </GroupBox>
         <StatusBar DockPanel.Dock="Bottom">
@@ -93,14 +107,7 @@
                     <local:SidebarControl DataContext="{Binding Path=Sidebar}" x:Name="sidebarControl" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinWidth="150"></local:SidebarControl>
                 </Grid>
             </TabItem>
-            <TabItem Header="DEBUG">
-                <RichTextBox DockPanel.Dock="Top" x:Name="richTextBox" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" >
-                    <FlowDocument>
-                        <Paragraph>
-                            <Run Text=""/>
-                        </Paragraph>
-                    </FlowDocument>
-                </RichTextBox>
+            <TabItem Header="SNIPER">
             </TabItem>
 
             <TabItem Header="   CONSOLE   ">

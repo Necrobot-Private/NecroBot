@@ -4,44 +4,50 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PoGo.Necrobot.Window.Controls"
-             mc:Ignorable="d" Height="115" Width="875">
-    
-    <Grid Margin="10,10,0,35">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*"></ColumnDefinition>
-            <ColumnDefinition Width="3*"></ColumnDefinition>
-            <ColumnDefinition Width="3*"></ColumnDefinition>
-            <ColumnDefinition Width="3*"></ColumnDefinition>
-            
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="25"></RowDefinition>
-            <RowDefinition Height="25"></RowDefinition>
-            <RowDefinition Height="0"></RowDefinition>
-        </Grid.RowDefinitions>
+             mc:Ignorable="d" Height="80" Width="875">
+    <DockPanel LastChildFill="True">
+        <Grid DockPanel.Dock="Right">
+            <Button Width="150" Click="Donate_Click" Margin="0,0,0,0">
+                <Image  Margin="0,0,0,0" Source="http://www.pngall.com/wp-content/uploads/2016/05/PayPal-Donate-Button-PNG-HD.png" ToolTip="Donate US -" Stretch="Fill"/>
+            </Button>
+        </Grid>
+        <Grid Margin="10,0,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
 
-        <TextBlock Grid.Column="0" Grid.Row="0">
-            <TextBlock.Text>
-                <MultiBinding StringFormat="{} LEVEL : {0}" FallbackValue="Level : 40">
-                    <Binding Path="Level" />
-                </MultiBinding>
-            </TextBlock.Text>
-        </TextBlock>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"></RowDefinition>
+                <RowDefinition Height="25"></RowDefinition>
+            </Grid.RowDefinitions>
 
-        <TextBlock  Grid.Column="1" Grid.Row="0">
-            <TextBlock.Text>
-                <MultiBinding StringFormat="{} EXP : {0}/{1}" FallbackValue="EXP :100000/500000">
-                    <Binding Path="Exp" />
-                    <Binding Path="LevelExp" />
-                </MultiBinding>
-            </TextBlock.Text>
-        </TextBlock>
-        <TextBlock Grid.Column="2" Grid.Row="0" x:Name="textBlock" HorizontalAlignment="Left"  TextWrapping="Wrap" Text="{Binding Path=EXPPerHour, FallbackValue=EXP/H: 123, StringFormat=EXP/H :{0}}" VerticalAlignment="Top"/>
-        <TextBlock Grid.Column="3" Grid.Row="0" x:Name="textBlock_Copy" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Path=PKMPerHour, FallbackValue=PKM/H: 123 ,StringFormat=PKM/H :{0}}" VerticalAlignment="Top" RenderTransformOrigin="6.212,4.375"/>
-        <TextBlock Grid.Column="0" Grid.Row="1" x:Name="textBlock1" HorizontalAlignment="Left"  TextWrapping="Wrap" Text="{Binding Runtime, FallbackValue=Runtime: xx:xx:xx:xx, StringFormat=Runtime : {0}}" VerticalAlignment="Top"/>
+            <TextBlock Grid.Column="0" Grid.Row="0">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{} LEVEL : {0}" FallbackValue="Level : 40">
+                        <Binding Path="Level" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
 
-        <TextBlock Grid.Column="1" Grid.Row="1" x:Name="textBlock2" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding TimeToLevelUp, FallbackValue=Level Up in :1d 24h, StringFormat=Level Up in {0}}" VerticalAlignment="Top" RenderTransformOrigin="-0.51,0.5"/>
-        <TextBlock Grid.Column="2" Grid.Row="1" x:Name="textBlock3" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Startdust, FallbackValue=Startdust: 90000, StringFormat=Startdust : \{0\}}" VerticalAlignment="Top"/>
+            <TextBlock  Grid.Column="1" Grid.Row="0">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{} EXP : {0}/{1}" FallbackValue="EXP :100000/500000">
+                        <Binding Path="Exp" />
+                        <Binding Path="LevelExp" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+            <TextBlock Grid.Column="2" Grid.Row="0" x:Name="textBlock" HorizontalAlignment="Left"  TextWrapping="Wrap" Text="{Binding Path=EXPPerHour, FallbackValue=EXP/H: 123, StringFormat=EXP/H :{0}}" VerticalAlignment="Top"/>
+            <TextBlock Grid.Column="3" Grid.Row="0" x:Name="textBlock_Copy" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Path=PKMPerHour, FallbackValue=PKM/H: 123 ,StringFormat=PKM/H :{0}}" VerticalAlignment="Top" RenderTransformOrigin="6.212,4.375"/>
+            <TextBlock Grid.Column="0" Grid.Row="1" x:Name="textBlock1" HorizontalAlignment="Left"  TextWrapping="Wrap" Text="{Binding Runtime, FallbackValue=Runtime: xx:xx:xx:xx, StringFormat=Runtime : {0}}" VerticalAlignment="Top"/>
 
-    </Grid>
+            <TextBlock Grid.Column="1" Grid.Row="1" x:Name="textBlock2" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding TimeToLevelUp, FallbackValue=Level Up in :1d 24h, StringFormat=Level Up in {0}}" VerticalAlignment="Top" RenderTransformOrigin="-0.51,0.5"/>
+            <TextBlock Grid.Column="2" Grid.Row="1" x:Name="textBlock3" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Startdust, FallbackValue=Startdust: 90000, StringFormat=Startdust : \{0\}}" VerticalAlignment="Top"/>
+
+        </Grid>
+    </DockPanel>
+
 </UserControl>

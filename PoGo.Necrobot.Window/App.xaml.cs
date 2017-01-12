@@ -29,16 +29,8 @@ namespace PoGo.Necrobot.Window
            
         }
 
-        private void UIEventListen(ISession session)
-        {
-            session.EventDispatcher.EventReceived += EventDispatcher_EventReceived;
-        }
-
-        private void EventDispatcher_EventReceived(NecroBot.Logic.Event.IEvent evt)
-        {
-            //var mainWindow = this.MainWindow as MainClientWindow;
-            //mainWindow.HandleBotEvent(evt);
-        }
+       
+        
 
         protected override void OnLoadCompleted(NavigationEventArgs e)
         {

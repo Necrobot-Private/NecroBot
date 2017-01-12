@@ -200,12 +200,16 @@
     <Compile Include="Controls\Sidebars\PokestopItem.xaml.cs">
       <DependentUpon>PokestopItem.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SniperControl.xaml.cs">
+      <DependentUpon>SniperControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\TrolleyTooltip.xaml.cs">
       <DependentUpon>TrolleyTooltip.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\FavoriteTextConverter.cs" />
     <Compile Include="Converters\CheckAllowEvolveConverter.cs" />
     <Compile Include="Converters\FriendlyEvolveTextConverter.cs" />
+    <Compile Include="Converters\IVToColorConverter.cs" />
     <Compile Include="Converters\FriendlyTransferTextConverter.cs" />
     <Compile Include="Converters\AllowTransferCheckConverter.cs" />
     <Compile Include="Converters\ItemIdToImageConverter.cs" />
@@ -234,6 +238,7 @@
     <Compile Include="Model\PokestopItemViewModel.cs" />
     <Compile Include="Model\SidebarItemViewModel.cs" />
     <Compile Include="Model\SidebarViewModel.cs" />
+    <Compile Include="Model\UIViewModel.cs" />
     <Compile Include="Model\ViewModelBase.cs" />
     <Compile Include="SplashScreen.xaml.cs">
       <DependentUpon>SplashScreen.xaml</DependentUpon>
@@ -293,6 +298,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\Sidebars\PokestopItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SniperControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -408,6 +417,7 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\packages\Fody.1.29.4\build\dotnet\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\packages\Fody.1.29.4\build\dotnet\Fody.targets'))" />
+    <Error Condition="!Exists('..\packages\Selenium.WebDriver.ChromeDriver.2.27.0\build\Selenium.WebDriver.ChromeDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Selenium.WebDriver.ChromeDriver.2.27.0\build\Selenium.WebDriver.ChromeDriver.targets'))" />
   </Target>
   <UsingTask TaskName="CosturaCleanup" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll" TaskFactory="CodeTaskFactory">
     <ParameterGroup>
@@ -445,6 +455,11 @@ foreach (var item in filesToCleanup)
   <Target Name="CleanReferenceCopyLocalPaths" AfterTargets="AfterBuild;NonWinFodyTarget">
     <CosturaCleanup Config="FodyWeavers.xml" Files="@(ReferenceCopyLocalPaths->'$(OutDir)%(DestinationSubDirectory)%(Filename)%(Extension)')" />
   </Target>
+  <Import Project="..\packages\Selenium.WebDriver.ChromeDriver.2.27.0\build\Selenium.WebDriver.ChromeDriver.targets" Condition="Exists('..\packages\Selenium.WebDriver.ChromeDriver.2.27.0\build\Selenium.WebDriver.ChromeDriver.targets')" />
+  <PropertyGroup>
+    <PostBuildEvent>cd "$(TargetDir)"
+del *.config</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
