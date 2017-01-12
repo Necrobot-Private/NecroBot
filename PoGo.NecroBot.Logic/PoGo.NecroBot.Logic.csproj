@@ -243,6 +243,7 @@
     <Compile Include="Event\Inventory\FavoriteEvent.cs" />
     <Compile Include="Event\Inventory\InventoryItemUpdateEvent.cs" />
     <Compile Include="Event\Inventory\InventoryRefreshedEvent.cs" />
+    <Compile Include="Event\Inventory\UpgradeFinishEvent.cs" />
     <Compile Include="Event\ItemRecycledEvent.cs" />
     <Compile Include="Event\KillSwitchEvent.cs" />
     <Compile Include="Event\LogEvent.cs" />

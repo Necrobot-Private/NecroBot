@@ -206,6 +206,7 @@
     <Compile Include="Converters\FavoriteTextConverter.cs" />
     <Compile Include="Converters\CheckAllowEvolveConverter.cs" />
     <Compile Include="Converters\FriendlyEvolveTextConverter.cs" />
+    <Compile Include="Converters\IVToColorConverter.cs" />
     <Compile Include="Converters\FriendlyTransferTextConverter.cs" />
     <Compile Include="Converters\AllowTransferCheckConverter.cs" />
     <Compile Include="Converters\ItemIdToImageConverter.cs" />
@@ -450,7 +451,7 @@ foreach (var item in filesToCleanup)
   <Import Project="..\packages\Selenium.WebDriver.ChromeDriver.2.27.0\build\Selenium.WebDriver.ChromeDriver.targets" Condition="Exists('..\packages\Selenium.WebDriver.ChromeDriver.2.27.0\build\Selenium.WebDriver.ChromeDriver.targets')" />
   <PropertyGroup>
     <PostBuildEvent>cd "$(TargetDir)"
-del *.config</PostBuildEvent>
+del *.config1</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
