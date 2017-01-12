@@ -163,5 +163,19 @@ namespace PoGo.Necrobot.Window
             var configWindow = new AppConfigWindow(this, System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "config\\config.json"));
             configWindow.ShowDialog();
         }
+
+        private void btnHideInfo_Click(object sender, RoutedEventArgs e)
+        {
+            if(grbPlayerInfo.Height == 35)
+            {
+                btnHideInfo.Content = "HIDE";
+                grbPlayerInfo.Height = 135;
+            }
+            else
+            {
+                grbPlayerInfo.Height = 35;
+                btnHideInfo.Content = "SHOW";
+            }
+        }
     }
 }

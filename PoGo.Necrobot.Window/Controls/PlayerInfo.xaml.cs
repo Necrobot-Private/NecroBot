@@ -1,6 +1,7 @@
 ﻿using PoGo.Necrobot.Window.Model;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -50,6 +51,11 @@ namespace PoGo.Necrobot.Window.Controls
         {
             //this.DataContext = this.PlayerData;
             InitializeComponent();
+        }
+
+        private void Donate_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("http://snipe.necrobot2.com?donate");
         }
     }
 }

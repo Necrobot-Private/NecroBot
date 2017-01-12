@@ -19,10 +19,11 @@ namespace PoGo.Necrobot.Window
 
         public void UIUpdateSafe(Action action)
         {
-            try {
+            try
+            {
                 this.Invoke(() => action);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -30,6 +31,14 @@ namespace PoGo.Necrobot.Window
         public void OnBotEvent(FavoriteEvent ev)
         {
             this.datacontext.PokemonList.OnFavorited(ev);
+        }
+        public void OnBotEvent(FinishUpgradeEvent e)
+        {
+            this.datacontext.PokemonList.OnUpgradeEnd(e);
+        }
+        public void OnBotEvent(UpgradePokemonEvent e)
+        {
+            this.datacontext.PokemonList.OnUpgraded(e);
         }
         public void OnBotEvent(PokemonEvolveEvent ev)
         {
@@ -42,6 +51,12 @@ namespace PoGo.Necrobot.Window
         public void OnBotEvent(InventoryRefreshedEvent inventory)
         {
             if (currentSession.Profile == null || currentSession.Profile.PlayerData == null) return;
+
+            var stats = currentSession.Inventory.GetPlayerStats().Result;
+
+            this.datacontext.PlayerInfo.Exp = stats.FirstOrDefault(x => x.Experience > 0).Experience;
+            this.datacontext.PlayerInfo.LevelExp = stats.FirstOrDefault(x => x.NextLevelXp > 0).NextLevelXp;
+
 
             var data = inventory.Inventory;
             //currentSession.Inventory.GetPokemons()?.Result?.ToList() ;
@@ -56,7 +71,7 @@ namespace PoGo.Necrobot.Window
             var items = data.InventoryDelta.InventoryItems.Select(x => x.InventoryItemData?.Item).Where(x => x != null).ToList();
             this.datacontext.MaxItemStogare = maxItemStogare.Value;
             this.datacontext.ItemsList.Update(items);
-            this.datacontext.PokemonList.Update( pokemons, inventory.Candies, inventory.PokemonSettings);
+            this.datacontext.PokemonList.Update(pokemons, inventory.Candies, inventory.PokemonSettings);
             this.datacontext.RaisePropertyChanged("PokemonTabHeader");
             this.datacontext.RaisePropertyChanged("ItemsTabHeader");
             this.datacontext.RaisePropertyChanged("MaxItemStogare");
@@ -75,17 +90,27 @@ namespace PoGo.Necrobot.Window
         }
         public void OnBotEvent(LoggedEvent userLogged)
         {
-            grbPlayerInfo.Header = "Playing as : " + userLogged.Profile.PlayerData.Username;
+            this.datacontext.UI.PlayerStatus = "Playing";
+            this.datacontext.UI.PlayerName = userLogged.Profile.PlayerData.Username;
+            this.datacontext.RaisePropertyChanged("UI");
+            lblAccount.Content = $"{this.datacontext.UI.PlayerStatus} as : {this.datacontext.UI.PlayerName}";
+
         }
         public void OnBotEvent(ProfileEvent profile)
         {
-            var stats = currentSession.Inventory.GetPlayerStats().Result;
+            /* var stats = currentSession.Inventory.GetPlayerStats().Result;
 
-            this.datacontext.PlayerInfo.Exp = stats.FirstOrDefault(x => x.Experience > 0).Experience;
-            this.datacontext.PlayerInfo.LevelExp  = stats.FirstOrDefault(x => x.NextLevelXp > 0).NextLevelXp;
+                 this.datacontext.PlayerInfo.Exp = stats.FirstOrDefault(x => x.Experience > 0).Experience;
+                 this.datacontext.PlayerInfo.LevelExp  = stats.FirstOrDefault(x => x.NextLevelXp > 0).NextLevelXp;
+            */
             this.playerProfile = profile.Profile;
 
-            grbPlayerInfo.Header = "Playing as : " + profile.Profile.PlayerData.Username;
+            this.datacontext.UI.PlayerStatus = "Playing";
+            this.datacontext.UI.PlayerName = profile.Profile.PlayerData.Username;
+            this.datacontext.RaisePropertyChanged("UI");
+
+            lblAccount.Content = $"{this.datacontext.UI.PlayerStatus} as : {this.datacontext.UI.PlayerName}";
+
         }
         public void OnBotEvent(TransferPokemonEvent transferedPkm)
         {
@@ -108,7 +133,7 @@ namespace PoGo.Necrobot.Window
             this.Invoke(() =>
             {
                 dynamic eve = evt;
-                richTextBox.AppendText(evt.ToString() + "\r\n");
+                ///richTextBox.AppendText(evt.ToString() + "\r\n");
 
                 try
                 {

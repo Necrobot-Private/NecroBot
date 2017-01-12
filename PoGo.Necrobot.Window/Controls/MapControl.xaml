@@ -9,7 +9,15 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
 
-        <WindowsPresentation:GMapControl x:Name="gmap" Margin="0,0,0,0"  Zoom="16" MaxZoom="24" MinZoom="1" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" CanDragMap="True"/>
+        <WindowsPresentation:GMapControl x:Name="gmap"
+                                         Margin="0,0,0,0" 
+                                         Zoom="16" 
+                                         MaxZoom="24" 
+                                         MinZoom="1" 
+                                         VerticalContentAlignment="Stretch" 
+                                         HorizontalContentAlignment="Stretch" 
+                                         CanDragMap="True" MouseWheelZoomType="MousePositionWithoutCenter"
+                                         />
 
     </Grid>
 </UserControl>
