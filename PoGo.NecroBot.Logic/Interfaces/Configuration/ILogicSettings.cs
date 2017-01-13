@@ -133,12 +133,19 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         bool SnipePokemonNotInPokedex { get; }
         bool RandomizeRecycle { get; }
         int RandomRecycleValue { get; }
-        int TotalAmountOfPokeballsToKeep { get; }
         int MaxPokeballsToKeep { get; }
 
+        int TotalAmountOfPokeballsToKeep { get; }
         int TotalAmountOfPotionsToKeep { get; }
         int TotalAmountOfRevivesToKeep { get; }
         int TotalAmountOfBerriesToKeep { get; }
+
+        bool UseRecyclePercentsInsteadOfTotals { get; }
+        int PercentOfInventoryPokeballsToKeep { get; }
+        int PercentOfInventoryPotionsToKeep { get; }
+        int PercentOfInventoryRevivesToKeep { get; }
+        int PercentOfInventoryBerriesToKeep { get; }
+
         bool DetailedCountsBeforeRecycling { get; }
         bool VerboseRecycling { get; }
         double RecycleInventoryAtUsagePercentage { get; }
