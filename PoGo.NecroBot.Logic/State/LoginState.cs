@@ -120,11 +120,11 @@ namespace PoGo.NecroBot.Logic.State
                 await Task.Delay(2000, cancellationToken);
                 Environment.Exit(0);
             }
-            catch (ActiveSwitchByRuleException op)
+            catch (ActiveSwitchByRuleException)
             {
 
             }
-            catch (OperationCanceledException op)
+            catch (OperationCanceledException)
             {
                 //just continue login if this happen, most case is bot switching...
             }
@@ -169,20 +169,47 @@ namespace PoGo.NecroBot.Logic.State
                     Console.ReadKey();
                 }
 
-                int maxTheoreticalItems = session.LogicSettings.TotalAmountOfPokeballsToKeep +
-                    session.LogicSettings.TotalAmountOfPotionsToKeep +
-                    session.LogicSettings.TotalAmountOfRevivesToKeep +
-                    session.LogicSettings.TotalAmountOfBerriesToKeep;
-
-                if (maxTheoreticalItems > session.Profile.PlayerData.MaxItemStorage)
+                if (session.LogicSettings.UseRecyclePercentsInsteadOfTotals)
                 {
-                    Logger.Write(session.Translation.GetTranslation(TranslationString.MaxItemsCombinedOverMaxItemStorage, maxTheoreticalItems, session.Profile.PlayerData.MaxItemStorage), LogLevel.Error);
-                    Logger.Write("Press any key to exit, then fix your configuration and run the bot again.", LogLevel.Warning);
-                    Console.ReadKey();
-                    System.Environment.Exit(1);
+                    int totalPercent = session.LogicSettings.PercentOfInventoryPokeballsToKeep +
+                        session.LogicSettings.PercentOfInventoryPotionsToKeep +
+                        session.LogicSettings.PercentOfInventoryRevivesToKeep +
+                        session.LogicSettings.PercentOfInventoryBerriesToKeep;
+
+                    if (totalPercent != 100)
+                    {
+                        Logger.Write(session.Translation.GetTranslation(TranslationString.TotalRecyclePercentGreaterThan100), LogLevel.Error);
+                        Logger.Write("Press any key to exit, then fix your configuration and run the bot again.", LogLevel.Warning);
+                        Console.ReadKey();
+                        System.Environment.Exit(1);
+                    }
+                    else
+                    {
+                        Logger.Write(session.Translation.GetTranslation(TranslationString.UsingRecyclePercentsInsteadOfTotals, session.Profile.PlayerData.MaxItemStorage), LogLevel.Info);
+                        Logger.Write(session.Translation.GetTranslation(TranslationString.PercentPokeballsToKeep, session.LogicSettings.PercentOfInventoryPokeballsToKeep, (int)Math.Floor(session.LogicSettings.PercentOfInventoryPokeballsToKeep / 100.0 * session.Profile.PlayerData.MaxItemStorage)), LogLevel.Info);
+                        Logger.Write(session.Translation.GetTranslation(TranslationString.PercentPotionsToKeep, session.LogicSettings.PercentOfInventoryPotionsToKeep, (int)Math.Floor(session.LogicSettings.PercentOfInventoryPotionsToKeep / 100.0 * session.Profile.PlayerData.MaxItemStorage)), LogLevel.Info);
+                        Logger.Write(session.Translation.GetTranslation(TranslationString.PercentRevivesToKeep, session.LogicSettings.PercentOfInventoryRevivesToKeep, (int)Math.Floor(session.LogicSettings.PercentOfInventoryRevivesToKeep / 100.0 * session.Profile.PlayerData.MaxItemStorage)), LogLevel.Info);
+                        Logger.Write(session.Translation.GetTranslation(TranslationString.PercentBerriesToKeep, session.LogicSettings.PercentOfInventoryBerriesToKeep, (int)Math.Floor(session.LogicSettings.PercentOfInventoryBerriesToKeep / 100.0 * session.Profile.PlayerData.MaxItemStorage)), LogLevel.Info);
+                    }
+                    
+                }
+                else
+                {
+                    int maxTheoreticalItems = session.LogicSettings.TotalAmountOfPokeballsToKeep +
+                        session.LogicSettings.TotalAmountOfPotionsToKeep +
+                        session.LogicSettings.TotalAmountOfRevivesToKeep +
+                        session.LogicSettings.TotalAmountOfBerriesToKeep;
+
+                    if (maxTheoreticalItems > session.Profile.PlayerData.MaxItemStorage)
+                    {
+                        Logger.Write(session.Translation.GetTranslation(TranslationString.MaxItemsCombinedOverMaxItemStorage, maxTheoreticalItems, session.Profile.PlayerData.MaxItemStorage), LogLevel.Error);
+                        Logger.Write("Press any key to exit, then fix your configuration and run the bot again.", LogLevel.Warning);
+                        Console.ReadKey();
+                        System.Environment.Exit(1);
+                    }
                 }
             }
-            catch (ActiveSwitchByRuleException op)
+            catch (ActiveSwitchByRuleException)
             {
 
             }
