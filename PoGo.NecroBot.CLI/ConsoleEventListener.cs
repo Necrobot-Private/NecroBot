@@ -12,6 +12,7 @@ using POGOProtos.Inventory.Item;
 using POGOProtos.Networking.Responses;
 using PoGo.NecroBot.Logic.Event.Gym;
 using POGOProtos.Map.Fort;
+using PoGo.NecroBot.Logic.Event.Player;
 #endregion
 
 namespace PoGo.NecroBot.CLI
@@ -354,6 +355,16 @@ namespace PoGo.NecroBot.CLI
         private static void HandleEvent(EggsListEvent event1, ISession session) { }
         private static void HandleEvent(InventoryListEvent event1, ISession session) { }
         private static void HandleEvent(PokemonListEvent event1, ISession session) { }
+
+        private static void HandleEvent(LoginEvent e, ISession session) {
+
+            Logger.Write(
+                  session.Translation.GetTranslation(TranslationString.LoggingIn,
+                  e.AuthType,
+                  e.Username),
+                  LogLevel.Info, ConsoleColor.DarkYellow);
+        }
+
         private static void HandleEvent(UpdatePositionEvent event1, ISession session)
         {
             //uncomment for more info about locations

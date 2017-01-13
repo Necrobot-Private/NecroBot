@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace PoGo.Necrobot.Window.Properties {
+namespace PoGo.NecroBot.Logic.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace PoGo.Necrobot.Window.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("PoGo.Necrobot.Window.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("PoGo.NecroBot.Logic.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -65,7 +65,7 @@ namespace PoGo.Necrobot.Window.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap ajax_loader {
             get {
-                object obj = ResourceManager.GetObject("ajax_loader", resourceCulture);
+                object obj = ResourceManager.GetObject("ajax-loader", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

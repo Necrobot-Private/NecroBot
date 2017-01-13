@@ -3,10 +3,12 @@ using PoGo.Necrobot.Window.Model;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Event.Inventory;
 using PoGo.NecroBot.Logic.Event.Player;
+using PoGo.NecroBot.Logic.Event.UI;
 using PoGo.NecroBot.Logic.State;
 using POGOProtos.Inventory.Item;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,7 +27,7 @@ namespace PoGo.Necrobot.Window
             }
             catch (Exception ex)
             {
-
+                Debug.WriteLine(ex.Message);
             }
         }
         public void OnBotEvent(FavoriteEvent ev)
@@ -48,18 +50,22 @@ namespace PoGo.Necrobot.Window
         {
             this.datacontext.Sidebar.AddOrUpdate(new CatchPokemonViewModel(inventory));
         }
+        public void OnBotEvent(LoginEvent ev)
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                this.datacontext.Reset();
+
+                lblAccount.Content = currentSession.Translation.GetTranslation(NecroBot.Logic.Common.TranslationString.LoggingIn, ev.AuthType, ev.Username);
+            });
+
+        }
         public void OnBotEvent(InventoryRefreshedEvent inventory)
         {
             if (currentSession.Profile == null || currentSession.Profile.PlayerData == null) return;
 
-            var stats = currentSession.Inventory.GetPlayerStats().Result;
-
-            this.datacontext.PlayerInfo.Exp = stats.FirstOrDefault(x => x.Experience > 0).Experience;
-            this.datacontext.PlayerInfo.LevelExp = stats.FirstOrDefault(x => x.NextLevelXp > 0).NextLevelXp;
-
-
             var data = inventory.Inventory;
-            //currentSession.Inventory.GetPokemons()?.Result?.ToList() ;
+
             var maxPokemonStogare = currentSession.Profile?.PlayerData?.MaxPokemonStorage;
             var maxItemStogare = currentSession.Profile?.PlayerData?.MaxItemStorage;
             var pokemons = data.InventoryDelta.InventoryItems
@@ -93,16 +99,19 @@ namespace PoGo.Necrobot.Window
             this.datacontext.UI.PlayerStatus = "Playing";
             this.datacontext.UI.PlayerName = userLogged.Profile.PlayerData.Username;
             this.datacontext.RaisePropertyChanged("UI");
-            lblAccount.Content = $"{this.datacontext.UI.PlayerStatus} as : {this.datacontext.UI.PlayerName}";
+            this.Dispatcher.Invoke(() =>
+            {
+                lblAccount.Content = $"{this.datacontext.UI.PlayerStatus} as : {this.datacontext.UI.PlayerName}";
 
+            });
         }
         public void OnBotEvent(ProfileEvent profile)
         {
-            /* var stats = currentSession.Inventory.GetPlayerStats().Result;
+            var stats = profile.Stats;
 
-                 this.datacontext.PlayerInfo.Exp = stats.FirstOrDefault(x => x.Experience > 0).Experience;
-                 this.datacontext.PlayerInfo.LevelExp  = stats.FirstOrDefault(x => x.NextLevelXp > 0).NextLevelXp;
-            */
+            this.datacontext.PlayerInfo.Exp = stats.FirstOrDefault(x => x.Experience > 0).Experience;
+            this.datacontext.PlayerInfo.LevelExp = stats.FirstOrDefault(x => x.NextLevelXp > 0).NextLevelXp;
+
             this.playerProfile = profile.Profile;
 
             this.datacontext.UI.PlayerStatus = "Playing";
@@ -115,6 +124,10 @@ namespace PoGo.Necrobot.Window
         public void OnBotEvent(TransferPokemonEvent transferedPkm)
         {
             this.datacontext.PokemonList.OnTransfer(transferedPkm);
+        }
+        public void OnBotEvent(StatusBarEvent e)
+        {
+            lblStatus.Text = e.Message;
         }
         public void OnBotEvent(FortUsedEvent ev)
         {
@@ -130,17 +143,26 @@ namespace PoGo.Necrobot.Window
         }
         internal void HandleBotEvent(IEvent evt)
         {
-            this.Invoke(() =>
-            {
-                dynamic eve = evt;
-                ///richTextBox.AppendText(evt.ToString() + "\r\n");
+            //this.Invoke(() =>
+            //{
+            dynamic eve = evt;
+            ///richTextBox.AppendText(evt.ToString() + "\r\n");
 
-                try
+            try
+            {
+                Task.Run(() =>
                 {
-                    OnBotEvent(eve);
-                }
-                catch (Exception ex) { }
-            });
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        OnBotEvent(eve);
+                    });
+                });
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+            // });
         }
         #endregion
 

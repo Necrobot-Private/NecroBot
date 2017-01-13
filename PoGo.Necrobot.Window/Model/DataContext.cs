@@ -56,6 +56,14 @@ namespace PoGo.Necrobot.Window.Model
             }
         }
 
+        internal void Reset()
+        {
+            this.PokemonList.Pokemons.Clear();
+            this.ItemsList.Items.Clear();
+            this.ItemsList.RaisePropertyChanged("TotalItem");
+
+        }
+
         public string ItemsTabHeader
         {
             get
