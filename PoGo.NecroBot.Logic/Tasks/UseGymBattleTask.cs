@@ -65,7 +65,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         }
                         else
                         {
-                            //await StartGymAttackLogic(session, fortInfo, fortDetails, gym, cancellationToken);
+                            await StartGymAttackLogic(session, fortInfo, fortDetails, gym, cancellationToken);
                             //Logger.Write($"No action... This gym is defending by other color", LogLevel.Gym, ConsoleColor.White);
                         }
                     }
@@ -262,10 +262,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 {
                                     try
                                     {
-                                        if (session.Profile.PlayerData.DailyBonus.NextCollectedTimestampMs <= DateTime.Now.ToUnixTime())
+                                        if (session.Profile.PlayerData.DailyBonus.NextCollectedTimestampMs <= 0)
                                         {
-                                            var collectDailyBonusResponse = await session.Client.Player.CollectDailyBonus();
-                                            if (collectDailyBonusResponse.Result == CollectDailyBonusResponse.Types.Result.Success)
+                                            var collectDailyBonusResponse = await session.Client.Player.CollectDailyDefenderBonus();
+                                            if (collectDailyBonusResponse.Result == CollectDailyDefenderBonusResponse.Types.Result.Success)
                                             {
                                                 Logger.Write($"Collected {count * 10} coins", LogLevel.Gym, ConsoleColor.DarkYellow);
                                             }
@@ -287,8 +287,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                             Logger.Write(string.Format("Deploy pokemon failed with result: {0}", response.Result), LogLevel.Gym, ConsoleColor.Magenta);
                     }
                     else
-                        Logger.Write($"You already have pokemon deployed here", LogLevel.Gym);
+                        Logger.Write($"You don't have pokemons to be deployed!", LogLevel.Gym);
                 }
+                else
+                    Logger.Write($"You already have pokemon deployed here", LogLevel.Gym);
             }
             else
             {
@@ -554,8 +556,20 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     List<BattleAction> a1 = (last == null || last.Type == BattleActionType.ActionVictory || last.Type == BattleActionType.ActionDefeat ? emptyActions : attackActionz);
                     BattleAction a2 = (last == null || last.Type == BattleActionType.ActionVictory || last.Type == BattleActionType.ActionDefeat ? emptyAction : last);
-                    //Logger.Write(string.Format("Sizeof of list of action passed: {0}, last one: {1}", a1.Count, a2.Type), LogLevel.Gym, ConsoleColor.Magenta);
-                    var attackResult = await session.Client.Fort.AttackGym(currentFortData.Id, startResponse.BattleId, a1, a2);
+                    AttackGymResponse attackResult = null;
+                    try
+                    {
+                        attackResult = await session.Client.Fort.AttackGym(currentFortData.Id, startResponse.BattleId, a1, a2);
+                    }
+                    catch (APIBadRequestException e)
+                    {
+                        Logger.Write("Shit!!!! Bad attack gym", LogLevel.Warning);
+                        Logger.Write(e.InnerException?.Message, LogLevel.Error, ConsoleColor.Magenta);
+                        Logger.Write("Last retrieved action was: "+a2, LogLevel.Error, ConsoleColor.Magenta);
+                        Logger.Write("Actions to perform were: " + string.Join(", ", a1), LogLevel.Error, ConsoleColor.Magenta);
+                        Logger.Write(string.Format("Attacker was: {0}, defender was: {1}", attacker, defender), LogLevel.Error, ConsoleColor.Magenta);
+                        continue;
+                    };
 
                     loops++;
 
