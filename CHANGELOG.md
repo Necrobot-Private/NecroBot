@@ -1,6 +1,6 @@
 # Change Log
 
-## [v1.0.0.60](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.51) (2017-01-14)
+## [v1.0.0.60](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.60) (2017-01-14)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.56...v1.0.0.60)
 ## Bugs & Enhancements
 - GUI BUG FIX : Crash when change account
