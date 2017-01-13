@@ -1,5 +1,15 @@
 # Change Log
 
+## [v1.0.0.60](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.51) (2017-01-14)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.56...v1.0.0.60)
+## Bugs & Enhancements
+- GUI BUG FIX : Crash when change account
+- Bug fix: freeze when select gender
+- Bug fix : Auto update wrong with GUI
+- Ehancement : Autosnipe with candy setting - which allow you setup min amount of candy and bot will snipe pokemon until you have that min amount candy. BOT will still snipe that pokemon depend on IV config after reach candy setting
+- Ehancement : Recycle item by percentage
+
+
 ## [v1.0.0.51](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.51) (2017-01-09)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.50...v1.0.0.51)
 ## Bugs & Enhancements
