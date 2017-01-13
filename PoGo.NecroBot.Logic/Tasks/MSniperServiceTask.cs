@@ -10,6 +10,7 @@ using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Utils;
 using POGOProtos.Data;
 using POGOProtos.Enums;
+using POGOProtos.Inventory;
 using POGOProtos.Map.Pokemon;
 using POGOProtos.Networking.Responses;
 using PokemonGo.RocketAPI.Exceptions;
@@ -453,7 +454,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             SnipeFilter filter = new SnipeFilter()
             {
                 SnipeIV = session.LogicSettings.MinIVForAutoSnipe,
-                VerifiedOnly = session.LogicSettings.AutosnipeVerifiedOnly
+                VerifiedOnly = session.LogicSettings.AutosnipeVerifiedOnly  ,
+                AustoSnipeCandy = session.LogicSettings.DefaultAutoSnipeCandy
             };
 
             var pokemonId = (PokemonId)item.PokemonId;
@@ -462,6 +464,9 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 filter = session.LogicSettings.PokemonSnipeFilters[pokemonId];
             }
+
+            var candy = session.Inventory.GetCandy(pokemonId);
+
             lock (locker)
             {
                 if (byPassValidation)
@@ -475,6 +480,14 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 item.Priority = filter.Priority;
 
+                //check candy
+
+                if(candy < filter.AustoSnipeCandy)
+                {
+                    autoSnipePokemons.Add(item);
+                    return;
+                }
+                
                 //hack, this case we can't determite move :)
 
                 if (filter.VerifiedOnly && item.EncounterId == 0) return;

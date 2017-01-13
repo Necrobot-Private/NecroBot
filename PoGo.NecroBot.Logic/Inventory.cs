@@ -42,6 +42,13 @@ namespace PoGo.NecroBot.Logic
         private DateTime _lastRefresh;
         private ISession ownerSession;
 
+        public int GetCandy(PokemonId id)
+        {
+            var setting = GetPokemonSettings().Result.FirstOrDefault(x => x.PokemonId == id);
+            return GetPokemonFamilies().Result.FirstOrDefault(x => x.FamilyId == setting.FamilyId).Candy_;
+
+        }
+
         public Inventory(ISession session, Client client, ILogicSettings logicSettings, Action<GetInventoryResponse> onUpdated = null)
         {
             this.ownerSession = session;
@@ -53,7 +60,7 @@ namespace PoGo.NecroBot.Logic
                  //Console.WriteLine("################# INVENTORY UPDATE ######################");
                  _cachedInventory = refreshedInventoryData;
                  _lastRefresh = DateTime.Now;
-                 if(onUpdated!= null)
+                 if (onUpdated != null)
                  {
                      onUpdated(_cachedInventory);
                  }
@@ -75,7 +82,7 @@ namespace PoGo.NecroBot.Logic
             pokemon.Favorite = 1;
             var all = await GetPokemons();
             var pkm = all.FirstOrDefault(x => x.Id == pokemon.Id);
-            if(pkm != null)
+            if (pkm != null)
             {
                 pkm.Favorite = 1;
             }
@@ -89,7 +96,7 @@ namespace PoGo.NecroBot.Logic
             ItemId.ItemMaxPotion
         };
 
-        public async Task  UpdateInventoryItem(ItemId itemId, int count)
+        public async Task UpdateInventoryItem(ItemId itemId, int count)
         {
             await Task.Run(() =>
            {
@@ -137,7 +144,7 @@ namespace PoGo.NecroBot.Logic
 
         public async Task<GetInventoryResponse> GetCachedInventory()
         {
-            lock(_cachedInventory)
+            lock (_cachedInventory)
             {
                 if (_player == null) GetPlayerData();
             }
@@ -149,7 +156,7 @@ namespace PoGo.NecroBot.Logic
                     return _cachedInventory;
             }
 
-          return await RefreshCachedInventory();
+            return await RefreshCachedInventory();
         }
 
         public async Task<IEnumerable<AppliedItems>> GetAppliedItems()
@@ -344,6 +351,14 @@ namespace PoGo.NecroBot.Logic
             return null;
         }
 
+        public int UpdateStartDust(int startdust)
+        {
+            GetPlayerData();
+            _player.PlayerData.Currencies[1].Amount += startdust;
+
+            return _player.PlayerData.Currencies[1].Amount;
+        }
+
         public int GetStarDust()
         {
             GetPlayerData();
@@ -352,12 +367,22 @@ namespace PoGo.NecroBot.Logic
 
         public async void GetPlayerData()
         {
-            try {
-                _player = await _client.Player.GetPlayer();
-            }catch(CaptchaException ex)
+
+            try
+            {
+                if (_player == null)
+                {
+                    _player = await _client.Player.GetPlayer();
+                }
+            }
+            catch (CaptchaException ex)
+            {
+                throw ex;
+            }
+            catch(Exception ex)
             {
                 Debug.Write(ex.Message);
-            } 
+            }
         }
 
         public async Task<PokemonData> GetHighestPokemonOfTypeByIv(PokemonData pokemon)
@@ -472,7 +497,7 @@ namespace PoGo.NecroBot.Logic
         public async Task<List<InventoryItem>> GetPokeDexItems()
         {
             //List<InventoryItem> PokeDex = new List<InventoryItem>();
-            var inventory = await GetCachedInventory(); 
+            var inventory = await GetCachedInventory();
 
             return (from items in inventory.InventoryDelta.InventoryItems
                     where items.InventoryItemData?.PokedexEntry != null
@@ -629,7 +654,7 @@ namespace PoGo.NecroBot.Logic
 
                 var pokemonCandyNeededAlready =
                     (pokemonToEvolve.Count(
-                        p => pokemonSettings.Single(x => x.PokemonId == p.PokemonId).FamilyId == settings.FamilyId) + 2) * 
+                        p => pokemonSettings.Single(x => x.PokemonId == p.PokemonId).FamilyId == settings.FamilyId) + 2) *
                     settings.CandyToEvolve;
 
                 if (familyCandy.Candy_ >= pokemonCandyNeededAlready)
@@ -650,7 +675,7 @@ namespace PoGo.NecroBot.Logic
                 var rewards = await _client.Player.GetLevelUpRewards(level);
                 foreach (var item in rewards.ItemsAwarded)
                 {
-                    UpdateInventoryItem(item.ItemId, item.ItemCount);
+                    await UpdateInventoryItem(item.ItemId, item.ItemCount);
                 }
             }
 
