@@ -241,5 +241,6 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
 
         bool AutosnipeVerifiedOnly { get;  }
         int SnipePauseOnOutOfBallTime { get;  }
+        int DefaultAutoSnipeCandy { get; }
     }
 }
