@@ -132,9 +132,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                         await Task.Delay(500);
                         result = await StartBattle(session, gym, pokemonDatas, defenders.FirstOrDefault(x=>x.Id == defenderPokemonId));
                     }
-                    catch (APIBadRequestException)
+                    catch (APIBadRequestException e)
                     {
-                        Logger.Write("SHIT", LogLevel.Warning);
+                        Logger.Write("SHIT in start battle", LogLevel.Warning);
+                        Logger.Write(e.Message, LogLevel.Error, ConsoleColor.Magenta);
+                        Logger.Write(e.StackTrace, LogLevel.Error, ConsoleColor.Magenta);
                         await Task.Delay(500);
                     }
                 }
@@ -189,12 +191,15 @@ namespace PoGo.NecroBot.Logic.Tasks
                     isVictory = false;
                     break;
                 }
-                var faintedPKM = battleActions.Where(x => x != null && x.Type == BattleActionType.ActionFaint).Select(x => x.ActivePokemonId).Distinct();
-                Logger.Write("We have lost pokemons with ids: " + string.Join(", ", faintedPKM), LogLevel.Gym, ConsoleColor.Magenta);
 
-                Logger.Write("Attackers before: " + string.Join(", ", pokemonDatas.Select(x=>x.Id)), LogLevel.Gym, ConsoleColor.Magenta);
-                pokemonDatas = pokemonDatas.Where(x => !faintedPKM.Any(y=>y==x.Id)).ToArray();
-                Logger.Write("Attackers for new turn: " + string.Join(", ", pokemonDatas.Select(x => x.Id)), LogLevel.Gym, ConsoleColor.Magenta);
+                var faintedPKM = battleActions.Where(x => x != null && x.Type == BattleActionType.ActionFaint).Select(x => x.ActivePokemonId).Distinct();
+                //Logger.Write("Defeted pokemons ids: " + string.Join(", ", faintedPKM), LogLevel.Gym, ConsoleColor.Magenta);
+
+                //Logger.Write("Attackers before: " + string.Join(", ", pokemonDatas.Select(x=>x.Id)), LogLevel.Gym, ConsoleColor.Magenta);
+                var livePokemons = pokemonDatas.Where(x => !faintedPKM.Any(y => y == x.Id));
+                var faintedPokemons = pokemonDatas.Where(x => faintedPKM.Any(y => y == x.Id));
+                pokemonDatas = livePokemons.Concat(faintedPokemons).ToArray();
+                //Logger.Write("Attackers for new turn: " + string.Join(", ", pokemonDatas.Select(x => x.Id)), LogLevel.Gym, ConsoleColor.Magenta);
 
                 if (lastAction.Type == BattleActionType.ActionVictory)
                 {
@@ -204,14 +209,17 @@ namespace PoGo.NecroBot.Logic.Tasks
                         var point = lastAction.BattleResults.GymPointsDelta;
                         defenderPokemonId = unchecked((ulong)lastAction.BattleResults.NextDefenderPokemonId);
 
-                        Logger.Write(string.Format("Exp: {0}, Gym points: {1}, Next defender id: {2}", exp, point, defenderPokemonId), LogLevel.Gym, ConsoleColor.Magenta);
+                        //Logger.Write(string.Format("Exp: {0}, Gym points: {1}, Next defender id: {2}", exp, point, defenderPokemonId), LogLevel.Gym, ConsoleColor.Magenta);
                     }
                     continue;
                 }
             }
 
             if (isVictory)
+            {
+                fortInfo = await session.Client.Fort.GetFort(gym.Id, gym.Latitude, gym.Longitude);
                 await Execute(session, cancellationToken, gym, fortInfo);
+            }
         }
 
         private static async Task DeployPokemonToGym(ISession session, FortDetailsResponse fortInfo, GetGymDetailsResponse fortDetails)
@@ -233,38 +241,53 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             if (availableSlots > 0)
             {
-                var pokemon = await GetDeployablePokemon(session);
-                if (pokemon != null)
+                var deployed = await session.Inventory.GetDeployedPokemons();
+                if (!deployed.Any(a => a.DeployedFortId == fortInfo.FortId))
                 {
-                    var response = await session.Client.Fort.FortDeployPokemon(fortInfo.FortId, pokemon.Id);
-                    if (response.Result == FortDeployPokemonResponse.Types.Result.Success)
+                    var pokemon = await GetDeployablePokemon(session);
+                    if (pokemon != null)
                     {
-                        session.EventDispatcher.Send(new GymDeployEvent()
+                        var response = await session.Client.Fort.FortDeployPokemon(fortInfo.FortId, pokemon.Id);
+                        if (response.Result == FortDeployPokemonResponse.Types.Result.Success)
                         {
-                            PokemonId = pokemon.PokemonId,
-                            Name = fortDetails.Name
-                        });
-                        if (session.LogicSettings.GymConfig.CollectCoinAfterDeployed > 0)
-                        {
-                            var deployed = await session.Inventory.GetDeployedPokemons();
-                            var count = deployed.Count();
-                            if (count >= session.LogicSettings.GymConfig.CollectCoinAfterDeployed)
+                            session.EventDispatcher.Send(new GymDeployEvent()
                             {
-                                try
+                                PokemonId = pokemon.PokemonId,
+                                Name = fortDetails.Name
+                            });
+                            if (session.LogicSettings.GymConfig.CollectCoinAfterDeployed > 0)
+                            {
+                                var count = deployed.Count() + 1;
+                                if (count >= session.LogicSettings.GymConfig.CollectCoinAfterDeployed)
                                 {
-                                    var collectDailyBonusResponse = await session.Client.Player.CollectDailyBonus();
-                                    if (collectDailyBonusResponse.Result == CollectDailyBonusResponse.Types.Result.Success)
+                                    try
                                     {
-                                        Logger.Write($"Collected {count * 10} coins", LogLevel.Gym, ConsoleColor.DarkYellow);
+                                        if (session.Profile.PlayerData.DailyBonus.NextCollectedTimestampMs <= DateTime.Now.ToUnixTime())
+                                        {
+                                            var collectDailyBonusResponse = await session.Client.Player.CollectDailyBonus();
+                                            if (collectDailyBonusResponse.Result == CollectDailyBonusResponse.Types.Result.Success)
+                                            {
+                                                Logger.Write($"Collected {count * 10} coins", LogLevel.Gym, ConsoleColor.DarkYellow);
+                                            }
+                                        }
+                                        else
+                                            Logger.Write($"You need to wait {session.Profile.PlayerData.DailyBonus.NextCollectedTimestampMs - DateTime.Now.ToUnixTime()}ms for daily bonus", LogLevel.Info, ConsoleColor.Magenta);
                                     }
-                                }
-                                catch (Exception ex)
-                                {
-                                    Logger.Write($"Coins ware already collected", LogLevel.Gym, ConsoleColor.DarkYellow);
+                                    catch (APIBadRequestException e)
+                                    {
+                                        Logger.Write("SHIT in getting coins", LogLevel.Warning);
+                                        Logger.Write(e.Message, LogLevel.Error, ConsoleColor.Magenta);
+                                        Logger.Write(e.StackTrace, LogLevel.Error, ConsoleColor.Magenta);
+                                        await Task.Delay(500);
+                                    }
                                 }
                             }
                         }
+                        else
+                            Logger.Write(string.Format("Deploy pokemon failed with result: {0}", response.Result), LogLevel.Gym, ConsoleColor.Magenta);
                     }
+                    else
+                        Logger.Write($"You already have pokemon deployed here", LogLevel.Gym);
                 }
             }
             else
@@ -529,14 +552,10 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     var attackActionz = await GetActions(session, serverMs, attacker, defender, _currentAttackerEnergy);
 
-                    var attackResult =
-                        await session.Client.Fort.AttackGym
-                        (
-                            currentFortData.Id,
-                            startResponse.BattleId,
-                            (last == null || last.Type == BattleActionType.ActionVictory ? emptyActions : attackActionz),
-                            (last == null || last.Type == BattleActionType.ActionVictory ? emptyAction : last)
-                        );
+                    List<BattleAction> a1 = (last == null || last.Type == BattleActionType.ActionVictory || last.Type == BattleActionType.ActionDefeat ? emptyActions : attackActionz);
+                    BattleAction a2 = (last == null || last.Type == BattleActionType.ActionVictory || last.Type == BattleActionType.ActionDefeat ? emptyAction : last);
+                    //Logger.Write(string.Format("Sizeof of list of action passed: {0}, last one: {1}", a1.Count, a2.Type), LogLevel.Gym, ConsoleColor.Magenta);
+                    var attackResult = await session.Client.Fort.AttackGym(currentFortData.Id, startResponse.BattleId, a1, a2);
 
                     loops++;
 
@@ -556,11 +575,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 Logger.Write(
                                     $"(GYM ATTACK) : Defender {attackResult.ActiveDefender.PokemonData.PokemonId.ToString()  } HP {attackResult.ActiveDefender.CurrentHealth} - Attacker  {attackResult.ActiveAttacker.PokemonData.PokemonId.ToString()}   HP/Sta {attackResult.ActiveAttacker.CurrentHealth}/{attackResult.ActiveAttacker.CurrentEnergy}        ");
 
-                                if (attackResult.ActiveAttacker.CurrentHealth <= 0)
-                                {
-                                    Logger.Write("--Lost pokemon: " + attacker.Id, LogLevel.Gym, ConsoleColor.Magenta);
-                                    attacker = null;
-                                }
                                 break;
 
                             case BattleState.Defeated:
@@ -580,7 +594,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 Logger.Write(
                                     $"We were victorious!: ");
                                 return lastActions;
-                                break;
                             default:
                                 Logger.Write(
                                     $"Unhandled attack response: {attackResult}");
@@ -603,10 +616,11 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 }
 
-
-                catch (APIBadRequestException)
+                catch (APIBadRequestException e)
                 {
                     Logger.Write("Shit!!!! Bad request send to server -", LogLevel.Warning);
+                    Logger.Write(e.Message, LogLevel.Error, ConsoleColor.Magenta);
+                    Logger.Write(e.StackTrace, LogLevel.Error, ConsoleColor.Magenta);
                 };
             }
             return lastActions;
@@ -785,17 +799,41 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static async Task<PokemonData> GetDeployablePokemon(ISession session)
         {
-            var pokemonList = (await session.Inventory.GetPokemons()).ToList();
-            pokemonList = pokemonList.OrderByDescending(p => p.Cp).Skip(Math.Min(pokemonList.Count - 1, session.LogicSettings.GymConfig.NumberOfTopPokemonToBeExcluded)).ToList();
+            PokemonData pokemon = null;
+            List<ulong> excluded = new List<ulong>();
 
-            if (pokemonList.Count == 1) return pokemonList.FirstOrDefault();
-            if (session.LogicSettings.GymConfig.UseRandomPokemon)
+            while (pokemon == null)
             {
+                var pokemonList = (await session.Inventory.GetPokemons()).ToList();
+                pokemonList = pokemonList
+                    .Where(w=> !excluded.Contains(w.Id) && w.Id!=session.Profile.PlayerData.BuddyPokemon?.Id)
+                    .OrderByDescending(p => p.Cp)
+                    .Skip(Math.Min(pokemonList.Count - 1, session.LogicSettings.GymConfig.NumberOfTopPokemonToBeExcluded))
+                    .ToList();
 
-                return pokemonList.ElementAt(new Random().Next(0, pokemonList.Count - 1));
+                if (pokemonList.Count == 0)
+                    return null;
+
+                if (pokemonList.Count == 1) pokemon = pokemonList.FirstOrDefault();
+                if (session.LogicSettings.GymConfig.UseRandomPokemon && pokemon == null)
+                {
+                    pokemon = pokemonList.ElementAt(new Random().Next(0, pokemonList.Count - 1));
+                }
+
+                pokemon = pokemonList.FirstOrDefault(p => p.Cp <= session.LogicSettings.GymConfig.MaxCPToDeploy && PokemonInfo.GetLevel(p) <= session.LogicSettings.GymConfig.MaxLevelToDeploy && string.IsNullOrEmpty(p.DeployedFortId));
+
+                if (pokemon.Stamina == 0)
+                    await RevivePokemon(session, pokemon);
+
+                if (pokemon.Stamina < pokemon.StaminaMax)
+                    await HealPokemon(session, pokemon);
+
+                if (pokemon.Stamina < pokemon.StaminaMax)
+                {
+                    excluded.Add(pokemon.Id);
+                    pokemon = null;
+                }
             }
-
-            var pokemon = pokemonList.FirstOrDefault(p => p.Cp <= session.LogicSettings.GymConfig.MaxCPToDeploy && PokemonInfo.GetLevel(p) <= session.LogicSettings.GymConfig.MaxLevelToDeploy && string.IsNullOrEmpty(p.DeployedFortId));
             return pokemon;
         }
     }
