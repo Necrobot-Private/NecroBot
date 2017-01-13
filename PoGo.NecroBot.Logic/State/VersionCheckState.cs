@@ -52,7 +52,7 @@ namespace PoGo.NecroBot.Logic.State
 
             var autoUpdate = session.LogicSettings.AutoUpdate;
             var isLatest = IsLatest();
-            if ( isLatest )
+            if ( isLatest  && 1 ==0)
             {
                 session.EventDispatcher.Send(new UpdateEvent
                 {

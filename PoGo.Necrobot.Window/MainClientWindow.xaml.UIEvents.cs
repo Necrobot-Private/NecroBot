@@ -127,7 +127,7 @@ namespace PoGo.Necrobot.Window
         }
         public void OnBotEvent(StatusBarEvent e)
         {
-
+            lblStatus.Text = e.Message;
         }
         public void OnBotEvent(FortUsedEvent ev)
         {
