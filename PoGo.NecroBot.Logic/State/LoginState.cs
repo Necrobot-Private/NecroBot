@@ -274,7 +274,8 @@ namespace PoGo.NecroBot.Logic.State
             try
             {
                 session.Profile = await session.Client.Player.GetPlayer();
-                session.EventDispatcher.Send(new ProfileEvent { Profile = session.Profile });
+                var stats = await session.Inventory.GetPlayerStats();
+                session.EventDispatcher.Send(new ProfileEvent { Profile = session.Profile , Stats = stats });
             }
             catch (System.UriFormatException e)
             {

@@ -3,6 +3,7 @@ using PoGo.Necrobot.Window.Model;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Event.Inventory;
 using PoGo.NecroBot.Logic.Event.Player;
+using PoGo.NecroBot.Logic.Event.UI;
 using PoGo.NecroBot.Logic.State;
 using POGOProtos.Inventory.Item;
 using System;
@@ -63,12 +64,6 @@ namespace PoGo.Necrobot.Window
         {
             if (currentSession.Profile == null || currentSession.Profile.PlayerData == null) return;
 
-            var stats = currentSession.Inventory.GetPlayerStats().Result;
-
-            this.datacontext.PlayerInfo.Exp = stats.FirstOrDefault(x => x.Experience > 0).Experience;
-            this.datacontext.PlayerInfo.LevelExp = stats.FirstOrDefault(x => x.NextLevelXp > 0).NextLevelXp;
-
-
             var data = inventory.Inventory;
 
             var maxPokemonStogare = currentSession.Profile?.PlayerData?.MaxPokemonStorage;
@@ -112,11 +107,11 @@ namespace PoGo.Necrobot.Window
         }
         public void OnBotEvent(ProfileEvent profile)
         {
-            /* var stats = currentSession.Inventory.GetPlayerStats().Result;
+            var stats = profile.Stats;
 
-                 this.datacontext.PlayerInfo.Exp = stats.FirstOrDefault(x => x.Experience > 0).Experience;
-                 this.datacontext.PlayerInfo.LevelExp  = stats.FirstOrDefault(x => x.NextLevelXp > 0).NextLevelXp;
-            */
+            this.datacontext.PlayerInfo.Exp = stats.FirstOrDefault(x => x.Experience > 0).Experience;
+            this.datacontext.PlayerInfo.LevelExp = stats.FirstOrDefault(x => x.NextLevelXp > 0).NextLevelXp;
+
             this.playerProfile = profile.Profile;
 
             this.datacontext.UI.PlayerStatus = "Playing";
@@ -129,6 +124,10 @@ namespace PoGo.Necrobot.Window
         public void OnBotEvent(TransferPokemonEvent transferedPkm)
         {
             this.datacontext.PokemonList.OnTransfer(transferedPkm);
+        }
+        public void OnBotEvent(StatusBarEvent e)
+        {
+
         }
         public void OnBotEvent(FortUsedEvent ev)
         {
@@ -157,7 +156,7 @@ namespace PoGo.Necrobot.Window
                     {
                         OnBotEvent(eve);
                     });
-               });
+                });
             }
             catch (Exception ex)
             {
