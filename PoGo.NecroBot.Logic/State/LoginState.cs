@@ -214,7 +214,7 @@ namespace PoGo.NecroBot.Logic.State
             {
 
             }
-		catch (OperationCanceledException)
+		    catch (OperationCanceledException)
             {
                 //just continue login if this happen, most case is bot switching...
             }
@@ -227,7 +227,10 @@ namespace PoGo.NecroBot.Logic.State
             {
                 throw new LoginFailedException();
             }
-
+            catch(Exception ex)
+            {
+                throw ex;
+            }
             session.LoggedTime = DateTime.Now;
             session.EventDispatcher.Send(new LoggedEvent()
             {

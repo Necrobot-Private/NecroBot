@@ -51,9 +51,10 @@ namespace PoGo.Necrobot.Window
         }
         public void OnBotEvent(LoginEvent ev)
         {
-            this.datacontext.Reset();
             this.Dispatcher.Invoke(() =>
             {
+                this.datacontext.Reset();
+
                 lblAccount.Content = currentSession.Translation.GetTranslation(NecroBot.Logic.Common.TranslationString.LoggingIn, ev.AuthType, ev.Username);
             });
 
@@ -150,7 +151,13 @@ namespace PoGo.Necrobot.Window
 
             try
             {
-                Task.Run(() => { OnBotEvent(eve); });
+                Task.Run(() =>
+                {
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        OnBotEvent(eve);
+                    });
+               });
             }
             catch (Exception ex)
             {
