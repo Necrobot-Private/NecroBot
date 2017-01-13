@@ -134,7 +134,6 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         bool RandomizeRecycle { get; }
         int RandomRecycleValue { get; }
         int TotalAmountOfPokeballsToKeep { get; }
-        int MaxPokeballsToKeep { get; }
 
         int TotalAmountOfPotionsToKeep { get; }
         int TotalAmountOfRevivesToKeep { get; }

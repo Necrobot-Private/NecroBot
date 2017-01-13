@@ -7,6 +7,7 @@ using PoGo.NecroBot.Logic.State;
 using POGOProtos.Inventory.Item;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,7 +26,7 @@ namespace PoGo.Necrobot.Window
             }
             catch (Exception ex)
             {
-
+                Debug.WriteLine(ex.Message);
             }
         }
         public void OnBotEvent(FavoriteEvent ev)
@@ -48,6 +49,15 @@ namespace PoGo.Necrobot.Window
         {
             this.datacontext.Sidebar.AddOrUpdate(new CatchPokemonViewModel(inventory));
         }
+        public void OnBotEvent(LoginEvent ev)
+        {
+            this.datacontext.Reset();
+            this.Dispatcher.Invoke(() =>
+            {
+                lblAccount.Content = currentSession.Translation.GetTranslation(NecroBot.Logic.Common.TranslationString.LoggingIn, ev.AuthType, ev.Username);
+            });
+
+        }
         public void OnBotEvent(InventoryRefreshedEvent inventory)
         {
             if (currentSession.Profile == null || currentSession.Profile.PlayerData == null) return;
@@ -59,7 +69,7 @@ namespace PoGo.Necrobot.Window
 
 
             var data = inventory.Inventory;
-            //currentSession.Inventory.GetPokemons()?.Result?.ToList() ;
+
             var maxPokemonStogare = currentSession.Profile?.PlayerData?.MaxPokemonStorage;
             var maxItemStogare = currentSession.Profile?.PlayerData?.MaxItemStorage;
             var pokemons = data.InventoryDelta.InventoryItems
@@ -93,8 +103,11 @@ namespace PoGo.Necrobot.Window
             this.datacontext.UI.PlayerStatus = "Playing";
             this.datacontext.UI.PlayerName = userLogged.Profile.PlayerData.Username;
             this.datacontext.RaisePropertyChanged("UI");
-            lblAccount.Content = $"{this.datacontext.UI.PlayerStatus} as : {this.datacontext.UI.PlayerName}";
+            this.Dispatcher.Invoke(() =>
+            {
+                lblAccount.Content = $"{this.datacontext.UI.PlayerStatus} as : {this.datacontext.UI.PlayerName}";
 
+            });
         }
         public void OnBotEvent(ProfileEvent profile)
         {
@@ -130,17 +143,20 @@ namespace PoGo.Necrobot.Window
         }
         internal void HandleBotEvent(IEvent evt)
         {
-            this.Invoke(() =>
-            {
-                dynamic eve = evt;
-                ///richTextBox.AppendText(evt.ToString() + "\r\n");
+            //this.Invoke(() =>
+            //{
+            dynamic eve = evt;
+            ///richTextBox.AppendText(evt.ToString() + "\r\n");
 
-                try
-                {
-                    OnBotEvent(eve);
-                }
-                catch (Exception ex) { }
-            });
+            try
+            {
+                Task.Run(() => { OnBotEvent(eve); });
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+            // });
         }
         #endregion
 

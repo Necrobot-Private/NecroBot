@@ -29,14 +29,15 @@ namespace PoGo.NecroBot.Logic.State
 
         public async Task<IState> Execute(ISession session, CancellationToken cancellationToken)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-            session.EventDispatcher.Send(new NoticeEvent
-            {
-                Message = session.Translation.GetTranslation(TranslationString.LoggingIn, session.Settings.AuthType)
-            });
+            // cancellationToken.ThrowIfCancellationRequested();
+            session.EventDispatcher.Send(new LoginEvent(session.Settings.AuthType, $"{session.Settings.GoogleUsername}{session.Settings.PtcUsername}"));
+
+            //session.EventDispatcher.Send(new NoticeEvent
+            //{
+            //    Message = session.Translation.GetTranslation(TranslationString.LoggingIn, session.Settings.AuthType)
+            //});
 
             await CheckLogin(session, cancellationToken);
-
             try
             {
                 if (session.Settings.AuthType == AuthType.Google || session.Settings.AuthType == AuthType.Ptc)

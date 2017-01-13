@@ -182,7 +182,6 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool SnipePokemonNotInPokedex => _settings.SnipeConfig.SnipePokemonNotInPokedex;
         public bool RandomizeRecycle => _settings.RecycleConfig.RandomizeRecycle;
         public int RandomRecycleValue => _settings.RecycleConfig.RandomRecycleValue;
-        public int MaxPokeballsToKeep => _settings.RecycleConfig.MaxPokeballsToKeep;
         public int TotalAmountOfPokeballsToKeep => _settings.RecycleConfig.TotalAmountOfPokeballsToKeep;
         public int TotalAmountOfPotionsToKeep => _settings.RecycleConfig.TotalAmountOfPotionsToKeep;
         public int TotalAmountOfRevivesToKeep => _settings.RecycleConfig.TotalAmountOfRevivesToKeep;

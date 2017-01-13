@@ -328,7 +328,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     if (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess)
                     {
                         var totalExp = 0;
-
+                        var totalStartDust = caughtPokemonResponse.CaptureAward.Stardust.Sum();
                         if (encounteredPokemon != null)
                         {
                             encounteredPokemon.Id = caughtPokemonResponse.CapturedPokemonId;
@@ -339,10 +339,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                         {
                             totalExp += xp;
                         }
-                        var profile = await session.Client.Player.GetPlayer();
+                        var stardust = session.Inventory.UpdateStartDust(totalStartDust);
 
                         evt.Exp = totalExp;
-                        evt.Stardust = profile.PlayerData.Currencies.ToArray()[1].Amount;
+                        evt.Stardust = stardust;
                         evt.UniqueId = caughtPokemonResponse.CapturedPokemonId;
 
                         var pokemonSettings = await session.Inventory.GetPokemonSettings();

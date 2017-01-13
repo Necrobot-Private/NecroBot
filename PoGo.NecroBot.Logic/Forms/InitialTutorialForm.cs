@@ -202,21 +202,35 @@ namespace PoGo.NecroBot.Logic.Forms
                 }
 
                 //await DelayingUtils.DelayAsync(3000, 2000, cancellationToken);
-            }).ContinueWith((t) =>
-            {
-                this.Invoke(new Action(() =>
+            }).ContinueWith(async (t) =>
+           {
+
+                if (markTutorialComplete)
                 {
-                    if (markTutorialComplete)
+                    await
+                        session.Client.Misc.MarkTutorialComplete(new RepeatedField<TutorialState>()
+                        {
+                                        TutorialState.FirstTimeExperienceComplete
+                        });
+                    session.EventDispatcher.Send(new NoticeEvent()
                     {
-                        this.DialogResult = DialogResult.OK;
-                        this.Close();
-                    }
-                    else {
+                        Message = "First time experience complete, looks like i just spinned an virtual pokestop :P"
+                    });
+                   this.Invoke(new Action(() =>
+                   {
+                       this.DialogResult = DialogResult.OK;
+                       this.Close();
+                   }));
+                }
+                else {
+
+                   this.Invoke(new Action(() =>
+                    {
                         lblNameError.Text = errorText;
                         lblNameError.Visible = true;
                         wizardControl1.PreviousPage();
-                    }
-                }), null);
+                    }));
+                }
             });
         }
 

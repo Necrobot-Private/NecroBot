@@ -104,7 +104,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 cancellationToken.ThrowIfCancellationRequested();
 
                 await session.Client.Inventory.RecycleItem(item.ItemId, item.Count);
-                session.Inventory.UpdateInventoryItem(item.ItemId, -item.Count);
+                await session.Inventory.UpdateInventoryItem(item.ItemId, -item.Count);
 
                 if (session.LogicSettings.VerboseRecycling)
                     session.EventDispatcher.Send(new ItemRecycledEvent { Id = item.ItemId, Count = item.Count });
@@ -161,7 +161,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 if (_diff > 0)
                 {
-                    await RecycleItems(session, cancellationToken, pokeBallsCount, ItemId.ItemPokeBall, session.LogicSettings.MaxPokeballsToKeep);
+                    await RecycleItems(session, cancellationToken, pokeBallsCount, ItemId.ItemPokeBall);
                 }
                 if (_diff > 0)
                 {

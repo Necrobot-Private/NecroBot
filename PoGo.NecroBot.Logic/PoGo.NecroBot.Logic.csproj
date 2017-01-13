@@ -249,6 +249,7 @@
     <Compile Include="Event\LogEvent.cs" />
     <Compile Include="Event\NoPokeballEvent.cs" />
     <Compile Include="Event\Player\LoggedEvent.cs" />
+    <Compile Include="Event\Player\LoginEvent.cs" />
     <Compile Include="Event\SnipePokemonFoundEvent.cs" />
     <Compile Include="Event\SnipeEvent.cs" />
     <Compile Include="Event\SnipeModeEvent.cs" />

@@ -56,11 +56,5 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [Range(0, 999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 9)]
         public int TotalAmountOfBerriesToKeep { get; set; }
-
-        [ExcelConfig(Description = "Max pokeball tobe keep - redudant need to cleanup ", Position = 9)]
-        [Range(0, 999)]
-        [DefaultValue(50)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 9)]
-        public int MaxPokeballsToKeep { get; set; }
     }
 }
