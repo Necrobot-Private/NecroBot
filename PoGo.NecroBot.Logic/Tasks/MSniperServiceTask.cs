@@ -480,19 +480,16 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 item.Priority = filter.Priority;
 
+                if (filter.VerifiedOnly && item.EncounterId == 0) return;
                 //check candy
 
-                if(candy < filter.AustoSnipeCandy)
+                if (candy < filter.AustoSnipeCandy)
                 {
                     autoSnipePokemons.Add(item);
                     return;
                 }
-                
-                //hack, this case we can't determite move :)
 
-                if (filter.VerifiedOnly && item.EncounterId == 0) return;
-
-                if (filter.SnipeIV <= item.Iv && item.Move1 == PokemonMove.Absorb && item.Move2 == PokemonMove.Absorb)
+                if (filter.SnipeIV <= item.Iv && item.Move1 == PokemonMove.MoveUnset && item.Move2 == PokemonMove.MoveUnset)
                 {
                     autoSnipePokemons.Add(item);
                     return;
