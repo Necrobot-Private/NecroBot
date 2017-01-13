@@ -186,6 +186,13 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public int TotalAmountOfPotionsToKeep => _settings.RecycleConfig.TotalAmountOfPotionsToKeep;
         public int TotalAmountOfRevivesToKeep => _settings.RecycleConfig.TotalAmountOfRevivesToKeep;
         public int TotalAmountOfBerriesToKeep => _settings.RecycleConfig.TotalAmountOfBerriesToKeep;
+
+        public bool UseRecyclePercentsInsteadOfTotals => _settings.RecycleConfig.UseRecyclePercentsInsteadOfTotals;
+        public int PercentOfInventoryPokeballsToKeep => _settings.RecycleConfig.PercentOfInventoryPokeballsToKeep;
+        public int PercentOfInventoryPotionsToKeep => _settings.RecycleConfig.PercentOfInventoryPotionsToKeep;
+        public int PercentOfInventoryRevivesToKeep => _settings.RecycleConfig.PercentOfInventoryRevivesToKeep;
+        public int PercentOfInventoryBerriesToKeep => _settings.RecycleConfig.PercentOfInventoryBerriesToKeep;
+
         public bool UseSnipeLimit => _settings.SnipeConfig.UseSnipeLimit;
         public bool UsePokeStopLimit => _settings.PokeStopConfig.UsePokeStopLimit;
         public bool UseCatchLimit => _settings.PokemonConfig.UseCatchLimit;
