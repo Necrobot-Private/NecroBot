@@ -120,11 +120,11 @@ namespace PoGo.NecroBot.Logic.State
                 await Task.Delay(2000, cancellationToken);
                 Environment.Exit(0);
             }
-            catch (ActiveSwitchByRuleException op)
+            catch (ActiveSwitchByRuleException)
             {
 
             }
-            catch (OperationCanceledException op)
+            catch (OperationCanceledException)
             {
                 //just continue login if this happen, most case is bot switching...
             }
@@ -182,7 +182,7 @@ namespace PoGo.NecroBot.Logic.State
                     System.Environment.Exit(1);
                 }
             }
-            catch (ActiveSwitchByRuleException op)
+            catch (ActiveSwitchByRuleException)
             {
 
             }
