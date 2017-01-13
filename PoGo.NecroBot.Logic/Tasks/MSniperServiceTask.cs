@@ -454,7 +454,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             SnipeFilter filter = new SnipeFilter()
             {
                 SnipeIV = session.LogicSettings.MinIVForAutoSnipe,
-                VerifiedOnly = session.LogicSettings.AutosnipeVerifiedOnly
+                VerifiedOnly = session.LogicSettings.AutosnipeVerifiedOnly  ,
+                AustoSnipeCandy = session.LogicSettings.DefaultAutoSnipeCandy
             };
 
             var pokemonId = (PokemonId)item.PokemonId;
