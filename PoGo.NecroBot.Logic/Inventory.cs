@@ -42,6 +42,13 @@ namespace PoGo.NecroBot.Logic
         private DateTime _lastRefresh;
         private ISession ownerSession;
 
+        public int GetCandy(PokemonId id)
+        {
+            var setting = GetPokemonSettings().Result.FirstOrDefault(x => x.PokemonId == id);
+            return GetPokemonFamilies().Result.FirstOrDefault(x => x.FamilyId == setting.FamilyId).Candy_;
+
+        }
+
         public Inventory(ISession session, Client client, ILogicSettings logicSettings, Action<GetInventoryResponse> onUpdated = null)
         {
             this.ownerSession = session;
