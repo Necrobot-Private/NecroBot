@@ -65,7 +65,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         }
                         else
                         {
-                            //await StartGymAttackLogic(session, fortInfo, fortDetails, gym, cancellationToken);
+                            await StartGymAttackLogic(session, fortInfo, fortDetails, gym, cancellationToken);
                             //Logger.Write($"No action... This gym is defending by other color", LogLevel.Gym, ConsoleColor.White);
                         }
                     }
@@ -847,7 +847,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 var pokemonList = (await session.Inventory.GetPokemons()).ToList();
                 pokemonList = pokemonList
-                    .Where(w=> !excluded.Contains(w.Id) && w.Id!=session.Profile.PlayerData.BuddyPokemon?.Id)
+                    .Where(w=> !excluded.Contains(w.Id) && w.Id!=session.Profile.PlayerData.BuddyPokemon?.Id && (session.LogicSettings.GymConfig.HealDefendersBeforeApplyToGym || w.Stamina == w.StaminaMax))
                     .OrderByDescending(p => p.Cp)
                     .Skip(Math.Min(pokemonList.Count - 1, session.LogicSettings.GymConfig.NumberOfTopPokemonToBeExcluded))
                     .ToList();
@@ -863,16 +863,19 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 pokemon = pokemonList.FirstOrDefault(p => p.Cp <= session.LogicSettings.GymConfig.MaxCPToDeploy && PokemonInfo.GetLevel(p) <= session.LogicSettings.GymConfig.MaxLevelToDeploy && string.IsNullOrEmpty(p.DeployedFortId));
 
-                if (pokemon.Stamina == 0)
-                    await RevivePokemon(session, pokemon);
-
-                if (pokemon.Stamina < pokemon.StaminaMax)
-                    await HealPokemon(session, pokemon);
-
-                if (pokemon.Stamina < pokemon.StaminaMax)
+                if (session.LogicSettings.GymConfig.HealDefendersBeforeApplyToGym)
                 {
-                    excluded.Add(pokemon.Id);
-                    pokemon = null;
+                    if (pokemon.Stamina == 0)
+                        await RevivePokemon(session, pokemon);
+
+                    if (pokemon.Stamina < pokemon.StaminaMax)
+                        await HealPokemon(session, pokemon);
+
+                    if (pokemon.Stamina < pokemon.StaminaMax)
+                    {
+                        excluded.Add(pokemon.Id);
+                        pokemon = null;
+                    }
                 }
             }
             return pokemon;
