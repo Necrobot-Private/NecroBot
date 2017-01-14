@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:PoGo.Necrobot.Window.Controls"
+             xmlns:local="clr-namespace:PoGo.Necrobot.Window"
              xmlns:cv="clr-namespace:PoGo.Necrobot.Window.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
@@ -18,17 +18,23 @@
     </Control.Resources>
     <StackPanel>
         <DockPanel LastChildFill="True">
-            <Button  DockPanel.Dock="Right" Name="btnExport" Click="btnExport_Click" Margin="0,0,20,0">
+            <Button  DockPanel.Dock="Right" Name="btnExport" Click="btnExport_Click" Margin="0,0,40,0" >
                 <StackPanel Orientation="Horizontal">
-                    <Image Width="16" Source="https://cdn1.iconfinder.com/data/icons/application-file-formats/128/microsoft-excel-128.png"/>
-                    <TextBlock Text="Export"></TextBlock>
+                    <Image Width="16" Source="https://cdn1.iconfinder.com/data/icons/application-file-formats/128/microsoft-excel-128.png" Cursor="Hand"/>
+                    <TextBlock Text="Export" Margin="10,0,0,0"></TextBlock>
                 </StackPanel>
                 
             </Button>
-        <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal">
             
-            <Button x:Name="btnTransferAll" Margin="0,0,135,0" Content="Transfer All" Click="btnTransferAll_Click"/>
-            <Button x:Name="btnFavoriteAll" Margin="0,0,135,0" Content="Favorite All"/>
+            <Button x:Name="btnTransferAll" Margin="0,0,35,0" Content="Transfer All" Click="btnTransferAll_Click"/>
+            <Button x:Name="btnFavoriteAll" Margin="0,0,35,0" Content="Favorite All"/>
+            <Button x:Name="btnPokedexView" Click="btnPokedexView_Click">
+                <StackPanel Orientation="Horizontal" >
+                    <Image Source="http://allaboutwindowsphone.com/images/appicons/208046.png" Width="20px"></Image>
+                    <TextBlock Text="Pokedex"></TextBlock>
+                </StackPanel>
+            </Button>
         </StackPanel>
         </DockPanel>
 

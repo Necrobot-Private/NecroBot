@@ -156,7 +156,11 @@ namespace PoGo.Necrobot.Window.Controls
                 await UpgradeSinglePokemonTask.Execute(Session, pokemonId, false);
             });
         }
-
+        private void btnPokedexView_Click(object sender, RoutedEventArgs e)
+        {                                
+            PokedexWindow dexWindow = new PokedexWindow(this.Session);
+            dexWindow.Show();
+        }
         private void btnExport_Click(object sender, RoutedEventArgs e)
         {
             var dlg = new SaveFileDialog()
