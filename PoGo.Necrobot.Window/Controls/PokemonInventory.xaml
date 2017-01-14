@@ -18,7 +18,13 @@
     </Control.Resources>
     <StackPanel>
         <DockPanel LastChildFill="True">
-            <Button Content="Export" DockPanel.Dock="Right" Name="btnExport" Click="btnExport_Click"></Button>
+            <Button  DockPanel.Dock="Right" Name="btnExport" Click="btnExport_Click" Margin="0,0,20,0">
+                <StackPanel Orientation="Horizontal">
+                    <Image Width="16" Source="https://cdn1.iconfinder.com/data/icons/application-file-formats/128/microsoft-excel-128.png"/>
+                    <TextBlock Text="Export"></TextBlock>
+                </StackPanel>
+                
+            </Button>
         <StackPanel Orientation="Horizontal">
             
             <Button x:Name="btnTransferAll" Margin="0,0,135,0" Content="Transfer All" Click="btnTransferAll_Click"/>

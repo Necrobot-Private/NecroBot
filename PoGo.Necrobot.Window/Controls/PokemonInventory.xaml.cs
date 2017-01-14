@@ -161,7 +161,7 @@ namespace PoGo.Necrobot.Window.Controls
         {
             var dlg = new SaveFileDialog()
             {
-                Filter = "Excel (*.xlsx)",
+                Filter = "Excel (.xlsx)|*.xlsx",
             };
 
             if (dlg.ShowDialog() == true)
