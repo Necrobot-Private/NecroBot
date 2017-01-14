@@ -211,9 +211,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                     {
                         var exp = lastAction.BattleResults.PlayerExperienceAwarded;
                         var point = lastAction.BattleResults.GymPointsDelta;
-                        defenderPokemonId = unchecked((ulong)lastAction.BattleResults.NextDefenderPokemonId);
+                        //defenderPokemonId = unchecked((ulong)lastAction.BattleResults.NextDefenderPokemonId);
 
-                        Logger.Write(string.Format("Exp: {0}, Gym points: {1}, Next defender id: {2}", exp, point, defenderPokemonId), LogLevel.Gym, ConsoleColor.Magenta);
+                        Logger.Write(string.Format("Exp: {0}, Gym points: {1}"/*, Next defender id: {2}"*/, exp, point, defenderPokemonId), LogLevel.Gym, ConsoleColor.Magenta);
                     }
                     continue;
                 }
@@ -222,6 +222,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (isVictory)
             {
                 gym.GymPoints += battleActions.Sum(s => s.BattleResults?.GymPointsDelta ?? 0);
+                if (gym.GymPoints < 0)
+                    gym.GymPoints = 0;
                 await Execute(session, cancellationToken, gym, fortInfo);
             }
         }
