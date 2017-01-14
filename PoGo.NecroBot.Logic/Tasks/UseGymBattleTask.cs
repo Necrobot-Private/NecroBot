@@ -187,14 +187,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Logger.Write($"Unhandled result starting gym battle:\n{result}");
                         break;
                 }
-                //check results .....
-                var rewarded = battleActions.Select(x => x.BattleResults?.PlayerExperienceAwarded).Where(x => x != null);
-                //if(rewarded!= null && rewarded.Count()>0)
-                //{
-                //    Logger.Write("Seem we win battle");
-                //    fighting = false;
-                //}
 
+                var rewarded = battleActions.Select(x => x.BattleResults?.PlayerExperienceAwarded).Where(x => x != null);
                 var lastAction = battleActions.LastOrDefault();
 
                 if (lastAction.Type == BattleActionType.ActionTimedOut ||
@@ -207,12 +201,9 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 var faintedPKM = battleActions.Where(x => x != null && x.Type == BattleActionType.ActionFaint).Select(x => x.ActivePokemonId).Distinct();
 
-                //Logger.Write("Defeted pokemons ids: " + string.Join(", ", faintedPKM), LogLevel.Gym, ConsoleColor.Magenta);
-                //Logger.Write("Attackers before: " + string.Join(", ", pokemonDatas.Select(x=>x.Id)), LogLevel.Gym, ConsoleColor.Magenta);
                 var livePokemons = pokemonDatas.Where(x => !faintedPKM.Any(y => y == x.Id));
                 var faintedPokemons = pokemonDatas.Where(x => faintedPKM.Any(y => y == x.Id));
                 pokemonDatas = livePokemons.Concat(faintedPokemons).ToArray();
-                //Logger.Write("Attackers for new turn: " + string.Join(", ", pokemonDatas.Select(x => x.Id)), LogLevel.Gym, ConsoleColor.Magenta);
 
                 if (lastAction.Type == BattleActionType.ActionVictory)
                 {
@@ -222,7 +213,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         var point = lastAction.BattleResults.GymPointsDelta;
                         defenderPokemonId = unchecked((ulong)lastAction.BattleResults.NextDefenderPokemonId);
 
-                        //Logger.Write(string.Format("Exp: {0}, Gym points: {1}, Next defender id: {2}", exp, point, defenderPokemonId), LogLevel.Gym, ConsoleColor.Magenta);
+                        Logger.Write(string.Format("Exp: {0}, Gym points: {1}, Next defender id: {2}", exp, point, defenderPokemonId), LogLevel.Gym, ConsoleColor.Magenta);
                     }
                     continue;
                 }
@@ -671,7 +662,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     else
                     {
                         Logger.Write($"Unexpected attack result:\n{attackResult}");
-                        continue;
+                        break;
                     }
                 }
                 catch (APIBadRequestException e)
