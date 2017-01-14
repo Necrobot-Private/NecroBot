@@ -17,6 +17,7 @@ using PokemonGo.RocketAPI.Exceptions;
 using PokemonGo.RocketAPI.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -328,8 +329,14 @@ namespace PoGo.NecroBot.Logic.Tasks
                 await Task.Delay(1000, cancellationToken);
 
                 encounter = await session.Client.Encounter.EncounterPokemon(encounterId.EncounterId, encounterId.SpawnPointId);
-                
-               
+
+#if DEBUG
+                if(encounter != null && encounter.Status != EncounterResponse.Types.Status.EncounterSuccess) {
+                    Debug.WriteLine($"{encounter}");
+
+                    Logger.Write($"{encounter}");
+                }
+#endif
             }
             catch (CaptchaException ex)
             {
@@ -489,7 +496,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     return;
                 }
 
-                if (filter.SnipeIV <= item.Iv && item.Move1 == PokemonMove.MoveUnset && item.Move2 == PokemonMove.MoveUnset)
+                if (filter.SnipeIV <= item.Iv && item.Move1 == PokemonMove.Absorb && item.Move2 == PokemonMove.Absorb)
                 {
                     autoSnipePokemons.Add(item);
                     return;

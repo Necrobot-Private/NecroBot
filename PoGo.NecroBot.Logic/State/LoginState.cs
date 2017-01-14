@@ -72,6 +72,7 @@ namespace PoGo.NecroBot.Logic.State
                 {
                     Message = session.Translation.GetTranslation(TranslationString.AccessTokenExpired)
                 });
+                return new LoginState();
             }
             catch (PtcOfflineException ex)
             {

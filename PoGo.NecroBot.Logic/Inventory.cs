@@ -45,7 +45,10 @@ namespace PoGo.NecroBot.Logic
         public int GetCandy(PokemonId id)
         {
             var setting = GetPokemonSettings().Result.FirstOrDefault(x => x.PokemonId == id);
-            return GetPokemonFamilies().Result.FirstOrDefault(x => x.FamilyId == setting.FamilyId).Candy_;
+            var family = GetPokemonFamilies().Result.FirstOrDefault(x => x.FamilyId == setting.FamilyId);
+
+            if (family == null) return 0;
+            return family.Candy_;
 
         }
 
@@ -370,22 +373,11 @@ namespace PoGo.NecroBot.Logic
 
         public async Task<GetPlayerResponse> GetPlayerData()
         {
-            try
+            if (_player == null)
             {
-                if (_player == null)
-                {
-                    _player = await _client.Player.GetPlayer();
-                }
+                _player = await _client.Player.GetPlayer();
             }
-            catch (CaptchaException ex)
-            {
-                Debug.Write("Xxx" + ex.Message + ex.StackTrace);
-                //throw ex;
-            }
-            catch(Exception ex)
-            {
-                Debug.Write(ex.Message);
-            }
+
             return _player;
         }
 
