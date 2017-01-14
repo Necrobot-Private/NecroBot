@@ -4,6 +4,11 @@ using System;
 using System.IO;
 using PoGo.NecroBot.Logic.State;
 using System.Globalization;
+using POGOProtos.Data;
+using OfficeOpenXml;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using PoGo.NecroBot.Logic.PoGoUtils;
 
 #endregion
 
@@ -92,6 +97,47 @@ namespace PoGo.NecroBot.Logic.DataDumper
         /// <param name="subPath"></param>
         public static void SetDumper(IDumper dumper, string subPath = "")
         {
+        }
+
+        public static async Task SaveAsExcel(ISession session, string Filename="")
+        {
+           await Task.Run(() =>
+            {
+                var allPokemonInBag = session.LogicSettings.PrioritizeIvOverCp
+                 ? session.Inventory.GetHighestsPerfect(1000).Result
+                 : session.Inventory.GetHighestsCp(1000).Result;
+                string file = !string.IsNullOrEmpty(Filename) ? Filename : $"config\\{session.Settings.GoogleUsername}{session.Settings.PtcUsername}\\allpokemon.xlsx";
+                int rowNum = 1;
+                using (Stream stream = File.OpenWrite(file))
+                using (var package = new ExcelPackage(stream))
+                {
+                    var ws = package.Workbook.Worksheets.Add("Pokemons");
+                    foreach (var item in allPokemonInBag)
+                    {
+                        if (rowNum == 1)
+                        {
+                            ws.Cells[1, 1].Value = "#";
+                            ws.Cells[1, 2].Value = "ID";
+                            ws.Cells[1, 3].Value = "Nickname";
+                        }
+                        ws.Cells[rowNum + 1, 1].Value = rowNum;
+                        ws.Cells[rowNum + 1, 2].Value = item.PokemonId.ToString();
+                        ws.Cells[rowNum + 1, 3].Value = item.Nickname;
+                        ws.Cells[rowNum + 1, 4].Value = PokemonInfo.CalculatePokemonPerfection(item);
+
+                        ws.Cells[rowNum + 1, 5].Value = item.IndividualAttack;
+                        ws.Cells[rowNum + 1, 6].Value = item.IndividualDefense;
+                        ws.Cells[rowNum + 1, 7].Value = item.IndividualStamina;
+                        ws.Cells[rowNum + 1, 8].Value = item.Stamina;
+                        ws.Cells[rowNum + 1, 9].Value = item.StaminaMax;
+                        ws.Cells[rowNum + 1, 10].Value = PokemonInfo.CalculateCp(item);
+                        ws.Cells[rowNum + 1, 11].Value = "candy";
+                        ws.Cells[rowNum + 1, 12].Value = item.Move1.ToString();
+                        ws.Cells[rowNum + 1, 13].Value = item.Move2.ToString();
+                    }
+                    package.Save();
+                }
+            });
         }
     }
 }

@@ -17,11 +17,15 @@
         <cv:IVToColorConverter x:Key="IVToColorConverter"    />
     </Control.Resources>
     <StackPanel>
-
+        <DockPanel LastChildFill="True">
+            <Button Content="Export" DockPanel.Dock="Right" Name="btnExport" Click="btnExport_Click"></Button>
         <StackPanel Orientation="Horizontal">
+            
             <Button x:Name="btnTransferAll" Margin="0,0,135,0" Content="Transfer All" Click="btnTransferAll_Click"/>
             <Button x:Name="btnFavoriteAll" Margin="0,0,135,0" Content="Favorite All"/>
         </StackPanel>
+        </DockPanel>
+
         <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto">
             <DataGrid x:Name="gridData"   
                MaxHeight="600"

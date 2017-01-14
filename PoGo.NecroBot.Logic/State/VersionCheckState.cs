@@ -159,7 +159,7 @@ namespace PoGo.NecroBot.Logic.State
             {
                 try
                 {
-                    if (file.Name.Contains("vshost") || file.Name.Contains(".gpx.old"))
+                    if (file.Name.Contains("vshost") || file.Name.Contains(".gpx.old") || file.Name.Contains("chromedriver"))
                         continue;
                     File.Delete(file.FullName);
                 }
