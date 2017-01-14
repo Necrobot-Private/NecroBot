@@ -132,7 +132,7 @@ namespace PoGo.NecroBot.Logic.DataDumper
                              ws.Cells[1, 14].Value = "Move1";
                              ws.Cells[1, 15].Value = "Move2";
                              ws.Cells["A1:O1"].AutoFilter = true;
-
+                             ws.Cells["A1:O1"].Style.Font.Bold = true;
                          }
                          ws.Cells[rowNum + 1, 1].Value = rowNum;
                          ws.Cells[rowNum + 1, 2].Value = item.PokemonId.ToString();
