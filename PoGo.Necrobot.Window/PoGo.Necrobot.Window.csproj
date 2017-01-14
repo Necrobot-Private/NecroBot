@@ -162,9 +162,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\SnipeGrid.xaml.cs">
+      <DependentUpon>SnipeGrid.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Converters\PokemonImageConverter.cs" />
+    <Compile Include="Converters\ListCountConverter.cs" />
     <Compile Include="Model\PokeDexEntryViewModel.cs" />
     <Compile Include="Model\PokedexItemsViewModel.cs" />
+    <Compile Include="Model\SnipeListViewModel.cs" />
+    <Compile Include="Model\SnipePokemonViewModel.cs" />
     <Compile Include="PokedexWindow.xaml.cs">
       <DependentUpon>PokedexWindow.xaml</DependentUpon>
     </Compile>
@@ -256,6 +262,10 @@
     </Compile>
     <Compile Include="UILogger.cs" />
     <Compile Include="Win32\ConsoleHelper.cs" />
+    <Page Include="Controls\SnipeGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="PokedexWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

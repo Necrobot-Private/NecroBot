@@ -95,6 +95,12 @@ namespace PoGo.Necrobot.Window
             this.datacontext.ItemsList.Update(new List<ItemData> { e.Item });
             this.datacontext.RaisePropertyChanged("ItemsTabHeader");
         }
+
+        public void OnBotEvent(EncounteredEvent e)
+        {
+            this.datacontext.SnipeList.OnSnipeData(e);
+        }
+
         public void OnBotEvent(LoggedEvent userLogged)
         {
             this.datacontext.UI.PlayerStatus = "Playing";
