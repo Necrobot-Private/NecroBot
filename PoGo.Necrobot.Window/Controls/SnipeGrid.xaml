@@ -10,17 +10,35 @@
              d:DesignHeight="300" d:DesignWidth="600">
     <Control.Resources>
         <c:PokemonImageConverter x:Key="PokemonImageConverter"/>
-        </Control.Resources>
+    </Control.Resources>
+
     
     <DataGrid ItemsSource="{Binding}" 
               
               AutoGenerateColumns="False" 
               LoadingRow="DataGrid_LoadingRow" 
               behaviors:DataGridBehavior.DisplayRowNumber="True">
-
+        <!--
+        <DataGrid.Resources>
+            <Style TargetType="DataGridCell">
+                <Style.Triggers>
+                    <Trigger Property="IsSelected" Value="True">
+                        <Setter Property="Background" Value="#1F71F4" />
+                        <Setter Property="BorderThickness" Value="0" />
+                    </Trigger>
+                   
+                    
+                </Style.Triggers>
+            </Style>
+        </DataGrid.Resources>
         <DataGrid.RowStyle>
             <Style TargetType="DataGridRow">
                 <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="#5191f7" />
+                        <Setter Property="BorderThickness" Value="0" />
+                    </Trigger>
+                    
                     <DataTrigger Binding="{Binding Recommend}" Value="True">
                         <Setter Property="Foreground" Value="Green"></Setter>
                     </DataTrigger>
@@ -30,7 +48,7 @@
                 </Style.Triggers>
             </Style>
         </DataGrid.RowStyle>
-        
+        -->
         <DataGrid.Columns>
             <DataGridTextColumn Binding="{Binding Path=Id}" Header="#"/>
             
@@ -43,7 +61,7 @@
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>
             </DataGridTemplateColumn>
-            <DataGridTextColumn Binding="{Binding Path=PokemonId}" Header="Pokemon" IsReadOnly="True"/>
+            <DataGridTextColumn Binding="{Binding Path=PokemonId}" Header="Pokemon" IsReadOnly="True" Foreground="AliceBlue"/>
             <DataGridTextColumn Binding="{Binding Path=IV, StringFormat={}{0:0.00}}" Header="%IV" IsReadOnly="True"/>
             <DataGridTextColumn Binding="{Binding Path=Level}" Header="Level" IsReadOnly="True"/>
             <DataGridTextColumn Binding="{Binding Path=Latitude}" Header="Latitude" IsReadOnly="True"/>
