@@ -21,6 +21,7 @@ using PoGo.NecroBot.Logic.Event.Player;
 using PoGo.Necrobot.Window.Model;
 using PoGo.NecroBot.Logic;
 using PoGo.NecroBot.Logic.Logging;
+using System.Diagnostics;
 
 namespace PoGo.Necrobot.Window
 {
@@ -51,13 +52,13 @@ namespace PoGo.Necrobot.Window
 
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
         {
-           
+
         }
         private DateTime lastClearLog = DateTime.Now;
         public void LogToConsoleTab(string message, LogLevel level, string color)
         {
 
-            if(color == "Black" && level == LogLevel.LevelUp) color = "DarkCyan";
+            if (color == "Black" && level == LogLevel.LevelUp) color = "DarkCyan";
 
             Dictionary<LogLevel, string> colors = new Dictionary<LogLevel, string>()
             {
@@ -83,7 +84,7 @@ namespace PoGo.Necrobot.Window
                 { LogLevel.Service ,"White" }
             };
 
-            if (string.IsNullOrEmpty(color) || color== "Black") color = colors[level];
+            if (string.IsNullOrEmpty(color) || color == "Black") color = colors[level];
 
             this.Invoke(() =>
             {
@@ -111,6 +112,7 @@ namespace PoGo.Necrobot.Window
             this.ctrPokemonInventory.Session = session;
             this.ctrlItemControl.Session = session;
             this.ctrlSniper.Session = session;
+            this.ctrlEggsControl.Session = session;
             this.datacontext.PokemonList.Session = session;
             botMap.SetDefaultPosition(session.Settings.DefaultLatitude, session.Settings.DefaultLongitude);
         }
@@ -136,9 +138,9 @@ namespace PoGo.Necrobot.Window
         bool isConsoleShowing = false;
         private void menuConsole_Click(object sender, RoutedEventArgs e)
         {
-            if(isConsoleShowing)
+            if (isConsoleShowing)
             {
-                consoleMenuText.Text= "Show Console";
+                consoleMenuText.Text = "Show Console";
                 ConsoleHelper.HideConsoleWindow();
             }
             else
@@ -151,7 +153,7 @@ namespace PoGo.Necrobot.Window
 
             isConsoleShowing = !isConsoleShowing;
         }
-        
+
         private void menuSetting_Click(object sender, RoutedEventArgs e)
         {
             var configWindow = new AppConfigWindow(this, System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "config\\config.json"));
@@ -160,7 +162,7 @@ namespace PoGo.Necrobot.Window
 
         private void btnHideInfo_Click(object sender, RoutedEventArgs e)
         {
-            if(grbPlayerInfo.Height == 35)
+            if (grbPlayerInfo.Height == 35)
             {
                 btnHideInfo.Content = "HIDE";
                 grbPlayerInfo.Height = 135;
@@ -170,6 +172,29 @@ namespace PoGo.Necrobot.Window
                 grbPlayerInfo.Height = 35;
                 btnHideInfo.Content = "SHOW";
             }
+        }
+
+        private void ChangeThemeTo(string color)
+        {
+            ResourceDictionary dict = new ResourceDictionary();
+            dict.Source = new Uri($"pack://application:,,,/MahApps.Metro;component/Styles/Accents/{color}.xaml", UriKind.Absolute);
+
+
+            var theme = Application.Current.Resources.MergedDictionaries.LastOrDefault();
+            Application.Current.Resources.MergedDictionaries.Add(dict);
+            Application.Current.Resources.MergedDictionaries.Remove(theme);
+
+        }
+
+        private void Theme_Selected(object sender, RoutedEventArgs e)
+        {
+            Popup1.IsOpen = !Popup1.IsOpen;
+        }
+
+        private void OnTheme_Checked(object sender, RoutedEventArgs e)
+        {
+            var rad = sender as RadioButton;
+            ChangeThemeTo(rad.Content as string);
         }
     }
 }

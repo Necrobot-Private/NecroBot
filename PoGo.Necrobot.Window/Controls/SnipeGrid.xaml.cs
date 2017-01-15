@@ -47,5 +47,11 @@ namespace PoGo.Necrobot.Window.Controls
                 select.RaisePropertyChanged("AllowSnipe");
             }
         }
+
+        private void DataGrid_LoadingRow(object sender, DataGridRowEventArgs e)
+        {
+            e.Row.Header = (e.Row.GetIndex()).ToString();
+
+        }
     }
 }

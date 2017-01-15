@@ -45,6 +45,7 @@ namespace PoGo.Necrobot.Window.Controls
                 bool caught = BotDataSocketClient.CheckIfPokemonBeenCaught(data.Latitude, data.Longitude, data.PokemonId, encounterid, Session);
                 if (!caught)
                 {
+                    
                     await MSniperServiceTask.AddSnipeItem(this.Session, new MSniperServiceTask.MSniperInfo2()
                     {
                         Latitude = data.Latitude,

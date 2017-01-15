@@ -3,6 +3,7 @@ using PoGo.Necrobot.Window.Model;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Event.Inventory;
 using PoGo.NecroBot.Logic.Event.Player;
+using PoGo.NecroBot.Logic.Event.Snipe;
 using PoGo.NecroBot.Logic.Event.UI;
 using PoGo.NecroBot.Logic.State;
 using POGOProtos.Inventory.Item;
@@ -60,6 +61,14 @@ namespace PoGo.Necrobot.Window
             });
 
         }
+        public void OnBotEvent(SnipePokemonStarted ex)
+        {
+            datacontext.SnipeList.OnPokemonSnipeStarted(ex.Pokemon);
+        }
+        public void OnBotEvent(EggIncubatorStatusEvent e)
+        {
+            datacontext.EggsList.OnEggIncubatorStatus(e);
+        }
         public void OnBotEvent(InventoryRefreshedEvent inventory)
         {
 
@@ -74,7 +83,9 @@ namespace PoGo.Necrobot.Window
                 .Where(x => x != null && !x.IsEgg)
                 .ToList();
 
+            datacontext.SnipeList.OnInventoryRefreshed(inventory.Inventory);
 
+            datacontext.EggsList.OnInventoryRefreshed(inventory.Inventory);
             var items = data.InventoryDelta.InventoryItems.Select(x => x.InventoryItemData?.Item).Where(x => x != null).ToList();
             this.datacontext.MaxItemStogare = maxItemStogare.Value;
             this.datacontext.ItemsList.Update(items);
@@ -147,6 +158,10 @@ namespace PoGo.Necrobot.Window
         public void OnBotEvent(UpdatePositionEvent ev)
         {
             this.botMap.UpdatePlayerPosition(ev.Latitude, ev.Longitude);
+        }
+        public void OnBotEvent(AutoSnipePokemonAddedEvent ev)
+        {
+            datacontext.SnipeList.OnSnipeItemQueue(ev.EncounteredEvent);
         }
         internal void HandleBotEvent(IEvent evt)
         {
