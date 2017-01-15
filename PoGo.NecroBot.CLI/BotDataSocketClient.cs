@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using PoGo.NecroBot.Logic.Event;
+using PoGo.NecroBot.Logic.Event.Snipe;
 using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Tasks;
@@ -231,8 +232,9 @@ namespace PoGo.NecroBot.CLI
                     bool caught = CheckIfPokemonBeenCaught(data.Latitude, data.Longitude, data.PokemonId, encounterid, session);
                     if (!caught)
                     {
-                        MSniperServiceTask.AddSnipeItem(session, new MSniperServiceTask.MSniperInfo2()
+                        var added = MSniperServiceTask.AddSnipeItem(session, new MSniperServiceTask.MSniperInfo2()
                         {
+                            UniqueIdentifier = data.EncounterId,
                             Latitude = data.Latitude,
                             Longitude = data.Longitude,
                             EncounterId = encounterid,
@@ -242,7 +244,11 @@ namespace PoGo.NecroBot.CLI
                             Move1 = move1,
                             Move2 = move2       ,
                             ExpiredTime =data.ExpireTimestamp
-                        }).Wait();
+                        }).Result;
+                        if (added)
+                        {
+                            session.EventDispatcher.Send(new AutoSnipePokemonAddedEvent(data));
+                        }
                     }
                 
                 }
@@ -276,6 +282,7 @@ namespace PoGo.NecroBot.CLI
 
                 MSniperServiceTask.AddSnipeItem(session, new MSniperServiceTask.MSniperInfo2()
                 {
+                    UniqueIdentifier = data.EncounterId,
                     Latitude = data.Latitude,
                     Longitude = data.Longitude,
                     EncounterId = encounterid,

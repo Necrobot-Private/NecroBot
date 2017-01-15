@@ -17,7 +17,57 @@
 
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
-                                              
+            <Button Click="Theme_Selected">
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle Width="20"
+                   Height="20"
+                   Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_social_delicious}" />
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                    <TextBlock Margin="4 0 0 0"   
+                   VerticalAlignment="Center"
+                   Text="Theme" />
+
+                    <Popup Margin="10,10,0,13" Name="Popup1" 
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Top" 
+                           Width="320" Height="280" IsOpen="False" AllowsTransparency="True" >
+                        <Grid Background="White" >
+
+                            <WrapPanel Background="White" Margin="20,20,20,20">
+                                <RadioButton GroupName="Theme" Foreground="Red" Content="Red"   Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5" ></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="Blue" Content="Blue"   Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5" IsChecked="True"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="Brown" Content="Brown" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme"  Content="Colbat" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="Crimson" Content="Crimson" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="Cyan" Content="Cyan" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="DarkGreen" Content="Emerald" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="Green" Content="Green" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="Indigo" Content="Indigo" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5" ></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="Lime" Content="Lime" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="Magenta" Content="Magenta" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5" ></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="#b784a7" Content="Mauve" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="Olive" Content="Olive" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5" ></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="Orange" Content="Orange" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="Pink" Content="Pink" Checked="OnTheme_Checked" Width="90"  Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="Purple"  Content="Purple" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="Sienna" Content="Sienna" Checked="OnTheme_Checked" Width="90"  Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="#e0dfdb" Content="Steel" Checked="OnTheme_Checked" Width="90"  Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="#483C32" Content="Taupe" Checked="OnTheme_Checked" Width="90"  Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="Teal" Content="Teal" Checked="OnTheme_Checked" Width="90"  Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="Violet" Content="Violet" Checked="OnTheme_Checked" Width="90"  Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="Yellow" Content="Yellow" Checked="OnTheme_Checked" Width="90"  Margin="0,5,0,5"></RadioButton>
+                            
+                        </WrapPanel>
+                        </Grid>
+
+                    </Popup>
+                
+                </StackPanel>
+                
+            </Button>
             <Button x:Name="menuConsole" Click="menuConsole_Click" >
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="20"
@@ -104,14 +154,14 @@
                     </Grid.ColumnDefinitions>
                     <local:MapControl x:Name="botMap" Grid.Column="0"></local:MapControl>
                     <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
-                    <local:SidebarControl DataContext="{Binding Path=Sidebar}" x:Name="sidebarControl" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinWidth="150"></local:SidebarControl>
+                    <local:SidebarControl Visibility="Hidden" DataContext="{Binding Path=Sidebar}" x:Name="sidebarControl" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinWidth="150"></local:SidebarControl>
                 </Grid>
             </TabItem>
             <TabItem Header="   SNIPER   ">
                 <local:SniperControl x:Name="ctrlSniper" DataContext="{Binding Path=SnipeList}"></local:SniperControl>
             </TabItem>
 
-            <TabItem Header="   CONSOLE   ">
+            <TabItem Header="   CONSOLE   " IsSelected="True">
                 <RichTextBox 
                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
                     ScrollViewer.VerticalScrollBarVisibility="Auto"
@@ -134,11 +184,11 @@
                 <local:PokemonInventory x:Name="ctrPokemonInventory" DataContext="{Binding Path=PokemonList}" OnPokemonItemSelected="PokemonInventory_OnPokemonItemSelected" ></local:PokemonInventory>
             </TabItem>
             <TabItem Name="tabItems" Header="{Binding Path=ItemsTabHeader, FallbackValue=Pokemon}" >
-               
-                    
                 <local:ItemsInventory DataContext="{Binding Path=ItemsList}" x:Name="ctrlItemControl"  />
             </TabItem>
-
+            <TabItem Name="tabEggs" Header="EGGS" >
+                <local:EggsControl DataContext="{Binding Path=EggsList}" x:Name="ctrlEggsControl"  />
+            </TabItem>
         </TabControl>
     </DockPanel>
     
