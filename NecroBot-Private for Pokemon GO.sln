@@ -250,7 +250,6 @@ Global
 		{1FEA147E-F704-497B-A538-00B053B5F672}.Release NecroBot2|Android.ActiveCfg = Release WPF GUI|Any CPU
 		{1FEA147E-F704-497B-A538-00B053B5F672}.Release NecroBot2|Android.Build.0 = Release WPF GUI|Any CPU
 		{1FEA147E-F704-497B-A538-00B053B5F672}.Release NecroBot2|Any CPU.ActiveCfg = Release|Any CPU
-		{1FEA147E-F704-497B-A538-00B053B5F672}.Release NecroBot2|Any CPU.Build.0 = Release|Any CPU
 		{1FEA147E-F704-497B-A538-00B053B5F672}.Release NecroBot2|iOS.ActiveCfg = Release WPF GUI|Any CPU
 		{1FEA147E-F704-497B-A538-00B053B5F672}.Release NecroBot2|iOS.Build.0 = Release WPF GUI|Any CPU
 		{1FEA147E-F704-497B-A538-00B053B5F672}.Release NecroBot2|Windows Phone (Universal).ActiveCfg = Release WPF GUI|Any CPU
