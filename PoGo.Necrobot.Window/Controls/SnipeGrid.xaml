@@ -32,7 +32,7 @@
             </Style>
         </DataGrid.Resources>
         <DataGrid.RowStyle>
-            <Style TargetType="DataGridRow">
+            <Style TargetType="DataGridCell">
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
                         <Setter Property="Background" Value="#5191f7" />
@@ -61,8 +61,30 @@
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>
             </DataGridTemplateColumn>
-            <DataGridTextColumn Binding="{Binding Path=PokemonId}" Header="Pokemon" IsReadOnly="True" Foreground="AliceBlue"/>
-            <DataGridTextColumn Binding="{Binding Path=IV, StringFormat={}{0:0.00}}" Header="%IV" IsReadOnly="True"/>
+            <DataGridTextColumn Binding="{Binding Path=PokemonId}" Header="Pokemon" IsReadOnly="True" >
+                <DataGridTextColumn.ElementStyle>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Recommend}" Value="True">
+                                <Setter Property="Background" Value="LightGreen"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGridTextColumn.ElementStyle>
+                
+            </DataGridTextColumn>
+            <DataGridTextColumn Binding="{Binding Path=IV, StringFormat={}{0:0.00}}" Header="%IV" IsReadOnly="True">
+                <DataGridTextColumn.ElementStyle>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Recommend}" Value="True">
+                                <Setter Property="Background" Value="LightGreen"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGridTextColumn.ElementStyle>
+                
+            </DataGridTextColumn>
             <DataGridTextColumn Binding="{Binding Path=Level}" Header="Level" IsReadOnly="True"/>
             <DataGridTextColumn Binding="{Binding Path=Latitude}" Header="Latitude" IsReadOnly="True"/>
             <DataGridTextColumn Binding="{Binding Path=Longitude}" Header="Longitude" IsReadOnly="True"/>
