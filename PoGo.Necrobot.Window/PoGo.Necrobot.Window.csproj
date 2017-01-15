@@ -163,11 +163,19 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Behaviors\DataGridBehavior.cs" />
+    <Compile Include="Controls\EggsControl.xaml.cs">
+      <DependentUpon>EggsControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\SnipeGrid.xaml.cs">
       <DependentUpon>SnipeGrid.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\ValueConverterGroup.cs" />
+    <Compile Include="Converters\VisibleIfTrueConverter.cs" />
     <Compile Include="Converters\PokemonImageConverter.cs" />
     <Compile Include="Converters\ListCountConverter.cs" />
+    <Compile Include="Model\EggsListViewModel.cs" />
+    <Compile Include="Model\EggViewModel.cs" />
+    <Compile Include="Model\IncubatorViewModel.cs" />
     <Compile Include="Model\PokeDexEntryViewModel.cs" />
     <Compile Include="Model\PokedexItemsViewModel.cs" />
     <Compile Include="Model\SnipeListViewModel.cs" />
@@ -263,6 +271,10 @@
     </Compile>
     <Compile Include="UILogger.cs" />
     <Compile Include="Win32\ConsoleHelper.cs" />
+    <Page Include="Controls\EggsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\SnipeGrid.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -65,6 +65,10 @@ namespace PoGo.Necrobot.Window
         {
             datacontext.SnipeList.OnPokemonSnipeStarted(ex.Pokemon);
         }
+        public void OnBotEvent(EggIncubatorStatusEvent e)
+        {
+            datacontext.EggsList.OnEggIncubatorStatus(e);
+        }
         public void OnBotEvent(InventoryRefreshedEvent inventory)
         {
 
@@ -81,6 +85,7 @@ namespace PoGo.Necrobot.Window
 
             datacontext.SnipeList.OnInventoryRefreshed(inventory.Inventory);
 
+            datacontext.EggsList.OnInventoryRefreshed(inventory.Inventory);
             var items = data.InventoryDelta.InventoryItems.Select(x => x.InventoryItemData?.Item).Where(x => x != null).ToList();
             this.datacontext.MaxItemStogare = maxItemStogare.Value;
             this.datacontext.ItemsList.Update(items);

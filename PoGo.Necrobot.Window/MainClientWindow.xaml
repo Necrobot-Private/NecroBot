@@ -184,11 +184,11 @@
                 <local:PokemonInventory x:Name="ctrPokemonInventory" DataContext="{Binding Path=PokemonList}" OnPokemonItemSelected="PokemonInventory_OnPokemonItemSelected" ></local:PokemonInventory>
             </TabItem>
             <TabItem Name="tabItems" Header="{Binding Path=ItemsTabHeader, FallbackValue=Pokemon}" >
-               
-                    
                 <local:ItemsInventory DataContext="{Binding Path=ItemsList}" x:Name="ctrlItemControl"  />
             </TabItem>
-
+            <TabItem Name="tabEggs" Header="Eggs" >
+                <local:EggsControl DataContext="{Binding Path=EggsList}" x:Name="ctrlEggsControl"  />
+            </TabItem>
         </TabControl>
     </DockPanel>
     

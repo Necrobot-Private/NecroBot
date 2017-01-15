@@ -21,6 +21,8 @@ namespace PoGo.Necrobot.Window.Model
 
         public SnipeListViewModel SnipeList { get; set; }
         public ItemsListViewModel ItemsList { get; set; }
+        public EggsListViewModel EggsList { get; set; }
+
         public List<PokemonData> Pokemons
         {
             get
@@ -44,6 +46,8 @@ namespace PoGo.Necrobot.Window.Model
             Sidebar = new SidebarViewModel();
             internalPokemons = new List<PokemonData>();
             SnipeList = new SnipeListViewModel();
+            EggsList = new EggsListViewModel();
+
             PokemonList = new PokemonListModel()
             {
                 Pokemons = new ObservableCollection<PokemonDataViewModel>()

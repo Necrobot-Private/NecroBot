@@ -36,8 +36,22 @@ namespace PoGo.Necrobot.Window.Model
             {
                 
             };
+            RefreshList();
         }
+        public async Task RefreshList()
+        {
+            while (true)
+            {
 
+                Refresh(this.PokedexSnipeItems);
+                Refresh(this.IV100List);
+                Refresh(this.SnipeQueueItems);
+
+                Refresh(this.OtherList);
+
+                await Task.Delay(3000);
+            }
+        }
         internal void OnSnipeData(EncounteredEvent e)
         {
             if (!e.IsRecievedFromSocket) return;
