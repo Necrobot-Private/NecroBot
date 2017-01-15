@@ -139,13 +139,15 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     try
                     {
-                        await Task.Delay(500);
+                        await Task.Delay(1000);
                         result = await StartBattle(session, gym, pokemonDatas, defenders.FirstOrDefault(x=>x.Id == defenderPokemonId));
                     }
                     catch (APIBadRequestException e)
                     {
                         Logger.Write("SHIT in start battle", LogLevel.Warning);
 #if DEBUG
+                        Logger.Write("Gym: " + gym, LogLevel.Info, ConsoleColor.Magenta);
+                        Logger.Write("Defender: " + defenders.FirstOrDefault(x => x.Id == defenderPokemonId), LogLevel.Info, ConsoleColor.Magenta);
                         Logger.Write(e.Message, LogLevel.Error, ConsoleColor.Magenta);
                         Logger.Write(e.StackTrace, LogLevel.Error, ConsoleColor.Magenta);
 #endif
