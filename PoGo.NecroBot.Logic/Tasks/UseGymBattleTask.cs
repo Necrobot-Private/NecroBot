@@ -835,7 +835,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             return true;
         }
 
-        private static int GetGymLevel(double points)
+        internal static int GetGymLevel(double points)
         {
             if (points < 2000) return 1;
             else
