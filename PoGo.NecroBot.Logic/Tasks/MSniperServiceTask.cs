@@ -496,7 +496,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                     return;
                 }
 
-                if (filter.SnipeIV <= item.Iv && item.Move1 == PokemonMove.Absorb && item.Move2 == PokemonMove.Absorb)
+                //if not verified and undetermine move.
+                if (filter.SnipeIV <= item.Iv && 
+                    item.Move1 == PokemonMove.MoveUnset && item.Move2 == PokemonMove.MoveUnset && 
+                    (filter.Moves == null || filter.Moves.Count ==0))
                 {
                     autoSnipePokemons.Add(item);
                     return;
@@ -611,6 +614,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     {
                         if (pokedexSnipePokemons.Count > 0 || manualSnipePokemons.Count > 0) break;
                     }
+
                     if (location.EncounterId > 0 && session.Cache[location.EncounterId.ToString()] != null) continue;
 
                     if (!await SnipePokemonTask.CheckPokeballsToSnipe(session.LogicSettings.MinPokeballsWhileSnipe + 1, session, cancellationToken))
