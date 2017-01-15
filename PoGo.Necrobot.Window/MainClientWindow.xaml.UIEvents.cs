@@ -62,6 +62,7 @@ namespace PoGo.Necrobot.Window
         }
         public void OnBotEvent(InventoryRefreshedEvent inventory)
         {
+
             if (currentSession.Profile == null || currentSession.Profile.PlayerData == null) return;
 
             var data = inventory.Inventory;
@@ -94,6 +95,12 @@ namespace PoGo.Necrobot.Window
             this.datacontext.ItemsList.Update(new List<ItemData> { e.Item });
             this.datacontext.RaisePropertyChanged("ItemsTabHeader");
         }
+
+        public void OnBotEvent(EncounteredEvent e)
+        {
+            this.datacontext.SnipeList.OnSnipeData(e);
+        }
+
         public void OnBotEvent(LoggedEvent userLogged)
         {
             this.datacontext.UI.PlayerStatus = "Playing";
@@ -143,28 +150,24 @@ namespace PoGo.Necrobot.Window
         }
         internal void HandleBotEvent(IEvent evt)
         {
-            //this.Invoke(() =>
-            //{
             dynamic eve = evt;
-            ///richTextBox.AppendText(evt.ToString() + "\r\n");
 
-            try
+            Task.Run(() =>
             {
-                Task.Run(() =>
+                this.Dispatcher.Invoke(() =>
                 {
-                    this.Dispatcher.Invoke(() =>
+                    try
                     {
                         OnBotEvent(eve);
-                    });
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex.Message);
+                    }
                 });
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-            }
-            // });
-        }
-        #endregion
-
+            });
     }
+    #endregion
+
+}
 }

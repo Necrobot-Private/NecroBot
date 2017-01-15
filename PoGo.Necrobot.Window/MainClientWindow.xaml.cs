@@ -110,6 +110,7 @@ namespace PoGo.Necrobot.Window
             this.playerStats = stat;
             this.ctrPokemonInventory.Session = session;
             this.ctrlItemControl.Session = session;
+            this.ctrlSniper.Session = session;
             this.datacontext.PokemonList.Session = session;
             botMap.SetDefaultPosition(session.Settings.DefaultLatitude, session.Settings.DefaultLongitude);
         }

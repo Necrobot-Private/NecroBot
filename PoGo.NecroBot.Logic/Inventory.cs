@@ -45,7 +45,10 @@ namespace PoGo.NecroBot.Logic
         public int GetCandy(PokemonId id)
         {
             var setting = GetPokemonSettings().Result.FirstOrDefault(x => x.PokemonId == id);
-            return GetPokemonFamilies().Result.FirstOrDefault(x => x.FamilyId == setting.FamilyId).Candy_;
+            var family = GetPokemonFamilies().Result.FirstOrDefault(x => x.FamilyId == setting.FamilyId);
+
+            if (family == null) return 0;
+            return family.Candy_;
 
         }
 
@@ -60,7 +63,7 @@ namespace PoGo.NecroBot.Logic
                  //Console.WriteLine("################# INVENTORY UPDATE ######################");
                  _cachedInventory = refreshedInventoryData;
                  _lastRefresh = DateTime.Now;
-                 if (onUpdated != null)
+                 if (onUpdated != null && _player != null)
                  {
                      onUpdated(_cachedInventory);
                  }
@@ -144,9 +147,12 @@ namespace PoGo.NecroBot.Logic
 
         public async Task<GetInventoryResponse> GetCachedInventory()
         {
-            lock (_cachedInventory)
+            lock (_player)
             {
-                if (_player == null) GetPlayerData();
+                if (_player == null)
+                {
+                    _player = GetPlayerData().Result;
+                }
             }
 
             var now = DateTime.UtcNow;
@@ -353,7 +359,7 @@ namespace PoGo.NecroBot.Logic
 
         public int UpdateStartDust(int startdust)
         {
-            GetPlayerData();
+            GetPlayerData().Wait();
             _player.PlayerData.Currencies[1].Amount += startdust;
 
             return _player.PlayerData.Currencies[1].Amount;
@@ -361,28 +367,18 @@ namespace PoGo.NecroBot.Logic
 
         public int GetStarDust()
         {
-            GetPlayerData();
+            GetPlayerData().Wait();
             return _player.PlayerData.Currencies[1].Amount;
         }
 
-        public async void GetPlayerData()
+        public async Task<GetPlayerResponse> GetPlayerData()
         {
+            if (_player == null)
+            {
+                _player = await _client.Player.GetPlayer();
+            }
 
-            try
-            {
-                if (_player == null)
-                {
-                    _player = await _client.Player.GetPlayer();
-                }
-            }
-            catch (CaptchaException ex)
-            {
-                throw ex;
-            }
-            catch(Exception ex)
-            {
-                Debug.Write(ex.Message);
-            }
+            return _player;
         }
 
         public async Task<PokemonData> GetHighestPokemonOfTypeByIv(PokemonData pokemon)

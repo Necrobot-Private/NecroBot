@@ -4,19 +4,46 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PoGo.Necrobot.Window.Controls"
+             xmlns:c="clr-namespace:PoGo.Necrobot.Window.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-        <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="23" Margin="-6,127,-96,0" TextWrapping="Wrap" Text="COMMING SOON !!!!" VerticalAlignment="Top" Width="402" RenderTransformOrigin="0.5,0.5">
-            <TextBox.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform Angle="-35.457"/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </TextBox.RenderTransform>
-        </TextBox>
+    <Control.Resources>
+        <c:ListCountConverter x:Key="ListCountConverter" />
+    </Control.Resources>
+    <TabControl x:Name="tabControl" >
+        <TabControl.Resources>
+            <Style TargetType="{x:Type TabItem}">
+                <Setter Property="HeaderTemplate">
+                    <Setter.Value>
+                        <DataTemplate>
+                            <ContentPresenter Content="{TemplateBinding Content}">
+                                <ContentPresenter.LayoutTransform>
+                                    <RotateTransform Angle="0" />
+                                </ContentPresenter.LayoutTransform>
+                            </ContentPresenter>
+                        </DataTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Padding" Value="3" />
+            </Style>
+        </TabControl.Resources>
+            
+        <TabItem Header="Rare pokemons">
+            <local:SnipeGrid DataContext="{Binding Path=RareList}" OnSnipePokemon="SnipeGrid_OnSnipePokemon"/>
+        </TabItem>
+            
+        <TabItem Header="IV 100%">
+            <local:SnipeGrid DataContext="{Binding Path=IV100List}" OnSnipePokemon="SnipeGrid_OnSnipePokemon" />
+        </TabItem>
+        <TabItem Header="Others">
+            <local:SnipeGrid DataContext="{Binding Path=OtherList}" OnSnipePokemon="SnipeGrid_OnSnipePokemon"/>
+        </TabItem>
+        <TabItem Header="Snipping">
+            <Grid Background="#FFE5E5E5"/>
+        </TabItem>
+        <TabItem Header="Not in Pokedex">
+            <Grid Background="#FFE5E5E5"/>
+        </TabItem>
+    </TabControl>
 
-    </Grid>
 </UserControl>

@@ -42,7 +42,7 @@ namespace PoGo.NecroBot.Logic.State
             {
                 if (session.Settings.AuthType == AuthType.Google || session.Settings.AuthType == AuthType.Ptc)
                 {
-                    await session.Client.Login.DoLogin();
+                    session.Profile = await session.Client.Login.DoLogin();
                 }
                 else
                 {
@@ -66,9 +66,16 @@ namespace PoGo.NecroBot.Logic.State
                 await Task.Delay(2000, cancellationToken);
                 throw new LoginFailedException();
             }
-            catch (Exception ex) when (ex is PtcOfflineException || ex is AccessTokenExpiredException)
+            catch (AccessTokenExpiredException ex)
             {
-
+                session.EventDispatcher.Send(new ErrorEvent
+                {
+                    Message = session.Translation.GetTranslation(TranslationString.AccessTokenExpired)
+                });
+                return new LoginState();
+            }
+            catch (PtcOfflineException ex)
+            {
                 session.EventDispatcher.Send(new ErrorEvent
                 {
                     Message = session.Translation.GetTranslation(TranslationString.PtcOffline)
@@ -192,7 +199,7 @@ namespace PoGo.NecroBot.Logic.State
                         Logger.Write(session.Translation.GetTranslation(TranslationString.PercentRevivesToKeep, session.LogicSettings.PercentOfInventoryRevivesToKeep, (int)Math.Floor(session.LogicSettings.PercentOfInventoryRevivesToKeep / 100.0 * session.Profile.PlayerData.MaxItemStorage)), LogLevel.Info);
                         Logger.Write(session.Translation.GetTranslation(TranslationString.PercentBerriesToKeep, session.LogicSettings.PercentOfInventoryBerriesToKeep, (int)Math.Floor(session.LogicSettings.PercentOfInventoryBerriesToKeep / 100.0 * session.Profile.PlayerData.MaxItemStorage)), LogLevel.Info);
                     }
-                    
+
                 }
                 else
                 {
@@ -214,7 +221,7 @@ namespace PoGo.NecroBot.Logic.State
             {
 
             }
-		    catch (OperationCanceledException)
+            catch (OperationCanceledException)
             {
                 //just continue login if this happen, most case is bot switching...
             }
@@ -227,7 +234,7 @@ namespace PoGo.NecroBot.Logic.State
             {
                 throw new LoginFailedException();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -273,9 +280,12 @@ namespace PoGo.NecroBot.Logic.State
         {
             try
             {
-                session.Profile = await session.Client.Player.GetPlayer();
+
+                //TODO : need get all data at 1 call here to save speed login.
+                session.Profile = await session.Inventory.GetPlayerData();
                 var stats = await session.Inventory.GetPlayerStats();
-                session.EventDispatcher.Send(new ProfileEvent { Profile = session.Profile , Stats = stats });
+
+                session.EventDispatcher.Send(new ProfileEvent { Profile = session.Profile, Stats = stats });
             }
             catch (System.UriFormatException e)
             {

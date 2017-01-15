@@ -17,6 +17,7 @@ using PokemonGo.RocketAPI.Exceptions;
 using PokemonGo.RocketAPI.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -328,8 +329,14 @@ namespace PoGo.NecroBot.Logic.Tasks
                 await Task.Delay(1000, cancellationToken);
 
                 encounter = await session.Client.Encounter.EncounterPokemon(encounterId.EncounterId, encounterId.SpawnPointId);
-                
-               
+
+#if DEBUG
+                if(encounter != null && encounter.Status != EncounterResponse.Types.Status.EncounterSuccess) {
+                    Debug.WriteLine($"{encounter}");
+
+                    Logger.Write($"{encounter}");
+                }
+#endif
             }
             catch (CaptchaException ex)
             {
@@ -480,19 +487,19 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 item.Priority = filter.Priority;
 
+                if (filter.VerifiedOnly && item.EncounterId == 0) return;
                 //check candy
 
-                if(candy < filter.AustoSnipeCandy)
+                if (candy < filter.AustoSnipeCandy)
                 {
                     autoSnipePokemons.Add(item);
                     return;
                 }
-                
-                //hack, this case we can't determite move :)
 
-                if (filter.VerifiedOnly && item.EncounterId == 0) return;
-
-                if (filter.SnipeIV <= item.Iv && item.Move1 == PokemonMove.Absorb && item.Move2 == PokemonMove.Absorb)
+                //if not verified and undetermine move.
+                if (filter.SnipeIV <= item.Iv && 
+                    item.Move1 == PokemonMove.MoveUnset && item.Move2 == PokemonMove.MoveUnset && 
+                    (filter.Moves == null || filter.Moves.Count ==0))
                 {
                     autoSnipePokemons.Add(item);
                     return;
@@ -607,6 +614,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     {
                         if (pokedexSnipePokemons.Count > 0 || manualSnipePokemons.Count > 0) break;
                     }
+
                     if (location.EncounterId > 0 && session.Cache[location.EncounterId.ToString()] != null) continue;
 
                     if (!await SnipePokemonTask.CheckPokeballsToSnipe(session.LogicSettings.MinPokeballsWhileSnipe + 1, session, cancellationToken))
