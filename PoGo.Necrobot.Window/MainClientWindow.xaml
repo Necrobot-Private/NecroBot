@@ -107,7 +107,8 @@
                     <local:SidebarControl DataContext="{Binding Path=Sidebar}" x:Name="sidebarControl" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinWidth="150"></local:SidebarControl>
                 </Grid>
             </TabItem>
-            <TabItem Header="SNIPER">
+            <TabItem Header="   SNIPER   ">
+                <local:SniperControl x:Name="ctrlSniper" DataContext="{Binding Path=SnipeList}"></local:SniperControl>
             </TabItem>
 
             <TabItem Header="   CONSOLE   ">
@@ -122,7 +123,7 @@
                     VerticalAlignment="Stretch" 
                     FontSize="14.667" >
                     <FlowDocument>
-                        <Paragraph>
+                        <Paragraph LineHeight="20">
                             <Run Text=""/>
                         </Paragraph>
                     </FlowDocument>

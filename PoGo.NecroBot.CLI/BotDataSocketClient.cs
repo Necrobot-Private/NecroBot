@@ -178,8 +178,9 @@ namespace PoGo.NecroBot.CLI
         {
             try
             {
-                OnSnipePokemon(session, e.Data);
                 OnPokemonData(session, e.Data);
+                OnSnipePokemon(session, e.Data);
+
                 //ONFPMBridgeData(session, e.Data); //Nolonger use
             }
 
@@ -250,7 +251,7 @@ namespace PoGo.NecroBot.CLI
         private static void OnSnipePokemon(ISession session, string message)
         {
             var match = Regex.Match(message, "42\\[\"snipe-pokemon\",(.*)]");
-            if (match != null && !string.IsNullOrEmpty(match.Groups[1].Value))
+            if (match != null && !string.IsNullOrEmpty(match.Value) && !string.IsNullOrEmpty(match.Groups[1].Value))
             {
                 var data = JsonConvert.DeserializeObject<EncounteredEvent>(match.Groups[1].Value);
 

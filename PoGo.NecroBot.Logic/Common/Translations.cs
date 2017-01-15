@@ -384,7 +384,7 @@ namespace PoGo.NecroBot.Logic.Common
             new KeyValuePair<TranslationString, string>(TranslationString.LogEntryGym, "GYM"),
             new KeyValuePair<TranslationString, string>(TranslationString.LogEntryService, "SERVICE"),
             new KeyValuePair<TranslationString, string>(TranslationString.LogEntrySoftBan, "SOFTBAN"),
-            new KeyValuePair<TranslationString, string>(TranslationString.LoggingIn, "Logging in using {0}"),
+            new KeyValuePair<TranslationString, string>(TranslationString.LoggingIn, "Logging in using {0} {1}"),
             new KeyValuePair<TranslationString, string>(TranslationString.PtcOffline,
                 "PTC Servers are probably down OR your credentials are wrong."),
             new KeyValuePair<TranslationString, string>(TranslationString.AccessTokenExpired,
