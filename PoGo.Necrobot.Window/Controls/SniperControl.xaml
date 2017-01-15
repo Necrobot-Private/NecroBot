@@ -38,11 +38,12 @@
         <TabItem Header="Others">
             <local:SnipeGrid DataContext="{Binding Path=OtherList}" OnSnipePokemon="SnipeGrid_OnSnipePokemon"/>
         </TabItem>
-        <TabItem Header="Snipping">
-            <Grid Background="#FFE5E5E5"/>
+        <TabItem Header="Snipe Queue">
+            <local:SnipeGrid DataContext="{Binding Path=SnipeQueueItems}"/>
         </TabItem>
+        
         <TabItem Header="Not in Pokedex">
-            <Grid Background="#FFE5E5E5"/>
+            <local:SnipeGrid DataContext="{Binding Path=PokedexSnipeItems}" OnSnipePokemon="SnipeGrid_OnSnipePokemon"/>
         </TabItem>
     </TabControl>
 

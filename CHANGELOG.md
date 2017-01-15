@@ -1,5 +1,16 @@
 # Change Log
 
+## [v1.0.0.62](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.62) (2017-01-15)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.60...v1.0.0.62)
+## Bugs & Enhancements
+- Pokedex screen added to alow you see all the list pokemon you already caught so far
+- Sniper tab with allow you see all the snipe data now we can do manual snipe from GUI
+- Eggs screen is added and working, you can put egg in incubators and view status
+- Many minor /major fix  -  few request and bot will work faster about 10% 
+- GUI look statble now to ready to develop advance feature - actualy, many minor bug  but not a big deal
+- An extra function allow you change theme color for NECROBOT gui  with support 24 basic color
+- Many minor fix and enhancemen
+
 ## [v1.0.0.60](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.60) (2017-01-14)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.56...v1.0.0.60)
 ## Bugs & Enhancements

@@ -18,7 +18,7 @@ namespace PoGo.Necrobot.Window.Converters
             {ItemId.ItemIncubatorBasicUnlimited,"http://i.imgur.com/ZBRdMuy.png" },
             {ItemId.ItemPokeBall, "https://raw.githubusercontent.com/Superviral/Pokemon-GO-App-Assets-and-Images/master/App%20Converted%20Images/pokeball_store.png" },
             {ItemId.ItemGreatBall, "http://i.imgur.com/ZP3DlMs.png" },
-            {ItemId.ItemUltraBall, "http://i.imgur.com/ZP3DlMs.png" },
+            {ItemId.ItemUltraBall, "http://i.imgur.com/nGsWvcR.png" },
             {ItemId.ItemMasterBall,"http://i.imgur.com/cyLuJEq.png" } ,
             {ItemId.ItemPotion,"http://i.imgur.com/6MQCO4g.png" } ,
              {ItemId.ItemSuperPotion,"http://i.imgur.com/ay1jWQF.png" },
