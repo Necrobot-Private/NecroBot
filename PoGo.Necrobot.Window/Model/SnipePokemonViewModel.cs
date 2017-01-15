@@ -13,6 +13,7 @@ namespace PoGo.Necrobot.Window.Model
 
         public SnipePokemonViewModel(EncounteredEvent e)
         {
+            this.UniqueId = e.EncounterId;
             //var move1 = PokemonMove.MoveUnset;
             //var move2 = PokemonMove.MoveUnset;
             //Enum.TryParse<PokemonMove>(e.Move1, true, out move1);
@@ -35,6 +36,8 @@ namespace PoGo.Necrobot.Window.Model
             
         }
 
+        public int Id => (int)PokemonId;
+
         public PokemonId PokemonId { get; set; }
         public DateTime Added { get; set; }
         public double IV { get; set; }
@@ -50,5 +53,7 @@ namespace PoGo.Necrobot.Window.Model
         public int RemainTimes =>  (int)(this.Expired - DateTime.Now).TotalSeconds;
         public Object Ref { get; set; }
         public bool AllowSnipe { get;  set; }
+        public string UniqueId { get;  set; }
+        public bool Recommend { get;  set; }
     }
 }

@@ -162,6 +162,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Behaviors\DataGridBehavior.cs" />
     <Compile Include="Controls\SnipeGrid.xaml.cs">
       <DependentUpon>SnipeGrid.xaml</DependentUpon>
     </Compile>
