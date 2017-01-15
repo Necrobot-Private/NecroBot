@@ -154,14 +154,14 @@
                     </Grid.ColumnDefinitions>
                     <local:MapControl x:Name="botMap" Grid.Column="0"></local:MapControl>
                     <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
-                    <local:SidebarControl DataContext="{Binding Path=Sidebar}" x:Name="sidebarControl" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinWidth="150"></local:SidebarControl>
+                    <local:SidebarControl Visibility="Hidden" DataContext="{Binding Path=Sidebar}" x:Name="sidebarControl" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinWidth="150"></local:SidebarControl>
                 </Grid>
             </TabItem>
             <TabItem Header="   SNIPER   ">
                 <local:SniperControl x:Name="ctrlSniper" DataContext="{Binding Path=SnipeList}"></local:SniperControl>
             </TabItem>
 
-            <TabItem Header="   CONSOLE   ">
+            <TabItem Header="   CONSOLE   " IsSelected="True">
                 <RichTextBox 
                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
                     ScrollViewer.VerticalScrollBarVisibility="Auto"
