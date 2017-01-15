@@ -19,6 +19,7 @@ namespace PoGo.Necrobot.Window.Model
         public PokemonListModel PokemonList { get; set; }
         public SidebarViewModel Sidebar { get; set; }
 
+        public SnipeListViewModel SnipeList { get; set; }
         public ItemsListViewModel ItemsList { get; set; }
         public List<PokemonData> Pokemons
         {
@@ -42,6 +43,7 @@ namespace PoGo.Necrobot.Window.Model
             ItemsList = new ItemsListViewModel();
             Sidebar = new SidebarViewModel();
             internalPokemons = new List<PokemonData>();
+            SnipeList = new SnipeListViewModel();
             PokemonList = new PokemonListModel()
             {
                 Pokemons = new ObservableCollection<PokemonDataViewModel>()
@@ -54,6 +56,14 @@ namespace PoGo.Necrobot.Window.Model
             {
                 return $"   POKEMONS ({PokemonList.Pokemons.Count} / 250)   ";
             }
+        }
+
+        internal void Reset()
+        {
+            this.PokemonList.Pokemons.Clear();
+            this.ItemsList.Items.Clear();
+            this.ItemsList.RaisePropertyChanged("TotalItem");
+
         }
 
         public string ItemsTabHeader

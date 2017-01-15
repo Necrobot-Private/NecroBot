@@ -1,9 +1,12 @@
-﻿using PoGo.Necrobot.Window.Model;
+﻿using Microsoft.Win32;
+using PoGo.Necrobot.Window.Model;
+using PoGo.NecroBot.Logic.DataDumper;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Tasks;
 using POGOProtos.Data;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -82,10 +85,10 @@ namespace PoGo.Necrobot.Window.Controls
             var data = DataContext as PokemonListModel;
             var pokemonToTransfer = data.Pokemons
                 .Where(x => x.IsSelected && !x.IsTransfering)
-                .Select(x=>x.Id)
+                .Select(x => x.Id)
                 .ToList();
             data.Transfer(pokemonToTransfer);
-            if (MessageBox.Show("Do you want to transfer all selected pokemon","Bulk transfer", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            if (MessageBox.Show("Do you want to transfer all selected pokemon", "Bulk transfer", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
                 Task.Run(async () =>
                 {
@@ -101,10 +104,10 @@ namespace PoGo.Necrobot.Window.Controls
 
             ulong pokemonId = (ulong)((Button)sender).CommandParameter;
             model.Evolve(pokemonId);
-           
+
             Task.Run(async () =>
             {
-                await EvolveSpecificPokemonTask.Execute(Session, pokemonId );
+                await EvolveSpecificPokemonTask.Execute(Session, pokemonId);
 
             });
         }
@@ -114,11 +117,11 @@ namespace PoGo.Necrobot.Window.Controls
             var model = this.DataContext as PokemonListModel;
 
             ulong pokemonId = (ulong)((Button)sender).CommandParameter;
-           bool state =  model.Favorite(pokemonId);
+            bool state = model.Favorite(pokemonId);
 
             Task.Run(async () =>
             {
-                await FavoritePokemonTask.Execute(Session,pokemonId, state);
+                await FavoritePokemonTask.Execute(Session, pokemonId, state);
 
             });
         }
@@ -146,12 +149,32 @@ namespace PoGo.Necrobot.Window.Controls
             var model = this.DataContext as PokemonListModel;
 
             ulong pokemonId = (ulong)((Button)sender).CommandParameter;
-             model.Powerup(pokemonId);
+            model.Powerup(pokemonId);
 
             Task.Run(async () =>
             {
                 await UpgradeSinglePokemonTask.Execute(Session, pokemonId, false);
             });
+        }
+        private void btnPokedexView_Click(object sender, RoutedEventArgs e)
+        {                                
+            PokedexWindow dexWindow = new PokedexWindow(this.Session);
+            dexWindow.Show();
+        }
+        private void btnExport_Click(object sender, RoutedEventArgs e)
+        {
+            var dlg = new SaveFileDialog()
+            {
+                Filter = "Excel (.xlsx)|*.xlsx",
+            };
+
+            if (dlg.ShowDialog() == true)
+            {
+                Dumper.SaveAsExcel(this.Session, dlg.FileName).ContinueWith((t) =>
+                {
+                    Process.Start(dlg.FileName);
+                });
+            }
         }
         //ICommand transferPokemonCommand;
         //public ICommand TransferPokemonCommand

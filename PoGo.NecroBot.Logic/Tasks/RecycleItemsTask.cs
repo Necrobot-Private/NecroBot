@@ -165,7 +165,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 if (_diff > 0)
                 {
-                    await RecycleItems(session, cancellationToken, pokeBallsCount, ItemId.ItemPokeBall, session.LogicSettings.MaxPokeballsToKeep);
+                    await RecycleItems(session, cancellationToken, pokeBallsCount, ItemId.ItemPokeBall);
                 }
                 if (_diff > 0)
                 {
