@@ -39,7 +39,7 @@
                                 <RadioButton GroupName="Theme" Foreground="Red" Content="Red"   Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5" ></RadioButton>
                                 <RadioButton GroupName="Theme" Foreground="Blue" Content="Blue"   Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5" IsChecked="True"></RadioButton>
                                 <RadioButton GroupName="Theme" Foreground="Brown" Content="Brown" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
-                                <RadioButton GroupName="Theme" Foreground="#0047ab"  Content="Colabt" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="#0047ab"  Content="Cobalt" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
                                 <RadioButton GroupName="Theme" Foreground="Crimson" Content="Crimson" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
                                 <RadioButton GroupName="Theme" Foreground="Cyan" Content="Cyan" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
                                 <RadioButton GroupName="Theme" Foreground="DarkGreen" Content="Emerald" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>

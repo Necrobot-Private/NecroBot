@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:PoGo.Necrobot.Window"
              xmlns:cv="clr-namespace:PoGo.Necrobot.Window.Converters"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="900">
     <Control.Resources>
         <cv:InverseBooleanConverter x:Key="InverseBooleanConverter" />
         <cv:FriendlyTransferTextConverter x:Key="FriendlyTransferTextConverter" />
@@ -51,6 +51,13 @@
                     ScrollViewer.CanContentScroll="True" 
       ScrollViewer.VerticalScrollBarVisibility="Visible"
       ScrollViewer.HorizontalScrollBarVisibility="Visible" >
+
+                <DataGrid.ContextMenu>
+                    <ContextMenu >
+                        <MenuItem Header="Set as Buddy" Click="mnuBuddy_Click"  />
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+                
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Header="Selected" IsReadOnly="False">
                         <DataGridTemplateColumn.CellTemplate>
@@ -101,7 +108,42 @@
                                         </Button.IsEnabled>
                                         
                                     </Button>
-                                    <Button Margin="0,0,10,0" Content="{Binding PowerupText, FallbackValue=Power Up}" IsEnabled="{Binding AllowPowerup, FallbackValue=false}" Click="btnPowerup_Click" CommandParameter="{Binding Id}"/>
+                                    <Button Name="OpenConfirmPower" Margin="0,0,10,0" Content="{Binding PowerupText, FallbackValue=Power Up}" IsEnabled="{Binding AllowPowerup, FallbackValue=false}" CommandParameter="{Binding Id}">
+                                        <Button.Triggers>
+                                            <EventTrigger RoutedEvent="Button.Click">
+                                                <EventTrigger.Actions>
+                                                    <BeginStoryboard>
+                                                        <Storyboard>
+                                                            <BooleanAnimationUsingKeyFrames 
+                                                             Storyboard.TargetName="ContextPopup" 
+                                                             Storyboard.TargetProperty="IsOpen">
+                                                                <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="True" />
+                                                            </BooleanAnimationUsingKeyFrames>
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </EventTrigger.Actions>
+                                            </EventTrigger>
+                                        </Button.Triggers>
+                                    </Button>
+
+                                    <Popup x:Name="ContextPopup"
+                                       PlacementTarget="{Binding ElementName=OpenConfirmPower}"
+                                       StaysOpen="True" Width="300">
+                                        <Grid Background="White">
+                                            <Border Background="GhostWhite" BorderBrush="Gainsboro" BorderThickness="1">
+
+                                                <StackPanel Margin="20,20,20,20" >
+                                                    <TextBlock TextWrapping="Wrap" Foreground="Orange" Text="Do you want to powerup this pokemon? Normal power up is do x time power up. Max power up is powerup to maximun level up to your candy, stardust and player level." />
+
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Button Margin="0,20,0,20" Click="btnPowerup_Click"   CommandParameter="{Binding Id}" Content="Normal Power UP"/>
+                                                        <Button Margin="40,20,0,20" Click="btnMaxPowerUp_Click"    CommandParameter="{Binding Id}" Content="MAX Power UP"/>
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </Border>
+                                        </Grid>
+                                    </Popup>
+
                                     <Button Margin="0,0,10,0" Click="btnFavorit_Click" CommandParameter="{Binding Id}">
                                         <Button.Content>
                                             <MultiBinding Converter="{StaticResource ResourceKey=FavoriteTextConverter}">
