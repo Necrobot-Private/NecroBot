@@ -26,9 +26,6 @@ namespace PoGo.NecroBot.Logic.Tasks
 {
     public class UseNearbyPokestopsTask
     {
-        //add delegate
-        public delegate void LootPokestopDelegate(FortData pokestop);
-
         private static int _stopsHit;
         private static int _randomStop;
         private static Random _rc; //initialize pokestop random cleanup counter first time
@@ -88,7 +85,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     await HumanWalkSnipeTask.Execute(session, cancellationToken, pokeStop, fortInfo);
                 }
-                
+
                 pokeStop = await GetNextPokeStop(session);
             }
         }
@@ -106,7 +103,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 throw new ActiveSwitchByRuleException(SwitchRules.SpinPokestopReached, session.LogicSettings.PokeStopLimit);
             }
 
-            if (session.Stats.CatchThresholdExceeds(session,false) && session.Stats.SearchThresholdExceeds(session,false))
+            if (session.Stats.CatchThresholdExceeds(session, false) && session.Stats.SearchThresholdExceeds(session, false))
             {
                 if (session.LogicSettings.AllowMultipleBot)
                 {
@@ -188,7 +185,14 @@ namespace PoGo.NecroBot.Logic.Tasks
                 //TODO : A logic need to be add for handle this  case?
             };
 
-            var forts = session.Forts.Where(p => p.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime()).ToList();
+            var deployedPokemons = await session.Inventory.GetDeployedPokemons();
+
+            var forts = session.Forts
+                .Where(p => p.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime())
+                .Where(f => deployedPokemons == null || !(f.Type == FortType.Gym && deployedPokemons.Any(a => a.DeployedFortId == f.Id))) // don't go to fort where is yours pokemon already deployed
+                .Where(l => !(l.OwnedByTeam != session.Profile.PlayerData.Team && UseGymBattleTask.GetGymLevel(l.GymPoints) > session.LogicSettings.GymConfig.MaxGymLevelToAttack)) // don't go to other's gym where lvl is too high 
+                .ToList();
+
             forts = forts.OrderBy(
                         p =>
                             session.Navigation.WalkStrategy.CalculateDistance(
@@ -432,10 +436,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Logger.Write($"(POKESTOP LIMIT) {session.Stats.GetNumPokestopsInLast24Hours()}/{session.LogicSettings.PokeStopLimit}",
                             LogLevel.Info, ConsoleColor.Yellow);
                     }
-
-                    //add pokeStops to Map
-                    OnLootPokestopEvent(pokeStop);
-                    //end pokeStop to Map
                     break; //Continue with program as loot was succesfull.
                 }
             } while (fortTry < retryNumber - zeroCheck);
@@ -500,7 +500,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Message = session.Translation.GetTranslation(TranslationString.FarmPokestopsNoUsableFound)
                     });
                     mapEmptyCount++;
-                    if(mapEmptyCount == 5 && session.LogicSettings.AllowMultipleBot)
+                    if (mapEmptyCount == 5 && session.LogicSettings.AllowMultipleBot)
                     {
                         mapEmptyCount = 0;
                         throw new ActiveSwitchByRuleException() { MatchedRule = SwitchRules.EmptyMap, ReachedValue = 5 };
@@ -560,13 +560,5 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             return pokeStops.ToList();
         }
-
-        //add delegate event
-        private static void OnLootPokestopEvent(FortData pokestop)
-        {
-            LootPokestopEvent?.Invoke(pokestop);
-        }
-
-        public static event LootPokestopDelegate LootPokestopEvent;
     }
 }
