@@ -85,7 +85,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     await HumanWalkSnipeTask.Execute(session, cancellationToken, pokeStop, fortInfo);
                 }
-                
+
                 pokeStop = await GetNextPokeStop(session);
             }
         }
@@ -103,7 +103,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 throw new ActiveSwitchByRuleException(SwitchRules.SpinPokestopReached, session.LogicSettings.PokeStopLimit);
             }
 
-            if (session.Stats.CatchThresholdExceeds(session,false) && session.Stats.SearchThresholdExceeds(session,false))
+            if (session.Stats.CatchThresholdExceeds(session, false) && session.Stats.SearchThresholdExceeds(session, false))
             {
                 if (session.LogicSettings.AllowMultipleBot)
                 {
@@ -189,9 +189,10 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             var forts = session.Forts
                 .Where(p => p.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime())
-                .Where(f => f.Type == FortType.Checkpoint || deployedPokemons == null || (f.Type == FortType.Gym && !deployedPokemons.Any(a=>a.DeployedFortId == f.Id))) // don't go to fort where is yours pokemon already deployed
-                .Where(l => l.Type == FortType.Checkpoint || (l.OwnedByTeam != session.Profile.PlayerData.Team && UseGymBattleTask.GetGymLevel(l.GymPoints) < session.LogicSettings.GymConfig.MaxGymLevelToAttack)) // don't go to other's gym where lvl is too high 
+                .Where(f => deployedPokemons == null || !(f.Type == FortType.Gym && deployedPokemons.Any(a => a.DeployedFortId == f.Id))) // don't go to fort where is yours pokemon already deployed
+                .Where(l => !(l.OwnedByTeam != session.Profile.PlayerData.Team && UseGymBattleTask.GetGymLevel(l.GymPoints) > session.LogicSettings.GymConfig.MaxGymLevelToAttack)) // don't go to other's gym where lvl is too high 
                 .ToList();
+
             forts = forts.OrderBy(
                         p =>
                             session.Navigation.WalkStrategy.CalculateDistance(
@@ -499,7 +500,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Message = session.Translation.GetTranslation(TranslationString.FarmPokestopsNoUsableFound)
                     });
                     mapEmptyCount++;
-                    if(mapEmptyCount == 5 && session.LogicSettings.AllowMultipleBot)
+                    if (mapEmptyCount == 5 && session.LogicSettings.AllowMultipleBot)
                     {
                         mapEmptyCount = 0;
                         throw new ActiveSwitchByRuleException() { MatchedRule = SwitchRules.EmptyMap, ReachedValue = 5 };
