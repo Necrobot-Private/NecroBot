@@ -176,6 +176,40 @@ namespace PoGo.Necrobot.Window.Controls
                 });
             }
         }
+
+        private void btnMaxPowerUp_Click(object sender, RoutedEventArgs e)
+        {
+            var model = this.DataContext as PokemonListModel;
+
+            ulong pokemonId = (ulong)((Button)sender).CommandParameter;
+            model.Powerup(pokemonId);
+
+            Task.Run(async () =>
+            {
+                await UpgradeSinglePokemonTask.Execute(Session, pokemonId, true);
+            });
+        }
+
+        private void mnuBuddy_Click(object sender, RoutedEventArgs e)
+        {
+            //Get the clicked MenuItem
+            var menuItem = (MenuItem)sender;
+
+            //Get the ContextMenu to which the menuItem belongs
+            var contextMenu = (ContextMenu)menuItem.Parent;
+
+            //Find the placementTarget
+            var item = (DataGrid)contextMenu.PlacementTarget;
+
+            //Get the underlying item, that you cast to your object that is bound
+            //to the DataGrid (and has subject and state as property)
+            var buddySelect = (PokemonDataViewModel)item.SelectedCells[0].Item;
+
+            Task.Run(async () =>
+            {
+                await SelectBuddyPokemonTask.Execute(this.Session, this.Session.CancellationTokenSource.Token, buddySelect.Id);
+            });
+        }
         //ICommand transferPokemonCommand;
         //public ICommand TransferPokemonCommand
         //{
