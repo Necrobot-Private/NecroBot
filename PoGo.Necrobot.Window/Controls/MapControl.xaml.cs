@@ -32,9 +32,13 @@ namespace PoGo.Necrobot.Window.Controls
             this.forts = new List<FortData>();
             InitMap();
         }
+        GMapMarker routeMarker;
+        List<PointLatLng>  track = new List<PointLatLng>();
 
         public void SetDefaultPosition(double lat, double lng)
         {
+            //track.Add(new PointLatLng(lat, lng));
+            //var routeMarker = new GMapMarker(track.First());
             this.Dispatcher.Invoke(() =>
             {
                 gmap.Position = new PointLatLng(lat, lng);
@@ -51,17 +55,7 @@ namespace PoGo.Necrobot.Window.Controls
             gmap.Zoom = 16;
             var m = new GMapMarker(gmap.Position);
 
-            //{
-            //if (checkBoxPlace.IsChecked.Value)
-            //{
-            //    GeoCoderStatusCode status;
-            //    var plret = GMapProviders.GoogleMap.GetPlacemark(currentMarker.Position, out status);
-            //    if (status == GeoCoderStatusCode.G_GEO_SUCCESS && plret != null)
-            //    {
-            //        p = plret;
-            //    }
-            //}
-            m.Shape = new CustomMarkerDemo(null, m, "xxx");
+             m.Shape = new CustomMarkerDemo(null, m, "xxx");
             //var x = new CustomMarkerDemo(null, m, "xxx");
             gmap.Markers.Add(m);
 
@@ -83,10 +77,11 @@ namespace PoGo.Necrobot.Window.Controls
             var marker = allMarkers[id];
             marker.Shape = new ImageMarker(null, marker, "", "pokestop-used.png");
         }
-
+        //var track = new List<PointLatLng>();
         public void UpdatePlayerPosition(double lat, double lng)
         {
-            if (playerMarker == null)
+
+           if (playerMarker == null)
             {
                 playerMarker = new GMapMarker(new PointLatLng(lat, lng));
                 playerMarker.ZIndex = 9999;
