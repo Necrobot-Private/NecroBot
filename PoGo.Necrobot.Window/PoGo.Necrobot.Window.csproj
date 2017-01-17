@@ -166,6 +166,9 @@
     <Compile Include="Controls\EggsControl.xaml.cs">
       <DependentUpon>EggsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\MapMarkers\TargetMarker.xaml.cs">
+      <DependentUpon>TargetMarker.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\SnipeGrid.xaml.cs">
       <DependentUpon>SnipeGrid.xaml</DependentUpon>
     </Compile>
@@ -176,6 +179,7 @@
     <Compile Include="Model\EggsListViewModel.cs" />
     <Compile Include="Model\EggViewModel.cs" />
     <Compile Include="Model\IncubatorViewModel.cs" />
+    <Compile Include="Model\MapViewModel.cs" />
     <Compile Include="Model\PokeDexEntryViewModel.cs" />
     <Compile Include="Model\PokedexItemsViewModel.cs" />
     <Compile Include="Model\SnipeListViewModel.cs" />
@@ -274,6 +278,10 @@
     <Page Include="Controls\EggsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\MapMarkers\TargetMarker.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\SnipeGrid.xaml">
       <SubType>Designer</SubType>
