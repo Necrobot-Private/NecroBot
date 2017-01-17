@@ -861,7 +861,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             else
             if (points < 4000) return 2;
             else
-                if (points < 6000) return 3;
+            if (points < 6000) return 3;
             else if (points < 12000) return 4;
             else if (points < 16000) return 5;
             else if (points < 20000) return 6;
@@ -916,4 +916,3 @@ namespace PoGo.NecroBot.Logic.Tasks
     }
 
 }
-
