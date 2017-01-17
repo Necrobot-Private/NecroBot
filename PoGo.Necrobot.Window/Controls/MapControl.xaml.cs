@@ -17,6 +17,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using POGOProtos.Map.Fort;
 using PoGo.NecroBot.Logic.State;
+using PoGo.Necrobot.Window.Model;
+using PoGo.NecroBot.Logic.Tasks;
 
 namespace PoGo.Necrobot.Window.Controls
 {
@@ -25,14 +27,19 @@ namespace PoGo.Necrobot.Window.Controls
     /// </summary>
     public partial class MapControl : UserControl
     {
+        MapViewModel model;
         Dictionary<string, GMapMarker> allMarkers = new Dictionary<string, GMapMarker>();
+        public ISession Session { get; set; }
+
         public MapControl()
         {
             InitializeComponent();
             this.forts = new List<FortData>();
             InitMap();
+            this.model = this.DataContext as MapViewModel;
         }
         GMapMarker routeMarker;
+        GMapMarker selectedMarker;
         List<PointLatLng>  track = new List<PointLatLng>();
 
         public void SetDefaultPosition(double lat, double lng)
@@ -59,6 +66,10 @@ namespace PoGo.Necrobot.Window.Controls
             //var x = new CustomMarkerDemo(null, m, "xxx");
             gmap.Markers.Add(m);
 
+            selectedMarker = new GMapMarker(new PointLatLng(0,0));
+            selectedMarker.Shape = new TargetMarker(null, selectedMarker, popSelect);
+            gmap.Markers.Add(selectedMarker);
+
         }
         private ISession session;
         private List<FortData> forts;
@@ -77,7 +88,7 @@ namespace PoGo.Necrobot.Window.Controls
             var marker = allMarkers[id];
             marker.Shape = new ImageMarker(null, marker, "", "pokestop-used.png");
         }
-        //var track = new List<PointLatLng>();
+        //var track = new List<PointLatLngpos
         public void UpdatePlayerPosition(double lat, double lng)
         {
 
@@ -112,6 +123,36 @@ namespace PoGo.Necrobot.Window.Controls
                 });
             }
 
+        }
+        
+        private void gmap_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            System.Windows.Point p = e.GetPosition(gmap);
+            var pos = gmap.FromLocalToLatLng((int)p.X, (int)p.Y);
+            model.CurrentLatitude = pos.Lat;
+            model.CurrentLongitude = pos.Lng;
+            var currentXY = this.gmap.FromLatLngToLocal(this.selectedMarker.Position);
+
+            //TODO : Need to find the better way to stop event then we can get rid of this hack
+            if (Math.Abs(p.X - currentXY.X) > 30 || Math.Abs(p.Y - currentXY.Y) > 30)
+            {
+                this.selectedMarker.Position = pos;
+                popSelect.IsOpen = false;
+            }
+        }
+
+        private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            this.model = DataContext as MapViewModel;
+        }
+
+        private void btnWalkHere_Click(object sender, RoutedEventArgs e)
+        {
+            Task.Run(async () => {
+                await SetMoveToTargetTask.Execute(session, model.CurrentLatitude, model.CurrentLongitude);
+            });
+
+            popSelect.IsOpen = false;
         }
     }
 }

@@ -62,7 +62,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 // Exit this task if both catching and looting has reached its limits
                 await CheckLimit(session);
 
-                var fortInfo = pokeStop.Id == SetMoveToTargetTask.TARGET_ID ? SetMoveToTargetTask.FortInfo : await session.Client.Fort.GetFort(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude);
+                var fortInfo = pokeStop.Id.StartsWith(SetMoveToTargetTask.TARGET_ID) ? SetMoveToTargetTask.FakeFortInfo(pokeStop) : await session.Client.Fort.GetFort(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude);
 
                 await WalkingToPokeStop(session, cancellationToken, pokeStop, fortInfo);
 

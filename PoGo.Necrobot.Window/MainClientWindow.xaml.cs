@@ -108,6 +108,7 @@ namespace PoGo.Necrobot.Window
             session.EventDispatcher.EventReceived += HandleBotEvent;
             stat.GetCurrent().DirtyEvent += OnPlayerStatisticChanged;
             this.currentSession = session;
+            this.botMap.Session = session;
             this.playerStats = stat;
             this.ctrPokemonInventory.Session = session;
             this.ctrlItemControl.Session = session;
