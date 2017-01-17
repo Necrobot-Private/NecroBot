@@ -55,8 +55,9 @@ namespace PoGo.NecroBot.Logic.Service
                     if (!string.IsNullOrEmpty(s))
                     {
                         lastChatId = Convert.ToInt64(s);
-                        #pragma warning disable 4014 // disables 'await not used warning' - since c'tor is not async by itself we can not use the async statement for method calls
+                        #pragma warning disable 4014 // added to get rid of compiler warning. Remove this if async code is used below.
                         telegramUtils.SendMessage(_session.Translation.GetTranslation(TranslationString.TelegramBotStarted), lastChatId);
+                        #pragma warning restore 4014
                     }
                     else
                     {
