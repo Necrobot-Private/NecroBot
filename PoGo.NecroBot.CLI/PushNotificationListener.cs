@@ -2,15 +2,10 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.Event;
-using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.State;
-using POGOProtos.Enums;
-using POGOProtos.Inventory.Item;
-using POGOProtos.Networking.Responses;
 using PoGo.NecroBot.Logic.Utils;
+
 #endregion
 
 namespace PoGo.NecroBot.CLI
@@ -36,7 +31,9 @@ namespace PoGo.NecroBot.CLI
             dynamic eve = evt;
 
             try
-            { HandleEvent(eve, session); }
+            {
+                HandleEvent(eve, session);
+            }
             catch (Exception)
             {
                 // ignored

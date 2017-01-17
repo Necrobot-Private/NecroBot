@@ -1,24 +1,17 @@
-﻿using GMap.NET;
-using GMap.NET.WindowsPresentation;
-using PoGo.Necrobot.Window.Controls.MapMarkers;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using POGOProtos.Map.Fort;
-using PoGo.NecroBot.Logic.State;
+using GMap.NET;
+using GMap.NET.MapProviders;
+using GMap.NET.WindowsPresentation;
+using PoGo.Necrobot.Window.Controls.MapMarkers;
 using PoGo.Necrobot.Window.Model;
+using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Tasks;
+using POGOProtos.Map.Fort;
 
 namespace PoGo.Necrobot.Window.Controls
 {
@@ -38,9 +31,10 @@ namespace PoGo.Necrobot.Window.Controls
             InitMap();
             this.model = this.DataContext as MapViewModel;
         }
+
         GMapMarker routeMarker;
         GMapMarker selectedMarker;
-        List<PointLatLng>  track = new List<PointLatLng>();
+        List<PointLatLng> track = new List<PointLatLng>();
 
         public void SetDefaultPosition(double lat, double lng)
         {
@@ -51,26 +45,26 @@ namespace PoGo.Necrobot.Window.Controls
                 gmap.Position = new PointLatLng(lat, lng);
                 gmap.Zoom = 16;
             });
-
         }
+
         public void InitMap()
         {
-            gmap.MapProvider = GMap.NET.MapProviders.OpenStreetMapProvider.Instance;
-            GMap.NET.GMaps.Instance.Mode = GMap.NET.AccessMode.ServerAndCache;
+            gmap.MapProvider = OpenStreetMapProvider.Instance;
+            GMaps.Instance.Mode = AccessMode.ServerAndCache;
             //gmap.SetPositionByKeywords("Melbourne, 3000");
             gmap.Position = new PointLatLng(54.6961334816182, 25.2985095977783);
             gmap.Zoom = 16;
             var m = new GMapMarker(gmap.Position);
 
-             m.Shape = new CustomMarkerDemo(null, m, "xxx");
+            m.Shape = new CustomMarkerDemo(null, m, "xxx");
             //var x = new CustomMarkerDemo(null, m, "xxx");
             gmap.Markers.Add(m);
 
-            selectedMarker = new GMapMarker(new PointLatLng(0,0));
+            selectedMarker = new GMapMarker(new PointLatLng(0, 0));
             selectedMarker.Shape = new TargetMarker(null, selectedMarker, popSelect);
             gmap.Markers.Add(selectedMarker);
-
         }
+
         private ISession session;
         private List<FortData> forts;
 
@@ -81,6 +75,7 @@ namespace PoGo.Necrobot.Window.Controls
                 AddPokestopMarker(item);
             }
         }
+
         private GMapMarker playerMarker;
 
         internal void MarkFortAsLooted(string id)
@@ -88,17 +83,17 @@ namespace PoGo.Necrobot.Window.Controls
             var marker = allMarkers[id];
             marker.Shape = new ImageMarker(null, marker, "", "pokestop-used.png");
         }
+
         //var track = new List<PointLatLngpos
         public void UpdatePlayerPosition(double lat, double lng)
         {
-
-           if (playerMarker == null)
+            if (playerMarker == null)
             {
                 playerMarker = new GMapMarker(new PointLatLng(lat, lng));
                 playerMarker.ZIndex = 9999;
                 playerMarker.Shape = new PlayerMarker(null, playerMarker, $"");
                 this.gmap.Markers.Add(this.playerMarker);
-            };
+            }
 
             this.playerMarker.Position = new PointLatLng(lat, lng);
         }
@@ -122,13 +117,12 @@ namespace PoGo.Necrobot.Window.Controls
                     gmap.Markers.Add(m);
                 });
             }
-
         }
-        
+
         private void gmap_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            System.Windows.Point p = e.GetPosition(gmap);
-            var pos = gmap.FromLocalToLatLng((int)p.X, (int)p.Y);
+            Point p = e.GetPosition(gmap);
+            var pos = gmap.FromLocalToLatLng((int) p.X, (int) p.Y);
             model.CurrentLatitude = pos.Lat;
             model.CurrentLongitude = pos.Lng;
             var currentXY = this.gmap.FromLatLngToLocal(this.selectedMarker.Position);
@@ -148,7 +142,8 @@ namespace PoGo.Necrobot.Window.Controls
 
         private void btnWalkHere_Click(object sender, RoutedEventArgs e)
         {
-            Task.Run(async () => {
+            Task.Run(async () =>
+            {
                 await SetMoveToTargetTask.Execute(session, model.CurrentLatitude, model.CurrentLongitude);
             });
 
