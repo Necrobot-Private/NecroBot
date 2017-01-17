@@ -8,6 +8,7 @@ using PokemonGo.RocketAPI.Extensions;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using PoGo.NecroBot.Logic.Event.Player;
 
 #endregion
 
@@ -54,6 +55,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                     };
                 }
             });
+
+            session.EventDispatcher.Send(new TargetLocationEvent(lat, lng));
+           
         }
         public static async Task<bool> IsReachedDestination(FortData destination, ISession session, CancellationToken cancellationToken)
         {

@@ -37,6 +37,10 @@ namespace PoGo.NecroBot.CLI
             Logger.Write(noticeEvent.ToString());
         }
 
+        private static void HandleEvent(TargetLocationEvent ev, ISession session)
+        {
+            Logger.Write(session.Translation.GetTranslation(TranslationString.TargetLocationSet, ev.Latitude, ev.Longitude), LogLevel.Info);
+        }
         private static void HandleEvent(BuddyUpdateEvent ev, ISession session)
         {
             Logger.Write(session.Translation.GetTranslation(TranslationString.BuddyPokemonUpdate, ev.Pokemon.PokemonId.ToString()), LogLevel.Info);

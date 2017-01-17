@@ -23,6 +23,7 @@ namespace PoGo.Necrobot.Window.Model
         public ItemsListViewModel ItemsList { get; set; }
         public EggsListViewModel EggsList { get; set; }
 
+        public MapViewModel Map { get; set; }
         public List<PokemonData> Pokemons
         {
             get
@@ -41,6 +42,8 @@ namespace PoGo.Necrobot.Window.Model
         public DataContext()
         {
             UI = new UIViewModel();
+            Map = new MapViewModel();
+
             MaxItemStogare = 350;
             ItemsList = new ItemsListViewModel();
             Sidebar = new SidebarViewModel();

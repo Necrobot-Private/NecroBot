@@ -528,7 +528,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
                 catch (APIBadRequestException)
                 {
-                    Logger.Write(string.Format("SHIT, Heal problem with max potions ({0}) on pokemon: {1}", maxPotions, pokemon), LogLevel.Error, ConsoleColor.Magenta);
+                    Logger.Write(string.Format("Heal problem with max potions ({0}) on pokemon: {1}", maxPotions, pokemon), LogLevel.Error, ConsoleColor.Magenta);
                 }
             }
 
@@ -611,7 +611,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     }
                     catch (APIBadRequestException)
                     {
-                        Logger.Write("Shit!!!! Bad attack gym", LogLevel.Warning);
+                        Logger.Write("Bad attack gym", LogLevel.Warning);
 #if DEBUG
                         Logger.Write("Last retrieved action was: " + a2, LogLevel.Error, ConsoleColor.Magenta);
                         Logger.Write("Actions to perform were: " + string.Join(", ", a1), LogLevel.Error, ConsoleColor.Magenta);
@@ -679,8 +679,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
                 catch (APIBadRequestException e)
                 {
-                    Logger.Write("Shit!!!! Bad request send to server -", LogLevel.Warning);
 #if DEBUG
+
+                    Logger.Write("Bad request send to server -", LogLevel.Warning);
+
                     Logger.Write(e.Message, LogLevel.Error, ConsoleColor.Magenta);
                     Logger.Write(e.StackTrace, LogLevel.Error, ConsoleColor.Magenta);
 #endif
