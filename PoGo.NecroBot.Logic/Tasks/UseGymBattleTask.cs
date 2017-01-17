@@ -292,8 +292,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                                     }
                                     catch (APIBadRequestException e)
                                     {
-                                        Logger.Write("Can't get coins", LogLevel.Warning);
 #if DEBUG
+                                        Logger.Write("Can't get coins", LogLevel.Warning);
+
                                         Debug.Write(e.Message, "GYM");
                                         Debug.Write(e.StackTrace, "GYM");
 #endif

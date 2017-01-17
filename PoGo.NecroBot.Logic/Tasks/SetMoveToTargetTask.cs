@@ -70,7 +70,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         }
         public static async Task<bool> IsReachedDestination(FortData destination, ISession session, CancellationToken cancellationToken)
         {
-            if (destination.Id == _targetStop.Id ) 
+            if (_targetStop!= null && destination.Id == _targetStop.Id ) 
             {
                 _targetStop = null;
                 queue.Dequeue();
