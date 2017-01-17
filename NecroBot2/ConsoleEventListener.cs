@@ -16,7 +16,7 @@ using PoGo.NecroBot.Logic.Event.Player;
 using NecroBot2.Forms;
 #endregion
 
-namespace PoGo.NecroBot.CLI
+namespace NecroBot2
 {
     [SuppressMessage("ReSharper", "UnusedParameter.Local")]
     internal class ConsoleEventListener
