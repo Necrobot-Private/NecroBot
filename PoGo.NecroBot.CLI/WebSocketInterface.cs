@@ -36,7 +36,7 @@ namespace PoGo.NecroBot.CLI
             {
                 Name = "NecroWebSocket",
                 Mode = SocketMode.Tcp,
-                MaxRequestLength = int.MaxValue ,
+                MaxRequestLength = int.MaxValue,
                 Certificate = new CertificateConfig
                 {
                     FilePath = @"cert.pfx",
@@ -90,12 +90,12 @@ namespace PoGo.NecroBot.CLI
 
         private void HandleEvent(PokeStopListEvent evt)
         {
-            if(_lastPokeStopList != null)
+            if (_lastPokeStopList != null)
             {
                 _lastPokeStopList.Forts.AddRange(evt.Forts);
             }
             else
-            _lastPokeStopList = evt;
+                _lastPokeStopList = evt;
         }
 
         private void HandleEvent(ProfileEvent evt)
