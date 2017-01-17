@@ -1,4 +1,4 @@
-﻿﻿#region using directives
+﻿#region using directives
 
 using System;
 using System.Collections.Generic;
@@ -118,10 +118,11 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
         }
 
-        private static async Task WalkingToPokeStop(ISession session, CancellationToken cancellationToken, FortData pokeStop, FortDetailsResponse fortInfo)
+        private static async Task WalkingToPokeStop(ISession session, CancellationToken cancellationToken,
+            FortData pokeStop, FortDetailsResponse fortInfo)
         {
             var distance = LocationUtils.CalculateDistanceInMeters(session.Client.CurrentLatitude,
-                    session.Client.CurrentLongitude, pokeStop.Latitude, pokeStop.Longitude);
+                session.Client.CurrentLongitude, pokeStop.Latitude, pokeStop.Longitude);
 
             // we only move to the PokeStop, and send the associated FortTargetEvent, when not using GPX
             // also, GPX pathing uses its own EggWalker and calls the CatchPokemon tasks internally.
@@ -137,13 +138,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                     LocationUtils.getElevation(session.ElevationService, pokeStop.Latitude, pokeStop.Longitude), pokeStop, fortInfo);
 
                 await session.Navigation.Move(pokeStopDestination,
-                 async () =>
-                 {
-
-                     await OnWalkingToPokeStopOrGym(session, pokeStop, cancellationToken);
-                 },
-                             session,
-                             cancellationToken);
+                    async () => { await OnWalkingToPokeStopOrGym(session, pokeStop, cancellationToken); },
+                    session,
+                    cancellationToken);
 
                 // we have moved this distance, so apply it immediately to the egg walker.
                 await eggWalker.ApplyDistance(distance, cancellationToken);

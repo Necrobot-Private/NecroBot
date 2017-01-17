@@ -1,4 +1,4 @@
-﻿﻿#region using directives
+﻿#region using directives
 
 using System;
 using System.Collections.Generic;
@@ -51,7 +51,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Longitude = lng,
                         Id = TARGET_ID + DateTime.Now.Ticks.ToString(),
                         Type = FortType.Checkpoint,
-                        CooldownCompleteTimestampMs = DateTime.UtcNow.AddHours(1).ToUnixTime()  //make sure bot not try to spin this fake pokestop
+                        //make sure bot not try to spin this fake pokestop
+                        CooldownCompleteTimestampMs = DateTime.UtcNow.AddHours(1).ToUnixTime()
                     };
                 }
                 queue.Enqueue(_targetStop);

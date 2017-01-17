@@ -1,4 +1,4 @@
-﻿﻿﻿#region using directives
+﻿#region using directives
 
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -43,4 +43,3 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("1.0.0.64")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 [assembly: AssemblyInformationalVersion("v1.0.0.64")]
-
