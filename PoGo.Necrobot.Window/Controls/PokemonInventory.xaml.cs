@@ -1,24 +1,14 @@
-﻿using Microsoft.Win32;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using Microsoft.Win32;
 using PoGo.Necrobot.Window.Model;
 using PoGo.NecroBot.Logic.DataDumper;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Tasks;
-using POGOProtos.Data;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace PoGo.Necrobot.Window.Controls
 {
@@ -66,7 +56,7 @@ namespace PoGo.Necrobot.Window.Controls
         {
             var model = this.DataContext as PokemonListModel;
 
-            ulong pokemonId = (ulong)((Button)sender).CommandParameter;
+            ulong pokemonId = (ulong) ((Button) sender).CommandParameter;
             model.Transfer(pokemonId);
             var button = sender as Button;
             //button.Content = "Transfering...";
@@ -74,10 +64,10 @@ namespace PoGo.Necrobot.Window.Controls
 
             Task.Run(async () =>
             {
-                await TransferPokemonTask.Execute(Session, Session.CancellationTokenSource.Token, new List<ulong> { pokemonId });
-
+                await TransferPokemonTask.Execute(
+                    Session, Session.CancellationTokenSource.Token, new List<ulong> {pokemonId}
+                );
             });
-
         }
 
         private void btnTransferAll_Click(object sender, RoutedEventArgs e)
@@ -92,8 +82,9 @@ namespace PoGo.Necrobot.Window.Controls
             {
                 Task.Run(async () =>
                 {
-                    await TransferPokemonTask.Execute(Session, Session.CancellationTokenSource.Token, pokemonToTransfer);
-
+                    await TransferPokemonTask.Execute(
+                        Session, Session.CancellationTokenSource.Token, pokemonToTransfer
+                    );
                 });
             }
         }
@@ -102,33 +93,25 @@ namespace PoGo.Necrobot.Window.Controls
         {
             var model = this.DataContext as PokemonListModel;
 
-            ulong pokemonId = (ulong)((Button)sender).CommandParameter;
+            ulong pokemonId = (ulong) ((Button) sender).CommandParameter;
             model.Evolve(pokemonId);
 
-            Task.Run(async () =>
-            {
-                await EvolveSpecificPokemonTask.Execute(Session, pokemonId);
-
-            });
+            Task.Run(async () => { await EvolveSpecificPokemonTask.Execute(Session, pokemonId); });
         }
 
         private void btnFavorit_Click(object sender, RoutedEventArgs e)
         {
             var model = this.DataContext as PokemonListModel;
 
-            ulong pokemonId = (ulong)((Button)sender).CommandParameter;
+            ulong pokemonId = (ulong) ((Button) sender).CommandParameter;
             bool state = model.Favorite(pokemonId);
 
-            Task.Run(async () =>
-            {
-                await FavoritePokemonTask.Execute(Session, pokemonId, state);
-
-            });
+            Task.Run(async () => { await FavoritePokemonTask.Execute(Session, pokemonId, state); });
         }
 
         private void Select_Checked(object sender, RoutedEventArgs e)
         {
-            ulong pokemonId = (ulong)((CheckBox)sender).CommandParameter;
+            ulong pokemonId = (ulong) ((CheckBox) sender).CommandParameter;
 
             var data = DataContext as PokemonListModel;
             var count = data.Pokemons.Count(x => x.IsSelected);
@@ -140,27 +123,24 @@ namespace PoGo.Necrobot.Window.Controls
             }
 
             OnPokemonItemSelected?.Invoke(null);
-
-
         }
 
         private void btnPowerup_Click(object sender, RoutedEventArgs e)
         {
             var model = this.DataContext as PokemonListModel;
 
-            ulong pokemonId = (ulong)((Button)sender).CommandParameter;
+            ulong pokemonId = (ulong) ((Button) sender).CommandParameter;
             model.Powerup(pokemonId);
 
-            Task.Run(async () =>
-            {
-                await UpgradeSinglePokemonTask.Execute(Session, pokemonId, false);
-            });
+            Task.Run(async () => { await UpgradeSinglePokemonTask.Execute(Session, pokemonId, false); });
         }
+
         private void btnPokedexView_Click(object sender, RoutedEventArgs e)
-        {                                
+        {
             PokedexWindow dexWindow = new PokedexWindow(this.Session);
             dexWindow.Show();
         }
+
         private void btnExport_Click(object sender, RoutedEventArgs e)
         {
             var dlg = new SaveFileDialog()
@@ -170,10 +150,7 @@ namespace PoGo.Necrobot.Window.Controls
 
             if (dlg.ShowDialog() == true)
             {
-                Dumper.SaveAsExcel(this.Session, dlg.FileName).ContinueWith((t) =>
-                {
-                    Process.Start(dlg.FileName);
-                });
+                Dumper.SaveAsExcel(this.Session, dlg.FileName).ContinueWith((t) => { Process.Start(dlg.FileName); });
             }
         }
 
@@ -181,35 +158,36 @@ namespace PoGo.Necrobot.Window.Controls
         {
             var model = this.DataContext as PokemonListModel;
 
-            ulong pokemonId = (ulong)((Button)sender).CommandParameter;
+            ulong pokemonId = (ulong) ((Button) sender).CommandParameter;
             model.Powerup(pokemonId);
 
-            Task.Run(async () =>
-            {
-                await UpgradeSinglePokemonTask.Execute(Session, pokemonId, true);
-            });
+            Task.Run(async () => { await UpgradeSinglePokemonTask.Execute(Session, pokemonId, true); });
         }
 
         private void mnuBuddy_Click(object sender, RoutedEventArgs e)
         {
             //Get the clicked MenuItem
-            var menuItem = (MenuItem)sender;
+            var menuItem = (MenuItem) sender;
 
             //Get the ContextMenu to which the menuItem belongs
-            var contextMenu = (ContextMenu)menuItem.Parent;
+            var contextMenu = (ContextMenu) menuItem.Parent;
 
             //Find the placementTarget
-            var item = (DataGrid)contextMenu.PlacementTarget;
+            var item = (DataGrid) contextMenu.PlacementTarget;
 
             //Get the underlying item, that you cast to your object that is bound
             //to the DataGrid (and has subject and state as property)
-            var buddySelect = (PokemonDataViewModel)item.SelectedCells[0].Item;
+            var buddySelect = (PokemonDataViewModel) item.SelectedCells[0].Item;
 
             Task.Run(async () =>
             {
-                await SelectBuddyPokemonTask.Execute(this.Session, this.Session.CancellationTokenSource.Token, buddySelect.Id);
+                await SelectBuddyPokemonTask.Execute(
+                    this.Session,
+                    this.Session.CancellationTokenSource.Token,
+                    buddySelect.Id);
             });
         }
+
         //ICommand transferPokemonCommand;
         //public ICommand TransferPokemonCommand
         //{
@@ -222,6 +200,5 @@ namespace PoGo.Necrobot.Window.Controls
         //        return transferPokemonCommand;
         //    }
         //}
-
     }
 }

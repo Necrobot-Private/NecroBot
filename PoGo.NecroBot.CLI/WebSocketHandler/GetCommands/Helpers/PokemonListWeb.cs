@@ -2,7 +2,6 @@
 
 using System.Collections.Generic;
 using PoGo.NecroBot.Logic.PoGoUtils;
-using PoGo.NecroBot.Logic.Service;
 using POGOProtos.Data;
 using POGOProtos.Inventory;
 using POGOProtos.Settings.Master;
@@ -15,7 +14,7 @@ namespace PoGo.NecroBot.CLI.WebSocketHandler.GetCommands.Helpers
     {
         public PokemonData Base;
         private readonly List<Candy> _families;
-        private readonly IEnumerable<PokemonSettings> _settings; 
+        private readonly IEnumerable<PokemonSettings> _settings;
 
         public PokemonListWeb(PokemonData data, List<Candy> family, IEnumerable<PokemonSettings> settings)
         {
