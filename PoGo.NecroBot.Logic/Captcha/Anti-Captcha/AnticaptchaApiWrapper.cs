@@ -63,7 +63,7 @@ namespace PoGo.NecroBot.Logic.Captcha.Anti_Captcha
                 null,
                 userAgent,
                 websiteSToken
-                );
+            );
         }
 
         public static AnticaptchaTask CreateNoCaptchaTask(string host, string clientKey, string websiteUrl,
@@ -83,7 +83,7 @@ namespace PoGo.NecroBot.Logic.Captcha.Anti_Captcha
                 proxyPassword,
                 userAgent,
                 websiteSToken
-                );
+            );
         }
 
         private static AnticaptchaTask CreateNoCaptchaTask(
@@ -99,7 +99,7 @@ namespace PoGo.NecroBot.Logic.Captcha.Anti_Captcha
             string proxyPassword,
             string userAgent,
             string websiteSToken = ""
-            )
+        )
         {
             if (proxyType != null && (string.IsNullOrEmpty(proxyAddress) || !CheckHost(proxyAddress)))
             {
@@ -198,7 +198,7 @@ namespace PoGo.NecroBot.Logic.Captcha.Anti_Captcha
                     errorId,
                     errorCode,
                     errorDescription
-                    );
+                );
             }
             catch
             {
@@ -306,7 +306,7 @@ namespace PoGo.NecroBot.Logic.Captcha.Anti_Captcha
                     host,
                     "createTask",
                     JsonConvert.SerializeObject(jObj, Formatting.Indented)
-                    );
+                );
 
                 int? taskId = null;
                 int? errorId = null;
@@ -354,7 +354,7 @@ namespace PoGo.NecroBot.Logic.Captcha.Anti_Captcha
                     errorId,
                     errorCode,
                     errorDescription
-                    );
+                );
             }
             catch
             {
@@ -498,7 +498,7 @@ namespace PoGo.NecroBot.Logic.Captcha.Anti_Captcha
                     createTime,
                     endTime,
                     solveCount
-                    );
+                );
             }
             catch
             {

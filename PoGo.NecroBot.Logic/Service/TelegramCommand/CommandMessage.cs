@@ -31,8 +31,8 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
                 }
                 catch (Exception ex)
                 {
-                    session.EventDispatcher.Send(new ErrorEvent { Message = ex.Message });
-                    session.EventDispatcher.Send(new ErrorEvent { Message = "Unkown Telegram Error occured. " });
+                    session.EventDispatcher.Send(new ErrorEvent {Message = ex.Message});
+                    session.EventDispatcher.Send(new ErrorEvent {Message = "Unkown Telegram Error occured. "});
                 }
             };
 

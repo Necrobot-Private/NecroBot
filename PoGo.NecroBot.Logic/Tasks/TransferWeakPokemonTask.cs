@@ -45,13 +45,13 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (session.LogicSettings.KeepPokemonsThatCanEvolve)
                 pokemonsFiltered =
                     pokemonDatas.Where(pokemon => !session.LogicSettings.PokemonsToEvolve.Contains(pokemon.PokemonId) &&
-                    pokemon.Favorite ==0 && 
+                    pokemon.Favorite ==0 &&
                     pokemon.BuddyTotalKmWalked ==0)
                         .ToList().OrderBy( poke => poke.Cp );
 
-            var orderedPokemon = pokemonsFiltered.OrderBy( poke => poke.Cp );
+            var orderedPokemon = pokemonsFiltered.OrderBy(poke => poke.Cp);
             var pokemonToTransfers = new List<PokemonData>();
-            foreach (var pokemon in orderedPokemon )
+            foreach (var pokemon in orderedPokemon)
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 if ((pokemon.Cp >= session.LogicSettings.KeepMinCp) ||
@@ -65,7 +65,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     pokemonToTransfers.Add(pokemon);
                 }
-                else {
+                else
+                {
                     await session.Client.Inventory.TransferPokemon(pokemon.Id);
                     await session.Inventory.DeletePokemonFromInvById(pokemon.Id);
                     await PrintTransferedPokemonInfo(session, pokemon);
@@ -73,7 +74,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     await DelayingUtils.DelayAsync(session.LogicSettings.TransferActionDelay, 0, cancellationToken);
                 }
             }
-            if (session.LogicSettings.UseBulkTransferPokemon && pokemonToTransfers.Count >0)
+            if (session.LogicSettings.UseBulkTransferPokemon && pokemonToTransfers.Count > 0)
             {
                 int page = orderedPokemon.Count() / session.LogicSettings.BulkTransferSize + 1;
                 for (int i = 0; i < page; i++)
@@ -96,8 +97,8 @@ namespace PoGo.NecroBot.Logic.Tasks
         private static async Task PrintTransferedPokemonInfo(ISession session, PokemonData pokemon)
         {
             var bestPokemonOfType = (session.LogicSettings.PrioritizeIvOverCp
-                                    ? await session.Inventory.GetHighestPokemonOfTypeByIv(pokemon)
-                                    : await session.Inventory.GetHighestPokemonOfTypeByCp(pokemon)) ?? pokemon;
+                                        ? await session.Inventory.GetHighestPokemonOfTypeByIv(pokemon)
+                                        : await session.Inventory.GetHighestPokemonOfTypeByCp(pokemon)) ?? pokemon;
 
             var setting = session.Inventory.GetPokemonSettings()
                 .Result.Single(q => q.PokemonId == pokemon.PokemonId);

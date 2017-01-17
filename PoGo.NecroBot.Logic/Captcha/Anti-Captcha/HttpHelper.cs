@@ -12,7 +12,7 @@ namespace PoGo.NecroBot.Logic.Captcha.Anti_Captcha
         {
             dynamic result = null;
             var postBody = Encoding.UTF8.GetBytes(post);
-            var request = (HttpWebRequest)WebRequest.Create(url);
+            var request = (HttpWebRequest) WebRequest.Create(url);
 
             request.Method = "POST";
             request.ContentType = "application/json";
@@ -26,7 +26,7 @@ namespace PoGo.NecroBot.Logic.Captcha.Anti_Captcha
                     stream.Close();
                 }
 
-                using (var response = (HttpWebResponse)request.GetResponse())
+                using (var response = (HttpWebResponse) request.GetResponse())
                 {
                     var strreader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
                     result = JsonConvert.DeserializeObject(strreader.ReadToEnd());

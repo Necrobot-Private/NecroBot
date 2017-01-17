@@ -20,17 +20,22 @@ namespace PoGo.NecroBot.Logic.Captcha
         public string APISecret { get; set; }
 
         public int Timeout { get; set; }
+
         public CaptchaSolutionClient(string key, string secret, int timeout = 120)
         {
             this.APIKey = key;
             this.APISecret = secret;
-            this.Timeout = timeout; 
+            this.Timeout = timeout;
         }
+
         public async Task<string> ResolveCaptcha(string googleSiteKey, string captchaUrl)
         {
-            if(string.IsNullOrEmpty(APIKey) || string.IsNullOrEmpty(APISecret))
+            if (string.IsNullOrEmpty(APIKey) || string.IsNullOrEmpty(APISecret))
             {
-                Logger.Write($"(CAPTCHA) - CaptchaSolutions API key or API Secret  not setup properly.", LogLevel.Error);
+                Logger.Write(
+                    $"(CAPTCHA) - CaptchaSolutions API key or API Secret  not setup properly.",
+                    LogLevel.Error
+                );
 
                 return string.Empty;
             }
@@ -50,13 +55,15 @@ namespace PoGo.NecroBot.Logic.Captcha
                     var responseContent = await client.GetAsync(url);
                     if (responseContent.StatusCode != HttpStatusCode.OK)
                     {
-                        Logger.Write($"(CAPTCHA) - Could not connect to solution captcha, please check your API config", LogLevel.Error);
+                        Logger.Write(
+                            $"(CAPTCHA) - Could not connect to solution captcha, please check your API config",
+                            LogLevel.Error
+                        );
                         return string.Empty;
                     }
                     var responseJSON = await responseContent.Content.ReadAsStringAsync();
                     var response = JsonConvert.DeserializeObject<APIObjectResponse>(responseJSON);
                     return response.captchasolutions;
-
                 }
                 catch (Exception)
                 {

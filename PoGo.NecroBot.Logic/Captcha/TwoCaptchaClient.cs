@@ -9,6 +9,7 @@ namespace PoGo.NecroBot.Logic.Captcha
     public class TwoCaptchaClient
     {
         public string APIKey { get; private set; }
+
         public TwoCaptchaClient(string apiKey)
         {
             APIKey = apiKey;
@@ -82,30 +83,27 @@ namespace PoGo.NecroBot.Logic.Captcha
                                         {
                                             return answerResponse.Remove(0, 3);
                                         }
-                                        else if (answerResponse != "CAPCHA_NOT_READY") 
+                                        else if (answerResponse != "CAPCHA_NOT_READY")
                                         {
                                             return string.Empty;
                                         }
                                     }
                                     Logger.Write($"Waiting response captcha from 2Captcha workers...");
-
                                 }
 
                                 await Task.Delay(3000);
                             }
                             return string.Empty;
                         }
-
                     }
                 }
             }
-            catch(Exception ex) {
+            catch (Exception ex)
+            {
                 Logger.Write($"2Captcha Error :  {ex.Message}");
             }
             return string.Empty;
         }
-
-       
     }
 
     public enum ProxyType

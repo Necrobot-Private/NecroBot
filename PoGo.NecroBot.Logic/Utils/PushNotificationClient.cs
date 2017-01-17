@@ -31,6 +31,7 @@ namespace PoGo.NecroBot.Logic.Utils
             fileContent.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
             return fileContent;
         }
+
         private static StringContent addContent(string name, string content)
         {
             var fileContent = new StringContent(content);
@@ -98,10 +99,13 @@ namespace PoGo.NecroBot.Logic.Utils
             }
             catch (Exception)
             {
-                session.EventDispatcher.Send(new WarnEvent() { Message = session.Translation.GetTranslation(TranslationString.FailedSendNotification) });
+                session.EventDispatcher.Send(new WarnEvent()
+                {
+                    Message = session.Translation.GetTranslation(TranslationString.FailedSendNotification)
+                });
             }
-           
         }
+
         public static async Task<bool> SendPushNotificationV2(string apiKey, string title, string body)
         {
             bool isSusccess = false;

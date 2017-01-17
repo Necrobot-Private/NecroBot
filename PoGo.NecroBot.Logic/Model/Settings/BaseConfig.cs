@@ -5,7 +5,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 {
     public class BaseConfig
     {
-        public BaseConfig   ()
+        public BaseConfig()
         {
             PropertyInfo[] props = this.GetType().GetProperties();
             foreach (PropertyInfo prop in props)

@@ -31,7 +31,7 @@ namespace PoGo.NecroBot.Logic.Service
             {
                 session.EventDispatcher.Send(new WarnEvent { Message = String.Format("Could not send location to 'Telegram', because given Chat id was '{0}'", 0) });
             }
-            await bot.SendLocationAsync(chatId, (float)geo.Latitude, (float)geo.Longitude);
+            await bot.SendLocationAsync(chatId, (float) geo.Latitude, (float) geo.Longitude);
         }
 
         public async Task SendMessage(string message, Message telegramMessage)

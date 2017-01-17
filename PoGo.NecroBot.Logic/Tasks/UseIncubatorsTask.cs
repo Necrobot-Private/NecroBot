@@ -20,7 +20,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 {
     public class UseIncubatorsTask
     {
-        public static async Task Execute(ISession session, CancellationToken cancellationToken, ulong eggId, string incubatorId)
+        public static async Task Execute(ISession session, CancellationToken cancellationToken,
+            ulong eggId, string incubatorId)
         {
             var incubators = (await session.Inventory.GetEggIncubators())
                 .Where(x => x.UsesRemaining > 0 || x.ItemId == ItemId.ItemIncubatorBasicUnlimited)
@@ -58,7 +59,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 //error output
             }
         }
-        
+
         public static async Task Execute(ISession session, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -68,7 +69,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             //TODO - Need more test to make sure not break anything.
             //await session.Inventory.RefreshCachedInventory();
 
-            try {
+            try
+            {
                 var playerStats = (await session.Inventory.GetPlayerStats()).FirstOrDefault();
                 if (playerStats == null)
                     return;
@@ -164,9 +166,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                 if (!newRememberedIncubators.SequenceEqual(rememberedIncubators))
                     SaveRememberedIncubators(newRememberedIncubators, rememberedIncubatorsFilePath);
             }
-            catch(Exception)
+            catch (Exception)
             {
-
             }
         }
 

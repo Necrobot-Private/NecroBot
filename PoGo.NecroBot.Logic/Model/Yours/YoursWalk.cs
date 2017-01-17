@@ -47,7 +47,7 @@ namespace PoGo.NecroBot.Logic.Model.Yours
                 Waypoints.Add(new GeoCoordinate(coordinate.ToArray()[1], coordinate.ToArray()[0]));
             }
         }
-        
+
         public static YoursWalk Get(string yoursResponse)
         {
             return new YoursWalk(yoursResponse);

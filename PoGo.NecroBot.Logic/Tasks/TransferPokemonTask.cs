@@ -44,8 +44,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     await session.Inventory.DeletePokemonFromInvById(pokemon.Id);
                     var bestPokemonOfType = (session.LogicSettings.PrioritizeIvOverCp
-                  ? await session.Inventory.GetHighestPokemonOfTypeByIv(pokemon)
-                  : await session.Inventory.GetHighestPokemonOfTypeByCp(pokemon)) ?? pokemon;
+                                                ? await session.Inventory.GetHighestPokemonOfTypeByIv(pokemon)
+                                                : await session.Inventory.GetHighestPokemonOfTypeByCp(pokemon)) ??
+                                            pokemon;
 
                     var setting = pokemonSettings.Single(q => q.PokemonId == pokemon.PokemonId);
                     var family = pokemonFamilies.First(q => q.FamilyId == setting.FamilyId);
@@ -61,7 +62,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Cp = pokemon.Cp,
                         BestCp = bestPokemonOfType.Cp,
                         BestPerfection = PokemonInfo.CalculatePokemonPerfection(bestPokemonOfType),
-                        FamilyCandies = family.Candy_  ,
+                        FamilyCandies = family.Candy_,
                         FamilyId = family.FamilyId
                     });
                 }

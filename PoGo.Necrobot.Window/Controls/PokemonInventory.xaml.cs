@@ -1,4 +1,4 @@
-﻿using Microsoft.Win32;
+﻿﻿using Microsoft.Win32;
 using PoGo.Necrobot.Window.Model;
 using PoGo.NecroBot.Logic.DataDumper;
 using PoGo.NecroBot.Logic.State;

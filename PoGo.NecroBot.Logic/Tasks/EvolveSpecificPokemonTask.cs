@@ -15,7 +15,6 @@ namespace PoGo.NecroBot.Logic.Tasks
     {
         public static async Task Execute(ISession session, ulong pokemonId)
         {
-
             using (var blocker = new BlockableScope(session, BotActions.Envolve))
             {
                 if (!await blocker.WaitToRun()) return;
@@ -30,8 +29,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 var pokemonSettings = await session.Inventory.GetPokemonSettings();
                 var pokemonFamilies = await session.Inventory.GetPokemonFamilies();
 
-                var setting =
-              pokemonSettings.FirstOrDefault(q => pokemon != null && q.PokemonId == pokemon.PokemonId);
+                var setting = pokemonSettings.FirstOrDefault(q => pokemon != null && q.PokemonId == pokemon.PokemonId);
                 var family = pokemonFamilies.FirstOrDefault(q => setting != null && q.FamilyId == setting.FamilyId);
 
                 if (setting.CandyToEvolve > family.Candy_) return;
@@ -46,7 +44,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     Exp = evolveResponse.ExperienceAwarded,
                     UniqueId = pokemon.Id,
                     Result = evolveResponse.Result,
-                    EvolvedPokemon = evolveResponse.EvolvedPokemonData  ,
+                    EvolvedPokemon = evolveResponse.EvolvedPokemonData,
                     PokemonSetting = setting,
                     Family = family
                 });

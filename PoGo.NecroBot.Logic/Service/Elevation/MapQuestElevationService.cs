@@ -60,7 +60,7 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
                         responseFromServer = responseFromServer.Replace("handleHelloWorldResponse(", "");
                         responseFromServer = responseFromServer.Replace("]}});", "]}}");
                         MapQuestResponse mapQuestResponse = JsonConvert.DeserializeObject<MapQuestResponse>(responseFromServer);
-                        if (mapQuestResponse.elevationProfile != null && 
+                        if (mapQuestResponse.elevationProfile != null &&
                             mapQuestResponse.elevationProfile.Count > 0 &&
                             mapQuestResponse.elevationProfile[0].height > -100)
                         {
@@ -71,11 +71,11 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
                     }
                 }
             }
-            catch(ActiveSwitchByRuleException ex)
+            catch (ActiveSwitchByRuleException ex)
             {
                 throw ex;
             }
-            catch(Exception)
+            catch (Exception)
             {
                 // If we get here for any reason, then just drop down and return 0.
             }

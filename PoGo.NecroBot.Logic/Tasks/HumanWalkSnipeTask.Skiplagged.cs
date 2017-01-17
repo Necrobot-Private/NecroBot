@@ -19,10 +19,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         public DateTime expires_date
         {
-            get
-            {
-                return UnixTimeStampToDateTime(expires);
-            }
+            get { return UnixTimeStampToDateTime(expires); }
         }
 
         public double expires { get; set; }
@@ -36,6 +33,7 @@ namespace PoGo.NecroBot.Logic.Tasks
     {
         public double duration { get; set; }
         public List<SkiplaggedItem> pokemons { get; set; }
+
         public SkiplaggedWrap()
         {
             pokemons = new List<SkiplaggedItem>();
@@ -75,7 +73,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 Logger.Write("Error loading data from skiplagged", LogLevel.Error, ConsoleColor.DarkRed);
             }
-            
+
             //var endFetchTime = DateTime.Now;
             //Logger.Write($"FetchFromSkiplagged spend {(endFetchTime - startFetchTime).TotalSeconds} seconds", LogLevel.Sniper, ConsoleColor.White);
             return results;
@@ -103,11 +101,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                 Latitude = result.latitude,
                 Longitude = result.longitude,
                 Id = result.pokemon_id,
-                ExpiredTime = UnixTimeStampToDateTime(result.expires) ,
+                ExpiredTime = UnixTimeStampToDateTime(result.expires),
                 Source = "Skiplagged"
-        };
+            };
         }
-
     }
-
 }

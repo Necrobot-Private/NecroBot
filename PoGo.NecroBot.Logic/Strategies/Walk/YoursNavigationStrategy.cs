@@ -22,7 +22,9 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
 
         public override string RouteName => "Yours Walk";
 
-        public override async Task<PlayerUpdateResponse> Walk(IGeoLocation targetLocation, Func<Task> functionExecutedWhileWalking, ISession session, CancellationToken cancellationToken, double walkSpeed = 0.0)
+        public override async Task<PlayerUpdateResponse> Walk(IGeoLocation targetLocation,
+            Func<Task> functionExecutedWhileWalking, ISession session, CancellationToken cancellationToken,
+            double walkSpeed = 0.0)
         {
             GetYoursInstance(session);
             var destinaionCoordinate = new GeoCoordinate(targetLocation.Latitude, targetLocation.Longitude);
@@ -45,7 +47,8 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
                 _yoursDirectionsService = new YoursDirectionsService(session);
         }
 
-        public override double CalculateDistance(double sourceLat, double sourceLng, double destinationLat, double destinationLng, ISession session = null)
+        public override double CalculateDistance(double sourceLat, double sourceLng, double destinationLat,
+            double destinationLng, ISession session = null)
         {
             // Too expensive to calculate true distance.
             return 1.5 * base.CalculateDistance(sourceLat, sourceLng, destinationLat, destinationLng);

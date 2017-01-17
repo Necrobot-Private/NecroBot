@@ -31,14 +31,16 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 var perfection = Math.Round(PokemonInfo.CalculatePokemonPerfection(pokemon));
 
-                if (session.LogicSettings.AutoFavoritePokemon && perfection >= session.LogicSettings.FavoriteMinIvPercentage && pokemon.Favorite!=1)
+                if (session.LogicSettings.AutoFavoritePokemon &&
+                    perfection >= session.LogicSettings.FavoriteMinIvPercentage && pokemon.Favorite != 1)
                 {
                     await session.Client.Inventory.SetFavoritePokemon(pokemon.Id, true);
                     await session.Inventory.MarkAsFavorite(pokemon);
                     session.EventDispatcher.Send(new NoticeEvent
                     {
                         Message =
-                            session.Translation.GetTranslation(TranslationString.PokemonFavorite, perfection, session.Translation.GetPokemonTranslation(pokemon.PokemonId), pokemon.Cp)
+                            session.Translation.GetTranslation(TranslationString.PokemonFavorite, perfection,
+                                session.Translation.GetPokemonTranslation(pokemon.PokemonId), pokemon.Cp)
                     });
                 }
             }
@@ -62,11 +64,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                         await session.Inventory.MarkAsFavorite(pokemon);
                         session.EventDispatcher.Send(new FavoriteEvent(pokemon, response));
                     }
-                
 
-                session.EventDispatcher.Send(new NoticeEvent
+
+                    session.EventDispatcher.Send(new NoticeEvent
                     {
-                        Message = session.Translation.GetTranslation(TranslationString.PokemonFavorite, perfection, session.Translation.GetPokemonTranslation(pokemon.PokemonId), pokemon.Cp)
+                        Message = session.Translation.GetTranslation(TranslationString.PokemonFavorite, perfection,
+                            session.Translation.GetPokemonTranslation(pokemon.PokemonId), pokemon.Cp)
                     });
                 }
             }

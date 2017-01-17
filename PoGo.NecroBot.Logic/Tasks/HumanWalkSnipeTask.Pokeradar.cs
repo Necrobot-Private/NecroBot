@@ -19,6 +19,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 public double longitude { get; set; }
                 public int pokemonId { get; set; }
             }
+
             //should refactore this model - SnipeInfo
             public List<PokeradarItem> data { get; set; }
         }

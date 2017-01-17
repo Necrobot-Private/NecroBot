@@ -67,11 +67,17 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
             if (elevation == 0 || elevation < -100)
             {
                 // Error getting elevation so just return 0.
-                Logger.Write($"{service.GetServiceId()} response not reliable: {elevation.ToString()}, and will be blacklisted for one hour.", LogLevel.Warning);
+                Logger.Write(
+                    $"{service.GetServiceId()} response not reliable: {elevation.ToString()}, and will be blacklisted for one hour.",
+                    LogLevel.Warning
+                );
                 BlacklistStrategy(service.GetType());
 
-                Logger.Write($"Falling back to next elevation strategy: {GetService().GetServiceId()}.", LogLevel.Warning);
-                
+                Logger.Write(
+                    $"Falling back to next elevation strategy: {GetService().GetServiceId()}.",
+                    LogLevel.Warning
+                );
+
                 // After blacklisting, retry.
                 return GetElevation(lat, lng);
             }

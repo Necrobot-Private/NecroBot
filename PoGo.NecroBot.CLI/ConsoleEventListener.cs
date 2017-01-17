@@ -44,8 +44,14 @@ namespace PoGo.NecroBot.CLI
         }
         private static void HandleEvent(BuddyUpdateEvent ev, ISession session)
         {
-            Logger.Write(session.Translation.GetTranslation(TranslationString.BuddyPokemonUpdate, ev.Pokemon.PokemonId.ToString()), LogLevel.Info);
+            Logger.Write(
+                session.Translation.GetTranslation(
+                    TranslationString.BuddyPokemonUpdate, ev.Pokemon.PokemonId.ToString()
+                ),
+                LogLevel.Info
+            );
         }
+
         private static void HandleEvent(WarnEvent warnEvent, ISession session)
         {
             Logger.Write(warnEvent.ToString(), LogLevel.Warning);
@@ -66,8 +72,10 @@ namespace PoGo.NecroBot.CLI
         {
             string strPokemon = session.Translation.GetPokemonTranslation(pokemonEvolveEvent.Id);
             string logMessage = pokemonEvolveEvent.Result == EvolvePokemonResponse.Types.Result.Success
-                ? session.Translation.GetTranslation(TranslationString.EventPokemonEvolvedSuccess, strPokemon, pokemonEvolveEvent.Exp)
-                : session.Translation.GetTranslation(TranslationString.EventPokemonEvolvedFailed, pokemonEvolveEvent.Id, pokemonEvolveEvent.Result,
+                ? session.Translation.GetTranslation(TranslationString.EventPokemonEvolvedSuccess, strPokemon,
+                    pokemonEvolveEvent.Exp)
+                : session.Translation.GetTranslation(TranslationString.EventPokemonEvolvedFailed, pokemonEvolveEvent.Id,
+                    pokemonEvolveEvent.Result,
                     strPokemon);
             logMessage = (pokemonEvolveEvent.Sequence > 0 ? $"{pokemonEvolveEvent.Sequence}. " : "") + logMessage;
             Logger.Write(logMessage, LogLevel.Evolve);
@@ -404,11 +412,25 @@ namespace PoGo.NecroBot.CLI
             Logger.Write(updateEvent.ToString(), LogLevel.Update);
         }
 
-        private static void HandleEvent(SnipeModeEvent event1, ISession session) { }
-        private static void HandleEvent(PokeStopListEvent event1, ISession session) { }
-        private static void HandleEvent(EggsListEvent event1, ISession session) { }
-        private static void HandleEvent(InventoryListEvent event1, ISession session) { }
-        private static void HandleEvent(PokemonListEvent event1, ISession session) { }
+        private static void HandleEvent(SnipeModeEvent event1, ISession session)
+        {
+        }
+
+        private static void HandleEvent(PokeStopListEvent event1, ISession session)
+        {
+        }
+
+        private static void HandleEvent(EggsListEvent event1, ISession session)
+        {
+        }
+
+        private static void HandleEvent(InventoryListEvent event1, ISession session)
+        {
+        }
+
+        private static void HandleEvent(PokemonListEvent event1, ISession session)
+        {
+        }
 
         private static void HandleEvent(LoginEvent e, ISession session)
         {
@@ -482,7 +504,8 @@ namespace PoGo.NecroBot.CLI
                 case HumanWalkSnipeEventTypes.PokemonScanned:
                     if (ev.Pokemons != null && ev.Pokemons.Count > 0 && ev.DisplayMessage)
                         Logger.Write(
-                            session.Translation.GetTranslation(TranslationString.HumanWalkSnipeUpdate, ev.Pokemons.Count, 2, 3),
+                            session.Translation.GetTranslation(TranslationString.HumanWalkSnipeUpdate,
+                                ev.Pokemons.Count, 2, 3),
                             LogLevel.Sniper,
                             ConsoleColor.DarkMagenta
                         );

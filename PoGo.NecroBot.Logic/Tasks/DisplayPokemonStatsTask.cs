@@ -32,22 +32,36 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             var pokemonPairedWithStatsCp =
                 highestsPokemonCp.Select(
-                    pokemon =>
-                        Tuple.Create(pokemon, PokemonInfo.CalculateMaxCp(pokemon),
-                            PokemonInfo.CalculatePokemonPerfection(pokemon), PokemonInfo.GetLevel(pokemon),
-                            PokemonInfo.GetPokemonMove1(pokemon), PokemonInfo.GetPokemonMove2(pokemon),
-                            PokemonInfo.GetCandy(pokemon, myPokemonFamilies, myPokeSettings))).ToList();
+                        pokemon =>
+                            Tuple.Create(
+                                pokemon,
+                                PokemonInfo.CalculateMaxCp(pokemon),
+                                PokemonInfo.CalculatePokemonPerfection(pokemon),
+                                PokemonInfo.GetLevel(pokemon),
+                                PokemonInfo.GetPokemonMove1(pokemon),
+                                PokemonInfo.GetPokemonMove2(pokemon),
+                                PokemonInfo.GetCandy(pokemon, myPokemonFamilies, myPokeSettings)
+                            )
+                    )
+                    .ToList();
 
             var highestsPokemonPerfect =
                 await session.Inventory.GetHighestsPerfect(session.LogicSettings.AmountOfPokemonToDisplayOnStart);
 
             var pokemonPairedWithStatsIv =
                 highestsPokemonPerfect.Select(
-                    pokemon =>
-                        Tuple.Create(pokemon, PokemonInfo.CalculateMaxCp(pokemon),
-                            PokemonInfo.CalculatePokemonPerfection(pokemon), PokemonInfo.GetLevel(pokemon),
-                            PokemonInfo.GetPokemonMove1(pokemon), PokemonInfo.GetPokemonMove2(pokemon),
-                            PokemonInfo.GetCandy(pokemon, myPokemonFamilies, myPokeSettings))).ToList();
+                        pokemon =>
+                            Tuple.Create(
+                                pokemon,
+                                PokemonInfo.CalculateMaxCp(pokemon),
+                                PokemonInfo.CalculatePokemonPerfection(pokemon),
+                                PokemonInfo.GetLevel(pokemon),
+                                PokemonInfo.GetPokemonMove1(pokemon),
+                                PokemonInfo.GetPokemonMove2(pokemon),
+                                PokemonInfo.GetCandy(pokemon, myPokemonFamilies, myPokeSettings)
+                            )
+                    )
+                    .ToList();
 
             session.EventDispatcher.Send(
                 new DisplayHighestsPokemonEvent
@@ -73,7 +87,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     Dumper.ClearDumpFile(session, dumpFileName);
 
-                    string[] data = {
+                    string[] data =
+                    {
                         "pokemonid",
                         "pokemonlevel",
                         "cp",
@@ -108,7 +123,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     foreach (var pokemon in allPokemonInBag)
                     {
-                        string[] pokemonData = {
+                        string[] pokemonData =
+                        {
                             session.Translation.GetPokemonTranslation(pokemon.PokemonId),
                             PokemonInfo.GetLevel(pokemon).ToString(),
                             pokemon.Cp.ToString(),
@@ -142,7 +158,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
                 catch (IOException)
                 {
-                    session.EventDispatcher.Send(new ErrorEvent { Message = $"Could not write {dumpFileName} dump file." });
+                    session.EventDispatcher.Send(
+                        new ErrorEvent {Message = $"Could not write {dumpFileName} dump file."}
+                    );
                 }
             }
         }

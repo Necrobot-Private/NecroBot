@@ -24,7 +24,8 @@ namespace PoGo.NecroBot.Logic.State
             cancellationToken.ThrowIfCancellationRequested();
 
             var tutState = session.Profile.PlayerData.TutorialState;
-            if(tutState.Contains(TutorialState.FirstTimeExperienceComplete)) {
+            if (tutState.Contains(TutorialState.FirstTimeExperienceComplete))
+            {
                 return new InfoState();
             }
 
@@ -41,11 +42,10 @@ namespace PoGo.NecroBot.Logic.State
                 });
                 await DelayingUtils.DelayAsync(5000, 2000, cancellationToken);
             }
-            InitialTutorialForm form = new InitialTutorialForm(this,tutState, session);
+            InitialTutorialForm form = new InitialTutorialForm(this, tutState, session);
 
             if (form.ShowDialog() == DialogResult.OK)
             {
-
             }
             else
             {
@@ -72,7 +72,7 @@ namespace PoGo.NecroBot.Logic.State
             //    //        gen = Gender.Male;
             //    //        break;
             //    //}
-                
+
 
             //    //var avatarRes = await session.Client.Player.SetAvatar(new PlayerAvatar()
             //    //{
@@ -131,7 +131,9 @@ namespace PoGo.NecroBot.Logic.State
                 PokemonId.Charmander,
                 PokemonId.Squirtle
             };
-            string pokemonString = GlobalSettings.PromptForString(session.Translation, session.Translation.GetTranslation(TranslationString.FirstStartSetupAutoCompleteTutStarterPrompt), new string[] { "Bulbasaur", "Charmander", "Squirtle" }, "You didn't enter a valid pokemon.", false);
+            string pokemonString = GlobalSettings.PromptForString(session.Translation,
+                session.Translation.GetTranslation(TranslationString.FirstStartSetupAutoCompleteTutStarterPrompt),
+                new string[] {"Bulbasaur", "Charmander", "Squirtle"}, "You didn't enter a valid pokemon.", false);
             var firstpokenum = 0;
             switch (pokemonString)
             {
@@ -152,7 +154,7 @@ namespace PoGo.NecroBot.Logic.State
                     firstpokenum = 0;
                     break;
             }
-            
+
             var firstPoke = firstPokeList[firstpokenum];
 
             var res = await session.Client.Encounter.EncounterTutorialComplete(firstPoke);
@@ -169,7 +171,9 @@ namespace PoGo.NecroBot.Logic.State
         {
             while (true)
             {
-                string nickname = GlobalSettings.PromptForString(session.Translation, session.Translation.GetTranslation(TranslationString.FirstStartSetupAutoCompleteTutNicknamePrompt), null, "You entered an invalid nickname.");
+                string nickname = GlobalSettings.PromptForString(session.Translation,
+                    session.Translation.GetTranslation(TranslationString.FirstStartSetupAutoCompleteTutNicknamePrompt),
+                    null, "You entered an invalid nickname.");
 
                 if (nickname.Length > 15 || nickname.Length == 0)
                 {
@@ -213,7 +217,7 @@ namespace PoGo.NecroBot.Logic.State
                         errorText = "Unknown Niantic error while changing nickname.";
                         break;
                 }
-                
+
                 if (!string.IsNullOrEmpty(infoText))
                 {
                     session.EventDispatcher.Send(new NoticeEvent()

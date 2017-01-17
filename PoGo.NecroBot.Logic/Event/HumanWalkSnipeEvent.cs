@@ -23,6 +23,7 @@ namespace PoGo.NecroBot.Logic.Event
         EncounterSnipePokemon,
         QueueUpdated
     }
+
     public class HumanWalkSnipeEvent : IEvent
     {
         public double Latitude { get; set; }

@@ -44,14 +44,14 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
 
                         JObject jsonObj = JObject.Parse(responseFromServer);
 
-                        JArray heights = (JArray)jsonObj["height"];
-                        return (double)heights[0];
+                        JArray heights = (JArray) jsonObj["height"];
+                        return (double) heights[0];
 
                         // All error handling is handled inside of the ElevationService.
                     }
                 }
             }
-            catch(Exception)
+            catch (Exception)
             {
                 // If we get here for any reason, then just drop down and return 0. Will cause this elevation service to be blacklisted.
             }

@@ -38,14 +38,14 @@ namespace PoGo.NecroBot.Logic.Captcha
                     }
 
                     Logger.Write("Auto resolving captcha by using captcha solution service, please wait..........");
-                    CaptchaSolutionClient client = new CaptchaSolutionClient(cfg.CaptchaSolutionAPIKey, cfg.CaptchaSolutionsSecretKey, cfg.AutoCaptchaTimeout);
+                    CaptchaSolutionClient client = new CaptchaSolutionClient(cfg.CaptchaSolutionAPIKey,
+                        cfg.CaptchaSolutionsSecretKey, cfg.AutoCaptchaTimeout);
                     captchaResponse = await client.ResolveCaptcha(POKEMON_GO_GOOGLE_KEY, captchaUrl);
                     needGetNewCaptcha = true;
                     if (!string.IsNullOrEmpty(captchaResponse))
                     {
                         resolved = await Resolve(session, captchaResponse);
                     }
-
                 }
 
                 //Anti captcha   - Havent test it, temporary comment until has key to test
@@ -68,12 +68,12 @@ namespace PoGo.NecroBot.Logic.Captcha
                 //}
 
                 //use 2 captcha
-                if (!resolved && session.LogicSettings.CaptchaConfig.Enable2Captcha && !string.IsNullOrEmpty(session.LogicSettings.CaptchaConfig.TwoCaptchaAPIKey))
+                if (!resolved && session.LogicSettings.CaptchaConfig.Enable2Captcha &&
+                    !string.IsNullOrEmpty(session.LogicSettings.CaptchaConfig.TwoCaptchaAPIKey))
                 {
                     if (needGetNewCaptcha)
                     {
                         captchaUrl = await GetNewCaptchaURL(session);
-
                     }
                     if (string.IsNullOrEmpty(captchaUrl)) return true;
 
@@ -86,11 +86,11 @@ namespace PoGo.NecroBot.Logic.Captcha
                     }
                 }
             }
-            
+
             //captchaRespose = "";
             if (!resolved)
             {
-                if(needGetNewCaptcha)
+                if (needGetNewCaptcha)
                 {
                     captchaUrl = await GetNewCaptchaURL(session);
                 }
@@ -105,26 +105,27 @@ namespace PoGo.NecroBot.Logic.Captcha
 
                 if (!string.IsNullOrEmpty(captchaResponse))
                 {
-                   resolved = await Resolve(session, captchaResponse);
+                    resolved = await Resolve(session, captchaResponse);
                 }
             }
-           
+
             return resolved;
         }
 
-        
+
         //NOT WORKING  SINCE WEB BROWSER CONTROL IS IE7, doesn't work with captcha page
 
         private static async Task<string> GetCaptchaTokenWithInternalForm(string captchaUrl)
         {
             string response = "";
-            var t = new Thread(()=> {
+            var t = new Thread(() =>
+            {
                 CaptchaSolveForm captcha = new CaptchaSolveForm(captchaUrl);
                 if (captcha.ShowDialog() == DialogResult.OK)
                 {
                     response = "Aaa";
                 }
-                
+
                 //captcha.TopMost = true;
             });
             t.SetApartmentState(ApartmentState.STA);
@@ -132,19 +133,18 @@ namespace PoGo.NecroBot.Logic.Captcha
             int count = 120;
             while (true && count > 0)
             {
-
                 count--;
                 //Thread.Sleep(1000);
                 await Task.Delay(1000);
             }
 
             return response;
-
         }
+
         private static async Task<string> GetNewCaptchaURL(ISession session)
         {
             var res = await session.Client.Player.CheckChallenge();
-            if(res.ShowChallenge )
+            if (res.ShowChallenge)
             {
                 return res.ChallengeUrl;
             }
@@ -199,14 +199,14 @@ namespace PoGo.NecroBot.Logic.Captcha
             int retries = session.LogicSettings.CaptchaConfig.AutoCaptchaRetries;
             string result = null;
 
-            while (retries-- >0  && !solved)
+            while (retries-- > 0 && !solved)
             {
                 TwoCaptchaClient client = new TwoCaptchaClient(session.LogicSettings.CaptchaConfig.TwoCaptchaAPIKey);
 
                 result = await client.SolveRecaptchaV2(POKEMON_GO_GOOGLE_KEY, captchaUrl, string.Empty, ProxyType.HTTP);
                 solved = !string.IsNullOrEmpty(result);
             }
-            if(solved)
+            if (solved)
             {
                 Logger.Write("Captcha has been resolved automatically by 2Captcha ");
             }
@@ -217,23 +217,28 @@ namespace PoGo.NecroBot.Logic.Captcha
         {
             if (!session.LogicSettings.CaptchaConfig.AllowManualCaptchaResolve) return null;
 
-            if(!File.Exists("chromedriver.exe"))
+            if (!File.Exists("chromedriver.exe"))
             {
-                Logger.Write($"You enable manual captcha resolve but didn't setup properly, please download webdriver.exe put in same folder.", LogLevel.Error);
+                Logger.Write(
+                    $"You enable manual captcha resolve but didn't setup properly, please download webdriver.exe put in same folder.",
+                    LogLevel.Error
+                );
                 return null;
             }
             IWebDriver webDriver = null;
             try
             {
-
-                webDriver = new ChromeDriver(Environment.CurrentDirectory, new ChromeOptions() {
-                    
-                    });
+                webDriver = new ChromeDriver(Environment.CurrentDirectory, new ChromeOptions()
+                {
+                });
 
                 webDriver.Navigate().GoToUrl(url);
                 Logger.Write($"Captcha is being show in separate thread window, please check your chrome browser and resolve it before {session.LogicSettings.CaptchaConfig.ManualCaptchaTimeout} seconds");
 
-                var wait = new WebDriverWait(webDriver, TimeSpan.FromSeconds(session.LogicSettings.CaptchaConfig.ManualCaptchaTimeout));
+                var wait = new WebDriverWait(
+                    webDriver,
+                    TimeSpan.FromSeconds(session.LogicSettings.CaptchaConfig.ManualCaptchaTimeout)
+                );
                 //wait.Until(ExpectedConditions.ElementIsVisible(By.Id("recaptcha-verify-button")));
                 wait.Until(d =>
                 {

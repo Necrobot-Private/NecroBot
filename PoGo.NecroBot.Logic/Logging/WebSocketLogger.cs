@@ -40,7 +40,7 @@ namespace PoGo.NecroBot.Logic.Logging
         {
             _session = session;
         }
-        
+
         /// <summary>
         ///     Log a specific message by LogLevel. Won't log if the LogLevel is greater than the maxLogLevel set.
         /// </summary>

@@ -3,9 +3,11 @@ using Newtonsoft.Json;
 
 namespace PoGo.NecroBot.Logic.Model.Settings
 {
-    public class NotificationConfig  : BaseConfig
+    public class NotificationConfig : BaseConfig
     {
-        public NotificationConfig() : base() { }
+        public NotificationConfig() : base()
+        {
+        }
 
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
@@ -36,6 +38,5 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.AllowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 6)]
         [ExcelConfig(Position = 6, Description = "List of email address to recieve notificaitons")]
         public string Recipients { get; set; }
-
     }
 }

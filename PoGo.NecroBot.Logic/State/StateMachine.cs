@@ -21,7 +21,7 @@ namespace PoGo.NecroBot.Logic.State
     {
         private IState _initialState;
 
-        public Task AsyncStart(IState initialState, Session session, string subPath, bool excelConfigAllowed=false)
+        public Task AsyncStart(IState initialState, Session session, string subPath, bool excelConfigAllowed = false)
         {
             return Task.Run(() => Start(initialState, session, subPath, excelConfigAllowed));
         }
@@ -39,7 +39,7 @@ namespace PoGo.NecroBot.Logic.State
             var profilePath = Path.Combine(Directory.GetCurrentDirectory(), subPath);
             var profileConfigPath = Path.Combine(profilePath, "config");
             globalSettings = GlobalSettings.Load(subPath);
-      
+
             FileSystemWatcher configWatcher = new FileSystemWatcher();
             configWatcher.Path = profileConfigPath;
             configWatcher.Filter = "config.json";
@@ -78,7 +78,6 @@ namespace PoGo.NecroBot.Logic.State
                         }
                         catch (Exception)
                         {
-
                         }
                     }
                 });
@@ -92,7 +91,8 @@ namespace PoGo.NecroBot.Logic.State
                     state = await state.Execute(session, session.CancellationTokenSource.Token);
 
                     // Exit the bot if both catching and looting has reached its limits
-                    if ((UseNearbyPokestopsTask._pokestopLimitReached || UseNearbyPokestopsTask._pokestopTimerReached) &&
+                    if ((UseNearbyPokestopsTask._pokestopLimitReached ||
+                         UseNearbyPokestopsTask._pokestopTimerReached) &&
                         session.Stats.CatchThresholdExceeds(session))
                     {
                         session.EventDispatcher.Send(new ErrorEvent
@@ -113,7 +113,7 @@ namespace PoGo.NecroBot.Logic.State
                 {
                     Logger.Write("Bad Request - If you see this message please conpy error log & screenshot send back to dev asap.", level: LogLevel.Error);
 
-                    session.EventDispatcher.Send(new ErrorEvent() { Message = ex.Message });
+                    session.EventDispatcher.Send(new ErrorEvent() {Message = ex.Message});
                     Logger.Write(ex.StackTrace, level: LogLevel.Error);
 
                     if (session.LogicSettings.AllowMultipleBot)
@@ -127,7 +127,8 @@ namespace PoGo.NecroBot.Logic.State
                         session.ReInitSessionWithNextBot();
                         state = new LoginState();
                     }
-                    else {
+                    else
+                    {
                         Console.Read();
                         Environment.Exit(0);
                     }
@@ -146,31 +147,30 @@ namespace PoGo.NecroBot.Logic.State
                         session.BlockCurrentBot(90);
                         session.ReInitSessionWithNextBot();
                     }
-                    else
-                    if (se.MatchedRule == SwitchRules.PokestopSoftban)
+                    else if (se.MatchedRule == SwitchRules.PokestopSoftban)
                     {
                         session.BlockCurrentBot();
                         session.ReInitSessionWithNextBot();
                     }
-                    else
-                    if (se.MatchedRule == SwitchRules.CatchFlee)
+                    else if (se.MatchedRule == SwitchRules.CatchFlee)
                     {
                         session.BlockCurrentBot(60);
                         session.ReInitSessionWithNextBot();
                     }
                     else
                     {
-                        if (se.MatchedRule == SwitchRules.CatchLimitReached || se.MatchedRule == SwitchRules.SpinPokestopReached)
+                        if (se.MatchedRule == SwitchRules.CatchLimitReached ||
+                            se.MatchedRule == SwitchRules.SpinPokestopReached)
                         {
                             PushNotificationClient.SendNotification(session, $"{se.MatchedRule} - {session.Settings.GoogleUsername}{session.Settings.PtcUsername}", "This bot has reach limit, it will be blocked for 60 mins for safety.", true);
                             session.EventDispatcher.Send(new WarnEvent() { Message = $"You reach limited. bot will sleep for {session.LogicSettings.MultipleBotConfig.OnLimitPauseTimes} min" });
 
                             session.BlockCurrentBot(session.LogicSettings.MultipleBotConfig.OnLimitPauseTimes);
 
-                           session.ReInitSessionWithNextBot();
-                           
+                            session.ReInitSessionWithNextBot();
                         }
-                        else {
+                        else
+                        {
                             if (session.LogicSettings.MultipleBotConfig.StartFromDefaultLocation)
                             {
                                 session.ReInitSessionWithNextBot(null, globalSettings.LocationConfig.DefaultLatitude, globalSettings.LocationConfig.DefaultLongitude, session.Client.CurrentAltitude);
@@ -200,18 +200,16 @@ namespace PoGo.NecroBot.Logic.State
                         }
                     }
                     state = new LoginState();
-
                 }
                 catch (OperationCanceledException)
                 {
-                    session.EventDispatcher.Send(new ErrorEvent { Message = "Current Operation was canceled." });
+                    session.EventDispatcher.Send(new ErrorEvent {Message = "Current Operation was canceled."});
                     if (session.LogicSettings.AllowMultipleBot)
                     {
                         session.BlockCurrentBot(30);
                         session.ReInitSessionWithNextBot();
                     }
                     state = new LoginState();
-
                 }
                 catch (LoginFailedException)
                 {
@@ -241,16 +239,15 @@ namespace PoGo.NecroBot.Logic.State
                     Console.ReadKey();
                     Environment.Exit(1);
                 }
-                catch(TokenRefreshException ex)
+                catch (TokenRefreshException ex)
                 {
-                    session.EventDispatcher.Send(new ErrorEvent() { Message = ex.Message });
+                    session.EventDispatcher.Send(new ErrorEvent() {Message = ex.Message});
 
                     if (session.LogicSettings.AllowMultipleBot)
                         session.ReInitSessionWithNextBot();
                     state = new LoginState();
-                    
                 }
-                
+
                 catch (PtcOfflineException)
                 {
                     session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.PtcOffline) });
@@ -283,10 +280,11 @@ namespace PoGo.NecroBot.Logic.State
                         {
                             session.BlockCurrentBot(15);
                             session.ReInitSessionWithNextBot();
-                         
+
                             state = new LoginState();
                         }
-                        else {
+                        else
+                        {
                             session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey) });
                             Console.ReadKey();
                             Environment.Exit(0);
@@ -300,8 +298,8 @@ namespace PoGo.NecroBot.Logic.State
                 }
                 catch (HasherException ex)
                 {
-                    session.EventDispatcher.Send(new ErrorEvent { Message = ex.Message });
-                  //  session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey) });
+                    session.EventDispatcher.Send(new ErrorEvent {Message = ex.Message});
+                    //  session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey) });
                     state = new IdleState();
                     //Console.ReadKey();
                     //System.Environment.Exit(1);

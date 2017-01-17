@@ -38,7 +38,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Cp = upgradeResult.UpgradedPokemon.Cp,
                         UniqueId = pokemon.Id
                     });
-
                 }
                 DelayingUtils.Delay(session.LogicSettings.DelayBetweenPlayerActions, 0);
             }

@@ -1,6 +1,6 @@
 ﻿namespace PoGo.NecroBot.Logic.Event
 {
-    public class BotSwitchedEvent :IEvent
+    public class BotSwitchedEvent : IEvent
     {
     }
 }

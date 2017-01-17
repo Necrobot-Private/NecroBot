@@ -10,6 +10,7 @@ namespace PoGo.NecroBot.Logic.Service
     class YoursDirectionsService
     {
         private readonly ISession _session;
+
         public YoursDirectionsService(ISession session)
         {
             _session = session;
@@ -42,7 +43,7 @@ namespace PoGo.NecroBot.Logic.Service
         private string GetUrl(GeoCoordinate sourceLocation, GeoCoordinate destLocation)
         {
             string url = $"http://www.yournavigation.org/api/dev/route.php?format=geojson&flat={sourceLocation.Latitude}&flon={sourceLocation.Longitude}&tlat={destLocation.Latitude}&tlon={destLocation.Longitude}&fast=1&layer=mapnik";
-            
+
             if (!string.IsNullOrEmpty(_session.LogicSettings.YoursWalkHeuristic))
                 url += $"&v={_session.LogicSettings.YoursWalkHeuristic}";
             else

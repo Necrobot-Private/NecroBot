@@ -61,14 +61,14 @@ namespace PoGo.NecroBot.Logic.Tasks
                     currentRevives, currentMaxRevives));
 
             var currentAmountOfBerries = await session.Inventory.GetItemAmountByType(ItemId.ItemRazzBerry) +
-                await session.Inventory.GetItemAmountByType(ItemId.ItemBlukBerry) +
-                await session.Inventory.GetItemAmountByType(ItemId.ItemNanabBerry) +
-                await session.Inventory.GetItemAmountByType(ItemId.ItemWeparBerry) +
-                await session.Inventory.GetItemAmountByType(ItemId.ItemPinapBerry);
+                                         await session.Inventory.GetItemAmountByType(ItemId.ItemBlukBerry) +
+                                         await session.Inventory.GetItemAmountByType(ItemId.ItemNanabBerry) +
+                                         await session.Inventory.GetItemAmountByType(ItemId.ItemWeparBerry) +
+                                         await session.Inventory.GetItemAmountByType(ItemId.ItemPinapBerry);
             var currentAmountOfIncense = await session.Inventory.GetItemAmountByType(ItemId.ItemIncenseOrdinary) +
-                await session.Inventory.GetItemAmountByType(ItemId.ItemIncenseSpicy) +
-                await session.Inventory.GetItemAmountByType(ItemId.ItemIncenseCool) +
-                await session.Inventory.GetItemAmountByType(ItemId.ItemIncenseFloral);
+                                         await session.Inventory.GetItemAmountByType(ItemId.ItemIncenseSpicy) +
+                                         await session.Inventory.GetItemAmountByType(ItemId.ItemIncenseCool) +
+                                         await session.Inventory.GetItemAmountByType(ItemId.ItemIncenseFloral);
             var currentAmountOfLuckyEggs = await session.Inventory.GetItemAmountByType(ItemId.ItemLuckyEgg);
             var currentAmountOfLures = await session.Inventory.GetItemAmountByType(ItemId.ItemTroyDisk);
 
@@ -127,7 +127,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 await session.Client.Inventory.RecycleItem(item, itemsToRecycle);
                 await session.Inventory.UpdateInventoryItem(item, -itemsToRecycle);
                 if (session.LogicSettings.VerboseRecycling)
-                    session.EventDispatcher.Send(new ItemRecycledEvent { Id = item, Count = itemsToRecycle });
+                    session.EventDispatcher.Send(new ItemRecycledEvent {Id = item, Count = itemsToRecycle});
 
                 DelayingUtils.Delay(session.LogicSettings.RecycleActionDelay, 500);
             }
@@ -160,7 +160,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     _diff = totalBallsCount - totalPokeballsToKeep + random;
                 }
-                else {
+                else
+                {
                     _diff = totalBallsCount - totalPokeballsToKeep;
                 }
 
@@ -247,13 +248,13 @@ namespace PoGo.NecroBot.Logic.Tasks
             int totalRevivesToKeep;
             if (session.LogicSettings.UseRecyclePercentsInsteadOfTotals)
             {
-                totalRevivesToKeep = (int)Math.Floor(session.LogicSettings.PercentOfInventoryRevivesToKeep / 100.0 * session.Profile.PlayerData.MaxItemStorage);
+                totalRevivesToKeep = (int) Math.Floor(session.LogicSettings.PercentOfInventoryRevivesToKeep / 100.0 * session.Profile.PlayerData.MaxItemStorage);
             }
             else
             {
                 totalRevivesToKeep = session.LogicSettings.TotalAmountOfRevivesToKeep;
             }
-            
+
             if (totalRevivesCount > totalRevivesToKeep)
             {
                 if (session.LogicSettings.RandomizeRecycle)
@@ -347,7 +348,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     await session.Inventory.UpdateInventoryItem(item, -count);
 
                     if (session.LogicSettings.VerboseRecycling)
-                        session.EventDispatcher.Send(new ItemRecycledEvent { Id = item, Count = count });
+                        session.EventDispatcher.Send(new ItemRecycledEvent {Id = item, Count = count});
 
                     DelayingUtils.Delay(session.LogicSettings.RecycleActionDelay, 500);
                 }

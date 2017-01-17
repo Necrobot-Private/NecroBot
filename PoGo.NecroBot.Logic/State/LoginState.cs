@@ -21,6 +21,7 @@ namespace PoGo.NecroBot.Logic.State
     public class LoginState : IState
     {
         private PokemonId pokemonToCatch;
+
         public LoginState(PokemonId pokemonToCatch = PokemonId.Missingno)
         {
             this.pokemonToCatch = pokemonToCatch;
@@ -29,7 +30,9 @@ namespace PoGo.NecroBot.Logic.State
         public async Task<IState> Execute(ISession session, CancellationToken cancellationToken)
         {
             // cancellationToken.ThrowIfCancellationRequested();
-            session.EventDispatcher.Send(new LoginEvent(session.Settings.AuthType, $"{session.Settings.GoogleUsername}{session.Settings.PtcUsername}"));
+            session.EventDispatcher.Send(new LoginEvent(
+                session.Settings.AuthType, $"{session.Settings.GoogleUsername}{session.Settings.PtcUsername}"
+                ));
 
             //session.EventDispatcher.Send(new NoticeEvent
             //{
@@ -86,7 +89,6 @@ namespace PoGo.NecroBot.Logic.State
             }
             catch (AccountNotVerifiedException ex)
             {
-
                 session.EventDispatcher.Send(new ErrorEvent
                 {
                     Message = session.Translation.GetTranslation(TranslationString.AccountNotVerified)
@@ -129,7 +131,6 @@ namespace PoGo.NecroBot.Logic.State
             }
             catch (ActiveSwitchByRuleException)
             {
-
             }
             catch (OperationCanceledException)
             {
@@ -149,7 +150,12 @@ namespace PoGo.NecroBot.Logic.State
                 // We need to terminate the client.
                 session.EventDispatcher.Send(new ErrorEvent
                 {
-                    Message = session.Translation.GetTranslation(TranslationString.MinimumClientVersionException, ex.CurrentApiVersion.ToString(), ex.MinimumClientVersion.ToString())
+                    Message = session.Translation
+                        .GetTranslation(
+                            TranslationString.MinimumClientVersionException,
+                            ex.CurrentApiVersion.ToString(),
+                            ex.MinimumClientVersion.ToString()
+                        )
                 });
 
                 Logger.Write(session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey, LogLevel.Error));
@@ -172,16 +178,19 @@ namespace PoGo.NecroBot.Logic.State
                 if (session.Profile == null)
                 {
                     await Task.Delay(20000, cancellationToken);
-                    Logger.Write("Due to login failure your player profile could not be retrieved. Press any key to re-try login.", LogLevel.Warning);
+                    Logger.Write(
+                        "Due to login failure your player profile could not be retrieved. Press any key to re-try login.",
+                        LogLevel.Warning
+                    );
                     Console.ReadKey();
                 }
 
                 if (session.LogicSettings.UseRecyclePercentsInsteadOfTotals)
                 {
                     int totalPercent = session.LogicSettings.PercentOfInventoryPokeballsToKeep +
-                        session.LogicSettings.PercentOfInventoryPotionsToKeep +
-                        session.LogicSettings.PercentOfInventoryRevivesToKeep +
-                        session.LogicSettings.PercentOfInventoryBerriesToKeep;
+                                       session.LogicSettings.PercentOfInventoryPotionsToKeep +
+                                       session.LogicSettings.PercentOfInventoryRevivesToKeep +
+                                       session.LogicSettings.PercentOfInventoryBerriesToKeep;
 
                     if (totalPercent != 100)
                     {
@@ -198,14 +207,13 @@ namespace PoGo.NecroBot.Logic.State
                         Logger.Write(session.Translation.GetTranslation(TranslationString.PercentRevivesToKeep, session.LogicSettings.PercentOfInventoryRevivesToKeep, (int)Math.Floor(session.LogicSettings.PercentOfInventoryRevivesToKeep / 100.0 * session.Profile.PlayerData.MaxItemStorage)), LogLevel.Info);
                         Logger.Write(session.Translation.GetTranslation(TranslationString.PercentBerriesToKeep, session.LogicSettings.PercentOfInventoryBerriesToKeep, (int)Math.Floor(session.LogicSettings.PercentOfInventoryBerriesToKeep / 100.0 * session.Profile.PlayerData.MaxItemStorage)), LogLevel.Info);
                     }
-
                 }
                 else
                 {
                     int maxTheoreticalItems = session.LogicSettings.TotalAmountOfPokeballsToKeep +
-                        session.LogicSettings.TotalAmountOfPotionsToKeep +
-                        session.LogicSettings.TotalAmountOfRevivesToKeep +
-                        session.LogicSettings.TotalAmountOfBerriesToKeep;
+                                              session.LogicSettings.TotalAmountOfPotionsToKeep +
+                                              session.LogicSettings.TotalAmountOfRevivesToKeep +
+                                              session.LogicSettings.TotalAmountOfBerriesToKeep;
 
                     if (maxTheoreticalItems > session.Profile.PlayerData.MaxItemStorage)
                     {
@@ -218,7 +226,6 @@ namespace PoGo.NecroBot.Logic.State
             }
             catch (ActiveSwitchByRuleException)
             {
-
             }
             catch (OperationCanceledException)
             {
@@ -279,16 +286,15 @@ namespace PoGo.NecroBot.Logic.State
         {
             try
             {
-
                 //TODO : need get all data at 1 call here to save speed login.
                 session.Profile = await session.Inventory.GetPlayerData();
                 var stats = await session.Inventory.GetPlayerStats();
 
-                session.EventDispatcher.Send(new ProfileEvent { Profile = session.Profile, Stats = stats });
+                session.EventDispatcher.Send(new ProfileEvent {Profile = session.Profile, Stats = stats});
             }
             catch (UriFormatException e)
             {
-                session.EventDispatcher.Send(new ErrorEvent { Message = e.ToString() });
+                session.EventDispatcher.Send(new ErrorEvent {Message = e.ToString()});
             }
             catch (CaptchaException ex)
             {
@@ -296,7 +302,7 @@ namespace PoGo.NecroBot.Logic.State
             }
             catch (Exception ex)
             {
-                session.EventDispatcher.Send(new ErrorEvent { Message = ex.ToString() });
+                session.EventDispatcher.Send(new ErrorEvent {Message = ex.ToString()});
             }
         }
     }

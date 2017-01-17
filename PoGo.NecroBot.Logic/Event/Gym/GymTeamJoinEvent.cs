@@ -3,7 +3,7 @@ using POGOProtos.Networking.Responses;
 
 namespace PoGo.NecroBot.Logic.Event.Gym
 {
-    public class GymTeamJoinEvent  : IEvent
+    public class GymTeamJoinEvent : IEvent
     {
         public TeamColor Team;
 

@@ -6,7 +6,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 {
     public class DataSharingConfig : BaseConfig
     {
-        public DataSharingConfig() : base() { }
+        public DataSharingConfig() : base()
+        {
+        }
 
         [ExcelConfig(Description = "ALlow bot send pokemon data to share data serice", Position = 1)]
         [DefaultValue(true)]
@@ -27,7 +29,10 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public bool AutoSnipe { get; set; }
 
-        [ExcelConfig(Description = "A unique ID you make by yourself to do a manual snipe from mypogosnipers.com. You have to make sure it is unique", Position = 4)]
+        [ExcelConfig(
+             Description =
+                 "A unique ID you make by yourself to do a manual snipe from mypogosnipers.com. You have to make sure it is unique",
+             Position = 4)]
         [DefaultValue("")]
         [MaxLength(256)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]

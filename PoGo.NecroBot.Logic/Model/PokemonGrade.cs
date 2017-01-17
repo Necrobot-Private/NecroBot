@@ -6,7 +6,7 @@
         Common,
         Popular, //Uncommon
         Rare,
-        VeryRare ,
+        VeryRare,
         Special,
         Epic,
         Legendary

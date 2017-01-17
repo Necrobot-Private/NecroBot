@@ -12,7 +12,6 @@ namespace PoGo.NecroBot.Logic.State
     public class FarmState : IState
     {
         [SuppressMessage("Await.Warning", "CS4014:Await.Warning")]
-
         public async Task<IState> Execute(ISession session, CancellationToken cancellationToken)
         {
             if (session.LogicSettings.UseNearActionRandom)
@@ -21,8 +20,10 @@ namespace PoGo.NecroBot.Logic.State
             }
             else
             {
-                if (session.LogicSettings.EvolveAllPokemonAboveIv || session.LogicSettings.EvolveAllPokemonWithEnoughCandy
-                   || session.LogicSettings.UseLuckyEggsWhileEvolving || session.LogicSettings.KeepPokemonsThatCanEvolve)
+                if (session.LogicSettings.EvolveAllPokemonAboveIv ||
+                    session.LogicSettings.EvolveAllPokemonWithEnoughCandy
+                    || session.LogicSettings.UseLuckyEggsWhileEvolving ||
+                    session.LogicSettings.KeepPokemonsThatCanEvolve)
                     await EvolvePokemonTask.Execute(session, cancellationToken);
                 if (session.LogicSettings.UseEggIncubators)
                     await UseIncubatorsTask.Execute(session, cancellationToken);

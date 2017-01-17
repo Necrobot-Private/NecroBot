@@ -40,14 +40,14 @@ namespace PoGo.NecroBot.Logic.Service
                 iCommandInstances = AppDomain.CurrentDomain.GetAssemblies()
                     .SelectMany(x => x.GetTypes())
                     .Where(x => (typeof(ICommand).IsAssignableFrom(x)) && !x.IsInterface && !x.IsAbstract)
-                    .Select(x => (ICommand)Activator.CreateInstance(x, telegramUtils));
+                    .Select(x => (ICommand) Activator.CreateInstance(x, telegramUtils));
 
                 var me = _bot.GetMeAsync().Result;
 
                 _bot.OnMessage += OnTelegramMessageReceived;
                 _bot.StartReceiving();
 
-                _session.EventDispatcher.Send(new NoticeEvent { Message = "Using TelegramAPI with " + me.Username });
+                _session.EventDispatcher.Send(new NoticeEvent {Message = "Using TelegramAPI with " + me.Username});
 
                 if (File.Exists(LOG_FILE))
                 {
@@ -62,13 +62,12 @@ namespace PoGo.NecroBot.Logic.Service
                     {
                         _session.EventDispatcher.Send(new NoticeEvent() { Message = _session.Translation.GetTranslation(TranslationString.TelegramNeedChatId) });
                     }
-
                 }
             }
             catch (Exception ex)
             {
-                _session.EventDispatcher.Send(new ErrorEvent { Message = ex.Message });
-                _session.EventDispatcher.Send(new ErrorEvent { Message = "Unkown Telegram Error occured. " });
+                _session.EventDispatcher.Send(new ErrorEvent {Message = ex.Message});
+                _session.EventDispatcher.Send(new ErrorEvent {Message = "Unkown Telegram Error occured. "});
             }
         }
 
@@ -136,7 +135,6 @@ namespace PoGo.NecroBot.Logic.Service
                 catch (Exception)
                 {
                 }
-
             }
 
             if (!handled)

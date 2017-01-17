@@ -30,7 +30,7 @@ namespace PoGo.NecroBot.Logic.Model.Google.GoogleObjects
                 shifter = 0;
                 do
                 {
-                    next5bits = (int)polylineChars[index++] - 63;
+                    next5bits = (int) polylineChars[index++] - 63;
                     sum |= (next5bits & 31) << shifter;
                     shifter += 5;
                 } while (next5bits >= 32 && index < polylineChars.Length);
@@ -45,7 +45,7 @@ namespace PoGo.NecroBot.Logic.Model.Google.GoogleObjects
                 shifter = 0;
                 do
                 {
-                    next5bits = (int)polylineChars[index++] - 63;
+                    next5bits = (int) polylineChars[index++] - 63;
                     sum |= (next5bits & 31) << shifter;
                     shifter += 5;
                 } while (next5bits >= 32 && index < polylineChars.Length);

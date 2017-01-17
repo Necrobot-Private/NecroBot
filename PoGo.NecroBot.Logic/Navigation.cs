@@ -30,10 +30,9 @@ namespace PoGo.NecroBot.Logic
         public Navigation(Client client, ILogicSettings logicSettings)
         {
             _client = client;
-            
+
             InitializeWalkStrategies(logicSettings);
             WalkStrategy = GetStrategy(logicSettings);
-
         }
 
         public double VariantRandom(ISession session, double currentSpeed)
@@ -43,7 +42,8 @@ namespace PoGo.NecroBot.Logic
                 if (WalkingRandom.Next(1, 10) > 5)
                 {
                     var randomicSpeed = currentSpeed;
-                    var max = session.LogicSettings.WalkingSpeedInKilometerPerHour + session.LogicSettings.WalkingSpeedVariant;
+                    var max = session.LogicSettings.WalkingSpeedInKilometerPerHour +
+                              session.LogicSettings.WalkingSpeedVariant;
                     randomicSpeed += WalkingRandom.NextDouble() * (0.02 - 0.001) + 0.001;
 
                     if (randomicSpeed > max)
@@ -63,8 +63,9 @@ namespace PoGo.NecroBot.Logic
                 else
                 {
                     var randomicSpeed = currentSpeed;
-                    var min = session.LogicSettings.WalkingSpeedInKilometerPerHour - session.LogicSettings.WalkingSpeedVariant;
-                    randomicSpeed -= WalkingRandom.NextDouble() * (0.02 - 0.001) + 0.001;                    
+                    var min = session.LogicSettings.WalkingSpeedInKilometerPerHour -
+                              session.LogicSettings.WalkingSpeedVariant;
+                    randomicSpeed -= WalkingRandom.NextDouble() * (0.02 - 0.001) + 0.001;
 
                     if (randomicSpeed < min)
                         randomicSpeed = min;
@@ -84,11 +85,13 @@ namespace PoGo.NecroBot.Logic
 
             return currentSpeed;
         }
+
         private object ensureOneWalkEvent = new object();
+
         public async Task<PlayerUpdateResponse> Move(IGeoLocation targetLocation,
             Func<Task> functionExecutedWhileWalking,
             ISession session,
-            CancellationToken cancellationToken, double customWalkingSpeed =0.0)
+            CancellationToken cancellationToken, double customWalkingSpeed = 0.0)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -111,7 +114,7 @@ namespace PoGo.NecroBot.Logic
             {
                 WalkStrategyQueue.Add(new HumanPathWalkingStrategy(_client));
             }
-            
+
             if (logicSettings.UseGoogleWalk)
             {
                 WalkStrategyQueue.Add(new GoogleStrategy(_client));

@@ -9,13 +9,12 @@ using POGOProtos.Inventory.Item;
 
 namespace PoGo.NecroBot.Logic.Interfaces.Configuration
 {
-
     public interface ILogicSettings
     {
         bool UseWebsocket { get; }
         bool CatchPokemon { get; }
         int OutOfBallCatchBlockTime { get; }
-        int PokeballsToKeepForSnipe { get; }            
+        int PokeballsToKeepForSnipe { get; }
         int CatchPokemonLimit { get; }
         int CatchPokemonLimitMinutes { get; }
         int PokeStopLimit { get; }
@@ -226,7 +225,7 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         int RecycleActionDelay { get; }
         int RenamePokemonActionDelay { get; }
 
-         GymConfig GymConfig { get; }
+        GymConfig GymConfig { get; }
         string DataSharingIdentifiation { get; }
         bool DataSharingEnable { get; }
         string DataSharingDataUrl { get; }
@@ -234,12 +233,12 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         MultipleBotConfig MultipleBotConfig { get; }
         List<AuthConfig> Bots { get; }
         bool AllowMultipleBot { get; }
-        CaptchaConfig CaptchaConfig { get;  }
-        int BulkTransferStogareBuffer { get;  }
+        CaptchaConfig CaptchaConfig { get; }
+        int BulkTransferStogareBuffer { get; }
         int BulkTransferSize { get; }
 
-        bool AutosnipeVerifiedOnly { get;  }
-        int SnipePauseOnOutOfBallTime { get;  }
+        bool AutosnipeVerifiedOnly { get; }
+        int SnipePauseOnOutOfBallTime { get; }
         int DefaultAutoSnipeCandy { get; }
     }
 }
