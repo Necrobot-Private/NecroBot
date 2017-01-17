@@ -36,7 +36,7 @@ namespace PoGo.Necrobot.Window.Model
             {
                 
             };
-            #pragma warning disable 4014  // added to get rid of compiler warning. Remove this if async code is used below.
+            #pragma warning disable 4014 // added to get rid of compiler warning. Remove this if async code is used below.
             RefreshList();
             #pragma warning restore 4014
         }

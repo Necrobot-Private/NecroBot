@@ -23,6 +23,7 @@ using PokemonGo.RocketAPI.Enums;
 using PokemonGo.RocketAPI.Extensions;
 using POGOProtos.Map.Fort;
 using POGOProtos.Networking.Responses;
+using static PoGo.NecroBot.Logic.Utils.PushNotificationClient;
 
 #endregion
 
@@ -214,7 +215,10 @@ namespace PoGo.NecroBot.Logic.State
                     logs.Add($"{item.GoogleUsername}{item.PtcUsername};{item.RuntimeTotal}");
                 }
                 File.AppendAllLines("runtime.log", logs);
-                PushNotificationClient.SendNotification(this,$"Account changed to {nextBot.GoogleUsername}{nextBot.PtcUsername}",body);
+
+                #pragma warning disable 4014 // added to get rid of compiler warning. Remove this if async code is used below.
+                SendNotification(this, $"Account changed to {nextBot.GoogleUsername}{nextBot.PtcUsername}", body);
+                #pragma warning restore 4014
 
                 this.Settings.AuthType = nextBot.AuthType;
                 this.Settings.GooglePassword = nextBot.GooglePassword;
@@ -244,7 +248,10 @@ namespace PoGo.NecroBot.Logic.State
             else
             {
                 var nextRelease = this.accounts.Min(x => (x.ReleaseBlockTime - DateTime.Now).TotalMinutes);
-                PushNotificationClient.SendNotification(this, "All accounts are being blocked", $"None of yours account available to switch, bot will sleep for {nextRelease} mins until next acount available to run", true);
+
+                #pragma warning disable 4014 // added to get rid of compiler warning. Remove this if async code is used below.
+                SendNotification(this, "All accounts are being blocked", $"None of yours account available to switch, bot will sleep for {nextRelease} mins until next acount available to run", true);
+                #pragma warning restore 4014
 
                 Task.Delay((int) nextRelease * 60 * 1000).Wait();
             }

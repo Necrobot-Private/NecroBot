@@ -68,7 +68,7 @@ namespace PoGo.NecroBot.Logic.State
                 await Task.Delay(2000, cancellationToken);
                 throw new LoginFailedException();
             }
-            catch (AccessTokenExpiredException ex)
+            catch (AccessTokenExpiredException)
             {
                 session.EventDispatcher.Send(new ErrorEvent
                 {
@@ -76,7 +76,7 @@ namespace PoGo.NecroBot.Logic.State
                 });
                 return new LoginState();
             }
-            catch (PtcOfflineException ex)
+            catch (PtcOfflineException)
             {
                 session.EventDispatcher.Send(new ErrorEvent
                 {

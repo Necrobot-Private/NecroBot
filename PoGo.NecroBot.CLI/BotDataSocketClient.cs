@@ -185,12 +185,15 @@ namespace PoGo.NecroBot.CLI
                 //ONFPMBridgeData(session, e.Data); //Nolonger use
             }
 
+            #pragma warning disable 0168 // Comment Suppress compiler warning - ex is used in DEBUG section
             catch (Exception ex)
+            #pragma warning restore 0168
             {
-#if DEBUG
+                // Comment Suppress compiler warning - ex is used in DEBUG section
+                #if DEBUG
                 Logger.Write("ERROR TO ADD SNIPE< DEBUG ONLY " + ex.Message + "\r\n " + ex.StackTrace,
                     Logic.Logging.LogLevel.Info, ConsoleColor.Yellow);
-#endif
+                #endif
             }
         }
 

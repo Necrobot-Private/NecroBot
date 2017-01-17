@@ -155,18 +155,21 @@ namespace PoGo.NecroBot.Logic.Tasks
                     await Task.Delay(2000);
                     result = await StartBattle(session, gym, pokemonDatas, defenders.FirstOrDefault(x => x.Id == defenderPokemonId));
                 }
+                #pragma warning disable 0168 // Comment Suppress compiler warning - e is used in DEBUG section
                 catch (APIBadRequestException e)
+                #pragma warning restore 1998 //
                 {
                     Logger.Write("Can't start battle", LogLevel.Gym);
                     isFailedToStart = true;
                     isVictory = false;
                     _startBattleCounter--;
-#if DEBUG
+
+                    #if DEBUG
                     Debug.Write("Gym: " + gym, "GYM");
                     Debug.Write("Defender: " + defenders.FirstOrDefault(x => x.Id == defenderPokemonId), "GYM");
                     Debug.Write("Attackers: " + string.Join(", ", pokemonDatas.Select(s => s.ToString()).ToArray()), "GYM");
                     Debug.Write(e.Message, "GYM");
-#endif
+                    #endif
                     break;
                 }
 
@@ -326,14 +329,16 @@ namespace PoGo.NecroBot.Logic.Tasks
                                                 ConsoleColor.Magenta
                                             );
                                     }
+                                    #pragma warning disable 0168 // Comment Suppress compiler warning - e is used in DEBUG section
                                     catch (APIBadRequestException e)
+                                    #pragma warning restore 1998 //
                                     {
-#if DEBUG
+                                        #if DEBUG
                                         Logger.Write("Can't get coins", LogLevel.Warning);
 
                                         Debug.Write(e.Message, "GYM");
                                         Debug.Write(e.StackTrace, "GYM");
-#endif
+                                        #endif
                                         await Task.Delay(500);
                                     }
                                 }
@@ -747,15 +752,15 @@ namespace PoGo.NecroBot.Logic.Tasks
                         break;
                     }
                 }
+                #pragma warning disable 1998 // Comment Suppress compiler warning - e is used in DEBUG section
                 catch (APIBadRequestException e)
+                #pragma warning restore 0168 //
                 {
-#if DEBUG
-
+                    #if DEBUG
                     Logger.Write("Bad request send to server -", LogLevel.Warning);
                     Debug.Write(e.Message, "GYM");
                     Debug.Write(e.StackTrace, "GYM");
-
-#endif
+                    #endif
                 }
             }
             return lastActions;

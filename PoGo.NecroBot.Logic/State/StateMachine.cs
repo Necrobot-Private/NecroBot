@@ -12,6 +12,8 @@ using PoGo.NecroBot.Logic.Model.Settings;
 using PoGo.NecroBot.Logic.Tasks;
 using PoGo.NecroBot.Logic.Utils;
 using PokemonGo.RocketAPI.Exceptions;
+using static System.Threading.Tasks.Task;
+using static PoGo.NecroBot.Logic.Utils.PushNotificationClient;
 
 #endregion
 
@@ -23,7 +25,7 @@ namespace PoGo.NecroBot.Logic.State
 
         public Task AsyncStart(IState initialState, Session session, string subPath, bool excelConfigAllowed = false)
         {
-            return Task.Run(() => Start(initialState, session, subPath, excelConfigAllowed));
+            return Run(() => Start(initialState, session, subPath, excelConfigAllowed));
         }
 
         public void SetFailureState(IState state)
@@ -52,6 +54,7 @@ namespace PoGo.NecroBot.Logic.State
                 {
                     globalSettings = GlobalSettings.Load(subPath);
                     session.LogicSettings = new LogicSettings(globalSettings);
+                    // BUG: duplicate boolean negation will take no effect
                     configWatcher.EnableRaisingEvents = !configWatcher.EnableRaisingEvents;
                     configWatcher.EnableRaisingEvents = !configWatcher.EnableRaisingEvents;
                     Logger.Write(" ##### config.json ##### ", LogLevel.Info);
@@ -61,7 +64,9 @@ namespace PoGo.NecroBot.Logic.State
             //watch the excel config file
             if (excelConfigAllowed)
             {
-                Task.Run(async () =>
+                // TODO - await is legal here! USE it or use pragma to suppress compilerwarning and write a comment why it is not used
+                // TODO: Attention - do not touch (add pragma) when you do not know what you are doing ;)
+                Run(async () =>
                 {
                     while (true)
                     {
@@ -74,10 +79,11 @@ namespace PoGo.NecroBot.Logic.State
                                 session.LogicSettings = new LogicSettings(globalSettings);
                                 Logger.Write(" ##### config.xlsm ##### ", LogLevel.Info);
                             }
-                            await Task.Delay(5000);
+                            await Delay(5000);
                         }
                         catch (Exception)
                         {
+                            // TODO Bad practice! Wanna log this?
                         }
                     }
                 });
@@ -103,7 +109,7 @@ namespace PoGo.NecroBot.Logic.State
                         session.CancellationTokenSource.Cancel();
 
                         // A bit rough here; works but can be improved
-                        await Task.Delay(10000);
+                        await Delay(10000);
                         state = null;
                         session.CancellationTokenSource.Dispose();
                         Environment.Exit(0);
@@ -162,7 +168,9 @@ namespace PoGo.NecroBot.Logic.State
                         if (se.MatchedRule == SwitchRules.CatchLimitReached ||
                             se.MatchedRule == SwitchRules.SpinPokestopReached)
                         {
-                            PushNotificationClient.SendNotification(session, $"{se.MatchedRule} - {session.Settings.GoogleUsername}{session.Settings.PtcUsername}", "This bot has reach limit, it will be blocked for 60 mins for safety.", true);
+                            // TODO - await is legal here! USE it or use pragma to suppress compilerwarning and write a comment why it is not used
+                            // TODO: Attention - do not touch (add pragma) when you do not know what you are doing ;)
+                            SendNotification(session, $"{se.MatchedRule} - {session.Settings.GoogleUsername}{session.Settings.PtcUsername}", "This bot has reach limit, it will be blocked for 60 mins for safety.", true);
                             session.EventDispatcher.Send(new WarnEvent() { Message = $"You reach limited. bot will sleep for {session.LogicSettings.MultipleBotConfig.OnLimitPauseTimes} min" });
 
                             session.BlockCurrentBot(session.LogicSettings.MultipleBotConfig.OnLimitPauseTimes);
@@ -188,7 +196,7 @@ namespace PoGo.NecroBot.Logic.State
                 catch (InvalidResponseException)
                 {
                     session.EventDispatcher.Send(new ErrorEvent { Message = "Niantic Servers unstable, throttling API Calls." });
-                    await Task.Delay(1000);
+                    await Delay(1000);
                     if (session.LogicSettings.AllowMultipleBot)
                     {
                         apiCallFailured++;
@@ -213,7 +221,9 @@ namespace PoGo.NecroBot.Logic.State
                 }
                 catch (LoginFailedException)
                 {
-                    PushNotificationClient.SendNotification(session, $"Banned!!!! {session.Settings.PtcUsername}{session.Settings.GoogleUsername}", session.Translation.GetTranslation(TranslationString.AccountBanned), true);
+                    // TODO - await is legal here! USE it or use pragma to suppress compilerwarning and write a comment why it is not used
+                    // TODO: Attention - do not touch (add pragma) when you do not know what you are doing ;)
+                    SendNotification(session, $"Banned!!!! {session.Settings.PtcUsername}{session.Settings.GoogleUsername}", session.Translation.GetTranslation(TranslationString.AccountBanned), true);
 
                     if (session.LogicSettings.AllowMultipleBot)
                     {
@@ -253,7 +263,7 @@ namespace PoGo.NecroBot.Logic.State
                     session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.PtcOffline) });
                     session.EventDispatcher.Send(new NoticeEvent { Message = session.Translation.GetTranslation(TranslationString.TryingAgainIn, 15) });
 
-                    await Task.Delay(15000);
+                    await Delay(15000);
                     state = _initialState;
                 }
                 catch (GoogleOfflineException)
@@ -261,7 +271,7 @@ namespace PoGo.NecroBot.Logic.State
                     session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.GoogleOffline) });
                     session.EventDispatcher.Send(new NoticeEvent { Message = session.Translation.GetTranslation(TranslationString.TryingAgainIn, 15) });
 
-                    await Task.Delay(15000);
+                    await Delay(15000);
                     state = _initialState;
                 }
                 catch (AccessTokenExpiredException)
@@ -274,7 +284,7 @@ namespace PoGo.NecroBot.Logic.State
                     var resolved = await CaptchaManager.SolveCaptcha(session, captchaException.Url);
                     if (!resolved)
                     {
-                        await PushNotificationClient.SendNotification(session, $"Captcha required {session.Settings.PtcUsername}{session.Settings.GoogleUsername}", session.Translation.GetTranslation(TranslationString.CaptchaShown), true);
+                        await SendNotification(session, $"Captcha required {session.Settings.PtcUsername}{session.Settings.GoogleUsername}", session.Translation.GetTranslation(TranslationString.CaptchaShown), true);
                         session.EventDispatcher.Send(new WarnEvent { Message = session.Translation.GetTranslation(TranslationString.CaptchaShown) });
                         if (session.LogicSettings.AllowMultipleBot)
                         {

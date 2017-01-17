@@ -15,7 +15,9 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
         {
         }
 
+        #pragma warning disable 1998 // added to get rid of compiler warning. Remove this if async code is used below.
         public override async Task<bool> OnCommand(ISession session, string cmd, Action<GeoCoordinate> Callback)
+        #pragma warning restore 1998
         {
             if (cmd.ToLower() == Command)
             {

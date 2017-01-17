@@ -108,10 +108,13 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 chunk.Add(pItem);
                             }
                         }
+                        // TODO - await is legal here! USE it or use pragma to suppress compilerwarning and write a comment why it is not used
+                        // TODO: Attention - do not touch (add pragma) when you do not know what you are doing ;)
                         PostProcessDataFetched(chunk, false);
                     }
                     catch
                     {
+                        // TODO Bad practice! Wanna log this?
                     }
                     finally
                     {
@@ -125,6 +128,8 @@ namespace PoGo.NecroBot.Logic.Tasks
         private static void StartAsyncPollingTask(ISession session, CancellationToken cancellationToken)
         {
             return;
+
+            // TODO unreachable
             if (!session.LogicSettings.HumanWalkingSnipeUseFastPokemap) return;
 
             if (taskDataLive != null && !taskDataLive.IsCompleted) return;
@@ -216,6 +221,8 @@ namespace PoGo.NecroBot.Logic.Tasks
         private static async Task<List<SnipePokemonInfo>> FetchFromFastPokemap(double lat, double lng)
         {
             return new List<SnipePokemonInfo>();
+
+            // TODO unreachable
             List<SnipePokemonInfo> results = new List<SnipePokemonInfo>();
             if (!_setting.HumanWalkingSnipeUseFastPokemap) return results;
 

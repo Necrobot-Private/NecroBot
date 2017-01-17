@@ -94,6 +94,7 @@ namespace PoGo.NecroBot.Logic.Utils
                         await SendPushNotificationV2(cfg.PushBulletApiKey, title, body);
                     }
 
+                    // TODO function is deprecated / obsolete
                     await session.Telegram.SendMessage($"{title}\r\n{body}");
                 }
             }

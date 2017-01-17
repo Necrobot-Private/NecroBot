@@ -16,7 +16,9 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
         {
         }
 
+        #pragma warning disable 1998 // added to get rid of compiler warning. Remove this if async code is used below.
         public override async Task<bool> OnCommand(ISession session,string commandText, Action<string> Callback)
+        #pragma warning restore 1998
         {
             var cmd = commandText.Split(' ');
 
@@ -33,9 +35,9 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
                 {
                     numberOfLines = Convert.ToInt32(cmd[1]);
                 }
-                var last10lines = alllines.Skip(Math.Max(0, alllines.Length - numberOfLines));
+                var last10Lines = alllines.Skip(Math.Max(0, alllines.Length - numberOfLines));
                 var message = "";
-                foreach (var item in last10lines)
+                foreach (var item in last10Lines)
                 {
                     message += item + "\r\n";
                 }
