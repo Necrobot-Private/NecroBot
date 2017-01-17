@@ -10,6 +10,7 @@ using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Utils;
 using POGOProtos.Map.Pokemon;
 using POGOProtos.Networking.Responses;
+using System.Collections.Generic;
 
 #endregion
 
@@ -17,6 +18,9 @@ namespace PoGo.NecroBot.Logic.Tasks
 {
     public static class CatchIncensePokemonsTask
     {
+        //add delegate
+        public delegate void PokemonsEncounterDelegate(List<MapPokemon> pokemons);
+
         public static async Task Execute(ISession session, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -42,6 +46,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                 };
                 if (session.Cache.Get(incensePokemon.EncounterId.ToString()) != null)
                     return; //pokemon been ignore before
+
+                //add delegate function
+                OnPokemonEncounterEvent(new List<MapPokemon> { pokemon });
 
                 if ((session.LogicSettings.UsePokemonSniperFilterOnly && !session.LogicSettings.PokemonToSnipe.Pokemon.Contains(pokemon.PokemonId))
                     || (session.LogicSettings.UsePokemonToNotCatchFilter && session.LogicSettings.PokemonsNotToCatch.Contains(pokemon.PokemonId)))
@@ -97,5 +104,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
             }
         }
-    }
+        //add delegate event
+         public static event PokemonsEncounterDelegate PokemonEncounterEvent;
+ 
+         private static void OnPokemonEncounterEvent(List<MapPokemon> pokemons)
+         {
+             PokemonEncounterEvent?.Invoke(pokemons);
+         }
+   }
 }
