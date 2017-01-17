@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Reflection;
+using System.Threading;
 using PoGo.NecroBot.Logic.Logging;
 
 namespace PoGo.NecroBot.Logic.Utils
@@ -22,7 +23,7 @@ namespace PoGo.NecroBot.Logic.Utils
             for( int i = timeout; i > 0; i-- )
             {
                 Logger.Write( "\b" + i, LogLevel.Error );
-                System.Threading.Thread.Sleep( 1000 );
+                Thread.Sleep( 1000 );
             }
 
             if( boolRestart )

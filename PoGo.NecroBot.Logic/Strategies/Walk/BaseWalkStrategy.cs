@@ -1,17 +1,16 @@
-﻿using GeoCoordinatePortable;
-using PoGo.NecroBot.Logic.Utils;
-using POGOProtos.Networking.Responses;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using PoGo.NecroBot.Logic.State;
 using System.Threading;
-using PokemonGo.RocketAPI;
-using PoGo.NecroBot.Logic.Interfaces.Configuration;
+using System.Threading.Tasks;
+using GeoCoordinatePortable;
 using PoGo.NecroBot.Logic.Event;
+using PoGo.NecroBot.Logic.Interfaces.Configuration;
 using PoGo.NecroBot.Logic.Model;
-using PoGo.NecroBot.Logic.Event.Gym;
+using PoGo.NecroBot.Logic.State;
+using PoGo.NecroBot.Logic.Utils;
+using PokemonGo.RocketAPI;
+using POGOProtos.Networking.Responses;
 
 namespace PoGo.NecroBot.Logic.Strategies.Walk
 {

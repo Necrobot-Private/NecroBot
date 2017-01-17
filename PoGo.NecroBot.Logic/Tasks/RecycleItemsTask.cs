@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Logging;
+using PoGo.NecroBot.Logic.Model;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Utils;
 using POGOProtos.Inventory.Item;
@@ -336,7 +337,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         public static async Task DropItem(ISession session, ItemId item, int count)
         {
-            using (var blocker = new BlockableScope(session, Model.BotActions.RecycleItem))
+            using (var blocker = new BlockableScope(session, BotActions.RecycleItem))
             {
                 if (!await blocker.WaitToRun()) return;
 

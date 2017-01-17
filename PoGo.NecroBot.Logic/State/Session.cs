@@ -1,26 +1,28 @@
 #region using directives
+
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Caching;
+using System.Threading;
+using System.Threading.Tasks;
 using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.Event;
+using PoGo.NecroBot.Logic.Event.Inventory;
 using PoGo.NecroBot.Logic.Interfaces.Configuration;
+using PoGo.NecroBot.Logic.Logging;
+using PoGo.NecroBot.Logic.Model;
 using PoGo.NecroBot.Logic.Model.Settings;
 using PoGo.NecroBot.Logic.Service;
-using PokemonGo.RocketAPI;
-using POGOProtos.Networking.Responses;
 using PoGo.NecroBot.Logic.Service.Elevation;
-using System.Collections.Generic;
-using POGOProtos.Map.Fort;
-using System;
-using PokemonGo.RocketAPI.Extensions;
-using PoGo.NecroBot.Logic.Model;
-using System.Threading.Tasks;
-using System.Threading;
-using System.Runtime.Caching;
-using PoGo.NecroBot.Logic.Logging;
-using PoGo.NecroBot.Logic.Utils;
-using System.IO;
 using PoGo.NecroBot.Logic.Tasks;
-using PoGo.NecroBot.Logic.Event.Inventory;
+using PoGo.NecroBot.Logic.Utils;
+using PokemonGo.RocketAPI;
+using PokemonGo.RocketAPI.Enums;
+using PokemonGo.RocketAPI.Extensions;
+using POGOProtos.Map.Fort;
+using POGOProtos.Networking.Responses;
 
 #endregion
 
@@ -83,8 +85,8 @@ namespace PoGo.NecroBot.Logic.State
             this.Reset(settings, LogicSettings);
             this.Stats = new SessionStats(this);
             this.accounts.AddRange(logicSettings.Bots);
-            if (!this.accounts.Any(x => (x.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Ptc && x.PtcUsername == settings.PtcUsername) ||
-                                        (x.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Google && x.GoogleUsername == settings.GoogleUsername)
+            if (!this.accounts.Any(x => (x.AuthType == AuthType.Ptc && x.PtcUsername == settings.PtcUsername) ||
+                                        (x.AuthType == AuthType.Google && x.GoogleUsername == settings.GoogleUsername)
                                         ))
             {
                 this.accounts.Add(new AuthConfig()
@@ -167,8 +169,8 @@ namespace PoGo.NecroBot.Logic.State
         {
             this.CatchBlockTime = DateTime.Now; //remove any block
             MSniperServiceTask.BlockSnipe();
-            var currentAccount = this.accounts.FirstOrDefault(x => (x.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Ptc && x.PtcUsername == this.Settings.PtcUsername) ||
-                                        (x.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Google && x.GoogleUsername == this.Settings.GoogleUsername));
+            var currentAccount = this.accounts.FirstOrDefault(x => (x.AuthType == AuthType.Ptc && x.PtcUsername == this.Settings.PtcUsername) ||
+                                        (x.AuthType == AuthType.Google && x.GoogleUsername == this.Settings.GoogleUsername));
             if (LoggedTime != DateTime.MinValue)
             {
                 currentAccount.RuntimeTotal += (DateTime.Now - LoggedTime).TotalMinutes;
@@ -281,8 +283,8 @@ namespace PoGo.NecroBot.Logic.State
 
         public void BlockCurrentBot(int expired = 60)
         {
-            var currentAccount = this.accounts.FirstOrDefault(x => (x.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Ptc && x.PtcUsername == this.Settings.PtcUsername) ||
-                                       (x.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Google && x.GoogleUsername == this.Settings.GoogleUsername));
+            var currentAccount = this.accounts.FirstOrDefault(x => (x.AuthType == AuthType.Ptc && x.PtcUsername == this.Settings.PtcUsername) ||
+                                       (x.AuthType == AuthType.Google && x.GoogleUsername == this.Settings.GoogleUsername));
 
             currentAccount.ReleaseBlockTime = DateTime.Now.AddMinutes(expired);
         }

@@ -1,16 +1,14 @@
-﻿using PoGo.NecroBot.Logic.Event;
-using PoGo.NecroBot.Logic.Model.Settings;
-using PoGo.NecroBot.Logic.State;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Mail;
-using System.Text;
 using System.Threading.Tasks;
+using PoGo.NecroBot.Logic.Common;
+using PoGo.NecroBot.Logic.Event;
+using PoGo.NecroBot.Logic.Model.Settings;
+using PoGo.NecroBot.Logic.State;
 
 namespace PoGo.NecroBot.Logic.Utils
 {
@@ -100,7 +98,7 @@ namespace PoGo.NecroBot.Logic.Utils
             }
             catch (Exception)
             {
-                session.EventDispatcher.Send(new WarnEvent() { Message = session.Translation.GetTranslation(Common.TranslationString.FailedSendNotification) });
+                session.EventDispatcher.Send(new WarnEvent() { Message = session.Translation.GetTranslation(TranslationString.FailedSendNotification) });
             }
            
         }

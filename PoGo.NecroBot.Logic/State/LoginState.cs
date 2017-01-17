@@ -7,13 +7,12 @@ using System.Threading.Tasks;
 using Google.Protobuf;
 using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.Event;
+using PoGo.NecroBot.Logic.Event.Player;
+using PoGo.NecroBot.Logic.Exceptions;
 using PoGo.NecroBot.Logic.Logging;
 using PokemonGo.RocketAPI.Enums;
 using PokemonGo.RocketAPI.Exceptions;
 using POGOProtos.Enums;
-using System.IO;
-using PoGo.NecroBot.Logic.Exceptions;
-using PoGo.NecroBot.Logic.Event.Player;
 
 #endregion
 
@@ -155,7 +154,7 @@ namespace PoGo.NecroBot.Logic.State
 
                 Logger.Write(session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey, LogLevel.Error));
                 Console.ReadKey();
-                System.Environment.Exit(1);
+                Environment.Exit(1);
             }
             catch (CaptchaException captcha)
             {
@@ -189,7 +188,7 @@ namespace PoGo.NecroBot.Logic.State
                         Logger.Write(session.Translation.GetTranslation(TranslationString.TotalRecyclePercentGreaterThan100), LogLevel.Error);
                         Logger.Write("Press any key to exit, then fix your configuration and run the bot again.", LogLevel.Warning);
                         Console.ReadKey();
-                        System.Environment.Exit(1);
+                        Environment.Exit(1);
                     }
                     else
                     {
@@ -213,7 +212,7 @@ namespace PoGo.NecroBot.Logic.State
                         Logger.Write(session.Translation.GetTranslation(TranslationString.MaxItemsCombinedOverMaxItemStorage, maxTheoreticalItems, session.Profile.PlayerData.MaxItemStorage), LogLevel.Error);
                         Logger.Write("Press any key to exit, then fix your configuration and run the bot again.", LogLevel.Warning);
                         Console.ReadKey();
-                        System.Environment.Exit(1);
+                        Environment.Exit(1);
                     }
                 }
             }
@@ -287,7 +286,7 @@ namespace PoGo.NecroBot.Logic.State
 
                 session.EventDispatcher.Send(new ProfileEvent { Profile = session.Profile, Stats = stats });
             }
-            catch (System.UriFormatException e)
+            catch (UriFormatException e)
             {
                 session.EventDispatcher.Send(new ErrorEvent { Message = e.ToString() });
             }

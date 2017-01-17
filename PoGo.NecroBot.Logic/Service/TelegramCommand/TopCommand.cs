@@ -1,10 +1,10 @@
-﻿using PoGo.NecroBot.Logic.Common;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.PoGoUtils;
 using PoGo.NecroBot.Logic.State;
 using POGOProtos.Data;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace PoGo.NecroBot.Logic.Service.TelegramCommand
 {

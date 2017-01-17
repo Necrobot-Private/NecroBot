@@ -1,9 +1,9 @@
 using System;
+using Google.Protobuf;
+using PoGo.NecroBot.Logic.Service.Elevation;
 using PoGo.NecroBot.Logic.Utils;
 using PokemonGo.RocketAPI;
 using PokemonGo.RocketAPI.Enums;
-using Google.Protobuf;
-using PoGo.NecroBot.Logic.Service.Elevation;
 
 namespace PoGo.NecroBot.Logic.Model.Settings
 {

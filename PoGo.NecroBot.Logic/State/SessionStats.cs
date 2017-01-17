@@ -1,10 +1,10 @@
-﻿using LiteDB;
-using PoGo.NecroBot.Logic.Common;
-using PoGo.NecroBot.Logic.Event;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading;
+using LiteDB;
+using PoGo.NecroBot.Logic.Common;
+using PoGo.NecroBot.Logic.Event;
+using PokemonGo.RocketAPI.Enums;
 
 namespace PoGo.NecroBot.Logic.State
 {
@@ -134,7 +134,7 @@ namespace PoGo.NecroBot.Logic.State
 
         public void InitializeDatabase(ISession session)
         {
-            string username = session.Settings.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Ptc ? session.Settings.PtcUsername : session.Settings.GoogleUsername;
+            string username = session.Settings.AuthType == AuthType.Ptc ? session.Settings.PtcUsername : session.Settings.GoogleUsername;
             if (string.IsNullOrEmpty(username))
             {
                 //firsttime setup , don't need to initial database

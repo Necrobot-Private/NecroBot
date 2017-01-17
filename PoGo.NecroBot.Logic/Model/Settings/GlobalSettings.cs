@@ -15,11 +15,11 @@ using Newtonsoft.Json.Schema;
 using Newtonsoft.Json.Schema.Generation;
 using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.Logging;
+using PoGo.NecroBot.Logic.Service.Elevation;
 using PoGo.NecroBot.Logic.State;
 using PokemonGo.RocketAPI.Enums;
-using POGOProtos.Enums;
-using PoGo.NecroBot.Logic.Service.Elevation;
 using PokemonGo.RocketAPI.Extensions;
+using POGOProtos.Enums;
 
 #endregion
 

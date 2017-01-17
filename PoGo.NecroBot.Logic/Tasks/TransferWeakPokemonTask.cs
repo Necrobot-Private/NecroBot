@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.PoGoUtils;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Utils;
 using POGOProtos.Data;
+using POGOProtos.Networking.Responses;
 
 #endregion
 
@@ -78,7 +80,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     var batchTransfer = orderedPokemon.Skip(i * session.LogicSettings.BulkTransferSize).Take(session.LogicSettings.BulkTransferSize);
                     var t = await session.Client.Inventory.TransferPokemons(batchTransfer.Select(x => x.Id).ToList());
-                    if (t.Result == POGOProtos.Networking.Responses.ReleasePokemonResponse.Types.Result.Success)
+                    if (t.Result == ReleasePokemonResponse.Types.Result.Success)
                     {
                         foreach (var duplicatePokemon in batchTransfer)
                         {
@@ -86,7 +88,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                             await PrintTransferedPokemonInfo(session, duplicatePokemon);
                         }
                     }
-                    else session.EventDispatcher.Send(new WarnEvent() { Message = session.Translation.GetTranslation(Common.TranslationString.BulkTransferFailed, orderedPokemon.Count()) });
+                    else session.EventDispatcher.Send(new WarnEvent() { Message = session.Translation.GetTranslation(TranslationString.BulkTransferFailed, orderedPokemon.Count()) });
                 }
             }
         }

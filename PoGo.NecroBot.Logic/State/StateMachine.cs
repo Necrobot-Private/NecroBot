@@ -2,17 +2,16 @@
 
 using System;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
-using PoGo.NecroBot.Logic.Event;
-using PoGo.NecroBot.Logic.Tasks;
+using PoGo.NecroBot.Logic.Captcha;
 using PoGo.NecroBot.Logic.Common;
+using PoGo.NecroBot.Logic.Event;
+using PoGo.NecroBot.Logic.Exceptions;
 using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.Model.Settings;
-using PokemonGo.RocketAPI.Exceptions;
-using PoGo.NecroBot.Logic.Exceptions;
+using PoGo.NecroBot.Logic.Tasks;
 using PoGo.NecroBot.Logic.Utils;
-using PoGo.NecroBot.Logic.Captcha;
+using PokemonGo.RocketAPI.Exceptions;
 
 #endregion
 
@@ -227,7 +226,7 @@ namespace PoGo.NecroBot.Logic.State
                     else {
                         session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey) });
                         Console.ReadKey();
-                        System.Environment.Exit(1);
+                        Environment.Exit(1);
                     }
                 }
                 catch (MinimumClientVersionException ex)
@@ -240,7 +239,7 @@ namespace PoGo.NecroBot.Logic.State
 
                     session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey) });
                     Console.ReadKey();
-                    System.Environment.Exit(1);
+                    Environment.Exit(1);
                 }
                 catch(TokenRefreshException ex)
                 {

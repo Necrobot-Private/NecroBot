@@ -1,9 +1,9 @@
-﻿using Caching;
-using Newtonsoft.Json.Linq;
-using PoGo.NecroBot.Logic.Model.Settings;
-using System;
+﻿using System;
 using System.IO;
 using System.Net;
+using Caching;
+using Newtonsoft.Json.Linq;
+using PoGo.NecroBot.Logic.Model.Settings;
 
 namespace PoGo.NecroBot.Logic.Service.Elevation
 {

@@ -6,12 +6,12 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Google.Protobuf.Collections;
+using PoGo.NecroBot.Logic.Exceptions;
 using PoGo.NecroBot.Logic.Logging;
+using PoGo.NecroBot.Logic.Model.Settings;
 using PoGo.NecroBot.Logic.State;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Networking.Responses;
-using PoGo.NecroBot.Logic.Exceptions;
-using PoGo.NecroBot.Logic.Model.Settings;
 
 #endregion
 
@@ -153,7 +153,7 @@ namespace PoGo.NecroBot.Logic.Utils
                 if (Result2.ToString().ToLower().Contains("success"))
                 {
                     string[] tokens = Result2.Result.ToString().Split(new[] { "itemId" }, StringSplitOptions.None);
-                    Logging.Logger.Write("Items Awarded:" + Result2.ItemsAwarded.ToString());
+                    Logger.Write("Items Awarded:" + Result2.ItemsAwarded.ToString());
                 }
                 output = new StatsExport
                 {

@@ -1,18 +1,17 @@
 ﻿#region using directives
 
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Google.Protobuf.Collections;
-using POGOProtos.Data.Player;
+using PoGo.NecroBot.Logic.Common;
+using PoGo.NecroBot.Logic.Event;
+using PoGo.NecroBot.Logic.Forms;
+using PoGo.NecroBot.Logic.Model.Settings;
+using PoGo.NecroBot.Logic.Utils;
 using POGOProtos.Enums;
 using POGOProtos.Networking.Responses;
-using PoGo.NecroBot.Logic.Event;
-using PoGo.NecroBot.Logic.Utils;
-using PoGo.NecroBot.Logic.Model.Settings;
-using PoGo.NecroBot.Logic.Common;
-using PoGo.NecroBot.Logic.Forms;
 
 #endregion
 
@@ -44,7 +43,7 @@ namespace PoGo.NecroBot.Logic.State
             }
             InitialTutorialForm form = new InitialTutorialForm(this,tutState, session);
 
-            if (form.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if (form.ShowDialog() == DialogResult.OK)
             {
 
             }

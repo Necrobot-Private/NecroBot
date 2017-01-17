@@ -2,14 +2,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using PoGo.NecroBot.Logic.DataDumper;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.PoGoUtils;
 using PoGo.NecroBot.Logic.State;
-using System.Globalization;
-using System.Threading;
 
 #endregion
 
@@ -139,7 +140,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     // restore culture
                     Thread.CurrentThread.CurrentCulture = prevCulture;
                 }
-                catch (System.IO.IOException)
+                catch (IOException)
                 {
                     session.EventDispatcher.Send(new ErrorEvent { Message = $"Could not write {dumpFileName} dump file." });
                 }

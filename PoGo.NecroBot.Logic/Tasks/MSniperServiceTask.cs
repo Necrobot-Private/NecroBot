@@ -1,4 +1,13 @@
-﻿using GeoCoordinatePortable;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using GeoCoordinatePortable;
 using Microsoft.AspNet.SignalR.Client;
 using Newtonsoft.Json;
 using PoGo.NecroBot.Logic.Common;
@@ -9,22 +18,11 @@ using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.Model.Settings;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Utils;
+using PokemonGo.RocketAPI.Exceptions;
 using POGOProtos.Data;
 using POGOProtos.Enums;
-using POGOProtos.Inventory;
 using POGOProtos.Map.Pokemon;
 using POGOProtos.Networking.Responses;
-using PokemonGo.RocketAPI.Exceptions;
-using PokemonGo.RocketAPI.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace PoGo.NecroBot.Logic.Tasks
 {
@@ -561,7 +559,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     session.EventDispatcher.Send(new WarnEvent()
                     {
-                        Message = session.Translation.GetTranslation(Common.TranslationString.AutoSnipeDisabled, session.LogicSettings.SnipePauseOnOutOfBallTime)
+                        Message = session.Translation.GetTranslation(TranslationString.AutoSnipeDisabled, session.LogicSettings.SnipePauseOnOutOfBallTime)
                     });
 
                     OutOffBallBlock = DateTime.Now.AddMinutes(session.LogicSettings.SnipePauseOnOutOfBallTime);
@@ -630,7 +628,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     {
                         session.EventDispatcher.Send(new WarnEvent()
                         {
-                            Message = session.Translation.GetTranslation(Common.TranslationString.AutoSnipeDisabled)
+                            Message = session.Translation.GetTranslation(TranslationString.AutoSnipeDisabled)
                         });
 
                         OutOffBallBlock = DateTime.Now.AddMinutes(session.LogicSettings.SnipePauseOnOutOfBallTime);

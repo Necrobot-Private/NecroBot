@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
-using PoGo.NecroBot.Logic.Logging;
-using POGOProtos.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using PoGo.NecroBot.Logic.Logging;
+using POGOProtos.Enums;
 
 namespace PoGo.NecroBot.Logic.Tasks
 {

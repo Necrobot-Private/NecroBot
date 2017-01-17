@@ -1,5 +1,9 @@
-﻿using Google.Protobuf;
-using Newtonsoft.Json;
+﻿using System;
+using System.IO;
+using System.Media;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
@@ -7,18 +11,7 @@ using PoGo.NecroBot.Logic.Captcha.Anti_Captcha;
 using PoGo.NecroBot.Logic.Forms;
 using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.State;
-using POGOProtos.Networking.Requests.Messages;
-using POGOProtos.Networking.Responses;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Media;
-using System.Reflection;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using static POGOProtos.Networking.Envelopes.Signature.Types;
+using LogLevel = PoGo.NecroBot.Logic.Logging.LogLevel;
 
 namespace PoGo.NecroBot.Logic.Captcha
 {
@@ -127,7 +120,7 @@ namespace PoGo.NecroBot.Logic.Captcha
             string response = "";
             var t = new Thread(()=> {
                 CaptchaSolveForm captcha = new CaptchaSolveForm(captchaUrl);
-                if (captcha.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                if (captcha.ShowDialog() == DialogResult.OK)
                 {
                     response = "Aaa";
                 }
@@ -166,10 +159,10 @@ namespace PoGo.NecroBot.Logic.Captcha
                 var verifyChallengeResponse = await session.Client.Player.VerifyChallenge(captchaRespose);
                 if (!verifyChallengeResponse.Success)
                 {
-                    Logging.Logger.Write($"(CAPTCHA) Failed to resolve captcha, try resolved captcha by official app. ");
+                    Logger.Write($"(CAPTCHA) Failed to resolve captcha, try resolved captcha by official app. ");
                     return false;
                 }
-                Logging.Logger.Write($"(CAPTCHA) Great!!! Captcha has been by passed", color: ConsoleColor.Green);
+                Logger.Write($"(CAPTCHA) Great!!! Captcha has been by passed", color: ConsoleColor.Green);
                 return verifyChallengeResponse.Success;
             }
             catch (Exception ex)
@@ -226,19 +219,19 @@ namespace PoGo.NecroBot.Logic.Captcha
 
             if(!File.Exists("chromedriver.exe"))
             {
-                Logging.Logger.Write($"You enable manual captcha resolve but didn't setup properly, please download webdriver.exe put in same folder.", Logging.LogLevel.Error);
+                Logger.Write($"You enable manual captcha resolve but didn't setup properly, please download webdriver.exe put in same folder.", LogLevel.Error);
                 return null;
             }
             IWebDriver webDriver = null;
             try
             {
 
-                webDriver = new ChromeDriver(System.Environment.CurrentDirectory, new ChromeOptions() {
+                webDriver = new ChromeDriver(Environment.CurrentDirectory, new ChromeOptions() {
                     
                     });
 
                 webDriver.Navigate().GoToUrl(url);
-                Logging.Logger.Write($"Captcha is being show in separate thread window, please check your chrome browser and resolve it before {session.LogicSettings.CaptchaConfig.ManualCaptchaTimeout} seconds");
+                Logger.Write($"Captcha is being show in separate thread window, please check your chrome browser and resolve it before {session.LogicSettings.CaptchaConfig.ManualCaptchaTimeout} seconds");
 
                 var wait = new WebDriverWait(webDriver, TimeSpan.FromSeconds(session.LogicSettings.CaptchaConfig.ManualCaptchaTimeout));
                 //wait.Until(ExpectedConditions.ElementIsVisible(By.Id("recaptcha-verify-button")));
@@ -261,7 +254,7 @@ namespace PoGo.NecroBot.Logic.Captcha
             }
             catch (Exception ex)
             {
-                Logging.Logger.Write($"You didn't resolve captcha in the given time: {ex.Message} ", Logging.LogLevel.Error);
+                Logger.Write($"You didn't resolve captcha in the given time: {ex.Message} ", LogLevel.Error);
             }
             finally
             {

@@ -1,22 +1,21 @@
 ﻿#region using directives
 
 using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using PoGo.NecroBot.Logic.Tasks;
-using System.Collections.Generic;
 using Newtonsoft.Json;
-using System.Linq;
-using PoGo.NecroBot.Logic.Utils;
-using GeoCoordinatePortable;
-using POGOProtos.Networking.Responses;
-using POGOProtos.Map.Pokemon;
-using POGOProtos.Enums;
-using System.Text;
-using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Common;
+using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Model;
-
+using PoGo.NecroBot.Logic.Tasks;
+using PoGo.NecroBot.Logic.Utils;
+using POGOProtos.Enums;
+using POGOProtos.Map.Pokemon;
+using POGOProtos.Networking.Responses;
 
 #endregion
 
@@ -24,7 +23,7 @@ namespace PoGo.NecroBot.Logic.State
 {
     public class CatchState : IState
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Await.Warning", "CS4014:Await.Warning")]
+        [SuppressMessage("Await.Warning", "CS4014:Await.Warning")]
 
         public class CatchablePokemon
         {

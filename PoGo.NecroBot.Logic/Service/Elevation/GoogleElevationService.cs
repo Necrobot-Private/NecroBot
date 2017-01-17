@@ -1,10 +1,11 @@
-﻿using Caching;
-using Newtonsoft.Json;
-using PoGo.NecroBot.Logic.Model.Settings;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using Caching;
+using Newtonsoft.Json;
+using PoGo.NecroBot.Logic.Exceptions;
+using PoGo.NecroBot.Logic.Model.Settings;
 
 namespace PoGo.NecroBot.Logic.Service.Elevation
 {
@@ -70,7 +71,7 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
                     }
                 }
             }
-            catch(Exceptions.ActiveSwitchByRuleException ex)
+            catch(ActiveSwitchByRuleException ex)
             {
                 throw ex;
             }

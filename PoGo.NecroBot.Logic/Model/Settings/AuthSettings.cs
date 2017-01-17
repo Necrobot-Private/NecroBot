@@ -17,8 +17,8 @@ using Newtonsoft.Json.Schema.Generation;
 using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.Utils;
-using PokemonGo.RocketAPI.Helpers;
 using PokemonGo.RocketAPI.Extensions;
+using PokemonGo.RocketAPI.Helpers;
 
 #endregion
 

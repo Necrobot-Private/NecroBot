@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using C5;
 using GeoCoordinatePortable;
 
 namespace PoGo.NecroBot.Logic.Model.Google.GoogleObjects
@@ -9,9 +8,9 @@ namespace PoGo.NecroBot.Logic.Model.Google.GoogleObjects
     {
         public string points { get; set; }
 
-        public List<GeoCoordinatePortable.GeoCoordinate> DecodePoly()
+        public List<GeoCoordinate> DecodePoly()
         {
-            var poly = new List<GeoCoordinatePortable.GeoCoordinate>();
+            var poly = new List<GeoCoordinate>();
             if (string.IsNullOrEmpty(points))
                 throw new ArgumentNullException("polyline");
 

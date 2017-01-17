@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using AeroWizard;
 using Google.Protobuf.Collections;
-using PoGo.NecroBot.Logic.State;
-using POGOProtos.Enums;
-using POGOProtos.Data.Player;
-using POGOProtos.Networking.Responses;
 using PoGo.NecroBot.Logic.Event;
+using PoGo.NecroBot.Logic.State;
+using POGOProtos.Data.Player;
+using POGOProtos.Enums;
+using POGOProtos.Networking.Responses;
 
 namespace PoGo.NecroBot.Logic.Forms
 {
@@ -41,7 +37,7 @@ namespace PoGo.NecroBot.Logic.Forms
 
         }
 
-        private void wizardPage4_Initialize(object sender, AeroWizard.WizardPageInitEventArgs e)
+        private void wizardPage4_Initialize(object sender, WizardPageInitEventArgs e)
         {
             Task.Run(async () =>
             {
@@ -96,7 +92,7 @@ namespace PoGo.NecroBot.Logic.Forms
             if (message.Msg == WM_NCHITTEST && (int)message.Result == HTCLIENT)
                 message.Result = (IntPtr)HTCAPTION;
         }
-        private void wizardPage3_Initialize(object sender, AeroWizard.WizardPageInitEventArgs e)
+        private void wizardPage3_Initialize(object sender, WizardPageInitEventArgs e)
         {
             PokemonId firstPoke = rdoBulbasaur.Checked ? PokemonId.Bulbasaur : rdoCharmander.Checked ? PokemonId.Charmander : PokemonId.Squirtle;
             EncounterTutorialCompleteResponse res = null;
@@ -124,7 +120,7 @@ namespace PoGo.NecroBot.Logic.Forms
            });
         }
 
-        private void wizardPage6_Initialize(object sender, AeroWizard.WizardPageInitEventArgs e)
+        private void wizardPage6_Initialize(object sender, WizardPageInitEventArgs e)
         {
             string nickname = txtNick.Text;
             ClaimCodenameResponse res = null;
@@ -234,7 +230,7 @@ namespace PoGo.NecroBot.Logic.Forms
             });
         }
 
-        private void wizardPage1_Initialize(object sender, AeroWizard.WizardPageInitEventArgs e)
+        private void wizardPage1_Initialize(object sender, WizardPageInitEventArgs e)
         {
             if (tutState.Contains(TutorialState.AvatarSelection))
             {
@@ -242,7 +238,7 @@ namespace PoGo.NecroBot.Logic.Forms
             }
         }
 
-        private void wizardPage2_Initialize(object sender, AeroWizard.WizardPageInitEventArgs e)
+        private void wizardPage2_Initialize(object sender, WizardPageInitEventArgs e)
         {
             if (tutState.Contains(TutorialState.PokemonCapture))
             {
@@ -252,7 +248,7 @@ namespace PoGo.NecroBot.Logic.Forms
             }
         }
 
-        private void wizardPage5_Initialize(object sender, AeroWizard.WizardPageInitEventArgs e)
+        private void wizardPage5_Initialize(object sender, WizardPageInitEventArgs e)
         {
             if (tutState.Contains(TutorialState.NameSelection))
             {

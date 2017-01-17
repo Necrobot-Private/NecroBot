@@ -1,10 +1,10 @@
-﻿using PoGo.NecroBot.Logic.Logging;
-using PoGo.NecroBot.Logic.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using PoGo.NecroBot.Logic.Logging;
+using PoGo.NecroBot.Logic.Utils;
 using WebSocket4Net;
 
 namespace PoGo.NecroBot.Logic.Tasks

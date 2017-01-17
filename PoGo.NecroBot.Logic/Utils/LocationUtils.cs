@@ -1,13 +1,11 @@
 ﻿#region using directives
 
 using System;
-using GeoCoordinatePortable;
 using System.Threading.Tasks;
-using POGOProtos.Networking.Responses;
-using PoGo.NecroBot.Logic.State;
-using PokemonGo.RocketAPI;
-using PoGo.NecroBot.Logic.Service;
+using GeoCoordinatePortable;
 using PoGo.NecroBot.Logic.Service.Elevation;
+using PoGo.NecroBot.Logic.State;
+using POGOProtos.Networking.Responses;
 
 #endregion
 

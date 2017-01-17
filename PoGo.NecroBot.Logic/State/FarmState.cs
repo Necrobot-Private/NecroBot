@@ -1,5 +1,6 @@
 ﻿#region using directives
 
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using PoGo.NecroBot.Logic.Tasks;
@@ -10,7 +11,7 @@ namespace PoGo.NecroBot.Logic.State
 {
     public class FarmState : IState
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Await.Warning", "CS4014:Await.Warning")]
+        [SuppressMessage("Await.Warning", "CS4014:Await.Warning")]
 
         public async Task<IState> Execute(ISession session, CancellationToken cancellationToken)
         {

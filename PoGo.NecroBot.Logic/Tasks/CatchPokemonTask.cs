@@ -7,17 +7,19 @@ using System.Threading;
 using System.Threading.Tasks;
 using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.Event;
+using PoGo.NecroBot.Logic.Exceptions;
 using PoGo.NecroBot.Logic.Logging;
+using PoGo.NecroBot.Logic.Model;
+using PoGo.NecroBot.Logic.Model.Settings;
 using PoGo.NecroBot.Logic.PoGoUtils;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Utils;
+using PokemonGo.RocketAPI.Enums;
+using POGOProtos.Data;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Map.Fort;
 using POGOProtos.Map.Pokemon;
 using POGOProtos.Networking.Responses;
-using POGOProtos.Data;
-using PoGo.NecroBot.Logic.Exceptions;
-using PoGo.NecroBot.Logic.Model.Settings;
 
 #endregion
 
@@ -71,12 +73,12 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 if(session.LogicSettings.AllowMultipleBot && session.LogicSettings.MultipleBotConfig.SwitchOnCatchLimit)
                 {
-                    throw new Exceptions.ActiveSwitchByRuleException() { MatchedRule = SwitchRules.CatchLimitReached, ReachedValue = session.LogicSettings.CatchPokemonLimit };
+                    throw new ActiveSwitchByRuleException() { MatchedRule = SwitchRules.CatchLimitReached, ReachedValue = session.LogicSettings.CatchPokemonLimit };
                 }
 
                 return false;
             }
-            using (var block = new BlockableScope(session, Model.BotActions.Catch))
+            using (var block = new BlockableScope(session, BotActions.Catch))
             {
                 if (!await block.WaitToRun()) return true;
 
@@ -435,7 +437,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     }
                 }
 
-                session.Actions.RemoveAll(x => x == Model.BotActions.Catch);
+                session.Actions.RemoveAll(x => x == BotActions.Catch);
 
                 if (MultipleBotConfig.IsMultiBotActive(session.LogicSettings))
                     ExecuteSwitcher(session, encounterEV);
@@ -475,7 +477,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         )
                 ))
             {
-                var curentkey = session.Settings.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Google ? session.Settings.GoogleUsername : session.Settings.PtcUsername;
+                var curentkey = session.Settings.AuthType == AuthType.Google ? session.Settings.GoogleUsername : session.Settings.PtcUsername;
                 curentkey += encounterEV.EncounterId;
 
                 session.Cache.Add(curentkey, encounterEV, DateTime.Now.AddMinutes(15));
@@ -484,7 +486,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 foreach (var bot in session.Accounts.OrderByDescending(p=>p.RuntimeTotal))
                 {
                     if (bot.ReleaseBlockTime > DateTime.Now) continue;
-                    var key = bot.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Google ? bot.GoogleUsername : bot.PtcUsername;
+                    var key = bot.AuthType == AuthType.Google ? bot.GoogleUsername : bot.PtcUsername;
                     key += encounterEV.EncounterId;
                     if (session.Cache.GetCacheItem(key) == null)
                     {

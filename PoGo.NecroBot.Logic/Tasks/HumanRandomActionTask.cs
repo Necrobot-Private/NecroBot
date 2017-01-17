@@ -1,8 +1,8 @@
-﻿using PoGo.NecroBot.Logic.State;
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using PoGo.NecroBot.Logic.State;
 
 namespace PoGo.NecroBot.Logic.Tasks
 {

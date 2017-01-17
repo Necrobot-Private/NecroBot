@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
-using PoGo.NecroBot.Logic.Logging;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using PoGo.NecroBot.Logic.Logging;
 
 namespace PoGo.NecroBot.Logic.Tasks
 {
@@ -53,7 +53,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static SnipePokemonInfo Map(PokeradarWrapper.PokeradarItem item)
         {
-            System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+            DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
             dtDateTime = dtDateTime.AddSeconds(item.created).ToLocalTime();
             var expiredTime = dtDateTime.AddMinutes(15);
 

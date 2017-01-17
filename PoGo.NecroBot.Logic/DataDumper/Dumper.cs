@@ -1,14 +1,12 @@
 ﻿#region using directives
 
 using System;
-using System.IO;
-using PoGo.NecroBot.Logic.State;
 using System.Globalization;
-using POGOProtos.Data;
-using OfficeOpenXml;
-using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
+using OfficeOpenXml;
 using PoGo.NecroBot.Logic.PoGoUtils;
+using PoGo.NecroBot.Logic.State;
 
 #endregion
 

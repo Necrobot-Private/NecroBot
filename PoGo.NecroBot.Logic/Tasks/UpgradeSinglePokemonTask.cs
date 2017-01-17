@@ -1,19 +1,19 @@
 ﻿#region using directives
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using PoGo.NecroBot.Logic.Logging;
+using PoGo.NecroBot.Logic.Event;
+using PoGo.NecroBot.Logic.Event.Inventory;
+using PoGo.NecroBot.Logic.Model;
 using PoGo.NecroBot.Logic.PoGoUtils;
 using PoGo.NecroBot.Logic.State;
-using POGOProtos.Data;
-using PoGo.NecroBot.Logic.Event;
-using POGOProtos.Inventory;
-using POGOProtos.Settings.Master;
-using System;
 using PokemonGo.RocketAPI.Exceptions;
-using PoGo.NecroBot.Logic.Event.Inventory;
+using POGOProtos.Data;
+using POGOProtos.Inventory;
+using POGOProtos.Networking.Responses;
+using POGOProtos.Settings.Master;
 
 #endregion
 
@@ -41,7 +41,7 @@ namespace PoGo.NecroBot.Logic.Tasks
     ? await session.Inventory.GetHighestPokemonOfTypeByIv(upgradeResult.UpgradedPokemon)
     : await session.Inventory.GetHighestPokemonOfTypeByCp(upgradeResult.UpgradedPokemon)) ?? upgradeResult.UpgradedPokemon;
 
-            if (upgradeResult.Result == POGOProtos.Networking.Responses.UpgradePokemonResponse.Types.Result.Success)
+            if (upgradeResult.Result == UpgradePokemonResponse.Types.Result.Success)
             {
                 session.EventDispatcher.Send(new UpgradePokemonEvent()
                 {
@@ -60,7 +60,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         }
         public static async Task Execute(ISession session, ulong pokemonId, bool isMax = false)
         {
-            using (var block = new BlockableScope(session, Model.BotActions.Upgrade))
+            using (var block = new BlockableScope(session, BotActions.Upgrade))
             {
                 if (!await block.WaitToRun())
                 {
@@ -78,7 +78,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 if (pokemonToUpgrade == null)
                 {
-                    session.Actions.RemoveAll(x => x == Model.BotActions.Upgrade);
+                    session.Actions.RemoveAll(x => x == BotActions.Upgrade);
                     return;
 
                 }

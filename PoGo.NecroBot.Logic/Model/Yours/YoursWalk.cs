@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
+﻿using System.Collections.Generic;
 using GeoCoordinatePortable;
-using PoGo.NecroBot.Logic.Model.Google.GoogleObjects;
 using Newtonsoft.Json;
 
 namespace PoGo.NecroBot.Logic.Model.Yours

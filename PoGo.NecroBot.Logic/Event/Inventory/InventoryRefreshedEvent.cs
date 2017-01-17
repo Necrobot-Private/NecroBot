@@ -1,12 +1,8 @@
-﻿using POGOProtos.Inventory;
+﻿using System.Collections.Generic;
+using POGOProtos.Data.Player;
+using POGOProtos.Inventory;
 using POGOProtos.Networking.Responses;
 using POGOProtos.Settings.Master;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using POGOProtos.Data.Player;
 
 namespace PoGo.NecroBot.Logic.Event.Inventory
 {

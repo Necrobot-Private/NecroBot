@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using GeoCoordinatePortable;
 using Newtonsoft.Json;
+using PoGo.NecroBot.Logic.Exceptions;
 using PoGo.NecroBot.Logic.Model.Google;
 using PoGo.NecroBot.Logic.Model.Google.GoogleObjects;
 using PoGo.NecroBot.Logic.State;
@@ -79,7 +80,7 @@ namespace PoGo.NecroBot.Logic.Service
                     return GoogleWalk.Get(googleResult);
                 }
             }
-            catch (Exceptions.ActiveSwitchByRuleException ex)
+            catch (ActiveSwitchByRuleException ex)
             {
                 throw ex;
             }

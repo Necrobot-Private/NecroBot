@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Caching;
+using PoGo.NecroBot.Logic.Event.Inventory;
+using PoGo.NecroBot.Logic.Exceptions;
 using PoGo.NecroBot.Logic.Interfaces.Configuration;
 using PoGo.NecroBot.Logic.Model.Settings;
 using PoGo.NecroBot.Logic.PoGoUtils;
@@ -18,10 +21,6 @@ using POGOProtos.Inventory;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Networking.Responses;
 using POGOProtos.Settings.Master;
-using Caching;
-using PoGo.NecroBot.Logic.Event.Inventory;
-using PokemonGo.RocketAPI.Exceptions;
-using System.Diagnostics;
 
 #endregion
 
@@ -70,7 +69,7 @@ namespace PoGo.NecroBot.Logic
              };
         }
 
-        private Caching.LRUCache<ItemId, int> pokeballCache = new Caching.LRUCache<ItemId, int>(capacity: 10);
+        private LRUCache<ItemId, int> pokeballCache = new LRUCache<ItemId, int>(capacity: 10);
 
         private readonly List<ItemId> _pokeballs = new List<ItemId>
         {
@@ -208,7 +207,7 @@ namespace PoGo.NecroBot.Logic
 
                         }).ToList();
             }
-            catch (Exceptions.ActiveSwitchByRuleException e)
+            catch (ActiveSwitchByRuleException e)
             {
                 throw e;
             }

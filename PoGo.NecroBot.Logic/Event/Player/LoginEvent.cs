@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PokemonGo.RocketAPI.Enums;
+﻿using PokemonGo.RocketAPI.Enums;
 
 namespace PoGo.NecroBot.Logic.Event.Player
 {

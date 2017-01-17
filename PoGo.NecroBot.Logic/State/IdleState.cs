@@ -1,12 +1,8 @@
-﻿using PoGo.NecroBot.Logic.Event;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using System;
 using System.Net.Http;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using PoGo.NecroBot.Logic.Event;
 
 namespace PoGo.NecroBot.Logic.State
 {

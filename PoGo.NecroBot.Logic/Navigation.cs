@@ -1,18 +1,17 @@
 ﻿#region using directives
 
 using System;
-using System.Threading;
-using System.Threading.Tasks;
-using GeoCoordinatePortable;
-using PoGo.NecroBot.Logic.Interfaces.Configuration;
-using PokemonGo.RocketAPI;
-using POGOProtos.Networking.Responses;
-using PoGo.NecroBot.Logic.State;
-using PoGo.NecroBot.Logic.Strategies.Walk;
-using PoGo.NecroBot.Logic.Event;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using PoGo.NecroBot.Logic.Event;
+using PoGo.NecroBot.Logic.Interfaces.Configuration;
 using PoGo.NecroBot.Logic.Model;
+using PoGo.NecroBot.Logic.State;
+using PoGo.NecroBot.Logic.Strategies.Walk;
+using PokemonGo.RocketAPI;
+using POGOProtos.Networking.Responses;
 
 #endregion
 

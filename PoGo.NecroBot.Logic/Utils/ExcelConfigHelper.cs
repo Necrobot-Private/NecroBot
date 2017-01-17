@@ -1,20 +1,17 @@
-﻿using OfficeOpenXml;
-using OfficeOpenXml.DataValidation;
-using PoGo.NecroBot.Logic.Logging;
-using PoGo.NecroBot.Logic.Model.Settings;
-using POGOProtos.Enums;
-using POGOProtos.Inventory.Item;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using OfficeOpenXml;
+using OfficeOpenXml.DataValidation;
+using OfficeOpenXml.Style;
+using PoGo.NecroBot.Logic.Logging;
+using PoGo.NecroBot.Logic.Model.Settings;
+using POGOProtos.Enums;
+using POGOProtos.Inventory.Item;
 
 namespace PoGo.NecroBot.Logic.Utils
 {
@@ -183,7 +180,7 @@ namespace PoGo.NecroBot.Logic.Utils
                 workSheet.Cells[exAtt.Position + OFFSET_START, 2].Value = propValue;
                 workSheet.Cells[exAtt.Position + OFFSET_START, 2].Style.Locked = false;
                 workSheet.Cells[exAtt.Position + OFFSET_START, 2].Style.Font.Bold = true;
-                workSheet.Cells[exAtt.Position + OFFSET_START, 2].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                workSheet.Cells[exAtt.Position + OFFSET_START, 2].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 workSheet.Cells[exAtt.Position + OFFSET_START, 3].Value = exAtt.Description;
                 workSheet.Cells[exAtt.Position + OFFSET_START, 3].Style.Locked = false;
                 workSheet.Cells[exAtt.Position + OFFSET_START, 1].AutoFitColumns();
@@ -344,8 +341,8 @@ namespace PoGo.NecroBot.Logic.Utils
                     workSheet.Row(1).CustomHeight = true;
                     workSheet.Row(1).Height = 30;
 
-                    workSheet.Cells["A1:C1"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                    workSheet.Cells["A1:C1"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Justify;
+                    workSheet.Cells["A1:C1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    workSheet.Cells["A1:C1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Justify;
 
                     workSheet.Cells[4, 1].Value = "Key";
                     workSheet.Cells[4, 2].Value = "Value";
@@ -396,8 +393,8 @@ namespace PoGo.NecroBot.Logic.Utils
             workSheet.Row(1).CustomHeight = true;
             workSheet.Row(1).Height = 30;
 
-            workSheet.Cells["A1:C1"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-            workSheet.Cells["A1:C1"].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Justify;
+            workSheet.Cells["A1:C1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            workSheet.Cells["A1:C1"].Style.HorizontalAlignment = ExcelHorizontalAlignment.Justify;
 
             workSheet.Cells[4, 1].Value = "Item Type";
             workSheet.Cells[4, 2].Value = "Value";
@@ -423,7 +420,7 @@ namespace PoGo.NecroBot.Logic.Utils
             Type type = inputObject.GetType();
 
             //get the property information based on the type
-            System.Reflection.PropertyInfo propertyInfo = type.GetProperty(propertyName);
+            PropertyInfo propertyInfo = type.GetProperty(propertyName);
 
             //find the property type
             Type propertyType = propertyInfo.PropertyType;
@@ -495,7 +492,7 @@ namespace PoGo.NecroBot.Logic.Utils
                                     if (keyFromExcel == key)
                                     {
                                         var value = ws.Cells[$"B{peAtt.Position + OFFSET_START}"].Value;
-                                        var convertedValue = System.Convert.ChangeType(value, cfg.FieldType);
+                                        var convertedValue = Convert.ChangeType(value, cfg.FieldType);
                                         cfg.SetValue(configProp, convertedValue);
                                     }
                                     else

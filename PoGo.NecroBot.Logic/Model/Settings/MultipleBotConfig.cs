@@ -1,13 +1,9 @@
-﻿using Newtonsoft.Json;
-using PoGo.NecroBot.Logic.Interfaces.Configuration;
-using POGOProtos.Enums;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
+using PoGo.NecroBot.Logic.Interfaces.Configuration;
+using POGOProtos.Enums;
 
 namespace PoGo.NecroBot.Logic.Model.Settings
 {

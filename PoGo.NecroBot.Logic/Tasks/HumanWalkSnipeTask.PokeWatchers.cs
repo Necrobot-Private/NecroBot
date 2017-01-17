@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
-using PoGo.NecroBot.Logic.Logging;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using PoGo.NecroBot.Logic.Logging;
 
 namespace PoGo.NecroBot.Logic.Tasks
 {

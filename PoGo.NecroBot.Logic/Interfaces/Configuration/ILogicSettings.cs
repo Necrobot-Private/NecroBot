@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using PoGo.NecroBot.Logic.Model.Settings;
 using POGOProtos.Enums;
 using POGOProtos.Inventory.Item;
-using System.Threading;
 
 #endregion
 

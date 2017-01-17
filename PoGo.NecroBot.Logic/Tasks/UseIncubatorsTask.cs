@@ -12,6 +12,7 @@ using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.PoGoUtils;
 using PoGo.NecroBot.Logic.State;
 using POGOProtos.Inventory.Item;
+using POGOProtos.Networking.Responses;
 
 #endregion
 
@@ -36,7 +37,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             var response = await session.Client.Inventory.UseItemEggIncubator(incubators.Id, unusedEggs.Id);
             var newRememberedIncubators = new List<IncubatorUsage>();
-            if (response.Result == POGOProtos.Networking.Responses.UseItemEggIncubatorResponse.Types.Result.Success)
+            if (response.Result == UseItemEggIncubatorResponse.Types.Result.Success)
             {
                 newRememberedIncubators.Add(new IncubatorUsage { IncubatorId = incubators.Id, PokemonId = unusedEggs.Id });
 

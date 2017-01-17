@@ -1,8 +1,8 @@
-﻿using PoGo.NecroBot.Logic.State;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Reflection;
 using System.Threading.Tasks;
+using PoGo.NecroBot.Logic.State;
 
 namespace PoGo.NecroBot.Logic.Service.TelegramCommand
 {

@@ -1,11 +1,11 @@
 #region using directives
 
 using System;
-using System.Text;
-using System.IO;
-using PoGo.NecroBot.Logic.State;
 using System.Collections.Concurrent;
+using System.IO;
+using System.Text;
 using PoGo.NecroBot.Logic.Event;
+using PoGo.NecroBot.Logic.State;
 
 #endregion
 

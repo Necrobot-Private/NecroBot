@@ -1,16 +1,15 @@
-﻿using Newtonsoft.Json;
-using PoGo.NecroBot.Logic.Logging;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
-using System.Threading.Tasks;
-using POGOProtos.Enums;
-using PoGo.NecroBot.Logic.State;
-using System.Threading;
-using PoGo.NecroBot.Logic.Utils;
-using System.Diagnostics;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using PoGo.NecroBot.Logic.Logging;
+using PoGo.NecroBot.Logic.State;
+using POGOProtos.Enums;
 
 namespace PoGo.NecroBot.Logic.Tasks
 {
@@ -194,7 +193,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 RequestUri = new Uri(url),
                 Method = HttpMethod.Get,
             };
-            request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             request.Headers.Add("origin", "https://fastpokemap.se");
             request.Headers.Add("authority", "cache.fastpokemap.se");
 

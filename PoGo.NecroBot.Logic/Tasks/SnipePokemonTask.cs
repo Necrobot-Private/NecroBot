@@ -16,10 +16,12 @@ using GeoCoordinatePortable;
 using Newtonsoft.Json;
 using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.Event;
+using PoGo.NecroBot.Logic.Exceptions;
 using PoGo.NecroBot.Logic.Model.Settings;
 using PoGo.NecroBot.Logic.PoGoUtils;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Utils;
+using PokemonGo.RocketAPI.Exceptions;
 using POGOProtos.Enums;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Map.Pokemon;
@@ -27,9 +29,6 @@ using POGOProtos.Networking.Responses;
 using Quobject.Collections.Immutable;
 using Quobject.SocketIoClientDotNet.Client;
 using Socket = Quobject.SocketIoClientDotNet.Client.Socket;
-using PoGo.NecroBot.Logic.Exceptions;
-using PokemonGo.RocketAPI.Exceptions;
-using PoGo.NecroBot.Logic.Captcha;
 
 #endregion
 
