@@ -332,9 +332,8 @@ namespace PoGo.NecroBot.CLI
 
             ProgressBar.Fill(20);
 
-
             var machine = new StateMachine();
-            var stats = new Statistics();
+            var stats = _session.RuntimeStatistics;
 
             ProgressBar.Fill(30);
             var strVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString(4);
