@@ -66,6 +66,7 @@ namespace PoGo.NecroBot.CLI
                 Logger.Write(translations.GetTranslation(TranslationString.WebSocketFailStart, port), LogLevel.Error);
                 return;
             }
+            Logger.Write(translations.GetTranslation(TranslationString.WebSocketStarted, port, port + 1), LogLevel.Info);
 
             _server.NewMessageReceived += HandleMessage;
             _server.NewSessionConnected += HandleSession;
