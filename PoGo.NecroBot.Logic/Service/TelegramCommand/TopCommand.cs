@@ -17,7 +17,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
 
         private string CommandParseRegex => @"\(" + Command + @")(?>\s+(?<orderBy>iv|cp)|\s+(?<count>\d+)){0,2}\s*";
 
-        // TODO Add additional parameter info [n]
+        // TODO Add additional parameter info [n] / [iv | cp]
         public override string Command => "/top";
 
         public override bool StopProcess => true;
