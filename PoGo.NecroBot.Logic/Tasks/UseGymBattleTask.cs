@@ -150,10 +150,16 @@ namespace PoGo.NecroBot.Logic.Tasks
                     isVictory = false;
                     _startBattleCounter--;
 #if DEBUG
-                    Debug.Write("Gym: " + gym, "GYM");
-                    Debug.Write("Defender: " + defenders.FirstOrDefault(x => x.Id == defenderPokemonId), "GYM");
-                    Debug.Write("Attackers: " + string.Join(", ", pokemonDatas.Select(s => s.ToString()).ToArray()), "GYM");
-                    Debug.Write(e.Message, "GYM");
+                    Logger.Write("Before Gym: " + gym, LogLevel.Gym, ConsoleColor.Magenta);
+                    Logger.Write("Before Defender: " + defenders.FirstOrDefault(x => x.Id == defenderPokemonId), LogLevel.Gym, ConsoleColor.Magenta);
+#endif
+                    var newFots = await UseNearbyPokestopsTask.UpdateFortsData(session);
+                    gym = newFots.FirstOrDefault(w=>w.Id == gym.Id);
+#if DEBUG
+                    Logger.Write("After Gym: " + gym, LogLevel.Gym, ConsoleColor.Magenta);
+                    Logger.Write("After Defender: " + defenders.FirstOrDefault(x => x.Id == defenderPokemonId), LogLevel.Gym, ConsoleColor.Magenta);
+                    Logger.Write("Attackers: " + string.Join(", ", pokemonDatas.Select(s => s.ToString()).ToArray()), LogLevel.Gym, ConsoleColor.Magenta);
+                    //Debug.WriteLine(e.Message, "GYM");
 #endif
                     break;
                 }
@@ -295,8 +301,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 #if DEBUG
                                         Logger.Write("Can't get coins", LogLevel.Warning);
 
-                                        Debug.Write(e.Message, "GYM");
-                                        Debug.Write(e.StackTrace, "GYM");
+                                        Debug.WriteLine(e.Message, "GYM");
+                                        Debug.WriteLine(e.StackTrace, "GYM");
 #endif
                                         await Task.Delay(500);
                                     }
@@ -591,29 +597,43 @@ namespace PoGo.NecroBot.Logic.Tasks
                     if (last?.Type == BattleActionType.ActionPlayerJoin)
                     {
                         await Task.Delay(3000);
-                        //Logger.Write("Sleep after join battle", LogLevel.Gym, ConsoleColor.Magenta);
+                        Logger.Write("Sleep after join battle", LogLevel.Gym, ConsoleColor.Magenta);
                     }
 
-                    var attackActionz = await GetActions(session, serverMs, attacker, defender, _currentAttackerEnergy);
+                    var attackActionz = last == null || last.Type == BattleActionType.ActionVictory || last.Type == BattleActionType.ActionDefeat ? emptyActions : await GetActions(session, serverMs, attacker, defender, _currentAttackerEnergy);
 
-                    var attackTime = attackActionz.Sum(s => s.DurationMs);
-                    await Task.Delay(attackTime);
+                    Logger.Write(string.Format(DateTime.Now.ToUnixTime()+" Going to make attack : {0}", string.Join(", ", attackActionz.Select(s => string.Format("{0} -> {1}", s.Type, s.DurationMs)))), LogLevel.Gym, ConsoleColor.Magenta );
+                    //var attackTime = attackActionz.Sum(s => s.DurationMs);
+                    //await Task.Delay(attackTime);
 
-                    List <BattleAction> a1 = (last == null || last.Type == BattleActionType.ActionVictory || last.Type == BattleActionType.ActionDefeat ? emptyActions : attackActionz);
+                    //List <BattleAction> a1 = (last == null || last.Type == BattleActionType.ActionVictory || last.Type == BattleActionType.ActionDefeat ? emptyActions : attackActionz);
                     BattleAction a2 = (last == null || last.Type == BattleActionType.ActionVictory || last.Type == BattleActionType.ActionDefeat ? emptyAction : last);
                     AttackGymResponse attackResult = null;
                     try
                     {
-                        attackResult = await session.Client.Fort.AttackGym(currentFortData.Id, startResponse.BattleId, a1, a2);
-                        //Logger.Write("Actions performed were: " + string.Join(", ", a1), LogLevel.Info, ConsoleColor.Magenta);
+                        if (attackActionz.Any(a => a.Type == BattleActionType.ActionSpecialAttack))
+                        {
+                            var damageWindow = attackActionz.Sum(x => (x.DamageWindowsEndTimestampMs - x.DamageWindowsStartTimestampMs));
+                            Logger.Write(string.Format("{0} Waiting for damage window: {1}", DateTime.Now.ToUnixTime(), damageWindow), LogLevel.Gym, ConsoleColor.Magenta );
+                            await Task.Delay((int)damageWindow);
+                        }
+
+                        Logger.Write(DateTime.Now.ToUnixTime() + " Start making attack", LogLevel.Gym, ConsoleColor.Magenta );
+                        attackResult = await session.Client.Fort.AttackGym(currentFortData.Id, startResponse.BattleId, attackActionz, a2);
+                        Logger.Write(string.Format(DateTime.Now.ToUnixTime() + " Finished making attack: {0}, Battle finished at: {1}", attackResult.BattleLog.BattleStartTimestampMs, attackResult.BattleLog.BattleEndTimestampMs), LogLevel.Gym, ConsoleColor.Magenta );
+
+                        var attackTime = attackActionz.Sum(x => x.DurationMs) + 50;
+                        Logger.Write(string.Format("{0} Waiting for attack to be prepared: {1}", DateTime.Now.ToUnixTime(), attackTime), LogLevel.Gym, ConsoleColor.Magenta);
+                        await Task.Delay(attackTime);
+
                     }
                     catch (APIBadRequestException)
                     {
                         Logger.Write("Bad attack gym", LogLevel.Warning);
 #if DEBUG
-                        Debug.Write("Last retrieved action was: " + a2, "GYM");
-                        Debug.Write("Actions to perform were: " + string.Join(", ", a1), "GYM");
-                        Debug.Write(string.Format("Attacker was: {0}, defender was: {1}", attacker, defender), "GYM");
+                        Logger.Write(string.Format("{0} Last retrieved action was: {1}", DateTime.Now.ToUnixTime(), a2), LogLevel.Gym, ConsoleColor.Magenta);
+                        Logger.Write(string.Format("{0} Actions to perform were: {1}", DateTime.Now.ToUnixTime(), string.Join(", ", attackActionz)), LogLevel.Gym, ConsoleColor.Magenta );
+                        Logger.Write(string.Format("{0} Attacker was: {1}, defender was: {2}", DateTime.Now.ToUnixTime(), attacker, defender), LogLevel.Gym, ConsoleColor.Magenta );
 #endif
                         continue;
                     };
@@ -666,22 +686,24 @@ namespace PoGo.NecroBot.Logic.Tasks
                                     $"Unhandled attack response: {attackResult}");
                                 continue;
                         }
-                        Debug.Write($"{attackResult}");
-                        await Task.Delay(attackActionz.Sum(x => x.DurationMs) + 10);
+                        Debug.WriteLine($"{attackResult}", "GYM: " + DateTime.Now.ToUnixTime());
                     }
                     else
                     {
                         Logger.Write($"Unexpected attack result:\n{attackResult}");
                         break;
                     }
+
+                    Logger.Write("Finished attack", LogLevel.Gym, ConsoleColor.Magenta );
                 }
                 catch (APIBadRequestException e)
                 {
 #if DEBUG
 
                     Logger.Write("Bad request send to server -", LogLevel.Warning);
-                    Debug.Write(e.Message, "GYM");
-                    Debug.Write(e.StackTrace, "GYM");
+                    Logger.Write(DateTime.Now.ToUnixTime() + " NOT finished attack", LogLevel.Gym, ConsoleColor.Magenta );
+                    Logger.Write(string.Format("{0} {1}", DateTime.Now.ToUnixTime(), e.Message), LogLevel.Gym, ConsoleColor.Magenta );
+                    //Logger.Write(e.StackTrace, LogLevel.Gym, ConsoleColor.Magenta DateTime.Now.ToUnixTime());
 
 #endif
                 };
@@ -825,7 +847,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             catch (APIBadRequestException e)
             {
 #if DEBUG
-                Debug.Write("Gym details: " + gymInfo, "GYM");
+                Debug.WriteLine("Gym details: " + gymInfo, "GYM: " + DateTime.Now.ToUnixTime());
 #endif
                 throw e;
             }
