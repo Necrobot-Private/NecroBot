@@ -647,7 +647,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     if (attackResult.Result == AttackGymResponse.Types.Result.Success)
                     {
-                        Logger.Write(string.Format("{0} Attack success", DateTime.Now.ToUnixTime()), LogLevel.Gym, ConsoleColor.Magenta);
+                        //Logger.Write(string.Format("{0} Attack success", DateTime.Now.ToUnixTime()), LogLevel.Gym, ConsoleColor.Magenta);
                         defender = attackResult.ActiveDefender?.PokemonData;
                         if (attackResult.BattleLog != null && attackResult.BattleLog.BattleActions.Count > 0)
                             lastActions.AddRange(attackResult.BattleLog.BattleActions);
