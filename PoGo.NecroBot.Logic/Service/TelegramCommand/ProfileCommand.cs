@@ -19,25 +19,47 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
 
         public override async Task<bool> OnCommand(ISession session, string cmd, Action<string> callback)
         {
-            if (cmd.ToLower() == Command)
+            var playerStats = session.Inventory.GetPlayerStats().Result.FirstOrDefault();
+
+            if (cmd.ToLower() != Command || playerStats == null)
             {
-                var answerTextmessage = GetMsgHead(session, session.Profile.PlayerData.Username) + "\r\n\r\n";
-
-                var stats = session.Inventory.GetPlayerStats().Result;
-                var stat = stats.FirstOrDefault();
-
-                var myPokemons2 = await session.Inventory.GetPokemons();
-                if (stat != null)
-                    answerTextmessage += session.Translation.GetTranslation(
-                        TranslationString.ProfileStatsTemplateString, stat.Level, session.Profile.PlayerData.Username,
-                        stat.Experience, stat.NextLevelXp, stat.PokemonsCaptured, stat.PokemonDeployed,
-                        stat.PokeStopVisits, stat.EggsHatched, stat.Evolutions, stat.UniquePokedexEntries,
-                        stat.KmWalked,
-                        myPokemons2.ToList().Count, session.Profile.PlayerData.MaxPokemonStorage);
-                callback(answerTextmessage);
-                return true;
+                return false;
             }
-            return false;
+
+            var answerTextmessage = GetMsgHead(session, session.Profile.PlayerData.Username) + "\r\n\r\n";
+            answerTextmessage += string.Format(
+                "Account: {0}\n" +
+                "Level: {1}\n" +
+                "Total XP: {2}\n" +
+                "XP until level up: {3}\n" +
+                "Pokemon caught: {4}\n" +
+                "Pokemon sent: {5}\n" +
+                "Pokemon in bag: {6}\n" +
+                "Pokemon evolved: {7}\n" +
+                "Pokestops visited: {8}\n" +
+                "Items in bag: {9}\n" +
+                "Stardust: {10}\n" +
+                "Eggs hatched: {11}\n" +
+                "Pokedex entries: {12}\n" +
+                "KM walked: {13}",
+                session.Profile.PlayerData.Username,
+                playerStats.Level,
+                playerStats.Experience,
+                playerStats.NextLevelXp - playerStats.Experience,
+                playerStats.PokemonsCaptured,
+                playerStats.PokemonDeployed,
+                (await session.Inventory.GetPokemons()).ToList().Count,
+                playerStats.Evolutions,
+                playerStats.PokeStopVisits,
+                (await session.Inventory.GetTotalItemCount()),
+                session.Inventory.GetStarDust(),
+                playerStats.EggsHatched,
+                playerStats.UniquePokedexEntries,
+                playerStats.KmWalked
+            );
+
+            callback(answerTextmessage);
+            return true;
         }
     }
 }
