@@ -62,10 +62,8 @@ namespace PoGo.NecroBot.Logic.State
                 return new LoginState();
             }
 
-
             SystemSounds.Asterisk.Play();
 
-           
             var remoteReleaseUrl =
                 $"https://github.com/Necrobot-Private/NecroBot/releases/download/v{RemoteVersion}/";
             string zipName = "NecroBot2.Console.zip";
