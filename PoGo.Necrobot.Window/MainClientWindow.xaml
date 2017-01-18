@@ -164,7 +164,20 @@
             </TabItem>
 
             <TabItem Header="   CONSOLE   " IsSelected="True">
-                <RichTextBox
+                <DockPanel LastChildFill="True">
+                    <TextBox HorizontalAlignment="Stretch" 
+                             Name="txtCmdInput" 
+                             Background="Black" 
+                             DockPanel.Dock="Top"
+                             Foreground="White" 
+                             BorderBrush="Aquamarine" 
+                             BorderThickness="1" 
+                             Text="Enter your command" 
+                             MouseDown="txtCmdInput_MouseDown"
+                             KeyDown="txtCmdInput_KeyDown"
+                             />
+
+                    <RichTextBox
                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
                     ScrollViewer.VerticalScrollBarVisibility="Auto"
                     ScrollViewer.CanContentScroll="True"
@@ -180,6 +193,8 @@
                         </Paragraph>
                     </FlowDocument>
                 </RichTextBox>
+                </DockPanel>
+
             </TabItem>
 
             <TabItem Header="{Binding Path= PokemonTabHeader, FallbackValue=Pokemon}" Name="tabPokemons">
