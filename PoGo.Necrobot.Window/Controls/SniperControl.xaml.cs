@@ -1,4 +1,5 @@
-﻿using PoGo.NecroBot.CLI;
+﻿using PoGo.Necrobot.Window.Model;
+using PoGo.NecroBot.CLI;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Tasks;
@@ -60,6 +61,40 @@ namespace PoGo.Necrobot.Window.Controls
                     }, true);
                 }
             });
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            cobPokemonId.ItemsSource = Enum.GetValues(typeof(PokemonId));
+        }
+
+        private void btnAddCoord_Click(object sender, RoutedEventArgs e)
+        {
+            var model = (SnipeListViewModel)DataContext;
+            var current = model.ManualSnipe;
+            Task.Run(async () =>
+            {
+                await MSniperServiceTask.AddSnipeItem(Session, new MSniperServiceTask.MSniperInfo2()
+                {
+                    PokemonId = (short)current.PokemonId,
+                    Latitude = current.Latitude,
+                    Longitude = current.Longitude
+                }, true);
+                current.Clear();
+                rtbFreeText.Document.Blocks.Clear();
+            });
+        }
+
+        private void RichTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var model = (SnipeListViewModel)DataContext;
+            if (model == null) return;
+
+            var current = model.ManualSnipe;
+
+            string richText = new TextRange(rtbFreeText.Document.ContentStart, rtbFreeText.Document.ContentEnd).Text;
+
+            current.Parse(richText);
         }
     }
 }
