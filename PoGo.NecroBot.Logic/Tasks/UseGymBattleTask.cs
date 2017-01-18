@@ -937,6 +937,4 @@ namespace PoGo.NecroBot.Logic.Tasks
             return pokemon;
         }
     }
-
 }
-
