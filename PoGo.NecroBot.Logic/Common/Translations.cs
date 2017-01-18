@@ -825,7 +825,7 @@ namespace PoGo.NecroBot.Logic.Common
                 new KeyValuePair<TranslationString, string>(TranslationString.TelegramCommandProfileMsgHead,
                     "{0}'s Profile:"),
                 new KeyValuePair<TranslationString, string>(TranslationString.TelegramCommandRecycleMsgHead,
-                    "Recycling {0}'s items:"),
+                    "Recycling {0}'s items"),
                 new KeyValuePair<TranslationString, string>(TranslationString.TelegramCommandRestartMsgHead,
                     "Restarting ... Current account is {0}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.TelegramCommandSnipeMsgHead,
