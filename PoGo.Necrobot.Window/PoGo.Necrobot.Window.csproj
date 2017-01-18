@@ -176,6 +176,7 @@
     <Compile Include="Converters\VisibleIfTrueConverter.cs" />
     <Compile Include="Converters\PokemonImageConverter.cs" />
     <Compile Include="Converters\ListCountConverter.cs" />
+    <Compile Include="Model\AddManualSnipeCoordViewModel.cs" />
     <Compile Include="Model\EggsListViewModel.cs" />
     <Compile Include="Model\EggViewModel.cs" />
     <Compile Include="Model\IncubatorViewModel.cs" />
