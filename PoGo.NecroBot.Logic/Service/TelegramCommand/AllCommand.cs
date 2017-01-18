@@ -7,6 +7,7 @@ using PoGo.NecroBot.Logic.State;
 
 namespace PoGo.NecroBot.Logic.Service.TelegramCommand
 {
+    // TODO I18N
     public class AllCommand : CommandMessage
     {
         public override string Command => "/all";
