@@ -18,7 +18,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
         }
 
         #pragma warning disable 1998  // added to get rid of compiler warning. Remove this if async code is used below.
-        public override async Task<bool> OnCommand(ISession session,string cmd, Action<string> Callback)
+        public override async Task<bool> OnCommand(ISession session,string cmd, Action<string> callback)
         #pragma warning restore 1998
         {
             if (cmd.ToLower() == Command)
@@ -39,7 +39,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
 
                     if (answerTextmessage.Length > 3800)
                     {
-                        Callback(answerTextmessage);
+                        callback(answerTextmessage);
                         answerTextmessage = "";
                     }
                 }
@@ -49,7 +49,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
                         .Cast<PokemonId>()
                         .Except(pokedex.Select(x => x.InventoryItemData.PokedexEntry.PokemonId));
 
-                Callback(answerTextmessage);
+                callback(answerTextmessage);
                 answerTextmessage = "";
 
                 answerTextmessage += session.Translation.GetTranslation(TranslationString.PokedexNeededTelegram);
@@ -64,12 +64,12 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
 
                         if (answerTextmessage.Length > 3800)
                         {
-                            Callback(answerTextmessage);
+                            callback(answerTextmessage);
                             answerTextmessage = "";
                         }
                     }
                 }
-                Callback(answerTextmessage);
+                callback(answerTextmessage);
                 return true;
             }
             return false;

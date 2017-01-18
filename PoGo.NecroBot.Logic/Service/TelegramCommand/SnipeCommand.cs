@@ -16,7 +16,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
         {
         }
 
-        public override async Task<bool> OnCommand(ISession session, string commandText, Action<string> Callback)
+        public override async Task<bool> OnCommand(ISession session, string commandText, Action<string> callback)
         {
             var cmd = commandText.Split(' ');
 

@@ -18,7 +18,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
         {
         }
 
-        public override async Task<bool> OnCommand(ISession session, string cmd, Action<string> Callback)
+        public override async Task<bool> OnCommand(ISession session, string cmd, Action<string> callback)
         {
             string[] messagetext = cmd.Split(' ');
             string answerTextmessage = "";
@@ -65,6 +65,11 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
                         session.Translation.GetTranslation(TranslationString.UsageHelp, "/top [cp/iv] [amount]");
                 }
 
+                if (topPokemons == null)
+                {
+                    return true;
+                }
+
                 foreach (var pokemon in topPokemons)
                 {
                     answerTextmessage += session.Translation.GetTranslation(TranslationString.ShowPokeSkillTemplate,
@@ -75,12 +80,12 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
 
                     if (answerTextmessage.Length > 3800)
                     {
-                        Callback(answerTextmessage);
+                        callback(answerTextmessage);
                         answerTextmessage = "";
                     }
                 }
 
-                Callback(answerTextmessage);
+                callback(answerTextmessage);
                 return true;
             }
             return false;

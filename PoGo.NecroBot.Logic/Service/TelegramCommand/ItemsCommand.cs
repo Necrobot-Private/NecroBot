@@ -16,7 +16,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
         {
         }
 
-        public override async Task<bool> OnCommand(ISession session, string cmd, Action<string> Callback)
+        public override async Task<bool> OnCommand(ISession session, string cmd, Action<string> callback)
         {
             if (cmd.ToLower() == Command)
             {
@@ -50,7 +50,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
                     await session.Inventory.GetItemAmountByType(ItemId.ItemIncenseFloral),
                     await session.Inventory.GetItemAmountByType(ItemId.ItemLuckyEgg),
                     await session.Inventory.GetItemAmountByType(ItemId.ItemTroyDisk));
-                Callback(answerTextmessage);
+                callback(answerTextmessage);
                 return true;
             }
             return false;

@@ -16,7 +16,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
         {
         }
 
-        public override async Task<bool> OnCommand(ISession session, string cmd, Action<string> Callback)
+        public override async Task<bool> OnCommand(ISession session, string cmd, Action<string> callback)
         {
             if (cmd.ToLower() == Command)
             {
@@ -33,7 +33,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
                         stat.PokeStopVisits, stat.EggsHatched, stat.Evolutions, stat.UniquePokedexEntries,
                         stat.KmWalked,
                         myPokemons2.ToList().Count, session.Profile.PlayerData.MaxPokemonStorage);
-                Callback(answerTextmessage);
+                callback(answerTextmessage);
                 return true;
             }
             return false;

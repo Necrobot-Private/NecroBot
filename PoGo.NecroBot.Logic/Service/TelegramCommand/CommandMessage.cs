@@ -8,11 +8,11 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
 {
     public abstract class CommandMessage : ICommandGenerify<string>
     {
-        protected readonly TelegramUtils telegramUtils;
+        protected readonly TelegramUtils TelegramUtils;
 
-        public CommandMessage(TelegramUtils telegramUtils)
+        protected CommandMessage(TelegramUtils telegramUtils)
         {
-            this.telegramUtils = telegramUtils;
+            TelegramUtils = telegramUtils;
         }
 
         public abstract string Command { get; }
@@ -23,11 +23,11 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
 
         public Task<bool> OnCommand(ISession session, string cmd, Message telegramMessage)
         {
-            Action<string> callback = async (string msg) =>
+            Action<string> callback = async msg =>
             {
                 try
                 {
-                    await telegramUtils.SendMessage(msg, telegramMessage.Chat.Id);
+                    await TelegramUtils.SendMessage(msg, telegramMessage.Chat.Id);
                 }
                 catch (Exception ex)
                 {

@@ -16,17 +16,19 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
         {
         }
 
-        public override async Task<bool> OnCommand(ISession session, string cmd, Action<string> Callback)
+        public override async Task<bool> OnCommand(ISession session, string cmd, Action<string> callback)
         {
             if (cmd.ToLower() == Command)
             {
-                Callback("Restarted Bot. Closing old Instance... BYE!");
+                callback("Restarted Bot. Closing old Instance... BYE!");
                 await Task.Delay(5000);
-                Process.Start(Assembly.GetEntryAssembly().Location);
+                var assembly = Assembly.GetEntryAssembly().Location;
+                if (assembly != null)
+                {
+                    Process.Start(assembly);
+                }
 
                 Environment.Exit(-1);
-
-                return true;
             }
             return false;
         }

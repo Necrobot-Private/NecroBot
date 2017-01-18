@@ -15,14 +15,14 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
         {
         }
 
-        public override async Task<bool> OnCommand(ISession session, string commandText, Action<string> Callback)
+        public override async Task<bool> OnCommand(ISession session, string commandText, Action<string> callback)
         {
             var cmd = commandText.Split(' ');
 
             if (cmd[0].ToLower() == Command)
             {
                 await RecycleItemsTask.Execute(session, session.CancellationTokenSource.Token);
-                Callback("RECYCLE ITEM DONE!");
+                callback("RECYCLE ITEM DONE!");
                 return true;
             }
             return false;

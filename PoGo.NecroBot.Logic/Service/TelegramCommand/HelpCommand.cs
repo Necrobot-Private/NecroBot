@@ -16,7 +16,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
         }
 
         #pragma warning disable 1998 // added to get rid of compiler warning. Remove this if async code is used below.
-        public override async Task<bool> OnCommand(ISession session, string cmd, Action<string> Callback)
+        public override async Task<bool> OnCommand(ISession session, string cmd, Action<string> callback)
         #pragma warning restore 1998
         {
             if (cmd.ToLower() == Command)
@@ -25,14 +25,14 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
                 var iCommandInstances = AppDomain.CurrentDomain.GetAssemblies()
                     .SelectMany(x => x.GetTypes())
                     .Where(x => (typeof(ICommand).IsAssignableFrom(x)) && !x.IsInterface && !x.IsAbstract)
-                    .Select(x => (ICommand) Activator.CreateInstance(x, telegramUtils));
+                    .Select(x => (ICommand) Activator.CreateInstance(x, TelegramUtils));
 
                 foreach (var instance in iCommandInstances)
                 {
-                    message += $"{((ICommand) instance).Command} - {((ICommand) instance).Description}\r\n";
+                    message += $"{instance.Command} - {instance.Description}\r\n";
                 }
 
-                Callback(message);
+                callback(message);
                 return true;
             }
             return false;

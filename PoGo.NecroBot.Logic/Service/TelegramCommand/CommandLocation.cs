@@ -9,11 +9,11 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
 {
     public abstract class CommandLocation : ICommandGenerify<GeoCoordinate>
     {
-        protected readonly TelegramUtils telegramUtils;
+        protected readonly TelegramUtils TelegramUtils;
 
-        public CommandLocation(TelegramUtils telegramUtils)
+        protected CommandLocation(TelegramUtils telegramUtils)
         {
-            this.telegramUtils = telegramUtils;
+            TelegramUtils = telegramUtils;
         }
 
         public abstract string Command { get; }
@@ -24,11 +24,11 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
 
         public Task<bool> OnCommand(ISession session, string cmd, Message telegramMessage)
         {
-            Action<GeoCoordinate> callback = async (GeoCoordinate geo) =>
+            Action<GeoCoordinate> callback = async geo =>
             {
                 try
                 {
-                    await telegramUtils.SendLocation(geo, telegramMessage.Chat.Id);
+                    await TelegramUtils.SendLocation(geo, telegramMessage.Chat.Id);
                 }
                 catch (Exception ex)
                 {
@@ -36,7 +36,6 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
                     session.EventDispatcher.Send(new ErrorEvent {Message = "Unkown Telegram Error occured. "});
                 }
             };
-
             return OnCommand(session, cmd, callback);
         }
     }

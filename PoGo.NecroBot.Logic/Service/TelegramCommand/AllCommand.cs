@@ -17,7 +17,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
         {
         }
 
-        public override async Task<bool> OnCommand(ISession session, string cmd, Action<string> Callback)
+        public override async Task<bool> OnCommand(ISession session, string cmd, Action<string> callback)
         {
             string[] messagetext = cmd.Split(' ');
 
@@ -58,12 +58,12 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
 
                     if (answerTextmessage.Length > 3800)
                     {
-                        Callback(answerTextmessage);
+                        callback(answerTextmessage);
                         answerTextmessage = "";
                     }
                 }
 
-                Callback(answerTextmessage);
+                callback(answerTextmessage);
                 return true;
             }
             return false;
