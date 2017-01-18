@@ -34,7 +34,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
                 if (session.LogicSettings.UseCatchLimit)
                 {
                     answerCatchLimit = string.Format(
-                        "{0}/{1}",
+                        "{0} / {1}",
                         session.Stats.GetNumPokemonsInLast24Hours(),
                         session.LogicSettings.CatchPokemonLimit
                     );
@@ -43,7 +43,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
                 if (session.LogicSettings.UsePokeStopLimit)
                 {
                     answerPokestopLimit = string.Format(
-                        "{0}/{1}",
+                        "{0} / {1}",
                         session.Stats.GetNumPokestopsInLast24Hours(),
                         session.LogicSettings.PokeStopLimit
                     );

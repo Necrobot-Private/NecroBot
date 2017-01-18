@@ -6,6 +6,7 @@ using PoGo.NecroBot.Logic.State;
 
 namespace PoGo.NecroBot.Logic.Service.TelegramCommand
 {
+    // TODO I18N
     public class ProfileCommand : CommandMessage
     {
         public override string Command => "/profile";
