@@ -193,9 +193,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                 .Where(l => !(l.OwnedByTeam != session.Profile.PlayerData.Team && UseGymBattleTask.GetGymLevel(l.GymPoints) > session.LogicSettings.GymConfig.MaxGymLevelToAttack)) // don't go to other's gym where lvl is too high 
                 .ToList();
 
-            if (session.LogicSettings.GymConfig.EnableAttackGym && forts.Where(w => w.Type == FortType.Gym).Count() == 0)
+            if (session.LogicSettings.GymConfig.EnableAttackGym && 
+                forts.Where(w => w.Type == FortType.Gym).Count() == 0 &&
+                (!session.LogicSettings.GymConfig.DontAttackAfterCoinsLimitReached || deployedPokemons.Count()<session.LogicSettings.GymConfig.CollectCoinAfterDeployed)
+                )
             {
-                Logger.Write("No usable gym found. Trying to refresh list.", LogLevel.Gym, ConsoleColor.Magenta);
+                //Logger.Write("No usable gym found. Trying to refresh list.", LogLevel.Gym, ConsoleColor.Magenta);
                 await GetPokeStops(session);
             }
 
