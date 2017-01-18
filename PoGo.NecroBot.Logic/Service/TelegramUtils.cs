@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Device.Location;
-using System.Linq;
 using System.Threading.Tasks;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.State;
@@ -60,10 +59,10 @@ namespace PoGo.NecroBot.Logic.Service
             }
         }
 
-        private static IEnumerable<string> Split(string str, int chunkSize)
+        static IEnumerable<string> Split(string str, int maxChunkSize)
         {
-            return Enumerable.Range(0, str.Length / chunkSize)
-                .Select(i => str.Substring(i * chunkSize, chunkSize));
+            for (var i = 0; i < str.Length; i += maxChunkSize)
+                yield return str.Substring(i, Math.Min(maxChunkSize, str.Length - i));
         }
     }
 }
