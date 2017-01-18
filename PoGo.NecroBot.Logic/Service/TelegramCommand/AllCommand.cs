@@ -24,7 +24,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
 
             if (messagetext[0].ToLower() == Command)
             {
-                var answerTextmessage = "";
+                var answerTextmessage = GetMsgHead(session, session.Profile.PlayerData.Username) + "\r\n\r\n";
                 var myPokemons = await session.Inventory.GetPokemons();
                 var allMyPokemons = myPokemons.ToList();
                 var allPokemons = await session.Inventory.GetHighestsCp(allMyPokemons.Count);

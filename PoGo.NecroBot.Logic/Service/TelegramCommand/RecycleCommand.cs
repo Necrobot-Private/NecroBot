@@ -24,7 +24,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
             if (cmd[0].ToLower() == Command)
             {
                 await RecycleItemsTask.Execute(session, session.CancellationTokenSource.Token);
-                callback("RECYCLE ITEM DONE!");
+                callback(GetMsgHead(session, session.Profile.PlayerData.Username) + "\r\n\r\n");
                 return true;
             }
             return false;

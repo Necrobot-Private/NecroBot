@@ -26,7 +26,8 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
             {
                 var pokedex = session.Inventory.GetPokeDexItems().Result;
                 var pokedexSort = pokedex.OrderBy(x => x.InventoryItemData.PokedexEntry.PokemonId);
-                string answerTextmessage = "";
+                var answerTextmessage = GetMsgHead(session, session.Profile.PlayerData.Username) + "\r\n\r\n";
+
                 answerTextmessage += session.Translation.GetTranslation(TranslationString.PokedexCatchedTelegram);
                 foreach (var pokedexItem in pokedexSort)
                 {

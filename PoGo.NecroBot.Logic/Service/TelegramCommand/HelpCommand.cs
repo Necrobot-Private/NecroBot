@@ -23,7 +23,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
         {
             if (cmd.ToLower() == Command)
             {
-                var message = "";
+                string message = GetMsgHead(session, session.Profile.PlayerData.Username) + "\r\n\r\n";
                 var iCommandInstances = AppDomain.CurrentDomain.GetAssemblies()
                     .SelectMany(x => x.GetTypes())
                     .Where(x => (typeof(ICommand).IsAssignableFrom(x)) && !x.IsInterface && !x.IsAbstract)

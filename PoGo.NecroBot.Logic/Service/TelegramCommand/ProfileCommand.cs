@@ -21,7 +21,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
         {
             if (cmd.ToLower() == Command)
             {
-                string answerTextmessage = "";
+                var answerTextmessage = GetMsgHead(session, session.Profile.PlayerData.Username) + "\r\n\r\n";
 
                 var stats = session.Inventory.GetPlayerStats().Result;
                 var stat = stats.FirstOrDefault();

@@ -23,6 +23,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
         {
             if (cmd.ToLower() == Command)
             {
+                // TODO can we send a text together with the location?
                 callback(new GeoCoordinate(session.Client.CurrentLatitude, session.Client.CurrentLongitude));
                 return true;
             }

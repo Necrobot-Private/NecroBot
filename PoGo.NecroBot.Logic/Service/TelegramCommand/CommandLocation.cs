@@ -44,7 +44,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
         public string GetDescription(ISession session, object[] data) =>
             session.Translation.GetTranslation(DescriptionI18NKey, data);
 
-        public string GetMsgHead(ISession session, object[] data = null) =>
+        public string GetMsgHead(ISession session, params object[] data) =>
             session.Translation.GetTranslation(DescriptionI18NKey, data);
 
         public string GetDescription(ISession session) =>

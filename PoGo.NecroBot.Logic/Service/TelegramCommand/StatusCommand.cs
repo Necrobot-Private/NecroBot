@@ -48,7 +48,9 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
                     );
                 }
 
-                var answerTextmessage = string.Format(
+                var answerTextmessage = GetMsgHead(session, session.Profile.PlayerData.Username) + "\r\n\r\n";
+
+                answerTextmessage += string.Format(
                     "Bot: Necrobot2 v{0}\n" +
                     "Account: {1}\n" +
                     "Runtime: {2}\n" +

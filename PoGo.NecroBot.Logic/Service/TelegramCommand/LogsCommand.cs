@@ -40,12 +40,11 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
                 {
                     numberOfLines = Convert.ToInt32(cmd[1]);
                 }
-                var last10Lines = alllines.Skip(Math.Max(0, alllines.Length - numberOfLines));
-                var message = "";
-                foreach (var item in last10Lines)
-                {
-                    message += item + "\r\n";
-                }
+                var last10Lines = (alllines.Skip(Math.Max(0, alllines.Length - numberOfLines))) ;
+                var enumerable = last10Lines as string[] ?? last10Lines.ToArray();
+
+                var message = GetMsgHead(session, session.Profile.PlayerData.Username, enumerable.Length) + "\r\n\r\n";
+                message = enumerable.Aggregate(message, (current, item) => current + (item + "\r\n"));
                 callback(message);
                 return true;
             }

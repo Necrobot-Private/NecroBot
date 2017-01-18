@@ -21,7 +21,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
         {
             if (cmd.ToLower() == Command)
             {
-                var answerTextmessage = "";
+                string answerTextmessage = GetMsgHead(session, session.Profile.PlayerData.Username) + "\r\n\r\n";
                 var inventory = session.Inventory;
                 answerTextmessage += session.Translation.GetTranslation(TranslationString.CurrentPokeballInv,
                     await inventory.GetItemAmountByType(ItemId.ItemPokeBall),

@@ -22,7 +22,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
         {
             if (cmd.ToLower() == Command)
             {
-                callback("Restarted Bot. Closing old Instance... BYE!");
+                callback(GetMsgHead(session, session.Profile.PlayerData.Username) + "\r\n\r\n");
                 await Task.Delay(5000);
                 var assembly = Assembly.GetEntryAssembly().Location;
                 if (assembly != null)
