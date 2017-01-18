@@ -281,8 +281,7 @@ namespace PoGo.NecroBot.Logic.Common
         SnipePokemonNotInPokedex,
         BuddyPokemonUpdate,
         TargetLocationSet,
-        WebSocketStarted
-        TargetLocationSet,
+        WebSocketStarted,
         TelegramCommandAccountsDescription,
         TelegramCommandAllDescription,
         TelegramCommandExitDescription,
