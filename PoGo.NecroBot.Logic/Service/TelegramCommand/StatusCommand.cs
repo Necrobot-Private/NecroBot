@@ -51,20 +51,8 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
 
                 var answerTextmessage = GetMsgHead(session, session.Profile.PlayerData.Username) + "\r\n\r\n";
 
-                answerTextmessage += string.Format(
-                    "Bot: Necrobot2 v{0}\n" +
-                    "Account: {1}\n" +
-                    "Runtime: {2}\n" +
-                    "Level: {3}\n" +
-                    "Advance in: {4}h {5}m | {6} EP\n" +
-                    "XP / h: {7:n0}\n" +
-                    "Poke / h: {8:n0}\n" +
-                    "Stardust / h: {9:n0}\n" +
-                    "Poke Sent: {10}\n" +
-                    "Poke Evolved: {11}\n" +
-                    "Recycled: {12}\n" +
-                    "Pokestop limit: {13}\n" +
-                    "Catch limit: {14}",
+                answerTextmessage += session.Translation.GetTranslation(
+                    TranslationString.TelegramCommandProfileMsgBody,
                     necroBotVersion,
                     session.Profile.PlayerData.Username,
                     necroBotStatistics.FormatRuntime(),

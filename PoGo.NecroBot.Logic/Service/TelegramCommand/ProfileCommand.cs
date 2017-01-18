@@ -28,21 +28,8 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
             }
 
             var answerTextmessage = GetMsgHead(session, session.Profile.PlayerData.Username) + "\r\n\r\n";
-            answerTextmessage += string.Format(
-                "Account: {0}\n" +
-                "Level: {1}\n" +
-                "Total XP: {2}\n" +
-                "XP until level up: {3}\n" +
-                "Pokemon caught: {4}\n" +
-                "Pokemon sent: {5}\n" +
-                "Pokemon in bag: {6}\n" +
-                "Pokemon evolved: {7}\n" +
-                "Pokestops visited: {8}\n" +
-                "Items in bag: {9}\n" +
-                "Stardust: {10}\n" +
-                "Eggs hatched: {11}\n" +
-                "Pokedex entries: {12}\n" +
-                "KM walked: {13}",
+            answerTextmessage += session.Translation.GetTranslation(
+                TranslationString.TelegramCommandProfileMsgBody,
                 session.Profile.PlayerData.Username,
                 playerStats.Level,
                 playerStats.Experience,
