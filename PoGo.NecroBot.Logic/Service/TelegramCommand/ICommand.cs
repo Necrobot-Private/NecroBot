@@ -14,7 +14,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
 
         Task<bool> OnCommand(ISession session, string cmd, Message telegramMessage);
 
-        string GetDescription(Session session);
-        string GetMsgHead(Session session);
+        string GetDescription(ISession session);
+        string GetMsgHead(ISession session, object[] args = null);
     }
 }

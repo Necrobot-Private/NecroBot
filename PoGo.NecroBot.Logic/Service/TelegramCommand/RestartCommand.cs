@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Reflection;
 using System.Threading.Tasks;
+using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.State;
 
 namespace PoGo.NecroBot.Logic.Service.TelegramCommand
@@ -9,8 +10,9 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
     public class RestartCommand : CommandMessage
     {
         public override string Command => "/restart";
-        public override string Description => "Restart bot";
         public override bool StopProcess => true;
+        public override TranslationString DescriptionI18NKey => TranslationString.TelegramCommandRestartDescription;
+        public override TranslationString MsgHeadI18NKey => TranslationString.TelegramCommandRestartMsgHead;
 
         public RestartCommand(TelegramUtils telegramUtils) : base(telegramUtils)
         {

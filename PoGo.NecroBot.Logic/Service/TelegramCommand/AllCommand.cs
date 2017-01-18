@@ -10,8 +10,9 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
     public class AllCommand : CommandMessage
     {
         public override string Command => "/all";
-        public override string Description => "<cp/iv> - Shows your Pokemons.";
         public override bool StopProcess => true;
+        public override TranslationString DescriptionI18NKey => TranslationString.TelegramCommandAllDescription;
+        public override TranslationString MsgHeadI18NKey => TranslationString.TelegramCommandAllMsgHead;
 
         public AllCommand(TelegramUtils telegramUtils) : base(telegramUtils)
         {

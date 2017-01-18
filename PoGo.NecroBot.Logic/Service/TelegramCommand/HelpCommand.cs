@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.State;
 
 namespace PoGo.NecroBot.Logic.Service.TelegramCommand
@@ -8,8 +9,9 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
     public class HelpCommand : CommandMessage
     {
         public override string Command => "/help";
-        public override string Description => "list all support command";
         public override bool StopProcess => true;
+        public override TranslationString DescriptionI18NKey => TranslationString.TelegramCommandHelpDescription;
+        public override TranslationString MsgHeadI18NKey => TranslationString.TelegramCommandHelpMsgHead;
 
         public HelpCommand(TelegramUtils telegramUtils) : base(telegramUtils)
         {
@@ -29,7 +31,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
 
                 foreach (var instance in iCommandInstances)
                 {
-                    message += $"{instance.Command} - {instance.Description}\r\n";
+                    message += $"{instance.Command} - {instance.GetDescription(session)}\r\n";
                 }
 
                 callback(message);

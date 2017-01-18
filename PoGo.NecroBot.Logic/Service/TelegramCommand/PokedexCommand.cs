@@ -10,8 +10,9 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
     public class PokedexCommand : CommandMessage
     {
         public override string Command => "/pokedex";
-        public override string Description => "Shows you Pokedex. ";
         public override bool StopProcess => true;
+        public override TranslationString DescriptionI18NKey => TranslationString.TelegramCommandPokedexDescription;
+        public override TranslationString MsgHeadI18NKey => TranslationString.TelegramCommandPokedexMsgHead;
 
         public PokedexCommand(TelegramUtils telegramUtils) : base(telegramUtils)
         {

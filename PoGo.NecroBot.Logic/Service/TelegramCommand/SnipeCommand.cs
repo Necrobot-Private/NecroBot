@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Tasks;
 using POGOProtos.Enums;
@@ -8,9 +9,11 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
 {
     public class SnipeCommand : CommandMessage
     {
+        // TODO Add mandatory parameter info [n]
         public override string Command => "/snipe";
-        public override string Description => "add snipe item <pokemon,lat,lng>";
         public override bool StopProcess => true;
+        public override TranslationString DescriptionI18NKey => TranslationString.TelegramCommandSnipeDescription;
+        public override TranslationString MsgHeadI18NKey => TranslationString.TelegramCommandSnipeMsgHead;
 
         public SnipeCommand(TelegramUtils telegramUtils) : base(telegramUtils)
         {

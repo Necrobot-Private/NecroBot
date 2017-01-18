@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Device.Location;
 using System.Threading.Tasks;
+using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.State;
 
 namespace PoGo.NecroBot.Logic.Service.TelegramCommand
@@ -8,8 +9,9 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
     public class LocCommand : CommandLocation
     {
         public override string Command => "/loc";
-        public override string Description => "Shows the bots current location";
         public override bool StopProcess => true;
+        public override TranslationString DescriptionI18NKey => TranslationString.TelegramCommandLocDescription;
+        public override TranslationString MsgHeadI18NKey => TranslationString.TelegramCommandLocMsgHead;
 
         public LocCommand(TelegramUtils telegramUtils) : base(telegramUtils)
         {

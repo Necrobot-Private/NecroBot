@@ -9,8 +9,9 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
     public class ProfileCommand : CommandMessage
     {
         public override string Command => "/profile";
-        public override string Description => "Shows your profile. ";
         public override bool StopProcess => true;
+        public override TranslationString DescriptionI18NKey => TranslationString.TelegramCommandProfileDescription;
+        public override TranslationString MsgHeadI18NKey => TranslationString.TelegramCommandProfileMsgHead;
 
         public ProfileCommand(TelegramUtils telegramUtils) : base(telegramUtils)
         {

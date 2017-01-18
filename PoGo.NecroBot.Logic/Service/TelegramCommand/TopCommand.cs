@@ -10,9 +10,13 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
 {
     public class TopCommand : CommandMessage
     {
+        private const int DeafultTopEntries = 10;
+
+        // TODO Add additional parameter info [n]
         public override string Command => "/top";
-        public override string Description => "<cp/iv> <amount> - Shows you top Pokemons. ";
         public override bool StopProcess => true;
+        public override TranslationString DescriptionI18NKey => TranslationString.TelegramCommandTopDescription;
+        public override TranslationString MsgHeadI18NKey => TranslationString.TelegramCommandTopMsgHead;
 
         public TopCommand(TelegramUtils telegramUtils) : base(telegramUtils)
         {
@@ -25,7 +29,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
 
             if (messagetext[0].ToLower() == Command)
             {
-                var times = 10;
+                var times = DeafultTopEntries;
                 var sortby = "cp";
 
                 if (messagetext.Length >= 2)

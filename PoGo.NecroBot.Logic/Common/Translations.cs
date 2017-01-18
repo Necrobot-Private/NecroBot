@@ -296,6 +296,7 @@ namespace PoGo.NecroBot.Logic.Common
         TelegramCommandSnipeDescription,
         TelegramCommandStatusDescription,
         TelegramCommandTopDescription,
+        TelegramCommandLocDescription,
         TelegramCommandAccountsMsgHead,
         TelegramCommandAllMsgHead,
         TelegramCommandExitMsgHead,
@@ -308,7 +309,8 @@ namespace PoGo.NecroBot.Logic.Common
         TelegramCommandRestartMsgHead,
         TelegramCommandSnipeMsgHead,
         TelegramCommandStatusMsgHead,
-        TelegramCommandTopMsgHead
+        TelegramCommandTopMsgHead,
+        TelegramCommandLocMsgHead
     }
 
     public class Translation : ITranslation
@@ -804,6 +806,8 @@ namespace PoGo.NecroBot.Logic.Common
                     "Shows bot runtime stats"),
                 new KeyValuePair<TranslationString, string>(TranslationString.TelegramCommandTopDescription,
                     "Shows Top 'n' Pokemon (defaults to {0})"),
+                new KeyValuePair<TranslationString, string>(TranslationString.TelegramCommandLocDescription,
+                    "Shows Bot location"),
                 new KeyValuePair<TranslationString, string>(TranslationString.TelegramCommandAccountsMsgHead,
                     ""),
                 new KeyValuePair<TranslationString, string>(TranslationString.TelegramCommandAllMsgHead,
@@ -829,7 +833,9 @@ namespace PoGo.NecroBot.Logic.Common
                 new KeyValuePair<TranslationString, string>(TranslationString.TelegramCommandStatusMsgHead,
                     "{0}'s bot status:"),
                 new KeyValuePair<TranslationString, string>(TranslationString.TelegramCommandTopMsgHead,
-                    "{0}'s top Pokemon")
+                    "{0}'s top Pokemon:"),
+                new KeyValuePair<TranslationString, string>(TranslationString.TelegramCommandLocMsgHead,
+                    "{0}'s location:")
             };
 
         [JsonProperty("PokemonStrings",

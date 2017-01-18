@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Threading.Tasks;
+using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.State;
 
 namespace PoGo.NecroBot.Logic.Service.TelegramCommand
@@ -8,15 +9,15 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
     public class StatusCommand : CommandMessage
     {
         public override string Command => "/status";
-        public override string Description => "Shows you the Status of the Bot.";
         public override bool StopProcess => true;
+        public override TranslationString DescriptionI18NKey => TranslationString.TelegramCommandStatusDescription;
+        public override TranslationString MsgHeadI18NKey => TranslationString.TelegramCommandStatusMsgHead;
 
         public StatusCommand(TelegramUtils telegramUtils) : base(telegramUtils)
         {
         }
 
         #pragma warning disable 1998 // added to get rid of compiler warning. Remove this if async code is used below.
-
         public override async Task<bool> OnCommand(ISession session, string cmd, Action<string> callback)
         #pragma warning restore 1998
         {

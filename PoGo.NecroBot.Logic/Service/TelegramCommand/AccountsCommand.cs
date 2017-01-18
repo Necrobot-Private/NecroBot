@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.State;
 
 namespace PoGo.NecroBot.Logic.Service.TelegramCommand
@@ -7,8 +8,9 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
     public class AccountsCommand : CommandMessage
     {
         public override string Command => "/accounts";
-        public override string Description => "List all account setup for multiple bot";
         public override bool StopProcess => true;
+        public override TranslationString DescriptionI18NKey => TranslationString.TelegramCommandAccountsDescription;
+        public override TranslationString MsgHeadI18NKey => TranslationString.TelegramCommandAccountsMsgHead;
 
         public AccountsCommand(TelegramUtils telegramUtils) : base(telegramUtils)
         {

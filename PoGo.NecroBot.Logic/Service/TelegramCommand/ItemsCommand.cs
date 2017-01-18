@@ -9,8 +9,9 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
     public class ItemsCommand : CommandMessage
     {
         public override string Command => "/items";
-        public override string Description => "Shows your items.";
         public override bool StopProcess => true;
+        public override TranslationString DescriptionI18NKey => TranslationString.TelegramCommandItemsDescription;
+        public override TranslationString MsgHeadI18NKey => TranslationString.TelegramCommandItemsMsgHead;
 
         public ItemsCommand(TelegramUtils telegramUtils) : base(telegramUtils)
         {
