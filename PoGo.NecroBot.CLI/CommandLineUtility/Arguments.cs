@@ -79,7 +79,6 @@ namespace PoGo.NecroBot.CLI.CommandLineUtility
                             if (!_parameters.ContainsKey(parameter))
                                 _parameters.Add(parameter, "true");
                         }
-
                         parameter = parts[1];
 
                         // Remove possible enclosing characters (",')
@@ -88,7 +87,6 @@ namespace PoGo.NecroBot.CLI.CommandLineUtility
                             parts[2] = remover.Replace(parts[2], "$1");
                             _parameters.Add(parameter, parts[2]);
                         }
-
                         parameter = null;
                         break;
                 }

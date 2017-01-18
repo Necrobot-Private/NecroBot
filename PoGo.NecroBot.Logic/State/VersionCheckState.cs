@@ -1,24 +1,23 @@
 ﻿#region using directives
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
+using System.Media;
 using System.Net;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Newtonsoft.Json.Linq;
 using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.Event;
-using PoGo.NecroBot.Logic.Logging;
-using PoGo.NecroBot.Logic.Model.Settings;
-using PoGo.NecroBot.Logic.Utils;
-using System.Windows.Forms;
 using PoGo.NecroBot.Logic.Event.UI;
-using System.Media;
+using PoGo.NecroBot.Logic.Logging;
+using PoGo.NecroBot.Logic.Utils;
+using PoGo.NecroBot.Logic.Forms;
 
 #endregion
 
@@ -40,19 +39,20 @@ namespace PoGo.NecroBot.Logic.State
 
             await CleanupOldFiles();
 
-            if( !session.LogicSettings.CheckForUpdates )
+            if (!session.LogicSettings.CheckForUpdates)
             {
-                session.EventDispatcher.Send( new UpdateEvent
+                session.EventDispatcher.Send(new UpdateEvent
                 {
-                    Message = session.Translation.GetTranslation( TranslationString.CheckForUpdatesDisabled, Assembly.GetExecutingAssembly().GetName().Version.ToString( 3 ) )
-                } );
+                    Message = session.Translation.GetTranslation(TranslationString.CheckForUpdatesDisabled,
+                        Assembly.GetExecutingAssembly().GetName().Version.ToString(3))
+                });
 
                 return new LoginState();
             }
 
             var autoUpdate = session.LogicSettings.AutoUpdate;
-            var isLatest = IsLatest();
-            if ( isLatest)
+           var isLatest = IsLatest();
+            if (isLatest)
             {
                 session.EventDispatcher.Send(new UpdateEvent
                 {
@@ -61,66 +61,45 @@ namespace PoGo.NecroBot.Logic.State
                 });
                 return new LoginState();
             }
-            if ( !autoUpdate )
-            {
-                SystemSounds.Asterisk.Play();
-                Logger.Write("New update detected, would you like to update? Y/N", LogLevel.Update);
 
-                if (MessageBox.Show("New update detected, would you like to update?", "Auto Update", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
-                {
-                    Logger.Write("Update Skipped", LogLevel.Update);
-                    return new LoginState();
-                }
 
-               // var boolBreak = false;
-                //while( !boolBreak )
-                //{
-                //    var strInput = Console.ReadLine().ToLower();
+            SystemSounds.Asterisk.Play();
 
-                //    switch( strInput )
-                //    {
-                //        case "y":
-                //            boolBreak = true;
-                //            break;
-                //        case "n":
-                //            Logger.Write( "Update Skipped", LogLevel.Update );
-                //            return new LoginState();
-                //        default:
-                //            Logger.Write( session.Translation.GetTranslation( TranslationString.PromptError, "Y", "N" ), LogLevel.Error );
-                //            continue;
-                //    }
-                //}
-            }
-
-            session.EventDispatcher.Send(new UpdateEvent
-            {
-                Message = session.Translation.GetTranslation(TranslationString.DownloadingUpdate)
-            });
-            
+           
             var remoteReleaseUrl =
                 $"https://github.com/Necrobot-Private/NecroBot/releases/download/v{RemoteVersion}/";
             string zipName = "NecroBot2.Console.zip";
-            if(Assembly.GetEntryAssembly().FullName.ToLower().Contains("necrobot2.win"))
+            if (Assembly.GetEntryAssembly().FullName.ToLower().Contains("necrobot2.win"))
             {
                 zipName = "NecroBot2.Win.zip";
             }
             var downloadLink = remoteReleaseUrl + zipName;
-            session.EventDispatcher.Send(new StatusBarEvent($"Auto update {RemoteVersion}, downloading.. .{downloadLink}"));
 
             var baseDir = Directory.GetCurrentDirectory();
             var downloadFilePath = Path.Combine(baseDir, zipName);
             var tempPath = Path.Combine(baseDir, "tmp");
             var extractedDir = Path.Combine(tempPath, "NecroBot2");
             var destinationDir = baseDir + Path.DirectorySeparatorChar;
-            Logger.Write(downloadLink, LogLevel.Info);
+             bool updated = false;
+            AutoUpdateForm autoUpdateForm = new AutoUpdateForm()
+            {
+                Session = session,
+                DownloadLink = downloadLink,
+                Destination = downloadFilePath,
+                AutoUpdate = true,
+                CurrentVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString(),
+                LatestVersion = $"{RemoteVersion}"
+            };
 
-            if (!DownloadFile(downloadLink, downloadFilePath))
+            updated = (autoUpdateForm.ShowDialog() == DialogResult.OK);
+
+
+            if (!updated)
+            {
+                Logger.Write("Update Skipped", LogLevel.Update);
                 return new LoginState();
 
-            session.EventDispatcher.Send(new UpdateEvent
-            {
-                Message = session.Translation.GetTranslation(TranslationString.FinishedDownloadingRelease)
-            });
+            }
 
             if (!UnpackFile(downloadFilePath, extractedDir))
                 return new LoginState();
@@ -137,7 +116,7 @@ namespace PoGo.NecroBot.Logic.State
             {
                 Message = session.Translation.GetTranslation(TranslationString.UpdateFinished)
             });
-            
+
             Process.Start(Assembly.GetEntryAssembly().Location);
             Environment.Exit(-1);
             return null;
@@ -159,7 +138,7 @@ namespace PoGo.NecroBot.Logic.State
             {
                 try
                 {
-                    if (file.Name.Contains("vshost") || file.Name.Contains(".gpx.old") || file.Name.Contains("chromedriver"))
+                    if (file.Name.Contains("vshost") || file.Name.Contains(".gpx.old") || file.Name.Contains("chromedriver.exe.old"))
                         continue;
                     File.Delete(file.FullName);
                 }
@@ -171,23 +150,7 @@ namespace PoGo.NecroBot.Logic.State
             await Task.Delay(200);
         }
 
-        public static bool DownloadFile(string url, string dest)
-        {
-            using (var client = new WebClient())
-            {
-                
-                try
-                {
-                    client.DownloadFile(url, dest);
-                    Logger.Write(dest, LogLevel.Info);
-                }
-                catch
-                {
-                    // ignored
-                }
-                return true;
-            }
-        }
+       
 
         private static string DownloadServerVersion()
         {
@@ -209,7 +172,7 @@ namespace PoGo.NecroBot.Logic.State
             {
                 var regex = new Regex(@"\[assembly\: AssemblyVersion\(""(\d{1,})\.(\d{1,})\.(\d{1,})\.(\d{1,})""\)\]");
                 var match = regex.Match(DownloadServerVersion());
-                
+
                 if (!match.Success)
                     return false;
 
@@ -234,7 +197,10 @@ namespace PoGo.NecroBot.Logic.State
             var oldfiles = Directory.GetFiles(destFolder);
             foreach (var old in oldfiles)
             {
-                if (old.Contains("vshost") || old.Contains(".gpx") || old.Contains("config.json") || old.Contains("config.xlsm") || old.Contains("auth.json") ||  old.Contains("SessionStats.db") || old.Contains("LastPos.ini")) continue;
+                if (old.Contains("vshost") || old.Contains(".gpx") || old.Contains("config.json") ||
+                    old.Contains("config.xlsm") || old.Contains("auth.json") || old.Contains("SessionStats.db") ||
+                    old.Contains("LastPos.ini") || old.Contains("chromedriver.exe")) continue;
+                if (File.Exists(old + ".old")) continue;
                 File.Move(old, old + ".old");
             }
 
@@ -246,7 +212,13 @@ namespace PoGo.NecroBot.Logic.State
                     if (file.Contains("vshost") || file.Contains(".gpx")) continue;
                     var name = Path.GetFileName(file);
                     var dest = Path.Combine(destFolder, name);
-                    File.Copy(file, dest, true);
+                    try {
+                        File.Copy(file, dest, true);
+                    }
+                    catch(Exception ex)
+                    {
+                        Logger.Write($"Error occurred while copy {file}, This seem like chromedriver.exe is being locked, you need manually copy after you close all chrome instance or ignore it");
+                    }
                 }
 
                 var folders = Directory.GetDirectories(sourceFolder);
@@ -265,7 +237,7 @@ namespace PoGo.NecroBot.Logic.State
             }
             return true;
         }
-        
+
         public static bool UnpackFile(string sourceTarget, string destPath)
         {
             var source = sourceTarget;

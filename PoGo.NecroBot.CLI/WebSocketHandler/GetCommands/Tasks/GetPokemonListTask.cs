@@ -7,7 +7,6 @@ using PoGo.NecroBot.CLI.WebSocketHandler.GetCommands.Events;
 using PoGo.NecroBot.CLI.WebSocketHandler.GetCommands.Helpers;
 using PoGo.NecroBot.Logic.State;
 using SuperSocket.WebSocket;
-using PoGo.NecroBot.Logic.Model;
 
 #endregion
 

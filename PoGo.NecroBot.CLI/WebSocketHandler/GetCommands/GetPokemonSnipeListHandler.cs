@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
-using PoGo.NecroBot.CLI.WebSocketHandler.GetCommands.Tasks;
 using PoGo.NecroBot.Logic.State;
+using PoGo.NecroBot.Logic.Tasks;
 using SuperSocket.WebSocket;
 
 namespace PoGo.NecroBot.CLI.WebSocketHandler.GetCommands
@@ -16,9 +16,8 @@ namespace PoGo.NecroBot.CLI.WebSocketHandler.GetCommands
 
         public async Task Handle(ISession session, WebSocketSession webSocketSession, dynamic message)
         {
-            await Logic.Tasks.HumanWalkSnipeTask.ExecuteFetchData(session);
+            await HumanWalkSnipeTask.ExecuteFetchData(session);
             //await GetPokemonSnipeListTask.Execute(session, webSocketSession, (string)message.RequestID);
         }
-
     }
 }

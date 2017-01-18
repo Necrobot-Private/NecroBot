@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using PoGo.NecroBot.CLI.WebSocketHandler.GetCommands.Events;
 using PoGo.NecroBot.Logic.State;
 using SuperSocket.WebSocket;
-using PoGo.NecroBot.Logic.Model;
 
 #endregion
 
@@ -14,7 +13,7 @@ namespace PoGo.NecroBot.CLI.WebSocketHandler.GetCommands.Tasks
     {
         public static async Task Execute(ISession session, WebSocketSession webSocketSession, string requestID)
         {
-           // using (var blocker = new BlockableScope(session, BotActions.ListItems))
+            // using (var blocker = new BlockableScope(session, BotActions.ListItems))
             {
                 //if (!await blocker.WaitToRun()) return;
 

@@ -1,14 +1,14 @@
 ﻿<Controls:MetroWindow x:Class="PoGo.Necrobot.Window.MainClientWindow"
-          xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-                  xmlns:Behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
+                      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                      xmlns:Behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
                       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                       xmlns:local="clr-namespace:PoGo.Necrobot.Window.Controls"
                       Title="Necrobot 2 - Window GUI"
                       Height="768"
-                      Width="1024" 
-                      BorderThickness="0" 
+                      Width="1024"
+                      BorderThickness="0"
                       GlowBrush="Black"
                       ResizeMode="CanResizeWithGrip"
                       WindowTransitionsEnabled="False"
@@ -19,21 +19,21 @@
             <Button Click="Theme_Selected">
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="20"
-                   Height="20"
-                   Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+                               Height="20"
+                               Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
                         <Rectangle.OpacityMask>
                             <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_social_delicious}" />
                         </Rectangle.OpacityMask>
                     </Rectangle>
-                    <TextBlock Margin="4 0 0 0"   
-                   VerticalAlignment="Center"
-                   Text="Theme" />
+                    <TextBlock Margin="4 0 0 0"
+                               VerticalAlignment="Center"
+                               Text="Theme" />
 
-                    <Popup Margin="10,10,0,13" Name="Popup1" 
+                    <Popup Margin="10,10,0,13" Name="Popup1"
                            HorizontalAlignment="Left"
-                           VerticalAlignment="Top" 
-                           Width="320" Height="280" IsOpen="False" AllowsTransparency="True" >
-                        <Grid Background="White" >
+                           VerticalAlignment="Top"
+                           Width="320" Height="280" IsOpen="False" AllowsTransparency="True">
+                        <Grid Background="White">
 
                             <WrapPanel Background="White" Margin="20,20,20,20">
                                 <RadioButton GroupName="Theme" Foreground="Red" Content="Red"   Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5" ></RadioButton>
@@ -58,53 +58,54 @@
                                 <RadioButton GroupName="Theme" Foreground="Teal" Content="Teal" Checked="OnTheme_Checked" Width="90"  Margin="0,5,0,5"></RadioButton>
                                 <RadioButton GroupName="Theme" Foreground="Violet" Content="Violet" Checked="OnTheme_Checked" Width="90"  Margin="0,5,0,5"></RadioButton>
                                 <RadioButton GroupName="Theme" Foreground="Yellow" Content="Yellow" Checked="OnTheme_Checked" Width="90"  Margin="0,5,0,5"></RadioButton>
-                            
+
                         </WrapPanel>
                         </Grid>
 
                     </Popup>
-                
+
                 </StackPanel>
-                
+
             </Button>
-            <Button x:Name="menuConsole" Click="menuConsole_Click" >
+            <Button x:Name="menuConsole" Click="menuConsole_Click">
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="20"
-                   Height="20"
-                   Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+                               Height="20"
+                               Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
                         <Rectangle.OpacityMask>
                             <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_console}" />
                         </Rectangle.OpacityMask>
                     </Rectangle>
-                    <TextBlock Margin="4 0 0 0"   Name="consoleMenuText"
-                   VerticalAlignment="Center"
-                   Text="Show Console" />
+                    <TextBlock Margin="4 0 0 0" Name="consoleMenuText"
+                               VerticalAlignment="Center"
+                               Text="Show Console" />
                 </StackPanel>
 
             </Button>
             <Button Click="menuSetting_Click" Name="menuSetting">
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="20"
-                   Height="20"
-                   Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+                               Height="20"
+                               Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
                         <Rectangle.OpacityMask>
                             <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_settings}" />
                         </Rectangle.OpacityMask>
                     </Rectangle>
                     <TextBlock Margin="4 0 0 0"
-                   VerticalAlignment="Center"
-                   Text="Settings" />
+                               VerticalAlignment="Center"
+                               Text="Settings" />
                 </StackPanel>
             </Button>
         </Controls:WindowCommands>
     </Controls:MetroWindow.RightWindowCommands>
-    
+
     <DockPanel LastChildFill="True">
-        <GroupBox x:Name="grbPlayerInfo" DockPanel.Dock="Top" Height="150" >
+        <GroupBox x:Name="grbPlayerInfo" DockPanel.Dock="Top" Height="150">
             <GroupBox.Header>
                 <DockPanel LastChildFill="True">
-                    <Button Content="Hide" DockPanel.Dock="Right" Name="btnHideInfo" Click="btnHideInfo_Click"></Button>
-                    <Label Content="Logging in ..... check console window for detail" Name="lblAccount" Foreground="White" FontWeight="Bold">
+                    <Button Content="Hide" DockPanel.Dock="Right" Name="btnHideInfo" Click="btnHideInfo_Click" />
+                    <Label Content="Logging in ..... check console window for detail" Name="lblAccount"
+                           Foreground="White" FontWeight="Bold">
                         <!--<Label.Content>
                             <MultiBinding StringFormat="{}{0} as : {1}">
                                 <Binding Path="UI.PlayerStatus"></Binding>
@@ -112,11 +113,11 @@
                             </MultiBinding>
 
                         </Label.Content>-->
-                        
+
                     </Label>
                 </DockPanel>
             </GroupBox.Header>
-            <local:PlayerInfo DataContext="{Binding Path=PlayerInfo}" Margin="10,0,-2,26"/>
+            <local:PlayerInfo DataContext="{Binding Path=PlayerInfo}" Margin="10,0,-2,26" />
         </GroupBox>
         <StatusBar DockPanel.Dock="Bottom">
             <StatusBarItem>
@@ -127,7 +128,7 @@
             </StatusBarItem>
         </StatusBar>
 
-        <TabControl TabStripPlacement="Left" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Name="tabMain">
+        <TabControl TabStripPlacement="Left" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Name="tabMain">
             <TabControl.Resources>
                 <Style TargetType="{x:Type TabItem}">
                     <Setter Property="HeaderTemplate">
@@ -151,45 +152,63 @@
                         <ColumnDefinition Width="5" />
                         <ColumnDefinition Width="auto" />
                     </Grid.ColumnDefinitions>
-                    <local:MapControl x:Name="botMap" Grid.Column="0" DataContext="{Binding Path=Map}"></local:MapControl>
+                    <local:MapControl x:Name="botMap" Grid.Column="0" DataContext="{Binding Path=Map}" />
                     <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
-                    <local:SidebarControl Visibility="Hidden" DataContext="{Binding Path=Sidebar}" x:Name="sidebarControl" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinWidth="150"></local:SidebarControl>
+                    <local:SidebarControl Visibility="Hidden" DataContext="{Binding Path=Sidebar}"
+                                          x:Name="sidebarControl" Grid.Column="2" HorizontalAlignment="Stretch"
+                                          VerticalAlignment="Stretch" MinWidth="150" />
                 </Grid>
             </TabItem>
             <TabItem Header="   SNIPER   ">
-                <local:SniperControl x:Name="ctrlSniper" DataContext="{Binding Path=SnipeList}"></local:SniperControl>
+                <local:SniperControl x:Name="ctrlSniper" DataContext="{Binding Path=SnipeList}" />
             </TabItem>
 
             <TabItem Header="   CONSOLE   " IsSelected="True">
-                <RichTextBox 
+                <DockPanel LastChildFill="True">
+                    <TextBox HorizontalAlignment="Stretch" 
+                             Name="txtCmdInput" 
+                             Background="Black" 
+                             DockPanel.Dock="Top"
+                             Foreground="White" 
+                             BorderBrush="Aquamarine" 
+                             BorderThickness="1" 
+                             Text="Enter your command" 
+                             MouseDown="txtCmdInput_MouseDown"
+                             KeyDown="txtCmdInput_KeyDown"
+                             />
+
+                    <RichTextBox
                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
                     ScrollViewer.VerticalScrollBarVisibility="Auto"
-                    ScrollViewer.CanContentScroll="True" 
-                    DockPanel.Dock="Top" 
-                    x:Name="consoleLog" 
-                    HorizontalAlignment="Stretch" 
-                    Background="Black"  
-                    VerticalAlignment="Stretch" 
-                    FontSize="14.667" >
+                    ScrollViewer.CanContentScroll="True"
+                    DockPanel.Dock="Top"
+                    x:Name="consoleLog"
+                    HorizontalAlignment="Stretch"
+                    Background="Black"
+                    VerticalAlignment="Stretch"
+                    FontSize="14.667">
                     <FlowDocument>
                         <Paragraph LineHeight="20">
-                            <Run Text=""/>
+                            <Run Text="" />
                         </Paragraph>
                     </FlowDocument>
                 </RichTextBox>
+                </DockPanel>
+
             </TabItem>
-            
+
             <TabItem Header="{Binding Path= PokemonTabHeader, FallbackValue=Pokemon}" Name="tabPokemons">
-                <local:PokemonInventory x:Name="ctrPokemonInventory" DataContext="{Binding Path=PokemonList}" OnPokemonItemSelected="PokemonInventory_OnPokemonItemSelected" ></local:PokemonInventory>
+                <local:PokemonInventory x:Name="ctrPokemonInventory" DataContext="{Binding Path=PokemonList}"
+                                        OnPokemonItemSelected="PokemonInventory_OnPokemonItemSelected" />
             </TabItem>
-            <TabItem Name="tabItems" Header="{Binding Path=ItemsTabHeader, FallbackValue=Pokemon}" >
-                <local:ItemsInventory DataContext="{Binding Path=ItemsList}" x:Name="ctrlItemControl"  />
+            <TabItem Name="tabItems" Header="{Binding Path=ItemsTabHeader, FallbackValue=Pokemon}">
+                <local:ItemsInventory DataContext="{Binding Path=ItemsList}" x:Name="ctrlItemControl" />
             </TabItem>
-            <TabItem Name="tabEggs" Header="EGGS" >
-                <local:EggsControl DataContext="{Binding Path=EggsList}" x:Name="ctrlEggsControl"  />
+            <TabItem Name="tabEggs" Header="EGGS">
+                <local:EggsControl DataContext="{Binding Path=EggsList}" x:Name="ctrlEggsControl" />
             </TabItem>
         </TabControl>
     </DockPanel>
-    
+
 
 </Controls:MetroWindow>
