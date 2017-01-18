@@ -52,7 +52,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
                 var answerTextmessage = GetMsgHead(session, session.Profile.PlayerData.Username) + "\r\n\r\n";
 
                 answerTextmessage += session.Translation.GetTranslation(
-                    TranslationString.TelegramCommandProfileMsgBody,
+                    TranslationString.TelegramCommandStatusMsgBody,
                     necroBotVersion,
                     session.Profile.PlayerData.Username,
                     necroBotStatistics.FormatRuntime(),
