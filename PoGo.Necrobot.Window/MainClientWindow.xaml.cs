@@ -197,5 +197,20 @@ namespace PoGo.Necrobot.Window
             var rad = sender as RadioButton;
             ChangeThemeTo(rad.Content as string);
         }
+
+        private void txtCmdInput_KeyDown(object sender, KeyEventArgs e)
+        {
+
+            if(e.Key == Key.Enter)
+            {
+                Logger.Write(txtCmdInput.Text, LogLevel.Info, ConsoleColor.White);
+                txtCmdInput.Text = "";
+            }
+        }
+
+        private void txtCmdInput_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            txtCmdInput.Text = "";
+        }
     }
 }

@@ -34,12 +34,11 @@ See https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer for pricing 
 <img src="http://i.imgur.com/z6UfTm8.png" width="430">
 
 <h2><a name="getting-started">Getting Started</a></h2>
-Make sure you check out our [Wiki](https://github.com/Necrobot-Private/NecroBot/wiki) to get started.    <b><---- Wiki links will be updated soon. Stay tuned.</b>
+
+Please visit our website [http://necrobot2.com](http://necrobot2.com) to find some tips for setup and running.
+
+</b>
 <br/>
-
-
-
-<h2><a name="features">Awesome Test Features</a></h2>
 
 ## [Credits](http://pastebin.com/Yh4ynXbv)
 
