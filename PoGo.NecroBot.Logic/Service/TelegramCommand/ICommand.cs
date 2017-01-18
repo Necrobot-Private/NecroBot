@@ -8,6 +8,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
     internal interface ICommand
     {
         string Command { get; }
+        string Arguments { get; }
         bool StopProcess { get; }
         TranslationString DescriptionI18NKey { get; }
         TranslationString MsgHeadI18NKey { get; }

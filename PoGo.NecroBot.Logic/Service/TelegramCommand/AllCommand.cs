@@ -14,10 +14,10 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
     {
         private const string DefaultOrderBy = "cp";
 
-        private string CommandParseRegex => @"\(" + Command + @")\s+(?<orderBy>iv|cp)\s*";
+        private string CommandParseRegex => "^(\\" + Command + ")(?>\\s+(?<orderBy>iv|cp))?\\s*";
 
-        // TODO Add additional parameter info [n] / [iv | cp]
         public override string Command => "/all";
+        public override string Arguments => "[iv|cp]";
         public override bool StopProcess => true;
         public override TranslationString DescriptionI18NKey => TranslationString.TelegramCommandAllDescription;
         public override TranslationString MsgHeadI18NKey => TranslationString.TelegramCommandAllMsgHead;

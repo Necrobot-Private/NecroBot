@@ -15,11 +15,10 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
         private const int DefaultCount = 10;
         private const string DefaultOrderBy = "cp";
 
-        private string CommandParseRegex => @"\(" + Command + @")(?>\s+(?<orderBy>iv|cp)|\s+(?<count>\d+)){0,2}\s*";
+        private string CommandParseRegex => "^(\\" + Command + ")(?>(?>\\s+(?<orderBy>iv|cp))|(?>\\s+(?<count>\\d+))){0,2}\\s*";
 
-        // TODO Add additional parameter info [n] / [iv | cp]
         public override string Command => "/top";
-
+        public override string Arguments => "[iv|cp] [n]";
         public override bool StopProcess => true;
         public override TranslationString DescriptionI18NKey => TranslationString.TelegramCommandTopDescription;
         public override TranslationString MsgHeadI18NKey => TranslationString.TelegramCommandTopMsgHead;
@@ -27,6 +26,9 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
         public TopCommand(TelegramUtils telegramUtils) : base(telegramUtils)
         {
         }
+
+        public override string GetDescription(ISession session) =>
+            base.GetDescription(session, DefaultCount.ToString());
 
         public override async Task<bool> OnCommand(ISession session, string cmd, Action<string> callback)
         {
@@ -41,7 +43,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
             int count;
             try
             {
-                count = string.IsNullOrEmpty(commandMatch.Groups["orderBy"].Value)
+                count = string.IsNullOrEmpty(commandMatch.Groups["count"].Value)
                     ? DefaultCount
                     : Convert.ToInt32(commandMatch.Groups["count"].Value);
             }

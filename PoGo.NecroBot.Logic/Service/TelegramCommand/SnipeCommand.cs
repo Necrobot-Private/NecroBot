@@ -9,8 +9,8 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
 {
     public class SnipeCommand : CommandMessage
     {
-        // TODO Add mandatory parameter info [n]
         public override string Command => "/snipe";
+        public override string Arguments => "<name,lat,lon>";
         public override bool StopProcess => true;
         public override TranslationString DescriptionI18NKey => TranslationString.TelegramCommandSnipeDescription;
         public override TranslationString MsgHeadI18NKey => TranslationString.TelegramCommandSnipeMsgHead;

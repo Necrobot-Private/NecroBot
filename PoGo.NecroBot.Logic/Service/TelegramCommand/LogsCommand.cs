@@ -11,8 +11,8 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
     {
         private const int DeafultLogEntries = 10;
 
-        // TODO Add additional parameter info [n]
         public override string Command => "/logs";
+        public override string Arguments => "[n]";
         public override bool StopProcess => true;
         public override TranslationString DescriptionI18NKey => TranslationString.TelegramCommandLogsDescription;
         public override TranslationString MsgHeadI18NKey => TranslationString.TelegramCommandLogsMsgHead;
@@ -20,6 +20,9 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
         public LogsCommand(TelegramUtils telegramUtils) : base(telegramUtils)
         {
         }
+
+        public override string GetDescription(ISession session) =>
+            base.GetDescription(session, DeafultLogEntries.ToString());
 
         #pragma warning disable 1998 // added to get rid of compiler warning. Remove this if async code is used below.
         public override async Task<bool> OnCommand(ISession session,string commandText, Action<string> callback)

@@ -17,6 +17,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
         }
 
         public abstract string Command { get; }
+        public virtual string Arguments => "";
         public abstract bool StopProcess { get; }
         public abstract TranslationString DescriptionI18NKey { get; }
         public abstract TranslationString MsgHeadI18NKey { get; }
@@ -40,10 +41,10 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
             return OnCommand(session, cmd, callback);
         }
 
-        public string GetDescription(ISession session, object[] data) =>
+        public string GetDescription(ISession session, params object[] data) =>
             session.Translation.GetTranslation(DescriptionI18NKey, data);
 
-        public string GetDescription(ISession session) =>
+        public virtual string GetDescription(ISession session) =>
             session.Translation.GetTranslation(DescriptionI18NKey);
 
         public string GetMsgHead(ISession session, params object[] data) =>

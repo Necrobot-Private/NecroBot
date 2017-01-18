@@ -31,7 +31,12 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
 
                 foreach (var instance in iCommandInstances)
                 {
-                    message += $"{instance.Command} - {instance.GetDescription(session)}\r\n";
+                    var arguments = "";
+                    if (!string.IsNullOrEmpty(instance.Arguments))
+                    {
+                        arguments = ' ' + instance.Arguments;
+                    }
+                    message += $"{instance.Command}{arguments} - {instance.GetDescription(session)}\r\n";
                 }
 
                 callback(message);
