@@ -14,8 +14,8 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
         // TODO Add additional parameter info [n]
         public override string Command => "/logs";
         public override bool StopProcess => true;
-        public override TranslationString DescriptionI18NKey => TranslationString.TelegramCommandRecycleDescription;
-        public override TranslationString MsgHeadI18NKey => TranslationString.TelegramCommandRecycleMsgHead;
+        public override TranslationString DescriptionI18NKey => TranslationString.TelegramCommandLogsDescription;
+        public override TranslationString MsgHeadI18NKey => TranslationString.TelegramCommandLogsMsgHead;
 
         public LogsCommand(TelegramUtils telegramUtils) : base(telegramUtils)
         {

@@ -10,8 +10,8 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
     {
         public override string Command => "/recycle";
         public override bool StopProcess => true;
-        public override TranslationString DescriptionI18NKey => TranslationString.TelegramCommandLogsDescription;
-        public override TranslationString MsgHeadI18NKey => TranslationString.TelegramCommandLogsMsgHead;
+        public override TranslationString DescriptionI18NKey => TranslationString.TelegramCommandRecycleDescription;
+        public override TranslationString MsgHeadI18NKey => TranslationString.TelegramCommandRecycleMsgHead;
 
         public RecycleCommand(TelegramUtils telegramUtils) : base(telegramUtils)
         {
