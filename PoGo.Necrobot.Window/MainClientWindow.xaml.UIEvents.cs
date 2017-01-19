@@ -153,7 +153,7 @@ namespace PoGo.Necrobot.Window
         }
         public void OnBotEvent(PokeStopListEvent ev)
         {
-            this.botMap.OnPokestopEvent(ev.Forts);
+            this.botMap.OnPokestopEvent(ev);
         }
         public void OnBotEvent(UpdatePositionEvent ev)
         {

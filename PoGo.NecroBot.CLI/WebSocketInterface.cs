@@ -1,5 +1,6 @@
 ﻿#region using directives
 
+using System.Linq;
 using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
@@ -70,15 +71,14 @@ namespace PoGo.NecroBot.CLI
             _server.NewMessageReceived += HandleMessage;
             _server.NewSessionConnected += HandleSession;
 
-           bool b = _server.Start();
-            if (b)
+            if (_server.Start())
             {
                 Logger.Write(translations.GetTranslation(TranslationString.WebSocketStarted, port, port + 1), LogLevel.Info);
 
             }
             else
             {
-                Logger.Write("Start socket failed..", LogLevel.Error);
+                Logger.Write($"Counld't start socket server at port {port}, this port maybe in use or block, please change config to other port and restart bot if you want to use web gui.", LogLevel.Error);
             }
         }
 
@@ -103,6 +103,7 @@ namespace PoGo.NecroBot.CLI
         {
             if (_lastPokeStopList != null)
             {
+                _lastPokeStopList.Forts.RemoveAll(x => evt.Forts.Any(t => x.Id == x.Id));
                 _lastPokeStopList.Forts.AddRange(evt.Forts);
             }
             else

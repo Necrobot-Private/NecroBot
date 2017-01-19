@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,13 @@ namespace PoGo.Necrobot.Window.Model
     {
         private double lat;
         private double lng;
+
+        public MapViewModel()
+        {
+            this.NearbyPokemons = new ObservableCollection<MapPokemonViewModel>();
+        }
+        public ObservableCollection<MapPokemonViewModel> NearbyPokemons { get; set; }
+
         public double CurrentLatitude { get { return lat; }
             set
             {
@@ -17,6 +25,7 @@ namespace PoGo.Necrobot.Window.Model
                 RaisePropertyChanged("CurrentLatitude");
             }
         }
+
         public double CurrentLongitude
         {
             get { return lng; }
