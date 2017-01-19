@@ -57,8 +57,38 @@
                         </Grid>
                     </DockPanel>
                     <StackPanel Orientation="Horizontal">
-                        <Button Margin="0,10,0,10" Width="100" Click="btnCatchHim_Click" >CATCH HIM</Button>
-                        <Button Margin="0,10,0,10" Width="100" Click="btnClose_Click" >CLOSE</Button>
+                        <Button Margin="0,10,0,10" Width="100" Click="btnCatchHim_Click" Content="Catch Him" >
+                            <Button.Triggers>
+                                <EventTrigger RoutedEvent="Button.Click">
+                                    <EventTrigger.Actions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <BooleanAnimationUsingKeyFrames Storyboard.TargetName="popInfo" Storyboard.TargetProperty="IsOpen">
+                                                    <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="False" />
+                                                </BooleanAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger.Actions>
+                                </EventTrigger>
+                            </Button.Triggers>
+                            
+                        </Button>
+                        <Button Margin="0,10,0,10" Width="100" Click="btnClose_Click" Content="Close">
+                            <Button.Triggers>
+                                <EventTrigger RoutedEvent="Button.Click">
+                                    <EventTrigger.Actions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <BooleanAnimationUsingKeyFrames Storyboard.TargetName="popInfo" Storyboard.TargetProperty="IsOpen">
+                                                    <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="False" />
+                                                </BooleanAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger.Actions>
+                                </EventTrigger>
+                            </Button.Triggers>
+                            
+                        </Button>
 
                     </StackPanel>
                 </StackPanel>

@@ -15,6 +15,7 @@ using PoGo.NecroBot.Logic.Tasks;
 using POGOProtos.Map.Fort;
 using PoGo.NecroBot.Logic.Event;
 using POGOProtos.Map.Pokemon;
+using System.Diagnostics;
 
 namespace PoGo.Necrobot.Window.Controls
 {
@@ -171,6 +172,41 @@ namespace PoGo.Necrobot.Window.Controls
             });
 
             popSelect.IsOpen = false;
+        }
+
+        internal void HandleEncounterEvent(EncounteredEvent encounteredEvent)
+        {
+            if (encounteredEvent.IsRecievedFromSocket) return;
+            var marker = this.nearbyPokemons.FirstOrDefault(x => ((MapPokemonMarker)x.Shape).IsMarkerOf(encounteredEvent.EncounterId));
+            if(marker != null)
+            {
+                this.Dispatcher.Invoke(() =>
+                {
+                    gmap.Markers.Remove(marker);
+                    this.nearbyPokemons.Remove(marker);
+                    var find = this.model.NearbyPokemons.FirstOrDefault(x => x.EncounterId.ToString() == encounteredEvent.EncounterId);
+                    if (find != null)
+                        this.model.NearbyPokemons.Remove(find);
+                });
+            }
+        }
+
+        private void gmap_LayoutUpdated(object sender, EventArgs e)
+        {
+            Debug.Write("gmap_LayoutUpdated");
+        }
+
+        internal void EnsureContent()
+        {
+            //foreach (var item in this.allMarkers)
+            //{
+            //    gmap.Markers.Remove(item.Value);
+            //}
+
+            //foreach (var item in this.allMarkers)
+            //{
+            //    gmap.Markers.Add(item.Value);
+            //}
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PoGo.NecroBot.Logic.Event;
 
 namespace PoGo.Necrobot.Window.Model
 {
@@ -34,6 +35,11 @@ namespace PoGo.Necrobot.Window.Model
                 lng = value;
                 RaisePropertyChanged("CurrentLongitude");
             }
+        }
+
+        internal void OnEncounterEvent(EncounteredEvent encounteredEvent)
+        {
+            throw new NotImplementedException();
         }
     }
 }

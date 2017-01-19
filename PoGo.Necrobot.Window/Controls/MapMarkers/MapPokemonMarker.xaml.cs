@@ -17,13 +17,16 @@ namespace PoGo.Necrobot.Window.Controls.MapMarkers
     /// </summary>
     public partial class MapPokemonMarker
     {
-        Popup Popup;
-        Label Label;
         GMapMarker Marker;
         MainClientWindow MainWindow;
         MapPokemonViewModel nearbyModel;
         private ISession session;
 
+        public bool IsMarkerOf(string encounterId)
+        {
+            return this.nearbyModel.EncounterId .ToString() == encounterId;
+
+        }
         public MapPokemonMarker(MainClientWindow window, GMapMarker marker, ISession session)
         {
             this.InitializeComponent();
@@ -60,19 +63,18 @@ namespace PoGo.Necrobot.Window.Controls.MapMarkers
 
         void CustomMarkerDemo_Unloaded(object sender, RoutedEventArgs e)
         {
-            this.Unloaded -= new RoutedEventHandler(CustomMarkerDemo_Unloaded);
-            this.Loaded -= new RoutedEventHandler(CustomMarkerDemo_Loaded);
-            this.SizeChanged -= new SizeChangedEventHandler(CustomMarkerDemo_SizeChanged);
-            this.MouseEnter -= new MouseEventHandler(MarkerControl_MouseEnter);
-            this.MouseLeave -= new MouseEventHandler(MarkerControl_MouseLeave);
-            this.MouseMove -= new MouseEventHandler(CustomMarkerDemo_MouseMove);
-            this.MouseLeftButtonUp -= new MouseButtonEventHandler(CustomMarkerDemo_MouseLeftButtonUp);
-            this.MouseLeftButtonDown -= new MouseButtonEventHandler(CustomMarkerDemo_MouseLeftButtonDown);
+            //this.Unloaded -= new RoutedEventHandler(CustomMarkerDemo_Unloaded);
+            //this.Loaded -= new RoutedEventHandler(CustomMarkerDemo_Loaded);
+            //this.SizeChanged -= new SizeChangedEventHandler(CustomMarkerDemo_SizeChanged);
+            //this.MouseEnter -= new MouseEventHandler(MarkerControl_MouseEnter);
+            //this.MouseLeave -= new MouseEventHandler(MarkerControl_MouseLeave);
+            //this.MouseMove -= new MouseEventHandler(CustomMarkerDemo_MouseMove);
+            //this.MouseLeftButtonUp -= new MouseButtonEventHandler(CustomMarkerDemo_MouseLeftButtonUp);
+            //this.MouseLeftButtonDown -= new MouseButtonEventHandler(CustomMarkerDemo_MouseLeftButtonDown);
 
-            Marker.Shape = null;
-            icon.Source = null;
-            icon = null;
-            Popup = null;
+            //Marker.Shape = null;
+            //icon.Source = null;
+            //icon = null;
         }
 
         void CustomMarkerDemo_SizeChanged(object sender, SizeChangedEventArgs e)

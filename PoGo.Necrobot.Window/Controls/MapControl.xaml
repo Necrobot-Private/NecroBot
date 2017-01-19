@@ -18,7 +18,11 @@
                                          MinZoom="1" 
                                          VerticalContentAlignment="Stretch" 
                                          HorizontalContentAlignment="Stretch" 
-                                         CanDragMap="True" MouseWheelZoomType="MousePositionWithoutCenter" MouseLeftButtonUp="gmap_MouseLeftButtonUp"
+                                         CanDragMap="True" MouseWheelZoomType="MousePositionWithoutCenter" 
+                                         MouseLeftButtonUp="gmap_MouseLeftButtonUp"
+                                         LayoutUpdated="gmap_LayoutUpdated" 
+                                         
+                                        
                                          />
 
         <Popup IsOpen="False" Name="popSelect" PopupAnimation="Scroll">
