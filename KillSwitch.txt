@@ -1,6 +1,6 @@
 BotStatus=ENABLED;
 //================================================================//
-                POKEMON GO FORCING 0.50.1 API
+                POKEMON GO USE NOW 0.51.2 API
 //================================================================//
 THIS BOT IS USING 0.45 API CONTINUED BOTTING WILL FLAG ACCOUNT FOR BAN
 //================================================================//
