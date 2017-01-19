@@ -186,7 +186,8 @@
                     HorizontalAlignment="Stretch"
                     Background="Black"
                     VerticalAlignment="Stretch"
-                    FontSize="14.667">
+                    FontSize="14.667" 
+                    IsReadOnly="True">
                     <FlowDocument>
                         <Paragraph LineHeight="20">
                             <Run Text="" />

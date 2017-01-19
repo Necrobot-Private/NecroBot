@@ -66,12 +66,20 @@ namespace PoGo.NecroBot.CLI
                 Logger.Write(translations.GetTranslation(TranslationString.WebSocketFailStart, port), LogLevel.Error);
                 return;
             }
-            Logger.Write(translations.GetTranslation(TranslationString.WebSocketStarted, port, port + 1), LogLevel.Info);
-
+           
             _server.NewMessageReceived += HandleMessage;
             _server.NewSessionConnected += HandleSession;
 
-            _server.Start();
+           bool b = _server.Start();
+            if (b)
+            {
+                Logger.Write(translations.GetTranslation(TranslationString.WebSocketStarted, port, port + 1), LogLevel.Info);
+
+            }
+            else
+            {
+                Logger.Write("Start socket failed..", LogLevel.Error);
+            }
         }
 
         private void Broadcast(string message)
@@ -82,9 +90,11 @@ namespace PoGo.NecroBot.CLI
                 {
                     session.Send(message);
                 }
-                catch
+                catch (Exception ex)
                 {
-                    // ignored
+#if DEBUG
+                    //Logger.Write(ex.Message);
+#endif
                 }
             }
         }
@@ -130,9 +140,11 @@ namespace PoGo.NecroBot.CLI
                 if (handle != null)
                     await handle;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // ignored
+#if DEBUG
+                //Logger.Write(ex.Message);
+#endif
             }
 
             // When we first get a message from the web socket, turn off log buffering.
@@ -156,9 +168,11 @@ namespace PoGo.NecroBot.CLI
                     Longitude = _session.Client.CurrentLongitude
                 }));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // ignored
+#if DEBUG
+                //Logger.Write(ex.Message);
+#endif
             }
         }
 
@@ -170,8 +184,11 @@ namespace PoGo.NecroBot.CLI
             {
                 HandleEvent(eve);
             }
-            catch
+            catch (Exception ex)
             {
+#if DEBUG
+                //Logger.Write(ex.Message);
+#endif
                 // ignored
             }
 
@@ -180,7 +197,7 @@ namespace PoGo.NecroBot.CLI
 
         private static string Serialize(dynamic evt)
         {
-            var jsonSerializerSettings = new JsonSerializerSettings {TypeNameHandling = TypeNameHandling.All};
+            var jsonSerializerSettings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All };
 
             // Add custom seriaizer to convert uong to string (ulong shoud not appear to json according to json specs)
             jsonSerializerSettings.Converters.Add(new IdToStringConverter());
