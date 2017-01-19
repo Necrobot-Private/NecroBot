@@ -110,6 +110,7 @@ namespace PoGo.Necrobot.Window
         public void OnBotEvent(EncounteredEvent e)
         {
             this.datacontext.SnipeList.OnSnipeData(e);
+            this.botMap.HandleEncounterEvent(e);
         }
 
         public void OnBotEvent(LoggedEvent userLogged)
@@ -153,7 +154,7 @@ namespace PoGo.Necrobot.Window
         }
         public void OnBotEvent(PokeStopListEvent ev)
         {
-            this.botMap.OnPokestopEvent(ev.Forts);
+            this.botMap.OnPokestopEvent(ev);
         }
         public void OnBotEvent(UpdatePositionEvent ev)
         {

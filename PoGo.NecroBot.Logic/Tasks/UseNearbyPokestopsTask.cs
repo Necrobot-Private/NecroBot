@@ -186,16 +186,16 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             var forts = session.Forts
                 .Where(p => p.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime())
-                .Where(f => deployedPokemons == null || !(f.Type == FortType.Gym && deployedPokemons.Any(a => a.DeployedFortId == f.Id))) // don't go to fort where is yours pokemon already deployed
-                .Where(l => !(l.OwnedByTeam != session.Profile.PlayerData.Team && UseGymBattleTask.GetGymLevel(l.GymPoints) > session.LogicSettings.GymConfig.MaxGymLevelToAttack)) // don't go to other's gym where lvl is too high 
+                .Where(f => f.Type == FortType.Checkpoint ||
+                            UseGymBattleTask.CanAttackGym(session, f, ref deployedPokemons) ||
+                            UseGymBattleTask.CanTrainGym(session, f, ref deployedPokemons))
                 .ToList();
 
-            if (session.LogicSettings.GymConfig.EnableAttackGym && 
-                forts.Where(w => w.Type == FortType.Gym).Count() == 0 &&
-                (!session.LogicSettings.GymConfig.DontAttackAfterCoinsLimitReached || deployedPokemons.Count()<session.LogicSettings.GymConfig.CollectCoinAfterDeployed)
+            if ((session.LogicSettings.GymConfig.EnableAttackGym && forts.Where(w => w.Type == FortType.Gym && UseGymBattleTask.CanAttackGym(session, w, ref deployedPokemons)).Count() == 0) ||
+                (session.LogicSettings.GymConfig.EnableGymTraining && forts.Where(w => w.Type == FortType.Gym && UseGymBattleTask.CanTrainGym(session, w, ref deployedPokemons)).Count() == 0)
                 )
             {
-                //Logger.Write("No usable gym found. Trying to refresh list.", LogLevel.Gym, ConsoleColor.Magenta);
+                Logger.Write("No usable gym found. Trying to refresh list.", LogLevel.Gym, ConsoleColor.Magenta);
                 await GetPokeStops(session);
             }
 
