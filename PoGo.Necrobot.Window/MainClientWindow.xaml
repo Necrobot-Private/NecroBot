@@ -128,7 +128,11 @@
             </StatusBarItem>
         </StatusBar>
 
-        <TabControl TabStripPlacement="Left" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Name="tabMain">
+        <TabControl TabStripPlacement="Left" HorizontalAlignment="Stretch" 
+                    VerticalAlignment="Stretch" 
+                    Name="tabMain"
+                    SelectionChanged="tabMain_SelectionChanged"
+                    >
             <TabControl.Resources>
                 <Style TargetType="{x:Type TabItem}">
                     <Setter Property="HeaderTemplate">
@@ -145,7 +149,7 @@
                     <Setter Property="Padding" Value="3" />
                 </Style>
             </TabControl.Resources>
-            <TabItem Header="  MAP &amp; JOURNEY  ">
+            <TabItem Header="  MAP &amp; JOURNEY  " Name="tabMap" >
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="7*" />
@@ -186,7 +190,8 @@
                     HorizontalAlignment="Stretch"
                     Background="Black"
                     VerticalAlignment="Stretch"
-                    FontSize="14.667">
+                    FontSize="14.667" 
+                    IsReadOnly="True">
                     <FlowDocument>
                         <Paragraph LineHeight="20">
                             <Run Text="" />

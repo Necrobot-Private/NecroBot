@@ -212,5 +212,13 @@ namespace PoGo.Necrobot.Window
         {
             txtCmdInput.Text = "";
         }
+
+        private void tabMain_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if(tabMap.IsSelected)
+            {
+                botMap.EnsureContent();
+            }
+        }
     }
 }
