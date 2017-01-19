@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Linq;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,6 +13,9 @@ using PoGo.Necrobot.Window.Model;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Tasks;
 using POGOProtos.Map.Fort;
+using PoGo.NecroBot.Logic.Event;
+using POGOProtos.Map.Pokemon;
+using System.Diagnostics;
 
 namespace PoGo.Necrobot.Window.Controls
 {
@@ -32,14 +36,11 @@ namespace PoGo.Necrobot.Window.Controls
             this.model = this.DataContext as MapViewModel;
         }
 
-        GMapMarker routeMarker;
         GMapMarker selectedMarker;
         List<PointLatLng> track = new List<PointLatLng>();
 
         public void SetDefaultPosition(double lat, double lng)
         {
-            //track.Add(new PointLatLng(lat, lng));
-            //var routeMarker = new GMapMarker(track.First());
             this.Dispatcher.Invoke(() =>
             {
                 gmap.Position = new PointLatLng(lat, lng);
@@ -65,15 +66,38 @@ namespace PoGo.Necrobot.Window.Controls
             gmap.Markers.Add(selectedMarker);
         }
 
-        private ISession session;
         private List<FortData> forts;
 
-        internal void OnPokestopEvent(List<FortData> forts)
+        internal void OnPokestopEvent(PokeStopListEvent ev)
         {
-            foreach (var item in forts)
+            if (ev.Forts == null) return;
+
+            foreach (var item in ev.Forts)
             {
                 AddPokestopMarker(item);
             }
+            if (ev.NearbyPokemons == null) return;
+            foreach (var item in ev.NearbyPokemons)
+            {
+                var fort = ev.Forts.FirstOrDefault(x => x.Id == item.FortId);
+                AddNearByPokemonMarker(item, fort);
+            }
+        }
+        List<GMapMarker> nearbyPokemons = new List<GMapMarker>();
+
+        private void AddNearByPokemonMarker(NearbyPokemon item, FortData fort)
+        {
+            var existing = model.NearbyPokemons.FirstOrDefault(x => x.EncounterId == item.EncounterId);
+            if (existing != null) return;
+
+            var nearbyModel = new MapPokemonViewModel(item, fort);
+
+            var marker = new GMapMarker(new PointLatLng(nearbyModel.Latitude, nearbyModel.Longitude) );
+            marker.Shape = new MapPokemonMarker(null, marker, Session, nearbyModel);
+            nearbyPokemons.Add(marker);
+            gmap.Markers.Add(marker);
+            this.model.NearbyPokemons.Add(nearbyModel);
+          
         }
 
         private GMapMarker playerMarker;
@@ -144,10 +168,45 @@ namespace PoGo.Necrobot.Window.Controls
         {
             Task.Run(async () =>
             {
-                await SetMoveToTargetTask.Execute(session, model.CurrentLatitude, model.CurrentLongitude);
+                await SetMoveToTargetTask.Execute(this.Session, model.CurrentLatitude, model.CurrentLongitude);
             });
 
             popSelect.IsOpen = false;
+        }
+
+        internal void HandleEncounterEvent(EncounteredEvent encounteredEvent)
+        {
+            if (encounteredEvent.IsRecievedFromSocket) return;
+            var marker = this.nearbyPokemons.FirstOrDefault(x => ((MapPokemonMarker)x.Shape).IsMarkerOf(encounteredEvent.EncounterId));
+            if(marker != null)
+            {
+                this.Dispatcher.Invoke(() =>
+                {
+                    gmap.Markers.Remove(marker);
+                    this.nearbyPokemons.Remove(marker);
+                    var find = this.model.NearbyPokemons.FirstOrDefault(x => x.EncounterId.ToString() == encounteredEvent.EncounterId);
+                    if (find != null)
+                        this.model.NearbyPokemons.Remove(find);
+                });
+            }
+        }
+
+        private void gmap_LayoutUpdated(object sender, EventArgs e)
+        {
+            Debug.Write("gmap_LayoutUpdated");
+        }
+
+        internal void EnsureContent()
+        {
+            //foreach (var item in this.allMarkers)
+            //{
+            //    gmap.Markers.Remove(item.Value);
+            //}
+
+            //foreach (var item in this.allMarkers)
+            //{
+            //    gmap.Markers.Add(item.Value);
+            //}
         }
     }
 }
