@@ -1,14 +1,20 @@
-﻿using System;
+﻿using POGOProtos.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using POGOProtos.Data.Player;
+using PoGo.NecroBot.Logic.Event;
+using POGOProtos.Networking.Responses;
+using PoGo.NecroBot.Logic.Event.Inventory;
 
 namespace PoGo.Necrobot.Window.Model
 {
     public class PlayerInfoModel : ViewModelBase
     {
+        public PokemonId BuddyPokemonId { get; set; }
         public string Name { get; set; }
         private double exp;
         public double Exp
@@ -92,6 +98,8 @@ namespace PoGo.Necrobot.Window.Model
             }
         }
         private int level;
+        private GetPlayerResponse playerProfile;
+
         public int Level
         {
             get { return level; }
@@ -101,6 +109,40 @@ namespace PoGo.Necrobot.Window.Model
                 RaisePropertyChanged("Level");
 
             }
+        }
+
+        public double BuddyTotalKM { get; set; }
+        public double BuddyCurrentKM { get; set; }
+
+        internal void OnProfileUpdate(ProfileEvent profile)
+        {
+            var stats = profile.Stats;
+            Exp = stats.FirstOrDefault(x => x.Experience > 0).Experience;
+            LevelExp = stats.FirstOrDefault(x => x.NextLevelXp > 0).NextLevelXp;
+
+            this.playerProfile = profile.Profile;
+        }
+
+        public void OnInventoryRefreshed(InventoryRefreshedEvent inventory)
+        {
+            if (this.playerProfile == null || this.playerProfile.PlayerData.BuddyPokemon == null) return;
+
+            var budyData = this.playerProfile.PlayerData.BuddyPokemon;
+
+            var buddy = inventory.Inventory
+                .InventoryDelta
+                .InventoryItems
+                .Select(x => x.InventoryItemData?.PokemonData)
+                .Where(x => x != null && x.Id == this.playerProfile.PlayerData.BuddyPokemon.Id)
+                .FirstOrDefault();
+
+            this.BuddyPokemonId = buddy.PokemonId;
+            this.BuddyCurrentKM = budyData.LastKmAwarded;
+            this.BuddyTotalKM = buddy.BuddyTotalKmWalked;
+
+            this.RaisePropertyChanged("BuddyPokemonId");
+            this.RaisePropertyChanged("BuddyCurrentKM");
+            this.RaisePropertyChanged("BuddyTotalKM");
         }
     }
 }

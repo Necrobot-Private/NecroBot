@@ -22,7 +22,8 @@
         <c:PokemonImageConverter x:Key="PokemonImageConverter" />
     </Window.Resources>
     
-    <ListView Name="lsDex" ItemsSource="{Binding Path=Entries}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MaxHeight="768" >
+    <ListView Name="lsDex" ItemsSource="{Binding Path=Entries}" 
+              VerticalAlignment="Stretch" HorizontalAlignment="Stretch"  >
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <UniformGrid Columns="9"/>

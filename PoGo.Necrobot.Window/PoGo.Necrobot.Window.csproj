@@ -166,15 +166,19 @@
     <Compile Include="Controls\EggsControl.xaml.cs">
       <DependentUpon>EggsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\EmptyItemsControlAdornerBehavior.cs" />
     <Compile Include="Controls\MapMarkers\MapPokemonMarker.xaml.cs">
       <DependentUpon>MapPokemonMarker.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\MapMarkers\TargetMarker.xaml.cs">
       <DependentUpon>TargetMarker.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Overlay.cs" />
     <Compile Include="Controls\SnipeGrid.xaml.cs">
       <DependentUpon>SnipeGrid.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\TemplatedAdorner.cs" />
+    <Compile Include="Converters\PokemonIdToImageConverter.cs" />
     <Compile Include="Converters\ValueConverterGroup.cs" />
     <Compile Include="Converters\VisibleIfTrueConverter.cs" />
     <Compile Include="Converters\PokemonImageConverter.cs" />

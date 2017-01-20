@@ -4,8 +4,28 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PoGo.Necrobot.Window.Controls"
+             xmlns:c="clr-namespace:PoGo.Necrobot.Window.Converters"
              mc:Ignorable="d" Height="80" Width="875">
+    
+    <Control.Resources>
+        <c:PokemonIdToImageConverter x:Key="PokemonIdToImageConverter"/>
+
+    </Control.Resources>
+    
     <DockPanel LastChildFill="True">
+        <StackPanel DockPanel.Dock="Left" Width="75" Orientation="Vertical">
+            <Image  Name="image" Width="45"  Source="{Binding Path=BuddyPokemonId, FallbackValue=https://img.pokemondb.net/artwork/garchomp.jpg, Converter={StaticResource PokemonIdToImageConverter}}">
+                </Image>
+            
+                <TextBlock TextAlignment="Center">
+                    <TextBlock.Text>
+                         <MultiBinding  StringFormat="{}{0:0.00}/{1:0.00}" FallbackValue="xxx/xxx">
+                            <Binding Path="BuddyTotalKM"></Binding>
+                            <Binding Path="BuddyCurrentKM"></Binding>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+        </StackPanel>
         <Grid DockPanel.Dock="Right">
             <Button Width="150" Click="Donate_Click" Margin="0,0,0,0">
                 <Image  Margin="0,0,0,0" Source="http://www.pngall.com/wp-content/uploads/2016/05/PayPal-Donate-Button-PNG-HD.png" ToolTip="Donate US -" Stretch="Fill"/>
