@@ -16,8 +16,8 @@
         <cv:AllowTransferCheckConverter x:Key="AllowTransferCheckConverter"/>
         <cv:IVToColorConverter x:Key="IVToColorConverter"    />
     </Control.Resources>
-    <StackPanel>
-        <DockPanel LastChildFill="True">
+    <DockPanel LastChildFill="True">
+        <DockPanel LastChildFill="True" DockPanel.Dock="Top">
             <Button  DockPanel.Dock="Right" Name="btnExport" Click="btnExport_Click" Margin="0,0,40,0" >
                 <StackPanel Orientation="Horizontal">
                     <Image Width="16" Source="https://cdn1.iconfinder.com/data/icons/application-file-formats/128/microsoft-excel-128.png" Cursor="Hand"/>
@@ -40,7 +40,6 @@
 
         <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto">
             <DataGrid x:Name="gridData"
-               MaxHeight="600"
               EnableRowVirtualization="True"
               AutoGenerateColumns="false"
               VerticalAlignment="Stretch"
@@ -163,5 +162,5 @@
                 </DataGrid.Columns>
         </DataGrid>
         </ScrollViewer>
-    </StackPanel>
+    </DockPanel>
 </UserControl>

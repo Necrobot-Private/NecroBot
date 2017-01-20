@@ -84,6 +84,7 @@ namespace PoGo.Necrobot.Window
                 .ToList();
 
             datacontext.SnipeList.OnInventoryRefreshed(inventory.Inventory);
+            datacontext.PlayerInfo.OnInventoryRefreshed(inventory);
 
             datacontext.EggsList.OnInventoryRefreshed(inventory.Inventory);
             var items = data.InventoryDelta.InventoryItems.Select(x => x.InventoryItemData?.Item).Where(x => x != null).ToList();
@@ -128,13 +129,11 @@ namespace PoGo.Necrobot.Window
         {
             var stats = profile.Stats;
 
-            this.datacontext.PlayerInfo.Exp = stats.FirstOrDefault(x => x.Experience > 0).Experience;
-            this.datacontext.PlayerInfo.LevelExp = stats.FirstOrDefault(x => x.NextLevelXp > 0).NextLevelXp;
-
-            this.playerProfile = profile.Profile;
+            this.datacontext.PlayerInfo.OnProfileUpdate(profile);
 
             this.datacontext.UI.PlayerStatus = "Playing";
             this.datacontext.UI.PlayerName = profile.Profile.PlayerData.Username;
+
             this.datacontext.RaisePropertyChanged("UI");
 
             lblAccount.Content = $"{this.datacontext.UI.PlayerStatus} as : {this.datacontext.UI.PlayerName}";
