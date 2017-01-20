@@ -81,7 +81,7 @@ namespace PoGo.Necrobot.Window.Model
             if(exist != null && ev.Result == POGOProtos.Networking.Responses.EvolvePokemonResponse.Types.Result.Success)
             {
                 this.Pokemons.Remove(exist);
-                var newItem = new PokemonDataViewModel(ev.EvolvedPokemon);
+                var newItem = new PokemonDataViewModel(ev.EvolvedPokemon, ev.PokemonSetting, ev.Family);
                 this.Pokemons.Add(newItem);
 
                 foreach (var item in this.Pokemons)

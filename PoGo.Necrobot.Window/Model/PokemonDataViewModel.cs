@@ -13,7 +13,7 @@ namespace PoGo.Necrobot.Window.Model
 {
     public class PokemonDataViewModel : ViewModelBase
     {
-        public PokemonDataViewModel(PokemonData pokemon, PokemonSettings setting = null, Candy candy = null)
+        public PokemonDataViewModel(PokemonData pokemon, PokemonSettings setting, Candy candy)
         {
             this.PowerupText = "Upgrade";
             this.AllowPowerup = true;
@@ -30,13 +30,10 @@ namespace PoGo.Necrobot.Window.Model
             this.IsSelected = false;
             this.Move1 = pokemon.Move1.ToString();
             this.Move2 = pokemon.Move2.ToString();
-
-            if (setting != null && candy != null)
-            {
-                this.PokemonSettings = setting;
-                this.AllowEvolve = candy.Candy_ >= setting.CandyToEvolve && setting.EvolutionIds.Count > 0;
-                this.Candy = candy.Candy_;
-            }
+            
+            this.PokemonSettings = setting;
+            this.AllowEvolve = candy.Candy_ >= setting.CandyToEvolve && setting.EvolutionIds.Count > 0;
+            this.Candy = candy.Candy_;
         }
 
         internal void UpdateWith(PokemonData item, Candy candy = null)
@@ -47,7 +44,6 @@ namespace PoGo.Necrobot.Window.Model
             this.CP = item.Cp;
             this.Level = (int)PokemonInfo.GetLevel(item);
             if (candy != null)
-
             {
                 this.Candy = candy.Candy_;
                 this.AllowEvolve = candy.Candy_ >= this.PokemonSettings.CandyToEvolve && this.PokemonSettings.EvolutionIds.Count > 0;
