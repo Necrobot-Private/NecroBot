@@ -13,13 +13,13 @@
     </Control.Resources>
     
     <DockPanel LastChildFill="True">
-        <StackPanel DockPanel.Dock="Left" Width="75" VerticalAlignment="Top">
-                <Image  Name="image" Source="{Binding Path=BuddyPokemonId, FallbackValue=https://img.pokemondb.net/artwork/garchomp.jpg, Converter={StaticResource PokemonIdToImageConverter}}">
+        <StackPanel DockPanel.Dock="Left" Width="75" Orientation="Vertical">
+            <Image  Name="image" Width="45"  Source="{Binding Path=BuddyPokemonId, FallbackValue=https://img.pokemondb.net/artwork/garchomp.jpg, Converter={StaticResource PokemonIdToImageConverter}}">
                 </Image>
             
-                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock TextAlignment="Center">
                     <TextBlock.Text>
-                         <MultiBinding  StringFormat="{}{0:0.00}/{1:0.00}">
+                         <MultiBinding  StringFormat="{}{0:0.00}/{1:0.00}" FallbackValue="xxx/xxx">
                             <Binding Path="BuddyTotalKM"></Binding>
                             <Binding Path="BuddyCurrentKM"></Binding>
                         </MultiBinding>
