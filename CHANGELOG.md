@@ -1,5 +1,16 @@
 # Change Log
 
+## [v1.0.0.66](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.62) (2017-01-21)
+[Full Changelog](https://github.c-/Necrobot-Private/NecroBot/compare/v1.0.0.62...v1.0.0.66)
+## Bugs & Enhancement---	Allow rename favorited Pokemon
+-	Support API 0.53 from FP Hash service
+- Fix scroll on window GUI
+-	Fix CP/Level/IV calculation
+-	Train GYM feature
+-	Allow display release notes on update screen
+-	Fix issue display total exp wrong on telegram
+- Minor fixes
+
 ## [v1.0.0.62](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.62) (2017-01-15)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.60...v1.0.0.62)
 ## Bugs & Enhancements
