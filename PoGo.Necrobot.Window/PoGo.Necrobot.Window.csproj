@@ -166,15 +166,19 @@
     <Compile Include="Controls\EggsControl.xaml.cs">
       <DependentUpon>EggsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\EmptyItemsControlAdornerBehavior.cs" />
     <Compile Include="Controls\MapMarkers\MapPokemonMarker.xaml.cs">
       <DependentUpon>MapPokemonMarker.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\MapMarkers\TargetMarker.xaml.cs">
       <DependentUpon>TargetMarker.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Overlay.cs" />
     <Compile Include="Controls\SnipeGrid.xaml.cs">
       <DependentUpon>SnipeGrid.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\TemplatedAdorner.cs" />
+    <Compile Include="Converters\PokemonIdToImageConverter.cs" />
     <Compile Include="Converters\ValueConverterGroup.cs" />
     <Compile Include="Converters\VisibleIfTrueConverter.cs" />
     <Compile Include="Converters\PokemonImageConverter.cs" />
@@ -520,7 +524,7 @@ foreach (var item in filesToCleanup)
   <Import Project="..\packages\Selenium.WebDriver.ChromeDriver.2.27.0\build\Selenium.WebDriver.ChromeDriver.targets" Condition="Exists('..\packages\Selenium.WebDriver.ChromeDriver.2.27.0\build\Selenium.WebDriver.ChromeDriver.targets')" />
   <PropertyGroup>
     <PostBuildEvent>cd "$(TargetDir)"
-del *.config1</PostBuildEvent>
+del *.config</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
