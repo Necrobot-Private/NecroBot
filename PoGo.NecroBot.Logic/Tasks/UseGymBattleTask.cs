@@ -75,12 +75,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 gym = response.GymState.FortData;
                             }
 
-                            if (CanTrainGym(session, gym, fortDetails, ref deployedPokemons))
+                            if (CanTrainGym(session, gym, fortDetails, deployedPokemons))
                                 await StartGymAttackLogic(session, fortInfo, fortDetails, gym, cancellationToken);
                         }
                         else
                         {
-                            if (CanAttackGym(session, gym, ref deployedPokemons))
+                            if (CanAttackGym(session, gym, deployedPokemons))
                                 await StartGymAttackLogic(session, fortInfo, fortDetails, gym, cancellationToken);
                         }
                     }
@@ -925,7 +925,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             return 52000;
         }
 
-        internal static bool CanAttackGym(ISession session, FortData fort, ref IEnumerable<PokemonData> deployedPokemons)
+        internal static bool CanAttackGym(ISession session, FortData fort, IEnumerable<PokemonData> deployedPokemons)
         {
             if (!session.LogicSettings.GymConfig.EnableAttackGym)
                 return false;
@@ -933,14 +933,14 @@ namespace PoGo.NecroBot.Logic.Tasks
                 return false;
             if (GetGymLevel(fort.GymPoints) > session.LogicSettings.GymConfig.MaxGymLevelToAttack)
                 return false;
-            if (session.LogicSettings.GymConfig.DontAttackAfterCoinsLimitReached && deployedPokemons.Count() >= session.LogicSettings.GymConfig.CollectCoinAfterDeployed)
+            if (deployedPokemons!=null && session.LogicSettings.GymConfig.DontAttackAfterCoinsLimitReached && deployedPokemons.Count() >= session.LogicSettings.GymConfig.CollectCoinAfterDeployed)
                 return false;
             return true;
         }
 
-        internal static bool CanTrainGym(ISession session, FortData fort, GetGymDetailsResponse gymDetails, ref IEnumerable<PokemonData> deployedPokemons)
+        internal static bool CanTrainGym(ISession session, FortData fort, GetGymDetailsResponse gymDetails, IEnumerable<PokemonData> deployedPokemons)
         {
-            bool isDeployed = deployedPokemons.Any(a => a.DeployedFortId == fort.Id);
+            bool isDeployed = deployedPokemons?.Any(a => a.DeployedFortId == fort.Id) ?? false;
             if (gymDetails != null && GetGymLevel(fort.GymPoints) > gymDetails.GymState.Memberships.Count && !isDeployed) // free slot should be used always but not always we know that...
                 return true;
             if (!session.LogicSettings.GymConfig.EnableGymTraining)
@@ -953,7 +953,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 return false;
             if (GetGymMaxPointsOnLevel(GetGymLevel(fort.GymPoints)) - fort.GymPoints > session.LogicSettings.GymConfig.TrainGymWhenMissingMaxPoints)
                 return false;
-            if (session.LogicSettings.GymConfig.DontAttackAfterCoinsLimitReached && deployedPokemons.Count() >= session.LogicSettings.GymConfig.CollectCoinAfterDeployed)
+            if (deployedPokemons!=null && session.LogicSettings.GymConfig.DontAttackAfterCoinsLimitReached && deployedPokemons.Count() >= session.LogicSettings.GymConfig.CollectCoinAfterDeployed)
                 return false;
             return true;
         }
