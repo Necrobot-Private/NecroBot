@@ -291,7 +291,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 {
                                     try
                                     {
-                                        if (session.Profile.PlayerData.DailyBonus.NextDefenderBonusCollectTimestampMs <= DateTime.Now.ToUnixTime())
+                                        if (session.Profile.PlayerData.DailyBonus.NextDefenderBonusCollectTimestampMs <= DateTime.UtcNow.ToUnixTime())
                                         {
                                             var collectDailyBonusResponse = await session.Client.Player.CollectDailyDefenderBonus();
                                             if (collectDailyBonusResponse.Result == CollectDailyDefenderBonusResponse.Types.Result.Success)
@@ -300,7 +300,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                                 Logger.Write($"Hmm, we have failed with gaining a reward: {collectDailyBonusResponse}", LogLevel.Gym, ConsoleColor.Magenta);
                                         }
                                         else
-                                            Logger.Write($"You will be able to collect bonus at {DateTimeFromUnixTimestampMillis(session.Profile.PlayerData.DailyBonus.NextDefenderBonusCollectTimestampMs)}", LogLevel.Info, ConsoleColor.Magenta);
+                                            Logger.Write($"You will be able to collect bonus at {DateTimeFromUnixTimestampMillis(session.Profile.PlayerData.DailyBonus.NextDefenderBonusCollectTimestampMs).ToLocalTime()}", LogLevel.Info, ConsoleColor.Magenta);
                                     }
                                     catch (APIBadRequestException)
                                     {
