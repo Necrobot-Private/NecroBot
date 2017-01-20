@@ -67,7 +67,14 @@ namespace PoGo.NecroBot.Logic.Tasks
                         if (fortDetails.GymState.FortData.OwnedByTeam == player.Team || fortDetails.GymState.FortData.OwnedByTeam == TeamColor.Neutral)
                         {
                             //trainning logic will come here
-                            await DeployPokemonToGym(session, fortInfo, fortDetails, cancellationToken);
+                            FortDeployPokemonResponse response = await DeployPokemonToGym(session, fortInfo, fortDetails, cancellationToken);
+
+                            if (response != null)
+                            {
+                                deployedPokemons = deployedPokemons.Concat(new PokemonData[] { response.PokemonData });
+                                gym = response.GymState.FortData;
+                            }
+
                             if (CanTrainGym(session, gym, fortDetails, ref deployedPokemons))
                                 await StartGymAttackLogic(session, fortInfo, fortDetails, gym, cancellationToken);
                         }
@@ -250,8 +257,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                 _startBattleCounter = 3;
         }
 
-        private static async Task DeployPokemonToGym(ISession session, FortDetailsResponse fortInfo, GetGymDetailsResponse fortDetails, CancellationToken cancellationToken)
+        private static async Task<FortDeployPokemonResponse> DeployPokemonToGym(ISession session, FortDetailsResponse fortInfo, GetGymDetailsResponse fortDetails, CancellationToken cancellationToken)
         {
+            FortDeployPokemonResponse response = null;
             cancellationToken.ThrowIfCancellationRequested();
             var points = fortDetails.GymState.FortData.GymPoints;
             var maxCount = GetGymLevel(points);
@@ -266,7 +274,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                     var pokemon = await GetDeployablePokemon(session);
                     if (pokemon != null)
                     {
-                        FortDeployPokemonResponse response = null;
                         try
                         {
                             response = await session.Client.Fort.FortDeployPokemon(fortInfo.FortId, pokemon.Id);
@@ -275,7 +282,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         {
                             Logger.Write("Failed to deploy pokemon. Trying again...", LogLevel.Gym, ConsoleColor.Magenta);
                             await Execute(session, cancellationToken, fortDetails.GymState.FortData, fortInfo);
-                            return;
+                            return null;
                         }
                         if (response?.Result == FortDeployPokemonResponse.Types.Result.Success)
                         {
@@ -284,6 +291,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 PokemonId = pokemon.PokemonId,
                                 Name = fortDetails.Name
                             });
+                            
                             if (session.LogicSettings.GymConfig.CollectCoinAfterDeployed > 0)
                             {
                                 var count = deployed.Count() + 1;
@@ -331,6 +339,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 string message = string.Format("No action. No FREE slots in GYM {0}/{1} ({2})", fortDetails.GymState.Memberships.Count(), maxCount, points);
                 Logger.Write(message, LogLevel.Gym, ConsoleColor.White);
             }
+            return response;
         }
 
         public static async Task RevivePokemon(ISession session, PokemonData pokemon)
