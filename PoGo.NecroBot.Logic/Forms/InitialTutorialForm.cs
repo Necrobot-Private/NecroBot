@@ -11,7 +11,7 @@ using POGOProtos.Networking.Responses;
 
 namespace PoGo.NecroBot.Logic.Forms
 {
-    public partial class InitialTutorialForm : Form
+    public partial class InitialTutorialForm : System.Windows.Forms.Form
     {
         private ISession session;
         private RepeatedField<TutorialState> tutState;
@@ -44,7 +44,7 @@ namespace PoGo.NecroBot.Logic.Forms
                     {
                         Backpack = 0,
                         Eyes = 0,
-                        Gender = gen,
+                        Avatar = (int)gen,
                         Hair = 0,
                         Hat = 0,
                         Pants = 0,
