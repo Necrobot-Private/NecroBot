@@ -67,13 +67,20 @@ namespace PoGo.NecroBot.Logic.Tasks
                         if (fortDetails.GymState.FortData.OwnedByTeam == player.Team || fortDetails.GymState.FortData.OwnedByTeam == TeamColor.Neutral)
                         {
                             //trainning logic will come here
-                            await DeployPokemonToGym(session, fortInfo, fortDetails, cancellationToken);
-                            if (CanTrainGym(session, gym, fortDetails, ref deployedPokemons))
+                            FortDeployPokemonResponse response = await DeployPokemonToGym(session, fortInfo, fortDetails, cancellationToken);
+
+                            if (response != null)
+                            {
+                                deployedPokemons = deployedPokemons.Concat(new PokemonData[] { response.PokemonData });
+                                gym = response.GymState.FortData;
+                            }
+
+                            if (CanTrainGym(session, gym, fortDetails, deployedPokemons))
                                 await StartGymAttackLogic(session, fortInfo, fortDetails, gym, cancellationToken);
                         }
                         else
                         {
-                            if (CanAttackGym(session, gym, ref deployedPokemons))
+                            if (CanAttackGym(session, gym, deployedPokemons))
                                 await StartGymAttackLogic(session, fortInfo, fortDetails, gym, cancellationToken);
                         }
                     }
@@ -250,8 +257,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                 _startBattleCounter = 3;
         }
 
-        private static async Task DeployPokemonToGym(ISession session, FortDetailsResponse fortInfo, GetGymDetailsResponse fortDetails, CancellationToken cancellationToken)
+        private static async Task<FortDeployPokemonResponse> DeployPokemonToGym(ISession session, FortDetailsResponse fortInfo, GetGymDetailsResponse fortDetails, CancellationToken cancellationToken)
         {
+            FortDeployPokemonResponse response = null;
             cancellationToken.ThrowIfCancellationRequested();
             var points = fortDetails.GymState.FortData.GymPoints;
             var maxCount = GetGymLevel(points);
@@ -266,7 +274,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                     var pokemon = await GetDeployablePokemon(session);
                     if (pokemon != null)
                     {
-                        FortDeployPokemonResponse response = null;
                         try
                         {
                             response = await session.Client.Fort.FortDeployPokemon(fortInfo.FortId, pokemon.Id);
@@ -275,7 +282,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         {
                             Logger.Write("Failed to deploy pokemon. Trying again...", LogLevel.Gym, ConsoleColor.Magenta);
                             await Execute(session, cancellationToken, fortDetails.GymState.FortData, fortInfo);
-                            return;
+                            return null;
                         }
                         if (response?.Result == FortDeployPokemonResponse.Types.Result.Success)
                         {
@@ -284,6 +291,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 PokemonId = pokemon.PokemonId,
                                 Name = fortDetails.Name
                             });
+                            
                             if (session.LogicSettings.GymConfig.CollectCoinAfterDeployed > 0)
                             {
                                 var count = deployed.Count() + 1;
@@ -291,7 +299,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 {
                                     try
                                     {
-                                        if (session.Profile.PlayerData.DailyBonus.NextDefenderBonusCollectTimestampMs <= DateTime.Now.ToUnixTime())
+                                        if (session.Profile.PlayerData.DailyBonus.NextDefenderBonusCollectTimestampMs <= DateTime.UtcNow.ToUnixTime())
                                         {
                                             var collectDailyBonusResponse = await session.Client.Player.CollectDailyDefenderBonus();
                                             if (collectDailyBonusResponse.Result == CollectDailyDefenderBonusResponse.Types.Result.Success)
@@ -300,7 +308,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                                 Logger.Write($"Hmm, we have failed with gaining a reward: {collectDailyBonusResponse}", LogLevel.Gym, ConsoleColor.Magenta);
                                         }
                                         else
-                                            Logger.Write($"You will be able to collect bonus at {DateTimeFromUnixTimestampMillis(session.Profile.PlayerData.DailyBonus.NextDefenderBonusCollectTimestampMs)}", LogLevel.Info, ConsoleColor.Magenta);
+                                            Logger.Write($"You will be able to collect bonus at {DateTimeFromUnixTimestampMillis(session.Profile.PlayerData.DailyBonus.NextDefenderBonusCollectTimestampMs).ToLocalTime()}", LogLevel.Info, ConsoleColor.Magenta);
                                     }
                                     catch (APIBadRequestException)
                                     {
@@ -331,6 +339,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 string message = string.Format("No action. No FREE slots in GYM {0}/{1} ({2})", fortDetails.GymState.Memberships.Count(), maxCount, points);
                 Logger.Write(message, LogLevel.Gym, ConsoleColor.White);
             }
+            return response;
         }
 
         public static async Task RevivePokemon(ISession session, PokemonData pokemon)
@@ -916,7 +925,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             return 52000;
         }
 
-        internal static bool CanAttackGym(ISession session, FortData fort, ref IEnumerable<PokemonData> deployedPokemons)
+        internal static bool CanAttackGym(ISession session, FortData fort, IEnumerable<PokemonData> deployedPokemons)
         {
             if (!session.LogicSettings.GymConfig.EnableAttackGym)
                 return false;
@@ -924,14 +933,14 @@ namespace PoGo.NecroBot.Logic.Tasks
                 return false;
             if (GetGymLevel(fort.GymPoints) > session.LogicSettings.GymConfig.MaxGymLevelToAttack)
                 return false;
-            if (session.LogicSettings.GymConfig.DontAttackAfterCoinsLimitReached && deployedPokemons.Count() >= session.LogicSettings.GymConfig.CollectCoinAfterDeployed)
+            if (deployedPokemons!=null && session.LogicSettings.GymConfig.DontAttackAfterCoinsLimitReached && deployedPokemons.Count() >= session.LogicSettings.GymConfig.CollectCoinAfterDeployed)
                 return false;
             return true;
         }
 
-        internal static bool CanTrainGym(ISession session, FortData fort, GetGymDetailsResponse gymDetails, ref IEnumerable<PokemonData> deployedPokemons)
+        internal static bool CanTrainGym(ISession session, FortData fort, GetGymDetailsResponse gymDetails, IEnumerable<PokemonData> deployedPokemons)
         {
-            bool isDeployed = deployedPokemons.Any(a => a.DeployedFortId == fort.Id);
+            bool isDeployed = deployedPokemons?.Any(a => a.DeployedFortId == fort.Id) ?? false;
             if (gymDetails != null && GetGymLevel(fort.GymPoints) > gymDetails.GymState.Memberships.Count && !isDeployed) // free slot should be used always but not always we know that...
                 return true;
             if (!session.LogicSettings.GymConfig.EnableGymTraining)
@@ -944,7 +953,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 return false;
             if (GetGymMaxPointsOnLevel(GetGymLevel(fort.GymPoints)) - fort.GymPoints > session.LogicSettings.GymConfig.TrainGymWhenMissingMaxPoints)
                 return false;
-            if (session.LogicSettings.GymConfig.DontAttackAfterCoinsLimitReached && deployedPokemons.Count() >= session.LogicSettings.GymConfig.CollectCoinAfterDeployed)
+            if (deployedPokemons!=null && session.LogicSettings.GymConfig.DontAttackAfterCoinsLimitReached && deployedPokemons.Count() >= session.LogicSettings.GymConfig.CollectCoinAfterDeployed)
                 return false;
             return true;
         }
