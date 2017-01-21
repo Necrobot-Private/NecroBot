@@ -40,12 +40,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             await EvolvePokemonTask.Execute(session, cancellationToken);
 
-            //if (session.LogicSettings.EvolveAllPokemonWithEnoughCandy ||
-            //          session.LogicSettings.EvolveAllPokemonAboveIv ||
-            //          session.LogicSettings.UseLuckyEggsWhileEvolving ||
-            //          session.LogicSettings.KeepPokemonsThatCanEvolve)
-            //    await session.Inventory.RefreshCachedInventory();
-
+            var buddy = session.Profile.PlayerData.BuddyPokemon;
             var duplicatePokemons =
                 await
                     session.Inventory.GetDuplicatePokemonToTransfer(
@@ -53,6 +48,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                         session.LogicSettings.PokemonsToEvolve,
                         session.LogicSettings.KeepPokemonsThatCanEvolve,
                         session.LogicSettings.PrioritizeIvOverCp);
+            
+            if (buddy != null)
+                duplicatePokemons = duplicatePokemons.Where(x => x.Id != buddy.Id);
 
             var orderedPokemon = duplicatePokemons.OrderBy(poke => poke.Cp);
 

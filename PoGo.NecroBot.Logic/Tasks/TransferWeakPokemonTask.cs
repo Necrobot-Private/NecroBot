@@ -37,16 +37,21 @@ namespace PoGo.NecroBot.Logic.Tasks
             if ((maxStorage - totalEggs.Count() - buff) > pokemons.Count()) return;
 
 
+
             var pokemonDatas = pokemons as IList<PokemonData> ?? pokemons.ToList();
+
+            var buddy = session.Profile.PlayerData.BuddyPokemon;
+
             var pokemonsFiltered =
-                pokemonDatas.Where(pokemon => !session.LogicSettings.PokemonsNotToTransfer.Contains(pokemon.PokemonId))
+                pokemonDatas.Where(pokemon => !session.LogicSettings.PokemonsNotToTransfer.Contains(pokemon.PokemonId) &&
+                    pokemon.Favorite == 0 &&
+                    pokemon.Id != buddy.Id &&
+                    pokemon.DeployedFortId == string.Empty) 
                     .ToList().OrderBy( poke => poke.Cp );
 
             if (session.LogicSettings.KeepPokemonsThatCanEvolve)
                 pokemonsFiltered =
-                    pokemonDatas.Where(pokemon => !session.LogicSettings.PokemonsToEvolve.Contains(pokemon.PokemonId) &&
-                    pokemon.Favorite ==0 &&
-                    pokemon.BuddyTotalKmWalked ==0)
+                    pokemonDatas.Where(pokemon => !session.LogicSettings.PokemonsToEvolve.Contains(pokemon.PokemonId) )
                         .ToList().OrderBy( poke => poke.Cp );
 
             var orderedPokemon = pokemonsFiltered.OrderBy(poke => poke.Cp);

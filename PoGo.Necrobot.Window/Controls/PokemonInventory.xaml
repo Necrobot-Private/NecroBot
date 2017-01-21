@@ -38,7 +38,6 @@
         </StackPanel>
         </DockPanel>
 
-        <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto">
             <DataGrid x:Name="gridData"
               EnableRowVirtualization="True"
               AutoGenerateColumns="false"
@@ -161,6 +160,5 @@
 
                 </DataGrid.Columns>
         </DataGrid>
-        </ScrollViewer>
     </DockPanel>
 </UserControl>

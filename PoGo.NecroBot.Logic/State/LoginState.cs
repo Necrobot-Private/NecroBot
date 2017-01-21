@@ -96,6 +96,22 @@ namespace PoGo.NecroBot.Logic.State
                 await Task.Delay(2000, cancellationToken);
                 throw ex;
             }
+            catch(GoogleTwoFactorException e)
+            {
+
+                session.EventDispatcher.Send(new ErrorEvent
+                {
+                    Message =  e.Message
+
+                });
+                session.EventDispatcher.Send(new ErrorEvent
+                {
+                    Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey)
+                });
+                Console.Read();
+                Environment.Exit(0);
+
+            }
             catch (GoogleException e)
             {
                 if (e.Message.Contains("NeedsBrowser"))
