@@ -213,7 +213,7 @@ namespace PoGo.NecroBot.Logic.State
                     try {
                         File.Copy(file, dest, true);
                     }
-                    catch(Exception ex)
+                    catch(Exception )
                     {
                         Logger.Write($"Error occurred while copy {file}, This seem like chromedriver.exe is being locked, you need manually copy after you close all chrome instance or ignore it");
                     }
