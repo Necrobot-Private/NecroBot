@@ -364,6 +364,7 @@
     <Compile Include="Model\Settings\YoursWalkConfig.cs" />
     <Compile Include="Model\Mapzen\MapzenWalk.cs" />
     <Compile Include="Model\Yours\YoursWalk.cs" />
+    <Compile Include="MultiAccountManager.cs" />
     <Compile Include="Navigation.cs" />
     <Compile Include="PoGoUtils\PokemonInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

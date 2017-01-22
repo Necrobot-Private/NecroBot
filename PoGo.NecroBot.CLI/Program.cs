@@ -370,6 +370,8 @@ namespace PoGo.NecroBot.CLI
 
             ProgressBar.Fill(100);
 
+            MultiAccountManager
+
             if (_session.LogicSettings.AllowMultipleBot
                 && _session.LogicSettings.MultipleBotConfig.SelectAccountOnStartUp)
             {
