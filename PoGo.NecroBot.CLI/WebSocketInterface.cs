@@ -90,7 +90,7 @@ namespace PoGo.NecroBot.CLI
                 {
                     session.Send(message);
                 }
-                catch (Exception ex)
+                catch (Exception )
                 {
 #if DEBUG
                     //Logger.Write(ex.Message);
@@ -169,7 +169,7 @@ namespace PoGo.NecroBot.CLI
                     Longitude = _session.Client.CurrentLongitude
                 }));
             }
-            catch (Exception ex)
+            catch (Exception )
             {
 #if DEBUG
                 //Logger.Write(ex.Message);
@@ -185,7 +185,7 @@ namespace PoGo.NecroBot.CLI
             {
                 HandleEvent(eve);
             }
-            catch (Exception ex)
+            catch (Exception )
             {
 #if DEBUG
                 //Logger.Write(ex.Message);
