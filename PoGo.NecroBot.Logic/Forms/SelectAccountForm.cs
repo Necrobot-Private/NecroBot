@@ -82,7 +82,8 @@ namespace PoGo.NecroBot.Logic.Forms
             countdown--;
             var translator = TinyIoC.TinyIoCContainer.Current.Resolve<ITranslation>();
             this.label1.Text = translator.GetTranslation(TranslationString.MultiAccountAutoSelect, countdown);
-       }
+            if (countdown <= 0) this.Close();
+        }
 
         private void button1_Click(object sender, EventArgs e)
         {
