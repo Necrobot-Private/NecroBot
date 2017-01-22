@@ -39,12 +39,11 @@ namespace PoGo.NecroBot.Logic.Forms
             {
                 EXListViewItem lvItem = new EXListViewItem(item.AuthType.ToString());
                 lvItem.SubItems.Add( new EXControlListViewSubItem() { Text = item.AppliedUsername });
-                lvItem.SubItems.Add(new EXControlListViewSubItem() { Text = item.RuntimeTotal.ToString() });
                 lvItem.SubItems.Add(new EXControlListViewSubItem() { Text = item.GetRuntime() });
+                lvItem.SubItems.Add(new EXControlListViewSubItem() { Text = "" });
 
                 EXControlListViewSubItem cs = new EXControlListViewSubItem()
                 {
-
                 };
                 Button b = new Button();
                 b.Text = "START";
