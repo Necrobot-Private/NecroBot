@@ -20,6 +20,7 @@ using POGOProtos.Inventory.Item;
 using POGOProtos.Map.Fort;
 using POGOProtos.Map.Pokemon;
 using POGOProtos.Networking.Responses;
+using TinyIoC;
 
 #endregion
 
@@ -502,22 +503,13 @@ namespace PoGo.NecroBot.Logic.Tasks
                 var curentkey = session.Settings.AuthType == AuthType.Google
                     ? session.Settings.GoogleUsername
                     : session.Settings.PtcUsername;
+
                 curentkey += encounterEV.EncounterId;
-
                 session.Cache.Add(curentkey, encounterEV, DateTime.Now.AddMinutes(15));
-                AuthConfig evalNextBot = null;
 
-                foreach (var bot in session.Accounts.OrderByDescending(p => p.RuntimeTotal))
-                {
-                    if (bot.ReleaseBlockTime > DateTime.Now) continue;
-                    var key = bot.AuthType == AuthType.Google ? bot.GoogleUsername : bot.PtcUsername;
-                    key += encounterEV.EncounterId;
-                    if (session.Cache.GetCacheItem(key) == null)
-                    {
-                        evalNextBot = bot;
-                        break;
-                    }
-                }
+                var accountManager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
+
+                var evalNextBot = accountManager.FindAvailableAccountForPokemonSwitch(encounterEV.EncounterId);
 
                 if (evalNextBot != null)
                 {

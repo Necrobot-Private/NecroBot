@@ -40,7 +40,7 @@ namespace PoGo.NecroBot.Logic.Forms
                 EXListViewItem lvItem = new EXListViewItem(item.AuthType.ToString());
                 lvItem.SubItems.Add( new EXControlListViewSubItem() { Text = item.AppliedUsername });
                 lvItem.SubItems.Add(new EXControlListViewSubItem() { Text = item.RuntimeTotal.ToString() });
-                lvItem.SubItems.Add(new EXControlListViewSubItem());
+                lvItem.SubItems.Add(new EXControlListViewSubItem() { Text = item.GetRuntime() });
 
                 EXControlListViewSubItem cs = new EXControlListViewSubItem()
                 {
@@ -73,6 +73,7 @@ namespace PoGo.NecroBot.Logic.Forms
             var manager = TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>();
 
                 SelectedAccount = manager.GetMinRuntime();
+                SelectedAccount.LoggedTime = DateTime.Now;
             }
         }
 
