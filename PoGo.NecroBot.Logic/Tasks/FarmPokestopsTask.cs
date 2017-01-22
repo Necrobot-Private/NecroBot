@@ -51,7 +51,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 // we have moved this distance, so apply it immediately to the egg walker.
                 await eggWalker.ApplyDistance(distanceFromStart, cancellationToken);
             }
-            checkForMoveBackToDefault = false;
+             checkForMoveBackToDefault = false;
 
             await CatchNearbyPokemonsTask.Execute(session, cancellationToken);
 

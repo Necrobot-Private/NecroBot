@@ -13,6 +13,7 @@ using PoGo.NecroBot.Logic.Logging;
 using PokemonGo.RocketAPI.Enums;
 using PokemonGo.RocketAPI.Exceptions;
 using POGOProtos.Enums;
+using TinyIoC;
 
 #endregion
 
@@ -306,6 +307,7 @@ namespace PoGo.NecroBot.Logic.State
                 session.Profile = await session.Inventory.GetPlayerData();
                 var stats = await session.Inventory.GetPlayerStats();
 
+                TinyIoCContainer.Current.Resolve<MultiAccountManager>().Logged();
                 session.EventDispatcher.Send(new ProfileEvent {Profile = session.Profile, Stats = stats});
             }
             catch (UriFormatException e)
