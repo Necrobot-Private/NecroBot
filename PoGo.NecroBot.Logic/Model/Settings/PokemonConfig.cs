@@ -158,6 +158,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 23)]
         public float FavoriteMinIvPercentage { get; set; }
 
+
         [ExcelConfig(Description = "Allow bot auto favorite pokemon after catch", Position = 24)]
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 24)]
@@ -395,5 +396,13 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 63)]
         [Range(1,100)]
         public int BulkTransferSize { get; set; }
+
+        /*Favorite CP*/
+        [ExcelConfig(Description = "Set min CP for auto favorite pokemon", Position = 64)]
+        [DefaultValue(1000)]
+        [Range(0, 9999)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 64)]
+        public float FavoriteMinCp { get; set; }
+
     }
 }
