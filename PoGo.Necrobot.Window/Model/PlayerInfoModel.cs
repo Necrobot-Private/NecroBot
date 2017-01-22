@@ -129,6 +129,8 @@ namespace PoGo.Necrobot.Window.Model
 
             var budyData = this.playerProfile.PlayerData.BuddyPokemon;
 
+            if (budyData == null) return;
+             
             var buddy = inventory.Inventory
                 .InventoryDelta
                 .InventoryItems
