@@ -71,7 +71,10 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                             if (response != null)
                             {
-                                deployedPokemons = deployedPokemons.Concat(new PokemonData[] { response.PokemonData });
+                                if (deployedPokemons == null)
+                                    deployedPokemons = new PokemonData[] { response.PokemonData };
+                                else
+                                    deployedPokemons = deployedPokemons.Concat(new PokemonData[] { response.PokemonData });
                                 gym = response.GymState.FortData;
                             }
 
