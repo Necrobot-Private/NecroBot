@@ -940,7 +940,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         internal static bool CanTrainGym(ISession session, FortData fort, GetGymDetailsResponse gymDetails, IEnumerable<PokemonData> deployedPokemons)
         {
-            bool isDeployed = deployedPokemons?.Any(a => a.DeployedFortId == fort.Id) ?? false;
+            bool isDeployed = deployedPokemons != null ? deployedPokemons.Any(a => a.DeployedFortId == fort.Id) : false;
             if (gymDetails != null && GetGymLevel(fort.GymPoints) > gymDetails.GymState.Memberships.Count && !isDeployed) // free slot should be used always but not always we know that...
                 return true;
             if (!session.LogicSettings.GymConfig.EnableGymTraining)
