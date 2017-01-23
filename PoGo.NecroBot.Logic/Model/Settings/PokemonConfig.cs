@@ -36,19 +36,19 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public int DelayBetweenPokemonCatch { get; set; }
 
         /*CatchLimit*/
-        [ExcelConfig(Description = "Check for daily limit catch rate - 1000/24h", Position = 3)]
+        [ExcelConfig(Description = "Check for daily limit catch rate - CatchPokemonLimit per CatchPokemonLimitMinutes", Position = 3)]
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 3)]
         public bool UseCatchLimit { get; set; }
 
         [ExcelConfig(Description = "Number of pokemon allow for catch duration", Position = 4)]
-        [DefaultValue(998)]
+        [DefaultValue(700)]
         [Range(0, 9999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 4)]
         public int CatchPokemonLimit { get; set; }
 
-        [ExcelConfig(Description = "Catch duration apply for catch limit  & number", Position = 5)]
-        [DefaultValue(60 * 24 + 30)]
+        [ExcelConfig(Description = "Catch duration apply for catch limit & number", Position = 5)]
+        [DefaultValue(60 * 22 + 30)]
         [Range(0, 9999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 5)]
         public int CatchPokemonLimitMinutes { get; set; }
