@@ -258,6 +258,15 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             if (_startBattleCounter <= 0)
                 _startBattleCounter = 3;
+
+            //If you won even one fight is worth it to attack again.
+            var bAction = battleActions.LastOrDefault();
+            if ((bAction.Type == BattleActionType.ActionTimedOut || bAction.Type == BattleActionType.ActionDefeat) &&
+                (battleActions.Exists(x => x.Type == BattleActionType.ActionVictory)))
+            {
+                battleActions.Clear();
+                await Execute(session, cancellationToken, gym, fortInfo);
+            }
         }
 
         private static async Task<FortDeployPokemonResponse> DeployPokemonToGym(ISession session, FortDetailsResponse fortInfo, GetGymDetailsResponse fortDetails, CancellationToken cancellationToken)
