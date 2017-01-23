@@ -762,7 +762,7 @@ namespace PoGo.NecroBot.Logic.Common
                 new KeyValuePair<TranslationString, string>(TranslationString.HumanWalkSnipeDestinationReached,
                     "(HUMAN WALK) destination reached | lat: {0}, lng: {1} | wait :{2:0.00} sec"),
                 new KeyValuePair<TranslationString, string>(TranslationString.HumanWalkSnipeNotEnoughtBalls,
-                    "(HUMAN WALK) Not enought balls to activate catch Em-All mode. ({0})/{1}"),
+                    "(HUMAN WALK) Not enough balls to activate catch Em-All mode. ({0})/{1}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.HumanWalkSnipePokemonEncountered,
                     "(HUMAN WALK) Encountered {0}  | lat :{1} , Lng : {2} | removed from snipping list"),
                 new KeyValuePair<TranslationString, string>(TranslationString.MinimumClientVersionException,
