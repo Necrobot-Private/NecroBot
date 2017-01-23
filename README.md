@@ -2,7 +2,7 @@
 [![Github All Releases](https://img.shields.io/github/downloads/Necrobot-Private/NecroBot/total.svg?maxAge=258)](https://github.com/Necrobot-Private/NecroBot/releases)
 [![GitHub license](https://img.shields.io/badge/license-AGPL-blue.svg)](https://raw.githubusercontent.com/Necrobot-Private/NecroBot/master/LICENSE.md)
 
-<h1>Necrobot2 now supports Pokémon Go 0.51.2 API using public hashing server from PogoDev.</h1>
+<h1>Necrobot2 now supports Pokémon Go 0.53.1 API using public hashing server from PogoDev.</h1>
 
 <p>
 Necrobot2 itself is free but now you will need to purchase an API key to run the bot.
