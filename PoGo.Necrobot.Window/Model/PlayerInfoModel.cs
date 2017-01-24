@@ -125,7 +125,7 @@ namespace PoGo.Necrobot.Window.Model
 
         public void OnInventoryRefreshed(InventoryRefreshedEvent inventory)
         {
-            if (this.playerProfile == null || this.playerProfile.PlayerData.BuddyPokemon == null) return;
+            if (this.playerProfile == null || this.playerProfile.PlayerData.BuddyPokemon == null || this.playerProfile.PlayerData.BuddyPokemon.Id == 0) return;
 
             var budyData = this.playerProfile.PlayerData.BuddyPokemon;
 

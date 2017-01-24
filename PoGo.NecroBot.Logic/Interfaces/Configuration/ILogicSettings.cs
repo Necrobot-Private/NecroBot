@@ -102,6 +102,7 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         bool RenamePokemon { get; }
         bool RenameOnlyAboveIv { get; }
         float FavoriteMinIvPercentage { get; }
+        float FavoriteMinCp { get; }
         bool AutoFavoritePokemon { get; }
         string RenameTemplate { get; }
         int AmountOfPokemonToDisplayOnStart { get; }

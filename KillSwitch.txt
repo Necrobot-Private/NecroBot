@@ -2,9 +2,9 @@ BotStatus=ENABLED;
 //================================================================//
                 POKEMON GO 0.53.1
 //================================================================//
-The bot has not been fully updated to 0.53.1 so it is not 100% safe to bot yet.
+The bot has been fully updated to 0.53.1 so it is safer to bot now.
 //================================================================//
-                         Updated: 1/20/2017
+                         Updated: 1/23/2017
 
 
 For support/questions:
