@@ -64,6 +64,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                     if (player.Team != TeamColor.Neutral)
                     {
                         var deployedPokemons = await session.Inventory.GetDeployedPokemons();
+                        List<PokemonData> deployedList = new List<PokemonData>(deployedPokemons);
+
                         if (fortDetails.GymState.FortData.OwnedByTeam == player.Team || fortDetails.GymState.FortData.OwnedByTeam == TeamColor.Neutral)
                         {
                             //trainning logic will come here
@@ -71,20 +73,21 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                             if (response != null)
                             {
-                                if (deployedPokemons == null)
-                                    deployedPokemons = new PokemonData[] { response.PokemonData };
+                                if (deployedList == null)
+                                    deployedList = new List<PokemonData> { response.PokemonData };
                                 else
-                                    deployedPokemons = deployedPokemons.Concat(new PokemonData[] { response.PokemonData });
+                                    deployedList.Add(response.PokemonData);
+
                                 if (response.GymState != null && response.GymState.FortData != null)
                                     gym = response.GymState.FortData;
                             }
 
-                            if (CanTrainGym(session, gym, fortDetails, deployedPokemons))
+                            if (CanTrainGym(session, gym, fortDetails, deployedList))
                                 await StartGymAttackLogic(session, fortInfo, fortDetails, gym, cancellationToken);
                         }
                         else
                         {
-                            if (CanAttackGym(session, gym, deployedPokemons))
+                            if (CanAttackGym(session, gym, deployedList))
                                 await StartGymAttackLogic(session, fortInfo, fortDetails, gym, cancellationToken);
                         }
                     }
@@ -350,6 +353,12 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static async Task<IEnumerable<PokemonData>> CompleteAttackTeam(ISession session, IEnumerable<PokemonData> defenders)
         {
+            /*
+             *  While i'm trying to make this gym attack i've made an error and complete team with the same one pokemon 6 times. 
+             *  Guess what, it was no error. More, fight in gym was successfull and this one pokemon didn't died once but after faint got max hp again and fight again. 
+             *  So after all we used only one pokemon.
+             *  Maybe we can use it somehow.
+             */
             var allPokemons = await session.Inventory.GetPokemons();
 
             List<PokemonData> attackers = new List<PokemonData>();
@@ -375,7 +384,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             return attackers;
         }
 
-        private static async Task<PokemonData> GetBestAgainst(ISession session, IEnumerable<PokemonData> myPokemons, IEnumerable<PokemonData> myTeam, PokemonData defender)
+        private static async Task<PokemonData> GetBestAgainst(ISession session, IEnumerable<PokemonData> myPokemons, List<PokemonData> myTeam, PokemonData defender)
         {
             TimedLog(string.Format("Checking pokemon for {0} ({1} CP). Already collected team is: {2}", defender.PokemonId, defender.Cp, string.Join(", ", myTeam.Select(s => string.Format("{0} ({1} CP)", s.PokemonId, s.Cp)))));
             var pokemonsSetting = await session.Inventory.GetPokemonSettings();
@@ -395,9 +404,9 @@ namespace PoGo.NecroBot.Logic.Tasks
             return myAttacker;
         }
 
-        private static async Task<IEnumerable<PokemonData>> GetBestToTeam(ISession session, IEnumerable<PokemonData> myPokemons, IEnumerable<PokemonData> myTeam)
+        private static async Task<IEnumerable<PokemonData>> GetBestToTeam(ISession session, IEnumerable<PokemonData> myPokemons, List<PokemonData> myTeam)
         {
-            var data = myPokemons.Where(w => !myTeam.Any(a => a.Id != w.Id)).OrderByDescending(o => o.Cp).Take(6 - myTeam.Count());
+            var data = myPokemons.Where(w => !myTeam.Any(a => a.Id == w.Id)).OrderByDescending(o => o.Cp).Take(6 - myTeam.Count());
             TimedLog("Best others are: " + string.Join(", ", data.Select(s => s.PokemonId)));
             return data;
         }
@@ -1050,10 +1059,10 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             try
             {
-                if (deployedPokemons == null || deployedPokemons.Count() == 0)
-                    deployedPokemons = session.Inventory.GetDeployedPokemons().Result;
+                //if (deployedPokemons == null || deployedPokemons.Count() == 0)
+                //    deployedPokemons = session.Inventory.GetDeployedPokemons().Result;
 
-                bool isDeployed = deployedPokemons != null && deployedPokemons.Count() > 0 ? deployedPokemons.Any(a => a.DeployedFortId == fort.Id) : false;
+                bool isDeployed = deployedPokemons != null && deployedPokemons.Count() > 0 ? deployedPokemons.Any(a => a?.DeployedFortId == fort.Id) : false;
                 if (gymDetails != null && GetGymLevel(fort.GymPoints) > gymDetails.GymState.Memberships.Count && !isDeployed) // free slot should be used always but not always we know that...
                     return true;
                 if (!session.LogicSettings.GymConfig.EnableGymTraining)
@@ -1086,7 +1095,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 var pokemonList = (await session.Inventory.GetPokemons()).ToList();
                 pokemonList = pokemonList
-                    .Where(w => !excluded.Contains(w.Id) && w.Id != session.Profile.PlayerData.BuddyPokemon?.Id && (session.LogicSettings.GymConfig.HealDefendersBeforeApplyToGym || w.Stamina == w.StaminaMax))
+                    .Where(w => !excluded.Contains(w.Id) && w.Id != session.Profile.PlayerData.BuddyPokemon?.Id)
                     .OrderByDescending(p => p.Cp)
                     .Skip(Math.Min(pokemonList.Count - 1, session.LogicSettings.GymConfig.NumberOfTopPokemonToBeExcluded))
                     .ToList();
@@ -1094,13 +1103,17 @@ namespace PoGo.NecroBot.Logic.Tasks
                 if (pokemonList.Count == 0)
                     return null;
 
-                if (pokemonList.Count == 1) pokemon = pokemonList.FirstOrDefault();
-                if (session.LogicSettings.GymConfig.UseRandomPokemon && pokemon == null)
-                {
-                    pokemon = pokemonList.ElementAt(new Random().Next(0, pokemonList.Count - 1));
-                }
+                if (pokemonList.Count == 1)
+                    pokemon = pokemonList.FirstOrDefault();
 
-                pokemon = pokemonList.FirstOrDefault(p => p.Cp <= session.LogicSettings.GymConfig.MaxCPToDeploy && PokemonInfo.GetLevel(p) <= session.LogicSettings.GymConfig.MaxLevelToDeploy && string.IsNullOrEmpty(p.DeployedFortId));
+                if (session.LogicSettings.GymConfig.UseRandomPokemon && pokemon == null)
+                    pokemon = pokemonList.ElementAt(new Random().Next(0, pokemonList.Count - 1));
+
+                pokemon = pokemonList.FirstOrDefault(p => 
+                    p.Cp <= session.LogicSettings.GymConfig.MaxCPToDeploy &&
+                    PokemonInfo.GetLevel(p) <= session.LogicSettings.GymConfig.MaxLevelToDeploy &&
+                    string.IsNullOrEmpty(p.DeployedFortId)
+                );
 
                 if (session.LogicSettings.GymConfig.HealDefendersBeforeApplyToGym)
                 {
@@ -1109,12 +1122,12 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     if (pokemon.Stamina < pokemon.StaminaMax)
                         await HealPokemon(session, pokemon);
+                }
 
-                    if (pokemon.Stamina < pokemon.StaminaMax)
-                    {
-                        excluded.Add(pokemon.Id);
-                        pokemon = null;
-                    }
+                if (pokemon.Stamina < pokemon.StaminaMax)
+                {
+                    excluded.Add(pokemon.Id);
+                    pokemon = null;
                 }
             }
             return pokemon;
