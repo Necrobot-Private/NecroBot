@@ -630,6 +630,17 @@ namespace PoGo.NecroBot.Logic
             return _pokemonSettings;
         }
 
+        public async Task<IEnumerable<MoveSettings>> GetMoveSettings()
+        {
+            if (_templates == null)
+                _templates = await _client.Download.GetItemTemplates();
+
+            var moveSettings = _templates.ItemTemplates.Where(x => x.MoveSettings != null)
+                .Select(x => x.MoveSettings);
+
+            return moveSettings;
+        }
+
         public async Task<IEnumerable<PokemonData>> GetPokemonToEvolve(IEnumerable<PokemonId> filter = null)
         {
             var myPokemon = await GetPokemons();
