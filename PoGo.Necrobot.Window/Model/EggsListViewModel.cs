@@ -83,6 +83,8 @@ namespace PoGo.Necrobot.Window.Model
             var egg = this.Eggs.FirstOrDefault(t => t.Id == e.PokemonId);
             var incu = this.Incubators.FirstOrDefault(t => t.Id == e.IncubatorId);
 
+            if (egg == null) return;
+
             egg.Hatchable = false;
             incu.InUse = true;
             egg.KM = e.KmWalked;

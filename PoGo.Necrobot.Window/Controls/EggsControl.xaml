@@ -117,7 +117,7 @@
                         </Image>
                             <TextBlock HorizontalAlignment="Center" Visibility="{Binding Path=Hatchable, Converter={StaticResource InverseAndVisibleConverter}}">
                             <TextBlock.Text>
-                                <MultiBinding StringFormat="{}{0} km /{1} km">
+                                <MultiBinding StringFormat="{}{0:0.00} km /{1} km" Mode="TwoWay">
                                     <Binding Path="KM"></Binding>
                                     <Binding Path="TotalKM"></Binding>
                                 </MultiBinding>

@@ -215,10 +215,6 @@ namespace PoGo.Necrobot.Window
 
         private void tabMain_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(tabMap.IsSelected)
-            {
-                botMap.EnsureContent();
-            }
         }
     }
 }

@@ -20,9 +20,6 @@
                                          HorizontalContentAlignment="Stretch" 
                                          CanDragMap="True" MouseWheelZoomType="MousePositionWithoutCenter" 
                                          MouseLeftButtonUp="gmap_MouseLeftButtonUp"
-                                         LayoutUpdated="gmap_LayoutUpdated" 
-                                         
-                                        
                                          />
 
         <Popup IsOpen="False" Name="popSelect" PopupAnimation="Scroll">
