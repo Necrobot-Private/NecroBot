@@ -586,20 +586,24 @@ namespace PoGo.NecroBot.Logic.Tasks
             var masterBallsCount = await session.Inventory.GetItemAmountByType(ItemId.ItemMasterBall);
 
             if (masterBallsCount > 0 && (
-                    (!session.LogicSettings.PokemonToUseMasterball.Any() && (
-                         pokemonCp >= session.LogicSettings.UseMasterBallAboveCp ||
-                         probability < session.LogicSettings.UseMasterBallBelowCatchProbability)) ||
-                    session.LogicSettings.PokemonToUseMasterball.Contains(pokemonId)))
+                         session.LogicSettings.UseBallOperator.BoolFunc(
+                              pokemonCp >= session.LogicSettings.UseMasterBallAboveCp ,
+                              probability < session.LogicSettings.UseMasterBallBelowCatchProbability
+                            ) 
+                        ||session.LogicSettings.PokemonToUseMasterball.Contains(pokemonId)))
                 return ItemId.ItemMasterBall;
 
-            if (ultraBallsCount > 0 && (pokemonCp >= session.LogicSettings.UseUltraBallAboveCp ||
-                                        iV >= session.LogicSettings.UseUltraBallAboveIv ||
-                                        probability < session.LogicSettings.UseUltraBallBelowCatchProbability))
+
+            if (ultraBallsCount > 0 &&
+                session.LogicSettings.UseBallOperator.BoolFunc(pokemonCp >= session.LogicSettings.UseUltraBallAboveCp ,
+                                                               iV >= session.LogicSettings.UseUltraBallAboveIv ,
+                                                               probability < session.LogicSettings.UseUltraBallBelowCatchProbability))
                 return ItemId.ItemUltraBall;
 
-            if (greatBallsCount > 0 && (pokemonCp >= session.LogicSettings.UseGreatBallAboveCp ||
-                                        iV >= session.LogicSettings.UseGreatBallAboveIv ||
-                                        probability < session.LogicSettings.UseGreatBallBelowCatchProbability))
+            if (greatBallsCount > 0 && session.LogicSettings.UseBallOperator.BoolFunc(pokemonCp >= session.LogicSettings.UseGreatBallAboveCp ,
+                                        iV >= session.LogicSettings.UseGreatBallAboveIv ,
+                                        probability < session.LogicSettings.UseGreatBallBelowCatchProbability)
+                                        )
                 return ItemId.ItemGreatBall;
 
             if (pokeBallsCount > 0)

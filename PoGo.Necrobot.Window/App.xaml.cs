@@ -12,6 +12,10 @@ using PoGo.NecroBot.Logic.State;
 using PoGo.Necrobot.Window.Win32;
 using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic;
+using PoGo.NecroBot.Logic.Model.Settings;
+using System.IO;
+using PoGo.NecroBot.Logic.Common;
+using TinyIoC;
 
 namespace PoGo.Necrobot.Window
 {
@@ -40,9 +44,6 @@ namespace PoGo.Necrobot.Window
             base.OnStartup(e);
         }
 
-       
-        
-
         protected override void OnLoadCompleted(NavigationEventArgs e)
         {
             
@@ -51,7 +52,21 @@ namespace PoGo.Necrobot.Window
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-           // base.OnStartup(e);
+            string languageCode = "en";
+
+            if (File.Exists("config\\config.json"))
+            {
+                var config = GlobalSettings.Load("config",false);
+                languageCode = config.ConsoleConfig.TranslationLanguageCode;
+            }
+
+            if (!System.IO.Directory.Exists(@"config\Translations"))
+            {
+                System.IO.Directory.CreateDirectory(@"config\Translations");
+            }
+
+            var uiTranslation = new UITranslation(languageCode);
+            TinyIoCContainer.Current.Register<UITranslation>(uiTranslation);
 
             MainWindow = new MainClientWindow();
 

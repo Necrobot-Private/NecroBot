@@ -11,7 +11,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         {
         }
 
-        internal enum Operator
+        public enum Operator
         {
             or,
             and
@@ -395,5 +395,13 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 63)]
         [Range(1,100)]
         public int BulkTransferSize { get; set; }
+
+        [DefaultValue(Operator.or)]
+        [ExcelConfig(Description = "Use ball operator between IV and CP ", Position = 634)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 63)]
+        public Operator UseBallOperator  { get; set; }
+
+
+
     }
 }

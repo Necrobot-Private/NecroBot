@@ -5,6 +5,7 @@
                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                       xmlns:local="clr-namespace:PoGo.Necrobot.Window.Controls"
+                      xmlns:c="clr-namespace:PoGo.Necrobot.Window.Converters"
                       Title="Necrobot 2 - Window GUI"
                       Height="768"
                       Width="1024"
@@ -13,7 +14,9 @@
                       ResizeMode="CanResizeWithGrip"
                       WindowTransitionsEnabled="False"
                       WindowStartupLocation="CenterScreen" Loaded="MetroWindow_Loaded">
-
+    <Control.Resources>
+        <c:I18NConveter x:Key="I18NConveter"/>
+    </Control.Resources>
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
             <Button Click="Theme_Selected">
@@ -149,7 +152,10 @@
                     <Setter Property="Padding" Value="3" />
                 </Style>
             </TabControl.Resources>
-            <TabItem Header="  MAP &amp; JOURNEY  " Name="tabMap" >
+            <TabItem Name="tabMap" >
+                <TabItem.Header>
+                    <TextBlock Margin="10,7,10,7" Text="{Binding  Source=MapTabTitle, Converter={StaticResource ResourceKey=I18NConveter}, FallbackValue=MAPS}"/>
+                </TabItem.Header>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="7*" />
@@ -163,11 +169,15 @@
                                           VerticalAlignment="Stretch" MinWidth="150" />
                 </Grid>
             </TabItem>
-            <TabItem Header="   SNIPER   ">
+            <TabItem >
+                <TabItem.Header>
+                    <TextBlock Margin="10,7,10,7" Text="{Binding  Source=SniperTabTitle, Converter={StaticResource ResourceKey=I18NConveter}, FallbackValue=MAPS}"/>
+                </TabItem.Header>
+                
                 <local:SniperControl x:Name="ctrlSniper" DataContext="{Binding Path=SnipeList}" />
             </TabItem>
 
-            <TabItem Header="   CONSOLE   " IsSelected="True">
+            <TabItem Header="{Binding Source=ConsoleTabTitle, Converter={StaticResource ResourceKey=I18NConveter}, FallbackValue=Console}" IsSelected="True">
                 <DockPanel LastChildFill="True">
                     <TextBox HorizontalAlignment="Stretch" 
                              Name="txtCmdInput" 

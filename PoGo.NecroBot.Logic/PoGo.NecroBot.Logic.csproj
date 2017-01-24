@@ -212,6 +212,7 @@
     <Compile Include="Captcha\CaptchaSolutionClient.cs" />
     <Compile Include="Captcha\TwoCaptchaClient.cs" />
     <Compile Include="Common\PokemonGradeHelper.cs" />
+    <Compile Include="Common\UITranslation.cs" />
     <Compile Include="DataDumper\IDumper.cs" />
     <Compile Include="DataDumper\Dumper.cs" />
     <Compile Include="Common\Translations.cs" />
