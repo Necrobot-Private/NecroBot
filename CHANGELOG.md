@@ -6,6 +6,10 @@
 ## [v1.0.0.70](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.70) (2017-01-23)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.69...v1.0.0.70)
 
+## Bugs & Enhancements
+- Bug fix: #91
+- Ban safety - More conservative default daily limits for pokestops and pokemons caught.
+
 ## [v1.0.0.69](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.69) (2017-01-22)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.66...v1.0.0.69)
 ## Bugs & Enhancements
