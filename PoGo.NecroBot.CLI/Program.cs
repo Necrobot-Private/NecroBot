@@ -34,7 +34,7 @@ namespace PoGo.NecroBot.CLI
         private static string _subPath = "";
 
         private static bool _enableJsonValidation = true;
-        //private static bool _ignoreKillSwitch;
+        private static bool _ignoreKillSwitch;
 
         private static readonly Uri StrKillSwitchUri =
             new Uri("https://raw.githubusercontent.com/Necrobot-Private/Necrobot2/master/KillSwitch.txt");
@@ -52,6 +52,8 @@ namespace PoGo.NecroBot.CLI
 
         public static void RunBotWithParameters(Action<ISession, StatisticsAggregator> onBotStarted, string[] args)
         {
+            var ioc = TinyIoC.TinyIoCContainer.Current;
+
             Application.EnableVisualStyles();
             var strCulture = Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName;
 
@@ -92,10 +94,10 @@ namespace PoGo.NecroBot.CLI
                 switch (commandLine["killswitch"])
                 {
                     case "true":
-                        //_ignoreKillSwitch = false;
+                        _ignoreKillSwitch = false;
                         break;
                     case "false":
-                        //_ignoreKillSwitch = true;
+                        _ignoreKillSwitch = true;
                         break;
                 }
             }
@@ -184,12 +186,17 @@ namespace PoGo.NecroBot.CLI
                 }
             }
 
-            //Only check killswitch if use legacyAPI
-            //if (settings.Auth.APIConfig.UseLegacyAPI  && (!_ignoreKillSwitch && CheckKillSwitch() || CheckMKillSwitch()))
-            //    return;
+            if (!_ignoreKillSwitch)
+            {
+                if (CheckKillSwitch() || CheckMKillSwitch())
+                {
+                    return;
+                }
+            }
 
             var logicSettings = new LogicSettings(settings);
             var translation = Translation.Load(logicSettings);
+            TinyIoC.TinyIoCContainer.Current.Register<ITranslation>(translation);
 
             if (settings.GPXConfig.UseGpxPathing)
             {
@@ -286,6 +293,8 @@ namespace PoGo.NecroBot.CLI
                 new ClientSettings(settings, elevationService), logicSettings, elevationService,
                 translation
             );
+            ioc.Register<ISession>(_session);
+
             Logger.SetLoggerContext(_session);
 
             if (boolNeedsSetup)
@@ -370,60 +379,16 @@ namespace PoGo.NecroBot.CLI
 
             ProgressBar.Fill(100);
 
-            if (_session.LogicSettings.AllowMultipleBot
-                && _session.LogicSettings.MultipleBotConfig.SelectAccountOnStartUp)
-            {
-                byte index = 0;
-                Console.WriteLine();
-                Console.WriteLine();
-                Logger.Write("PLEASE SELECT AN ACCOUNT TO START. AUTO START AFTER 30 SEC");
-                List<Char> availableOption = new List<char>();
-                foreach (var item in _session.Accounts)
-                {
-                    var ch = (char) (index + 65);
-                    availableOption.Add(ch);
-                    int day = (int) item.RuntimeTotal / 1440;
-                    int hour = (int) (item.RuntimeTotal - (day * 1400)) / 60;
-                    int min = (int) (item.RuntimeTotal - (day * 1400) - hour * 60);
 
-                    var runtime = $"{day:00}:{hour:00}:{min:00}:00";
+            var accountManager = new MultiAccountManager(logicSettings.Bots);
 
-                    Logger.Write($"{ch}. {item.GoogleUsername}{item.PtcUsername} \t\t{runtime}");
-                    index++;
-                }
+            accountManager.Add(settings.Auth.AuthConfig);
 
-                char select = ' ';
-                DateTime timeoutvalue = DateTime.Now.AddSeconds(30);
+            ioc.Register<MultiAccountManager>(accountManager);
 
-                while (DateTime.Now < timeoutvalue && !availableOption.Contains(select))
-                {
-                    if (Console.KeyAvailable)
-                    {
-                        ConsoleKeyInfo cki = Console.ReadKey();
-                        select = cki.KeyChar;
-                        select = Char.ToUpper(select);
-                        if (!availableOption.Contains(select))
-                        {
-                            Console.Out.WriteLine("Please select an account from list");
-                        }
-                    }
-                    else
-                    {
-                        Thread.Sleep(100);
-                    }
-                }
+            var bot = accountManager.GetStartUpAccount();
 
-                if (availableOption.Contains(select))
-                {
-                    var bot = _session.Accounts[select - 65];
-                    _session.ReInitSessionWithNextBot(bot);
-                }
-                else
-                {
-                    var bot = _session.Accounts.OrderBy(p => p.RuntimeTotal).First();
-                    _session.ReInitSessionWithNextBot(bot);
-                }
-            }
+            _session.ReInitSessionWithNextBot(bot);
 
             machine.AsyncStart(new VersionCheckState(), _session, _subPath, excelConfigAllow);
 

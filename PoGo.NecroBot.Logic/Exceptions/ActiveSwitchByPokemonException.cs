@@ -10,6 +10,6 @@ namespace PoGo.NecroBot.Logic.Exceptions
         public double LastLongitude { get; set; }
         public PokemonId LastEncounterPokemonId { get; set; }
 
-        public AuthConfig Bot { get; set; }
+        public MultiAccountManager.BotAccount Bot { get; set; }
     }
 }

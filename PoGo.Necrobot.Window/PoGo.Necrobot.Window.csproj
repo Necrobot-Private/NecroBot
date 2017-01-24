@@ -124,10 +124,6 @@
       <HintPath>$(SolutionDir)\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="POGOLib.Official, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)\packages\POGOLib.Official.1.2.1\lib\net45\POGOLib.Official.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="S2Geometry, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\S2Geometry.1.0.3\lib\portable-net45+wp8+win8\S2Geometry.dll</HintPath>
       <Private>True</Private>
@@ -174,6 +170,7 @@
       <DependentUpon>SnipeGrid.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\TemplatedAdorner.cs" />
+    <Compile Include="Converters\I18NConveter.cs" />
     <Compile Include="Converters\PokemonIdToImageConverter.cs" />
     <Compile Include="Converters\ValueConverterGroup.cs" />
     <Compile Include="Converters\VisibleIfTrueConverter.cs" />

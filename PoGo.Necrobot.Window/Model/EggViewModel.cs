@@ -26,6 +26,7 @@ namespace PoGo.Necrobot.Window.Model
 
         public bool Hatchable { get; set; }
         public string Icon => icons[this.TotalKM];
+        public EggViewModel() { }
         public EggViewModel(PokemonData egg)
         {
             this.Id = egg.Id;

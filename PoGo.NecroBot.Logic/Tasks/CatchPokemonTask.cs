@@ -20,6 +20,7 @@ using POGOProtos.Inventory.Item;
 using POGOProtos.Map.Fort;
 using POGOProtos.Map.Pokemon;
 using POGOProtos.Networking.Responses;
+using TinyIoC;
 
 #endregion
 
@@ -502,22 +503,13 @@ namespace PoGo.NecroBot.Logic.Tasks
                 var curentkey = session.Settings.AuthType == AuthType.Google
                     ? session.Settings.GoogleUsername
                     : session.Settings.PtcUsername;
+
                 curentkey += encounterEV.EncounterId;
-
                 session.Cache.Add(curentkey, encounterEV, DateTime.Now.AddMinutes(15));
-                AuthConfig evalNextBot = null;
 
-                foreach (var bot in session.Accounts.OrderByDescending(p => p.RuntimeTotal))
-                {
-                    if (bot.ReleaseBlockTime > DateTime.Now) continue;
-                    var key = bot.AuthType == AuthType.Google ? bot.GoogleUsername : bot.PtcUsername;
-                    key += encounterEV.EncounterId;
-                    if (session.Cache.GetCacheItem(key) == null)
-                    {
-                        evalNextBot = bot;
-                        break;
-                    }
-                }
+                var accountManager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
+
+                var evalNextBot = accountManager.FindAvailableAccountForPokemonSwitch(encounterEV.EncounterId);
 
                 if (evalNextBot != null)
                 {
@@ -594,20 +586,24 @@ namespace PoGo.NecroBot.Logic.Tasks
             var masterBallsCount = await session.Inventory.GetItemAmountByType(ItemId.ItemMasterBall);
 
             if (masterBallsCount > 0 && (
-                    (!session.LogicSettings.PokemonToUseMasterball.Any() && (
-                         pokemonCp >= session.LogicSettings.UseMasterBallAboveCp ||
-                         probability < session.LogicSettings.UseMasterBallBelowCatchProbability)) ||
-                    session.LogicSettings.PokemonToUseMasterball.Contains(pokemonId)))
+                         session.LogicSettings.UseBallOperator.BoolFunc(
+                              pokemonCp >= session.LogicSettings.UseMasterBallAboveCp ,
+                              probability < session.LogicSettings.UseMasterBallBelowCatchProbability
+                            ) 
+                        ||session.LogicSettings.PokemonToUseMasterball.Contains(pokemonId)))
                 return ItemId.ItemMasterBall;
 
-            if (ultraBallsCount > 0 && (pokemonCp >= session.LogicSettings.UseUltraBallAboveCp ||
-                                        iV >= session.LogicSettings.UseUltraBallAboveIv ||
-                                        probability < session.LogicSettings.UseUltraBallBelowCatchProbability))
+
+            if (ultraBallsCount > 0 &&
+                session.LogicSettings.UseBallOperator.BoolFunc(pokemonCp >= session.LogicSettings.UseUltraBallAboveCp ,
+                                                               iV >= session.LogicSettings.UseUltraBallAboveIv ,
+                                                               probability < session.LogicSettings.UseUltraBallBelowCatchProbability))
                 return ItemId.ItemUltraBall;
 
-            if (greatBallsCount > 0 && (pokemonCp >= session.LogicSettings.UseGreatBallAboveCp ||
-                                        iV >= session.LogicSettings.UseGreatBallAboveIv ||
-                                        probability < session.LogicSettings.UseGreatBallBelowCatchProbability))
+            if (greatBallsCount > 0 && session.LogicSettings.UseBallOperator.BoolFunc(pokemonCp >= session.LogicSettings.UseGreatBallAboveCp ,
+                                        iV >= session.LogicSettings.UseGreatBallAboveIv ,
+                                        probability < session.LogicSettings.UseGreatBallBelowCatchProbability)
+                                        )
                 return ItemId.ItemGreatBall;
 
             if (pokeBallsCount > 0)
