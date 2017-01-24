@@ -1,17 +1,17 @@
 ﻿#region using directives
 
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Google.Protobuf.Collections;
-using POGOProtos.Data.Player;
+using PoGo.NecroBot.Logic.Common;
+using PoGo.NecroBot.Logic.Event;
+using PoGo.NecroBot.Logic.Forms;
+using PoGo.NecroBot.Logic.Model.Settings;
+using PoGo.NecroBot.Logic.Utils;
 using POGOProtos.Enums;
 using POGOProtos.Networking.Responses;
-using PoGo.NecroBot.Logic.Event;
-using PoGo.NecroBot.Logic.Utils;
-using PoGo.NecroBot.Logic.Model.Settings;
-using PoGo.NecroBot.Logic.Common;
 
 #endregion
 
@@ -24,6 +24,11 @@ namespace PoGo.NecroBot.Logic.State
             cancellationToken.ThrowIfCancellationRequested();
 
             var tutState = session.Profile.PlayerData.TutorialState;
+            if (tutState.Contains(TutorialState.FirstTimeExperienceComplete))
+            {
+                return new InfoState();
+            }
+
             if (!tutState.Contains(TutorialState.LegalScreen))
             {
                 await
@@ -35,74 +40,86 @@ namespace PoGo.NecroBot.Logic.State
                 {
                     Message = "Just read the Niantic ToS, looks legit, accepting!"
                 });
-                await DelayingUtils.DelayAsync(9000, 2000, cancellationToken);
+                await DelayingUtils.DelayAsync(5000, 2000, cancellationToken);
             }
-            if (!tutState.Contains(TutorialState.AvatarSelection))
-            {
-                string genderString = GlobalSettings.PromptForString(session.Translation, session.Translation.GetTranslation(TranslationString.FirstStartSetupAutoCompleteTutGenderPrompt), new string[] { "Male", "Female" }, "You didn't set a valid gender.", false);
+            InitialTutorialForm form = new InitialTutorialForm(this, tutState, session);
 
-                Gender gen;
-                switch (genderString)
-                {
-                    case "Male":
-                    case "male":
-                        gen = Gender.Male;
-                        break;
-                    case "Female":
-                    case "female":
-                        gen = Gender.Female;
-                        break;
-                    default:
-                        // We should never get here, since the prompt should only allow valid options.
-                        gen = Gender.Male;
-                        break;
-                }
-                var avatarRes = await session.Client.Player.SetAvatar(new PlayerAvatar()
-                {
-                    Backpack = 0,
-                    Eyes = 0,
-                    Gender = gen,
-                    Hair = 0,
-                    Hat = 0,
-                    Pants = 0,
-                    Shirt = 0,
-                    Shoes = 0,
-                    Skin = 0
-                });
-                if (avatarRes.Status == SetAvatarResponse.Types.Status.AvatarAlreadySet ||
-                    avatarRes.Status == SetAvatarResponse.Types.Status.Success)
-                {
-                    await session.Client.Misc.MarkTutorialComplete(new RepeatedField<TutorialState>()
-                    {
-                        TutorialState.AvatarSelection
-                    });
-                    session.EventDispatcher.Send(new NoticeEvent()
-                    {
-                        Message = $"Selected your avatar, now you are {gen}!"
-                    });
-                }
-            }
-            if (!tutState.Contains(TutorialState.PokemonCapture))
+            if (form.ShowDialog() == DialogResult.OK)
             {
-                await CatchFirstPokemon(session, cancellationToken);
             }
-            if (!tutState.Contains(TutorialState.NameSelection))
+            else
             {
-                await SelectNickname(session, cancellationToken);
+                return new CheckTosState();
             }
-            if (!tutState.Contains(TutorialState.FirstTimeExperienceComplete))
-            {
-                await
-                    session.Client.Misc.MarkTutorialComplete(new RepeatedField<TutorialState>()
-                    {
-                        TutorialState.FirstTimeExperienceComplete
-                    });
-                session.EventDispatcher.Send(new NoticeEvent()
-                {
-                    Message = "First time experience complete, looks like i just spinned an virtual pokestop :P"
-                });
-                await DelayingUtils.DelayAsync(3000, 2000, cancellationToken);
-            }
+
+            //if (!tutState.Contains(TutorialState.AvatarSelection))
+            //{
+            //    //string genderString = GlobalSettings.PromptForString(session.Translation, session.Translation.GetTranslation(TranslationString.FirstStartSetupAutoCompleteTutGenderPrompt), new string[] { "Male", "Female" }, "You didn't set a valid gender.", false);
+
+            //    //Gender gen;
+            //    //switch (genderString)
+            //    //{
+            //    //    case "Male":
+            //    //    case "male":
+            //    //        gen = Gender.Male;
+            //    //        break;
+            //    //    case "Female":
+            //    //    case "female":
+            //    //        gen = Gender.Female;
+            //    //        break;
+            //    //    default:
+            //    //        // We should never get here, since the prompt should only allow valid options.
+            //    //        gen = Gender.Male;
+            //    //        break;
+            //    //}
+
+
+            //    //var avatarRes = await session.Client.Player.SetAvatar(new PlayerAvatar()
+            //    //{
+            //    //    Backpack = 0,
+            //    //    Eyes = 0,
+            //    //    Gender = gen,
+            //    //    Hair = 0,
+            //    //    Hat = 0,
+            //    //    Pants = 0,
+            //    //    Shirt = 0,
+            //    //    Shoes = 0,
+            //    //    Skin = 0
+            //    //});
+            //    //if (avatarRes.Status == SetAvatarResponse.Types.Status.AvatarAlreadySet ||
+            //    //    avatarRes.Status == SetAvatarResponse.Types.Status.Success)
+            //    //{
+            //    //    await session.Client.Misc.MarkTutorialComplete(new RepeatedField<TutorialState>()
+            //    //    {
+            //    //        TutorialState.AvatarSelection
+            //    //    });
+            //    //    session.EventDispatcher.Send(new NoticeEvent()
+            //    //    {
+            //    //        Message = $"Selected your avatar, now you are {gen}!"
+            //    //    });
+            //    //}
+            //}
+            ////if (!tutState.Contains(TutorialState.PokemonCapture))
+            ////{
+            ////    await CatchFirstPokemon(session, cancellationToken);
+            ////}
+            //if (!tutState.Contains(TutorialState.NameSelection))
+            //{
+            //    await SelectNickname(session, cancellationToken);
+            //}
+            //if (!tutState.Contains(TutorialState.FirstTimeExperienceComplete))
+            //{
+            //    await
+            //        session.Client.Misc.MarkTutorialComplete(new RepeatedField<TutorialState>()
+            //        {
+            //            TutorialState.FirstTimeExperienceComplete
+            //        });
+            //    session.EventDispatcher.Send(new NoticeEvent()
+            //    {
+            //        Message = "First time experience complete, looks like i just spinned an virtual pokestop :P"
+            //    });
+            //    await DelayingUtils.DelayAsync(3000, 2000, cancellationToken);
+            //}
             return new InfoState();
         }
 
@@ -114,7 +131,9 @@ namespace PoGo.NecroBot.Logic.State
                 PokemonId.Charmander,
                 PokemonId.Squirtle
             };
-            string pokemonString = GlobalSettings.PromptForString(session.Translation, session.Translation.GetTranslation(TranslationString.FirstStartSetupAutoCompleteTutStarterPrompt), new string[] { "Bulbasaur", "Charmander", "Squirtle" }, "You didn't enter a valid pokemon.", false);
+            string pokemonString = GlobalSettings.PromptForString(session.Translation,
+                session.Translation.GetTranslation(TranslationString.FirstStartSetupAutoCompleteTutStarterPrompt),
+                new string[] {"Bulbasaur", "Charmander", "Squirtle"}, "You didn't enter a valid pokemon.", false);
             var firstpokenum = 0;
             switch (pokemonString)
             {
@@ -135,7 +154,7 @@ namespace PoGo.NecroBot.Logic.State
                     firstpokenum = 0;
                     break;
             }
-            
+
             var firstPoke = firstPokeList[firstpokenum];
 
             var res = await session.Client.Encounter.EncounterTutorialComplete(firstPoke);
@@ -152,7 +171,9 @@ namespace PoGo.NecroBot.Logic.State
         {
             while (true)
             {
-                string nickname = GlobalSettings.PromptForString(session.Translation, session.Translation.GetTranslation(TranslationString.FirstStartSetupAutoCompleteTutNicknamePrompt), null, "You entered an invalid nickname.");
+                string nickname = GlobalSettings.PromptForString(session.Translation,
+                    session.Translation.GetTranslation(TranslationString.FirstStartSetupAutoCompleteTutNicknamePrompt),
+                    null, "You entered an invalid nickname.");
 
                 if (nickname.Length > 15 || nickname.Length == 0)
                 {
@@ -196,7 +217,7 @@ namespace PoGo.NecroBot.Logic.State
                         errorText = "Unknown Niantic error while changing nickname.";
                         break;
                 }
-                
+
                 if (!string.IsNullOrEmpty(infoText))
                 {
                     session.EventDispatcher.Send(new NoticeEvent()

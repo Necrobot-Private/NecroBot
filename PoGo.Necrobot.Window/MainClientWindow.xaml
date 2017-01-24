@@ -1,0 +1,219 @@
+﻿<Controls:MetroWindow x:Class="PoGo.Necrobot.Window.MainClientWindow"
+                      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                      xmlns:Behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                      xmlns:local="clr-namespace:PoGo.Necrobot.Window.Controls"
+                      Title="Necrobot 2 - Window GUI"
+                      Height="768"
+                      Width="1024"
+                      BorderThickness="0"
+                      GlowBrush="Black"
+                      ResizeMode="CanResizeWithGrip"
+                      WindowTransitionsEnabled="False"
+                      WindowStartupLocation="CenterScreen" Loaded="MetroWindow_Loaded">
+
+    <Controls:MetroWindow.RightWindowCommands>
+        <Controls:WindowCommands>
+            <Button Click="Theme_Selected">
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle Width="20"
+                               Height="20"
+                               Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_social_delicious}" />
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                    <TextBlock Margin="4 0 0 0"
+                               VerticalAlignment="Center"
+                               Text="Theme" />
+
+                    <Popup Margin="10,10,0,13" Name="Popup1"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Top"
+                           Width="320" Height="280" IsOpen="False" AllowsTransparency="True">
+                        <Grid Background="White">
+
+                            <WrapPanel Background="White" Margin="20,20,20,20">
+                                <RadioButton GroupName="Theme" Foreground="Red" Content="Red"   Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5" ></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="Blue" Content="Blue"   Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5" IsChecked="True"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="Brown" Content="Brown" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="#0047ab"  Content="Cobalt" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="Crimson" Content="Crimson" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="Cyan" Content="Cyan" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="DarkGreen" Content="Emerald" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="Green" Content="Green" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="Indigo" Content="Indigo" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5" ></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="Lime" Content="Lime" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="Magenta" Content="Magenta" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5" ></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="#b784a7" Content="Mauve" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="Olive" Content="Olive" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5" ></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="Orange" Content="Orange" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="Pink" Content="Pink" Checked="OnTheme_Checked" Width="90"  Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="Purple"  Content="Purple" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="Sienna" Content="Sienna" Checked="OnTheme_Checked" Width="90"  Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="#e0dfdb" Content="Steel" Checked="OnTheme_Checked" Width="90"  Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="#483C32" Content="Taupe" Checked="OnTheme_Checked" Width="90"  Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="Teal" Content="Teal" Checked="OnTheme_Checked" Width="90"  Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="Violet" Content="Violet" Checked="OnTheme_Checked" Width="90"  Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="Yellow" Content="Yellow" Checked="OnTheme_Checked" Width="90"  Margin="0,5,0,5"></RadioButton>
+
+                        </WrapPanel>
+                        </Grid>
+
+                    </Popup>
+
+                </StackPanel>
+
+            </Button>
+            <Button x:Name="menuConsole" Click="menuConsole_Click">
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle Width="20"
+                               Height="20"
+                               Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_console}" />
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                    <TextBlock Margin="4 0 0 0" Name="consoleMenuText"
+                               VerticalAlignment="Center"
+                               Text="Show Console" />
+                </StackPanel>
+
+            </Button>
+            <Button Click="menuSetting_Click" Name="menuSetting">
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle Width="20"
+                               Height="20"
+                               Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_settings}" />
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                    <TextBlock Margin="4 0 0 0"
+                               VerticalAlignment="Center"
+                               Text="Settings" />
+                </StackPanel>
+            </Button>
+        </Controls:WindowCommands>
+    </Controls:MetroWindow.RightWindowCommands>
+
+    <DockPanel LastChildFill="True">
+        <GroupBox x:Name="grbPlayerInfo" DockPanel.Dock="Top" Height="150">
+            <GroupBox.Header>
+                <DockPanel LastChildFill="True">
+                    <Button Content="Hide" DockPanel.Dock="Right" Name="btnHideInfo" Click="btnHideInfo_Click" />
+                    <Label Content="Logging in ..... check console window for detail" Name="lblAccount"
+                           Foreground="White" FontWeight="Bold">
+                        <!--<Label.Content>
+                            <MultiBinding StringFormat="{}{0} as : {1}">
+                                <Binding Path="UI.PlayerStatus"></Binding>
+                                <Binding Path="UI.PlayerName"></Binding>
+                            </MultiBinding>
+
+                        </Label.Content>-->
+
+                    </Label>
+                </DockPanel>
+            </GroupBox.Header>
+            <local:PlayerInfo DataContext="{Binding Path=PlayerInfo}" Margin="10,0,-2,26" />
+        </GroupBox>
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock Name="lblStatus" />
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock Name="lblCount" />
+            </StatusBarItem>
+        </StatusBar>
+
+        <TabControl TabStripPlacement="Left" HorizontalAlignment="Stretch" 
+                    VerticalAlignment="Stretch" 
+                    Name="tabMain"
+                    SelectionChanged="tabMain_SelectionChanged"
+                    >
+            <TabControl.Resources>
+                <Style TargetType="{x:Type TabItem}">
+                    <Setter Property="HeaderTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <ContentPresenter Content="{TemplateBinding Content}">
+                                    <ContentPresenter.LayoutTransform>
+                                        <RotateTransform Angle="270" />
+                                    </ContentPresenter.LayoutTransform>
+                                </ContentPresenter>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Padding" Value="3" />
+                </Style>
+            </TabControl.Resources>
+            <TabItem Header="  MAP &amp; JOURNEY  " Name="tabMap" >
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="7*" />
+                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+                    <local:MapControl x:Name="botMap" Grid.Column="0" DataContext="{Binding Path=Map}" />
+                    <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+                    <local:SidebarControl Visibility="Hidden" DataContext="{Binding Path=Sidebar}"
+                                          x:Name="sidebarControl" Grid.Column="2" HorizontalAlignment="Stretch"
+                                          VerticalAlignment="Stretch" MinWidth="150" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="   SNIPER   ">
+                <local:SniperControl x:Name="ctrlSniper" DataContext="{Binding Path=SnipeList}" />
+            </TabItem>
+
+            <TabItem Header="   CONSOLE   " IsSelected="True">
+                <DockPanel LastChildFill="True">
+                    <TextBox HorizontalAlignment="Stretch" 
+                             Name="txtCmdInput" 
+                             Background="Black" 
+                             DockPanel.Dock="Top"
+                             Foreground="White" 
+                             BorderBrush="Aquamarine" 
+                             BorderThickness="1" 
+                             Text="Enter your command" 
+                             MouseDown="txtCmdInput_MouseDown"
+                             KeyDown="txtCmdInput_KeyDown"
+                             />
+
+                    <RichTextBox
+                    ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                    ScrollViewer.VerticalScrollBarVisibility="Auto"
+                    ScrollViewer.CanContentScroll="True"
+                    DockPanel.Dock="Top"
+                    x:Name="consoleLog"
+                    HorizontalAlignment="Stretch"
+                    Background="Black"
+                    VerticalAlignment="Stretch"
+                    FontSize="14.667" 
+                    IsReadOnly="True">
+                    <FlowDocument>
+                        <Paragraph LineHeight="20">
+                            <Run Text="" />
+                        </Paragraph>
+                    </FlowDocument>
+                </RichTextBox>
+                </DockPanel>
+
+            </TabItem>
+
+            <TabItem Header="{Binding Path= PokemonTabHeader, FallbackValue=Pokemon}" Name="tabPokemons">
+                <local:PokemonInventory x:Name="ctrPokemonInventory" DataContext="{Binding Path=PokemonList}"
+                                        OnPokemonItemSelected="PokemonInventory_OnPokemonItemSelected" />
+            </TabItem>
+            <TabItem Name="tabItems" Header="{Binding Path=ItemsTabHeader, FallbackValue=Pokemon}">
+                <local:ItemsInventory DataContext="{Binding Path=ItemsList}" x:Name="ctrlItemControl" />
+            </TabItem>
+            <TabItem Name="tabEggs" Header="EGGS">
+                <local:EggsControl DataContext="{Binding Path=EggsList}" x:Name="ctrlEggsControl" />
+            </TabItem>
+        </TabControl>
+    </DockPanel>
+
+
+</Controls:MetroWindow>

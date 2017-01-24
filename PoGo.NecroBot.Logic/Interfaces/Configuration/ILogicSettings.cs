@@ -4,19 +4,17 @@ using System.Collections.Generic;
 using PoGo.NecroBot.Logic.Model.Settings;
 using POGOProtos.Enums;
 using POGOProtos.Inventory.Item;
-using System.Threading;
 
 #endregion
 
 namespace PoGo.NecroBot.Logic.Interfaces.Configuration
 {
-
     public interface ILogicSettings
     {
         bool UseWebsocket { get; }
         bool CatchPokemon { get; }
         int OutOfBallCatchBlockTime { get; }
-        int PokeballsToKeepForSnipe { get; }            
+        int PokeballsToKeepForSnipe { get; }
         int CatchPokemonLimit { get; }
         int CatchPokemonLimitMinutes { get; }
         int PokeStopLimit { get; }
@@ -40,7 +38,7 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         bool RandomlyPauseAtStops { get; }
         bool FastSoftBanBypass { get; }
         int ByPassSpinCount { get; }
-
+        double AutoSnipeMaxDistance { get; }
         bool EvolveAllPokemonWithEnoughCandy { get; }
         bool KeepPokemonsThatCanEvolve { get; }
 
@@ -133,12 +131,18 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         bool SnipePokemonNotInPokedex { get; }
         bool RandomizeRecycle { get; }
         int RandomRecycleValue { get; }
-        int TotalAmountOfPokeballsToKeep { get; }
-        int MaxPokeballsToKeep { get; }
 
+        int TotalAmountOfPokeballsToKeep { get; }
         int TotalAmountOfPotionsToKeep { get; }
         int TotalAmountOfRevivesToKeep { get; }
         int TotalAmountOfBerriesToKeep { get; }
+
+        bool UseRecyclePercentsInsteadOfTotals { get; }
+        int PercentOfInventoryPokeballsToKeep { get; }
+        int PercentOfInventoryPotionsToKeep { get; }
+        int PercentOfInventoryRevivesToKeep { get; }
+        int PercentOfInventoryBerriesToKeep { get; }
+
         bool DetailedCountsBeforeRecycling { get; }
         bool VerboseRecycling { get; }
         double RecycleInventoryAtUsagePercentage { get; }
@@ -221,29 +225,20 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         int RecycleActionDelay { get; }
         int RenamePokemonActionDelay { get; }
 
-        bool GymAllowed { get; }
-        bool GymPrioritizeOverPokestop { get; }
-        TeamColor GymDefaultTeam { get; }
-        double GymMaxDistance { get; }
-        int GymMaxCPToDeploy {  get; }
-        int GymMaxLevelToDeploy { get; }
-        bool GymUseRandomPokemon { get; }
-        int GymVisitTimeout { get; }
-        int GymNumberOfTopPokemonToBeExcluded { get; }
-
+        GymConfig GymConfig { get; }
         string DataSharingIdentifiation { get; }
         bool DataSharingEnable { get; }
         string DataSharingDataUrl { get; }
         bool AllowAutoSnipe { get; }
         MultipleBotConfig MultipleBotConfig { get; }
-        int GymCollectRewardAfter { get; }
         List<AuthConfig> Bots { get; }
         bool AllowMultipleBot { get; }
-        CaptchaConfig CaptchaConfig { get;  }
-        int BulkTransferStogareBuffer { get;  }
+        CaptchaConfig CaptchaConfig { get; }
+        int BulkTransferStogareBuffer { get; }
         int BulkTransferSize { get; }
 
-        bool AutosnipeVerifiedOnly { get;  }
-        int SnipePauseOnOutOfBallTime { get;  }
+        bool AutosnipeVerifiedOnly { get; }
+        int SnipePauseOnOutOfBallTime { get; }
+        int DefaultAutoSnipeCandy { get; }
     }
 }

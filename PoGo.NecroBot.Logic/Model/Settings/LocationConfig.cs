@@ -7,7 +7,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
     [JsonObject(Title = "Location Config", Description = "Set your location settings.", ItemRequired = Required.DisallowNull)]
     public class LocationConfig : BaseConfig
     {
-        public LocationConfig() : base() { }
+        public LocationConfig() : base()
+        {
+        }
 
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
@@ -61,13 +63,13 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [DefaultValue(10)]
         [Range(0, 999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 10)]
-        [ExcelConfig(Description = "This value to set random offset change when bot start from defautl location", Position = 10)]
+        [ExcelConfig(Description = "This value to set random offset change when bot start from default location", Position = 10)]
         public int MaxSpawnLocationOffset { get; set; }
 
         [DefaultValue(1000)]
         [Range(0, 9999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 11)]
-        [ExcelConfig(Description = "The radius distance we want bot to travel from defautl location. Notice that this will be change depend on other config bot may walk out of that radius", Position = 11)]
+        [ExcelConfig(Description = "The radius distance we want bot to travel from default location. Notice that this will be change depending on other config bot may walk out of that radius", Position = 11)]
         public int MaxTravelDistanceInMeters { get; set; }
 
         [JsonIgnore]

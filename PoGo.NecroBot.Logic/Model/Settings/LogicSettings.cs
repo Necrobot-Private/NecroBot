@@ -1,6 +1,5 @@
 #region using directives
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using PoGo.NecroBot.Logic.Interfaces.Configuration;
@@ -31,7 +30,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public int OutOfBallCatchBlockTime => _settings.PokemonConfig.OutOfBallCatchBlockTime;
         public int PokeballToKeepForSnipe => _settings.PokemonConfig.PokeballToKeepForSnipe;
         public int PokeballsToKeepForSnipe => _settings.PokemonConfig.PokeballToKeepForSnipe;
-
+        public double AutoSnipeMaxDistance => _settings.SnipeConfig.AutoSnipeMaxDistance;
         public int CatchPokemonLimit => _settings.PokemonConfig.CatchPokemonLimit;
         public int CatchPokemonLimitMinutes => _settings.PokemonConfig.CatchPokemonLimitMinutes;
         public int PokeStopLimit => _settings.PokeStopConfig.PokeStopLimit;
@@ -66,7 +65,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public double WalkingSpeedVariant => _settings.LocationConfig.WalkingSpeedVariant;
         public bool ShowVariantWalking => _settings.LocationConfig.ShowVariantWalking;
         public bool FastSoftBanBypass => _settings.SoftBanConfig.FastSoftBanBypass;
-        public int ByPassSpinCount  =>  _settings.SoftBanConfig.ByPassSpinCount;
+        public int ByPassSpinCount => _settings.SoftBanConfig.ByPassSpinCount;
         public bool EvolveAllPokemonWithEnoughCandy => _settings.PokemonConfig.EvolveAllPokemonWithEnoughCandy;
         public bool KeepPokemonsThatCanEvolve => _settings.PokemonConfig.KeepPokemonsThatCanEvolve;
         public bool TransferDuplicatePokemon => _settings.PokemonConfig.TransferDuplicatePokemon;
@@ -182,11 +181,17 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool SnipePokemonNotInPokedex => _settings.SnipeConfig.SnipePokemonNotInPokedex;
         public bool RandomizeRecycle => _settings.RecycleConfig.RandomizeRecycle;
         public int RandomRecycleValue => _settings.RecycleConfig.RandomRecycleValue;
-        public int MaxPokeballsToKeep => _settings.RecycleConfig.MaxPokeballsToKeep;
         public int TotalAmountOfPokeballsToKeep => _settings.RecycleConfig.TotalAmountOfPokeballsToKeep;
         public int TotalAmountOfPotionsToKeep => _settings.RecycleConfig.TotalAmountOfPotionsToKeep;
         public int TotalAmountOfRevivesToKeep => _settings.RecycleConfig.TotalAmountOfRevivesToKeep;
         public int TotalAmountOfBerriesToKeep => _settings.RecycleConfig.TotalAmountOfBerriesToKeep;
+
+        public bool UseRecyclePercentsInsteadOfTotals => _settings.RecycleConfig.UseRecyclePercentsInsteadOfTotals;
+        public int PercentOfInventoryPokeballsToKeep => _settings.RecycleConfig.PercentOfInventoryPokeballsToKeep;
+        public int PercentOfInventoryPotionsToKeep => _settings.RecycleConfig.PercentOfInventoryPotionsToKeep;
+        public int PercentOfInventoryRevivesToKeep => _settings.RecycleConfig.PercentOfInventoryRevivesToKeep;
+        public int PercentOfInventoryBerriesToKeep => _settings.RecycleConfig.PercentOfInventoryBerriesToKeep;
+
         public bool UseSnipeLimit => _settings.SnipeConfig.UseSnipeLimit;
         public bool UsePokeStopLimit => _settings.PokeStopConfig.UsePokeStopLimit;
         public bool UseCatchLimit => _settings.PokemonConfig.UseCatchLimit;
@@ -219,19 +224,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool HumanWalkingSnipeUseFastPokemap => _settings.HumanWalkSnipeConfig.UseFastPokemap;
         public bool HumanWalkingSnipeUsePogoLocationFeeder => _settings.HumanWalkSnipeConfig.UsePogoLocationFeeder;
         public bool HumanWalkingSnipeAllowTransferWhileWalking => _settings.HumanWalkSnipeConfig.AllowTransferWhileWalking;
-        public int GymCollectRewardAfter => _settings.GymConfig.CollectCoinAfterDeployed;
-        public bool GymAllowed => _settings.GymConfig.Enable;
-        public bool GymPrioritizeOverPokestop => _settings.GymConfig.PrioritizeGymOverPokestop;
-        public TeamColor GymDefaultTeam =>(TeamColor)Enum.Parse(typeof(TeamColor), _settings.GymConfig.DefaultTeam);
-
-        public double GymMaxDistance => _settings.GymConfig.MaxDistance;
-        public int GymVisitTimeout => _settings.GymConfig.VisitTimeout;
-        public int GymMaxCPToDeploy => _settings.GymConfig.MaxCPToDeploy;
-        public int GymMaxLevelToDeploy => _settings.GymConfig.MaxLevelToDeploy;
-
-        public bool GymUseRandomPokemon => _settings.GymConfig.UseRandomPokemon;
-
-        public int GymNumberOfTopPokemonToBeExcluded => _settings.GymConfig.NumberOfTopPokemonToBeExcluded;
+        public GymConfig GymConfig => _settings.GymConfig;
 
         public bool DataSharingEnable => _settings.DataSharingConfig.EnableSyncData;
         public string DataSharingIdentifiation => _settings.DataSharingConfig.DataServiceIdentification;
@@ -240,12 +233,13 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public int SnipePauseOnOutOfBallTime => _settings.SnipeConfig.SnipePauseOnOutOfBallTime;
         public string DataSharingDataUrl => _settings.DataSharingConfig.DataRecieverURL;
         public bool UseTransferFilterToCatch => _settings.CustomCatchConfig.UseTransferFilterToCatch;
- 
+
         public MultipleBotConfig MultipleBotConfig => _settings.MultipleBotConfig;
         public List<AuthConfig> Bots => _settings.Auth.Bots;
         public bool AllowMultipleBot => _settings.Auth.AllowMultipleBot;
         public int MinIVForAutoSnipe => _settings.SnipeConfig.MinIVForAutoSnipe;
         public bool AutosnipeVerifiedOnly => _settings.SnipeConfig.AutosnipeVerifiedOnly;
+        public int DefaultAutoSnipeCandy => _settings.SnipeConfig.DefaultAutoSnipeCandy;
         public Dictionary<PokemonId, BotSwitchPokemonFilter> BotSwitchPokemonFilters => _settings.BotSwitchPokemonFilters;
 
         public NotificationConfig NotificationConfig => _settings.NotificationConfig;

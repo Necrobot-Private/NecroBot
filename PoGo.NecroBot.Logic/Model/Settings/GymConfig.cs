@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 
@@ -7,7 +7,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
     [JsonObject(Title = "Gym Config", Description = "This config to setup rules for bot doing gym", ItemRequired = Required.DisallowNull)]
     public class GymConfig  : BaseConfig
     {
-        public GymConfig() :base() {}
+        public GymConfig() : base()
+        {
+        }
 
         internal enum TeamColor
         {
@@ -67,8 +69,57 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         [ExcelConfig(Description = "Collect coin after N gym deployed", Position = 10)]
         [DefaultValue(1)]
-        [Range(0, 10)]
+        [Range(1, 20)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
         public int CollectCoinAfterDeployed { get; set; }
+
+        [ExcelConfig(Description = "Enable attack gym", Position = 11)]
+        [DefaultValue(false)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
+        public bool EnableAttackGym { get; set; }
+
+        [ExcelConfig(Description = "Max Gym Level to Attack", Position = 12)]
+        [DefaultValue(3)]
+        [Range(1, 10)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
+        public int MaxGymLevelToAttack { get; set; }
+
+        [ExcelConfig(Description = "Max gym defenders to attack", Position = 13)]
+        [DefaultValue(3)]
+        [Range(1, 10)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
+        public int MaxDefendersToAttack { get; set; }
+
+        [ExcelConfig(Description = "Heal fefenders before apply to gym", Position = 14)]
+        [DefaultValue(true)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
+        public bool HealDefendersBeforeApplyToGym { get; set; }
+
+        [ExcelConfig(Description = "Don't Attack After Coins Limit is Reached", Position = 15)]
+        [DefaultValue(true)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
+        public bool DontAttackAfterCoinsLimitReached { get; set; }
+
+        [ExcelConfig(Description = "Enable gym training", Position = 16)]
+        [DefaultValue(true)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
+        public bool EnableGymTraining { get; set; }
+
+        [ExcelConfig(Description = "Train gym when missing max points", Position = 17)]
+        [DefaultValue(1000)]
+        [Range(1, 50000)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
+        public int TrainGymWhenMissingMaxPoints { get; set; }
+
+        [ExcelConfig(Description = "Max gym lvl to train", Position = 18)]
+        [DefaultValue(4)]
+        [Range(1, 10)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
+        public int MaxGymLvlToTrain { get; set; }
+
+        [ExcelConfig(Description = "Train already defended gym", Position = 19)]
+        [DefaultValue(true)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
+        public bool TrainAlreadyDefendedGym { get; set; }
     }
 }

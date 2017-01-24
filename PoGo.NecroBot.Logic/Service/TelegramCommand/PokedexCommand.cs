@@ -1,29 +1,33 @@
-﻿using PoGo.NecroBot.Logic.Common;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.State;
 using POGOProtos.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PoGo.NecroBot.Logic.Service.TelegramCommand
 {
-    public class PokedexCommand : ICommand
+    public class PokedexCommand : CommandMessage
     {
-        public string Command =>  "/pokedex";
-        public string Description=>  "Shows you Pokedex. ";
-        public bool StopProcess => true;
+        public override string Command => "/pokedex";
+        public override bool StopProcess => true;
+        public override TranslationString DescriptionI18NKey => TranslationString.TelegramCommandPokedexDescription;
+        public override TranslationString MsgHeadI18NKey => TranslationString.TelegramCommandPokedexMsgHead;
 
-        public async Task<bool> OnCommand(ISession session,string cmd, Action<string> Callback)
+        public PokedexCommand(TelegramUtils telegramUtils) : base(telegramUtils)
         {
-            await Task.Delay(0); // Just added to get rid of compiler warning. Remove this if async code is used below.
+        }
 
+        #pragma warning disable 1998  // added to get rid of compiler warning. Remove this if async code is used below.
+        public override async Task<bool> OnCommand(ISession session,string cmd, Action<string> callback)
+        #pragma warning restore 1998
+        {
             if (cmd.ToLower() == Command)
             {
                 var pokedex = session.Inventory.GetPokeDexItems().Result;
                 var pokedexSort = pokedex.OrderBy(x => x.InventoryItemData.PokedexEntry.PokemonId);
-                string answerTextmessage = "";
+                var answerTextmessage = GetMsgHead(session, session.Profile.PlayerData.Username) + "\r\n\r\n";
+
                 answerTextmessage += session.Translation.GetTranslation(TranslationString.PokedexCatchedTelegram);
                 foreach (var pokedexItem in pokedexSort)
                 {
@@ -37,7 +41,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
 
                     if (answerTextmessage.Length > 3800)
                     {
-                        Callback(answerTextmessage);
+                        callback(answerTextmessage);
                         answerTextmessage = "";
                     }
                 }
@@ -47,7 +51,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
                         .Cast<PokemonId>()
                         .Except(pokedex.Select(x => x.InventoryItemData.PokedexEntry.PokemonId));
 
-                Callback(answerTextmessage);
+                callback(answerTextmessage);
                 answerTextmessage = "";
 
                 answerTextmessage += session.Translation.GetTranslation(TranslationString.PokedexNeededTelegram);
@@ -62,14 +66,13 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
 
                         if (answerTextmessage.Length > 3800)
                         {
-                            Callback(answerTextmessage);
+                            callback(answerTextmessage);
                             answerTextmessage = "";
                         }
                     }
                 }
-                Callback(answerTextmessage);
+                callback(answerTextmessage);
                 return true;
-
             }
             return false;
         }

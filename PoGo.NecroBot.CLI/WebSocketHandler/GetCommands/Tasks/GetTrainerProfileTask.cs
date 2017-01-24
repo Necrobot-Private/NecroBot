@@ -6,7 +6,6 @@ using PoGo.NecroBot.CLI.WebSocketHandler.GetCommands.Events;
 using PoGo.NecroBot.CLI.WebSocketHandler.GetCommands.Helpers;
 using PoGo.NecroBot.Logic.State;
 using SuperSocket.WebSocket;
-using PoGo.NecroBot.Logic.Model;
 
 #endregion
 
@@ -18,7 +17,7 @@ namespace PoGo.NecroBot.CLI.WebSocketHandler.GetCommands.Tasks
         {
             //using (var blocker = new BlockableScope(session, BotActions.GetProfile))
             {
-               // if (!await blocker.WaitToRun()) return;
+                // if (!await blocker.WaitToRun()) return;
 
                 var playerStats = (await session.Inventory.GetPlayerStats()).FirstOrDefault();
                 if (playerStats == null)

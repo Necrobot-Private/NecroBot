@@ -1,15 +1,7 @@
-﻿using PoGo.NecroBot.Logic.Model.Settings;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+﻿using System;
 using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using PoGo.NecroBot.Logic.Model.Settings;
 
 namespace PoGo.NecroBot.CLI.Forms
 {
@@ -32,7 +24,9 @@ namespace PoGo.NecroBot.CLI.Forms
                 radLegacy.Checked = value.UseLegacyAPI;
             }
         }
+
         private bool forceInput;
+
         public AuthAPIForm(bool forceInput)
         {
             InitializeComponent();
@@ -44,7 +38,9 @@ namespace PoGo.NecroBot.CLI.Forms
                 btnCancel.Visible = false;
             }
         }
+
         private const int CP_NOCLOSE_BUTTON = 0x200;
+
         protected override CreateParams CreateParams
         {
             get
@@ -58,6 +54,7 @@ namespace PoGo.NecroBot.CLI.Forms
                 return myCp;
             }
         }
+
         private void lnkBuy_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Process.Start("https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer");
@@ -69,12 +66,12 @@ namespace PoGo.NecroBot.CLI.Forms
             {
                 MessageBox.Show("Please enter API Key", "Missing API key", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
-
             }
 
-            if (!radHashServer.Checked && ! radLegacy.Checked)
+            if (!radHashServer.Checked && !radLegacy.Checked)
             {
-                MessageBox.Show("Please select 1 API method", "Config error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Please select 1 API method", "Config error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             this.DialogResult = DialogResult.OK;

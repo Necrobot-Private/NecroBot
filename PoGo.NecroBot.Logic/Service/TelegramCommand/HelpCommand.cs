@@ -1,38 +1,46 @@
-﻿using PoGo.NecroBot.Logic.State;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using PoGo.NecroBot.Logic.Common;
+using PoGo.NecroBot.Logic.State;
 
 namespace PoGo.NecroBot.Logic.Service.TelegramCommand
 {
-    public class HelpCommand : ICommand
+    public class HelpCommand : CommandMessage
     {
-        public string Command  => "/help";
-        public string Description => "list all support command";
-        public bool StopProcess => true;
+        public override string Command => "/help";
+        public override bool StopProcess => true;
+        public override TranslationString DescriptionI18NKey => TranslationString.TelegramCommandHelpDescription;
+        public override TranslationString MsgHeadI18NKey => TranslationString.TelegramCommandHelpMsgHead;
 
-        public async Task<bool> OnCommand(ISession session,string cmd, Action<string> Callback)
+        public HelpCommand(TelegramUtils telegramUtils) : base(telegramUtils)
         {
-            await Task.Delay(0); // Just added to get rid of compiler warning. Remove this if async code is used below.
+        }
 
+        #pragma warning disable 1998 // added to get rid of compiler warning. Remove this if async code is used below.
+        public override async Task<bool> OnCommand(ISession session, string cmd, Action<string> callback)
+        #pragma warning restore 1998
+        {
             if (cmd.ToLower() == Command)
             {
-                var type = typeof(ICommand);
-                var types = AppDomain.CurrentDomain.GetAssemblies()
-                    .SelectMany(s => s.GetTypes())
-                    .Where(p => type.IsAssignableFrom(p) && p != type).OrderBy(p=>p.Name);
-                string message = "";
-                foreach (var item in types)
+                string message = GetMsgHead(session, session.Profile.PlayerData.Username) + "\r\n\r\n";
+                var iCommandInstances = AppDomain.CurrentDomain.GetAssemblies()
+                    .SelectMany(x => x.GetTypes())
+                    .Where(x => (typeof(ICommand).IsAssignableFrom(x)) && !x.IsInterface && !x.IsAbstract)
+                    .Select(x => (ICommand) Activator.CreateInstance(x, TelegramUtils));
+
+                foreach (var instance in iCommandInstances)
                 {
-                    ICommand telegramCMD =(ICommand) Activator.CreateInstance(item);
-                    message += $"{telegramCMD.Command} - {telegramCMD.Description}\r\n";
+                    var arguments = "";
+                    if (!string.IsNullOrEmpty(instance.Arguments))
+                    {
+                        arguments = ' ' + instance.Arguments;
+                    }
+                    message += $"{instance.Command}{arguments} - {instance.GetDescription(session)}\r\n";
                 }
 
-                Callback(message);
+                callback(message);
                 return true;
-
             }
             return false;
         }
