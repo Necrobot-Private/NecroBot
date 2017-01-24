@@ -1,13 +1,13 @@
 # Change Log
 
 ## [v1.0.0.69](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.69) (2017-01-22)
-[Full Changelog](https://github.com-/Necrobot-Private/NecroBot/compare/v1.0.0.66...v1.0.0.69)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.66...v1.0.0.69)
 ## Bugs & Enhancements
 - Bug fix: More fixes for API 0.53
 - Bug fix: #598 - Empty inventory in WPF GUI
 
 ## [v1.0.0.66](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.62) (2017-01-21)
-[Full Changelog](https://github.com-/Necrobot-Private/NecroBot/compare/v1.0.0.62...v1.0.0.66)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.62...v1.0.0.66)
 ## Bugs & Enhancement---	Allow rename favorited Pokemon
 -	Support API 0.53 from FP Hash service
 - Fix scroll on window GUI
