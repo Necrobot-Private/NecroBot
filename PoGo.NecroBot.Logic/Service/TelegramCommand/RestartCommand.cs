@@ -1,31 +1,36 @@
-﻿using PoGo.NecroBot.Logic.State;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
+using PoGo.NecroBot.Logic.Common;
+using PoGo.NecroBot.Logic.State;
 
 namespace PoGo.NecroBot.Logic.Service.TelegramCommand
 {
-    public class RestartCommand : ICommand
+    public class RestartCommand : CommandMessage
     {
-        public string Command => "/restart";
-        public string Description        =>  "Restart bot";
-        public bool StopProcess => true;
+        public override string Command => "/restart";
+        public override bool StopProcess => true;
+        public override TranslationString DescriptionI18NKey => TranslationString.TelegramCommandRestartDescription;
+        public override TranslationString MsgHeadI18NKey => TranslationString.TelegramCommandRestartMsgHead;
 
-        public async Task<bool> OnCommand(ISession session,string cmd, Action<string> Callback)
+        public RestartCommand(TelegramUtils telegramUtils) : base(telegramUtils)
         {
-            if(cmd.ToLower() == Command)
+        }
+
+        public override async Task<bool> OnCommand(ISession session, string cmd, Action<string> callback)
+        {
+            if (cmd.ToLower() == Command)
             {
-                Callback("Restarted Bot. Closing old Instance... BYE!");
+                callback(GetMsgHead(session, session.Profile.PlayerData.Username) + "\r\n\r\n");
                 await Task.Delay(5000);
-                Process.Start(Assembly.GetEntryAssembly().Location);
+                var assembly = Assembly.GetEntryAssembly().Location;
+                if (assembly != null)
+                {
+                    Process.Start(assembly);
+                }
 
                 Environment.Exit(-1);
-
-                return true;
             }
             return false;
         }

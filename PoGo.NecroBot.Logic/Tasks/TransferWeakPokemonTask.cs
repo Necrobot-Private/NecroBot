@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.PoGoUtils;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Utils;
 using POGOProtos.Data;
+using POGOProtos.Networking.Responses;
 
 #endregion
 
@@ -35,19 +37,26 @@ namespace PoGo.NecroBot.Logic.Tasks
             if ((maxStorage - totalEggs.Count() - buff) > pokemons.Count()) return;
 
 
+
             var pokemonDatas = pokemons as IList<PokemonData> ?? pokemons.ToList();
+
+            var buddy = session.Profile.PlayerData.BuddyPokemon;
+
             var pokemonsFiltered =
-                pokemonDatas.Where(pokemon => !session.LogicSettings.PokemonsNotToTransfer.Contains(pokemon.PokemonId))
+                pokemonDatas.Where(pokemon => !session.LogicSettings.PokemonsNotToTransfer.Contains(pokemon.PokemonId) &&
+                    pokemon.Favorite == 0 &&
+                    pokemon.Id != buddy.Id &&
+                    pokemon.DeployedFortId == string.Empty) 
                     .ToList().OrderBy( poke => poke.Cp );
 
             if (session.LogicSettings.KeepPokemonsThatCanEvolve)
                 pokemonsFiltered =
-                    pokemonDatas.Where(pokemon => !session.LogicSettings.PokemonsToEvolve.Contains(pokemon.PokemonId))
+                    pokemonDatas.Where(pokemon => !session.LogicSettings.PokemonsToEvolve.Contains(pokemon.PokemonId) )
                         .ToList().OrderBy( poke => poke.Cp );
 
-            var orderedPokemon = pokemonsFiltered.OrderBy( poke => poke.Cp );
+            var orderedPokemon = pokemonsFiltered.OrderBy(poke => poke.Cp);
             var pokemonToTransfers = new List<PokemonData>();
-            foreach (var pokemon in orderedPokemon )
+            foreach (var pokemon in orderedPokemon)
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 if ((pokemon.Cp >= session.LogicSettings.KeepMinCp) ||
@@ -61,7 +70,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     pokemonToTransfers.Add(pokemon);
                 }
-                else {
+                else
+                {
                     await session.Client.Inventory.TransferPokemon(pokemon.Id);
                     await session.Inventory.DeletePokemonFromInvById(pokemon.Id);
                     await PrintTransferedPokemonInfo(session, pokemon);
@@ -69,14 +79,14 @@ namespace PoGo.NecroBot.Logic.Tasks
                     await DelayingUtils.DelayAsync(session.LogicSettings.TransferActionDelay, 0, cancellationToken);
                 }
             }
-            if (session.LogicSettings.UseBulkTransferPokemon && pokemonToTransfers.Count >0)
+            if (session.LogicSettings.UseBulkTransferPokemon && pokemonToTransfers.Count > 0)
             {
                 int page = orderedPokemon.Count() / session.LogicSettings.BulkTransferSize + 1;
                 for (int i = 0; i < page; i++)
                 {
                     var batchTransfer = orderedPokemon.Skip(i * session.LogicSettings.BulkTransferSize).Take(session.LogicSettings.BulkTransferSize);
                     var t = await session.Client.Inventory.TransferPokemons(batchTransfer.Select(x => x.Id).ToList());
-                    if (t.Result == POGOProtos.Networking.Responses.ReleasePokemonResponse.Types.Result.Success)
+                    if (t.Result == ReleasePokemonResponse.Types.Result.Success)
                     {
                         foreach (var duplicatePokemon in batchTransfer)
                         {
@@ -84,7 +94,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                             await PrintTransferedPokemonInfo(session, duplicatePokemon);
                         }
                     }
-                    else session.EventDispatcher.Send(new WarnEvent() { Message = session.Translation.GetTranslation(Common.TranslationString.BulkTransferFailed, orderedPokemon.Count()) });
+                    else session.EventDispatcher.Send(new WarnEvent() { Message = session.Translation.GetTranslation(TranslationString.BulkTransferFailed, orderedPokemon.Count()) });
                 }
             }
         }
@@ -92,8 +102,8 @@ namespace PoGo.NecroBot.Logic.Tasks
         private static async Task PrintTransferedPokemonInfo(ISession session, PokemonData pokemon)
         {
             var bestPokemonOfType = (session.LogicSettings.PrioritizeIvOverCp
-                                    ? await session.Inventory.GetHighestPokemonOfTypeByIv(pokemon)
-                                    : await session.Inventory.GetHighestPokemonOfTypeByCp(pokemon)) ?? pokemon;
+                                        ? await session.Inventory.GetHighestPokemonOfTypeByIv(pokemon)
+                                        : await session.Inventory.GetHighestPokemonOfTypeByCp(pokemon)) ?? pokemon;
 
             var setting = session.Inventory.GetPokemonSettings()
                 .Result.Single(q => q.PokemonId == pokemon.PokemonId);
@@ -103,7 +113,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             session.EventDispatcher.Send(new TransferPokemonEvent
             {
-                Id = pokemon.PokemonId,
+                Id = pokemon.Id,
+                PokemonId = pokemon.PokemonId,
                 Perfection = PokemonInfo.CalculatePokemonPerfection(pokemon),
                 Cp = pokemon.Cp,
                 BestCp = bestPokemonOfType.Cp,

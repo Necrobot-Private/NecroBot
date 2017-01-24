@@ -1,24 +1,27 @@
-﻿using PoGo.NecroBot.Logic.Common;
+﻿using System;
+using System.Threading.Tasks;
+using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.State;
 using POGOProtos.Inventory.Item;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PoGo.NecroBot.Logic.Service.TelegramCommand
 {
-    public class ItemsCommand : ICommand
+    public class ItemsCommand : CommandMessage
     {
-        public string Command   =>  "/items";
-        public string Description  =>  "Shows your items.";
-        public bool StopProcess => true;
-        public async Task<bool> OnCommand(ISession session,string cmd, Action<string> Callback)
+        public override string Command => "/items";
+        public override bool StopProcess => true;
+        public override TranslationString DescriptionI18NKey => TranslationString.TelegramCommandItemsDescription;
+        public override TranslationString MsgHeadI18NKey => TranslationString.TelegramCommandItemsMsgHead;
+
+        public ItemsCommand(TelegramUtils telegramUtils) : base(telegramUtils)
         {
-            if(cmd.ToLower() == Command)
+        }
+
+        public override async Task<bool> OnCommand(ISession session, string cmd, Action<string> callback)
+        {
+            if (cmd.ToLower() == Command)
             {
-                var answerTextmessage = "";
+                string answerTextmessage = GetMsgHead(session, session.Profile.PlayerData.Username) + "\r\n\r\n";
                 var inventory = session.Inventory;
                 answerTextmessage += session.Translation.GetTranslation(TranslationString.CurrentPokeballInv,
                     await inventory.GetItemAmountByType(ItemId.ItemPokeBall),
@@ -48,9 +51,8 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
                     await session.Inventory.GetItemAmountByType(ItemId.ItemIncenseFloral),
                     await session.Inventory.GetItemAmountByType(ItemId.ItemLuckyEgg),
                     await session.Inventory.GetItemAmountByType(ItemId.ItemTroyDisk));
-                Callback(answerTextmessage);
+                callback(answerTextmessage);
                 return true;
-
             }
             return false;
         }

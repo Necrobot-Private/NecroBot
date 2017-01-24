@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 namespace PoGo.NecroBot.Logic.Model.Settings
 {
     [JsonObject(Title = "Snipe Config", Description = "Set your snipe settings.", ItemRequired = Required.DisallowNull)]
-    public class SnipeConfig  : BaseConfig
+    public class SnipeConfig : BaseConfig
     {
         public SnipeConfig() : base() {}
         [ExcelConfig (Description = "Tell bot to use location service, detail at  - https://github.com/5andr0/PogoLocationFeeder", Position =1)]
@@ -128,5 +128,21 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 22)]
         public bool AutosnipeVerifiedOnly { get; set; }
+
+        [ExcelConfig(Description = "Set the amount of candy want bot auto snipe if we has less candy than this value.", Position = 22)]
+        [DefaultValue(0)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 22)]
+        public int DefaultAutoSnipeCandy { get; set; }
+
+        [ExcelConfig(Description = "Total time in minutes bot will ignore autosnipe when out of ball", Position = 23)]
+        [DefaultValue(5)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 23)]
+        public int SnipePauseOnOutOfBallTime { get;  set; }
+
+        [ExcelConfig(Description = "Max distance in km that allow bot autosnipe. set to Z mean not applied", Position = 24)]
+        [DefaultValue(0)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 24)]
+
+        public double AutoSnipeMaxDistance { get;  set; }
     }
 }

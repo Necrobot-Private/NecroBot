@@ -1,12 +1,12 @@
 BotStatus=ENABLED;
 //================================================================//
-                POKEMON GO FORCING 0.50.1 API
+                POKEMON GO 0.53.1
 //================================================================//
-THIS BOT IS USING 0.45 API CONTINUED BOTTING WILL FLAG ACCOUNT FOR BAN
+The bot has been fully updated to 0.53.1 so it is safer to bot now.
 //================================================================//
-                         Updated: 12/24/16
+                         Updated: 1/23/2017
 
 
 For support/questions:
 OFFICIAL NECROBOT2 Discord: https://discord.gg/7FWyWVp
-(Do NOT publish/share/advertise this Bot or Discord, in any other discord server or website)
+

@@ -19,7 +19,7 @@
   "author": "NecroBot2-Private Team",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^1.4.7",
+    "electron": "^1.4.13",
     "electron-builder": "^8.6.0",
     "electron-packager": "^8.3.0"
   },

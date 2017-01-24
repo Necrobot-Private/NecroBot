@@ -1,37 +1,40 @@
-﻿using PoGo.NecroBot.Logic.State;
+﻿using System;
+using System.Threading.Tasks;
+using PoGo.NecroBot.Logic.Common;
+using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Tasks;
 using POGOProtos.Enums;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PoGo.NecroBot.Logic.Service.TelegramCommand
 {
-    public class SnipeCommand : ICommand
+    public class SnipeCommand : CommandMessage
     {
-        public string Command  => "/snipe";
-        public string Description => "add snipe item <pokemon,lat,lng>";
-        public bool StopProcess => true;
+        public override string Command => "/snipe";
+        public override string Arguments => "<name,lat,lon>";
+        public override bool StopProcess => true;
+        public override TranslationString DescriptionI18NKey => TranslationString.TelegramCommandSnipeDescription;
+        public override TranslationString MsgHeadI18NKey => TranslationString.TelegramCommandSnipeMsgHead;
 
-        public async Task<bool> OnCommand(ISession session,string commandText, Action<string> Callback)
+        public SnipeCommand(TelegramUtils telegramUtils) : base(telegramUtils)
+        {
+        }
+
+        public override async Task<bool> OnCommand(ISession session, string commandText, Action<string> callback)
         {
             var cmd = commandText.Split(' ');
 
             if (cmd[0].ToLower() == Command)
             {
                 var pokemonData = cmd[1].Split(',');
-                PokemonId pid = (PokemonId)Enum.Parse(typeof(PokemonId), pokemonData[0].Trim(), true);
+                PokemonId pid = (PokemonId) Enum.Parse(typeof(PokemonId), pokemonData[0].Trim(), true);
 
-                await MSniperServiceTask.AddSnipeItem(session, new MSniperServiceTask.MSniperInfo2() {
-                    PokemonId = (short)pid,
+                await MSniperServiceTask.AddSnipeItem(session, new MSniperServiceTask.MSniperInfo2()
+                {
+                    PokemonId = (short) pid,
                     Latitude = Convert.ToDouble(pokemonData[1].Trim()),
                     Longitude = Convert.ToDouble(pokemonData[2].Trim())
                 }, true);
-                //Callback("Snipe pokemon added");
+                callback(GetMsgHead(session, session.Profile.PlayerData.Username) + "\r\n\r\n");
                 return true;
             }
             return false;
