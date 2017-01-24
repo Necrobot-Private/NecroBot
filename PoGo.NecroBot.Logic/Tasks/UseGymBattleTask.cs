@@ -393,14 +393,22 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             var moveSettings = await session.Inventory.GetMoveSettings();
             var moves = moveSettings.Where(w => attacks.Any(a => a == w.PokemonType));
-            PokemonData myAttacker = myPokemons.Where(w => moves.Any(a => a.MovementId == w.Move1 || a.MovementId == w.Move2) && !myTeam.Any(a=>a.Id == w.Id)).OrderByDescending(o => o.Cp).FirstOrDefault();
+            PokemonData myAttacker = myPokemons
+                .Where(w =>
+                        moves.Any(a => a.MovementId == w.Move1 || a.MovementId == w.Move2) && //by move
+                        !myTeam.Any(a => a.Id == w.Id) && //not already in team
+                        string.IsNullOrEmpty(w.DeployedFortId) && //not already deployed
+                        session.Profile.PlayerData.BuddyPokemon?.Id != w.Id //not a buddy
+                    )
+                .OrderByDescending(o => o.Cp)
+                .FirstOrDefault();
             if (myAttacker == null || myAttacker.Cp < (defender.Cp / 2))
             {
                 myAttacker = (await GetBestToTeam(session, myPokemons, myTeam)).FirstOrDefault();
                 TimedLog(string.Format("Best against {0} with is {1} can't be found, will be used {2} ({7} CP) with attacks {3} and {4} instead (best attacks types shold to be {5})", defender.PokemonId, pt1, myAttacker.PokemonId, myAttacker.Move1, myAttacker.Move2, string.Join(", ", attacks), defender.Cp, myAttacker.Cp));
             }
             else
-                TimedLog(string.Format("Best against {0} with is {1} type will be {2} ({5} CP) with attacks {3} and {4} (best attacks types will be {5})", defender.PokemonId, pt1, myAttacker.PokemonId, myAttacker.Move1, myAttacker.Move2, string.Join(", ", attacks), myAttacker.Cp));
+                TimedLog(string.Format("Best against {0} with is {1} type will be {2} ({6} CP) with attacks {3} and {4} (best attacks types will be {5})", defender.PokemonId, pt1, myAttacker.PokemonId, myAttacker.Move1, myAttacker.Move2, string.Join(", ", attacks), myAttacker.Cp));
             return myAttacker;
         }
 
