@@ -49,6 +49,7 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         bool UseEggIncubators { get; }
         bool UseLimitedEggIncubators { get; }
         int UseGreatBallAboveCp { get; }
+        string UseBallOperator { get; }
         int UseUltraBallAboveCp { get; }
         int UseMasterBallAboveCp { get; }
         double UseGreatBallAboveIv { get; }

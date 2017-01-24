@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using POGOProtos.Data;
 using System.Collections.ObjectModel;
+using PoGo.NecroBot.Logic.Common;
 
 namespace PoGo.Necrobot.Window.Model
 {

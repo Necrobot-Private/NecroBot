@@ -53,6 +53,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public int GetMinStarDustForLevelUp => _settings.PokemonConfig.GetMinStarDustForLevelUp;
         public bool UseLuckyEggConstantly => _settings.PokemonConfig.UseLuckyEggConstantly;
         public bool UseIncenseConstantly => _settings.PokemonConfig.UseIncenseConstantly;
+        public string UseBallOperator => _settings.PokemonConfig.UseBallOperator.ToString();
         public float UseBerriesMinCp => _settings.PokemonConfig.UseBerriesMinCp;
         public float UseBerriesMinIv => _settings.PokemonConfig.UseBerriesMinIv;
         public double UseBerriesBelowCatchProbability => _settings.PokemonConfig.UseBerriesBelowCatchProbability;

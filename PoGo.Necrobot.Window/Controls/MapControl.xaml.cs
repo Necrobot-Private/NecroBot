@@ -190,23 +190,5 @@ namespace PoGo.Necrobot.Window.Controls
                 });
             }
         }
-
-        private void gmap_LayoutUpdated(object sender, EventArgs e)
-        {
-            Debug.Write("gmap_LayoutUpdated");
-        }
-
-        internal void EnsureContent()
-        {
-            //foreach (var item in this.allMarkers)
-            //{
-            //    gmap.Markers.Remove(item.Value);
-            //}
-
-            //foreach (var item in this.allMarkers)
-            //{
-            //    gmap.Markers.Add(item.Value);
-            //}
-        }
     }
 }

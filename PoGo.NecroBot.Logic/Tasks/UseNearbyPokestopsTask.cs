@@ -418,6 +418,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     });
                     if (fortSearch.Result == FortSearchResponse.Types.Result.Success)
                     {
+                        mapEmptyCount = 0;
                         foreach (var item in fortSearch.ItemsAwarded)
                         {
                             await session.Inventory.UpdateInventoryItem(item.ItemId, item.ItemCount);
