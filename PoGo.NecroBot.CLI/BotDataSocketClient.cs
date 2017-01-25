@@ -138,31 +138,18 @@ namespace PoGo.NecroBot.CLI
                             lock (events)
                             {
                                 processing.Clear();
-                                processing.AddRange(events.Take(10));
+                                processing.AddRange(events);
+                                events.Clear();
                             }
 
                             if (processing.Count > 0 && ws.IsAlive)
                             {
-                                //if (processing.Count == 1)
-                                //{
-                                //    //serialize list will make data bigger, code ugly but save bandwidth and help socket process faster
-                                //    var data = Serialize(processing.First());
-                                //    ws.Send($"42[\"pokemon\",{data}]");
-                                //}
-                                //else
-                                //{
                                 var data = Serialize(processing);
-
                                 var message = Encrypt(data);
                                 var actualMessage = JsonConvert.SerializeObject(message);
-
                                 ws.Send($"42[\"pokemons-secure\",{actualMessage}]");
-                                //}
                             }
-                            lock (events)
-                            {
-                                events.RemoveAll(x => processing.Any(t => t.EncounterId == x.EncounterId));
-                            }
+                           
                             await Task.Delay(POLLING_INTERVAL, cancellationToken);
                             ws.Ping();
                         }
@@ -181,6 +168,7 @@ namespace PoGo.NecroBot.CLI
                     {
                         //everytime disconnected with server bot wil reconnect after 15 sec
                         await Task.Delay(POLLING_INTERVAL, cancellationToken);
+
                     }
                 }
             }
