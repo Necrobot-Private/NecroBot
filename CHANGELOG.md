@@ -1,5 +1,11 @@
 # Change Log
 
+## [v1.0.0.72](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.72) (2017-01-24)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.71...v1.0.0.72)
+
+## Bugs & Enhancements
+- Bug fix: #640 - First time tutorial does not complete properly all the time.
+ 
 ## [v1.0.0.71](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.71) (2017-01-24)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.70...v1.0.0.71)
 
