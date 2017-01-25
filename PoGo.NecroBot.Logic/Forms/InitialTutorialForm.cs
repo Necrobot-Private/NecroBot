@@ -16,6 +16,7 @@ namespace PoGo.NecroBot.Logic.Forms
         private ISession session;
         private RepeatedField<TutorialState> tutState;
         CheckTosState state;
+        private EncounterTutorialCompleteResponse encounterTutorialCompleteResponse;
 
         public InitialTutorialForm()
         {
@@ -38,38 +39,57 @@ namespace PoGo.NecroBot.Logic.Forms
         {
             Task.Run(async () =>
                 {
-                    Gender gen = rdoMale.Checked ? Gender.Male : Gender.Female;
-
-                    var avatarRes = await session.Client.Player.SetAvatar(new PlayerAvatar()
+                    if (!tutState.Contains(TutorialState.AvatarSelection))
                     {
-                        Backpack = 0,
-                        Eyes = 0,
-                        Avatar = (int)gen,
-                        Hair = 0,
-                        Hat = 0,
-                        Pants = 0,
-                        Shirt = 0,
-                        Shoes = 0,
-                        Skin = 0
-                    });
+                        int gender = rdoMale.Checked ? 0 : 1;
 
-                    if (avatarRes.Status == SetAvatarResponse.Types.Status.AvatarAlreadySet ||
-                        avatarRes.Status == SetAvatarResponse.Types.Status.Success)
-                    {
-                        session.Client.Misc
-                            .MarkTutorialComplete(new RepeatedField<TutorialState>()
-                            {
-                                TutorialState.AvatarSelection
-                            })
-                            .Wait();
-                        session.EventDispatcher.Send(new NoticeEvent()
+                        var avatarRes = await session.Client.Player.SetAvatar(new PlayerAvatar()
                         {
-                            Message = $"Selected your avatar, now you are {gen}!"
+                            Backpack = 0,
+                            Eyes = 0,
+                            Avatar = gender,
+                            Hair = 0,
+                            Hat = 0,
+                            Pants = 0,
+                            Shirt = 0,
+                            Shoes = 0,
+                            Skin = 0
                         });
+
+                        if (avatarRes.Status == SetAvatarResponse.Types.Status.AvatarAlreadySet ||
+                            avatarRes.Status == SetAvatarResponse.Types.Status.Success)
+                        {
+                            encounterTutorialCompleteResponse = session.Client.Misc
+                                .MarkTutorialComplete(new RepeatedField<TutorialState>()
+                                {
+                                    TutorialState.AvatarSelection
+                                }).Result;
+
+                            if (encounterTutorialCompleteResponse.Result == EncounterTutorialCompleteResponse.Types.Result.Success)
+                            {
+                                session.EventDispatcher.Send(new NoticeEvent()
+                                {
+                                    Message = $"Selected your avatar, now you are {gender}!"
+                                });
+
+                                this.Invoke(new Action(() =>
+                                {
+                                    wizardControl1.NextPage();
+                                }), null);
+
+                                return true;
+                            }
+                        }
+
+                        this.Invoke(new Action(() =>
+                        {
+                            lblNameError.Text = "Error selecting avatar gender!";
+                            lblNameError.Visible = true;
+                            wizardControl1.PreviousPage();
+                        }));
                     }
                     return true;
-                })
-                .ContinueWith((t) => { this.Invoke(new Action(() => { wizardControl1.NextPage(); }), null); });
+                });
         }
 
         private const int WM_NCHITTEST = 0x84;
@@ -94,123 +114,137 @@ namespace PoGo.NecroBot.Logic.Forms
                 : rdoCharmander.Checked
                     ? PokemonId.Charmander
                     : PokemonId.Squirtle;
-            EncounterTutorialCompleteResponse res = null;
+
             Task.Run(() =>
                 {
-                    res = session.Client.Encounter.EncounterTutorialComplete(firstPoke).Result;
+                    if (!tutState.Contains(TutorialState.PokemonCapture))
+                    {
+                        encounterTutorialCompleteResponse = session.Client.Encounter.EncounterTutorialComplete(firstPoke).Result;
 
-                    //await DelayingUtils.DelayAsync(7000, 2000, cancellationToken);
-                    if (res.Result != EncounterTutorialCompleteResponse.Types.Result.Success)
-                        session.EventDispatcher.Send(new NoticeEvent()
+                        if (encounterTutorialCompleteResponse.Result == EncounterTutorialCompleteResponse.Types.Result.Success)
                         {
-                            Message = $"Caught Tutorial pokemon! it's {firstPoke}!"
-                        });
-                    //return true;
+                            session.EventDispatcher.Send(new NoticeEvent()
+                            {
+                                Message = $"Caught Tutorial pokemon! it's {firstPoke}!"
+                            });
 
-                    //state.CatchFirstPokemon(session, session.CancellationTokenSource.Token).Wait();
-                })
-                .ContinueWith((t) => { this.Invoke(new Action(() => { wizardControl1.NextPage(); }), null); });
+                            this.Invoke(new Action(() =>
+                            {
+                                wizardControl1.NextPage();
+                            }), null);
+                        }
+                        else
+                        {
+                            this.Invoke(new Action(() =>
+                            {
+                                lblNameError.Text = "Error catching tutorial pokemon.";
+                                lblNameError.Visible = true;
+                                wizardControl1.PreviousPage();
+                            }));
+                        }
+                    }
+                });
         }
 
         private void wizardPage6_Initialize(object sender, WizardPageInitEventArgs e)
         {
             string nickname = txtNick.Text;
             ClaimCodenameResponse res = null;
-
-
+            
             bool markTutorialComplete = false;
             string errorText = null;
             string warningText = null;
             string infoText = null;
             Task.Run(() =>
                 {
-                    res = session.Client.Misc.ClaimCodename(nickname).Result;
+                    if (!tutState.Contains(TutorialState.NameSelection))
+                    {
+                        res = session.Client.Misc.ClaimCodename(nickname).Result;
 
-                    switch (res.Status)
-                    {
-                        case ClaimCodenameResponse.Types.Status.Unset:
-                            errorText = "Unset, somehow";
-                            break;
-                        case ClaimCodenameResponse.Types.Status.Success:
-                            infoText = $"Your name is now: {res.Codename}";
-                            markTutorialComplete = true;
-                            break;
-                        case ClaimCodenameResponse.Types.Status.CodenameNotAvailable:
-                            errorText = $"That nickname ({nickname}) isn't available, pick another one!";
-                            break;
-                        case ClaimCodenameResponse.Types.Status.CodenameNotValid:
-                            errorText = $"That nickname ({nickname}) isn't valid, pick another one!";
-                            break;
-                        case ClaimCodenameResponse.Types.Status.CurrentOwner:
-                            warningText = $"You already own that nickname!";
-                            markTutorialComplete = true;
-                            break;
-                        case ClaimCodenameResponse.Types.Status.CodenameChangeNotAllowed:
-                            warningText = "You can't change your nickname anymore!";
-                            markTutorialComplete = true;
-                            break;
-                        default:
-                            errorText = "Unknown Niantic error while changing nickname.";
-                            break;
-                    }
-                    if (!string.IsNullOrEmpty(infoText))
-                    {
-                        session.EventDispatcher.Send(new NoticeEvent()
+                        switch (res.Status)
                         {
-                            Message = infoText
-                        });
-                    }
-                    else if (!string.IsNullOrEmpty(warningText))
-                    {
-                        session.EventDispatcher.Send(new WarnEvent()
+                            case ClaimCodenameResponse.Types.Status.Unset:
+                                errorText = "Unset, somehow";
+                                break;
+                            case ClaimCodenameResponse.Types.Status.Success:
+                                infoText = $"Your name is now: {res.Codename}";
+                                markTutorialComplete = true;
+                                break;
+                            case ClaimCodenameResponse.Types.Status.CodenameNotAvailable:
+                                errorText = $"That nickname ({nickname}) isn't available, pick another one!";
+                                break;
+                            case ClaimCodenameResponse.Types.Status.CodenameNotValid:
+                                errorText = $"That nickname ({nickname}) isn't valid, pick another one!";
+                                break;
+                            case ClaimCodenameResponse.Types.Status.CurrentOwner:
+                                warningText = $"You already own that nickname!";
+                                markTutorialComplete = true;
+                                break;
+                            case ClaimCodenameResponse.Types.Status.CodenameChangeNotAllowed:
+                                warningText = "You can't change your nickname anymore!";
+                                markTutorialComplete = true;
+                                break;
+                            default:
+                                errorText = "Unknown Niantic error while changing nickname.";
+                                break;
+                        }
+                        if (!string.IsNullOrEmpty(infoText))
                         {
-                            Message = warningText
-                        });
-                    }
-                    else if (!string.IsNullOrEmpty(errorText))
-                    {
-                        session.EventDispatcher.Send(new ErrorEvent()
+                            session.EventDispatcher.Send(new NoticeEvent()
+                            {
+                                Message = infoText
+                            });
+                        }
+                        else if (!string.IsNullOrEmpty(warningText))
                         {
-                            Message = errorText
-                        });
-                    }
+                            session.EventDispatcher.Send(new WarnEvent()
+                            {
+                                Message = warningText
+                            });
+                        }
+                        else if (!string.IsNullOrEmpty(errorText))
+                        {
+                            session.EventDispatcher.Send(new ErrorEvent()
+                            {
+                                Message = errorText
+                            });
+                        }
 
-                    if (markTutorialComplete)
-                    {
-                        var x = session.Client.Misc.MarkTutorialComplete(new RepeatedField<TutorialState>()
+                        if (markTutorialComplete)
+                        {
+                            encounterTutorialCompleteResponse = session.Client.Misc.MarkTutorialComplete(new RepeatedField<TutorialState>()
                             {
                                 TutorialState.NameSelection
-                            })
-                            .Result;
-                        session.EventDispatcher.Send(new NoticeEvent()
-                        {
-                            Message = "First time experience complete, looks like i just spinned an virtual pokestop :P"
-                        });
-                    }
+                            }).Result;
 
-                    //await DelayingUtils.DelayAsync(3000, 2000, cancellationToken);
-                })
-                .ContinueWith(async (t) =>
-                {
-                    if (markTutorialComplete)
-                    {
-                        await
-                            session.Client.Misc.MarkTutorialComplete(new RepeatedField<TutorialState>()
+                            if (encounterTutorialCompleteResponse.Result == EncounterTutorialCompleteResponse.Types.Result.Success)
                             {
-                                TutorialState.FirstTimeExperienceComplete
-                            });
-                        session.EventDispatcher.Send(new NoticeEvent()
-                        {
-                            Message = "First time experience complete, looks like i just spinned an virtual pokestop :P"
-                        });
-                        this.Invoke(new Action(() =>
-                        {
-                            this.DialogResult = DialogResult.OK;
-                            this.Close();
-                        }));
-                    }
-                    else
-                    {
+                                if (!tutState.Contains(TutorialState.FirstTimeExperienceComplete))
+                                {
+                                    encounterTutorialCompleteResponse = session.Client.Misc.MarkTutorialComplete(new RepeatedField<TutorialState>()
+                                    {
+                                        TutorialState.FirstTimeExperienceComplete
+                                    }).Result;
+
+                                    if (encounterTutorialCompleteResponse.Result == EncounterTutorialCompleteResponse.Types.Result.Success)
+                                    {
+                                        session.EventDispatcher.Send(new NoticeEvent()
+                                        {
+                                            Message = "First time experience complete, looks like i just spinned an virtual pokestop :P"
+                                        });
+
+                                        this.Invoke(new Action(() =>
+                                        {
+                                            this.DialogResult = DialogResult.OK;
+                                            this.Close();
+                                        }));
+
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+
                         this.Invoke(new Action(() =>
                         {
                             lblNameError.Text = errorText;
