@@ -31,16 +31,27 @@ namespace PoGo.NecroBot.Logic.State
 
             if (!tutState.Contains(TutorialState.LegalScreen))
             {
-                await
+                EncounterTutorialCompleteResponse res = await
                     session.Client.Misc.MarkTutorialComplete(new RepeatedField<TutorialState>()
                     {
                         TutorialState.LegalScreen
                     });
-                session.EventDispatcher.Send(new NoticeEvent()
+
+                if (res.Result == EncounterTutorialCompleteResponse.Types.Result.Success)
                 {
-                    Message = "Just read the Niantic ToS, looks legit, accepting!"
-                });
-                await DelayingUtils.DelayAsync(5000, 2000, cancellationToken);
+                    session.EventDispatcher.Send(new NoticeEvent()
+                    {
+                        Message = "Just read the Niantic ToS, looks legit, accepting!"
+                    });
+                    await DelayingUtils.DelayAsync(5000, 2000, cancellationToken);
+                }
+                else
+                {
+                    session.EventDispatcher.Send(new NoticeEvent()
+                    {
+                        Message = "Error reading the Niantic ToS!"
+                    });
+                }
             }
             InitialTutorialForm form = new InitialTutorialForm(this, tutState, session);
 
