@@ -24,6 +24,7 @@ using PokemonGo.RocketAPI.Extensions;
 using POGOProtos.Map.Fort;
 using POGOProtos.Networking.Responses;
 using static PoGo.NecroBot.Logic.Utils.PushNotificationClient;
+using TinyIoC;
 
 #endregion
 
@@ -44,7 +45,7 @@ namespace PoGo.NecroBot.Logic.State
         IElevationService ElevationService { get; set; }
         List<FortData> Forts { get; set; }
         List<FortData> VisibleForts { get; set; }
-        bool ReInitSessionWithNextBot(AuthConfig authConfig = null, double lat = 0, double lng = 0, double att = 0);
+        bool ReInitSessionWithNextBot(MultiAccountManager.BotAccount authConfig = null, double lat = 0, double lng = 0, double att = 0);
         void AddForts(List<FortData> mapObjects);
         void AddVisibleForts(List<FortData> mapObjects);
         Task<bool> WaitUntilActionAccept(BotActions action, int timeout = 30000);
@@ -176,51 +177,16 @@ namespace PoGo.NecroBot.Logic.State
         }
 
         //TODO : Need add BotManager to manage all feature related to multibot, 
-        public bool ReInitSessionWithNextBot(AuthConfig bot = null, double lat = 0, double lng = 0, double att = 0)
+        public bool ReInitSessionWithNextBot(MultiAccountManager.BotAccount bot = null, double lat = 0, double lng = 0, double att = 0)
         {
             this.CatchBlockTime = DateTime.Now; //remove any block
             MSniperServiceTask.BlockSnipe();
-            var currentAccount = this.accounts.FirstOrDefault(
-                x => (x.AuthType == AuthType.Ptc && x.PtcUsername == this.Settings.PtcUsername) ||
-                     (x.AuthType == AuthType.Google && x.GoogleUsername == this.Settings.GoogleUsername));
-            if (LoggedTime != DateTime.MinValue)
-            {
-                currentAccount.RuntimeTotal += (DateTime.Now - LoggedTime).TotalMinutes;
-            }
-
-            this.accounts = this.accounts.OrderByDescending(p => p.RuntimeTotal).ToList();
-            var first = this.accounts.First();
-            if (first.RuntimeTotal >= 100000)
-            {
-                first.RuntimeTotal = this.accounts.Min(p => p.RuntimeTotal);
-            }
-            this.Forts.Clear();
             this.VisibleForts.Clear();
-            var nextBot = bot != null
-                ? bot
-                : this.accounts.LastOrDefault(p => p != currentAccount && p.ReleaseBlockTime < DateTime.Now);
-            if (nextBot != null)
-            {
-                Logger.Write($"Switching to {nextBot.GoogleUsername}{nextBot.PtcUsername}...");
-                string body = "";
+            this.Forts.Clear();
 
-                File.Delete("runtime.log");
-                List<string> logs = new List<string>();
+            var manager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
 
-                foreach (var item in this.Accounts)
-                {
-                    int day = (int) item.RuntimeTotal / 1440;
-                    int hour = (int) (item.RuntimeTotal - (day * 1400)) / 60;
-                    int min = (int) (item.RuntimeTotal - (day * 1400) - hour * 60);
-
-                    body = body + $"{item.GoogleUsername}{item.PtcUsername}     {day:00}:{hour:00}:{min:00}:00\r\n";
-                    logs.Add($"{item.GoogleUsername}{item.PtcUsername};{item.RuntimeTotal}");
-                }
-                File.AppendAllLines("runtime.log", logs);
-
-                #pragma warning disable 4014 // added to get rid of compiler warning. Remove this if async code is used below.
-                SendNotification(this, $"Account changed to {nextBot.GoogleUsername}{nextBot.PtcUsername}", body);
-                #pragma warning restore 4014
+            var nextBot = bot == null? manager.GetSwitchableAccount() : bot;
 
                 this.Settings.AuthType = nextBot.AuthType;
                 this.Settings.GooglePassword = nextBot.GooglePassword;
@@ -238,26 +204,11 @@ namespace PoGo.NecroBot.Logic.State
                 this.EventDispatcher.Send(new BotSwitchedEvent()
                 {
                 });
-
-                if (this.LogicSettings.MultipleBotConfig.DisplayList)
-                {
-                    foreach (var item in this.accounts)
-                    {
-                        Logger.Write($"{item.PtcUsername}{item.GoogleUsername} \tRuntime : {item.RuntimeTotal:0.00} min ");
-                    }
-                }
-            }
-            else
+            if (this.LogicSettings.MultipleBotConfig.DisplayList)
             {
-                var nextRelease = this.accounts.Min(x => (x.ReleaseBlockTime - DateTime.Now).TotalMinutes);
-
-                #pragma warning disable 4014 // added to get rid of compiler warning. Remove this if async code is used below.
-                SendNotification(this, "All accounts are being blocked", $"None of yours account available to switch, bot will sleep for {nextRelease} mins until next acount available to run", true);
-                #pragma warning restore 4014
-
-                Task.Delay((int) nextRelease * 60 * 1000).Wait();
+                manager.DumpAccountList();
             }
-            return nextBot != null;
+           return true;
         }
 
         public void AddForts(List<FortData> data)

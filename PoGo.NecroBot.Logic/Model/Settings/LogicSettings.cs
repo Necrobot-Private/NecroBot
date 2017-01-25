@@ -53,6 +53,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public int GetMinStarDustForLevelUp => _settings.PokemonConfig.GetMinStarDustForLevelUp;
         public bool UseLuckyEggConstantly => _settings.PokemonConfig.UseLuckyEggConstantly;
         public bool UseIncenseConstantly => _settings.PokemonConfig.UseIncenseConstantly;
+        public string UseBallOperator => _settings.PokemonConfig.UseBallOperator.ToString();
         public float UseBerriesMinCp => _settings.PokemonConfig.UseBerriesMinCp;
         public float UseBerriesMinIv => _settings.PokemonConfig.UseBerriesMinIv;
         public double UseBerriesBelowCatchProbability => _settings.PokemonConfig.UseBerriesBelowCatchProbability;
@@ -119,6 +120,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool RenamePokemon => _settings.PokemonConfig.RenamePokemon;
         public bool RenameOnlyAboveIv => _settings.PokemonConfig.RenameOnlyAboveIv;
         public float FavoriteMinIvPercentage => _settings.PokemonConfig.FavoriteMinIvPercentage;
+        public float FavoriteMinCp => _settings.PokemonConfig.FavoriteMinCp;
         public bool AutoFavoritePokemon => _settings.PokemonConfig.AutoFavoritePokemon;
         public string RenameTemplate => _settings.PokemonConfig.RenameTemplate;
         public int AmountOfPokemonToDisplayOnStart => _settings.ConsoleConfig.AmountOfPokemonToDisplayOnStart;

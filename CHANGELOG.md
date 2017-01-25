@@ -1,13 +1,33 @@
 # Change Log
 
+## [v1.0.0.72](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.72) (2017-01-24)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.71...v1.0.0.72)
+
+## Bugs & Enhancements
+- Bug fix: #640 - First time tutorial does not complete properly all the time.
+ 
+## [v1.0.0.71](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.71) (2017-01-24)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.70...v1.0.0.71)
+
+## Bugs & Enhancements
+- Bug fix: Re-enable killswitch override (use at your own discretion)
+- Enhancements to multi account manager
+
+## [v1.0.0.70](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.70) (2017-01-23)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.69...v1.0.0.70)
+
+## Bugs & Enhancements
+- Bug fix: #91
+- Ban safety - More conservative default daily limits for pokestops and pokemons caught.
+
 ## [v1.0.0.69](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.69) (2017-01-22)
-[Full Changelog](https://github.c-/Necrobot-Private/NecroBot/compare/v1.0.0.66...v1.0.0.69)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.66...v1.0.0.69)
 ## Bugs & Enhancements
 - Bug fix: More fixes for API 0.53
 - Bug fix: #598 - Empty inventory in WPF GUI
 
 ## [v1.0.0.66](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.62) (2017-01-21)
-[Full Changelog](https://github.c-/Necrobot-Private/NecroBot/compare/v1.0.0.62...v1.0.0.66)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.62...v1.0.0.66)
 ## Bugs & Enhancement---	Allow rename favorited Pokemon
 -	Support API 0.53 from FP Hash service
 - Fix scroll on window GUI

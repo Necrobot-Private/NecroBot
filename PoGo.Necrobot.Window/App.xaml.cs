@@ -12,6 +12,10 @@ using PoGo.NecroBot.Logic.State;
 using PoGo.Necrobot.Window.Win32;
 using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic;
+using PoGo.NecroBot.Logic.Model.Settings;
+using System.IO;
+using PoGo.NecroBot.Logic.Common;
+using TinyIoC;
 
 namespace PoGo.Necrobot.Window
 {
@@ -40,9 +44,6 @@ namespace PoGo.Necrobot.Window
             base.OnStartup(e);
         }
 
-       
-        
-
         protected override void OnLoadCompleted(NavigationEventArgs e)
         {
             
@@ -51,7 +52,27 @@ namespace PoGo.Necrobot.Window
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-           // base.OnStartup(e);
+            string languageCode = "en";
+            
+            var profileConfigPath = Path.Combine(Directory.GetCurrentDirectory(), "config");
+            var configFile = Path.Combine(profileConfigPath, "config.json");
+            var translationsDir = Path.Combine(profileConfigPath, "Translations");
+            var subPath = "";
+            var validateJSON = false; // TODO Need to re-enable validation for GUI.
+
+            if (File.Exists(configFile))
+            {
+                var config = GlobalSettings.Load(subPath, validateJSON);
+                languageCode = config.ConsoleConfig.TranslationLanguageCode;
+            }
+
+            if (!Directory.Exists(translationsDir))
+            {
+                Directory.CreateDirectory(translationsDir);
+            }
+
+            var uiTranslation = new UITranslation(languageCode);
+            TinyIoCContainer.Current.Register<UITranslation>(uiTranslation);
 
             MainWindow = new MainClientWindow();
 

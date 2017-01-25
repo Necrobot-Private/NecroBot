@@ -212,6 +212,7 @@
     <Compile Include="Captcha\CaptchaSolutionClient.cs" />
     <Compile Include="Captcha\TwoCaptchaClient.cs" />
     <Compile Include="Common\PokemonGradeHelper.cs" />
+    <Compile Include="Common\UITranslation.cs" />
     <Compile Include="DataDumper\IDumper.cs" />
     <Compile Include="DataDumper\Dumper.cs" />
     <Compile Include="Common\Translations.cs" />
@@ -281,12 +282,24 @@
     <Compile Include="Forms\CaptchaSolveForm.Designer.cs">
       <DependentUpon>CaptchaSolveForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\EXComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\EXListView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Forms\Extentions.cs" />
     <Compile Include="Forms\InitialTutorialForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\InitialTutorialForm.Designer.cs">
       <DependentUpon>InitialTutorialForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SelectAccountForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SelectAccountForm.Designer.cs">
+      <DependentUpon>SelectAccountForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Interfaces\Configuration\ILogicSettings.cs" />
     <Compile Include="Inventory.cs" />
@@ -364,6 +377,7 @@
     <Compile Include="Model\Settings\YoursWalkConfig.cs" />
     <Compile Include="Model\Mapzen\MapzenWalk.cs" />
     <Compile Include="Model\Yours\YoursWalk.cs" />
+    <Compile Include="MultiAccountManager.cs" />
     <Compile Include="Navigation.cs" />
     <Compile Include="PoGoUtils\PokemonInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -486,6 +500,7 @@
     <Compile Include="Tasks\UseIncubatorsTask.cs" />
     <Compile Include="Tasks\UseLuckyEggConstantlyTask.cs" />
     <Compile Include="Tasks\UseNearbyPokestopsTask.cs" />
+    <Compile Include="TinyIoC.cs" />
     <Compile Include="Utils\DelayingUtils.cs" />
     <Compile Include="Utils\EggWalker.cs" />
     <Compile Include="Utils\ErrorHandler.cs" />
@@ -512,6 +527,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\InitialTutorialForm.resx">
       <DependentUpon>InitialTutorialForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SelectAccountForm.resx">
+      <DependentUpon>SelectAccountForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

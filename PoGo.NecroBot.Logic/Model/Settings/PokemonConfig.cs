@@ -11,7 +11,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         {
         }
 
-        internal enum Operator
+        public enum Operator
         {
             or,
             and
@@ -157,6 +157,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [Range(0, 100)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 23)]
         public float FavoriteMinIvPercentage { get; set; }
+
 
         [ExcelConfig(Description = "Allow bot auto favorite pokemon after catch", Position = 24)]
         [DefaultValue(false)]
@@ -395,5 +396,19 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 63)]
         [Range(1,100)]
         public int BulkTransferSize { get; set; }
+
+        [DefaultValue(Operator.or)]
+        [ExcelConfig(Description = "Use ball operator between IV and CP ", Position = 634)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 63)]
+        public Operator UseBallOperator  { get; set; }
+
+
+        /*Favorite CP*/
+        [ExcelConfig(Description = "Set min CP for auto favorite pokemon", Position = 64)]
+        [DefaultValue(0)]
+        [Range(0, 9999)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 64)]
+        public float FavoriteMinCp { get; set; }
+
     }
 }
