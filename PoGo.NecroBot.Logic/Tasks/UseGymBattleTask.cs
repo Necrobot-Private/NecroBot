@@ -72,7 +72,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                             //trainning logic will come here
                             FortDeployPokemonResponse response = await DeployPokemonToGym(session, fortInfo, fortDetails, cancellationToken);
 
-                            if (response != null)
+                            if (response != null && response.Result == FortDeployPokemonResponse.Types.Result.Success)
                             {
                                 await Task.Delay(2000);
                                 deployedPokemons = await session.Inventory.GetDeployedPokemons();
@@ -847,7 +847,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                     {
                                         attacker = await GetBestInBattle(session, attackResult.ActiveDefender.PokemonData);
                                         if (attacker != null)
-                                            attackResult = await SwitchPokemon(session, currentFortData.Id, startResponse.BattleId, attacker, attackResult.ActiveAttacker.PokemonData, a2, serverMs);
+                                            /*attackResult = */await SwitchPokemon(session, currentFortData.Id, startResponse.BattleId, attacker, attackResult.ActiveAttacker.PokemonData, a2, serverMs);
                                     }
                                 }
                                 if (attacker.Id != attackResult?.ActiveAttacker?.PokemonData.Id)
@@ -856,10 +856,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                                     TimedLog("We are switching pokemon after die");
                                     attacker = await GetBestInBattle(session, attackResult.ActiveDefender.PokemonData);
                                     if (attacker != null)
-                                        attackResult = await SwitchPokemon(session, currentFortData.Id, startResponse.BattleId, attacker, attackResult.ActiveAttacker.PokemonData, a2, serverMs);
-                                    //attacker = attackResult.ActiveAttacker.PokemonData;
-                                    //await Task.Delay(1000);
-                                    Logger.Write(string.Format("We ware fainted in battle, new attacker is: {0} ({1} CP){2}", attacker.PokemonId, attacker.Cp, Environment.NewLine), LogLevel.Info, ConsoleColor.Magenta);
+                                    {
+                                        /*attackResult = */await SwitchPokemon(session, currentFortData.Id, startResponse.BattleId, attacker, attackResult.ActiveAttacker.PokemonData, a2, serverMs);
+                                        //attacker = attackResult.ActiveAttacker.PokemonData;
+                                        //await Task.Delay(1000);
+                                        Logger.Write(string.Format("We ware fainted in battle, new attacker is: {0} ({1} CP){2}", attacker.PokemonId, attacker.Cp, Environment.NewLine), LogLevel.Info, ConsoleColor.Magenta);
+                                    }
                                 }
                                 Console.SetCursorPosition(0, Console.CursorTop - 1);
                                 Logger.Write($"(GYM ATTACK) : Defender {attackResult.ActiveDefender.PokemonData.PokemonId.ToString()  } HP {attackResult.ActiveDefender.CurrentHealth} - Attacker  {attackResult.ActiveAttacker.PokemonData.PokemonId.ToString()}   HP/Sta {attackResult.ActiveAttacker.CurrentHealth}/{attackResult.ActiveAttacker.CurrentEnergy}        ");
@@ -911,21 +913,26 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static async Task<AttackGymResponse> SwitchPokemon(ISession session, string fortId, string battleId, PokemonData newAttacker, PokemonData oldAttacker, BattleAction actionReceived, long serverMs)
         {
-            const int swithTime = 1500;
+            var _templates = await session.Client.Download.GetItemTemplates();
+            if (PokemonGo.RocketAPI.Helpers.PokemonMeta.BattleSettings == null)
+                PokemonGo.RocketAPI.Helpers.PokemonMeta.Update(_templates);
+            int swithTime = PokemonGo.RocketAPI.Helpers.PokemonMeta.BattleSettings.SwapDurationMs;
             DateTime now = DateTimeFromUnixTimestampMillis(serverMs);
             BattleAction action = new BattleAction()
             {
                 Type = BattleActionType.ActionSwapPokemon,
                 DurationMs = swithTime,
                 ActionStartMs = now.AddMilliseconds(swithTime).ToUnixTime(),
-                //                ActivePokemonId = newAttacker.Id,
-                //                TargetPokemonId = newAttacker.Id,
+
+                ActivePokemonId = newAttacker.Id,
+                
+                //TargetPokemonId = newAttacker.Id,
 
                 //ActivePokemonId = newAttacker.Id,
                 //TargetPokemonId = oldAttacker.Id,
 
-                ActivePokemonId = oldAttacker.Id,
-                TargetPokemonId = newAttacker.Id,
+                //ActivePokemonId = oldAttacker.Id,
+                //TargetPokemonId = newAttacker.Id,
             };
             await Task.Delay(swithTime);
             AttackGymResponse resp = await session.Client.Fort.AttackGym(fortId, battleId, new List<BattleAction>() { action }, actionReceived);
