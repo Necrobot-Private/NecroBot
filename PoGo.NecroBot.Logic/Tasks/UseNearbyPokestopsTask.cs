@@ -227,13 +227,24 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 // Return the first gym in range.
                 if (gyms.Count() > 0)
+                {
+                    gyms.OrderBy(p => p.GymPoints);
                     return gyms.FirstOrDefault();
+                }
+               
             }
 
             if (forts.Count == 1)
                 return forts.FirstOrDefault();
 
-            return forts.Skip((int)DateTime.Now.Ticks % 2).FirstOrDefault();
+            
+            if (forts.Count < 4)
+                return forts.Skip((int)DateTime.Now.Ticks % 2).FirstOrDefault();
+            else
+            {
+                Random rnd = new Random();
+                return forts.Skip(rnd.Next(0,3)).FirstOrDefault();
+            }
         }
 
         public static async Task SpinPokestopNearBy(ISession session, CancellationToken cancellationToken, FortData destinationFort = null)
