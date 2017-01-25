@@ -58,6 +58,7 @@ namespace PoGo.NecroBot.Logic.State
         Statistics RuntimeStatistics { get; }
 
         void BlockCurrentBot(int expired = 15);
+        List<GymTeamState> GymTeam { get; set; }
     }
 
     public class Session : ISession
@@ -122,6 +123,8 @@ namespace PoGo.NecroBot.Logic.State
                     }
                 }
             }
+
+            GymTeam = new List<GymTeamState>();
         }
 
         public List<FortData> Forts { get; set; }
@@ -260,5 +263,7 @@ namespace PoGo.NecroBot.Logic.State
 
             currentAccount.ReleaseBlockTime = DateTime.Now.AddMinutes(expired);
         }
+
+        public List<GymTeamState> GymTeam { get; set; }
     }
 }

@@ -28,6 +28,7 @@ namespace PoGo.NecroBot.Logic.Tasks
     {
         private static int _startBattleCounter = 3;
         private static readonly bool _logTimings = true;
+        private static readonly DateTime UnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
         public static async Task Execute(ISession session, CancellationToken cancellationToken, FortData gym, FortDetailsResponse fortInfo)
         {
@@ -73,13 +74,13 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                             if (response != null)
                             {
-                                if (deployedList == null)
-                                    deployedList = new List<PokemonData> { response.PokemonData };
-                                else
-                                    deployedList.Add(response.PokemonData);
-
-                                if (response.GymState != null && response.GymState.FortData != null)
-                                    gym = response.GymState.FortData;
+                                await Task.Delay(2000);
+                                deployedPokemons = await session.Inventory.GetDeployedPokemons();
+                                await Task.Delay(2000);
+                                List<FortData> allForts = await UseNearbyPokestopsTask.UpdateFortsData(session);
+                                gym = allForts.FirstOrDefault(f => f.Id == gym.Id);
+                                await Task.Delay(2000);
+                                fortDetails = await session.Client.Fort.GetGymDetails(gym.Id, gym.Latitude, gym.Longitude);
                             }
 
                             if (CanTrainGym(session, gym, fortDetails, deployedList))
@@ -158,9 +159,10 @@ namespace PoGo.NecroBot.Logic.Tasks
             List<BattleAction> battleActions = new List<BattleAction>();
             ulong defenderPokemonId = defenders.First().Id;
 
-            TimedLog("Attacking team is: " + string.Join(", ", badassPokemon.Select(s => s.PokemonId)));
+            //TimedLog("Attacking team is: " + string.Join(", ", badassPokemon.Select(s => s.PokemonId)));
             while (index < defenders.Count())
             {
+                TimedLog("Attacking team is: "+string.Join(", ", session.GymTeam.Select(s=>string.Format("{0} ({1} HP)", s.attacker.PokemonId, s.HpState))));
                 cancellationToken.ThrowIfCancellationRequested();
                 var thisAttackActions = new List<BattleAction>();
 
@@ -199,7 +201,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     case BattleState.Active:
                         Logger.Write($"Time to start Attack Mode", LogLevel.Gym, ConsoleColor.DarkYellow);
-                        thisAttackActions = await AttackGym(session, cancellationToken, gym, result);
+                        thisAttackActions = await AttackGym(session, cancellationToken, gym, result, index);
                         battleActions.AddRange(thisAttackActions);
                         break;
                     case BattleState.Defeated:
@@ -229,10 +231,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                     break;
                 }
 
-                var faintedPKM = battleActions.Where(x => x != null && x.Type == BattleActionType.ActionFaint).Select(x => x.ActivePokemonId).Distinct();
-                var livePokemons = pokemonDatas.Where(x => !faintedPKM.Any(y => y == x.Id));
-                var faintedPokemons = pokemonDatas.Where(x => faintedPKM.Any(y => y == x.Id));
-                pokemonDatas = livePokemons.Concat(faintedPokemons).ToArray();
+                //var faintedPKM = battleActions.Where(x => x != null && x.Type == BattleActionType.ActionFaint).Select(x => x.ActivePokemonId).Distinct();
+                //var livePokemons = pokemonDatas.Where(x => !faintedPKM.Any(y => y == x.Id));
+                //var faintedPokemons = pokemonDatas.Where(x => faintedPKM.Any(y => y == x.Id));
+                //pokemonDatas = livePokemons.Concat(faintedPokemons).ToArray();
 
                 if (lastAction.Type == BattleActionType.ActionVictory)
                 {
@@ -363,23 +365,26 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             List<PokemonData> attackers = new List<PokemonData>();
 
-            while (attackers.Count() < 6)
+            if (defenders.Count() > 0)
             {
-                foreach (var defender in defenders)
+                while (attackers.Count() < 6)
                 {
-                    var attacker = await GetBestAgainst(session, allPokemons, attackers, defender);
-                    attackers.Add(attacker);
+                    foreach (var defender in defenders)
+                    {
+                        var attacker = await GetBestAgainst(session, allPokemons, attackers, defender);
+                        attackers.Add(attacker);
+                    }
                 }
             }
 
-            //if (attackers.Count < 6)
-            //{
-            //    var rest = await GetBestToTeam(session, allPokemons, attackers);
-            //    attackers.AddRange(rest);
-            //}
-
             if (attackers.Count > 6)
                 attackers = attackers.OrderBy(o => o.Cp).Take(6 - attackers.Count).ToList();
+
+            session.GymTeam.Clear();
+            attackers.ForEach(a =>
+            {
+                session.GymTeam.Add(new GymTeamState() { attacker = a, HpState = a.StaminaMax });
+            });
 
             return attackers;
         }
@@ -410,6 +415,40 @@ namespace PoGo.NecroBot.Logic.Tasks
             else
                 TimedLog(string.Format("Best against {0} with is {1} type will be {2} ({6} CP) with attacks {3} and {4} (best attacks types will be {5})", defender.PokemonId, pt1, myAttacker.PokemonId, myAttacker.Move1, myAttacker.Move2, string.Join(", ", attacks), myAttacker.Cp));
             return myAttacker;
+        }
+
+        private static async Task<PokemonData> GetBestInBattle(ISession session, PokemonData defender)
+        {
+            var pokemonsSetting = await session.Inventory.GetPokemonSettings();
+            PokemonType pt1 = pokemonsSetting.Where(f => f.PokemonId == defender.PokemonId).Select(s => s.Type).FirstOrDefault();
+            List<PokemonType> attacks = new List<PokemonType>(GetOppositeTypes(pt1));
+
+            TimedLog(string.Format("Searching for new attacker against {0} ({1})", defender.PokemonId, pt1));
+
+            var moveSettings = await session.Inventory.GetMoveSettings();
+            var moves = moveSettings.Where(w => attacks.Any(a => a == w.PokemonType));
+
+            PokemonData newAttacker = session.GymTeam.Where(w =>
+                        moves.Any(a => a.MovementId == w.attacker.Move1 || a.MovementId == w.attacker.Move2) && //by move
+                        w.HpState > 0
+                    )
+                .OrderByDescending(o => o.attacker.Cp)
+                .Select(s => s.attacker)
+                .FirstOrDefault();
+
+            if (newAttacker == null)
+            {
+                TimedLog("No best found, takeing by CP");
+                newAttacker = session.GymTeam.Where(w => w.HpState > 0)
+                .OrderByDescending(o => o.attacker.Cp)
+                .Select(s => s.attacker)
+                .FirstOrDefault();
+            }
+
+            if (newAttacker != null)
+                TimedLog(string.Format("New atacker to switch will be {0} {1} CP {2}", newAttacker.PokemonId, newAttacker.Cp, newAttacker.Id));
+
+            return newAttacker;
         }
 
         private static async Task<IEnumerable<PokemonData>> GetBestToTeam(ISession session, IEnumerable<PokemonData> myPokemons, List<PokemonData> myTeam)
@@ -709,11 +748,11 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static int _currentAttackerEnergy;
 
-        // ReSharper disable once UnusedParameter.Local
         private static async Task<List<BattleAction>> AttackGym(ISession session, 
             CancellationToken cancellationToken, 
             FortData currentFortData, 
-            StartGymBattleResponse startResponse)
+            StartGymBattleResponse startResponse,
+            int counter)
         {
             long serverMs = startResponse.BattleLog.BattleStartTimestampMs;
             var lastActions = startResponse.BattleLog.BattleActions.ToList();
@@ -741,7 +780,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     if (last?.Type == BattleActionType.ActionPlayerJoin)
                     {
-                        await Task.Delay(3000);
+                        await Task.Delay(500);
                         TimedLog("Sleep after join battle");
                     }
 
@@ -801,16 +840,30 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 TimedLog("Battlestate active start");
                                 _currentAttackerEnergy = attackResult.ActiveAttacker.CurrentEnergy;
                                 if (attacker == null)
-                                    attacker = attackResult.ActiveAttacker.PokemonData;
+                                {
+                                    if (counter == 1) //first iteration, we have good attacker
+                                        attacker = attackResult.ActiveAttacker.PokemonData;
+                                    else //next iteration so we should to swith to proper attacker for new defender
+                                    {
+                                        attacker = await GetBestInBattle(session, attackResult.ActiveDefender.PokemonData);
+                                        if (attacker != null)
+                                            attackResult = await SwitchPokemon(session, currentFortData.Id, startResponse.BattleId, attacker, attackResult.ActiveAttacker.PokemonData, a2, serverMs);
+                                    }
+                                }
                                 if (attacker.Id != attackResult?.ActiveAttacker?.PokemonData.Id)
                                 {
-                                    attacker = attackResult.ActiveAttacker.PokemonData;
-                                    await Task.Delay(2000);
+                                    session.GymTeam.Where(w => w.attacker.Id == attacker.Id).FirstOrDefault().HpState = 0;
+                                    TimedLog("We are switching pokemon after die");
+                                    attacker = await GetBestInBattle(session, attackResult.ActiveDefender.PokemonData);
+                                    if (attacker != null)
+                                        attackResult = await SwitchPokemon(session, currentFortData.Id, startResponse.BattleId, attacker, attackResult.ActiveAttacker.PokemonData, a2, serverMs);
+                                    //attacker = attackResult.ActiveAttacker.PokemonData;
+                                    //await Task.Delay(1000);
                                     Logger.Write(string.Format("We ware fainted in battle, new attacker is: {0} ({1} CP){2}", attacker.PokemonId, attacker.Cp, Environment.NewLine), LogLevel.Info, ConsoleColor.Magenta);
                                 }
                                 Console.SetCursorPosition(0, Console.CursorTop - 1);
                                 Logger.Write($"(GYM ATTACK) : Defender {attackResult.ActiveDefender.PokemonData.PokemonId.ToString()  } HP {attackResult.ActiveDefender.CurrentHealth} - Attacker  {attackResult.ActiveAttacker.PokemonData.PokemonId.ToString()}   HP/Sta {attackResult.ActiveAttacker.CurrentHealth}/{attackResult.ActiveAttacker.CurrentEnergy}        ");
-
+                                session.GymTeam.Where(w => w.attacker.Id == attacker.Id).FirstOrDefault().HpState = attackResult.ActiveAttacker.CurrentHealth;
                                 break;
 
                             case BattleState.Defeated:
@@ -856,28 +909,46 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         }
 
-        private static readonly DateTime UnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        private static async Task<AttackGymResponse> SwitchPokemon(ISession session, string fortId, string battleId, PokemonData newAttacker, PokemonData oldAttacker, BattleAction actionReceived, long serverMs)
+        {
+            const int swithTime = 1500;
+            DateTime now = DateTimeFromUnixTimestampMillis(serverMs);
+            BattleAction action = new BattleAction()
+            {
+                Type = BattleActionType.ActionSwapPokemon,
+                DurationMs = swithTime,
+                ActionStartMs = now.AddMilliseconds(swithTime).ToUnixTime(),
+                //                ActivePokemonId = newAttacker.Id,
+                //                TargetPokemonId = newAttacker.Id,
+
+                //ActivePokemonId = newAttacker.Id,
+                //TargetPokemonId = oldAttacker.Id,
+
+                ActivePokemonId = oldAttacker.Id,
+                TargetPokemonId = newAttacker.Id,
+            };
+            await Task.Delay(swithTime);
+            AttackGymResponse resp = await session.Client.Fort.AttackGym(fortId, battleId, new List<BattleAction>() { action }, actionReceived);
+            await Task.Delay(swithTime);
+            TimedLog(string.Format("Switching pokemon {0} result: {1}", action, resp));
+            return resp;
+        }
+
         public static DateTime DateTimeFromUnixTimestampMillis(long millis)
         {
             return UnixEpoch.AddMilliseconds(millis);
         }
 
-        //private static int _pos;
         public static async Task<List<BattleAction>> GetActions(ISession sessison, long serverMs, PokemonData attacker, PokemonData defender, int energy)
         {
             Random rnd = new Random();
             List<BattleAction> actions = new List<BattleAction>();
             DateTime now = DateTimeFromUnixTimestampMillis(serverMs);
-            //Logger.Write($"AttackGym Count: {_pos}");
 
             var inventory = sessison.Inventory;
 
             if (attacker != null && defender != null)
             {
-                //var move1 = PokemonMoveMetaRegistry.GetMeta(attacker.Move1);
-                //var move2 = PokemonMoveMetaRegistry.GetMeta(attacker.Move2);
-                //  Logger.Write($"Retrieved Move Metadata, Move1: {move1.GetTime()} - Move2: {move2.GetTime()}");
-
                 var moveSetting = await inventory.GetMoveSetting(attacker.Move1);
                 var specialMove = await inventory.GetMoveSetting(attacker.Move2);
 
