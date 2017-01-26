@@ -60,7 +60,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [ExcelConfig(Key = "Auto Snipe Candy", Description = "Set number of candy you want bot snipe for this pokemon", Position = 7)]
         [DefaultValue(2000)]
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 7)]
-        public int AustoSnipeCandy { get; set; }
+        public int AutoSnipeCandy { get; set; }
 
         internal static Dictionary<PokemonId, SnipeFilter> SniperFilterDefault()
         {
