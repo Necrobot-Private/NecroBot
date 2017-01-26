@@ -484,7 +484,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 SnipeIV = session.LogicSettings.MinIVForAutoSnipe,
                 VerifiedOnly = session.LogicSettings.AutosnipeVerifiedOnly,
-                AustoSnipeCandy = session.LogicSettings.DefaultAutoSnipeCandy
+                AutoSnipeCandy = session.LogicSettings.DefaultAutoSnipeCandy
             };
 
             var pokemonId = (PokemonId) item.PokemonId;
@@ -512,7 +512,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 if (filter.VerifiedOnly && item.EncounterId == 0) return false;
                 //check candy
 
-                if (candy < filter.AustoSnipeCandy)
+                if (candy < filter.AutoSnipeCandy)
                 {
                     autoSnipePokemons.Add(item);
                     return true;
