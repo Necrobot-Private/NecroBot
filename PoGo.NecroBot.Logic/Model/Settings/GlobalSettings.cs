@@ -479,7 +479,24 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                         ((JObject) settings["UpdateConfig"]).Remove("TransferConfigAndAuthOnUpdate");
                         break;
 
-                    // Add more here.
+                    case 6:
+                        // Rename AustoSnipeCandy to AutoSnipeCandy
+                        if (settings["SnipePokemonFilter"] != null)
+                        {
+                            foreach (var x in settings["SnipePokemonFilter"])
+                            {
+                                var key = ((JProperty)(x)).Name;
+                                var filter = ((JProperty)(x)).Value;
+
+                                if (filter["AustoSnipeCandy"] != null)
+                                {
+                                    filter["AutoSnipeCandy"] = filter["AustoSnipeCandy"];
+                                    ((JObject)filter).Remove("AustoSnipeCandy");
+                                }
+                            }
+                        }
+                        break;
+                        // Add more here.
                 }
             }
         }
