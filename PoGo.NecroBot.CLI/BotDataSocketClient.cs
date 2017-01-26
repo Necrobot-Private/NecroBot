@@ -48,6 +48,7 @@ namespace PoGo.NecroBot.CLI
         {
             lock (events)
             {
+                if (eve.IsRecievedFromSocket) return;
                 events.Add(eve);
             }
         }
