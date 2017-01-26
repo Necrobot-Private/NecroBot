@@ -75,11 +75,16 @@ namespace PoGo.NecroBot.Logic.Tasks
                             if (response != null && response.Result == FortDeployPokemonResponse.Types.Result.Success)
                             {
                                 await Task.Delay(2000);
-                                deployedPokemons = await session.Inventory.GetDeployedPokemons();
-                                await Task.Delay(2000);
-                                List<FortData> allForts = await UseNearbyPokestopsTask.UpdateFortsData(session);
-                                gym = allForts.FirstOrDefault(f => f.Id == gym.Id);
-                                await Task.Delay(2000);
+                                var refreshResult = await session.Inventory.RefreshCachedInventory();
+                                if (refreshResult.Success)
+                                {
+                                    deployedPokemons = await session.Inventory.GetDeployedPokemons();
+                                    deployedList = new List<PokemonData>(deployedPokemons);
+                                    await Task.Delay(2000);
+                                    List<FortData> allForts = await UseNearbyPokestopsTask.UpdateFortsData(session);
+                                    gym = allForts.FirstOrDefault(f => f.Id == gym.Id);
+                                    await Task.Delay(2000);
+                                }
                                 fortDetails = await session.Client.Fort.GetGymDetails(gym.Id, gym.Latitude, gym.Longitude);
                             }
 
@@ -231,10 +236,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                     break;
                 }
 
-                //var faintedPKM = battleActions.Where(x => x != null && x.Type == BattleActionType.ActionFaint).Select(x => x.ActivePokemonId).Distinct();
-                //var livePokemons = pokemonDatas.Where(x => !faintedPKM.Any(y => y == x.Id));
-                //var faintedPokemons = pokemonDatas.Where(x => faintedPKM.Any(y => y == x.Id));
-                //pokemonDatas = livePokemons.Concat(faintedPokemons).ToArray();
+                var faintedPKM = battleActions.Where(x => x != null && x.Type == BattleActionType.ActionFaint).Select(x => x.ActivePokemonId).Distinct();
+                var livePokemons = pokemonDatas.Where(x => !faintedPKM.Any(y => y == x.Id));
+                var faintedPokemons = pokemonDatas.Where(x => faintedPKM.Any(y => y == x.Id));
+                pokemonDatas = livePokemons.Concat(faintedPokemons).ToArray();
 
                 if (lastAction.Type == BattleActionType.ActionVictory)
                 {
@@ -841,27 +846,27 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 _currentAttackerEnergy = attackResult.ActiveAttacker.CurrentEnergy;
                                 if (attacker == null)
                                 {
-                                    if (counter == 1) //first iteration, we have good attacker
+                                    //if (counter == 1) //first iteration, we have good attacker
                                         attacker = attackResult.ActiveAttacker.PokemonData;
-                                    else //next iteration so we should to swith to proper attacker for new defender
-                                    {
-                                        attacker = await GetBestInBattle(session, attackResult.ActiveDefender.PokemonData);
-                                        if (attacker != null)
-                                            /*attackResult = */await SwitchPokemon(session, currentFortData.Id, startResponse.BattleId, attacker, attackResult.ActiveAttacker.PokemonData, a2, serverMs);
-                                    }
+                                    //else //next iteration so we should to swith to proper attacker for new defender
+                                    //{
+                                    //    attacker = await GetBestInBattle(session, attackResult.ActiveDefender.PokemonData);
+                                    //    if (attacker != null)
+                                    //        /*attackResult = */await SwitchPokemon(session, currentFortData.Id, startResponse.BattleId, attacker, attackResult.ActiveAttacker.PokemonData, a2, serverMs);
+                                    //}
                                 }
                                 if (attacker.Id != attackResult?.ActiveAttacker?.PokemonData.Id)
                                 {
                                     session.GymTeam.Where(w => w.attacker.Id == attacker.Id).FirstOrDefault().HpState = 0;
                                     TimedLog("We are switching pokemon after die");
-                                    attacker = await GetBestInBattle(session, attackResult.ActiveDefender.PokemonData);
-                                    if (attacker != null)
-                                    {
-                                        /*attackResult = */await SwitchPokemon(session, currentFortData.Id, startResponse.BattleId, attacker, attackResult.ActiveAttacker.PokemonData, a2, serverMs);
-                                        //attacker = attackResult.ActiveAttacker.PokemonData;
-                                        //await Task.Delay(1000);
-                                        Logger.Write(string.Format("We ware fainted in battle, new attacker is: {0} ({1} CP){2}", attacker.PokemonId, attacker.Cp, Environment.NewLine), LogLevel.Info, ConsoleColor.Magenta);
-                                    }
+                                    //attacker = await GetBestInBattle(session, attackResult.ActiveDefender.PokemonData);
+                                    //if (attacker != null)
+                                    //{
+                                    //    /*attackResult = */await SwitchPokemon(session, currentFortData.Id, startResponse.BattleId, attacker, attackResult.ActiveAttacker.PokemonData, a2, serverMs);
+                                    //    //attacker = attackResult.ActiveAttacker.PokemonData;
+                                    //    //await Task.Delay(1000);
+                                    //    Logger.Write(string.Format("We ware fainted in battle, new attacker is: {0} ({1} CP){2}", attacker.PokemonId, attacker.Cp, Environment.NewLine), LogLevel.Info, ConsoleColor.Magenta);
+                                    //}
                                 }
                                 Console.SetCursorPosition(0, Console.CursorTop - 1);
                                 Logger.Write($"(GYM ATTACK) : Defender {attackResult.ActiveDefender.PokemonData.PokemonId.ToString()  } HP {attackResult.ActiveDefender.CurrentHealth} - Attacker  {attackResult.ActiveAttacker.PokemonData.PokemonId.ToString()}   HP/Sta {attackResult.ActiveAttacker.CurrentHealth}/{attackResult.ActiveAttacker.CurrentEnergy}        ");
@@ -922,10 +927,10 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 Type = BattleActionType.ActionSwapPokemon,
                 DurationMs = swithTime,
-                ActionStartMs = now.AddMilliseconds(swithTime).ToUnixTime(),
-
-                ActivePokemonId = newAttacker.Id,
+                ActionStartMs = now/*.AddMilliseconds(swithTime)*/.ToUnixTime(),
                 
+                ActivePokemonId = newAttacker.Id,
+
                 //TargetPokemonId = newAttacker.Id,
 
                 //ActivePokemonId = newAttacker.Id,
@@ -962,7 +967,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 BattleAction action2 = new BattleAction();
                 if (Math.Abs(specialMove.EnergyDelta) <= energy)
                 {
-                    now = now.AddMilliseconds(specialMove.DurationMs);
+                    //now = now.AddMilliseconds(specialMove.DurationMs);
                     action2.Type = BattleActionType.ActionSpecialAttack;
                     action2.DurationMs = specialMove.DurationMs;
 
@@ -971,7 +976,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
                 else
                 {
-                    now = now.AddMilliseconds(moveSetting.DurationMs);
+                    //now = now.AddMilliseconds(moveSetting.DurationMs);
                     action2.Type = BattleActionType.ActionAttack;
                     action2.DurationMs = moveSetting.DurationMs;
 
@@ -988,7 +993,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 return actions;
             }
             BattleAction action1 = new BattleAction();
-            now = now.AddMilliseconds(500);
+            //now = now.AddMilliseconds(500);
             action1.Type = BattleActionType.ActionAttack;
             action1.DurationMs = 500;
             action1.ActionStartMs = now.ToUnixTime();
