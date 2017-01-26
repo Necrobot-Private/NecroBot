@@ -12,6 +12,7 @@ using PoGo.NecroBot.Logic.Model.Settings;
 using PoGo.NecroBot.Logic.Utils;
 using POGOProtos.Enums;
 using POGOProtos.Networking.Responses;
+using POGOProtos.Data.Player;
 
 #endregion
 
@@ -24,8 +25,32 @@ namespace PoGo.NecroBot.Logic.State
             cancellationToken.ThrowIfCancellationRequested();
 
             var tutState = session.Profile.PlayerData.TutorialState;
+            
             if (tutState.Contains(TutorialState.FirstTimeExperienceComplete))
             {
+                // If we somehow marked the tutorial as complete but have not yet created an avatar,
+                // then create it.
+                if (!tutState.Contains(TutorialState.AvatarSelection))
+                {
+                    var avatarRes = await session.Client.Player.SetAvatar(new PlayerAvatar()
+                    {
+                        Backpack = 0,
+                        Eyes = 0,
+                        Avatar = 0,
+                        Hair = 0,
+                        Hat = 0,
+                        Pants = 0,
+                        Shirt = 0,
+                        Shoes = 0,
+                        Skin = 0
+                    });
+
+                    EncounterTutorialCompleteResponse res = await
+                    session.Client.Misc.MarkTutorialComplete(new RepeatedField<TutorialState>()
+                    {
+                        TutorialState.AvatarSelection
+                    });
+                }
                 return new InfoState();
             }
 
