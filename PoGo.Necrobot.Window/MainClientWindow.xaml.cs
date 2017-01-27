@@ -62,8 +62,8 @@ namespace PoGo.Necrobot.Window
 
             Dictionary<LogLevel, string> colors = new Dictionary<LogLevel, string>()
             {
-                { LogLevel.Error, "red" },
-                { LogLevel.Caught, "green" },
+                { LogLevel.Error, "Red" },
+                { LogLevel.Caught, "Green" },
                 { LogLevel.Info, "DarkCyan" } ,
                 { LogLevel.Warning, "DarkYellow" } ,
                 { LogLevel.Pokestop,"Cyan" }  ,
@@ -95,7 +95,7 @@ namespace PoGo.Necrobot.Window
                 }
                 if (string.IsNullOrEmpty(color) || color == "Black") color = "white";
 
-                consoleLog.AppendText(message + "\r\n", color);
+                consoleLog.AppendText(message + "\r", color);
 
                 consoleLog.ScrollToEnd();
             });
