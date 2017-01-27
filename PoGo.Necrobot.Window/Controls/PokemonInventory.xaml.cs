@@ -40,6 +40,15 @@ namespace PoGo.Necrobot.Window.Controls
 
         private void gridData_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            foreach (PokemonDataViewModel pokemon in e.AddedItems)
+            {
+                pokemon.IsSelected = true;
+            }
+            foreach (PokemonDataViewModel pokemon in e.RemovedItems)
+            {
+                pokemon.IsSelected = false;
+            }
+
             var data = DataContext as PokemonListModel;
             var count = data.Pokemons.Count(x => x.IsSelected);
             //TODO : Thought it will better to use binding.

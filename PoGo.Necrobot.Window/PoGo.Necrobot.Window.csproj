@@ -471,6 +471,15 @@
     <None Include="Resources\ajax-loader.gif" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Controls\MapMarkers\images\instinct.png" />
+    <Resource Include="Controls\MapMarkers\images\location.png" />
+    <Resource Include="Controls\MapMarkers\images\Lured.png" />
+    <Resource Include="Controls\MapMarkers\images\mystic.png" />
+    <Resource Include="Controls\MapMarkers\images\Normal.png" />
+    <Resource Include="Controls\MapMarkers\images\unoccupied.png" />
+    <Resource Include="Controls\MapMarkers\images\valor.png" />
+    <Resource Include="Controls\MapMarkers\images\Visited.png" />
+    <Resource Include="Controls\MapMarkers\images\VisitedLure.png" />
     <Content Include="Effects\GrayscaleEffect.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
