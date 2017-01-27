@@ -15,7 +15,7 @@ using PoGo.NecroBot.Logic.Tasks;
 using POGOProtos.Map.Fort;
 using PoGo.NecroBot.Logic.Event;
 using POGOProtos.Map.Pokemon;
-using System.Diagnostics;
+using PokemonGo.RocketAPI.Extensions;
 
 namespace PoGo.Necrobot.Window.Controls
 {
@@ -50,11 +50,13 @@ namespace PoGo.Necrobot.Window.Controls
 
         public void InitMap()
         {
-            gmap.MapProvider = OpenStreetMapProvider.Instance;
+            gmap.MapProvider = GoogleMapProvider.Instance;
             GMaps.Instance.Mode = AccessMode.ServerAndCache;
             //gmap.SetPositionByKeywords("Melbourne, 3000");
             gmap.Position = new PointLatLng(54.6961334816182, 25.2985095977783);
             gmap.Zoom = 16;
+            gmap.ShowCenter = false;
+
             var m = new GMapMarker(gmap.Position);
 
             m.Shape = new CustomMarkerDemo(null, m, "xxx");
@@ -105,7 +107,20 @@ namespace PoGo.Necrobot.Window.Controls
         internal void MarkFortAsLooted(string id)
         {
             var marker = allMarkers[id];
-            marker.Shape = new ImageMarker(null, marker, "", "pokestop-used.png");
+            var fort = this.forts.Where(x => x.Id == id).FirstOrDefault();
+            if (fort.Type == FortType.Checkpoint)
+            {
+                string fortIcon;
+                if (fort.LureInfo != null)
+                {
+                    fortIcon = "images/VisitedLure.png";
+                }
+                else
+                {
+                    fortIcon = "images/Visited.png";
+                }
+                marker.Shape = new ImageMarker(null, marker, "", fortIcon);
+            }
         }
 
         //var track = new List<PointLatLngpos
@@ -136,7 +151,44 @@ namespace PoGo.Necrobot.Window.Controls
 
                 this.Dispatcher.Invoke(() =>
                 {
-                    m.Shape = new ImageMarker(null, m, $"[{item.Latitude},{item.Longitude}]", "pokestop-normal.png");
+                    string fortIcon = "images/Normal.png";
+                    switch (item.Type)
+                    {
+                        case FortType.Checkpoint:
+                            if (item.LureInfo != null)
+                            {
+                                if (item.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime())
+                                    fortIcon = "images/Lured.png";
+                                else
+                                    fortIcon = "images/VisitedLure.png";
+                            }
+                            else
+                            {
+                                if (item.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime())
+                                    fortIcon = "images/Normal.png";
+                                else
+                                    fortIcon = "images/Visited.png";
+                            }
+                            break;
+                        case FortType.Gym:
+                            switch (item.OwnedByTeam)
+                            {
+                                case POGOProtos.Enums.TeamColor.Neutral:
+                                    fortIcon = "images/unoccupied.png";
+                                    break;
+                                case POGOProtos.Enums.TeamColor.Blue:
+                                    fortIcon = "images/mystic.png";
+                                    break;
+                                case POGOProtos.Enums.TeamColor.Red:
+                                    fortIcon = "images/valor.png";
+                                    break;
+                                case POGOProtos.Enums.TeamColor.Yellow:
+                                    fortIcon = "images/instinct.png";
+                                    break;
+                            }
+                            break;
+                    }
+                    m.Shape = new ImageMarker(null, m, $"[{item.Latitude},{item.Longitude}]", fortIcon);
                     allMarkers.Add(item.Id, m);
                     gmap.Markers.Add(m);
                 });
