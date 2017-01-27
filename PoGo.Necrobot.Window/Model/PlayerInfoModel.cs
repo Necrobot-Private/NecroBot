@@ -24,9 +24,10 @@ namespace PoGo.Necrobot.Window.Model
             {
                 exp = value;
                 RaisePropertyChanged("Exp");
-
+                RaisePropertyChanged("PercentComplete");
             }
         }
+
         private double levelExp;
         public double LevelExp
         {
@@ -35,7 +36,17 @@ namespace PoGo.Necrobot.Window.Model
             {
                 levelExp = value;
                 RaisePropertyChanged("LevelExp");
+                RaisePropertyChanged("PercentComplete");
+            }
+        }
 
+        public int PercentComplete
+        {
+            get
+            {
+                if (LevelExp > 0)
+                    return (int)Math.Floor(Exp / LevelExp * 100);
+                return 0;
             }
         }
 
@@ -47,7 +58,6 @@ namespace PoGo.Necrobot.Window.Model
             {
                 expH = value;
                 RaisePropertyChanged("EXPPerHour");
-
             }
         }
 
