@@ -193,9 +193,9 @@ namespace PoGo.NecroBot.Logic.State
                     state = new LoginState();
                 }
 
-                catch (InvalidResponseException)
+                catch (InvalidResponseException e)
                 {
-                    session.EventDispatcher.Send(new ErrorEvent { Message = "Niantic Servers unstable, throttling API Calls." });
+                    session.EventDispatcher.Send(new ErrorEvent { Message = $"Niantic Servers unstable, throttling API Calls. {e.Message}" });
                     await Delay(1000);
                     if (session.LogicSettings.AllowMultipleBot)
                     {

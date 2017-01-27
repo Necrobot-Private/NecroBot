@@ -32,7 +32,6 @@ namespace PoGo.NecroBot.Logic
         private readonly ILogicSettings _logicSettings;
         private GetPlayerResponse _player = null;
         private int _level = 0;
-        private DownloadItemTemplatesResponse _templates = null;
         private IEnumerable<PokemonSettings> _pokemonSettings = null;
 
         private readonly List<ItemId> _revives = new List<ItemId> {ItemId.ItemRevive, ItemId.ItemMaxRevive};
@@ -154,15 +153,8 @@ namespace PoGo.NecroBot.Logic
                     _player = GetPlayerData().Result;
                 }
             }
-
-            var now = DateTime.UtcNow;
-            lock (_cachedInventory)
-            {
-                if (_cachedInventory != null && _lastRefresh.AddSeconds(5 * 60).Ticks > now.Ticks)
-                    return _cachedInventory;
-            }
-
-            return await RefreshCachedInventory();
+            
+            return _cachedInventory;
         }
 
         public async Task<IEnumerable<AppliedItems>> GetAppliedItems()
@@ -606,9 +598,10 @@ namespace PoGo.NecroBot.Logic
 
         public async Task<MoveSettings> GetMoveSetting(PokemonMove move)
         {
-            if (_templates == null) await GetPokemonSettings();
+            if (_client.Download.ItemTemplates == null)
+                await GetPokemonSettings();
 
-            var moveSettings = _templates.ItemTemplates.Where(x => x.MoveSettings != null)
+            var moveSettings = _client.Download.ItemTemplates.Where(x => x.MoveSettings != null)
                 .Select(x => x.MoveSettings)
                 .ToList();
 
@@ -617,16 +610,19 @@ namespace PoGo.NecroBot.Logic
 
         public async Task<IEnumerable<PokemonSettings>> GetPokemonSettings()
         {
-            if (_templates == null || _pokemonSettings == null)
+            if (_client.Download.ItemTemplates == null)
+                await _client.Download.GetItemTemplates();
+
+            if (_pokemonSettings == null)
             {
-                _templates = await _client.Download.GetItemTemplates();
-                var moveSettings = _templates.ItemTemplates.Where(x => x.MoveSettings != null)
+                var moveSettings = _client.Download.ItemTemplates.Where(x => x.MoveSettings != null)
                     .Select(x => x.MoveSettings)
                     .ToList();
 
-                _pokemonSettings = _templates.ItemTemplates.Select(i => i.PokemonSettings)
+                _pokemonSettings = _client.Download.ItemTemplates.Select(i => i.PokemonSettings)
                     .Where(p => p != null && p.FamilyId != PokemonFamilyId.FamilyUnset);
             }
+
             return _pokemonSettings;
         }
 
@@ -780,6 +776,8 @@ namespace PoGo.NecroBot.Logic
                 _logicSettings.KeepMinOperator, _logicSettings.KeepMinDuplicatePokemon);
         }
 
+        // Now that inventory is refreshed every time we make an API call, this function is no longer needed.
+        /*
         public async Task<GetInventoryResponse> RefreshCachedInventory()
         {
             var now = DateTime.UtcNow;
@@ -797,6 +795,7 @@ namespace PoGo.NecroBot.Logic
                 ss.Release();
             }
         }
+        */
 
         public async Task<UpgradePokemonResponse> UpgradePokemon(ulong pokemonid)
         {

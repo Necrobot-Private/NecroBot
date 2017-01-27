@@ -120,7 +120,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
             }
 
-            await session.Inventory.RefreshCachedInventory();
+            //await session.Inventory.RefreshCachedInventory();
             var badassPokemon = await session.Inventory.GetHighestCpForGym(6);
             var pokemonDatas = badassPokemon as PokemonData[] ?? badassPokemon.ToArray();
             if (defenders.Count == 0) return;
