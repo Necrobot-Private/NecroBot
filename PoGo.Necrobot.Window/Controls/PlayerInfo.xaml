@@ -46,7 +46,7 @@
 
             <TextBlock Grid.Column="0" Grid.Row="0">
                 <TextBlock.Text>
-                    <MultiBinding StringFormat="{} LEVEL : {0}" FallbackValue="Level : 40">
+                    <MultiBinding StringFormat="Level: {0}" FallbackValue="Level: 40">
                         <Binding Path="Level" />
                     </MultiBinding>
                 </TextBlock.Text>
@@ -54,19 +54,19 @@
 
             <TextBlock  Grid.Column="1" Grid.Row="0">
                 <TextBlock.Text>
-                    <MultiBinding StringFormat="{} EXP : {0}/{1} ({2}%)" FallbackValue="EXP :100000/500000 (20%)">
+                    <MultiBinding StringFormat="EXP: {0}/{1} ({2}%)" FallbackValue="EXP: 100000/500000 (20%)">
                         <Binding Path="Exp" />
                         <Binding Path="LevelExp" />
                         <Binding Path="PercentComplete" />
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
-            <TextBlock Grid.Column="2" Grid.Row="0" x:Name="textBlock" HorizontalAlignment="Left"  TextWrapping="Wrap" Text="{Binding Path=EXPPerHour, FallbackValue=EXP/H: 123, StringFormat=EXP/H :{0}}" VerticalAlignment="Top"/>
-            <TextBlock Grid.Column="3" Grid.Row="0" x:Name="textBlock_Copy" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Path=PKMPerHour, FallbackValue=PKM/H: 123 ,StringFormat=PKM/H :{0}}" VerticalAlignment="Top" RenderTransformOrigin="6.212,4.375"/>
-            <TextBlock Grid.Column="0" Grid.Row="1" x:Name="textBlock1" HorizontalAlignment="Left"  TextWrapping="Wrap" Text="{Binding Runtime, FallbackValue=Runtime: xx:xx:xx:xx, StringFormat=Runtime : {0}}" VerticalAlignment="Top"/>
+            <TextBlock Grid.Column="2" Grid.Row="0" x:Name="textBlock" HorizontalAlignment="Left"  TextWrapping="Wrap" Text="{Binding Path=EXPPerHour, FallbackValue=EXP/H: 123, StringFormat=EXP/H: {0}}" VerticalAlignment="Top"/>
+            <TextBlock Grid.Column="3" Grid.Row="0" x:Name="textBlock_Copy" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Path=PKMPerHour, FallbackValue=PKM/H: 123 ,StringFormat=PKM/H: {0}}" VerticalAlignment="Top" RenderTransformOrigin="6.212,4.375"/>
+            <TextBlock Grid.Column="0" Grid.Row="1" x:Name="textBlock1" HorizontalAlignment="Left"  TextWrapping="Wrap" Text="{Binding Runtime, FallbackValue=Runtime: xx:xx:xx:xx, StringFormat=Runtime: {0}}" VerticalAlignment="Top"/>
 
             <TextBlock Grid.Column="1" Grid.Row="1" x:Name="textBlock2" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding TimeToLevelUp, FallbackValue=Level Up in :1d 24h, StringFormat=Level Up in {0}}" VerticalAlignment="Top" RenderTransformOrigin="-0.51,0.5"/>
-            <TextBlock Grid.Column="2" Grid.Row="1" x:Name="textBlock3" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Startdust, FallbackValue=Startdust: 90000, StringFormat=Startdust : \{0\}}" VerticalAlignment="Top"/>
+            <TextBlock Grid.Column="2" Grid.Row="1" x:Name="textBlock3" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Startdust, FallbackValue=Stardust: 90000, StringFormat=Stardust: \{0\}}" VerticalAlignment="Top"/>
 
         </Grid>
     </DockPanel>
