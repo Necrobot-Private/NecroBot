@@ -75,7 +75,18 @@ namespace PoGo.Necrobot.Window.Model
 
             }
         }
-        public bool IsSelected { get; set; }
+
+        private bool isSelected;
+        public bool IsSelected
+        {
+            get { return isSelected; }
+            set
+            {
+                isSelected = value;
+                RaisePropertyChanged("IsSelected");
+            }
+        }
+
         public PokemonId PokemonName { get; set; }
 
         public int Level { get; set; }
