@@ -307,7 +307,7 @@ namespace PoGo.NecroBot.Logic.State
                 session.Profile = await session.Inventory.GetPlayerData();
                 var stats = await session.Inventory.GetPlayerStats();
 
-                TinyIoCContainer.Current.Resolve<MultiAccountManager>().Logged();
+                TinyIoCContainer.Current.Resolve<MultiAccountManager>().Logged(session.Profile, stats);
                 session.EventDispatcher.Send(new ProfileEvent {Profile = session.Profile, Stats = stats});
             }
             catch (UriFormatException e)

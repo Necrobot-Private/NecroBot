@@ -28,7 +28,7 @@ namespace PoGo.NecroBot.Logic.State
         {
             session.EventDispatcher.Send(new WarnEvent()
             {
-                Message = "Hash server being down, Bot will enter IDLE state until service available. Ping internal is 60 sec, press any key to ping service.... "
+                Message = "Hash server being down, Bot will enter IDLE state until service available. Ping internal is 5 sec, press any key to ping service.... "
             });
 
             Console.WriteLine();
@@ -53,7 +53,7 @@ namespace PoGo.NecroBot.Logic.State
                     }
                     else
                     {
-                        Thread.Sleep(1000);
+                        await Task.Delay(5000);
                         Console.SetCursorPosition(0, Console.CursorTop - 1);
                         var ts = DateTime.Now - start;
                         session.EventDispatcher.Send(new ErrorEvent()
