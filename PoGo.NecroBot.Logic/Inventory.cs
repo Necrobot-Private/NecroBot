@@ -662,6 +662,7 @@ namespace PoGo.NecroBot.Logic
             foreach (var pokemon in pokemons)
             {
                 var settings = pokemonSettings.SingleOrDefault(x => x.PokemonId == pokemon.PokemonId);
+                
                 var familyCandy = pokemonFamilies.SingleOrDefault(x => settings.FamilyId == x.FamilyId);
 
                 //Don't evolve if we can't evolve it
@@ -672,7 +673,8 @@ namespace PoGo.NecroBot.Logic
 
                 var pokemonCandyNeededAlready =
                     (pokemonToEvolve.Count(
-                        p => pokemonSettings.Single(x => x.PokemonId == p.PokemonId).FamilyId == settings.FamilyId) + 2) *
+                        p => pokemonSettings.FirstOrDefault(x => x.PokemonId == p.PokemonId) != null && 
+                        pokemonSettings.FirstOrDefault(x => x.PokemonId == p.PokemonId).FamilyId == settings.FamilyId) + 2) *
                     settings.CandyToEvolve;
 
                 if (familyCandy.Candy_ >= pokemonCandyNeededAlready)

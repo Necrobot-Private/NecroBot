@@ -16,7 +16,12 @@
                       WindowStartupLocation="CenterScreen" Loaded="MetroWindow_Loaded">
     <Control.Resources>
         <c:I18NConveter x:Key="I18NConveter"/>
+        <Style x:Key="LatoFont">
+            <Setter Property="TextElement.FontFamily" 
+            Value="pack://application:,,,/Resources/#Lato-light" />
+        </Style>
     </Control.Resources>
+    
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
             <Button Click="Theme_Selected">
@@ -202,10 +207,11 @@
                     HorizontalAlignment="Stretch"
                     Background="Black"
                     VerticalAlignment="Stretch"
-                    FontSize="13" 
-                    IsReadOnly="True" FontFamily="Global Monospace" FontWeight="Bold">
+                    FontSize="16" 
+                    IsReadOnly="True" 
+                    FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato Light">
                     <FlowDocument>
-                        <Paragraph LineHeight="20">
+                        <Paragraph LineHeight="24">
                             <Run Text="" />
                         </Paragraph>
                     </FlowDocument>
