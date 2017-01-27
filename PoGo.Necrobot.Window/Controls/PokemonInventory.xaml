@@ -27,8 +27,8 @@
             </Button>
             <StackPanel Orientation="Horizontal">
 
-            <Button x:Name="btnTransferAll" Margin="0,0,35,0" Content="Transfer All" Click="btnTransferAll_Click"/>
-            <Button x:Name="btnFavoriteAll" Margin="0,0,35,0" Content="Favorite All"/>
+            <Button x:Name="btnTransferAll" Margin="0,0,10,0" Content="Transfer All" Click="btnTransferAll_Click"/>
+            <Button x:Name="btnFavoriteAll" Margin="0,0,10,0" Content="Favorite All"/>
             <Button x:Name="btnPokedexView" Click="btnPokedexView_Click">
                 <StackPanel Orientation="Horizontal" >
                     <Image Source="http://allaboutwindowsphone.com/images/appicons/208046.png" Width="20px"></Image>
@@ -57,31 +57,28 @@
                 </DataGrid.ContextMenu>
 
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn Header="Selected" IsReadOnly="False">
+                    <DataGridTemplateColumn Header="" IsReadOnly="False" MinWidth="40">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <CheckBox Margin="15,0,0,0" IsChecked="{Binding IsSelected, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Checked="Select_Checked" CommandParameter="{Binding Path=Id}"  Click="Select_Checked"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Pokemon" IsReadOnly="true">
+                    <DataGridTemplateColumn Header="" IsReadOnly="true" MinWidth="40">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Image Source="{Binding PokemonIcon}" Width="50" ToolTip="{Binding PokemonName}"/>
+                                <Image Source="{Binding PokemonIcon}" Width="30" ToolTip="{Binding PokemonName}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
                     <!--<DataGridCheckBoxColumn Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" Header="Selected"/>-->
-                    <DataGridTextColumn Binding="{Binding PokemonName}" Header="Name" MinWidth="120" />
-                    <DataGridTextColumn Binding="{Binding IV, StringFormat=\{0:0.00\}}" Header="IV" MinWidth="60" IsReadOnly="True">
-
-                    </DataGridTextColumn>
-                    <DataGridTextColumn Binding="{Binding CP, StringFormat=\{0\}}" Header="CP" MinWidth="60" IsReadOnly="True"/>
-                    <DataGridTextColumn Binding="{Binding Level, StringFormat=\{0\}}" Header="Level" MinWidth="60" IsReadOnly="True"/>
-                    <DataGridTextColumn Binding="{Binding HP, StringFormat=\{0\}}" Header="HP" MinWidth="60" IsReadOnly="True"/>
-                    <DataGridTextColumn Binding="{Binding MaxHP, StringFormat=\{0\}}" Header="MaxHP" MinWidth="60" IsReadOnly="True"/>
-                    <DataGridTextColumn Binding="{Binding Candy, StringFormat=\{0\}}" Header="Candy" MinWidth="90" IsReadOnly="True"/>
+                    <DataGridTextColumn Binding="{Binding PokemonName}" Header="Name" MinWidth="90" />
+                    <DataGridTextColumn Binding="{Binding IV, StringFormat=\{0:0.00\}}" Header="IV" MinWidth="44" IsReadOnly="True"/>
+                    <DataGridTextColumn Binding="{Binding CP, StringFormat=\{0\}}" Header="CP" MinWidth="30" IsReadOnly="True"/>
+                    <DataGridTextColumn Binding="{Binding Level, StringFormat=\{0\}}" Header="LVL" MinWidth="20" IsReadOnly="True"/>
+                    <DataGridTextColumn Binding="{Binding HPDisplay, StringFormat=\{0\}}" Header="HP" MinWidth="50" IsReadOnly="True"/>
+                    <DataGridTextColumn Binding="{Binding Candy, StringFormat=\{0\}}" Header="Candy" MinWidth="50" IsReadOnly="True"/>
                     <DataGridTextColumn Binding="{Binding Move1, StringFormat=\{0\}}" Header="Move1" MinWidth="90" IsReadOnly="True"/>
                     <DataGridTextColumn Binding="{Binding Move2, StringFormat=\{0\}}" Header="Move2" MinWidth="90" IsReadOnly="True"/>
                     <DataGridTemplateColumn Header="Actions">

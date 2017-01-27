@@ -120,18 +120,7 @@ namespace PoGo.Necrobot.Window.Controls
 
         private void Select_Checked(object sender, RoutedEventArgs e)
         {
-            ulong pokemonId = (ulong) ((CheckBox) sender).CommandParameter;
-
-            var data = DataContext as PokemonListModel;
-            var count = data.Pokemons.Count(x => x.IsSelected);
-            //TODO : Thought it will better to use binding.
-            btnTransferAll.Content = $"Transfer all ({count})";
-            if (count > 1)
-            {
-                btnTransferAll.IsEnabled = true;
-            }
-
-            OnPokemonItemSelected?.Invoke(null);
+           
         }
 
         private void btnPowerup_Click(object sender, RoutedEventArgs e)
