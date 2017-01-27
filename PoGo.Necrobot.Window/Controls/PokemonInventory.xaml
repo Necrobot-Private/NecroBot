@@ -139,7 +139,7 @@
                                         </Grid>
                                     </Popup>
 
-                                    <Button Margin="0,0,10,0" Click="btnFavorit_Click" CommandParameter="{Binding Id}">
+                                    <Button Margin="0,0,10,0" Click="btnFavorite_Click" CommandParameter="{Binding Id}">
                                         <Button.Content>
                                             <MultiBinding Converter="{StaticResource ResourceKey=FavoriteTextConverter}">
                                                 <Binding Path="IsFavoriting"></Binding>
