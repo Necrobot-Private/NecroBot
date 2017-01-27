@@ -54,9 +54,10 @@
 
             <TextBlock  Grid.Column="1" Grid.Row="0">
                 <TextBlock.Text>
-                    <MultiBinding StringFormat="{} EXP : {0}/{1}" FallbackValue="EXP :100000/500000">
+                    <MultiBinding StringFormat="{} EXP : {0}/{1} ({2}%)" FallbackValue="EXP :100000/500000 (20%)">
                         <Binding Path="Exp" />
                         <Binding Path="LevelExp" />
+                        <Binding Path="PercentComplete" />
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>

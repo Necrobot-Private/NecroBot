@@ -129,6 +129,7 @@ namespace PoGo.Necrobot.Window
             this.datacontext.PlayerInfo.Level = this.playerStats.GetCurrent().StatsExport.Level;
             this.datacontext.PlayerInfo.Startdust = this.playerStats.GetCurrent().TotalStardust;
             this.datacontext.PlayerInfo.Exp = this.playerStats.GetCurrent().StatsExport.CurrentXp;
+            this.datacontext.PlayerInfo.LevelExp = this.playerStats.GetCurrent().StatsExport.LevelupXp;
         }
 
         private void PokemonInventory_OnPokemonItemSelected(PokemonDataViewModel selected)
