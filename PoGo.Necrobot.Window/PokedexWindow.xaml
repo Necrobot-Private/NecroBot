@@ -26,15 +26,15 @@
               VerticalAlignment="Stretch" HorizontalAlignment="Stretch"  >
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <UniformGrid Columns="9"/>
+                    <UniformGrid Columns="10"/>
                 </ItemsPanelTemplate>
             </ListView.ItemsPanel>
             
             <ListView.ItemTemplate>
                 <DataTemplate>
                 <Border BorderBrush="White" BorderThickness="2">
-                    <StackPanel Width="140" Margin="5,5,5,5">
-                        <Image Source="{Binding Path=PokemonId, Converter={StaticResource ResourceKey=PokemonImageConverter}}" Width="138" >
+                    <StackPanel Width="64" Margin="5,5,5,5">
+                        <Image Source="{Binding Path=PokemonId, Converter={StaticResource ResourceKey=PokemonImageConverter}}" Width="60" >
                             <Image.Effect>
                                 <effect:GrayscaleEffect x:Name="grayscaleEffect" DesaturationFactor="{Binding Opacity}"/>
                             </Image.Effect>
@@ -57,16 +57,7 @@
 
                         </Image>
                         <DockPanel LastChildFill="True">
-                            <TextBlock DockPanel.Dock="Left" Text="{Binding Id, StringFormat=#{0}}" Width="30" ></TextBlock>
-                            <TextBlock DockPanel.Dock="Right" Text="{Binding Name}"></TextBlock>
-                            <TextBlock >
-                                <TextBlock.Text>
-                                    <MultiBinding StringFormat="{}{0}\{1}">
-                                        <Binding Path="Caught"></Binding>
-                                        <Binding Path="Seen"></Binding>
-                                    </MultiBinding>
-                                </TextBlock.Text>
-                            </TextBlock>
+                            <TextBlock DockPanel.Dock="Left" Text="{Binding Name}"></TextBlock>
                         </DockPanel>
                     </StackPanel>
                 </Border>
