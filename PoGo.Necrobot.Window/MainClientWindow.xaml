@@ -207,11 +207,11 @@
                     HorizontalAlignment="Stretch"
                     Background="Black"
                     VerticalAlignment="Stretch"
-                    FontSize="16" 
+                    FontSize="15" 
                     IsReadOnly="True" 
                     FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato Light">
                     <FlowDocument>
-                        <Paragraph LineHeight="24">
+                        <Paragraph LineHeight="25">
                             <Run Text="" />
                         </Paragraph>
                     </FlowDocument>
