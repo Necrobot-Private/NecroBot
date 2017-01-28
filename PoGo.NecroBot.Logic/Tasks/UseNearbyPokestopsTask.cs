@@ -182,7 +182,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 //TODO : A logic need to be add for handle this  case?
             };
 
-            var deployedPokemons = await session.Inventory.GetDeployedPokemons();
+            var deployedPokemons = session.Inventory.GetDeployedPokemons();
 
             var forts = session.Forts
                 .Where(p => p.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime())
@@ -214,7 +214,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 forts = forts.Where(p => LocationUtils.CalculateDistanceInMeters(p.Latitude, p.Longitude, session.Client.CurrentLatitude, session.Client.CurrentLongitude) < 40).ToList();
             }
 
-            if (!session.LogicSettings.GymConfig.Enable /*|| session.Inventory.GetPlayerStats().Result.FirstOrDefault().Level <= 5*/)
+            if (!session.LogicSettings.GymConfig.Enable /*|| session.Inventory.GetPlayerStats().FirstOrDefault().Level <= 5*/)
             {
                 // Filter out the gyms
                 forts = forts.Where(x => x.Type != FortType.Gym).ToList();
@@ -424,12 +424,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                         mapEmptyCount = 0;
                         foreach (var item in fortSearch.ItemsAwarded)
                         {
-                            await session.Inventory.UpdateInventoryItem(item.ItemId, item.ItemCount);
+                            await session.Inventory.UpdateInventoryItem(item.ItemId);
                         }
                         if (fortSearch.PokemonDataEgg != null)
                         {
                             fortSearch.PokemonDataEgg.IsEgg = true;
-                            await session.Inventory.AddPokemonToCache(fortSearch.PokemonDataEgg);
                         }
 
                     }

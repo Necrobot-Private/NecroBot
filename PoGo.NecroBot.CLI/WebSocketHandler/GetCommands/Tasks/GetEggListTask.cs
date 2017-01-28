@@ -20,12 +20,12 @@ namespace PoGo.NecroBot.CLI.WebSocketHandler.GetCommands.Tasks
             {
                 // if (!await blocker.WaitToRun()) return;
 
-                var incubators = (await session.Inventory.GetEggIncubators())
+                var incubators = session.Inventory.GetEggIncubators()
                     .Where(x => x.UsesRemaining > 0 || x.ItemId == ItemId.ItemIncubatorBasicUnlimited)
                     .OrderByDescending(x => x.ItemId == ItemId.ItemIncubatorBasicUnlimited)
                     .ToList();
 
-                var unusedEggs = (await session.Inventory.GetEggs())
+                var unusedEggs = session.Inventory.GetEggs()
                     .Where(x => string.IsNullOrEmpty(x.EggIncubatorId))
                     .OrderBy(x => x.EggKmWalkedTarget - x.EggKmWalkedStart)
                     .ToList();

@@ -29,11 +29,11 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             await EvolvePokemonTask.Execute(session, cancellationToken);
 
-            var pokemons = await session.Inventory.GetPokemons();
+            var pokemons = session.Inventory.GetPokemons();
             int buff = session.LogicSettings.BulkTransferStogareBuffer;
             //check for bag, if bag is nearly full, then process bulk transfer.
             var maxStorage = session.Profile.PlayerData.MaxPokemonStorage;
-            var totalEggs = await session.Inventory.GetEggs();
+            var totalEggs = session.Inventory.GetEggs();
             if ((maxStorage - totalEggs.Count() - buff) > pokemons.Count()) return;
 
 
@@ -73,7 +73,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                 else
                 {
                     await session.Client.Inventory.TransferPokemon(pokemon.Id);
-                    await session.Inventory.DeletePokemonFromInvById(pokemon.Id);
                     await PrintTransferedPokemonInfo(session, pokemon);
 
                     await DelayingUtils.DelayAsync(session.LogicSettings.TransferActionDelay, 0, cancellationToken);
@@ -90,7 +89,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                     {
                         foreach (var duplicatePokemon in batchTransfer)
                         {
-                            await session.Inventory.DeletePokemonFromInvById(duplicatePokemon.Id);
                             await PrintTransferedPokemonInfo(session, duplicatePokemon);
                         }
                     }
@@ -102,8 +100,8 @@ namespace PoGo.NecroBot.Logic.Tasks
         private static async Task PrintTransferedPokemonInfo(ISession session, PokemonData pokemon)
         {
             var bestPokemonOfType = (session.LogicSettings.PrioritizeIvOverCp
-                                        ? await session.Inventory.GetHighestPokemonOfTypeByIv(pokemon)
-                                        : await session.Inventory.GetHighestPokemonOfTypeByCp(pokemon)) ?? pokemon;
+                                        ? session.Inventory.GetHighestPokemonOfTypeByIv(pokemon)
+                                        : session.Inventory.GetHighestPokemonOfTypeByCp(pokemon)) ?? pokemon;
 
             var setting = session.Inventory.GetPokemonSettings()
                 .Result.Single(q => q.PokemonId == pokemon.PokemonId);

@@ -75,7 +75,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     continue; //this pokemon has been skipped because not meet with catch criteria before.
                 }
 
-                var allitems = await session.Inventory.GetItems();
+                var allitems = session.Inventory.GetItems();
                 var pokeBallsCount = allitems.FirstOrDefault(i => i.ItemId == ItemId.ItemPokeBall)?.Count;
                 var greatBallsCount = allitems.FirstOrDefault(i => i.ItemId == ItemId.ItemGreatBall)?.Count;
                 var ultraBallsCount = allitems.FirstOrDefault(i => i.ItemId == ItemId.ItemUltraBall)?.Count;
