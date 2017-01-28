@@ -1,5 +1,8 @@
 # Change Log
 
+## [v1.0.0.76](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.76) (2017-01-27)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.72...v1.0.0.76)
+
 ## [v1.0.0.72](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.72) (2017-01-24)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.71...v1.0.0.72)
 

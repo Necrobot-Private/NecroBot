@@ -209,7 +209,7 @@ namespace PoGo.NecroBot.Logic.State
                                        session.LogicSettings.PercentOfInventoryRevivesToKeep +
                                        session.LogicSettings.PercentOfInventoryBerriesToKeep;
 
-                    if (totalPercent != 100)
+                    if (totalPercent > 100)
                     {
                         Logger.Write(session.Translation.GetTranslation(TranslationString.TotalRecyclePercentGreaterThan100), LogLevel.Error);
                         Logger.Write("Press any key to exit, then fix your configuration and run the bot again.", LogLevel.Warning);

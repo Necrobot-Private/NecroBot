@@ -260,7 +260,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                     {
                         var fortInfo = await session.Client.Fort.GetFort(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude);
                         await FarmPokestop(session, pokeStop, fortInfo, cancellationToken, true);
-                        pokeStop.CooldownCompleteTimestampMs = DateTime.UtcNow.ToUnixTime() + 5 * 60 * 1000;
+                        // Synchronize cooldown with map
+                        var mapFort = (await session.Client.Map.GetMapObjects()).MapCells.SelectMany(x => x.Forts).Where(y => y.Id == pokeStop.Id).FirstOrDefault();
+                        if (mapFort != pokeStop)
+                            pokeStop.CooldownCompleteTimestampMs = mapFort.CooldownCompleteTimestampMs;
                         spinedPokeStops.Add(pokeStop);
                         if (spinablePokestops.Count > 1)
                         {
@@ -551,9 +554,9 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             var mapObjects = await session.Client.Map.GetMapObjects();
 
-            session.AddForts(mapObjects.Item1.MapCells.SelectMany(p => p.Forts).ToList());
+            session.AddForts(mapObjects.MapCells.SelectMany(p => p.Forts).ToList());
 
-            var pokeStops = mapObjects.Item1.MapCells.SelectMany(i => i.Forts)
+            var pokeStops = mapObjects.MapCells.SelectMany(i => i.Forts)
                 .Where(
                     i =>
                         (i.Type == FortType.Checkpoint || i.Type == FortType.Gym) &&
