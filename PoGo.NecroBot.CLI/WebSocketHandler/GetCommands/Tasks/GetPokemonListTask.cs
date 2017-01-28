@@ -20,7 +20,7 @@ namespace PoGo.NecroBot.CLI.WebSocketHandler.GetCommands.Tasks
             {
                 //if (!await blocker.WaitToRun()) return;
 
-                var allPokemonInBag = await session.Inventory.GetHighestsCp(1000);
+                var allPokemonInBag = session.Inventory.GetHighestsCp(1000);
                 var families = await session.Inventory.GetPokemonFamilies();
                 var settings = await session.Inventory.GetPokemonSettings();
                 var list = new List<PokemonListWeb>();

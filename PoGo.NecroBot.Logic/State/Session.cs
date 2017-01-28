@@ -171,7 +171,6 @@ namespace PoGo.NecroBot.Logic.State
             {
                 var candy = this.Inventory.GetPokemonFamilies().Result.ToList();
                 var pokemonSettings = this.Inventory.GetPokemonSettings().Result.ToList();
-                //var playerStats = null;// this.Inventory.GetPlayerStats().Result;
                 this.EventDispatcher.Send(new InventoryRefreshedEvent(args, null, pokemonSettings, candy));
             });
             Navigation = new Navigation(Client, logicSettings);

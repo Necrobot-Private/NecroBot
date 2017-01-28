@@ -28,7 +28,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
                 var pokemonData = cmd[1].Split(',');
                 PokemonId pid = (PokemonId) Enum.Parse(typeof(PokemonId), pokemonData[0].Trim(), true);
 
-                await MSniperServiceTask.AddSnipeItem(session, new MSniperServiceTask.MSniperInfo2()
+                MSniperServiceTask.AddSnipeItem(session, new MSniperServiceTask.MSniperInfo2()
                 {
                     PokemonId = (short) pid,
                     Latitude = Convert.ToDouble(pokemonData[1].Trim()),

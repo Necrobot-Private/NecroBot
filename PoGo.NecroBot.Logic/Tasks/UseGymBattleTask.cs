@@ -64,7 +64,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     if (player.Team != TeamColor.Neutral)
                     {
-                        var deployedPokemons = await session.Inventory.GetDeployedPokemons();
+                        var deployedPokemons = session.Inventory.GetDeployedPokemons();
                         List<PokemonData> deployedList = new List<PokemonData>(deployedPokemons);
 
                         if (fortDetails.GymState.FortData.OwnedByTeam == player.Team || fortDetails.GymState.FortData.OwnedByTeam == TeamColor.Neutral)
@@ -285,7 +285,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             if (availableSlots > 0)
             {
-                var deployed = await session.Inventory.GetDeployedPokemons();
+                var deployed = session.Inventory.GetDeployedPokemons();
                 if (!deployed.Any(a => a.DeployedFortId == fortInfo.FortId))
                 {
                     var pokemon = await GetDeployablePokemon(session);
@@ -517,14 +517,14 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         public static async Task RevivePokemon(ISession session, PokemonData pokemon)
         {
-            var normalPotions = await session.Inventory.GetItemAmountByType(ItemId.ItemPotion);
-            var superPotions = await session.Inventory.GetItemAmountByType(ItemId.ItemSuperPotion);
-            var hyperPotions = await session.Inventory.GetItemAmountByType(ItemId.ItemHyperPotion);
+            var normalPotions = session.Inventory.GetItemAmountByType(ItemId.ItemPotion);
+            var superPotions = session.Inventory.GetItemAmountByType(ItemId.ItemSuperPotion);
+            var hyperPotions = session.Inventory.GetItemAmountByType(ItemId.ItemHyperPotion);
 
             var healPower = normalPotions * 20 + superPotions * 50 + hyperPotions * 200;
 
-            var normalRevives = await session.Inventory.GetItemAmountByType(ItemId.ItemRevive);
-            var maxRevives = await session.Inventory.GetItemAmountByType(ItemId.ItemMaxRevive);
+            var normalRevives = session.Inventory.GetItemAmountByType(ItemId.ItemRevive);
+            var maxRevives = session.Inventory.GetItemAmountByType(ItemId.ItemMaxRevive);
 
             if ((healPower >= pokemon.StaminaMax / 2 || maxRevives == 0) && normalRevives > 0 && pokemon.Stamina <= 0)
             {
@@ -532,7 +532,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 switch (ret.Result)
                 {
                     case UseItemReviveResponse.Types.Result.Success:
-                        await session.Inventory.UpdateInventoryItem(ItemId.ItemRevive, -1);
+                        await session.Inventory.UpdateInventoryItem(ItemId.ItemRevive);
                         pokemon.Stamina = ret.Stamina;
                         session.EventDispatcher.Send(new EventUsedRevive
                         {
@@ -560,7 +560,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 switch (ret.Result)
                 {
                     case UseItemReviveResponse.Types.Result.Success:
-                        await session.Inventory.UpdateInventoryItem(ItemId.ItemMaxRevive, -1);
+                        await session.Inventory.UpdateInventoryItem(ItemId.ItemMaxRevive);
                         pokemon.Stamina = ret.Stamina;
                         session.EventDispatcher.Send(new EventUsedRevive
                         {
@@ -703,10 +703,10 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         public static async Task<bool> HealPokemon(ISession session, PokemonData pokemon)
         {
-            var normalPotions = await session.Inventory.GetItemAmountByType(ItemId.ItemPotion);
-            var superPotions = await session.Inventory.GetItemAmountByType(ItemId.ItemSuperPotion);
-            var hyperPotions = await session.Inventory.GetItemAmountByType(ItemId.ItemHyperPotion);
-            var maxPotions = await session.Inventory.GetItemAmountByType(ItemId.ItemMaxPotion);
+            var normalPotions = session.Inventory.GetItemAmountByType(ItemId.ItemPotion);
+            var superPotions = session.Inventory.GetItemAmountByType(ItemId.ItemSuperPotion);
+            var hyperPotions = session.Inventory.GetItemAmountByType(ItemId.ItemHyperPotion);
+            var maxPotions = session.Inventory.GetItemAmountByType(ItemId.ItemMaxPotion);
 
             var healPower = normalPotions * 20 + superPotions * 50 + hyperPotions * 200;
 
@@ -716,7 +716,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     if (await UseMaxPotion(session, pokemon, maxPotions))
                     {
-                        await session.Inventory.UpdateInventoryItem(ItemId.ItemMaxPotion, -1);
+                        await session.Inventory.UpdateInventoryItem(ItemId.ItemMaxPotion);
                         return true;
                     }
                 }
@@ -733,7 +733,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     if (!await UseHyperPotion(session, pokemon, hyperPotions))
                         return false;
                     hyperPotions--;
-                    await session.Inventory.UpdateInventoryItem(ItemId.ItemHyperPotion, -1);
+                    await session.Inventory.UpdateInventoryItem(ItemId.ItemHyperPotion);
                 }
                 else
                 if (((pokemon.StaminaMax - pokemon.Stamina) > 50 || normalPotions * 20 < (pokemon.StaminaMax - pokemon.Stamina)) && superPotions > 0)
@@ -741,14 +741,14 @@ namespace PoGo.NecroBot.Logic.Tasks
                     if (!await UseSuperPotion(session, pokemon, superPotions))
                         return false;
                     superPotions--;
-                    await session.Inventory.UpdateInventoryItem(ItemId.ItemSuperPotion, -1);
+                    await session.Inventory.UpdateInventoryItem(ItemId.ItemSuperPotion);
                 }
                 else
                 {
                     if (!await UsePotion(session, pokemon, normalPotions))
                         return false;
                     normalPotions--;
-                    await session.Inventory.UpdateInventoryItem(ItemId.ItemPotion, -1);
+                    await session.Inventory.UpdateInventoryItem(ItemId.ItemPotion);
                 }
             }
 
@@ -1262,7 +1262,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             while (pokemon == null)
             {
-                var pokemonList = (await session.Inventory.GetPokemons()).ToList();
+                var pokemonList = session.Inventory.GetPokemons().ToList();
                 pokemonList = pokemonList
                     .Where(w => !excluded.Contains(w.Id) && w.Id != session.Profile.PlayerData.BuddyPokemon?.Id)
                     .OrderByDescending(p => p.Cp)

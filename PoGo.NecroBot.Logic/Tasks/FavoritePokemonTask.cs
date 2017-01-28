@@ -23,7 +23,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             cancellationToken.ThrowIfCancellationRequested();
             //await session.Inventory.RefreshCachedInventory();
 
-            var pokemons = await session.Inventory.GetPokemons();
+            var pokemons = session.Inventory.GetPokemons();
 
             foreach (var pokemon in pokemons)
             {
@@ -35,7 +35,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     perfection >= session.LogicSettings.FavoriteMinIvPercentage && pokemon.Cp >= session.LogicSettings.FavoriteMinCp && pokemon.Favorite != 1)
                 {
                     await session.Client.Inventory.SetFavoritePokemon(pokemon.Id, true);
-                    await session.Inventory.MarkAsFavorite(pokemon);
+                    session.Inventory.MarkAsFavorite(pokemon);
                     session.EventDispatcher.Send(new NoticeEvent
                     {
                         Message =
@@ -52,7 +52,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 if (!await blocker.WaitToRun()) return;
 
-                var all = await session.Inventory.GetPokemons();
+                var all = session.Inventory.GetPokemons();
                 var pokemon = all.FirstOrDefault(p => p.Id == pokemonId);
                 if (pokemon != null)
                 {
@@ -61,7 +61,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     var response = await session.Client.Inventory.SetFavoritePokemon(pokemonId, favorite);
                     if (response.Result == SetFavoritePokemonResponse.Types.Result.Success)
                     {
-                        await session.Inventory.MarkAsFavorite(pokemon);
+                        session.Inventory.MarkAsFavorite(pokemon);
                         session.EventDispatcher.Send(new FavoriteEvent(pokemon, response));
                     }
 
