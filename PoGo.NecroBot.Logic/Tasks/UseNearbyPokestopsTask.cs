@@ -550,9 +550,9 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             var mapObjects = await session.Client.Map.GetMapObjects();
 
-            session.AddForts(mapObjects.Item1.MapCells.SelectMany(p => p.Forts).ToList());
+            session.AddForts(mapObjects.MapCells.SelectMany(p => p.Forts).ToList());
 
-            var pokeStops = mapObjects.Item1.MapCells.SelectMany(i => i.Forts)
+            var pokeStops = mapObjects.MapCells.SelectMany(i => i.Forts)
                 .Where(
                     i =>
                         (i.Type == FortType.Checkpoint || i.Type == FortType.Gym) &&
