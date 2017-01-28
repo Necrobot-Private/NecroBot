@@ -16,7 +16,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             //await session.Inventory.RefreshCachedInventory();
 
-            var currentAmountOfLuckyEggs = await session.Inventory.GetItemAmountByType(ItemId.ItemLuckyEgg);
+            var currentAmountOfLuckyEggs = session.Inventory.GetItemAmountByType(ItemId.ItemLuckyEgg);
             if (currentAmountOfLuckyEggs == 0)
             {
                 Logger.Write(session.Translation.GetTranslation(TranslationString.NoEggsAvailable));

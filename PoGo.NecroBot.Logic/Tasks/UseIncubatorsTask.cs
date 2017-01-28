@@ -23,11 +23,11 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static async Task Execute(ISession session, CancellationToken cancellationToken,
             ulong eggId, string incubatorId)
         {
-            var incubators = (await session.Inventory.GetEggIncubators())
+            var incubators = session.Inventory.GetEggIncubators()
                 .Where(x => x.UsesRemaining > 0 || x.ItemId == ItemId.ItemIncubatorBasicUnlimited)
                 .FirstOrDefault(x => x.Id == incubatorId);
 
-            var unusedEggs = (await session.Inventory.GetEggs())
+            var unusedEggs = session.Inventory.GetEggs()
                 .Where(x => string.IsNullOrEmpty(x.EggIncubatorId))
                 .FirstOrDefault(x => x.Id == eggId);
 
@@ -71,25 +71,25 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             try
             {
-                var playerStats = (await session.Inventory.GetPlayerStats()).FirstOrDefault();
+                var playerStats = (session.Inventory.GetPlayerStats()).FirstOrDefault();
                 if (playerStats == null)
                     return;
 
                 var kmWalked = playerStats.KmWalked;
 
-                var incubators = (await session.Inventory.GetEggIncubators())
+                var incubators = session.Inventory.GetEggIncubators()
                     .Where(x => x.UsesRemaining > 0 || x.ItemId == ItemId.ItemIncubatorBasicUnlimited)
                     .OrderByDescending(x => x.ItemId == ItemId.ItemIncubatorBasicUnlimited)
                     .ToList();
 
-                var unusedEggs = (await session.Inventory.GetEggs())
+                var unusedEggs = session.Inventory.GetEggs()
                     .Where(x => string.IsNullOrEmpty(x.EggIncubatorId))
                     .OrderBy(x => x.EggKmWalkedTarget - x.EggKmWalkedStart)
                     .ToList();
 
                 var rememberedIncubatorsFilePath = Path.Combine(session.LogicSettings.ProfilePath, "temp", "incubators.json");
                 var rememberedIncubators = GetRememberedIncubators(rememberedIncubatorsFilePath);
-                var pokemons = (await session.Inventory.GetPokemons()).ToList();
+                var pokemons = session.Inventory.GetPokemons().ToList();
 
                 // Check if eggs in remembered incubator usages have since hatched
                 // (instead of calling session.Client.Inventory.GetHatchedEgg(), which doesn't seem to work properly)

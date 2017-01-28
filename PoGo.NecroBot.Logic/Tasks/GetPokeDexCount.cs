@@ -15,7 +15,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             //await session.Inventory.RefreshCachedInventory();
 
-            var PokeDex = await session.Inventory.GetPokeDexItems();
+            var PokeDex = session.Inventory.GetPokeDexItems();
             var _totalUniqueEncounters = PokeDex.Select(
                 i => new
                 {

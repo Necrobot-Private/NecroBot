@@ -110,7 +110,7 @@ namespace PoGo.NecroBot.Logic.Utils
 
         public StatsExport GetCurrentInfo(Inventory inventory)
         {
-            var stats = inventory.GetPlayerStats().Result;
+            var stats = inventory.GetPlayerStats();
             StatsExport output = null;
             var stat = stats.FirstOrDefault();
             if (stat != null)

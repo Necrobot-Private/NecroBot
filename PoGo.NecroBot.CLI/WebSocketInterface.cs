@@ -141,7 +141,7 @@ namespace PoGo.NecroBot.CLI
                 if (handle != null)
                     await handle;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 #if DEBUG
                 //Logger.Write(ex.Message);
