@@ -14,9 +14,9 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            await session.Inventory.RefreshCachedInventory();
+            //await session.Inventory.RefreshCachedInventory();
 
-            var currentAmountOfIncense = await session.Inventory.GetItemAmountByType(ItemId.ItemIncenseOrdinary);
+            var currentAmountOfIncense = session.Inventory.GetItemAmountByType(ItemId.ItemIncenseOrdinary);
             if (currentAmountOfIncense == 0)
             {
                 Logger.Write(session.Translation.GetTranslation(TranslationString.NoIncenseAvailable));

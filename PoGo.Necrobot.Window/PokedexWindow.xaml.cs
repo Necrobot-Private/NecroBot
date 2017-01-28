@@ -58,7 +58,7 @@ namespace PoGo.Necrobot.Window
         {
             Task.Run(async () =>
             {
-                var x = await this.session.Inventory.GetPokeDexItems();
+                var x = this.session.Inventory.GetPokeDexItems();
                 this.Dispatcher.Invoke(() =>
                {
                    dataViewModel.UpdateWith(x);

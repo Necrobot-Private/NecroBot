@@ -496,6 +496,21 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                             }
                         }
                         break;
+
+                    case 7:
+                        // We making the limits more conservative.
+                        if (settings["PokemonConfig"] != null)
+                        {
+                            if ((int)(settings["PokemonConfig"]["CatchPokemonLimit"]) == 998)
+                                settings["PokemonConfig"]["CatchPokemonLimit"] = 700;
+                            if ((int)(settings["PokemonConfig"]["CatchPokemonLimitMinutes"]) == 1470)
+                                settings["PokemonConfig"]["CatchPokemonLimitMinutes"] = 1200;
+                            if ((int)(settings["PokeStopConfig"]["PokeStopLimit"]) == 1998)
+                                settings["PokeStopConfig"]["PokeStopLimit"] = 1500;
+                            if ((int)(settings["PokeStopConfig"]["PokeStopLimitMinutes"]) == 1470)
+                                settings["PokeStopConfig"]["PokeStopLimitMinutes"] = 1200;
+                        }
+                        break;
                         // Add more here.
                 }
             }

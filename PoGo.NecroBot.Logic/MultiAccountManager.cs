@@ -195,7 +195,7 @@ namespace PoGo.NecroBot.Logic
                 current.RuntimeTotal += (DateTime.Now - current.LoggedTime).TotalMinutes;
                 current.IsRunning = false;
 
-                var playerStats = (session.Inventory.GetPlayerStats().Result).FirstOrDefault();
+                var playerStats = (session.Inventory.GetPlayerStats()).FirstOrDefault();
                 current.Level = playerStats.Level;
 
                 UpdateDatabase(current);
@@ -281,7 +281,7 @@ namespace PoGo.NecroBot.Logic
                     runningAccount.RuntimeTotal += (DateTime.Now - runningAccount.LoggedTime).TotalMinutes;
                     runningAccount.IsRunning = false;
 
-                    var playerStats = (session.Inventory.GetPlayerStats().Result).FirstOrDefault();
+                    var playerStats = (session.Inventory.GetPlayerStats()).FirstOrDefault();
                     runningAccount.Level = playerStats.Level;
 
                     UpdateDatabase(runningAccount);

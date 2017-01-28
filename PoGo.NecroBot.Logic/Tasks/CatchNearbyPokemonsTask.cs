@@ -83,7 +83,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     continue; //this pokemon has been skipped because not meet with catch criteria before.
                 }
 
-                var allitems = await session.Inventory.GetItems();
+                var allitems = session.Inventory.GetItems();
                 var pokeBallsCount = allitems.FirstOrDefault(i => i.ItemId == ItemId.ItemPokeBall)?.Count;
                 var greatBallsCount = allitems.FirstOrDefault(i => i.ItemId == ItemId.ItemGreatBall)?.Count;
                 var ultraBallsCount = allitems.FirstOrDefault(i => i.ItemId == ItemId.ItemUltraBall)?.Count;
@@ -172,12 +172,12 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static async Task<IOrderedEnumerable<MapPokemon>> GetNearbyPokemons(ISession session)
         {
             var mapObjects = await session.Client.Map.GetMapObjects();
-            var forts = mapObjects.Item1.MapCells.SelectMany(p => p.Forts).ToList();
-            var nearbyPokemons = mapObjects.Item1.MapCells.SelectMany(x => x.NearbyPokemons).ToList();
+            var forts = mapObjects.MapCells.SelectMany(p => p.Forts).ToList();
+            var nearbyPokemons = mapObjects.MapCells.SelectMany(x => x.NearbyPokemons).ToList();
             
             session.EventDispatcher.Send(new PokeStopListEvent(forts, nearbyPokemons));
 
-            var pokemons = mapObjects.Item1.MapCells.SelectMany(i => i.CatchablePokemons)
+            var pokemons = mapObjects.MapCells.SelectMany(i => i.CatchablePokemons)
                 .OrderBy(
                     i =>
                         LocationUtils.CalculateDistanceInMeters(session.Client.CurrentLatitude,

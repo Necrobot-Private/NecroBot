@@ -13,7 +13,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             // Refresh inventory so that the player stats are fresh
             //await session.Inventory.RefreshCachedInventory();
 
-            var inventory = await session.Inventory.GetItems();
+            var inventory = session.Inventory.GetItems();
 
             session.EventDispatcher.Send(
                 new InventoryListEvent

@@ -20,7 +20,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 if (!await blocker.WaitToRun()) return;
 
 
-                var all = await session.Inventory.GetPokemons();
+                var all = session.Inventory.GetPokemons();
                 var pokemons = all.OrderByDescending(x => x.Cp).ThenBy(n => n.StaminaMax);
                 var pokemon = pokemons.FirstOrDefault(p => p.Id == pokemonId);
 

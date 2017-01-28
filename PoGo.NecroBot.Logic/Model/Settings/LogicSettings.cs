@@ -5,6 +5,7 @@ using System.Linq;
 using PoGo.NecroBot.Logic.Interfaces.Configuration;
 using POGOProtos.Enums;
 using POGOProtos.Inventory.Item;
+using System;
 
 #endregion
 
@@ -13,10 +14,44 @@ namespace PoGo.NecroBot.Logic.Model.Settings
     public class LogicSettings : ILogicSettings
     {
         private readonly GlobalSettings _settings;
+        private Random _rand;
 
         public LogicSettings(GlobalSettings settings)
         {
             _settings = settings;
+            _rand = new Random();
+        }
+
+        public double GenRandom(double min, double max)
+        {
+            return _rand.NextDouble() * (max - min) + min;
+        }
+
+        public int GenRandom(int val)
+        {
+            double min = 0.9 * val;
+            int newVal = (int)Math.Floor(GenRandom(min, val));
+            if (newVal < 0)
+                newVal = 0;
+            return newVal;
+        }
+
+        public double GenRandom(double val)
+        {
+            double min = 0.9 * val;
+            double newVal = GenRandom(min, val);
+            if (newVal < 0)
+                newVal = 0;
+            return newVal;
+        }
+
+        public float GenRandom(float val)
+        {
+            double min = 0.9 * val;
+            double newVal = GenRandom(min, val);
+            if (newVal < 0)
+                newVal = 0;
+            return (float)newVal;
         }
 
         public string ProfilePath => _settings.ProfilePath;
@@ -27,16 +62,15 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool AutoUpdate => _settings.UpdateConfig.AutoUpdate;
         public bool UseWebsocket => _settings.WebsocketsConfig.UseWebsocket;
         public bool CatchPokemon => _settings.PokemonConfig.CatchPokemon;
-        public int OutOfBallCatchBlockTime => _settings.PokemonConfig.OutOfBallCatchBlockTime;
-        public int PokeballToKeepForSnipe => _settings.PokemonConfig.PokeballToKeepForSnipe;
-        public int PokeballsToKeepForSnipe => _settings.PokemonConfig.PokeballToKeepForSnipe;
-        public double AutoSnipeMaxDistance => _settings.SnipeConfig.AutoSnipeMaxDistance;
-        public int CatchPokemonLimit => _settings.PokemonConfig.CatchPokemonLimit;
-        public int CatchPokemonLimitMinutes => _settings.PokemonConfig.CatchPokemonLimitMinutes;
-        public int PokeStopLimit => _settings.PokeStopConfig.PokeStopLimit;
-        public int PokeStopLimitMinutes => _settings.PokeStopConfig.PokeStopLimitMinutes;
-        public int SnipeCountLimit => _settings.SnipeConfig.SnipeCountLimit;
-        public int SnipeRestSeconds => _settings.SnipeConfig.SnipeRestSeconds;
+        public int OutOfBallCatchBlockTime => GenRandom(_settings.PokemonConfig.OutOfBallCatchBlockTime);
+        public int PokeballsToKeepForSnipe => GenRandom(_settings.PokemonConfig.PokeballToKeepForSnipe);
+        public double AutoSnipeMaxDistance => GenRandom(_settings.SnipeConfig.AutoSnipeMaxDistance);
+        public int CatchPokemonLimit => GenRandom(_settings.PokemonConfig.CatchPokemonLimit);
+        public int CatchPokemonLimitMinutes => GenRandom(_settings.PokemonConfig.CatchPokemonLimitMinutes);
+        public int PokeStopLimit => GenRandom(_settings.PokeStopConfig.PokeStopLimit);
+        public int PokeStopLimitMinutes => GenRandom(_settings.PokeStopConfig.PokeStopLimitMinutes);
+        public int SnipeCountLimit => GenRandom(_settings.SnipeConfig.SnipeCountLimit);
+        public int SnipeRestSeconds => GenRandom(_settings.SnipeConfig.SnipeRestSeconds);
         public bool TransferWeakPokemon => _settings.PokemonConfig.TransferWeakPokemon;
         public bool DisableHumanWalking => _settings.LocationConfig.DisableHumanWalking;
         public int MaxBerriesToUsePerPokemon => _settings.PokemonConfig.MaxBerriesToUsePerPokemon;
@@ -54,8 +88,8 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool UseLuckyEggConstantly => _settings.PokemonConfig.UseLuckyEggConstantly;
         public bool UseIncenseConstantly => _settings.PokemonConfig.UseIncenseConstantly;
         public string UseBallOperator => _settings.PokemonConfig.UseBallOperator.ToString();
-        public float UseBerriesMinCp => _settings.PokemonConfig.UseBerriesMinCp;
-        public float UseBerriesMinIv => _settings.PokemonConfig.UseBerriesMinIv;
+        public float UseBerriesMinCp => GenRandom(_settings.PokemonConfig.UseBerriesMinCp);
+        public float UseBerriesMinIv => GenRandom(_settings.PokemonConfig.UseBerriesMinIv);
         public double UseBerriesBelowCatchProbability => _settings.PokemonConfig.UseBerriesBelowCatchProbability;
         public string UseBerriesOperator => _settings.PokemonConfig.UseBerriesOperator;
         public float UpgradePokemonIvMinimum => _settings.PokemonConfig.UpgradePokemonIvMinimum;
@@ -78,43 +112,43 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         public bool UseEggIncubators => _settings.PokemonConfig.UseEggIncubators;
         public bool UseLimitedEggIncubators => _settings.PokemonConfig.UseLimitedEggIncubators;
-        public int UseGreatBallAboveCp => _settings.PokemonConfig.UseGreatBallAboveCp;
-        public int UseUltraBallAboveCp => _settings.PokemonConfig.UseUltraBallAboveCp;
-        public int UseMasterBallAboveCp => _settings.PokemonConfig.UseMasterBallAboveCp;
-        public double UseGreatBallAboveIv => _settings.PokemonConfig.UseGreatBallAboveIv;
-        public double UseUltraBallAboveIv => _settings.PokemonConfig.UseUltraBallAboveIv;
-        public double UseMasterBallBelowCatchProbability => _settings.PokemonConfig.UseMasterBallBelowCatchProbability;
-        public double UseUltraBallBelowCatchProbability => _settings.PokemonConfig.UseUltraBallBelowCatchProbability;
-        public double UseGreatBallBelowCatchProbability => _settings.PokemonConfig.UseGreatBallBelowCatchProbability;
+        public int UseGreatBallAboveCp => GenRandom(_settings.PokemonConfig.UseGreatBallAboveCp);
+        public int UseUltraBallAboveCp => GenRandom(_settings.PokemonConfig.UseUltraBallAboveCp);
+        public int UseMasterBallAboveCp => GenRandom(_settings.PokemonConfig.UseMasterBallAboveCp);
+        public double UseGreatBallAboveIv => GenRandom(_settings.PokemonConfig.UseGreatBallAboveIv);
+        public double UseUltraBallAboveIv => GenRandom(_settings.PokemonConfig.UseUltraBallAboveIv);
+        public double UseMasterBallBelowCatchProbability => GenRandom(_settings.PokemonConfig.UseMasterBallBelowCatchProbability);
+        public double UseUltraBallBelowCatchProbability => GenRandom(_settings.PokemonConfig.UseUltraBallBelowCatchProbability);
+        public double UseGreatBallBelowCatchProbability => GenRandom(_settings.PokemonConfig.UseGreatBallBelowCatchProbability);
         public bool EnableHumanizedThrows => _settings.CustomCatchConfig.EnableHumanizedThrows;
         public bool EnableMissedThrows => _settings.CustomCatchConfig.EnableMissedThrows;
         public int ThrowMissPercentage => _settings.CustomCatchConfig.ThrowMissPercentage;
-        public int NiceThrowChance => _settings.CustomCatchConfig.NiceThrowChance;
-        public int GreatThrowChance => _settings.CustomCatchConfig.GreatThrowChance;
-        public int ExcellentThrowChance => _settings.CustomCatchConfig.ExcellentThrowChance;
-        public int CurveThrowChance => _settings.CustomCatchConfig.CurveThrowChance;
-        public double ForceGreatThrowOverIv => _settings.CustomCatchConfig.ForceGreatThrowOverIv;
-        public double ForceExcellentThrowOverIv => _settings.CustomCatchConfig.ForceExcellentThrowOverIv;
-        public int ForceGreatThrowOverCp => _settings.CustomCatchConfig.ForceGreatThrowOverCp;
-        public int ForceExcellentThrowOverCp => _settings.CustomCatchConfig.ForceExcellentThrowOverCp;
-        public int DelayBetweenPokemonUpgrade => _settings.PokemonConfig.DelayBetweenPokemonUpgrade;
-        public int DelayBetweenPokemonCatch => _settings.PokemonConfig.DelayBetweenPokemonCatch;
+        public int NiceThrowChance => GenRandom(_settings.CustomCatchConfig.NiceThrowChance);
+        public int GreatThrowChance => GenRandom(_settings.CustomCatchConfig.GreatThrowChance);
+        public int ExcellentThrowChance => GenRandom(_settings.CustomCatchConfig.ExcellentThrowChance);
+        public int CurveThrowChance => GenRandom(_settings.CustomCatchConfig.CurveThrowChance);
+        public double ForceGreatThrowOverIv => GenRandom(_settings.CustomCatchConfig.ForceGreatThrowOverIv);
+        public double ForceExcellentThrowOverIv => GenRandom(_settings.CustomCatchConfig.ForceExcellentThrowOverIv);
+        public int ForceGreatThrowOverCp => GenRandom(_settings.CustomCatchConfig.ForceGreatThrowOverCp);
+        public int ForceExcellentThrowOverCp => GenRandom(_settings.CustomCatchConfig.ForceExcellentThrowOverCp);
+        public int DelayBetweenPokemonUpgrade => GenRandom(_settings.PokemonConfig.DelayBetweenPokemonUpgrade);
+        public int DelayBetweenPokemonCatch => GenRandom(_settings.PokemonConfig.DelayBetweenPokemonCatch);
 
-        public int DelayBetweenPlayerActions => _settings.PlayerConfig.DelayBetweenPlayerActions;
-        public int EvolveActionDelay => _settings.PlayerConfig.EvolveActionDelay;
-        public int TransferActionDelay => _settings.PlayerConfig.TransferActionDelay;
-        public int RecycleActionDelay => _settings.PlayerConfig.RecycleActionDelay;
-        public int RenamePokemonActionDelay => _settings.PlayerConfig.RenamePokemonActionDelay;
+        public int DelayBetweenPlayerActions => GenRandom(_settings.PlayerConfig.DelayBetweenPlayerActions);
+        public int EvolveActionDelay => GenRandom(_settings.PlayerConfig.EvolveActionDelay);
+        public int TransferActionDelay => GenRandom(_settings.PlayerConfig.TransferActionDelay);
+        public int RecycleActionDelay => GenRandom(_settings.PlayerConfig.RecycleActionDelay);
+        public int RenamePokemonActionDelay => GenRandom(_settings.PlayerConfig.RenamePokemonActionDelay);
         public bool UseNearActionRandom => _settings.PlayerConfig.UseNearActionRandom;
         public bool UsePokemonToNotCatchFilter => _settings.PokemonConfig.UsePokemonToNotCatchFilter;
         public bool UsePokemonSniperFilterOnly => _settings.PokemonConfig.UsePokemonSniperFilterOnly;
         public int KeepMinDuplicatePokemon => _settings.PokemonConfig.KeepMinDuplicatePokemon;
         public bool PrioritizeIvOverCp => _settings.PokemonConfig.PrioritizeIvOverCp;
-        public int MaxTravelDistanceInMeters => _settings.LocationConfig.MaxTravelDistanceInMeters;
+        public int MaxTravelDistanceInMeters => GenRandom(_settings.LocationConfig.MaxTravelDistanceInMeters);
         public string GpxFile => _settings.GPXConfig.GpxFile;
         public bool UseGpxPathing => _settings.GPXConfig.UseGpxPathing;
         public bool UseLuckyEggsWhileEvolving => _settings.PokemonConfig.UseLuckyEggsWhileEvolving;
-        public int UseLuckyEggsMinPokemonAmount => _settings.PokemonConfig.UseLuckyEggsMinPokemonAmount;
+        public int UseLuckyEggsMinPokemonAmount => GenRandom(_settings.PokemonConfig.UseLuckyEggsMinPokemonAmount);
         public bool EvolveAllPokemonAboveIv => _settings.PokemonConfig.EvolveAllPokemonAboveIv;
         public float EvolveAboveIvValue => _settings.PokemonConfig.EvolveAboveIvValue;
         public bool RenamePokemon => _settings.PokemonConfig.RenamePokemon;
@@ -128,9 +162,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public string TranslationLanguageCode => _settings.ConsoleConfig.TranslationLanguageCode;
         public bool DetailedCountsBeforeRecycling => _settings.ConsoleConfig.DetailedCountsBeforeRecycling;
         public bool VerboseRecycling => _settings.RecycleConfig.VerboseRecycling;
-        public double RecycleInventoryAtUsagePercentage => _settings.RecycleConfig.RecycleInventoryAtUsagePercentage;
-        public double EvolveKeptPokemonsAtStorageUsagePercentage => _settings.PokemonConfig.EvolveKeptPokemonsAtStorageUsagePercentage;
-        public int EvolveKeptPokemonIfBagHasOverThisManyPokemon => _settings.PokemonConfig.EvolveKeptPokemonIfBagHasOverThisManyPokemon;
+        public double RecycleInventoryAtUsagePercentage => GenRandom(_settings.RecycleConfig.RecycleInventoryAtUsagePercentage);
+        public double EvolveKeptPokemonsAtStorageUsagePercentage => GenRandom(_settings.PokemonConfig.EvolveKeptPokemonsAtStorageUsagePercentage);
+        public int EvolveKeptPokemonIfBagHasOverThisManyPokemon => GenRandom(_settings.PokemonConfig.EvolveKeptPokemonIfBagHasOverThisManyPokemon);
         public ICollection<KeyValuePair<ItemId, int>> ItemRecycleFilter => _settings.ItemRecycleFilter.Select(itemRecycleFilter => new KeyValuePair<ItemId, int>(itemRecycleFilter.Key, itemRecycleFilter.Value)).ToList();
         public ICollection<PokemonId> PokemonsToEvolve => _settings.PokemonsToEvolve;
         public ICollection<PokemonId> PokemonsToLevelUp => _settings.PokemonsToLevelUp;
@@ -163,9 +197,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool UseTelegramAPI => _settings.TelegramConfig.UseTelegramAPI;
         public string TelegramAPIKey => _settings.TelegramConfig.TelegramAPIKey;
         public string TelegramPassword => _settings.TelegramConfig.TelegramPassword;
-        public int MinPokeballsToSnipe => _settings.SnipeConfig.MinPokeballsToSnipe;
-        public int MinPokeballsWhileSnipe => _settings.SnipeConfig.MinPokeballsWhileSnipe;
-        public int MaxPokeballsPerPokemon => _settings.PokemonConfig.MaxPokeballsPerPokemon;
+        public int MinPokeballsToSnipe => GenRandom(_settings.SnipeConfig.MinPokeballsToSnipe);
+        public int MinPokeballsWhileSnipe => GenRandom(_settings.SnipeConfig.MinPokeballsWhileSnipe);
+        public int MaxPokeballsPerPokemon => GenRandom(_settings.PokemonConfig.MaxPokeballsPerPokemon);
         public bool RandomlyPauseAtStops => _settings.LocationConfig.RandomlyPauseAtStops;
         public SnipeSettings PokemonToSnipe => _settings.PokemonToSnipe;
         public string SnipeLocationServer => _settings.SnipeConfig.SnipeLocationServer;
@@ -178,21 +212,21 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool UseSnipeLocationServer => _settings.SnipeConfig.UseSnipeLocationServer;
         public bool UseTransferIvForSnipe => _settings.SnipeConfig.UseTransferIvForSnipe;
         public bool SnipeIgnoreUnknownIv => _settings.SnipeConfig.SnipeIgnoreUnknownIv;
-        public int MinDelayBetweenSnipes => _settings.SnipeConfig.MinDelayBetweenSnipes;
+        public int MinDelayBetweenSnipes => GenRandom(_settings.SnipeConfig.MinDelayBetweenSnipes);
         public double SnipingScanOffset => _settings.SnipeConfig.SnipingScanOffset;
         public bool SnipePokemonNotInPokedex => _settings.SnipeConfig.SnipePokemonNotInPokedex;
         public bool RandomizeRecycle => _settings.RecycleConfig.RandomizeRecycle;
         public int RandomRecycleValue => _settings.RecycleConfig.RandomRecycleValue;
-        public int TotalAmountOfPokeballsToKeep => _settings.RecycleConfig.TotalAmountOfPokeballsToKeep;
-        public int TotalAmountOfPotionsToKeep => _settings.RecycleConfig.TotalAmountOfPotionsToKeep;
-        public int TotalAmountOfRevivesToKeep => _settings.RecycleConfig.TotalAmountOfRevivesToKeep;
-        public int TotalAmountOfBerriesToKeep => _settings.RecycleConfig.TotalAmountOfBerriesToKeep;
+        public int TotalAmountOfPokeballsToKeep => GenRandom(_settings.RecycleConfig.TotalAmountOfPokeballsToKeep);
+        public int TotalAmountOfPotionsToKeep => GenRandom(_settings.RecycleConfig.TotalAmountOfPotionsToKeep);
+        public int TotalAmountOfRevivesToKeep => GenRandom(_settings.RecycleConfig.TotalAmountOfRevivesToKeep);
+        public int TotalAmountOfBerriesToKeep => GenRandom(_settings.RecycleConfig.TotalAmountOfBerriesToKeep);
 
         public bool UseRecyclePercentsInsteadOfTotals => _settings.RecycleConfig.UseRecyclePercentsInsteadOfTotals;
-        public int PercentOfInventoryPokeballsToKeep => _settings.RecycleConfig.PercentOfInventoryPokeballsToKeep;
-        public int PercentOfInventoryPotionsToKeep => _settings.RecycleConfig.PercentOfInventoryPotionsToKeep;
-        public int PercentOfInventoryRevivesToKeep => _settings.RecycleConfig.PercentOfInventoryRevivesToKeep;
-        public int PercentOfInventoryBerriesToKeep => _settings.RecycleConfig.PercentOfInventoryBerriesToKeep;
+        public int PercentOfInventoryPokeballsToKeep => GenRandom(_settings.RecycleConfig.PercentOfInventoryPokeballsToKeep);
+        public int PercentOfInventoryPotionsToKeep => GenRandom(_settings.RecycleConfig.PercentOfInventoryPotionsToKeep);
+        public int PercentOfInventoryRevivesToKeep => GenRandom(_settings.RecycleConfig.PercentOfInventoryRevivesToKeep);
+        public int PercentOfInventoryBerriesToKeep => GenRandom(_settings.RecycleConfig.PercentOfInventoryBerriesToKeep);
 
         public bool UseSnipeLimit => _settings.SnipeConfig.UseSnipeLimit;
         public bool UsePokeStopLimit => _settings.PokeStopConfig.UsePokeStopLimit;
@@ -202,21 +236,21 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public int ResumeTrackPt => _settings.LocationConfig.ResumeTrackPt;
         public bool EnableHumanWalkingSnipe => _settings.HumanWalkSnipeConfig.Enable;
         public bool HumanWalkingSnipeDisplayList => _settings.HumanWalkSnipeConfig.DisplayPokemonList;
-        public double HumanWalkingSnipeMaxDistance => _settings.HumanWalkSnipeConfig.MaxDistance;
-        public double HumanWalkingSnipeMaxEstimateTime => _settings.HumanWalkSnipeConfig.MaxEstimateTime;
+        public double HumanWalkingSnipeMaxDistance => GenRandom(_settings.HumanWalkSnipeConfig.MaxDistance);
+        public double HumanWalkingSnipeMaxEstimateTime => GenRandom(_settings.HumanWalkSnipeConfig.MaxEstimateTime);
         public bool HumanWalkingSnipeTryCatchEmAll => _settings.HumanWalkSnipeConfig.TryCatchEmAll;
-        public int HumanWalkingSnipeCatchEmAllMinBalls => _settings.HumanWalkSnipeConfig.CatchEmAllMinBalls;
+        public int HumanWalkingSnipeCatchEmAllMinBalls => GenRandom(_settings.HumanWalkSnipeConfig.CatchEmAllMinBalls);
         public bool HumanWalkingSnipeCatchPokemonWhileWalking => _settings.HumanWalkSnipeConfig.CatchPokemonWhileWalking;
         public bool HumanWalkingSnipeSpinWhileWalking => _settings.HumanWalkSnipeConfig.SpinWhileWalking;
         public bool HumanWalkingSnipeAlwaysWalkBack => _settings.HumanWalkSnipeConfig.AlwaysWalkback;
-        public double HumanWalkingSnipeWalkbackDistanceLimit => _settings.HumanWalkSnipeConfig.WalkbackDistanceLimit;
-        public double HumanWalkingSnipeSnipingScanOffset => _settings.HumanWalkSnipeConfig.SnipingScanOffset;
+        public double HumanWalkingSnipeWalkbackDistanceLimit => GenRandom(_settings.HumanWalkSnipeConfig.WalkbackDistanceLimit);
+        public double HumanWalkingSnipeSnipingScanOffset => GenRandom(_settings.HumanWalkSnipeConfig.SnipingScanOffset);
         public bool HumanWalkingSnipeIncludeDefaultLocation => _settings.HumanWalkSnipeConfig.IncludeDefaultLocation;
         public bool HumanWalkingSnipeUseSnipePokemonList => _settings.HumanWalkSnipeConfig.UseSnipePokemonList;
         public Dictionary<PokemonId, HumanWalkSnipeFilter> HumanWalkSnipeFilters => _settings.HumanWalkSnipeFilters;
         public bool HumanWalkingSnipeAllowSpeedUp => _settings.HumanWalkSnipeConfig.AllowSpeedUp;
         public double HumanWalkingSnipeMaxSpeedUpSpeed => _settings.HumanWalkSnipeConfig.MaxSpeedUpSpeed;
-        public int HumanWalkingSnipeDelayTimeAtDestination => _settings.HumanWalkSnipeConfig.DelayTimeAtDestination;
+        public int HumanWalkingSnipeDelayTimeAtDestination => GenRandom(_settings.HumanWalkSnipeConfig.DelayTimeAtDestination);
         public bool HumanWalkingSnipeUsePokeRadar => _settings.HumanWalkSnipeConfig.UsePokeRadar;
         public bool HumanWalkingSnipeUseSkiplagged => _settings.HumanWalkSnipeConfig.UseSkiplagged;
         public bool HumanWalkingSnipeUsePokecrew => _settings.HumanWalkSnipeConfig.UsePokecrew;
@@ -232,7 +266,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public string DataSharingIdentifiation => _settings.DataSharingConfig.DataServiceIdentification;
         public bool AllowAutoSnipe => _settings.DataSharingConfig.AutoSnipe;
 
-        public int SnipePauseOnOutOfBallTime => _settings.SnipeConfig.SnipePauseOnOutOfBallTime;
+        public int SnipePauseOnOutOfBallTime => GenRandom(_settings.SnipeConfig.SnipePauseOnOutOfBallTime);
         public string DataSharingDataUrl => _settings.DataSharingConfig.DataRecieverURL;
         public bool UseTransferFilterToCatch => _settings.CustomCatchConfig.UseTransferFilterToCatch;
 
