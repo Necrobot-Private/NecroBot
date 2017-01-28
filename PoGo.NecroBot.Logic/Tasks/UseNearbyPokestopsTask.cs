@@ -259,7 +259,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                     {
                         var fortInfo = await session.Client.Fort.GetFort(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude);
                         await FarmPokestop(session, pokeStop, fortInfo, cancellationToken, true);
-                        pokeStop.CooldownCompleteTimestampMs = DateTime.UtcNow.ToUnixTime() + 5 * 60 * 1000;
+                        // Synchronize cooldown with map
+                        var mapFort = (await session.Client.Map.GetMapObjects()).MapCells.SelectMany(x => x.Forts).Where(y => y.Id == pokeStop.Id).FirstOrDefault();
+                        if (mapFort != pokeStop)
+                            pokeStop.CooldownCompleteTimestampMs = mapFort.CooldownCompleteTimestampMs;
                         spinedPokeStops.Add(pokeStop);
                         if (spinablePokestops.Count > 1)
                         {
