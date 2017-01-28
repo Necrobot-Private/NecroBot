@@ -22,7 +22,7 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
             if (!string.IsNullOrEmpty(settings.MapzenWalkConfig.MapzenElevationApiKey))
                 ElevationServiceQueue.Add(new MapzenElevationService(settings, cache));
 
-            ElevationServiceQueue.Add(new MapQuestElevationService(settings, cache));
+            //ElevationServiceQueue.Add(new MapQuestElevationService(settings, cache));
 
             if (!string.IsNullOrEmpty(settings.GoogleWalkConfig.GoogleElevationAPIKey))
                 ElevationServiceQueue.Add(new GoogleElevationService(settings, cache));

@@ -60,8 +60,8 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
 
             // Get 'count' top Pokemon and 'orderBy' -> will never be null
             var topPokemon = string.Equals("iv", orderBy)
-                ? await session.Inventory.GetHighestsPerfect(count)
-                : await session.Inventory.GetHighestsCp(count);
+                ? session.Inventory.GetHighestsPerfect(count)
+                : session.Inventory.GetHighestsCp(count);
 
             var topPokemonList = topPokemon as IList<PokemonData> ?? topPokemon.ToList();
 

@@ -99,37 +99,37 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public int DelayTimeAtDestination { get; set; } //  10 sec
 
         [ExcelConfig(Position = 17, Description = "Datasource from pokeradar.info")]
-        [DefaultValue(true)]
+        [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool UsePokeRadar { get; set; }
 
         [ExcelConfig(Position = 18, Description = "Datasource from UseSkiplagged.info")]
-        [DefaultValue(true)]
+        [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool UseSkiplagged { get; set; }
 
         [ExcelConfig(Position = 19, Description = "Datasource from pokekcrew")]
-        [DefaultValue(true)]
+        [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool UsePokecrew { get; set; }
 
         [ExcelConfig(Position = 20, Description = "Datasource from pokesnipers")]
-        [DefaultValue(true)]
+        [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool UsePokesnipers { get; set; }
 
         [ExcelConfig(Position = 21, Description = "Datasource from pokezz.info")]
-        [DefaultValue(true)]
+        [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool UsePokeZZ { get; set; }
 
         [ExcelConfig(Position = 22, Description = "Datasource from pokewatcher")]
-        [DefaultValue(true)]
+        [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool UsePokeWatcher { get; set; }
 
         [ExcelConfig(Position = 23, Description = "Datasource from FPM")]
-        [DefaultValue(true)]
+        [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool UseFastPokemap { get; set; }
 

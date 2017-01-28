@@ -24,7 +24,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         private static async Task<bool> UpgradeSinglePokemon(ISession session, PokemonData pokemon,
             List<Candy> pokemonFamilies, List<PokemonSettings> pokemonSettings)
         {
-            var playerLevel = session.Inventory.GetPlayerStats().Result.FirstOrDefault().Level;
+            var playerLevel = session.Inventory.GetPlayerStats().FirstOrDefault().Level;
             var pokemonLevel = PokemonInfo.GetLevel(pokemon);
 
             if (pokemonLevel > playerLevel) return false;
@@ -36,12 +36,10 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             var upgradeResult = await session.Inventory.UpgradePokemon(pokemon.Id);
 
-            await session.Inventory.UpdateCandy(familyCandy, -settings.CandyToEvolve);
-
             var bestPokemonOfType = (session.LogicSettings.PrioritizeIvOverCp
-                                        ? await session.Inventory.GetHighestPokemonOfTypeByIv(upgradeResult
+                                        ? session.Inventory.GetHighestPokemonOfTypeByIv(upgradeResult
                                             .UpgradedPokemon)
-                                        : await session.Inventory.GetHighestPokemonOfTypeByCp(upgradeResult
+                                        : session.Inventory.GetHighestPokemonOfTypeByCp(upgradeResult
                                             .UpgradedPokemon)) ?? upgradeResult.UpgradedPokemon;
 
             if (upgradeResult.Result == UpgradePokemonResponse.Types.Result.Success)
@@ -77,7 +75,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 if (session.Inventory.GetStarDust() <= session.LogicSettings.GetMinStarDustForLevelUp)
                     return;
-                var pokemonToUpgrade = await session.Inventory.GetSinglePokemon(pokemonId);
+                var pokemonToUpgrade = session.Inventory.GetSinglePokemon(pokemonId);
 
                 if (pokemonToUpgrade == null)
                 {
