@@ -189,8 +189,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 //add catch to avoid snipe duplicate
                 string uniqueCacheKey =
-                    $"{session.Settings.PtcUsername}{session.Settings.GoogleUsername}{Math.Round(encounterEV.Latitude, 6)}{encounterEV.PokemonId}{Math.Round(encounterEV.Longitude, 6)}";
-                session.Cache.Add(uniqueCacheKey, encounterEV, DateTime.Now.AddMinutes(15));
+                    $"{session.Settings.PtcUsername}{session.Settings.GoogleUsername}{Math.Round(encounterEV.Latitude, 6)}{(int)encounterEV.PokemonId}{Math.Round(encounterEV.Longitude, 6)}";
+                session.Cache.Add(uniqueCacheKey, encounterEV, DateTime.Now.AddMinutes(30));
 
                 session.EventDispatcher.Send(encounterEV);
 

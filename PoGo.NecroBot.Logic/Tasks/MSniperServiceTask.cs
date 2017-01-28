@@ -671,6 +671,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     //If bot already catch the same pokemon, and very close this location. 
                     string uniqueCacheKey = $"{session.Settings.PtcUsername}{session.Settings.GoogleUsername}{Math.Round(location.Latitude, 6)}{location.PokemonId}{Math.Round(location.Longitude, 6)}";
+
                     if (session.Cache.Get(uniqueCacheKey) != null) continue;
 
                     session.Cache.Add(location.EncounterId.ToString(), true, DateTime.Now.AddMinutes(15));
@@ -684,6 +685,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Source = "InternalSnipe",
                         Iv = location.Iv
                     });
+
                     session.Stats.IsSnipping = true;
                     var result = location.EncounterId != 0
                         ? await CatchFromService(session, cancellationToken, location)
