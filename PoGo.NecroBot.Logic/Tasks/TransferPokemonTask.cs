@@ -23,7 +23,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 if (!await blocker.WaitToRun()) return;
 
-                var all = await session.Inventory.GetPokemons();
+                var all = session.Inventory.GetPokemons();
                 List<PokemonData> pokemonToTransfer = new List<PokemonData>();
                 var pokemons = all.OrderBy(x => x.Cp).ThenBy(n => n.StaminaMax);
 
@@ -42,10 +42,9 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 foreach (var pokemon in pokemonToTransfer)
                 {
-                    await session.Inventory.DeletePokemonFromInvById(pokemon.Id);
                     var bestPokemonOfType = (session.LogicSettings.PrioritizeIvOverCp
-                                                ? await session.Inventory.GetHighestPokemonOfTypeByIv(pokemon)
-                                                : await session.Inventory.GetHighestPokemonOfTypeByCp(pokemon)) ??
+                                                ? session.Inventory.GetHighestPokemonOfTypeByIv(pokemon)
+                                                : session.Inventory.GetHighestPokemonOfTypeByCp(pokemon)) ??
                                             pokemon;
 
                     var setting = pokemonSettings.Single(q => q.PokemonId == pokemon.PokemonId);

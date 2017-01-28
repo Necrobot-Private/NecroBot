@@ -20,14 +20,14 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
 
         public override async Task<bool> OnCommand(ISession session, string cmd, Action<string> callback)
         {
-            var playerStats = (await session.Inventory.GetPlayerStats()).FirstOrDefault();
+            var playerStats = (session.Inventory.GetPlayerStats()).FirstOrDefault();
             if (cmd.ToLower() != Command || playerStats == null)
             {
                 return false;
             }
 
             var answerTextmessage = GetMsgHead(session, session.Profile.PlayerData.Username) + "\r\n\r\n";
-            var pokemonInBag = (await session.Inventory.GetPokemons()).ToList().Count;
+            var pokemonInBag = session.Inventory.GetPokemons().ToList().Count;
             answerTextmessage += session.Translation.GetTranslation(
                 TranslationString.TelegramCommandProfileMsgBody,
                 session.Profile.PlayerData.Username,
@@ -39,7 +39,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
                 pokemonInBag,
                 playerStats.Evolutions,
                 playerStats.PokeStopVisits,
-                (await session.Inventory.GetTotalItemCount()),
+                session.Inventory.GetTotalItemCount(),
                 session.Inventory.GetStarDust(),
                 playerStats.EggsHatched,
                 playerStats.UniquePokedexEntries,

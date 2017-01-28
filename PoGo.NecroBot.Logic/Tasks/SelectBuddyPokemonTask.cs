@@ -11,7 +11,7 @@ namespace PoGo.NecroBot.Logic.Tasks
     {
         public static async Task Execute(ISession session, CancellationToken cancellationToken, ulong pokemonId)
         {
-            var pokemon = (await session.Inventory.GetPokemons()).FirstOrDefault(x => x.Id == pokemonId);
+            var pokemon = session.Inventory.GetPokemons().FirstOrDefault(x => x.Id == pokemonId);
 
             if (pokemon == null) return;
 

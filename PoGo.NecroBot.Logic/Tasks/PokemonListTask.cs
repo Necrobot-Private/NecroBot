@@ -25,7 +25,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             var myPokemonFamilies = await session.Inventory.GetPokemonFamilies();
             var pokemonFamilies = myPokemonFamilies.ToArray();
 
-            var allPokemonInBag = await session.Inventory.GetHighestsCp(1000);
+            var allPokemonInBag = session.Inventory.GetHighestsCp(1000);
 
             var pkmWithIv = allPokemonInBag.Select(p =>
             {

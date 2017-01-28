@@ -435,7 +435,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static object locker = new object();
 
-        public static async Task<bool> AddSnipeItem(ISession session, MSniperInfo2 item, bool byPassValidation = false)
+        public static bool AddSnipeItem(ISession session, MSniperInfo2 item, bool byPassValidation = false)
         {
             if (isBlocking) return false;
             if (Math.Abs(item.Latitude) > 90 || Math.Abs(item.Longitude) > 180) return false;
@@ -461,7 +461,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             item.Iv = Math.Round(item.Iv, 2);
             if (session.LogicSettings.SnipePokemonNotInPokedex)
             {
-                var pokedex = await session.Inventory.GetPokeDexItems();
+                var pokedex = session.Inventory.GetPokeDexItems();
 
                 if (!pokedex.Exists(x => x.InventoryItemData?.PokedexEntry?.PokemonId == (PokemonId) item.PokemonId) &&
                     !pokedexSnipePokemons.Exists(p => p.PokemonId == item.PokemonId) &&
@@ -586,7 +586,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     return;
                 }
 
-                if (autoSnipePokemons.Count > 0 && !await SnipePokemonTask.CheckPokeballsToSnipe(
+                if (autoSnipePokemons.Count > 0 && !SnipePokemonTask.CheckPokeballsToSnipe(
                         session.LogicSettings.MinPokeballsToSnipe + 1, session, cancellationToken))
                 {
                     session.EventDispatcher.Send(new WarnEvent()
@@ -656,7 +656,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     if (location.EncounterId > 0 && session.Cache[location.EncounterId.ToString()] != null) continue;
 
-                    if (!await SnipePokemonTask.CheckPokeballsToSnipe(session.LogicSettings.MinPokeballsWhileSnipe + 1, session, cancellationToken))
+                    if (!SnipePokemonTask.CheckPokeballsToSnipe(session.LogicSettings.MinPokeballsWhileSnipe + 1, session, cancellationToken))
                     {
                         session.EventDispatcher.Send(new WarnEvent()
                         {

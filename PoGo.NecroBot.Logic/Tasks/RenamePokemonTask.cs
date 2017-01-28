@@ -23,7 +23,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             //await session.Inventory.RefreshCachedInventory();
 
-            var pokemons = await session.Inventory.GetPokemons();
+            var pokemons = session.Inventory.GetPokemons();
 
             foreach (var pokemon in pokemons)
             {
@@ -53,8 +53,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                     if (result.Result == NicknamePokemonResponse.Types.Result.Success)
                     {
                         pokemon.Nickname = newNickname;
-                        await session.Inventory.DeletePokemonFromInvById(pokemon.Id);
-                        await session.Inventory.AddPokemonToCache(pokemon);
 
                         session.EventDispatcher.Send(new NoticeEvent
                         {
