@@ -628,10 +628,10 @@ namespace PoGo.NecroBot.Logic
 
         public async Task<IEnumerable<MoveSettings>> GetMoveSettings()
         {
-            if (_templates == null)
-                _templates = await _client.Download.GetItemTemplates();
+            if (_client.Download.ItemTemplates == null)
+                await _client.Download.GetItemTemplates();
 
-            var moveSettings = _templates.ItemTemplates.Where(x => x.MoveSettings != null)
+            var moveSettings = _client.Download.ItemTemplates.Where(x => x.MoveSettings != null)
                 .Select(x => x.MoveSettings);
 
             return moveSettings;

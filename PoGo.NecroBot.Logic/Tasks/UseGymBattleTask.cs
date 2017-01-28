@@ -75,16 +75,16 @@ namespace PoGo.NecroBot.Logic.Tasks
                             if (response != null && response.Result == FortDeployPokemonResponse.Types.Result.Success)
                             {
                                 await Task.Delay(2000);
-                                var refreshResult = await session.Inventory.RefreshCachedInventory();
-                                if (refreshResult.Success)
-                                {
+                                //var refreshResult = await session.Inventory.RefreshCachedInventory();
+                                //if (refreshResult.Success)
+                                //{
                                     deployedPokemons = await session.Inventory.GetDeployedPokemons();
                                     deployedList = new List<PokemonData>(deployedPokemons);
                                     //await Task.Delay(2000);
                                     //List<FortData> allForts = await UseNearbyPokestopsTask.UpdateFortsData(session);
                                     //gym = allForts.FirstOrDefault(f => f.Id == gym.Id);
                                     await Task.Delay(2000);
-                                }
+                                //}
                                 fortDetails = await session.Client.Fort.GetGymDetails(gym.Id, gym.Latitude, gym.Longitude);
                             }
 
@@ -130,7 +130,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
             }
 
-            await session.Inventory.RefreshCachedInventory();
+            //await session.Inventory.RefreshCachedInventory();
             //var badassPokemon = await session.Inventory.GetHighestCpForGym(6);
             var badassPokemon = await CompleteAttackTeam(session, defenders);
             var pokemonDatas = badassPokemon as PokemonData[] ?? badassPokemon.ToArray();
@@ -824,9 +824,9 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                         var attackTime = attackActionz.Sum(x => x.DurationMs);
                         if (attackActionz.Any(a => a.Type == BattleActionType.ActionSpecialAttack))
-                            attackTime = (int)(attackTime * 1.15);
+                            attackTime = (int)(attackTime * 1.2);
                         int attackTimeCorrected = attackTime - (int)(timeAfter- timeBefore);
-                        TimedLog(string.Format("Waiting for attack to be prepared(+10% for special attacks): {0} (last call was {1}, after correction {2})", attackTime, timeAfter, attackTimeCorrected > 0 ? attackTimeCorrected : 0));
+                        TimedLog(string.Format("Waiting for attack to be prepared(+20% for special attacks): {0} (last call was {1}, after correction {2})", attackTime, timeAfter, attackTimeCorrected > 0 ? attackTimeCorrected : 0));
                         if (attackTimeCorrected > 0)
                             await Task.Delay(attackTimeCorrected);
 
@@ -1228,12 +1228,18 @@ namespace PoGo.NecroBot.Logic.Tasks
                 fort = gymDetails.GymState.FortData;
             else
             {
-                var task = session.Client.Fort.GetGymDetails(fort.Id, fort.Latitude, fort.Longitude);
-                task.Wait();
-                if (task.IsCompleted && task.Result.Result == GetGymDetailsResponse.Types.Result.Success)
+                try
                 {
-                    fort = task.Result.GymState.FortData;
-                    gymDetails = task.Result;
+                    var task = session.Client.Fort.GetGymDetails(fort.Id, fort.Latitude, fort.Longitude);
+                    task.Wait();
+                    if (task.IsCompleted && task.Result.Result == GetGymDetailsResponse.Types.Result.Success)
+                    {
+                        fort = task.Result.GymState.FortData;
+                        gymDetails = task.Result;
+                    }
+                } catch(Exception ex)
+                {
+                    TimedLog(ex.Message);
                 }
             }
 
