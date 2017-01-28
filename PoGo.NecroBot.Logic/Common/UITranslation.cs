@@ -19,6 +19,8 @@ namespace PoGo.NecroBot.Logic.Common
 
         [Description("Sniper")]
         public string SniperTabTitle { get; set; }
+        [Description("Bot switching account... ")]
+        public string AccountSwitching { get; set; }
 
 
         [Description("Console")]
