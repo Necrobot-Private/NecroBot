@@ -23,9 +23,6 @@ namespace PoGo.NecroBot.Logic.Tasks
 {
     public class UseNearbyPokestopsTask
     {
-        //add delegate
-        public delegate void LootPokestopDelegate(FortData pokestop);
-
         private static int _stopsHit;
         private static int _randomStop;
         private static Random _rc; //initialize pokestop random cleanup counter first time
@@ -185,7 +182,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 //TODO : A logic need to be add for handle this  case?
             };
 
-            var deployedPokemons = await session.Inventory.GetDeployedPokemons();
+            var deployedPokemons = session.Inventory.GetDeployedPokemons();
 
             var forts = session.Forts
                 .Where(p => p.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime())
@@ -217,7 +214,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 forts = forts.Where(p => LocationUtils.CalculateDistanceInMeters(p.Latitude, p.Longitude, session.Client.CurrentLatitude, session.Client.CurrentLongitude) < 40).ToList();
             }
 
-            if (!session.LogicSettings.GymConfig.Enable /*|| session.Inventory.GetPlayerStats().Result.FirstOrDefault().Level <= 5*/)
+            if (!session.LogicSettings.GymConfig.Enable /*|| session.Inventory.GetPlayerStats().FirstOrDefault().Level <= 5*/)
             {
                 // Filter out the gyms
                 forts = forts.Where(x => x.Type != FortType.Gym).ToList();
@@ -262,7 +259,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                     {
                         var fortInfo = await session.Client.Fort.GetFort(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude);
                         await FarmPokestop(session, pokeStop, fortInfo, cancellationToken, true);
-                        pokeStop.CooldownCompleteTimestampMs = DateTime.UtcNow.ToUnixTime() + 5 * 60 * 1000;
+                        // Synchronize cooldown with map
+                        var mapFort = (await session.Client.Map.GetMapObjects()).MapCells.SelectMany(x => x.Forts).Where(y => y.Id == pokeStop.Id).FirstOrDefault();
+                        if (mapFort != pokeStop)
+                            pokeStop.CooldownCompleteTimestampMs = mapFort.CooldownCompleteTimestampMs;
                         spinedPokeStops.Add(pokeStop);
                         if (spinablePokestops.Count > 1)
                         {
@@ -424,12 +424,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                         mapEmptyCount = 0;
                         foreach (var item in fortSearch.ItemsAwarded)
                         {
-                            await session.Inventory.UpdateInventoryItem(item.ItemId, item.ItemCount);
+                            await session.Inventory.UpdateInventoryItem(item.ItemId);
                         }
                         if (fortSearch.PokemonDataEgg != null)
                         {
                             fortSearch.PokemonDataEgg.IsEgg = true;
-                            await session.Inventory.AddPokemonToCache(fortSearch.PokemonDataEgg);
                         }
 
                     }
@@ -446,11 +445,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Logger.Write($"(POKESTOP LIMIT) {session.Stats.GetNumPokestopsInLast24Hours()}/{session.LogicSettings.PokeStopLimit}",
                             LogLevel.Info, ConsoleColor.Yellow);
                     }
-
-                    //add pokeStops to Map
-                    OnLootPokestopEvent(pokeStop);
-                    //end pokeStop to Map
-
                     break; //Continue with program as loot was succesfull.
                 }
             } while (fortTry < retryNumber - zeroCheck);
@@ -558,9 +552,9 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             var mapObjects = await session.Client.Map.GetMapObjects();
 
-            session.AddForts(mapObjects.Item1.MapCells.SelectMany(p => p.Forts).ToList());
+            session.AddForts(mapObjects.MapCells.SelectMany(p => p.Forts).ToList());
 
-            var pokeStops = mapObjects.Item1.MapCells.SelectMany(i => i.Forts)
+            var pokeStops = mapObjects.MapCells.SelectMany(i => i.Forts)
                 .Where(
                     i =>
                         (i.Type == FortType.Checkpoint || i.Type == FortType.Gym) &&
@@ -573,11 +567,5 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             return pokeStops.ToList();
         }
-        //add delegate event
-        private static void OnLootPokestopEvent(FortData pokestop)
-        {
-            LootPokestopEvent?.Invoke(pokestop);
-        }
-        public static event LootPokestopDelegate LootPokestopEvent;
     }
 }
