@@ -500,9 +500,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                     });
                     await Task.Delay(1000);
                     var mapObjects = session.Client.Map.GetMapObjects().Result;
-                    //session.AddForts(mapObjects.Item1.MapCells.SelectMany(p => p.Forts).ToList());
+                    //session.AddForts(mapObjects.MapCells.SelectMany(p => p.Forts).ToList());
                     catchablePokemon =
-                        mapObjects.Item1.MapCells.SelectMany(q => q.CatchablePokemons)
+                        mapObjects.MapCells.SelectMany(q => q.CatchablePokemons)
                             .Where(q => pokemonIds.Contains(q.PokemonId))
                             .OrderByDescending(pokemon => PokemonInfo.CalculateMaxCpMultiplier(pokemon.PokemonId))
                             .ToList();

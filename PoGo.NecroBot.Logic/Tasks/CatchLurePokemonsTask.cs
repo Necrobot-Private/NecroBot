@@ -106,7 +106,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             // Looking for any lure pokestop neaby
 
             var mapObjects = await session.Client.Map.GetMapObjects();
-            var pokeStops = mapObjects.Item1.MapCells.SelectMany(i => i.Forts)
+            var pokeStops = mapObjects.MapCells.SelectMany(i => i.Forts)
                 .Where(
                     i =>
                         (i.Type == FortType.Checkpoint) &&
