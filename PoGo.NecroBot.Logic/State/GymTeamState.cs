@@ -1,4 +1,5 @@
 ﻿using POGOProtos.Data;
+using POGOProtos.Settings.Master;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,11 @@ namespace PoGo.NecroBot.Logic.State
     {
         public List<MyPokemonStat> myPokemons { get; private set; }
 
+        public List<MyPokemonStat> otherDefenders { get; private set; }
+
         public List<GymPokemon> myTeam { get; private set; }
+
+        public IEnumerable<MoveSettings> moveSettings { get; set; }
 
         public GymTeamState()
         {
@@ -19,11 +24,17 @@ namespace PoGo.NecroBot.Logic.State
             myPokemons = new List<MyPokemonStat>();
         }
 
-        public void addPokemon(ISession session, PokemonData pokemon)
+        public void addPokemon(ISession session, PokemonData pokemon, bool isMine=true)
         {
-            if (myPokemons.Any(a => a.data.Id == pokemon.Id))
+            if (isMine && myPokemons.Any(a => a.data.Id == pokemon.Id))
                 return;
-            myPokemons.Add(new MyPokemonStat(session, pokemon));
+            if (!isMine && otherDefenders.Any(a => a.data.Id == pokemon.Id))
+                return;
+
+            if (isMine)
+                myPokemons.Add(new MyPokemonStat(session, pokemon));
+            else
+                otherDefenders.Add(new MyPokemonStat(session, pokemon));
         }
 
         public void Dispose()
