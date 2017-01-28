@@ -36,7 +36,6 @@ namespace PoGo.NecroBot.Logic
 
         private readonly List<ItemId> _revives = new List<ItemId> {ItemId.ItemRevive, ItemId.ItemMaxRevive};
         private GetInventoryResponse _cachedInventory = null;
-        private DateTime _lastRefresh;
         private ISession ownerSession;
 
         public int GetCandy(PokemonId id)
@@ -59,7 +58,6 @@ namespace PoGo.NecroBot.Logic
             {
                 //Console.WriteLine("################# INVENTORY UPDATE ######################");
                 _cachedInventory = refreshedInventoryData;
-                _lastRefresh = DateTime.Now;
                 if (onUpdated != null && _player != null)
                 {
                     onUpdated(_cachedInventory);
@@ -154,7 +152,13 @@ namespace PoGo.NecroBot.Logic
                 }
             }
             
-            return _cachedInventory;
+            lock (_cachedInventory)
+            {
+                if (_cachedInventory != null && _client.InventoryLastUpdateTimestamp + (5*60*1000) > PokemonGo.RocketAPI.Util.TimeUtil.GetCurrentTimestampInMilliseconds())
+                    return _cachedInventory;
+            }
+
+            return await RefreshCachedInventory();
         }
 
         public async Task<IEnumerable<AppliedItems>> GetAppliedItems()
@@ -776,17 +780,13 @@ namespace PoGo.NecroBot.Logic
                 _logicSettings.KeepMinOperator, _logicSettings.KeepMinDuplicatePokemon);
         }
 
-        // Now that inventory is refreshed every time we make an API call, this function is no longer needed.
-        /*
         public async Task<GetInventoryResponse> RefreshCachedInventory()
         {
-            var now = DateTime.UtcNow;
             var ss = new SemaphoreSlim(10);
 
             await ss.WaitAsync();
             try
             {
-                _lastRefresh = now;
                 _cachedInventory = await _client.Inventory.GetInventory();
                 return _cachedInventory;
             }
@@ -795,7 +795,6 @@ namespace PoGo.NecroBot.Logic
                 ss.Release();
             }
         }
-        */
 
         public async Task<UpgradePokemonResponse> UpgradePokemon(ulong pokemonid)
         {
