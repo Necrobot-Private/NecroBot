@@ -87,7 +87,7 @@ namespace PoGo.NecroBot.Logic.PoGoUtils
             //TODO : Lets use the simple formulat att+def+sta /45
 
             //if (Math.Abs(poke.CpMultiplier + poke.AdditionalCpMultiplier) <= 0)
-                return (poke.IndividualAttack + poke.IndividualDefense + poke.IndividualStamina) / 45.0 * 100.0;
+                return Math.Round((poke.IndividualAttack + poke.IndividualDefense + poke.IndividualStamina) / 45.0 * 100.0, 2);
 
             //GetBaseStats(poke.PokemonId);
             //var maxCp = CalculateMaxCpMultiplier(poke.PokemonId);
