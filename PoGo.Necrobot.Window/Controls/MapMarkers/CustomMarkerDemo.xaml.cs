@@ -16,7 +16,7 @@ namespace PoGo.Necrobot.Window.Controls.MapMarkers
       Popup Popup;
       Label Label;
       GMapMarker Marker;
-        MainClientWindow MainWindow;
+      MainClientWindow MainWindow;
 
       public CustomMarkerDemo(MainClientWindow window, GMapMarker marker, string title)
       {

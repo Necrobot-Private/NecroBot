@@ -168,7 +168,6 @@ namespace PoGo.NecroBot.Logic.State
             {
                 var candy = this.Inventory.GetPokemonFamilies().Result.ToList();
                 var pokemonSettings = this.Inventory.GetPokemonSettings().Result.ToList();
-                //var playerStats = null;// this.Inventory.GetPlayerStats().Result;
                 this.EventDispatcher.Send(new InventoryRefreshedEvent(args, null, pokemonSettings, candy));
             });
             Navigation = new Navigation(Client, logicSettings);
@@ -188,27 +187,28 @@ namespace PoGo.NecroBot.Logic.State
 
             var nextBot = bot == null? manager.GetSwitchableAccount() : bot;
 
-                this.Settings.AuthType = nextBot.AuthType;
-                this.Settings.GooglePassword = nextBot.GooglePassword;
-                this.Settings.GoogleUsername = nextBot.GoogleUsername;
-                this.Settings.PtcPassword = nextBot.PtcPassword;
-                this.Settings.PtcUsername = nextBot.PtcUsername;
-                this.Settings.DefaultAltitude = att == 0 ? this.Client.CurrentAltitude : att;
-                this.Settings.DefaultLatitude = lat == 0 ? this.Client.CurrentLatitude : lat;
-                this.Settings.DefaultLongitude = lng == 0 ? this.Client.CurrentLongitude : lng;
-                this.Stats = new SessionStats(this);
-                this.Reset(this.Settings, this.LogicSettings);
-                //CancellationTokenSource.Cancel();
-                this.CancellationTokenSource = new CancellationTokenSource();
+            this.Settings.AuthType = nextBot.AuthType;
+            this.Settings.GooglePassword = nextBot.GooglePassword;
+            this.Settings.GoogleUsername = nextBot.GoogleUsername;
+            this.Settings.PtcPassword = nextBot.PtcPassword;
+            this.Settings.PtcUsername = nextBot.PtcUsername;
+            this.Settings.DefaultAltitude = att == 0 ? this.Client.CurrentAltitude : att;
+            this.Settings.DefaultLatitude = lat == 0 ? this.Client.CurrentLatitude : lat;
+            this.Settings.DefaultLongitude = lng == 0 ? this.Client.CurrentLongitude : lng;
+            this.Stats = new SessionStats(this);
+            this.Reset(this.Settings, this.LogicSettings);
+            //CancellationTokenSource.Cancel();
+            this.CancellationTokenSource = new CancellationTokenSource();
 
-                this.EventDispatcher.Send(new BotSwitchedEvent()
-                {
-                });
+            this.EventDispatcher.Send(new BotSwitchedEvent(nextBot)
+            {
+            });
+
             if (this.LogicSettings.MultipleBotConfig.DisplayList)
             {
                 manager.DumpAccountList();
             }
-           return true;
+            return true;
         }
 
         public void AddForts(List<FortData> data)

@@ -28,7 +28,7 @@ namespace PoGo.Necrobot.Window.Model
             this.Level = (int)PokemonInfo.GetLevel(pokemon);
             this.Favorited = pokemon.Favorite > 0;
             this.IsSelected = false;
-            this.Move1 = pokemon.Move1.ToString();
+            this.Move1 = pokemon.Move1.ToString().Replace("Fast", "");
             this.Move2 = pokemon.Move2.ToString();
             
             this.PokemonSettings = setting;
@@ -75,7 +75,18 @@ namespace PoGo.Necrobot.Window.Model
 
             }
         }
-        public bool IsSelected { get; set; }
+
+        private bool isSelected;
+        public bool IsSelected
+        {
+            get { return isSelected; }
+            set
+            {
+                isSelected = value;
+                RaisePropertyChanged("IsSelected");
+            }
+        }
+
         public PokemonId PokemonName { get; set; }
 
         public int Level { get; set; }
@@ -106,7 +117,8 @@ namespace PoGo.Necrobot.Window.Model
         public DateTime CaughtTime { get; set; }
 
         public ulong Id { get; set; }
-        int hp;
+
+        private int hp;
         public int HP
         {
             get { return hp; }
@@ -114,9 +126,21 @@ namespace PoGo.Necrobot.Window.Model
             {
                 hp = value;
                 RaisePropertyChanged("HP");
+                RaisePropertyChanged("HPDisplay");
             }
         }
-        public int MaxHP { get; set; }
+        
+        private int maxHp;
+        public int MaxHP
+        {
+            get { return maxHp; }
+            set
+            {
+                maxHp = value;
+                RaisePropertyChanged("MaxHP");
+                RaisePropertyChanged("HPDisplay");
+            }
+        }
 
         private bool favorited;
 
@@ -129,7 +153,7 @@ namespace PoGo.Necrobot.Window.Model
                 RaisePropertyChanged("Favorited");
             }
         }
-        public string HPDisplay => $"{HP} ({Math.Round(((100.0 * HP) / MaxHP), 2):P}";
+        public string HPDisplay => $"{HP}/{MaxHP}";
 
         private bool allowEvolve;
 

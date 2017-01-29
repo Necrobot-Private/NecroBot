@@ -13,6 +13,7 @@ using POGOProtos.Enums;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Map.Fort;
 using POGOProtos.Networking.Responses;
+using PoGo.NecroBot.Logic.Event.Snipe;
 
 #endregion
 
@@ -32,6 +33,14 @@ namespace PoGo.NecroBot.CLI
             Logger.Write(errorEvent.ToString(), LogLevel.Error, force: true);
         }
 
+        private static void HandleEvent(SnipePokemonUpdateEvent e, ISession session)
+        {
+
+            //move to resource later
+            if (e.IsRemoteEvent) {
+                Logger.Write($"Expired snipe pokemon has been removed from queue : {e.Data.PokemonId} ");
+        }
+        }
 
         private static void HandleEvent(NoticeEvent noticeEvent, ISession session)
         {

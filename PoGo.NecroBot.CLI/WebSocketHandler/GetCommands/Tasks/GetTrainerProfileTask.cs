@@ -19,7 +19,7 @@ namespace PoGo.NecroBot.CLI.WebSocketHandler.GetCommands.Tasks
             {
                 // if (!await blocker.WaitToRun()) return;
 
-                var playerStats = (await session.Inventory.GetPlayerStats()).FirstOrDefault();
+                var playerStats = (session.Inventory.GetPlayerStats()).FirstOrDefault();
                 if (playerStats == null)
                     return;
                 var tmpData = new TrainerProfileWeb(session.Profile.PlayerData, playerStats);

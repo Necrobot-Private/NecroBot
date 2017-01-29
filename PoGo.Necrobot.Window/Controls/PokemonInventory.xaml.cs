@@ -40,6 +40,16 @@ namespace PoGo.Necrobot.Window.Controls
 
         private void gridData_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            // The bulk selection only works when 2 or more rows are selected.  This is to work around
+            // issues with the checkbox and row selection when only one row is clicked.
+            if (e.AddedItems.Count > 1)
+            {
+                foreach (PokemonDataViewModel pokemon in e.AddedItems)
+                {
+                    pokemon.IsSelected = true;
+                }
+            }
+
             var data = DataContext as PokemonListModel;
             var count = data.Pokemons.Count(x => x.IsSelected);
             //TODO : Thought it will better to use binding.
@@ -99,7 +109,7 @@ namespace PoGo.Necrobot.Window.Controls
             Task.Run(async () => { await EvolveSpecificPokemonTask.Execute(Session, pokemonId); });
         }
 
-        private void btnFavorit_Click(object sender, RoutedEventArgs e)
+        private void btnFavorite_Click(object sender, RoutedEventArgs e)
         {
             var model = this.DataContext as PokemonListModel;
 
@@ -111,7 +121,7 @@ namespace PoGo.Necrobot.Window.Controls
 
         private void Select_Checked(object sender, RoutedEventArgs e)
         {
-            ulong pokemonId = (ulong) ((CheckBox) sender).CommandParameter;
+            ulong pokemonId = (ulong)((CheckBox)sender).CommandParameter;
 
             var data = DataContext as PokemonListModel;
             var count = data.Pokemons.Count(x => x.IsSelected);

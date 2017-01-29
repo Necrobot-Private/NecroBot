@@ -209,7 +209,7 @@ namespace PoGo.NecroBot.Logic.State
                                        session.LogicSettings.PercentOfInventoryRevivesToKeep +
                                        session.LogicSettings.PercentOfInventoryBerriesToKeep;
 
-                    if (totalPercent != 100)
+                    if (totalPercent > 100)
                     {
                         Logger.Write(session.Translation.GetTranslation(TranslationString.TotalRecyclePercentGreaterThan100), LogLevel.Error);
                         Logger.Write("Press any key to exit, then fix your configuration and run the bot again.", LogLevel.Warning);
@@ -305,9 +305,9 @@ namespace PoGo.NecroBot.Logic.State
             {
                 //TODO : need get all data at 1 call here to save speed login.
                 session.Profile = await session.Inventory.GetPlayerData();
-                var stats = await session.Inventory.GetPlayerStats();
+                var stats = session.Inventory.GetPlayerStats();
 
-                TinyIoCContainer.Current.Resolve<MultiAccountManager>().Logged();
+                TinyIoCContainer.Current.Resolve<MultiAccountManager>().Logged(session.Profile, stats);
                 session.EventDispatcher.Send(new ProfileEvent {Profile = session.Profile, Stats = stats});
             }
             catch (UriFormatException e)

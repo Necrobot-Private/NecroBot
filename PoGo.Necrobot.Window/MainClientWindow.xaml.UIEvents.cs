@@ -35,6 +35,13 @@ namespace PoGo.Necrobot.Window
         {
             this.datacontext.PokemonList.OnFavorited(ev);
         }
+        public void OnBotEvent(BotSwitchedEvent ex)
+        {
+            //this.botMap.Reset();
+            this.datacontext.Reset();
+            this.popSwithAccount.IsOpen = true;
+            //show popup...
+        }
         public void OnBotEvent(FinishUpgradeEvent e)
         {
             this.datacontext.PokemonList.OnUpgradeEnd(e);
@@ -76,8 +83,8 @@ namespace PoGo.Necrobot.Window
 
             var data = inventory.Inventory;
 
-            var maxPokemonStogare = currentSession.Profile?.PlayerData?.MaxPokemonStorage;
-            var maxItemStogare = currentSession.Profile?.PlayerData?.MaxItemStorage;
+            var maxPokemonStorage = currentSession.Profile?.PlayerData?.MaxPokemonStorage;
+            var maxItemStorage = currentSession.Profile?.PlayerData?.MaxItemStorage;
             var pokemons = data.InventoryDelta.InventoryItems
                 .Select(x => x.InventoryItemData?.PokemonData)
                 .Where(x => x != null && !x.IsEgg)
@@ -88,17 +95,15 @@ namespace PoGo.Necrobot.Window
 
             datacontext.EggsList.OnInventoryRefreshed(inventory.Inventory);
             var items = data.InventoryDelta.InventoryItems.Select(x => x.InventoryItemData?.Item).Where(x => x != null).ToList();
-            this.datacontext.MaxItemStogare = maxItemStogare.Value;
+            this.datacontext.MaxItemStorage = maxItemStorage.Value;
             this.datacontext.ItemsList.Update(items);
             this.datacontext.PokemonList.Update(pokemons, inventory.Candies, inventory.PokemonSettings);
             this.datacontext.RaisePropertyChanged("PokemonTabHeader");
             this.datacontext.RaisePropertyChanged("ItemsTabHeader");
-            this.datacontext.RaisePropertyChanged("MaxItemStogare");
+            this.datacontext.RaisePropertyChanged("MaxItemStorage");
             UIUpdateSafe(() =>
              {
-                 tabPokemons.Header = $"   POKEMONS ({this.datacontext.Pokemons.Count}/{maxPokemonStogare})  ";
-                 //tabItems.Header = $"   POKEMONS ({this.datacontext.Pokemons.Count}/{maxPokemonStogare})  ";
-
+                 tabPokemons.Header = $"   Pokemons ({this.datacontext.Pokemons.Count}/{maxPokemonStorage})   ";
              });
         }
 
@@ -119,8 +124,10 @@ namespace PoGo.Necrobot.Window
             this.datacontext.UI.PlayerStatus = "Playing";
             this.datacontext.UI.PlayerName = userLogged.Profile.PlayerData.Username;
             this.datacontext.RaisePropertyChanged("UI");
+
             this.Dispatcher.Invoke(() =>
             {
+                this.popSwithAccount.IsOpen = false;
                 lblAccount.Content = $"{this.datacontext.UI.PlayerStatus} as : {this.datacontext.UI.PlayerName}";
 
             });

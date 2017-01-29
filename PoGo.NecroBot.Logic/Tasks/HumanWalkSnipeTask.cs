@@ -78,17 +78,17 @@ namespace PoGo.NecroBot.Logic.Tasks
             }, false);
         }
 
-        public static async Task<bool> CheckPokeballsToSnipe(int minPokeballs, ISession session,
+        public static bool CheckPokeballsToSnipe(int minPokeballs, ISession session,
             CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
             // Refresh inventory so that the player stats are fresh
             //await session.Inventory.RefreshCachedInventory();
-            var pokeBallsCount = await session.Inventory.GetItemAmountByType(ItemId.ItemPokeBall);
-            pokeBallsCount += await session.Inventory.GetItemAmountByType(ItemId.ItemGreatBall);
-            pokeBallsCount += await session.Inventory.GetItemAmountByType(ItemId.ItemUltraBall);
-            pokeBallsCount += await session.Inventory.GetItemAmountByType(ItemId.ItemMasterBall);
+            var pokeBallsCount = session.Inventory.GetItemAmountByType(ItemId.ItemPokeBall);
+            pokeBallsCount += session.Inventory.GetItemAmountByType(ItemId.ItemGreatBall);
+            pokeBallsCount += session.Inventory.GetItemAmountByType(ItemId.ItemUltraBall);
+            pokeBallsCount += session.Inventory.GetItemAmountByType(ItemId.ItemMasterBall);
 
             if (pokeBallsCount < minPokeballs)
             {
@@ -149,7 +149,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             if (_setting.HumanWalkingSnipeTryCatchEmAll)
             {
-                var checkBall = await CheckPokeballsToSnipe(_setting.HumanWalkingSnipeCatchEmAllMinBalls, session,
+                var checkBall = CheckPokeballsToSnipe(_setting.HumanWalkingSnipeCatchEmAllMinBalls, session,
                     cancellationToken);
                 if (!checkBall && !prioritySnipeFlag) return;
             }

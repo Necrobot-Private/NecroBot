@@ -16,7 +16,12 @@
                       WindowStartupLocation="CenterScreen" Loaded="MetroWindow_Loaded">
     <Control.Resources>
         <c:I18NConveter x:Key="I18NConveter"/>
+        <Style x:Key="LatoFont">
+            <Setter Property="TextElement.FontFamily" 
+            Value="pack://application:,,,/Resources/#Lato-light" />
+        </Style>
     </Control.Resources>
+    
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
             <Button Click="Theme_Selected">
@@ -30,7 +35,7 @@
                     </Rectangle>
                     <TextBlock Margin="4 0 0 0"
                                VerticalAlignment="Center"
-                               Text="Theme" />
+                               Text="{Binding Source=Theme, Converter={StaticResource ResourceKey=I18NConveter}}" />
 
                     <Popup Margin="10,10,0,13" Name="Popup1"
                            HorizontalAlignment="Left"
@@ -81,7 +86,7 @@
                     </Rectangle>
                     <TextBlock Margin="4 0 0 0" Name="consoleMenuText"
                                VerticalAlignment="Center"
-                               Text="Show Console" />
+                               Text="{Binding Source=ShowConsole, Converter={StaticResource I18NConveter}}" />
                 </StackPanel>
 
             </Button>
@@ -96,7 +101,7 @@
                     </Rectangle>
                     <TextBlock Margin="4 0 0 0"
                                VerticalAlignment="Center"
-                               Text="Settings" />
+                               Text="{Binding Source=MenuSetting, Converter={StaticResource I18NConveter}}" />
                 </StackPanel>
             </Button>
         </Controls:WindowCommands>
@@ -130,7 +135,13 @@
                 <TextBlock Name="lblCount" />
             </StatusBarItem>
         </StatusBar>
-
+        <Popup Name="popSwithAccount" Placement="Center" IsOpen="False" Width="300" Height="90" >
+            <Border BorderBrush="Coral" Background="WhiteSmoke" BorderThickness="4">
+                <StackPanel Margin="30,30,30,30">
+                    <TextBlock Name="txtMessage" Text="{Binding Source=AccountSwitching, Converter={StaticResource ResourceKey=I18NConveter}}"></TextBlock>
+                </StackPanel>
+            </Border>
+        </Popup>
         <TabControl TabStripPlacement="Left" HorizontalAlignment="Stretch" 
                     VerticalAlignment="Stretch" 
                     Name="tabMain"
@@ -159,14 +170,16 @@
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="7*" />
-                        <ColumnDefinition Width="5" />
+                        <!--<ColumnDefinition Width="5" />-->
                         <ColumnDefinition Width="auto" />
                     </Grid.ColumnDefinitions>
                     <local:MapControl x:Name="botMap" Grid.Column="0" DataContext="{Binding Path=Map}" />
+                    <!--
                     <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
                     <local:SidebarControl Visibility="Hidden" DataContext="{Binding Path=Sidebar}"
                                           x:Name="sidebarControl" Grid.Column="2" HorizontalAlignment="Stretch"
                                           VerticalAlignment="Stretch" MinWidth="150" />
+                    -->
                 </Grid>
             </TabItem>
             <TabItem >
@@ -200,10 +213,11 @@
                     HorizontalAlignment="Stretch"
                     Background="Black"
                     VerticalAlignment="Stretch"
-                    FontSize="14.667" 
-                    IsReadOnly="True">
+                    FontSize="15" 
+                    IsReadOnly="True" 
+                    FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato Light">
                     <FlowDocument>
-                        <Paragraph LineHeight="20">
+                        <Paragraph LineHeight="25">
                             <Run Text="" />
                         </Paragraph>
                     </FlowDocument>
@@ -219,10 +233,11 @@
             <TabItem Name="tabItems" Header="{Binding Path=ItemsTabHeader, FallbackValue=Pokemon}">
                 <local:ItemsInventory DataContext="{Binding Path=ItemsList}" x:Name="ctrlItemControl" />
             </TabItem>
-            <TabItem Name="tabEggs" Header="EGGS">
+            <TabItem Name="tabEggs" Header="{Binding Source=EggTabHeader , Converter={StaticResource I18NConveter}}">
                 <local:EggsControl DataContext="{Binding Path=EggsList}" x:Name="ctrlEggsControl" />
             </TabItem>
         </TabControl>
+        
     </DockPanel>
 
 

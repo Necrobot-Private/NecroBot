@@ -2,6 +2,8 @@
 using PoGo.NecroBot.Logic.Forms;
 using PoGo.NecroBot.Logic.Model.Settings;
 using PoGo.NecroBot.Logic.State;
+using POGOProtos.Data.Player;
+using POGOProtos.Networking.Responses;
 using PokemonGo.RocketAPI.Enums;
 using System;
 using System.Collections.Generic;
@@ -38,6 +40,7 @@ namespace PoGo.NecroBot.Logic
             [BsonId]
             public int Id { get; set; }
             public DateTime LoggedTime { get; set; }
+            public int Level { get; set; }
 
             public string GetRuntime()
             {
@@ -192,6 +195,9 @@ namespace PoGo.NecroBot.Logic
                 current.RuntimeTotal += (DateTime.Now - current.LoggedTime).TotalMinutes;
                 current.IsRunning = false;
 
+                var playerStats = (session.Inventory.GetPlayerStats()).FirstOrDefault();
+                current.Level = playerStats.Level;
+
                 UpdateDatabase(current);
             }
 
@@ -239,7 +245,7 @@ namespace PoGo.NecroBot.Logic
 
             return runningAccount;
         }
-         private BotAccount runningAccount;
+        private BotAccount runningAccount;
         private void UpdateDatabase(BotAccount current)
         {
             using (var db = new LiteDatabase(ACCOUNT_DB_NAME))
@@ -253,7 +259,10 @@ namespace PoGo.NecroBot.Logic
         {
             foreach (var item in this.Accounts)
             {
-                Logging.Logger.Write($"{item.PtcUsername}{item.GoogleUsername} \tRuntime : {item.GetRuntime()}");
+                if (item.Level > 0)
+                    Logging.Logger.Write($"{item.PtcUsername}{item.GoogleUsername}(Level: {item.Level})\t\t\tRuntime : {item.GetRuntime()}");
+                else
+                    Logging.Logger.Write($"{item.PtcUsername}{item.GoogleUsername}(Level: ??)\t\t\tRuntime : {item.GetRuntime()}");
             }
         }
 
@@ -271,6 +280,10 @@ namespace PoGo.NecroBot.Logic
                 {
                     runningAccount.RuntimeTotal += (DateTime.Now - runningAccount.LoggedTime).TotalMinutes;
                     runningAccount.IsRunning = false;
+
+                    var playerStats = (session.Inventory.GetPlayerStats()).FirstOrDefault();
+                    runningAccount.Level = playerStats.Level;
+
                     UpdateDatabase(runningAccount);
 
                     runningAccount = bot;
@@ -282,9 +295,11 @@ namespace PoGo.NecroBot.Logic
             return null;
         }
 
-        internal void Logged()
+        internal void Logged(GetPlayerResponse playerResponse, IEnumerable<PlayerStats> playerStats)
         {
             this.runningAccount.LoggedTime = DateTime.Now;
+            this.runningAccount.Level = playerStats.FirstOrDefault().Level;
+            UpdateDatabase(this.runningAccount);
         }
     }
 }

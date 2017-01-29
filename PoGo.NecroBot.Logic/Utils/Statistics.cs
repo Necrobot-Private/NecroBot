@@ -110,12 +110,12 @@ namespace PoGo.NecroBot.Logic.Utils
 
         public StatsExport GetCurrentInfo(Inventory inventory)
         {
-            var stats = inventory.GetPlayerStats().Result;
+            var stats = inventory.GetPlayerStats();
             StatsExport output = null;
             var stat = stats.FirstOrDefault();
             if (stat != null)
             {
-                var ep = stat.NextLevelXp - stat.PrevLevelXp - (stat.Experience - stat.PrevLevelXp);
+                var ep = stat.NextLevelXp - stat.Experience;
                 var time = Math.Round(ep / (TotalExperience / GetRuntime()), 2);
                 var hours = 0.00;
                 var minutes = 0.00;
@@ -160,8 +160,8 @@ namespace PoGo.NecroBot.Logic.Utils
                     Level = stat.Level,
                     HoursUntilLvl = hours,
                     MinutesUntilLevel = minutes,
-                    CurrentXp = stat.Experience - stat.PrevLevelXp - GetXpDiff(stat.Level),
-                    LevelupXp = stat.NextLevelXp - stat.PrevLevelXp - GetXpDiff(stat.Level)
+                    CurrentXp = stat.Experience,
+                    LevelupXp = stat.NextLevelXp
                 };
             }
             return output;
@@ -177,6 +177,7 @@ namespace PoGo.NecroBot.Logic.Utils
             this.TotalStardust = 0;
             this.TotalPokemonTransferred = 0;
             this._initSessionDateTime = DateTime.Now;
+            this._exportStats = new StatsExport();
         }
 
         public async Task<LevelUpRewardsResponse> Execute(ISession ctx)

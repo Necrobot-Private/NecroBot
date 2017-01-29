@@ -99,8 +99,8 @@ namespace PoGo.NecroBot.Logic.DataDumper
             await Task.Run(() =>
             {
                 var allPokemonInBag = session.LogicSettings.PrioritizeIvOverCp
-                    ? session.Inventory.GetHighestsPerfect(1000).Result
-                    : session.Inventory.GetHighestsCp(1000).Result;
+                    ? session.Inventory.GetHighestsPerfect(1000)
+                    : session.Inventory.GetHighestsCp(1000);
                 string file = !string.IsNullOrEmpty(Filename)
                     ? Filename
                     : $"config\\{session.Settings.GoogleUsername}{session.Settings.PtcUsername}\\allpokemon.xlsx";
