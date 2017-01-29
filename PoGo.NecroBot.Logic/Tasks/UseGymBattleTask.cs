@@ -72,23 +72,25 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                         if (fortDetails.GymState.FortData.OwnedByTeam == player.Team || fortDetails.GymState.FortData.OwnedByTeam == TeamColor.Neutral)
                         {
-                            //trainning logic will come here
-                            FortDeployPokemonResponse response = await DeployPokemonToGym(session, fortInfo, fortDetails, cancellationToken);
-
-                            if (response != null && response.Result == FortDeployPokemonResponse.Types.Result.Success)
+                            if (!deployedPokemons.Any(a => a.DeployedFortId.Equals(fortInfo.FortId)))
                             {
-                                //await Task.Delay(2000);
-                                //var refreshResult = await session.Inventory.RefreshCachedInventory();
-                                //if (refreshResult.Success)
-                                //{
+                                FortDeployPokemonResponse response = await DeployPokemonToGym(session, fortInfo, fortDetails, cancellationToken);
+
+                                if (response != null && response.Result == FortDeployPokemonResponse.Types.Result.Success)
+                                {
+                                    //await Task.Delay(2000);
+                                    //var refreshResult = await session.Inventory.RefreshCachedInventory();
+                                    //if (refreshResult.Success)
+                                    //{
                                     deployedPokemons = session.Inventory.GetDeployedPokemons();
                                     deployedList = new List<PokemonData>(deployedPokemons);
                                     //await Task.Delay(2000);
                                     //List<FortData> allForts = await UseNearbyPokestopsTask.UpdateFortsData(session);
                                     //gym = allForts.FirstOrDefault(f => f.Id == gym.Id);
                                     //await Task.Delay(2000);
-                                //}
-                                fortDetails = await session.Client.Fort.GetGymDetails(gym.Id, gym.Latitude, gym.Longitude);
+                                    //}
+                                    fortDetails = await session.Client.Fort.GetGymDetails(gym.Id, gym.Latitude, gym.Longitude);
+                                }
                             }
 
                             if (CanTrainGym(session, gym, fortDetails, deployedList))
@@ -260,6 +262,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
             }
 
+            Logger.Write(string.Join(Environment.NewLine, battleActions.OrderBy(o=>o.ActionStartMs).Select(s => s)));
+
             if (isVictory)
             {
                 if (gym.GymPoints < 0)
@@ -314,7 +318,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                             if (session.LogicSettings.GymConfig.CollectCoinAfterDeployed > 0)
                             {
-                                var count = deployed.Count() + 1;
+                                var count = deployed.Count();
                                 if (count >= session.LogicSettings.GymConfig.CollectCoinAfterDeployed)
                                 {
                                     try
@@ -849,7 +853,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                         TimedLog("Attack success");
                         defender = attackResult.ActiveDefender?.PokemonData;
                         if (attackResult.BattleLog != null && attackResult.BattleLog.BattleActions.Count > 0)
-                            lastActions.AddRange(attackResult.BattleLog.BattleActions);
+                        {
+                            var result = attackResult.BattleLog.BattleActions.OrderBy(o => o.ActionStartMs);
+                            lastActions.AddRange(result);
+                            TimedLog("Result -> \r\n"+string.Join(Environment.NewLine, result));
+                        }
                         serverMs = attackResult.BattleLog.ServerMs;
                         //wastedTimeStart = DateTime.Now.ToUnixTime();
                         //TimedLog("Start to wasting server time " + serverMs);
