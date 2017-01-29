@@ -16,16 +16,31 @@ namespace PoGo.NecroBot.Logic.Common
         [Description("Map & Journey")]
         public string MapTabTitle { get; set; }
 
-
         [Description("Sniper")]
         public string SniperTabTitle { get; set; }
+        [Description("Bot switching account... ")]
+        public string AccountSwitching { get; set; }
 
+        [Description("Eggs")]
+        public string EggTabHeader { get; set; }
 
         [Description("Console")]
         public string ConsoleTabTitle { get; set; }
 
         [Description("Pokemon [{0}/{1}]")]
         public string PokemonTabTitle { get; set; }
+
+        [Description("Show Console")]
+        public string ShowConsole { get; set; }
+
+        [Description("Hide Console")]
+        public string HideConsole { get; set; }
+
+        [Description("Setting")]
+        public string MenuSetting { get; set; }
+
+        [Description("Theme")]
+        public string Theme { get; set; }
 
         #endregion
 

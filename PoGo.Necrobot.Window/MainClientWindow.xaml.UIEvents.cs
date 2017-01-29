@@ -35,6 +35,13 @@ namespace PoGo.Necrobot.Window
         {
             this.datacontext.PokemonList.OnFavorited(ev);
         }
+        public void OnBotEvent(BotSwitchedEvent ex)
+        {
+            //this.botMap.Reset();
+            this.datacontext.Reset();
+            this.popSwithAccount.IsOpen = true;
+            //show popup...
+        }
         public void OnBotEvent(FinishUpgradeEvent e)
         {
             this.datacontext.PokemonList.OnUpgradeEnd(e);
@@ -117,8 +124,10 @@ namespace PoGo.Necrobot.Window
             this.datacontext.UI.PlayerStatus = "Playing";
             this.datacontext.UI.PlayerName = userLogged.Profile.PlayerData.Username;
             this.datacontext.RaisePropertyChanged("UI");
+
             this.Dispatcher.Invoke(() =>
             {
+                this.popSwithAccount.IsOpen = false;
                 lblAccount.Content = $"{this.datacontext.UI.PlayerStatus} as : {this.datacontext.UI.PlayerName}";
 
             });
