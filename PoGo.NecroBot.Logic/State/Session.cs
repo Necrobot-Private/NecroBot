@@ -203,7 +203,7 @@ namespace PoGo.NecroBot.Logic.State
             //CancellationTokenSource.Cancel();
             this.CancellationTokenSource = new CancellationTokenSource();
 
-            this.EventDispatcher.Send(new BotSwitchedEvent()
+            this.EventDispatcher.Send(new BotSwitchedEvent(nextBot)
             {
             });
 

@@ -23,6 +23,7 @@ using POGOProtos.Data;
 using POGOProtos.Enums;
 using POGOProtos.Map.Pokemon;
 using POGOProtos.Networking.Responses;
+using System.Runtime.Caching;
 
 namespace PoGo.NecroBot.Logic.Tasks
 {
@@ -312,6 +313,51 @@ namespace PoGo.NecroBot.Logic.Tasks
             return true;
         }
 
+        private static MemoryCache expiredCache = new MemoryCache("expired");
+
+        public static void RemoveExpiredSnipeData(ISession session, string encounterId)
+        {
+            lock(expiredCache)
+            {
+                expiredCache.Add(encounterId, DateTime.Now, DateTime.Now.AddMinutes(15));
+            }
+
+            lock (autoSnipePokemons)
+            {
+                var find = autoSnipePokemons.FirstOrDefault(x => x.EncounterId.ToString() == encounterId);
+                if (find != null)
+                {
+                    session.EventDispatcher.Send(new SnipePokemonUpdateEvent(encounterId, true, find));
+                    autoSnipePokemons.RemoveAll(x => x.EncounterId.ToString() == encounterId);
+                }
+            }
+
+            lock (manualSnipePokemons)
+            {
+                
+                var find = manualSnipePokemons.FirstOrDefault(x => x.EncounterId.ToString() == encounterId);
+
+                if (find != null)
+                {
+                    session.EventDispatcher.Send(new SnipePokemonUpdateEvent(encounterId, true, find));
+                    manualSnipePokemons.RemoveAll(x => x.EncounterId.ToString() == encounterId);
+                }
+            }
+
+            lock (pokedexSnipePokemons)
+            {
+                
+                var find = pokedexSnipePokemons.FirstOrDefault(x => x.EncounterId.ToString() == encounterId);
+
+                if (find != null)
+                {
+                    session.EventDispatcher.Send(new SnipePokemonUpdateEvent(encounterId, true, find));
+                    pokedexSnipePokemons.RemoveAll(x => x.EncounterId.ToString() == encounterId);
+                }
+            }
+
+        }
+
         public static async Task<bool> CatchFromService(ISession session,
             CancellationToken cancellationToken, MSniperInfo2 encounterId)
         {
@@ -341,8 +387,14 @@ namespace PoGo.NecroBot.Logic.Tasks
                     Debug.WriteLine($"{encounter}");
 
                     Logger.Write($"{encounter}");
+
                 }
 #endif
+                //pokemon has expired, send event to remove it.
+                if(encounter != null && encounter.Status == EncounterResponse.Types.Status.EncounterClosed)
+                {
+                    session.EventDispatcher.Send(new SnipePokemonUpdateEvent(encounterId.EncounterId.ToString(), false, null));
+                }
             }
             catch (CaptchaException ex)
             {
@@ -374,6 +426,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                 Logger.Write("Pokemon bag full, snipe cancel");
                 await TransferDuplicatePokemonTask.Execute(session, cancellationToken);
                 return false;
+            }
+
+            if (encounter.Status == EncounterResponse.Types.Status.EncounterClosed)
+            {
+                Logger.Write("This pokemon has been expired");
+                return true;
             }
             PokemonData encounteredPokemon;
 
@@ -438,6 +496,8 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static bool AddSnipeItem(ISession session, MSniperInfo2 item, bool byPassValidation = false)
         {
             if (isBlocking) return false;
+            if (item.EncounterId > 0 && expiredCache.Get(item.EncounterId.ToString()) != null) return false;
+
             if (Math.Abs(item.Latitude) > 90 || Math.Abs(item.Longitude) > 180) return false;
 
             if (!byPassValidation &&
@@ -643,9 +703,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
                 foreach (var location in mSniperLocation2)
                 {
+                    
                     if (session.Stats.CatchThresholdExceeds(session) || isBlocking) break;
                     lock (locker)
                     {
+                        if (location.EncounterId > 0 && expiredCache.Get(location.EncounterId.ToString()) != null) continue;
+
                         if (pokedexSnipePokemons.Count > 0 || manualSnipePokemons.Count > 0)
                         {
                             break;
@@ -671,6 +734,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     //If bot already catch the same pokemon, and very close this location. 
                     string uniqueCacheKey = $"{session.Settings.PtcUsername}{session.Settings.GoogleUsername}{Math.Round(location.Latitude, 6)}{location.PokemonId}{Math.Round(location.Longitude, 6)}";
+
                     if (session.Cache.Get(uniqueCacheKey) != null) continue;
 
                     session.Cache.Add(location.EncounterId.ToString(), true, DateTime.Now.AddMinutes(15));
@@ -684,6 +748,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Source = "InternalSnipe",
                         Iv = location.Iv
                     });
+
                     session.Stats.IsSnipping = true;
                     var result = location.EncounterId != 0
                         ? await CatchFromService(session, cancellationToken, location)

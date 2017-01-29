@@ -36,6 +36,17 @@ namespace PoGo.Necrobot.Window.Controls
             this.model = this.DataContext as MapViewModel;
         }
 
+        internal void Reset()
+        {
+            foreach (var item in this.allMarkers)
+            {
+                gmap.Markers.Remove(item.Value);
+                item.Value.Shape = null;
+                item.Value.Clear();
+            }
+            this.allMarkers = new Dictionary<string, GMapMarker>();
+        }
+
         GMapMarker selectedMarker;
         List<PointLatLng> track = new List<PointLatLng>();
 
@@ -50,6 +61,7 @@ namespace PoGo.Necrobot.Window.Controls
 
         public void InitMap()
         {
+            gmap.DragButton = MouseButton.Left;
             gmap.MapProvider = GoogleMapProvider.Instance;
             GMaps.Instance.Mode = AccessMode.ServerAndCache;
             //gmap.SetPositionByKeywords("Melbourne, 3000");
