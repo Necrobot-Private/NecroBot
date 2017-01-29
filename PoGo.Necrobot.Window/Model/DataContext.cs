@@ -70,8 +70,10 @@ namespace PoGo.Necrobot.Window.Model
         {
             this.PokemonList.Pokemons.Clear();
             this.ItemsList.Items.Clear();
-            this.ItemsList.RaisePropertyChanged("TotalItem");
+            this.EggsList.Eggs.Clear();
+            this.EggsList.Incubators.Clear();
 
+            this.ItemsList.RaisePropertyChanged("TotalItem");
         }
 
         public string ItemsTabHeader
