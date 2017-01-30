@@ -24,7 +24,7 @@ using PoGo.NecroBot.Logic.Tasks;
 using PoGo.NecroBot.Logic.Utils;
 using ProgressBar = PoGo.NecroBot.CLI.Resources.ProgressBar;
 
-#endregion
+#endregion using directives
 
 namespace PoGo.NecroBot.CLI
 {
@@ -84,6 +84,7 @@ namespace PoGo.NecroBot.CLI
                     case "true":
                         _enableJsonValidation = true;
                         break;
+
                     case "false":
                         _enableJsonValidation = false;
                         break;
@@ -96,6 +97,7 @@ namespace PoGo.NecroBot.CLI
                     case "true":
                         _ignoreKillSwitch = false;
                         break;
+
                     case "false":
                         _ignoreKillSwitch = true;
                         break;
@@ -147,7 +149,7 @@ namespace PoGo.NecroBot.CLI
                     ProfilePath = profilePath,
                     ProfileConfigPath = profileConfigPath,
                     GeneralConfigPath = Path.Combine(Directory.GetCurrentDirectory(), "config"),
-                    ConsoleConfig = {TranslationLanguageCode = strCulture}
+                    ConsoleConfig = { TranslationLanguageCode = strCulture }
                 };
 
                 boolNeedsSetup = true;
@@ -374,11 +376,10 @@ namespace PoGo.NecroBot.CLI
             ProgressBar.Fill(90);
 
             _session.Navigation.WalkStrategy.UpdatePositionEvent +=
-                (lat, lng) => _session.EventDispatcher.Send(new UpdatePositionEvent {Latitude = lat, Longitude = lng});
+                (lat, lng) => _session.EventDispatcher.Send(new UpdatePositionEvent { Latitude = lat, Longitude = lng });
             _session.Navigation.WalkStrategy.UpdatePositionEvent += SaveLocationToDisk;
 
             ProgressBar.Fill(100);
-
 
             var accountManager = new MultiAccountManager(logicSettings.Bots);
 
@@ -423,6 +424,8 @@ namespace PoGo.NecroBot.CLI
 
             if (_session.LogicSettings.ActivateMSniper)
             {
+                ServicePointManager.ServerCertificateValidationCallback +=
+                    (sender, certificate, chain, sslPolicyErrors) => true;
                 MSniperServiceTask.ConnectToService();
                 _session.EventDispatcher.EventReceived += evt => MSniperServiceTask.AddToList(evt);
             }
@@ -431,7 +434,7 @@ namespace PoGo.NecroBot.CLI
             if (!File.Exists(trackFile) || File.GetLastWriteTime(trackFile) < DateTime.Now.AddDays(-1))
             {
                 Thread.Sleep(10000);
-                Thread mThread = new Thread(delegate()
+                Thread mThread = new Thread(delegate ()
                 {
                     var infoForm = new InfoForm();
                     infoForm.ShowDialog();
@@ -441,7 +444,6 @@ namespace PoGo.NecroBot.CLI
 
                 mThread.Start();
             }
-
 
             QuitEvent.WaitOne();
         }
@@ -475,7 +477,6 @@ namespace PoGo.NecroBot.CLI
                         var strStatus1 = strSplit1[0];
                         var strReason1 = strSplit1[1];
                         var strExitMsg = strSplit1[2];
-
 
                         if (strStatus1.ToLower().Contains("disable"))
                         {
@@ -546,7 +547,6 @@ namespace PoGo.NecroBot.CLI
             return false;
         }
 
-
         private static void UnhandledExceptionEventHandler(object obj, UnhandledExceptionEventArgs args)
         {
             Logger.Write("Exception caught, writing LogBuffer.", force: true);
@@ -566,8 +566,10 @@ namespace PoGo.NecroBot.CLI
                     case "y":
                         // Override killswitch
                         return true;
+
                     case "n":
                         return false;
+
                     default:
                         Logger.Write("Enter y or n", LogLevel.Error);
                         continue;
