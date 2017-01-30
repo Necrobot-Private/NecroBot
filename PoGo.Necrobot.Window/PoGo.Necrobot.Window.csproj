@@ -159,6 +159,12 @@
       <DependentUpon>EggsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\EmptyItemsControlAdornerBehavior.cs" />
+    <Compile Include="Controls\MapMarkers\GymMarker.xaml.cs">
+      <DependentUpon>GymMarker.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MapMarkers\FortMarker.xaml.cs">
+      <DependentUpon>FortMarker.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\MapMarkers\MapPokemonMarker.xaml.cs">
       <DependentUpon>MapPokemonMarker.xaml</DependentUpon>
     </Compile>
@@ -179,6 +185,8 @@
     <Compile Include="Model\AddManualSnipeCoordViewModel.cs" />
     <Compile Include="Model\EggsListViewModel.cs" />
     <Compile Include="Model\EggViewModel.cs" />
+    <Compile Include="Model\GymViewModel.cs" />
+    <Compile Include="Model\FortViewModel.cs" />
     <Compile Include="Model\IncubatorViewModel.cs" />
     <Compile Include="Model\MapPokemonViewModel.cs" />
     <Compile Include="Model\MapViewModel.cs" />
@@ -281,6 +289,14 @@
     <Page Include="Controls\EggsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\MapMarkers\GymMarker.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\MapMarkers\FortMarker.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\MapMarkers\MapPokemonMarker.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -490,15 +506,19 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Fonts\Lato\SIL Open Font License.txt" />
-    <Resource Include="Controls\MapMarkers\images\instinct.png" />
     <Resource Include="Controls\MapMarkers\images\location.png" />
     <Resource Include="Controls\MapMarkers\images\Lured.png" />
-    <Resource Include="Controls\MapMarkers\images\mystic.png" />
     <Resource Include="Controls\MapMarkers\images\Normal.png" />
-    <Resource Include="Controls\MapMarkers\images\unoccupied.png" />
-    <Resource Include="Controls\MapMarkers\images\valor.png" />
     <Resource Include="Controls\MapMarkers\images\Visited.png" />
     <Resource Include="Controls\MapMarkers\images\VisitedLure.png" />
+    <Resource Include="Controls\MapMarkers\images\team-Instinct.png" />
+    <Resource Include="Controls\MapMarkers\images\team-mystic.png" />
+    <Resource Include="Controls\MapMarkers\images\team-unoccupied.png" />
+    <Resource Include="Controls\MapMarkers\images\team-valor.png" />
+    <Resource Include="Controls\MapMarkers\images\gym-instinct.png" />
+    <Resource Include="Controls\MapMarkers\images\gym-mystic.png" />
+    <Resource Include="Controls\MapMarkers\images\gym-unoccupied.png" />
+    <Resource Include="Controls\MapMarkers\images\gym-valor.png" />
     <Content Include="Effects\GrayscaleEffect.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
