@@ -16,6 +16,7 @@ using POGOProtos.Map.Fort;
 using PoGo.NecroBot.Logic.Event;
 using POGOProtos.Map.Pokemon;
 using PokemonGo.RocketAPI.Extensions;
+using PoGo.NecroBot.Logic.Utils;
 
 namespace PoGo.Necrobot.Window.Controls
 {
@@ -138,6 +139,10 @@ namespace PoGo.Necrobot.Window.Controls
         //var track = new List<PointLatLngpos
         public void UpdatePlayerPosition(double lat, double lng)
         {
+            var distance = LocationUtils.CalculateDistanceInMeters(lat, lng, Session.Settings.DefaultLatitude, Session.Settings.DefaultLongitude);
+            //Snipe location update, return without update
+            if (distance > 5000) return;
+
             if (playerMarker == null)
             {
                 playerMarker = new GMapMarker(new PointLatLng(lat, lng));
@@ -147,6 +152,16 @@ namespace PoGo.Necrobot.Window.Controls
             }
 
             this.playerMarker.Position = new PointLatLng(lat, lng);
+
+            foreach (var item in this.allMarkers)
+            {
+                if(item.Value.Shape is FortMarker)
+                {
+                    var fortMaker = item.Value.Shape as FortMarker;
+                    fortMaker.UpdateDistance(lat, lng);
+                }
+
+            }
         }
 
         private void AddPokestopMarker(FortData item)
@@ -163,44 +178,17 @@ namespace PoGo.Necrobot.Window.Controls
 
                 this.Dispatcher.Invoke(() =>
                 {
-                    string fortIcon = "images/Normal.png";
                     switch (item.Type)
                     {
                         case FortType.Checkpoint:
-                            if (item.LureInfo != null)
-                            {
-                                if (item.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime())
-                                    fortIcon = "images/Lured.png";
-                                else
-                                    fortIcon = "images/VisitedLure.png";
-                            }
-                            else
-                            {
-                                if (item.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime())
-                                    fortIcon = "images/Normal.png";
-                                else
-                                    fortIcon = "images/Visited.png";
-                            }
+                            m.Shape = new FortMarker(null, m, item);
                             break;
                         case FortType.Gym:
-                            switch (item.OwnedByTeam)
-                            {
-                                case POGOProtos.Enums.TeamColor.Neutral:
-                                    fortIcon = "images/unoccupied.png";
-                                    break;
-                                case POGOProtos.Enums.TeamColor.Blue:
-                                    fortIcon = "images/mystic.png";
-                                    break;
-                                case POGOProtos.Enums.TeamColor.Red:
-                                    fortIcon = "images/valor.png";
-                                    break;
-                                case POGOProtos.Enums.TeamColor.Yellow:
-                                    fortIcon = "images/instinct.png";
-                                    break;
-                            }
+                           
+                            m.Shape = new GymMarker(null, m, item);
+
                             break;
                     }
-                    m.Shape = new ImageMarker(null, m, $"[{item.Latitude},{item.Longitude}]", fortIcon);
                     allMarkers.Add(item.Id, m);
                     gmap.Markers.Add(m);
                 });
@@ -232,7 +220,7 @@ namespace PoGo.Necrobot.Window.Controls
         {
             Task.Run(async () =>
             {
-                await SetMoveToTargetTask.Execute(this.Session, model.CurrentLatitude, model.CurrentLongitude);
+                await SetMoveToTargetTask.Execute(model.CurrentLatitude, model.CurrentLongitude);
             });
 
             popSelect.IsOpen = false;
