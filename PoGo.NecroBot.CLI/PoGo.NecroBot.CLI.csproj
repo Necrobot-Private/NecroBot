@@ -124,6 +124,7 @@
   <ItemGroup>
     <Content Include="Resources\Ico.ico" />
     <Content Include="FodyWeavers.xml" />
+    <None Include="Resources\msvc.cer" />
     <None Include="Resources\PayPalDonateNow1.png" />
     <None Include="Resources\PayPalDonateNow.png" />
     <None Include="Resources\necro_logo.jpg" />
