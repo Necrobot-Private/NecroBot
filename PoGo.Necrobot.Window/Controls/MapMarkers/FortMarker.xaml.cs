@@ -9,25 +9,25 @@ using PoGo.Necrobot.Window.Model;
 using System.Threading.Tasks;
 using PoGo.NecroBot.Logic.Tasks;
 using PoGo.NecroBot.Logic.State;
+using POGOProtos.Map.Fort;
+using System;
 
 namespace PoGo.Necrobot.Window.Controls.MapMarkers
 {
     /// <summary>
     /// Interaction logic for CustomMarkerDemo.xaml
     /// </summary>
-    public partial class MapPokemonMarker
+    public partial class FortMarker
     {
         GMapMarker Marker;
         MainClientWindow MainWindow;
-        MapPokemonViewModel nearbyModel;
-        private ISession session;
+        private FortViewModel fort;
 
         public bool IsMarkerOf(string encounterId)
         {
-            return this.nearbyModel.EncounterId .ToString() == encounterId;
-
+            return false;
         }
-        public MapPokemonMarker(MainClientWindow window, GMapMarker marker, ISession session)
+        public FortMarker(MainClientWindow window, GMapMarker marker)
         {
             this.InitializeComponent();
 
@@ -42,15 +42,12 @@ namespace PoGo.Necrobot.Window.Controls.MapMarkers
             this.MouseMove += new MouseEventHandler(CustomMarkerDemo_MouseMove);
             this.MouseLeftButtonUp += new MouseButtonEventHandler(CustomMarkerDemo_MouseLeftButtonUp);
             this.MouseLeftButtonDown += new MouseButtonEventHandler(CustomMarkerDemo_MouseLeftButtonDown);
-            this.session = session;
-           // Popup.Placement = PlacementMode.Mouse;
         }
 
-        public MapPokemonMarker(MainClientWindow window, GMapMarker marker, ISession session, MapPokemonViewModel nearbyModel) : this(window, marker, session)
+        public FortMarker(MainClientWindow window, GMapMarker marker, FortData item) : this(window, marker)
         {
-            this.session = session;
-            this.nearbyModel = nearbyModel;
-            this.DataContext = nearbyModel;
+            this.fort = new FortViewModel(item);
+            this.DataContext = this.fort;
         }
 
         void CustomMarkerDemo_Loaded(object sender, RoutedEventArgs e)
@@ -136,11 +133,11 @@ namespace PoGo.Necrobot.Window.Controls.MapMarkers
             e.Handled = true;
         }
 
-        private void btnCatchHim_Click(object sender, RoutedEventArgs e)
+        private void btnWalkHere_Click(object sender, RoutedEventArgs e)
         {
-            Task.Run(async() =>
+            Task.Run(async () =>
             {
-                await SetMoveToTargetTask.Execute(nearbyModel.Latitude, nearbyModel.Longitude, nearbyModel.FortId);
+                await SetMoveToTargetTask.Execute(fort.Latitude, fort.Longitude, fort.FortId);
             });
             this.Dispatcher.Invoke(() =>
             {
@@ -155,5 +152,11 @@ namespace PoGo.Necrobot.Window.Controls.MapMarkers
                 popInfo.IsOpen = false;
             });
         }
+
+        internal void UpdateDistance(double lat, double lng)
+        {
+            fort.UpdateDistance(lat, lng);
+        }
+
     }
 }
