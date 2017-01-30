@@ -10,6 +10,7 @@ using PoGo.NecroBot.Logic.State;
 using PokemonGo.RocketAPI.Extensions;
 using POGOProtos.Map.Fort;
 using POGOProtos.Networking.Responses;
+using TinyIoC;
 
 #endregion
 
@@ -29,8 +30,9 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         static Queue<FortData> queue = new Queue<FortData>();
 
-        public static async Task Execute(ISession session, double lat, double lng, string fortId = "")
+        public static async Task Execute(double lat, double lng, string fortId = "")
         {
+            ISession session = TinyIoCContainer.Current.Resolve<ISession>();
             await Task.Run(() =>
             {
                 if (!string.IsNullOrEmpty(fortId))
