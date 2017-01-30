@@ -44,6 +44,33 @@ namespace PoGo.NecroBot.Logic.Common
 
         #endregion
 
+        #region Popup
+        [Description("Latitude")]
+        public string Latitude { get; set; }
+
+        [Description("Longitude")]
+        public string Longitude { get; set; }
+
+
+        [Description("Distance")]
+        public string Distance { get; set; }
+
+
+        [Description("Close")]
+        public string Close { get; set; }
+
+
+        [Description("WalkHere")]
+        public string WalkToHere { get; set; }
+
+        [Description("CP")]
+        public string GymDefenderCP { get; set; }
+
+        [Description("Gym Point")]
+        public string GymPoints { get; set; }
+
+
+        #endregion
         private Dictionary<string, string> translations = new Dictionary<string, string>();
         private string languageCode = "en";
         private string translationFile = @"Config\Translations\ui.{0}.json";
