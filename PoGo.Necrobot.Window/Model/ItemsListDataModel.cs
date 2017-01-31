@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using POGOProtos.Inventory.Item;
 
 namespace PoGo.Necrobot.Window.Model
@@ -35,7 +32,7 @@ namespace PoGo.Necrobot.Window.Model
                 {
                     this.Items.Add(new ItemsViewModel()
                     {
-                        Name = item.ItemId.ToString(),
+                        Name = item.ItemId.ToString().Replace("Item", "").Replace("Basic", "").Replace("Unlimited", "(∞)").Replace("Ordinary", ""),
                         ItemId = item.ItemId,
                         ItemCount = item.Count,
                         SelectedValue = item.Count,

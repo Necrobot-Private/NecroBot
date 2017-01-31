@@ -13,19 +13,15 @@
     <ListView Margin="10" Name="lsItem" ItemsSource="{Binding Path=Items}">
         <ListView.View>
             <GridView>
-                <GridViewColumn Header="Name"  DisplayMemberBinding="{Binding  Name}" Width="130"></GridViewColumn>
-                <GridViewColumn Header="Item"
-				    Width="100">
+                <GridViewColumn Header="Name"  DisplayMemberBinding="{Binding  Name}" Width="100"></GridViewColumn>
+                <GridViewColumn Header=""
+				    Width="40">
                     <GridViewColumn.CellTemplate>
                         <DataTemplate>
-                            <DockPanel VerticalAlignment="Center" Margin="10">
-                                <Image ToolTip="{Binding Path=Name}" Source="{Binding Path=ItemId, Converter={StaticResource ItemIdToImageConverter}}" DockPanel.Dock="Left"  />
-                                <TextBlock  MinWidth="80" Text="{Binding Path=Name}" DockPanel.Dock="Right"/>
-                            </DockPanel>
-                            </DataTemplate>
-                                </GridViewColumn.CellTemplate>
+                            <Image Width="30" ToolTip="{Binding Path=Name}" Source="{Binding Path=ItemId, Converter={StaticResource ItemIdToImageConverter}}" />
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>
                 </GridViewColumn>
-               
                 
                 <GridViewColumn Header="Amount"
 				    DisplayMemberBinding="{Binding ItemCount, UpdateSourceTrigger=PropertyChanged}"
