@@ -32,7 +32,7 @@ namespace PoGo.Necrobot.Window.Model
                 {
                     this.Items.Add(new ItemsViewModel()
                     {
-                        Name = item.ItemId.ToString().Replace("Item", "").Replace("Basic", "").Replace("Unlimited", "(∞)").Replace("Ordinary", ""),
+                        Name = item.ItemId.ToString().Replace("Item", "").Replace("Basic", "").Replace("Unlimited", "(∞)").Replace("Ordinary", "").Replace("TroyDisk", "Lure"),
                         ItemId = item.ItemId,
                         ItemCount = item.Count,
                         SelectedValue = item.Count,
