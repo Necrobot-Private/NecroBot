@@ -1,5 +1,10 @@
 # Change Log
 
+## [v1.0.0.82](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.82) (2017-01-31)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.81...v1.0.0.82)
+
+- Bug fix: #662 - Starting from last position should work again.
+
 ## [v1.0.0.81](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.81) (2017-01-31)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.76...v1.0.0.81)
 

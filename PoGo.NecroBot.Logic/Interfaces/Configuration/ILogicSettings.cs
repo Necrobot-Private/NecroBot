@@ -92,6 +92,7 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         string UseBerriesOperator { get; }
         string UpgradePokemonMinimumStatsOperator { get; }
         int MaxTravelDistanceInMeters { get; }
+        bool StartFromLastPosition { get; }
         bool UseGpxPathing { get; }
         string GpxFile { get; }
         bool UseLuckyEggsWhileEvolving { get; }

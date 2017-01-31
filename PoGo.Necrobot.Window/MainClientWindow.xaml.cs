@@ -216,6 +216,18 @@ namespace PoGo.Necrobot.Window
 
         private void tabMain_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (e.AddedItems != null && e.AddedItems.Count > 0)
+            {
+                var addedItem = e.AddedItems[0];
+                if (addedItem != null)
+                {
+                    if (addedItem.GetType() == typeof(TabItem) && ((TabItem)addedItem).Content?.GetType() == typeof(Controls.ItemsInventory))
+                    {
+                        DataContext dataContext = (DataContext)((TabItem)addedItem).DataContext;
+                        dataContext?.ItemsList?.SyncSelectedValues();
+                    }
+                }
+            }
         }
     }
 }

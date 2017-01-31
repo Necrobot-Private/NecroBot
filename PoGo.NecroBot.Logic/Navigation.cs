@@ -17,7 +17,7 @@ using POGOProtos.Networking.Responses;
 
 namespace PoGo.NecroBot.Logic
 {
-    public delegate void UpdatePositionDelegate(double lat, double lng);
+    public delegate void UpdatePositionDelegate(ISession session, double lat, double lng);
 
     public class Navigation
     {
