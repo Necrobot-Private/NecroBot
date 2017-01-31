@@ -343,7 +343,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                     if (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess)
                     {
                         var totalExp = 0;
-                        var totalStartDust = caughtPokemonResponse.CaptureAward.Stardust.Sum();
                         if (encounteredPokemon != null)
                         {
                             encounteredPokemon.Id = caughtPokemonResponse.CapturedPokemonId;
@@ -352,29 +351,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                         {
                             totalExp += xp;
                         }
-                        var stardust = session.Inventory.UpdateStartDust(totalStartDust);
-
+                        
                         evt.Exp = totalExp;
-                        evt.Stardust = stardust;
+                        evt.Stardust = session.Inventory.GetStarDust();
                         evt.UniqueId = caughtPokemonResponse.CapturedPokemonId;
-
-                        var pokemonSettings = await session.Inventory.GetPokemonSettings();
-                        var pokemonFamilies = await session.Inventory.GetPokemonFamilies();
-
-                        var setting =
-                            pokemonSettings.FirstOrDefault(q => pokemon != null && q.PokemonId == pokemon.PokemonId);
-                        var family =
-                            pokemonFamilies.FirstOrDefault(q => setting != null && q.FamilyId == setting.FamilyId);
-
-                        if (family != null)
-                        {
-                            family.Candy_ += caughtPokemonResponse.CaptureAward.Candy.Sum();
-                            evt.FamilyCandies = family.Candy_;
-                        }
-                        else
-                        {
-                            evt.FamilyCandies = caughtPokemonResponse.CaptureAward.Candy.Sum();
-                        }
+                        evt.Candy = session.Inventory.GetCandy(pokemon.PokemonId);
 
                         if (session.LogicSettings.UseCatchLimit)
                         {
@@ -405,7 +386,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     evt.SpawnPointId = _spawnPointId;
                     evt.Level = PokemonInfo.GetLevel(encounteredPokemon);
                     evt.Cp = encounteredPokemon.Cp;
-                    evt.MaxCp = PokemonInfo.CalculateMaxCp(encounteredPokemon);
+                    evt.MaxCp = PokemonInfo.CalculateMaxCp(encounteredPokemon.PokemonId);
                     evt.Perfection = Math.Round(PokemonInfo.CalculatePokemonPerfection(encounteredPokemon));
                     evt.Probability = Math.Round(probability * 100, 2);
                     evt.Distance = distance;

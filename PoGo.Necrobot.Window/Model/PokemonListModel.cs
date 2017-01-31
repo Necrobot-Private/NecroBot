@@ -1,103 +1,111 @@
 ﻿using POGOProtos.Data;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using POGOProtos.Enums;
 using PoGo.NecroBot.Logic.Event;
 using POGOProtos.Inventory;
 using POGOProtos.Settings.Master;
 using PoGo.NecroBot.Logic.Event.Inventory;
+using PoGo.NecroBot.Logic.State;
 
 namespace PoGo.Necrobot.Window.Model
 {
     public class PokemonListModel : ViewModelBase
     {
+        public PokemonListModel(ISession session)
+        {
+            this.Session = Session;
+        }
+
         public ObservableCollection<PokemonDataViewModel> Pokemons { get; set; }
 
-        internal void Update(List<PokemonData> pokemons, List<Candy> candies, List<PokemonSettings> pokemonSettings)
+        internal void Update(IEnumerable<PokemonData> pokemons)
         {
-                //var families = Session.Inventory.GetPokemonFamilies().Result;
-                //var settings = Session.Inventory.GetPokemonSettings().Result;
+            foreach (var item in pokemons)
+            {
+                var existing = Pokemons.FirstOrDefault(x => x.Id == item.Id);
 
-                foreach (var item in pokemons)
+                if (existing != null)
                 {
-
-                    var existing = Pokemons.FirstOrDefault(x => x.Id == item.Id);
-
-                    if (existing != null)
-                    {
-                        existing.UpdateWith(item);
-                        continue;
-                    }
-                    var setting = pokemonSettings.FirstOrDefault(x => x.PokemonId == item.PokemonId);
-
-                    var family = candies.FirstOrDefault(x => x.FamilyId == setting.FamilyId);
-
-                    Pokemons.Add(new PokemonDataViewModel(item, setting, family));
+                    existing.UpdateWith(item);
                 }
-          //  });
+                else
+                {
+                    Pokemons.Add(new PokemonDataViewModel(this.Session, item));
+                }
+            }
+
+            // Remove missing pokemon
+            List<PokemonDataViewModel> modelsToRemove = new List<PokemonDataViewModel>();
+            foreach (var item in Pokemons)
+            {
+                var existing = pokemons.FirstOrDefault(x => x.Id == item.Id);
+                if (existing == null)
+                {
+                    modelsToRemove.Add(item);
+                }
+            }
+            
+            foreach(var model in modelsToRemove)
+            {
+                Pokemons.Remove(model);
+            }
         }
 
         internal void OnUpgradeEnd(FinishUpgradeEvent e)
         {
             var id = e.PokemonId;
             var model = Get(id);
-            model.AllowPowerup = e.AllowUpgrade;
-            model.PowerupText = "Upgrade";
+            model.IsUpgrading = false;
+            model.PokemonData = e.Pokemon;
         }
 
         internal void OnUpgraded(UpgradePokemonEvent e)
         {
             var id = e.Pokemon.Id;
             var model = Get(id);
+            model.IsUpgrading = false;
             model.PokemonData = e.Pokemon;
-            model.CP = e.Cp;
-            model.Candy = e.FamilyCandies;
-            model.HP = e.Pokemon.Stamina;
-
         }
+
         public void OnFavorited(FavoriteEvent ev)
         {
             var result = ev.FavoritePokemonResponse.Result == POGOProtos.Networking.Responses.SetFavoritePokemonResponse.Types.Result.Success;
             var id = ev.Pokemon.Id;
             var model = Get(id);
             model.IsFavoriting = false;
-            if (!result)
-            {
-                model.Favorited = !model.Favorited;
-            }
+            model.PokemonData = ev.Pokemon;
         }
 
         private PokemonDataViewModel Get(ulong id)
         {
             return this.Pokemons.FirstOrDefault(x => x.Id == id);
         }
+
         internal void OnEvolved(PokemonEvolveEvent ev)
         {
             var exist = Get(ev.OriginalId);
-            if(exist != null && ev.Result == POGOProtos.Networking.Responses.EvolvePokemonResponse.Types.Result.Success)
+            if (ev.Result == POGOProtos.Networking.Responses.EvolvePokemonResponse.Types.Result.Success)
             {
-                this.Pokemons.Remove(exist);
-                var newItem = new PokemonDataViewModel(ev.EvolvedPokemon, ev.PokemonSetting, ev.Family);
+                if (exist != null)
+                    this.Pokemons.Remove(exist);
+
+                var newItem = new PokemonDataViewModel(this.Session, ev.EvolvedPokemon);
                 this.Pokemons.Add(newItem);
 
-                foreach (var item in this.Pokemons)
+                foreach (var item in this.Pokemons.Where(p => p.FamilyId == newItem.FamilyId))
                 {
-                    if (item.PokemonSettings != null && item.PokemonSettings.FamilyId == ev.Family?.FamilyId)
-                    {
-                        item.Candy = ev.Family.Candy_;
-                    }
+                    item.RaisePropertyChanged("Candy");
                 }
-
-            } 
+            }
+            else
+            {
+                exist.IsEvolving = false;
+            }
         }
 
         public void Transfer(List<ulong> pokemonIds)
         {
-
             foreach (var item in pokemonIds)
             {
                 Transfer(item);
@@ -125,14 +133,12 @@ namespace PoGo.Necrobot.Window.Model
         internal void OnTransfer(TransferPokemonEvent e)
         {
             this.Remove(e.Id);
-            foreach (var item in this.Pokemons)
+            foreach (var item in this.Pokemons.Where(p => p.FamilyId == e.Candy.FamilyId))
             {
-                if(item.PokemonSettings != null && item.PokemonSettings.FamilyId == e.FamilyId)
-                {
-                    item.Candy = e.FamilyCandies;
-                }
+                item.RaisePropertyChanged("Candy");
             }
         }
+
         internal bool Favorite(ulong pokemonId)
         {
             var pkm = Get(pokemonId);
@@ -141,10 +147,10 @@ namespace PoGo.Necrobot.Window.Model
             {
                 pkm.IsFavoriting = true;
             }
-            pkm.Favorited = !pkm.Favorited;
 
             return pkm.Favorited;
         }
+
         internal void Evolve(ulong pokemonId)
         {
             var pkm = Pokemons.FirstOrDefault(x => x.Id == pokemonId);
@@ -162,10 +168,7 @@ namespace PoGo.Necrobot.Window.Model
 
             if (pkm != null)
             {
-                pkm.AllowPowerup = false;
-                pkm.PowerupText = "Upgrading...";
-                pkm.RaisePropertyChanged("PowerupText");
-                pkm.RaisePropertyChanged("AllowPowerup");
+                pkm.IsUpgrading = true;
             }
         }
     }

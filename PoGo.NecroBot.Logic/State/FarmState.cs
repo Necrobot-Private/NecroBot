@@ -34,7 +34,7 @@ namespace PoGo.NecroBot.Logic.State
                 if (session.LogicSettings.UseIncenseConstantly)
                     await UseIncenseConstantlyTask.Execute(session, cancellationToken);
 
-                await GetPokeDexCount.Execute(session, cancellationToken);
+                GetPokeDexCount.Execute(session, cancellationToken);
 
                 if (session.LogicSettings.RenamePokemon)
                     await RenamePokemonTask.Execute(session, cancellationToken);

@@ -46,12 +46,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                                 ? session.Inventory.GetHighestPokemonOfTypeByIv(pokemon)
                                                 : session.Inventory.GetHighestPokemonOfTypeByCp(pokemon)) ??
                                             pokemon;
-
-                    var setting = pokemonSettings.Single(q => q.PokemonId == pokemon.PokemonId);
-                    var family = pokemonFamilies.First(q => q.FamilyId == setting.FamilyId);
-
-                    family.Candy_++;
-
+                    
                     // Broadcast event as everyone would benefit
                     session.EventDispatcher.Send(new TransferPokemonEvent
                     {
@@ -61,8 +56,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Cp = pokemon.Cp,
                         BestCp = bestPokemonOfType.Cp,
                         BestPerfection = PokemonInfo.CalculatePokemonPerfection(bestPokemonOfType),
-                        FamilyCandies = family.Candy_,
-                        FamilyId = family.FamilyId
+                        Candy = session.Inventory.GetCandy(pokemon.PokemonId)
                     });
                 }
 

@@ -5,6 +5,7 @@ using PoGo.NecroBot.Logic.PoGoUtils;
 using POGOProtos.Data;
 using POGOProtos.Inventory;
 using POGOProtos.Settings.Master;
+using PoGo.NecroBot.Logic.State;
 
 #endregion
 
@@ -13,17 +14,15 @@ namespace PoGo.NecroBot.CLI.WebSocketHandler.GetCommands.Helpers
     public class PokemonListWeb
     {
         public PokemonData Base;
-        private readonly List<Candy> _families;
-        private readonly IEnumerable<PokemonSettings> _settings;
+        private readonly ISession _session;
 
-        public PokemonListWeb(PokemonData data, List<Candy> family, IEnumerable<PokemonSettings> settings)
+        public PokemonListWeb(ISession session, PokemonData data)
         {
             Base = data;
-            _families = family;
-            _settings = settings;
+            _session = session;
         }
 
         public double IvPerfection => PokemonInfo.CalculatePokemonPerfection(Base);
-        public int FamilyCandies => PokemonInfo.GetCandy(Base, _families, _settings);
+        public int FamilyCandies => PokemonInfo.GetCandy(_session, Base);
     }
 }

@@ -121,5 +121,17 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool TrainAlreadyDefendedGym { get; set; }
+
+        [ExcelConfig(Description = "Min CP to use in attack", Position = 20)]
+        [DefaultValue(1000)]
+        [Range(1, 3500)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
+        public int MinCpToUseInAttack { get; set; }
+
+        [ExcelConfig(Description = "But not less than defender's percent", Position = 21)]
+        [DefaultValue(0.75)]
+        [Range(0.01, 1)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
+        public double ButNotLessThanDefenderPercent { get; set; }
     }
 }
