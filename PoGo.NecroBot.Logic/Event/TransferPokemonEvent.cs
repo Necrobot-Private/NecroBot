@@ -1,6 +1,7 @@
 ﻿#region using directives
 
 using POGOProtos.Enums;
+using POGOProtos.Inventory;
 
 #endregion
 
@@ -11,11 +12,9 @@ namespace PoGo.NecroBot.Logic.Event
         public int BestCp;
         public double BestPerfection;
         public int Cp;
-        public int FamilyCandies;
         public PokemonId PokemonId;
         public double Perfection;
         public ulong Id;
-
-        public PokemonFamilyId FamilyId { get; internal set; }
+        public Candy Candy { get; internal set; }
     }
 }

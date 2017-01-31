@@ -123,37 +123,29 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static async Task Evolve(ISession session, List<PokemonData> pokemonToEvolve)
         {
-            var pokemonSettings = await session.Inventory.GetPokemonSettings();
-            var pokemonFamilies = await session.Inventory.GetPokemonFamilies();
-
             int sequence = 1;
             foreach (var pokemon in pokemonToEvolve)
             {
-                var setting =
-                    pokemonSettings.FirstOrDefault(q => pokemon != null && q.PokemonId == pokemon.PokemonId);
-                var family = pokemonFamilies.FirstOrDefault(q => setting != null && q.FamilyId == setting.FamilyId);
-
-                if (family.Candy_ < setting.CandyToEvolve) continue;
-                // no cancellationToken.ThrowIfCancellationRequested here, otherwise the lucky egg would be wasted.
-                var evolveResponse = await session.Client.Inventory.EvolvePokemon(pokemon.Id);
-                if (evolveResponse.Result == EvolvePokemonResponse.Types.Result.Success)
+                if (await session.Inventory.CanEvolvePokemon(pokemon))
                 {
-                    family.Candy_ -= setting.CandyToEvolve;
+                    // no cancellationToken.ThrowIfCancellationRequested here, otherwise the lucky egg would be wasted.
+                    var evolveResponse = await session.Client.Inventory.EvolvePokemon(pokemon.Id);
+                    if (evolveResponse.Result == EvolvePokemonResponse.Types.Result.Success)
+                    {
+                        session.EventDispatcher.Send(new PokemonEvolveEvent
+                        {
+                            Id = pokemon.PokemonId,
+                            Exp = evolveResponse.ExperienceAwarded,
+                            UniqueId = pokemon.Id,
+                            Result = evolveResponse.Result,
+                            Sequence = pokemonToEvolve.Count() == 1 ? 0 : sequence++,
+                            EvolvedPokemon = evolveResponse.EvolvedPokemonData
+                        });
+                    }
+                    
+                    if (!pokemonToEvolve.Last().Equals(pokemon))
+                        DelayingUtils.Delay(session.LogicSettings.EvolveActionDelay, 0);
                 }
-                
-                session.EventDispatcher.Send(new PokemonEvolveEvent
-                {
-                    Id = pokemon.PokemonId,
-                    Exp = evolveResponse.ExperienceAwarded,
-                    UniqueId = pokemon.Id,
-                    Result = evolveResponse.Result,
-                    Sequence = pokemonToEvolve.Count() == 1 ? 0 : sequence++,
-                    Family = family,
-                    PokemonSetting = setting
-                });
-
-                if (!pokemonToEvolve.Last().Equals(pokemon))
-                    DelayingUtils.Delay(session.LogicSettings.EvolveActionDelay, 0);
             }
         }
 
