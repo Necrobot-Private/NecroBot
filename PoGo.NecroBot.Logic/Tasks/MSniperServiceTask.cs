@@ -553,8 +553,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                 filter = session.LogicSettings.PokemonSnipeFilters[pokemonId];
             }
 
-            var candy = session.Inventory.GetCandy(pokemonId);
-
             lock (locker)
             {
                 if (byPassValidation)
@@ -569,9 +567,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                 item.Priority = filter.Priority;
 
                 if (filter.VerifiedOnly && item.EncounterId == 0) return false;
+                
                 //check candy
-
-                if (candy < filter.AutoSnipeCandy)
+                var candy = session.Inventory.GetCandy(pokemonId)?.Candy_;
+                if (candy != null && candy < filter.AutoSnipeCandy)
                 {
                     autoSnipePokemons.Add(item);
                     return true;

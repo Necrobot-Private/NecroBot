@@ -9,7 +9,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 {
     public class GetPokeDexCount
     {
-        public static async Task Execute(ISession session, CancellationToken cancellationToken)
+        public static void Execute(ISession session, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 

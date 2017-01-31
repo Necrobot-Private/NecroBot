@@ -10,7 +10,11 @@ namespace PoGo.Necrobot.Window.Converters
 
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            return !System.Convert.ToBoolean(values[0]) && !System.Convert.ToBoolean(values[1]);
+            bool isEvolving = (bool)values[1];
+            bool isTransfering = (bool)values[2];
+            bool allow = (bool)values[0];
+
+            return !isEvolving && !isTransfering && allow;
         }
 
         object[] IMultiValueConverter.ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

@@ -52,7 +52,7 @@ namespace PoGo.Necrobot.Window.Model
             SnipeList = new SnipeListViewModel();
             EggsList = new EggsListViewModel();
 
-            PokemonList = new PokemonListModel()
+            PokemonList = new PokemonListModel(this.Session)
             {
                 Pokemons = new ObservableCollection<PokemonDataViewModel>()
             };

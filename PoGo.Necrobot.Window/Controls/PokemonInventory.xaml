@@ -87,10 +87,11 @@
                                 <StackPanel  Orientation="Horizontal"  >
                                     <Button Margin="0,0,10,0" Click="btnTransfer_Click" CommandParameter="{Binding Id}" Content="{Binding Path=IsTransfering, Converter={StaticResource ResourceKey= FriendlyTransferTextConverter}}">
                                         <Button.IsEnabled>
-                                            <MultiBinding Converter="{StaticResource AllowTransferCheckConverter}">
-                                                <Binding Path="IsTransfering"/>
-                                                <Binding Path="Favorited"/>
-                                            </MultiBinding>
+                                        <MultiBinding Converter="{StaticResource ResourceKey=AllowTransferCheckConverter}">
+                                            <Binding Path="AllowTransfer"/>
+                                            <Binding Path="IsEvolving"/>
+                                            <Binding Path="IsTransfering"/>
+                                        </MultiBinding>
                                         </Button.IsEnabled>
                                     </Button>
                                     <Button Margin="0,0,10,0"  Click="btnEvolve_Click" CommandParameter="{Binding Id}" Content="{Binding Path=IsEvolving, Converter={StaticResource ResourceKey=FriendlyEvolveTextConverter}}">

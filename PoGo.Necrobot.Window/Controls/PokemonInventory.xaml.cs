@@ -116,7 +116,7 @@ namespace PoGo.Necrobot.Window.Controls
             ulong pokemonId = (ulong) ((Button) sender).CommandParameter;
             bool state = model.Favorite(pokemonId);
 
-            Task.Run(async () => { await FavoritePokemonTask.Execute(Session, pokemonId, state); });
+            Task.Run(async () => { await FavoritePokemonTask.Execute(Session, pokemonId, !state); });
         }
 
         private void Select_Checked(object sender, RoutedEventArgs e)

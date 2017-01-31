@@ -56,9 +56,6 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             if (orderedPokemon.Count() == 0) return;
 
-            var pokemonSettings = await session.Inventory.GetPokemonSettings();
-            var pokemonFamilies = await session.Inventory.GetPokemonFamilies();
-
             if (session.LogicSettings.UseBulkTransferPokemon)
             {
                 int page = orderedPokemon.Count() / session.LogicSettings.BulkTransferSize + 1;
@@ -70,7 +67,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     {
                         foreach (var duplicatePokemon in batchTransfer)
                         {
-                            await PrintPokemonInfo(session, pokemonSettings, pokemonFamilies, duplicatePokemon);
+                            PrintPokemonInfo(session, duplicatePokemon);
                         }
                     }
                     else session.EventDispatcher.Send(new WarnEvent() { Message = session.Translation.GetTranslation(TranslationString.BulkTransferFailed, orderedPokemon.Count()) });
@@ -83,7 +80,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     await session.Client.Inventory.TransferPokemon(duplicatePokemon.Id);
 
-                    await PrintPokemonInfo(session, pokemonSettings, pokemonFamilies, duplicatePokemon);
+                    PrintPokemonInfo(session, duplicatePokemon);
 
                     // Padding the TransferEvent with player-choosen delay before instead of after.
                     // This is to remedy too quick transfers, often happening within a second of the
@@ -93,19 +90,13 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
         }
 
-        public static async Task PrintPokemonInfo(ISession session, IEnumerable<PokemonSettings> pokemonSettings,
-            List<Candy> pokemonFamilies, PokemonData duplicatePokemon)
+        public static void PrintPokemonInfo(ISession session, PokemonData duplicatePokemon)
         {
             var bestPokemonOfType = (session.LogicSettings.PrioritizeIvOverCp
                                         ? session.Inventory.GetHighestPokemonOfTypeByIv(duplicatePokemon)
                                         : session.Inventory.GetHighestPokemonOfTypeByCp(duplicatePokemon)) ??
                                     duplicatePokemon;
-
-            var setting = pokemonSettings.SingleOrDefault(q => q.PokemonId == duplicatePokemon.PokemonId);
-            var family = pokemonFamilies.FirstOrDefault(q => q.FamilyId == setting.FamilyId);
-
-            family.Candy_++;
-
+            
             session.EventDispatcher.Send(new TransferPokemonEvent
             {
                 Id = duplicatePokemon.Id,
@@ -114,7 +105,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 Cp = duplicatePokemon.Cp,
                 BestCp = bestPokemonOfType.Cp,
                 BestPerfection = PokemonInfo.CalculatePokemonPerfection(bestPokemonOfType),
-                FamilyCandies = family.Candy_
+                Candy = session.Inventory.GetCandy(duplicatePokemon.PokemonId)
             });
         }
     }
