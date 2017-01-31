@@ -98,10 +98,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
                 finally
                 {
+                    // Reload pokemon after upgrade.
+                    var upgradedPokemon = session.Inventory.GetSinglePokemon(pokemonId);
                     session.EventDispatcher.Send(new FinishUpgradeEvent()
                     {
                         PokemonId = pokemonId,
-                        Pokemon = pokemonToUpgrade
+                        Pokemon = upgradedPokemon
                     });
                 }
             }

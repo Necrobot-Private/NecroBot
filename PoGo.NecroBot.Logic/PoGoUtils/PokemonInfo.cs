@@ -8,28 +8,12 @@ using POGOProtos.Enums;
 using POGOProtos.Inventory;
 using POGOProtos.Settings.Master;
 using PokemonGo.RocketAPI.Helpers;
+using PoGo.NecroBot.Logic.State;
 
 #endregion
 
 namespace PoGo.NecroBot.Logic.PoGoUtils
 {
-    public struct BaseStats
-    {
-        public int BaseAttack, BaseDefense, BaseStamina;
-
-        public BaseStats(int baseStamina, int baseAttack, int baseDefense)
-        {
-            BaseAttack = baseAttack;
-            BaseDefense = baseDefense;
-            BaseStamina = baseStamina;
-        }
-
-        public override string ToString()
-        {
-            return $"({BaseAttack} atk,{BaseDefense} def,{BaseStamina} sta)";
-        }
-    }
-
     public static class PokemonInfo
     {
         public static int CalculateCp(PokemonData poke)
@@ -37,14 +21,9 @@ namespace PoGo.NecroBot.Logic.PoGoUtils
             return PokemonCpUtils.GetCp(poke);
         }
         
-        public static double CalculateMaxCpMultiplier(PokemonId pokemonId)
+        public static int CalculateMaxCp(PokemonId pokemonId, int level = 40)
         {
-            return PokemonCpUtils.GetAbsoluteMaxCp(pokemonId);
-        }
-
-        public static int CalculateMaxCp(PokemonData poke)
-        {
-            return PokemonCpUtils.GetMaxCp(poke);
+            return PokemonCpUtils.GetAbsoluteMaxCp(pokemonId, level);
         }
 
         public static double CalculatePokemonPerfection(PokemonData poke)
@@ -82,15 +61,9 @@ namespace PoGo.NecroBot.Logic.PoGoUtils
             return move2;
         }
 
-        public static int GetCandy(PokemonData pokemon, List<Candy> PokemonFamilies,
-            IEnumerable<PokemonSettings> PokemonSettings)
+        public static int GetCandy(ISession session, PokemonData pokemon)
         {
-            if (PokemonFamilies == null || PokemonSettings == null) return 0;
-
-            var setting = PokemonSettings.FirstOrDefault(q => pokemon != null && q.PokemonId == pokemon.PokemonId);
-            var family = PokemonFamilies.FirstOrDefault(q => setting != null && q.FamilyId == setting.FamilyId);
-
-            return family != null ? family.Candy_ : 0;
+            return session.Inventory.GetCandy(pokemon.PokemonId);
         }
 
         public static int GetPowerUpLevel(PokemonData poke)

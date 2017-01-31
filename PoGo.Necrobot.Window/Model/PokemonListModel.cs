@@ -19,7 +19,7 @@ namespace PoGo.Necrobot.Window.Model
 
         public ObservableCollection<PokemonDataViewModel> Pokemons { get; set; }
 
-        internal void Update(List<PokemonData> pokemons, List<Candy> candies, List<PokemonSettings> pokemonSettings)
+        internal void Update(IEnumerable<PokemonData> pokemons)
         {
             foreach (var item in pokemons)
             {
@@ -34,19 +34,37 @@ namespace PoGo.Necrobot.Window.Model
                     Pokemons.Add(new PokemonDataViewModel(this.Session, item));
                 }
             }
+
+            // Remove missing pokemon
+            List<PokemonDataViewModel> modelsToRemove = new List<PokemonDataViewModel>();
+            foreach (var item in Pokemons)
+            {
+                var existing = pokemons.FirstOrDefault(x => x.Id == item.Id);
+                if (existing == null)
+                {
+                    modelsToRemove.Add(item);
+                }
+            }
+            
+            foreach(var model in modelsToRemove)
+            {
+                Pokemons.Remove(model);
+            }
         }
 
         internal void OnUpgradeEnd(FinishUpgradeEvent e)
         {
             var id = e.PokemonId;
             var model = Get(id);
-            model.PowerupText = "Upgrade";
+            model.IsUpgrading = false;
+            model.PokemonData = e.Pokemon;
         }
 
         internal void OnUpgraded(UpgradePokemonEvent e)
         {
             var id = e.Pokemon.Id;
             var model = Get(id);
+            model.IsUpgrading = false;
             model.PokemonData = e.Pokemon;
         }
 
@@ -66,9 +84,9 @@ namespace PoGo.Necrobot.Window.Model
 
         internal void OnEvolved(PokemonEvolveEvent ev)
         {
+            var exist = Get(ev.OriginalId);
             if (ev.Result == POGOProtos.Networking.Responses.EvolvePokemonResponse.Types.Result.Success)
             {
-                var exist = Get(ev.OriginalId);
                 if (exist != null)
                     this.Pokemons.Remove(exist);
 
@@ -79,6 +97,10 @@ namespace PoGo.Necrobot.Window.Model
                 {
                     item.RaisePropertyChanged("Candy");
                 }
+            }
+            else
+            {
+                exist.IsEvolving = false;
             }
         }
 
@@ -146,9 +168,7 @@ namespace PoGo.Necrobot.Window.Model
 
             if (pkm != null)
             {
-                pkm.PowerupText = "Upgrading...";
-                pkm.RaisePropertyChanged("PowerupText");
-                pkm.RaisePropertyChanged("AllowPowerup");
+                pkm.IsUpgrading = true;
             }
         }
     }

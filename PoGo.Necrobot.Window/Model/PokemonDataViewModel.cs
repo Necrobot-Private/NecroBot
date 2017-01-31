@@ -14,15 +14,11 @@ namespace PoGo.Necrobot.Window.Model
         {
             this.Session = session;
             this.PokemonData = pokemon;
-            this.PowerupText = "Upgrade";
         }
 
         internal void UpdateWith(PokemonData item)
         {
             this.PokemonData = item;
-            this.IsTransfering = false;
-            this.IsEvolving = false;
-            this.IsFavoriting = false;
         }
 
         public ulong Id
@@ -32,8 +28,21 @@ namespace PoGo.Necrobot.Window.Model
                 return PokemonData.Id;
             }
         }
+        
+        public string PokemonName
+        {
+            get
+            {
+                return string.IsNullOrEmpty(PokemonData.Nickname) ? PokemonData.PokemonId.ToString() : PokemonData.Nickname;
+            }
 
-        public PokemonId PokemonName
+            set
+            {
+                PokemonData.Nickname = value;
+            }
+        }
+
+        public PokemonId PokemonId
         {
             get
             {
@@ -69,7 +78,7 @@ namespace PoGo.Necrobot.Window.Model
         {
             get
             {
-                return this.Session.Inventory.GetPokemonSettings().Result.FirstOrDefault(x => x.PokemonId == PokemonName);
+                return this.Session.Inventory.GetPokemonSettings().Result.FirstOrDefault(x => x.PokemonId == PokemonId);
             }
         }
 
@@ -94,6 +103,14 @@ namespace PoGo.Necrobot.Window.Model
             get
             {
                 return this.Session.Inventory.CanEvolvePokemon(this.PokemonData).Result;
+            }
+        }
+
+        public bool AllowTransfer
+        {
+            get
+            {
+                return this.Session.Inventory.CanTransferPokemon(this.PokemonData);
             }
         }
 
@@ -127,6 +144,18 @@ namespace PoGo.Necrobot.Window.Model
             {
                 isFavoriting = value;
                 RaisePropertyChanged("IsFavoriting");
+            }
+        }
+
+        private bool isUpgrading;
+        public bool IsUpgrading
+        {
+            get { return isUpgrading; }
+            set
+            {
+                isUpgrading = value;
+                RaisePropertyChanged("IsUpgrading");
+                RaisePropertyChanged("PowerupText");
             }
         }
 
@@ -223,6 +252,7 @@ namespace PoGo.Necrobot.Window.Model
                 RaisePropertyChanged("Candy");
                 RaisePropertyChanged("AllowPowerup");
                 RaisePropertyChanged("AllowEvolve");
+                RaisePropertyChanged("AllowTransfer");
                 RaisePropertyChanged("Candy");
                 RaisePropertyChanged("IV");
                 RaisePropertyChanged("CP");
@@ -237,6 +267,16 @@ namespace PoGo.Necrobot.Window.Model
 
             }
         }
-        public string PowerupText { get; internal set; }
+
+        public string PowerupText
+        {
+            get
+            {
+                if (IsUpgrading)
+                    return "Upgrading...";
+                else
+                    return "Upgrade";
+            }
+        }
     }
 }

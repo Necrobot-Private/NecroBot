@@ -71,18 +71,7 @@ namespace PoGo.NecroBot.Logic
             ItemId.ItemUltraBall,
             ItemId.ItemMasterBall
         };
-
-        internal void MarkAsFavorite(PokemonData pokemon)
-        {
-            pokemon.Favorite = 1;
-            var all = GetPokemons();
-            var pkm = all.FirstOrDefault(x => x.Id == pokemon.Id);
-            if (pkm != null)
-            {
-                pkm.Favorite = 1;
-            }
-        }
-
+        
         private readonly List<ItemId> _potions = new List<ItemId>
         {
             ItemId.ItemPotion,
@@ -158,7 +147,7 @@ namespace PoGo.NecroBot.Logic
 
             var myPokemonList = myPokemon.ToList();
 
-            var pokemonToTransfer = myPokemonList
+            var pokemonToTransfer = myPokemon
                 .Where(p => !pokemonsNotToTransfer.Contains(p.PokemonId) && p.DeployedFortId == string.Empty &&
                             p.Favorite == 0 && p.BuddyTotalKmWalked == 0)
                 .ToList();
@@ -318,15 +307,7 @@ namespace PoGo.NecroBot.Logic
             }
             return null;
         }
-
-        public int UpdateStartDust(int startdust)
-        {
-            GetPlayerData().Wait();
-            _player.PlayerData.Currencies[1].Amount += startdust;
-
-            return _player.PlayerData.Currencies[1].Amount;
-        }
-
+        
         public int GetStarDust()
         {
             GetPlayerData().Wait();
@@ -557,6 +538,24 @@ namespace PoGo.NecroBot.Logic
             return _pokemonSettings;
         }
 
+        public bool CanTransferPokemon(PokemonData pokemon)
+        {
+            // Can't transfer pokemon in gyms.
+            if (!string.IsNullOrEmpty(pokemon.DeployedFortId))
+                return false;
+
+            // Can't transfer buddy pokemon
+            var buddy = this.ownerSession.Profile.PlayerData.BuddyPokemon;
+            if (buddy != null && buddy.Id == pokemon.Id)
+                return false;
+            
+            // Can't transfer favorite
+            if (pokemon.Favorite == 1)
+                return false;
+
+            return true;
+        }
+
         public async Task<bool> CanEvolvePokemon(PokemonData pokemon, IEnumerable<PokemonData> pokemonsToEvolve = null)
         {
             // Can't evolve pokemon in gyms.
@@ -569,9 +568,8 @@ namespace PoGo.NecroBot.Logic
             // Can't evolve pokemon that are not evolvable.
             if (settings.EvolutionIds.Count == 0)
                 return false;
-
-            List<Candy> pokemonFamilies = await GetPokemonFamilies();
-            int familyCandy = PokemonInfo.GetCandy(pokemon, pokemonFamilies, pokemonSettings);
+            
+            int familyCandy = GetCandy(pokemon.PokemonId);
             
             //DO NOT CHANGE! TESTED AND WORKS
             //TRUONG: temporary change 1 to 2 to fix not enought resource when evolve. not a big deal when we keep few candy.

@@ -138,7 +138,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                             Exp = evolveResponse.ExperienceAwarded,
                             UniqueId = pokemon.Id,
                             Result = evolveResponse.Result,
-                            Sequence = pokemonToEvolve.Count() == 1 ? 0 : sequence++
+                            Sequence = pokemonToEvolve.Count() == 1 ? 0 : sequence++,
+                            EvolvedPokemon = evolveResponse.EvolvedPokemonData
                         });
                     }
                     

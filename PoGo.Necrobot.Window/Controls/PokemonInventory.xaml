@@ -89,7 +89,7 @@
                                         <Button.IsEnabled>
                                             <MultiBinding Converter="{StaticResource AllowTransferCheckConverter}">
                                                 <Binding Path="IsTransfering"/>
-                                                <Binding Path="Favorited"/>
+                                                <Binding Path="AllowTransfer"/>
                                             </MultiBinding>
                                         </Button.IsEnabled>
                                     </Button>

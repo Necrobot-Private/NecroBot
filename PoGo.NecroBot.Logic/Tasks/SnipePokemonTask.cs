@@ -499,7 +499,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     catchablePokemon =
                         mapObjects.MapCells.SelectMany(q => q.CatchablePokemons)
                             .Where(q => pokemonIds.Contains(q.PokemonId))
-                            .OrderByDescending(pokemon => PokemonInfo.CalculateMaxCpMultiplier(pokemon.PokemonId))
+                            .OrderByDescending(pokemon => PokemonInfo.CalculateMaxCp(pokemon.PokemonId))
                             .ToList();
                 } while (catchablePokemon.Count == 0 && retry > 0);
             }
