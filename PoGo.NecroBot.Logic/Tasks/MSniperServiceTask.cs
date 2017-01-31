@@ -569,8 +569,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                 if (filter.VerifiedOnly && item.EncounterId == 0) return false;
                 
                 //check candy
-                var candy = session.Inventory.GetCandy(pokemonId)?.Candy_;
-                if (candy != null && candy < filter.AutoSnipeCandy)
+                int candy = session.Inventory.GetCandyCount(pokemonId);
+                if (candy < filter.AutoSnipeCandy)
                 {
                     autoSnipePokemons.Add(item);
                     return true;

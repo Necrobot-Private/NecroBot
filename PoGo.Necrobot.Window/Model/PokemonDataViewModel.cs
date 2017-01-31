@@ -87,7 +87,7 @@ namespace PoGo.Necrobot.Window.Model
         {
             get
             {
-                return this.Session.Inventory.GetCandy(this.PokemonData.PokemonId).Candy_;
+                return this.Session.Inventory.GetCandyCount(this.PokemonData.PokemonId);
             }
         }
 
