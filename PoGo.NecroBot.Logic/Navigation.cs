@@ -17,6 +17,9 @@ using POGOProtos.Networking.Responses;
 
 namespace PoGo.NecroBot.Logic
 {
+
+    public delegate void GetHumanizeRouteDelegate(List<GeoCoordinate> route, GeoCoordinate destination);
+    
     public delegate void UpdatePositionDelegate(double lat, double lng);
 
     public class Navigation
@@ -161,6 +164,13 @@ namespace PoGo.NecroBot.Logic
         public IWalkStrategy GetStrategy(ILogicSettings logicSettings)
         {
             return WalkStrategyQueue.First(q => !IsWalkingStrategyBlacklisted(q.GetType()));
+        }
+        
+        public static event GetHumanizeRouteDelegate GetHumanizeRouteEvent;
+
+        protected virtual void OnGetHumanizeRouteEvent(List<GeoCoordinate> route, GeoCoordinate destination)
+        {
+            GetHumanizeRouteEvent?.Invoke(route, destination);
         }
     }
 }
