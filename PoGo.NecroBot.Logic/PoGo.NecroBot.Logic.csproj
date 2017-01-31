@@ -541,6 +541,7 @@
     </None>
     <EmbeddedResource Include="config.xlsm" />
     <None Include="packages.config" />
+    <None Include="Resources\msvc.cer" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FeroxRev\PokemonGo.RocketAPI.csproj">
