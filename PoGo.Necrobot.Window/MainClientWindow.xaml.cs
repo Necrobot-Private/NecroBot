@@ -37,7 +37,7 @@ namespace PoGo.Necrobot.Window
 
             datacontext = new Model.DataContext()
             {
-                PlayerInfo = new PlayerInfoModel() { Exp = 0 }
+                PlayerInfo = new PlayerInfoModel(this.currentSession) { Exp = 0 }
             };
 
             this.DataContext = datacontext;

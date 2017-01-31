@@ -1,19 +1,19 @@
 ﻿using POGOProtos.Enums;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using POGOProtos.Data.Player;
 using PoGo.NecroBot.Logic.Event;
 using POGOProtos.Networking.Responses;
-using PoGo.NecroBot.Logic.Event.Inventory;
+using PoGo.NecroBot.Logic.State;
 
 namespace PoGo.Necrobot.Window.Model
 {
     public class PlayerInfoModel : ViewModelBase
     {
+        public PlayerInfoModel(ISession session)
+        {
+            this.Session = session;
+        }
+
         public PokemonId BuddyPokemonId { get; set; }
         public string Name { get; set; }
         private double exp;
@@ -133,7 +133,7 @@ namespace PoGo.Necrobot.Window.Model
             this.playerProfile = profile.Profile;
         }
 
-        public void OnInventoryRefreshed(InventoryRefreshedEvent inventory)
+        public void OnInventoryRefreshed()
         {
             if (this.playerProfile == null || this.playerProfile.PlayerData.BuddyPokemon == null || this.playerProfile.PlayerData.BuddyPokemon.Id == 0) return;
 
@@ -141,9 +141,7 @@ namespace PoGo.Necrobot.Window.Model
 
             if (budyData == null) return;
              
-            var buddy = inventory.Inventory
-                .InventoryDelta
-                .InventoryItems
+            var buddy = this.Session.Inventory.GetCachedInventory()
                 .Select(x => x.InventoryItemData?.PokemonData)
                 .Where(x => x != null && x.Id == this.playerProfile.PlayerData.BuddyPokemon.Id)
                 .FirstOrDefault();

@@ -8,27 +8,29 @@ using POGOProtos.Networking.Responses;
 using POGOProtos.Data;
 using POGOProtos.Inventory;
 using PoGo.NecroBot.Logic.Event;
+using PoGo.NecroBot.Logic.State;
 
 namespace PoGo.Necrobot.Window.Model
 {
-    public class EggsListViewModel  :ViewModelBase
+    public class EggsListViewModel : ViewModelBase
     {
         public ObservableCollection<EggViewModel> Eggs { get; set; }
         public ObservableCollection<IncubatorViewModel> Incubators { get; set; }
-        public EggsListViewModel()
+        public EggsListViewModel(ISession session)
         {
+            this.Session = session;
             this.Eggs = new ObservableCollection<EggViewModel>();
             this.Incubators = new ObservableCollection<IncubatorViewModel>();
         }
 
-        internal void OnInventoryRefreshed(GetInventoryResponse inventory)
+        internal void OnInventoryRefreshed()
         {
-            var eggs = inventory.InventoryDelta.InventoryItems
+            var eggs = this.Session.Inventory.GetCachedInventory()
                 .Select(x => x.InventoryItemData?.PokemonData)
                 .Where(x => x != null && x.IsEgg)
                 .ToList();
 
-            var incubators = inventory.InventoryDelta.InventoryItems
+            var incubators = this.Session.Inventory.GetCachedInventory()
                     .Where(x => x.InventoryItemData.EggIncubators != null)
                     .SelectMany(i => i.InventoryItemData.EggIncubators.EggIncubator)
                     .Where(i => i != null);

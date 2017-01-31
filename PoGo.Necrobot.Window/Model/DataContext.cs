@@ -49,8 +49,8 @@ namespace PoGo.Necrobot.Window.Model
             ItemsList = new ItemsListViewModel();
             Sidebar = new SidebarViewModel();
             internalPokemons = new List<PokemonData>();
-            SnipeList = new SnipeListViewModel();
-            EggsList = new EggsListViewModel();
+            SnipeList = new SnipeListViewModel(this.Session);
+            EggsList = new EggsListViewModel(this.Session);
 
             PokemonList = new PokemonListModel(this.Session)
             {
