@@ -58,9 +58,9 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
             }
         }
 
-        internal void DoUpdatePositionEvent(double latitude, double longitude)
+        internal void DoUpdatePositionEvent(ISession session, double latitude, double longitude)
         {
-            UpdatePositionEvent?.Invoke(latitude, longitude);
+            UpdatePositionEvent?.Invoke(session, latitude, longitude);
         }
 
         /// <summary>
@@ -214,13 +214,13 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
                     result = await LocationUtils
                         .UpdatePlayerLocationWithAltitude(session, waypoint, (float) speedInMetersPerSecond);
 
-                    UpdatePositionEvent?.Invoke(waypoint.Latitude, waypoint.Longitude);
+                    UpdatePositionEvent?.Invoke(session, waypoint.Latitude, waypoint.Longitude);
 
                     if (functionExecutedWhileWalking != null)
                         await functionExecutedWhileWalking(); // look for pokemon
                 } while (LocationUtils.CalculateDistanceInMeters(currentLocation, nextStep) >= 2);
 
-                UpdatePositionEvent?.Invoke(nextStep.Latitude, nextStep.Longitude);
+                UpdatePositionEvent?.Invoke(session, nextStep.Latitude, nextStep.Longitude);
             }
 
             return result;

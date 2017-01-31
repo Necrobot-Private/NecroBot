@@ -172,7 +172,8 @@ namespace PoGo.NecroBot.Logic.State
             });
             Navigation = new Navigation(Client, logicSettings);
             Navigation.WalkStrategy.UpdatePositionEvent +=
-                (lat, lng) => this.EventDispatcher.Send(new UpdatePositionEvent {Latitude = lat, Longitude = lng});
+                (session, lat, lng) => this.EventDispatcher.Send(new UpdatePositionEvent {Latitude = lat, Longitude = lng});
+            Navigation.WalkStrategy.UpdatePositionEvent += LoadSaveState.SaveLocationToDisk;
         }
 
         //TODO : Need add BotManager to manage all feature related to multibot, 

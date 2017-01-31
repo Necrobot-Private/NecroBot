@@ -61,9 +61,7 @@ namespace PoGo.NecroBot.Logic
                 }
             };
         }
-
-        private LRUCache<ItemId, int> pokeballCache = new LRUCache<ItemId, int>(capacity: 10);
-
+        
         private readonly List<ItemId> _pokeballs = new List<ItemId>
         {
             ItemId.ItemPokeBall,
@@ -98,20 +96,7 @@ namespace PoGo.NecroBot.Logic
                 }
             });
         }
-
-        public int GetCachedPokeballCount(ItemId pokeballId)
-        {
-            int pokeballCount;
-            if (!pokeballCache.TryGetValue(pokeballId, out pokeballCount))
-            {
-                //await RefreshCachedInventory();
-                pokeballCount = GetItemAmountByType(pokeballId);
-                pokeballCache.Add(pokeballId, pokeballCount);
-            }
-
-            return pokeballCount;
-        }
-
+        
         public async Task<LevelUpRewardsResponse> GetLevelUpRewards(Inventory inv)
         {
             return await GetLevelUpRewards(inv.GetPlayerStats().FirstOrDefault().Level);

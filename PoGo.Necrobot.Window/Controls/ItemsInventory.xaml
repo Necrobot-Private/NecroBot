@@ -13,29 +13,25 @@
     <ListView Margin="10" Name="lsItem" ItemsSource="{Binding Path=Items}">
         <ListView.View>
             <GridView>
-                <GridViewColumn Header="Name"  DisplayMemberBinding="{Binding  Name}" Width="130"></GridViewColumn>
-                <GridViewColumn Header="Item"
-				    Width="100">
+                <GridViewColumn Header="Name"  DisplayMemberBinding="{Binding  Name}" Width="100"></GridViewColumn>
+                <GridViewColumn Header=""
+				    Width="40">
                     <GridViewColumn.CellTemplate>
                         <DataTemplate>
-                            <DockPanel VerticalAlignment="Center" Margin="10">
-                                <Image ToolTip="{Binding Path=Name}" Source="{Binding Path=ItemId, Converter={StaticResource ItemIdToImageConverter}}" DockPanel.Dock="Left"  />
-                                <TextBlock  MinWidth="80" Text="{Binding Path=Name}" DockPanel.Dock="Right"/>
-                            </DockPanel>
-                            </DataTemplate>
-                                </GridViewColumn.CellTemplate>
+                            <Image Width="30" ToolTip="{Binding Path=Name}" Source="{Binding Path=ItemId, Converter={StaticResource ItemIdToImageConverter}}" />
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>
                 </GridViewColumn>
-               
                 
                 <GridViewColumn Header="Amount"
-				    DisplayMemberBinding="{Binding ItemCount}"
+				    DisplayMemberBinding="{Binding ItemCount, UpdateSourceTrigger=PropertyChanged}"
 				    Width="80"/>
                 <GridViewColumn Header="Recycle" Width="350">
                     <GridViewColumn.CellTemplate>
                         <DataTemplate>
                             <DockPanel VerticalAlignment="Center" Margin="10">
                                 <TextBox Text="{Binding ElementName=slider, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Right" Width="30"  Margin="20,0,0,0" />
-                                <Slider Name="slider" Minimum="0" Maximum="{Binding Path=ItemCount}" Value="{Binding Path=SelectedValue}"   IsSnapToTickEnabled="false"  ></Slider>
+                                <Slider Name="slider" Minimum="0" Maximum="{Binding Path=ItemCount, UpdateSourceTrigger=PropertyChanged}" Value="{Binding Path=SelectedValue}" IsSnapToTickEnabled="false"  ></Slider>
                             </DockPanel>
 
                         </DataTemplate>

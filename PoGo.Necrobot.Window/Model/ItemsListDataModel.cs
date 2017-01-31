@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using POGOProtos.Inventory.Item;
 
 namespace PoGo.Necrobot.Window.Model
@@ -16,6 +13,16 @@ namespace PoGo.Necrobot.Window.Model
         {
             this.Items = new ObservableCollection<ItemsViewModel>();
         }
+
+        public void SyncSelectedValues()
+        {
+            foreach (var item in this.Items)
+            {
+                item.SelectedValue = item.ItemCount;
+                item.RaisePropertyChanged("SelectedValue");
+            }
+        }
+
         public void Update(List<ItemData> items)
         {
             foreach (var item in items)
@@ -25,7 +32,7 @@ namespace PoGo.Necrobot.Window.Model
                 {
                     this.Items.Add(new ItemsViewModel()
                     {
-                        Name = item.ItemId.ToString(),
+                        Name = item.ItemId.ToString().Replace("Item", "").Replace("Basic", "").Replace("Unlimited", "(∞)").Replace("Ordinary", ""),
                         ItemId = item.ItemId,
                         ItemCount = item.Count,
                         SelectedValue = item.Count,
@@ -37,12 +44,18 @@ namespace PoGo.Necrobot.Window.Model
                 {
                     existing.ItemCount = item.Count;
                     existing.RaisePropertyChanged("ItemCount");
+
+                    if (existing.SelectedValue > existing.ItemCount)
+                    {
+                        existing.SelectedValue = existing.ItemCount;
+                        existing.RaisePropertyChanged("SelectedValue");
+                    }
+                    
                     existing.DropText = "Drop";
                     existing.RaisePropertyChanged("DropText");
 
                     existing.AllowDrop = true;
                     existing.RaisePropertyChanged("AllowDrop");
-
                 }
             }
             this.RaisePropertyChanged("TotalItem");
