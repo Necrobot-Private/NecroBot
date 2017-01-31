@@ -2,6 +2,7 @@
 using PoGo.NecroBot.Logic.State;
 using POGOProtos.Data;
 using POGOProtos.Enums;
+using POGOProtos.Inventory;
 using POGOProtos.Settings.Master;
 using System;
 using System.Linq;
@@ -86,7 +87,7 @@ namespace PoGo.Necrobot.Window.Model
         {
             get
             {
-                return this.Session.Inventory.GetCandy(this.PokemonData.PokemonId);
+                return this.Session.Inventory.GetCandy(this.PokemonData.PokemonId).Candy_;
             }
         }
 

@@ -37,15 +37,15 @@ namespace PoGo.NecroBot.Logic
         private readonly List<ItemId> _revives = new List<ItemId> {ItemId.ItemRevive, ItemId.ItemMaxRevive};
         private ISession ownerSession;
 
-        public int GetCandy(PokemonId id)
+        public Candy GetCandy(PokemonId id)
         {
             var setting = GetPokemonSettings().Result.FirstOrDefault(x => x.PokemonId == id);
             var family = GetPokemonFamilies().Result.FirstOrDefault(x => x.FamilyId == setting.FamilyId);
 
-            if (family == null) return 0;
-            return family.Candy_;
+            if (family == null) return null;
+            return family;
         }
-
+        
         public Inventory(ISession session, Client client, ILogicSettings logicSettings,
             Action<GetInventoryResponse> onUpdated = null)
         {
@@ -569,7 +569,7 @@ namespace PoGo.NecroBot.Logic
             if (settings.EvolutionIds.Count == 0)
                 return false;
             
-            int familyCandy = GetCandy(pokemon.PokemonId);
+            int familyCandy = GetCandy(pokemon.PokemonId).Candy_;
             
             //DO NOT CHANGE! TESTED AND WORKS
             //TRUONG: temporary change 1 to 2 to fix not enought resource when evolve. not a big deal when we keep few candy.
@@ -659,7 +659,7 @@ namespace PoGo.NecroBot.Logic
             if (pokemonLevel >= playerLevel)
                 return false;
             
-            int familyCandy = GetCandy(pokemon.PokemonId);
+            int familyCandy = GetCandy(pokemon.PokemonId).Candy_;
 
             // Can't evolve if not enough candy.
             int pokemonCandyNeededAlready = PokemonCpUtils.GetCandyCostsForPowerup(pokemon.CpMultiplier + pokemon.AdditionalCpMultiplier);

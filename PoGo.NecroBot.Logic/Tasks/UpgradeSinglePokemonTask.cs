@@ -38,7 +38,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 session.EventDispatcher.Send(new UpgradePokemonEvent()
                 {
-                    FamilyCandies = session.Inventory.GetCandy(pokemon.PokemonId),
+                    Candy = session.Inventory.GetCandy(pokemon.PokemonId),
                     Pokemon = upgradeResult.UpgradedPokemon,
                     PokemonId = upgradeResult.UpgradedPokemon.PokemonId,
                     Cp = upgradeResult.UpgradedPokemon.Cp,

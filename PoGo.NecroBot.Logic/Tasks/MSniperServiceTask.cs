@@ -553,7 +553,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 filter = session.LogicSettings.PokemonSnipeFilters[pokemonId];
             }
 
-            var candy = session.Inventory.GetCandy(pokemonId);
+            var candy = session.Inventory.GetCandy(pokemonId).Candy_;
 
             lock (locker)
             {
