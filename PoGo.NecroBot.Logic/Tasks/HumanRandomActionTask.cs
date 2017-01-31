@@ -75,7 +75,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
             }
 
-            await GetPokeDexCount.Execute(session, cancellationToken);
+            GetPokeDexCount.Execute(session, cancellationToken);
         }
 
         public static async Task TransferRandom(ISession session, CancellationToken cancellationToken)

@@ -20,6 +20,7 @@ using POGOProtos.Inventory;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Networking.Responses;
 using POGOProtos.Settings.Master;
+using PokemonGo.RocketAPI.Helpers;
 
 #endregion
 
@@ -36,15 +37,15 @@ namespace PoGo.NecroBot.Logic
         private readonly List<ItemId> _revives = new List<ItemId> {ItemId.ItemRevive, ItemId.ItemMaxRevive};
         private ISession ownerSession;
 
-        public int GetCandy(PokemonId id)
+        public Candy GetCandy(PokemonId id)
         {
             var setting = GetPokemonSettings().Result.FirstOrDefault(x => x.PokemonId == id);
             var family = GetPokemonFamilies().Result.FirstOrDefault(x => x.FamilyId == setting.FamilyId);
 
-            if (family == null) return 0;
-            return family.Candy_;
+            if (family == null) return null;
+            return family;
         }
-
+        
         public Inventory(ISession session, Client client, ILogicSettings logicSettings,
             Action<GetInventoryResponse> onUpdated = null)
         {
@@ -70,18 +71,7 @@ namespace PoGo.NecroBot.Logic
             ItemId.ItemUltraBall,
             ItemId.ItemMasterBall
         };
-
-        internal void MarkAsFavorite(PokemonData pokemon)
-        {
-            pokemon.Favorite = 1;
-            var all = GetPokemons();
-            var pkm = all.FirstOrDefault(x => x.Id == pokemon.Id);
-            if (pkm != null)
-            {
-                pkm.Favorite = 1;
-            }
-        }
-
+        
         private readonly List<ItemId> _potions = new List<ItemId>
         {
             ItemId.ItemPotion,
@@ -157,7 +147,7 @@ namespace PoGo.NecroBot.Logic
 
             var myPokemonList = myPokemon.ToList();
 
-            var pokemonToTransfer = myPokemonList
+            var pokemonToTransfer = myPokemon
                 .Where(p => !pokemonsNotToTransfer.Contains(p.PokemonId) && p.DeployedFortId == string.Empty &&
                             p.Favorite == 0 && p.BuddyTotalKmWalked == 0)
                 .ToList();
@@ -317,15 +307,7 @@ namespace PoGo.NecroBot.Logic
             }
             return null;
         }
-
-        public int UpdateStartDust(int startdust)
-        {
-            GetPlayerData().Wait();
-            _player.PlayerData.Currencies[1].Amount += startdust;
-
-            return _player.PlayerData.Currencies[1].Amount;
-        }
-
+        
         public int GetStarDust()
         {
             GetPlayerData().Wait();
@@ -556,11 +538,68 @@ namespace PoGo.NecroBot.Logic
             return _pokemonSettings;
         }
 
+        public bool CanTransferPokemon(PokemonData pokemon)
+        {
+            // Can't transfer pokemon in gyms.
+            if (!string.IsNullOrEmpty(pokemon.DeployedFortId))
+                return false;
+
+            // Can't transfer buddy pokemon
+            var buddy = this.ownerSession.Profile.PlayerData.BuddyPokemon;
+            if (buddy != null && buddy.Id == pokemon.Id)
+                return false;
+            
+            // Can't transfer favorite
+            if (pokemon.Favorite == 1)
+                return false;
+
+            return true;
+        }
+
+        public async Task<bool> CanEvolvePokemon(PokemonData pokemon, IEnumerable<PokemonData> pokemonsToEvolve = null)
+        {
+            // Can't evolve pokemon in gyms.
+            if (!string.IsNullOrEmpty(pokemon.DeployedFortId))
+                return false;
+
+            IEnumerable<PokemonSettings> pokemonSettings = await GetPokemonSettings();
+            var settings = pokemonSettings.SingleOrDefault(x => x.PokemonId == pokemon.PokemonId);
+            
+            // Can't evolve pokemon that are not evolvable.
+            if (settings.EvolutionIds.Count == 0)
+                return false;
+            
+            int familyCandy = GetCandy(pokemon.PokemonId).Candy_;
+            
+            //DO NOT CHANGE! TESTED AND WORKS
+            //TRUONG: temporary change 1 to 2 to fix not enought resource when evolve. not a big deal when we keep few candy.
+            int pokemonCandyNeededAlready;
+            if (pokemonsToEvolve != null)
+            {
+                // Candy needed to evolve multiple pokemon.
+                pokemonCandyNeededAlready =
+                    (pokemonsToEvolve.Count(
+                        p => pokemonSettings.FirstOrDefault(x => x.PokemonId == p.PokemonId) != null &&
+                        pokemonSettings.FirstOrDefault(x => x.PokemonId == p.PokemonId).FamilyId == settings.FamilyId) + 2) *
+                    settings.CandyToEvolve;
+            }
+            else
+            {
+                // Candy needed to evolve a single pokemon.
+                pokemonCandyNeededAlready = settings.CandyToEvolve;
+            }
+
+            // Can't evolve if not enough candy.
+            if (familyCandy < pokemonCandyNeededAlready)
+                return false;
+
+            return true;
+        }
+
         public async Task<IEnumerable<PokemonData>> GetPokemonToEvolve(IEnumerable<PokemonId> filter = null)
         {
-            var myPokemon = GetPokemons();
-            myPokemon = myPokemon.Where(p => p.DeployedFortId == string.Empty).OrderByDescending(p => p.Cp);
-            //Don't evolve pokemon in gyms
+            IEnumerable<PokemonData> myPokemon = GetPokemons().OrderByDescending(p => p.Cp);
+            
             IEnumerable<PokemonId> pokemonIds = filter as PokemonId[] ?? filter.ToArray();
             if (pokemonIds.Any())
             {
@@ -576,34 +615,13 @@ namespace PoGo.NecroBot.Logic
                     myPokemon.Where(
                         p => PokemonInfo.CalculatePokemonPerfection(p) >= _logicSettings.EvolveAboveIvValue);
             }
+
             var pokemons = myPokemon.ToList();
-
-            var myPokemonSettings = await GetPokemonSettings();
-            var pokemonSettings = myPokemonSettings.ToList();
-
-            var myPokemonFamilies = await GetPokemonFamilies();
-            var pokemonFamilies = myPokemonFamilies.ToArray();
-
+            
             var pokemonToEvolve = new List<PokemonData>();
             foreach (var pokemon in pokemons)
             {
-                var settings = pokemonSettings.SingleOrDefault(x => x.PokemonId == pokemon.PokemonId);
-                
-                var familyCandy = pokemonFamilies.SingleOrDefault(x => settings.FamilyId == x.FamilyId);
-
-                //Don't evolve if we can't evolve it
-                if (settings.EvolutionIds.Count == 0)
-                    continue;
-                //DO NOT CHANGE! TESTED AND WORKS
-                //TRUONG: temporary change 1 to 2 to fix not enought resource when evolve. not a big deal when we keep few candy 
-
-                var pokemonCandyNeededAlready =
-                    (pokemonToEvolve.Count(
-                        p => pokemonSettings.FirstOrDefault(x => x.PokemonId == p.PokemonId) != null && 
-                        pokemonSettings.FirstOrDefault(x => x.PokemonId == p.PokemonId).FamilyId == settings.FamilyId) + 2) *
-                    settings.CandyToEvolve;
-
-                if (familyCandy.Candy_ >= pokemonCandyNeededAlready)
+                if (await CanEvolvePokemon(pokemon, pokemonToEvolve))
                 {
                     pokemonToEvolve.Add(pokemon);
                 }
@@ -628,6 +646,34 @@ namespace PoGo.NecroBot.Logic
             return new LevelUpRewardsResponse();
         }
 
+        public bool CanUpgradePokemon(PokemonData pokemon)
+        {
+            // Can't upgrade pokemon in gyms.
+            if (!string.IsNullOrEmpty(pokemon.DeployedFortId))
+                return false;
+
+            var playerLevel = GetPlayerStats().FirstOrDefault().Level;
+            var pokemonLevel = PokemonInfo.GetLevel(pokemon);
+
+            // Can't evolve unless pokemon level is lower than trainer.
+            if (pokemonLevel >= playerLevel)
+                return false;
+            
+            int familyCandy = GetCandy(pokemon.PokemonId).Candy_;
+
+            // Can't evolve if not enough candy.
+            int pokemonCandyNeededAlready = PokemonCpUtils.GetCandyCostsForPowerup(pokemon.CpMultiplier + pokemon.AdditionalCpMultiplier);
+            if (familyCandy < pokemonCandyNeededAlready)
+                return false;
+
+            // Can't evolve if not enough stardust.
+            var stardustToUpgrade = PokemonCpUtils.GetStardustCostsForPowerup(pokemon.CpMultiplier + pokemon.AdditionalCpMultiplier);
+            if (GetStarDust() < stardustToUpgrade)
+                return false;
+
+            return true;
+        }
+
         public List<PokemonData> GetPokemonToUpgrade()
         {
             var upgradePokemon = new List<PokemonData>();
@@ -635,8 +681,8 @@ namespace PoGo.NecroBot.Logic
             if (!_logicSettings.AutomaticallyLevelUpPokemon)
                 return upgradePokemon;
 
-            var myPokemon = GetPokemons();
-            myPokemon = myPokemon.Where(p => p.DeployedFortId == string.Empty);
+            var myPokemon = GetPokemons().Where(p => CanUpgradePokemon(p));
+
             var grouped = myPokemon.GroupBy(p => p.PokemonId);
 
             Parallel.ForEach(grouped, (group) =>

@@ -18,27 +18,17 @@ namespace PoGo.NecroBot.Logic.Tasks
             using (var blocker = new BlockableScope(session, BotActions.Envolve))
             {
                 if (!await blocker.WaitToRun()) return;
-
-
+                
                 var all = session.Inventory.GetPokemons();
                 var pokemons = all.OrderByDescending(x => x.Cp).ThenBy(n => n.StaminaMax);
                 var pokemon = pokemons.FirstOrDefault(p => p.Id == pokemonId);
 
                 if (pokemon == null) return;
 
-                var pokemonSettings = await session.Inventory.GetPokemonSettings();
-                var pokemonFamilies = await session.Inventory.GetPokemonFamilies();
-
-                var setting = pokemonSettings.FirstOrDefault(q => pokemon != null && q.PokemonId == pokemon.PokemonId);
-                var family = pokemonFamilies.FirstOrDefault(q => setting != null && q.FamilyId == setting.FamilyId);
-
-                if (setting.CandyToEvolve > family.Candy_) return;
-                family.Candy_ -= setting.CandyToEvolve;
+                if (!await session.Inventory.CanEvolvePokemon(pokemon))
+                    return;
 
                 var evolveResponse = await session.Client.Inventory.EvolvePokemon(pokemon.Id);
-
-                // Update setting after evolve.
-                setting = pokemonSettings.FirstOrDefault(q => pokemon != null && q.PokemonId == evolveResponse.EvolvedPokemonData.PokemonId); 
 
                 session.EventDispatcher.Send(new PokemonEvolveEvent
                 {
@@ -47,10 +37,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                     Exp = evolveResponse.ExperienceAwarded,
                     UniqueId = pokemon.Id,
                     Result = evolveResponse.Result,
-                    EvolvedPokemon = evolveResponse.EvolvedPokemonData,
-                    PokemonSetting = setting,
-                    Family = family
+                    EvolvedPokemon = evolveResponse.EvolvedPokemonData
                 });
+
                 DelayingUtils.Delay(session.LogicSettings.EvolveActionDelay, 0);
             }
         }

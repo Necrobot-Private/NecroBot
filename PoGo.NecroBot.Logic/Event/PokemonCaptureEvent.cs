@@ -1,6 +1,7 @@
 ﻿#region using directives
 
 using POGOProtos.Enums;
+using POGOProtos.Inventory;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Networking.Responses;
 
@@ -16,7 +17,7 @@ namespace PoGo.NecroBot.Logic.Event
         public int Cp;
         public double Distance;
         public int Exp;
-        public int FamilyCandies;
+        public Candy Candy;
         public PokemonId Id;
         public ulong UniqueId;
         public double Level;

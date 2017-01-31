@@ -104,7 +104,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         PokemonId = hatched.PokemonId,
                         Level = PokemonInfo.GetLevel(hatched),
                         Cp = hatched.Cp,
-                        MaxCp = PokemonInfo.CalculateMaxCp(hatched),
+                        MaxCp = PokemonInfo.CalculateMaxCp(hatched.PokemonId),
                         Perfection = Math.Round(PokemonInfo.CalculatePokemonPerfection(hatched), 2)
                     });
                 }
