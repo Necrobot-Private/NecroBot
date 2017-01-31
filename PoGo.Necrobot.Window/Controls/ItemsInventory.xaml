@@ -28,14 +28,14 @@
                
                 
                 <GridViewColumn Header="Amount"
-				    DisplayMemberBinding="{Binding ItemCount}"
+				    DisplayMemberBinding="{Binding ItemCount, UpdateSourceTrigger=PropertyChanged}"
 				    Width="80"/>
                 <GridViewColumn Header="Recycle" Width="350">
                     <GridViewColumn.CellTemplate>
                         <DataTemplate>
                             <DockPanel VerticalAlignment="Center" Margin="10">
                                 <TextBox Text="{Binding ElementName=slider, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Right" Width="30"  Margin="20,0,0,0" />
-                                <Slider Name="slider" Minimum="0" Maximum="{Binding Path=ItemCount}" Value="{Binding Path=SelectedValue}"   IsSnapToTickEnabled="false"  ></Slider>
+                                <Slider Name="slider" Minimum="0" Maximum="{Binding Path=ItemCount, UpdateSourceTrigger=PropertyChanged}" Value="{Binding Path=SelectedValue}" IsSnapToTickEnabled="false"  ></Slider>
                             </DockPanel>
 
                         </DataTemplate>

@@ -33,13 +33,13 @@ namespace PoGo.Necrobot.Window.Controls
 
         private void btnDrop_Click(object sender, RoutedEventArgs e)
         {
-             var itemId = (ItemId)((Button)sender).CommandParameter ;
+            var itemId = (ItemId)((Button)sender).CommandParameter ;
 
             var data = this.DataContext as ItemsListViewModel;
 
             ItemsViewModel Item = data.Get(itemId);
 
-           if(MessageBox.Show($"Do you want to drop {Item.ItemCount - Item.SelectedValue} {Item.ItemId}", "Drop item", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            if(MessageBox.Show($"Do you want to drop {Item.ItemCount - Item.SelectedValue} {Item.ItemId}", "Drop item", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
                 data.Drop(Item);
                 Task.Run(async () =>

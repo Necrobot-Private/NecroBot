@@ -16,6 +16,16 @@ namespace PoGo.Necrobot.Window.Model
         {
             this.Items = new ObservableCollection<ItemsViewModel>();
         }
+
+        public void SyncSelectedValues()
+        {
+            foreach (var item in this.Items)
+            {
+                item.SelectedValue = item.ItemCount;
+                item.RaisePropertyChanged("SelectedValue");
+            }
+        }
+
         public void Update(List<ItemData> items)
         {
             foreach (var item in items)
@@ -37,12 +47,18 @@ namespace PoGo.Necrobot.Window.Model
                 {
                     existing.ItemCount = item.Count;
                     existing.RaisePropertyChanged("ItemCount");
+
+                    if (existing.SelectedValue > existing.ItemCount)
+                    {
+                        existing.SelectedValue = existing.ItemCount;
+                        existing.RaisePropertyChanged("SelectedValue");
+                    }
+                    
                     existing.DropText = "Drop";
                     existing.RaisePropertyChanged("DropText");
 
                     existing.AllowDrop = true;
                     existing.RaisePropertyChanged("AllowDrop");
-
                 }
             }
             this.RaisePropertyChanged("TotalItem");

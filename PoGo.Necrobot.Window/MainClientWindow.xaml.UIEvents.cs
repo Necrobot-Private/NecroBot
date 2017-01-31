@@ -76,28 +76,31 @@ namespace PoGo.Necrobot.Window
         {
             datacontext.EggsList.OnEggIncubatorStatus(e);
         }
-        public void OnBotEvent(InventoryRefreshedEvent inventory)
+        public void OnBotEvent(InventoryRefreshedEvent e)
         {
 
             if (currentSession.Profile == null || currentSession.Profile.PlayerData == null) return;
 
-            var data = inventory.Inventory;
+            var data = e.Inventory;
 
             var maxPokemonStorage = currentSession.Profile?.PlayerData?.MaxPokemonStorage;
             var maxItemStorage = currentSession.Profile?.PlayerData?.MaxItemStorage;
             var pokemons = currentSession.Inventory.GetPokemons();
 
-            datacontext.SnipeList.OnInventoryRefreshed(inventory.Inventory);
-            datacontext.PlayerInfo.OnInventoryRefreshed(inventory);
+            datacontext.SnipeList.OnInventoryRefreshed(e.Inventory);
+            datacontext.PlayerInfo.OnInventoryRefreshed(e);
+            datacontext.EggsList.OnInventoryRefreshed(e.Inventory);
 
-            datacontext.EggsList.OnInventoryRefreshed(inventory.Inventory);
             var items = data.InventoryDelta.InventoryItems.Select(x => x.InventoryItemData?.Item).Where(x => x != null).ToList();
             this.datacontext.MaxItemStorage = maxItemStorage.Value;
+            this.datacontext.RaisePropertyChanged("MaxItemStorage");
+
             this.datacontext.ItemsList.Update(items);
+            this.datacontext.RaisePropertyChanged("ItemsTabHeader");
+
             this.datacontext.PokemonList.Update(pokemons);
             this.datacontext.RaisePropertyChanged("PokemonTabHeader");
-            this.datacontext.RaisePropertyChanged("ItemsTabHeader");
-            this.datacontext.RaisePropertyChanged("MaxItemStorage");
+            
             UIUpdateSafe(() =>
              {
                  tabPokemons.Header = $"   Pokemons ({this.datacontext.Pokemons.Count}/{maxPokemonStorage})   ";
