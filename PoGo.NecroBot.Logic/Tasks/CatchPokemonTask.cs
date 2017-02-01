@@ -355,7 +355,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         evt.Exp = totalExp;
                         evt.Stardust = session.Inventory.GetStarDust();
                         evt.UniqueId = caughtPokemonResponse.CapturedPokemonId;
-                        evt.Candy = session.Inventory.GetCandy(pokemon.PokemonId);
+                        evt.Candy = session.Inventory.GetCandyFamily(pokemon.PokemonId);
 
                         if (session.LogicSettings.UseCatchLimit)
                         {

@@ -21,8 +21,6 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            //await session.Inventory.RefreshCachedInventory();
-
             var pokemons = session.Inventory.GetPokemons();
 
             foreach (var pokemon in pokemons)
@@ -30,16 +28,23 @@ namespace PoGo.NecroBot.Logic.Tasks
                 cancellationToken.ThrowIfCancellationRequested();
 
                 var perfection = Math.Round(PokemonInfo.CalculatePokemonPerfection(pokemon));
+                var level = PokemonInfo.GetLevel(pokemon);
                 var pokemonName = session.Translation.GetPokemonTranslation(pokemon.PokemonId);
                 // iv number + templating part + pokemonName <= 12
-                var nameLength = 12 -
-                                 (perfection.ToString(CultureInfo.InvariantCulture).Length +
-                                  session.LogicSettings.RenameTemplate.Length - 6);
+                
+                var newNickname = session.LogicSettings.RenameTemplate;
+                newNickname.Replace("{IV}", Math.Round(perfection, 0).ToString());
+                newNickname.Replace("{Level}", Math.Round(level, 0).ToString());
+
+                var nameLength = 18 - newNickname.Length;
                 if (pokemonName.Length > nameLength)
                 {
                     pokemonName = pokemonName.Substring(0, nameLength);
                 }
-                var newNickname = string.Format(session.LogicSettings.RenameTemplate, pokemonName, perfection);
+
+                newNickname.Replace("{Name}", pokemonName);
+
+
                 var oldNickname = pokemon.Nickname.Length != 0 ? pokemon.Nickname : pokemon.PokemonId.ToString();
 
                 // If "RenameOnlyAboveIv" = true only rename pokemon with IV over "KeepMinIvPercentage"

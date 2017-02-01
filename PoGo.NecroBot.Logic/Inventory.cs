@@ -37,7 +37,7 @@ namespace PoGo.NecroBot.Logic
         private readonly List<ItemId> _revives = new List<ItemId> {ItemId.ItemRevive, ItemId.ItemMaxRevive};
         private ISession ownerSession;
 
-        public Candy GetCandy(PokemonId id)
+        public Candy GetCandyFamily(PokemonId id)
         {
             var setting = GetPokemonSettings().Result.FirstOrDefault(x => x.PokemonId == id);
             var family = GetPokemonFamilies().Result.FirstOrDefault(x => x.FamilyId == setting.FamilyId);
@@ -45,7 +45,15 @@ namespace PoGo.NecroBot.Logic
             if (family == null) return null;
             return family;
         }
-        
+
+        public int GetCandyCount(PokemonId id)
+        {
+            Candy candy = GetCandyFamily(id);
+            if (candy != null)
+                return candy.Candy_;
+            return 0;
+        }
+
         public Inventory(ISession session, Client client, ILogicSettings logicSettings,
             Action<GetInventoryResponse> onUpdated = null)
         {
@@ -523,6 +531,17 @@ namespace PoGo.NecroBot.Logic
             return _pokemonSettings;
         }
 
+        public async Task<IEnumerable<MoveSettings>> GetMoveSettings()
+        {
+            if (_client.Download.ItemTemplates == null)
+                await _client.Download.GetItemTemplates();
+
+            var moveSettings = _client.Download.ItemTemplates.Where(x => x.MoveSettings != null)
+                .Select(x => x.MoveSettings);
+
+            return moveSettings;
+        }
+
         public bool CanTransferPokemon(PokemonData pokemon)
         {
             // Can't transfer pokemon in gyms.
@@ -554,7 +573,7 @@ namespace PoGo.NecroBot.Logic
             if (settings.EvolutionIds.Count == 0)
                 return false;
             
-            int familyCandy = GetCandy(pokemon.PokemonId).Candy_;
+            int familyCandy = GetCandyCount(pokemon.PokemonId);
             
             //DO NOT CHANGE! TESTED AND WORKS
             //TRUONG: temporary change 1 to 2 to fix not enought resource when evolve. not a big deal when we keep few candy.
@@ -644,7 +663,7 @@ namespace PoGo.NecroBot.Logic
             if (pokemonLevel >= playerLevel)
                 return false;
             
-            int familyCandy = GetCandy(pokemon.PokemonId).Candy_;
+            int familyCandy = GetCandyCount(pokemon.PokemonId);
 
             // Can't evolve if not enough candy.
             int pokemonCandyNeededAlready = PokemonCpUtils.GetCandyCostsForPowerup(pokemon.CpMultiplier + pokemon.AdditionalCpMultiplier);

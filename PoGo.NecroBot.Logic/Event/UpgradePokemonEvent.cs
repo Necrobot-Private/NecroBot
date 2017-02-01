@@ -13,7 +13,7 @@ namespace PoGo.NecroBot.Logic.Event
         public int BestCp;
         public double BestPerfection;
         public int Cp;
-        public Candy Candy;
+        public int Candy;
         public PokemonId PokemonId;
         public ulong Id;
         public double Perfection;

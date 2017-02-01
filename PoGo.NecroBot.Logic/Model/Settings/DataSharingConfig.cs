@@ -36,7 +36,12 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [DefaultValue("")]
         [MaxLength(256)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
+
         public string DataServiceIdentification { get; set; }
 
+        [ExcelConfig(Description = "The authozied access key to use snipe data", Position = 4)]
+        [DefaultValue("")]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
+        public string SnipeDataAccessKey { get;  set; }
     }
 }
