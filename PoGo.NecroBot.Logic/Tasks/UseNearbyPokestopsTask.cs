@@ -23,9 +23,6 @@ namespace PoGo.NecroBot.Logic.Tasks
 {
     public class UseNearbyPokestopsTask
     {
-        //add delegate
-        public delegate void LootPokestopDelegate(FortData pokestop);
-
         private static int _stopsHit;
         private static int _randomStop;
         private static Random _rc; //initialize pokestop random cleanup counter first time
@@ -191,7 +188,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                 .Where(p => p.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime())
                 .Where(f => f.Type == FortType.Checkpoint ||
                             UseGymBattleTask.CanAttackGym(session, f, deployedPokemons) ||
-                            UseGymBattleTask.CanTrainGym(session, f, null, deployedPokemons))
+                            UseGymBattleTask.CanTrainGym(session, f, null, deployedPokemons) ||
+                            UseGymBattleTask.CanDeployToGym(session, f, null, deployedPokemons))
                 .ToList();
 
             if ((session.LogicSettings.GymConfig.EnableAttackGym && forts.Where(w => w.Type == FortType.Gym && UseGymBattleTask.CanAttackGym(session, w, deployedPokemons)).Count() == 0) ||
@@ -448,11 +446,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Logger.Write($"(POKESTOP LIMIT) {session.Stats.GetNumPokestopsInLast24Hours()}/{session.LogicSettings.PokeStopLimit}",
                             LogLevel.Info, ConsoleColor.Yellow);
                     }
-
-                    //add pokeStops to Map
-                    OnLootPokestopEvent(pokeStop);
-                    //end pokeStop to Map
-
                     break; //Continue with program as loot was succesfull.
                 }
             } while (fortTry < retryNumber - zeroCheck);
@@ -575,11 +568,5 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             return pokeStops.ToList();
         }
-        //add delegate event
-        private static void OnLootPokestopEvent(FortData pokestop)
-        {
-            LootPokestopEvent?.Invoke(pokestop);
-        }
-        public static event LootPokestopDelegate LootPokestopEvent;
     }
 }
