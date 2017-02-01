@@ -44,6 +44,12 @@ namespace PoGo.NecroBot.Logic.Common
 
         #endregion
 
+        #region Pokemon Inventory
+
+        [Description("Export")]
+        public string Export { get; set; }
+
+        #endregion
         #region Popup
         [Description("Latitude")]
         public string Latitude { get; set; }

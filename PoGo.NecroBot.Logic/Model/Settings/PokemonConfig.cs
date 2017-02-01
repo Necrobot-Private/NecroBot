@@ -145,7 +145,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool RenameOnlyAboveIv;
 
         [ExcelConfig(Description = "The template for pokemon rename", Position = 22)]
-        [DefaultValue("{1}_{0}")]
+        [DefaultValue("{Name}_{IV}_Lv{Level}")]
         [MinLength(0)]
         [MaxLength(32)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 22)]
