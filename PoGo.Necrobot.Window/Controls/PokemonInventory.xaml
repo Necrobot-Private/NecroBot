@@ -15,6 +15,7 @@
         <cv:FavoriteTextConverter x:Key="FavoriteTextConverter"/>
         <cv:AllowTransferCheckConverter x:Key="AllowTransferCheckConverter"/>
         <cv:IVToColorConverter x:Key="IVToColorConverter"    />
+        <cv:EnumToNumberConverter x:Key="EnumToNumberConverter"></cv:EnumToNumberConverter>
     </Control.Resources>
     <DockPanel LastChildFill="True">
         <DockPanel LastChildFill="True" DockPanel.Dock="Top">
@@ -57,7 +58,9 @@
                 </DataGrid.ContextMenu>
 
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn Header="" IsReadOnly="False" MinWidth="40">
+                <DataGridTextColumn Binding="{Binding PokemonId, Converter={StaticResource EnumToNumberConverter}}" Header="#" MinWidth="30" />
+
+                <DataGridTemplateColumn Header="" IsReadOnly="False" MinWidth="40">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <CheckBox Margin="15,0,0,0" IsChecked="{Binding IsSelected, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Checked="Select_Checked" CommandParameter="{Binding Path=Id}"  Click="Select_Checked"/>
