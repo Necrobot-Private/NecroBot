@@ -78,20 +78,18 @@ namespace PoGo.Necrobot.Window
         }
         public void OnBotEvent(InventoryRefreshedEvent e)
         {
-
             if (currentSession.Profile == null || currentSession.Profile.PlayerData == null) return;
-
-            var data = e.Inventory;
 
             var maxPokemonStorage = currentSession.Profile?.PlayerData?.MaxPokemonStorage;
             var maxItemStorage = currentSession.Profile?.PlayerData?.MaxItemStorage;
             var pokemons = currentSession.Inventory.GetPokemons();
 
-            datacontext.SnipeList.OnInventoryRefreshed(e.Inventory);
-            datacontext.PlayerInfo.OnInventoryRefreshed(e);
-            datacontext.EggsList.OnInventoryRefreshed(e.Inventory);
+            var inventory = currentSession.Inventory.GetCachedInventory();
+            datacontext.SnipeList.OnInventoryRefreshed(inventory);
+            datacontext.PlayerInfo.OnInventoryRefreshed(inventory);
+            datacontext.EggsList.OnInventoryRefreshed(inventory);
 
-            var items = data.InventoryDelta.InventoryItems.Select(x => x.InventoryItemData?.Item).Where(x => x != null).ToList();
+            var items = inventory.Select(x => x.InventoryItemData?.Item).Where(x => x != null).ToList();
             this.datacontext.MaxItemStorage = maxItemStorage.Value;
             this.datacontext.RaisePropertyChanged("MaxItemStorage");
 

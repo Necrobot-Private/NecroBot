@@ -21,6 +21,7 @@ using POGOProtos.Inventory.Item;
 using POGOProtos.Networking.Responses;
 using POGOProtos.Settings.Master;
 using PokemonGo.RocketAPI.Helpers;
+using System.Collections.Concurrent;
 
 #endregion
 
@@ -55,17 +56,17 @@ namespace PoGo.NecroBot.Logic
         }
 
         public Inventory(ISession session, Client client, ILogicSettings logicSettings,
-            Action<GetInventoryResponse> onUpdated = null)
+            Action onUpdated = null)
         {
             this.ownerSession = session;
             _client = client;
             _logicSettings = logicSettings;
             // Inventory update will be called everytime GetMapObject is called.
-            client.OnInventoryUpdated += (refreshedInventoryData) =>
+            client.Inventory.OnInventoryUpdated += () =>
             {
                 if (onUpdated != null && _player != null)
                 {
-                    onUpdated(refreshedInventoryData);
+                    onUpdated();
                 }
             };
         }
@@ -90,7 +91,7 @@ namespace PoGo.NecroBot.Logic
         {
             await Task.Run(() =>
             {
-                foreach (var item in GetCachedInventory().InventoryDelta.InventoryItems)
+                foreach (var item in GetCachedInventory())
                 {
                     if (item.InventoryItemData != null
                         && item.InventoryItemData.Item != null
@@ -110,7 +111,7 @@ namespace PoGo.NecroBot.Logic
             return await GetLevelUpRewards(inv.GetPlayerStats().FirstOrDefault().Level);
         }
 
-        public GetInventoryResponse GetCachedInventory()
+        public IEnumerable<InventoryItem> GetCachedInventory()
         {
             lock (_player)
             {
@@ -120,13 +121,13 @@ namespace PoGo.NecroBot.Logic
                 }
             }
 
-            return _client.LastGetInventoryResponse;
+            return _client.Inventory.InventoryItems.Select(kvp => kvp.Value);
         }
 
         public IEnumerable<AppliedItems> GetAppliedItems()
         {
             var inventory = GetCachedInventory();
-            return inventory.InventoryDelta.InventoryItems
+            return inventory
                 .Select(i => i.InventoryItemData?.AppliedItems)
                 .Where(p => p != null);
         }
@@ -271,7 +272,7 @@ namespace PoGo.NecroBot.Logic
         {
             var inventory = GetCachedInventory();
             return
-                inventory.InventoryDelta.InventoryItems
+                inventory
                     .Where(x => x.InventoryItemData.EggIncubators != null)
                     .SelectMany(i => i.InventoryItemData.EggIncubators.EggIncubator)
                     .Where(i => i != null);
@@ -281,7 +282,7 @@ namespace PoGo.NecroBot.Logic
         {
             var inventory = GetCachedInventory();
             return
-                inventory.InventoryDelta.InventoryItems.Select(i => i.InventoryItemData?.PokemonData)
+                inventory.Select(i => i.InventoryItemData?.PokemonData)
                     .Where(p => p != null && p.IsEgg);
         }
 
@@ -364,7 +365,7 @@ namespace PoGo.NecroBot.Logic
         public IEnumerable<ItemData> GetItems()
         {
             var inventory = GetCachedInventory();
-            return inventory.InventoryDelta.InventoryItems
+            return inventory
                 .Select(i => i.InventoryItemData?.Item)
                 .Where(p => p != null);
         }
@@ -410,7 +411,7 @@ namespace PoGo.NecroBot.Logic
         public IEnumerable<PlayerStats> GetPlayerStats()
         {
             var inventory = GetCachedInventory();
-            return inventory.InventoryDelta.InventoryItems
+            return inventory
                 .Select(i => i.InventoryItemData?.PlayerStats)
                 .Where(p => p != null);
         }
@@ -431,7 +432,7 @@ namespace PoGo.NecroBot.Logic
         {
             var inventory = GetCachedInventory();
 
-            return (from items in inventory.InventoryDelta.InventoryItems
+            return (from items in inventory
                 where items.InventoryItemData?.PokedexEntry != null
                 select items).ToList();
         }
@@ -442,16 +443,10 @@ namespace PoGo.NecroBot.Logic
 
             IEnumerable<Candy> families = null;
             var inventory = GetCachedInventory();
-            if (inventory == null || inventory.InventoryDelta == null ||
-                inventory.InventoryDelta.InventoryItems == null)
-            {
-                DelayingUtils.Delay(3000, 3000);
-                inventory = GetCachedInventory();
-            }
 
             try
             {
-                families = from item in inventory.InventoryDelta.InventoryItems
+                families = from item in inventory
                     where item.InventoryItemData?.Candy != null
                     where item.InventoryItemData?.Candy.FamilyId != PokemonFamilyId.FamilyUnset
                     group item by item.InventoryItemData?.Candy.FamilyId
@@ -475,14 +470,14 @@ namespace PoGo.NecroBot.Logic
         {
             var inventory = GetCachedInventory();
             return
-                inventory.InventoryDelta.InventoryItems.Select(i => i.InventoryItemData?.PokemonData)
+                inventory.Select(i => i.InventoryItemData?.PokemonData)
                     .FirstOrDefault(p => p != null && p.PokemonId > 0 && p.Id == id);
         }
 
         public IEnumerable<PokemonData> GetPokemons()
         {
             var inventory = GetCachedInventory();
-            return inventory.InventoryDelta.InventoryItems
+            return inventory
                     .Select(i => i.InventoryItemData?.PokemonData)
                     .Where(p => p != null && p.PokemonId > 0);
         }
