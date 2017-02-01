@@ -153,7 +153,9 @@ test: off
 #---------------------------------#
 
 artifacts:
-  
+  - path: '\$(PLATFORM)\$(CONFIGURATION)\NecroBot2.Win'
+    name: NecroBot2.WIN
+
   - path: '\$(PLATFORM)\$(CONFIGURATION)\NecroBot2'
     name: NecroBot2.Console
 
@@ -162,8 +164,7 @@ artifacts:
     
   - path: '\$(PLATFORM)\$(CONFIGURATION)\NecroBot2GUI.Electron'
     name: NecroBot2.GUI.Electron
-  - path: '\$(PLATFORM)\$(CONFIGURATION)\NecroBot2.Win'
-    name: NecroBot2.WIN
+
 #---------------------------------#
 #     deployment configuration    #
 #---------------------------------#
