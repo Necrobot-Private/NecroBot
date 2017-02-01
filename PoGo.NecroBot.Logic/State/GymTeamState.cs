@@ -140,26 +140,44 @@ namespace PoGo.NecroBot.Logic.State
                 return TypeFactor[type];
 
             int factor = 0;
-            if (UseGymBattleTask.GetBestTypes(type).Any(a => a == MainType)) factor += 1;
-            if (UseGymBattleTask.GetWorstTypes(type).Any(a => a == MainType)) factor -= 1;
+            if (UseGymBattleTask.GetBestTypes(type).Any(a => a == Attack.PokemonType))
+            {
+                factor += 2;
+                if (MainType == Attack.PokemonType || ExtraType == Attack.PokemonType)
+                    factor += 1;
+            }
+            if (UseGymBattleTask.GetWorstTypes(type).Any(a => a == Attack.PokemonType)) factor -= 2;
 
-            if (UseGymBattleTask.GetBestTypes(type).Any(a => a == ExtraType)) factor += 1;
-            if (UseGymBattleTask.GetWorstTypes(type).Any(a => a == ExtraType)) factor -= 1;
+            if (UseGymBattleTask.GetBestTypes(type).Any(a => a == SpecialAttack.PokemonType))
+            {
+                factor += 2;
+                if (MainType == SpecialAttack.PokemonType || ExtraType == SpecialAttack.PokemonType)
+                    factor += 1;
+            }
+            if (UseGymBattleTask.GetWorstTypes(type).Any(a => a == SpecialAttack.PokemonType)) factor -= 2;
 
             TypeFactor.Add(type, factor);
 
             return factor;
         }
 
-        public int getFactorAgainst(int cp)
+        public int getFactorAgainst(ISession session, int cp)
         {
             decimal percent = 0.0M;
             if (cp > data.Cp)
-                percent = data.Cp / cp * -100.0M;
+                percent = (decimal)data.Cp / (decimal)cp * -100.0M;
             else
-                percent = cp / data.Cp * 100.0M;
+                percent = (decimal)cp / (decimal)data.Cp * 100.0M;
 
-            return (int)(100.0M - Math.Abs(percent) / 10.0M) * Math.Sign(percent);
+            int factor = (int)((100.0M - Math.Abs(percent)) / 10.0M) * Math.Sign(percent);
+
+            if (session.LogicSettings.GymConfig.NotUsedSkills.Any(a => a.Key == data.PokemonId && a.Value == Attack.MovementId))
+                factor -= 3;
+
+            if (session.LogicSettings.GymConfig.NotUsedSkills.Any(a => a.Key == data.PokemonId && a.Value == SpecialAttack.MovementId))
+                factor -= 3;
+
+            return factor;
         }
 
         private int getFactorAgainst(PokemonSettings pokemon)
