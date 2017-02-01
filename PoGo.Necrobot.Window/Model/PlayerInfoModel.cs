@@ -9,6 +9,7 @@ using POGOProtos.Data.Player;
 using PoGo.NecroBot.Logic.Event;
 using POGOProtos.Networking.Responses;
 using PoGo.NecroBot.Logic.Event.Inventory;
+using POGOProtos.Inventory;
 
 namespace PoGo.Necrobot.Window.Model
 {
@@ -133,7 +134,7 @@ namespace PoGo.Necrobot.Window.Model
             this.playerProfile = profile.Profile;
         }
 
-        public void OnInventoryRefreshed(InventoryRefreshedEvent inventory)
+        public void OnInventoryRefreshed(IEnumerable<InventoryItem> inventory)
         {
             if (this.playerProfile == null || this.playerProfile.PlayerData.BuddyPokemon == null || this.playerProfile.PlayerData.BuddyPokemon.Id == 0) return;
 
@@ -141,9 +142,7 @@ namespace PoGo.Necrobot.Window.Model
 
             if (budyData == null) return;
              
-            var buddy = inventory.Inventory
-                .InventoryDelta
-                .InventoryItems
+            var buddy = inventory
                 .Select(x => x.InventoryItemData?.PokemonData)
                 .Where(x => x != null && x.Id == this.playerProfile.PlayerData.BuddyPokemon.Id)
                 .FirstOrDefault();

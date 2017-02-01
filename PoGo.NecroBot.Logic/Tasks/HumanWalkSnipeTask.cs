@@ -16,6 +16,7 @@ using POGOProtos.Enums;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Map.Fort;
 using POGOProtos.Networking.Responses;
+using System.Collections.Concurrent;
 
 namespace PoGo.NecroBot.Logic.Tasks
 {
@@ -53,7 +54,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         private static ISession _session;
         private static ILogicSettings _setting;
         private static int pokestopCount = 0;
-        private static List<PokemonId> pokemonToBeSnipedIds = null;
+        private static ConcurrentDictionary<PokemonId, PokemonId> pokemonToBeSnipedIds = null;
         static bool prioritySnipeFlag = false;
         private static DateTime lastUpdated = DateTime.Now.AddMinutes(-10);
 
@@ -114,14 +115,23 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             _session = session;
             _setting = _session.LogicSettings;
-            pokemonToBeSnipedIds = _setting.HumanWalkingSnipeUseSnipePokemonList
-                ? _setting.PokemonToSnipe.Pokemon
-                : new List<PokemonId>();
-            pokemonToBeSnipedIds.AddRange(_setting.HumanWalkSnipeFilters
-                .Where(x => !pokemonToBeSnipedIds.Any(t => t == x.Key))
-                .Select(x => x.Key)
-                .ToList()
-            ); //this will combine with pokemon snipe filter
+            pokemonToBeSnipedIds = new ConcurrentDictionary<PokemonId, PokemonId>();
+
+            if (_setting.HumanWalkingSnipeUseSnipePokemonList)
+            {
+                foreach (var pokemonId in _setting.PokemonToSnipe.Pokemon)
+                {
+                    pokemonToBeSnipedIds[pokemonId] = pokemonId;
+                }
+            }
+            
+            foreach (var pokemonId in _setting.HumanWalkSnipeFilters
+                .Where(x => !pokemonToBeSnipedIds.ContainsKey(x.Key))
+                .Select(x => x.Key))
+            {
+                pokemonToBeSnipedIds[pokemonId] = pokemonId;
+            } 
+            //this will combine with pokemon snipe filter
         }
 
         public static List<SnipePokemonInfo> ApplyFilter(List<SnipePokemonInfo> source)
@@ -481,7 +491,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                             continue;
                         }
                         //check if pokemon in the snip list
-                        if (!pokemonToBeSnipedIds.Any(x => x == item.PokemonId)) continue;
+                        if (!pokemonToBeSnipedIds.ContainsKey(item.PokemonId)) continue;
 
                         count++;
                         var snipeSetting = _setting.HumanWalkSnipeFilters.FirstOrDefault(x => x.Key == item.PokemonId);
@@ -646,7 +656,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             });
 
             //in some case, we caught the pokemon before data refresh, we need add a fake pokemon to list to avoid it add back and waste time 
-            if (!exist && pokemonToBeSnipedIds.Any(p => p == id))
+            if (!exist && pokemonToBeSnipedIds.ContainsKey(id))
             {
                 //lock(threadLocker)
                 {

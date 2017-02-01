@@ -12,6 +12,7 @@ using POGOProtos.Networking.Responses;
 using POGOProtos.Data;
 using PoGo.NecroBot.Logic.Tasks;
 using PoGo.NecroBot.Logic.PoGoUtils;
+using POGOProtos.Inventory;
 
 namespace PoGo.Necrobot.Window.Model
 {
@@ -134,10 +135,10 @@ namespace PoGo.Necrobot.Window.Model
         }
         private List<PokedexEntry> pokedex;
         private List<PokemonData> bestPokemons;
-        public void OnInventoryRefreshed(GetInventoryResponse inventory)
+        public void OnInventoryRefreshed(IEnumerable<InventoryItem> inventory)
         {
-            var all = inventory.InventoryDelta.InventoryItems.Select(x => x.InventoryItemData?.PokemonData).Where(x => x != null).ToList(); 
-            pokedex = inventory.InventoryDelta.InventoryItems.Select(x => x.InventoryItemData?.PokedexEntry).Where(x => x != null).ToList();
+            var all = inventory.Select(x => x.InventoryItemData?.PokemonData).Where(x => x != null).ToList(); 
+            pokedex = inventory.Select(x => x.InventoryItemData?.PokedexEntry).Where(x => x != null).ToList();
             bestPokemons = all.OrderByDescending(x => PokemonInfo.CalculatePokemonPerfection(x))
                              .GroupBy(x => x.PokemonId)
                              .Select(x => x.First())
