@@ -15,6 +15,7 @@ namespace PoGo.NecroBot.Logic.Event
         public PokemonId PokemonId;
         public double Perfection;
         public ulong Id;
-        public Candy Candy { get; internal set; }
+        public int Candy { get; internal set; }
+        public PokemonFamilyId FamilyId { get; internal set; }
     }
 }

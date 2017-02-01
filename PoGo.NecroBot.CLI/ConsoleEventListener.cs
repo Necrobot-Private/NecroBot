@@ -99,7 +99,7 @@ namespace PoGo.NecroBot.CLI
                     transferPokemonEvent.Perfection.ToString("0.00"),
                     transferPokemonEvent.BestCp.ToString(),
                     transferPokemonEvent.BestPerfection.ToString("0.00"),
-                    transferPokemonEvent.Candy.Candy_
+                    transferPokemonEvent.Candy
                 ),
                 LogLevel.Transfer
             );
@@ -253,7 +253,7 @@ namespace PoGo.NecroBot.CLI
                     pokemonCaptureEvent.Attempt)
                 : session.Translation.GetTranslation(TranslationString.CatchStatus, strStatus);
 
-            var familyCandies = pokemonCaptureEvent.Candy.Candy_ > 0
+            var familyCandies = pokemonCaptureEvent.Candy?.Candy_ > 0
                 ? session.Translation.GetTranslation(TranslationString.Candies, pokemonCaptureEvent.Candy.Candy_)
                 : "";
 

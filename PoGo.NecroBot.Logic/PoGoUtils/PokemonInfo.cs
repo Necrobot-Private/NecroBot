@@ -63,7 +63,7 @@ namespace PoGo.NecroBot.Logic.PoGoUtils
 
         public static int GetCandy(ISession session, PokemonData pokemon)
         {
-            return session.Inventory.GetCandy(pokemon.PokemonId).Candy_;
+            return session.Inventory.GetCandyCount(pokemon.PokemonId);
         }
 
         public static int GetPowerUpLevel(PokemonData poke)

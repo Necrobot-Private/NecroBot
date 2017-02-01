@@ -133,7 +133,7 @@ namespace PoGo.Necrobot.Window.Model
         internal void OnTransfer(TransferPokemonEvent e)
         {
             this.Remove(e.Id);
-            foreach (var item in this.Pokemons.Where(p => p.FamilyId == e.Candy.FamilyId))
+            foreach (var item in this.Pokemons.Where(p => p.FamilyId == e.FamilyId))
             {
                 item.RaisePropertyChanged("Candy");
             }
