@@ -21,14 +21,14 @@ namespace PoGo.Necrobot.Window.Model
             this.Incubators = new ObservableCollection<IncubatorViewModel>();
         }
 
-        internal void OnInventoryRefreshed(GetInventoryResponse inventory)
+        internal void OnInventoryRefreshed(IEnumerable<InventoryItem> inventory)
         {
-            var eggs = inventory.InventoryDelta.InventoryItems
+            var eggs = inventory
                 .Select(x => x.InventoryItemData?.PokemonData)
                 .Where(x => x != null && x.IsEgg)
                 .ToList();
 
-            var incubators = inventory.InventoryDelta.InventoryItems
+            var incubators = inventory
                     .Where(x => x.InventoryItemData.EggIncubators != null)
                     .SelectMany(i => i.InventoryItemData.EggIncubators.EggIncubator)
                     .Where(i => i != null);
