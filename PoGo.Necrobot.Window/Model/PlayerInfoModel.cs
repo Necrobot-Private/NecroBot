@@ -97,14 +97,14 @@ namespace PoGo.Necrobot.Window.Model
 
             }
         }
-        private int startdust;
-        public int Startdust
+        private int stardust;
+        public int Stardust
         {
-            get { return startdust; }
+            get { return stardust; }
             set
             {
-                startdust = value;
-                RaisePropertyChanged("Startdust");
+                stardust = value;
+                RaisePropertyChanged("Stardust");
 
             }
         }
