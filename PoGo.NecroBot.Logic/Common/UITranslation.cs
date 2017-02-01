@@ -13,6 +13,8 @@ namespace PoGo.NecroBot.Logic.Common
     public class UITranslation
     {
         #region Main screen
+        [Description("Accounts")]
+        public string AccountSetting { get; set; }
         [Description("Map & Journey")]
         public string MapTabTitle { get; set; }
 
