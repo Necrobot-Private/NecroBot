@@ -531,6 +531,17 @@ namespace PoGo.NecroBot.Logic
             return _pokemonSettings;
         }
 
+        public async Task<IEnumerable<MoveSettings>> GetMoveSettings()
+        {
+            if (_client.Download.ItemTemplates == null)
+                await _client.Download.GetItemTemplates();
+
+            var moveSettings = _client.Download.ItemTemplates.Where(x => x.MoveSettings != null)
+                .Select(x => x.MoveSettings);
+
+            return moveSettings;
+        }
+
         public bool CanTransferPokemon(PokemonData pokemon)
         {
             // Can't transfer pokemon in gyms.

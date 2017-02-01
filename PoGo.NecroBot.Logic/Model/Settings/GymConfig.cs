@@ -1,6 +1,9 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using POGOProtos.Enums;
+using System;
 
 namespace PoGo.NecroBot.Logic.Model.Settings
 {
@@ -121,5 +124,36 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool TrainAlreadyDefendedGym { get; set; }
+
+        [ExcelConfig(Description = "Min CP to use in attack", Position = 20)]
+        [DefaultValue(1000)]
+        [Range(1, 3500)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
+        public int MinCpToUseInAttack { get; set; }
+
+        [ExcelConfig(Description = "But not less than defender's percent", Position = 21)]
+        [DefaultValue(0.75)]
+        [Range(0.01, 1)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
+        public double ButNotLessThanDefenderPercent { get; set; }
+
+        [ExcelConfig(Description = "Don't use this skills in fight", Position = 22)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public ICollection<KeyValuePair<PokemonId, PokemonMove>> NotUsedSkills = GetDefaults();
+
+        [ExcelConfig(Description = "Use Pokemon to attack only by CP", Position = 23)]
+        [DefaultValue(true)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
+        public bool UsePokemonToAttackOnlyByCp { get; set; }
+
+        private static ICollection<KeyValuePair<PokemonId, PokemonMove>> GetDefaults()
+        {
+            return new List<KeyValuePair<PokemonId, PokemonMove>>()
+            {
+                new KeyValuePair<PokemonId, PokemonMove>( PokemonId.Snorlax, PokemonMove.HyperBeam ),
+                new KeyValuePair<PokemonId, PokemonMove>( PokemonId.Dragonite, PokemonMove.HyperBeam ),
+                new KeyValuePair<PokemonId, PokemonMove>( PokemonId.Lapras, PokemonMove.Blizzard ),
+            };
+        }
     }
 }
