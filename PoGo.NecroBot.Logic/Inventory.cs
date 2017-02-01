@@ -301,6 +301,14 @@ namespace PoGo.NecroBot.Logic
             }
             return null;
         }
+
+        public int UpdateStarDust(int startdust)
+        {
+            GetPlayerData().Wait();
+            _player.PlayerData.Currencies[1].Amount += startdust;
+
+            return _player.PlayerData.Currencies[1].Amount;
+        }
         
         public int GetStarDust()
         {

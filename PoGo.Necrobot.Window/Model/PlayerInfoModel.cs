@@ -1,14 +1,9 @@
 ﻿using POGOProtos.Enums;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using POGOProtos.Data.Player;
 using PoGo.NecroBot.Logic.Event;
 using POGOProtos.Networking.Responses;
-using PoGo.NecroBot.Logic.Event.Inventory;
 using POGOProtos.Inventory;
 
 namespace PoGo.Necrobot.Window.Model
