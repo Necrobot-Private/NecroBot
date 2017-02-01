@@ -43,6 +43,7 @@ namespace PoGo.NecroBot.Logic.Utils
         public void Dirty(Inventory inventory, ISession session)
         {
             _exportStats = GetCurrentInfo(inventory);
+            TotalStardust = inventory.GetStarDust();
             DirtyEvent?.Invoke();
             OnStatisticChanged(session);
         }
