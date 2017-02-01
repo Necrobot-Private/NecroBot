@@ -105,6 +105,11 @@ namespace PoGo.NecroBot.CLI
 
             var socketURL = session.LogicSettings.DataSharingDataUrl;
 
+            if (!string.IsNullOrEmpty(session.LogicSettings.SnipeDataAccessKey))
+            {
+                socketURL += "&access_key=" + Encrypt(session.LogicSettings.SnipeDataAccessKey);
+            }
+
             using (var ws = new WebSocket(socketURL))
             {
                 ws.Log.Level = LogLevel.Fatal;
