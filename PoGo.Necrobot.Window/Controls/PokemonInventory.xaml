@@ -15,6 +15,7 @@
         <cv:FavoriteTextConverter x:Key="FavoriteTextConverter"/>
         <cv:AllowTransferCheckConverter x:Key="AllowTransferCheckConverter"/>
         <cv:IVToColorConverter x:Key="IVToColorConverter"    />
+        <cv:I18NConveter x:Key="I18NConveter"/>
         <cv:EnumToNumberConverter x:Key="EnumToNumberConverter"></cv:EnumToNumberConverter>
     </Control.Resources>
     <DockPanel LastChildFill="True">
@@ -22,7 +23,7 @@
             <Button  DockPanel.Dock="Right" Name="btnExport" Click="btnExport_Click" Margin="0,0,40,0" >
                 <StackPanel Orientation="Horizontal">
                     <Image Width="16" Source="https://cdn1.iconfinder.com/data/icons/application-file-formats/128/microsoft-excel-128.png" Cursor="Hand"/>
-                    <TextBlock Text="Export" Margin="10,0,0,0"></TextBlock>
+                    <TextBlock Text="{Binding Source=Export, Converter={StaticResource I18NConveter}}" Margin="10,0,0,0"></TextBlock>
                 </StackPanel>
 
             </Button>
