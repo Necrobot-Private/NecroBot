@@ -42,6 +42,6 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [ExcelConfig(Description = "The authozied access key to use snipe data", Position = 4)]
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
-        public string SnipeDataAccessKey { get; internal set; }
+        public string SnipeDataAccessKey { get;  set; }
     }
 }
