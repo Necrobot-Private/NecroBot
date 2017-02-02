@@ -1001,7 +1001,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             DateTime now = DateTimeFromUnixTimestampMillis(serverMs);
             const int beforeDodge = 200;
 
-            if (lastSpecialAttack != null)
+            if (lastSpecialAttack != null && lastSpecialAttack.DamageWindowsStartTimestampMs > serverMs)
             {
                 long dodgeTime = lastSpecialAttack.DamageWindowsStartTimestampMs - beforeDodge;
                 if (sessison.GymState.TimeToDodge < dodgeTime)
@@ -1022,7 +1022,9 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 bool canDoAttack = !canDoSpecialAttack && !(sessison.GymState.TimeToDodge > now.ToUnixTime() && sessison.GymState.TimeToDodge < now.ToUnixTime() + normalMove.DurationMs);
 
-                if (sessison.GymState.TimeToDodge > now.ToUnixTime() && !canDoAttack && !canDoSpecialAttack)
+                bool skipDodge = (lastSpecialAttack?.DurationMs ?? 0) < normalMove.DurationMs + 550;
+
+                if (sessison.GymState.TimeToDodge > now.ToUnixTime() && !canDoAttack && !canDoSpecialAttack && !skipDodge)
                 {
                     if (sessison.GymState.LastWentDodge != sessison.GymState.TimeToDodge)
                     {
@@ -1074,7 +1076,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 ActionStartMs = now.ToUnixTime(),
                 TargetIndex = -1
             };
-            if (defender != null)
+            if (defender != null && attacker != null)
                 action1.ActivePokemonId = attacker.Id;
 
             actions.Add(action1);
