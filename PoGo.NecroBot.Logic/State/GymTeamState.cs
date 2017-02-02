@@ -187,10 +187,13 @@ namespace PoGo.NecroBot.Logic.State
             return factor;
         }
 
+        // jjskuld - Ignore CS0108 warning for now.
+        #pragma warning disable 0108
         public void Dispose()
         {
             if (TypeFactor != null)
                 TypeFactor.Clear();
         }
+        #pragma warning restore 0108
     }
 }

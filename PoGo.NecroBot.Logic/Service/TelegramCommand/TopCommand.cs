@@ -30,6 +30,8 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
         public override string GetDescription(ISession session) =>
             base.GetDescription(session, DefaultCount.ToString());
 
+        // jjskuld - Ignore CS1998 warning for now.
+        #pragma warning disable 1998
         public override async Task<bool> OnCommand(ISession session, string cmd, Action<string> callback)
         {
             var commandMatch = Match(cmd, CommandParseRegex);
@@ -80,5 +82,6 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
             callback(answerTextmessage);
             return true;
         }
+        #pragma warning restore 1998
     }
 }

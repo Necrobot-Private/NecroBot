@@ -66,6 +66,8 @@ namespace PoGo.NecroBot.Logic.State
             {
                 // TODO - await is legal here! USE it or use pragma to suppress compilerwarning and write a comment why it is not used
                 // TODO: Attention - do not touch (add pragma) when you do not know what you are doing ;)
+                // jjskuld - Ignore CS4014 warning for now.
+                #pragma warning disable 4014
                 Run(async () =>
                 {
                     while (true)
@@ -87,6 +89,7 @@ namespace PoGo.NecroBot.Logic.State
                         }
                     }
                 });
+                #pragma warning restore 4014
             }
 
             int apiCallFailured = 0;
@@ -170,7 +173,10 @@ namespace PoGo.NecroBot.Logic.State
                         {
                             // TODO - await is legal here! USE it or use pragma to suppress compilerwarning and write a comment why it is not used
                             // TODO: Attention - do not touch (add pragma) when you do not know what you are doing ;)
+                            // jjskuld - Ignore CS4014 warning for now.
+                            #pragma warning disable 4014
                             SendNotification(session, $"{se.MatchedRule} - {session.Settings.GoogleUsername}{session.Settings.PtcUsername}", "This bot has reach limit, it will be blocked for 60 mins for safety.", true);
+                            #pragma warning restore 4014
                             session.EventDispatcher.Send(new WarnEvent() { Message = $"You reach limited. bot will sleep for {session.LogicSettings.MultipleBotConfig.OnLimitPauseTimes} min" });
 
                             session.BlockCurrentBot(session.LogicSettings.MultipleBotConfig.OnLimitPauseTimes);
@@ -223,7 +229,10 @@ namespace PoGo.NecroBot.Logic.State
                 {
                     // TODO - await is legal here! USE it or use pragma to suppress compilerwarning and write a comment why it is not used
                     // TODO: Attention - do not touch (add pragma) when you do not know what you are doing ;)
+                    // jjskuld - Ignore CS4014 warning for now.
+                    #pragma warning disable 4014
                     SendNotification(session, $"Banned!!!! {session.Settings.PtcUsername}{session.Settings.GoogleUsername}", session.Translation.GetTranslation(TranslationString.AccountBanned), true);
+                    #pragma warning restore 4014
 
                     if (session.LogicSettings.AllowMultipleBot)
                     {
