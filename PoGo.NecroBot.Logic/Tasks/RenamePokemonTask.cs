@@ -33,8 +33,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                 // iv number + templating part + pokemonName <= 12
                 
                 var newNickname = session.LogicSettings.RenameTemplate;
-                newNickname.Replace("{IV}", Math.Round(perfection, 0).ToString());
-                newNickname.Replace("{Level}", Math.Round(level, 0).ToString());
+                newNickname = newNickname.Replace("{IV}", Math.Round(perfection, 0).ToString());
+                newNickname = newNickname.Replace("{Level}", Math.Round(level, 0).ToString());
 
                 var nameLength = 18 - newNickname.Length;
                 if (pokemonName.Length > nameLength)
@@ -42,7 +42,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     pokemonName = pokemonName.Substring(0, nameLength);
                 }
 
-                newNickname.Replace("{Name}", pokemonName);
+                newNickname = newNickname.Replace("{Name}", pokemonName);
 
 
                 var oldNickname = pokemon.Nickname.Length != 0 ? pokemon.Nickname : pokemon.PokemonId.ToString();
