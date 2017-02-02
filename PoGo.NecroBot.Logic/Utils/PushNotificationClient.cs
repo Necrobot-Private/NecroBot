@@ -95,7 +95,10 @@ namespace PoGo.NecroBot.Logic.Utils
                     }
 
                     // TODO function is deprecated / obsolete
+                    // jjskuld - Ignore CS0618 warning for now.
+                    #pragma warning disable 0618
                     await session.Telegram.SendMessage($"{title}\r\n{body}");
+                    #pragma warning restore 0618
                 }
             }
             catch (Exception)

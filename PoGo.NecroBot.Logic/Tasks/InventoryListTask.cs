@@ -8,6 +8,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 {
     public class InventoryListTask
     {
+        // jjskuld - Ignore CS1998 warning for now.
+        #pragma warning disable 1998
         public static async Task Execute(ISession session)
         {
             // Refresh inventory so that the player stats are fresh
@@ -23,5 +25,6 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             DelayingUtils.Delay(session.LogicSettings.DelayBetweenPlayerActions, 0);
         }
+        #pragma warning restore 1998
     }
 }
