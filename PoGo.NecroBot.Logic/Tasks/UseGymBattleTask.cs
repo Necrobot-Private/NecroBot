@@ -110,7 +110,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             var defenders = fortDetails.GymState.Memberships.Select(x => x.PokemonData).ToList();
 
-            if (session.Profile.PlayerData.Team != fortInfo.TeamColor)
+            if (session.Profile.PlayerData.Team != gym.OwnedByTeam)
             {
                 if (session.LogicSettings.GymConfig.MaxGymLevelToAttack < GetGymLevel(gym.GymPoints))
                 {
