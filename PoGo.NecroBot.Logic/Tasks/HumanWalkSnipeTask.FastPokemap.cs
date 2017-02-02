@@ -110,7 +110,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                         }
                         // TODO - await is legal here! USE it or use pragma to suppress compilerwarning and write a comment why it is not used
                         // TODO: Attention - do not touch (add pragma) when you do not know what you are doing ;)
+                        // jjskuld - Ignore CS4014 warning for now.
+                        #pragma warning disable 4014
                         PostProcessDataFetched(chunk, false);
+                        #pragma warning restore 4014
                     }
                     catch
                     {
@@ -130,6 +133,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             return;
 
             // TODO unreachable
+            // jjskuld - Ignore CS0162 warning for now.
+            #pragma warning disable 0162
             if (!session.LogicSettings.HumanWalkingSnipeUseFastPokemap) return;
 
             if (taskDataLive != null && !taskDataLive.IsCompleted) return;
@@ -159,6 +164,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     }
                 }
             });
+            #pragma warning restore 0162
         }
 
         private static SnipePokemonInfo Map(FastPokemapItem result)
@@ -223,6 +229,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             return new List<SnipePokemonInfo>();
 
             // TODO unreachable
+            // jjskuld - Ignore CS0162 warning for now.
+            #pragma warning disable 0162
             List<SnipePokemonInfo> results = new List<SnipePokemonInfo>();
             if (!_setting.HumanWalkingSnipeUseFastPokemap) return results;
 
@@ -253,6 +261,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             //var endFetchTime = DateTime.Now;
             //Logger.Write($"FetchFromFastPokemap spent {(endFetchTime - startFetchTime).TotalSeconds} seconds", LogLevel.Info, ConsoleColor.White);
             return results;
+            #pragma warning restore 0162
         }
     }
 }
