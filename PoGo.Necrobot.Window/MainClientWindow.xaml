@@ -124,7 +124,7 @@
                            Width="700" Height="350" IsOpen="False" AllowsTransparency="True" StaysOpen="False"
                            Placement="Left"
                            >
-                        <Border  BorderBrush="Sienna" BorderThickness="1,1,1,1"  CornerRadius="8,8,8,8" Background="FloralWhite">
+                        <Border CornerRadius="4,4,4,4" BorderBrush="DodgerBlue" BorderThickness="1,3,1,5">
                             <DataGrid  Margin="20,20,20,20" Name="gridAccounts" AutoGenerateColumns="False">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Binding="{Binding AuthType}" Header="AuthType"></DataGridTextColumn>
