@@ -251,7 +251,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
             }
 
-            TimedLog(string.Join(Environment.NewLine, battleActions.OrderBy(o=>o.ActionStartMs).Select(s => s).Distinct()), true);
+            TimedLog(string.Join(Environment.NewLine, battleActions.OrderBy(o=>o.ActionStartMs).Select(s => s).Distinct()));
 
             if (isVictory)
             {
@@ -877,7 +877,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         {
                             var result = attackResult.BattleLog.BattleActions.OrderBy(o => o.ActionStartMs).Distinct();
                             lastActions.AddRange(result);
-                            TimedLog("Result -> \r\n"+string.Join(Environment.NewLine, result), true);
+                            TimedLog("Result -> \r\n"+string.Join(Environment.NewLine, result));
                         }
                         serverMs = attackResult.BattleLog.ServerMs;
 
@@ -986,7 +986,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (DateTime.UtcNow.ToUnixTime() - before < swithTime + 100)
                 await Task.Delay(swithTime + 100 - (int)(DateTime.UtcNow.ToUnixTime() - before));
 
-            TimedLog(string.Format("Switching pokemon {0} result: {1}", string.Join(", ", actions), resp), true);
+            TimedLog(string.Format("Switching pokemon {0} result: {1}", string.Join(", ", actions), resp));
             return resp;
         }
 
@@ -1016,13 +1016,13 @@ namespace PoGo.NecroBot.Logic.Tasks
                 //if (lastSpecialAttack != null && lastSpecialAttack.DamageWindowsStartTimestampMs < serverMs)
                 //    lastSpecialAttack = null;
 
-                bool canDoSpecialAttack = Math.Abs(specialMove.EnergyDelta) <= energy && !(sessison.GymState.TimeToDodge > now.ToUnixTime() && sessison.GymState.TimeToDodge < now.ToUnixTime() + specialMove.DurationMs);
+                bool skipDodge = (lastSpecialAttack?.DurationMs ?? 0) < normalMove.DurationMs + 550;
+
+                bool canDoSpecialAttack = Math.Abs(specialMove.EnergyDelta) <= energy && (!(sessison.GymState.TimeToDodge > now.ToUnixTime() && sessison.GymState.TimeToDodge < now.ToUnixTime() + specialMove.DurationMs) || skipDodge);
                 if (sessison.LogicSettings.GymConfig.NotUsedSkills.Any(a => a.Key == attacker.PokemonId && a.Value == specialMove.MovementId))
                     canDoSpecialAttack = false;
 
-                bool canDoAttack = !canDoSpecialAttack && !(sessison.GymState.TimeToDodge > now.ToUnixTime() && sessison.GymState.TimeToDodge < now.ToUnixTime() + normalMove.DurationMs);
-
-                bool skipDodge = (lastSpecialAttack?.DurationMs ?? 0) < normalMove.DurationMs + 550;
+                bool canDoAttack = !canDoSpecialAttack && (!(sessison.GymState.TimeToDodge > now.ToUnixTime() && sessison.GymState.TimeToDodge < now.ToUnixTime() + normalMove.DurationMs) || skipDodge);
 
                 if (sessison.GymState.TimeToDodge > now.ToUnixTime() && !canDoAttack && !canDoSpecialAttack && !skipDodge)
                 {
@@ -1033,13 +1033,13 @@ namespace PoGo.NecroBot.Logic.Tasks
                         BattleAction dodge = new BattleAction()
                         {
                             Type = BattleActionType.ActionDodge,
-                            ActionStartMs = sessison.GymState.TimeToDodge,
+                            ActionStartMs = now.ToUnixTime(),
                             DurationMs = 500,
                             TargetIndex = -1,
                             ActivePokemonId = attacker.Id,
                         };
 
-                        TimedLog(string.Format("Trying to dodge an attack {0}, lastSpecialAttack.DamageWindowsStartTimestampMs: {1}, serverMs: {2}", dodge, lastSpecialAttack.DamageWindowsStartTimestampMs, serverMs), true);
+                        TimedLog(string.Format("Trying to dodge an attack {0}, lastSpecialAttack.DamageWindowsStartTimestampMs: {1}, serverMs: {2}", dodge, lastSpecialAttack.DamageWindowsStartTimestampMs, serverMs));
                         actions.Add(dodge);
                     }
                 }
@@ -1071,7 +1071,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
             BattleAction action1 = new BattleAction()
             {
-                Type = BattleActionType.ActionDodge,
+                Type = BattleActionType.ActionAttack,
                 DurationMs = 500,
                 ActionStartMs = now.ToUnixTime(),
                 TargetIndex = -1
