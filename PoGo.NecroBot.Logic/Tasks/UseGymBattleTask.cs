@@ -36,9 +36,11 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             if (session.GymState.moveSettings == null)
             {
-                session.GymState.moveSettings = await session.Inventory.GetMoveSettings();
-                session.GymState.LoadMyPokemons(session);
+                session.GymState.moveSettings = await session.Inventory.GetMoveSettings();                
             }
+
+            session.GymState.LoadMyPokemons(session);
+
 
             cancellationToken.ThrowIfCancellationRequested();
             var distance = session.Navigation.WalkStrategy.CalculateDistance(session.Client.CurrentLatitude, session.Client.CurrentLongitude, gym.Latitude, gym.Longitude);
@@ -919,7 +921,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                         attacker = attackResult.ActiveAttacker.PokemonData;
                                     Logger.Write(string.Format("We ware fainted in battle, new attacker is: {0} ({1} CP){2}", attacker.PokemonId, attacker.Cp, Environment.NewLine), LogLevel.Info, ConsoleColor.Magenta);
                                 }
-                                Console.SetCursorPosition(0, Console.CursorTop - 1);
+//                                Console.SetCursorPosition(0, Console.CursorTop - 1);
                                 Logger.Write($"(GYM ATTACK) : Defender {attackResult.ActiveDefender.PokemonData.PokemonId.ToString()  } HP {attackResult.ActiveDefender.CurrentHealth} - Attacker  {attacker.PokemonId.ToString()}   HP/Sta {attackResult.ActiveAttacker.CurrentHealth}/{attackResult.ActiveAttacker.CurrentEnergy}        ");
                                 if (attackResult != null && attackResult.ActiveAttacker != null)
                                     session.GymState.myTeam.Where(w => w.attacker.Id == attackResult.ActiveAttacker.PokemonData.Id).FirstOrDefault().HpState = attackResult.ActiveAttacker.CurrentHealth;
