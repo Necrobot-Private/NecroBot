@@ -20,6 +20,7 @@ namespace PoGo.NecroBot.Logic.State
         public IEnumerable<MoveSettings> moveSettings { get; set; }
 
         public long TimeToDodge { get; set; }
+        public long LastWentDodge { get; set; }
 
         public GymTeamState()
         {

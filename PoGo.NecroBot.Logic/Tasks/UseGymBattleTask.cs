@@ -251,7 +251,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
             }
 
-           TimedLog(string.Join(Environment.NewLine, battleActions.OrderBy(o=>o.ActionStartMs).Select(s => s)), true);
+            TimedLog(string.Join(Environment.NewLine, battleActions.OrderBy(o=>o.ActionStartMs).Select(s => s).Distinct()), true);
 
             if (isVictory)
             {
@@ -875,9 +875,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                         defender = attackResult.ActiveDefender?.PokemonData;
                         if (attackResult.BattleLog != null && attackResult.BattleLog.BattleActions.Count > 0)
                         {
-                            var result = attackResult.BattleLog.BattleActions.OrderBy(o => o.ActionStartMs);
+                            var result = attackResult.BattleLog.BattleActions.OrderBy(o => o.ActionStartMs).Distinct();
                             lastActions.AddRange(result);
-                            TimedLog("Result -> \r\n"+string.Join(Environment.NewLine, result));
+                            TimedLog("Result -> \r\n"+string.Join(Environment.NewLine, result), true);
                         }
                         serverMs = attackResult.BattleLog.ServerMs;
 
@@ -892,7 +892,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                     else //next iteration so we should to swith to proper attacker for new defender
                                     {
                                         var newAttacker = GetBestInBattle(session, attackResult.ActiveDefender.PokemonData);
-                                        if (newAttacker != null)
+                                        if (newAttacker != null && newAttacker.Id!= attackResult.ActiveAttacker.PokemonData.Id)
                                         {
                                             var newAttackResult = await SwitchPokemon(session, gym.Id, startResponse.BattleId, newAttacker, a2, serverMs);
                                             if (newAttackResult != null && newAttackResult.Result == AttackGymResponse.Types.Result.Success)
@@ -908,7 +908,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                     session.GymState.myTeam.Where(w => w.attacker.Id == attacker.Id).FirstOrDefault().HpState = 0;
                                     TimedLog("We are switching pokemon after die");
                                     var newAttacker = GetBestInBattle(session, attackResult.ActiveDefender.PokemonData);
-                                    if (newAttacker != null && currentFortData.GymState.Memberships.Count > 1 && !session.LogicSettings.GymConfig.UsePokemonToAttackOnlyByCp)
+                                    if (newAttacker != null && currentFortData.GymState.Memberships.Count > 1 && !session.LogicSettings.GymConfig.UsePokemonToAttackOnlyByCp && newAttacker.Id != attackResult.ActiveAttacker.PokemonData.Id)
                                     {
                                         var newAttackResult = await SwitchPokemon(session, gym.Id, startResponse.BattleId, newAttacker, a2, serverMs);
                                         if (newAttackResult != null && newAttackResult.Result == AttackGymResponse.Types.Result.Success)
@@ -922,7 +922,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                     Logger.Write(string.Format("We ware fainted in battle, new attacker is: {0} ({1} CP){2}", attacker.PokemonId, attacker.Cp, Environment.NewLine), LogLevel.Info, ConsoleColor.Magenta);
                                 }
                                 Console.SetCursorPosition(0, Console.CursorTop - 1);
-                                Logger.Write($"(GYM ATTACK) : Defender {attackResult.ActiveDefender.PokemonData.PokemonId.ToString()  } HP {attackResult.ActiveDefender.CurrentHealth} - Attacker  {attacker.PokemonId.ToString()}   HP/Sta {attackResult.ActiveAttacker.CurrentHealth}/{attackResult.ActiveAttacker.CurrentEnergy}        ");
+                                Logger.Write($"(GYM ATTACK) : Defender {attackResult.ActiveDefender.PokemonData.PokemonId.ToString()  } HP {attackResult.ActiveDefender.CurrentHealth} - Attacker  {attackResult.ActiveAttacker.PokemonData.PokemonId.ToString()}   HP/Sta {attackResult.ActiveAttacker.CurrentHealth}/{attackResult.ActiveAttacker.CurrentEnergy}        ");
                                 if (attackResult != null && attackResult.ActiveAttacker != null)
                                     session.GymState.myTeam.Where(w => w.attacker.Id == attackResult.ActiveAttacker.PokemonData.Id).FirstOrDefault().HpState = attackResult.ActiveAttacker.CurrentHealth;
                                 break;
@@ -999,7 +999,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             List<BattleAction> actions = new List<BattleAction>();
             DateTime now = DateTimeFromUnixTimestampMillis(serverMs);
-            const int beforeDodge = 250;
+            const int beforeDodge = 200;
 
             if (lastSpecialAttack != null)
             {
@@ -1024,19 +1024,22 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 if (sessison.GymState.TimeToDodge > now.ToUnixTime() && !canDoAttack && !canDoSpecialAttack)
                 {
-                    BattleAction dodge = new BattleAction()
+                    if (sessison.GymState.LastWentDodge != sessison.GymState.TimeToDodge)
                     {
-                        Type = BattleActionType.ActionDodge,
-                        ActionStartMs = now.ToUnixTime(),
-                        DurationMs = 500,
-                        TargetIndex = -1,
-                        ActivePokemonId = attacker.Id,
-                    };
+                        sessison.GymState.LastWentDodge = sessison.GymState.TimeToDodge;
 
-                    TimedLog(string.Format("Trying to dodge an attack {0}, lastSpecialAttack.DamageWindowsStartTimestampMs: {1}, serverMs: {2}", dodge, lastSpecialAttack.DamageWindowsStartTimestampMs, serverMs), true);
-                    actions.Add(dodge);
-                    //if (Math.Abs(sessison.GymState.TimeToDodge - now.ToUnixTime()) < 500)
-                    //    sessison.GymState.TimeToDodge = 0;
+                        BattleAction dodge = new BattleAction()
+                        {
+                            Type = BattleActionType.ActionDodge,
+                            ActionStartMs = sessison.GymState.TimeToDodge,
+                            DurationMs = 500,
+                            TargetIndex = -1,
+                            ActivePokemonId = attacker.Id,
+                        };
+
+                        TimedLog(string.Format("Trying to dodge an attack {0}, lastSpecialAttack.DamageWindowsStartTimestampMs: {1}, serverMs: {2}", dodge, lastSpecialAttack.DamageWindowsStartTimestampMs, serverMs), true);
+                        actions.Add(dodge);
+                    }
                 }
                 else
                 {
@@ -1048,7 +1051,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         action2.DamageWindowsStartTimestampMs = specialMove.DamageWindowStartMs;
                         action2.DamageWindowsEndTimestampMs = specialMove.DamageWindowEndMs;
                     }
-                    else if(canDoAttack)
+                    else if (canDoAttack)
                     {
                         action2.Type = BattleActionType.ActionAttack;
                         action2.DurationMs = normalMove.DurationMs;
