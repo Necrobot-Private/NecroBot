@@ -55,6 +55,7 @@ namespace PoGo.NecroBot.Logic.State
 
         public void LoadMyPokemons(ISession session)
         {
+            myPokemons.Clear();
             foreach (var pokemon in session.Inventory.GetPokemons().Where(w => w.Cp >= session.LogicSettings.GymConfig.MinCpToUseInAttack))
             {
                 MyPokemonStat mps = new MyPokemonStat(session, pokemon);
