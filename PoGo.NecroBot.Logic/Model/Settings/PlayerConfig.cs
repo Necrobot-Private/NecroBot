@@ -43,5 +43,11 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 6)]
         public bool UseNearActionRandom { get; set; }
+
+        [ExcelConfig(Description = "Randomize numeric settings by percent.", Position = 7)]
+        [DefaultValue(5)]
+        [Range(0, 100)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 7)]
+        public int RandomizeSettingsByPercent = 5;
     }
 }

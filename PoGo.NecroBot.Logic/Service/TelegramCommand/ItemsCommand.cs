@@ -17,6 +17,8 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
         {
         }
 
+        // jjskuld - Ignore CS1998 warning for now.
+        #pragma warning disable 1998
         public override async Task<bool> OnCommand(ISession session, string cmd, Action<string> callback)
         {
             if (cmd.ToLower() == Command)
@@ -56,5 +58,6 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
             }
             return false;
         }
+        #pragma warning restore 1998
     }
 }

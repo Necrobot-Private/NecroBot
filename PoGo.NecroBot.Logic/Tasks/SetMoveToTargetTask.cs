@@ -19,15 +19,9 @@ namespace PoGo.NecroBot.Logic.Tasks
     public class SetMoveToTargetTask
     {
         public static string TARGET_ID = "NECRO2_FORT";
-
-        private static FortDetailsResponse _fortInfo;
+        
         private static FortData _targetStop;
-
-        public static FortDetailsResponse FortInfo
-        {
-            get { return _fortInfo; }
-        }
-
+        
         static Queue<FortData> queue = new Queue<FortData>();
 
         public static async Task Execute(double lat, double lng, string fortId = "")

@@ -22,6 +22,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         public static List<ulong> PokemonIdcp = new List<ulong>();
 
+        // jjskuld - Ignore CS1998 warning for now.
+        #pragma warning disable 1998
         public static async Task Execute(ISession session)
         {
             var highestsPokemonCp =
@@ -161,5 +163,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
             }
         }
+        #pragma warning restore 1998
     }
 }

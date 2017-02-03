@@ -231,13 +231,3 @@ on_failure:
 
 # after build failure or success
 on_finish:
-
-#---------------------------------#
-#  notifications configuration    #
-#---------------------------------#
-notifications:
-  - provider: Webhook
-    url: https://webhooks.gitter.im/e/edd3d77d0afd21a6916b
-    on_build_success: true
-    on_build_failure: true
-    on_build_status_changed: true

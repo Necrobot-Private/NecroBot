@@ -35,7 +35,7 @@ namespace PoGo.Necrobot.Window.Controls
         private void SnipeGrid_OnSnipePokemon(Model.SnipePokemonViewModel selected)
         {
             var data = selected.Ref as EncounteredEvent;
-            Task.Run(async () =>
+            Task.Run(() =>
             {
                 var move1 = PokemonMove.MoveUnset;
                 var move2 = PokemonMove.MoveUnset;

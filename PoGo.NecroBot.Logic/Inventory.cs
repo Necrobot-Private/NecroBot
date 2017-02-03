@@ -212,12 +212,25 @@ namespace PoGo.NecroBot.Logic
                     settings.CandyToEvolve > 0 &&
                     settings.EvolutionIds.Count != 0)
                 {
-                    var familyCandy = pokemonFamilies.Single(x => settings.FamilyId == x.FamilyId);
-
-                    // its an solution in fixed numbers of equations with two variables 
-                    // (N = X + Y, X + C + Y >= Y * E) -> X >= (N * (E - 1) - C) / E
-                    // where N - current canBeRemoved,  X - new canBeRemoved, Y - possible to keep more, E - CandyToEvolve, C - candy amount
-                    canBeRemoved = (int)Math.Ceiling((double)((settings.CandyToEvolve - 1) * canBeRemoved - familyCandy.Candy_) / settings.CandyToEvolve);
+                    if (settings.FamilyId != PokemonFamilyId.FamilyUnset)
+                    {
+                        var familyCandy = pokemonFamilies.FirstOrDefault(x => settings.FamilyId == x.FamilyId);
+                        if (familyCandy != null)
+                        {
+                            // its an solution in fixed numbers of equations with two variables 
+                            // (N = X + Y, X + C + Y >= Y * E) -> X >= (N * (E - 1) - C) / E
+                            // where N - current canBeRemoved,  X - new canBeRemoved, Y - possible to keep more, E - CandyToEvolve, C - candy amount
+                            canBeRemoved = (int)Math.Ceiling((double)((settings.CandyToEvolve - 1) * canBeRemoved - familyCandy.Candy_) / settings.CandyToEvolve);
+                        }
+                        else
+                        {
+                            canBeRemoved = 0;
+                        }
+                    }
+                    else
+                    {
+                        canBeRemoved = 0;
+                    }
                 }
 
                 if (canBeRemoved <= 0)
