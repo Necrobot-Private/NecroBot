@@ -51,6 +51,19 @@ namespace PoGo.NecroBot.Logic.Common
         [Description("Export")]
         public string Export { get; set; }
 
+        [Description("HP")]
+        public string HP{ get; set; }
+
+        [Description("Candy")]
+        public string Candy { get; set; }
+
+        [Description("Level")]
+        public string Level { get; set; }
+
+
+        [Description("Caught at")]
+        public string CaughtTime { get; set; }
+
         #endregion
         #region Popup
         [Description("Latitude")]

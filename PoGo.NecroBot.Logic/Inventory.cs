@@ -205,7 +205,9 @@ namespace PoGo.NecroBot.Logic
                 var canBeRemoved = Math.Min(needToRemove, weakPokemonCount);
 
 
-                var settings = pokemonSettings.Single(x => x.PokemonId == pokemonGroupToTransfer.Key);
+                var settings = pokemonSettings.FirstOrDefault(x => x.PokemonId == pokemonGroupToTransfer.Key);
+                if (settings == null) continue;
+
                 //Lets calc new canBeRemoved pokemons according to transferring some of them for +1 candy or to evolving for +1 candy
                 if (keepPokemonsThatCanEvolve &&
                     pokemonsToEvolve.Contains(pokemonGroupToTransfer.Key) &&

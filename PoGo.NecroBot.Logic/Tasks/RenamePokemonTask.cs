@@ -38,7 +38,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 var newNickname = session.LogicSettings.RenameTemplate.ToUpper();
                 newNickname = newNickname.Replace("{IV}", Math.Round(perfection, 0).ToString());
                 newNickname = newNickname.Replace("{LEVEL}", Math.Round(level, 0).ToString());
-                newNickname = newNickname.Replace("{CP}", cp.ToString());
+                newNickname = newNickname.Replace("{CP}",cp.ToString());
 
                 var nameLength = 18 - newNickname.Length;
                 if (pokemonName.Length > nameLength && nameLength >0)
@@ -49,10 +49,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                 newNickname = newNickname.Replace("{NAME}", pokemonName);
 
                //verify
-               if(Regex.IsMatch(newNickname, @"[^a-zA-Z0-9\_\.\s]") || nameLength <=0 )
+               if(Regex.IsMatch(newNickname, @"[^a-zA-Z0-9-_.]") || nameLength <=0 )
                 {
-                    Logger.Write($"Your rename template : {session.LogicSettings.RenameTemplate} incorrect.");
-                    return;
+                    Logger.Write($"Your rename template : {session.LogicSettings.RenameTemplate} incorrect. : {pokemonName} / {newNickname}");
+                    continue;
                 }
                 var oldNickname = pokemon.Nickname.Length != 0 ? pokemon.Nickname : pokemon.PokemonId.ToString();
 

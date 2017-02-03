@@ -85,7 +85,9 @@
                     <DataGridTextColumn Binding="{Binding Candy, StringFormat=\{0\}}" Header="Candy" MinWidth="50" IsReadOnly="True"/>
                     <DataGridTextColumn Binding="{Binding Move1, StringFormat=\{0\}}" Header="Move1" MinWidth="90" IsReadOnly="True"/>
                     <DataGridTextColumn Binding="{Binding Move2, StringFormat=\{0\}}" Header="Move2" MinWidth="90" IsReadOnly="True"/>
-                    <DataGridTemplateColumn Header="Actions">
+
+                <DataGridTextColumn Binding="{Binding CaughtTime, StringFormat=\{0\}}" Header="{Binding Source=CaughtTime, Converter={StaticResource I18NConveter}}" MinWidth="90" IsReadOnly="True"/>
+                <DataGridTemplateColumn Header="Actions">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel  Orientation="Horizontal"  >

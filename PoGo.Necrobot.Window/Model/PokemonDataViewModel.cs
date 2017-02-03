@@ -115,6 +115,8 @@ namespace PoGo.Necrobot.Window.Model
             }
         }
 
+        public DateTime CaughtTime => new DateTime(1970, 1, 1, 0, 0, 0).AddMilliseconds(Convert.ToDouble(pokemonData.CreationTimeMs));
+
         private bool isTransfering;
         public bool IsTransfering
         {
@@ -195,7 +197,6 @@ namespace PoGo.Necrobot.Window.Model
             }
         }
 
-        public DateTime CaughtTime { get; set; }
         
         public int HP
         {
