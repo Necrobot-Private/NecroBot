@@ -36,9 +36,11 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             if (session.GymState.moveSettings == null)
             {
-                session.GymState.moveSettings = await session.Inventory.GetMoveSettings();
-                session.GymState.LoadMyPokemons(session);
+                session.GymState.moveSettings = await session.Inventory.GetMoveSettings();                
             }
+
+            session.GymState.LoadMyPokemons(session);
+
 
             cancellationToken.ThrowIfCancellationRequested();
             var distance = session.Navigation.WalkStrategy.CalculateDistance(session.Client.CurrentLatitude, session.Client.CurrentLongitude, gym.Latitude, gym.Longitude);
