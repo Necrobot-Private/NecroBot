@@ -27,7 +27,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             //await session.Inventory.RefreshCachedInventory();
 
-            var pokemonToEvolveTask = await session.Inventory
+            var pokemonToEvolveTask = session.Inventory
                 .GetPokemonToEvolve(session.LogicSettings.PokemonsToEvolve);
             var pokemonToEvolve = pokemonToEvolveTask.Where(p => p != null).ToList();
 
@@ -117,7 +117,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             _lastLuckyEggTime = DateTime.Now;
             await session.Client.Inventory.UseItemXpBoost();
-            if (luckyEgg != null) session.EventDispatcher.Send(new UseLuckyEggEvent {Count = luckyEgg.Count - 1});
+            if (luckyEgg != null) session.EventDispatcher.Send(new UseLuckyEggEvent { Count = luckyEgg.Count - 1 });
             DelayingUtils.Delay(session.LogicSettings.DelayBetweenPlayerActions, 0);
         }
 
@@ -142,7 +142,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                             EvolvedPokemon = evolveResponse.EvolvedPokemonData
                         });
                     }
-                    
+
                     if (!pokemonToEvolve.Last().Equals(pokemon))
                         DelayingUtils.Delay(session.LogicSettings.EvolveActionDelay, 0);
                 }
