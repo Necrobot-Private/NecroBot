@@ -28,7 +28,7 @@ namespace PoGo.NecroBot.Logic.State
         {
             session.EventDispatcher.Send(new WarnEvent()
             {
-                Message = "Hash server being down, Bot will enter IDLE state until service available. Ping internal is 5 sec, press any key to ping service.... "
+                Message = "Hash server being down, Bot will enter IDLE state until service available. Ping interval is 5 sec..."
             });
 
             Console.WriteLine();
@@ -39,28 +39,18 @@ namespace PoGo.NecroBot.Logic.State
             bool alive = false;
             while (!alive)
             {
-                DateTime timeoutvalue = DateTime.Now.AddSeconds(60);
-
                 alive = await Ping();
                 lastPing = DateTime.Now;
-                while (DateTime.Now < timeoutvalue && !alive)
+                if (!alive)
                 {
-                    if (Console.KeyAvailable)
+                    Console.SetCursorPosition(0, Console.CursorTop - 1);
+                    var ts = DateTime.Now - start;
+                    session.EventDispatcher.Send(new ErrorEvent()
                     {
-                        ConsoleKeyInfo cki = Console.ReadKey();
-                        alive = await Ping();
-                        lastPing = DateTime.Now;
-                    }
-                    else
-                    {
-                        await Task.Delay(5000);
-                        Console.SetCursorPosition(0, Console.CursorTop - 1);
-                        var ts = DateTime.Now - start;
-                        session.EventDispatcher.Send(new ErrorEvent()
-                        {
-                            Message = $"Hash API server down time : {ts.ToString(@"hh\:mm\:ss")}   Last ping: {lastPing.ToString("T")}"
-                        });
-                    }
+                        Message = $"Hash API server down time : {ts.ToString(@"hh\:mm\:ss")}   Last ping: {lastPing.ToString("T")}"
+                    });
+
+                    await Task.Delay(5000);
                 }
             }
 
