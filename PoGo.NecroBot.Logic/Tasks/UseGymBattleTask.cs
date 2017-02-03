@@ -1276,7 +1276,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                         fort = task.Result.GymState.FortData;
                         gymDetails = task.Result;
                     }
-                } catch(Exception ex)
+                }
+                catch(HasherException ex) { throw ex; }
+                catch (CaptchaException ex) { throw ex; }
+                catch (Exception ex)
                 {
                     TimedLog(ex.Message);
                 }

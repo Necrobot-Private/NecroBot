@@ -503,6 +503,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                             .ToList();
                 } while (catchablePokemon.Count == 0 && retry > 0);
             }
+            catch(HasherException ex) { throw ex; }
             catch (CaptchaException ex)
             {
                 //isCaptchaShow = true;
@@ -543,6 +544,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     encounter =
                         session.Client.Encounter.EncounterPokemon(pokemon.EncounterId, pokemon.SpawnPointId).Result;
                 }
+                catch (HasherException ex) { throw ex; }
                 catch (CaptchaException ex)
                 {
                     isCaptchaShow = true;

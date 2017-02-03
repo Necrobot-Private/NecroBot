@@ -141,6 +141,12 @@
                     </Popup>
                 </StackPanel>
             </Button>
+            <Button Name="btnDonate"  Click="btnDonate_Click" Margin="0,0,0,0">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="http://www.northernyouth.ca/wp-content/uploads/2014/11/NYL-Donate-Button.png" Height="30"/>
+                </StackPanel>
+                
+            </Button>
             
         </Controls:WindowCommands>
     </Controls:MetroWindow.RightWindowCommands>

@@ -236,5 +236,10 @@ namespace PoGo.Necrobot.Window
         {
             popAccounts.IsOpen = true;
         }
+
+        private void btnDonate_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("http://snipe.necrobot2.com?donate");
+        }
     }
 }

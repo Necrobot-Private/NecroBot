@@ -54,6 +54,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         public static void ConnectToService()
         {
+            //TODO - remove this line after MSniper.com back to work
+            return;
             while (true)
             {
                 try
@@ -688,7 +690,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                             .ThenByDescending(x => x.PokemonId)
                             .ThenByDescending(x => x.AddedTime);
 
-                        var batch = autoSnipePokemons.Take(10);
+                        var batch = autoSnipePokemons.Take(session.LogicSettings.AutoSnipeBatchSize);
                         //mSniperLocation2.AddRange(autoSnipePokemons.Take(10));
                         //autoSnipePokemons.Clear();
                         if (batch != null && batch.Count() > 0)
