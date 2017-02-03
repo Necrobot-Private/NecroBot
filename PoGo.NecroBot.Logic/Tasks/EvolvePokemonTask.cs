@@ -27,7 +27,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             //await session.Inventory.RefreshCachedInventory();
 
-            var pokemonToEvolveTask = await session.Inventory
+            var pokemonToEvolveTask = session.Inventory
                 .GetPokemonToEvolve(session.LogicSettings.PokemonsToEvolve);
             var pokemonToEvolve = pokemonToEvolveTask.Where(p => p != null).ToList();
 

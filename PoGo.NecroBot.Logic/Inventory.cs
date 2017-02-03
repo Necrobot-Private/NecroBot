@@ -138,9 +138,7 @@ namespace PoGo.NecroBot.Logic
         )
         {
             var myPokemon = GetPokemons();
-
-            var myPokemonList = myPokemon.ToList();
-
+            
             var pokemonToTransfer = myPokemon
                 .Where(p => !pokemonsNotToTransfer.Contains(p.PokemonId) && p.DeployedFortId == string.Empty &&
                             p.Favorite == 0 && p.BuddyTotalKmWalked == 0)
@@ -195,7 +193,7 @@ namespace PoGo.NecroBot.Logic
             {
                 var amountToKeepInStorage = Math.Max(GetPokemonTransferFilter(pokemonGroupToTransfer.Key).KeepMinDuplicatePokemon, 0);
 
-                var inStorage = myPokemonList.Count(data => data.PokemonId == pokemonGroupToTransfer.Key);
+                var inStorage = myPokemon.Count(data => data.PokemonId == pokemonGroupToTransfer.Key);
                 var needToRemove = inStorage - amountToKeepInStorage;
 
                 if (needToRemove <= 0)
@@ -203,33 +201,22 @@ namespace PoGo.NecroBot.Logic
 
                 var weakPokemonCount = pokemonGroupToTransfer.Count();
                 var canBeRemoved = Math.Min(needToRemove, weakPokemonCount);
-
-
-                var settings = pokemonSettings.Single(x => x.PokemonId == pokemonGroupToTransfer.Key);
-                //Lets calc new canBeRemoved pokemons according to transferring some of them for +1 candy or to evolving for +1 candy
-                if (keepPokemonsThatCanEvolve &&
+                
+                var settings = pokemonSettings.FirstOrDefault(x => x.PokemonId == pokemonGroupToTransfer.Key);
+                if (settings != null &&
+                    keepPokemonsThatCanEvolve &&
                     pokemonsToEvolve.Contains(pokemonGroupToTransfer.Key) &&
                     settings.CandyToEvolve > 0 &&
                     settings.EvolutionIds.Count != 0)
                 {
-                    if (settings.FamilyId != PokemonFamilyId.FamilyUnset)
+                    var familyCandy = pokemonFamilies.FirstOrDefault(x => settings.FamilyId == x.FamilyId);
+                    if (familyCandy != null)
                     {
-                        var familyCandy = pokemonFamilies.FirstOrDefault(x => settings.FamilyId == x.FamilyId);
-                        if (familyCandy != null)
-                        {
-                            // its an solution in fixed numbers of equations with two variables 
-                            // (N = X + Y, X + C + Y >= Y * E) -> X >= (N * (E - 1) - C) / E
-                            // where N - current canBeRemoved,  X - new canBeRemoved, Y - possible to keep more, E - CandyToEvolve, C - candy amount
-                            canBeRemoved = (int)Math.Ceiling((double)((settings.CandyToEvolve - 1) * canBeRemoved - familyCandy.Candy_) / settings.CandyToEvolve);
-                        }
-                        else
-                        {
-                            canBeRemoved = 0;
-                        }
-                    }
-                    else
-                    {
-                        canBeRemoved = 0;
+                        // Calculate the number of evolutions possible (taking into account +1 candy for evolve and +1 candy for transfer)
+                        var evolutionCalcs = CalcuatePokemonEvolution(canBeRemoved, familyCandy.Candy_, settings.CandyToEvolve);
+
+                        // Subtract the number of evolutions possible from the number that can be transferred.
+                        canBeRemoved -= evolutionCalcs.Evolves;
                     }
                 }
 
@@ -281,6 +268,79 @@ namespace PoGo.NecroBot.Logic
             return results;
         }
         
+        public class EvolutionCalculations
+        {
+            public int Transfers { get; set; }
+            public int Evolves { get; set; }
+            public int CandiesLeft { get; set; }
+            public int PokemonLeft { get; set; }
+        }
+
+        // Calculates the number of pokemon evolutions possible given number of pokemon, candies, and candies to evolve.
+        // Implementation is taken from https://www.pidgeycalc.com and double-checked with calculator at https://pokeassistant.com/main/pidgeyspam
+        public EvolutionCalculations CalcuatePokemonEvolution(int pokemonLeft, int candiesLeft, int candiesToEvolve)
+        {
+            int transferCandiesGained = 1;
+            int candiesGainedOnEvolve = candiesToEvolve;
+            int evolveCount = 0;
+            int transferCount = 0;
+
+            // Evolutions without transferring
+            while (true)
+            {
+                // Not enough Pokemon or candies
+                if (candiesLeft / candiesToEvolve == 0 || pokemonLeft == 0)
+                {
+                    break;
+                }
+                else
+                {
+                    // Evolve a Pokemon
+                    pokemonLeft--;
+                    candiesLeft -= candiesToEvolve;
+                    candiesLeft += candiesGainedOnEvolve;
+                    evolveCount++;
+                    // Break if out of Pokemon
+                    if (pokemonLeft == 0)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            // Evolutions after transferring
+            while (true)
+            {
+                // Not enough Pokemon or candies
+                if ((candiesLeft + (pokemonLeft * transferCandiesGained)) < (candiesToEvolve + transferCandiesGained) || pokemonLeft == 0)
+                {
+                    break;
+                }
+
+                // Keep transferring until enough candies for an evolve
+                while (candiesLeft < candiesToEvolve)
+                {
+                    transferCount++;
+                    pokemonLeft--;
+                    candiesLeft += transferCandiesGained;
+                }
+
+                // Evolve a Pokemon
+                pokemonLeft--;
+                candiesLeft -= candiesToEvolve;
+                candiesLeft += candiesGainedOnEvolve;
+                evolveCount++;
+            }
+
+            return new EvolutionCalculations
+            {
+                Transfers = transferCount,
+                Evolves = evolveCount,
+                CandiesLeft = candiesLeft,
+                PokemonLeft = pokemonLeft
+            };
+        }
+
         public IEnumerable<EggIncubator> GetEggIncubators()
         {
             var inventory = GetCachedInventory();
@@ -576,7 +636,7 @@ namespace PoGo.NecroBot.Logic
             return true;
         }
 
-        public async Task<bool> CanEvolvePokemon(PokemonData pokemon, IEnumerable<PokemonData> pokemonsToEvolve = null)
+        public async Task<bool> CanEvolvePokemon(PokemonData pokemon)
         {
             // Can't evolve pokemon in gyms.
             if (!string.IsNullOrEmpty(pokemon.DeployedFortId))
@@ -590,33 +650,14 @@ namespace PoGo.NecroBot.Logic
                 return false;
             
             int familyCandy = GetCandyCount(pokemon.PokemonId);
-            
-            //DO NOT CHANGE! TESTED AND WORKS
-            //TRUONG: temporary change 1 to 2 to fix not enought resource when evolve. not a big deal when we keep few candy.
-            int pokemonCandyNeededAlready;
-            if (pokemonsToEvolve != null)
-            {
-                // Candy needed to evolve multiple pokemon.
-                pokemonCandyNeededAlready =
-                    (pokemonsToEvolve.Count(
-                        p => pokemonSettings.FirstOrDefault(x => x.PokemonId == p.PokemonId) != null &&
-                        pokemonSettings.FirstOrDefault(x => x.PokemonId == p.PokemonId).FamilyId == settings.FamilyId) + 2) *
-                    settings.CandyToEvolve;
-            }
-            else
-            {
-                // Candy needed to evolve a single pokemon.
-                pokemonCandyNeededAlready = settings.CandyToEvolve;
-            }
-
             // Can't evolve if not enough candy.
-            if (familyCandy < pokemonCandyNeededAlready)
+            if (familyCandy < settings.CandyToEvolve)
                 return false;
 
             return true;
         }
 
-        public async Task<IEnumerable<PokemonData>> GetPokemonToEvolve(IEnumerable<PokemonId> filter = null)
+        public IEnumerable<PokemonData> GetPokemonToEvolve(IEnumerable<PokemonId> filter = null)
         {
             IEnumerable<PokemonData> myPokemon = GetPokemons().OrderByDescending(p => p.Cp);
             
@@ -636,17 +677,30 @@ namespace PoGo.NecroBot.Logic
                         p => PokemonInfo.CalculatePokemonPerfection(p) >= _logicSettings.EvolveAboveIvValue);
             }
 
-            var pokemons = myPokemon.ToList();
-            
+            // Only get evolvable pokemon (not in gym, enough candy, etc.)
+            var evolvablePokemon = myPokemon.Where(p => CanEvolvePokemon(p).Result).ToList();
+
             var pokemonToEvolve = new List<PokemonData>();
-            foreach (var pokemon in pokemons)
+
+            // Group pokemon by their PokemonId
+            var groupedPokemons = evolvablePokemon.GroupBy(p => p.PokemonId);
+            foreach (var group in groupedPokemons)
             {
-                if (await CanEvolvePokemon(pokemon, pokemonToEvolve))
+                PokemonId pokemonId = group.Key;
+                int candiesLeft = GetCandyCount(pokemonId);
+                PokemonSettings settings = GetPokemonSettings().Result.FirstOrDefault(x => x.PokemonId == pokemonId);
+                int pokemonLeft = group.Count();
+
+                // Calculate the number of evolutions possible (taking into account +1 candy for evolve and +1 candy for transfer)
+                EvolutionCalculations evolutionInfo = CalcuatePokemonEvolution(pokemonLeft, candiesLeft, settings.CandyToEvolve);
+
+                if (evolutionInfo.Evolves > 0)
                 {
-                    pokemonToEvolve.Add(pokemon);
+                    // Add only the number of pokemon we can evolve.
+                    pokemonToEvolve.AddRange(group.Take(evolutionInfo.Evolves).ToList());
                 }
             }
-
+            
             return pokemonToEvolve;
         }
 
