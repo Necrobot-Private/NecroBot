@@ -28,7 +28,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             foreach (var pokemon in pokemons)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-
+                TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
                 var perfection = Math.Round(PokemonInfo.CalculatePokemonPerfection(pokemon));
 
                 if (session.LogicSettings.AutoFavoritePokemon &&

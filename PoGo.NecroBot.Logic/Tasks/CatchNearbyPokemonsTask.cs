@@ -28,7 +28,10 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static async Task Execute(ISession session, CancellationToken cancellationToken,
             PokemonId priority = PokemonId.Missingno, bool sessionAllowTransfer = true)
         {
+            TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
             cancellationToken.ThrowIfCancellationRequested();
+            TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
+
             if (!session.LogicSettings.CatchPokemon) return;
 
             if (session.Stats.CatchThresholdExceeds(session))
@@ -76,6 +79,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 await MSniperServiceTask.Execute(session, cancellationToken);
 
                 cancellationToken.ThrowIfCancellationRequested();
+                TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
                 string pokemonUniqueKey = $"{pokemon.EncounterId}";
 
                 if (session.Cache.GetCacheItem(pokemonUniqueKey) != null)

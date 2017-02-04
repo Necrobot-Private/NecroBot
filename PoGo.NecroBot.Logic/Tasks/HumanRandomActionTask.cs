@@ -18,7 +18,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             for (int i = 0; i < 9; i++)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-
+                TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
                 switch (randomCommand[i])
                 {
                     case 1:

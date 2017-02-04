@@ -22,6 +22,7 @@ using PoGo.Necrobot.Window.Model;
 using PoGo.NecroBot.Logic;
 using PoGo.NecroBot.Logic.Logging;
 using System.Diagnostics;
+using TinyIoC;
 
 namespace PoGo.Necrobot.Window
 {
@@ -43,8 +44,7 @@ namespace PoGo.Necrobot.Window
             this.DataContext = datacontext;
 
         }
-
-
+           
         private void Grid_Loaded(object sender, RoutedEventArgs e)
         {
 
@@ -116,6 +116,8 @@ namespace PoGo.Necrobot.Window
             this.ctrlEggsControl.Session = session;
             this.datacontext.PokemonList.Session = session;
             botMap.SetDefaultPosition(session.Settings.DefaultLatitude, session.Settings.DefaultLongitude);
+            var accountManager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
+            gridAccounts.ItemsSource = accountManager.Accounts;
         }
 
         private void OnPlayerStatisticChanged()
@@ -228,6 +230,26 @@ namespace PoGo.Necrobot.Window
                     }
                 }
             }
+        }
+
+        private void menuAuth_Click(object sender, RoutedEventArgs e)
+        {
+            popAccounts.IsOpen = true;
+        }
+
+        private void btnDonate_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start("http://snipe.necrobot2.com?donate");
+        }
+
+        private void btnSwitchAcount_Click(object sender, RoutedEventArgs e)
+        {
+            var btn = ((Button)sender);
+            var account = (MultiAccountManager.BotAccount)btn.CommandParameter ;
+
+            var manager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
+
+            manager.SwitchAccountTo(account);
         }
     }
 }
