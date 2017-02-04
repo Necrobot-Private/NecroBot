@@ -4,12 +4,10 @@ using POGOProtos.Settings.Master;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PoGo.NecroBot.Logic.State
 {
-    public class GymTeamState: IDisposable
+    public class GymTeamState : IDisposable
     {
         public List<MyPokemonStat> myPokemons { get; private set; }
 
@@ -30,7 +28,7 @@ namespace PoGo.NecroBot.Logic.State
             TimeToDodge = 0;
         }
 
-        public void addPokemon(ISession session, PokemonData pokemon, bool isMine=true)
+        public void addPokemon(ISession session, PokemonData pokemon, bool isMine = true)
         {
             if (isMine && myPokemons.Any(a => a.data.Id == pokemon.Id))
                 return;
@@ -88,7 +86,7 @@ namespace PoGo.NecroBot.Logic.State
         }
     }
 
-    public class AnyPokemonStat: IDisposable
+    public class AnyPokemonStat : IDisposable
     {
         public PokemonData data { get; set; }
 
@@ -124,12 +122,12 @@ namespace PoGo.NecroBot.Logic.State
         }
     }
 
-    public class MyPokemonStat: AnyPokemonStat
+    public class MyPokemonStat : AnyPokemonStat
     {
 
         public Dictionary<POGOProtos.Enums.PokemonType, int> TypeFactor { get; private set; }
 
-        public MyPokemonStat(ISession session, PokemonData pokemon): base(session, pokemon)
+        public MyPokemonStat(ISession session, PokemonData pokemon) : base(session, pokemon)
         {
             TypeFactor = new Dictionary<POGOProtos.Enums.PokemonType, int>();
 
@@ -196,12 +194,12 @@ namespace PoGo.NecroBot.Logic.State
         }
 
         // jjskuld - Ignore CS0108 warning for now.
-        #pragma warning disable 0108
+#pragma warning disable 0108
         public void Dispose()
         {
             if (TypeFactor != null)
                 TypeFactor.Clear();
         }
-        #pragma warning restore 0108
+#pragma warning restore 0108
     }
 }

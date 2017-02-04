@@ -38,11 +38,13 @@ namespace PoGo.NecroBot.Logic.Tasks
             PokemonToLevel.AddRange(session.LogicSettings.PokemonUpgradeFilters.Select(p => p.Key));
             foreach (var pokemon in upgradablePokemon)
             {
+                TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
                 //code seem wrong. need need refactor to cleanup code here.
                 if (session.LogicSettings.UseLevelUpList && PokemonToLevel != null)
                 {
                     for (int i = 0; i < PokemonToLevel.Count; i++)
                     {
+                        TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
                         //unnessecsarily check, should remove
                         if (PokemonToLevel.Contains(pokemon.PokemonId))
                         {

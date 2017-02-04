@@ -22,13 +22,13 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static async Task Execute(ISession session, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-
+            TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
             var pokemons = session.Inventory.GetPokemons();
 
             foreach (var pokemon in pokemons)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-
+                TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
                 var perfection = Math.Round(PokemonInfo.CalculatePokemonPerfection(pokemon));
                 var level = PokemonInfo.GetLevel(pokemon);
                 var pokemonName = session.Translation.GetPokemonTranslation(pokemon.PokemonId);

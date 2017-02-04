@@ -189,7 +189,7 @@ namespace PoGo.NecroBot.Logic.State
 
             var manager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
 
-            var nextBot = bot == null? manager.GetSwitchableAccount() : bot;
+            var nextBot = manager.GetSwitchableAccount(bot);
 
             this.Settings.AuthType = nextBot.AuthType;
             this.Settings.GooglePassword = nextBot.GooglePassword;

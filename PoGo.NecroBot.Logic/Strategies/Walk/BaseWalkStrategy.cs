@@ -164,7 +164,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
                 do
                 {
                     cancellationToken.ThrowIfCancellationRequested();
-
+                    TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
                     var msToPositionChange = (DateTime.Now - requestSendDateTime).TotalMilliseconds;
                     currentLocation = new GeoCoordinate(_client.CurrentLatitude, _client.CurrentLongitude);
                     var currentDistanceToWaypoint = LocationUtils.CalculateDistanceInMeters(currentLocation, nextStep);

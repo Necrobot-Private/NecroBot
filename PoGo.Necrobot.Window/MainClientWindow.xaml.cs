@@ -241,5 +241,15 @@ namespace PoGo.Necrobot.Window
         {
             Process.Start("http://snipe.necrobot2.com?donate");
         }
+
+        private void btnSwitchAcount_Click(object sender, RoutedEventArgs e)
+        {
+            var btn = ((Button)sender);
+            var account = (MultiAccountManager.BotAccount)btn.CommandParameter ;
+
+            var manager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
+
+            manager.SwitchAccountTo(account);
+        }
     }
 }

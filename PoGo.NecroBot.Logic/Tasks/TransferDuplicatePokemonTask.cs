@@ -23,7 +23,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static async Task Execute(ISession session, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-
+            TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
             if (!session.LogicSettings.TransferDuplicatePokemon) return;
             if (session.LogicSettings.UseBulkTransferPokemon)
             {
@@ -61,6 +61,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 int page = orderedPokemon.Count() / session.LogicSettings.BulkTransferSize + 1;
                 for (int i = 0; i < page; i++)
                 {
+                    TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
                     var batchTransfer = orderedPokemon.Skip(i * session.LogicSettings.BulkTransferSize).Take(session.LogicSettings.BulkTransferSize);
                     var t = await session.Client.Inventory.TransferPokemons(batchTransfer.Select(x => x.Id).ToList());
                     if (t.Result == ReleasePokemonResponse.Types.Result.Success)
@@ -76,6 +77,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             else
                 foreach (var duplicatePokemon in orderedPokemon)
                 {
+                    TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
                     cancellationToken.ThrowIfCancellationRequested();
 
                     await session.Client.Inventory.TransferPokemon(duplicatePokemon.Id);

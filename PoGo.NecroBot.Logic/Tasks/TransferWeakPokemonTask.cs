@@ -21,7 +21,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static async Task Execute(ISession session, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-
+            TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
             if (!session.LogicSettings.TransferWeakPokemon) return;
 
             if (session.LogicSettings.AutoFavoritePokemon)
@@ -58,6 +58,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             var pokemonToTransfers = new List<PokemonData>();
             foreach (var pokemon in orderedPokemon)
             {
+                TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
                 cancellationToken.ThrowIfCancellationRequested();
                 if ((pokemon.Cp >= session.LogicSettings.KeepMinCp) ||
                     (PokemonInfo.CalculatePokemonPerfection(pokemon) >= session.LogicSettings.KeepMinIvPercentage &&

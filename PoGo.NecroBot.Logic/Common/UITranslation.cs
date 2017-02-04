@@ -35,6 +35,10 @@ namespace PoGo.NecroBot.Logic.Common
         [Description("Show Console")]
         public string ShowConsole { get; set; }
 
+        [Description("Switch")]
+        public string Switch { get; set; }
+
+
         [Description("Hide Console")]
         public string HideConsole { get; set; }
 
@@ -51,8 +55,29 @@ namespace PoGo.NecroBot.Logic.Common
         [Description("Export")]
         public string Export { get; set; }
 
+
+        [Description("Name")]
+        public string PokemonName { get; set; }
+
+
         [Description("HP")]
-        public string HP{ get; set; }
+        public string HP { get; set; }
+
+
+
+        [Description("Move1")]
+        public string Move1 { get; set; }
+
+
+        [Description("Move2")]
+        public string Move2 { get; set; }
+
+
+        [Description("IV")]
+        public string IV{ get; set; }
+
+        [Description("CP")]
+        public string CP { get; set; }
 
         [Description("Candy")]
         public string Candy { get; set; }
