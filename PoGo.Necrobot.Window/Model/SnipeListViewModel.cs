@@ -117,17 +117,15 @@ namespace PoGo.Necrobot.Window.Model
         //HOPE WPF HANDLE PERFOMANCE WELL
         public void Refresh(ObservableCollection<SnipePokemonViewModel> list)
         {
-            var toremove = list.Where(x => x.RemainTimes < 0);
+            List<SnipePokemonViewModel> toremove = list.Where(x => x.RemainTimes < 0).ToList();  // Copy the ObservableCollection into a list to avoid exception when we remove from list.
 
             foreach (var item in toremove)
             {
-                
                 list.Remove(item);
             }
 
             foreach (var item in list)
             {
-                
                 item.RaisePropertyChanged("RemainTimes");
             }
         }
