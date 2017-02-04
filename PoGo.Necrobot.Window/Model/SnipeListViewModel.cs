@@ -63,8 +63,12 @@ namespace PoGo.Necrobot.Window.Model
             if (!e.IsRecievedFromSocket) return;
             var model = new SnipePokemonViewModel(e);
             var grade = PokemonGradeHelper.GetPokemonGrade(model.PokemonId);
-            var best = bestPokemons.FirstOrDefault(x => x.PokemonId == model.PokemonId);
-            if(best == null || PokemonInfo.CalculatePokemonPerfection(best) < model.IV)
+            PokemonData best = null;
+
+            if (bestPokemons != null)
+                best= bestPokemons.FirstOrDefault(x => x.PokemonId == model.PokemonId);
+
+            if (best == null || PokemonInfo.CalculatePokemonPerfection(best) < model.IV)
             {
                 model.Recommend = true;
             }
@@ -113,17 +117,15 @@ namespace PoGo.Necrobot.Window.Model
         //HOPE WPF HANDLE PERFOMANCE WELL
         public void Refresh(ObservableCollection<SnipePokemonViewModel> list)
         {
-            var toremove = list.Where(x => x.RemainTimes < 0);
+            List<SnipePokemonViewModel> toremove = list.Where(x => x.RemainTimes < 0).ToList();  // Copy the ObservableCollection into a list to avoid exception when we remove from list.
 
             foreach (var item in toremove)
             {
-                
                 list.Remove(item);
             }
 
             foreach (var item in list)
             {
-                
                 item.RaisePropertyChanged("RemainTimes");
             }
         }

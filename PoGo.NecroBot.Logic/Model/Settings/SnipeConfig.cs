@@ -142,14 +142,12 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [ExcelConfig(Description = "Max distance in km that allow bot autosnipe. set to Z mean not applied", Position = 24)]
         [DefaultValue(0)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 24)]
-
         public double AutoSnipeMaxDistance { get;  set; }
 
         [ExcelConfig(Description = "Number of autosnipe pokemon in a row that bot pickup for snipe", Position = 26)]
         [DefaultValue(10)]
         [Range(1,1000)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 26)]
-
-        public int AutoSnipeBatchSize { get; internal set; }
+        public int AutoSnipeBatchSize { get; set; }
     }
 }
