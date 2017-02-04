@@ -18,25 +18,25 @@ namespace PoGo.Necrobot.Window.Model
 {
    public class SnipeListViewModel : ViewModelBase
     {
-        public ObservableCollection<SnipePokemonViewModel> IV100List { get; set; }
-        public ObservableCollection<SnipePokemonViewModel> RareList { get;  set; }
-        public ObservableCollection<SnipePokemonViewModel> OtherList { get; set; }
-        public ObservableCollection<SnipePokemonViewModel> PokedexSnipeItems { get; set; }
+        public ObservableCollectionExt<SnipePokemonViewModel> IV100List { get; set; }
+        public ObservableCollectionExt<SnipePokemonViewModel> RareList { get;  set; }
+        public ObservableCollectionExt<SnipePokemonViewModel> OtherList { get; set; }
+        public ObservableCollectionExt<SnipePokemonViewModel> PokedexSnipeItems { get; set; }
 
         public AddManualSnipeCoordViewModel ManualSnipe { get; set; }
 
         public int TotalOtherList => this.OtherList.Count;
 
-        public ObservableCollection<SnipePokemonViewModel> SnipeQueueItems { get;  set; }
+        public ObservableCollectionExt<SnipePokemonViewModel> SnipeQueueItems { get;  set; }
 
         public SnipeListViewModel()
         {
             ManualSnipe = new AddManualSnipeCoordViewModel() { Latitude = 123 };
-            this.RareList = new ObservableCollection<SnipePokemonViewModel>();
-            this.OtherList = new ObservableCollection<SnipePokemonViewModel>();
-            this.SnipeQueueItems = new ObservableCollection<SnipePokemonViewModel>();
-            this.PokedexSnipeItems = new ObservableCollection<SnipePokemonViewModel>();
-            this.IV100List = new ObservableCollection<Model.SnipePokemonViewModel>()
+            this.RareList = new ObservableCollectionExt<SnipePokemonViewModel>();
+            this.OtherList = new ObservableCollectionExt<SnipePokemonViewModel>();
+            this.SnipeQueueItems = new ObservableCollectionExt<SnipePokemonViewModel>();
+            this.PokedexSnipeItems = new ObservableCollectionExt<SnipePokemonViewModel>();
+            this.IV100List = new ObservableCollectionExt<Model.SnipePokemonViewModel>()
             {
                 
             };
@@ -92,7 +92,7 @@ namespace PoGo.Necrobot.Window.Model
         }
 
         private void RemoveFromSnipeQueue(string uniqueIdentifier)
-        {   lock(threadSafeLocker)
+        {   //lock(threadSafeLocker)
             {
                 var find = this.SnipeQueueItems.FirstOrDefault(x => x.UniqueId == uniqueIdentifier);
 
@@ -118,17 +118,18 @@ namespace PoGo.Necrobot.Window.Model
 
         private object threadSafeLocker = new object();
         //HOPE WPF HANDLE PERFOMANCE WELL
-        public void Refresh(string propertyName,ObservableCollection<SnipePokemonViewModel> list)
+        public void Refresh(string propertyName, ObservableCollectionExt<SnipePokemonViewModel> list)
         {
-           //lock(threadSafeLocker)
+           ////lock(threadSafeLocker)
             {
-                var toremove = list.Where(x => x.RemainTimes < 0);
+                list.RemoveAll(x => x.RemainTimes < 0);
+                //var toremove = list.Where(x => x.RemainTimes < 0);
 
-                foreach (var item in toremove)
-                {
+                //foreach (var item in toremove)
+                //{
 
-                    list.Remove(item);
-                }
+                //    list.Remove(item);
+                //}
 
                 foreach (var item in list)
                 {
@@ -139,7 +140,7 @@ namespace PoGo.Necrobot.Window.Model
         }
         private void HandleOthers(SnipePokemonViewModel model)
         {
-            lock(threadSafeLocker)
+           // //lock(threadSafeLocker)
             {
                 this.OtherList.Insert(0, model);
                 this.RaisePropertyChanged("TotalOtherList");
