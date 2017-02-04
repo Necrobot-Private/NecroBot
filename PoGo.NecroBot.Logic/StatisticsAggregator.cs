@@ -129,6 +129,10 @@ namespace PoGo.NecroBot.Logic
         {
         }
 
+        public void HandleEvent(IEvent evt, ISession session)
+        {
+        }
+
         public void Listen(IEvent evt, ISession session)
         {
             dynamic eve = evt;
