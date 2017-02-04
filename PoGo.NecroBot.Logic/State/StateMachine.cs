@@ -142,6 +142,13 @@ namespace PoGo.NecroBot.Logic.State
                         Environment.Exit(0);
                     }
                 }
+                catch(ActiveSwitchAccountManualException ex)
+                {
+                    session.EventDispatcher.Send(new WarnEvent { Message = "Switch account requested by user" });
+                    session.ReInitSessionWithNextBot(ex.RequestedAccount, session.Client.CurrentLatitude, session.Client.CurrentLongitude, session.Client.CurrentAltitude);
+                    state = new LoginState();
+
+                }
                 catch (ActiveSwitchByPokemonException rsae)
                 {
                     session.EventDispatcher.Send(new WarnEvent { Message = "Encountered a good pokemon , switch another bot to catch him too." });

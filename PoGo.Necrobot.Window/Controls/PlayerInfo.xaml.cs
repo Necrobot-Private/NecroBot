@@ -52,10 +52,6 @@ namespace PoGo.Necrobot.Window.Controls
             //this.DataContext = this.PlayerData;
             InitializeComponent();
         }
-
-        private void Donate_Click(object sender, RoutedEventArgs e)
-        {
-            Process.Start("http://snipe.necrobot2.com?donate");
-        }
+                           
     }
 }

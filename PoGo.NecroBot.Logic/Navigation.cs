@@ -94,7 +94,7 @@ namespace PoGo.NecroBot.Logic
             CancellationToken cancellationToken, double customWalkingSpeed = 0.0)
         {
             cancellationToken.ThrowIfCancellationRequested();
-
+            TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
             // If the stretegies become bigger, create a factory for easy management
 
             return await WalkStrategy.Walk(targetLocation, functionExecutedWhileWalking, session, cancellationToken, customWalkingSpeed);

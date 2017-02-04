@@ -43,6 +43,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
 
             cancellationToken.ThrowIfCancellationRequested();
+            TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
             var distance = session.Navigation.WalkStrategy.CalculateDistance(session.Client.CurrentLatitude, session.Client.CurrentLongitude, gym.Latitude, gym.Longitude);
             if (fortInfo != null)
             {
@@ -168,6 +169,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 TimedLog("Attacking team is: "+string.Join(", ", session.GymState.myTeam.Select(s=>string.Format("{0} ({1} HP / {2} CP) [{3}]", s.attacker.PokemonId, s.HpState, s.attacker.Cp, s.attacker.Id))));
                 cancellationToken.ThrowIfCancellationRequested();
+                TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
                 var thisAttackActions = new List<BattleAction>();
 
                 StartGymBattleResponse result = null;
@@ -273,6 +275,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             FortDeployPokemonResponse response = null;
             cancellationToken.ThrowIfCancellationRequested();
+            TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
             var points = fortDetails.GymState.FortData.GymPoints;
             var maxCount = GetGymLevel(points);
 
@@ -826,7 +829,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 try
                 {
                     cancellationToken.ThrowIfCancellationRequested();
-
+                    TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
                     TimedLog("Starts loop");
                     var last = lastActions.Where(w => !session.GymState.myTeam.Any(a => a.attacker.Id.Equals(w.ActivePokemonId))).LastOrDefault();
                     BattleAction lastSpecialAttack = lastActions.Where(w => !session.GymState.myTeam.Any(a => a.attacker.Id.Equals(w.ActivePokemonId)) && w.Type == BattleActionType.ActionSpecialAttack).LastOrDefault();
@@ -1276,7 +1279,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                         fort = task.Result.GymState.FortData;
                         gymDetails = task.Result;
                     }
-                } catch(Exception ex)
+                }
+                catch(HasherException ex) { throw ex; }
+                catch (CaptchaException ex) { throw ex; }
+                catch (Exception ex)
                 {
                     TimedLog(ex.Message);
                 }

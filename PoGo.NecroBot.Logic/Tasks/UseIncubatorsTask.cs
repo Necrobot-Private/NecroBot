@@ -63,11 +63,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static async Task Execute(ISession session, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-
-            // Refresh inventory so that the player stats are fresh
-
-            //TODO - Need more test to make sure not break anything.
-            //await session.Inventory.RefreshCachedInventory();
+            TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
 
             try
             {
@@ -114,7 +110,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 foreach (var incubator in incubators)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
-
+                    TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
                     if (incubator.PokemonId == 0)
                     {
                         // Unlimited incubators prefer short eggs, limited incubators prefer long eggs

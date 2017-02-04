@@ -25,6 +25,7 @@ namespace PoGo.NecroBot.Logic.Utils
         public async Task ApplyDistance(double distanceTraveled, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
+            TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
 
             if (!_session.LogicSettings.UseEggIncubators)
                 return;

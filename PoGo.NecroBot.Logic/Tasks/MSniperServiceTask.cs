@@ -54,6 +54,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         public static void ConnectToService()
         {
+            //TODO - remove this line after MSniper.com back to work
+            return;
             while (true)
             {
                 try
@@ -362,7 +364,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             CancellationToken cancellationToken, MSniperInfo2 encounterId)
         {
             cancellationToken.ThrowIfCancellationRequested();
-
+            TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
             double lat = session.Client.CurrentLatitude;
             double lon = session.Client.CurrentLongitude;
 
@@ -615,6 +617,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
+            TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
             return await SnipePokemonTask.Snipe(
                 session,
                 new List<PokemonId>() { (PokemonId)encounterId.PokemonId },
@@ -688,7 +691,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                             .ThenByDescending(x => x.PokemonId)
                             .ThenByDescending(x => x.AddedTime);
 
-                        var batch = autoSnipePokemons.Take(10);
+                        var batch = autoSnipePokemons.Take(session.LogicSettings.AutoSnipeBatchSize);
                         //mSniperLocation2.AddRange(autoSnipePokemons.Take(10));
                         //autoSnipePokemons.Clear();
                         if (batch != null && batch.Count() > 0)
@@ -736,7 +739,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     session.Cache.Add(location.EncounterId.ToString(), true, DateTime.Now.AddMinutes(15));
 
                     cancellationToken.ThrowIfCancellationRequested();
-
+                    TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
                     session.EventDispatcher.Send(new SnipeScanEvent
                     {
                         Bounds = new Location(location.Latitude, location.Longitude),

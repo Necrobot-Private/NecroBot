@@ -173,10 +173,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-
-            // Refresh inventory so that the player stats are fresh
-            //await session.Inventory.RefreshCachedInventory();
-
+            TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
+           
             var pokeBallsCount = session.Inventory.GetItemAmountByType(ItemId.ItemPokeBall);
             pokeBallsCount += session.Inventory.GetItemAmountByType(ItemId.ItemGreatBall);
             pokeBallsCount += session.Inventory.GetItemAmountByType(ItemId.ItemUltraBall);
@@ -503,6 +501,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                             .ToList();
                 } while (catchablePokemon.Count == 0 && retry > 0);
             }
+            catch(HasherException ex) { throw ex; }
             catch (CaptchaException ex)
             {
                 //isCaptchaShow = true;
@@ -543,6 +542,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     encounter =
                         session.Client.Encounter.EncounterPokemon(pokemon.EncounterId, pokemon.SpawnPointId).Result;
                 }
+                catch (HasherException ex) { throw ex; }
                 catch (CaptchaException ex)
                 {
                     isCaptchaShow = true;
@@ -1045,7 +1045,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             while (true)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-
+                TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
                 try
                 {
                     var lClient = new TcpClient();

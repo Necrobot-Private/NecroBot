@@ -67,6 +67,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             FortData currentFortData,
             bool sessionAllowTransfer)
         {
+            TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
             // If the encounter is null nothing will work below, so exit now
             if (encounter == null) return true;
             // Exit if user defined max limits reached

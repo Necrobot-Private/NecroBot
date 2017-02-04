@@ -179,7 +179,7 @@ deploy:
     description: '[CHANGELOG.md](https://github.com/Necrobot-Private/NecroBot/blob/master/CHANGELOG.md)'
     release: NecroBot2 $(APPVEYOR_REPO_TAG_NAME)
     auth_token: $(access_token)
-    artifact: NecroBot2.Console;NecroBot2.GUI;NecroBot2.GUI.Electron;NecroBot2.WIN
+    artifact: NecroBot2.WIN;NecroBot2.Console;NecroBot2.GUI;NecroBot2.GUI.Electron
     draft: false
     prerelease: false
     force_update: true

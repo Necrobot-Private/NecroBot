@@ -169,6 +169,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             do
             {
                 cancellationToken.ThrowIfCancellationRequested();
+                TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
                 prioritySnipeFlag = false;
                 pokemon = await GetNextSnipeablePokemon(session.Client.CurrentLatitude, session.Client.CurrentLongitude,
                     !caughtAnyPokemonInThisWalk);

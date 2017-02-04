@@ -25,6 +25,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
             double walkSpeed = 0.0)
         {
             cancellationToken.ThrowIfCancellationRequested();
+            TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
             var destinaionCoordinate = new GeoCoordinate(targetLocation.Latitude, targetLocation.Longitude);
             //PlayerUpdateResponse result = null;
 
@@ -52,7 +53,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
             do
             {
                 cancellationToken.ThrowIfCancellationRequested();
-
+                TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
                 var millisecondsUntilGetUpdatePlayerLocationResponse =
                     (DateTime.Now - requestSendDateTime).TotalMilliseconds;
                 var millisecondsUntilVariant =

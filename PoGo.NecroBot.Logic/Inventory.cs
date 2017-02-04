@@ -203,8 +203,8 @@ namespace PoGo.NecroBot.Logic
                 var canBeRemoved = Math.Min(needToRemove, weakPokemonCount);
 
                 var settings = pokemonSettings.FirstOrDefault(x => x.PokemonId == pokemonGroupToTransfer.Key);
-                if (settings != null &&
-                    keepPokemonsThatCanEvolve &&
+
+                if(settings != null && 
                     pokemonsToEvolve.Contains(pokemonGroupToTransfer.Key) &&
                     settings.CandyToEvolve > 0 &&
                     settings.EvolutionIds.Count != 0)
