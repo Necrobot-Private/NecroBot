@@ -191,6 +191,7 @@ namespace PoGo.NecroBot.Logic
         {
             return WalkStrategyQueue.First(q => !IsWalkingStrategyBlacklisted(q.GetType()));
         }
+
         //functions for routes map
         private List<List<double>> Route(ISession session, GeoCoordinate start, GeoCoordinate dest)
         {
