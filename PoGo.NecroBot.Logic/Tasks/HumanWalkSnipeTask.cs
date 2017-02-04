@@ -481,6 +481,9 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static async Task PostProcessDataFetched(IEnumerable<SnipePokemonInfo> pokemons, bool displayList = true)
         {
+            // Filter out pokemon with invalid locations.
+            pokemons = pokemons.Where(p => LocationUtils.IsValidLocation(p.Latitude, p.Longitude)).ToList();
+
             var rw = new Random();
             var speedInMetersPerSecond = _setting.WalkingSpeedInKilometerPerHour / 3.6;
             int count = 0;
