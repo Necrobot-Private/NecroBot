@@ -41,7 +41,7 @@ namespace PoGo.Necrobot.Window.Model
                 
             };
             #pragma warning disable 4014 // added to get rid of compiler warning. Remove this if async code is used below.
-            RefreshList();
+            //RefreshList();
             #pragma warning restore 4014
         }
         public async Task RefreshList()
@@ -105,7 +105,7 @@ namespace PoGo.Necrobot.Window.Model
 
         private void HandlePokedex(SnipePokemonViewModel model)
         {
-            lock(threadSafeLocker )
+            //lock(threadSafeLocker )
             {
                 if (pokedex != null && !pokedex.Exists(p => p.PokemonId == model.PokemonId))
                 {
@@ -116,7 +116,7 @@ namespace PoGo.Necrobot.Window.Model
 
         }
 
-        private object threadSafeLocker = new object();
+        //private object threadSafeLocker = new object();
         //HOPE WPF HANDLE PERFOMANCE WELL
         public void Refresh(string propertyName, ObservableCollectionExt<SnipePokemonViewModel> list)
         {
@@ -162,7 +162,7 @@ namespace PoGo.Necrobot.Window.Model
 
         private void HandleRarePokemon(SnipePokemonViewModel model)
         {
-            lock (threadSafeLocker)
+            //lock (threadSafeLocker)
             {
                 this.RareList.Insert(0, model);
             }
@@ -172,7 +172,7 @@ namespace PoGo.Necrobot.Window.Model
 
         private void Handle100IV(SnipePokemonViewModel e)
         {
-            lock (threadSafeLocker)
+            //lock (threadSafeLocker)
             {
                 this.IV100List.Insert(0, e);
             }
@@ -192,7 +192,7 @@ namespace PoGo.Necrobot.Window.Model
 
         private void HandleSnippingList(SnipePokemonViewModel model)
         {
-            lock (threadSafeLocker)
+            //lock (threadSafeLocker)
             {
                 this.SnipeQueueItems.Insert(0, model);
             }
