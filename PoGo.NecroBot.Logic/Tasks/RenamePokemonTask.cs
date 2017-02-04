@@ -49,7 +49,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 newNickname = newNickname.Replace("{NAME}", pokemonName);
 
                //verify
-               if(Regex.IsMatch(newNickname, @"[^a-zA-Z0-9-_.]") || nameLength <=0 )
+               if(Regex.IsMatch(newNickname, @"[^a-zA-Z0-9-_.%]") || nameLength <=0 )
                 {
                     Logger.Write($"Your rename template : {session.LogicSettings.RenameTemplate} incorrect. : {pokemonName} / {newNickname}");
                     continue;

@@ -279,8 +279,25 @@ namespace PoGo.Necrobot.Window
         }
         public UIElement BuildObjectForm(object source)
         {
-            StackPanel panel = new StackPanel();
-            var type = source.GetType();
+
+            StackPanel panelWrap = new StackPanel() {
+              
+            };
+
+            Border border= new Border()
+            {
+                BorderBrush = Brushes.CadetBlue,
+                
+                BorderThickness = new Thickness(2, 2, 3, 3)
+            };
+            
+            StackPanel panel = new StackPanel() {
+                Margin = new Thickness(20,20,20,20)
+            };
+            border.Child = panel;
+            panelWrap.Children.Add(border);
+
+      var type = source.GetType();
             foreach (var item in type.GetProperties())
             {
                 var att = item.GetCustomAttributes<ExcelConfigAttribute>(true).FirstOrDefault();
@@ -291,7 +308,7 @@ namespace PoGo.Necrobot.Window
                 }
             }
 
-            return panel;
+            return panelWrap;
         }
 
         private UIElement GetInputControl(PropertyInfo item, object source)
@@ -326,6 +343,7 @@ namespace PoGo.Necrobot.Window
             {
                 var textbox = new TextBox()
                 {
+                    MaxWidth = 400
                 };
 
                 BindingOperations.SetBinding(textbox, TextBox.TextProperty, binding);
