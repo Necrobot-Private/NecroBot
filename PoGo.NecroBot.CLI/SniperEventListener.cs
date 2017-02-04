@@ -46,6 +46,10 @@ namespace PoGo.NecroBot.CLI
             );
         }
 
+        public static void HandleEvent(IEvent evt, ISession session)
+        {
+        }
+
         internal void Listen(IEvent evt, ISession session)
         {
             dynamic eve = evt;
