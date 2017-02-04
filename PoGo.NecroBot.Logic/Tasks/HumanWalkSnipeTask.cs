@@ -54,7 +54,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         private static ISession _session;
         private static ILogicSettings _setting;
         private static int pokestopCount = 0;
-        private static ConcurrentDictionary<PokemonId, PokemonId> pokemonToBeSnipedIds = null;
+        private static ConcurrentDictionary<PokemonId, PokemonId> pokemonToBeSnipedIds = new ConcurrentDictionary<PokemonId, PokemonId>();
         static bool prioritySnipeFlag = false;
         private static DateTime lastUpdated = DateTime.Now.AddMinutes(-10);
 
