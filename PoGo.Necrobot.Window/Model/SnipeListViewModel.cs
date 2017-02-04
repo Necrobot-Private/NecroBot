@@ -63,8 +63,12 @@ namespace PoGo.Necrobot.Window.Model
             if (!e.IsRecievedFromSocket) return;
             var model = new SnipePokemonViewModel(e);
             var grade = PokemonGradeHelper.GetPokemonGrade(model.PokemonId);
-            var best = bestPokemons.FirstOrDefault(x => x.PokemonId == model.PokemonId);
-            if(best == null || PokemonInfo.CalculatePokemonPerfection(best) < model.IV)
+            PokemonData best = null;
+
+            if (bestPokemons != null)
+                best= bestPokemons.FirstOrDefault(x => x.PokemonId == model.PokemonId);
+
+            if (best == null || PokemonInfo.CalculatePokemonPerfection(best) < model.IV)
             {
                 model.Recommend = true;
             }
