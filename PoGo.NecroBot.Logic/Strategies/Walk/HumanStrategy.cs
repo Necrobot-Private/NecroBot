@@ -55,7 +55,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
             do
             {
                 cancellationToken.ThrowIfCancellationRequested();
-
+                TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
                 var millisecondsUntilGetUpdatePlayerLocationResponse =
                     (DateTime.Now - requestSendDateTime).TotalMilliseconds;
                 var millisecondsUntilVariant =

@@ -24,6 +24,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static async Task Execute(ISession session, FortData currentFortData,
             CancellationToken cancellationToken)
         {
+            TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
             cancellationToken.ThrowIfCancellationRequested();
             if (!session.LogicSettings.CatchPokemon ||
                 session.CatchBlockTime > DateTime.Now) return;

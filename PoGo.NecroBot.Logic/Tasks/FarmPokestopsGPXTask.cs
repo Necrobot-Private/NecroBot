@@ -42,7 +42,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 _resumeTrack = curTrk;
                 cancellationToken.ThrowIfCancellationRequested();
-
+                TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
                 var track = tracks.ElementAt(curTrk);
                 var trackSegments = track.Segments;
 
@@ -50,6 +50,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     _resumeTrackSeg = curTrkSeg;
                     cancellationToken.ThrowIfCancellationRequested();
+                    TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
 
                     var trackPoints = trackSegments.ElementAt(curTrkSeg).TrackPoints;
 
@@ -57,7 +58,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     {
                         _resumeTrackPt = curTrkPt;
                         cancellationToken.ThrowIfCancellationRequested();
-
+                        TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
                         var nextPoint = trackPoints.ElementAt(curTrkPt);
                         var distance = LocationUtils.CalculateDistanceInMeters(session.Client.CurrentLatitude,
                             session.Client.CurrentLongitude,

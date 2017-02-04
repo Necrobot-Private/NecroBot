@@ -26,11 +26,7 @@
                     </TextBlock.Text>
                 </TextBlock>
         </StackPanel>
-        <Grid DockPanel.Dock="Right">
-            <Button Width="150" Click="Donate_Click" Margin="0,0,0,0">
-                <Image  Margin="0,0,0,0" Source="http://www.pngall.com/wp-content/uploads/2016/05/PayPal-Donate-Button-PNG-HD.png" ToolTip="Donate US -" Stretch="Fill"/>
-            </Button>
-        </Grid>
+        
         <Grid Margin="10,0,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*"></ColumnDefinition>
