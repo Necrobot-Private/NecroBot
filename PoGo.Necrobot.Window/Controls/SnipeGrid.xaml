@@ -91,7 +91,7 @@
             <DataGridTextColumn Binding="{Binding Path=Move2}" Header="{Binding Source=Move2, Converter= {StaticResource I18NConveter}}" IsReadOnly="True"/>
             <DataGridTextColumn Binding="{Binding Path=Verified, StringFormat={}{0}}" Header="{Binding Source=Vefiried, Converter= {StaticResource I18NConveter}}" IsReadOnly="True"/>
             <DataGridTextColumn Binding="{Binding Path=RemainTimes, StringFormat={}{0:000}s}" Header="{Binding Source=RemainTime, Converter= {StaticResource I18NConveter}}" IsReadOnly="True"/>
-            <DataGridTemplateColumn Header="Snipe??">
+            <DataGridTemplateColumn Header="{Binding Source=SnipeButton, Converter={StaticResource I18NConveter}}">
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
                         <StackPanel>
