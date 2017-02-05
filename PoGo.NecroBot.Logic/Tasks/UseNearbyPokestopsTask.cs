@@ -186,15 +186,17 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             var forts = session.Forts
                 .Where(p => p.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime())
-                .Where(f => f.Type == FortType.Checkpoint ||
+                .Where(f => f.Type == FortType.Checkpoint || 
+                       (session.LogicSettings.GymConfig.Enable && (
                             UseGymBattleTask.CanAttackGym(session, f, deployedPokemons) ||
                             UseGymBattleTask.CanTrainGym(session, f, null, deployedPokemons) ||
-                            UseGymBattleTask.CanDeployToGym(session, f, null, deployedPokemons))
+                            UseGymBattleTask.CanDeployToGym(session, f, null, deployedPokemons))))
                 .ToList();
 
-            if ((session.LogicSettings.GymConfig.EnableAttackGym && forts.Where(w => w.Type == FortType.Gym && UseGymBattleTask.CanAttackGym(session, w, deployedPokemons)).Count() == 0) ||
+            if (session.LogicSettings.GymConfig.Enable &&
+                ((session.LogicSettings.GymConfig.EnableAttackGym && forts.Where(w => w.Type == FortType.Gym && UseGymBattleTask.CanAttackGym(session, w, deployedPokemons)).Count() == 0) ||
                 (session.LogicSettings.GymConfig.EnableGymTraining && forts.Where(w => w.Type == FortType.Gym && UseGymBattleTask.CanTrainGym(session, w, null, deployedPokemons)).Count() == 0)
-                )
+                ))
             {
                 //Logger.Write("No usable gym found. Trying to refresh list.", LogLevel.Gym, ConsoleColor.Magenta);
                 await GetPokeStops(session);
