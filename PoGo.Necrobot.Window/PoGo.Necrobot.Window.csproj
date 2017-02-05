@@ -190,6 +190,7 @@
     <Compile Include="Model\IncubatorViewModel.cs" />
     <Compile Include="Model\MapPokemonViewModel.cs" />
     <Compile Include="Model\MapViewModel.cs" />
+    <Compile Include="Model\ObservableCollectionExt.cs" />
     <Compile Include="Model\PokeDexEntryViewModel.cs" />
     <Compile Include="Model\PokedexItemsViewModel.cs" />
     <Compile Include="Model\PokemonViewModelBase.cs" />

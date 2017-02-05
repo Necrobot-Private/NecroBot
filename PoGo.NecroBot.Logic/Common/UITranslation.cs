@@ -50,11 +50,46 @@ namespace PoGo.NecroBot.Logic.Common
 
         #endregion
 
+        #region snipe screen
+        [Description("100% IV")]
+        public string TabSnipeIV100 { get; set; }
+
+        [Description("Rare pokemon")]
+        public string TabSnipeRarePokemon { get; set; }
+
+        [Description("Others")]
+        public string TabSnipeOtherPokemon { get; set; }
+
+        [Description("Not in Dex")]
+        public string TabSnipeNotInDexPokemon { get; set; }
+
+        [Description("Auto Snipe List")]
+        public string TabSnipeAutoListPokemon { get; set; }
+
+        [Description("Add Manual Coordinate")]
+        public string TabSnipeAddManualCoord { get; set; }
+        [Description("Snipe??")]
+        public string SnipeButton { get; set; }
+        [Description("FreeInput")]
+        public string FreeInput { get; set; }
+
+        [Description("You can copy & paste any free text content which has pokemon name, latitude, longitude then bot will parse that content to get the snipe infomation.")]
+        public string FreeInputExplain{ get; set; }
+
+        [Description("Add To Snipe")]
+        public string AddToSnipeButtonText { get; set; }
+
+        #endregion
         #region Pokemon Inventory
 
         [Description("Export")]
         public string Export { get; set; }
 
+        [Description("Verified")]
+        public string Verified { get; set; }
+
+        [Description("RemainTime")]
+        public string RemainTime { get; set; }
 
         [Description("Name")]
         public string PokemonName { get; set; }

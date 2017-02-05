@@ -10,11 +10,10 @@
              d:DesignHeight="300" d:DesignWidth="600">
     <Control.Resources>
         <c:PokemonImageConverter x:Key="PokemonImageConverter"/>
+        <c:I18NConveter x:Key="I18NConveter"/>
     </Control.Resources>
 
-    
     <DataGrid ItemsSource="{Binding}" 
-              
               AutoGenerateColumns="False" 
               LoadingRow="DataGrid_LoadingRow" 
               behaviors:DataGridBehavior.DisplayRowNumber="True">
@@ -61,7 +60,7 @@
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>
             </DataGridTemplateColumn>
-            <DataGridTextColumn Binding="{Binding Path=PokemonId}" Header="Pokemon" IsReadOnly="True" >
+            <DataGridTextColumn Binding="{Binding Path=PokemonId}" Header="{Binding Source=PokemonName, Converter= {StaticResource I18NConveter}}" IsReadOnly="True" >
                 <DataGridTextColumn.ElementStyle>
                     <Style TargetType="{x:Type TextBlock}">
                         <Style.Triggers>
@@ -73,7 +72,7 @@
                 </DataGridTextColumn.ElementStyle>
                 
             </DataGridTextColumn>
-            <DataGridTextColumn Binding="{Binding Path=IV, StringFormat={}{0:0.00}}" Header="%IV" IsReadOnly="True">
+            <DataGridTextColumn Binding="{Binding Path=IV, StringFormat={}{0:0.00}}" Header="{Binding Source=IV, Converter= {StaticResource I18NConveter}}" IsReadOnly="True">
                 <DataGridTextColumn.ElementStyle>
                     <Style TargetType="{x:Type TextBlock}">
                         <Style.Triggers>
@@ -85,14 +84,14 @@
                 </DataGridTextColumn.ElementStyle>
                 
             </DataGridTextColumn>
-            <DataGridTextColumn Binding="{Binding Path=Level}" Header="Level" IsReadOnly="True"/>
-            <DataGridTextColumn Binding="{Binding Path=Latitude}" Header="Latitude" IsReadOnly="True"/>
-            <DataGridTextColumn Binding="{Binding Path=Longitude}" Header="Longitude" IsReadOnly="True"/>
-            <DataGridTextColumn Binding="{Binding Path=Move1}" Header="Move1" IsReadOnly="True"/>
-            <DataGridTextColumn Binding="{Binding Path=Move2}" Header="Move2" IsReadOnly="True"/>
-            <DataGridTextColumn Binding="{Binding Path=Verified, StringFormat={}{0}}" Header="Verified" IsReadOnly="True"/>
-            <DataGridTextColumn Binding="{Binding Path=RemainTimes, StringFormat={}{0:000}s}" Header="RemainTime" IsReadOnly="True"/>
-            <DataGridTemplateColumn Header="Snipe??">
+            <DataGridTextColumn Binding="{Binding Path=Level}" Header="{Binding Source=Level, Converter= {StaticResource I18NConveter}}" IsReadOnly="True"/>
+            <DataGridTextColumn Binding="{Binding Path=Latitude}" Header="{Binding Source=Latitude, Converter= {StaticResource I18NConveter}}" IsReadOnly="True"/>
+            <DataGridTextColumn Binding="{Binding Path=Longitude}" Header="{Binding Source=Longitude, Converter= {StaticResource I18NConveter}}" IsReadOnly="True"/>
+            <DataGridTextColumn Binding="{Binding Path=Move1}" Header="{Binding Source=Move1, Converter= {StaticResource I18NConveter}}" IsReadOnly="True"/>
+            <DataGridTextColumn Binding="{Binding Path=Move2}" Header="{Binding Source=Move2, Converter= {StaticResource I18NConveter}}" IsReadOnly="True"/>
+            <DataGridTextColumn Binding="{Binding Path=Verified, StringFormat={}{0}}" Header="{Binding Source=Vefiried, Converter= {StaticResource I18NConveter}}" IsReadOnly="True"/>
+            <DataGridTextColumn Binding="{Binding Path=RemainTimes, StringFormat={}{0:000}s}" Header="{Binding Source=RemainTime, Converter= {StaticResource I18NConveter}}" IsReadOnly="True"/>
+            <DataGridTemplateColumn Header="{Binding Source=SnipeButton, Converter={StaticResource I18NConveter}}">
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
                         <StackPanel>
