@@ -9,11 +9,13 @@
                       Title="Necrobot 2 - Window GUI"
                       Height="768"
                       Width="1024"
+                      MinWidth="800"
                       BorderThickness="0"
                       GlowBrush="Black"
                       ResizeMode="CanResizeWithGrip"
                       WindowTransitionsEnabled="False"
-                      WindowStartupLocation="CenterScreen" Loaded="MetroWindow_Loaded">
+                      WindowStartupLocation="CenterScreen" 
+                      Loaded="MetroWindow_Loaded">
     <Control.Resources>
         <c:I18NConveter x:Key="I18NConveter"/>
         <c:InverseBooleanConverter x:Key="InverseBooleanConverter"/>

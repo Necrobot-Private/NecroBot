@@ -54,7 +54,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         private static ISession _session;
         private static ILogicSettings _setting;
         private static int pokestopCount = 0;
-        private static ConcurrentDictionary<PokemonId, PokemonId> pokemonToBeSnipedIds = null;
+        private static ConcurrentDictionary<PokemonId, PokemonId> pokemonToBeSnipedIds = new ConcurrentDictionary<PokemonId, PokemonId>();
         static bool prioritySnipeFlag = false;
         private static DateTime lastUpdated = DateTime.Now.AddMinutes(-10);
 
@@ -481,6 +481,9 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static async Task PostProcessDataFetched(IEnumerable<SnipePokemonInfo> pokemons, bool displayList = true)
         {
+            // Filter out pokemon with invalid locations.
+            pokemons = pokemons.Where(p => LocationUtils.IsValidLocation(p.Latitude, p.Longitude)).ToList();
+
             var rw = new Random();
             var speedInMetersPerSecond = _setting.WalkingSpeedInKilometerPerHour / 3.6;
             int count = 0;

@@ -24,6 +24,11 @@ namespace PoGo.NecroBot.Logic.Utils
             return result;
         }
 
+        public static bool IsValidLocation(double latitude, double longitude)
+        {
+            return latitude <= 90 && latitude >= -90 && longitude >= -180 && longitude <= 180;
+        }
+
         public static double CalculateDistanceInMeters(double sourceLat, double sourceLng,
                 double destLat, double destLng)
             // from http://stackoverflow.com/questions/6366408/calculating-distance-between-two-latitude-and-longitude-geocoordinates

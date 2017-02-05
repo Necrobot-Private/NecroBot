@@ -10,7 +10,7 @@
                       BorderThickness="0" 
                       GlowBrush="Black"
                       ResizeMode="CanResizeWithGrip"
-
+                      MinWidth="800"
                       WindowTransitionsEnabled="False"
                       WindowStartupLocation="CenterScreen" Closed="MetroWindow_Closed"
                       >
