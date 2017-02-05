@@ -68,7 +68,8 @@ namespace PoGo.NecroBot.Logic.Common
 
         [Description("Add Manual Coordinate")]
         public string TabSnipeAddManualCoord { get; set; }
-
+        [Description("Snipe??")]
+        public string SnipeButton { get; set; }
         [Description("FreeInput")]
         public string FreeInput { get; set; }
 
