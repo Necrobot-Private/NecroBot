@@ -272,7 +272,6 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public int SnipePauseOnOutOfBallTime => GenRandom(_settings.SnipeConfig.SnipePauseOnOutOfBallTime);
         public string DataSharingDataUrl => _settings.DataSharingConfig.DataRecieverURL;
         public bool UseTransferFilterToCatch => _settings.CustomCatchConfig.UseTransferFilterToCatch;
-
         public MultipleBotConfig MultipleBotConfig => _settings.MultipleBotConfig;
         public List<AuthConfig> Bots => _settings.Auth.Bots;
         public bool AllowMultipleBot => _settings.Auth.AllowMultipleBot;
@@ -280,9 +279,8 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool AutosnipeVerifiedOnly => _settings.SnipeConfig.AutosnipeVerifiedOnly;
         public int DefaultAutoSnipeCandy => _settings.SnipeConfig.DefaultAutoSnipeCandy;
         public Dictionary<PokemonId, BotSwitchPokemonFilter> BotSwitchPokemonFilters => _settings.BotSwitchPokemonFilters;
-
         public NotificationConfig NotificationConfig => _settings.NotificationConfig;
-
         public CaptchaConfig CaptchaConfig => _settings.CaptchaConfig;
+        public GUIConfig UIConfig => _settings.UIConfig;
     }
 }

@@ -350,6 +350,7 @@
     <Compile Include="Model\Settings\GlobalSettings.cs" />
     <Compile Include="Model\Settings\GoogleWalkConfig.cs" />
     <Compile Include="Model\Settings\GpxConfig.cs" />
+    <Compile Include="Model\Settings\GUIConfig.cs" />
     <Compile Include="Model\Settings\GymConfig.cs" />
     <Compile Include="Model\Settings\HumanWalkSnipeConfig.cs" />
     <Compile Include="Model\Settings\HumanWalkSnipeFilter.cs" />
