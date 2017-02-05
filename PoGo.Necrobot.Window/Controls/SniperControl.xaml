@@ -6,9 +6,10 @@
              xmlns:local="clr-namespace:PoGo.Necrobot.Window.Controls"
              xmlns:c="clr-namespace:PoGo.Necrobot.Window.Converters"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300" Loaded="UserControl_Loaded">
+             d:DesignHeight="500" d:DesignWidth="900" Loaded="UserControl_Loaded">
     <Control.Resources>
         <c:ListCountConverter x:Key="ListCountConverter" />
+        <c:I18NConveter x:Key="I18NConveter" />
     </Control.Resources>
     <TabControl x:Name="tabControl" >
         <TabControl.Resources>
@@ -28,26 +29,47 @@
             </Style>
         </TabControl.Resources>
             
-        <TabItem Header="Rare pokemons">
+        <TabItem>
+            <TabItem.Header>
+                <TextBlock Margin="5,2,5,2" Text="{Binding Source=TabSnipeRarePokemon, Converter={StaticResource I18NConveter}}"></TextBlock>
+            </TabItem.Header>
             <local:SnipeGrid DataContext="{Binding Path=RareList}" OnSnipePokemon="SnipeGrid_OnSnipePokemon"/>
         </TabItem>
             
-        <TabItem Header="IV 100%">
+        <TabItem >
+            <TabItem.Header>
+                <TextBlock Margin="5,2,5,2" Text="{Binding Source=TabSnipeIV100, Converter={StaticResource I18NConveter}}"></TextBlock>
+            </TabItem.Header>
+            
             <local:SnipeGrid DataContext="{Binding Path=IV100List}" OnSnipePokemon="SnipeGrid_OnSnipePokemon" />
         </TabItem>
-        <TabItem Header="Others">
+        <TabItem >
+            <TabItem.Header>
+                <TextBlock Margin="5,2,5,2" Text="{Binding Source=TabSnipeOtherPokemon, Converter={StaticResource I18NConveter}}"></TextBlock>
+            </TabItem.Header>
             <local:SnipeGrid DataContext="{Binding Path=OtherList}" OnSnipePokemon="SnipeGrid_OnSnipePokemon"/>
         </TabItem>
-        <TabItem Header="Snipe Queue">
+        <TabItem >
+            <TabItem.Header>
+                <TextBlock Margin="5,2,5,2" Text="{Binding Source=TabSnipeAutoListPokemon, Converter={StaticResource I18NConveter}}"></TextBlock>
+            </TabItem.Header>
             <local:SnipeGrid DataContext="{Binding Path=SnipeQueueItems}"/>
             
         </TabItem>
         
-        <TabItem Header="Not in Pokedex">
+        <TabItem>
+            <TabItem.Header>
+                <TextBlock Margin="5,2,5,2" Text="{Binding Source=TabSnipeNotInDexPokemon, Converter={StaticResource I18NConveter}}"></TextBlock>
+            </TabItem.Header>
+            
             <local:SnipeGrid DataContext="{Binding Path=PokedexSnipeItems}" OnSnipePokemon="SnipeGrid_OnSnipePokemon"/>
         </TabItem>
 
-        <TabItem Header="Add Manual Coord">
+        <TabItem>
+            <TabItem.Header>
+                <TextBlock Margin="5,2,5,2" Text="{Binding Source=TabSnipeAddManualCoord, Converter={StaticResource I18NConveter}}"></TextBlock>
+            </TabItem.Header>
+            
             <Grid Margin="50,50,50,50">
                 <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100" />
@@ -65,16 +87,16 @@
                     <RowDefinition Height="10"  />
                     <RowDefinition Height="30" />
                 </Grid.RowDefinitions>
-                <TextBlock Text="Latitude" Grid.Column="0" Grid.Row="0"></TextBlock>
-                <TextBlock Text="Longitude" Grid.Column="0" Grid.Row="2" ></TextBlock>
-                <TextBlock Text="Pokemon" Grid.Column="0" Grid.Row="4"></TextBlock>
-                <TextBlock Text="Free Input" Grid.Column="0" Grid.Row="6"></TextBlock>
+                <TextBlock Text="{Binding Source=Latitude, Converter={StaticResource I18NConveter}}" Grid.Column="0" Grid.Row="0"></TextBlock>
+                <TextBlock Text="{Binding Source=Longitude, Converter={StaticResource I18NConveter}}" Grid.Column="0" Grid.Row="2" ></TextBlock>
+                <TextBlock Text="{Binding Source=PokemonName, Converter={StaticResource I18NConveter}}" Grid.Column="0" Grid.Row="4"></TextBlock>
+                <TextBlock Text="{Binding Source=FreeInput, Converter={StaticResource I18NConveter}}" Grid.Column="0" Grid.Row="6"></TextBlock>
 
                 <TextBox Text="{Binding Path=ManualSnipe.Latitude, Mode=TwoWay}" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch"></TextBox>
                 <TextBox Text="{Binding Path=ManualSnipe.Longitude , Mode=TwoWay}" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Stretch"></TextBox>
                 <ComboBox  Grid.Column="1" Grid.Row="4" Name="cobPokemonId"  SelectedValue="{Binding Path=ManualSnipe.PokemonId, Mode=TwoWay}" ></ComboBox>
                 <DockPanel LastChildFill="True" Grid.Column="1" Grid.Row="6">
-                    <TextBlock DockPanel.Dock="Top">You can paste whatever free text you copy from web/discord.....</TextBlock>
+                    <TextBlock DockPanel.Dock="Top" Text="{Binding Source=FreeInputExplain, Converter={StaticResource I18NConveter}}"></TextBlock>
                     <RichTextBox  TextChanged="RichTextBox_TextChanged" Name="rtbFreeText" >
                         <FlowDocument>
                             <Paragraph>
@@ -84,11 +106,8 @@
                     </RichTextBox>
                </DockPanel>
 
-                <Button Grid.Column="1" Grid.Row="8" Content="ADD" Name="btnAddCoord" Click="btnAddCoord_Click" ></Button>
-                
+                <Button Grid.Column="1" Grid.Row="8" Content="{Binding Source=AddToSnipeButtonText, Converter={StaticResource I18NConveter}}" Name="btnAddCoord" Click="btnAddCoord_Click" ></Button>
             </Grid>
         </TabItem>
-        
     </TabControl>
-
 </UserControl>
