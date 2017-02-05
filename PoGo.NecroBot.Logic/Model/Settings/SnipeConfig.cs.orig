@@ -148,6 +148,11 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [DefaultValue(10)]
         [Range(1,1000)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 26)]
+<<<<<<< HEAD
+
+        public int AutoSnipeBatchSize { get;  set; }
+=======
         public int AutoSnipeBatchSize { get; set; }
+>>>>>>> ce0a8cbd760ca0b073048e7d381c1aa4e9aa2dfe
     }
 }

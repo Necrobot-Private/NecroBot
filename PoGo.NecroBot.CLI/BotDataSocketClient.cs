@@ -31,6 +31,10 @@ namespace PoGo.NecroBot.CLI
         private static List<EncounteredEvent> events = new List<EncounteredEvent>();
         private const int POLLING_INTERVAL = 5000;
 
+        public static void HandleEvent(IEvent evt, ISession session)
+        {
+        }
+
         public static void Listen(IEvent evt, ISession session)
         {
             dynamic eve = evt;

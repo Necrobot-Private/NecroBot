@@ -17,11 +17,16 @@ namespace PoGo.Necrobot.Window.Model
         public MapPokemonViewModel(NearbyPokemon item, FortData fort)
         {
             this.item = item;
-            this.fort = fort;
-
+            
             this.PokemonId = item.PokemonId;
-            this.Latitude = fort.Latitude;
-            this.Longitude = fort.Longitude;
+
+            if (fort != null)
+            {
+                this.fort = fort;
+                this.Latitude = fort.Latitude;
+                this.Longitude = fort.Longitude;
+            }
+
             this.EncounterId = item.EncounterId;
             this.Distance = item.DistanceInMeters;
             this.FortId = item.FortId;

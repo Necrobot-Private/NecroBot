@@ -124,6 +124,7 @@ namespace PoGo.Necrobot.Window.Model
         //HOPE WPF HANDLE PERFOMANCE WELL
         public void Refresh(string propertyName, ObservableCollectionExt<SnipePokemonViewModel> list)
         {
+<<<<<<< HEAD
            ////lock(threadSafeLocker)
             {
                 list.RemoveAll(x => x.RemainTimes < 0);
@@ -140,6 +141,18 @@ namespace PoGo.Necrobot.Window.Model
                     item.RaisePropertyChanged("RemainTimes");
                 }
                 RaisePropertyChanged(propertyName);
+=======
+            List<SnipePokemonViewModel> toremove = list.Where(x => x.RemainTimes < 0).ToList();  // Copy the ObservableCollection into a list to avoid exception when we remove from list.
+
+            foreach (var item in toremove)
+            {
+                list.Remove(item);
+            }
+
+            foreach (var item in list)
+            {
+                item.RaisePropertyChanged("RemainTimes");
+>>>>>>> ce0a8cbd760ca0b073048e7d381c1aa4e9aa2dfe
             }
         }
         private void HandleOthers(SnipePokemonViewModel model)

@@ -19,6 +19,9 @@ namespace System
                 tr.Text = text;
                 try
                 {
+                    // Mapping console color DarkYellow to Wheat color.
+                    if (color == "DarkYellow")
+                        color = "Wheat";
                     tr.ApplyPropertyValue(TextElement.ForegroundProperty,
                         bc.ConvertFromString(color));
                 }

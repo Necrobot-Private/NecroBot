@@ -168,6 +168,9 @@ namespace PoGo.Necrobot.Window
         {                            
             datacontext.SnipeList.OnSnipeItemQueue(ev.EncounteredEvent);
         }
+        public void OnBotEvent(IEvent evt)
+        {
+        }
         internal void HandleBotEvent(IEvent evt)
         {
             dynamic eve = evt;
