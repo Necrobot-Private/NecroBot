@@ -497,9 +497,26 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static bool AddSnipeItem(ISession session, MSniperInfo2 item, bool byPassValidation = false)
         {
             if (isBlocking) return false;
+            //this pokemon has been recorded as expires
             if (item.EncounterId > 0 && expiredCache.Get(item.EncounterId.ToString()) != null) return false;
 
+            //fake & annoy data
             if (Math.Abs(item.Latitude) > 90 || Math.Abs(item.Longitude) > 180) return false;
+
+            lock(locker)
+            {
+                Func<MSniperInfo2, bool> checkExisting = (MSniperInfo2 x) => {
+                    return (x.EncounterId > 0 && x.EncounterId == item.EncounterId) ||
+                    (x.EncounterId == 0 && Math.Round(x.Latitude, 6) == Math.Round(item.Latitude, 6)
+                                         && Math.Round(x.Longitude, 6) == Math.Round(item.Longitude, 6)
+                                         && x.PokemonId == item.PokemonId);
+                };
+
+                //remove existing item that
+                autoSnipePokemons.RemoveAll(x=>checkExisting(x));
+                pokedexSnipePokemons.RemoveAll(x => checkExisting(x));
+                manualSnipePokemons.RemoveAll(x => checkExisting(x));
+            }
 
             if (!byPassValidation &&
                 session.LogicSettings.AutoSnipeMaxDistance > 0 &&

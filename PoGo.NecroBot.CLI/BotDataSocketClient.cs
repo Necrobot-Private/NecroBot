@@ -141,7 +141,7 @@ namespace PoGo.NecroBot.CLI
                             retries = 0;
                         }
 
-                        if ((lastEncouteredEvent != null || events.Count > 0) && ws.ReadyState != WebSocketState.Open)
+                        if (ws.ReadyState != WebSocketState.Open)
                         {
                             retries++;
                             ws.Connect();
