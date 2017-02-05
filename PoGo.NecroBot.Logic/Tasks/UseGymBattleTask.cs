@@ -265,7 +265,20 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
 
             if (isFailedToStart && _startBattleCounter > 0)
+            {
+                
                 await Execute(session, cancellationToken, gym, fortInfo);
+            }
+
+            var bAction = battleActions.LastOrDefault();
+            if (bAction != null)
+                if ((bAction.Type == BattleActionType.ActionDefeat) || (bAction.Type == BattleActionType.ActionTimedOut))
+                {
+                    if (battleActions.Exists(p => p.Type == BattleActionType.ActionVictory))
+                    {
+                        await Execute(session, cancellationToken, gym, fortInfo);
+                    }
+                }
 
             if (_startBattleCounter <= 0)
                 _startBattleCounter = 3;
