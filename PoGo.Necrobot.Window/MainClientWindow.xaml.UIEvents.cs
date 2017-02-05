@@ -98,7 +98,7 @@ namespace PoGo.Necrobot.Window
 
             this.datacontext.PokemonList.Update(pokemons);
             this.datacontext.RaisePropertyChanged("PokemonTabHeader");
-            
+
             UIUpdateSafe(() =>
              {
                  tabPokemons.Header = $"   Pokemons ({this.datacontext.Pokemons.Count}/{maxPokemonStorage})   ";
@@ -165,7 +165,7 @@ namespace PoGo.Necrobot.Window
             this.botMap.UpdatePlayerPosition(ev.Latitude, ev.Longitude);
         }
         public void OnBotEvent(AutoSnipePokemonAddedEvent ev)
-        {                            
+        {
             datacontext.SnipeList.OnSnipeItemQueue(ev.EncounteredEvent);
         }
         public void OnBotEvent(IEvent evt)
@@ -189,8 +189,7 @@ namespace PoGo.Necrobot.Window
                     }
                 });
             });
+        }
+        #endregion
     }
-    #endregion
-
-}
 }

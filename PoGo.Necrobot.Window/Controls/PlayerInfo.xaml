@@ -6,10 +6,9 @@
              xmlns:local="clr-namespace:PoGo.Necrobot.Window.Controls"
              xmlns:c="clr-namespace:PoGo.Necrobot.Window.Converters"
              mc:Ignorable="d" Height="80" Width="875">
-    
     <Control.Resources>
         <c:PokemonIdToImageConverter x:Key="PokemonIdToImageConverter"/>
-
+        <c:I18NConveter x:Key="I18NConveter"></c:I18NConveter>
     </Control.Resources>
     
     <DockPanel LastChildFill="True">
@@ -33,7 +32,7 @@
                 <ColumnDefinition Width="3*"></ColumnDefinition>
                 <ColumnDefinition Width="3*"></ColumnDefinition>
                 <ColumnDefinition Width="3*"></ColumnDefinition>
-
+                <ColumnDefinition Width="3*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="25"></RowDefinition>

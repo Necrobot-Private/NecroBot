@@ -12,6 +12,7 @@ using PoGo.NecroBot.Logic.Utils;
 using POGOProtos.Data;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Networking.Responses;
+using TinyIoC;
 
 #endregion
 
@@ -105,8 +106,6 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         public static async Task UseLuckyEgg(ISession session)
         {
-            //await session.Inventory.RefreshCachedInventory();
-
             var inventoryContent = session.Inventory.GetItems();
 
             var luckyEggs = inventoryContent.Where(p => p.ItemId == ItemId.ItemLuckyEgg);
@@ -116,8 +115,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                 return;
 
             _lastLuckyEggTime = DateTime.Now;
-            await session.Client.Inventory.UseItemXpBoost();
-            if (luckyEgg != null) session.EventDispatcher.Send(new UseLuckyEggEvent { Count = luckyEgg.Count - 1 });
+            var responseLuckyEgg = await session.Client.Inventory.UseItemXpBoost();
+            if (responseLuckyEgg.Result == UseItemXpBoostResponse.Types.Result.Success) { 
+                if (luckyEgg != null) session.EventDispatcher.Send(new UseLuckyEggEvent { Count = luckyEgg.Count - 1 });
+                TinyIoCContainer.Current.Resolve<MultiAccountManager>().DisableSwitchAccountUntil(DateTime.Now.AddMinutes(30));
+            }
             DelayingUtils.Delay(session.LogicSettings.DelayBetweenPlayerActions, 0);
         }
 
