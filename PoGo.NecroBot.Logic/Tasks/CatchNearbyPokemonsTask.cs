@@ -15,6 +15,7 @@ using POGOProtos.Inventory.Item;
 using POGOProtos.Map.Pokemon;
 using POGOProtos.Networking.Responses;
 using TinyIoC;
+using System.Collections.Generic;
 
 #endregion
 
@@ -22,6 +23,9 @@ namespace PoGo.NecroBot.Logic.Tasks
 {
     public static class CatchNearbyPokemonsTask
     {
+        //add delegate
+        public delegate void PokemonsEncounterDelegate(List<MapPokemon> pokemons);
+
         public static async Task Execute(ISession session, CancellationToken cancellationToken,
             PokemonId priority = PokemonId.Missingno, bool sessionAllowTransfer = true)
         {
@@ -54,6 +58,10 @@ namespace PoGo.NecroBot.Logic.Tasks
             var nearbyPokemons = await GetNearbyPokemons(session);
             var priorityPokemon = nearbyPokemons.Where(p => p.PokemonId == priority).FirstOrDefault();
             var pokemons = nearbyPokemons.Where(p => p.PokemonId != priority).ToList();
+
+            //add pokemons to map
+            OnPokemonEncounterEvent(pokemons.ToList());
+
             EncounterResponse encounter = null;
             //if that is snipe pokemon and inventories if full, execute transfer to get more room for pokemon
             if (priorityPokemon != null)
@@ -184,6 +192,13 @@ namespace PoGo.NecroBot.Logic.Tasks
                             i.Latitude, i.Longitude));
 
             return pokemons;
+        }
+        //add delegate event
+        public static event PokemonsEncounterDelegate PokemonEncounterEvent;
+
+        private static void OnPokemonEncounterEvent(List<MapPokemon> pokemons)
+        {
+            PokemonEncounterEvent?.Invoke(pokemons);
         }
     }
 }
