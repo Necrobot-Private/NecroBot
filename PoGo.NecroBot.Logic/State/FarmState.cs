@@ -45,6 +45,9 @@ namespace PoGo.NecroBot.Logic.State
                     await LevelUpPokemonTask.Execute(session, cancellationToken);
             }
 
+            await SelectBuddyPokemonTask.Execute(session, cancellationToken);
+
+
             if (session.LogicSettings.UseGpxPathing)
                 await FarmPokestopsGpxTask.Execute(session, cancellationToken);
             else

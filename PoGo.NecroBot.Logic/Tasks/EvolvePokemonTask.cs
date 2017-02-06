@@ -13,6 +13,7 @@ using POGOProtos.Data;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Networking.Responses;
 using TinyIoC;
+using PoGo.NecroBot.Logic.Logging;
 
 #endregion
 
@@ -116,7 +117,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             _lastLuckyEggTime = DateTime.Now;
             var responseLuckyEgg = await session.Client.Inventory.UseItemXpBoost();
-            if (responseLuckyEgg.Result == UseItemXpBoostResponse.Types.Result.Success) { 
+            if (responseLuckyEgg.Result == UseItemXpBoostResponse.Types.Result.Success)
+            {
                 if (luckyEgg != null) session.EventDispatcher.Send(new UseLuckyEggEvent { Count = luckyEgg.Count - 1 });
                 TinyIoCContainer.Current.Resolve<MultiAccountManager>().DisableSwitchAccountUntil(DateTime.Now.AddMinutes(30));
             }
@@ -131,23 +133,30 @@ namespace PoGo.NecroBot.Logic.Tasks
                 TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
                 if (await session.Inventory.CanEvolvePokemon(pokemon))
                 {
-                    // no cancellationToken.ThrowIfCancellationRequested here, otherwise the lucky egg would be wasted.
-                    var evolveResponse = await session.Client.Inventory.EvolvePokemon(pokemon.Id);
-                    if (evolveResponse.Result == EvolvePokemonResponse.Types.Result.Success)
+                    try
                     {
-                        session.EventDispatcher.Send(new PokemonEvolveEvent
+                        // no cancellationToken.ThrowIfCancellationRequested here, otherwise the lucky egg would be wasted.
+                        var evolveResponse = await session.Client.Inventory.EvolvePokemon(pokemon.Id);
+                        if (evolveResponse.Result == EvolvePokemonResponse.Types.Result.Success)
                         {
-                            Id = pokemon.PokemonId,
-                            Exp = evolveResponse.ExperienceAwarded,
-                            UniqueId = pokemon.Id,
-                            Result = evolveResponse.Result,
-                            Sequence = pokemonToEvolve.Count() == 1 ? 0 : sequence++,
-                            EvolvedPokemon = evolveResponse.EvolvedPokemonData
-                        });
-                    }
+                            session.EventDispatcher.Send(new PokemonEvolveEvent
+                            {
+                                Id = pokemon.PokemonId,
+                                Exp = evolveResponse.ExperienceAwarded,
+                                UniqueId = pokemon.Id,
+                                Result = evolveResponse.Result,
+                                Sequence = pokemonToEvolve.Count() == 1 ? 0 : sequence++,
+                                EvolvedPokemon = evolveResponse.EvolvedPokemonData
+                            });
+                        }
 
-                    if (!pokemonToEvolve.Last().Equals(pokemon))
-                        DelayingUtils.Delay(session.LogicSettings.EvolveActionDelay, 0);
+                        if (!pokemonToEvolve.Last().Equals(pokemon))
+                            DelayingUtils.Delay(session.LogicSettings.EvolveActionDelay, 0);
+                    }
+                    catch
+                    {
+                        Logger.Write("ERROR - Evolve failed", color: ConsoleColor.Red);
+                    }
                 }
             }
         }

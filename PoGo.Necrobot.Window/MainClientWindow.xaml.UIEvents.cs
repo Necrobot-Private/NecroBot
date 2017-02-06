@@ -54,9 +54,9 @@ namespace PoGo.Necrobot.Window
         {
             this.datacontext.PokemonList.OnEvolved(ev);
         }
-        public void OnBotEvent(PokemonCaptureEvent inventory)
+        public void OnBotEvent(PokemonCaptureEvent capture)
         {
-            this.datacontext.Sidebar.AddOrUpdate(new CatchPokemonViewModel(inventory));
+            this.datacontext.Sidebar.AddOrUpdate(new CatchPokemonViewModel(capture));
         }
         public void OnBotEvent(LoginEvent ev)
         {
@@ -154,6 +154,7 @@ namespace PoGo.Necrobot.Window
         }
         public void OnBotEvent(FortUsedEvent ev)
         {
+            this.datacontext.Sidebar.AddOrUpdate(new PokestopItemViewModel(ev));
             this.botMap.MarkFortAsLooted(ev.Id);
         }
         public void OnBotEvent(PokeStopListEvent ev)

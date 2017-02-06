@@ -182,6 +182,7 @@
     <Compile Include="Converters\VisibleIfTrueConverter.cs" />
     <Compile Include="Converters\PokemonImageConverter.cs" />
     <Compile Include="Converters\ListCountConverter.cs" />
+    <Compile Include="Converters\VisibleWhenGreateThenZeroConverter.cs" />
     <Compile Include="Model\AddManualSnipeCoordViewModel.cs" />
     <Compile Include="Model\EggsListViewModel.cs" />
     <Compile Include="Model\EggViewModel.cs" />
@@ -255,7 +256,7 @@
     <Compile Include="Converters\FriendlyTransferTextConverter.cs" />
     <Compile Include="Converters\AllowTransferCheckConverter.cs" />
     <Compile Include="Converters\ItemIdToImageConverter.cs" />
-    <Compile Include="Converters\VisibleWhenGreateThenZeroConverter.cs" />
+    <Compile Include="Converters\CollapseWhenGreateThenZeroConverter.cs" />
     <Compile Include="Converters\InverseBooleanConverter.cs" />
     <Compile Include="Converters\MoveConverter.cs" />
     <Compile Include="Converters\OperatorConverter.cs" />

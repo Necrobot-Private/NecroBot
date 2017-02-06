@@ -246,5 +246,6 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         int DefaultAutoSnipeCandy { get; }
         int AutoSnipeBatchSize { get; }
         GUIConfig UIConfig { get; }
+        PokemonId DefaultBuddyPokemon { get; }
     }
 }
