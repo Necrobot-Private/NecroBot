@@ -1152,7 +1152,7 @@ namespace RocketBot2.Forms
                 {
                     var pokemonObject = new PokemonObject(pokemon);
                     //TODO: 
-                    //var family =  _families.First(i => (int)i.FamilyId <= (int)pokemon.PokemonId);
+                    //var family = _families.First(i => (int)i.FamilyId <= (int)pokemon.PokemonId);
                     //pokemonObject.Candy = family.Candy_;
                     pokemonObjects.Add(pokemonObject);
                 }
