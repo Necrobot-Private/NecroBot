@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
+using POGOProtos.Enums;
 
 namespace PoGo.NecroBot.Logic.Model.Settings
 {
@@ -409,6 +410,11 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [Range(0, 9999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 64)]
         public float FavoriteMinCp { get; set; }
+
+        [ExcelConfig(Description = "Set Buddy pokemon", Position = 65)]
+        [DefaultValue(PokemonId.Dragonite)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 65)]
+        public PokemonId DefaultBuddyPokemon { get; set; }
 
     }
 }

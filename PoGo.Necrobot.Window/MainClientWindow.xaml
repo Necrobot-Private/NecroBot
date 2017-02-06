@@ -234,16 +234,16 @@
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="7*" />
-                        <!--<ColumnDefinition Width="5" />-->
+                        <ColumnDefinition Width="5" />
                         <ColumnDefinition Width="auto" />
                     </Grid.ColumnDefinitions>
                     <local:MapControl x:Name="botMap" Grid.Column="0" DataContext="{Binding Path=Map}" />
-                    <!--
+                    
                     <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
-                    <local:SidebarControl Visibility="Hidden" DataContext="{Binding Path=Sidebar}"
+                    <local:SidebarControl Visibility="Visible" DataContext="{Binding Path=Sidebar}"
                                           x:Name="sidebarControl" Grid.Column="2" HorizontalAlignment="Stretch"
-                                          VerticalAlignment="Stretch" MinWidth="150" />
-                    -->
+                                          VerticalAlignment="Stretch" MinWidth="200" />
+                    
                 </Grid>
             </TabItem>
             <TabItem >

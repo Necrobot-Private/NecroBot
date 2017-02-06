@@ -12,6 +12,7 @@ using PoGo.NecroBot.Logic.Model.Settings;
 using PoGo.NecroBot.Logic.State;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Networking.Responses;
+using TinyIoC;
 
 #endregion
 
@@ -50,7 +51,7 @@ namespace PoGo.NecroBot.Logic.Utils
 
         public void OnStatisticChanged(ISession session)
         {
-            if (MultipleBotConfig.IsMultiBotActive(session.LogicSettings))
+            if (MultipleBotConfig.IsMultiBotActive(session.LogicSettings) &&  TinyIoCContainer.Current.Resolve<MultiAccountManager>().AllowSwitch())
             {
                 var config = session.LogicSettings.MultipleBotConfig;
 
