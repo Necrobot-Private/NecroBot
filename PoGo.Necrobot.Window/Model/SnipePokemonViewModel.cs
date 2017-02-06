@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PoGo.NecroBot.Logic.Event;
+using TinyIoC;
+using PoGo.NecroBot.Logic.State;
 
 namespace PoGo.Necrobot.Window.Model
 {
@@ -13,11 +15,8 @@ namespace PoGo.Necrobot.Window.Model
 
         public SnipePokemonViewModel(EncounteredEvent e)
         {
+            var session = TinyIoCContainer.Current.Resolve<ISession>();
             this.UniqueId = e.EncounterId;
-            //var move1 = PokemonMove.MoveUnset;
-            //var move2 = PokemonMove.MoveUnset;
-            //Enum.TryParse<PokemonMove>(e.Move1, true, out move1);
-            //Enum.TryParse<PokemonMove>(e.Move2, true, out move2);
             ulong encounterid = 0;
             ulong.TryParse(e.EncounterId, out encounterid);
             this.Ref = e;
@@ -28,7 +27,7 @@ namespace PoGo.Necrobot.Window.Model
             this.Longitude = e.Longitude;
             this.Move1 = e.Move1;
             this.Move2 = e.Move2;
-            this.Expired = DateTime.Now.AddMinutes(2);
+            this.Expired = DateTime.Now.AddSeconds(session.LogicSettings.UIConfig.SnipeItemListDisplayTime);
             this.EncounterId = encounterid;
             this.Level = e.Level;
             this.SpawnPointId = e.SpawnPointId;

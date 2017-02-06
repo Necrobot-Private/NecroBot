@@ -191,10 +191,19 @@ namespace PoGo.NecroBot.Logic
             //return bot;
         }
 
+        private DateTime disableSwitchTime = DateTime.MinValue;
+        internal void DisableSwitchAccountUntil(DateTime untilTime)
+        {
+            if (disableSwitchTime < untilTime) disableSwitchTime = untilTime;
+        }
+
+        public bool AllowSwitch()
+        {
+            return disableSwitchTime < DateTime.Now;
+        }
+
         public BotAccount GetSwitchableAccount(BotAccount bot = null)
         {
-            
-
             var session = TinyIoCContainer.Current.Resolve<ISession>();
             var currentAccount = this.Accounts.FirstOrDefault(
                 x => (x.AuthType == AuthType.Ptc && x.PtcUsername == session.Settings.PtcUsername) ||

@@ -177,6 +177,11 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public Dictionary<PokemonId, BotSwitchPokemonFilter> BotSwitchPokemonFilters = BotSwitchPokemonFilter.Default();
 
+        [ExcelConfig(SheetName = "UIConfig", Description = "Define all parametter to display data on UI.")]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
+
+        public GUIConfig UIConfig = new GUIConfig();
+
 
         public GlobalSettings()
         {

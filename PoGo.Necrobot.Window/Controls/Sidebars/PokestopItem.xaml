@@ -6,7 +6,22 @@
              xmlns:local="clr-namespace:PoGo.Necrobot.Window.Controls.Sidebars"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
+    <Grid VerticalAlignment="Stretch" >
+        <Border BorderBrush="GreenYellow" BorderThickness="1,1,1,1" VerticalAlignment="Stretch">
 
+            <DockPanel HorizontalAlignment="Stretch" LastChildFill="True">
+                <Image Source="https://ih1.redbubble.net/image.235489512.1726/ap,550x550,12x12,1,transparent,t.png" Width="45"></Image>
+                <StackPanel>
+                    <StackPanel>
+                        <TextBlock Text="{Binding Path=Name}"></TextBlock>
+
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Path=EXP, StringFormat={}+{0} EXP}" />
+                    </StackPanel>
+                </StackPanel>
+            </DockPanel>
+        </Border>
     </Grid>
+
 </UserControl>
