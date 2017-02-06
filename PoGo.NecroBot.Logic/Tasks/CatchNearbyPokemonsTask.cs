@@ -14,6 +14,7 @@ using POGOProtos.Enums;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Map.Pokemon;
 using POGOProtos.Networking.Responses;
+using TinyIoC;
 using System.Collections.Generic;
 
 #endregion
@@ -37,7 +38,9 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (session.Stats.CatchThresholdExceeds(session))
             {
                 if (session.LogicSettings.AllowMultipleBot &&
-                    session.LogicSettings.MultipleBotConfig.SwitchOnCatchLimit)
+                    session.LogicSettings.MultipleBotConfig.SwitchOnCatchLimit &&
+                    TinyIoCContainer.Current.Resolve<MultiAccountManager>().AllowSwitch()
+                    )
                 {
                     throw new ActiveSwitchByRuleException()
                     {

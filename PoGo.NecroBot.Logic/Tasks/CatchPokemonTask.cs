@@ -74,7 +74,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (session.Stats.CatchThresholdExceeds(session))
             {
                 if (session.LogicSettings.AllowMultipleBot &&
-                    session.LogicSettings.MultipleBotConfig.SwitchOnCatchLimit)
+                    session.LogicSettings.MultipleBotConfig.SwitchOnCatchLimit &&
+                        TinyIoCContainer.Current.Resolve<MultiAccountManager>().AllowSwitch())
                 {
                     throw new ActiveSwitchByRuleException()
                     {
@@ -414,7 +415,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                     if (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchFlee)
                     {
                         CatchFleeContinuouslyCount++;
-                        if (CatchFleeContinuouslyCount > session.LogicSettings.MultipleBotConfig.CatchFleeCount)
+                        if (CatchFleeContinuouslyCount > session.LogicSettings.MultipleBotConfig.CatchFleeCount &&
+                            TinyIoCContainer.Current.Resolve<MultiAccountManager>().AllowSwitch())
                         {
                             CatchFleeContinuouslyCount = 0;
 

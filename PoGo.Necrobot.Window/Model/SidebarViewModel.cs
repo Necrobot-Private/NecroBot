@@ -11,9 +11,9 @@ namespace PoGo.Necrobot.Window.Model
     {
         public SidebarViewModel()
         {
-            HistoryItems = new ObservableCollection<SidebarItemViewModel>();
+            HistoryItems = new ObservableCollectionExt<SidebarItemViewModel>();
         }
-        public ObservableCollection<SidebarItemViewModel> HistoryItems
+        public ObservableCollectionExt<SidebarItemViewModel> HistoryItems
         {
             get;
             set;
@@ -23,31 +23,49 @@ namespace PoGo.Necrobot.Window.Model
                 this.HistoryItems.Add(item);
         }
 
+        public void AddOrUpdate(PokestopItemViewModel item)
+        {
+            var existingItem = this.HistoryItems.FirstOrDefault(x => x.UUID == item.UUID);
+
+            if (existingItem == null)
+            {
+                this.HistoryItems.Insert(0,item);
+            }
+            Trim();
+        }
         public void AddOrUpdate(CatchPokemonViewModel item)
         {
             var existingItem = this.HistoryItems.FirstOrDefault(x => x.UUID == item.UUID);
 
             if (existingItem == null)
             {
-                this.HistoryItems.Add(item);
+                this.HistoryItems.Insert(0, item);
+                Trim();
             }
             else
             {
                 var model = existingItem as CatchPokemonViewModel;
 
                 model.CatchStatus = item.CatchStatus;
-                model.GreateBalls += item.GreateBalls;
+                model.GreatBalls += item.GreatBalls;
                 
                 model.PokeBalls += item.PokeBalls;
                 model.UltraBalls += item.PokeBalls;
-                model.GreateBalls += item.GreateBalls;
                 model.RaisePropertyChanged("UltraBalls");
                 model.RaisePropertyChanged("PokeBalls");
-                model.RaisePropertyChanged("GreateBalls");
+                model.RaisePropertyChanged("GreatBalls");
                 model.RaisePropertyChanged("CatchStatus");
                 //existingItem.CopyFrom(item);
                 //update exising item and fire property change.....
 
+            }
+        }
+
+        private void Trim()
+        {
+            if(this.HistoryItems.Count > 15)
+            {
+                this.HistoryItems.RemoveAt(this.HistoryItems.Count - 1);
             }
         }
     }

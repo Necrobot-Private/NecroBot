@@ -11,23 +11,53 @@
     <Control.Resources>
         <c:VisibleWhenGreateThenZeroConverter x:Key="VisibleWhenGreateThenZeroConverter"/>
         <c:InverseBooleanConverter x:Key="InverseBooleanConverter" />
-        <c:FriendlyTransferTextConverter x:Key="FriendlyTransferTextConverter" />
+        <c:PokemonIdToImageConverter x:Key="PokemonIdToImageConverter"></c:PokemonIdToImageConverter>
+        <c:ItemIdToImageConverter x:Key="ItemIdToImageConverter"/>
+        <c:CollapseWhenGreateThenZeroConverter x:Key="CollapseWhenGreateThenZeroConverter"/>
     </Control.Resources>
-    <WrapPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-        <TextBlock >
-            <TextBlock.Text>
-           <MultiBinding StringFormat="Caught  {0}  {1} Level : {2}  CP: {3}  Chance : {4}  IV:{5:0.00}  Move1: {6}  Move 2: {Move2}" FallbackValue="Caught Missied Draniti">
-                    <Binding Path="CatchStatus" />
-                    <Binding Path="PokemonName" />
-                    <Binding Path="Level"/>
-                    <Binding Path="CP" />
-                    <Binding Path="Probability" />
-                    <Binding Path="IV" />
-                    <Binding Path="Move1" />
-                    <Binding Path="Move2" />
-                </MultiBinding>
-            </TextBlock.Text>
-        </TextBlock>
-        <TextBlock Text="{Binding Path=PokeBalls , StringFormat=Pokebals : {0}, FallbackValue=Pokeball +3}" Visibility="{Binding Path=PokeBalls , Converter={StaticResource VisibleWhenGreateThenZeroConverter}}"></TextBlock>
-    </WrapPanel>
+    <Grid HorizontalAlignment="Stretch">
+        <Border BorderBrush="DarkGoldenrod" BorderThickness="1,1,1,1" VerticalAlignment="Stretch">
+            <DockPanel LastChildFill="True">
+                <Image Width="45" DockPanel.Dock="Left" Source="{Binding Path=PokemonId, Converter={StaticResource PokemonIdToImageConverter}}"></Image>
+                <StackPanel>
+                    <StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
+                        <TextBlock Margin="3,5,0,0" Text="{Binding Path=IV, StringFormat={}IV:{0}%}"></TextBlock>
+                        <TextBlock Margin="3,5,0,0" Text="{Binding Path=CP, StringFormat={}CP:{0}}"></TextBlock>
+                        <TextBlock Margin="3,5,0,0" Text="{Binding Path=Level, StringFormat={}Level:{0}}"></TextBlock>
+                    </StackPanel>
+                    <StackPanel HorizontalAlignment="Stretch" Visibility="Collapsed">
+                        <TextBlock Margin="3,5,0,0" >
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}Moves:{0}/{1}">
+                                    <Binding Path="Move1"/>
+                                    <Binding Path="Move1"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </StackPanel>
+
+                    <StackPanel  Orientation="Horizontal">
+                        <StackPanel  Visibility="{Binding Pokeballs, Converter={ StaticResource CollapseWhenGreateThenZeroConverter}}" Orientation="Horizontal">
+                            <Image  Source="https://raw.githubusercontent.com/Superviral/Pokemon-GO-App-Assets-and-Images/master/App%20Converted%20Images/pokeball_store.png" Width="25"></Image>
+                            <TextBlock Margin="3,5,0,0" Text="{Binding PokeBalls, StringFormat={}x{0}}"></TextBlock>
+                        </StackPanel>
+                        <StackPanel  Visibility="{Binding   Path=GreatBalls, Converter={ StaticResource CollapseWhenGreateThenZeroConverter}}" Orientation="Horizontal">
+                            <Image  Source="http://i.imgur.com/ZP3DlMs.png" Width="25"></Image>
+                            <TextBlock Margin="3,5,0,0" Text="{Binding GreatBalls, StringFormat={}x{0}}"></TextBlock>
+                        </StackPanel>
+                        <StackPanel  Visibility="{Binding Path=UltraBalls, Converter={ StaticResource CollapseWhenGreateThenZeroConverter}}" Orientation="Horizontal">
+
+                            <Image  Source="http://i.imgur.com/nGsWvcR.png" Width="25"></Image>
+                            <TextBlock Margin="3,5,0,0" Text="{Binding Path=UltraBalls, StringFormat={}x{0}}"></TextBlock>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Visibility="{Binding EXP, Converter={ StaticResource CollapseWhenGreateThenZeroConverter}}">
+                        <TextBlock Margin="3,5,0,0" Text="{Binding Path=EXP, StringFormat={}+{0} EXP}"></TextBlock>
+                    </StackPanel>
+
+                </StackPanel>
+            </DockPanel>
+        </Border>
+    </Grid>
 </UserControl>

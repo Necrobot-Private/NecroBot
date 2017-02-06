@@ -16,6 +16,7 @@ using POGOProtos.Networking.Responses;
 using PoGo.NecroBot.Logic.Model;
 using PoGo.NecroBot.Logic.Exceptions;
 using PoGo.NecroBot.Logic.Model.Settings;
+using TinyIoC;
 
 #endregion
 
@@ -92,20 +93,29 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static async Task CheckLimit(ISession session)
         {
+            bool allowSwitch = TinyIoCContainer.Current.Resolve<MultiAccountManager>().AllowSwitch();
             var multiConfig = session.LogicSettings.MultipleBotConfig;
 
-            if (session.Stats.CatchThresholdExceeds(session, false) && multiConfig.SwitchOnCatchLimit && session.LogicSettings.AllowMultipleBot)
+            if (session.Stats.CatchThresholdExceeds(session, false) && 
+                multiConfig.SwitchOnCatchLimit && 
+                session.LogicSettings.AllowMultipleBot &&
+                allowSwitch)
             {
                 throw new ActiveSwitchByRuleException(SwitchRules.CatchLimitReached, session.LogicSettings.CatchPokemonLimit);
             }
-            if (session.Stats.SearchThresholdExceeds(session, false) && multiConfig.SwitchOnPokestopLimit && session.LogicSettings.AllowMultipleBot)
+            if (session.Stats.SearchThresholdExceeds(session, false) && 
+                multiConfig.SwitchOnPokestopLimit && 
+                session.LogicSettings.AllowMultipleBot && 
+                allowSwitch)
             {
                 throw new ActiveSwitchByRuleException(SwitchRules.SpinPokestopReached, session.LogicSettings.PokeStopLimit);
             }
 
-            if (session.Stats.CatchThresholdExceeds(session, false) && session.Stats.SearchThresholdExceeds(session, false))
+            if (session.Stats.CatchThresholdExceeds(session, false) && 
+                session.Stats.SearchThresholdExceeds(session, false) 
+                )
             {
-                if (session.LogicSettings.AllowMultipleBot)
+                if (session.LogicSettings.AllowMultipleBot && allowSwitch)
                 {
                     throw new ActiveSwitchByRuleException(SwitchRules.SpinPokestopReached, session.LogicSettings.PokeStopLimit);
                 }
@@ -481,7 +491,8 @@ else
                     //only check if PokestopSoftbanCount > 0
                     if (MultipleBotConfig.IsMultiBotActive(session.LogicSettings) &&
                         session.LogicSettings.MultipleBotConfig.PokestopSoftbanCount > 0 &&
-                        session.LogicSettings.MultipleBotConfig.PokestopSoftbanCount <= softbanCount)
+                        session.LogicSettings.MultipleBotConfig.PokestopSoftbanCount <= softbanCount &&
+                        TinyIoCContainer.Current.Resolve<MultiAccountManager>().AllowSwitch())
                     {
                         softbanCount = 0;
 
@@ -531,7 +542,9 @@ else
                         Message = session.Translation.GetTranslation(TranslationString.FarmPokestopsNoUsableFound)
                     });
                     mapEmptyCount++;
-                    if (mapEmptyCount == 5 && session.LogicSettings.AllowMultipleBot)
+                    if (mapEmptyCount == 5 && 
+                        session.LogicSettings.AllowMultipleBot &&
+                        TinyIoCContainer.Current.Resolve<MultiAccountManager>().AllowSwitch())
                     {
                         mapEmptyCount = 0;
                         throw new ActiveSwitchByRuleException() { MatchedRule = SwitchRules.EmptyMap, ReachedValue = 5 };
