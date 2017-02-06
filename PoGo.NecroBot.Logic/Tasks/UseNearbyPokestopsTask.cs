@@ -196,15 +196,17 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             var forts = session.Forts
                 .Where(p => p.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime())
-                .Where(f => f.Type == FortType.Checkpoint ||
+                .Where(f => f.Type == FortType.Checkpoint || 
+                       (session.LogicSettings.GymConfig.Enable && (
                             UseGymBattleTask.CanAttackGym(session, f, deployedPokemons) ||
                             UseGymBattleTask.CanTrainGym(session, f, null, deployedPokemons) ||
-                            UseGymBattleTask.CanDeployToGym(session, f, null, deployedPokemons))
+                            UseGymBattleTask.CanDeployToGym(session, f, null, deployedPokemons))))
                 .ToList();
 
-            if ((session.LogicSettings.GymConfig.EnableAttackGym && forts.Where(w => w.Type == FortType.Gym && UseGymBattleTask.CanAttackGym(session, w, deployedPokemons)).Count() == 0) ||
+            if (session.LogicSettings.GymConfig.Enable &&
+                ((session.LogicSettings.GymConfig.EnableAttackGym && forts.Where(w => w.Type == FortType.Gym && UseGymBattleTask.CanAttackGym(session, w, deployedPokemons)).Count() == 0) ||
                 (session.LogicSettings.GymConfig.EnableGymTraining && forts.Where(w => w.Type == FortType.Gym && UseGymBattleTask.CanTrainGym(session, w, null, deployedPokemons)).Count() == 0)
-                )
+                ))
             {
                 //Logger.Write("No usable gym found. Trying to refresh list.", LogLevel.Gym, ConsoleColor.Magenta);
                 await GetPokeStops(session);
@@ -238,13 +240,22 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 // Return the first gym in range.
                 if (gyms.Count() > 0)
+ {
+                    gyms.OrderBy(p => p.GymPoints);
                     return gyms.FirstOrDefault();
-            }
+                }
 
+  }
             if (forts.Count == 1)
                 return forts.FirstOrDefault();
 
+if (forts.Count < 4)
             return forts.Skip((int)DateTime.Now.Ticks % 2).FirstOrDefault();
+else
+            {
+                Random rnd = new Random();
+                return forts.Skip(rnd.Next(0,3)).FirstOrDefault();
+            }
         }
 
         public static async Task SpinPokestopNearBy(ISession session, CancellationToken cancellationToken, FortData destinationFort = null)

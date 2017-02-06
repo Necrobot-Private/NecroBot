@@ -79,8 +79,8 @@
                     <!--<DataGridCheckBoxColumn Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" Header="Selected"/>-->
                 <DataGridTextColumn Binding="{Binding PokemonName}" Header="{Binding Source=PokemonName, Converter={StaticResource I18NConveter}}" MinWidth="90" />
                 <DataGridTextColumn Binding="{Binding IV, StringFormat=\{0:0.00\}}" Header="{Binding Source=IV, Converter={StaticResource I18NConveter}}" MinWidth="44" IsReadOnly="True"/>
-                <DataGridTextColumn Binding="{Binding CP, StringFormat=\{0\}}" Header="{Binding Source=CP, Converter={StaticResource I18NConveter}}" MinWidth="30" IsReadOnly="True"/>
                 <DataGridTextColumn Binding="{Binding Level, StringFormat=\{0\}}" Header="{Binding Source=Level, Converter={StaticResource I18NConveter}}" MinWidth="20" IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding CP, StringFormat=\{0\}}" Header="{Binding Source=CP, Converter={StaticResource I18NConveter}}" MinWidth="30" IsReadOnly="True"/>
                 <DataGridTextColumn Binding="{Binding HPDisplay, StringFormat=\{0\}}" Header="{Binding Source=HP, Converter={StaticResource I18NConveter}}" MinWidth="50" IsReadOnly="True"/>
                 <DataGridTextColumn Binding="{Binding Candy, StringFormat=\{0\}}" Header="{Binding Source=Candy, Converter={StaticResource I18NConveter}}" MinWidth="50" IsReadOnly="True"/>
                 <DataGridTextColumn Binding="{Binding Move1, StringFormat=\{0\}}" Header="{Binding Source=Move1, Converter={StaticResource I18NConveter}}" MinWidth="90" IsReadOnly="True"/>
