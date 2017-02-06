@@ -843,7 +843,6 @@ namespace RocketBot2.Forms
         #endregion EVENTS
        
         #region POKEMON LIST
-        private IEnumerable<Candy> _families;
 
         private void InitializePokemonForm()
         {
@@ -1142,18 +1141,13 @@ namespace RocketBot2.Forms
                         .OrderByDescending(PokemonInfo.CalculatePokemonPerfection)
                         .ThenByDescending(key => key.Cp)
                         .OrderBy(key => key.PokemonId);
-
-                _families = inventory.Select(i => i.InventoryItemData.Candy)
-                    .Where(p => p != null && p.FamilyId > 0)
-                    .OrderByDescending(p => p.FamilyId);
-                    
+                                                   
                 var pokemonObjects = new List<PokemonObject>();
                 foreach (var pokemon in pokemons)
                 {
                     var pokemonObject = new PokemonObject(pokemon);
-                    //TODO: 
-                    //var family = _families.First(i => (int)i.FamilyId <= (int)pokemon.PokemonId);
-                    //pokemonObject.Candy = family.Candy_;
+                    var Candy_ = _session.Inventory.GetCandyCount(pokemon.PokemonId);
+                    pokemonObject.Candy = Candy_;
                     pokemonObjects.Add(pokemonObject);
                 }
 
