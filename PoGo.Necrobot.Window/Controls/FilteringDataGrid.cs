@@ -15,7 +15,7 @@ namespace PoGo.Necrobot.Window.Controls
 {
     //Credit - https://www.codeproject.com/Articles/41755/Filtering-the-WPF-DataGrid-automatically-via-the-h
 
-    public class FilteringDataGrid   : DataGrid
+    public class FilteringDataGrid   : Microsoft.Windows.Controls.DataGrid
     {
         /// <summary>
         /// This dictionary will have a list of all applied filters
@@ -95,6 +95,7 @@ namespace PoGo.Necrobot.Window.Controls
             // This should be stored as datacontext.
             string columnBinding = header.DataContext != null ?
                                         header.DataContext.ToString() : "";
+            if (columnBinding == "Name") columnBinding = "PokemonName";
             // Set the filter 
             if (!String.IsNullOrEmpty(columnBinding))
                 columnFilters[columnBinding] = textBox.Text;
