@@ -526,10 +526,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 item.AddedTime = DateTime.Now;
                 //just keep pokemon in last 2 min
-                autoSnipePokemons.RemoveAll(x => x.AddedTime.AddSeconds(SNIPE_SAFE_TIME) <
-                                                 DateTime
-                                                     .Now); // || (x.ExpiredTime > 0 && x.ExpiredTime < DateTime.Now.ToUnixTime()));
-                pokedexSnipePokemons.RemoveAll(x => x.AddedTime.AddMinutes(2) < DateTime.Now);
+                autoSnipePokemons.RemoveAll(x => x.AddedTime.AddSeconds(SNIPE_SAFE_TIME) < DateTime.Now); 
+                pokedexSnipePokemons.RemoveAll(x => x.AddedTime.AddMinutes(SNIPE_SAFE_TIME) < DateTime.Now);
             }
             if (OutOffBallBlock > DateTime.Now ||
                 autoSnipePokemons.Exists(x => x.EncounterId == item.EncounterId && item.EncounterId > 0) ||

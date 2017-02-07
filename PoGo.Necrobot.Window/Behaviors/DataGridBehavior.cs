@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PoGo.Necrobot.Window.Controls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,11 +31,11 @@ namespace PoGo.Necrobot.Window.Behaviors
 
         private static void OnDisplayRowNumberChanged(DependencyObject target, DependencyPropertyChangedEventArgs e)
         {
-            DataGrid dataGrid = target as DataGrid;
+            FilteringDataGrid dataGrid = target as FilteringDataGrid;
             if ((bool)e.NewValue == true)
             {
-                EventHandler<DataGridRowEventArgs> loadedRowHandler = null;
-                loadedRowHandler = (object sender, DataGridRowEventArgs ea) =>
+                EventHandler< Microsoft.Windows.Controls.DataGridRowEventArgs> loadedRowHandler = null;
+                loadedRowHandler = (object sender, Microsoft.Windows.Controls.DataGridRowEventArgs ea) =>
                 {
                     if (GetDisplayRowNumber(dataGrid) == false)
                     {
@@ -58,6 +59,11 @@ namespace PoGo.Necrobot.Window.Behaviors
                 };
                 dataGrid.ItemContainerGenerator.ItemsChanged += itemsChangedHandler;
             }
+        }
+
+        private static void DataGrid_LoadingRow(object sender, Microsoft.Windows.Controls.DataGridRowEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion // DisplayRowNumber

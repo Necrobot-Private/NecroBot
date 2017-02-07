@@ -13,12 +13,12 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
-        [ExcelConfig(Description = "Allow visualizer connect to bot using web socket", Position = 1)]
+        [NecrobotConfig(Description = "Allow visualizer connect to bot using web socket", Position = 1)]
         public bool UseWebsocket { get; set; }
 
         [DefaultValue(14251)]
         [Range(1, 65535)]
-        [ExcelConfig(Description = "Specify web socket port. you need to set this port into visualizer ", Position = 2)]
+        [NecrobotConfig(Description = "Specify web socket port. you need to set this port into visualizer ", Position = 2)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
         public int WebSocketPort  { get; set; }
     }

@@ -10,21 +10,21 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         {
         }
 
-        public const int CURRENT_SCHEMA_VERSION = 10;
+        public const int CURRENT_SCHEMA_VERSION = 11;
 
         [DefaultValue(CURRENT_SCHEMA_VERSION)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
-        [ExcelConfig(Description = "Allow bot automatically checking for latest version, it will display message on console.", Position = 1)]
+        [NecrobotConfig(Description = "Allow bot automatically checking for latest version, it will display message on console.", Position = 1)]
         public int SchemaVersion { get; set; }
 
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
-        [ExcelConfig(Description = "Allow bot automatically update latest version", Position = 2)]
+        [NecrobotConfig(Description = "Allow bot automatically update latest version", Position = 2)]
         public bool CheckForUpdates { get; set; }
 
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 3)]
-        [ExcelConfig(Description = "Transfer existing config when bot update", Position = 3)]
+        [NecrobotConfig(Description = "Transfer existing config when bot update", Position = 3)]
         public bool AutoUpdate { get; set; }
     }
 }
