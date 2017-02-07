@@ -2,7 +2,7 @@
 
 namespace PoGo.NecroBot.Logic.Model.Settings
 {
-    public class ExcelConfigAttribute : Attribute
+    public class NecrobotConfigAttribute : Attribute
     {
         public string SheetName { get; set; }
         public string Key { get; set; }
