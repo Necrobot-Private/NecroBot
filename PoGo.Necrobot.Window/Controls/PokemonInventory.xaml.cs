@@ -142,7 +142,7 @@ namespace PoGo.Necrobot.Window.Controls
             ulong pokemonId = (ulong) ((Button) sender).CommandParameter;
             model.Powerup(pokemonId);
 
-            Task.Run(async () => { await UpgradeSinglePokemonTask.Execute(Session, pokemonId, false); });
+            Task.Run(async () => { await UpgradeSinglePokemonTask.Execute(Session, pokemonId, false, 1 /* Only upgarde 1 time */); });
         }
 
         private void btnPokedexView_Click(object sender, RoutedEventArgs e)

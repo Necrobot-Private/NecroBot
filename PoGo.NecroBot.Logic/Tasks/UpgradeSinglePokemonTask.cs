@@ -53,17 +53,18 @@ namespace PoGo.NecroBot.Logic.Tasks
             return false;            
         }
 
-        public static async Task Execute(ISession session, ulong pokemonId, bool isMax = false)
+        public static async Task Execute(ISession session, ulong pokemonId, bool isMax = false, int numUpgrades = -1)
         {
             using (var block = new BlockableScope(session, BotActions.Upgrade))
             {
+                if (numUpgrades == -1)
+                    numUpgrades = session.LogicSettings.AmountOfTimesToUpgradeLoop;
+
                 PokemonData pokemonToUpgrade = null;
                 try
                 {
                     if (await block.WaitToRun())
                     {
-                        //await session.Inventory.RefreshCachedInventory();
-
                         if (session.Inventory.GetStarDust() <= session.LogicSettings.GetMinStarDustForLevelUp)
                             return;
 
@@ -93,7 +94,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                             {
                                 //make sure no exception happen
                             }
-                        } while (upgradable && (isMax || upgradeTimes < session.LogicSettings.AmountOfTimesToUpgradeLoop));
+                        } while (upgradable && (isMax || upgradeTimes < numUpgrades));
                     }
                 }
                 finally
