@@ -412,9 +412,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public float FavoriteMinCp { get; set; }
 
         [ExcelConfig(Description = "Set Buddy pokemon", Position = 65)]
-        [DefaultValue(PokemonId.Dragonite)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 65)]
-        public PokemonId DefaultBuddyPokemon { get; set; }
+        [DefaultValue(null)]
+        [JsonProperty(Required = Required.AllowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 65)]
+        public string DefaultBuddyPokemon { get; set; }
 
     }
 }
