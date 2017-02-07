@@ -7,6 +7,8 @@ using POGOProtos.Networking.Responses;
 using PoGo.NecroBot.Logic.PoGoUtils;
 using PoGo.NecroBot.Logic.Logging;
 using POGOProtos.Data;
+using POGOProtos.Enums;
+using System;
 
 namespace PoGo.NecroBot.Logic.Tasks
 {
@@ -17,17 +19,29 @@ namespace PoGo.NecroBot.Logic.Tasks
             PokemonData newBuddy = null;
             if (pokemonId == 0)
             {
+                if (string.IsNullOrEmpty(session.LogicSettings.DefaultBuddyPokemon))
+                    return;
+
+                PokemonId buddyPokemonId;
+                bool success = Enum.TryParse(session.LogicSettings.DefaultBuddyPokemon, out buddyPokemonId);
+                if (!success)
+                {
+                    // Invalid buddy pokemon type
+                    Logger.Write($"The DefaultBuddyPokemon ({session.LogicSettings.DefaultBuddyPokemon}) is not a valid pokemon.", LogLevel.Error);
+                    return;
+                }
+
                 if (session.Profile.PlayerData.BuddyPokemon?.Id > 0)
                 {
                     var currentBuddy = session.Inventory.GetPokemons().FirstOrDefault(x => x.Id == session.Profile.PlayerData.BuddyPokemon.Id);
-                    if (currentBuddy.PokemonId == session.LogicSettings.DefaultBuddyPokemon)
+                    if (currentBuddy.PokemonId == buddyPokemonId)
                     {
                         //dont change same buddy
                         return;
                     }
                 }
 
-                var buddy = session.Inventory.GetPokemons().Where(x => x.PokemonId == session.LogicSettings.DefaultBuddyPokemon)
+                var buddy = session.Inventory.GetPokemons().Where(x => x.PokemonId == buddyPokemonId)
                 .OrderByDescending(x => PokemonInfo.CalculateCp(x));
 
                 if (session.LogicSettings.PrioritizeIvOverCp)
@@ -38,7 +52,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 if (newBuddy == null)
                 {
-                    Logger.Write($"You don't have pokemon to {session.LogicSettings.DefaultBuddyPokemon} to set as buddy");
+                    Logger.Write($"You don't have pokemon {session.LogicSettings.DefaultBuddyPokemon} to set as buddy");
                     return;
                 }
             }

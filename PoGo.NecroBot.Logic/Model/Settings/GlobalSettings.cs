@@ -528,6 +528,11 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                         }
                         break;
 
+                    case 10:
+                        if ((string)settings["PokemonConfig"]["DefaultBuddyPokemon"] == "dragonite")
+                            settings["PokemonConfig"]["DefaultBuddyPokemon"] = null;
+                        break;
+
                         // Add more here.
                 }
             }
