@@ -108,6 +108,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool TransferDuplicatePokemonOnCapture => _settings.PokemonConfig.TransferDuplicatePokemonOnCapture;
         public bool UseBulkTransferPokemon => _settings.PokemonConfig.UseBulkTransferPokemon;
         public string DefaultBuddyPokemon => _settings.PokemonConfig.DefaultBuddyPokemon;
+        public bool AutoFinishTutorial => _settings.PlayerConfig.AutoFinishTutorial;
         public int BulkTransferSize => _settings.PokemonConfig.BulkTransferSize;
         public int BulkTransferStogareBuffer => _settings.PokemonConfig.BulkTransferStogareBuffer;
 
