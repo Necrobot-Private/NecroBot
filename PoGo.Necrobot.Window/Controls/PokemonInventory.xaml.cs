@@ -42,9 +42,9 @@ namespace PoGo.Necrobot.Window.Controls
         {
             // The bulk selection only works when 2 or more rows are selected.  This is to work around
             // issues with the checkbox and row selection when only one row is clicked.
-            if (e.AddedItems.Count > 1)
+            if ((sender as DataGrid).SelectedItems.Count > 1)
             {
-                foreach (PokemonDataViewModel pokemon in e.AddedItems)
+                foreach (PokemonDataViewModel pokemon in (sender as DataGrid).SelectedItems)
                 {
                     pokemon.IsSelected = true;
                 }
