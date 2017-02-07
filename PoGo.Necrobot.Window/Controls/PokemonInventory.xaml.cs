@@ -51,7 +51,7 @@ namespace PoGo.Necrobot.Window.Controls
             }
 
             var data = DataContext as PokemonListModel;
-            var count = data.Pokemons.Count(x => x.IsSelected);
+            var count = data.Pokemons.Count(x => x.IsSelected && Session.Inventory.CanTransferPokemon(x.PokemonData));
             //TODO : Thought it will better to use binding.
             btnTransferAll.Content = $"Transfer all ({count})";
             if (count > 1)
@@ -84,18 +84,25 @@ namespace PoGo.Necrobot.Window.Controls
         {
             var data = DataContext as PokemonListModel;
             var pokemonToTransfer = data.Pokemons
-                .Where(x => x.IsSelected && !x.IsTransfering)
+                .Where(x => x.IsSelected && !x.IsTransfering && Session.Inventory.CanTransferPokemon(x.PokemonData))
                 .Select(x => x.Id)
                 .ToList();
-            data.Transfer(pokemonToTransfer);
-            if (MessageBox.Show("Do you want to transfer all selected pokemon", "Bulk transfer", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            if (pokemonToTransfer.Count > 0)
             {
-                Task.Run(async () =>
+                data.Transfer(pokemonToTransfer);
+                if (MessageBox.Show("Do you want to transfer all selected pokemon", "Bulk transfer", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                 {
-                    await TransferPokemonTask.Execute(
-                        Session, Session.CancellationTokenSource.Token, pokemonToTransfer
-                    );
-                });
+                    Task.Run(async () =>
+                    {
+                        await TransferPokemonTask.Execute(
+                            Session, Session.CancellationTokenSource.Token, pokemonToTransfer
+                        );
+                    });
+                }
+            }
+            else
+            {
+                // There are no transferrable pokemon selected.
             }
         }
 
@@ -142,7 +149,7 @@ namespace PoGo.Necrobot.Window.Controls
             ulong pokemonId = (ulong) ((Button) sender).CommandParameter;
             model.Powerup(pokemonId);
 
-            Task.Run(async () => { await UpgradeSinglePokemonTask.Execute(Session, pokemonId, false); });
+            Task.Run(async () => { await UpgradeSinglePokemonTask.Execute(Session, pokemonId, false, 1 /* Only upgarde 1 time */); });
         }
 
         private void btnPokedexView_Click(object sender, RoutedEventArgs e)

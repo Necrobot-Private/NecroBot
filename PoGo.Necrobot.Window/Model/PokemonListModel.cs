@@ -114,7 +114,7 @@ namespace PoGo.Necrobot.Window.Model
         }
         public void Transfer(ulong pokemonId)
         {
-            var pkm = Pokemons.FirstOrDefault(x => x.Id == pokemonId);
+            var pkm = Pokemons.FirstOrDefault(x => x.Id == pokemonId && Session.Inventory.CanTransferPokemon(x.PokemonData));
 
             if (pkm != null)
             {
