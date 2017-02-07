@@ -84,7 +84,7 @@ namespace PoGo.Necrobot.Window.Controls
         {
             var data = DataContext as PokemonListModel;
             var pokemonToTransfer = data.Pokemons
-                .Where(x => x.IsSelected && !x.IsTransfering)
+                .Where(x => x.IsSelected && !x.IsTransfering && Session.Inventory.CanTransferPokemon(x.PokemonData))
                 .Select(x => x.Id)
                 .ToList();
             data.Transfer(pokemonToTransfer);
