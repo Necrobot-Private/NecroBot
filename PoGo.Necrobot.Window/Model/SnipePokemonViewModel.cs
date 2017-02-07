@@ -34,6 +34,7 @@ namespace PoGo.Necrobot.Window.Model
             this.Verified = (this.EncounterId>0 ? "Verified":"");
             
         }
+        public string PokemonName => PokemonId.ToString();
 
         public int Id => (int)PokemonId;
 

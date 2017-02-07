@@ -14,55 +14,55 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         }
 
         [JsonIgnore]
-        [ExcelConfig(IsPrimaryKey = true, Key = "Allow Snipe", Position = 1, Description = "TRUE : Allow bot walk to snipe this pokemon")]
+        [NecrobotConfig(IsPrimaryKey = true, Key = "Allow Snipe", Position = 1, Description = "TRUE : Allow bot walk to snipe this pokemon")]
         public bool AllowSnipe { get; set; }
 
         [DefaultValue(300.0)]
         [Range(0, 9999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
-        [ExcelConfig(Key = "MaxDistance" , Description = "Max distance that bot allow walk to snipe this pokemon", Position = 2)]
+        [NecrobotConfig(Key = "MaxDistance" , Description = "Max distance that bot allow walk to snipe this pokemon", Position = 2)]
         public double MaxDistance { get; set; }
 
-        [ExcelConfig(Key = "Priority", Description = "Priority for this pokemon compare to others", Position = 3)]
+        [NecrobotConfig(Key = "Priority", Description = "Priority for this pokemon compare to others", Position = 3)]
         [DefaultValue(1)]
         [Range(0, 151)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
         public int Priority { get; set; }
 
-        [ExcelConfig(Key = "Max Walk Times", Description = "Max walk time bot allows wall to catch this pokemon compare", Position = 4)]
+        [NecrobotConfig(Key = "Max Walk Times", Description = "Max walk time bot allows wall to catch this pokemon compare", Position = 4)]
         [DefaultValue(200.0)]
         [Range(0, 9999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 3)]
         public double MaxWalkTimes { get; set; }
 
-        [ExcelConfig(Key = "Allow Catch", Description = "Allow bot catch pokemon while it walking to snipe target", Position = 5)]
+        [NecrobotConfig(Key = "Allow Catch", Description = "Allow bot catch pokemon while it walking to snipe target", Position = 5)]
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 4)]
         public bool CatchPokemonWhileWalking { get; set; }
 
-        [ExcelConfig(Key = "Allow Spin", Description = "Allow bot spin pokestop while it walking to snipe target", Position = 6)]
+        [NecrobotConfig(Key = "Allow Spin", Description = "Allow bot spin pokestop while it walking to snipe target", Position = 6)]
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 5)]
         public bool SpinPokestopWhileWalking { get; set; }
 
-        [ExcelConfig(Key = "Max Speed", Description = "The max speed up apply to walk to this pokemon", Position = 7)]
+        [NecrobotConfig(Key = "Max Speed", Description = "The max speed up apply to walk to this pokemon", Position = 7)]
         [DefaultValue(60.0)]
         [Range(0, 999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 6)]
         public double MaxSpeedUpSpeed { get; set; }
 
-        [ExcelConfig(Key = "Allow SpeedUP", Description = "Allow bot speed up to catch this pokemon", Position = 8)]
+        [NecrobotConfig(Key = "Allow SpeedUP", Description = "Allow bot speed up to catch this pokemon", Position = 8)]
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 7)]
         public bool AllowSpeedUp { get; set; }
 
-        [ExcelConfig(Key = "Delay at Dest", Description = "Delay time at destination", Position = 9)]
+        [NecrobotConfig(Key = "Delay at Dest", Description = "Delay time at destination", Position = 9)]
         [DefaultValue(10000)]
         [Range(0, 999999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 8)]
         public int DelayTimeAtDestination { get; set; }
 
-        [ExcelConfig(Key = "Allow Transfer", Description = "Allow bot transfer pokemon while walk to target", Position = 10)]
+        [NecrobotConfig(Key = "Allow Transfer", Description = "Allow bot transfer pokemon while walk to target", Position = 10)]
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 9)]
         public bool AllowTransferWhileWalking { get; set; }

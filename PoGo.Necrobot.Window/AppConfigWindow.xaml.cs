@@ -88,7 +88,7 @@ namespace PoGo.Necrobot.Window
             GlobalSettings Settings = new GlobalSettings();
             foreach (var item in Settings.GetType().GetFields())
             {
-                var att = item.GetCustomAttributes<ExcelConfigAttribute>(true).FirstOrDefault();
+                var att = item.GetCustomAttributes<NecrobotConfigAttribute>(true).FirstOrDefault();
                 if (att != null)
                 {
                     string name = string.IsNullOrEmpty(att.Key) ? item.Name : att.Key;
@@ -129,7 +129,7 @@ namespace PoGo.Necrobot.Window
             var type = typeof(T);
             foreach (var item in type.GetProperties())
             {
-                var att = item.GetCustomAttribute<ExcelConfigAttribute>(true);
+                var att = item.GetCustomAttribute<NecrobotConfigAttribute>(true);
                 if (att != null && !att.IsPrimaryKey)
                 {
                     var dataGridControl = GetDataGridInputControl(item);
@@ -155,7 +155,7 @@ namespace PoGo.Necrobot.Window
         }
         private DataGridColumn GetDataGridInputControl(PropertyInfo item)
         {
-            var att = item.GetCustomAttribute<ExcelConfigAttribute>(true);
+            var att = item.GetCustomAttribute<NecrobotConfigAttribute>(true);
 
             var binding = new Binding($"Value.{item.Name}")
             {
@@ -300,7 +300,7 @@ namespace PoGo.Necrobot.Window
       var type = source.GetType();
             foreach (var item in type.GetProperties())
             {
-                var att = item.GetCustomAttributes<ExcelConfigAttribute>(true).FirstOrDefault();
+                var att = item.GetCustomAttributes<NecrobotConfigAttribute>(true).FirstOrDefault();
                 if (att != null)
                 {
                     panel.Children.Add(new Label() { Content = item.Name, FontSize = 15, ToolTip = att.Description });
@@ -394,7 +394,7 @@ namespace PoGo.Necrobot.Window
             this.DataContext = Settings;
             foreach (var item in Settings.GetType().GetFields())
             {
-                var att = item.GetCustomAttributes<ExcelConfigAttribute>(true).FirstOrDefault();
+                var att = item.GetCustomAttributes<NecrobotConfigAttribute>(true).FirstOrDefault();
                 if (att != null)
                 {
                     string name = string.IsNullOrEmpty(att.Key) ? item.Name : att.Key;
@@ -408,7 +408,7 @@ namespace PoGo.Necrobot.Window
         {
             foreach (var item in Settings.GetType().GetFields())
             {
-                var att = item.GetCustomAttributes<ExcelConfigAttribute>(true).FirstOrDefault();
+                var att = item.GetCustomAttributes<NecrobotConfigAttribute>(true).FirstOrDefault();
                 if (att != null)
                 {
                     var type = item.FieldType;
