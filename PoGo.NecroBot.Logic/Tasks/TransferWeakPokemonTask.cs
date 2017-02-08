@@ -36,8 +36,6 @@ namespace PoGo.NecroBot.Logic.Tasks
             var totalEggs = session.Inventory.GetEggs();
             if ((maxStorage - totalEggs.Count() - buff) > pokemons.Count()) return;
 
-
-
             var pokemonDatas = pokemons as IList<PokemonData> ?? pokemons.ToList();
 
             var buddy = session.Profile.PlayerData.BuddyPokemon;

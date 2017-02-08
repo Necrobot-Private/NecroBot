@@ -130,11 +130,11 @@ namespace PoGo.NecroBot.Logic.Tasks
             int sequence = 1;
             foreach (var pokemon in pokemonToEvolve)
             {
-                TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
                 if (await session.Inventory.CanEvolvePokemon(pokemon))
                 {
                     try
                     {
+                        Logger.Write("FUCK , EVOLEVEL POKEMON xxx");
                         // no cancellationToken.ThrowIfCancellationRequested here, otherwise the lucky egg would be wasted.
                         var evolveResponse = await session.Client.Inventory.EvolvePokemon(pokemon.Id);
                         if (evolveResponse.Result == EvolvePokemonResponse.Types.Result.Success)
