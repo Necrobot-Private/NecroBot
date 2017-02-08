@@ -117,6 +117,19 @@ namespace PoGo.NecroBot.CLI
                 LogLevel.LevelUp);
         }
 
+        private static void HandleEvent(RenamePokemonEvent renamePokemonEvent, ISession session)
+        {
+            Logger.Write(
+                session.Translation.GetTranslation(
+                    TranslationString.PokemonRename,
+                    session.Translation.GetPokemonTranslation(renamePokemonEvent.PokemonId),
+                    renamePokemonEvent.Id,
+                    renamePokemonEvent.OldNickname,
+                    renamePokemonEvent.NewNickname
+                ),
+                LogLevel.Info);
+        }
+
         private static void HandleEvent(ItemRecycledEvent itemRecycledEvent, ISession session)
         {
             Logger.Write(

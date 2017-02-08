@@ -144,6 +144,10 @@ namespace PoGo.Necrobot.Window
             lblAccount.Content = $"{this.datacontext.UI.PlayerStatus} as : {this.datacontext.UI.PlayerName}";
 
         }
+        public void OnBotEvent(RenamePokemonEvent renamePokemonEvent)
+        {
+            this.datacontext.PokemonList.OnRename(renamePokemonEvent);
+        }
         public void OnBotEvent(TransferPokemonEvent transferedPkm)
         {
             this.datacontext.PokemonList.OnTransfer(transferedPkm);

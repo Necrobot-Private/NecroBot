@@ -260,6 +260,7 @@
     <Compile Include="Event\Snipe\AutoSnipePokemonAddedEvent.cs" />
     <Compile Include="Event\Snipe\SnipePokemonStarted.cs" />
     <Compile Include="Event\Snipe\SnipePokemonUpdateEvent.cs" />
+    <Compile Include="Event\RenamePokemonEvent.cs" />
     <Compile Include="Event\UI\StatusBarEvent.cs" />
     <Compile Include="Event\UpgradePokemonEvent.cs" />
     <Compile Include="Event\UpdateEvent.cs" />
@@ -487,6 +488,7 @@
     <Compile Include="Tasks\FarmPokestopsGPXTask.cs" />
     <Compile Include="Tasks\FarmPokestopsTask.cs" />
     <Compile Include="Tasks\RecycleItemsTask.cs" />
+    <Compile Include="Tasks\RenameSinglePokemonTask.cs" />
     <Compile Include="Tasks\RenamePokemonTask.cs" />
     <Compile Include="Tasks\SelectBuddyPokemonTask.cs" />
     <Compile Include="Tasks\SetMoveToTargetTask.cs" />
