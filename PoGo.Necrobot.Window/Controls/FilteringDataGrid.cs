@@ -1,4 +1,5 @@
 ﻿using Microsoft.Windows.Controls.Primitives;
+using POGOProtos.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
