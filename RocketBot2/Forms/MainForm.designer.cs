@@ -281,7 +281,7 @@ namespace RocketBot2.Forms
             // 
             // pkmnCandyToEvolve
             // 
-            this.pkmnCandyToEvolve.AspectName = "Candy";
+            this.pkmnCandyToEvolve.AspectName = "CandyToEvolve";
             this.pkmnCandyToEvolve.Text = "CtE";
             this.pkmnCandyToEvolve.Width = 20;
             // 
