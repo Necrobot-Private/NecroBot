@@ -67,15 +67,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                     {
                         pokemon.Nickname = newNickname;
 
-                        session.EventDispatcher.Send(new NoticeEvent
+                        session.EventDispatcher.Send(new RenamePokemonEvent
                         {
-                            Message = session.Translation.GetTranslation(
-                                TranslationString.PokemonRename,
-                                session.Translation.GetPokemonTranslation(pokemon.PokemonId),
-                                pokemon.Id,
-                                oldNickname,
-                                newNickname
-                            )
+                            Id = pokemon.Id,
+                            PokemonId = pokemon.PokemonId,
+                            OldNickname = oldNickname,
+                            NewNickname = newNickname
                         });
                     }
                     //Delay only if the pokemon was really renamed!

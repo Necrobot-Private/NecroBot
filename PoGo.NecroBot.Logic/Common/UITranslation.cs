@@ -119,10 +119,12 @@ namespace PoGo.NecroBot.Logic.Common
 
         [Description("Level")]
         public string Level { get; set; }
-
-
+        
         [Description("Caught at")]
         public string CaughtTime { get; set; }
+
+        [Description("Location")]
+        public string CaughtLocation { get; set; }
 
         #endregion
         #region Popup

@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using PoGo.NecroBot.Logic.Event;
-using POGOProtos.Inventory;
-using POGOProtos.Settings.Master;
 using PoGo.NecroBot.Logic.Event.Inventory;
 using PoGo.NecroBot.Logic.State;
+using Caching;
 
 namespace PoGo.Necrobot.Window.Model
 {
@@ -16,6 +15,9 @@ namespace PoGo.Necrobot.Window.Model
         {
             this.Session = Session;
         }
+
+        // Caches
+        public static LRUCache<ulong, string> LocationsCache = new LRUCache<ulong, string>(capacity: 500);
 
         public ObservableCollection<PokemonDataViewModel> Pokemons { get; set; }
 
@@ -128,6 +130,13 @@ namespace PoGo.Necrobot.Window.Model
 
             if (pkm != null)
                 this.Pokemons.Remove(pkm);
+        }
+
+        internal void OnRename(RenamePokemonEvent e)
+        {
+            var pkm = Get(e.Id);
+            pkm.PokemonData.Nickname = e.NewNickname;
+            pkm.RaisePropertyChanged("PokemonName");
         }
 
         internal void OnTransfer(TransferPokemonEvent e)
