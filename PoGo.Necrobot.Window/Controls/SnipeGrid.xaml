@@ -88,10 +88,10 @@
         </Style>
     </Control.Resources>
 
-    <local:FilteringDataGrid ItemsSource="{Binding Mode=OneWay}" 
+    <DataGrid ItemsSource="{Binding Mode=OneWay}" 
               AutoGenerateColumns="false" 
               GridLinesVisibility="None"
-              IsFilteringCaseSensitive="False"
+              
               IsReadOnly="True"
               behaviors:DataGridBehavior.DisplayRowNumber="True">
         
@@ -126,20 +126,20 @@
             </Style>
         </DataGrid.RowStyle>
         -->
-        <local:FilteringDataGrid.Columns>
-            <my:DataGridTextColumn Binding="{Binding Path=Id}" Header="#" IsReadOnly="True"/>
+        <DataGrid.Columns>
+            <DataGridTextColumn Binding="{Binding Path=Id}" Header="#" IsReadOnly="True"/>
 
-            <my:DataGridTemplateColumn Header="#">
-                <my:DataGridTemplateColumn.CellTemplate>
+            <DataGridTemplateColumn Header="#">
+                <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
                         <StackPanel>
                             <Image Width="30" Source="{Binding Path=PokemonId, Converter={StaticResource PokemonImageConverter}}" />
                         </StackPanel>
                     </DataTemplate>
-                </my:DataGridTemplateColumn.CellTemplate>
-            </my:DataGridTemplateColumn>
-            <my:DataGridTextColumn Binding="{Binding Path=PokemonName}" Header="{Binding Source=PokemonName, Converter= {StaticResource I18NConveter}}" IsReadOnly="True" MinWidth="100" >
-                <my:DataGridTextColumn.ElementStyle>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+            <DataGridTextColumn Binding="{Binding Path=PokemonName}" Header="{Binding Source=PokemonName, Converter= {StaticResource I18NConveter}}" IsReadOnly="True" MinWidth="100" >
+                <DataGridTextColumn.ElementStyle>
                     <Style TargetType="{x:Type TextBlock}">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding Recommend}" Value="True">
@@ -147,11 +147,11 @@
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </my:DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn.ElementStyle>
 
-            </my:DataGridTextColumn>
-            <my:DataGridTextColumn Binding="{Binding Path=IV, StringFormat={}{0:0.00}}" Header="{Binding Source=IV, Converter= {StaticResource I18NConveter}}" IsReadOnly="True" MinWidth="60">
-                <my:DataGridTextColumn.ElementStyle>
+            </DataGridTextColumn>
+            <DataGridTextColumn Binding="{Binding Path=IV, StringFormat={}{0:0.00}}" Header="{Binding Source=IV, Converter= {StaticResource I18NConveter}}" IsReadOnly="True" MinWidth="60">
+                <DataGridTextColumn.ElementStyle>
                     <Style TargetType="{x:Type TextBlock}">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding Recommend}" Value="True">
@@ -159,25 +159,25 @@
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </my:DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn.ElementStyle>
 
-            </my:DataGridTextColumn>
-            <my:DataGridTextColumn Binding="{Binding Path=Level}" Header="{Binding Source=Level, Converter= {StaticResource I18NConveter}}" IsReadOnly="True"/>
-            <my:DataGridTextColumn Binding="{Binding Path=Latitude}" Header="{Binding Source=Latitude, Converter= {StaticResource I18NConveter}}" IsReadOnly="True"/>
-            <my:DataGridTextColumn Binding="{Binding Path=Longitude}" Header="{Binding Source=Longitude, Converter= {StaticResource I18NConveter}}" IsReadOnly="True"/>
-            <my:DataGridTextColumn Binding="{Binding Path=Move1}" Header="{Binding Source=Move1, Converter= {StaticResource I18NConveter}}" IsReadOnly="True"/>
-            <my:DataGridTextColumn Binding="{Binding Path=Move2}" Header="{Binding Source=Move2, Converter= {StaticResource I18NConveter}}" IsReadOnly="True"/>
-            <my:DataGridTextColumn Binding="{Binding Path=Verified, StringFormat={}{0}}" Header="{Binding Source=Verified, Converter= {StaticResource I18NConveter}}" IsReadOnly="True"/>
-            <my:DataGridTextColumn Binding="{Binding Path=RemainTimes, StringFormat={}{0:000}s}" Header="{Binding Source=RemainTime, Converter= {StaticResource I18NConveter}}" IsReadOnly="True"/>
-            <my:DataGridTemplateColumn Header="{Binding Source=SnipeButton, Converter={StaticResource I18NConveter}}">
-                <my:DataGridTemplateColumn.CellTemplate>
+            </DataGridTextColumn>
+            <DataGridTextColumn Binding="{Binding Path=Level}" Header="{Binding Source=Level, Converter= {StaticResource I18NConveter}}" IsReadOnly="True"/>
+            <DataGridTextColumn Binding="{Binding Path=Latitude}" Header="{Binding Source=Latitude, Converter= {StaticResource I18NConveter}}" IsReadOnly="True"/>
+            <DataGridTextColumn Binding="{Binding Path=Longitude}" Header="{Binding Source=Longitude, Converter= {StaticResource I18NConveter}}" IsReadOnly="True"/>
+            <DataGridTextColumn Binding="{Binding Path=Move1}" Header="{Binding Source=Move1, Converter= {StaticResource I18NConveter}}" IsReadOnly="True"/>
+            <DataGridTextColumn Binding="{Binding Path=Move2}" Header="{Binding Source=Move2, Converter= {StaticResource I18NConveter}}" IsReadOnly="True"/>
+            <DataGridTextColumn Binding="{Binding Path=Verified, StringFormat={}{0}}" Header="{Binding Source=Verified, Converter= {StaticResource I18NConveter}}" IsReadOnly="True"/>
+            <DataGridTextColumn Binding="{Binding Path=RemainTimes, StringFormat={}{0:000}s}" Header="{Binding Source=RemainTime, Converter= {StaticResource I18NConveter}}" IsReadOnly="True"/>
+            <DataGridTemplateColumn Header="{Binding Source=SnipeButton, Converter={StaticResource I18NConveter}}">
+                <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
                         <StackPanel>
                             <Button IsEnabled="{Binding Path=AllowSnipe}" Content="SNIPE" CommandParameter="{Binding Ref}" Click="Snipe_Click"/>
                         </StackPanel>
                     </DataTemplate>
-                </my:DataGridTemplateColumn.CellTemplate>
-            </my:DataGridTemplateColumn>
-        </local:FilteringDataGrid.Columns>
-    </local:FilteringDataGrid>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+        </DataGrid.Columns>
+    </DataGrid>
 </UserControl>
