@@ -42,24 +42,26 @@ namespace PoGo.Necrobot.Window.Controls
         {
             // The bulk selection only works when 2 or more rows are selected.  This is to work around
             // issues with the checkbox and row selection when only one row is clicked.
-            if (e.AddedItems.Count > 1)
+            if ((sender as DataGrid).SelectedItems.Count > 1)
             {
-                foreach (PokemonDataViewModel pokemon in e.AddedItems)
+                foreach (PokemonDataViewModel pokemon in (sender as DataGrid).SelectedItems)
                 {
                     pokemon.IsSelected = true;
                 }
             }
 
+            UpdateTransferAllButtonState();
+
+            OnPokemonItemSelected?.Invoke(null);
+        }
+
+        private void UpdateTransferAllButtonState()
+        {
             var data = DataContext as PokemonListModel;
             var count = data.Pokemons.Count(x => x.IsSelected && Session.Inventory.CanTransferPokemon(x.PokemonData));
             //TODO : Thought it will better to use binding.
             btnTransferAll.Content = $"Transfer all ({count})";
-            if (count > 1)
-            {
-                btnTransferAll.IsEnabled = true;
-            }
-
-            OnPokemonItemSelected?.Invoke(null);
+            btnTransferAll.IsEnabled = count > 0;
         }
 
         private void btnTransfer_Click(object sender, RoutedEventArgs e)
@@ -130,14 +132,7 @@ namespace PoGo.Necrobot.Window.Controls
         {
             ulong pokemonId = (ulong)((CheckBox)sender).CommandParameter;
 
-            var data = DataContext as PokemonListModel;
-            var count = data.Pokemons.Count(x => x.IsSelected);
-            //TODO : Thought it will better to use binding.
-            btnTransferAll.Content = $"Transfer all ({count})";
-            if (count > 1)
-            {
-                btnTransferAll.IsEnabled = true;
-            }
+            UpdateTransferAllButtonState();
 
             OnPokemonItemSelected?.Invoke(null);
         }
@@ -149,7 +144,7 @@ namespace PoGo.Necrobot.Window.Controls
             ulong pokemonId = (ulong) ((Button) sender).CommandParameter;
             model.Powerup(pokemonId);
 
-            Task.Run(async () => { await UpgradeSinglePokemonTask.Execute(Session, pokemonId, false, 1 /* Only upgarde 1 time */); });
+            Task.Run(async () => { await UpgradeSinglePokemonTask.Execute(Session, pokemonId, false, 1 /* Only upgrade 1 time */); });
         }
 
         private void btnPokedexView_Click(object sender, RoutedEventArgs e)

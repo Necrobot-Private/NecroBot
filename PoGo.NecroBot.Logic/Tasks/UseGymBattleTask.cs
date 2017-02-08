@@ -856,6 +856,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                     AttackGymResponse attackResult = null;
                     try
                     {
+                        //if (attackActionz.Any(a => a.Type == BattleActionType.ActionSpecialAttack && Math.Abs(a.EnergyDelta)==100))
+                        //    await Task.Delay(2500);
+
                         TimedLog("Start making attack");
                         long timeBefore = DateTime.UtcNow.ToUnixTime();
                         attackResult = await session.Client.Fort.AttackGym(gym.Id, startResponse.BattleId, attackActionz, a2);
@@ -868,7 +871,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         if (attackActionz.Any(a => a.Type != BattleActionType.ActionSpecialAttack))
                             attackTimeCorrected = attackTime - (int)(timeAfter - timeBefore);
                         //else if (_currentAttackerEnergy >= 100)
-                        //    attackTimeCorrected = attackTime + 2100;
+                        //    attackTimeCorrected = attackTime + 2500;
 
                         TimedLog(string.Format("Waiting for attack to be prepared: {0} (last call was {1}, after correction {2})", attackTime, timeAfter, attackTimeCorrected > 0 ? attackTimeCorrected : 0));
                         if (attackTimeCorrected > 0)
@@ -912,7 +915,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                         var newAttacker = GetBestInBattle(session, attackResult.ActiveDefender.PokemonData);
                                         if (newAttacker != null && newAttacker.Id!= attackResult.ActiveAttacker.PokemonData.Id)
                                         {
-                                            var newAttackResult = await SwitchPokemon(session, gym.Id, startResponse.BattleId, newAttacker, a2, serverMs);
+                                            var newAttackResult = await SwitchPokemon(session, gym.Id, startResponse.BattleId, newAttacker, a2, serverMs, attackResult.ActiveAttacker.PokemonData.Id);
                                             if (newAttackResult != null && newAttackResult.Result == AttackGymResponse.Types.Result.Success)
                                             {
                                                 attacker = newAttackResult.ActiveAttacker.PokemonData;
@@ -928,7 +931,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                     var newAttacker = GetBestInBattle(session, attackResult.ActiveDefender.PokemonData);
                                     if (newAttacker != null && currentFortData.GymState.Memberships.Count > 1 && !session.LogicSettings.GymConfig.UsePokemonToAttackOnlyByCp && newAttacker.Id != attackResult.ActiveAttacker.PokemonData.Id)
                                     {
-                                        var newAttackResult = await SwitchPokemon(session, gym.Id, startResponse.BattleId, newAttacker, a2, serverMs);
+                                        var newAttackResult = await SwitchPokemon(session, gym.Id, startResponse.BattleId, newAttacker, a2, serverMs, attackResult.ActiveAttacker.PokemonData.Id);
                                         if (newAttackResult != null && newAttackResult.Result == AttackGymResponse.Types.Result.Success)
                                         {
                                             attacker = newAttackResult.ActiveAttacker.PokemonData;
@@ -939,6 +942,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                                         attacker = attackResult.ActiveAttacker.PokemonData;
                                     Logger.Write(string.Format("We ware fainted in battle, new attacker is: {0} ({1} CP){2}", attacker.PokemonId, attacker.Cp, Environment.NewLine), LogLevel.Info, ConsoleColor.Magenta);
                                 }
+                                else
+                                    attacker = attackResult.ActiveAttacker.PokemonData;
                                 Console.SetCursorPosition(0, Console.CursorTop - 1);
                                 Logger.Write($"(GYM ATTACK) : Defender {attackResult.ActiveDefender.PokemonData.PokemonId.ToString()  } HP {attackResult.ActiveDefender.CurrentHealth} - Attacker  {attackResult.ActiveAttacker.PokemonData.PokemonId.ToString()}   HP/Sta {attackResult.ActiveAttacker.CurrentHealth}/{attackResult.ActiveAttacker.CurrentEnergy}        ");
                                 if (attackResult != null && attackResult.ActiveAttacker != null)
@@ -982,7 +987,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         }
 
-        private static async Task<AttackGymResponse> SwitchPokemon(ISession session, string fortId, string battleId, PokemonData newAttacker, BattleAction actionReceived, long serverMs)
+        private static async Task<AttackGymResponse> SwitchPokemon(ISession session, string fortId, string battleId, PokemonData newAttacker, BattleAction actionReceived, long serverMs, ulong oldAttackerId)
         {
             TimedLog(string.Format("Prepare switching, serverTimeMS: {0} <- begin of switch procedure, server time is from responce + time from takeing it to this moment", serverMs));
             const int swithTime = 1000;
@@ -993,7 +998,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                 Type = BattleActionType.ActionSwapPokemon,
                 DurationMs = swithTime,
                 ActionStartMs = serverMs,
-                ActivePokemonId = newAttacker.Id,
+                ActivePokemonId = oldAttackerId,
+                TargetPokemonId = newAttacker.Id,
                 TargetIndex = -1,
             });
 
@@ -1031,10 +1037,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 var normalMove = sessison.GymState.myPokemons.FirstOrDefault(f => f.data.Id == attacker.Id).Attack;
                 var specialMove = sessison.GymState.myPokemons.FirstOrDefault(f => f.data.Id == attacker.Id).SpecialAttack;
 
-                //if (lastSpecialAttack != null && lastSpecialAttack.DamageWindowsStartTimestampMs < serverMs)
-                //    lastSpecialAttack = null;
-
-                bool skipDodge = (lastSpecialAttack?.DurationMs ?? 0) < normalMove.DurationMs + 550;
+                bool skipDodge = (lastSpecialAttack?.DurationMs ?? 0) < normalMove.DurationMs + 550; //if our normal attack is too slow and defender special is too fast so we should to only do dodge all the time then we totally skip dodge
 
                 bool canDoSpecialAttack = Math.Abs(specialMove.EnergyDelta) <= energy && (!(sessison.GymState.TimeToDodge > now.ToUnixTime() && sessison.GymState.TimeToDodge < now.ToUnixTime() + specialMove.DurationMs) || skipDodge);
                 if (sessison.LogicSettings.GymConfig.NotUsedSkills.Any(a => a.Key == attacker.PokemonId && a.Value == specialMove.MovementId))
@@ -1070,6 +1073,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         action2.DurationMs = specialMove.DurationMs;
                         action2.DamageWindowsStartTimestampMs = specialMove.DamageWindowStartMs;
                         action2.DamageWindowsEndTimestampMs = specialMove.DamageWindowEndMs;
+                        TimedLog(string.Format("Trying to make an special attack {0}, on: {1}, duration: {2}", specialMove.MovementId, serverMs, specialMove.DurationMs));
                     }
                     else if (canDoAttack)
                     {
@@ -1077,6 +1081,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                         action2.DurationMs = normalMove.DurationMs;
                         action2.DamageWindowsStartTimestampMs = normalMove.DamageWindowStartMs;
                         action2.DamageWindowsEndTimestampMs = normalMove.DamageWindowEndMs;
+                        TimedLog(string.Format("Trying to make an normal attack {0}, on: {1}, duration: {2}", normalMove.MovementId, serverMs, normalMove.DurationMs));
+                    }
+                    else
+                    {
+                        TimedLog("SHIT", true);
                     }
                     action2.ActionStartMs = now.ToUnixTime();
                     action2.TargetIndex = -1;
@@ -1089,7 +1098,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
             BattleAction action1 = new BattleAction()
             {
-                Type = BattleActionType.ActionAttack,
+                Type = BattleActionType.ActionDodge,
                 DurationMs = 500,
                 ActionStartMs = now.ToUnixTime(),
                 TargetIndex = -1
