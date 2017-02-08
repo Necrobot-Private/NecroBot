@@ -31,11 +31,11 @@ namespace PoGo.Necrobot.Window.Behaviors
 
         private static void OnDisplayRowNumberChanged(DependencyObject target, DependencyPropertyChangedEventArgs e)
         {
-            FilteringDataGrid dataGrid = target as FilteringDataGrid;
+            DataGrid dataGrid = target as DataGrid;
             if ((bool)e.NewValue == true)
             {
-                EventHandler< Microsoft.Windows.Controls.DataGridRowEventArgs> loadedRowHandler = null;
-                loadedRowHandler = (object sender, Microsoft.Windows.Controls.DataGridRowEventArgs ea) =>
+                EventHandler<DataGridRowEventArgs> loadedRowHandler = null;
+                loadedRowHandler = (object sender, DataGridRowEventArgs ea) =>
                 {
                     if (GetDisplayRowNumber(dataGrid) == false)
                     {
@@ -63,7 +63,7 @@ namespace PoGo.Necrobot.Window.Behaviors
 
         private static void DataGrid_LoadingRow(object sender, Microsoft.Windows.Controls.DataGridRowEventArgs e)
         {
-            throw new NotImplementedException();
+            
         }
 
         #endregion // DisplayRowNumber

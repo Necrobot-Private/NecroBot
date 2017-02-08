@@ -386,6 +386,18 @@ namespace PoGo.Necrobot.Window
                 BindingOperations.SetBinding(numberTextbox, TextBox.TextProperty, binding);
                 return numberTextbox;
             }
+
+            if(item.PropertyType == typeof(List<PokemonId>))
+            {
+                var  txt = new TextBox()
+                {
+                    MinWidth = 600,
+                    HorizontalAlignment = HorizontalAlignment.Left
+                };
+                binding.Converter = new ListPokemonIdConverter();
+                BindingOperations.SetBinding(txt, TextBox.TextProperty, binding);
+                return txt;
+            }
             return new TextBox();
         }
 

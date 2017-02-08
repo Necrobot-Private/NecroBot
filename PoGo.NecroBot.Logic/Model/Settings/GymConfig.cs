@@ -146,6 +146,12 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool UsePokemonToAttackOnlyByCp { get; set; }
 
+        [NecrobotConfig(Description = "List of pokemon bot won't use in gym batle, deploy", Position = 24)]
+        [DefaultValue("Kangaskhan;Tauros;MrMime;Farfetchd")]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
+        
+        public List<PokemonId> ExcludeForGyms { get; set; }
+
         private static ICollection<KeyValuePair<PokemonId, PokemonMove>> GetDefaults()
         {
             return new List<KeyValuePair<PokemonId, PokemonMove>>()

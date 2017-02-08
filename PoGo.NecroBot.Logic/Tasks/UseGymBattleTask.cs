@@ -1326,10 +1326,11 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             PokemonData pokemon = null;
             List<ulong> excluded = new List<ulong>();
+            var pokemonList = session.Inventory.GetPokemons().ToList();
+            pokemonList.RemoveAll(x => session.LogicSettings.GymConfig.ExcludeForGyms.Contains(x.PokemonId));
 
             while (pokemon == null)
             {
-                var pokemonList = session.Inventory.GetPokemons().ToList();
                 pokemonList = pokemonList
                     .Where(w => !excluded.Contains(w.Id) && w.Id != session.Profile.PlayerData.BuddyPokemon?.Id)
                     .OrderByDescending(p => p.Cp)
