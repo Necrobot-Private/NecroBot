@@ -134,7 +134,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     try
                     {
-                        Logger.Write("FUCK , EVOLEVEL POKEMON xxx");
                         // no cancellationToken.ThrowIfCancellationRequested here, otherwise the lucky egg would be wasted.
                         var evolveResponse = await session.Client.Inventory.EvolvePokemon(pokemon.Id);
                         if (evolveResponse.Result == EvolvePokemonResponse.Types.Result.Success)

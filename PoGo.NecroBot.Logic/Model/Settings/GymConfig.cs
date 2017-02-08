@@ -146,6 +146,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool UsePokemonToAttackOnlyByCp { get; set; }
 
+
         private static ICollection<KeyValuePair<PokemonId, PokemonMove>> GetDefaults()
         {
             return new List<KeyValuePair<PokemonId, PokemonMove>>()
