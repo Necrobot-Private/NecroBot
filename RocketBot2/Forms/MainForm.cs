@@ -64,7 +64,6 @@ namespace RocketBot2.Forms
         private static readonly Uri StrMasterKillSwitchUri =
             new Uri("https://raw.githubusercontent.com/TheUnnamedOrganisation/PoGo.NecroBot.Logic/master/MKS.txt");
 
-        public static Session _session;
         private GlobalSettings _settings;
         private StateMachine _machine;
         private PointLatLng _currentLatLng;
@@ -78,6 +77,8 @@ namespace RocketBot2.Forms
         private readonly GMapOverlay _pokemonsOverlay = new GMapOverlay("pokemons");
         private readonly GMapOverlay _pokestopsOverlay = new GMapOverlay("pokestops");
         private readonly GMapOverlay _searchAreaOverlay = new GMapOverlay("areas");
+
+        public static Session _session;
 
         public MainForm(string[] _args)
         {
