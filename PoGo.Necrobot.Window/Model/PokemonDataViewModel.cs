@@ -1,11 +1,12 @@
 ﻿using PoGo.NecroBot.Logic.PoGoUtils;
 using PoGo.NecroBot.Logic.State;
+using PoGo.NecroBot.Logic.Tasks;
 using POGOProtos.Data;
 using POGOProtos.Enums;
-using POGOProtos.Inventory;
 using POGOProtos.Settings.Master;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace PoGo.Necrobot.Window.Model
 {
@@ -39,7 +40,18 @@ namespace PoGo.Necrobot.Window.Model
 
             set
             {
-                PokemonData.Nickname = value;
+                if (PokemonData.Nickname != value)
+                {
+                    // Fire off the rename
+                    Task.Run(async () =>
+                    {
+                        await RenameSinglePokemonTask.Execute(
+                            this.Session,
+                            PokemonData.Id,
+                            value,
+                            this.Session.CancellationTokenSource.Token);
+                    });
+                }
             }
         }
 
