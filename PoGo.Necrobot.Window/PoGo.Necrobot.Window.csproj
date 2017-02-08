@@ -199,6 +199,7 @@
     <Compile Include="Converters\HeaderFilterConverter.cs" />
     <Compile Include="Converters\I18NConveter.cs" />
     <Compile Include="Converters\EnumToNumberConverter.cs" />
+    <Compile Include="Converters\ListPokemonIdConverter.cs" />
     <Compile Include="Converters\PokemonIdToImageConverter.cs" />
     <Compile Include="Converters\ValueConverterGroup.cs" />
     <Compile Include="Converters\VisibleIfTrueConverter.cs" />
@@ -453,6 +454,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="app.config" />
+    <None Include="Config\Translations\ui.pl.json" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

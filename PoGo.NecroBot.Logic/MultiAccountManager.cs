@@ -278,7 +278,6 @@ namespace PoGo.NecroBot.Logic
 
         public void SwitchAccountTo(BotAccount account)
         {
-            Logging.Logger.Write($"{account}");
             this.requestedAccount = account;
         }
 
