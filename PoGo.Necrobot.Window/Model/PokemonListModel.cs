@@ -6,6 +6,7 @@ using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Event.Inventory;
 using PoGo.NecroBot.Logic.State;
 using Caching;
+using POGOProtos.Inventory;
 
 namespace PoGo.Necrobot.Window.Model
 {
@@ -89,15 +90,14 @@ namespace PoGo.Necrobot.Window.Model
             var exist = Get(ev.OriginalId);
             if (ev.Result == POGOProtos.Networking.Responses.EvolvePokemonResponse.Types.Result.Success)
             {
-                if (exist != null)
-                    this.Pokemons.Remove(exist);
-
-                var newItem = new PokemonDataViewModel(this.Session, ev.EvolvedPokemon);
-                this.Pokemons.Add(newItem);
-
-                foreach (var item in this.Pokemons.Where(p => p.FamilyId == newItem.FamilyId))
+                Candy candy = this.Session.Inventory.GetCandyFamily(ev.EvolvedPokemon.PokemonId);
+                if (candy != null)
                 {
-                    item.RaisePropertyChanged("Candy");
+                    var familyId = candy.FamilyId;
+                    foreach (var item in this.Pokemons.Where(p => p.FamilyId == familyId))
+                    {
+                        item.RaisePropertyChanged("Candy");
+                    }
                 }
             }
             else
