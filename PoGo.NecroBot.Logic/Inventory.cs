@@ -281,7 +281,7 @@ namespace PoGo.NecroBot.Logic
         public EvolutionCalculations CalcuatePokemonEvolution(int pokemonLeft, int candiesLeft, int candiesToEvolve)
         {
             int transferCandiesGained = 1;
-            int candiesGainedOnEvolve = candiesToEvolve;
+            int candiesGainedOnEvolve = 1;
             int evolveCount = 0;
             int transferCount = 0;
 
