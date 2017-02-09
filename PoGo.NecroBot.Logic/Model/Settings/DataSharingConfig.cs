@@ -43,5 +43,16 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [DefaultValue("")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public string SnipeDataAccessKey { get;  set; }
+
+        [NecrobotConfig(Description = "Enable failover data servers", Position = 5)]
+        [DefaultValue(true)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
+        public bool EnableFailoverDataServers { get; set; }
+
+        [NecrobotConfig(Description = "List of servers that bot will connect when primary server down or can't connect", Position = 6)]
+        [DefaultValue("ws://s1.mypogosnipers.com/socket.io/?EIO=3&transport=websocket;ws://s2.mypogosnipers.com/socket.io/?EIO=3&transport=websocket")]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
+        public string FailoverDataServers { get; set; }
+
     }
 }
