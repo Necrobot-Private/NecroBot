@@ -523,7 +523,7 @@ namespace RocketBot2.Forms
                 #pragma warning restore 4014
             }
 
-            if (_session.LogicSettings.DataSharingEnable)
+            if (_session.LogicSettings.DataSharingConfig.EnableSyncData)
             {
                 await BotDataSocketClient.StartAsync(_session);
                 _session.EventDispatcher.EventReceived += evt => BotDataSocketClient.Listen(evt, _session);
