@@ -265,13 +265,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool HumanWalkingSnipeAllowTransferWhileWalking => _settings.HumanWalkSnipeConfig.AllowTransferWhileWalking;
         public GymConfig GymConfig => _settings.GymConfig;
 
-        public bool DataSharingEnable => _settings.DataSharingConfig.EnableSyncData;
-        public string DataSharingIdentifiation => _settings.DataSharingConfig.DataServiceIdentification;
-        public bool AllowAutoSnipe => _settings.DataSharingConfig.AutoSnipe;
-
-        public string SnipeDataAccessKey => _settings.DataSharingConfig.SnipeDataAccessKey;
+        public DataSharingConfig DataSharingConfig => _settings.DataSharingConfig;
         public int SnipePauseOnOutOfBallTime => GenRandom(_settings.SnipeConfig.SnipePauseOnOutOfBallTime);
-        public string DataSharingDataUrl => _settings.DataSharingConfig.DataRecieverURL;
+        
         public bool UseTransferFilterToCatch => _settings.CustomCatchConfig.UseTransferFilterToCatch;
         public MultipleBotConfig MultipleBotConfig => _settings.MultipleBotConfig;
         public List<AuthConfig> Bots => _settings.Auth.Bots;

@@ -229,11 +229,7 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         int RenamePokemonActionDelay { get; }
 
         GymConfig GymConfig { get; }
-        string DataSharingIdentifiation { get; }
-        bool DataSharingEnable { get; }
-        string DataSharingDataUrl { get; }
-        string SnipeDataAccessKey { get; }
-        bool AllowAutoSnipe { get; }
+        DataSharingConfig DataSharingConfig { get; }
         MultipleBotConfig MultipleBotConfig { get; }
         List<AuthConfig> Bots { get; }
         bool AllowMultipleBot { get; }

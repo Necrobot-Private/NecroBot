@@ -692,7 +692,7 @@ namespace PoGo.NecroBot.Logic
                 int pokemonLeft = group.Count();
 
                 // Calculate the number of evolutions possible (taking into account +1 candy for evolve and +1 candy for transfer)
-                EvolutionCalculations evolutionInfo = CalcuatePokemonEvolution(pokemonLeft, candiesLeft, settings.CandyToEvolve);
+                EvolutionCalculations evolutionInfo = CalcuatePokemonEvolution(pokemonLeft, candiesLeft, 1);
 
                 if (evolutionInfo.Evolves > 0)
                 {

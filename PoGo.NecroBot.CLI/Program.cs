@@ -418,7 +418,7 @@ namespace PoGo.NecroBot.CLI
                 #pragma warning restore 4014
             }
 
-            if (_session.LogicSettings.DataSharingEnable)
+            if (_session.LogicSettings.DataSharingConfig.EnableSyncData)
             {
                 BotDataSocketClient.StartAsync(_session);
                 _session.EventDispatcher.EventReceived += evt => BotDataSocketClient.Listen(evt, _session);
