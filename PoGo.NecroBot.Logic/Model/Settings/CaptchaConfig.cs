@@ -84,5 +84,6 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 4)]
         [NecrobotConfig(Position = 15, Description = "Timeout for auto captcha solving")]
         public int AutoCaptchaTimeout { get; set; }
+        
     }
 }
