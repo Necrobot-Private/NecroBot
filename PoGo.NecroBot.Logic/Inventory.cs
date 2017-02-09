@@ -213,7 +213,7 @@ namespace PoGo.NecroBot.Logic
                     if (familyCandy != null)
                     {
                         // Calculate the number of evolutions possible (taking into account +1 candy for evolve and +1 candy for transfer)
-                        var evolutionCalcs = CalcuatePokemonEvolution(canBeRemoved, familyCandy.Candy_, settings.CandyToEvolve, 1); // 1 for candy gain after evolution
+                        var evolutionCalcs = CalculatePokemonEvolution(canBeRemoved, familyCandy.Candy_, settings.CandyToEvolve, 1); // 1 for candy gain after evolution
 
                         // Subtract the number of evolutions possible from the number that can be transferred.
                         canBeRemoved -= evolutionCalcs.Evolves;
@@ -278,7 +278,7 @@ namespace PoGo.NecroBot.Logic
 
         // Calculates the number of pokemon evolutions possible given number of pokemon, candies, and candies to evolve.
         // Implementation is taken from https://www.pidgeycalc.com and double-checked with calculator at https://pokeassistant.com/main/pidgeyspam
-        public EvolutionCalculations CalcuatePokemonEvolution(int pokemonLeft, int candiesLeft, int candiesToEvolve, int candiesGainedOnEvolve)
+        public EvolutionCalculations CalculatePokemonEvolution(int pokemonLeft, int candiesLeft, int candiesToEvolve, int candiesGainedOnEvolve)
         {
             int transferCandiesGained = 1;
             int evolveCount = 0;
@@ -691,7 +691,7 @@ namespace PoGo.NecroBot.Logic
                 int pokemonLeft = group.Count();
 
                 // Calculate the number of evolutions possible (taking into account +1 candy for evolve and +1 candy for transfer)
-                EvolutionCalculations evolutionInfo = CalcuatePokemonEvolution(pokemonLeft, candiesLeft, settings.CandyToEvolve);
+                EvolutionCalculations evolutionInfo = CalculatePokemonEvolution(pokemonLeft, candiesLeft, settings.CandyToEvolve, 1);
 
                 if (evolutionInfo.Evolves > 0)
                 {
