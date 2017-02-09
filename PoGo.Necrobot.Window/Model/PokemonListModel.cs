@@ -5,6 +5,7 @@ using System.Linq;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Event.Inventory;
 using PoGo.NecroBot.Logic.State;
+using Caching;
 
 namespace PoGo.Necrobot.Window.Model
 {
@@ -14,6 +15,9 @@ namespace PoGo.Necrobot.Window.Model
         {
             this.Session = Session;
         }
+
+        // Caches
+        public static LRUCache<ulong, string> LocationsCache = new LRUCache<ulong, string>(capacity: 500);
 
         public ObservableCollection<PokemonDataViewModel> Pokemons { get; set; }
 
