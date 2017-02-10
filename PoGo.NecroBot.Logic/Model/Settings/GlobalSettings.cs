@@ -529,6 +529,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                         break;
 
                     case 10:
+                    case 11:
                         if ((string)settings["PokemonConfig"]["DefaultBuddyPokemon"] == "dragonite" ||
                             (string)settings["PokemonConfig"]["DefaultBuddyPokemon"] == null)
                             settings["PokemonConfig"]["DefaultBuddyPokemon"] = "";
