@@ -50,6 +50,11 @@ namespace PoGo.Necrobot.Window.Controls.MapMarkers
             this.DataContext = this.fort;
         }
 
+        public void UpdateFortData(FortData item)
+        {
+            this.fort.UpdateFortData(item);
+        }
+
         void CustomMarkerDemo_Loaded(object sender, RoutedEventArgs e)
         {
             if (icon.Source.CanFreeze)

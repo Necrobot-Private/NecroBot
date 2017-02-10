@@ -159,7 +159,7 @@ namespace PoGo.Necrobot.Window
         public void OnBotEvent(FortUsedEvent ev)
         {
             this.datacontext.Sidebar.AddOrUpdate(new PokestopItemViewModel(ev));
-            this.botMap.MarkFortAsLooted(ev.Id);
+            this.botMap.MarkFortAsLooted(ev.Fort);
         }
         public void OnBotEvent(PokeStopListEvent ev)
         {

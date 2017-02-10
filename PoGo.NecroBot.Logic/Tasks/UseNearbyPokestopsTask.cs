@@ -429,7 +429,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Latitude = pokeStop.Latitude,
                         Longitude = pokeStop.Longitude,
                         Altitude = session.Client.CurrentAltitude,
-                        InventoryFull = fortSearch.Result == FortSearchResponse.Types.Result.InventoryFull
+                        InventoryFull = fortSearch.Result == FortSearchResponse.Types.Result.InventoryFull,
+                        Fort = pokeStop
                     });
                     if (fortSearch.Result == FortSearchResponse.Types.Result.Success)
                     {
