@@ -62,6 +62,19 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 7)]
         public int AutoSnipeCandy { get; set; }
 
+        [NecrobotConfig(Key = "Snipe Level", Description = "Min level to snipe , level are using and logic with IV and move and only activate for verify data", Position = 8)]
+        [DefaultValue(0)]
+        [Range(0,100)]
+        [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 8)]
+        public int Level { get; set; }
+
+        [NecrobotConfig(Key = "MultiAccountSNipe", Description = "Allow bot change account to snipe this pokemon", Position = 9)]
+        [DefaultValue(false)]
+        [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 9)]
+        public bool AllowMultiAccountSnipe { get; set; }
+
+
+
         internal static Dictionary<PokemonId, SnipeFilter> SniperFilterDefault()
         {
             return new Dictionary<PokemonId, SnipeFilter>

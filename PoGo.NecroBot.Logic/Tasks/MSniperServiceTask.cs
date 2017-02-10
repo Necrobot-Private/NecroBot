@@ -229,6 +229,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             public short PokemonId { get; set; }
             public string SpawnPointId { get; set; }
             public int Priority { get; set; }
+            public int Level { get;  set; }
         }
 
         #endregion Classes
@@ -560,7 +561,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 SnipeIV = session.LogicSettings.MinIVForAutoSnipe,
                 VerifiedOnly = session.LogicSettings.AutosnipeVerifiedOnly,
-                AutoSnipeCandy = session.LogicSettings.DefaultAutoSnipeCandy
+                AutoSnipeCandy = session.LogicSettings.DefaultAutoSnipeCandy,
+                Level = 0
             };
 
             var pokemonId = (PokemonId)item.PokemonId;
@@ -593,16 +595,18 @@ namespace PoGo.NecroBot.Logic.Tasks
                     return true;
                 }
 
-                //if not verified and undetermine move.
-                if (filter.SnipeIV <= item.Iv &&
+                //if not verified and undetermine move. If not verify, level won't apply
+                if ((filter.Level <= item.Level || !filter.VerifiedOnly) &&
+                    filter.SnipeIV <= item.Iv &&
                     item.Move1 == PokemonMove.MoveUnset && item.Move2 == PokemonMove.MoveUnset &&
                     (filter.Moves == null || filter.Moves.Count == 0))
                 {
                     autoSnipePokemons.Add(item);
                     return true;
                 }
-                //ugly but readable
-                if ((string.IsNullOrEmpty(filter.Operator) || filter.Operator == Operator.or.ToString()) &&
+                //need refactore this to better 
+                if ((filter.Level <= item.Level || !filter.VerifiedOnly) &&
+                    (string.IsNullOrEmpty(filter.Operator) || filter.Operator == Operator.or.ToString()) &&
                     (filter.SnipeIV <= item.Iv
                      || (filter.Moves != null
                          && filter.Moves.Count > 0
@@ -614,7 +618,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                     return true;
                 }
 
-                if (filter.Operator == Operator.and.ToString() &&
+                if ((filter.Level <= item.Level || !filter.VerifiedOnly) && 
+                    filter.Operator == Operator.and.ToString() &&
                     (filter.SnipeIV <= item.Iv
                      && (filter.Moves != null
                          && filter.Moves.Count > 0
