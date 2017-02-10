@@ -227,7 +227,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                 forts = forts.Where(p => LocationUtils.CalculateDistanceInMeters(p.Latitude, p.Longitude, session.Client.CurrentLatitude, session.Client.CurrentLongitude) < 40).ToList();
             }
 
-            if (!session.LogicSettings.GymConfig.Enable /*|| session.Inventory.GetPlayerStats().FirstOrDefault().Level <= 5*/)
+            var reviveCount = session.Inventory.GetItems().Where(w => w.ItemId == POGOProtos.Inventory.Item.ItemId.ItemRevive || w.ItemId == POGOProtos.Inventory.Item.ItemId.ItemMaxRevive).Select(s => s.Count).Sum();
+            if (!session.LogicSettings.GymConfig.Enable 
+                || session.LogicSettings.GymConfig.MinRevivePotions > reviveCount
+            /*|| session.Inventory.GetPlayerStats().FirstOrDefault().Level <= 5*/
+            )
             {
                 // Filter out the gyms
                 forts = forts.Where(x => x.Type != FortType.Gym).ToList();
@@ -240,22 +244,10 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 // Return the first gym in range.
                 if (gyms.Count() > 0)
- {
-                    gyms.OrderBy(p => p.GymPoints);
                     return gyms.FirstOrDefault();
-                }
-
-  }
-            if (forts.Count == 1)
-                return forts.FirstOrDefault();
-
-if (forts.Count < 4)
-            return forts.Skip((int)DateTime.Now.Ticks % 2).FirstOrDefault();
-else
-            {
-                Random rnd = new Random();
-                return forts.Skip(rnd.Next(0,3)).FirstOrDefault();
             }
+
+            return forts.FirstOrDefault();
         }
 
         public static async Task SpinPokestopNearBy(ISession session, CancellationToken cancellationToken, FortData destinationFort = null)

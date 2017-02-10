@@ -53,7 +53,7 @@ namespace PoGo.NecroBot.CLI
         {
             lock (events)
             {
-                if (eve.IsRecievedFromSocket && cache.Get(eve.EncounterId) != null) return;
+                if (eve.IsRecievedFromSocket || cache.Get(eve.EncounterId) != null) return;
                 events.Add(eve);
             }
         }
@@ -298,6 +298,8 @@ namespace PoGo.NecroBot.CLI
                 var data = JsonConvert.DeserializeObject<EncounteredEvent>(match.Groups[1].Value);
                 data.IsRecievedFromSocket = true;
                 ulong encounterid = 0;
+                if (Math.Abs(data.Latitude) > 90 || Math.Abs(data.Longitude) > 180) return;
+
                 ulong.TryParse(data.EncounterId, out encounterid);
                 if(encounterid>0 && cache.Get(encounterid.ToString()) == null)
                 {
