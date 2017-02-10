@@ -529,8 +529,16 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                         break;
 
                     case 10:
-                        if ((string)settings["PokemonConfig"]["DefaultBuddyPokemon"] == "dragonite")
-                            settings["PokemonConfig"]["DefaultBuddyPokemon"] = null;
+                        if ((string)settings["PokemonConfig"]["DefaultBuddyPokemon"] == "dragonite" ||
+                            (string)settings["PokemonConfig"]["DefaultBuddyPokemon"] == null)
+                            settings["PokemonConfig"]["DefaultBuddyPokemon"] = "";
+                        else
+                        {
+                            // Upper case first letter.
+                            char[] a = ((string)settings["PokemonConfig"]["DefaultBuddyPokemon"]).ToCharArray();
+                            a[0] = char.ToUpper(a[0]);
+                            settings["PokemonConfig"]["DefaultBuddyPokemon"] = new string(a);
+                        }
                         break;
 
                         // Add more here.
