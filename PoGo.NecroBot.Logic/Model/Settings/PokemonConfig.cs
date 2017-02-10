@@ -413,7 +413,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         [NecrobotConfig(Description = "Set Buddy pokemon", Position = 65)]
         [DefaultValue(null)]
-        [JsonProperty(Required = Required.AllowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 65)]
+        [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 65)]
         public string DefaultBuddyPokemon { get; set; }
 
     }
