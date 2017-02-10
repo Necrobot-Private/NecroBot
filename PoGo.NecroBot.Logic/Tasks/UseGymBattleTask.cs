@@ -28,7 +28,7 @@ namespace PoGo.NecroBot.Logic.Tasks
     {
         private static int _startBattleCounter = 3;
         private static readonly bool _logTimings = false;
-        private static readonly bool _testSwapPokemon = false;
+        private static readonly bool _testSwapPokemon = true;
         private static readonly DateTime UnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
         public static async Task Execute(ISession session, CancellationToken cancellationToken, FortData gym, FortDetailsResponse fortInfo)
@@ -158,7 +158,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 if (pokemon.Stamina < pokemon.StaminaMax)
                     Logger.Write(string.Format("You are out of healing potions! {0} ({1} CP) haven't got fully healed", pokemon.PokemonId, pokemon.Cp), LogLevel.Gym, ConsoleColor.Magenta);
             }
-            await Task.Delay(2000);
+            //await Task.Delay(2000);
 
             var index = 0;
             bool isVictory = true;
@@ -845,6 +845,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     cancellationToken.ThrowIfCancellationRequested();
                     TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
+
                     TimedLog("Starts loop");
                     var last = lastActions.Where(w => !session.GymState.myTeam.Any(a => a.attacker.Id.Equals(w.ActivePokemonId))).LastOrDefault();
                     BattleAction lastSpecialAttack = lastActions.Where(w => !session.GymState.myTeam.Any(a => a.attacker.Id.Equals(w.ActivePokemonId)) && w.Type == BattleActionType.ActionSpecialAttack).LastOrDefault();
@@ -858,11 +859,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                     AttackGymResponse attackResult = null;
                     try
                     {
-                        //if (attackActionz.Any(a => a.Type == BattleActionType.ActionSwapPokemon))
-                        //{
-                        //    TimedLog("Etra wait before SWAP call");
-                        //    await Task.Delay(3000);
-                        //}
+                        if (attackActionz.Any(a => a.Type == BattleActionType.ActionSwapPokemon))
+                        {
+                            TimedLog("Etra wait before SWAP call");
+                            await Task.Delay(1000);
+                        }
 
                         TimedLog("Start making attack");
                         long timeBefore = DateTime.UtcNow.ToUnixTime();
@@ -880,11 +881,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                         if (attackTimeCorrected > 0)
                             await Task.Delay(attackTimeCorrected);
 
-                        //if (attackActionz.Any(a => a.Type == BattleActionType.ActionSwapPokemon))
-                        //{
-                        //    TimedLog("Etra wait after SWAP call");
-                        //    await Task.Delay(5000);
-                        //}
+                        if (attackActionz.Any(a => a.Type == BattleActionType.ActionSwapPokemon))
+                        {
+                            TimedLog("Etra wait after SWAP call");
+                            await Task.Delay(1000);
+                        }
                     }
                     catch (APIBadRequestException)
                     {
@@ -981,6 +982,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                             case BattleState.Victory:
                                 Logger.Write($"We were victorious!: ");
+                                await Task.Delay(2000);
                                 return lastActions;
                             default:
                                 Logger.Write($"Unhandled attack response: {attackResult}");
@@ -1159,7 +1161,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             try
             {
                 var result = await session.Client.Fort.StartGymBattle(gym.Id, defenderId, attackingPokemonIds);
-                await Task.Delay(1000);
+                await Task.Delay(2000);
 
                 if (result.Result == StartGymBattleResponse.Types.Result.Success)
                 {
