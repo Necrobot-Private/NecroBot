@@ -594,37 +594,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                     autoSnipePokemons.Add(item);
                     return true;
                 }
-
-                //if not verified and undetermine move. If not verify, level won't apply
-                if ((filter.Level <= item.Level || !filter.VerifiedOnly) &&
-                    filter.SnipeIV <= item.Iv &&
-                    item.Move1 == PokemonMove.MoveUnset && item.Move2 == PokemonMove.MoveUnset &&
-                    (filter.Moves == null || filter.Moves.Count == 0))
-                {
-                    autoSnipePokemons.Add(item);
-                    return true;
-                }
-                //need refactore this to better 
-                if ((filter.Level <= item.Level || !filter.VerifiedOnly) &&
-                    (string.IsNullOrEmpty(filter.Operator) || filter.Operator == Operator.or.ToString()) &&
-                    (filter.SnipeIV <= item.Iv
-                     || (filter.Moves != null
-                         && filter.Moves.Count > 0
-                         && filter.Moves.Any(x => x[0] == item.Move1 && x[1] == item.Move2))
-                    ))
-
-                {
-                    autoSnipePokemons.Add(item);
-                    return true;
-                }
-
-                if ((filter.Level <= item.Level || !filter.VerifiedOnly) && 
-                    filter.Operator == Operator.and.ToString() &&
-                    (filter.SnipeIV <= item.Iv
-                     && (filter.Moves != null
-                         && filter.Moves.Count > 0
-                         && filter.Moves.Any(x => x[0] == item.Move1 && x[1] == item.Move2))
-                    ))
+                
+                if(filter.IsMatch(item.Iv, item.Move1, item.Move2, item.Level, item.EncounterId > 0))
                 {
                     autoSnipePokemons.Add(item);
                     return true;
@@ -788,6 +759,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     waitNextPokestop = true;
                 }
             }
+            catch(ActiveSwitchByPokemonException ex) { throw ex; }
             catch (ActiveSwitchByRuleException ex)
             {
                 throw ex;

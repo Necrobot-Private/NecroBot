@@ -21,6 +21,7 @@ using POGOProtos.Map.Fort;
 using POGOProtos.Map.Pokemon;
 using POGOProtos.Networking.Responses;
 using TinyIoC;
+using POGOProtos.Enums;
 
 #endregion
 
@@ -467,7 +468,32 @@ namespace PoGo.NecroBot.Logic.Tasks
                     session.Client.CurrentLatitude,
                     session.Client.CurrentLongitude
                 ) > 250)
+            {
+
+                if (session.LogicSettings.PokemonSnipeFilters.ContainsKey(encounterEV.PokemonId))
+                {
+                    var filter = session.LogicSettings.PokemonSnipeFilters[encounterEV.PokemonId];
+                    if (filter.AllowMultiAccountSnipe && filter.IsMatch(encounterEV.IV, 
+                        (PokemonMove)Enum.Parse(typeof(PokemonMove), encounterEV.Move1),
+                        (PokemonMove)Enum.Parse(typeof(PokemonMove), encounterEV.Move1), 
+                        encounterEV.Level, true))
+                    {
+                        //thow
+                        throw new ActiveSwitchByPokemonException()
+                        {
+                            EncounterData = encounterEV,
+                            LastLatitude = encounterEV.Latitude,
+                            LastLongitude = encounterEV.Longitude,
+                            LastEncounterPokemonId = encounterEV.PokemonId,
+                            Snipe = true
+                        };
+
+                    }
+                }
+
                 return;
+
+            }
 
             if (MultipleBotConfig.IsMultiBotActive(session.LogicSettings) &&
                 session.LogicSettings.MultipleBotConfig.OnRarePokemon &&
