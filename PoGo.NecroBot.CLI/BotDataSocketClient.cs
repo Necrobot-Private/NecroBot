@@ -17,6 +17,7 @@ using POGOProtos.Enums;
 using WebSocketSharp;
 using Logger = PoGo.NecroBot.Logic.Logging.Logger;
 using System.Runtime.Caching;
+using System.Reflection;
 
 namespace PoGo.NecroBot.CLI
 {
@@ -29,7 +30,29 @@ namespace PoGo.NecroBot.CLI
             public long TimeTimestamp { get; set; }
             public string Hash { get; set; }
         }
-        private static List<EncounteredEvent> events = new List<EncounteredEvent>();
+        public class SocketClientUpdate
+        {
+            public List<EncounteredEvent> Pokemons { get; set; }
+
+            public List<SnipeFailedEvent> SnipeFailedPokemons { get; set; }
+            public List<string> ExpiredPokemons { get; set; }
+            public string ClientVersion { get; set; }
+            public SocketClientUpdate()
+            {
+                this.Pokemons = new List<EncounteredEvent>();
+                this.SnipeFailedPokemons = new List<SnipeFailedEvent>();
+                this.ExpiredPokemons = new List<string>();
+                this.ClientVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+
+            }
+
+            public bool HasData()
+            {
+                return Pokemons.Count > 0 || SnipeFailedPokemons.Count > 0 || ExpiredPokemons.Count > 0;
+            }
+        }
+        private static SocketClientUpdate clientData = new SocketClientUpdate();
+
         private const int POLLING_INTERVAL = 5000;
 
         public static void HandleEvent(IEvent evt, ISession session)
@@ -37,7 +60,10 @@ namespace PoGo.NecroBot.CLI
         }
         public static void HandleEvent(SnipeFailedEvent e, ISession sesion)
         {
-
+            lock (clientData)
+            {
+                clientData.SnipeFailedPokemons.Add(e);
+            }
         }
 
         public static void Listen(IEvent evt, ISession session)
@@ -55,18 +81,18 @@ namespace PoGo.NecroBot.CLI
 
         private static void HandleEvent(EncounteredEvent eve, ISession session)
         {
-            lock (events)
+            lock (clientData)
             {
                 if (eve.IsRecievedFromSocket || cache.Get(eve.EncounterId) != null) return;
-                events.Add(eve);
+                clientData.Pokemons.Add(eve);
             }
         }
         private static SnipePokemonUpdateEvent lastEncouteredEvent;
         private static void HandleEvent(SnipePokemonUpdateEvent eve, ISession session)
         {
-            lock (lastEncouteredEvent)
+            lock(clientData)
             {
-                lastEncouteredEvent = eve;
+                clientData.ExpiredPokemons.Add(eve.EncounterId);
             }
         }
         private static string Serialize(dynamic evt)
@@ -105,21 +131,21 @@ namespace PoGo.NecroBot.CLI
 
         public static async Task Start(Session session, CancellationToken cancellationToken)
         {
-            
+
             await Task.Delay(30000, cancellationToken); //delay running 30s
 
             ServicePointManager.Expect100Continue = false;
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            while(true)
+            while (true)
             {
                 var socketURL = servers.Dequeue();
-                Logger.Write($"Connecting to {socketURL}....");
+                Logger.Write($"Connecting to {socketURL} ....");
                 await ConnectToServer(session, socketURL);
                 servers.Enqueue(socketURL);
             }
-            
+
         }
         public static async Task ConnectToServer(ISession session, string socketURL)
         {
@@ -151,7 +177,7 @@ namespace PoGo.NecroBot.CLI
                             {
                                 Message = $"Couldn't establish the connection to necro socket server : {socketURL}"
                             });
-                            if(session.LogicSettings.DataSharingConfig.EnableFailoverDataServers && servers.Count > 1)
+                            if (session.LogicSettings.DataSharingConfig.EnableFailoverDataServers && servers.Count > 1)
                             {
                                 break;
                             }
@@ -170,32 +196,27 @@ namespace PoGo.NecroBot.CLI
                             //Logger.Write("Connected to necrobot data service.");
                             retries = 0;
 
-                            lock (events)
-                            {
-                                processing.Clear();
-                                processing.AddRange(events);
-                                events.Clear();
-                            }
+                            //if (lastEncouteredEvent != null && ws.IsAlive)
+                            //{
+                            //    lock (lastEncouteredEvent)
+                            //    {
+                            //        var data = Serialize(lastEncouteredEvent);
+                            //        lastEncouteredEvent = null;
+                            //        var message = Encrypt(data);
+                            //        var actualMessage = JsonConvert.SerializeObject(message);
+                            //        ws.Send($"42[\"pokemons-update\",{actualMessage}]");
+                            //    }
+                            //    await Task.Delay(POLLING_INTERVAL);
+                            //}
 
-                            if (lastEncouteredEvent != null && ws.IsAlive)
+                            if (ws.IsAlive && clientData.HasData())
                             {
-                                lock (lastEncouteredEvent)
-                                {
-                                    var data = Serialize(lastEncouteredEvent);
-                                    lastEncouteredEvent = null;
-                                    var message = Encrypt(data);
-                                    var actualMessage = JsonConvert.SerializeObject(message);
-                                    ws.Send($"42[\"pokemons-update\",{actualMessage}]");
-                                }
-                                await Task.Delay(POLLING_INTERVAL);
-                            }
+                                var data = JsonConvert.SerializeObject(clientData);// Serialize(processing);
+                                clientData = new SocketClientUpdate();
 
-                            if (processing.Count > 0 && ws.IsAlive)
-                            {
-                                var data = Serialize(processing);
                                 var message = Encrypt(data);
                                 var actualMessage = JsonConvert.SerializeObject(message);
-                                ws.Send($"42[\"pokemons-secure\",{actualMessage}]");
+                                ws.Send($"42[\"client-update\",{actualMessage}]");
                             }
 
                             await Task.Delay(POLLING_INTERVAL);
@@ -225,6 +246,7 @@ namespace PoGo.NecroBot.CLI
         {
             try
             {
+                OnPokemonRemoved(session, e.Data);
                 OnPokemonUpdateData(session, e.Data);
                 OnPokemonData(session, e.Data);
                 OnSnipePokemon(session, e.Data);
@@ -264,9 +286,9 @@ namespace PoGo.NecroBot.CLI
                 //var data = JsonConvert.DeserializeObject<List<Logic.Tasks.HumanWalkSnipeTask.FastPokemapItem>>(match.Groups[1].Value);
 
                 // jjskuld - Ignore CS4014 warning for now.
-                #pragma warning disable 4014
+#pragma warning disable 4014
                 HumanWalkSnipeTask.AddFastPokemapItem(match.Groups[1].Value);
-                #pragma warning restore 4014
+#pragma warning restore 4014
             }
         }
 
@@ -287,7 +309,16 @@ namespace PoGo.NecroBot.CLI
             {
                 var data = JsonConvert.DeserializeObject<EncounteredEvent>(match.Groups[1].Value);
                 MSniperServiceTask.RemoveExpiredSnipeData(session, data.EncounterId);
-                 
+            }
+        }
+
+        private static void OnPokemonRemoved(ISession session, string message)
+        {
+            var match = Regex.Match(message, "42\\[\"pokemon-remove\",(.*)]");
+            if (match != null && !string.IsNullOrEmpty(match.Groups[1].Value))
+            {
+                var data = JsonConvert.DeserializeObject<EncounteredEvent>(match.Groups[1].Value);
+                MSniperServiceTask.RemoveExpiredSnipeData(session, data.EncounterId);
             }
         }
 
@@ -308,7 +339,7 @@ namespace PoGo.NecroBot.CLI
                 };
 
                 ulong.TryParse(data.EncounterId, out encounterid);
-                if(encounterid>0 && cache.Get(encounterid.ToString()) == null)
+                if (encounterid > 0 && cache.Get(encounterid.ToString()) == null)
                 {
                     cache.Add(encounterid.ToString(), DateTime.Now, DateTime.Now.AddMinutes(15));
                 }
@@ -320,7 +351,7 @@ namespace PoGo.NecroBot.CLI
                     var move2 = PokemonMove.MoveUnset;
                     Enum.TryParse<PokemonMove>(data.Move1, true, out move1);
                     Enum.TryParse<PokemonMove>(data.Move2, true, out move2);
-                   
+
                     bool caught = CheckIfPokemonBeenCaught(data.Latitude, data.Longitude,
                         data.PokemonId, encounterid, session);
                     if (!caught)
@@ -402,7 +433,7 @@ namespace PoGo.NecroBot.CLI
             {
                 servers.Enqueue(config.DataRecieverURL);
 
-                if(config.EnableFailoverDataServers)
+                if (config.EnableFailoverDataServers)
                 {
                     foreach (var item in config.FailoverDataServers.Split(";".ToCharArray(), StringSplitOptions.RemoveEmptyEntries))
                     {
