@@ -35,6 +35,10 @@ namespace PoGo.NecroBot.CLI
         public static void HandleEvent(IEvent evt, ISession session)
         {
         }
+        public static void HandleEvent(SnipeFailedEvent e, ISession sesion)
+        {
+
+        }
 
         public static void Listen(IEvent evt, ISession session)
         {

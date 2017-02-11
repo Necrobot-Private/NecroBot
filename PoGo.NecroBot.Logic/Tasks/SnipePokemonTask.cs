@@ -524,8 +524,16 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 session.EventDispatcher.Send(new SnipeEvent
                 {
-                    Message = session.Translation.GetTranslation(TranslationString.NoPokemonToSnipe)
+                    Message = session.Translation.GetTranslation(TranslationString.NoPokemonToSnipe),
                 });
+
+                session.EventDispatcher.Send(new SnipeFailedEvent
+                {
+                    Latitude = latitude,
+                    Longitude = longitude,
+                    PokemonId = pokemonIds.FirstOrDefault()
+                });
+
                 return false;
             }
 
