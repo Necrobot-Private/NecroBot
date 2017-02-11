@@ -473,9 +473,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                 if (session.LogicSettings.PokemonSnipeFilters.ContainsKey(encounterEV.PokemonId))
                 {
                     var filter = session.LogicSettings.PokemonSnipeFilters[encounterEV.PokemonId];
-                    if (filter.AllowMultiAccountSnipe && filter.IsMatch(encounterEV.IV, 
+                    if ( session.LogicSettings.AllowMultipleBot && 
+                        filter.AllowMultiAccountSnipe && 
+                        filter.IsMatch(encounterEV.IV, 
                         (PokemonMove)Enum.Parse(typeof(PokemonMove), encounterEV.Move1),
-                        (PokemonMove)Enum.Parse(typeof(PokemonMove), encounterEV.Move1), 
+                        (PokemonMove)Enum.Parse(typeof(PokemonMove), encounterEV.Move2), 
                         encounterEV.Level, true))
                     {
                         //thow

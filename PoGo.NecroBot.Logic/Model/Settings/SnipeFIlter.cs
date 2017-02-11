@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 using POGOProtos.Enums;
 using System.Linq;
+using System;
 
 namespace PoGo.NecroBot.Logic.Model.Settings
 {
@@ -89,9 +90,8 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         }
 
         public bool IsMatch(double iv, PokemonMove move1, PokemonMove move2, int level, bool verified )
-        {
+        { 
             var filter = this;
-
             //if not verified and undetermine move. If not verify, level won't apply
             if ((filter.Level <= level || !filter.VerifiedOnly) &&
                 filter.SnipeIV <= iv &&
@@ -102,7 +102,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             }
 
             //if not verified and undetermine move. If not verify, level won't apply
-            if ((filter.Level <= level || !filter.VerifiedOnly) &&
+            if (((verified && filter.Level <= level) || !filter.VerifiedOnly) &&
                 filter.SnipeIV <= iv &&
                 move1 == PokemonMove.MoveUnset && move2 == PokemonMove.MoveUnset &&
                 (filter.Moves == null || filter.Moves.Count == 0))
@@ -110,7 +110,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 return true;
             }
             //need refactore this to better 
-            if ((filter.Level <= Level || !filter.VerifiedOnly) &&
+            if (((verified && filter.Level <= level) || !filter.VerifiedOnly) &&
                 (string.IsNullOrEmpty(filter.Operator) || filter.Operator == "or") &&
                 (filter.SnipeIV <= iv
                  || (filter.Moves != null
@@ -122,7 +122,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 return true;
             }
 
-            if ((filter.Level <= level || !filter.VerifiedOnly) &&
+            if (((verified && filter.Level <= level) || !filter.VerifiedOnly) &&
                 filter.Operator == "and" &&
                 (filter.SnipeIV <= iv
                  && (filter.Moves != null
