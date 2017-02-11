@@ -21,6 +21,7 @@ using POGOProtos.Map.Fort;
 using POGOProtos.Map.Pokemon;
 using POGOProtos.Networking.Responses;
 using TinyIoC;
+using POGOProtos.Enums;
 
 #endregion
 
@@ -438,7 +439,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 session.Actions.RemoveAll(x => x == BotActions.Catch);
 
                 if (MultipleBotConfig.IsMultiBotActive(session.LogicSettings))
-                    ExecuteSwitcher(session, encounterEV);
+                    ExecuteSwitcher(session, encounterEV, uniqueCacheKey);
 
                 if (session.LogicSettings.TransferDuplicatePokemonOnCapture &&
                     session.LogicSettings.TransferDuplicatePokemon &&
@@ -455,10 +456,20 @@ namespace PoGo.NecroBot.Logic.Tasks
             return true;
         }
 
-        private static void ExecuteSwitcher(ISession session, EncounteredEvent encounterEV)
+        private static void ExecuteSwitcher(ISession session, EncounteredEvent encounterEV, string cacheKey)
         {
             //if distance is very far. that is snip pokemon
+            var accountManager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
 
+            var curentkey = session.Settings.AuthType == AuthType.Google
+                  ? session.Settings.GoogleUsername
+                  : session.Settings.PtcUsername;
+
+            curentkey += encounterEV.EncounterId;
+            session.Cache.Add(curentkey, encounterEV, DateTime.Now.AddMinutes(15));
+
+            var evalNextBot = accountManager.FindAvailableAccountForPokemonSwitch(encounterEV.EncounterId);
+            if (evalNextBot == null) return;
             if (session.Stats.IsSnipping
                 //assume that all pokemon catch from 250+m is snipe
                 || LocationUtils.CalculateDistanceInMeters(
@@ -466,8 +477,35 @@ namespace PoGo.NecroBot.Logic.Tasks
                     encounterEV.Longitude,
                     session.Client.CurrentLatitude,
                     session.Client.CurrentLongitude
-                ) > 250)
+                ) > 1000)
+            {
+
+                if (session.LogicSettings.PokemonSnipeFilters.ContainsKey(encounterEV.PokemonId))
+                {
+                    var filter = session.LogicSettings.PokemonSnipeFilters[encounterEV.PokemonId];
+                    if ( session.LogicSettings.AllowMultipleBot && 
+                        filter.AllowMultiAccountSnipe && 
+                        filter.IsMatch(encounterEV.IV, 
+                        (PokemonMove)Enum.Parse(typeof(PokemonMove), encounterEV.Move1),
+                        (PokemonMove)Enum.Parse(typeof(PokemonMove), encounterEV.Move2), 
+                        encounterEV.Level, true))
+                    {
+                        //thow
+                        throw new ActiveSwitchByPokemonException()
+                        {
+                            EncounterData = encounterEV,
+                            LastLatitude = encounterEV.Latitude,
+                            LastLongitude = encounterEV.Longitude,
+                            LastEncounterPokemonId = encounterEV.PokemonId,
+                            Snipe = true , Bot = evalNextBot
+                        };
+
+                    }
+                }
+
                 return;
+
+            }
 
             if (MultipleBotConfig.IsMultiBotActive(session.LogicSettings) &&
                 session.LogicSettings.MultipleBotConfig.OnRarePokemon &&
@@ -484,17 +522,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                     )
                 ))
             {
-                var curentkey = session.Settings.AuthType == AuthType.Google
-                    ? session.Settings.GoogleUsername
-                    : session.Settings.PtcUsername;
+              
 
-                curentkey += encounterEV.EncounterId;
-                session.Cache.Add(curentkey, encounterEV, DateTime.Now.AddMinutes(15));
-
-                var accountManager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
-
-                var evalNextBot = accountManager.FindAvailableAccountForPokemonSwitch(encounterEV.EncounterId);
-
+           
                 if (evalNextBot != null)
                 {
                     //cancel all running task.

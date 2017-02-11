@@ -151,9 +151,17 @@ namespace PoGo.NecroBot.Logic.State
                 }
                 catch (ActiveSwitchByPokemonException rsae)
                 {
-                    session.EventDispatcher.Send(new WarnEvent { Message = "Encountered a good pokemon , switch another bot to catch him too." });
-                    session.ReInitSessionWithNextBot(rsae.Bot, session.Client.CurrentLatitude, session.Client.CurrentLongitude, session.Client.CurrentAltitude);
-                    state = new LoginState(rsae.LastEncounterPokemonId);
+                    if (rsae.Snipe && rsae.EncounterData != null)
+                    {
+                        session.EventDispatcher.Send(new WarnEvent { Message = $"Detected a pefect pokemon with snipe {rsae.EncounterData.PokemonId.ToString()}   IV:{rsae.EncounterData.IV}  Move:{rsae.EncounterData.Move1}/ Move:{rsae.EncounterData.Move2}   LV: Move:{rsae.EncounterData.Level}" });
+                        session.ReInitSessionWithNextBot(null,session.Client.CurrentLatitude, session.Client.CurrentLongitude, session.Client.CurrentAltitude);
+                        state = new LoginState(rsae.LastEncounterPokemonId, rsae.EncounterData);
+                    }
+                    else {
+                        session.EventDispatcher.Send(new WarnEvent { Message = "Encountered a good pokemon , switch another bot to catch him too." });
+                        session.ReInitSessionWithNextBot(rsae.Bot, session.Client.CurrentLatitude, session.Client.CurrentLongitude, session.Client.CurrentAltitude);
+                        state = new LoginState(rsae.LastEncounterPokemonId);
+                    }
                 }
                 catch (ActiveSwitchByRuleException se)
                 {
