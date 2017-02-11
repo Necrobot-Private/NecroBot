@@ -393,7 +393,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
 #endif
                 //pokemon has expired, send event to remove it.
-                if (encounter != null && encounter.Status == EncounterResponse.Types.Status.EncounterClosed)
+                if (encounter != null &&( encounter.Status == EncounterResponse.Types.Status.EncounterClosed|| 
+                    encounter.Status == EncounterResponse.Types.Status.EncounterNotFound))
                 {
                     session.EventDispatcher.Send(new SnipePokemonUpdateEvent(encounterId.EncounterId.ToString(), false, null));
                 }
