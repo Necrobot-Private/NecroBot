@@ -14,6 +14,7 @@ using POGOProtos.Enums;
 using POGOProtos.Networking.Responses;
 using POGOProtos.Data.Player;
 using System;
+using System.IO;
 
 #endregion
 
@@ -212,6 +213,8 @@ namespace PoGo.NecroBot.Logic.State
 
         public async Task<bool> SelectNickname(ISession session, CancellationToken cancellationToken)
         {
+           var  nickname = session.Settings.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Ptc ? session.Settings.PtcUsername : session.Settings.GooglePassword.Split(new char[] { '@' })[0];
+
             while (true)
             {
                 //string nickname = GlobalSettings.PromptForString(session.Translation,
@@ -226,8 +229,7 @@ namespace PoGo.NecroBot.Logic.State
                 //    });
                 //    continue;
                 //}
-                var nickname = session.Settings.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Ptc ? session.Settings.PtcUsername : session.Settings.GooglePassword.Split(new char[] { '@' })[0];
-
+               
                 if (nickname.Length > 15) nickname = nickname.Substring(0, 15);
 
                 var res = await session.Client.Misc.ClaimCodename(nickname);
@@ -236,6 +238,7 @@ namespace PoGo.NecroBot.Logic.State
                 string errorText = null;
                 string warningText = null;
                 string infoText = null;
+                bool nameIsvalid = true;
                 switch (res.Status)
                 {
                     case ClaimCodenameResponse.Types.Status.Unset:
@@ -246,12 +249,15 @@ namespace PoGo.NecroBot.Logic.State
                         markTutorialComplete = true;
                         break;
                     case ClaimCodenameResponse.Types.Status.CodenameNotAvailable:
+                        nameIsvalid = false;
                         errorText = $"That nickname ({nickname}) isn't available, pick another one!";
                         break;
                     case ClaimCodenameResponse.Types.Status.CodenameNotValid:
+                        nameIsvalid = false;
                         errorText = $"That nickname ({nickname}) isn't valid, pick another one!";
                         break;
                     case ClaimCodenameResponse.Types.Status.CurrentOwner:
+                        nameIsvalid = false;
                         warningText = $"You already own that nickname!";
                         markTutorialComplete = true;
                         break;
@@ -284,6 +290,12 @@ namespace PoGo.NecroBot.Logic.State
                     {
                         Message = errorText
                     });
+                    if(!nameIsvalid)
+                    {
+                        nickname = Path.GetRandomFileName();
+                        continue;
+                    }
+                    
                 }
 
                 if (markTutorialComplete)

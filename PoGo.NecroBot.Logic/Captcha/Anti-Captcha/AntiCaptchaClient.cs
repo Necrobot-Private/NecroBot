@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PoGo.NecroBot.Logic.Logging;
+using System;
 using System.Threading.Tasks;
 
 namespace PoGo.NecroBot.Logic.Captcha.Anti_Captcha
@@ -45,19 +46,18 @@ namespace PoGo.NecroBot.Logic.Captcha.Anti_Captcha
                     break;
                 }
 
-                Console.WriteLine("Not done yet, waiting...");
-                await Task.Delay(1000);
+                await Task.Delay(3000);
             } while (response != null && response.GetStatus().Equals(AnticaptchaResult.Status.processing));
 
             if (response == null || response.GetSolution() == null)
             {
-                Console.WriteLine("Unknown error occurred...");
-                Console.WriteLine("Response dump:");
-                Console.WriteLine(response);
+                Logger.Write("Unknown error occurred...", LogLevel.Error);
+                //Console.WriteLine("Response dump:");
+                //Console.WriteLine(response);
             }
             else
             {
-                Console.WriteLine("The answer is '" + response.GetSolution() + "'");
+                //Console.WriteLine("The answer is '" + response.GetSolution() + "'");
             }
 
             return response.GetSolution();
