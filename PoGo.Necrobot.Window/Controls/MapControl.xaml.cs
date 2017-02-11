@@ -117,22 +117,16 @@ namespace PoGo.Necrobot.Window.Controls
 
         private GMapMarker playerMarker;
 
-        internal void MarkFortAsLooted(string id)
+        internal void MarkFortAsLooted(FortData fortData)
         {
-            var marker = allMarkers[id];
-            var fort = this.forts.Where(x => x.Id == id).FirstOrDefault();
+            GMapMarker marker = allMarkers[fortData.Id];
+            var fort = this.forts.Where(x => x.Id == fortData.Id).FirstOrDefault();
             if (fort.Type == FortType.Checkpoint)
             {
-                string fortIcon;
-                if (fort.LureInfo != null)
+                if (marker.Shape is FortMarker)
                 {
-                    fortIcon = "images/VisitedLure.png";
+                    ((FortMarker)marker.Shape).UpdateFortData(fortData);
                 }
-                else
-                {
-                    fortIcon = "images/Visited.png";
-                }
-                marker.Shape = new ImageMarker(null, marker, "", fortIcon);
             }
         }
 
@@ -166,7 +160,8 @@ namespace PoGo.Necrobot.Window.Controls
 
         private void AddPokestopMarker(FortData item)
         {
-            if (!this.forts.Exists(x => x.Id == item.Id))
+            var existingFort = this.forts.FirstOrDefault(x => x.Id == item.Id);
+            if (existingFort == null)
             {
                 this.forts.Add(item);
 
@@ -192,6 +187,15 @@ namespace PoGo.Necrobot.Window.Controls
                     allMarkers.Add(item.Id, m);
                     gmap.Markers.Add(m);
                 });
+            }
+            else
+            {
+                // Update state of fort
+                GMapMarker gmapMarker = allMarkers[item.Id];
+                if (gmapMarker.Shape is FortMarker)
+                {
+                    ((FortMarker)gmapMarker.Shape).UpdateFortData(item);
+                }
             }
         }
 

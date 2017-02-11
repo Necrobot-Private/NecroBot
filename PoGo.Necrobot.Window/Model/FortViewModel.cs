@@ -3,10 +3,6 @@ using PoGo.NecroBot.Logic.Utils;
 using POGOProtos.Map.Fort;
 using PokemonGo.RocketAPI.Extensions;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TinyIoC;
 
 namespace PoGo.Necrobot.Window.Model
@@ -43,12 +39,30 @@ namespace PoGo.Necrobot.Window.Model
                 return fortIcon;
             }
         }
+
         public FortViewModel(FortData data)
         {
             this.Session = TinyIoCContainer.Current.Resolve<ISession>();
             this.fort = data;
             
             UpdateDistance(this.Session.Client.CurrentLatitude, this.Session.Client.CurrentLongitude);
+        }
+
+        public void UpdateFortData(FortData newFort)
+        {
+            var originalFort = this.fort;
+            this.fort = newFort;
+
+            if (IsVisited(newFort) != IsVisited(originalFort) || newFort.LureInfo != originalFort.LureInfo)
+            {
+                // If lure status or visited status has changed, then raise the property.
+                RaisePropertyChanged("FortIcon");
+            }
+        }
+
+        protected bool IsVisited(FortData data)
+        {
+            return fort.CooldownCompleteTimestampMs > DateTime.UtcNow.ToUnixTime();
         }
 
         internal void UpdateDistance(double lat, double lng)
