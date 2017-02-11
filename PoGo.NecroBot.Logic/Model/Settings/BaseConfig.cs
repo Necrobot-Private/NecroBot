@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace PoGo.NecroBot.Logic.Model.Settings
@@ -10,31 +11,39 @@ namespace PoGo.NecroBot.Logic.Model.Settings
     {
         public BaseConfig()
         {
-            PropertyInfo[] props = this.GetType().GetProperties();
-            foreach (PropertyInfo prop in props)
+            try
             {
-                var d = prop.GetCustomAttribute<DefaultValueAttribute>();
-
-                if (d != null)
+                PropertyInfo[] props = this.GetType().GetProperties();
+                foreach (PropertyInfo prop in props)
                 {
+                    var d = prop.GetCustomAttribute<DefaultValueAttribute>();
 
-                    if (prop.PropertyType == typeof(List<PokemonId>))
+                    if (d != null)
                     {
-                        var arr = d.Value.ToString().Split(new char[] { ';' });
-                        var list = new List<PokemonId>();
-                        foreach (var pname in arr)
+
+                        if (prop.PropertyType == typeof(List<PokemonId>))
                         {
-                            PokemonId pi = PokemonId.Missingno;
-                            if (Enum.TryParse<PokemonId>(pname, true, out pi))
+                            var arr = d.Value.ToString().Split(new char[] { ';' });
+                            var list = new List<PokemonId>();
+                            foreach (var pname in arr)
                             {
-                                list.Add(pi);
+                                PokemonId pi = PokemonId.Missingno;
+                                if (Enum.TryParse<PokemonId>(pname, true, out pi))
+                                {
+                                    list.Add(pi);
+                                }
                             }
+                            prop.SetValue(this, list);
                         }
-                        prop.SetValue(this, list);
+                        else
+                            prop.SetValue(this, d.Value);
+
                     }
-                    else
-                        prop.SetValue(this, d.Value);
                 }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
             }
         }
     }

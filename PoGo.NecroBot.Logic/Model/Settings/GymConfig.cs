@@ -149,8 +149,17 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [NecrobotConfig(Description = "List of pokemon bot won't use in gym batle, deploy", Position = 24)]
         [DefaultValue("Kangaskhan;Tauros;MrMime;Farfetchd")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
-        
         public List<PokemonId> ExcludeForGyms { get; set; }
+
+        [NecrobotConfig(Description = "Do not use dodge", Position = 25)]
+        [DefaultValue(false)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
+        public bool DontUseDodge { get; set; }
+
+        [NecrobotConfig(Description = "Minimum revive potions to use gym module", Position = 26)]
+        [DefaultValue(5)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
+        public int MinRevivePotions { get; set; }
 
         private static ICollection<KeyValuePair<PokemonId, PokemonMove>> GetDefaults()
         {

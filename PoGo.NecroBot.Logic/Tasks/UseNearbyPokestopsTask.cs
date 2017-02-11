@@ -230,7 +230,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                 forts = forts.Where(p => LocationUtils.CalculateDistanceInMeters(p.Latitude, p.Longitude, session.Client.CurrentLatitude, session.Client.CurrentLongitude) < 40).ToList();
             }
 
-            if (!session.LogicSettings.GymConfig.Enable /*|| session.Inventory.GetPlayerStats().FirstOrDefault().Level <= 5*/)
+            var reviveCount = session.Inventory.GetItems().Where(w => w.ItemId == POGOProtos.Inventory.Item.ItemId.ItemRevive || w.ItemId == POGOProtos.Inventory.Item.ItemId.ItemMaxRevive).Select(s => s.Count).Sum();
+            if (!session.LogicSettings.GymConfig.Enable 
+                || session.LogicSettings.GymConfig.MinRevivePotions > reviveCount
+            /*|| session.Inventory.GetPlayerStats().FirstOrDefault().Level <= 5*/
+            )
             {
                 // Filter out the gyms
                 forts = forts.Where(x => x.Type != FortType.Gym).ToList();
@@ -432,7 +436,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Latitude = pokeStop.Latitude,
                         Longitude = pokeStop.Longitude,
                         Altitude = session.Client.CurrentAltitude,
-                        InventoryFull = fortSearch.Result == FortSearchResponse.Types.Result.InventoryFull
+                        InventoryFull = fortSearch.Result == FortSearchResponse.Types.Result.InventoryFull,
+                        Fort = pokeStop
                     });
                     if (fortSearch.Result == FortSearchResponse.Types.Result.Success)
                     {

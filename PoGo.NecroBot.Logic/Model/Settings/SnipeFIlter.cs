@@ -3,6 +3,8 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 using POGOProtos.Enums;
+using System.Linq;
+using System;
 
 namespace PoGo.NecroBot.Logic.Model.Settings
 {
@@ -62,6 +64,18 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 7)]
         public int AutoSnipeCandy { get; set; }
 
+        [NecrobotConfig(Key = "Snipe Level", Description = "Min level to snipe , level are using and logic with IV and move and only activate for verify data", Position = 8)]
+        [DefaultValue(0)]
+        [Range(0,100)]
+        [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 8)]
+        public int Level { get; set; }
+
+        [NecrobotConfig(Key = "AllowMultiAccountSnipe", Description = "Allow bot change account to snipe this pokemon", Position = 9)]
+        [DefaultValue(false)]
+        [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 9)]
+        public bool AllowMultiAccountSnipe { get; set; }
+
+
         internal static Dictionary<PokemonId, SnipeFilter> SniperFilterDefault()
         {
             return new Dictionary<PokemonId, SnipeFilter>
@@ -73,6 +87,55 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 {PokemonId.Rhyhorn, new SnipeFilter(0, new List<List<PokemonMove>>() { })},
                 {PokemonId.Abra, new SnipeFilter(0, new List<List<PokemonMove>>() { })}
             };
+        }
+
+        public bool IsMatch(double iv, PokemonMove move1, PokemonMove move2, int level, bool verified )
+        { 
+            var filter = this;
+            //if not verified and undetermine move. If not verify, level won't apply
+            if (((verified && filter.Level <= level) || !filter.VerifiedOnly) &&
+                filter.SnipeIV <= iv &&
+                move1 == PokemonMove.MoveUnset && move2 == PokemonMove.MoveUnset &&
+                (filter.Moves == null || filter.Moves.Count == 0))
+            {
+                return true;
+            }
+
+            //if not verified and undetermine move. If not verify, level won't apply
+            if (((verified && filter.Level <= level) || !verified) &&
+                filter.SnipeIV <= iv &&
+                move1 == PokemonMove.MoveUnset && move2 == PokemonMove.MoveUnset &&
+                (filter.Moves == null || filter.Moves.Count == 0))
+            {
+                return true;
+            }
+            //need refactore this to better 
+            if (((verified && filter.Level <= level) || !verified) &&
+                (string.IsNullOrEmpty(filter.Operator) || filter.Operator == "or") &&
+                (filter.SnipeIV <= iv
+                 || (filter.Moves != null
+                     && filter.Moves.Count > 0
+                     && filter.Moves.Any(x => x[0] == move1 && x[1] == move2))
+                ))
+
+            {
+                return true;
+            }
+
+            if (((verified && filter.Level <= level) || !verified) &&
+                filter.Operator == "and" &&
+                (filter.SnipeIV <= iv
+                 && (filter.Moves != null
+                     && filter.Moves.Count > 0
+                     && filter.Moves.Any(x => x[0] == move1 && x[1] == move2))
+                ))
+            {
+                return true;
+            }
+
+            return false;
+
+
         }
     }
 }

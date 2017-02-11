@@ -229,6 +229,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             public short PokemonId { get; set; }
             public string SpawnPointId { get; set; }
             public int Priority { get; set; }
+            public int Level { get;  set; }
         }
 
         #endregion Classes
@@ -392,7 +393,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
 #endif
                 //pokemon has expired, send event to remove it.
-                if (encounter != null && encounter.Status == EncounterResponse.Types.Status.EncounterClosed)
+                if (encounter != null &&( encounter.Status == EncounterResponse.Types.Status.EncounterClosed|| 
+                    encounter.Status == EncounterResponse.Types.Status.EncounterNotFound))
                 {
                     session.EventDispatcher.Send(new SnipePokemonUpdateEvent(encounterId.EncounterId.ToString(), false, null));
                 }
@@ -560,7 +562,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 SnipeIV = session.LogicSettings.MinIVForAutoSnipe,
                 VerifiedOnly = session.LogicSettings.AutosnipeVerifiedOnly,
-                AutoSnipeCandy = session.LogicSettings.DefaultAutoSnipeCandy
+                AutoSnipeCandy = session.LogicSettings.DefaultAutoSnipeCandy,
+                Level = 0
             };
 
             var pokemonId = (PokemonId)item.PokemonId;
@@ -592,34 +595,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                     autoSnipePokemons.Add(item);
                     return true;
                 }
-
-                //if not verified and undetermine move.
-                if (filter.SnipeIV <= item.Iv &&
-                    item.Move1 == PokemonMove.MoveUnset && item.Move2 == PokemonMove.MoveUnset &&
-                    (filter.Moves == null || filter.Moves.Count == 0))
-                {
-                    autoSnipePokemons.Add(item);
-                    return true;
-                }
-                //ugly but readable
-                if ((string.IsNullOrEmpty(filter.Operator) || filter.Operator == Operator.or.ToString()) &&
-                    (filter.SnipeIV <= item.Iv
-                     || (filter.Moves != null
-                         && filter.Moves.Count > 0
-                         && filter.Moves.Any(x => x[0] == item.Move1 && x[1] == item.Move2))
-                    ))
-
-                {
-                    autoSnipePokemons.Add(item);
-                    return true;
-                }
-
-                if (filter.Operator == Operator.and.ToString() &&
-                    (filter.SnipeIV <= item.Iv
-                     && (filter.Moves != null
-                         && filter.Moves.Count > 0
-                         && filter.Moves.Any(x => x[0] == item.Move1 && x[1] == item.Move2))
-                    ))
+                
+                if(filter.IsMatch(item.Iv, item.Move1, item.Move2, item.Level, item.EncounterId > 0))
                 {
                     autoSnipePokemons.Add(item);
                     return true;
@@ -783,6 +760,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     waitNextPokestop = true;
                 }
             }
+            catch(ActiveSwitchByPokemonException ex) { throw ex; }
             catch (ActiveSwitchByRuleException ex)
             {
                 throw ex;

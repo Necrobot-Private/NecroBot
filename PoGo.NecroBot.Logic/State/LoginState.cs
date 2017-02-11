@@ -22,9 +22,11 @@ namespace PoGo.NecroBot.Logic.State
     public class LoginState : IState
     {
         private PokemonId pokemonToCatch;
+        private EncounteredEvent encounterData;
 
-        public LoginState(PokemonId pokemonToCatch = PokemonId.Missingno)
+        public LoginState(PokemonId pokemonToCatch = PokemonId.Missingno, EncounteredEvent encounterData = null)
         {
+            this.encounterData = encounterData;
             this.pokemonToCatch = pokemonToCatch;
         }
 
@@ -268,7 +270,7 @@ namespace PoGo.NecroBot.Logic.State
             });
             if (this.pokemonToCatch != PokemonId.Missingno)
             {
-                return new BotSwitcherState(this.pokemonToCatch);
+                return new BotSwitcherState(this.pokemonToCatch, this.encounterData);
             }
             return new LoadSaveState();
         }
