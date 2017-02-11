@@ -470,7 +470,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             session.EventDispatcher.Send(new SnipeModeEvent {Active = true});
 
             List<MapPokemon> catchablePokemon;
-            int retry = 5;
+            int retry = 3;
 
             bool isCaptchaShow = false;
 
@@ -482,7 +482,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     await
                         LocationUtils.UpdatePlayerLocationWithAltitude(session,
                             new GeoCoordinate(latitude, longitude, 10d), 0); // Set speed to 0 for random speed.
-                    await Task.Delay(1000);
+                    await Task.Delay(500);
                     latitude += 0.00000001;
                     longitude += 0.00000001;
 
@@ -491,7 +491,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Longitude = longitude,
                         Latitude = latitude
                     });
-                    await Task.Delay(1000);
+                    await Task.Delay(500);
                     var mapObjects = session.Client.Map.GetMapObjects().Result;
                     //session.AddForts(mapObjects.MapCells.SelectMany(p => p.Forts).ToList());
                     catchablePokemon =

@@ -289,16 +289,19 @@ namespace PoGo.NecroBot.CLI
 
         private static MemoryCache cache = new MemoryCache("dump");
 
+        static int count = 0;
         private static void OnPokemonData(ISession session, string message)
         {
-            
             var match = Regex.Match(message, "42\\[\"pokemon\",(.*)]");
             if (match != null && !string.IsNullOrEmpty(match.Groups[1].Value))
             {
                 var data = JsonConvert.DeserializeObject<EncounteredEvent>(match.Groups[1].Value);
                 data.IsRecievedFromSocket = true;
                 ulong encounterid = 0;
-                if (Math.Abs(data.Latitude) > 90 || Math.Abs(data.Longitude) > 180) return;
+                if (Math.Abs(data.Latitude) > 90 || Math.Abs(data.Longitude) > 180)
+                {
+                    return;
+                };
 
                 ulong.TryParse(data.EncounterId, out encounterid);
                 if(encounterid>0 && cache.Get(encounterid.ToString()) == null)

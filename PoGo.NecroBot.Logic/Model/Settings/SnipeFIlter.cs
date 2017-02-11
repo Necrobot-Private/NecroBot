@@ -93,7 +93,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         { 
             var filter = this;
             //if not verified and undetermine move. If not verify, level won't apply
-            if ((filter.Level <= level || !filter.VerifiedOnly) &&
+            if (((verified && filter.Level <= level) || !filter.VerifiedOnly) &&
                 filter.SnipeIV <= iv &&
                 move1 == PokemonMove.MoveUnset && move2 == PokemonMove.MoveUnset &&
                 (filter.Moves == null || filter.Moves.Count == 0))
@@ -102,7 +102,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             }
 
             //if not verified and undetermine move. If not verify, level won't apply
-            if (((verified && filter.Level <= level) || !filter.VerifiedOnly) &&
+            if (((verified && filter.Level <= level) || !verified) &&
                 filter.SnipeIV <= iv &&
                 move1 == PokemonMove.MoveUnset && move2 == PokemonMove.MoveUnset &&
                 (filter.Moves == null || filter.Moves.Count == 0))
@@ -110,7 +110,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 return true;
             }
             //need refactore this to better 
-            if (((verified && filter.Level <= level) || !filter.VerifiedOnly) &&
+            if (((verified && filter.Level <= level) || !verified) &&
                 (string.IsNullOrEmpty(filter.Operator) || filter.Operator == "or") &&
                 (filter.SnipeIV <= iv
                  || (filter.Moves != null
@@ -122,7 +122,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 return true;
             }
 
-            if (((verified && filter.Level <= level) || !filter.VerifiedOnly) &&
+            if (((verified && filter.Level <= level) || !verified) &&
                 filter.Operator == "and" &&
                 (filter.SnipeIV <= iv
                  && (filter.Moves != null
