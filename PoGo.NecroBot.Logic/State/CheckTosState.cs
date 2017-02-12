@@ -292,7 +292,7 @@ namespace PoGo.NecroBot.Logic.State
                     });
                     if(!nameIsvalid)
                     {
-                        nickname = Path.GetRandomFileName();
+                        nickname = Path.GetFileNameWithoutExtension(Path.GetRandomFileName());
                         continue;
                     }
                     

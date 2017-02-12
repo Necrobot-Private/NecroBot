@@ -230,6 +230,10 @@ namespace PoGo.NecroBot.Logic.Tasks
             public string SpawnPointId { get; set; }
             public int Priority { get; set; }
             public int Level { get;  set; }
+            public bool IsVerified()
+            {
+                return EncounterId > 0 && SpawnPointId.IndexOf('-') < 0;
+            }
         }
 
         #endregion Classes
@@ -741,7 +745,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     });
 
                     session.Stats.IsSnipping = true;
-                    var result = location.EncounterId != 0
+                    var result = location.IsVerified()
                         ? await CatchFromService(session, cancellationToken, location)
                         : await CatchWithSnipe(session, location, cancellationToken);
 

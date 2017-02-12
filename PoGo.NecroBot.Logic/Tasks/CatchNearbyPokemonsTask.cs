@@ -56,6 +56,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             Logger.Write(session.Translation.GetTranslation(TranslationString.LookingForPokemon), LogLevel.Debug);
 
             var nearbyPokemons = await GetNearbyPokemons(session);
+            if (nearbyPokemons == null) return;
             var priorityPokemon = nearbyPokemons.Where(p => p.PokemonId == priority).FirstOrDefault();
             var pokemons = nearbyPokemons.Where(p => p.PokemonId != priority).ToList();
 
@@ -179,6 +180,8 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static async Task<IOrderedEnumerable<MapPokemon>> GetNearbyPokemons(ISession session)
         {
             var mapObjects = await session.Client.Map.GetMapObjects();
+            if (mapObjects == null || mapObjects.MapCells == null) return null;
+
             var forts = mapObjects.MapCells.SelectMany(p => p.Forts).ToList();
             var nearbyPokemons = mapObjects.MapCells.SelectMany(x => x.NearbyPokemons).ToList();
             

@@ -175,16 +175,16 @@ namespace PoGo.NecroBot.Logic.State
             else
                 percent = (decimal)cp / (decimal)data.Cp * 100.0M;
 
-            int factor = (int)((100.0M - Math.Abs(percent)) / 8.0M) * Math.Sign(percent);
+            int factor = (int)((100.0M - Math.Abs(percent)) / 5.0M) * Math.Sign(percent);
 
-            if (isTraining)
-                factor *= -1;
+            if (isTraining && cp <= data.Cp)
+                factor -= 100;
 
             if (session.LogicSettings.GymConfig.NotUsedSkills.Any(a => a.Key == data.PokemonId && a.Value == attack.MovementId))
-                factor -= 10;
+                factor -= 20;
 
             if (session.LogicSettings.GymConfig.NotUsedSkills.Any(a => a.Key == data.PokemonId && a.Value == specialAttack.MovementId))
-                factor -= 8;
+                factor -= 20;
 
             return factor;
         }
