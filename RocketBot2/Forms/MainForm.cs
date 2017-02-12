@@ -687,6 +687,7 @@ namespace RocketBot2.Forms
                 _playerOverlay.Routes.Clear();
                 _playerOverlay.Markers.Clear();
                 _pokemonsOverlay.Markers.Clear();
+                _playerLocations.Clear();
                 encounterPokemonsCount = 0;
             }
 
