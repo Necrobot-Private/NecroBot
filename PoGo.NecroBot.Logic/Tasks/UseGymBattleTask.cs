@@ -184,11 +184,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                     isVictory = false;
                     _startBattleCounter--;
 
-                    TimedLog("Start battle result: " + result, true);
-                    TimedLog("FortDetais: " + fortDetails, true);
-                    TimedLog("PokemonDatas: " + string.Join(", ", pokemonDatas.Select(s => string.Format("Id: {0} Name: {1} CP: {2} HP: {3}", s.Id, s.PokemonId, s.Cp, s.Stamina))), true);
-                    TimedLog("DefenderId: " + defenderPokemonId, true);
-                    TimedLog("ActionsLog -> " + string.Join(Environment.NewLine, battleActions), true);
+                    TimedLog("Start battle result: " + result);
+                    TimedLog("FortDetais: " + fortDetails);
+                    TimedLog("PokemonDatas: " + string.Join(", ", pokemonDatas.Select(s => string.Format("Id: {0} Name: {1} CP: {2} HP: {3}", s.Id, s.PokemonId, s.Cp, s.Stamina))));
+                    TimedLog("DefenderId: " + defenderPokemonId);
+                    TimedLog("ActionsLog -> " + string.Join(Environment.NewLine, battleActions));
 
                     break;
                 }
@@ -250,6 +250,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                         gym.GymPoints += point;
                         defenderPokemonId = unchecked((ulong)lastAction.BattleResults.NextDefenderPokemonId);
 
+                        await Task.Delay(2000);
+
                         Logger.Write(string.Format("Exp: {0}, Gym points: {1}, Next defender Id: {2}", exp, point, defenderPokemonId), LogLevel.Gym, ConsoleColor.Magenta);
                     }
                     continue;
@@ -267,7 +269,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             if (isFailedToStart && _startBattleCounter > 0)
             {
-
+                await Task.Delay(15000);
                 await Execute(session, cancellationToken, gym, fortInfo);
             }
 
@@ -947,11 +949,14 @@ namespace PoGo.NecroBot.Logic.Tasks
                                             wasSwithed = true;
                                         }
                                         else
+                                        {
                                             Logger.Write(string.Format("We ware fainted in battle, new attacker is: {0} ({1} CP){2}", attacker.PokemonId, attacker.Cp, Environment.NewLine), LogLevel.Info, ConsoleColor.Magenta);
+                                            await Task.Delay(2000);
+                                        }
                                     }
                                 }
                                 attacker = attackResult.ActiveAttacker.PokemonData;
-                                //Console.SetCursorPosition(0, Console.CursorTop - 1);
+                                Console.SetCursorPosition(0, Console.CursorTop - 1);
                                 Logger.Write($"(GYM ATTACK) : Defender {attackResult.ActiveDefender.PokemonData.PokemonId.ToString()  } HP {attackResult.ActiveDefender.CurrentHealth} - Attacker  {attackResult.ActiveAttacker.PokemonData.PokemonId.ToString()}   HP/Sta {attackResult.ActiveAttacker.CurrentHealth}/{attackResult.ActiveAttacker.CurrentEnergy}        ");
                                 if (attackResult != null && attackResult.ActiveAttacker != null)
                                     session.GymState.myTeam.Where(w => w.attacker.Id == attackResult.ActiveAttacker.PokemonData.Id).FirstOrDefault().hpState = attackResult.ActiveAttacker.CurrentHealth;
