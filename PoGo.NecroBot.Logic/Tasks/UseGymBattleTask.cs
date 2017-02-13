@@ -951,8 +951,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                                         else
                                         {
                                             Logger.Write(string.Format("We ware fainted in battle, new attacker is: {0} ({1} CP){2}", attacker.PokemonId, attacker.Cp, Environment.NewLine), LogLevel.Info, ConsoleColor.Magenta);
-                                            await Task.Delay(2000);
                                         }
+                                        await Task.Delay(3000);
                                     }
                                 }
                                 attacker = attackResult.ActiveAttacker.PokemonData;
@@ -973,7 +973,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                             case BattleState.Victory:
                                 Logger.Write($"We were victorious!: ");
-                                await Task.Delay(5000);
+                                await Task.Delay(2000);
                                 return lastActions;
                             default:
                                 Logger.Write($"Unhandled attack response: {attackResult}");

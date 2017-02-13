@@ -240,7 +240,15 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 // Prioritize gyms over pokestops
                 var gyms = forts.Where(x => x.Type == FortType.Gym &&
-                    LocationUtils.CalculateDistanceInMeters(x.Latitude, x.Longitude, session.Client.CurrentLatitude, session.Client.CurrentLongitude) < session.LogicSettings.GymConfig.MaxDistance);
+                    LocationUtils.CalculateDistanceInMeters(x.Latitude, x.Longitude, session.Client.CurrentLatitude, session.Client.CurrentLongitude) < session.LogicSettings.GymConfig.MaxDistance)
+                    .OrderBy(x => LocationUtils.CalculateDistanceInMeters(x.Latitude, x.Longitude, session.Client.CurrentLatitude, session.Client.CurrentLongitude));
+
+                if (session.LogicSettings.GymConfig.PrioritizeGymWithFreeSlot)
+                {
+                    var freeSlots = gyms.Where(w => w.OwnedByTeam == session.Profile.PlayerData.Team && UseGymBattleTask.CanDeployToGym(session, w, null, deployedPokemons));
+                    if (freeSlots.Count() > 0)
+                        return freeSlots.First();
+                } 
 
                 // Return the first gym in range.
                 if (gyms.Count() > 0)
