@@ -365,9 +365,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         if (session.LogicSettings.UseCatchLimit)
                         {
                             session.Stats.AddPokemonTimestamp(DateTime.Now.Ticks);
-                            Logger.Write(
-                                $"(CATCH LIMIT) {session.Stats.GetNumPokemonsInLast24Hours()}/{session.LogicSettings.CatchPokemonLimit}",
-                                LogLevel.Info, ConsoleColor.Yellow);
+                            session.EventDispatcher.Send(new CatchLimitUpdate(session.Stats.GetNumPokemonsInLast24Hours(), session.LogicSettings.CatchPokemonLimit));
                         }
                     }
 

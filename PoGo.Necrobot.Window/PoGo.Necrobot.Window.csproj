@@ -197,6 +197,7 @@
     </Compile>
     <Compile Include="Controls\TemplatedAdorner.cs" />
     <Compile Include="Converters\HeaderFilterConverter.cs" />
+    <Compile Include="Converters\I18NMultiConveter.cs" />
     <Compile Include="Converters\I18NConveter.cs" />
     <Compile Include="Converters\EnumToNumberConverter.cs" />
     <Compile Include="Converters\ListPokemonIdConverter.cs" />

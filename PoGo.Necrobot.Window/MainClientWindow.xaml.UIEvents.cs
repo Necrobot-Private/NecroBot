@@ -13,6 +13,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TinyIoC;
 
 namespace PoGo.Necrobot.Window
 {
@@ -168,10 +169,19 @@ namespace PoGo.Necrobot.Window
         public void OnBotEvent(UpdatePositionEvent ev)
         {
             this.botMap.UpdatePlayerPosition(ev.Latitude, ev.Longitude);
+            this.datacontext.PlayerInfo.UpdateSpeed(ev.Speed);
         }
         public void OnBotEvent(AutoSnipePokemonAddedEvent ev)
         {
             datacontext.SnipeList.OnSnipeItemQueue(ev.EncounteredEvent);
+        }
+        public void OnBotEvent(PokestopLimitUpdate ev)
+        {
+            this.datacontext.PlayerInfo.UpdatePokestopLimit(ev);
+        }
+        public void OnBotEvent(CatchLimitUpdate ev)
+        {
+            this.datacontext.PlayerInfo.UpdateCatchLimit(ev);
         }
         public void OnBotEvent(IEvent evt)
         {

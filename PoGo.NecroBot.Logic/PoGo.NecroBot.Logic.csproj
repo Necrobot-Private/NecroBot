@@ -250,6 +250,7 @@
     <Compile Include="Event\Player\LoggedEvent.cs" />
     <Compile Include="Event\Player\LoginEvent.cs" />
     <Compile Include="Event\Player\TargetLocationEvent.cs" />
+    <Compile Include="Event\PokestopLimitUpdate.cs" />
     <Compile Include="Event\SnipePokemonFoundEvent.cs" />
     <Compile Include="Event\SnipeEvent.cs" />
     <Compile Include="Event\SnipeModeEvent.cs" />

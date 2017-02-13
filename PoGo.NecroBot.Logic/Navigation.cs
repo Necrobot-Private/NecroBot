@@ -25,10 +25,10 @@ using System.IO;
 
 namespace PoGo.NecroBot.Logic
 {
+    public delegate void UpdatePositionDelegate(ISession session, double lat, double lng, double speed);
+
     //add delegate
     public delegate void GetHumanizeRouteDelegate(List<GeoCoordinate> route, GeoCoordinate destination, List<FortData> pokeStops);
-
-    public delegate void UpdatePositionDelegate(ISession session, double lat, double lng);
 
     public class Navigation
     {
