@@ -9,6 +9,7 @@
     <Control.Resources>
         <c:PokemonIdToImageConverter x:Key="PokemonIdToImageConverter"/>
         <c:I18NConveter x:Key="I18NConveter"></c:I18NConveter>
+        <c:I18NMultiConveter x:Key="I18NMultiConveter"></c:I18NMultiConveter>
     </Control.Resources>
     
     <DockPanel LastChildFill="True">
@@ -62,6 +63,25 @@
 
             <TextBlock Grid.Column="1" Grid.Row="1" x:Name="textBlock2" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding TimeToLevelUp, FallbackValue=Level Up in :1d 24h, StringFormat=Level Up in {0}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" RenderTransformOrigin="-0.51,0.5"/>
             <TextBlock Grid.Column="2" Grid.Row="1" x:Name="textBlock3" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Stardust, FallbackValue=Stardust: 90000, StringFormat=Stardust: \{0\}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top"/>
+
+            <TextBlock Grid.Column="4" Grid.Row="1"  HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top">
+                <TextBlock.Text>
+                    <MultiBinding Converter="{StaticResource ResourceKey=I18NMultiConveter}">
+                        <Binding Source="PokestopLimit"></Binding>
+                        <Binding Path="PokestopLimit"></Binding>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+
+            <TextBlock Grid.Column="4" Grid.Row="0"  HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top">
+                <TextBlock.Text>
+                    <MultiBinding Converter="{StaticResource ResourceKey=I18NMultiConveter}">
+                        <Binding Source="CatchLimit"></Binding>
+                        <Binding Path="CatchLimit"></Binding>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+            
 
         </Grid>
     </DockPanel>

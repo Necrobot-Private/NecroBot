@@ -5,6 +5,8 @@ using System.Linq;
 using PoGo.NecroBot.Logic.Event;
 using POGOProtos.Networking.Responses;
 using POGOProtos.Inventory;
+using TinyIoC;
+using PoGo.NecroBot.Logic.Common;
 
 namespace PoGo.Necrobot.Window.Model
 {
@@ -119,6 +121,8 @@ namespace PoGo.Necrobot.Window.Model
 
         public double BuddyTotalKM { get; set; }
         public double BuddyCurrentKM { get; set; }
+        public string PokestopLimit { get; set; }
+        public string CatchLimit { get; set; }
 
         internal void OnProfileUpdate(ProfileEvent profile)
         {
@@ -149,6 +153,18 @@ namespace PoGo.Necrobot.Window.Model
             this.RaisePropertyChanged("BuddyPokemonId");
             this.RaisePropertyChanged("BuddyCurrentKM");
             this.RaisePropertyChanged("BuddyTotalKM");
+        }
+
+        internal void UpdatePokestopLimit(PokestopLimitUpdate ev)
+        {
+            this.PokestopLimit = $"{ev.Value}/{ev.Limit}";
+            this.RaisePropertyChanged("PokestopLimit");
+        }
+
+        internal void UpdateCatchLimit(CatchLimitUpdate ev)
+        {
+            this.CatchLimit = $"{ev.Value}/{ev.Limit}";
+            this.RaisePropertyChanged("CatchLimit");
         }
     }
 }

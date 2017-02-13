@@ -17,6 +17,7 @@ using PoGo.NecroBot.Logic.Event;
 using POGOProtos.Map.Pokemon;
 using PokemonGo.RocketAPI.Extensions;
 using PoGo.NecroBot.Logic.Utils;
+using POGOProtos.Enums;
 
 namespace PoGo.Necrobot.Window.Controls
 {
@@ -91,14 +92,34 @@ namespace PoGo.Necrobot.Window.Controls
             {
                 AddPokestopMarker(item);
             }
+
             if (ev.NearbyPokemons == null) return;
+            //remove pokemon not in the list
+            List<GMapMarker> needRemoveMarkers = new List<GMapMarker>();
+
+            foreach (var item in this.nearbyPokemonMarkers)
+            {
+                var pokeMarker = item.Shape as MapPokemonMarker;
+                if (ev.NearbyPokemons.Any(x => pokeMarker.IsMarkerOf(x.EncounterId.ToString()))) continue;
+
+                needRemoveMarkers.Add(item);
+            }
+            //remove map markers
+            foreach (var item in needRemoveMarkers)
+            {
+                this.gmap.Markers.Remove(item);
+            }
+              
+            model.NearbyPokemons.RemoveAll(x => needRemoveMarkers.Any(y => ((MapPokemonMarker)y.Shape).IsMarkerOf(x.EncounterId.ToString())));
+            this.nearbyPokemonMarkers.RemoveAll(x=> needRemoveMarkers.Contains(x));
+            
             foreach (var item in ev.NearbyPokemons)
             {
                 var fort = ev.Forts.FirstOrDefault(x => x.Id == item.FortId);
                 AddNearByPokemonMarker(item, fort);
             }
         }
-        List<GMapMarker> nearbyPokemons = new List<GMapMarker>();
+        List<GMapMarker> nearbyPokemonMarkers = new List<GMapMarker>();
 
         private void AddNearByPokemonMarker(NearbyPokemon item, FortData fort)
         {
@@ -109,7 +130,7 @@ namespace PoGo.Necrobot.Window.Controls
 
             var marker = new GMapMarker(new PointLatLng(nearbyModel.Latitude, nearbyModel.Longitude) );
             marker.Shape = new MapPokemonMarker(null, marker, Session, nearbyModel);
-            nearbyPokemons.Add(marker);
+            nearbyPokemonMarkers.Add(marker);
             gmap.Markers.Add(marker);
             this.model.NearbyPokemons.Add(nearbyModel);
           
@@ -233,18 +254,41 @@ namespace PoGo.Necrobot.Window.Controls
         internal void HandleEncounterEvent(EncounteredEvent encounteredEvent)
         {
             if (encounteredEvent.IsRecievedFromSocket) return;
-            var marker = this.nearbyPokemons.FirstOrDefault(x => ((MapPokemonMarker)x.Shape).IsMarkerOf(encounteredEvent.EncounterId));
+            var marker = this.nearbyPokemonMarkers.FirstOrDefault(x => ((MapPokemonMarker)x.Shape).IsMarkerOf(encounteredEvent.EncounterId));
             if(marker != null)
             {
                 this.Dispatcher.Invoke(() =>
                 {
                     gmap.Markers.Remove(marker);
-                    this.nearbyPokemons.Remove(marker);
+                    this.nearbyPokemonMarkers.Remove(marker);
                     var find = this.model.NearbyPokemons.FirstOrDefault(x => x.EncounterId.ToString() == encounteredEvent.EncounterId);
                     if (find != null)
                         this.model.NearbyPokemons.Remove(find);
                 });
             }
+        }
+
+        private void mnuClear_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var nearby in this.nearbyPokemonMarkers)
+            {
+                gmap.Markers.Remove(nearby);
+            };
+            this.model.NearbyPokemons.Clear();
+        }
+
+        private void mnuZoomOut_Click(object sender, RoutedEventArgs e)
+        {
+            if (gmap.Zoom <= gmap.MinZoom) return;
+
+            gmap.Zoom--;
+        }
+
+        private void mnuZoomIn_Click(object sender, RoutedEventArgs e)
+        {
+            if (gmap.Zoom >= gmap.MaxZoom) return;
+
+            gmap.Zoom++;
         }
     }
 }
