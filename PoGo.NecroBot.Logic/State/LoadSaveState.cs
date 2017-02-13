@@ -89,7 +89,7 @@ namespace PoGo.NecroBot.Logic.State
             return new CheckTosState();
         }
 
-        public static void SaveLocationToDisk(ISession session, double lat, double lng)
+        public static void SaveLocationToDisk(ISession session, double lat, double lng, double speed)
         {
             var coordsPath = Path.Combine(session.LogicSettings.ProfileConfigPath, "LastPos.ini");
             File.WriteAllText(coordsPath, $"{lat}:{lng}");

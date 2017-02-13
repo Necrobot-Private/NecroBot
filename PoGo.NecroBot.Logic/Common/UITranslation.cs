@@ -49,7 +49,20 @@ namespace PoGo.NecroBot.Logic.Common
         public string Theme { get; set; }
 
         #endregion
+        #region Map
 
+        [Description("Zoom In")]
+        public string ZoomIn { get; set; }
+
+
+        [Description("ZoomOut")]
+        public string ZoomOut { get; set; }
+
+        [Description("Clear map")]
+        public string ClearMap { get; set; }
+        [Description("Walk Here")]
+        public string WalkHere { get; set; }
+        #endregion
         #region snipe screen
         [Description("100% IV")]
         public string TabSnipeIV100 { get; set; }
@@ -81,6 +94,14 @@ namespace PoGo.NecroBot.Logic.Common
 
         #endregion
         #region Pokemon Inventory
+
+        [Description("Do you want to powerup this pokemon? Normal power up is do x time power up. Max power up is powerup to maximun level up to your candy, stardust and player level.")]
+        public string PowerUpDescription { get; set; }
+        [Description("Normal Power Up")]
+        public string NormalPowerup { get; set; }
+
+        [Description("Max Power Up")]
+        public string MaxPowerup { get; set; }
 
         [Description("Export")]
         public string Export { get; set; }
@@ -152,7 +173,14 @@ namespace PoGo.NecroBot.Logic.Common
         [Description("Gym Point")]
         public string GymPoints { get; set; }
 
-
+        [Description("Pokestops: {0}")]
+        public string PokestopLimit { get; set; }
+        [Description("Pokemons: {0}")]
+        public string CatchLimit { get; set; }
+        [Description("Speed: {0:0.00} km/h")]
+        public string WalkSpeed { get; set; }
+        [Description("Transfered: {0}")]
+        public string PokemonTransfered { get; set; }
         #endregion
         private Dictionary<string, string> translations = new Dictionary<string, string>();
         private string languageCode = "en";

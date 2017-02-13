@@ -137,11 +137,11 @@
                                             <Border Background="GhostWhite" BorderBrush="Gainsboro" BorderThickness="1">
 
                                                 <StackPanel Margin="20,20,20,20" >
-                                                    <TextBlock TextWrapping="Wrap" Foreground="Orange" Text="Do you want to powerup this pokemon? Normal power up is do x time power up. Max power up is powerup to maximun level up to your candy, stardust and player level." />
+                                                    <TextBlock TextWrapping="Wrap" Foreground="Orange" Text="{Binding Source=PowerUpDescription, Converter={StaticResource I18NConveter}}" />
 
                                                     <StackPanel Orientation="Horizontal">
-                                                        <Button Margin="0,20,0,20" Click="btnPowerup_Click"   CommandParameter="{Binding Id}" Content="Normal Power UP"/>
-                                                        <Button Margin="40,20,0,20" Click="btnMaxPowerUp_Click"    CommandParameter="{Binding Id}" Content="MAX Power UP"/>
+                                                        <Button Margin="0,20,0,20" Click="btnPowerup_Click"   CommandParameter="{Binding Id}" Content="{Binding Source=NormalPowerup, Converter={StaticResource I18NConveter}}"/>
+                                                    <Button Margin="40,20,0,20" Click="btnMaxPowerUp_Click"    CommandParameter="{Binding Id}" Content="{Binding Source=MaxPowerup, Converter={StaticResource I18NConveter}}"/>
                                                     </StackPanel>
                                                 </StackPanel>
                                             </Border>

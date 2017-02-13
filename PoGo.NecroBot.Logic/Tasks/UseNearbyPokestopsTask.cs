@@ -459,8 +459,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     if (session.LogicSettings.UsePokeStopLimit)
                     {
                         session.Stats.AddPokestopTimestamp(DateTime.Now.Ticks);
-                        Logger.Write($"(POKESTOP LIMIT) {session.Stats.GetNumPokestopsInLast24Hours()}/{session.LogicSettings.PokeStopLimit}",
-                            LogLevel.Info, ConsoleColor.Yellow);
+                        session.EventDispatcher.Send(new PokestopLimitUpdate(session.Stats.GetNumPokestopsInLast24Hours(), session.LogicSettings.PokeStopLimit));
                     }
                     break; //Continue with program as loot was succesfull.
                 }

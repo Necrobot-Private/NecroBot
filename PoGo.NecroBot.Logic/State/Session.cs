@@ -175,7 +175,8 @@ namespace PoGo.NecroBot.Logic.State
             });
             Navigation = new Navigation(Client, logicSettings);
             Navigation.WalkStrategy.UpdatePositionEvent +=
-                (session, lat, lng) => this.EventDispatcher.Send(new UpdatePositionEvent {Latitude = lat, Longitude = lng});
+                (session, lat, lng,s) => this.EventDispatcher.Send(new UpdatePositionEvent {Latitude = lat, Longitude = lng, Speed = s});
+
             Navigation.WalkStrategy.UpdatePositionEvent += LoadSaveState.SaveLocationToDisk;
         }
 
