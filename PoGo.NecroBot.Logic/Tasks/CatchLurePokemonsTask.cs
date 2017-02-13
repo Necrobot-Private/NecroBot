@@ -19,6 +19,8 @@ using POGOProtos.Networking.Responses;
 
 namespace PoGo.NecroBot.Logic.Tasks
 {
+    //add delegate
+    public delegate void PokemonsEncounterLureDelegate(List<MapPokemon> pokemons);
     public static class CatchLurePokemonsTask
     {
         public static async Task Execute(ISession session, FortData currentFortData,
@@ -65,6 +67,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                         PokemonId = currentFortData.LureInfo.ActivePokemonId,
                         SpawnPointId = currentFortData.Id
                     };
+
+                    //add delegate function
+                    OnPokemonEncounterEvent(new List<MapPokemon> { pokemon });
 
                     // Catch the Pokemon
                     await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon,
@@ -130,6 +135,13 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
             }
             ;
+        }
+        //add delegate event
+        public static event PokemonsEncounterLureDelegate PokemonEncounterEvent;
+
+        private static void OnPokemonEncounterEvent(List<MapPokemon> pokemons)
+        {
+            PokemonEncounterEvent?.Invoke(pokemons);
         }
     }
 }
