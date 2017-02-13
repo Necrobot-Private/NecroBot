@@ -729,7 +729,7 @@ namespace PoGo.NecroBot.Logic
             var pokemonLevel = PokemonInfo.GetLevel(pokemon);
 
             // Can't evolve unless pokemon level is lower than trainer.
-            if (pokemonLevel >= playerLevel)
+            if (pokemonLevel >= playerLevel + 2)
                 return false;
 
             int familyCandy = GetCandyCount(pokemon.PokemonId);
