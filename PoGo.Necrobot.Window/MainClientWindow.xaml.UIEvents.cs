@@ -169,6 +169,7 @@ namespace PoGo.Necrobot.Window
         public void OnBotEvent(UpdatePositionEvent ev)
         {
             this.botMap.UpdatePlayerPosition(ev.Latitude, ev.Longitude);
+            this.datacontext.PlayerInfo.UpdateSpeed(ev.Speed);
         }
         public void OnBotEvent(AutoSnipePokemonAddedEvent ev)
         {

@@ -7,6 +7,7 @@ using POGOProtos.Networking.Responses;
 using POGOProtos.Inventory;
 using TinyIoC;
 using PoGo.NecroBot.Logic.Common;
+using PoGo.NecroBot.Logic.Utils;
 
 namespace PoGo.Necrobot.Window.Model
 {
@@ -123,6 +124,8 @@ namespace PoGo.Necrobot.Window.Model
         public double BuddyCurrentKM { get; set; }
         public string PokestopLimit { get; set; }
         public string CatchLimit { get; set; }
+        public double WalkSpeed { get; set; }
+        public int PokemonTransfered { get; set; }
 
         internal void OnProfileUpdate(ProfileEvent profile)
         {
@@ -155,6 +158,29 @@ namespace PoGo.Necrobot.Window.Model
             this.RaisePropertyChanged("BuddyTotalKM");
         }
 
+        internal void DirtyEventHandle(Statistics stat)
+        {
+            this.Runtime = stat.FormatRuntime();
+            this.EXPPerHour = (int)(stat.TotalExperience / stat.GetRuntime());
+            this.PKMPerHour = (int)(stat.TotalPokemons / stat.GetRuntime());
+            this.TimeToLevelUp = $"{stat.StatsExport.HoursUntilLvl:00}h :{stat.StatsExport.MinutesUntilLevel:00}m";
+            this.Level = stat.StatsExport.Level;
+            this.Stardust = stat.TotalStardust;
+            this.Exp = stat.StatsExport.CurrentXp;
+            this.LevelExp = stat.StatsExport.LevelupXp;
+            this.PokemonTransfered = stat.TotalPokemonTransferred;
+            this.RaisePropertyChanged("TotalPokemonTransferred;");
+            this.RaisePropertyChanged("Runtime");
+            this.RaisePropertyChanged("EXPPerHour");
+            this.RaisePropertyChanged("PKMPerHour");
+            this.RaisePropertyChanged("TimeToLevelUp");
+            this.RaisePropertyChanged("Level");
+            this.RaisePropertyChanged("Stardust");
+            this.RaisePropertyChanged("Exp");
+            this.RaisePropertyChanged("LevelExp");
+
+        }
+
         internal void UpdatePokestopLimit(PokestopLimitUpdate ev)
         {
             this.PokestopLimit = $"{ev.Value}/{ev.Limit}";
@@ -165,6 +191,13 @@ namespace PoGo.Necrobot.Window.Model
         {
             this.CatchLimit = $"{ev.Value}/{ev.Limit}";
             this.RaisePropertyChanged("CatchLimit");
+        }
+
+        public void UpdateSpeed(double speed)
+        {
+            this.WalkSpeed = speed;
+            this.RaisePropertyChanged("WalkSpeed");
+
         }
     }
 }

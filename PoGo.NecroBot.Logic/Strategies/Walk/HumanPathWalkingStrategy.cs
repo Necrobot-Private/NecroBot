@@ -48,7 +48,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
                 .UpdatePlayerLocationWithAltitude(session, waypoint, (float) speedInMetersPerSecond);
 
             double SpeedVariantSec = rw.Next(1000, 10000);
-            base.DoUpdatePositionEvent(session, waypoint.Latitude, waypoint.Longitude);
+            base.DoUpdatePositionEvent(session, waypoint.Latitude, waypoint.Longitude, walkSpeed, CurrentWalkingSpeed);
 
             do
             {
@@ -87,7 +87,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
                 result = await LocationUtils
                     .UpdatePlayerLocationWithAltitude(session, waypoint, (float) speedInMetersPerSecond);
 
-                base.DoUpdatePositionEvent(session, waypoint.Latitude, waypoint.Longitude);
+                base.DoUpdatePositionEvent(session, waypoint.Latitude, waypoint.Longitude, CurrentWalkingSpeed);
 
                 if (functionExecutedWhileWalking != null)
                     await functionExecutedWhileWalking(); // look for pokemon & hit stops

@@ -95,6 +95,14 @@ namespace PoGo.NecroBot.Logic.Common
         #endregion
         #region Pokemon Inventory
 
+        [Description("Do you want to powerup this pokemon? Normal power up is do x time power up. Max power up is powerup to maximun level up to your candy, stardust and player level.")]
+        public string PowerUpDescription { get; set; }
+        [Description("Normal Power Up")]
+        public string NormalPowerup { get; set; }
+
+        [Description("Max Power Up")]
+        public string MaxPowerup { get; set; }
+
         [Description("Export")]
         public string Export { get; set; }
 
@@ -169,6 +177,10 @@ namespace PoGo.NecroBot.Logic.Common
         public string PokestopLimit { get; set; }
         [Description("Pokemons: {0}")]
         public string CatchLimit { get; set; }
+        [Description("Speed: {0:0.00} km/h")]
+        public string WalkSpeed { get; set; }
+        [Description("Transfered: {0}")]
+        public string PokemonTransfered { get; set; }
         #endregion
         private Dictionary<string, string> translations = new Dictionary<string, string>();
         private string languageCode = "en";
