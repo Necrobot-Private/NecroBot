@@ -167,7 +167,8 @@ namespace PoGo.NecroBot.Logic.Common
 
         [Description("Pokestops: {0}")]
         public string PokestopLimit { get; set; }
-
+        [Description("Pokemons: {0}")]
+        public string CatchLimit { get; set; }
         #endregion
         private Dictionary<string, string> translations = new Dictionary<string, string>();
         private string languageCode = "en";
