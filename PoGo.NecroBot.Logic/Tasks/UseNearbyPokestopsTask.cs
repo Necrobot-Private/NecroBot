@@ -17,6 +17,7 @@ using PoGo.NecroBot.Logic.Model;
 using PoGo.NecroBot.Logic.Exceptions;
 using PoGo.NecroBot.Logic.Model.Settings;
 using TinyIoC;
+using PokemonGo.RocketAPI.Util;
 
 #endregion
 
@@ -254,7 +255,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             var allForts = session.Forts.Where(p => p.Type == FortType.Checkpoint).ToList();
 
-            if (allForts.Count > 1)
+            if (allForts.Count > 0)
             {
                 var spinablePokestops = allForts.Where(
                     i =>
@@ -266,22 +267,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 (destinationFort == null || destinationFort.Id != i.Id))
                 ).ToList();
 
-                List<FortData> spinedPokeStops = new List<FortData>();
-                if (spinablePokestops.Count >= 1)
+                if (spinablePokestops.Count > 0)
                 {
                     foreach (var pokeStop in spinablePokestops)
                     {
                         var fortInfo = await session.Client.Fort.GetFort(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude);
                         await FarmPokestop(session, pokeStop, fortInfo, cancellationToken, true);
-                        // Synchronize cooldown with map
-                        var mapFort = (await session.Client.Map.GetMapObjects()).MapCells.SelectMany(x => x.Forts).Where(y => y.Id == pokeStop.Id).FirstOrDefault();
-                        if (mapFort != pokeStop)
-                            pokeStop.CooldownCompleteTimestampMs = mapFort.CooldownCompleteTimestampMs;
-                        spinedPokeStops.Add(pokeStop);
-                        if (spinablePokestops.Count > 1)
-                        {
-                            await Task.Delay(1000);
-                        }
                     }
                 }
                 session.AddForts(spinablePokestops);
@@ -460,6 +451,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                             fortSearch.PokemonDataEgg.IsEgg = true;
                         }
 
+                        // Update the cache
+                        var fortFromCache = session.Client.Map.LastGetMapObjectResponse.MapCells.SelectMany(x => x.Forts).FirstOrDefault(f => f.Id == pokeStop.Id);
+                        
+                        long newCooldown = TimeUtil.GetCurrentTimestampInMilliseconds() + (5 * 60 * 1000); /* 5 min */
+                        fortFromCache.CooldownCompleteTimestampMs = newCooldown;
+                        pokeStop.CooldownCompleteTimestampMs = newCooldown;
                     }
                     MSniperServiceTask.UnblockSnipe(false);
                     if (fortSearch.Result == FortSearchResponse.Types.Result.InventoryFull)
