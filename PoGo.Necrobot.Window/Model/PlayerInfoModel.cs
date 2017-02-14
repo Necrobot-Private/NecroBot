@@ -140,17 +140,19 @@ namespace PoGo.Necrobot.Window.Model
         {
             if (this.playerProfile == null || this.playerProfile.PlayerData.BuddyPokemon == null || this.playerProfile.PlayerData.BuddyPokemon.Id == 0) return;
 
-            var budyData = this.playerProfile.PlayerData.BuddyPokemon;
+            var buddyData = this.playerProfile.PlayerData.BuddyPokemon;
 
-            if (budyData == null) return;
+            if (buddyData == null) return;
              
             var buddy = inventory
                 .Select(x => x.InventoryItemData?.PokemonData)
                 .Where(x => x != null && x.Id == this.playerProfile.PlayerData.BuddyPokemon.Id)
                 .FirstOrDefault();
 
+            if (buddy == null) return;
+
             this.BuddyPokemonId = buddy.PokemonId;
-            this.BuddyCurrentKM = budyData.LastKmAwarded;
+            this.BuddyCurrentKM = buddyData.LastKmAwarded;
             this.BuddyTotalKM = buddy.BuddyTotalKmWalked;
 
             this.RaisePropertyChanged("BuddyPokemonId");
