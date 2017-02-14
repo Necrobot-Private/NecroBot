@@ -53,11 +53,7 @@ namespace PoGo.Necrobot.Window.Model
             var originalFort = this.fort;
             this.fort = newFort;
 
-            if (IsVisited(newFort) != IsVisited(originalFort) || newFort.LureInfo != originalFort.LureInfo)
-            {
-                // If lure status or visited status has changed, then raise the property.
-                RaisePropertyChanged("FortIcon");
-            }
+            RaisePropertyChanged("FortIcon");
         }
 
         protected bool IsVisited(FortData data)
