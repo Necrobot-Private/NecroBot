@@ -35,9 +35,45 @@
                 <StackPanel Orientation="Horizontal" >
                     <Image Source="http://allaboutwindowsphone.com/images/appicons/208046.png" Width="20px"></Image>
                     <TextBlock Text="Pokedex"></TextBlock>
+                    
                 </StackPanel>
             </Button>
-        </StackPanel>
+
+                <Button x:Name="btnFilters">
+                    <Button.Triggers>
+                        <EventTrigger RoutedEvent="Button.Click">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <BooleanAnimationUsingKeyFrames
+                                                             Storyboard.TargetName="popSearchAndFilter"
+                                                             Storyboard.TargetProperty="IsOpen">
+                                            <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="True" />
+                                        </BooleanAnimationUsingKeyFrames>
+                                        
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                    </Button.Triggers>
+                    <StackPanel Orientation="Horizontal" >
+                        <Image Margin="5,0" Source="https://cdn3.iconfinder.com/data/icons/tango-icon-library/48/system-search-32.png" Width="20px"></Image>
+                        <TextBlock Margin="5,0" Text="{Binding Source=FilterAndSearch, Converter={StaticResource I18NConveter}}"></TextBlock>
+                    </StackPanel>
+
+                    
+                </Button>
+                <Popup Name="popSearchAndFilter" IsOpen="False" Placement="Mouse" >
+                    <Grid Width="500" Height="399">
+                        <Border BorderThickness="1,1,1,1" BorderBrush="Black">
+                            <StackPanel>
+                                <TextBlock Text="test"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </Popup>
+                
+            </StackPanel>
         </DockPanel>
 
             <DataGrid x:Name="gridData"

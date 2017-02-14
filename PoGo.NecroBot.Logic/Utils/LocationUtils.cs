@@ -6,6 +6,7 @@ using GeoCoordinatePortable;
 using PoGo.NecroBot.Logic.Service.Elevation;
 using PoGo.NecroBot.Logic.State;
 using POGOProtos.Networking.Responses;
+using PoGo.NecroBot.Logic.Logging;
 
 #endregion
 
@@ -19,9 +20,21 @@ namespace PoGo.NecroBot.Logic.Utils
             double altitude = session.ElevationService.GetElevation(position.Latitude, position.Longitude);
             //need retry to make sure we back to ogirinal location
 
-            var result = await session.Client.Player
+            try
+            {
+                //Logger.Write("start ai call");
+                var result = await session.Client.Player
                 .UpdatePlayerLocation(position.Latitude, position.Longitude, altitude, speed);
-            return result;
+                return result;
+            }
+            catch (Exception EX)
+            {
+                await Task.Delay(500);
+                Logger.Write("API CALL FAILED");
+                return await UpdatePlayerLocationWithAltitude(session, position, speed);
+            }
+            
+            
         }
 
         public static bool IsValidLocation(double latitude, double longitude)

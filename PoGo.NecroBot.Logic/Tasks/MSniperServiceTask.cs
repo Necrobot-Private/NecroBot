@@ -384,6 +384,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                     0
                 );
 
+                await session.Client.Map.GetMapObjects();
+
                 await Task.Delay(1000, cancellationToken);
 
                 encounter = await session.Client.Encounter.EncounterPokemon(encounterId.EncounterId, encounterId.SpawnPointId);
@@ -745,9 +747,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                     });
 
                     session.Stats.IsSnipping = true;
-                    var result = location.IsVerified()
-                        ? await CatchFromService(session, cancellationToken, location)
-                        : await CatchWithSnipe(session, location, cancellationToken);
+                    //var result = location.IsVerified()
+                    //    ? await CatchFromService(session, cancellationToken, location)
+                    //    : await CatchWithSnipe(session, location, cancellationToken);
+
+                     var result = await CatchWithSnipe(session, location, cancellationToken);
+
 
                     if (result)
                     {
