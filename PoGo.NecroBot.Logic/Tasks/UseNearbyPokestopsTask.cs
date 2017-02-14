@@ -384,9 +384,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                     {
                         await session.Client.Map.GetMapObjects(true);
                     }
-#if DEBUG
                 }
                 while (fortSearch.Result == FortSearchResponse.Types.Result.OutOfRange);
+#if DEBUG
 
                 Logger.Write($"{fortSearch.Result}");
 #endif
