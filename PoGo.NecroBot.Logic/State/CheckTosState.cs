@@ -26,7 +26,8 @@ namespace PoGo.NecroBot.Logic.State
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var tutState = session.Profile.PlayerData.TutorialState;
+            // Always get a fresh PlayerData when checking tutorial state.
+            var tutState = (await session.Client.Player.GetPlayer()).PlayerData.TutorialState;
 
             if (tutState.Contains(TutorialState.FirstTimeExperienceComplete))
             {
