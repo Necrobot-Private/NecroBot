@@ -492,7 +492,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Latitude = latitude
                     });
                     await Task.Delay(500);
-                    var mapObjects = session.Client.Map.GetMapObjects().Result;
+                    var mapObjects = session.Client.Map.GetMapObjects(true).Result;
                     //session.AddForts(mapObjects.MapCells.SelectMany(p => p.Forts).ToList());
                     catchablePokemon =
                         mapObjects.MapCells.SelectMany(q => q.CatchablePokemons)

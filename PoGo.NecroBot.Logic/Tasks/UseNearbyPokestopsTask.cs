@@ -365,6 +365,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 return;
             }
 
+            await session.Client.Map.GetMapObjects();
             FortSearchResponse fortSearch;
             var timesZeroXPawarded = 0;
             var fortTry = 0; //Current check
@@ -570,6 +571,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static async Task<List<FortData>> UpdateFortsData(ISession session)
         {
             var mapObjects = await session.Client.Map.GetMapObjects();
+            
 
             session.AddForts(mapObjects.MapCells.SelectMany(p => p.Forts).ToList());
 
