@@ -13,43 +13,10 @@ using PoGo.NecroBot.Logic.Model;
 
 namespace PoGo.Necrobot.Window.Model
 {
-    public class PokemonViewFilter : ViewModelBase
-    {
-        public PokemonViewFilter() : base()
-        {
-            this.MaxCP = 3500;
-            this.MaxLevel = 50;
-            this.MaxIV = 100;
-        }
-
-        public string Name { get; set; }
-        public int MinIV { get; set; }
-
-        public int MaxIV { get; set; }
-        public int MinLevel { get; set; }
-        public int MaxLevel { get; set; }
-
-        public int MinCP { get; set; }
-        public int MaxCP { get; set; }
-
-        internal bool Check(PokemonDataViewModel item)
-        {
-            if(!string.IsNullOrEmpty(Name))
-            {
-                if (!Name.ToLower().Contains(item.PokemonId.ToString().ToLower())) return false;
-            }
-
-            if (item.IV < MinIV || item.IV > MaxIV) return false;
-            if (item.IV < MinLevel || item.IV > MaxLevel) return false;
-            if (item.IV < MinCP || item.IV > MaxCP) return false;
-            return true;
-        }
-    }
     public class PokemonListModel : ViewModelBase
     {
         public PokemonListModel(ISession session)
         {
-            Filter = new PokemonViewFilter();
             this.Session = Session;
         }
 
@@ -57,7 +24,7 @@ namespace PoGo.Necrobot.Window.Model
         public static LRUCache<ulong, string> LocationsCache = new LRUCache<ulong, string>(capacity: 500);
 
         public ObservableCollection<PokemonDataViewModel> Pokemons { get; set; }
-        public PokemonViewFilter Filter { get; set; }
+
         internal void Update(IEnumerable<PokemonData> pokemons)
         {
             foreach (var item in pokemons)
@@ -91,8 +58,8 @@ namespace PoGo.Necrobot.Window.Model
                     modelsToRemove.Add(item);
                 }
             }
-
-            foreach (var model in modelsToRemove)
+            
+            foreach(var model in modelsToRemove)
             {
                 Pokemons.Remove(model);
             }
@@ -212,8 +179,8 @@ namespace PoGo.Necrobot.Window.Model
                 pkm.IsEvolving = true;
             }
         }
-
-
+        
+        
         public void Powerup(ulong pokemonId)
         {
             var pkm = Pokemons.FirstOrDefault(x => x.Id == pokemonId);
@@ -221,15 +188,6 @@ namespace PoGo.Necrobot.Window.Model
             if (pkm != null)
             {
                 pkm.IsUpgrading = true;
-            }
-        }
-
-        internal void ApplyFilter()
-        {
-            foreach (var item in this.Pokemons)
-            {
-                item.Displayed = this.Filter.Check(item);
-                item.RaisePropertyChanged("Displayed");
             }
         }
     }

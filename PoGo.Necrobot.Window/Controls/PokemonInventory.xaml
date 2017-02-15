@@ -5,7 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:PoGo.Necrobot.Window"
              xmlns:cv="clr-namespace:PoGo.Necrobot.Window.Converters"
-             xmlns:t="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="900">
     <Control.Resources>
@@ -57,48 +56,18 @@
                             </EventTrigger.Actions>
                         </EventTrigger>
                     </Button.Triggers>
-                    <StackPanel Orientation="Horizontal" Visibility="Collapsed" >
+                    <StackPanel Orientation="Horizontal" >
                         <Image Margin="5,0" Source="https://cdn3.iconfinder.com/data/icons/tango-icon-library/48/system-search-32.png" Width="20px"></Image>
                         <TextBlock Margin="5,0" Text="{Binding Source=FilterAndSearch, Converter={StaticResource I18NConveter}}"></TextBlock>
-                        
                     </StackPanel>
 
                     
                 </Button>
-                <Popup Name="popSearchAndFilter" IsOpen="False" Placement="Mouse"  >
-                    <Grid Width="500" Height="399" Background="WhiteSmoke">
-                        <Border BorderThickness="1,1,1,1" BorderBrush="BlueViolet">
-                            <StackPanel Margin="20,20,20,20" >
-                                <TextBlock Text="{Binding Source=SearchPokemonName, Converter={StaticResource I18NConveter}}"></TextBlock>
-                                <TextBox Name="filterName" Text="{Binding Path=Filter.Name}"></TextBox>
-                                
-                                <TextBlock Text="{Binding Source=SearchPokemonIV, Converter={StaticResource I18NConveter}}"></TextBlock>
-                                <t:RangeSlider Minimum="0" Maximum="100" LowerValue="{Binding Path=Filter.MinIV}" HigherValue="{Binding Path=Filter.MaxIV}"  ></t:RangeSlider>
-
-                                <TextBlock Text="{Binding Source=SearchPokemonLevel, Converter={StaticResource I18NConveter}}"></TextBlock>
-                                <t:RangeSlider Minimum="0" Maximum="50" LowerValue="{Binding Path=Filter.MinLevel}" HigherValue="{Binding Path=Filter.MaxLevel}" ></t:RangeSlider>
-                                
-                                <TextBlock Text="{Binding Source=SearchPokemonCP, Converter={StaticResource I18NConveter}}"></TextBlock>
-                                <t:RangeSlider Minimum="0" Maximum="5000" LowerValue="{Binding Path=Filter.MinCP}" HigherValue="{Binding Path=Filter.MaxCP}"  ></t:RangeSlider>
-                                
-                                <StackPanel Orientation="Horizontal">
-                                    <Button Content="{Binding Source=SearchButton, Converter={StaticResource I18NConveter}}" Name="applyFilter" Click="applyFilter_Click"></Button>
-                                    <Button Content="{Binding Source=SearchButton, Converter={StaticResource I18NConveter}}" Name="closeSearch">
-                                        <Button.Triggers>
-                                            <EventTrigger RoutedEvent="Button.Click">
-                                                <BeginStoryboard>
-                                                    <Storyboard>
-                                                        <BooleanAnimationUsingKeyFrames Storyboard.TargetName="popSearchAndFilter"
-                                                             Storyboard.TargetProperty="IsOpen">
-                                                            <DiscreteBooleanKeyFrame KeyTime="0:0:4" Value="False" />
-                                                        </BooleanAnimationUsingKeyFrames>
-                                                    </Storyboard>
-                                                </BeginStoryboard>
-                                                
-                                            </EventTrigger>
-                                        </Button.Triggers>
-                                    </Button>
-                                </StackPanel>
+                <Popup Name="popSearchAndFilter" IsOpen="False" Placement="Mouse" >
+                    <Grid Width="500" Height="399">
+                        <Border BorderThickness="1,1,1,1" BorderBrush="Black">
+                            <StackPanel>
+                                <TextBlock Text="test"/>
                             </StackPanel>
                         </Border>
                     </Grid>
@@ -124,17 +93,8 @@
                         <MenuItem Header="Set as Buddy" Click="mnuBuddy_Click"  />
                     </ContextMenu>
                 </DataGrid.ContextMenu>
-            <DataGrid.RowStyle>
-                <Style TargetType="{x:Type DataGridRow}">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding Displayed}" Value="False">
-                            <Setter Property="Visibility" Value="Collapsed"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </DataGrid.RowStyle>
-                
-            <DataGrid.Columns>
+
+                <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding PokemonId, Converter={StaticResource EnumToNumberConverter}}" Header="#" MinWidth="30" />
 
                 <DataGridTemplateColumn Header="" IsReadOnly="False" MinWidth="40">
