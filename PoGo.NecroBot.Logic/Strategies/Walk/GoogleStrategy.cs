@@ -8,6 +8,7 @@ using PoGo.NecroBot.Logic.Service;
 using PoGo.NecroBot.Logic.State;
 using PokemonGo.RocketAPI;
 using POGOProtos.Networking.Responses;
+using PoGo.NecroBot.Logic.Logging;
 
 namespace PoGo.NecroBot.Logic.Strategies.Walk
 {
@@ -27,7 +28,6 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
             double walkSpeed = 0.0)
         {
             GetGoogleInstance(session);
-
             _minStepLengthInMeters = session.LogicSettings.DefaultStepLength;
             var currentLocation = new GeoCoordinate(_client.CurrentLatitude, _client.CurrentLongitude, _client.CurrentAltitude);
             var destinaionCoordinate = new GeoCoordinate(targetLocation.Latitude, targetLocation.Longitude);

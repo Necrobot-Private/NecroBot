@@ -385,9 +385,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                 );
 
 
-                await session.Client.Map.GetMapObjects(true);
+                await session.Client.Misc.RandomAPICall();
 
-                await Task.Delay(1000, cancellationToken);
+                //await session.Client.Map.GetMapObjects(true);
+
+                //await Task.Delay(1000, cancellationToken);
 
                 encounter = await session.Client.Encounter.EncounterPokemon(encounterId.EncounterId, encounterId.SpawnPointId);
 

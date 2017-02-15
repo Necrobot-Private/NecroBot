@@ -382,14 +382,15 @@ namespace PoGo.NecroBot.Logic.Tasks
                         await session.Client.Fort.SearchFort(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude);
                     if(fortSearch.Result == FortSearchResponse.Types.Result.OutOfRange)
                     {
-                        await session.Client.Map.GetMapObjects(true);
+#if DEBUG
+
+                        Logger.Write($"{fortSearch.Result}");
+#endif
+                        //await session.Client.Map.GetMapObjects(true);
                     }
                 }
                 while (fortSearch.Result == FortSearchResponse.Types.Result.OutOfRange);
-#if DEBUG
 
-                Logger.Write($"{fortSearch.Result}");
-#endif
                 if (fortSearch.ExperienceAwarded > 0 && timesZeroXPawarded > 0) timesZeroXPawarded = 0;
                 if (fortSearch.ExperienceAwarded == 0 && fortSearch.Result != FortSearchResponse.Types.Result.InventoryFull)
                 {
