@@ -232,6 +232,7 @@
     <Compile Include="Event\FortTargetEvent.cs" />
     <Compile Include="Event\FortFailedEvent.cs" />
     <Compile Include="Event\FortUsedEvent.cs" />
+    <Compile Include="Event\GetHumanizeRouteEvent.cs" />
     <Compile Include="Event\Gym\GymBattleStarted.cs" />
     <Compile Include="Event\Gym\GymDeployEvent.cs" />
     <Compile Include="Event\Gym\GymDetailInfoEvent.cs" />
