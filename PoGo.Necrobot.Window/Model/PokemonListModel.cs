@@ -8,6 +8,8 @@ using PoGo.NecroBot.Logic.State;
 using Caching;
 using POGOProtos.Inventory;
 using System;
+using System.Threading.Tasks;
+using PoGo.NecroBot.Logic.Model;
 
 namespace PoGo.Necrobot.Window.Model
 {
@@ -68,7 +70,14 @@ namespace PoGo.Necrobot.Window.Model
                 }
                 else
                 {
-                    Pokemons.Add(new PokemonDataViewModel(this.Session, item));
+                    var pokemonDataViewModel = new PokemonDataViewModel(this.Session, item);
+                    Pokemons.Add(pokemonDataViewModel);
+                    Task.Run(async () =>
+                    {
+                        GeoLocation geoLocation = await GeoLocation.FindOrUpdateInDatabase(pokemonDataViewModel.PokemonData.CapturedCellId);
+                        if (geoLocation != null)
+                            pokemonDataViewModel.GeoLocation = geoLocation;
+                    });
                 }
             }
 

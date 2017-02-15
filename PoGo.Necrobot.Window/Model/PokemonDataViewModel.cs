@@ -1,5 +1,4 @@
-﻿using Geocoding.Google;
-using Google.Common.Geometry;
+﻿using PoGo.NecroBot.Logic.Model;
 using PoGo.NecroBot.Logic.PoGoUtils;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Tasks;
@@ -133,51 +132,33 @@ namespace PoGo.Necrobot.Window.Model
 
         public DateTime CaughtTime => TimeUtil.GetDateTimeFromMilliseconds((long)pokemonData.CreationTimeMs).ToLocalTime();
 
+        private GeoLocation geoLocation;
+        public GeoLocation GeoLocation
+        {
+            get
+            {
+                return geoLocation;
+            }
+
+            set
+            {
+                geoLocation = value;
+                RaisePropertyChanged("CaughtLocation");
+            }
+        }
+
         public string CaughtLocation
         {
             get
             {
-                return ReverseGeoCodeCapturedCellIdToLocation(this.PokemonData.CapturedCellId);
+                if (geoLocation == null)
+                {
+                    // Just return latitude, longitude string
+                    return new GeoLocation(pokemonData.CapturedCellId).ToString();
+                }
+
+                return geoLocation.ToString();
             }
-        }
-
-        private string ReverseGeoCodeCapturedCellIdToLocation(ulong capturedCellId)
-        {
-            var cellId = new S2CellId(capturedCellId);
-            var latlng = cellId.ToLatLng();
-            string location;
-
-            // Check cache for location.
-            bool success = PokemonListModel.LocationsCache.TryGetValue(this.PokemonData.CapturedCellId, out location);
-            if (success)
-                return location;
-            
-            GoogleGeocoder geocoder = new GoogleGeocoder();
-            var addresses = geocoder.ReverseGeocode(new Geocoding.Location(latlng.LatDegrees, latlng.LngDegrees));
-            GoogleAddress addr = addresses.Where(a => !a.IsPartialMatch).FirstOrDefault();
-            
-            if (addr != null && addr[GoogleAddressType.Country] != null)
-            {
-                if (addr[GoogleAddressType.Locality] != null)
-                    location = $"{addr[GoogleAddressType.Locality].LongName}, {addr[GoogleAddressType.Country].LongName}";
-                else if (addr[GoogleAddressType.AdministrativeAreaLevel1] != null)
-                    location = $"{addr[GoogleAddressType.AdministrativeAreaLevel1].LongName}, {addr[GoogleAddressType.Country].LongName}";
-                else if (addr[GoogleAddressType.AdministrativeAreaLevel2] != null)
-                    location = $"{addr[GoogleAddressType.AdministrativeAreaLevel2].LongName}, {addr[GoogleAddressType.Country].LongName}";
-                else if (addr[GoogleAddressType.AdministrativeAreaLevel3] != null)
-                    location = $"{addr[GoogleAddressType.AdministrativeAreaLevel3].LongName}, {addr[GoogleAddressType.Country].LongName}";
-                else
-                    location = $"{addr[GoogleAddressType.Country].LongName}";
-
-                // Add to cache
-                PokemonListModel.LocationsCache.Add(this.PokemonData.CapturedCellId, location);
-            }
-            else
-            {
-                location = $"{latlng.LatDegrees}, {latlng.LngDegrees}";
-            }
-
-            return location;
         }
 
         private bool isTransfering;
