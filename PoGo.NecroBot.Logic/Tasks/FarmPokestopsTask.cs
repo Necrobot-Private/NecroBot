@@ -25,7 +25,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 session.Settings.DefaultLatitude, session.Settings.DefaultLongitude,
                 session.Client.CurrentLatitude, session.Client.CurrentLongitude);
 
-            var response = await LocationUtils.UpdatePlayerLocationWithAltitude(session, new GeoCoordinate(session.Client.CurrentLatitude, session.Client.CurrentLongitude, session.Client.CurrentAltitude), 20);
+            var response = await LocationUtils.UpdatePlayerLocationWithAltitude(session, new GeoCoordinate(session.Client.CurrentLatitude, session.Client.CurrentLongitude, session.Client.CurrentAltitude), session.Client.CurrentSpeed);
             // Edge case for when the client somehow ends up outside the defined radius
             if (session.LogicSettings.MaxTravelDistanceInMeters != 0 && checkForMoveBackToDefault &&
                 distanceFromStart > session.LogicSettings.MaxTravelDistanceInMeters)
