@@ -384,7 +384,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                     0
                 );
 
-                await session.Client.Map.GetMapObjects();
+
+                await session.Client.Map.GetMapObjects(true);
 
                 await Task.Delay(1000, cancellationToken);
 
@@ -747,11 +748,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                     });
 
                     session.Stats.IsSnipping = true;
-                    //var result = location.IsVerified()
-                    //    ? await CatchFromService(session, cancellationToken, location)
-                    //    : await CatchWithSnipe(session, location, cancellationToken);
+                    var result = location.IsVerified()
+                        ? await CatchFromService(session, cancellationToken, location)
+                        : await CatchWithSnipe(session, location, cancellationToken);
 
-                     var result = await CatchWithSnipe(session, location, cancellationToken);
+                    //var result = await CatchWithSnipe(session, location, cancellationToken);
 
 
                     if (result)
