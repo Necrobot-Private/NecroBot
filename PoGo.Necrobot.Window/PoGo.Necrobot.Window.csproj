@@ -478,7 +478,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="app.config" />
     <None Include="Config\Translations\ui.pl.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
