@@ -19,13 +19,19 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
         {
             _settings = settings;
 
-            if (!string.IsNullOrEmpty(settings.MapzenWalkConfig.MapzenElevationApiKey))
-                ElevationServiceQueue.Add(new MapzenElevationService(settings, cache));
+            if (_settings.MapzenWalkConfig.UseMapzenWalk)
+            {
+                if (!string.IsNullOrEmpty(settings.MapzenWalkConfig.MapzenElevationApiKey))
+                    ElevationServiceQueue.Add(new MapzenElevationService(settings, cache));
+            }
 
             //ElevationServiceQueue.Add(new MapQuestElevationService(settings, cache));
 
-            if (!string.IsNullOrEmpty(settings.GoogleWalkConfig.GoogleElevationAPIKey))
-                ElevationServiceQueue.Add(new GoogleElevationService(settings, cache));
+            if (_settings.GoogleWalkConfig.UseGoogleWalk)
+            {
+                if (!string.IsNullOrEmpty(settings.GoogleWalkConfig.GoogleElevationAPIKey))
+                    ElevationServiceQueue.Add(new GoogleElevationService(settings, cache));
+            }
 
             ElevationServiceQueue.Add(new RandomElevationService(settings, cache));
         }
