@@ -113,15 +113,23 @@ namespace PoGo.NecroBot.Logic
             return this.Accounts.OrderBy(x => x.RuntimeTotal).Where(x => x.ReleaseBlockTime < DateTime.Now).FirstOrDefault();
         }
 
-        public void Add(AuthConfig authConfig)
+        public BotAccount Add(AuthConfig authConfig)
         {
             SyncDatabase(new List<AuthConfig>() { authConfig });
+
+            return this.Accounts.Last();
         }
 
         public BotAccount GetStartUpAccount()
         {
-            runningAccount = GetMinRuntime();
             ISession session = TinyIoC.TinyIoCContainer.Current.Resolve<ISession>();
+
+            if (!session.LogicSettings.AllowMultipleBot)
+            {
+                runningAccount = Accounts.Last();
+            }
+            else
+            runningAccount = GetMinRuntime();
 
             if (session.LogicSettings.AllowMultipleBot
               && session.LogicSettings.MultipleBotConfig.SelectAccountOnStartUp)

@@ -29,6 +29,7 @@ using POGOProtos.Networking.Responses;
 using Quobject.Collections.Immutable;
 using Quobject.SocketIoClientDotNet.Client;
 using Socket = Quobject.SocketIoClientDotNet.Client.Socket;
+using PoGo.NecroBot.Logic.Logging;
 
 #endregion
 
@@ -473,7 +474,6 @@ namespace PoGo.NecroBot.Logic.Tasks
             int retry = 3;
 
             bool isCaptchaShow = false;
-
             try
             {
                 do
@@ -482,7 +482,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                     await
                         LocationUtils.UpdatePlayerLocationWithAltitude(session,
                             new GeoCoordinate(latitude, longitude, 10d), 0); // Set speed to 0 for random speed.
-                    await Task.Delay(500);
                     latitude += 0.00000001;
                     longitude += 0.00000001;
 
@@ -491,9 +490,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Longitude = longitude,
                         Latitude = latitude
                     });
-                    await Task.Delay(500);
-                    var mapObjects = session.Client.Map.GetMapObjects(true).Result;
-                    //session.AddForts(mapObjects.MapCells.SelectMany(p => p.Forts).ToList());
+                    var mapObjects = await session.Client.Map.GetMapObjects(true);
                     catchablePokemon =
                         mapObjects.MapCells.SelectMany(q => q.CatchablePokemons)
                             .Where(q => pokemonIds.Contains(q.PokemonId))
@@ -504,8 +501,12 @@ namespace PoGo.NecroBot.Logic.Tasks
             catch(HasherException ex) { throw ex; }
             catch (CaptchaException ex)
             {
-                //isCaptchaShow = true;
                 throw ex;
+            }
+            catch(Exception e)
+            {
+                Logger.Write($"Error: {e.Message}", LogLevel.Error);
+                throw e;
             }
             finally
             {

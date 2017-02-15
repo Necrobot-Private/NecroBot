@@ -365,7 +365,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 return;
             }
 
-            await session.Client.Map.GetMapObjects();
+            //await session.Client.Map.GetMapObjects();
             FortSearchResponse fortSearch;
             var timesZeroXPawarded = 0;
             var fortTry = 0; //Current check
@@ -376,9 +376,20 @@ namespace PoGo.NecroBot.Logic.Tasks
                 cancellationToken.ThrowIfCancellationRequested();
                 TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
 
+                do
+                {
+                    fortSearch =
+                        await session.Client.Fort.SearchFort(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude);
+                    if(fortSearch.Result == FortSearchResponse.Types.Result.OutOfRange)
+                    {
+                        await session.Client.Map.GetMapObjects(true);
+                    }
+                }
+                while (fortSearch.Result == FortSearchResponse.Types.Result.OutOfRange);
+#if DEBUG
 
-                fortSearch =
-                    await session.Client.Fort.SearchFort(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude);
+                Logger.Write($"{fortSearch.Result}");
+#endif
                 if (fortSearch.ExperienceAwarded > 0 && timesZeroXPawarded > 0) timesZeroXPawarded = 0;
                 if (fortSearch.ExperienceAwarded == 0 && fortSearch.Result != FortSearchResponse.Types.Result.InventoryFull)
                 {
@@ -571,7 +582,6 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static async Task<List<FortData>> UpdateFortsData(ISession session)
         {
             var mapObjects = await session.Client.Map.GetMapObjects();
-            
 
             session.AddForts(mapObjects.MapCells.SelectMany(p => p.Forts).ToList());
 
