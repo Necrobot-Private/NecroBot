@@ -11,6 +11,7 @@ using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Utils;
 using PokemonGo.RocketAPI;
 using POGOProtos.Networking.Responses;
+using PoGo.NecroBot.Logic.Logging;
 
 namespace PoGo.NecroBot.Logic.Strategies.Walk
 {
@@ -101,6 +102,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
             Func<Task> functionExecutedWhileWalking, GeoCoordinate sourceLocation, GeoCoordinate targetLocation,
             CancellationToken cancellationToken, double walkSpeed = 0.0)
         {
+
             PlayerUpdateResponse result = null;
             var currentLocation = new GeoCoordinate(_client.CurrentLatitude, _client.CurrentLongitude,
                 _client.CurrentAltitude);
@@ -143,6 +145,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
                     _currentWalkingSpeed = session.Navigation.VariantRandom(session, _currentWalkingSpeed);
 
                 var speedInMetersPerSecond = (walkSpeed > 0 ? walkSpeed : _currentWalkingSpeed) / 3.6;
+
                 var nextStepBearing = LocationUtils.DegreeBearing(currentLocation, nextStep);
                 //particular steps are limited by minimal length, first step is calculated from the original speed per second (distance in 1s)
                 var nextStepDistance = Math.Max(RandomizeStepLength(_minStepLengthInMeters), speedInMetersPerSecond);
@@ -158,7 +161,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
                         (float) speedInMetersPerSecond);
 
                 var realDistanceToTarget = LocationUtils.CalculateDistanceInMeters(currentLocation, targetLocation);
-                if (realDistanceToTarget < 30)
+                if (realDistanceToTarget < 2)
                     break;
 
                 do
@@ -204,6 +207,8 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
                         //also add the distance raise (bot overhead corrections) to the normal step length
                         Math.Max(RandomizeStepLength(_minStepLengthInMeters) + distanceRaise,
                             (msToPositionChange / 1000) * speedInMetersPerSecond) + distanceRaise);
+                    int timeToWalk = (int)((nextStepDistance * 1000) / speedInMetersPerSecond);
+                    //Logger.Debug($"nextStepDistance {nextStepDistance} need {timeToWalk} ms");
 
                     waypoint = LocationUtils.CreateWaypoint(currentLocation, nextStepDistance, nextStepBearing);
                     walkedPointsList.Add(waypoint);
@@ -216,6 +221,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
 
                     UpdatePositionEvent?.Invoke(session, waypoint.Latitude, waypoint.Longitude, _currentWalkingSpeed);
 
+                    await Task.Delay(timeToWalk); 
                     if (functionExecutedWhileWalking != null)
                         await functionExecutedWhileWalking(); // look for pokemon
                 } while (LocationUtils.CalculateDistanceInMeters(currentLocation, nextStep) >= 2);

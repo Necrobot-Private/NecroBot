@@ -33,7 +33,16 @@ namespace PoGo.NecroBot.Logic.Logging
             if (!_loggers.Contains(logger))
                 _loggers.Add(logger);
         }
-
+        public static void Debug(string message, Exception ex = null)
+        {
+#if DEBUG
+            Write(message, color: ConsoleColor.DarkRed);
+            if(ex != null)
+            {
+                Write(ex.Message, color: ConsoleColor.DarkRed);
+            }
+#endif
+        }
         /// <summary>
         ///     Sets Context for the loggers
         /// </summary>
