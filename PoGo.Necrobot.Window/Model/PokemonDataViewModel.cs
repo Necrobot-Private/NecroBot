@@ -19,7 +19,6 @@ namespace PoGo.Necrobot.Window.Model
         {
             this.Session = session;
             this.PokemonData = pokemon;
-            this.Displayed = true;
         }
 
         internal void UpdateWith(PokemonData item)
@@ -379,7 +378,5 @@ namespace PoGo.Necrobot.Window.Model
                     return "Upgrade";
             }
         }
-
-        public bool Displayed { get; set; }
     }
 }
