@@ -97,6 +97,7 @@ namespace PoGo.NecroBot.Logic
             TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
             // If the stretegies become bigger, create a factory for easy management
 
+            //Logging.Logger.Write($"Navigation - Walking speed {customWalkingSpeed}");
             return await WalkStrategy.Walk(targetLocation, functionExecutedWhileWalking, session, cancellationToken, customWalkingSpeed);
         }
 
