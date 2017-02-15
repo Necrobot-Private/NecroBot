@@ -936,7 +936,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                         }
                                     }
                                 }
-                                else if (attacker != null && attacker.Id != attackResult?.ActiveAttacker?.PokemonData.Id)
+                                else if (attacker != null && attacker.Id != attackResult?.ActiveAttacker?.PokemonData.Id && !session.LogicSettings.GymConfig.UsePokemonToAttackOnlyByCp)
                                 {
                                     if (wasSwithed)
                                         wasSwithed = false;
