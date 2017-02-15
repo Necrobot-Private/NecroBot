@@ -98,10 +98,16 @@ namespace PoGo.NecroBot.Logic
 
                     if (existing == null)
                     {
-                        BotAccount newAcc = new BotAccount(item);
-                        newAcc.Id = this.Accounts.Count == 0 ? 1 : this.Accounts.Max(x => x.Id) + 1;
-                        accountdb.Insert(newAcc);
-                        this.Accounts.Add(newAcc);
+                        try {
+                            BotAccount newAcc = new BotAccount(item);
+                            newAcc.Id = this.Accounts.Count == 0 ? 1 : this.Accounts.Max(x => x.Id) + 1;
+                            accountdb.Insert(newAcc);
+                            this.Accounts.Add(newAcc);
+                        }
+                        catch(Exception ex)
+                        {
+                            Logic.Logging.Logger.Write("Error while saving data into accounts.db, please delete account.db and restart bot to have it fully work in order");
+                        }
                     }
                 }
 

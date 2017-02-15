@@ -376,14 +376,20 @@ namespace PoGo.NecroBot.Logic.Tasks
                         await session.Client.Fort.SearchFort(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude);
                     if(fortSearch.Result == FortSearchResponse.Types.Result.OutOfRange)
                     {
-                        await session.Client.Map.GetMapObjects(true);
+                        var distance = LocationUtils.CalculateDistanceInMeters(pokeStop.Latitude, pokeStop.Longitude, session.Client.CurrentLatitude, session.Client.CurrentLongitude);
+#if DEBUG
+
+                        Logger.Write($"Loot pokestop result :{fortSearch.Result} , distance to pokestop : {distance:0.00}m");
+#endif
+                        if (distance>30)
+                        {
+                            await LocationUtils.UpdatePlayerLocationWithAltitude(session, new GeoCoordinatePortable.GeoCoordinate(pokeStop.Latitude, pokeStop.Longitude), 0);
+                        }
+                        //await session.Client.Map.GetMapObjects(true);
                     }
                 }
                 while (fortSearch.Result == FortSearchResponse.Types.Result.OutOfRange);
-#if DEBUG
 
-                Logger.Write($"{fortSearch.Result}");
-#endif
                 if (fortSearch.ExperienceAwarded > 0 && timesZeroXPawarded > 0) timesZeroXPawarded = 0;
                 if (fortSearch.ExperienceAwarded == 0 && fortSearch.Result != FortSearchResponse.Types.Result.InventoryFull)
                 {
