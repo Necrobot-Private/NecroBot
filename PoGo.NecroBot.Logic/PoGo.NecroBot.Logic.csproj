@@ -106,6 +106,10 @@
       <HintPath>$(SolutionDir)\packages\EPPlus.4.1.0\lib\net40\EPPlus.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Geocoding, Version=3.6.0.0, Culture=neutral, PublicKeyToken=7c714700b88674c7, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Geocoding.net.3.6.0\lib\net40\Geocoding.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="GeoCoordinate.NetStandard1, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\GeoCoordinate.NetStandard1.1.0.0\lib\netstandard1.0\GeoCoordinate.NetStandard1.dll</HintPath>
       <Private>True</Private>
@@ -314,6 +318,7 @@
     <Compile Include="Logging\LoggingStrings.cs" />
     <Compile Include="Model\BotActions.cs" />
     <Compile Include="Exceptions\ActiveSwitchByPokemonException.cs" />
+    <Compile Include="Model\GeoLocation.cs" />
     <Compile Include="Model\Google\GoogleObjects\Address_Components.cs" />
     <Compile Include="Model\Google\GoogleObjects\Bounds.cs" />
     <Compile Include="Model\Google\GoogleObjects\DirectionsResponse.cs" />
@@ -510,6 +515,7 @@
     <Compile Include="Tasks\UseLuckyEggTask.cs" />
     <Compile Include="Tasks\UseNearbyPokestopsTask.cs" />
     <Compile Include="TinyIoC.cs" />
+    <Compile Include="Utils\AsyncLock.cs" />
     <Compile Include="Utils\DelayingUtils.cs" />
     <Compile Include="Utils\EggWalker.cs" />
     <Compile Include="Utils\ErrorHandler.cs" />
