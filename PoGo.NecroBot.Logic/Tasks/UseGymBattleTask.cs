@@ -55,7 +55,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     Longitude = fortInfo.Longitude
                 });
 
-                var fortDetails = await session.Client.Fort.GetGymDetails(gym.Id, gym.Latitude, gym.Longitude);
+                var fortDetails = session.GymState.getGymDetails(session, gym, true); //await session.Client.Fort.GetGymDetails(gym.Id, gym.Latitude, gym.Longitude);
 
                 if (fortDetails.Result == GetGymDetailsResponse.Types.Result.Success)
                 {
@@ -84,11 +84,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 {
                                     deployedPokemons = session.Inventory.GetDeployedPokemons();
                                     deployedList = new List<PokemonData>(deployedPokemons);
-                                    fortDetails = await session.Client.Fort.GetGymDetails(gym.Id, gym.Latitude, gym.Longitude);
                                 }
                             }
 
-                            if (CanTrainGym(session, gym, fortDetails, deployedList))
+                            if (CanTrainGym(session, gym, deployedList))
                                 await StartGymAttackLogic(session, fortInfo, fortDetails, gym, cancellationToken);
                         }
                         else
@@ -112,6 +111,9 @@ namespace PoGo.NecroBot.Logic.Tasks
         private static async Task StartGymAttackLogic(ISession session, FortDetailsResponse fortInfo, GetGymDetailsResponse fortDetails, FortData gym, CancellationToken cancellationToken)
         {
             var defenders = fortDetails.GymState.Memberships.Select(x => x.PokemonData).ToList();
+
+            if (defenders.Count < 1)
+                return;
 
             if (session.Profile.PlayerData.Team != gym.OwnedByTeam)
             {
@@ -956,7 +958,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                     }
                                 }
                                 attacker = attackResult.ActiveAttacker.PokemonData;
-                                Console.SetCursorPosition(0, Console.CursorTop - 1);
+                                //Console.SetCursorPosition(0, Console.CursorTop - 1);
                                 Logger.Write($"(GYM ATTACK) : Defender {attackResult.ActiveDefender.PokemonData.PokemonId.ToString()  } HP {attackResult.ActiveDefender.CurrentHealth} - Attacker  {attackResult.ActiveAttacker.PokemonData.PokemonId.ToString()}   HP/Sta {attackResult.ActiveAttacker.CurrentHealth}/{attackResult.ActiveAttacker.CurrentEnergy}        ");
                                 if (attackResult != null && attackResult.ActiveAttacker != null)
                                     session.GymState.myTeam.Where(w => w.attacker.Id == attackResult.ActiveAttacker.PokemonData.Id).FirstOrDefault().hpState = attackResult.ActiveAttacker.CurrentHealth;
@@ -1263,22 +1265,13 @@ namespace PoGo.NecroBot.Logic.Tasks
             return true;
         }
 
-        internal static bool CanTrainGym(ISession session, FortData fort, GetGymDetailsResponse gymDetails, IEnumerable<PokemonData> deployedPokemons)
+        internal static bool CanTrainGym(ISession session, FortData fort, IEnumerable<PokemonData> deployedPokemons)
         {
             try
             {
-                if (gymDetails != null && gymDetails.GymState != null && gymDetails.GymState.FortData != null)
+                GetGymDetailsResponse gymDetails = session.GymState.getGymDetails(session, fort);
+                if (gymDetails?.Result == GetGymDetailsResponse.Types.Result.Success)
                     fort = gymDetails.GymState.FortData;
-                else
-                {
-                    var task = session.Client.Fort.GetGymDetails(fort.Id, fort.Latitude, fort.Longitude);
-                    task.Wait();
-                    if (task.IsCompleted && task.Result.Result == GetGymDetailsResponse.Types.Result.Success)
-                    {
-                        fort = task.Result.GymState.FortData;
-                        gymDetails = task.Result;
-                    }
-                }
 
                 bool isDeployed = deployedPokemons != null && deployedPokemons.Count() > 0 ? deployedPokemons.Any(a => a?.DeployedFortId == fort.Id) : false;
                 if (gymDetails != null && GetGymLevel(fort.GymPoints) > gymDetails.GymState.Memberships.Count && !isDeployed) // free slot should be used always but not always we know that...
@@ -1298,35 +1291,17 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
             catch (Exception ex)
             {
-                TimedLog(string.Format("{0} -> {1} -> {2}", ex.Message, string.Join(", ", deployedPokemons), gymDetails));
+                TimedLog(string.Format("{0} -> {1} -> {2}", ex.Message, string.Join(", ", deployedPokemons), fort));
                 return false;
             }
             return true;
         }
 
-        internal static bool CanDeployToGym(ISession session, FortData fort, GetGymDetailsResponse gymDetails, IEnumerable<PokemonData> deployedPokemons)
+        internal static bool CanDeployToGym(ISession session, FortData fort, IEnumerable<PokemonData> deployedPokemons)
         {
-            if (gymDetails != null && gymDetails.GymState != null && gymDetails.GymState.FortData != null)
+            GetGymDetailsResponse gymDetails = session.GymState.getGymDetails(session, fort);
+            if(gymDetails?.Result == GetGymDetailsResponse.Types.Result.Success)
                 fort = gymDetails.GymState.FortData;
-            else
-            {
-                try
-                {
-                    var task = session.Client.Fort.GetGymDetails(fort.Id, fort.Latitude, fort.Longitude);
-                    task.Wait();
-                    if (task.IsCompleted && task.Result.Result == GetGymDetailsResponse.Types.Result.Success)
-                    {
-                        fort = task.Result.GymState.FortData;
-                        gymDetails = task.Result;
-                    }
-                }
-                catch (HasherException ex) { throw ex; }
-                catch (CaptchaException ex) { throw ex; }
-                catch (Exception ex)
-                {
-                    TimedLog(ex.Message);
-                }
-            }
 
             if (deployedPokemons.Any(a => a.DeployedFortId.Equals(fort.Id)))
                 return false;
