@@ -140,13 +140,16 @@ namespace PoGo.Necrobot.Window.Controls
 
         internal void MarkFortAsLooted(FortData fortData)
         {
-            GMapMarker marker = allMarkers[fortData.Id];
-            var fort = this.forts.Where(x => x.Id == fortData.Id).FirstOrDefault();
-            if (fort.Type == FortType.Checkpoint)
+            if (allMarkers.ContainsKey(fortData.Id))
             {
-                if (marker.Shape is FortMarker)
+                GMapMarker marker = allMarkers[fortData.Id];
+                var fort = this.forts.Where(x => x.Id == fortData.Id).FirstOrDefault();
+                if (fort.Type == FortType.Checkpoint)
                 {
-                    ((FortMarker)marker.Shape).UpdateFortData(fortData);
+                    if (marker.Shape is FortMarker)
+                    {
+                        ((FortMarker)marker.Shape).UpdateFortData(fortData);
+                    }
                 }
             }
         }
