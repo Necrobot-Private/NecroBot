@@ -17,6 +17,7 @@ using PoGo.NecroBot.Logic.Model;
 using PoGo.NecroBot.Logic.Exceptions;
 using PoGo.NecroBot.Logic.Model.Settings;
 using TinyIoC;
+using PokemonGo.RocketAPI.Util;
 
 #endregion
 
@@ -257,7 +258,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             var allForts = session.Forts.Where(p => p.Type == FortType.Checkpoint).ToList();
 
-            if (allForts.Count > 1)
+            if (allForts.Count > 0)
             {
                 var spinablePokestops = allForts.Where(
                     i =>
@@ -269,22 +270,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 (destinationFort == null || destinationFort.Id != i.Id))
                 ).ToList();
 
-                List<FortData> spinedPokeStops = new List<FortData>();
-                if (spinablePokestops.Count >= 1)
+                if (spinablePokestops.Count > 0)
                 {
                     foreach (var pokeStop in spinablePokestops)
                     {
                         var fortInfo = await session.Client.Fort.GetFort(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude);
                         await FarmPokestop(session, pokeStop, fortInfo, cancellationToken, true);
-                        // Synchronize cooldown with map
-                        var mapFort = (await session.Client.Map.GetMapObjects()).MapCells.SelectMany(x => x.Forts).Where(y => y.Id == pokeStop.Id).FirstOrDefault();
-                        if (mapFort != pokeStop)
-                            pokeStop.CooldownCompleteTimestampMs = mapFort.CooldownCompleteTimestampMs;
-                        spinedPokeStops.Add(pokeStop);
-                        if (spinablePokestops.Count > 1)
-                        {
-                            await Task.Delay(1000);
-                        }
                     }
                 }
                 session.AddForts(spinablePokestops);
@@ -368,7 +359,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 return;
             }
 
-            await session.Client.Map.GetMapObjects();
+            //await session.Client.Map.GetMapObjects();
             FortSearchResponse fortSearch;
             var timesZeroXPawarded = 0;
             var fortTry = 0; //Current check
@@ -379,9 +370,20 @@ namespace PoGo.NecroBot.Logic.Tasks
                 cancellationToken.ThrowIfCancellationRequested();
                 TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
 
+                do
+                {
+                    fortSearch =
+                        await session.Client.Fort.SearchFort(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude);
+                    if(fortSearch.Result == FortSearchResponse.Types.Result.OutOfRange)
+                    {
+                        await session.Client.Map.GetMapObjects(true);
+                    }
+                }
+                while (fortSearch.Result == FortSearchResponse.Types.Result.OutOfRange);
+#if DEBUG
 
-                fortSearch =
-                    await session.Client.Fort.SearchFort(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude);
+                Logger.Write($"{fortSearch.Result}");
+#endif
                 if (fortSearch.ExperienceAwarded > 0 && timesZeroXPawarded > 0) timesZeroXPawarded = 0;
                 if (fortSearch.ExperienceAwarded == 0 && fortSearch.Result != FortSearchResponse.Types.Result.InventoryFull)
                 {
@@ -452,6 +454,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                             fortSearch.PokemonDataEgg.IsEgg = true;
                         }
 
+                        // Update the cache
+                        var fortFromCache = session.Client.Map.LastGetMapObjectResponse.MapCells.SelectMany(x => x.Forts).FirstOrDefault(f => f.Id == pokeStop.Id);
+                        
+                        long newCooldown = TimeUtil.GetCurrentTimestampInMilliseconds() + (5 * 60 * 1000); /* 5 min */
+                        fortFromCache.CooldownCompleteTimestampMs = newCooldown;
+                        pokeStop.CooldownCompleteTimestampMs = newCooldown;
                     }
                     MSniperServiceTask.UnblockSnipe(false);
                     if (fortSearch.Result == FortSearchResponse.Types.Result.InventoryFull)
@@ -578,7 +586,6 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static async Task<List<FortData>> UpdateFortsData(ISession session)
         {
             var mapObjects = await session.Client.Map.GetMapObjects();
-            
 
             session.AddForts(mapObjects.MapCells.SelectMany(p => p.Forts).ToList());
 
