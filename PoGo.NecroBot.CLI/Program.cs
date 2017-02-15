@@ -383,9 +383,11 @@ namespace PoGo.NecroBot.CLI
 
             var accountManager = new MultiAccountManager(logicSettings.Bots);
 
-            accountManager.Add(settings.Auth.AuthConfig);
+            var mainAccount = accountManager.Add(settings.Auth.AuthConfig);
 
             ioc.Register<MultiAccountManager>(accountManager);
+
+            
 
             var bot = accountManager.GetStartUpAccount();
 
