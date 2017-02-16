@@ -87,13 +87,33 @@ namespace PoGo.NecroBot.Logic.Common
         public string FreeInput { get; set; }
 
         [Description("You can copy & paste any free text content which has pokemon name, latitude, longitude then bot will parse that content to get the snipe infomation.")]
-        public string FreeInputExplain{ get; set; }
+        public string FreeInputExplain { get; set; }
 
         [Description("Add To Snipe")]
         public string AddToSnipeButtonText { get; set; }
 
         #endregion
         #region Pokemon Inventory
+        [Description("Search & Filters")]
+        public string FilterAndSearch { get; set; }
+
+        [Description("Pokedex")]
+        public string Pokedex { get; set; }
+        [Description("Enter Pokemon Name")]
+        public string SearchPokemonName { get; set; }
+        [Description("Select Pokemon %IV")]
+        public string SearchPokemonIV { get; set; }
+        [Description("Select Pokemon Level")]
+        public string SearchPokemonLevel { get; set; }
+
+        [Description("Select Pokemon CP")]
+        public string SearchPokemonCP { get; set; }
+
+        [Description("Search & Select")]
+        public string SearchSelectAllButton {get;set;}
+
+        [Description("Search")]
+        public string SearchButton { get; set; }
 
         [Description("Do you want to powerup this pokemon? Normal power up is do x time power up. Max power up is powerup to maximun level up to your candy, stardust and player level.")]
         public string PowerUpDescription { get; set; }
@@ -130,7 +150,7 @@ namespace PoGo.NecroBot.Logic.Common
 
 
         [Description("IV")]
-        public string IV{ get; set; }
+        public string IV { get; set; }
 
         [Description("CP")]
         public string CP { get; set; }
@@ -140,7 +160,7 @@ namespace PoGo.NecroBot.Logic.Common
 
         [Description("Level")]
         public string Level { get; set; }
-        
+
         [Description("Caught at")]
         public string CaughtTime { get; set; }
 
@@ -197,7 +217,7 @@ namespace PoGo.NecroBot.Logic.Common
         public string GetTranslation(string key)
         {
             var prop = GetType().GetProperty(key);
-            if(prop != null)
+            if (prop != null)
             {
                 return prop.GetValue(this).ToString();
             }
@@ -230,7 +250,7 @@ namespace PoGo.NecroBot.Logic.Common
                     pi.SetValue(this, description.Description);
                 }
                 else
-                pi.SetValue(this, pi.Name);
+                    pi.SetValue(this, pi.Name);
             }
 
             if (File.Exists(translationFile))

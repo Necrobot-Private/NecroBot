@@ -229,7 +229,7 @@
             </TabControl.Resources>
             <TabItem Name="tabMap" >
                 <TabItem.Header>
-                    <TextBlock Margin="10,7,10,7" Text="{Binding  Source=MapTabTitle, Converter={StaticResource ResourceKey=I18NConveter}, FallbackValue=MAPS}"/>
+                    <TextBlock Margin="7,5,7,5" Text="{Binding  Source=MapTabTitle, Converter={StaticResource ResourceKey=I18NConveter}, FallbackValue=MAPS}" FontSize="15"/>
                 </TabItem.Header>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -248,13 +248,16 @@
             </TabItem>
             <TabItem >
                 <TabItem.Header>
-                    <TextBlock Margin="10,7,10,7" Text="{Binding  Source=SniperTabTitle, Converter={StaticResource ResourceKey=I18NConveter}, FallbackValue=MAPS}"/>
+                    <TextBlock  FontSize="15" Margin="7,5,7,5" Text="{Binding  Source=SniperTabTitle, Converter={StaticResource ResourceKey=I18NConveter}, FallbackValue=MAPS}"/>
                 </TabItem.Header>
                 
                 <local:SniperControl x:Name="ctrlSniper" DataContext="{Binding Path=SnipeList}" />
             </TabItem>
 
-            <TabItem Header="{Binding Source=ConsoleTabTitle, Converter={StaticResource ResourceKey=I18NConveter}, FallbackValue=Console}" IsSelected="True">
+            <TabItem  IsSelected="True">
+                <TabItem.Header>
+                    <TextBlock FontSize="15" Text="{Binding Source=ConsoleTabTitle, Converter={StaticResource ResourceKey=I18NConveter}, FallbackValue=Console}"/>
+                </TabItem.Header>
                 <DockPanel LastChildFill="True">
                     <TextBox HorizontalAlignment="Stretch" 
                              Name="txtCmdInput" 
@@ -290,14 +293,14 @@
 
             </TabItem>
 
-            <TabItem Header="{Binding Path= PokemonTabHeader, FallbackValue=Pokemon}" Name="tabPokemons">
+            <TabItem FontSize="15" Header="{Binding Path= PokemonTabHeader, FallbackValue=Pokemon}" Name="tabPokemons">
                 <local:PokemonInventory x:Name="ctrPokemonInventory" DataContext="{Binding Path=PokemonList}"
                                         OnPokemonItemSelected="PokemonInventory_OnPokemonItemSelected" />
             </TabItem>
-            <TabItem Name="tabItems" Header="{Binding Path=ItemsTabHeader, FallbackValue=Pokemon}">
+            <TabItem FontSize="15" Name="tabItems" Header="{Binding Path=ItemsTabHeader, FallbackValue=Pokemon}">
                 <local:ItemsInventory DataContext="{Binding Path=ItemsList}" x:Name="ctrlItemControl" />
             </TabItem>
-            <TabItem Name="tabEggs" Header="{Binding Source=EggTabHeader , Converter={StaticResource I18NConveter}}">
+            <TabItem FontSize="15" Name="tabEggs" Header="{Binding Source=EggTabHeader , Converter={StaticResource I18NConveter}}">
                 <local:EggsControl DataContext="{Binding Path=EggsList}" x:Name="ctrlEggsControl" />
             </TabItem>
         </TabControl>
