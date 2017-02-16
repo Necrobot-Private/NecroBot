@@ -9,6 +9,5 @@ namespace RocketBot2.Logic.Event
     {
         public GeoCoordinate Destination;
         public List<GeoCoordinate> Route;
-        public List<FortData> pokeStops;
     }
 }

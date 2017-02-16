@@ -28,7 +28,7 @@ namespace PoGo.NecroBot.Logic
     public delegate void UpdatePositionDelegate(ISession session, double lat, double lng, double speed);
 
     //add delegate
-    public delegate void GetHumanizeRouteDelegate(List<GeoCoordinate> route, GeoCoordinate destination, List<FortData> pokeStops);
+    public delegate void GetHumanizeRouteDelegate(List<GeoCoordinate> route, GeoCoordinate destination);
 
     public class Navigation
     {
@@ -120,8 +120,7 @@ namespace PoGo.NecroBot.Logic
                 points.Add(new GeoCoordinate(item.ToArray()[1], item.ToArray()[0]));
 
             //get pokeStops to map
-            var pokeStops = await GetPokeStops(session);
-            OnGetHumanizeRouteEvent(points, targetLocation.ToGeoCoordinate(), pokeStops);
+            OnGetHumanizeRouteEvent(points, targetLocation.ToGeoCoordinate());
             //end code add routes
 
             // If the stretegies become bigger, create a factory for easy management
@@ -277,32 +276,11 @@ namespace PoGo.NecroBot.Logic
             return result;
         }
 
-        private static async Task<List<FortData>> GetPokeStops(ISession session)
-        {
-            var mapObjects = await session.Client.Map.GetMapObjects();
-
-            // Wasn't sure how to make this pretty. Edit as needed.
-            var pokeStops = mapObjects.MapCells.SelectMany(i => i.Forts)
-                .Where(
-                    i =>
-                        i.Type == FortType.Checkpoint &&
-                        i.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime() &&
-                        ( // Make sure PokeStop is within max travel distance, unless it's set to 0.
-                            LocationUtils.CalculateDistanceInMeters(
-                                session.Settings.DefaultLatitude, session.Settings.DefaultLongitude,
-                                i.Latitude, i.Longitude) < session.LogicSettings.MaxTravelDistanceInMeters ||
-                            session.LogicSettings.MaxTravelDistanceInMeters == 0)
-                );
-
-            return pokeStops.ToList();
-        }
-
-
         public static event GetHumanizeRouteDelegate GetHumanizeRouteEvent;
 
-        protected virtual void OnGetHumanizeRouteEvent(List<GeoCoordinate> route, GeoCoordinate destination, List<FortData> pokeStops)
+        protected virtual void OnGetHumanizeRouteEvent(List<GeoCoordinate> route, GeoCoordinate destination)
         {
-            GetHumanizeRouteEvent?.Invoke(route, destination, pokeStops);
+            GetHumanizeRouteEvent?.Invoke(route, destination);
         }
         //end functions routes map
     }
