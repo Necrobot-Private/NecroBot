@@ -240,6 +240,7 @@ namespace PoGo.NecroBot.Logic
             {
                 
                 runningAccount = bot;
+                
             }
             else {
 
@@ -281,6 +282,12 @@ namespace PoGo.NecroBot.Logic
                     Task.Delay(pauseTime * 60 * 1000).Wait();
                     return GetSwitchableAccount();
                 }
+            }
+            //overkill
+            foreach (var item in this.Accounts)
+            {
+                item.IsRunning = false;
+                UpdateDatabase(item);
             }
             runningAccount.IsRunning = true;
             runningAccount.LoggedTime = DateTime.Now;

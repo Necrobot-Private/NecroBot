@@ -17,7 +17,7 @@ namespace PoGo.Necrobot.Window.Model
         public string AA { get; set; }
         public List<PokemonData> internalPokemons;
 
-        public PokemonListModel PokemonList { get; set; }
+        public PokemonListViewModel PokemonList { get; set; }
         public SidebarViewModel Sidebar { get; set; }
 
         public SnipeListViewModel SnipeList { get; set; }
@@ -52,7 +52,7 @@ namespace PoGo.Necrobot.Window.Model
             SnipeList = new SnipeListViewModel();
             EggsList = new EggsListViewModel();
 
-            PokemonList = new PokemonListModel(this.Session)
+            PokemonList = new PokemonListViewModel(this.Session)
             {
                 Pokemons = new ObservableCollection<PokemonDataViewModel>()
             };

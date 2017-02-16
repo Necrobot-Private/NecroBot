@@ -198,6 +198,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             var deployedPokemons = session.Inventory.GetDeployedPokemons();
 
+            //NOTE : This code is killing perfomance of BOT if GYM is turn on, need to refactor to avoid this hummer call API
+
             var forts = session.Forts
                 .Where(p => p.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime())
                 .Where(f => f.Type == FortType.Checkpoint || 
@@ -385,22 +387,32 @@ namespace PoGo.NecroBot.Logic.Tasks
                 cancellationToken.ThrowIfCancellationRequested();
                 TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
                 int retry = 3;
+                double latitude = pokeStop.Latitude;
+                double longitude = pokeStop.Longitude;
                 do
                 {
                     fortSearch = await session.Client.Fort.SearchFort(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude);
                     if(fortSearch.Result == FortSearchResponse.Types.Result.OutOfRange)
                     {
+                        if(retry>1)
+                        {
+                            await Task.Delay(500);
+                        }
+                        else
                         await session.Client.Map.GetMapObjects(true);
 #if DEBUG
                         Logger.Write($"Loot pokestop result: {fortSearch.Result}, distance to pokestop: {distance:0.00}m, retry: #{4-retry}");
 #endif
-                        
+
+                        latitude += 0.000001;
+                        longitude += 0.000001;
+                        await LocationUtils.UpdatePlayerLocationWithAltitude(session, new GeoCoordinatePortable.GeoCoordinate(latitude, longitude), 0);
                         retry--;
                         //await session.Client.Map.GetMapObjects(true);
                     }
                 }
                 while (fortSearch.Result == FortSearchResponse.Types.Result.OutOfRange && retry >0);
-
+                Logger.Write($"Loot pokestop result: {fortSearch.Result}");
                 if (fortSearch.ExperienceAwarded > 0 && timesZeroXPawarded > 0) timesZeroXPawarded = 0;
                 if (fortSearch.ExperienceAwarded == 0 && fortSearch.Result != FortSearchResponse.Types.Result.InventoryFull)
                 {
