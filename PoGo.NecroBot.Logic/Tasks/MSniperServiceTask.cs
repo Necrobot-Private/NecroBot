@@ -547,6 +547,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 var pokedex = session.Inventory.GetPokeDexItems();
 
+                Logger.Debug($"Pokedex Entry : {pokedex.Count()}");
+
                 if (!pokedex.Exists(x => x.InventoryItemData?.PokedexEntry?.PokemonId == (PokemonId)item.PokemonId) &&
                     !pokedexSnipePokemons.Exists(p => p.PokemonId == item.PokemonId) &&
                     (!session.LogicSettings.AutosnipeVerifiedOnly ||

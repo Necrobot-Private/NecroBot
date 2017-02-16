@@ -69,7 +69,6 @@ namespace PoGo.NecroBot.Logic.Captcha
                     }
                 }
 
-                //Anti captcha   -Havent test it, temporary comment until has key to test
                 if (!resolved && session.LogicSettings.CaptchaConfig.EnableAntiCaptcha && !string.IsNullOrEmpty(session.LogicSettings.CaptchaConfig.AntiCaptchaAPIKey))
                 {
                     if (needGetNewCaptcha)
