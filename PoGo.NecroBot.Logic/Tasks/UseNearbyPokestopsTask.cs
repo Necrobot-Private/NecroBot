@@ -399,7 +399,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     }
                 }
                 while (fortSearch.Result == FortSearchResponse.Types.Result.OutOfRange && retry >0);
-
+                Logger.Write($"Loot pokestop result: {fortSearch.Result}");
                 if (fortSearch.ExperienceAwarded > 0 && timesZeroXPawarded > 0) timesZeroXPawarded = 0;
                 if (fortSearch.ExperienceAwarded == 0 && fortSearch.Result != FortSearchResponse.Types.Result.InventoryFull)
                 {

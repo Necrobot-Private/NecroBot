@@ -58,7 +58,6 @@ namespace PoGo.Necrobot.Window
         public void LogToConsoleTab(string message, LogLevel level, string color)
         {
 
-            if (color == "Black" && level == LogLevel.LevelUp) color = "DarkCyan";
 
             Dictionary<LogLevel, string> colors = new Dictionary<LogLevel, string>()
             {
