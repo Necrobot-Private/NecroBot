@@ -271,7 +271,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             if (isFailedToStart && _startBattleCounter > 0)
             {
-                await Task.Delay(15000);
+                Logger.Write("Waiting extra time to try again");
+                await Task.Delay(120000);
                 await Execute(session, cancellationToken, gym, fortInfo);
             }
 
@@ -887,7 +888,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         if (attackActionz.Any(a => a.Type == BattleActionType.ActionSwapPokemon))
                         {
                             TimedLog("Etra wait after SWAP call");
-                            await Task.Delay(1000);
+                            await Task.Delay(3000);
                         }
                     }
                     catch (APIBadRequestException)
@@ -953,13 +954,13 @@ namespace PoGo.NecroBot.Logic.Tasks
                                         else
                                         {
                                             Logger.Write(string.Format("We ware fainted in battle, new attacker is: {0} ({1} CP){2}", attacker.PokemonId, attacker.Cp, Environment.NewLine), LogLevel.Info, ConsoleColor.Magenta);
+                                            await Task.Delay(3000);
                                         }
-                                        await Task.Delay(3000);
                                     }
                                 }
                                 attacker = attackResult.ActiveAttacker.PokemonData;
                                 //Console.SetCursorPosition(0, Console.CursorTop - 1);
-                                Logger.Write($"(GYM ATTACK) : Defender {attackResult.ActiveDefender.PokemonData.PokemonId.ToString()  } HP {attackResult.ActiveDefender.CurrentHealth} - Attacker  {attackResult.ActiveAttacker.PokemonData.PokemonId.ToString()}   HP/Sta {attackResult.ActiveAttacker.CurrentHealth}/{attackResult.ActiveAttacker.CurrentEnergy}        ");
+                                Logger.Write($"(GYM ATTACK) : Defender {attackResult.ActiveDefender.PokemonData.PokemonId.ToString()  } HP {attackResult.ActiveDefender.CurrentHealth} - Attacker  {attackResult.ActiveAttacker.PokemonData.PokemonId.ToString()} ({attackResult.ActiveAttacker.PokemonData.Id})  HP/Sta {attackResult.ActiveAttacker.CurrentHealth}/{attackResult.ActiveAttacker.CurrentEnergy}        ");
                                 if (attackResult != null && attackResult.ActiveAttacker != null)
                                     session.GymState.myTeam.Where(w => w.attacker.Id == attackResult.ActiveAttacker.PokemonData.Id).FirstOrDefault().hpState = attackResult.ActiveAttacker.CurrentHealth;
                                 break;
@@ -986,6 +987,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     else
                     {
                         Logger.Write($"Unexpected attack result:\n{attackResult}");
+                        TimedLog("Attack: " + string.Join(Environment.NewLine, attackActionz), true);
                         break;
                     }
 
@@ -1048,7 +1050,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     Type = BattleActionType.ActionSwapPokemon,
                     DurationMs = session.GymState.swithAttacker.attackDuration,
                     ActionStartMs = serverMs,
-                    ActivePokemonId = session.GymState.swithAttacker.oldAttacker,
+                    ActivePokemonId = session.GymState.swithAttacker.oldAttacker,                    
                     TargetPokemonId = session.GymState.swithAttacker.newAttacker,
                     TargetIndex = -1,
                 });
