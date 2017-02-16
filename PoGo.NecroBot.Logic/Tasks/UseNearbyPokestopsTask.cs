@@ -195,6 +195,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             var deployedPokemons = session.Inventory.GetDeployedPokemons();
 
+            //NOTE : This code is killing perfomance of BOT if GYM is turn on, need to refactor to avoid this hummer call API
+
             var forts = session.Forts
                 .Where(p => p.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime())
                 .Where(f => f.Type == FortType.Checkpoint || 
