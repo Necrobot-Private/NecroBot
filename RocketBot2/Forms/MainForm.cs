@@ -461,7 +461,7 @@ namespace RocketBot2.Forms
             _session.Navigation.WalkStrategy.UpdatePositionEvent += LoadSaveState.SaveLocationToDisk;
 
             Navigation.GetHumanizeRouteEvent +=
-                (route, destination) => _session.EventDispatcher.Send(new GetHumanizeRouteEvent { Route = route, Destination = destination });
+                (route)  => _session.EventDispatcher.Send(new GetHumanizeRouteEvent { Route = route} );
             Navigation.GetHumanizeRouteEvent += UpdateMap;
 
             UseNearbyPokestopsTask.LootPokestopEvent +=
@@ -670,7 +670,7 @@ namespace RocketBot2.Forms
         }
 
         private int encounterPokemonsCount;
-        private void UpdateMap(List<GeoCoordinate> route, GeoCoordinate destination)
+        private void UpdateMap(List<GeoCoordinate> route)
         {
             var routePointLatLngs = new List<PointLatLng>();
             foreach (var item in route)

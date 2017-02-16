@@ -28,7 +28,7 @@ namespace PoGo.NecroBot.Logic
     public delegate void UpdatePositionDelegate(ISession session, double lat, double lng, double speed);
 
     //add delegate
-    public delegate void GetHumanizeRouteDelegate(List<GeoCoordinate> route, GeoCoordinate destination);
+    public delegate void GetHumanizeRouteDelegate(List<GeoCoordinate> route);
 
     public class Navigation
     {
@@ -120,7 +120,7 @@ namespace PoGo.NecroBot.Logic
                 points.Add(new GeoCoordinate(item.ToArray()[1], item.ToArray()[0]));
 
             //get pokeStops to map
-            OnGetHumanizeRouteEvent(points, targetLocation.ToGeoCoordinate());
+            OnGetHumanizeRouteEvent(points);
             //end code add routes
 
             // If the stretegies become bigger, create a factory for easy management
@@ -278,9 +278,9 @@ namespace PoGo.NecroBot.Logic
 
         public static event GetHumanizeRouteDelegate GetHumanizeRouteEvent;
 
-        protected virtual void OnGetHumanizeRouteEvent(List<GeoCoordinate> route, GeoCoordinate destination)
+        protected virtual void OnGetHumanizeRouteEvent(List<GeoCoordinate> route)
         {
-            GetHumanizeRouteEvent?.Invoke(route, destination);
+            GetHumanizeRouteEvent?.Invoke(route);
         }
         //end functions routes map
     }
