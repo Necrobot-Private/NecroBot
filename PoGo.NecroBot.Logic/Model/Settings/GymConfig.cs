@@ -161,6 +161,11 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
         public int MinRevivePotions { get; set; }
 
+        [NecrobotConfig(Description = "Prioritize Gym with free slot", Position = 27)]
+        [DefaultValue(true)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
+        public bool PrioritizeGymWithFreeSlot { get; set; }
+
         private static ICollection<KeyValuePair<PokemonId, PokemonMove>> GetDefaults()
         {
             return new List<KeyValuePair<PokemonId, PokemonMove>>()

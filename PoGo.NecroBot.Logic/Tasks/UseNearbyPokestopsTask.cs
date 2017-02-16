@@ -200,13 +200,13 @@ namespace PoGo.NecroBot.Logic.Tasks
                 .Where(f => f.Type == FortType.Checkpoint || 
                        (session.LogicSettings.GymConfig.Enable && (
                             UseGymBattleTask.CanAttackGym(session, f, deployedPokemons) ||
-                            UseGymBattleTask.CanTrainGym(session, f, null, deployedPokemons) ||
-                            UseGymBattleTask.CanDeployToGym(session, f, null, deployedPokemons))))
+                            UseGymBattleTask.CanTrainGym(session, f, deployedPokemons) ||
+                            UseGymBattleTask.CanDeployToGym(session, f, deployedPokemons))))
                 .ToList();
 
             if (session.LogicSettings.GymConfig.Enable &&
                 ((session.LogicSettings.GymConfig.EnableAttackGym && forts.Where(w => w.Type == FortType.Gym && UseGymBattleTask.CanAttackGym(session, w, deployedPokemons)).Count() == 0) ||
-                (session.LogicSettings.GymConfig.EnableGymTraining && forts.Where(w => w.Type == FortType.Gym && UseGymBattleTask.CanTrainGym(session, w, null, deployedPokemons)).Count() == 0)
+                (session.LogicSettings.GymConfig.EnableGymTraining && forts.Where(w => w.Type == FortType.Gym && UseGymBattleTask.CanTrainGym(session, w, deployedPokemons)).Count() == 0)
                 ))
             {
                 //Logger.Write("No usable gym found. Trying to refresh list.", LogLevel.Gym, ConsoleColor.Magenta);
@@ -242,6 +242,14 @@ namespace PoGo.NecroBot.Logic.Tasks
                 // Prioritize gyms over pokestops
                 var gyms = forts.Where(x => x.Type == FortType.Gym &&
                     LocationUtils.CalculateDistanceInMeters(x.Latitude, x.Longitude, session.Client.CurrentLatitude, session.Client.CurrentLongitude) < session.LogicSettings.GymConfig.MaxDistance);
+                    //.OrderBy(x => LocationUtils.CalculateDistanceInMeters(x.Latitude, x.Longitude, session.Client.CurrentLatitude, session.Client.CurrentLongitude));
+
+                if (session.LogicSettings.GymConfig.PrioritizeGymWithFreeSlot)
+                {
+                    var freeSlots = gyms.Where(w => w.OwnedByTeam == session.Profile.PlayerData.Team && UseGymBattleTask.CanDeployToGym(session, w, deployedPokemons));
+                    if (freeSlots.Count() > 0)
+                        return freeSlots.First();
+                } 
 
                 // Return the first gym in range.
                 if (gyms.Count() > 0)
