@@ -7,6 +7,7 @@ using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Utils;
 using PokemonGo.RocketAPI;
 using POGOProtos.Networking.Responses;
+using System.Collections.Generic;
 
 namespace PoGo.NecroBot.Logic.Strategies.Walk
 {
@@ -24,6 +25,15 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
             Func<Task> functionExecutedWhileWalking, ISession session, CancellationToken cancellationToken,
             double walkSpeed = 0.0)
         {
+            List<GeoCoordinate> points = new List<GeoCoordinate>();
+            GeoCoordinate target = new GeoCoordinate(targetLocation.Latitude, targetLocation.Longitude);
+            points.Add(target);
+
+            GeoCoordinate sourceLocation = new GeoCoordinate(session.Client.CurrentLatitude, session.Client.CurrentLongitude, session.Client.CurrentAltitude);
+            return await DoWalk(points, session, functionExecutedWhileWalking, sourceLocation, target, cancellationToken, walkSpeed);
+
+            /*
+
             base.OnStartWalking(session, targetLocation);
 
             var destinaionCoordinate = new GeoCoordinate(targetLocation.Latitude, targetLocation.Longitude);
@@ -93,6 +103,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
             } while (LocationUtils.CalculateDistanceInMeters(sourceLocation, destinaionCoordinate) >= (new Random()).Next(1, 10));
 
             return result;
+            */
         }
 
         public override double CalculateDistance(double sourceLat, double sourceLng, double destinationLat,
