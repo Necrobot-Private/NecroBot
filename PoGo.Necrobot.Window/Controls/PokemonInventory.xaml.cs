@@ -200,6 +200,13 @@ namespace PoGo.Necrobot.Window.Controls
             });
         }
 
+        private void applyFilter_Click(object sender, RoutedEventArgs e)
+        {
+            var model = (PokemonListModel)this.DataContext;
+
+            model.ApplyFilter();
+        }
+
         //ICommand transferPokemonCommand;
         //public ICommand TransferPokemonCommand
         //{
