@@ -124,6 +124,7 @@ namespace PoGo.Necrobot.Window
         {
             var stat = this.playerStats.GetCurrent();
 
+
             this.datacontext.PlayerInfo.DirtyEventHandle(stat);
         }
 

@@ -374,16 +374,26 @@ namespace PoGo.NecroBot.Logic.Tasks
                 cancellationToken.ThrowIfCancellationRequested();
                 TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
                 int retry = 3;
+                double latitude = pokeStop.Latitude;
+                double longitude = pokeStop.Longitude;
                 do
                 {
                     fortSearch = await session.Client.Fort.SearchFort(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude);
                     if(fortSearch.Result == FortSearchResponse.Types.Result.OutOfRange)
                     {
+                        if(retry>1)
+                        {
+                            await Task.Delay(500);
+                        }
+                        else
                         await session.Client.Map.GetMapObjects(true);
 #if DEBUG
                         Logger.Write($"Loot pokestop result: {fortSearch.Result}, distance to pokestop: {distance:0.00}m, retry: #{4-retry}");
 #endif
-                        
+
+                        latitude += 0.000001;
+                        longitude += 0.000001;
+                        await LocationUtils.UpdatePlayerLocationWithAltitude(session, new GeoCoordinatePortable.GeoCoordinate(latitude, longitude), 0);
                         retry--;
                         //await session.Client.Map.GetMapObjects(true);
                     }

@@ -40,14 +40,14 @@ namespace PoGo.Necrobot.Window.Model
             }
 
             if (item.IV < MinIV || item.IV > MaxIV) return false;
-            if (item.IV < MinLevel || item.IV > MaxLevel) return false;
-            if (item.IV < MinCP || item.IV > MaxCP) return false;
+            if (item.Level < MinLevel || item.Level > MaxLevel) return false;
+            if (item.CP < MinCP || item.CP > MaxCP) return false;
             return true;
         }
     }
-    public class PokemonListModel : ViewModelBase
+    public class PokemonListViewModel : ViewModelBase
     {
-        public PokemonListModel(ISession session)
+        public PokemonListViewModel(ISession session)
         {
             Filter = new PokemonViewFilter();
             this.Session = Session;
@@ -66,11 +66,15 @@ namespace PoGo.Necrobot.Window.Model
 
                 if (existing != null)
                 {
+                    existing.Displayed = Filter.Check(existing);
                     existing.UpdateWith(item);
+                    
                 }
                 else
                 {
                     var pokemonDataViewModel = new PokemonDataViewModel(this.Session, item);
+                    pokemonDataViewModel.Displayed = Filter.Check(pokemonDataViewModel);
+
                     Pokemons.Add(pokemonDataViewModel);
                     Task.Run(async () =>
                     {
@@ -224,12 +228,17 @@ namespace PoGo.Necrobot.Window.Model
             }
         }
 
-        internal void ApplyFilter()
+        internal void ApplyFilter(bool select = false)
         {
             foreach (var item in this.Pokemons)
             {
                 item.Displayed = this.Filter.Check(item);
                 item.RaisePropertyChanged("Displayed");
+                if(select && item.Displayed)
+                {
+                    item.IsSelected = true;
+                    item.RaisePropertyChanged("IsSelected");
+                }
             }
         }
     }

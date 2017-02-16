@@ -57,7 +57,7 @@ namespace PoGo.Necrobot.Window.Controls
 
         private void UpdateTransferAllButtonState()
         {
-            var data = DataContext as PokemonListModel;
+            var data = DataContext as PokemonListViewModel;
             var count = data.Pokemons.Count(x => x.IsSelected && Session.Inventory.CanTransferPokemon(x.PokemonData));
             //TODO : Thought it will better to use binding.
             btnTransferAll.Content = $"Transfer all ({count})";
@@ -66,7 +66,7 @@ namespace PoGo.Necrobot.Window.Controls
 
         private void btnTransfer_Click(object sender, RoutedEventArgs e)
         {
-            var model = this.DataContext as PokemonListModel;
+            var model = this.DataContext as PokemonListViewModel;
 
             ulong pokemonId = (ulong) ((Button) sender).CommandParameter;
             model.Transfer(pokemonId);
@@ -84,7 +84,7 @@ namespace PoGo.Necrobot.Window.Controls
 
         private void btnTransferAll_Click(object sender, RoutedEventArgs e)
         {
-            var data = DataContext as PokemonListModel;
+            var data = DataContext as PokemonListViewModel;
             var pokemonToTransfer = data.Pokemons
                 .Where(x => x.IsSelected && !x.IsTransfering && Session.Inventory.CanTransferPokemon(x.PokemonData))
                 .Select(x => x.Id)
@@ -110,7 +110,7 @@ namespace PoGo.Necrobot.Window.Controls
 
         private void btnEvolve_Click(object sender, RoutedEventArgs e)
         {
-            var model = this.DataContext as PokemonListModel;
+            var model = this.DataContext as PokemonListViewModel;
 
             ulong pokemonId = (ulong) ((Button) sender).CommandParameter;
             model.Evolve(pokemonId);
@@ -120,7 +120,7 @@ namespace PoGo.Necrobot.Window.Controls
 
         private void btnFavorite_Click(object sender, RoutedEventArgs e)
         {
-            var model = this.DataContext as PokemonListModel;
+            var model = this.DataContext as PokemonListViewModel;
 
             ulong pokemonId = (ulong) ((Button) sender).CommandParameter;
             bool state = model.Favorite(pokemonId);
@@ -139,7 +139,7 @@ namespace PoGo.Necrobot.Window.Controls
 
         private void btnPowerup_Click(object sender, RoutedEventArgs e)
         {
-            var model = this.DataContext as PokemonListModel;
+            var model = this.DataContext as PokemonListViewModel;
 
             ulong pokemonId = (ulong) ((Button) sender).CommandParameter;
             model.Powerup(pokemonId);
@@ -168,7 +168,7 @@ namespace PoGo.Necrobot.Window.Controls
 
         private void btnMaxPowerUp_Click(object sender, RoutedEventArgs e)
         {
-            var model = this.DataContext as PokemonListModel;
+            var model = this.DataContext as PokemonListViewModel;
 
             ulong pokemonId = (ulong) ((Button) sender).CommandParameter;
             model.Powerup(pokemonId);
@@ -202,9 +202,16 @@ namespace PoGo.Necrobot.Window.Controls
 
         private void applyFilter_Click(object sender, RoutedEventArgs e)
         {
-            var model = (PokemonListModel)this.DataContext;
+            var model = (PokemonListViewModel)this.DataContext;
 
             model.ApplyFilter();
+        }
+
+        private void applySearchSelect_Click(object sender, RoutedEventArgs e)
+        {
+            var model = (PokemonListViewModel)this.DataContext;
+
+            model.ApplyFilter(true);
         }
 
         //ICommand transferPokemonCommand;
