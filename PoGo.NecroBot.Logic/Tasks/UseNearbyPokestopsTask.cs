@@ -362,6 +362,14 @@ namespace PoGo.NecroBot.Logic.Tasks
             var fortTry = 0; //Current check
             int retryNumber = session.LogicSettings.ByPassSpinCount; //How many times it needs to check to clear softban
             int zeroCheck = Math.Min(5, retryNumber); //How many times it checks fort before it thinks it's softban
+
+            var distance = LocationUtils.CalculateDistanceInMeters(pokeStop.Latitude, pokeStop.Longitude, session.Client.CurrentLatitude, session.Client.CurrentLongitude);
+            if (distance > 30)
+            {
+                await LocationUtils.UpdatePlayerLocationWithAltitude(session, new GeoCoordinatePortable.GeoCoordinate(pokeStop.Latitude, pokeStop.Longitude), 0);
+                await session.Client.Misc.RandomAPICall();
+            }
+
             do
             {
                 cancellationToken.ThrowIfCancellationRequested();
@@ -369,23 +377,14 @@ namespace PoGo.NecroBot.Logic.Tasks
                 int retry = 3;
                 do
                 {
-                    fortSearch =
-                        await session.Client.Fort.SearchFort(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude);
+                    fortSearch = await session.Client.Fort.SearchFort(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude);
                     if(fortSearch.Result == FortSearchResponse.Types.Result.OutOfRange)
                     {
-                        if(retry <2)
-                        {
-                            await session.Client.Map.GetMapObjects(true);
-                        }
-                        var distance = LocationUtils.CalculateDistanceInMeters(pokeStop.Latitude, pokeStop.Longitude, session.Client.CurrentLatitude, session.Client.CurrentLongitude);
+                        await session.Client.Map.GetMapObjects(true);
 #if DEBUG
-
-                        Logger.Write($"Loot pokestop result :{fortSearch.Result} , distance to pokestop : {distance:0.00}m");
+                        Logger.Write($"Loot pokestop result: {fortSearch.Result}, distance to pokestop: {distance:0.00}m, retry: #{4-retry}");
 #endif
-                        if (distance>30)
-                        {
-                            await LocationUtils.UpdatePlayerLocationWithAltitude(session, new GeoCoordinatePortable.GeoCoordinate(pokeStop.Latitude, pokeStop.Longitude), 0);
-                        }
+                        
                         retry--;
                         //await session.Client.Map.GetMapObjects(true);
                     }
