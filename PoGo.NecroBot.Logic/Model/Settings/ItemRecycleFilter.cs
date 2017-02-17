@@ -7,9 +7,9 @@ using POGOProtos.Inventory.Item;
 namespace PoGo.NecroBot.Logic.Model.Settings
 {
     [JsonObject(Title = "Item Recycle Filter", Description = "", ItemRequired = Required.DisallowNull)]
-    public class ItemRecycleFilter
+    public class ItemRecycleFilter :BaseConfig
     {
-        public ItemRecycleFilter()
+        public ItemRecycleFilter() :base()
         {
         }
 
@@ -21,12 +21,12 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         [DefaultValue("ItemUnknown")]
         [JsonProperty(Required = Required.Always, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
-        public ItemId Key = ItemId.ItemUnknown;
+        public ItemId Key { get; set; }
 
         [DefaultValue(0)]
         [Range(0, 999)]
         [JsonProperty(Required = Required.Always, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
-        public int Value;
+        public int Value { get; set; }
 
         internal static List<ItemRecycleFilter> ItemRecycleFilterDefault()
         {

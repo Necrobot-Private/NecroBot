@@ -20,19 +20,20 @@ using PoGo.NecroBot.Logic;
 using PoGo.Necrobot.Window;
 using PoGo.NecroBot.Logic.Model.Settings;
 using PoGo.Necrobot.Window.Converters;
+using System.Collections.ObjectModel;
 
 namespace PoGo.Necrobot.Window
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class AppConfigWindow : MetroWindow
+    public partial class SettingsWindow : MetroWindow
     {
 
         public GlobalSettings Settings { get; set; }
         MetroWindow main;
         private string fileName;
-        public AppConfigWindow(MetroWindow parent, string filename)
+        public SettingsWindow(MetroWindow parent, string filename)
         {
             main = parent;
             this.Settings = GlobalSettings.Load(filename);
@@ -75,33 +76,11 @@ namespace PoGo.Necrobot.Window
                 }
             }
         }
-        public AppConfigWindow()
+        public SettingsWindow()
         {
             InitializeComponent();
             InitForm();
             this.WindowState = WindowState.Maximized;
-        }
-        
-
-        public void InitForm1()
-        {
-            GlobalSettings Settings = new GlobalSettings();
-            foreach (var item in Settings.GetType().GetFields())
-            {
-                var att = item.GetCustomAttributes<NecrobotConfigAttribute>(true).FirstOrDefault();
-                if (att != null)
-                {
-                    string name = string.IsNullOrEmpty(att.Key) ? item.Name : att.Key;
-                    var button = new Button()
-                    {
-                        Content = name,
-                        HorizontalAlignment = HorizontalAlignment.Left,
-                        Width = 128
-                    };
-                    DockPanel.SetDock(button, Dock.Top);
-                    //stackProps.Children.Add(button);
-                }
-            }
         }
 
         Dictionary<FieldInfo, object> map = new Dictionary<FieldInfo, object>();
@@ -126,6 +105,31 @@ namespace PoGo.Necrobot.Window
                 Mode = BindingMode.TwoWay
             };
             grid.Columns.Add(col1);
+            var type = typeof(T);
+            foreach (var item in type.GetProperties())
+            {
+                var att = item.GetCustomAttribute<NecrobotConfigAttribute>(true);
+                if (att != null && !att.IsPrimaryKey)
+                {
+                    var dataGridControl = GetDataGridInputControl(item);
+                    grid.Columns.Add(dataGridControl);
+                }
+            }
+            return grid;
+        }
+
+        public UIElement BuildListObjectForm<T>(FieldInfo pi, List<T> list)
+        {
+            ObservableCollection<T> dataSource = new ObservableCollection<T>(list);
+
+            DataGrid grid = new DataGrid()
+            {
+                IsReadOnly = false,
+                AutoGenerateColumns = true
+            };
+            grid.ItemsSource = dataSource;
+
+
             var type = typeof(T);
             foreach (var item in type.GetProperties())
             {
@@ -269,10 +273,21 @@ namespace PoGo.Necrobot.Window
                 Type keyType = type.GetGenericArguments()[0];
                 Type valueType = type.GetGenericArguments()[1];
 
-                MethodInfo method = typeof(AppConfigWindow).GetMethod("BuildDictionaryForm");
+                MethodInfo method = typeof(SettingsWindow).GetMethod("BuildDictionaryForm");
                 MethodInfo genericMethod = method.MakeGenericMethod(valueType);
                 return (UIElement)genericMethod.Invoke(this, new object[] { fi, source });
             }
+
+            if (type.IsGenericType && (type.GetGenericTypeDefinition() == typeof(List<>)))
+            {
+                Type objectType= type.GetGenericArguments()[0];
+                //Type valueType = type.GetGenericArguments()[1];
+
+                MethodInfo method = typeof(SettingsWindow).GetMethod("BuildListObjectForm");
+                MethodInfo genericMethod = method.MakeGenericMethod(objectType);
+                return (UIElement)genericMethod.Invoke(this, new object[] { fi, source });
+            }
+
             return BuildObjectForm(source);
 
 

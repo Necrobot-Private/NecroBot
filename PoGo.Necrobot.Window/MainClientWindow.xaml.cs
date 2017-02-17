@@ -153,8 +153,8 @@ namespace PoGo.Necrobot.Window
 
         private void menuSetting_Click(object sender, RoutedEventArgs e)
         {
-            var configWindow = new AppConfigWindow(this, System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "config\\config.json"));
-            configWindow.ShowDialog();
+            var configWindow = new SettingsWindow(this, System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "config\\config.json"));
+            configWindow.ShowDialog();         
         }
 
         private void btnHideInfo_Click(object sender, RoutedEventArgs e)
