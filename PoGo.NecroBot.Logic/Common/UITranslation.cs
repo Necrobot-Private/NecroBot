@@ -49,6 +49,9 @@ namespace PoGo.NecroBot.Logic.Common
 
         [Description("Theme")]
         public string Theme { get; set; }
+        
+        [Description("Enter your command")]
+        public string InputCommand { get; set; }
 
         #endregion
         #region Map
