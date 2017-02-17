@@ -235,7 +235,6 @@ namespace PoGo.NecroBot.Logic.Common
             {
                 if (translations.ContainsKey(item.Name)) continue;
                 translations.Add(item.Name, item.GetValue(this).ToString());
-
             }
 
             File.WriteAllText(this.translationFile, JsonConvert.SerializeObject(translations, Formatting.Indented));

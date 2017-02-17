@@ -101,6 +101,7 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         float EvolveAboveIvValue { get; }
         bool DumpPokemonStats { get; }
         bool RenamePokemon { get; }
+        bool RenamePokemonRespectTransferRule { get; }
         bool RenameOnlyAboveIv { get; }
         float FavoriteMinIvPercentage { get; }
         float FavoriteMinCp { get; }

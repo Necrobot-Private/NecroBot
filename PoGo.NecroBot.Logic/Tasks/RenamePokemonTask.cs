@@ -27,7 +27,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             cancellationToken.ThrowIfCancellationRequested();
             TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
             var pokemons = session.Inventory.GetPokemons();
-            if (session.LogicSettings.TransferDuplicatePokemon)
+            if (session.LogicSettings.TransferDuplicatePokemon &&
+                session.LogicSettings.RenamePokemonRespectTransferRule)
             {
                 var duplicatePokemons =
                    await

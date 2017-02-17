@@ -428,5 +428,11 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 65)]
 
         public Operator FavoriteOperator { get; set; }
+
+        [NecrobotConfig(Description = "If this option set to true, bot only rename pokemon not meet with transfer settings, otherwise, bot will rename all pokemon in bag", Position = 66)]
+        [DefaultValue(false)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 65)]
+
+        public  bool RenamePokemonRespectTransferRule { get;  set; }
     }
 }
