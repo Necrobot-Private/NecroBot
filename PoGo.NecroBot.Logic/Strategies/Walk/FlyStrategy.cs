@@ -19,7 +19,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
         public override string RouteName => "Necrobot Flying";
 
 
-        public override async Task<PlayerUpdateResponse> Walk(IGeoLocation targetLocation,
+        public override async Task Walk(IGeoLocation targetLocation,
             Func<Task> functionExecutedWhileWalking, ISession session, CancellationToken cancellationToken,
             double walkSpeed = 0.0)
         {
@@ -36,7 +36,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
                 var sentTime = DateTime.Now;
 
                 // We are setting speed to 0, so it will be randomly generated speed.
-                var result = await LocationUtils.UpdatePlayerLocationWithAltitude(session, waypoint, 0);
+                LocationUtils.UpdatePlayerLocationWithAltitude(session, waypoint, 0);
                 base.DoUpdatePositionEvent(session, waypoint.Latitude, waypoint.Longitude, walkSpeed,0);
 
                 do
@@ -60,23 +60,21 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
                     waypoint = LocationUtils.CreateWaypoint(curLocation, nextWaypointDistance, nextWaypointBearing);
                     sentTime = DateTime.Now;
                     // We are setting speed to 0, so it will be randomly generated speed.
-                    result = await LocationUtils.UpdatePlayerLocationWithAltitude(session, waypoint, 0);
+                    LocationUtils.UpdatePlayerLocationWithAltitude(session, waypoint, 0);
                     base.DoUpdatePositionEvent(session, waypoint.Latitude, waypoint.Longitude, walkSpeed);
 
 
                     if (functionExecutedWhileWalking != null)
                         await functionExecutedWhileWalking(); // look for pokemon
                 } while (LocationUtils.CalculateDistanceInMeters(curLocation, destinaionCoordinate) >= 10);
-                return result;
             }
             else
             {
                 // We are setting speed to 0, so it will be randomly generated speed.
-                var result = await LocationUtils.UpdatePlayerLocationWithAltitude(session, targetLocation.ToGeoCoordinate(), 0);
+                LocationUtils.UpdatePlayerLocationWithAltitude(session, targetLocation.ToGeoCoordinate(), 0);
                 base.DoUpdatePositionEvent(session, targetLocation.Latitude, targetLocation.Longitude,walkSpeed);
                 if (functionExecutedWhileWalking != null)
                     await functionExecutedWhileWalking(); // look for pokemon
-                return result;
             }
         }
 
