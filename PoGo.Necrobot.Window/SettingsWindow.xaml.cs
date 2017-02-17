@@ -89,6 +89,10 @@ namespace PoGo.Necrobot.Window
 
         public UIElement BuildDictionaryForm<T>(FieldInfo pi, Dictionary<PokemonId, T> dictionary)
         {
+            var natt = pi.GetCustomAttribute<NecrobotConfigAttribute>();
+
+            string resKey = $"Setting.{pi.Name}";
+
             ObservablePairCollection<PokemonId, T> dataSource = new ObservablePairCollection<PokemonId, T>(dictionary);
             map.Add(pi, dataSource);
 
@@ -99,7 +103,7 @@ namespace PoGo.Necrobot.Window
             };
             grid.ItemsSource = dataSource;
 
-            var col1 = new DataGridComboBoxColumn() { Header = "Pokemon Name" };
+            var col1 = new DataGridComboBoxColumn() { Header = translator.PokemonName };
             col1.ItemsSource = Enum.GetValues(typeof(PokemonId)).Cast<PokemonId>();
 
             col1.SelectedItemBinding = new Binding("Key")
@@ -113,7 +117,10 @@ namespace PoGo.Necrobot.Window
                 var att = item.GetCustomAttribute<NecrobotConfigAttribute>(true);
                 if (att != null && !att.IsPrimaryKey)
                 {
+                    string headerKey = $"{resKey}.{item.Name}";
                     var dataGridControl = GetDataGridInputControl(item);
+                    dataGridControl.Header = translator.GetTranslation(headerKey);
+
                     grid.Columns.Add(dataGridControl);
                 }
             }
@@ -315,7 +322,7 @@ namespace PoGo.Necrobot.Window
 
             var type = source.GetType();
 
-            var fileName = !string.IsNullOrEmpty(configAttibute.SheetName) ? configAttibute.SheetName : type.Name;
+            var fieldName =  type.Name;
 
             foreach (var item in type.GetProperties())
             {
@@ -323,8 +330,8 @@ namespace PoGo.Necrobot.Window
                 if (att != null)
                 {
 
-                    string resKey = $"Setting.{fileName}.{item.Name}";
-                    string DescKey = $"Setting.{fileName }.{item.Name}Desc";
+                    string resKey = $"Setting.{fieldName}.{item.Name}";
+                    string DescKey = $"Setting.{fieldName }.{item.Name}Desc";
 
                     panel.Children.Add(new Label() { Content = translator.GetTranslation(resKey), FontSize = 15, ToolTip = translator.GetTranslation(DescKey)});
                     panel.Children.Add(GetInputControl(item, source));
@@ -356,7 +363,6 @@ namespace PoGo.Necrobot.Window
                 foreach (var v in Enum.GetValues(enumDataTypeAtt.EnumType))
                 {
                     ddrop.Items.Add(v.ToString());
-
                 }
                 BindingOperations.SetBinding(ddrop, ComboBox.SelectedValueProperty, binding);
                 return ddrop;
