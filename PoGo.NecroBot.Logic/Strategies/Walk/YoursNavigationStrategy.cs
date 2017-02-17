@@ -34,6 +34,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
             if (yoursWalk == null)
             {
                 await RedirectToNextFallbackStrategy(session.LogicSettings, targetLocation, functionExecutedWhileWalking, session, cancellationToken);
+                return;
             }
 
             base.OnStartWalking(session, targetLocation, yoursWalk.Distance);
