@@ -51,7 +51,12 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 new ItemRecycleFilter(ItemId.ItemRevive, 10),
                 new ItemRecycleFilter(ItemId.ItemPotion, 10),
                 new ItemRecycleFilter(ItemId.ItemHyperPotion, 10),
-                new ItemRecycleFilter(ItemId.ItemGreatBall, 100)
+                new ItemRecycleFilter(ItemId.ItemGreatBall, 100),
+                new ItemRecycleFilter(ItemId.ItemBlukBerry, 30),
+                new ItemRecycleFilter(ItemId.ItemNanabBerry, 30),
+                new ItemRecycleFilter(ItemId.ItemWeparBerry, 30),
+                new ItemRecycleFilter(ItemId.ItemPinapBerry, 30),
+                new ItemRecycleFilter(ItemId.ItemRazzBerry, 30)
             };
         }
     }

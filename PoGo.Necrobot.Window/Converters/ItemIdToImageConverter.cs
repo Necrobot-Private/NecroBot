@@ -30,6 +30,9 @@ namespace PoGo.Necrobot.Window.Converters
             {ItemId.ItemMaxRevive,"http://i.imgur.com/qa2Rqnw.png" } ,
             {ItemId.ItemRazzBerry,"http://i.imgur.com/9lyjJHn.png" } ,
             {ItemId.ItemBlukBerry,"http://i.imgur.com/80WZSnw.png" } ,
+            {ItemId.ItemNanabBerry,"http://i.imgur.com/y19SxXM.png" } ,
+            {ItemId.ItemPinapBerry,"http://i.imgur.com/8t40rJH.png" } ,
+            {ItemId.ItemWeparBerry,"http://i.imgur.com/DOhPGVh.png" },
             {ItemId.ItemIncenseOrdinary,"http://i.imgur.com/KqdjZTf.png" } ,
             {ItemId.ItemTroyDisk,"http://i.imgur.com/qJedIld.png" } ,
             {ItemId.ItemLuckyEgg,"http://i.imgur.com/fEPh6Eu.png" }
