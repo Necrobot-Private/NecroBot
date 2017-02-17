@@ -158,6 +158,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool RenameOnlyAboveIv => _settings.PokemonConfig.RenameOnlyAboveIv;
         public float FavoriteMinIvPercentage => _settings.PokemonConfig.FavoriteMinIvPercentage;
         public float FavoriteMinCp => _settings.PokemonConfig.FavoriteMinCp;
+        public int FavoriteMinLevel => _settings.PokemonConfig.FavoriteMinLevel;
+        public string FavoriteOperator => _settings.PokemonConfig.FavoriteOperator.ToString();
+
         public bool AutoFavoritePokemon => _settings.PokemonConfig.AutoFavoritePokemon;
         public string RenameTemplate => _settings.PokemonConfig.RenameTemplate;
         public int AmountOfPokemonToDisplayOnStart => _settings.ConsoleConfig.AmountOfPokemonToDisplayOnStart;

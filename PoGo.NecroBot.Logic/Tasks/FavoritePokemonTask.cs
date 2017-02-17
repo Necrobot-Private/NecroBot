@@ -11,6 +11,7 @@ using PoGo.NecroBot.Logic.Model;
 using PoGo.NecroBot.Logic.PoGoUtils;
 using PoGo.NecroBot.Logic.State;
 using POGOProtos.Networking.Responses;
+using PoGo.NecroBot.Logic.Utils;
 
 #endregion
 
@@ -23,7 +24,9 @@ namespace PoGo.NecroBot.Logic.Tasks
             cancellationToken.ThrowIfCancellationRequested();
             //await session.Inventory.RefreshCachedInventory();
 
-            var pokemons = session.Inventory.GetPokemons();
+            if (!session.LogicSettings.AutoFavoritePokemon) return;
+
+            var pokemons = session.Inventory.GetPokemons().Where(x=>x.Favorite ==0);
 
             foreach (var pokemon in pokemons)
             {
@@ -31,8 +34,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                 TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
                 var perfection = Math.Round(PokemonInfo.CalculatePokemonPerfection(pokemon));
 
-                if (session.LogicSettings.AutoFavoritePokemon &&
-                    perfection >= session.LogicSettings.FavoriteMinIvPercentage && pokemon.Cp >= session.LogicSettings.FavoriteMinCp && pokemon.Favorite != 1)
+                if (session.LogicSettings.FavoriteOperator.BoolFunc(
+                    perfection >= session.LogicSettings.FavoriteMinIvPercentage , 
+                    pokemon.Cp >= session.LogicSettings.FavoriteMinCp,
+                    PokemonInfo.GetLevel(pokemon) >= session.LogicSettings.FavoriteMinLevel))
                 {
                     var response = await session.Client.Inventory.SetFavoritePokemon(pokemon.Id, true);
                     if (response.Result == SetFavoritePokemonResponse.Types.Result.Success)
