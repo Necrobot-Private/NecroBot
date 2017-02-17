@@ -273,7 +273,7 @@ namespace RocketBot2.Forms
                 {
                     return;
                 }*/
-                CheckKillSwitch();
+                _botStarted = CheckKillSwitch();
                 CheckMKillSwitch();
             }
 
