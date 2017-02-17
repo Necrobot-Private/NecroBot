@@ -548,12 +548,11 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 Logger.Debug($"Pokedex Entry : {pokedex.Count()}");
 
-                if (!pokedex.Exists(x => x.InventoryItemData?.PokedexEntry?.PokemonId == (PokemonId)item.PokemonId) &&
+                if (pokedex.Count>0 && 
+                    !pokedex.Exists(x => x.InventoryItemData?.PokedexEntry?.PokemonId == (PokemonId)item.PokemonId) &&
                     !pokedexSnipePokemons.Exists(p => p.PokemonId == item.PokemonId) &&
                     (!session.LogicSettings.AutosnipeVerifiedOnly ||
-                     (session.LogicSettings.AutosnipeVerifiedOnly &&
-                      (item.EncounterId > 0 || (item.Move1 != PokemonMove.MoveUnset &&
-                                                item.Move2 != PokemonMove.MoveUnset)))))
+                     (session.LogicSettings.AutosnipeVerifiedOnly && item.IsVerified() )))
                 {
                     session.EventDispatcher.Send(new WarnEvent()
                     {

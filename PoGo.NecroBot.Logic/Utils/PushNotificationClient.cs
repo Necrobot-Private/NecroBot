@@ -102,7 +102,6 @@ namespace PoGo.NecroBot.Logic.Utils
                     {
                         await SendPushNotificationV2(cfg.PushBulletApiKey, title, body);
                     }
-
                     // TODO function is deprecated / obsolete
                     // jjskuld - Ignore CS0618 warning for now.
                     #pragma warning disable 0618
