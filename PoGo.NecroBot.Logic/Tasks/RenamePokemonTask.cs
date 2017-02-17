@@ -41,7 +41,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 pokemons = pokemons.Where(x => !duplicatePokemons.Any(p => p.Id == x.Id));
             }
 
-            if (session.LogicSettings.TransferWeakPokemon)
+            if (session.LogicSettings.TransferWeakPokemon && session.LogicSettings.RenamePokemonRespectTransferRule)
             {
 
                 var pokemonsFiltered =

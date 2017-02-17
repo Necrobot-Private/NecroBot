@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using PoGo.NecroBot.Logic.Model.Settings;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -110,7 +111,7 @@ namespace PoGo.NecroBot.Logic.Common
         public string SearchPokemonCP { get; set; }
 
         [Description("Search & Select")]
-        public string SearchSelectAllButton {get;set;}
+        public string SearchSelectAllButton { get; set; }
 
         [Description("Search")]
         public string SearchButton { get; set; }
@@ -225,6 +226,10 @@ namespace PoGo.NecroBot.Logic.Common
             {
                 return prop.GetValue(this).ToString();
             }
+            if(translations.ContainsKey(key))
+            {
+                return translations[key];
+            }
             return $"{key} missing";
         }
 
@@ -273,9 +278,57 @@ namespace PoGo.NecroBot.Logic.Common
                     }
                 }
             }
-            Save();
+            //append translation for setting
+            Type setting = typeof(GlobalSettings);
+
+            foreach (var item in setting.GetFields())
+            {
+                var configAttibute = item.GetCustomAttribute<NecrobotConfigAttribute>();
+                if (configAttibute != null)
+                {
+                    var fileName = !string.IsNullOrEmpty(configAttibute.SheetName) ? configAttibute.SheetName : item.Name;
+
+                    string key = $"Setting.{fileName }";
+                    var configType = item.FieldType;
+
+                    if (!translations.ContainsKey(key))
+                    {
+                        translations.Add(key, !string.IsNullOrEmpty(configAttibute.Key) ? configAttibute.Key : fileName);
+                    }
+                    var keyDesc = $"{key}Desc";
+
+                    if (!translations.ContainsKey(keyDesc))
+                    {
+                        translations.Add(keyDesc, !string.IsNullOrEmpty(configAttibute.Description) ? configAttibute.Description : $"{key} description");
+                    };
+
+                    foreach (var configItem in configType.GetProperties())
+                    {
+                        var propAttibute = configItem.GetCustomAttribute<NecrobotConfigAttribute>();
+                        if (propAttibute != null)
+                        {
+                            string field = !string.IsNullOrEmpty(propAttibute.Key) ? propAttibute.Key : configItem.Name;
+
+                            var subKey = $"{key}.{field}";
+                            var descKey = subKey + "Desc";
+
+                            if (!translations.ContainsKey(subKey))
+                            {
+                                translations.Add(subKey, string.IsNullOrEmpty(propAttibute.Key) ? field : propAttibute.Key);
+                            }
+
+                            if (!translations.ContainsKey(descKey))
+                            {
+                                translations.Add(descKey, !string.IsNullOrEmpty(propAttibute.Description) ? propAttibute.Description : $"{subKey} description");
+                            }
+                        }
+                    }
+                }
+
+                Save();
+
+            }
 
         }
-
     }
 }

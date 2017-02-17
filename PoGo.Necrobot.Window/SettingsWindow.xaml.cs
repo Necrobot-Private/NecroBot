@@ -21,6 +21,8 @@ using PoGo.Necrobot.Window;
 using PoGo.NecroBot.Logic.Model.Settings;
 using PoGo.Necrobot.Window.Converters;
 using System.Collections.ObjectModel;
+using PoGo.NecroBot.Logic.Common;
+using TinyIoC;
 
 namespace PoGo.Necrobot.Window
 {
@@ -264,7 +266,7 @@ namespace PoGo.Necrobot.Window
 
             return accountColumn;
         }
-        public UIElement BuildForm(FieldInfo fi, object source)
+        public UIElement BuildForm(FieldInfo fi, object source, NecrobotConfigAttribute propAtt)
         {
             var type = source.GetType();
 
@@ -288,11 +290,10 @@ namespace PoGo.Necrobot.Window
                 return (UIElement)genericMethod.Invoke(this, new object[] { fi, source });
             }
 
-            return BuildObjectForm(source);
-
+            return BuildObjectForm(fi,source, propAtt);
 
         }
-        public UIElement BuildObjectForm(object source)
+        public UIElement BuildObjectForm(FieldInfo fi,object source, NecrobotConfigAttribute configAttibute)
         {
 
             StackPanel panelWrap = new StackPanel() {
@@ -312,13 +313,20 @@ namespace PoGo.Necrobot.Window
             border.Child = panel;
             panelWrap.Children.Add(border);
 
-      var type = source.GetType();
+            var type = source.GetType();
+
+            var fileName = !string.IsNullOrEmpty(configAttibute.SheetName) ? configAttibute.SheetName : type.Name;
+
             foreach (var item in type.GetProperties())
             {
                 var att = item.GetCustomAttributes<NecrobotConfigAttribute>(true).FirstOrDefault();
                 if (att != null)
                 {
-                    panel.Children.Add(new Label() { Content = item.Name, FontSize = 15, ToolTip = att.Description });
+
+                    string resKey = $"Setting.{fileName}.{item.Name}";
+                    string DescKey = $"Setting.{fileName }.{item.Name}Desc";
+
+                    panel.Children.Add(new Label() { Content = translator.GetTranslation(resKey), FontSize = 15, ToolTip = translator.GetTranslation(DescKey)});
                     panel.Children.Add(GetInputControl(item, source));
                 }
             }
@@ -416,16 +424,22 @@ namespace PoGo.Necrobot.Window
             return new TextBox();
         }
 
+        private UITranslation translator; 
+
         public void InitForm()
         {
+            translator = TinyIoCContainer.Current.Resolve<UITranslation>();
             this.DataContext = Settings;
             foreach (var item in Settings.GetType().GetFields())
             {
                 var att = item.GetCustomAttributes<NecrobotConfigAttribute>(true).FirstOrDefault();
                 if (att != null)
                 {
+                    string resKey = "Setting."+ (string.IsNullOrEmpty(att.SheetName) ? item.Name : att.SheetName);
+
                     string name = string.IsNullOrEmpty(att.Key) ? item.Name : att.Key;
-                    var tabItem = new TabItem() { Content = BuildForm(item, item.GetValue(Settings)), Header = name, FontSize = 11 };
+                    var tabItem = new TabItem() { Content = BuildForm(item, item.GetValue(Settings), att), FontSize = 11, Header = translator.GetTranslation(resKey) };
+
                     tabControl.Items.Add(tabItem);
                 }
             }
