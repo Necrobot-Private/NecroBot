@@ -672,7 +672,7 @@ namespace RocketBot2.Forms
         private int encounterPokemonsCount;
         private void UpdateMap(List<GeoCoordinate> route)
         {
-            var routePointLatLngs = new List<PointLatLng>();
+                 var routePointLatLngs = new List<PointLatLng>();
             foreach (var item in route)
             {
                 routePointLatLngs.Add(new PointLatLng(item.Latitude, item.Longitude));
@@ -682,18 +682,19 @@ namespace RocketBot2.Forms
                 Stroke = new Pen(Color.FromArgb(128, 0, 179, 253), 4) { DashStyle = DashStyle.Dash }
             };
 
-            if (encounterPokemonsCount > 25 || encounterPokemonsCount == 0)
+            if (encounterPokemonsCount > 15 || encounterPokemonsCount == 0)
             {
                 _playerOverlay.Markers.Clear();
                 _pokemonsOverlay.Markers.Clear();
                 _playerLocations.Clear();
+                Navigation_UpdatePositionEvent(_session.Client.CurrentLatitude,
+                    _session.Client.CurrentLongitude);
                 //get optimized route
                 var _pokeStops = RouteOptimizeUtil.Optimize(_session.Forts.ToArray(), _session.Client.CurrentLatitude,
                     _session.Client.CurrentLongitude);
                 InitializePokestopsAndRoute(_pokeStops);
-                Navigation_UpdatePositionEvent(_session.Client.CurrentLatitude, _session.Client.CurrentLongitude);
                 encounterPokemonsCount = 0;
-            }
+             }
 
             encounterPokemonsCount++;
             _playerRouteOverlay.Routes.Clear();
