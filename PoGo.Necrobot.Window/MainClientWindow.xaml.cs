@@ -23,6 +23,7 @@ using PoGo.NecroBot.Logic;
 using PoGo.NecroBot.Logic.Logging;
 using System.Diagnostics;
 using TinyIoC;
+using PoGo.NecroBot.Logic.Common;
 
 namespace PoGo.Necrobot.Window
 {
@@ -135,15 +136,17 @@ namespace PoGo.Necrobot.Window
         bool isConsoleShowing = false;
         private void menuConsole_Click(object sender, RoutedEventArgs e)
         {
+            var translator = TinyIoCContainer.Current.Resolve<UITranslation>();
+
             if (isConsoleShowing)
             {
-                consoleMenuText.Text = "Show Console";
+                consoleMenuText.Text = translator.ShowConsole; 
                 ConsoleHelper.HideConsoleWindow();
             }
             else
             {
 
-                consoleMenuText.Text = "Close Console";
+                consoleMenuText.Text = translator.HideConsole;
                 ConsoleHelper.ShowConsoleWindow();
 
             }
@@ -159,15 +162,17 @@ namespace PoGo.Necrobot.Window
 
         private void btnHideInfo_Click(object sender, RoutedEventArgs e)
         {
+            var translator = TinyIoCContainer.Current.Resolve<UITranslation>();
+
             if (grbPlayerInfo.Height == 35)
             {
-                btnHideInfo.Content = "HIDE";
+                btnHideInfo.Content = translator.Hide;
                 grbPlayerInfo.Height = 135;
             }
             else
             {
                 grbPlayerInfo.Height = 35;
-                btnHideInfo.Content = "SHOW";
+                btnHideInfo.Content = translator.Show;
             }
         }
 

@@ -201,6 +201,10 @@ namespace PoGo.NecroBot.Logic.Common
         public string WalkSpeed { get; set; }
         [Description("Transfered: {0}")]
         public string PokemonTransfered { get; set; }
+        [Description("HIDE")]
+        public string Hide { get; set; }
+        [Description("SHOW")]
+        public string Show { get; set; }
         #endregion
         private Dictionary<string, string> translations = new Dictionary<string, string>();
         private string languageCode = "en";
