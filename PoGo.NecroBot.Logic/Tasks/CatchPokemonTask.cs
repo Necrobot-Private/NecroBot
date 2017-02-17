@@ -336,6 +336,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     var evt = new PokemonCaptureEvent()
                     {
                         Status = caughtPokemonResponse.Status,
+                        CaptureReason = caughtPokemonResponse.CaptureReason,
                         Latitude = latitude,
                         Longitude = longitude
                     };

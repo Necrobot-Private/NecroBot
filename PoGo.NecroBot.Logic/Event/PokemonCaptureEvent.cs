@@ -27,6 +27,7 @@ namespace PoGo.NecroBot.Logic.Event
         public double Probability;
         public int Stardust;
         public CatchPokemonResponse.Types.CatchStatus Status;
+        public CatchPokemonResponse.Types.CaptureReason CaptureReason;
         public double Latitude;
         public double Longitude;
         public string SpawnPointId;
