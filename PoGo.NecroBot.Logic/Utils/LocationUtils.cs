@@ -14,15 +14,12 @@ namespace PoGo.NecroBot.Logic.Utils
 {
     public static class LocationUtils
     {
-        public static async Task<PlayerUpdateResponse> UpdatePlayerLocationWithAltitude(ISession session,
+        public static void UpdatePlayerLocationWithAltitude(ISession session,
             GeoCoordinate position, float speed)
         {
             double altitude = session.ElevationService.GetElevation(position.Latitude, position.Longitude);
 
-            var result = await session.Client.Player.UpdatePlayerLocation(position.Latitude, position.Longitude, altitude, speed);
-
-            await session.Client.Misc.RandomAPICall();
-            return result;
+            session.Client.Player.UpdatePlayerLocation(position.Latitude, position.Longitude, altitude, speed);
         }
 
         public static bool IsValidLocation(double latitude, double longitude)

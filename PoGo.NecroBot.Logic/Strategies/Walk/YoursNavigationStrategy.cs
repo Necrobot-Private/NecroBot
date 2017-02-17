@@ -22,7 +22,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
 
         public override string RouteName => "Yours Walk";
 
-        public override async Task<PlayerUpdateResponse> Walk(IGeoLocation targetLocation,
+        public override async Task Walk(IGeoLocation targetLocation,
             Func<Task> functionExecutedWhileWalking, ISession session, CancellationToken cancellationToken,
             double walkSpeed = 0.0)
         {
@@ -33,12 +33,13 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
 
             if (yoursWalk == null)
             {
-                return await RedirectToNextFallbackStrategy(session.LogicSettings, targetLocation, functionExecutedWhileWalking, session, cancellationToken);
+                await RedirectToNextFallbackStrategy(session.LogicSettings, targetLocation, functionExecutedWhileWalking, session, cancellationToken);
+                return;
             }
 
             base.OnStartWalking(session, targetLocation, yoursWalk.Distance);
             List<GeoCoordinate> points = yoursWalk.Waypoints;
-            return await DoWalk(points, session, functionExecutedWhileWalking, sourceLocation, destinaionCoordinate, cancellationToken, walkSpeed);
+            await DoWalk(points, session, functionExecutedWhileWalking, sourceLocation, destinaionCoordinate, cancellationToken, walkSpeed);
         }
 
         private void GetYoursInstance(ISession session)

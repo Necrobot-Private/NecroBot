@@ -378,12 +378,15 @@ namespace PoGo.NecroBot.Logic.Tasks
             try
             {
                 // Speed set to 0 for random speed.
-                await LocationUtils.UpdatePlayerLocationWithAltitude(
+                LocationUtils.UpdatePlayerLocationWithAltitude(
                     session,
                     new GeoCoordinate(encounterId.Latitude, encounterId.Longitude, session.Client.CurrentAltitude),
                     0
                 );
-                
+
+
+                await session.Client.Misc.RandomAPICall();
+
                 //await session.Client.Map.GetMapObjects(true);
 
                 //await Task.Delay(1000, cancellationToken);
@@ -420,7 +423,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     //TODO - What if udpate location failed
                     // Speed set to 0 for random speed.
-                    var response = await LocationUtils.UpdatePlayerLocationWithAltitude(
+                    LocationUtils.UpdatePlayerLocationWithAltitude(
                         session,
                         new GeoCoordinate(lat, lon, session.Client.CurrentAltitude),
                         0
