@@ -28,7 +28,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
 
         public event UpdatePositionDelegate UpdatePositionEvent;
 
-        public abstract Task<PlayerUpdateResponse> Walk(IGeoLocation targetLocation, Func<Task> functionExecutedWhileWalking, ISession session, CancellationToken cancellationToken, double walkSpeed = 0.0);
+        public abstract Task Walk(IGeoLocation targetLocation, Func<Task> functionExecutedWhileWalking, ISession session, CancellationToken cancellationToken, double walkSpeed = 0.0);
 
         public virtual string RouteName { get; }
 
@@ -86,7 +86,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
             return LocationUtils.CreateWaypoint(geo, randomDistance, randomBearingDegrees);
         }
 
-        public Task<PlayerUpdateResponse> RedirectToNextFallbackStrategy(ILogicSettings logicSettings,
+        public Task RedirectToNextFallbackStrategy(ILogicSettings logicSettings,
             IGeoLocation targetLocation, Func<Task> functionExecutedWhileWalking, ISession session,
             CancellationToken cancellationToken, double walkSpeed = 0.0)
         {
@@ -98,12 +98,10 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
             return nextStrategy.Walk(targetLocation, functionExecutedWhileWalking, session, cancellationToken);
         }
 
-        public async Task<PlayerUpdateResponse> DoWalk(List<GeoCoordinate> points, ISession session,
+        public async Task DoWalk(List<GeoCoordinate> points, ISession session,
             Func<Task> functionExecutedWhileWalking, GeoCoordinate sourceLocation, GeoCoordinate targetLocation,
             CancellationToken cancellationToken, double walkSpeed = 0.0)
         {
-
-            PlayerUpdateResponse result = null;
             var currentLocation = new GeoCoordinate(_client.CurrentLatitude, _client.CurrentLongitude,
                 _client.CurrentAltitude);
 
@@ -156,8 +154,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
                 var previousLocation =
                     currentLocation; //store the current location for comparison and correction purposes
                 var requestSendDateTime = DateTime.Now;
-                result =
-                    await LocationUtils.UpdatePlayerLocationWithAltitude(session, waypoint,
+                LocationUtils.UpdatePlayerLocationWithAltitude(session, waypoint,
                         (float) speedInMetersPerSecond);
 
                 var realDistanceToTarget = LocationUtils.CalculateDistanceInMeters(currentLocation, targetLocation);
@@ -216,8 +213,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
                     //store the current location for comparison and correction purposes
                     previousLocation = currentLocation;
                     requestSendDateTime = DateTime.Now;
-                    result = await LocationUtils
-                        .UpdatePlayerLocationWithAltitude(session, waypoint, (float) speedInMetersPerSecond);
+                    LocationUtils.UpdatePlayerLocationWithAltitude(session, waypoint, (float) speedInMetersPerSecond);
 
                     UpdatePositionEvent?.Invoke(session, waypoint.Latitude, waypoint.Longitude, _currentWalkingSpeed);
 
@@ -228,8 +224,6 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
 
                 UpdatePositionEvent?.Invoke(session, nextStep.Latitude, nextStep.Longitude, _currentWalkingSpeed);
             }
-
-            return result;
         }
 
 

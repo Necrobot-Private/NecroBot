@@ -104,7 +104,7 @@ namespace PoGo.NecroBot.Logic
                             accountdb.Insert(newAcc);
                             this.Accounts.Add(newAcc);
                         }
-                        catch(Exception ex)
+                        catch(Exception)
                         {
                             Logic.Logging.Logger.Write("Error while saving data into accounts.db, please delete account.db and restart bot to have it fully work in order");
                         }

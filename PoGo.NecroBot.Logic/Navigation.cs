@@ -88,7 +88,7 @@ namespace PoGo.NecroBot.Logic
 
         private object ensureOneWalkEvent = new object();
 
-        public async Task<PlayerUpdateResponse> Move(IGeoLocation targetLocation,
+        public async Task Move(IGeoLocation targetLocation,
             Func<Task> functionExecutedWhileWalking,
             ISession session,
             CancellationToken cancellationToken, double customWalkingSpeed = 0.0)
@@ -98,7 +98,7 @@ namespace PoGo.NecroBot.Logic
             // If the stretegies become bigger, create a factory for easy management
 
             //Logging.Logger.Write($"Navigation - Walking speed {customWalkingSpeed}");
-            return await WalkStrategy.Walk(targetLocation, functionExecutedWhileWalking, session, cancellationToken, customWalkingSpeed);
+            await WalkStrategy.Walk(targetLocation, functionExecutedWhileWalking, session, cancellationToken, customWalkingSpeed);
         }
 
         private void InitializeWalkStrategies(ILogicSettings logicSettings)

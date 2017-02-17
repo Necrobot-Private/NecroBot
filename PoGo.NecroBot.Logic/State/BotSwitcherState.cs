@@ -26,7 +26,7 @@ namespace PoGo.NecroBot.Logic.State
         {
             if (this.encounterData == null)
             {
-                await session.Client.Player.UpdatePlayerLocation(session.Client.CurrentLatitude,
+                session.Client.Player.UpdatePlayerLocation(session.Client.CurrentLatitude,
                     session.Client.CurrentLongitude, session.Client.CurrentAltitude, 10);
                 await Task.Delay(1000, cancellationToken);
                 await CatchNearbyPokemonsTask.Execute(session, cancellationToken, this.pokemonToCatch);

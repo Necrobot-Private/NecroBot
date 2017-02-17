@@ -1,8 +1,8 @@
-BotStatus=DISABLED;
+BotStatus=ENABLED;
 //================================================================//
                 POKEMON GO 0.57.2
 //================================================================//
-The API is being forced to 0.57.2. Please stop botting if you care about your account!
+Necrobot is now compatible with 0.57.2 API.
 //================================================================//
                          Updated: 2/16/2017
 

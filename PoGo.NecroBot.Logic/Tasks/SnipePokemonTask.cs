@@ -479,9 +479,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 do
                 {
                     retry--;
-                    await
-                        LocationUtils.UpdatePlayerLocationWithAltitude(session,
-                            new GeoCoordinate(latitude, longitude, 10d), 0); // Set speed to 0 for random speed.
+                    LocationUtils.UpdatePlayerLocationWithAltitude(session, new GeoCoordinate(latitude, longitude, 10d), 0); // Set speed to 0 for random speed.
                     latitude += 0.00000001;
                     longitude += 0.00000001;
 
@@ -511,9 +509,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             finally
             {
                 //if(!isCaptchaShow)
-                await
-                    LocationUtils.UpdatePlayerLocationWithAltitude(session,
-                        new GeoCoordinate(currentLatitude, currentLongitude, session.Client.CurrentAltitude), 0); // Set speed to 0 for random speed.
+                LocationUtils.UpdatePlayerLocationWithAltitude(session,
+                    new GeoCoordinate(currentLatitude, currentLongitude, session.Client.CurrentAltitude), 0); // Set speed to 0 for random speed.
             }
 
             if (catchablePokemon.Count == 0)
@@ -544,9 +541,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                 EncounterResponse encounter;
                 try
                 {
-                    await
-                        LocationUtils.UpdatePlayerLocationWithAltitude(session,
-                            new GeoCoordinate(latitude, longitude, session.Client.CurrentAltitude), 0); // Set speed to 0 for random speed.
+                    LocationUtils.UpdatePlayerLocationWithAltitude(session,
+                        new GeoCoordinate(latitude, longitude, session.Client.CurrentAltitude), 0); // Set speed to 0 for random speed.
 
                     encounter =
                         session.Client.Encounter.EncounterPokemon(pokemon.EncounterId, pokemon.SpawnPointId).Result;
@@ -560,10 +556,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                 finally
                 {
                     if (!isCaptchaShow)
-                        await
-                            LocationUtils.UpdatePlayerLocationWithAltitude(session,
-                                // Set speed to 0 for random speed.
-                                new GeoCoordinate(currentLatitude, currentLongitude, session.Client.CurrentAltitude), 0);
+                        LocationUtils.UpdatePlayerLocationWithAltitude(session,
+                            // Set speed to 0 for random speed.
+                            new GeoCoordinate(currentLatitude, currentLongitude, session.Client.CurrentAltitude), 0);
                 }
 
                 switch (encounter.Status)
