@@ -23,7 +23,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
 
         public override string RouteName => "Google Walk";
 
-        public override async Task<PlayerUpdateResponse> Walk(IGeoLocation targetLocation,
+        public override async Task Walk(IGeoLocation targetLocation,
             Func<Task> functionExecutedWhileWalking, ISession session, CancellationToken cancellationToken,
             double walkSpeed = 0.0)
         {
@@ -36,13 +36,14 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
 
             if (googleWalk == null)
             {
-                return await RedirectToNextFallbackStrategy(session.LogicSettings, targetLocation, functionExecutedWhileWalking, session, cancellationToken, walkSpeed);
+                await RedirectToNextFallbackStrategy(session.LogicSettings, targetLocation, functionExecutedWhileWalking, session, cancellationToken, walkSpeed);
+                return;
             }
 
             base.OnStartWalking(session, targetLocation, googleWalk.Distance);
 
             List<GeoCoordinate> points = googleWalk.Waypoints;
-            return await DoWalk(points, session, functionExecutedWhileWalking, currentLocation, destinaionCoordinate, cancellationToken, walkSpeed);
+            await DoWalk(points, session, functionExecutedWhileWalking, currentLocation, destinaionCoordinate, cancellationToken, walkSpeed);
         }
 
         private void GetGoogleInstance(ISession session)
