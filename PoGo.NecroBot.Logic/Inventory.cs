@@ -67,8 +67,7 @@ namespace PoGo.NecroBot.Logic
                 if (onUpdated != null && _player != null)
                 {
                     var pidgey = GetPokemons().Where(x => x.PokemonId == PokemonId.Pidgey).ToList();
-                    
-                    Logging.Logger.Debug($"INVENTORY UPDATED, PIDGEY COUNT : {pidgey.Count}, Total pokemons : {GetPokemons().Count()}");
+                    //Logging.Logger.Debug($"INVENTORY UPDATED, PIDGEY COUNT : {pidgey.Count}, Total pokemons : {GetPokemons().Count()}");
                     onUpdated();
                 }
             };

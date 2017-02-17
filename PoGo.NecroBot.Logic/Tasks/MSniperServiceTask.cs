@@ -390,14 +390,10 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 encounter = await session.Client.Encounter.EncounterPokemon(encounterId.EncounterId, encounterId.SpawnPointId);
 
-#if DEBUG
                 if (encounter != null && encounter.Status != EncounterResponse.Types.Status.EncounterSuccess)
                 {
-                    Debug.WriteLine($"{encounter}");
-
-                    Logger.Write($"{encounter}");
+                    Logger.Debug($"{encounter}");
                 }
-#endif
                 //pokemon has expired, send event to remove it.
                 if (encounter != null &&( encounter.Status == EncounterResponse.Types.Status.EncounterClosed|| 
                     encounter.Status == EncounterResponse.Types.Status.EncounterNotFound))
@@ -755,7 +751,6 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     //var result = await CatchWithSnipe(session, location, cancellationToken);
 
-
                     if (result)
                     {
                         snipeFailedCount = 0;
@@ -765,7 +760,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         snipeFailedCount++;
                         if (snipeFailedCount >= 3) break; //maybe softban, stop snipe wait until verify it not been
                     }
-                    await Task.Delay(1000, cancellationToken);
+                    //await Task.Delay(1000, cancellationToken);
                     session.Stats.LastSnipeTime = DateTime.Now;
                     session.Stats.SnipeCount++;
                     waitNextPokestop = true;

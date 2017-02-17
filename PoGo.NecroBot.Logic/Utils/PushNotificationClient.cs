@@ -80,7 +80,7 @@ namespace PoGo.NecroBot.Logic.Utils
                     }
                     catch(Exception ex)
                     {
-                        Logic.Logging.Logger.Debug("Fail to send notification", ex);
+                        //Logic.Logging.Logger.Debug("Fail to send notification", ex);
                     }
                 }
             });
