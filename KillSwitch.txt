@@ -1,10 +1,10 @@
-BotStatus=ENABLED;
+BotStatus=DISABLED;
 //================================================================//
-                POKEMON GO 0.53.1
+                POKEMON GO 0.57.2
 //================================================================//
-The bot has been fully updated to 0.53.1 so it is safer to bot now.
+The API is being forced to 0.57.2. Please stop botting if you care about your account!
 //================================================================//
-                         Updated: 1/23/2017
+                         Updated: 2/16/2017
 
 
 For support/questions:

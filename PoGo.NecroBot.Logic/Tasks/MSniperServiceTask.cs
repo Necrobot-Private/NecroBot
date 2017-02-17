@@ -383,7 +383,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                     new GeoCoordinate(encounterId.Latitude, encounterId.Longitude, session.Client.CurrentAltitude),
                     0
                 );
-                
+
+
+                await session.Client.Misc.RandomAPICall();
+
                 //await session.Client.Map.GetMapObjects(true);
 
                 //await Task.Delay(1000, cancellationToken);

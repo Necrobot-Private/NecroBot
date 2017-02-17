@@ -18,11 +18,23 @@ namespace PoGo.NecroBot.Logic.Utils
             GeoCoordinate position, float speed)
         {
             double altitude = session.ElevationService.GetElevation(position.Latitude, position.Longitude);
+            //need retry to make sure we back to ogirinal location
 
-            var result = await session.Client.Player.UpdatePlayerLocation(position.Latitude, position.Longitude, altitude, speed);
-
-            await session.Client.Misc.RandomAPICall();
-            return result;
+            try
+            {
+                //Logger.Write("start ai call");
+                var result = await session.Client.Player
+                .UpdatePlayerLocation(position.Latitude, position.Longitude, altitude, speed);
+                return result;
+            }
+            catch (Exception EX)
+            {
+                await Task.Delay(500);
+                Logger.Write("API CALL FAILED");
+                return await UpdatePlayerLocationWithAltitude(session, position, speed);
+            }
+            
+            
         }
 
         public static bool IsValidLocation(double latitude, double longitude)

@@ -377,6 +377,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (distance > 30)
             {
                 await LocationUtils.UpdatePlayerLocationWithAltitude(session, new GeoCoordinatePortable.GeoCoordinate(pokeStop.Latitude, pokeStop.Longitude), 0);
+                await session.Client.Misc.RandomAPICall();
             }
 
             do
