@@ -12,7 +12,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
         string RouteName { get; }
         event UpdatePositionDelegate UpdatePositionEvent;
 
-        Task<PlayerUpdateResponse> Walk(IGeoLocation destinationLocation, Func<Task> functionExecutedWhileWalking,
+        Task Walk(IGeoLocation destinationLocation, Func<Task> functionExecutedWhileWalking,
             ISession session, CancellationToken cancellationToken, double customWalkingSpeed = 0.0);
 
         double CalculateDistance(double sourceLat, double sourceLng, double destinationLat, double destinationLng,

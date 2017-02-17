@@ -6,7 +6,6 @@ using PoGo.NecroBot.Logic.Model;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Utils;
 using PokemonGo.RocketAPI;
-using POGOProtos.Networking.Responses;
 
 namespace PoGo.NecroBot.Logic.Strategies.Walk
 {
@@ -20,7 +19,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
 
         public override string RouteName => "NecroBot Walk";
 
-        public override async Task<PlayerUpdateResponse> Walk(IGeoLocation targetLocation,
+        public override async Task Walk(IGeoLocation targetLocation,
             Func<Task> functionExecutedWhileWalking, ISession session, CancellationToken cancellationToken,
             double walkSpeed = 0.0)
         {
@@ -46,8 +45,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
             var requestSendDateTime = DateTime.Now;
             var requestVariantDateTime = DateTime.Now;
 
-            var result = await LocationUtils
-                .UpdatePlayerLocationWithAltitude(session, waypoint, (float) speedInMetersPerSecond);
+            LocationUtils.UpdatePlayerLocationWithAltitude(session, waypoint, (float) speedInMetersPerSecond);
 
             double SpeedVariantSec = rw.Next(1000, 10000);
             base.DoUpdatePositionEvent(session, waypoint.Latitude, waypoint.Longitude, CurrentWalkingSpeed);
@@ -83,16 +81,13 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
                 waypoint = LocationUtils.CreateWaypoint(sourceLocation, nextWaypointDistance, nextWaypointBearing);
 
                 requestSendDateTime = DateTime.Now;
-                result = await LocationUtils
-                    .UpdatePlayerLocationWithAltitude(session, waypoint, (float) speedInMetersPerSecond);
+                LocationUtils.UpdatePlayerLocationWithAltitude(session, waypoint, (float) speedInMetersPerSecond);
 
                 base.DoUpdatePositionEvent(session, waypoint.Latitude, waypoint.Longitude, CurrentWalkingSpeed);
 
                 if (functionExecutedWhileWalking != null)
                     await functionExecutedWhileWalking(); // look for pokemon
             } while (LocationUtils.CalculateDistanceInMeters(sourceLocation, destinaionCoordinate) >= (new Random()).Next(1, 10));
-
-            return result;
         }
 
         public override double CalculateDistance(double sourceLat, double sourceLng, double destinationLat,
