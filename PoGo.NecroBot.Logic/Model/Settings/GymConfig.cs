@@ -166,6 +166,11 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool PrioritizeGymWithFreeSlot { get; set; }
 
+        [NecrobotConfig(Description = "Save Max Revives", Position = 28)]
+        [DefaultValue(true)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
+        public bool SaveMaxRevives { get; set; }
+
         private static ICollection<KeyValuePair<PokemonId, PokemonMove>> GetDefaults()
         {
             return new List<KeyValuePair<PokemonId, PokemonMove>>()
@@ -175,6 +180,8 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 new KeyValuePair<PokemonId, PokemonMove>( PokemonId.Lapras, PokemonMove.Blizzard ),
                 new KeyValuePair<PokemonId, PokemonMove>( PokemonId.Cloyster, PokemonMove.Blizzard ),
                 new KeyValuePair<PokemonId, PokemonMove>( PokemonId.Flareon, PokemonMove.FireBlast ),
+                new KeyValuePair<PokemonId, PokemonMove>( PokemonId.Gyarados, PokemonMove.HydroPump ),
+                new KeyValuePair<PokemonId, PokemonMove>( PokemonId.Exeggutor, PokemonMove.SolarBeam ),
             };
         }
     }
