@@ -103,7 +103,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public SoftBanConfig SoftBanConfig = new SoftBanConfig();
 
-        [NecrobotConfig (SheetName = "GoogleWalkConfig", Description = "Setup parametter for google walk such as api key, account, rules..")]
+        [NecrobotConfig(SheetName = "GoogleWalkConfig", Description = "Setup parametter for google walk such as api key, account, rules..")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public GoogleWalkConfig GoogleWalkConfig = new GoogleWalkConfig();
 
@@ -115,7 +115,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public MapzenWalkConfig MapzenWalkConfig = new MapzenWalkConfig();
 
-        [NecrobotConfig(SheetName = "ItemRecycleFilter", Description ="Set number of each item we want bot to keep when it perfom recycle for get free space")]
+        [NecrobotConfig(SheetName = "ItemRecycleFilter", Description = "Set number of each item we want bot to keep when it perfom recycle for get free space")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public List<ItemRecycleFilter> ItemRecycleFilter = Settings.ItemRecycleFilter.ItemRecycleFilterDefault();
 
@@ -154,7 +154,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public Dictionary<PokemonId, UpgradeFilter> PokemonUpgradeFilters = UpgradeFilter.Default();
 
-        [NecrobotConfig (Description ="Setting up bot to use multiple account" , SheetName = "MultipleBotConfig")]
+        [NecrobotConfig(Description = "Setting up bot to use multiple account", SheetName = "MultipleBotConfig")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public MultipleBotConfig MultipleBotConfig = MultipleBotConfig.Default();
 
@@ -162,7 +162,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public NotificationConfig NotificationConfig = new NotificationConfig();
 
-        [NecrobotConfig(SheetName = "SnipePokemonFilter", Description ="Setup list pokemon for auto snipe")]
+        [NecrobotConfig(SheetName = "SnipePokemonFilter", Description = "Setup list pokemon for auto snipe")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public Dictionary<PokemonId, SnipeFilter> SnipePokemonFilter = SnipeFilter.SniperFilterDefault();
 
@@ -232,7 +232,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                     SchemaReferenceHandling = SchemaReferenceHandling.None
                 };
                 // change Zone enum to generate a string property
-                var strEnumGen = new StringEnumGenerationProvider {CamelCaseText = true};
+                var strEnumGen = new StringEnumGenerationProvider { CamelCaseText = true };
                 generator.GenerationProviders.Add(strEnumGen);
                 // generate json schema 
                 var type = typeof(GlobalSettings);
@@ -337,7 +337,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                     }
 
                     var jsonSettings = new JsonSerializerSettings();
-                    jsonSettings.Converters.Add(new StringEnumConverter {CamelCaseText = true});
+                    jsonSettings.Converters.Add(new StringEnumConverter { CamelCaseText = true });
                     jsonSettings.ObjectCreationHandling = ObjectCreationHandling.Replace;
                     jsonSettings.DefaultValueHandling = DefaultValueHandling.Populate;
 
@@ -352,7 +352,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                             MigrateSettings(jsonObj, configFile, schemaFile);
 
                             // Save the original schema version since we need to pass it to AuthSettings for migration.
-                            schemaVersionBeforeUpgrade = (int) jsonObj["UpdateConfig"]["SchemaVersion"];
+                            schemaVersionBeforeUpgrade = (int)jsonObj["UpdateConfig"]["SchemaVersion"];
 
                             // After migration we need to update the schema version to the latest version.
                             jsonObj["UpdateConfig"]["SchemaVersion"] = UpdateConfig.CURRENT_SCHEMA_VERSION;
@@ -418,7 +418,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                     foreach (var filter in settings.PokemonsTransferFilter.Where(x => x.Value.Moves == null))
                     {
                         filter.Value.Moves = filter.Value.DeprecatedMoves != null
-                            ? new List<List<PokemonMove>> {filter.Value.DeprecatedMoves}
+                            ? new List<List<PokemonMove>> { filter.Value.DeprecatedMoves }
                             : filter.Value.Moves ?? new List<List<PokemonMove>>();
                     }
                     foreach (var filter in settings.PokemonsTransferFilter.Where(x => x.Value.MovesOperator == null))
@@ -458,7 +458,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 settings["UpdateConfig"]["SchemaVersion"] = 0;
             }
 
-            int schemaVersion = (int) settings["UpdateConfig"]["SchemaVersion"];
+            int schemaVersion = (int)settings["UpdateConfig"]["SchemaVersion"];
             if (schemaVersion == UpdateConfig.CURRENT_SCHEMA_VERSION)
             {
                 Logger.Write("Configuration is up-to-date. Schema version: " + schemaVersion);
@@ -480,15 +480,15 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 {
                     case 1:
                         // Delete the auto complete tutorial settings.
-                        ((JObject) settings["PlayerConfig"]).Remove("AutoCompleteTutorial");
-                        ((JObject) settings["PlayerConfig"]).Remove("DesiredNickname");
-                        ((JObject) settings["PlayerConfig"]).Remove("DesiredGender");
-                        ((JObject) settings["PlayerConfig"]).Remove("DesiredStarter");
+                        ((JObject)settings["PlayerConfig"]).Remove("AutoCompleteTutorial");
+                        ((JObject)settings["PlayerConfig"]).Remove("DesiredNickname");
+                        ((JObject)settings["PlayerConfig"]).Remove("DesiredGender");
+                        ((JObject)settings["PlayerConfig"]).Remove("DesiredStarter");
                         break;
 
                     case 2:
                         // Remove the TransferConfigAndAuthOnUpdate setting since we always transfer now.
-                        ((JObject) settings["UpdateConfig"]).Remove("TransferConfigAndAuthOnUpdate");
+                        ((JObject)settings["UpdateConfig"]).Remove("TransferConfigAndAuthOnUpdate");
                         break;
 
                     case 6:
@@ -556,11 +556,21 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                     // Add more here.
                     case 14:
                         //migrate berries setting
-                        settings["ItemUseFilters"]["ItemRazzBerry"]["UseItemMinIV"] = (int)settings["PokemonConfig"]["UseBerriesMinIv"];
-                        settings["ItemUseFilters"]["ItemRazzBerry"]["UseItemMinCP"] = settings["PokemonConfig"]["UseBerriesMinCp"];
-                        settings["ItemUseFilters"]["ItemRazzBerry"]["CatchProbability"] = settings["PokemonConfig"]["UseBerriesBelowCatchProbability"];
-                        settings["ItemUseFilters"]["ItemRazzBerry"]["Operator"] = settings["PokemonConfig"]["UseBerriesOperator"];
-                        settings["ItemUseFilters"]["ItemRazzBerry"]["MaxItemsUsePerPokemon"] = settings["PokemonConfig"]["MaxBerriesToUsePerPokemon"];
+                        if (settings["PokemonConfig"]["UseBerriesMinIv"] != null)
+                        {
+                            settings["ItemUseFilters"]["ItemRazzBerry"]["UseItemMinIV"] = (int)settings["PokemonConfig"]["UseBerriesMinIv"];
+                            settings["ItemUseFilters"]["ItemRazzBerry"]["UseItemMinCP"] = settings["PokemonConfig"]["UseBerriesMinCp"];
+                            settings["ItemUseFilters"]["ItemRazzBerry"]["CatchProbability"] = settings["PokemonConfig"]["UseBerriesBelowCatchProbability"];
+                            settings["ItemUseFilters"]["ItemRazzBerry"]["Operator"] = settings["PokemonConfig"]["UseBerriesOperator"];
+                            settings["ItemUseFilters"]["ItemRazzBerry"]["MaxItemsUsePerPokemon"] = settings["PokemonConfig"]["MaxBerriesToUsePerPokemon"];
+                            //delete old 
+
+                            ((JObject)settings["PokemonConfig"]).Remove("UseBerriesMinIv");
+                            ((JObject)settings["PokemonConfig"]).Remove("UseBerriesMinCp");
+                            ((JObject)settings["PokemonConfig"]).Remove("UseBerriesBelowCatchProbability");
+                            ((JObject)settings["PokemonConfig"]).Remove("UseBerriesOperator");
+                            ((JObject)settings["PokemonConfig"]).Remove("MaxBerriesToUsePerPokemon");
+                        }
 
                         break;
                 }
@@ -771,7 +781,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             string accountType = PromptForString(
                 translator,
                 translator.GetTranslation(TranslationString.FirstStartSetupTypePrompt, "google", "ptc"),
-                new string[] {"google", "ptc"},
+                new string[] { "google", "ptc" },
                 translator.GetTranslation(TranslationString.FirstStartSetupTypePromptError, "google", "ptc"),
                 false
             );
@@ -787,7 +797,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             }
 
             Logger.Write(
-                translator.GetTranslation(TranslationString.FirstStartSetupTypeConfirm,accountType.ToUpper()
+                translator.GetTranslation(TranslationString.FirstStartSetupTypeConfirm, accountType.ToUpper()
                 )
             );
         }
@@ -886,7 +896,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public void Save(string fullPath, bool validate = false)
         {
             var output = JsonConvert.SerializeObject(this, Formatting.Indented,
-                new StringEnumConverter {CamelCaseText = true});
+                new StringEnumConverter { CamelCaseText = true });
 
             var folder = Path.GetDirectoryName(fullPath);
             if (folder != null && !Directory.Exists(folder))
