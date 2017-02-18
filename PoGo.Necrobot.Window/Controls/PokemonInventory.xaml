@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="PoGo.Necrobot.Window.Controls.PokemonInventory"
+<UserControl x:Class="PoGo.Necrobot.Window.Controls.PokemonInventory"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -85,7 +85,7 @@
 
                                         <Image Source="https://cdn0.iconfinder.com/data/icons/round-ui-icons/128/close_blue.png" Width="28"></Image>
                                     </Button>
-                                    <TextBlock Margin="20,4,20,4" Foreground="White" HorizontalAlignment="Stretch" Text="Search &amp; Filter" FontSize="22.667" FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato Heavy"></TextBlock>
+                                    <TextBlock Margin="20,4,20,4" Foreground="White" HorizontalAlignment="Stretch" Text="{Binding Source=FilterAndSearch, Converter={StaticResource I18NConveter}}" FontSize="22.667" FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato Heavy"></TextBlock>
 
                                 </DockPanel>
 
@@ -146,7 +146,7 @@
 
             <DataGrid.ContextMenu>
                 <ContextMenu >
-                    <MenuItem Header="Set as Buddy" Click="mnuBuddy_Click"  />
+                    <MenuItem Header="{Binding Source=SetBuddy, Converter={StaticResource I18NConveter}}" Click="mnuBuddy_Click"  />
                 </ContextMenu>
             </DataGrid.ContextMenu>
             <DataGrid.RowStyle>
@@ -194,7 +194,7 @@
                 <DataGridTextColumn Binding="{Binding CaughtTime, StringFormat=\{0\}}" Header="{Binding Source=CaughtTime, Converter={StaticResource I18NConveter}}" MinWidth="90" IsReadOnly="True"/>
                 <DataGridTextColumn Binding="{Binding CaughtLocation}" Header="{Binding Source=CaughtLocation, Converter={StaticResource I18NConveter}}" MinWidth="90" IsReadOnly="True"/>
 
-                <DataGridTemplateColumn Header="Actions">
+                <DataGridTemplateColumn Header="{Binding Source=Actions, Converter={StaticResource I18NConveter}}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel  Orientation="Horizontal">
