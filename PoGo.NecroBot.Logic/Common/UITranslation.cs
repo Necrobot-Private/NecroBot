@@ -314,7 +314,7 @@ namespace PoGo.NecroBot.Logic.Common
                 {
                     var fileName = !string.IsNullOrEmpty(configAttibute.SheetName) ? configAttibute.SheetName : item.Name;
 
-                    string key = $"Setting.{fileName }";
+                    string key = $"Setting.{item.Name}";
                     var configType = item.FieldType;
 
                     if (!translations.ContainsKey(key))

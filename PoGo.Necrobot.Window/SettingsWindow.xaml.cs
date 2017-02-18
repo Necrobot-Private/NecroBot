@@ -87,13 +87,13 @@ namespace PoGo.Necrobot.Window
 
         Dictionary<FieldInfo, object> map = new Dictionary<FieldInfo, object>();
 
-        public UIElement BuildDictionaryForm<T>(FieldInfo pi, Dictionary<PokemonId, T> dictionary)
+        public UIElement BuildDictionaryForm<Y, T>(FieldInfo pi, Dictionary<Y, T> dictionary)
         {
             var natt = pi.GetCustomAttribute<NecrobotConfigAttribute>();
 
             string resKey = $"Setting.{pi.Name}";
 
-            ObservablePairCollection<PokemonId, T> dataSource = new ObservablePairCollection<PokemonId, T>(dictionary);
+            ObservablePairCollection<Y, T> dataSource = new ObservablePairCollection<Y, T>(dictionary);
             map.Add(pi, dataSource);
 
             DataGrid grid = new DataGrid()
@@ -104,7 +104,7 @@ namespace PoGo.Necrobot.Window
             grid.ItemsSource = dataSource;
 
             var col1 = new DataGridComboBoxColumn() { Header = translator.PokemonName };
-            col1.ItemsSource = Enum.GetValues(typeof(PokemonId)).Cast<PokemonId>();
+            col1.ItemsSource = Enum.GetValues(typeof(Y)).Cast<Y>();
 
             col1.SelectedItemBinding = new Binding("Key")
             {
@@ -283,8 +283,9 @@ namespace PoGo.Necrobot.Window
                 Type valueType = type.GetGenericArguments()[1];
 
                 MethodInfo method = typeof(SettingsWindow).GetMethod("BuildDictionaryForm");
-                MethodInfo genericMethod = method.MakeGenericMethod(valueType);
+                MethodInfo genericMethod = method.MakeGenericMethod(keyType, valueType);
                 return (UIElement)genericMethod.Invoke(this, new object[] { fi, source });
+                
             }
 
             if (type.IsGenericType && (type.GetGenericTypeDefinition() == typeof(List<>)))
@@ -313,9 +314,10 @@ namespace PoGo.Necrobot.Window
                 
                 BorderThickness = new Thickness(2, 2, 3, 3)
             };
-            
+
             StackPanel panel = new StackPanel() {
-                Margin = new Thickness(20,20,20,20)
+                Margin = new Thickness(20, 20, 20, 20),
+                HorizontalAlignment = HorizontalAlignment.Left
             };
             border.Child = panel;
             panelWrap.Children.Add(border);
@@ -330,8 +332,8 @@ namespace PoGo.Necrobot.Window
                 if (att != null)
                 {
 
-                    string resKey = $"Setting.{fieldName}.{item.Name}";
-                    string DescKey = $"Setting.{fieldName }.{item.Name}Desc";
+                    string resKey = $"Setting.{fi.Name}.{item.Name}";
+                    string DescKey = $"Setting.{fi.Name}.{item.Name}Desc";
 
                     panel.Children.Add(new Label() { Content = translator.GetTranslation(resKey), FontSize = 15, ToolTip = translator.GetTranslation(DescKey)});
                     panel.Children.Add(GetInputControl(item, source));
@@ -441,7 +443,7 @@ namespace PoGo.Necrobot.Window
                 var att = item.GetCustomAttributes<NecrobotConfigAttribute>(true).FirstOrDefault();
                 if (att != null)
                 {
-                    string resKey = "Setting."+ (string.IsNullOrEmpty(att.SheetName) ? item.Name : att.SheetName);
+                    string resKey = $"Setting.{item.Name}";// + (string.IsNullOrEmpty(att.SheetName) ? item.Name : att.SheetName);
 
                     string name = string.IsNullOrEmpty(att.Key) ? item.Name : att.Key;
                     var tabItem = new TabItem() { Content = BuildForm(item, item.GetValue(Settings), att), FontSize = 11, Header = translator.GetTranslation(resKey) };
