@@ -46,6 +46,11 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.WalkinSpeedPage = new AeroWizard.WizardPage();
+            this.txtMapzenKey = new System.Windows.Forms.TextBox();
+            this.chkMazen = new System.Windows.Forms.CheckBox();
+            this.chkAllowYourwalk = new System.Windows.Forms.CheckBox();
+            this.txtGoogleKey = new System.Windows.Forms.TextBox();
+            this.chkEnableGoogle = new System.Windows.Forms.CheckBox();
             this.chkAllowVariant = new System.Windows.Forms.CheckBox();
             this.txtVariant = new System.Windows.Forms.TextBox();
             this.txtSpeed = new System.Windows.Forms.TextBox();
@@ -100,7 +105,7 @@
             // 
             // txtLanguage
             // 
-            this.txtLanguage.Location = new System.Drawing.Point(222, 11);
+            this.txtLanguage.Location = new System.Drawing.Point(222, 13);
             this.txtLanguage.Name = "txtLanguage";
             this.txtLanguage.Size = new System.Drawing.Size(100, 23);
             this.txtLanguage.TabIndex = 1;
@@ -228,6 +233,11 @@
             // 
             // WalkinSpeedPage
             // 
+            this.WalkinSpeedPage.Controls.Add(this.txtMapzenKey);
+            this.WalkinSpeedPage.Controls.Add(this.chkMazen);
+            this.WalkinSpeedPage.Controls.Add(this.chkAllowYourwalk);
+            this.WalkinSpeedPage.Controls.Add(this.txtGoogleKey);
+            this.WalkinSpeedPage.Controls.Add(this.chkEnableGoogle);
             this.WalkinSpeedPage.Controls.Add(this.chkAllowVariant);
             this.WalkinSpeedPage.Controls.Add(this.txtVariant);
             this.WalkinSpeedPage.Controls.Add(this.txtSpeed);
@@ -239,12 +249,62 @@
             this.WalkinSpeedPage.Text = "Walking setting";
             this.WalkinSpeedPage.Click += new System.EventHandler(this.WalkinSpeedPage_Click);
             // 
+            // txtMapzenKey
+            // 
+            this.txtMapzenKey.Location = new System.Drawing.Point(20, 159);
+            this.txtMapzenKey.Name = "txtMapzenKey";
+            this.txtMapzenKey.Size = new System.Drawing.Size(462, 23);
+            this.txtMapzenKey.TabIndex = 23;
+            // 
+            // chkMazen
+            // 
+            this.chkMazen.AutoSize = true;
+            this.chkMazen.Checked = true;
+            this.chkMazen.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkMazen.Location = new System.Drawing.Point(20, 134);
+            this.chkMazen.Name = "chkMazen";
+            this.chkMazen.Size = new System.Drawing.Size(267, 19);
+            this.chkMazen.TabIndex = 22;
+            this.chkMazen.Text = "Allow Mapzen walk (enter mapzen key below)";
+            this.chkMazen.UseVisualStyleBackColor = true;
+            // 
+            // chkAllowYourwalk
+            // 
+            this.chkAllowYourwalk.AutoSize = true;
+            this.chkAllowYourwalk.Checked = true;
+            this.chkAllowYourwalk.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkAllowYourwalk.Location = new System.Drawing.Point(20, 111);
+            this.chkAllowYourwalk.Name = "chkAllowYourwalk";
+            this.chkAllowYourwalk.Size = new System.Drawing.Size(115, 19);
+            this.chkAllowYourwalk.TabIndex = 21;
+            this.chkAllowYourwalk.Text = "Allow yours walk";
+            this.chkAllowYourwalk.UseVisualStyleBackColor = true;
+            // 
+            // txtGoogleKey
+            // 
+            this.txtGoogleKey.Location = new System.Drawing.Point(20, 82);
+            this.txtGoogleKey.Name = "txtGoogleKey";
+            this.txtGoogleKey.Size = new System.Drawing.Size(462, 23);
+            this.txtGoogleKey.TabIndex = 20;
+            // 
+            // chkEnableGoogle
+            // 
+            this.chkEnableGoogle.AutoSize = true;
+            this.chkEnableGoogle.Checked = true;
+            this.chkEnableGoogle.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkEnableGoogle.Location = new System.Drawing.Point(20, 57);
+            this.chkEnableGoogle.Name = "chkEnableGoogle";
+            this.chkEnableGoogle.Size = new System.Drawing.Size(257, 19);
+            this.chkEnableGoogle.TabIndex = 19;
+            this.chkEnableGoogle.Text = "Allow google walk (Enter google key below)";
+            this.chkEnableGoogle.UseVisualStyleBackColor = true;
+            // 
             // chkAllowVariant
             // 
             this.chkAllowVariant.AutoSize = true;
             this.chkAllowVariant.Checked = true;
             this.chkAllowVariant.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkAllowVariant.Location = new System.Drawing.Point(35, 95);
+            this.chkAllowVariant.Location = new System.Drawing.Point(20, 32);
             this.chkAllowVariant.Name = "chkAllowVariant";
             this.chkAllowVariant.Size = new System.Drawing.Size(156, 19);
             this.chkAllowVariant.TabIndex = 18;
@@ -254,15 +314,15 @@
             // 
             // txtVariant
             // 
-            this.txtVariant.Location = new System.Drawing.Point(136, 59);
+            this.txtVariant.Location = new System.Drawing.Point(345, 6);
             this.txtVariant.Name = "txtVariant";
-            this.txtVariant.Size = new System.Drawing.Size(162, 23);
+            this.txtVariant.Size = new System.Drawing.Size(84, 23);
             this.txtVariant.TabIndex = 17;
             this.txtVariant.Text = "0";
             // 
             // txtSpeed
             // 
-            this.txtSpeed.Location = new System.Drawing.Point(136, 23);
+            this.txtSpeed.Location = new System.Drawing.Point(91, 5);
             this.txtSpeed.Name = "txtSpeed";
             this.txtSpeed.Size = new System.Drawing.Size(162, 23);
             this.txtSpeed.TabIndex = 16;
@@ -271,16 +331,16 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(32, 59);
+            this.label7.Location = new System.Drawing.Point(280, 9);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(78, 15);
+            this.label7.Size = new System.Drawing.Size(43, 15);
             this.label7.TabIndex = 15;
-            this.label7.Text = "Speed variant";
+            this.label7.Text = "Variant";
             // 
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(29, 23);
+            this.label8.Location = new System.Drawing.Point(17, 8);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(68, 15);
             this.label8.TabIndex = 14;
@@ -304,12 +364,11 @@
             this.txtWebsocketPort.Name = "txtWebsocketPort";
             this.txtWebsocketPort.Size = new System.Drawing.Size(162, 23);
             this.txtWebsocketPort.TabIndex = 18;
-            this.txtWebsocketPort.Text = "30";
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(45, 72);
+            this.label9.Location = new System.Drawing.Point(45, 76);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(94, 15);
             this.label9.TabIndex = 17;
@@ -408,5 +467,10 @@
         private System.Windows.Forms.CheckBox chkAllowVariant;
         private AeroWizard.WizardPage wizardPage1;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.TextBox txtMapzenKey;
+        private System.Windows.Forms.CheckBox chkMazen;
+        private System.Windows.Forms.CheckBox chkAllowYourwalk;
+        private System.Windows.Forms.TextBox txtGoogleKey;
+        private System.Windows.Forms.CheckBox chkEnableGoogle;
     }
 }

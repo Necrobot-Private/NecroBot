@@ -32,8 +32,8 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool EnableSnipe { get; set; }
 
         [NecrobotConfig(Key = "Snipe Min IV", Description = "Min Pokemon IV for auto snipe", Position = 2)]
-        [DefaultValue(76)]
-        [Range(0, 100)]
+        [DefaultValue(90)]
+        [Range(0, 101)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public int SnipeIV {get; set;}
 

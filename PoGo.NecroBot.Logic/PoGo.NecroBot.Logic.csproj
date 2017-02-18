@@ -262,6 +262,7 @@
     <Compile Include="Event\PokemonLevelUpEvent.cs" />
     <Compile Include="Event\SnipeScanEvent.cs" />
     <Compile Include="Event\NicknameUpdateEvent.cs" />
+    <Compile Include="Event\Snipe\AllBotSnipeEvent.cs" />
     <Compile Include="Event\Snipe\AutoSnipePokemonAddedEvent.cs" />
     <Compile Include="Event\Snipe\SnipePokemonStarted.cs" />
     <Compile Include="Event\Snipe\SnipePokemonUpdateEvent.cs" />
@@ -344,6 +345,7 @@
     <Compile Include="Model\Settings\AuthSettings.cs" />
     <Compile Include="Model\Settings\BaseConfig.cs" />
     <Compile Include="Model\Settings\CatchConfig.cs" />
+    <Compile Include="Model\Settings\BerryUseFilter.cs" />
     <Compile Include="Model\Settings\ClientSettings.cs" />
     <Compile Include="Model\Settings\CaptchaConfig.cs" />
     <Compile Include="Model\Settings\ConsoleConfig.cs" />

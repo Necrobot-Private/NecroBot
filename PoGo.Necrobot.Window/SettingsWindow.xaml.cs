@@ -20,19 +20,22 @@ using PoGo.NecroBot.Logic;
 using PoGo.Necrobot.Window;
 using PoGo.NecroBot.Logic.Model.Settings;
 using PoGo.Necrobot.Window.Converters;
+using System.Collections.ObjectModel;
+using PoGo.NecroBot.Logic.Common;
+using TinyIoC;
 
 namespace PoGo.Necrobot.Window
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class AppConfigWindow : MetroWindow
+    public partial class SettingsWindow : MetroWindow
     {
 
         public GlobalSettings Settings { get; set; }
         MetroWindow main;
         private string fileName;
-        public AppConfigWindow(MetroWindow parent, string filename)
+        public SettingsWindow(MetroWindow parent, string filename)
         {
             main = parent;
             this.Settings = GlobalSettings.Load(filename);
@@ -75,40 +78,22 @@ namespace PoGo.Necrobot.Window
                 }
             }
         }
-        public AppConfigWindow()
+        public SettingsWindow()
         {
             InitializeComponent();
             InitForm();
             this.WindowState = WindowState.Maximized;
         }
-        
-
-        public void InitForm1()
-        {
-            GlobalSettings Settings = new GlobalSettings();
-            foreach (var item in Settings.GetType().GetFields())
-            {
-                var att = item.GetCustomAttributes<NecrobotConfigAttribute>(true).FirstOrDefault();
-                if (att != null)
-                {
-                    string name = string.IsNullOrEmpty(att.Key) ? item.Name : att.Key;
-                    var button = new Button()
-                    {
-                        Content = name,
-                        HorizontalAlignment = HorizontalAlignment.Left,
-                        Width = 128
-                    };
-                    DockPanel.SetDock(button, Dock.Top);
-                    //stackProps.Children.Add(button);
-                }
-            }
-        }
 
         Dictionary<FieldInfo, object> map = new Dictionary<FieldInfo, object>();
 
-        public UIElement BuildDictionaryForm<T>(FieldInfo pi, Dictionary<PokemonId, T> dictionary)
+        public UIElement BuildDictionaryForm<Y, T>(FieldInfo pi, Dictionary<Y, T> dictionary)
         {
-            ObservablePairCollection<PokemonId, T> dataSource = new ObservablePairCollection<PokemonId, T>(dictionary);
+            var natt = pi.GetCustomAttribute<NecrobotConfigAttribute>();
+
+            string resKey = $"Setting.{pi.Name}";
+
+            ObservablePairCollection<Y, T> dataSource = new ObservablePairCollection<Y, T>(dictionary);
             map.Add(pi, dataSource);
 
             DataGrid grid = new DataGrid()
@@ -118,14 +103,42 @@ namespace PoGo.Necrobot.Window
             };
             grid.ItemsSource = dataSource;
 
-            var col1 = new DataGridComboBoxColumn() { Header = "Pokemon Name" };
-            col1.ItemsSource = Enum.GetValues(typeof(PokemonId)).Cast<PokemonId>();
+            var col1 = new DataGridComboBoxColumn() { Header = translator.PokemonName };
+            col1.ItemsSource = Enum.GetValues(typeof(Y)).Cast<Y>();
 
             col1.SelectedItemBinding = new Binding("Key")
             {
                 Mode = BindingMode.TwoWay
             };
             grid.Columns.Add(col1);
+            var type = typeof(T);
+            foreach (var item in type.GetProperties())
+            {
+                var att = item.GetCustomAttribute<NecrobotConfigAttribute>(true);
+                if (att != null && !att.IsPrimaryKey)
+                {
+                    string headerKey = $"{resKey}.{item.Name}";
+                    var dataGridControl = GetDataGridInputControl(item);
+                    dataGridControl.Header = translator.GetTranslation(headerKey);
+
+                    grid.Columns.Add(dataGridControl);
+                }
+            }
+            return grid;
+        }
+
+        public UIElement BuildListObjectForm<T>(FieldInfo pi, List<T> list)
+        {
+            ObservableCollection<T> dataSource = new ObservableCollection<T>(list);
+
+            DataGrid grid = new DataGrid()
+            {
+                IsReadOnly = false,
+                AutoGenerateColumns = true
+            };
+            grid.ItemsSource = dataSource;
+
+
             var type = typeof(T);
             foreach (var item in type.GetProperties())
             {
@@ -260,7 +273,7 @@ namespace PoGo.Necrobot.Window
 
             return accountColumn;
         }
-        public UIElement BuildForm(FieldInfo fi, object source)
+        public UIElement BuildForm(FieldInfo fi, object source, NecrobotConfigAttribute propAtt)
         {
             var type = source.GetType();
 
@@ -269,15 +282,26 @@ namespace PoGo.Necrobot.Window
                 Type keyType = type.GetGenericArguments()[0];
                 Type valueType = type.GetGenericArguments()[1];
 
-                MethodInfo method = typeof(AppConfigWindow).GetMethod("BuildDictionaryForm");
-                MethodInfo genericMethod = method.MakeGenericMethod(valueType);
+                MethodInfo method = typeof(SettingsWindow).GetMethod("BuildDictionaryForm");
+                MethodInfo genericMethod = method.MakeGenericMethod(keyType, valueType);
+                return (UIElement)genericMethod.Invoke(this, new object[] { fi, source });
+                
+            }
+
+            if (type.IsGenericType && (type.GetGenericTypeDefinition() == typeof(List<>)))
+            {
+                Type objectType= type.GetGenericArguments()[0];
+                //Type valueType = type.GetGenericArguments()[1];
+
+                MethodInfo method = typeof(SettingsWindow).GetMethod("BuildListObjectForm");
+                MethodInfo genericMethod = method.MakeGenericMethod(objectType);
                 return (UIElement)genericMethod.Invoke(this, new object[] { fi, source });
             }
-            return BuildObjectForm(source);
 
+            return BuildObjectForm(fi,source, propAtt);
 
         }
-        public UIElement BuildObjectForm(object source)
+        public UIElement BuildObjectForm(FieldInfo fi,object source, NecrobotConfigAttribute configAttibute)
         {
 
             StackPanel panelWrap = new StackPanel() {
@@ -290,20 +314,28 @@ namespace PoGo.Necrobot.Window
                 
                 BorderThickness = new Thickness(2, 2, 3, 3)
             };
-            
+
             StackPanel panel = new StackPanel() {
-                Margin = new Thickness(20,20,20,20)
+                Margin = new Thickness(20, 20, 20, 20),
+                HorizontalAlignment = HorizontalAlignment.Left
             };
             border.Child = panel;
             panelWrap.Children.Add(border);
 
-      var type = source.GetType();
+            var type = source.GetType();
+
+            var fieldName =  type.Name;
+
             foreach (var item in type.GetProperties())
             {
                 var att = item.GetCustomAttributes<NecrobotConfigAttribute>(true).FirstOrDefault();
                 if (att != null)
                 {
-                    panel.Children.Add(new Label() { Content = item.Name, FontSize = 15, ToolTip = att.Description });
+
+                    string resKey = $"Setting.{fi.Name}.{item.Name}";
+                    string DescKey = $"Setting.{fi.Name}.{item.Name}Desc";
+
+                    panel.Children.Add(new Label() { Content = translator.GetTranslation(resKey), FontSize = 15, ToolTip = translator.GetTranslation(DescKey)});
                     panel.Children.Add(GetInputControl(item, source));
                 }
             }
@@ -333,7 +365,6 @@ namespace PoGo.Necrobot.Window
                 foreach (var v in Enum.GetValues(enumDataTypeAtt.EnumType))
                 {
                     ddrop.Items.Add(v.ToString());
-
                 }
                 BindingOperations.SetBinding(ddrop, ComboBox.SelectedValueProperty, binding);
                 return ddrop;
@@ -401,16 +432,22 @@ namespace PoGo.Necrobot.Window
             return new TextBox();
         }
 
+        private UITranslation translator; 
+
         public void InitForm()
         {
+            translator = TinyIoCContainer.Current.Resolve<UITranslation>();
             this.DataContext = Settings;
             foreach (var item in Settings.GetType().GetFields())
             {
                 var att = item.GetCustomAttributes<NecrobotConfigAttribute>(true).FirstOrDefault();
                 if (att != null)
                 {
+                    string resKey = $"Setting.{item.Name}";// + (string.IsNullOrEmpty(att.SheetName) ? item.Name : att.SheetName);
+
                     string name = string.IsNullOrEmpty(att.Key) ? item.Name : att.Key;
-                    var tabItem = new TabItem() { Content = BuildForm(item, item.GetValue(Settings)), Header = name, FontSize = 11 };
+                    var tabItem = new TabItem() { Content = BuildForm(item, item.GetValue(Settings), att), FontSize = 11, Header = translator.GetTranslation(resKey) };
+
                     tabControl.Items.Add(tabItem);
                 }
             }

@@ -1,6 +1,7 @@
 ﻿using PoGo.Necrobot.Window.Model;
 using PoGo.NecroBot.CLI;
 using PoGo.NecroBot.Logic.Event;
+using PoGo.NecroBot.Logic.Event.Snipe;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Tasks;
 using POGOProtos.Enums;
@@ -32,11 +33,16 @@ namespace PoGo.Necrobot.Window.Controls
             InitializeComponent();
         }
 
-        private void SnipeGrid_OnSnipePokemon(Model.SnipePokemonViewModel selected)
+        private void SnipeGrid_OnSnipePokemon(Model.SnipePokemonViewModel selected, bool all)
         {
             var data = selected.Ref as EncounteredEvent;
             Task.Run(() =>
             {
+                if(all)
+                {
+                    this.Session.EventDispatcher.Send(new AllBotSnipeEvent(data.EncounterId));
+                };
+
                 var move1 = PokemonMove.MoveUnset;
                 var move2 = PokemonMove.MoveUnset;
                 Enum.TryParse<PokemonMove>(data.Move1, true, out move1);

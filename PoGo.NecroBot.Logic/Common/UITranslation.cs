@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using PoGo.NecroBot.Logic.Model.Settings;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,6 +20,12 @@ namespace PoGo.NecroBot.Logic.Common
         
         [Description("Map & Journey")]
         public string MapTabTitle { get; set; }
+
+        [Description("SNIPE")]
+        public string SnipeText { get; set; }
+
+        [Description("ALL BOT SNIPE")]
+        public string SnipeAllBotText { get; set; }
 
         [Description("Sniper")]
         public string SniperTabTitle { get; set; }
@@ -123,7 +130,7 @@ namespace PoGo.NecroBot.Logic.Common
         public string SearchPokemonCP { get; set; }
 
         [Description("Search & Select")]
-        public string SearchSelectAllButton {get;set;}
+        public string SearchSelectAllButton { get; set; }
 
         [Description("Search")]
         public string SearchButton { get; set; }
@@ -220,7 +227,10 @@ namespace PoGo.NecroBot.Logic.Common
         
         [Description("Transfered: {0}")]
         public string PokemonTransfered { get; set; }
-        
+        [Description("HIDE")]
+        public string Hide { get; set; }
+        [Description("SHOW")]
+        public string Show { get; set; }
         #endregion
             
         private Dictionary<string, string> translations = new Dictionary<string, string>();
@@ -242,6 +252,10 @@ namespace PoGo.NecroBot.Logic.Common
             {
                 return prop.GetValue(this).ToString();
             }
+            if(translations.ContainsKey(key))
+            {
+                return translations[key];
+            }
             return $"{key} missing";
         }
 
@@ -252,7 +266,6 @@ namespace PoGo.NecroBot.Logic.Common
             {
                 if (translations.ContainsKey(item.Name)) continue;
                 translations.Add(item.Name, item.GetValue(this).ToString());
-
             }
 
             File.WriteAllText(this.translationFile, JsonConvert.SerializeObject(translations, Formatting.Indented));
@@ -291,9 +304,75 @@ namespace PoGo.NecroBot.Logic.Common
                     }
                 }
             }
-            Save();
+            //append translation for setting
+            Type setting = typeof(GlobalSettings);
+
+            foreach (var item in setting.GetFields())
+            {
+                var configAttibute = item.GetCustomAttribute<NecrobotConfigAttribute>();
+                if (configAttibute != null)
+                {
+                    var fileName = !string.IsNullOrEmpty(configAttibute.SheetName) ? configAttibute.SheetName : item.Name;
+
+                    string key = $"Setting.{item.Name}";
+                    var configType = item.FieldType;
+
+                    if (!translations.ContainsKey(key))
+                    {
+                        translations.Add(key, !string.IsNullOrEmpty(configAttibute.Key) ? configAttibute.Key : fileName);
+                    }
+                    var keyDesc = $"{key}Desc";
+
+                    if (!translations.ContainsKey(keyDesc))
+                    {
+                        translations.Add(keyDesc, !string.IsNullOrEmpty(configAttibute.Description) ? configAttibute.Description : $"{key} description");
+                    };
+                    if (item.FieldType.IsGenericType && (item.FieldType.GetGenericTypeDefinition() == typeof(Dictionary<,>)))
+                    {
+                        Type keyType = item.FieldType.GetGenericArguments()[0];
+                        Type valueType = item.FieldType.GetGenericArguments()[1];
+                        AddResourceForType(key, valueType);
+                    }
+
+                    if (item.FieldType.IsGenericType && (item.FieldType.GetGenericTypeDefinition() == typeof(List<>)))
+                    {
+                        Type keyType = item.FieldType.GetGenericArguments()[0];
+                        AddResourceForType(key, keyType);
+                    }
+
+
+                    AddResourceForType(key, configType);
+                }
+
+                Save();
+
+            }
 
         }
 
+        private void AddResourceForType(string key, Type configType)
+        {
+            foreach (var configItem in configType.GetProperties())
+            {
+                var propAttibute = configItem.GetCustomAttribute<NecrobotConfigAttribute>();
+                if (propAttibute != null)
+                {
+                    string fieldValue = !string.IsNullOrEmpty(propAttibute.Key) ? propAttibute.Key : configItem.Name;
+
+                    var subKey = $"{key}.{configItem.Name}";
+                    var descKey = subKey + "Desc";
+
+                    if (!translations.ContainsKey(subKey))
+                    {
+                        translations.Add(subKey, string.IsNullOrEmpty(propAttibute.Key) ? fieldValue : propAttibute.Key);
+                    }
+
+                    if (!translations.ContainsKey(descKey))
+                    {
+                        translations.Add(descKey, !string.IsNullOrEmpty(propAttibute.Description) ? propAttibute.Description : $"{subKey} description");
+                    }
+                }
+            }
+        }
     }
 }
