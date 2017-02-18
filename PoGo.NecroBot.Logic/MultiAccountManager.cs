@@ -297,15 +297,20 @@ namespace PoGo.NecroBot.Logic
             return runningAccount;
         }
 
+        private bool switchAccountRequest = false;
         public void SwitchAccountTo(BotAccount account)
         {
             this.requestedAccount = account;
+            this.switchAccountRequest = true;
         }
 
         public void ThrowIfSwitchAccountRequested()
         {
-            if (this.requestedAccount != null && !this.requestedAccount.IsRunning)
+            if (switchAccountRequest && this.requestedAccount != null && !this.requestedAccount.IsRunning)
+            {
+                switchAccountRequest = false;
                 throw new ActiveSwitchAccountManualException(this.requestedAccount);
+            }
         }
 
         private BotAccount requestedAccount = null;
