@@ -416,15 +416,14 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 65)]
         public string DefaultBuddyPokemon { get; set; }
 
-        
         [NecrobotConfig(Description = "Min level to favorite", Position = 66)]
-        [DefaultValue(25)]
+        [DefaultValue(0)]
         [Range(0,100)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 65)]
         public int FavoriteMinLevel { get; set; }
 
         [NecrobotConfig(Description = "The logic operator to check compbo IV, CP, Level to favorite pokemon", Position = 65)]
-        [DefaultValue(Operator.or)]
+        [DefaultValue(Operator.and)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 65)]
 
         public Operator FavoriteOperator { get; set; }
