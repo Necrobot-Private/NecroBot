@@ -416,5 +416,23 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 65)]
         public string DefaultBuddyPokemon { get; set; }
 
+        
+        [NecrobotConfig(Description = "Min level to favorite", Position = 66)]
+        [DefaultValue(25)]
+        [Range(0,100)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 65)]
+        public int FavoriteMinLevel { get; set; }
+
+        [NecrobotConfig(Description = "The logic operator to check compbo IV, CP, Level to favorite pokemon", Position = 65)]
+        [DefaultValue(Operator.or)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 65)]
+
+        public Operator FavoriteOperator { get; set; }
+
+        [NecrobotConfig(Description = "If this option set to true, bot only rename pokemon not meet with transfer settings, otherwise, bot will rename all pokemon in bag", Position = 66)]
+        [DefaultValue(false)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 65)]
+
+        public  bool RenamePokemonRespectTransferRule { get;  set; }
     }
 }

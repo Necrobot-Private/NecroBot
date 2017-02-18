@@ -18,7 +18,7 @@ using System.Windows.Shapes;
 
 namespace PoGo.Necrobot.Window.Controls
 {
-    public delegate void OnSnipePokemon(SnipePokemonViewModel selected);
+    public delegate void OnSnipePokemon(SnipePokemonViewModel selected, bool allBotInstanceSnipe);
 
     /// <summary>
     /// Interaction logic for SnipeGrid.xaml
@@ -33,16 +33,21 @@ namespace PoGo.Necrobot.Window.Controls
         }
         private void Snipe_Click(object sender, RoutedEventArgs e)
         {
-           var model = this.DataContext as ObservableCollection<SnipePokemonViewModel>;
-            var button = (Button) sender;
+            var button = (Button)sender;
 
             var b = button.CommandParameter;
+            DoSnipe(b, false);
+        }
+
+        private void DoSnipe(object b, bool all = false)
+        {
+            var model = this.DataContext as ObservableCollection<SnipePokemonViewModel>;
 
             var select = model.FirstOrDefault(x => x.Ref == b);
 
-            if(select!= null)
+            if (select != null)
             {
-                OnSnipePokemon?.Invoke(select);
+                OnSnipePokemon?.Invoke(select, false);
                 select.AllowSnipe = false;
                 select.RaisePropertyChanged("AllowSnipe");
             }
@@ -52,6 +57,15 @@ namespace PoGo.Necrobot.Window.Controls
         {
             e.Row.Header = (e.Row.GetIndex()).ToString();
 
+        }
+
+        private void SnipeAll_Click(object sender, RoutedEventArgs e)
+        {
+
+            var button = (Button)sender;
+
+            var b = button.CommandParameter;
+            DoSnipe(b, true);
         }
     }
 }

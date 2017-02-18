@@ -266,7 +266,7 @@
                              Foreground="White" 
                              BorderBrush="Aquamarine" 
                              BorderThickness="1" 
-                             Text="{Binding Source=InputCommand, Converter={StaticResource ResourceKey=I18NConveter}}" 
+                             ToolTip="{Binding Source=InputCommand, Converter={StaticResource ResourceKey=I18NConveter}}" 
                              MouseDown="txtCmdInput_MouseDown"
                              KeyDown="txtCmdInput_KeyDown"
                              />

@@ -114,7 +114,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public MapzenWalkConfig MapzenWalkConfig = new MapzenWalkConfig();
 
-        //[ExcelConfig (SheetName = "ItemRecycleFilter", Description ="Set number of each item we want bot to keep when it perfom recycle for get free space")]
+        [NecrobotConfig(SheetName = "ItemRecycleFilter", Description ="Set number of each item we want bot to keep when it perfom recycle for get free space")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public List<ItemRecycleFilter> ItemRecycleFilter = Settings.ItemRecycleFilter.ItemRecycleFilterDefault();
 

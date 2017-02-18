@@ -80,7 +80,7 @@ namespace PoGo.NecroBot.Logic.Utils
                     }
                     catch(Exception ex)
                     {
-                        Logic.Logging.Logger.Debug("Fail to send notification", ex);
+                        //Logic.Logging.Logger.Debug("Fail to send notification", ex);
                     }
                 }
             });
@@ -102,7 +102,6 @@ namespace PoGo.NecroBot.Logic.Utils
                     {
                         await SendPushNotificationV2(cfg.PushBulletApiKey, title, body);
                     }
-
                     // TODO function is deprecated / obsolete
                     // jjskuld - Ignore CS0618 warning for now.
                     #pragma warning disable 0618
