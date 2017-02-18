@@ -19,6 +19,12 @@ namespace PoGo.NecroBot.Logic.Common
         [Description("Map & Journey")]
         public string MapTabTitle { get; set; }
 
+        [Description("SNIPE")]
+        public string SnipeText { get; set; }
+
+        [Description("ALL BOT SNIPE")]
+        public string SnipeAllBotText { get; set; }
+
         [Description("Sniper")]
         public string SniperTabTitle { get; set; }
         [Description("Bot switching account... ")]
