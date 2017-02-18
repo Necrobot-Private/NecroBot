@@ -188,7 +188,6 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         public Dictionary<ItemId, ItemUseFilter> ItemUseFilters = ItemUseFilter.Default();
 
-
         public GlobalSettings()
         {
             InitializePropertyDefaultValues(this);
@@ -556,7 +555,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                     // Add more here.
                     case 14:
                         //migrate berries setting
-                        if (settings["PokemonConfig"]["UseBerriesMinIv"] != null)
+                        if (settings["PokemonConfig"]["UseBerriesMinIv"] != null && settings["ItemUseFilters"] != null)
                         {
                             settings["ItemUseFilters"]["ItemRazzBerry"]["UseItemMinIV"] = (int)settings["PokemonConfig"]["UseBerriesMinIv"];
                             settings["ItemUseFilters"]["ItemRazzBerry"]["UseItemMinCP"] = settings["PokemonConfig"]["UseBerriesMinCp"];
