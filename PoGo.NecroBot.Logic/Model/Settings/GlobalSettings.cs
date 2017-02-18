@@ -542,7 +542,10 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                             settings["PokemonConfig"]["DefaultBuddyPokemon"] = new string(a);
                         }
                         break;
-
+                    case 13:
+                        settings["PokemonConfig"]["FavoriteOperator"] = "and";
+                        settings["PokemonConfig"]["FavoriteMinLevel"] = 0;
+                        break;
                         // Add more here.
                 }
             }
