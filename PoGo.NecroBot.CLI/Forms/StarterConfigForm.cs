@@ -74,6 +74,13 @@ namespace PoGo.NecroBot.CLI.Forms
             this.settings.LocationConfig.WalkingSpeedInKilometerPerHour = Convert.ToDouble(txtSpeed.Text);
             this.settings.LocationConfig.WalkingSpeedVariant = Convert.ToDouble(txtSpeed.Text);
             this.settings.LocationConfig.UseWalkingSpeedVariant = chkAllowVariant.Checked;
+
+            this.settings.GoogleWalkConfig.UseGoogleWalk = chkEnableGoogle.Checked;
+            this.settings.GoogleWalkConfig.GoogleAPIKey = txtGoogleKey.Text;
+            this.settings.GoogleWalkConfig.UseGoogleWalk = chkAllowYourwalk.Checked;
+
+            this.settings.MapzenWalkConfig.UseMapzenWalk = chkMazen.Checked;
+            this.settings.MapzenWalkConfig.MapzenTurnByTurnApiKey = txtMapzenKey.Text;
         }
 
         private void chkAllowVariant_Click(object sender, EventArgs e)
@@ -120,7 +127,6 @@ namespace PoGo.NecroBot.CLI.Forms
             GlobalSettings.SaveFiles(settings, this.configFile);
             new Session(new ClientSettings(settings, elevationService), new LogicSettings(settings), elevationService);
             Logger.Write(Session.Translation.GetTranslation(TranslationString.FirstStartSetupCompleted), LogLevel.Info);
-
 
             this.Close();
         }

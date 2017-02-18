@@ -1,4 +1,4 @@
-﻿<Controls:MetroWindow x:Class="PoGo.Necrobot.Window.AppConfigWindow"
+﻿<Controls:MetroWindow x:Class="PoGo.Necrobot.Window.SettingsWindow"
                       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
 	                  xmlns:Behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
                       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"

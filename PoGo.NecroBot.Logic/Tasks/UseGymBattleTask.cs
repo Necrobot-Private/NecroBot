@@ -19,6 +19,7 @@ using PokemonGo.RocketAPI.Extensions;
 using POGOProtos.Data;
 using POGOProtos.Data.Battle;
 using PokemonGo.RocketAPI.Exceptions;
+using PoGo.NecroBot.Logic.Utils;
 
 #endregion
 
@@ -337,7 +338,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                                         {
                                             var collectDailyBonusResponse = await session.Client.Player.CollectDailyDefenderBonus();
                                             if (collectDailyBonusResponse.Result == CollectDailyDefenderBonusResponse.Types.Result.Success)
+                                            {
                                                 Logger.Write($"Collected {count * 10} coins", LogLevel.Gym, ConsoleColor.DarkYellow);
+
+                                                PushNotificationClient.SendNotification(session, $"Daily reward collected : {count * 10} coins", $"Congratulations, Your bot has worked hard and collected {count * 10} coins today.");
+                                            }
                                             else
                                                 Logger.Write($"Hmm, we have failed with gaining a reward: {collectDailyBonusResponse}", LogLevel.Gym, ConsoleColor.Magenta);
                                         }

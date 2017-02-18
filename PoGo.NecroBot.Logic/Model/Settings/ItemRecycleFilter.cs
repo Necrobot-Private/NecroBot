@@ -7,9 +7,9 @@ using POGOProtos.Inventory.Item;
 namespace PoGo.NecroBot.Logic.Model.Settings
 {
     [JsonObject(Title = "Item Recycle Filter", Description = "", ItemRequired = Required.DisallowNull)]
-    public class ItemRecycleFilter
+    public class ItemRecycleFilter :BaseConfig
     {
-        public ItemRecycleFilter()
+        public ItemRecycleFilter() :base()
         {
         }
 
@@ -19,14 +19,16 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             Value = value;
         }
 
-        [DefaultValue("ItemUnknown")]
+        [NecrobotConfig(Description ="Item Name")]
+        [DefaultValue(ItemId.ItemUnknown)]
         [JsonProperty(Required = Required.Always, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
-        public ItemId Key = ItemId.ItemUnknown;
+        public ItemId Key { get; set; }
 
+        [NecrobotConfig(Description = "Item quality to keep")]
         [DefaultValue(0)]
         [Range(0, 999)]
         [JsonProperty(Required = Required.Always, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
-        public int Value;
+        public int Value { get; set; }
 
         internal static List<ItemRecycleFilter> ItemRecycleFilterDefault()
         {
@@ -51,7 +53,12 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 new ItemRecycleFilter(ItemId.ItemRevive, 10),
                 new ItemRecycleFilter(ItemId.ItemPotion, 10),
                 new ItemRecycleFilter(ItemId.ItemHyperPotion, 10),
-                new ItemRecycleFilter(ItemId.ItemGreatBall, 100)
+                new ItemRecycleFilter(ItemId.ItemGreatBall, 100),
+                new ItemRecycleFilter(ItemId.ItemBlukBerry, 30),
+                new ItemRecycleFilter(ItemId.ItemNanabBerry, 30),
+                new ItemRecycleFilter(ItemId.ItemWeparBerry, 30),
+                new ItemRecycleFilter(ItemId.ItemPinapBerry, 30),
+                new ItemRecycleFilter(ItemId.ItemRazzBerry, 30)
             };
         }
     }

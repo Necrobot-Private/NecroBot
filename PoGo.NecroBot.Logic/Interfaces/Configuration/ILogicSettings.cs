@@ -84,12 +84,7 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         int AmountOfTimesToUpgradeLoop { get; }
         int GetMinStarDustForLevelUp { get; }
         bool UseLuckyEggConstantly { get; }
-        int MaxBerriesToUsePerPokemon { get; }
         bool UseIncenseConstantly { get; }
-        float UseBerriesMinCp { get; }
-        float UseBerriesMinIv { get; }
-        double UseBerriesBelowCatchProbability { get; }
-        string UseBerriesOperator { get; }
         string UpgradePokemonMinimumStatsOperator { get; }
         int MaxTravelDistanceInMeters { get; }
         bool StartFromLastPosition { get; }
@@ -101,9 +96,12 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         float EvolveAboveIvValue { get; }
         bool DumpPokemonStats { get; }
         bool RenamePokemon { get; }
+        bool RenamePokemonRespectTransferRule { get; }
         bool RenameOnlyAboveIv { get; }
         float FavoriteMinIvPercentage { get; }
         float FavoriteMinCp { get; }
+        int FavoriteMinLevel { get; }
+        string FavoriteOperator { get; }
         bool AutoFavoritePokemon { get; }
         string RenameTemplate { get; }
         int AmountOfPokemonToDisplayOnStart { get; }
@@ -244,5 +242,6 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         GUIConfig UIConfig { get; }
         string DefaultBuddyPokemon { get; }
         bool AutoFinishTutorial { get;  }
+        Dictionary<ItemId, ItemUseFilter> ItemUseFilters { get; }
     }
 }

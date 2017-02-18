@@ -91,7 +91,6 @@
     <DataGrid ItemsSource="{Binding Mode=OneWay}" 
               AutoGenerateColumns="false" 
               GridLinesVisibility="None"
-              
               IsReadOnly="True"
               behaviors:DataGridBehavior.DisplayRowNumber="True">
         
@@ -128,7 +127,6 @@
         -->
         <DataGrid.Columns>
             <DataGridTextColumn Binding="{Binding Path=Id}" Header="#" IsReadOnly="True"/>
-
             <DataGridTemplateColumn Header="#">
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
@@ -172,8 +170,11 @@
             <DataGridTemplateColumn Header="{Binding Source=SnipeButton, Converter={StaticResource I18NConveter}}">
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
-                        <StackPanel>
-                            <Button IsEnabled="{Binding Path=AllowSnipe}" Content="SNIPE" CommandParameter="{Binding Ref}" Click="Snipe_Click"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Button IsEnabled="{Binding Path=AllowSnipe}" Content="{Binding Source=SnipeText, Converter= {StaticResource I18NConveter}}" CommandParameter="{Binding Ref}" Click="Snipe_Click"/>
+
+                            <Button Margin="10,0,0,0" IsEnabled="{Binding Path=AllowSnipe}" Content="{Binding Source=SnipeAllBotText, Converter= {StaticResource I18NConveter}}" CommandParameter="{Binding Ref}" Click="SnipeAll_Click"/>
+                            
                         </StackPanel>
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>

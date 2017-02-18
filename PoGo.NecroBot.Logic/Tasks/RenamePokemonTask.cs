@@ -27,7 +27,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             cancellationToken.ThrowIfCancellationRequested();
             TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
             var pokemons = session.Inventory.GetPokemons();
-            if (session.LogicSettings.TransferDuplicatePokemon)
+            if (session.LogicSettings.TransferDuplicatePokemon &&
+                session.LogicSettings.RenamePokemonRespectTransferRule)
             {
                 var duplicatePokemons =
                    await
@@ -40,7 +41,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 pokemons = pokemons.Where(x => !duplicatePokemons.Any(p => p.Id == x.Id));
             }
 
-            if (session.LogicSettings.TransferWeakPokemon)
+            if (session.LogicSettings.TransferWeakPokemon && session.LogicSettings.RenamePokemonRespectTransferRule)
             {
 
                 var pokemonsFiltered =
@@ -89,7 +90,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 newNickname = newNickname.Replace("{NAME}", pokemonName);
 
                 //verify
-                if (Regex.IsMatch(newNickname, @"[^a-zA-Z0-9-_.%/\\]") || nameLength <= 0)
+                if (nameLength <= 0)
                 {
                     Logger.Write($"Your rename template : {session.LogicSettings.RenameTemplate} incorrect. : {pokemonName} / {newNickname}");
                     continue;
