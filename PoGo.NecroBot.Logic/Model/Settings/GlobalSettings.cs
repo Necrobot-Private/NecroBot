@@ -20,6 +20,7 @@ using PoGo.NecroBot.Logic.State;
 using PokemonGo.RocketAPI.Enums;
 using PokemonGo.RocketAPI.Extensions;
 using POGOProtos.Enums;
+using POGOProtos.Inventory.Item;
 
 #endregion
 
@@ -182,6 +183,11 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         public GUIConfig UIConfig = new GUIConfig();
 
+        [NecrobotConfig(SheetName = "Item Use Filters", Description = "Define logic to use item when catching Pokemon")]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
+
+        public Dictionary<ItemId, ItemUseFilter> ItemUseFilters = ItemUseFilter.Default();
+
 
         public GlobalSettings()
         {
@@ -237,6 +243,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 return _schema;
             }
         }
+
 
 
         //private JObject _jsonObject;
@@ -546,7 +553,16 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                         settings["PokemonConfig"]["FavoriteOperator"] = "and";
                         settings["PokemonConfig"]["FavoriteMinLevel"] = 0;
                         break;
-                        // Add more here.
+                    // Add more here.
+                    case 14:
+                        //migrate berries setting
+                        settings["ItemUseFilters"]["ItemRazzBerry"]["UseItemMinIV"] = (int)settings["PokemonConfig"]["UseBerriesMinIv"];
+                        settings["ItemUseFilters"]["ItemRazzBerry"]["UseItemMinCP"] = settings["PokemonConfig"]["UseBerriesMinCp"];
+                        settings["ItemUseFilters"]["ItemRazzBerry"]["CatchProbability"] = settings["PokemonConfig"]["UseBerriesBelowCatchProbability"];
+                        settings["ItemUseFilters"]["ItemRazzBerry"]["Operator"] = settings["PokemonConfig"]["UseBerriesOperator"];
+                        settings["ItemUseFilters"]["ItemRazzBerry"]["MaxItemsUsePerPokemon"] = settings["PokemonConfig"]["MaxBerriesToUsePerPokemon"];
+
+                        break;
                 }
             }
         }

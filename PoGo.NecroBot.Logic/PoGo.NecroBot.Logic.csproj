@@ -345,6 +345,7 @@
     <Compile Include="Model\Settings\AuthSettings.cs" />
     <Compile Include="Model\Settings\BaseConfig.cs" />
     <Compile Include="Model\Settings\CatchConfig.cs" />
+    <Compile Include="Model\Settings\BerryUseFilter.cs" />
     <Compile Include="Model\Settings\ClientSettings.cs" />
     <Compile Include="Model\Settings\CaptchaConfig.cs" />
     <Compile Include="Model\Settings\ConsoleConfig.cs" />
