@@ -43,7 +43,7 @@ namespace PoGo.Necrobot.Window
             };
 
             this.DataContext = datacontext;
-
+            txtCmdInput.Text = TinyIoCContainer.Current.Resolve<UITranslation>().InputCommand; 
         }
            
         private void Grid_Loaded(object sender, RoutedEventArgs e)
