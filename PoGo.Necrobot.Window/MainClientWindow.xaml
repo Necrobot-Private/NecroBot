@@ -89,7 +89,7 @@
                     </Rectangle>
                     <TextBlock Margin="4 0 0 0" Name="consoleMenuText"
                                VerticalAlignment="Center"
-                               Text="{Binding Source=ShowConsole, Converter={StaticResource I18NConveter}}" />
+                               Text="{Binding Source=ShowConsole, Converter={StaticResource ResourceKey=I18NConveter}}" />
                 </StackPanel>
 
             </Button>
@@ -266,7 +266,7 @@
                              Foreground="White" 
                              BorderBrush="Aquamarine" 
                              BorderThickness="1" 
-                             Text="Enter your command" 
+                             Text="{Binding Source=InputCommand, Converter={StaticResource ResourceKey=I18NConveter}}" 
                              MouseDown="txtCmdInput_MouseDown"
                              KeyDown="txtCmdInput_KeyDown"
                              />

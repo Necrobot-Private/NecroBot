@@ -37,6 +37,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
             if (googleWalk == null)
             {
                 await RedirectToNextFallbackStrategy(session.LogicSettings, targetLocation, functionExecutedWhileWalking, session, cancellationToken, walkSpeed);
+                return;
             }
 
             base.OnStartWalking(session, targetLocation, googleWalk.Distance);

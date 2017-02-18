@@ -45,6 +45,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
                     session,
                     cancellationToken
                 );
+                return;
             }
 
             base.OnStartWalking(session, targetLocation, mapzenWalk.Distance);

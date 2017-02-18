@@ -14,8 +14,10 @@ namespace PoGo.NecroBot.Logic.Common
     public class UITranslation
     {
         #region Main screen
+            
         [Description("Accounts")]
         public string AccountSetting { get; set; }
+        
         [Description("Map & Journey")]
         public string MapTabTitle { get; set; }
 
@@ -27,6 +29,7 @@ namespace PoGo.NecroBot.Logic.Common
 
         [Description("Sniper")]
         public string SniperTabTitle { get; set; }
+        
         [Description("Bot switching account... ")]
         public string AccountSwitching { get; set; }
 
@@ -45,7 +48,6 @@ namespace PoGo.NecroBot.Logic.Common
         [Description("Switch")]
         public string Switch { get; set; }
 
-
         [Description("Hide Console")]
         public string HideConsole { get; set; }
 
@@ -54,6 +56,9 @@ namespace PoGo.NecroBot.Logic.Common
 
         [Description("Theme")]
         public string Theme { get; set; }
+        
+        [Description("Enter your command")]
+        public string InputCommand { get; set; }
 
         #endregion
         #region Map
@@ -61,16 +66,18 @@ namespace PoGo.NecroBot.Logic.Common
         [Description("Zoom In")]
         public string ZoomIn { get; set; }
 
-
         [Description("ZoomOut")]
         public string ZoomOut { get; set; }
 
         [Description("Clear map")]
         public string ClearMap { get; set; }
+        
         [Description("Walk Here")]
         public string WalkHere { get; set; }
+        
         #endregion
         #region snipe screen
+            
         [Description("100% IV")]
         public string TabSnipeIV100 { get; set; }
 
@@ -88,8 +95,10 @@ namespace PoGo.NecroBot.Logic.Common
 
         [Description("Add Manual Coordinate")]
         public string TabSnipeAddManualCoord { get; set; }
+        
         [Description("Snipe??")]
         public string SnipeButton { get; set; }
+        
         [Description("FreeInput")]
         public string FreeInput { get; set; }
 
@@ -101,15 +110,19 @@ namespace PoGo.NecroBot.Logic.Common
 
         #endregion
         #region Pokemon Inventory
+            
         [Description("Search & Filters")]
         public string FilterAndSearch { get; set; }
 
         [Description("Pokedex")]
         public string Pokedex { get; set; }
+        
         [Description("Enter Pokemon Name")]
         public string SearchPokemonName { get; set; }
+        
         [Description("Select Pokemon %IV")]
         public string SearchPokemonIV { get; set; }
+        
         [Description("Select Pokemon Level")]
         public string SearchPokemonLevel { get; set; }
 
@@ -124,6 +137,7 @@ namespace PoGo.NecroBot.Logic.Common
 
         [Description("Do you want to powerup this pokemon? Normal power up is do x time power up. Max power up is powerup to maximun level up to your candy, stardust and player level.")]
         public string PowerUpDescription { get; set; }
+        
         [Description("Normal Power Up")]
         public string NormalPowerup { get; set; }
 
@@ -142,19 +156,14 @@ namespace PoGo.NecroBot.Logic.Common
         [Description("Name")]
         public string PokemonName { get; set; }
 
-
         [Description("HP")]
         public string HP { get; set; }
-
-
 
         [Description("Move1")]
         public string Move1 { get; set; }
 
-
         [Description("Move2")]
         public string Move2 { get; set; }
-
 
         [Description("IV")]
         public string IV { get; set; }
@@ -173,9 +182,16 @@ namespace PoGo.NecroBot.Logic.Common
 
         [Description("Location")]
         public string CaughtLocation { get; set; }
+        
+        [Description("Set Buddy")]
+        public string SetBuddy { get; set; }
+        
+        [Description("Actions")]
+        public string Actions { get; set; }
 
         #endregion
         #region Popup
+            
         [Description("Latitude")]
         public string Latitude { get; set; }
 
@@ -202,10 +218,13 @@ namespace PoGo.NecroBot.Logic.Common
 
         [Description("Pokestops: {0}")]
         public string PokestopLimit { get; set; }
+        
         [Description("Pokemons: {0}")]
         public string CatchLimit { get; set; }
+        
         [Description("Speed: {0:0.00} km/h")]
         public string WalkSpeed { get; set; }
+        
         [Description("Transfered: {0}")]
         public string PokemonTransfered { get; set; }
         [Description("HIDE")]
@@ -213,6 +232,7 @@ namespace PoGo.NecroBot.Logic.Common
         [Description("SHOW")]
         public string Show { get; set; }
         #endregion
+            
         private Dictionary<string, string> translations = new Dictionary<string, string>();
         private string languageCode = "en";
         private string translationFile = @"Config\Translations\ui.{0}.json";
