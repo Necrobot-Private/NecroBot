@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 using POGOProtos.Enums;
+using System;
 
 namespace PoGo.NecroBot.Logic.Model.Settings
 {
@@ -62,11 +63,26 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public string Operator { get; set; }
 
         [NecrobotConfig(Key = "Evolve To", Position = 6, Description = "Select branch to envolve to for multiple branch pokemon like Poliwirl")]
-        [DefaultValue(null)]
+        [DefaultValue("")]
         [EnumDataType(typeof(Operator))]
-        [JsonProperty(Required = Required.AllowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 6)]
-        public PokemonId EvolveTo { get; set; }
-        
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 6)]
+        public string EvolveTo { get; set; }
+
+        [JsonIgnore]
+        public PokemonId EvolveToPokemonId
+        {
+            get
+            {
+                PokemonId id = PokemonId.Missingno;
+
+                if (Enum.TryParse<PokemonId>(this.EvolveTo, out id))
+                {
+                    return id;
+                }
+
+                return id;
+            }
+        }
         internal static Dictionary<PokemonId, EvolveFilter> Default()
         {
             return new Dictionary<PokemonId, EvolveFilter>
