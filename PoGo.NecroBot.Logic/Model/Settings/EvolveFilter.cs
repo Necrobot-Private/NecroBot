@@ -29,7 +29,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         [NecrobotConfig(IsPrimaryKey = true, Key = "Enable Envolve", Description = "Allow bot auto evolve this pokemon", Position = 1)]
         [DefaultValue(false)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
+        [JsonIgnore]
         public bool EnableEvolve { get; set; }
 
         [NecrobotConfig(Key = "Evolve Min IV", Description = "Min IV for auto evolve", Position = 2)]
@@ -61,6 +61,12 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 5)]
         public string Operator { get; set; }
 
+        [NecrobotConfig(Key = "Evolve To", Position = 6, Description = "Select branch to envolve to for multiple branch pokemon like Poliwirl")]
+        [DefaultValue(null)]
+        [EnumDataType(typeof(Operator))]
+        [JsonProperty(Required = Required.AllowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 6)]
+        public PokemonId EvolveTo { get; set; }
+        
         internal static Dictionary<PokemonId, EvolveFilter> Default()
         {
             return new Dictionary<PokemonId, EvolveFilter>

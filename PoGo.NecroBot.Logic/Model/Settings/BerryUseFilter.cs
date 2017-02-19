@@ -25,6 +25,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             this.Pokemons = pokemons;
             this.Operator = op;
             this.MaxItemsUsePerPokemon = maxUse;
+            this.UseIfExceedBagRecycleFilter = true;
         }
                          
         [NecrobotConfig(Key = "Min IV", Description = "Min IV to use this item", Position = 2)]
@@ -64,6 +65,12 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 7)]
 
         public int MaxItemsUsePerPokemon { get; set; }
+
+
+        [NecrobotConfig(Key = "UseIfExceedFilter", Position = 8, Description = "If your items exceed recycle filter, ot will always use this when possible")]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 7)]
+        [DefaultValue(true)]
+        public bool UseIfExceedBagRecycleFilter { get; set; }
 
         internal static Dictionary<ItemId, ItemUseFilter> Default()
         {
