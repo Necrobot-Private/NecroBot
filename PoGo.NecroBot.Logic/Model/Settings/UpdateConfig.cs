@@ -10,7 +10,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         {
         }
 
-        public const int CURRENT_SCHEMA_VERSION = 15;
+        public const int CURRENT_SCHEMA_VERSION = 16;
 
         [DefaultValue(CURRENT_SCHEMA_VERSION)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
