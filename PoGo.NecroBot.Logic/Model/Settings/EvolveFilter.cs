@@ -26,7 +26,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             this.MinIV = evolveIV;
             this.MinLV = evolveLV;
             this.EvolveTo = evolveTo;
-            this.MinCP = MinCP;
+            this.MinCP = minCP;
             this.Operator = evoOperator;
         }
 
