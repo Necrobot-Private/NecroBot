@@ -140,6 +140,11 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public Dictionary<PokemonId, TransferFilter> PokemonsTransferFilter = TransferFilter.TransferFilterDefault();
 
+        [NecrobotConfig(SheetName = "Item Use Filters", Description = "Define logic to use item when catching Pokemon")]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public Dictionary<ItemId, ItemUseFilter> ItemUseFilters = ItemUseFilter.Default();
+
+        //TODO remove this list.
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public SnipeSettings PokemonToSnipe = SnipeSettings.Default();
 
@@ -166,9 +171,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public Dictionary<PokemonId, SnipeFilter> SnipePokemonFilter = SnipeFilter.SniperFilterDefault();
 
-        [NecrobotConfig(SheetName = "EvolvePokemonFilter", Description = "Setup list pokemon for auto evolve")]
+        [NecrobotConfig(SheetName = "PokemonEvolveFilter", Description = "Setup list pokemon for auto evolve")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public Dictionary<PokemonId, EvolveFilter> EvolvePokemonFilter = EvolveFilter.Default();
+        public Dictionary<PokemonId, EvolveFilter> PokemonEvolveFilter = EvolveFilter.Default();
 
         [NecrobotConfig(SheetName = "CatchPokemonFilter", Description = "Setup list pokemon for catch")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
@@ -177,17 +182,10 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [NecrobotConfig(SheetName = "BotSwitchPokemonFilter", Description = "Define the filter to switch bot in multiple account mode.")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public Dictionary<PokemonId, BotSwitchPokemonFilter> BotSwitchPokemonFilters = BotSwitchPokemonFilter.Default();
-
+        
         [NecrobotConfig(SheetName = "UIConfig", Description = "Define all parametter to display data on UI.")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
-
         public GUIConfig UIConfig = new GUIConfig();
-
-        [NecrobotConfig(SheetName = "Item Use Filters", Description = "Define logic to use item when catching Pokemon")]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
-
-        public Dictionary<ItemId, ItemUseFilter> ItemUseFilters = ItemUseFilter.Default();
-
         public GlobalSettings()
         {
             InitializePropertyDefaultValues(this);
@@ -595,6 +593,24 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                             }
                         }
 
+                        break;
+
+                    case 16:
+                        if (settings["PokemonEvolveFilter"] != null && settings["PokemonsToEvolve"] != null)
+                        {
+                            List<string> pokemonToEvolve = new List<string>();
+                            foreach (var x in settings["PokemonsToEvolve"].Children())
+                            {
+                                var pokemonName = (string)x;
+                                pokemonName = pokemonName[0].ToString().ToUpper() + new string(pokemonName.Skip(1).ToArray());
+
+                                if(settings["PokemonEvolveFilter"][pokemonName] == null )
+                                {
+                                    EvolveFilter ev = new EvolveFilter(0, 0, 0);
+                                    settings["PokemonEvolveFilter"][pokemonName] = JObject.Parse(JsonConvert.SerializeObject(ev));
+                                }
+                            }
+                        }
                         break;
                 }
             }
