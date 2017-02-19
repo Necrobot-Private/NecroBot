@@ -401,19 +401,17 @@ namespace PoGo.NecroBot.Logic.Tasks
                         }
                         else
                         await session.Client.Map.GetMapObjects(true);
-#if DEBUG
-                        Logger.Write($"Loot pokestop result: {fortSearch.Result}, distance to pokestop: {distance:0.00}m, retry: #{4-retry}");
-#endif
+
+                        Logger.Debug($"Loot pokestop result: {fortSearch.Result}, distance to pokestop: {distance:0.00}m, retry: #{4-retry}");
 
                         latitude += 0.000001;
                         longitude += 0.000001;
                         LocationUtils.UpdatePlayerLocationWithAltitude(session, new GeoCoordinatePortable.GeoCoordinate(latitude, longitude), 0);
                         retry--;
-                        //await session.Client.Map.GetMapObjects(true);
                     }
                 }
                 while (fortSearch.Result == FortSearchResponse.Types.Result.OutOfRange && retry >0);
-                Logger.Write($"Loot pokestop result: {fortSearch.Result}");
+                Logger.Debug($"Loot pokestop result: {fortSearch.Result}");
                 if (fortSearch.ExperienceAwarded > 0 && timesZeroXPawarded > 0) timesZeroXPawarded = 0;
                 if (fortSearch.ExperienceAwarded == 0 && fortSearch.Result != FortSearchResponse.Types.Result.InventoryFull)
                 {

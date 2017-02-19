@@ -572,6 +572,30 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                         }
 
                         break;
+                    case 15:
+                        List<string> existing = new List<string>();
+                        foreach (var x in settings["ItemRecycleFilter"].Children())
+                        {
+                            existing.Add((string)x["Key"]);
+                        }
+
+                        List<ItemId> newItems = new List<ItemId>() { ItemId.ItemDragonScale, ItemId.ItemUpGrade, ItemId.ItemKingsRock, ItemId.ItemSunStone, ItemId.ItemMetalCoat };
+
+                        foreach (var item in newItems)
+                        {
+                            if (!existing.Any(x => x.ToLower() == item.ToString().ToLower()))
+                            {
+                                var itemName = item.ToString();
+                                itemName = itemName.Replace("Item", "item");
+
+                                var last = settings["ItemRecycleFilter"].Children().Last();
+                                var newFilter = JObject.Parse(@"{""Key"":""" + itemName + @""",""Value"":100}");
+
+                                last.AddAfterSelf(newFilter);
+                            }
+                        }
+
+                        break;
                 }
             }
         }

@@ -272,8 +272,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             if (isFailedToStart && _startBattleCounter > 0)
             {
-                Logger.Write("Waiting extra time to try again");
-                await Task.Delay(120000);
+                Logger.Write("Waiting extra time to try again (3 min)");
+                await Task.Delay(180000);
                 await Execute(session, cancellationToken, gym, fortInfo);
             }
 
@@ -590,11 +590,18 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         public static async Task RevivePokemon(ISession session, PokemonData pokemon)
         {
-            var normalPotions = session.Inventory.GetItemAmountByType(ItemId.ItemPotion);
-            var superPotions = session.Inventory.GetItemAmountByType(ItemId.ItemSuperPotion);
-            var hyperPotions = session.Inventory.GetItemAmountByType(ItemId.ItemHyperPotion);
+            int healPower = 0;
 
-            var healPower = normalPotions * 20 + superPotions * 50 + hyperPotions * 200;
+            if (session.LogicSettings.GymConfig.SaveMaxRevives && session.Inventory.GetItemAmountByType(ItemId.ItemMaxPotion) > 0)
+                healPower = Int32.MaxValue;
+            else
+            {
+                var normalPotions = session.Inventory.GetItemAmountByType(ItemId.ItemPotion);
+                var superPotions = session.Inventory.GetItemAmountByType(ItemId.ItemSuperPotion);
+                var hyperPotions = session.Inventory.GetItemAmountByType(ItemId.ItemHyperPotion);
+
+                healPower = normalPotions * 20 + superPotions * 50 + hyperPotions * 200;
+            }
 
             var normalRevives = session.Inventory.GetItemAmountByType(ItemId.ItemRevive);
             var maxRevives = session.Inventory.GetItemAmountByType(ItemId.ItemMaxRevive);
@@ -893,7 +900,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         if (attackActionz.Any(a => a.Type == BattleActionType.ActionSwapPokemon))
                         {
                             TimedLog("Etra wait after SWAP call");
-                            await Task.Delay(3000);
+                            await Task.Delay(2000);
                         }
                     }
                     catch (APIBadRequestException)
@@ -928,7 +935,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         {
                             case BattleState.Active:
                                 _currentAttackerEnergy = attackResult.ActiveAttacker.CurrentEnergy;
-                                if (attacker == null)
+                                if (attacker == null) //start battle
                                 {
                                     if (counter == 1 || currentFortData.GymState.Memberships.Count == 1 || session.LogicSettings.GymConfig.UsePokemonToAttackOnlyByCp) //first iteration, we have good attacker
                                         attacker = attackResult.ActiveAttacker.PokemonData;
@@ -942,25 +949,40 @@ namespace PoGo.NecroBot.Logic.Tasks
                                         }
                                     }
                                 }
-                                else if (attacker != null && attacker.Id != attackResult?.ActiveAttacker?.PokemonData.Id && !session.LogicSettings.GymConfig.UsePokemonToAttackOnlyByCp)
+                                else if (attacker != null && attacker.Id != attackResult?.ActiveAttacker?.PokemonData.Id) //we died and pokemon is switched to next one
                                 {
-                                    if (wasSwithed)
-                                        wasSwithed = false;
-                                    else
+                                    bool informDie = true;
+                                    bool extraWait = true;
+                                    if (!session.LogicSettings.GymConfig.UsePokemonToAttackOnlyByCp) //we should manually switch pokemon to best one
                                     {
-                                        session.GymState.myTeam.Where(w => w.attacker.Id == attacker.Id).FirstOrDefault().hpState = 0;
-                                        TimedLog("We are switching pokemon after die");
-                                        var newAttacker = GetBestInBattle(session, attackResult.ActiveDefender.PokemonData);
-                                        if (newAttacker != null && currentFortData.GymState.Memberships.Count > 1 && !session.LogicSettings.GymConfig.UsePokemonToAttackOnlyByCp && newAttacker.Id != attackResult.ActiveAttacker.PokemonData.Id)
+                                        if (!wasSwithed && currentFortData.GymState.Memberships.Count > 1) //swap call wasn't already called, do job
                                         {
-                                            session.GymState.swithAttacker = new SwitchPokemonData(attackResult.ActiveAttacker.PokemonData.Id, newAttacker.Id);
-                                            wasSwithed = true;
+                                            session.GymState.myTeam.Where(w => w.attacker.Id == attacker.Id).FirstOrDefault().hpState = 0;
+                                            var newAttacker = GetBestInBattle(session, attackResult.ActiveDefender.PokemonData);
+                                            if (newAttacker != null && newAttacker.Id != attackResult.ActiveAttacker.PokemonData.Id)
+                                            {
+                                                session.GymState.swithAttacker = new SwitchPokemonData(attackResult.ActiveAttacker.PokemonData.Id, newAttacker.Id);
+                                                wasSwithed = true;
+                                                informDie = false; //don't inform, we just prepared swap call...
+                                                extraWait = false; //don't wait, this is in swap call
+                                            }
                                         }
                                         else
                                         {
-                                            Logger.Write(string.Format("We ware fainted in battle, new attacker is: {0} ({1} CP){2}", attacker.PokemonId, attacker.Cp, Environment.NewLine), LogLevel.Info, ConsoleColor.Magenta);
-                                            await Task.Delay(3000);
+                                            wasSwithed = false;
+                                            informDie = false;
+                                            extraWait = false; //we already waited in swap call
                                         }
+                                    }
+                                    if (informDie)
+                                    {
+                                        Logger.Write(string.Format("We ware fainted in battle, new attacker is: {0} ({1} CP)", attacker.PokemonId, attacker.Cp), LogLevel.Info, ConsoleColor.Magenta);
+                                        Logger.Write("");
+                                    }
+                                    if (extraWait)
+                                    {
+                                        TimedLog("Death penalty applied");
+                                        await Task.Delay(1000);
                                     }
                                 }
                                 attacker = attackResult.ActiveAttacker.PokemonData;
@@ -1008,34 +1030,6 @@ namespace PoGo.NecroBot.Logic.Tasks
             return lastActions;
 
         }
-
-        //private static async Task<AttackGymResponse> SwitchPokemon(ISession session, string fortId, string battleId, PokemonData newAttacker, BattleAction actionReceived, long serverMs, ulong oldAttackerId)
-        //{
-        //    TimedLog(string.Format("Prepare switching, serverTimeMS: {0} <- begin of switch procedure, server time is from responce + time from takeing it to this moment", serverMs));
-        //    const int swithTime = 1000;
-
-        //    List<BattleAction> actions = new List<BattleAction>();
-        //    actions.Add(new BattleAction()
-        //    {
-        //        Type = BattleActionType.ActionSwapPokemon,
-        //        DurationMs = swithTime,
-        //        ActionStartMs = serverMs,
-        //        ActivePokemonId = oldAttackerId,
-        //        TargetPokemonId = newAttacker.Id,
-        //        TargetIndex = -1,
-        //    });
-
-        //    TimedLog("Start switching <- call to api");
-        //    long before = DateTime.UtcNow.ToUnixTime();
-        //    AttackGymResponse resp = await session.Client.Fort.AttackGym(fortId, battleId, actions, actionReceived);
-        //    long after = DateTime.UtcNow.ToUnixTime();
-        //    TimedLog("Finished switch api call <- end of call");
-        //    if (after - before < 2 * swithTime)
-        //        await Task.Delay(2 * swithTime - (int)(after - before));
-
-        //    TimedLog(string.Format("Switching pokemon {0} result: {1}", string.Join(", ", actions), resp), true);
-        //    return resp;
-        //}
 
         public static DateTime DateTimeFromUnixTimestampMillis(long millis)
         {
@@ -1086,8 +1080,6 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 if (session.GymState.timeToDodge > now.ToUnixTime() && !canDoAttack && !canDoSpecialAttack && !skipDodge)
                 {
-                    //if (session.GymState.lastWentDodge != session.GymState.timeToDodge)
-                    //{
                         session.GymState.lastWentDodge = now.ToUnixTime();
 
                         BattleAction dodge = new BattleAction()
@@ -1101,7 +1093,6 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                         TimedLog(string.Format("Trying to dodge an attack {0}, lastSpecialAttack.DamageWindowsStartTimestampMs: {1}, serverMs: {2}", dodge, lastSpecialAttack.DamageWindowsStartTimestampMs, serverMs));
                         actions.Add(dodge);
-                    //}
                 }
                 else
                 {
@@ -1370,9 +1361,15 @@ namespace PoGo.NecroBot.Logic.Tasks
             return pokemon;
         }
 
-        private static void TimedLog(string message, bool force = false)
+        private static void TimedLog(string message, bool force)
         {
             if (_logTimings || force)
+                Logger.Write(string.Format("{0} {1}", DateTime.UtcNow.ToUnixTime(), message), LogLevel.Gym, ConsoleColor.Magenta);
+        }
+
+        private static void TimedLog(string message)
+        {
+            if (_logTimings)
                 Logger.Write(string.Format("{0} {1}", DateTime.UtcNow.ToUnixTime(), message), LogLevel.Gym, ConsoleColor.Magenta);
         }
     }

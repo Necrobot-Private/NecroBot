@@ -48,6 +48,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static string _msniperServiceUrl = "https://www.msniper.com/signalr";
 
+        private static List<PokemonId> pokedexList = new List<PokemonId>();
         #endregion Variables
 
         #region signalr msniper service
@@ -200,6 +201,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         public static void BlockSnipe()
         {
+            pokedexList = new List<PokemonId>();
             isBlocking = true;
         }
 
@@ -544,12 +546,16 @@ namespace PoGo.NecroBot.Logic.Tasks
             item.Iv = Math.Round(item.Iv, 2);
             if (session.LogicSettings.SnipePokemonNotInPokedex)
             {
-                var pokedex = session.Inventory.GetPokeDexItems();
+                //sometime the API return pokedex not correct, we need cahe this list, need lean everyetime peopellogi
+                var pokedex = session.Inventory.GetPokeDexItems().Select(x=>x.InventoryItemData?.PokedexEntry?.PokemonId).Where(x=>x != null).ToList();
+                var update = pokedex.Where(x => !pokedexList.Contains(x.Value)).ToList();
 
-                Logger.Debug($"Pokedex Entry : {pokedex.Count()}");
+                pokedexList.AddRange(update.Select(x=>x.Value));
 
-                if (pokedex.Count>0 && 
-                    !pokedex.Exists(x => x.InventoryItemData?.PokedexEntry?.PokemonId == (PokemonId)item.PokemonId) &&
+                Logger.Debug($"Pokedex Entry : {pokedexList.Count()}");
+
+                if (pokedexList.Count>0 && 
+                    !pokedexList.Exists(x => x == (PokemonId)item.PokemonId) &&
                     !pokedexSnipePokemons.Exists(p => p.PokemonId == item.PokemonId) &&
                     (!session.LogicSettings.AutosnipeVerifiedOnly ||
                      (session.LogicSettings.AutosnipeVerifiedOnly && item.IsVerified() )))
