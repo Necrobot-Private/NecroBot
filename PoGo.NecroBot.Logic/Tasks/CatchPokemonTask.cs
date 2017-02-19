@@ -655,15 +655,20 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 if (berry == null || berry.Count <= 0)
                     continue;
-
                 var filter = item.Value;
-                if ((filter.Pokemons.Count == 0 || filter.Pokemons.Contains(pokemonId)) &&
+
+                var itemRecycleFilter = session.LogicSettings.ItemRecycleFilter.FirstOrDefault(x => x.Key == item.Key);
+                
+                if ( (filter.UseIfExceedBagRecycleFilter && 
+                    !itemRecycleFilter.Equals(new KeyValuePair<ItemId, int>()) && 
+                    itemRecycleFilter.Value< berry.Count)
+                    || ((filter.Pokemons.Count == 0 || filter.Pokemons.Contains(pokemonId)) &&
                     (!AmountOfBerries.ContainsKey(item.Key) || AmountOfBerries[item.Key] < filter.MaxItemsUsePerPokemon) &&
                     filter.Operator.BoolFunc(
                           pokemonIv >= filter.UseItemMinIV,
                           pokemonCp >= filter.UseItemMinCP,
                           probability < filter.CatchProbability,
-                          pokemonLv >= filter.UseItemMinLevel))
+                          pokemonLv >= filter.UseItemMinLevel)))
                 {
                     var useCaptureItem = await session.Client.Encounter.UseItemEncounter(encounterId, item.Key, spawnPointId);
                     //berry.Count -= 1;
