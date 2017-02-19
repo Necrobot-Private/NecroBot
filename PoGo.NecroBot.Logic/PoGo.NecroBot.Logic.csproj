@@ -279,6 +279,7 @@
     <Compile Include="Event\EggIncubatorStatusEvent.cs" />
     <Compile Include="Exceptions\ActiveSwitchAccountManualException.cs" />
     <Compile Include="Exceptions\ActiveSwitchByRuleException.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="Forms\AutoUpdateForm.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -179,7 +179,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public Dictionary<PokemonId, TransferFilter> PokemonsTransferFilter => _settings.PokemonsTransferFilter;
         public Dictionary<PokemonId, UpgradeFilter> PokemonUpgradeFilters => _settings.PokemonUpgradeFilters;
         public Dictionary<PokemonId, SnipeFilter> PokemonSnipeFilters => _settings.SnipePokemonFilter;
-
+        public Dictionary<PokemonId, EvolveFilter> PokemonEvolveFilters => _settings.PokemonEvolveFilter;
         public bool StartupWelcomeDelay => _settings.ConsoleConfig.StartupWelcomeDelay;
         public bool UseGoogleWalk => _settings.GoogleWalkConfig.UseGoogleWalk;
         public double DefaultStepLength => _settings.GoogleWalkConfig.DefaultStepLength;
