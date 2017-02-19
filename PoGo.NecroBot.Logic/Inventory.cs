@@ -676,7 +676,7 @@ namespace PoGo.NecroBot.Logic
             var buddy = GetPlayerData().Result.PlayerData.BuddyPokemon?.Id;
 
             IEnumerable<PokemonData> myPokemons = GetPokemons().OrderByDescending(p => p.Cp);
-            myPokemons = myPokemons.Where(p => string.IsNullOrEmpty(p.DeployedFortId) && (!buddy.HasValue || buddy.Value == p.Id));
+            myPokemons = myPokemons.Where(p => string.IsNullOrEmpty(p.DeployedFortId) && (!buddy.HasValue || buddy.Value != p.Id));
 
             List<PokemonData> possibleEvolvePokemons = new List<PokemonData>();
 
@@ -689,7 +689,8 @@ namespace PoGo.NecroBot.Logic
                         filter.MinIV <= pokemon.Perfection(),
                         filter.MinLV <= pokemon.Level(),
                         filter.MinCP <= pokemon.CP(),
-                        (filter.Moves.Count ==0 ||
+                        (filter.Moves ==null ||
+                        filter.Moves.Count ==0 ||
                         filter.Moves.Any(x=>x[0] == pokemon.Move1 && x[1] == pokemon.Move2)
                         )
                     )

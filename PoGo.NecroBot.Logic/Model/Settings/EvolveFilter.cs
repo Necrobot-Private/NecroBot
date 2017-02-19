@@ -18,14 +18,16 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         }
 
 
-        public EvolveFilter(int evolveIV, int evolveLV, int minCP, List<List<PokemonMove>> moves = null)
+        public EvolveFilter(int evolveIV, int evolveLV, int minCP, string evoOperator = "and", string evolveTo = "", List<List<PokemonMove>> moves = null)
         {
+            this.Moves = new List<List<PokemonMove>>();
+            if (moves != null) this.Moves = moves;
             EnableEvolve = true;
             this.MinIV = evolveIV;
-            this.Moves = moves;
             this.MinLV = evolveLV;
+            this.EvolveTo = evolveTo;
             this.MinCP = MinCP;
-            this.Operator = "or";
+            this.Operator = evoOperator;
         }
 
         [NecrobotConfig(IsPrimaryKey = true, Key = "Enable Envolve", Description = "Allow bot auto evolve this pokemon", Position = 1)]
@@ -37,7 +39,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [DefaultValue(95)]
         [Range(0, 100)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
-        public int MinIV {get; set;}
+        public int MinIV { get; set; }
 
         [NecrobotConfig(Key = "Evolve Min LV", Description = "Min LV for auto evolve", Position = 3)]
         [DefaultValue(95)]
@@ -64,7 +66,6 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         [NecrobotConfig(Key = "Evolve To", Position = 6, Description = "Select branch to envolve to for multiple branch pokemon like Poliwirl")]
         [DefaultValue("")]
-        [EnumDataType(typeof(Operator))]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 6)]
         public string EvolveTo { get; set; }
 
@@ -87,9 +88,20 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         {
             return new Dictionary<PokemonId, EvolveFilter>
             {
-                {PokemonId.Zubat, new EvolveFilter(0, 0, 0, new List<List<PokemonMove>>() { })},
-                {PokemonId.Pidgey, new EvolveFilter(0, 0, 0, new List<List<PokemonMove>>() { })},
-                {PokemonId.Caterpie, new EvolveFilter(0, 0, 0, new List<List<PokemonMove>>() { })}
+                {PokemonId.Rattata, new EvolveFilter(0, 0, 0, "or")},
+                {PokemonId.Zubat, new EvolveFilter(0, 0, 0, "or")},
+                {PokemonId.Pidgey, new EvolveFilter(0, 0, 0, "or")},
+                {PokemonId.Caterpie, new EvolveFilter(0, 0, 0,  "or") },
+                {PokemonId.Weedle, new EvolveFilter(0, 0, 0,  "or") },
+
+                {PokemonId.Porygon, new EvolveFilter(100, 28, 500, "and",PokemonId.Porygon2.ToString())},
+                {PokemonId.Gloom , new EvolveFilter(100, 28, 500, "and",PokemonId.Bellossom.ToString())} ,
+                {PokemonId.Sunkern , new EvolveFilter(100, 28, 500, "and",PokemonId.Sunflora.ToString())}  ,
+                {PokemonId.Slowpoke, new EvolveFilter(100, 28, 500, "and",PokemonId.Slowking.ToString())},
+                {PokemonId.Poliwhirl , new EvolveFilter(100, 28, 500, "and",PokemonId.Politoed.ToString())},
+                {PokemonId.Seadra , new EvolveFilter(100, 28, 500, "and",PokemonId.Kingdra.ToString())},
+                {PokemonId.Dratini, new EvolveFilter(100, 30, 800, "and")}
+
             };
         }
     }

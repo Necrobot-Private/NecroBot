@@ -594,6 +594,24 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                         }
 
                         break;
+
+                    case 16:
+                        if (settings["PokemonEvolveFilter"] != null && settings["PokemonsToEvolve"] != null)
+                        {
+                            List<string> pokemonToEvolve = new List<string>();
+                            foreach (var x in settings["PokemonsToEvolve"].Children())
+                            {
+                                var pokemonName = (string)x;
+                                pokemonName = pokemonName[0].ToString().ToUpper() + new string(pokemonName.Skip(1).ToArray());
+
+                                if(settings["PokemonEvolveFilter"][pokemonName] == null )
+                                {
+                                    EvolveFilter ev = new EvolveFilter(0, 0, 0);
+                                    settings["PokemonEvolveFilter"][pokemonName] = JObject.Parse(JsonConvert.SerializeObject(ev));
+                                }
+                            }
+                        }
+                        break;
                 }
             }
         }
