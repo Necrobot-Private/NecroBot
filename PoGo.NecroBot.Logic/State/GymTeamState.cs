@@ -85,6 +85,7 @@ namespace PoGo.NecroBot.Logic.State
             {
                 gymDetails = new CachedGymGetails(session, fort);
                 _gymDetails.Add(fort.Id, gymDetails);
+                force = false;
             }
 
             if (force || gymDetails.lastCall.AddSeconds(_cacheTime) < DateTime.UtcNow)
@@ -245,7 +246,7 @@ namespace PoGo.NecroBot.Logic.State
 
         public int attackDuration
         {
-            get { return 1000; }
+            get { return 2000; }
         }
 
         public SwitchPokemonData(ulong Old, ulong New)
