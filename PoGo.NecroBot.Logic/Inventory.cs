@@ -637,7 +637,7 @@ namespace PoGo.NecroBot.Logic
             return true;
         }
 
-        public async Task<bool> CanEvolvePokemon(PokemonData pokemon)
+        public async Task<bool> CanEvolvePokemon(PokemonData pokemon, EvolveFilter appliedFilter =null)
         {
             // Can't evolve pokemon in gyms.
             if (!string.IsNullOrEmpty(pokemon.DeployedFortId))
@@ -650,7 +650,20 @@ namespace PoGo.NecroBot.Logic
             if (settings.EvolutionIds.Count == 0)
                 return false;
 
+            
             int familyCandy = GetCandyCount(pokemon.PokemonId);
+            PokemonId evolveTo = PokemonId.Missingno;
+            if(appliedFilter != null && !string.IsNullOrEmpty(appliedFilter.EvolveTo) && Enum.TryParse<PokemonId>(appliedFilter.EvolveTo, true, out evolveTo))
+            {
+                var branch = settings.EvolutionBranch.FirstOrDefault(x => x.Evolution == evolveTo);
+                if (branch == null) return false; //wrong setting, do not evolve this pokemon
+
+                var itemCount = GetItems().Count(x => x.ItemId == branch.EvolutionItemRequirement);
+
+                if (itemCount == 0 || familyCandy < branch.CandyCost) return false;
+
+            }
+            else
             // Can't evolve if not enough candy.
             if (familyCandy < settings.CandyToEvolve)
                 return false;
@@ -658,42 +671,66 @@ namespace PoGo.NecroBot.Logic
             return true;
         }
 
-        public IEnumerable<PokemonData> GetPokemonToEvolve(IEnumerable<PokemonId> filter = null)
+        public IEnumerable<PokemonData> GetPokemonToEvolve(Dictionary<PokemonId, EvolveFilter> filters = null)
         {
-            IEnumerable<PokemonData> myPokemon = GetPokemons().OrderByDescending(p => p.Cp);
+            var buddy = GetPlayerData().Result.PlayerData.BuddyPokemon?.Id;
 
-            IEnumerable<PokemonId> pokemonIds = filter as PokemonId[] ?? filter.ToArray();
-            if (pokemonIds.Any())
+            IEnumerable<PokemonData> myPokemons = GetPokemons().OrderByDescending(p => p.Cp);
+            myPokemons = myPokemons.Where(p => string.IsNullOrEmpty(p.DeployedFortId) && (!buddy.HasValue || buddy.Value != p.Id));
+
+            List<PokemonData> possibleEvolvePokemons = new List<PokemonData>();
+
+            foreach (var pokemon in myPokemons)
             {
-                myPokemon =
-                    myPokemon.Where(
-                        p => (pokemonIds.Contains(p.PokemonId)) ||
-                             (_logicSettings.EvolveAllPokemonAboveIv &&
-                              (PokemonInfo.CalculatePokemonPerfection(p) >= _logicSettings.EvolveAboveIvValue)));
-            }
-            else if (_logicSettings.EvolveAllPokemonAboveIv)
-            {
-                myPokemon =
-                    myPokemon.Where(
-                        p => PokemonInfo.CalculatePokemonPerfection(p) >= _logicSettings.EvolveAboveIvValue);
-            }
+                if (!filters.ContainsKey(pokemon.PokemonId)) continue;
+                var filter = filters[pokemon.PokemonId];
 
-            // Only get evolvable pokemon (not in gym, enough candy, etc.)
-            var evolvablePokemon = myPokemon.Where(p => CanEvolvePokemon(p).Result).ToList();
+                if(filter.Operator.BoolFunc(
+                        filter.MinIV <= pokemon.Perfection(),
+                        filter.MinLV <= pokemon.Level(),
+                        filter.MinCP <= pokemon.CP(),
+                        (filter.Moves ==null ||
+                        filter.Moves.Count ==0 ||
+                        filter.Moves.Any(x=>x[0] == pokemon.Move1 && x[1] == pokemon.Move2)
+                        )
+                    )
+                    && CanEvolvePokemon(pokemon, filter).Result
+                    )
+                {
+                    possibleEvolvePokemons.Add(pokemon);
+                }
 
+            }
+         
             var pokemonToEvolve = new List<PokemonData>();
 
             // Group pokemon by their PokemonId
-            var groupedPokemons = evolvablePokemon.GroupBy(p => p.PokemonId);
+            var groupedPokemons = possibleEvolvePokemons.GroupBy(p => p.PokemonId);
+
             foreach (var group in groupedPokemons)
             {
                 PokemonId pokemonId = group.Key;
+                //if (!filters.ContainsKey(pokemon.PokemonId)) continue;
+                var filter = filters[pokemonId];
+
                 int candiesLeft = GetCandyCount(pokemonId);
                 PokemonSettings settings = GetPokemonSettings().Result.FirstOrDefault(x => x.PokemonId == pokemonId);
                 int pokemonLeft = group.Count();
 
+                int candyNeed = settings.CandyToEvolve;
+
+                if(filter.EvolveToPokemonId!= PokemonId.Missingno)
+                {
+                    var branch = settings.EvolutionBranch.FirstOrDefault(x => x.Evolution == filter.EvolveToPokemonId);
+
+                    if(branch != null)
+                    {
+                        candyNeed = branch.CandyCost;
+                    }
+                }
+                
                 // Calculate the number of evolutions possible (taking into account +1 candy for evolve and +1 candy for transfer)
-                EvolutionCalculations evolutionInfo = CalculatePokemonEvolution(pokemonLeft, candiesLeft, settings.CandyToEvolve, 1);
+                EvolutionCalculations evolutionInfo = CalculatePokemonEvolution(pokemonLeft, candiesLeft, candyNeed, 1);
 
                 if (evolutionInfo.Evolves > 0)
                 {

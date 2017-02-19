@@ -14,6 +14,8 @@ using POGOProtos.Inventory.Item;
 using POGOProtos.Networking.Responses;
 using TinyIoC;
 using PoGo.NecroBot.Logic.Logging;
+using PoGo.NecroBot.Logic.Model.Settings;
+using POGOProtos.Enums;
 
 #endregion
 
@@ -30,7 +32,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             //await session.Inventory.RefreshCachedInventory();
 
             var pokemonToEvolveTask = session.Inventory
-                .GetPokemonToEvolve(session.LogicSettings.PokemonsToEvolve);
+                .GetPokemonToEvolve(session.LogicSettings.PokemonEvolveFilters);
             var pokemonToEvolve = pokemonToEvolveTask.Where(p => p != null).ToList();
 
             session.EventDispatcher.Send(new EvolveCountEvent
@@ -125,17 +127,36 @@ namespace PoGo.NecroBot.Logic.Tasks
             DelayingUtils.Delay(session.LogicSettings.DelayBetweenPlayerActions, 0);
         }
 
+        public static EvolveFilter GetEvolveFilter(ISession session, PokemonId id)
+        {
+            if (session.LogicSettings.PokemonEvolveFilters.ContainsKey(id))
+                return session.LogicSettings.PokemonEvolveFilters[id];
+
+            //TODO maybe use global config for evolve
+            return null;
+
+        }
+        public static ItemId GetRequireEvolveItem(ISession session, PokemonId from, PokemonId to)
+        {
+            var settings = session.Inventory.GetPokemonSettings().Result.FirstOrDefault(x => x.PokemonId == from);
+            if (settings == null) return ItemId.ItemUnknown;
+
+            var branch = settings.EvolutionBranch.FirstOrDefault(x => x.Evolution == to);
+            if (branch == null) return ItemId.ItemUnknown;
+            return branch.EvolutionItemRequirement;
+        }
         private static async Task Evolve(ISession session, List<PokemonData> pokemonToEvolve)
         {
             int sequence = 1;
             foreach (var pokemon in pokemonToEvolve)
             {
-                if (await session.Inventory.CanEvolvePokemon(pokemon))
+                var filter = GetEvolveFilter(session,pokemon.PokemonId);
+                if (await session.Inventory.CanEvolvePokemon(pokemon, null))
                 {
                     try
                     {
                         // no cancellationToken.ThrowIfCancellationRequested here, otherwise the lucky egg would be wasted.
-                        var evolveResponse = await session.Client.Inventory.EvolvePokemon(pokemon.Id);
+                        var evolveResponse = await session.Client.Inventory.EvolvePokemon(pokemon.Id ,filter== null? ItemId.ItemUnknown: GetRequireEvolveItem(session ,pokemon.PokemonId, filter.EvolveToPokemonId));
                         if (evolveResponse.Result == EvolvePokemonResponse.Types.Result.Success)
                         {
                             session.EventDispatcher.Send(new PokemonEvolveEvent
