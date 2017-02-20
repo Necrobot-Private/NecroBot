@@ -804,10 +804,6 @@ namespace PoGo.NecroBot.Logic
                         _logicSettings.UpgradePokemonIvMinimum, _logicSettings.UpgradePokemonMinimumStatsOperator,
                         _logicSettings.OnlyUpgradeFavorites);
 
-                if (appliedFilter.OnlyUpgradeFavorites && pokemon.Favorite == 1)
-                {
-                    upgradePokemon.Add(pokemon);
-                }
 
                 if ((appliedFilter.OnlyUpgradeFavorites && pokemon.Favorite == 1) ||
                      (!appliedFilter.OnlyUpgradeFavorites &&
@@ -815,8 +811,9 @@ namespace PoGo.NecroBot.Logic
                         pokemon.CP() >= appliedFilter.UpgradePokemonCpMinimum,
                         pokemon.Level() >= appliedFilter.UpgradePokemonLvlMinimum,
                         pokemon.Perfection() >= appliedFilter.UpgradePokemonIvMinimum,
-                        (appliedFilter.Moves == null || appliedFilter.Moves.Count == 0) && appliedFilter.Moves.Any(x => x[0] == pokemon.Move1 && x[1] == pokemon.Move2)
-                    )))
+                        ((appliedFilter.UpgradePokemonMinimumStatsOperator == "and" && (appliedFilter.Moves == null || appliedFilter.Moves.Count == 0)) ||
+                        (appliedFilter.Moves != null && appliedFilter.Moves.Count > 0 && appliedFilter.Moves.Any(x => x[0] == pokemon.Move1 && x[1] == pokemon.Move2))
+                    ))))
                 {
 
                     upgradePokemon.Add(pokemon);

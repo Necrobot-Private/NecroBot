@@ -203,7 +203,7 @@
                                         </MultiBinding>
                                     </Button.IsEnabled>
                                 </Button>
-                                
+
                                 <Button Name="buttonEvolve" Margin="0,0,10,0"   CommandParameter="{Binding Id}" Content="{Binding Path=IsEvolving, Converter={StaticResource ResourceKey=FriendlyEvolveTextConverter}}">
                                     <Button.IsEnabled>
                                         <MultiBinding Converter="{StaticResource ResourceKey=CheckAllowEvolveConverter}">
@@ -214,20 +214,20 @@
                                     </Button.IsEnabled>
 
                                     <Button.Triggers>
-                                            <EventTrigger RoutedEvent="Button.Click">
-                                                <EventTrigger.Actions>
-                                                    <BeginStoryboard>
-                                                        <Storyboard>
-                                                            <BooleanAnimationUsingKeyFrames
+                                        <EventTrigger RoutedEvent="Button.Click">
+                                            <EventTrigger.Actions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <BooleanAnimationUsingKeyFrames
                                                              Storyboard.TargetName="popEvoveConfirmation"
                                                              Storyboard.TargetProperty="IsOpen">
-                                                                <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="True" />
-                                                            </BooleanAnimationUsingKeyFrames>
-                                                        </Storyboard>
-                                                    </BeginStoryboard>
-                                                </EventTrigger.Actions>
-                                            </EventTrigger>
-                                        </Button.Triggers>
+                                                            <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="True" />
+                                                        </BooleanAnimationUsingKeyFrames>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </EventTrigger.Actions>
+                                        </EventTrigger>
+                                    </Button.Triggers>
                                 </Button>
                                 <Popup  x:Name="popEvoveConfirmation"
                                        PlacementTarget="{Binding ElementName=buttonEvolve}"
@@ -237,15 +237,32 @@
                                             <StackPanel Margin="20,20,20,20" >
                                                 <TextBlock TextWrapping="Wrap" Foreground="DarkOrange" Text="{Binding Source=EvolveConfirm, Converter={StaticResource I18NConveter}}" />
                                                 <StackPanel Orientation="Horizontal">
+                                                    <ListView Margin="10" ItemsSource="{Binding Path=EvolutionBranchs}">
+                                                        <ListView.ItemsPanel>
+                                                            <ItemsPanelTemplate>
+                                                                <UniformGrid Columns="3"/>
+                                                            </ItemsPanelTemplate>
+                                                        </ListView.ItemsPanel>
+
+                                                        <ListView.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <Border BorderBrush="White" BorderThickness="2">
+                                                                    <StackPanel Width="64" Margin="5,5,5,5">
+                                                                        <Button Content="{Binding Path=Pokemon}"></Button>
+                                                                    </StackPanel>
+                                                                </Border>
+                                                            </DataTemplate>
+                                                            </ListView.ItemTemplate>
+                                                    </ListView>
                                                     <Button Margin="0,20,0,20" CommandParameter="{Binding Id}" Content="{Binding Source=NormalEvolve, Converter={StaticResource I18NConveter}}" Click="btnEvolve_Click"/>
                                                     <Button Margin="40,20,0,20" CommandParameter="{Binding Id}" Content="{Binding Source=UseItemEvolve, Converter={StaticResource I18NConveter}}"/>
                                                 </StackPanel>
-                                                
+
                                             </StackPanel>
                                         </Border>
                                     </Grid>
                                 </Popup>
-                                
+
                                 <Button Name="OpenConfirmPower" Margin="0,0,10,0" Content="{Binding PowerupText, FallbackValue=Power Up}" IsEnabled="{Binding AllowPowerup, FallbackValue=false}" CommandParameter="{Binding Id}">
                                     <Button.Triggers>
                                         <EventTrigger RoutedEvent="Button.Click">

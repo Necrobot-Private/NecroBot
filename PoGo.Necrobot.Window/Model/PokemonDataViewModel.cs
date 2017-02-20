@@ -7,11 +7,17 @@ using POGOProtos.Enums;
 using POGOProtos.Settings.Master;
 using PokemonGo.RocketAPI.Util;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace PoGo.Necrobot.Window.Model
 {
+    public class EvolutionToPokemon : ViewModelBase
+    {
+        public PokemonId Pokemon { get; set; }
+        public bool AllowEvolve { get; set; }
+    }
     public class PokemonDataViewModel : ViewModelBase
     {
         public PokemonDataViewModel(ISession session, PokemonData pokemon)
@@ -19,8 +25,14 @@ namespace PoGo.Necrobot.Window.Model
             this.Session = session;
             this.PokemonData = pokemon;
             this.Displayed = true;
+            this.EvolutionBranchs = new List<EvolutionToPokemon>()
+            {
+                new EvolutionToPokemon() {Pokemon = PokemonId.Tangela, AllowEvolve = true },
+                new EvolutionToPokemon() {Pokemon = PokemonId.Tyranitar, AllowEvolve = true }
+            };
         }
 
+        public List<EvolutionToPokemon> EvolutionBranchs { get; set; }
         internal void UpdateWith(PokemonData item)
         {
             this.PokemonData = item;

@@ -26,6 +26,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         public UpgradeFilter(): base()
         {
+            this.Moves = new List<List<PokemonMove>>();
         }
 
         public UpgradeFilter(double minLevel, double upgradePokemonCpMinimum, double upgradePokemonIvMinimum,
@@ -46,7 +47,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         [NecrobotConfig(Key = "Min Level To Upgrade", Position = 2, Description ="Min Level to upgrade")]
         [Range(0,100)]
-        [EnumDataType(typeof(CPorIv))]
+        [DefaultValue(30)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
         public double UpgradePokemonLvlMinimum { get; set; }
 
@@ -74,8 +75,8 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool OnlyUpgradeFavorites { get; set; }
 
         [NecrobotConfig(Key = "Move Set", Position = 6, Description = "Only update if move set match with pair in the list")]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 6)]
-        public List<List<PokemonMove>> Moves { get; set; }
+        [JsonProperty(Required = Required.AllowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 6)]
+        public List<List<PokemonMove>> Moves { get; set; } = new List<List<PokemonMove>>();
 
         internal static Dictionary<PokemonId, UpgradeFilter> Default()
         {
