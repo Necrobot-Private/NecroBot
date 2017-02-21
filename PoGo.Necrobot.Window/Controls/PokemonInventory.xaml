@@ -142,7 +142,9 @@
                   VerticalScrollBarVisibility="Visible"
                     ScrollViewer.CanContentScroll="True"
       ScrollViewer.VerticalScrollBarVisibility="Visible"
-      ScrollViewer.HorizontalScrollBarVisibility="Visible" >
+      ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                  GridLinesVisibility="All"
+                  >
 
             <DataGrid.ContextMenu>
                 <ContextMenu >

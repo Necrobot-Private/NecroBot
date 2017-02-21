@@ -70,6 +70,17 @@ namespace PoGo.NecroBot.Logic
 
         }
 
+        public void BlockCurrentBot(int expired = 60)
+        {
+            var session = TinyIoCContainer.Current.Resolve<ISession>();
+            var currentAccount = this.Accounts.FirstOrDefault(
+                x => (x.AuthType == AuthType.Ptc && x.PtcUsername == session.Settings.PtcUsername) ||
+                     (x.AuthType == AuthType.Google && x.GoogleUsername == session.Settings.GoogleUsername));
+
+            currentAccount.ReleaseBlockTime = DateTime.Now.AddMinutes(expired);
+            UpdateDatabase(currentAccount);
+        }
+
         private void LoadDataFromDB()
         {
             using (var db = new LiteDatabase(ACCOUNT_DB_NAME))
@@ -224,7 +235,6 @@ namespace PoGo.NecroBot.Logic
                      (x.AuthType == AuthType.Google && x.GoogleUsername == session.Settings.GoogleUsername));
 
 
-            var current = this.Accounts.FirstOrDefault(x => x.IsRunning);
             if (currentAccount != null)
             {
                 currentAccount.RuntimeTotal += (DateTime.Now - currentAccount.LoggedTime).TotalMinutes;

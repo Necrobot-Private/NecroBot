@@ -14,6 +14,7 @@ using PoGo.NecroBot.Logic.Utils;
 using PokemonGo.RocketAPI.Exceptions;
 using static System.Threading.Tasks.Task;
 using static PoGo.NecroBot.Logic.Utils.PushNotificationClient;
+using TinyIoC;
 
 #endregion
 
@@ -168,17 +169,17 @@ namespace PoGo.NecroBot.Logic.State
                     session.EventDispatcher.Send(new WarnEvent { Message = $"Switch bot account activated by : {se.MatchedRule.ToString()}  - {se.ReachedValue} " });
                     if (se.MatchedRule == SwitchRules.EmptyMap)
                     {
-                        session.BlockCurrentBot(90);
+                        TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(90);
                         session.ReInitSessionWithNextBot();
                     }
                     else if (se.MatchedRule == SwitchRules.PokestopSoftban)
                     {
-                        session.BlockCurrentBot();
+                        TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot();
                         session.ReInitSessionWithNextBot();
                     }
                     else if (se.MatchedRule == SwitchRules.CatchFlee)
                     {
-                        session.BlockCurrentBot(60);
+                        TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(60);
                         session.ReInitSessionWithNextBot();
                     }
                     else
@@ -194,7 +195,7 @@ namespace PoGo.NecroBot.Logic.State
                             #pragma warning restore 4014
                             session.EventDispatcher.Send(new WarnEvent() { Message = $"You reach limited. bot will sleep for {session.LogicSettings.MultipleBotConfig.OnLimitPauseTimes} min" });
 
-                            session.BlockCurrentBot(session.LogicSettings.MultipleBotConfig.OnLimitPauseTimes);
+                            TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(session.LogicSettings.MultipleBotConfig.OnLimitPauseTimes);
 
                             session.ReInitSessionWithNextBot();
                         }
@@ -224,7 +225,7 @@ namespace PoGo.NecroBot.Logic.State
                         if (apiCallFailured > 20)
                         {
                             apiCallFailured = 0;
-                            session.BlockCurrentBot(30);
+                            TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(30);
                             session.ReInitSessionWithNextBot();
                         }
                     }
@@ -235,7 +236,7 @@ namespace PoGo.NecroBot.Logic.State
                     session.EventDispatcher.Send(new ErrorEvent {Message = "Current Operation was canceled."});
                     if (session.LogicSettings.AllowMultipleBot)
                     {
-                        session.BlockCurrentBot(30);
+                        TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(30);
                         session.ReInitSessionWithNextBot();
                     }
                     state = new LoginState();
@@ -251,7 +252,7 @@ namespace PoGo.NecroBot.Logic.State
 
                     if (session.LogicSettings.AllowMultipleBot)
                     {
-                        session.BlockCurrentBot(24 * 60); //need remove acc
+                        TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(24 * 60); //need remove acc
                         session.ReInitSessionWithNextBot();
                         state = new LoginState();
                     }
@@ -310,11 +311,12 @@ namespace PoGo.NecroBot.Logic.State
                     {
                         await SendNotification(session, $"Captcha required {session.Settings.PtcUsername}{session.Settings.GoogleUsername}", session.Translation.GetTranslation(TranslationString.CaptchaShown), true);
                         session.EventDispatcher.Send(new WarnEvent { Message = session.Translation.GetTranslation(TranslationString.CaptchaShown) });
+                        Logger.Debug("Captcha not resolved");
                         if (session.LogicSettings.AllowMultipleBot)
                         {
-                            session.BlockCurrentBot(15);
+                            Logger.Debug("Change account");
+                            TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(15);
                             session.ReInitSessionWithNextBot();
-
                             state = new LoginState();
                         }
                         else
