@@ -20,5 +20,6 @@ namespace PoGo.NecroBot.Logic.Event
         public int Sequence { get; set; }
         public PokemonData EvolvedPokemon { get; set; }
         public ulong OriginalId { get; set; }
+        public bool Cancelled { get; set; }
     }
 }

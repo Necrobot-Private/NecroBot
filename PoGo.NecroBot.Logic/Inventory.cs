@@ -47,6 +47,11 @@ namespace PoGo.NecroBot.Logic
             return family;
         }
 
+        internal PokemonSettings GetPokemonSetting(PokemonId pokemonId)
+        {
+            return GetPokemonSettings().Result.FirstOrDefault(p => p.PokemonId == pokemonId);
+        }
+
         public int GetCandyCount(PokemonId id)
         {
             Candy candy = GetCandyFamily(id);
@@ -206,7 +211,7 @@ namespace PoGo.NecroBot.Logic
 
                 var settings = pokemonSettings.FirstOrDefault(x => x.PokemonId == pokemonGroupToTransfer.Key);
 
-                if(settings != null && 
+                if (settings != null &&
                     pokemonsToEvolve.Contains(pokemonGroupToTransfer.Key) &&
                     settings.CandyToEvolve > 0 &&
                     settings.EvolutionIds.Count != 0)
@@ -637,7 +642,7 @@ namespace PoGo.NecroBot.Logic
             return true;
         }
 
-        public async Task<bool> CanEvolvePokemon(PokemonData pokemon, EvolveFilter appliedFilter =null)
+        public async Task<bool> CanEvolvePokemon(PokemonData pokemon, EvolveFilter appliedFilter = null)
         {
             // Can't evolve pokemon in gyms.
             if (!string.IsNullOrEmpty(pokemon.DeployedFortId))
@@ -650,18 +655,20 @@ namespace PoGo.NecroBot.Logic
             if (settings.EvolutionIds.Count == 0)
                 return false;
 
-            
+
             int familyCandy = GetCandyCount(pokemon.PokemonId);
             PokemonId evolveTo = PokemonId.Missingno;
-            if(appliedFilter != null && !string.IsNullOrEmpty(appliedFilter.EvolveTo) && Enum.TryParse<PokemonId>(appliedFilter.EvolveTo, true, out evolveTo))
+            if (appliedFilter != null && !string.IsNullOrEmpty(appliedFilter.EvolveTo) && Enum.TryParse<PokemonId>(appliedFilter.EvolveTo, true, out evolveTo))
             {
                 var branch = settings.EvolutionBranch.FirstOrDefault(x => x.Evolution == evolveTo);
                 if (branch == null) return false; //wrong setting, do not evolve this pokemon
 
-                var itemCount = GetItems().Count(x => x.ItemId == branch.EvolutionItemRequirement);
+                if (branch.EvolutionItemRequirement != ItemId.ItemUnknown)
+                {
+                    var itemCount = GetItems().Count(x => x.ItemId == branch.EvolutionItemRequirement);
 
-                if (itemCount == 0 || familyCandy < branch.CandyCost) return false;
-
+                    if (itemCount == 0 || familyCandy < branch.CandyCost) return false;
+                }
             }
             else
             // Can't evolve if not enough candy.
@@ -685,13 +692,13 @@ namespace PoGo.NecroBot.Logic
                 if (!filters.ContainsKey(pokemon.PokemonId)) continue;
                 var filter = filters[pokemon.PokemonId];
 
-                if(filter.Operator.BoolFunc(
+                if (filter.Operator.BoolFunc(
                         filter.MinIV <= pokemon.Perfection(),
                         filter.MinLV <= pokemon.Level(),
                         filter.MinCP <= pokemon.CP(),
-                        (filter.Moves ==null ||
-                        filter.Moves.Count ==0 ||
-                        filter.Moves.Any(x=>x[0] == pokemon.Move1 && x[1] == pokemon.Move2)
+                        (filter.Moves == null ||
+                        filter.Moves.Count == 0 ||
+                        filter.Moves.Any(x => x[0] == pokemon.Move1 && x[1] == pokemon.Move2)
                         )
                     )
                     && CanEvolvePokemon(pokemon, filter).Result
@@ -701,7 +708,7 @@ namespace PoGo.NecroBot.Logic
                 }
 
             }
-         
+
             var pokemonToEvolve = new List<PokemonData>();
 
             // Group pokemon by their PokemonId
@@ -719,16 +726,16 @@ namespace PoGo.NecroBot.Logic
 
                 int candyNeed = settings.CandyToEvolve;
 
-                if(filter.EvolveToPokemonId!= PokemonId.Missingno)
+                if (filter.EvolveToPokemonId != PokemonId.Missingno)
                 {
                     var branch = settings.EvolutionBranch.FirstOrDefault(x => x.Evolution == filter.EvolveToPokemonId);
 
-                    if(branch != null)
+                    if (branch != null)
                     {
                         candyNeed = branch.CandyCost;
                     }
                 }
-                
+
                 // Calculate the number of evolutions possible (taking into account +1 candy for evolve and +1 candy for transfer)
                 EvolutionCalculations evolutionInfo = CalculatePokemonEvolution(pokemonLeft, candiesLeft, candyNeed, 1);
 
@@ -793,58 +800,34 @@ namespace PoGo.NecroBot.Logic
             if (!_logicSettings.AutomaticallyLevelUpPokemon)
                 return upgradePokemon;
 
-            var myPokemon = GetPokemons().Where(p => CanUpgradePokemon(p));
+            var myPokemons = GetPokemons().Where(p => CanUpgradePokemon(p));
 
-            var grouped = myPokemon.GroupBy(p => p.PokemonId);
 
-            Parallel.ForEach(grouped, (group) =>
+            foreach (var pokemon in myPokemons)
             {
-                var appliedFilter = _logicSettings.PokemonUpgradeFilters.ContainsKey(group.Key)
-                    ? _logicSettings.PokemonUpgradeFilters[group.Key]
-                    : new UpgradeFilter(_logicSettings.LevelUpByCPorIv, _logicSettings.UpgradePokemonCpMinimum,
+                var appliedFilter = _logicSettings.PokemonUpgradeFilters.ContainsKey(pokemon.PokemonId)
+                    ? _logicSettings.PokemonUpgradeFilters[pokemon.PokemonId]
+                    : new UpgradeFilter(_logicSettings.UpgradePokemonLvlMinimum, _logicSettings.UpgradePokemonCpMinimum,
                         _logicSettings.UpgradePokemonIvMinimum, _logicSettings.UpgradePokemonMinimumStatsOperator,
                         _logicSettings.OnlyUpgradeFavorites);
 
-                IEnumerable<PokemonData> highestPokemonForUpgrade =
-                    (appliedFilter.UpgradePokemonMinimumStatsOperator.ToLower().Equals("and"))
-                        ? group.Where(
-                                p => (p.Cp >= appliedFilter.UpgradePokemonCpMinimum &&
-                                      PokemonInfo.CalculatePokemonPerfection(p) >=
-                                      appliedFilter.UpgradePokemonIvMinimum))
-                            .OrderByDescending(p => p.Cp)
-                            .ToList()
-                        : group.Where(
-                                p => (p.Cp >= appliedFilter.UpgradePokemonCpMinimum ||
-                                      PokemonInfo.CalculatePokemonPerfection(p) >=
-                                      appliedFilter.UpgradePokemonIvMinimum))
-                            .OrderByDescending(p => p.Cp)
-                            .ToList();
 
-                if (appliedFilter.OnlyUpgradeFavorites)
+                if ((appliedFilter.OnlyUpgradeFavorites && pokemon.Favorite == 1) ||
+                     (!appliedFilter.OnlyUpgradeFavorites &&
+                        appliedFilter.UpgradePokemonMinimumStatsOperator.BoolFunc(
+                        pokemon.CP() >= appliedFilter.UpgradePokemonCpMinimum,
+                        pokemon.Level() >= appliedFilter.UpgradePokemonLvlMinimum,
+                        pokemon.Perfection() >= appliedFilter.UpgradePokemonIvMinimum,
+                        ((appliedFilter.UpgradePokemonMinimumStatsOperator == "and" && (appliedFilter.Moves == null || appliedFilter.Moves.Count == 0)) ||
+                        (appliedFilter.Moves != null && appliedFilter.Moves.Count > 0 && appliedFilter.Moves.Any(x => x[0] == pokemon.Move1 && x[1] == pokemon.Move2))
+                    ))))
                 {
-                    highestPokemonForUpgrade = highestPokemonForUpgrade.Where(i => i.Favorite == 1);
+
+                    upgradePokemon.Add(pokemon);
                 }
 
-                var upgradeableList = (appliedFilter.LevelUpByCPorIv.ToLower().Equals("iv"))
-                    ? highestPokemonForUpgrade.OrderByDescending(PokemonInfo.CalculatePokemonPerfection).ToList()
-                    : highestPokemonForUpgrade.OrderByDescending(p => p.Cp).ToList();
-                lock (upgradePokemon)
-                {
-                    upgradePokemon.AddRange(upgradeableList);
-                }
-            });
+            }
             return upgradePokemon;
-            //IEnumerable<PokemonData> highestPokemonForUpgrade = (_logicSettings.UpgradePokemonMinimumStatsOperator.ToLower().Equals("and")) ?
-            //    myPokemon.Where(
-            //            p => (p.Cp >= _logicSettings.UpgradePokemonCpMinimum &&
-            //                PokemonInfo.CalculatePokemonPerfection(p) >= _logicSettings.UpgradePokemonIvMinimum)).OrderByDescending(p => p.Cp).ToList() :
-            //    myPokemon.Where(
-            //        p => (p.Cp >= _logicSettings.UpgradePokemonCpMinimum ||
-            //            PokemonInfo.CalculatePokemonPerfection(p) >= _logicSettings.UpgradePokemonIvMinimum)).OrderByDescending(p => p.Cp).ToList();
-
-            //return upgradePokemon = (_logicSettings.LevelUpByCPorIv.ToLower().Equals("iv")) ?
-            //        highestPokemonForUpgrade.OrderByDescending(PokemonInfo.CalculatePokemonPerfection).ToList() :
-            //        highestPokemonForUpgrade.OrderByDescending(p => p.Cp).ToList();
         }
 
         public TransferFilter GetPokemonTransferFilter(PokemonId pokemon)

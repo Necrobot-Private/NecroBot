@@ -244,5 +244,6 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         string DefaultBuddyPokemon { get; }
         bool AutoFinishTutorial { get;  }
         Dictionary<ItemId, ItemUseFilter> ItemUseFilters { get; }
+        double UpgradePokemonLvlMinimum { get; }
     }
 }

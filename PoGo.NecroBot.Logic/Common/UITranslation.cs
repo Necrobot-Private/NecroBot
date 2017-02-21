@@ -110,7 +110,12 @@ namespace PoGo.NecroBot.Logic.Common
 
         #endregion
         #region Pokemon Inventory
-            
+        
+        [Description("This pokemon can be evolve to below pokemon , please select the branch you want to evolve to")]
+        public string EvolveConfirm { get; set; }
+
+        [Description("Evolve Pokemon")]
+        public string EvolvePopupCaption { get; set; }
         [Description("Search & Filters")]
         public string FilterAndSearch { get; set; }
 
