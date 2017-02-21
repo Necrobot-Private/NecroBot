@@ -22,20 +22,9 @@ namespace PoGo.Necrobot.Window.Controls
         public ISession Session { get; set; }
         public event PokemonItemSelected OnPokemonItemSelected;
 
-        //public static readonly DependencyProperty PokemonsProperty =
-        // DependencyProperty.Register("Pokemons", typeof(string),
-        //   typeof(List<PokemonData>), new PropertyMetadata(""));
-
-        //public List<PokemonData> Pokemons
-        //{
-        //    get { return (List<PokemonData>)GetValue(PokemonsProperty); }
-        //    set { SetValue(PokemonsProperty, value); }
-        //}
         public PokemonInventory()
         {
             InitializeComponent();
-
-            // gridData.ItemsSource = this.DataContext as List<PokemonData>;
         }
 
         private void gridData_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -112,10 +101,10 @@ namespace PoGo.Necrobot.Window.Controls
         {
             var model = this.DataContext as PokemonListViewModel;
 
-            ulong pokemonId = (ulong) ((Button) sender).CommandParameter;
-            model.Evolve(pokemonId);
+            EvolutionToPokemon evolveTo = (EvolutionToPokemon) ((Button) sender).CommandParameter;
+            model.Evolve(evolveTo.OriginPokemonId);
 
-            Task.Run(async () => { await EvolveSpecificPokemonTask.Execute(Session, pokemonId); });
+            Task.Run(async () => { await EvolveSpecificPokemonTask.Execute(Session, evolveTo.OriginPokemonId, evolveTo.Pokemon); });
         }
 
         private void btnFavorite_Click(object sender, RoutedEventArgs e)

@@ -81,6 +81,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool UseKeepMinLvl => _settings.PokemonConfig.UseKeepMinLvl;
         public bool AutomaticallyLevelUpPokemon => _settings.PokemonConfig.AutomaticallyLevelUpPokemon;
         public bool OnlyUpgradeFavorites => _settings.PokemonConfig.OnlyUpgradeFavorites;
+        public double UpgradePokemonLvlMinimum => _settings.PokemonConfig.UpgradePokemonLvlMinimum;
         public bool UseLevelUpList => _settings.PokemonConfig.UseLevelUpList;
         public int AmountOfTimesToUpgradeLoop => _settings.PokemonConfig.AmountOfTimesToUpgradeLoop;
         public string LevelUpByCPorIv => _settings.PokemonConfig.LevelUpByCPorIv;

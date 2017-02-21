@@ -135,6 +135,10 @@ namespace PoGo.Necrobot.Window.Model
         internal void OnEvolved(PokemonEvolveEvent ev)
         {
             var exist = Get(ev.OriginalId);
+            if(ev.Cancelled && exist!=null)
+            {
+                exist.IsEvolving = false;
+            } 
             if (ev.Result == POGOProtos.Networking.Responses.EvolvePokemonResponse.Types.Result.Success)
             {
                 Candy candy = this.Session.Inventory.GetCandyFamily(ev.EvolvedPokemon.PokemonId);
