@@ -75,6 +75,7 @@ namespace PoGo.Necrobot.Window.Model
             else
                 if (grade == PokemonGrades.Legendary ||
                 grade == PokemonGrades.VeryRare ||
+                grade == PokemonGrades.Epic ||
                 grade == PokemonGrades.Rare)
             {
                 HandleRarePokemon(model);

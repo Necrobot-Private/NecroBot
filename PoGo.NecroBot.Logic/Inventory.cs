@@ -47,6 +47,11 @@ namespace PoGo.NecroBot.Logic
             return family;
         }
 
+        internal PokemonSettings GetPokemonSetting(PokemonId pokemonId)
+        {
+            return GetPokemonSettings().Result.FirstOrDefault(p => p.PokemonId == pokemonId);
+        }
+
         public int GetCandyCount(PokemonId id)
         {
             Candy candy = GetCandyFamily(id);
@@ -658,10 +663,12 @@ namespace PoGo.NecroBot.Logic
                 var branch = settings.EvolutionBranch.FirstOrDefault(x => x.Evolution == evolveTo);
                 if (branch == null) return false; //wrong setting, do not evolve this pokemon
 
-                var itemCount = GetItems().Count(x => x.ItemId == branch.EvolutionItemRequirement);
+                if (branch.EvolutionItemRequirement != ItemId.ItemUnknown)
+                {
+                    var itemCount = GetItems().Count(x => x.ItemId == branch.EvolutionItemRequirement);
 
-                if (itemCount == 0 || familyCandy < branch.CandyCost) return false;
-
+                    if (itemCount == 0 || familyCandy < branch.CandyCost) return false;
+                }
             }
             else
             // Can't evolve if not enough candy.
