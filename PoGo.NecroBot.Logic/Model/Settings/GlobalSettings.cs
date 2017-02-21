@@ -612,19 +612,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                             }
                         }
                         break;
-                    //case 17:
-                    //    //Add moves to UpgradeFilters
-
-                    //    if (settings["PokemonUpgradeFilters"] != null)
-                    //    {
-                    //        foreach (var x in settings["PokemonUpgradeFilters"].Children())
-                    //        {
-                    //            var empty = new List<List<PokemonMove>>();
-                    //            //x.Last.AddAfterSelf(JObject.Parse(JsonConvert.SerializeObject("{\"Moves\": []")));
-                    //        }
-                    //    }
-
-                        break;
+                    
                 }
             }
         }

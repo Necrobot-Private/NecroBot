@@ -75,7 +75,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool OnlyUpgradeFavorites { get; set; }
 
         [NecrobotConfig(Key = "Move Set", Position = 6, Description = "Only update if move set match with pair in the list")]
-        [JsonProperty(Required = Required.AllowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 6)]
+        [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 6)]
         public List<List<PokemonMove>> Moves { get; set; } = new List<List<PokemonMove>>();
 
         internal static Dictionary<PokemonId, UpgradeFilter> Default()
