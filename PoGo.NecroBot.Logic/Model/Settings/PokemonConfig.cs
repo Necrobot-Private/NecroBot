@@ -433,5 +433,10 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 65)]
 
         public  bool RenamePokemonRespectTransferRule { get;  set; }
+
+        [NecrobotConfig(Description = "Minium pokemon level to upgrade", Position = 67)]
+        [DefaultValue(30)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 65)]
+        public double UpgradePokemonLvlMinimum { get;  set; }
     }
 }

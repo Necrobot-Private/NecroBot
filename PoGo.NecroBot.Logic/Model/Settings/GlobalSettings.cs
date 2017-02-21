@@ -182,7 +182,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [NecrobotConfig(SheetName = "BotSwitchPokemonFilter", Description = "Define the filter to switch bot in multiple account mode.")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public Dictionary<PokemonId, BotSwitchPokemonFilter> BotSwitchPokemonFilters = BotSwitchPokemonFilter.Default();
-        
+
         [NecrobotConfig(SheetName = "UIConfig", Description = "Define all parametter to display data on UI.")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public GUIConfig UIConfig = new GUIConfig();
@@ -604,7 +604,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                                 var pokemonName = (string)x;
                                 pokemonName = pokemonName[0].ToString().ToUpper() + new string(pokemonName.Skip(1).ToArray());
 
-                                if(settings["PokemonEvolveFilter"][pokemonName] == null )
+                                if (settings["PokemonEvolveFilter"][pokemonName] == null)
                                 {
                                     EvolveFilter ev = new EvolveFilter(0, 0, 0);
                                     settings["PokemonEvolveFilter"][pokemonName] = JObject.Parse(JsonConvert.SerializeObject(ev));
@@ -612,6 +612,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                             }
                         }
                         break;
+                    
                 }
             }
         }

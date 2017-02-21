@@ -31,7 +31,6 @@ namespace PoGo.Necrobot.Window
             AppDomain currentDomain = AppDomain.CurrentDomain;
             currentDomain.UnhandledException += new UnhandledExceptionEventHandler(this.ErrorHandler);
         }
-
         
         private void ErrorHandler(object sender, UnhandledExceptionEventArgs e)
         {
@@ -40,7 +39,6 @@ namespace PoGo.Necrobot.Window
 
         protected override void OnStartup(StartupEventArgs e)
         {
-
             base.OnStartup(e);
         }
 

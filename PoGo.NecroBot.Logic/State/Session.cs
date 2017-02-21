@@ -56,8 +56,6 @@ namespace PoGo.NecroBot.Logic.State
         DateTime LoggedTime { get; set; }
         DateTime CatchBlockTime { get; set; }
         Statistics RuntimeStatistics { get; }
-
-        void BlockCurrentBot(int expired = 15);
         GymTeamState GymState { get; set; }
     }
 
@@ -256,16 +254,6 @@ namespace PoGo.NecroBot.Logic.State
             }
             return false; //timedout
         }
-
-        public void BlockCurrentBot(int expired = 60)
-        {
-            var currentAccount = this.accounts.FirstOrDefault(
-                x => (x.AuthType == AuthType.Ptc && x.PtcUsername == this.Settings.PtcUsername) ||
-                     (x.AuthType == AuthType.Google && x.GoogleUsername == this.Settings.GoogleUsername));
-
-            currentAccount.ReleaseBlockTime = DateTime.Now.AddMinutes(expired);
-        }
-
         public GymTeamState GymState { get; set; }
     }
 }
