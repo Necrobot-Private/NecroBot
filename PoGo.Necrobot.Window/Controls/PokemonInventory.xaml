@@ -149,6 +149,8 @@
             <DataGrid.ContextMenu>
                 <ContextMenu >
                     <MenuItem Header="{Binding Source=SetBuddy, Converter={StaticResource I18NConveter}}" Click="mnuBuddy_Click"  />
+                    <MenuItem Header="{Binding Source=MenuTransferFilterText, Converter={StaticResource I18NConveter}}" Click="mnuTransferSetting_Click"  />
+                    
                 </ContextMenu>
             </DataGrid.ContextMenu>
             <DataGrid.RowStyle>

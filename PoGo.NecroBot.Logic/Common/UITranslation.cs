@@ -111,6 +111,8 @@ namespace PoGo.NecroBot.Logic.Common
         #endregion
         #region Pokemon Inventory
         
+        [Description("Transfer Setting")]
+        public string MenuTransferFilterText { get; set; }
         [Description("This pokemon can be evolve to below pokemon , please select the branch you want to evolve to")]
         public string EvolveConfirm { get; set; }
 
@@ -236,8 +238,10 @@ namespace PoGo.NecroBot.Logic.Common
         public string Hide { get; set; }
         [Description("SHOW")]
         public string Show { get; set; }
+        [Description("Transfer filter - {0}")]
+        public string TransferFilterFormTitle { get; set; }
         #endregion
-            
+
         private Dictionary<string, string> translations = new Dictionary<string, string>();
         private string languageCode = "en";
         private string translationFile = @"Config\Translations\ui.{0}.json";

@@ -9,5 +9,6 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public string Description { get; set; }
         public int Position { get; set; }
         public bool IsPrimaryKey { get; set; }
+        public bool HiddenOnGui { get; set; }
     }
 }

@@ -49,7 +49,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         }
 
         [JsonIgnore]
-        [NecrobotConfig(IsPrimaryKey = true, Key = "Allow Transfer", Position = 1, Description = "If TRUE bot will transfer this type of pokemon when match with filter condition.")]
+        [NecrobotConfig(HiddenOnGui = true,IsPrimaryKey = true, Key = "Allow Transfer", Position = 1, Description = "If TRUE bot will transfer this type of pokemon when match with filter condition.")]
         public bool AllowTransfer { get; set; }
 
         [JsonIgnore]

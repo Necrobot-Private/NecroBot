@@ -9,6 +9,9 @@ using PoGo.Necrobot.Window.Model;
 using PoGo.NecroBot.Logic.DataDumper;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Tasks;
+using TinyIoC;
+using PoGo.NecroBot.Logic;
+using PoGo.NecroBot.Logic.Model.Settings;
 
 namespace PoGo.Necrobot.Window.Controls
 {
@@ -201,6 +204,21 @@ namespace PoGo.Necrobot.Window.Controls
             var model = (PokemonListViewModel)this.DataContext;
 
             model.ApplyFilter(true);
+        }
+
+        private void mnuTransferSetting_Click(object sender, RoutedEventArgs e)
+        {
+            var menuItem = (MenuItem)sender;
+
+            //Get the ContextMenu to which the menuItem belongs
+            var contextMenu = (ContextMenu)menuItem.Parent;
+
+            //Find the placementTarget
+            var item = (DataGrid)contextMenu.PlacementTarget;
+            var selectItem = (PokemonDataViewModel)item.SelectedCells[0].Item;
+            var filter = TinyIoCContainer.Current.Resolve<ISession>().LogicSettings.PokemonsTransferFilter.GetFilter<TransferFilter>(selectItem.PokemonId);
+            var setting = new FilterSetting(selectItem.PokemonId, filter, "PokemonsTransferFilter");
+            setting.ShowDialog();
         }
 
         //ICommand transferPokemonCommand;
