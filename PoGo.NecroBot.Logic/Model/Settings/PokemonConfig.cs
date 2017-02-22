@@ -464,6 +464,6 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [DefaultValue(2000)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 70)]
         [Range(0, 5000)]
-        public double EvolveMinLevel { get; internal set; }
+        public double EvolveMinLevel { get;  set; }
     }
 }

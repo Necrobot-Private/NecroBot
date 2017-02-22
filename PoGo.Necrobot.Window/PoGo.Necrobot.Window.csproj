@@ -220,6 +220,7 @@
       <DependentUpon>SnipeGrid.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\TemplatedAdorner.cs" />
+    <Compile Include="Converters\ListPokemonIdToTextConverter.cs" />
     <Compile Include="Converters\HeaderFilterConverter.cs" />
     <Compile Include="Converters\I18NMultiConveter.cs" />
     <Compile Include="Converters\I18NConveter.cs" />
