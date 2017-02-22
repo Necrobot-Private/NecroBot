@@ -575,7 +575,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                 SnipeIV = session.LogicSettings.MinIVForAutoSnipe,
                 VerifiedOnly = session.LogicSettings.AutosnipeVerifiedOnly,
                 AutoSnipeCandy = session.LogicSettings.DefaultAutoSnipeCandy,
-                Level = 0
+                Level = session.LogicSettings.MinLvlForAutoSnipe,
+                Operator = "or"
             };
 
             var pokemonId = (PokemonId)item.PokemonId;

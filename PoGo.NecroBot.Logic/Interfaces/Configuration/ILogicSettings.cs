@@ -21,6 +21,7 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         int PokeStopLimitMinutes { get; }
         int SnipeCountLimit { get; }
         int MinIVForAutoSnipe { get; }
+        int MinLvlForAutoSnipe { get; }
         int SnipeRestSeconds { get; }
         bool TransferWeakPokemon { get; }
         bool DisableHumanWalking { get; }
