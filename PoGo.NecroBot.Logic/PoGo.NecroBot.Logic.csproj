@@ -357,6 +357,7 @@
     <Compile Include="Model\Settings\EvolveConfig.cs" />
     <Compile Include="Model\Settings\CatchFilter.cs" />
     <Compile Include="Model\Settings\ExcelConfigAttribute.cs" />
+    <Compile Include="Model\Settings\FilterUtil.cs" />
     <Compile Include="Model\Settings\GlobalSettings.cs" />
     <Compile Include="Model\Settings\GoogleWalkConfig.cs" />
     <Compile Include="Model\Settings\GpxConfig.cs" />
@@ -364,6 +365,7 @@
     <Compile Include="Model\Settings\GymConfig.cs" />
     <Compile Include="Model\Settings\HumanWalkSnipeConfig.cs" />
     <Compile Include="Model\Settings\HumanWalkSnipeFilter.cs" />
+    <Compile Include="Model\Settings\IPokemonFilter.cs" />
     <Compile Include="Model\Settings\ItemRecycleFilter.cs" />
     <Compile Include="Model\Settings\LevelUpConfig.cs" />
     <Compile Include="Model\Settings\Location.cs" />

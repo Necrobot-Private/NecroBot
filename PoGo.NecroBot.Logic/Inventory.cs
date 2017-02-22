@@ -22,9 +22,10 @@ using POGOProtos.Networking.Responses;
 using POGOProtos.Settings.Master;
 using PokemonGo.RocketAPI.Helpers;
 using System.Collections.Concurrent;
+using TinyIoC;
 
 #endregion
-
+using static PoGo.NecroBot.Logic.Model.Settings.FilterUtil;
 namespace PoGo.NecroBot.Logic
 {
     public class Inventory
@@ -144,6 +145,7 @@ namespace PoGo.NecroBot.Logic
             bool keepPokemonsThatCanEvolve = false, bool prioritizeIVoverCp = false
         )
         {
+            var session = TinyIoCContainer.Current.Resolve<ISession>();
             var myPokemon = GetPokemons();
 
             var pokemonToTransfer = myPokemon
@@ -157,7 +159,7 @@ namespace PoGo.NecroBot.Logic
                     pokemonToTransfer.Where(
                             p =>
                             {
-                                var pokemonTransferFilter = GetPokemonTransferFilter(p.PokemonId);
+                                var pokemonTransferFilter = session.LogicSettings.PokemonsTransferFilter.GetFilter<TransferFilter>(p.PokemonId);
 
                                 return !pokemonTransferFilter.MovesOperator.BoolFunc(
                                     pokemonTransferFilter.MovesOperator.ReverseBoolFunc(
@@ -198,7 +200,7 @@ namespace PoGo.NecroBot.Logic
 
             foreach (var pokemonGroupToTransfer in pokemonToTransfer.GroupBy(p => p.PokemonId).ToList())
             {
-                var amountToKeepInStorage = Math.Max(GetPokemonTransferFilter(pokemonGroupToTransfer.Key).KeepMinDuplicatePokemon, 0);
+                var amountToKeepInStorage = Math.Max(GetApplyFilter<TransferFilter>(session.LogicSettings.PokemonsTransferFilter,pokemonGroupToTransfer.Key).KeepMinDuplicatePokemon, 0);
 
                 var inStorage = myPokemon.Count(data => data.PokemonId == pokemonGroupToTransfer.Key);
                 var needToRemove = inStorage - amountToKeepInStorage;
@@ -805,12 +807,7 @@ namespace PoGo.NecroBot.Logic
 
             foreach (var pokemon in myPokemons)
             {
-                var appliedFilter = _logicSettings.PokemonUpgradeFilters.ContainsKey(pokemon.PokemonId)
-                    ? _logicSettings.PokemonUpgradeFilters[pokemon.PokemonId]
-                    : new UpgradeFilter(_logicSettings.UpgradePokemonLvlMinimum, _logicSettings.UpgradePokemonCpMinimum,
-                        _logicSettings.UpgradePokemonIvMinimum, _logicSettings.UpgradePokemonMinimumStatsOperator,
-                        _logicSettings.OnlyUpgradeFavorites);
-
+                var appliedFilter = _logicSettings.PokemonUpgradeFilters.GetFilter<UpgradeFilter>(pokemon.PokemonId);
 
                 if ((appliedFilter.OnlyUpgradeFavorites && pokemon.Favorite == 1) ||
                      (!appliedFilter.OnlyUpgradeFavorites &&
@@ -830,22 +827,7 @@ namespace PoGo.NecroBot.Logic
             return upgradePokemon;
         }
 
-        public TransferFilter GetPokemonTransferFilter(PokemonId pokemon)
-        {
-            if (_logicSettings.PokemonsTransferFilter != null &&
-                _logicSettings.PokemonsTransferFilter.ContainsKey(pokemon))
-            {
-                var filter = _logicSettings.PokemonsTransferFilter[pokemon];
-                if (filter.Moves == null)
-                {
-                    filter.Moves = new List<List<PokemonMove>>();
-                }
-                return filter;
-            }
-            return new TransferFilter(_logicSettings.KeepMinCp, _logicSettings.KeepMinLvl, _logicSettings.UseKeepMinLvl,
-                _logicSettings.KeepMinIvPercentage,
-                _logicSettings.KeepMinOperator, _logicSettings.KeepMinDuplicatePokemon);
-        }
+       
 
         public async Task<UpgradePokemonResponse> UpgradePokemon(ulong pokemonid)
         {

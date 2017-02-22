@@ -23,7 +23,7 @@ using POGOProtos.Networking.Responses;
 using TinyIoC;
 using POGOProtos.Enums;
 using System.Collections.Generic;
-
+using PoGo.NecroBot.Logic;
 #endregion
 
 namespace PoGo.NecroBot.Logic.Tasks
@@ -478,6 +478,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                     session.Client.CurrentLongitude
                 ) > 1000)
             {
+
+                var snipePokemonFiler = session.LogicSettings.PokemonSnipeFilters.GetFilter<SnipeFilter>(encounterEV.PokemonId);
 
                 if (session.LogicSettings.PokemonSnipeFilters.ContainsKey(encounterEV.PokemonId))
                 {

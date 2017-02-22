@@ -4,14 +4,17 @@ using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 using POGOProtos.Enums;
 using System;
+using TinyIoC;
+using PoGo.NecroBot.Logic.State;
 
 namespace PoGo.NecroBot.Logic.Model.Settings
 {
     [JsonObject(Description = "", ItemRequired = Required.DisallowNull)] //Dont set Title
-    public class EvolveFilter
+    public class EvolveFilter   : BaseConfig, IPokemonFilter
     {
-        public EvolveFilter()
+        public EvolveFilter()  :base()
         {
+            this.AffectToPokemons = new List<PokemonId>();
             Moves = new List<List<PokemonMove>>();
             EnableEvolve = true;
             Operator = "or";
@@ -69,6 +72,10 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 6)]
         public string EvolveTo { get; set; }
 
+        [NecrobotConfig(Key = "Affect To Pokemons", Position = 6, Description = "Set the list of pokemon you want to use the same config")]
+        [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 7)]
+        public List<PokemonId> AffectToPokemons { get; set; }
+
         [JsonIgnore]
         public PokemonId EvolveToPokemonId
         {
@@ -84,6 +91,8 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 return id;
             }
         }
+
+
         internal static Dictionary<PokemonId, EvolveFilter> Default()
         {
             return new Dictionary<PokemonId, EvolveFilter>
@@ -103,6 +112,14 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 {PokemonId.Dratini, new EvolveFilter(100, 30, 800, "and")}
 
             };
+        }
+
+        public IPokemonFilter GetGlobalFilter()
+        {
+            var session = TinyIoCContainer.Current.Resolve<ISession>();
+            var _logicSettings = session.LogicSettings;
+
+            return new UpgradeFilter(_logicSettings.EvolveMinLevel, _logicSettings.EvolveMinCP, _logicSettings.EvolveMinIV, _logicSettings.EvolveOperator, _logicSettings.EvolveFavoritedOnly);
         }
     }
 }
