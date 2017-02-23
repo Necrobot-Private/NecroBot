@@ -267,7 +267,6 @@ namespace PoGo.NecroBot.CLI
                         Console.ReadKey();
                         Environment.Exit(0);
                     }
-                    //TODO - test api call to valida auth key
                 }
                 else if (apiCfg.UseLegacyAPI)
                 {

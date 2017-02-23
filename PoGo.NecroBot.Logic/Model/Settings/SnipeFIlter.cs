@@ -22,6 +22,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         public SnipeFilter(int snipeMinIV, List<List<PokemonMove>> moves = null) : base()
         {
+
             this.AffectToPokemons = new List<PokemonId>();
             this.Operator = "or";
             this.SnipeIV = snipeMinIV;
@@ -107,15 +108,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 return true;
             }
 
-            //if not verified and undetermine move. If not verify, level won't apply
-            if (((verified && filter.Level <= level) || !verified) &&
-                filter.SnipeIV <= iv &&
-                move1 == PokemonMove.MoveUnset && move2 == PokemonMove.MoveUnset &&
-                (filter.Moves == null || filter.Moves.Count == 0))
-            {
-                return true;
-            }
-            //need refactore this to better 
+           //need refactore this to better 
             if (((verified && filter.Level <= level) || !verified) &&
                 (string.IsNullOrEmpty(filter.Operator) || filter.Operator == "or") &&
                 (filter.SnipeIV <= iv
@@ -151,8 +144,10 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             var _setting = session.LogicSettings;
             return new SnipeFilter(_setting.MinIVForAutoSnipe)
             {
+                SnipeIV = _setting.MinIVForAutoSnipe, 
                 Operator = "and",
                 Priority = 5,
+                AutoSnipeCandy = _setting.DefaultAutoSnipeCandy,
                 Level = _setting.MinLevelForAutoSnipe,
                 VerifiedOnly = _setting.AutosnipeVerifiedOnly
             };
