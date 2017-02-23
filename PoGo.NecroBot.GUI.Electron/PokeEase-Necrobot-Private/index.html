@@ -2,7 +2,7 @@
 <html>
 <head>
     <title> PokeEase </title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, target-densitydpi=high-dpi">
     <link rel="stylesheet" href="styles/site.min.css">
     <link rel="stylesheet" href="styles/vendor.min.css">
     <style>
@@ -13,7 +13,9 @@
     <link rel="icon" sizes="16x16" href="images/favicon.png">
 </head>
 <body class="live-version">
-
+<div id="audioWrapper">
+    <audio id="hiddenAudio" src="audio/levelup.mp3"></audio>
+</div>
 <div id="pokemon-images" style="display: none;">
     <img src="images/pokemon/0.png" alt="Pokemon 0" data-pokemon-id="0" />
     <img src="images/pokemon/1.png" alt="Pokemon 1" data-pokemon-id="1" />
@@ -167,6 +169,106 @@
     <img src="images/pokemon/149.png" alt="Pokemon 149" data-pokemon-id="149" />
     <img src="images/pokemon/150.png" alt="Pokemon 150" data-pokemon-id="150" />
     <img src="images/pokemon/151.png" alt="Pokemon 151" data-pokemon-id="151" />
+    <img src="images/pokemon/152.png" alt="Pokemon 152" data-pokemon-id="152" />
+    <img src="images/pokemon/153.png" alt="Pokemon 153" data-pokemon-id="153" />
+    <img src="images/pokemon/154.png" alt="Pokemon 154" data-pokemon-id="154" />
+    <img src="images/pokemon/155.png" alt="Pokemon 155" data-pokemon-id="155" />
+    <img src="images/pokemon/156.png" alt="Pokemon 156" data-pokemon-id="156" />
+    <img src="images/pokemon/157.png" alt="Pokemon 157" data-pokemon-id="157" />
+    <img src="images/pokemon/158.png" alt="Pokemon 158" data-pokemon-id="158" />
+    <img src="images/pokemon/159.png" alt="Pokemon 159" data-pokemon-id="159" />
+    <img src="images/pokemon/160.png" alt="Pokemon 160" data-pokemon-id="160" />
+    <img src="images/pokemon/161.png" alt="Pokemon 161" data-pokemon-id="161" />
+    <img src="images/pokemon/162.png" alt="Pokemon 162" data-pokemon-id="162" />
+    <img src="images/pokemon/163.png" alt="Pokemon 163" data-pokemon-id="163" />
+    <img src="images/pokemon/164.png" alt="Pokemon 164" data-pokemon-id="164" />
+    <img src="images/pokemon/165.png" alt="Pokemon 165" data-pokemon-id="165" />
+    <img src="images/pokemon/166.png" alt="Pokemon 166" data-pokemon-id="166" />
+    <img src="images/pokemon/167.png" alt="Pokemon 167" data-pokemon-id="167" />
+    <img src="images/pokemon/168.png" alt="Pokemon 168" data-pokemon-id="168" />
+    <img src="images/pokemon/169.png" alt="Pokemon 169" data-pokemon-id="169" />
+    <img src="images/pokemon/170.png" alt="Pokemon 170" data-pokemon-id="170" />
+    <img src="images/pokemon/171.png" alt="Pokemon 171" data-pokemon-id="171" />
+    <img src="images/pokemon/172.png" alt="Pokemon 172" data-pokemon-id="172" />
+    <img src="images/pokemon/173.png" alt="Pokemon 173" data-pokemon-id="173" />
+    <img src="images/pokemon/174.png" alt="Pokemon 174" data-pokemon-id="174" />
+    <img src="images/pokemon/175.png" alt="Pokemon 175" data-pokemon-id="175" />
+    <img src="images/pokemon/176.png" alt="Pokemon 176" data-pokemon-id="176" />
+    <img src="images/pokemon/177.png" alt="Pokemon 177" data-pokemon-id="177" />
+    <img src="images/pokemon/178.png" alt="Pokemon 178" data-pokemon-id="178" />
+    <img src="images/pokemon/179.png" alt="Pokemon 179" data-pokemon-id="179" />
+    <img src="images/pokemon/180.png" alt="Pokemon 180" data-pokemon-id="180" />
+    <img src="images/pokemon/181.png" alt="Pokemon 181" data-pokemon-id="181" />
+    <img src="images/pokemon/182.png" alt="Pokemon 182" data-pokemon-id="182" />
+    <img src="images/pokemon/183.png" alt="Pokemon 183" data-pokemon-id="183" />
+    <img src="images/pokemon/184.png" alt="Pokemon 184" data-pokemon-id="184" />
+    <img src="images/pokemon/185.png" alt="Pokemon 185" data-pokemon-id="185" />
+    <img src="images/pokemon/186.png" alt="Pokemon 186" data-pokemon-id="186" />
+    <img src="images/pokemon/187.png" alt="Pokemon 187" data-pokemon-id="187" />
+    <img src="images/pokemon/188.png" alt="Pokemon 188" data-pokemon-id="188" />
+    <img src="images/pokemon/189.png" alt="Pokemon 189" data-pokemon-id="189" />
+    <img src="images/pokemon/190.png" alt="Pokemon 190" data-pokemon-id="190" />
+    <img src="images/pokemon/191.png" alt="Pokemon 191" data-pokemon-id="191" />
+    <img src="images/pokemon/192.png" alt="Pokemon 192" data-pokemon-id="192" />
+    <img src="images/pokemon/193.png" alt="Pokemon 193" data-pokemon-id="193" />
+    <img src="images/pokemon/194.png" alt="Pokemon 194" data-pokemon-id="194" />
+    <img src="images/pokemon/195.png" alt="Pokemon 195" data-pokemon-id="195" />
+    <img src="images/pokemon/196.png" alt="Pokemon 196" data-pokemon-id="196" />
+    <img src="images/pokemon/197.png" alt="Pokemon 197" data-pokemon-id="197" />
+    <img src="images/pokemon/198.png" alt="Pokemon 198" data-pokemon-id="198" />
+    <img src="images/pokemon/199.png" alt="Pokemon 199" data-pokemon-id="199" />
+    <img src="images/pokemon/200.png" alt="Pokemon 200" data-pokemon-id="200" />
+    <img src="images/pokemon/201.png" alt="Pokemon 201" data-pokemon-id="201" />
+    <img src="images/pokemon/202.png" alt="Pokemon 202" data-pokemon-id="202" />
+    <img src="images/pokemon/203.png" alt="Pokemon 203" data-pokemon-id="203" />
+    <img src="images/pokemon/204.png" alt="Pokemon 204" data-pokemon-id="204" />
+    <img src="images/pokemon/205.png" alt="Pokemon 205" data-pokemon-id="205" />
+    <img src="images/pokemon/206.png" alt="Pokemon 206" data-pokemon-id="206" />
+    <img src="images/pokemon/207.png" alt="Pokemon 207" data-pokemon-id="207" />
+    <img src="images/pokemon/208.png" alt="Pokemon 208" data-pokemon-id="208" />
+    <img src="images/pokemon/209.png" alt="Pokemon 209" data-pokemon-id="209" />
+    <img src="images/pokemon/210.png" alt="Pokemon 210" data-pokemon-id="210" />
+    <img src="images/pokemon/211.png" alt="Pokemon 211" data-pokemon-id="211" />
+    <img src="images/pokemon/212.png" alt="Pokemon 212" data-pokemon-id="212" />
+    <img src="images/pokemon/213.png" alt="Pokemon 213" data-pokemon-id="213" />
+    <img src="images/pokemon/214.png" alt="Pokemon 214" data-pokemon-id="214" />
+    <img src="images/pokemon/215.png" alt="Pokemon 215" data-pokemon-id="215" />
+    <img src="images/pokemon/216.png" alt="Pokemon 216" data-pokemon-id="216" />
+    <img src="images/pokemon/217.png" alt="Pokemon 217" data-pokemon-id="217" />
+    <img src="images/pokemon/218.png" alt="Pokemon 218" data-pokemon-id="218" />
+    <img src="images/pokemon/219.png" alt="Pokemon 219" data-pokemon-id="219" />
+    <img src="images/pokemon/220.png" alt="Pokemon 220" data-pokemon-id="220" />
+    <img src="images/pokemon/221.png" alt="Pokemon 221" data-pokemon-id="221" />
+    <img src="images/pokemon/222.png" alt="Pokemon 222" data-pokemon-id="222" />
+    <img src="images/pokemon/223.png" alt="Pokemon 223" data-pokemon-id="223" />
+    <img src="images/pokemon/224.png" alt="Pokemon 224" data-pokemon-id="224" />
+    <img src="images/pokemon/225.png" alt="Pokemon 225" data-pokemon-id="225" />
+    <img src="images/pokemon/226.png" alt="Pokemon 226" data-pokemon-id="226" />
+    <img src="images/pokemon/227.png" alt="Pokemon 227" data-pokemon-id="227" />
+    <img src="images/pokemon/228.png" alt="Pokemon 228" data-pokemon-id="228" />
+    <img src="images/pokemon/229.png" alt="Pokemon 229" data-pokemon-id="229" />
+    <img src="images/pokemon/230.png" alt="Pokemon 230" data-pokemon-id="230" />
+    <img src="images/pokemon/231.png" alt="Pokemon 231" data-pokemon-id="231" />
+    <img src="images/pokemon/232.png" alt="Pokemon 232" data-pokemon-id="232" />
+    <img src="images/pokemon/233.png" alt="Pokemon 233" data-pokemon-id="233" />
+    <img src="images/pokemon/234.png" alt="Pokemon 234" data-pokemon-id="234" />
+    <img src="images/pokemon/235.png" alt="Pokemon 235" data-pokemon-id="235" />
+    <img src="images/pokemon/236.png" alt="Pokemon 236" data-pokemon-id="236" />
+    <img src="images/pokemon/237.png" alt="Pokemon 237" data-pokemon-id="237" />
+    <img src="images/pokemon/238.png" alt="Pokemon 238" data-pokemon-id="238" />
+    <img src="images/pokemon/239.png" alt="Pokemon 239" data-pokemon-id="239" />
+    <img src="images/pokemon/240.png" alt="Pokemon 240" data-pokemon-id="240" />
+    <img src="images/pokemon/241.png" alt="Pokemon 241" data-pokemon-id="241" />
+    <img src="images/pokemon/242.png" alt="Pokemon 242" data-pokemon-id="242" />
+    <img src="images/pokemon/243.png" alt="Pokemon 243" data-pokemon-id="243" />
+    <img src="images/pokemon/244.png" alt="Pokemon 244" data-pokemon-id="244" />
+    <img src="images/pokemon/245.png" alt="Pokemon 245" data-pokemon-id="245" />
+    <img src="images/pokemon/246.png" alt="Pokemon 246" data-pokemon-id="246" />
+    <img src="images/pokemon/247.png" alt="Pokemon 247" data-pokemon-id="247" />
+    <img src="images/pokemon/248.png" alt="Pokemon 248" data-pokemon-id="248" />
+    <img src="images/pokemon/249.png" alt="Pokemon 249" data-pokemon-id="249" />
+    <img src="images/pokemon/250.png" alt="Pokemon 250" data-pokemon-id="250" />
+    <img src="images/pokemon/251.png" alt="Pokemon 251" data-pokemon-id="251" />
 </div>
 
 <div id="iw-template" style="display: none">
@@ -1167,6 +1269,47 @@
             </div>
         </div>
     </div>
+	
+    <div class="setting-topic">
+		<h6 class="setting-name"> Audio notifications </h6>
+
+		<div class="setting-part">
+			<div class="setting-question">
+				Example
+			</div>
+			<div class="setting-answer">
+				<span class="example" id="show-notification-audio-example-button">show example</span>
+			</div>
+		</div>
+
+		<div class="setting-part">
+			<div class="setting-question">
+				Events to show
+			</div>
+			<div class="setting-answer">
+				<input type="checkbox" name="settings-notifications-audio-pokestop-used"
+					   value="pokestop-used">Pokestop<br/>
+				<input type="checkbox"
+					   name="settings-notifications-audio-pokemon-capture"
+					   value="pokemon-capture">Capture<br/>
+				<input type="checkbox" name="settings-notifications-audio-pokemon-snipe"
+					   value="pokemon-snipe">Snipe<br/>
+				<input type="checkbox"
+					   name="settings-notifications-audio-pokemon-evolved"
+					   value="pokemon-evolved">Evolve<br/>
+				<input type="checkbox" name="settings-notifications-audio-egg-hatched"
+					   value="egg-hatched">Hatch<br/>
+				<input type="checkbox"
+					   name="settings-notifications-audio-incubator-status"
+					   value="incubator-status">Incubator status<br/>
+				<input type="checkbox" name="settings-notifications-audio-item-recycle"
+					   value="item-recycle">Recycle<br/>
+				<input type="checkbox"
+					   name="settings-notifications-audio-pokemon-transfer"
+					   value="pokemon-transfer">Transfer<br/>
+			</div>
+		</div>
+	</div>
 </div>
 
 <div id="other-settings">
