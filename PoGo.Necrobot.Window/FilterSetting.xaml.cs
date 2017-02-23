@@ -29,17 +29,21 @@ namespace PoGo.Necrobot.Window
     {
         UITranslation translator;
         string FilterName;
-        PokemonId pokemonId;
+        IPokemonFilter data;
+        PokemonId PokemonId;
         ObservableCollectionExt<AffectPokemonViewModel> pokemonList;
-        public FilterSetting(PokemonId pokemonId, IPokemonFilter filter, string filterName)
+        Action<PokemonId, IPokemonFilter> onSaveFilter;
+        public FilterSetting(PokemonId pokemonId, IPokemonFilter filter, string filterName, Action<PokemonId, IPokemonFilter> onSave)
         {
+            this.data = filter;
             translator = TinyIoCContainer.Current.Resolve<UITranslation>();
 
             this.Title = string.Format(translator.TransferFilterFormTitle, pokemonId.ToString());
 
-            this.pokemonId = pokemonId;
+            this.PokemonId = pokemonId;
             this.FilterName = filterName;
-            this.DataContext = filter;
+            this.onSaveFilter = onSave;
+            this.DataContext = data;
             InitializeComponent();
             pnlFilters.Children.Add(BuildObjectForm(filter));
             DisplayListPokemons(filter.AffectToPokemons);
@@ -180,6 +184,9 @@ namespace PoGo.Necrobot.Window
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
+            data.AffectToPokemons = this.pokemonList.Where(x => x.Selected).Select(x => x.Pokemon).ToList();
+            this.onSaveFilter(PokemonId, data);
+            this.Close();
 
         }
 
@@ -189,6 +196,11 @@ namespace PoGo.Necrobot.Window
             var cmd = (AffectPokemonViewModel)button.CommandParameter;
             cmd.Selected = !cmd.Selected;
             cmd.RaisePropertyChanged("Selected");
+        }
+
+        private void PokemonSelected_Click(object sender, RoutedEventArgs e)
+        {
+            data.AffectToPokemons = this.pokemonList.Where(x => x.Selected).Select(x => x.Pokemon).ToList();
         }
     }
 }

@@ -111,8 +111,19 @@ namespace PoGo.NecroBot.Logic.Common
         #endregion
         #region Pokemon Inventory
         
-        [Description("Transfer Setting")]
+        [Description("Evolve Filter Setting")]
         public string MenuTransferFilterText { get; set; }
+
+        [Description("Evolve Filter Setting")]
+        public string MenuEvolveFilterText { get; set; }
+
+        [Description("Snipe Filter Setting")]
+        public string MenuSnipeFilterText { get; set; }
+
+        [Description("Snipe Upgrade Setting")]
+        public string MenuUpgradeFilterText { get; set; }
+
+
         [Description("This pokemon can be evolve to below pokemon , please select the branch you want to evolve to")]
         public string EvolveConfirm { get; set; }
 

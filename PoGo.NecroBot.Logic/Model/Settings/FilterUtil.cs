@@ -22,9 +22,23 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         private static T GetDefault<T>() where T : IPokemonFilter
         {
-
             var globalFilter = Activator.CreateInstance<T>();
             return (T)globalFilter.GetGlobalFilter();
+        }
+
+        public static void UpdateFilterSetting<T>(GlobalSettings globalSettings, Dictionary<PokemonId, T> pokemonsTransferFilter, PokemonId id, T f)
+        {
+            if(pokemonsTransferFilter.ContainsKey(id))
+            {
+                pokemonsTransferFilter[id] = f;
+            }
+            else
+            {
+                pokemonsTransferFilter.Add(id, f);
+
+            }
+            string configFile = System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "config\\config.json");
+            globalSettings.Save(configFile);
         }
     }
 }

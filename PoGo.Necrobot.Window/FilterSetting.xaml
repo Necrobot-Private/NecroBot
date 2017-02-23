@@ -9,7 +9,7 @@
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:effect="clr-namespace:GrayscaleEffect;assembly=GrayscaleEffect"
         mc:Ignorable="d"
-        Title="Filter Settings" 
+        Title="Filter Config"
         Height="768"
         Width="1024" 
         BorderThickness="0" 
@@ -51,11 +51,15 @@
 
     <Grid>
         <DockPanel LastChildFill="True">
-            <StackPanel Name="pnlFilters">
+            <StackPanel>
+                <Image Source="{Binding PokemonId, Converter= {StaticResource PokemonIdToImageConverter}}" Width="40"></Image>
+                <StackPanel Name="pnlFilters">
+                </StackPanel>
             </StackPanel>
-            <StackPanel >
+
+            <ScrollViewer>
                 <ListView Name="lslAllPokemons" 
-              VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Auto"  >
+              VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Visible"  >
                     <ListView.ItemsPanel>
                         <ItemsPanelTemplate>
                             <UniformGrid Columns="10"/>
@@ -64,36 +68,23 @@
 
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <Border BorderBrush="White" BorderThickness="2">
-                                <StackPanel Width="45" Margin="5,5,5,5">
-                                    <Button Click="Button_Click" CommandParameter="{Binding}">
-                                        <Image  Name="img" Source="{Binding Path=Pokemon, Converter={StaticResource ResourceKey=PokemonIdToImageConverter}}" Width="45" >
-                                            <Image.Effect>
-                                                <effect:GrayscaleEffect x:Name="grayscaleEffect" DesaturationFactor="{Binding Opacity}"/>
-                                            </Image.Effect>
-                                            <Image.Triggers>
-                                                <DataTrigger Binding="{Binding Path=Selected}" Value="True" >
-                                                    
-                                                    <Setter TargetName="grayscaleEffect" Property="effect:GrayscaleEffect.DesaturationFactor" Value="0.1" >
-                                                    </Setter>
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding Path=Selected}" Value="True" >
-                                                    <Setter TargetName="grayscaleEffect" Property="effect:GrayscaleEffect.DesaturationFactor" Value="1" >
-                                                    </Setter>
-                                                </DataTrigger>
-                                            </Image.Triggers>
-
-                                        </Image>
-                                    </Button>
+                            <Border BorderBrush="White" BorderThickness="0">
+                                <StackPanel Width="45" Margin="0,0,0,0">
+                                    <Image  Name="img" Source="{Binding Path=Pokemon, Converter={StaticResource ResourceKey=PokemonIdToImageConverter}}" Width="45" >
+                                        <Image.Effect>
+                                            <effect:GrayscaleEffect x:Name="grayscaleEffect" DesaturationFactor="1.0"/>
+                                        </Image.Effect>
+                                    </Image>
                                     <DockPanel LastChildFill="True">
-                                        <TextBlock DockPanel.Dock="Left" Text="{Binding Name}"></TextBlock>
+                                        <CheckBox  IsChecked="{Binding Path=Selected}" DockPanel.Dock="Left" Click="PokemonSelected_Click" ></CheckBox>
+                                        <TextBlock DockPanel.Dock="Left" Text="{Binding Path=Pokemon}" Visibility="Collapsed"></TextBlock>
                                     </DockPanel>
                                 </StackPanel>
                             </Border>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-            </StackPanel>
+            </ScrollViewer>
         </DockPanel>
     </Grid>
 </Controls:MetroWindow>
