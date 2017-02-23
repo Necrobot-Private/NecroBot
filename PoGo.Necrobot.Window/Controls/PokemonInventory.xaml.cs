@@ -278,7 +278,7 @@ namespace PoGo.Necrobot.Window.Controls
             var item = (DataGrid)contextMenu.PlacementTarget;
             var selectItem = (PokemonDataViewModel)item.SelectedCells[0].Item;
             var filter = TinyIoCContainer.Current.Resolve<ISession>().LogicSettings.PokemonSnipeFilters.GetFilter<SnipeFilter>(selectItem.PokemonId);
-            var setting = new FilterSetting(selectItem.PokemonId, filter, "PokemonSnipeFilter", (id, f) => {
+            var setting = new FilterSetting(selectItem.PokemonId, filter, "SnipePokemonFilter", (id, f) => {
 
                 var globalSettings = GlobalSettings.Load("", false);
                 FilterUtil.UpdateFilterSetting<SnipeFilter>(globalSettings, globalSettings.SnipePokemonFilter, id, (SnipeFilter)f);
