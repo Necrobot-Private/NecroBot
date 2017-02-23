@@ -272,9 +272,11 @@ namespace PoGo.NecroBot.CLI
                 else if (apiCfg.UseLegacyAPI)
                 {
                     Logger.Write(
-                        "You bot will start after 15 second, You are running bot with  Legacy API (0.45) it will increase your risk to be banned and trigger captcha. Config captcha in config.json to auto resolve them",
-                        LogLevel.Warning
+                        "API 0.45 was shutdown by Niantic, bot no longer work with your current setup, please consider to use paid API instead.",
+                        LogLevel.Error
                     );
+                    Console.ReadLine();
+                    Application.Exit();
 
 #if RELEASE
                     Thread.Sleep(15000);

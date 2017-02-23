@@ -66,7 +66,8 @@ namespace PoGo.NecroBot.Logic.Common
                         PokemonId.Voltorb,
                         PokemonId.Goldeen,
                         PokemonId.Eevee,
-                        PokemonId.Magikarp
+                        PokemonId.Magikarp,
+                        PokemonId.Natu
                     }
                 },
                 {
@@ -124,7 +125,7 @@ namespace PoGo.NecroBot.Logic.Common
                        PokemonId.Remoraid     ,
                        PokemonId.Houndour     ,
                        PokemonId.Phanpy       ,
-
+                       PokemonId.Marill
                     }
                 },
                 {
@@ -229,6 +230,10 @@ namespace PoGo.NecroBot.Logic.Common
                         PokemonId.Miltank,
                         PokemonId.Blissey,
                         PokemonId.Pupitar,
+                        PokemonId.Xatu    ,
+                        PokemonId.Mareep    ,
+                        PokemonId.Flaaffy ,
+                        PokemonId.Azumarill
 
                     }
                 },
@@ -266,6 +271,7 @@ namespace PoGo.NecroBot.Logic.Common
                         PokemonId.Typhlosion,
                         PokemonId.Jumpluff,
                         PokemonId.Forretress,
+                        PokemonId.Ampharos
                     }
                 },
                 {

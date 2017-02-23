@@ -205,7 +205,21 @@ namespace PoGo.Necrobot.Window
                 };
 
                 return txt;
+            }
 
+            if (item.PropertyType == typeof(List<PokemonId>))
+            {
+                binding.Converter = new ListPokemonIdToTextConverter();
+
+                DataGridTextColumn txt = new DataGridTextColumn()
+                {
+                    Binding = binding,
+                    Header = header,
+                    Width = 220,
+                    IsReadOnly = false
+                };
+
+                return txt;
             }
 
             if (item.PropertyType == typeof(string) ||

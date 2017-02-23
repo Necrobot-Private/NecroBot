@@ -245,5 +245,11 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         bool AutoFinishTutorial { get;  }
         Dictionary<ItemId, ItemUseFilter> ItemUseFilters { get; }
         double UpgradePokemonLvlMinimum { get; }
+        bool EvolveFavoritedOnly { get; }
+        string EvolveOperator { get; }
+        double EvolveMinIV { get; }
+        double EvolveMinCP { get;  }
+        double EvolveMinLevel { get; }
+        int MinLevelForAutoSnipe { get;  }
     }
 }

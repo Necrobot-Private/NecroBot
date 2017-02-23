@@ -9,6 +9,9 @@ using PoGo.Necrobot.Window.Model;
 using PoGo.NecroBot.Logic.DataDumper;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Tasks;
+using TinyIoC;
+using PoGo.NecroBot.Logic;
+using PoGo.NecroBot.Logic.Model.Settings;
 
 namespace PoGo.Necrobot.Window.Controls
 {
@@ -201,6 +204,88 @@ namespace PoGo.Necrobot.Window.Controls
             var model = (PokemonListViewModel)this.DataContext;
 
             model.ApplyFilter(true);
+        }
+
+        private void mnuTransferSetting_Click(object sender, RoutedEventArgs e)
+        {
+            var menuItem = (MenuItem)sender;
+
+            //Get the ContextMenu to which the menuItem belongs
+            var contextMenu = (ContextMenu)menuItem.Parent;
+
+            //Find the placementTarget
+            var item = (DataGrid)contextMenu.PlacementTarget;
+            var selectItem = (PokemonDataViewModel)item.SelectedCells[0].Item;
+            var filter = TinyIoCContainer.Current.Resolve<ISession>().LogicSettings.PokemonsTransferFilter.GetFilter<TransferFilter>(selectItem.PokemonId);
+            var setting = new FilterSetting(selectItem.PokemonId, filter, "PokemonsTransferFilter", (id, f)=> {
+
+                var globalSettings = GlobalSettings.Load("", false);
+                FilterUtil.UpdateFilterSetting<TransferFilter>(globalSettings,globalSettings.PokemonsTransferFilter, id, (TransferFilter)f);
+                
+            });
+            setting.ShowDialog();
+        }
+
+        private void MenuEvolve_Click(object sender, RoutedEventArgs e)
+        {
+            var menuItem = (MenuItem)sender;
+
+            //Get the ContextMenu to which the menuItem belongs
+            var contextMenu = (ContextMenu)menuItem.Parent;
+
+            //Find the placementTarget
+            var item = (DataGrid)contextMenu.PlacementTarget;
+            var selectItem = (PokemonDataViewModel)item.SelectedCells[0].Item;
+            var filter = TinyIoCContainer.Current.Resolve<ISession>().LogicSettings.PokemonEvolveFilters.GetFilter<EvolveFilter>(selectItem.PokemonId);
+            var setting = new FilterSetting(selectItem.PokemonId, filter, "PokemonEvolveFilter", (id, f) => {
+
+                var globalSettings = GlobalSettings.Load("", false);
+                FilterUtil.UpdateFilterSetting<EvolveFilter>(globalSettings, globalSettings.PokemonEvolveFilter, id, (EvolveFilter)f);
+
+            });
+            setting.ShowDialog();
+
+        }
+
+        private void MenuUpgrade_Click(object sender, RoutedEventArgs e)
+        {
+            var menuItem = (MenuItem)sender;
+
+            //Get the ContextMenu to which the menuItem belongs
+            var contextMenu = (ContextMenu)menuItem.Parent;
+
+            //Find the placementTarget
+            var item = (DataGrid)contextMenu.PlacementTarget;
+            var selectItem = (PokemonDataViewModel)item.SelectedCells[0].Item;
+            var filter = TinyIoCContainer.Current.Resolve<ISession>().LogicSettings.PokemonUpgradeFilters.GetFilter<UpgradeFilter>(selectItem.PokemonId);
+            var setting = new FilterSetting(selectItem.PokemonId, filter, "PokemonUpgradeFilters", (id, f) => {
+
+                var globalSettings = GlobalSettings.Load("", false);
+                FilterUtil.UpdateFilterSetting<UpgradeFilter>(globalSettings, globalSettings.PokemonUpgradeFilters, id, (UpgradeFilter)f);
+
+            });
+            setting.ShowDialog();
+        }
+
+        private void MenuSnipe_Click(object sender, RoutedEventArgs e)
+        {
+            var menuItem = (MenuItem)sender;
+
+            //Get the ContextMenu to which the menuItem belongs
+            var contextMenu = (ContextMenu)menuItem.Parent;
+
+            //Find the placementTarget
+            var item = (DataGrid)contextMenu.PlacementTarget;
+            var selectItem = (PokemonDataViewModel)item.SelectedCells[0].Item;
+            var filter = TinyIoCContainer.Current.Resolve<ISession>().LogicSettings.PokemonSnipeFilters.GetFilter<SnipeFilter>(selectItem.PokemonId);
+            var setting = new FilterSetting(selectItem.PokemonId, filter, "SnipePokemonFilter", (id, f) => {
+
+                var globalSettings = GlobalSettings.Load("", false);
+                FilterUtil.UpdateFilterSetting<SnipeFilter>(globalSettings, globalSettings.SnipePokemonFilter, id, (SnipeFilter)f);
+
+            });
+            setting.ShowDialog();
+
         }
 
         //ICommand transferPokemonCommand;

@@ -124,6 +124,12 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 21)]
         public int MinIVForAutoSnipe { get; set; }
 
+        [NecrobotConfig(Description = "Min Level that bot will automatically snipe pokemon", Position = 21)]
+        [DefaultValue(0)]
+        [Range(0,100)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 21)]
+        public int MinLevelForAutoSnipe { get; set; }
+
         [NecrobotConfig(Description = "Only auto snipe pokemon has been verified (overwriteable by invidual pokemon)", Position = 22)]
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 22)]

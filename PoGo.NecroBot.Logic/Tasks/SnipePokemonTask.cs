@@ -30,7 +30,7 @@ using Quobject.Collections.Immutable;
 using Quobject.SocketIoClientDotNet.Client;
 using Socket = Quobject.SocketIoClientDotNet.Client.Socket;
 using PoGo.NecroBot.Logic.Logging;
-
+using static PoGo.NecroBot.Logic.Model.Settings.FilterUtil;
 #endregion
 
 namespace PoGo.NecroBot.Logic.Tasks
@@ -255,7 +255,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         var locationsToSnipe = SnipeLocations?.Where(q =>
                                 (!session.LogicSettings.UseTransferIvForSnipe ||
                                  (q.IV == 0 && !session.LogicSettings.SnipeIgnoreUnknownIv) ||
-                                 (q.IV >= session.Inventory.GetPokemonTransferFilter(q.Id).KeepMinIvPercentage)) &&
+                                 (q.IV >= GetApplyFilter<TransferFilter>(session.LogicSettings.PokemonsTransferFilter, q.Id).KeepMinIvPercentage)) &&
                                 !LocsVisited.Contains(new PokemonLocation(q.Latitude, q.Longitude))
                                 && !(q.ExpirationTimestamp != default(DateTime) &&
                                      q.ExpirationTimestamp > new DateTime(2016) &&
@@ -776,7 +776,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 string status;
                 if (!session.LogicSettings.UseTransferIvForSnipe ||
                     (q.IV < 1 && !session.LogicSettings.SnipeIgnoreUnknownIv) ||
-                    (q.IV >= session.Inventory.GetPokemonTransferFilter(q.Id).KeepMinIvPercentage))
+                    (q.IV >= GetApplyFilter<TransferFilter>(session.LogicSettings.PokemonsTransferFilter, q.Id).KeepMinIvPercentage))
                 {
                     if (!LocsVisited.Contains(new PokemonLocation(q.Latitude, q.Longitude)))
                     {
@@ -876,7 +876,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 string status;
                 if (!session.LogicSettings.UseTransferIvForSnipe ||
                     (q.IV < 1 && !session.LogicSettings.SnipeIgnoreUnknownIv) ||
-                    (q.IV >= session.Inventory.GetPokemonTransferFilter(q.Id).KeepMinIvPercentage))
+                    (q.IV >= GetApplyFilter<TransferFilter>(session.LogicSettings.PokemonsTransferFilter, q.Id).KeepMinIvPercentage))
                 {
                     if (!LocsVisited.Contains(new PokemonLocation(q.Latitude, q.Longitude)))
                     {
@@ -1002,7 +1002,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 string status;
                 if (!session.LogicSettings.UseTransferIvForSnipe ||
                     (q.IV < 1 && !session.LogicSettings.SnipeIgnoreUnknownIv) ||
-                    (q.IV >= session.Inventory.GetPokemonTransferFilter(q.Id).KeepMinIvPercentage))
+                    (q.IV >= GetApplyFilter<TransferFilter>(session.LogicSettings.PokemonsTransferFilter, q.Id).KeepMinIvPercentage))
                 {
                     if (!LocsVisited.Contains(new PokemonLocation(q.Latitude, q.Longitude)))
                     {
