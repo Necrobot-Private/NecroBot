@@ -379,6 +379,13 @@ namespace PoGo.NecroBot.CLI
                 (session, lat, lng, speed) => _session.EventDispatcher.Send(new UpdatePositionEvent { Latitude = lat, Longitude = lng, Speed = speed });
             _session.Navigation.WalkStrategy.UpdatePositionEvent += LoadSaveState.SaveLocationToDisk;
 
+            /*
+            Navigation.GetHumanizeRouteEvent +=
+                (route, destination, pokestops) => _session.EventDispatcher.Send(new GetHumanizeRouteEvent { Route = route, Destination = destination, pokeStops = pokestops });
+            Navigation.GetHumanizeRouteEvent += UpdateMap;
+            */
+
+
             ProgressBar.Fill(100);
 
             var accountManager = new MultiAccountManager(logicSettings.Bots);
