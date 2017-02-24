@@ -179,8 +179,13 @@ namespace PoGo.NecroBot.CLI
                 {
                     var lat = double.Parse(crds[0]);
                     var lng = double.Parse(crds[1]);
-                    settings.LocationConfig.DefaultLatitude = lat;
-                    settings.LocationConfig.DefaultLongitude = lng;
+                    //If lastcoord is snipe coord, bot start from default location
+
+                    if (LocationUtils.CalculateDistanceInMeters(lat, lng, settings.LocationConfig.DefaultLatitude, settings.LocationConfig.DefaultLongitude) < 2000)
+                    {
+                        settings.LocationConfig.DefaultLatitude = lat;
+                        settings.LocationConfig.DefaultLongitude = lng;
+                    }
                 }
                 catch (Exception)
                 {
