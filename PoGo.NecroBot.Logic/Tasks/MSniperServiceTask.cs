@@ -571,7 +571,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
             }
             var pokemonId  = (PokemonId)item.PokemonId;
-            SnipeFilter filter = session.LogicSettings.PokemonSnipeFilters.GetFilter<SnipeFilter>(pokemonId);
+           SnipeFilter filter = session.LogicSettings.PokemonSnipeFilters.GetFilter<SnipeFilter>(pokemonId);
 
             lock (locker)
             {
