@@ -8,6 +8,7 @@ using PoGo.NecroBot.Logic.Model.Settings;
 using PoGo.NecroBot.Logic.Service.Elevation;
 using PoGo.NecroBot.Logic.State;
 using PokemonGo.RocketAPI.Enums;
+using System.Diagnostics;
 
 namespace PoGo.NecroBot.CLI.Forms
 {
@@ -40,6 +41,10 @@ namespace PoGo.NecroBot.CLI.Forms
             this.txtWebsocketPort.Text = settings.WebsocketsConfig.WebSocketPort.ToString();
             this.chkAllowWebsocket.Checked = settings.WebsocketsConfig.UseWebsocket;
 
+            this.chkSnipeDex.Checked = this.Session.LogicSettings.SnipePokemonNotInPokedex;
+            this.chkEnableSnipe.Checked = this.Session.LogicSettings.DataSharingConfig.AutoSnipe;
+            this.txtMinIV.Text = this.Session.LogicSettings.MinIVForAutoSnipe.ToString();
+            this.txtMinLevel.Text = this.Session.LogicSettings.MinLevelForAutoSnipe.ToString();
             this.elevationService = elevationService;
             this.configFile = configFile;
         }
@@ -61,26 +66,16 @@ namespace PoGo.NecroBot.CLI.Forms
 
         private void SelectLanguagePage_Commit(object sender, WizardPageConfirmEventArgs e)
         {
+            
         }
 
         private void wizardPage4_Click(object sender, EventArgs e)
         {
-            this.settings.LocationConfig.DefaultLatitude = Convert.ToDouble(txtLat.Text);
-            this.settings.LocationConfig.DefaultLongitude = Convert.ToDouble(txtLng.Text);
         }
 
         private void WalkinSpeedPage_Click(object sender, EventArgs e)
         {
-            this.settings.LocationConfig.WalkingSpeedInKilometerPerHour = Convert.ToDouble(txtSpeed.Text);
-            this.settings.LocationConfig.WalkingSpeedVariant = Convert.ToDouble(txtSpeed.Text);
-            this.settings.LocationConfig.UseWalkingSpeedVariant = chkAllowVariant.Checked;
-
-            this.settings.GoogleWalkConfig.UseGoogleWalk = chkEnableGoogle.Checked;
-            this.settings.GoogleWalkConfig.GoogleAPIKey = txtGoogleKey.Text;
-            this.settings.GoogleWalkConfig.UseGoogleWalk = chkAllowYourwalk.Checked;
-
-            this.settings.MapzenWalkConfig.UseMapzenWalk = chkMazen.Checked;
-            this.settings.MapzenWalkConfig.MapzenTurnByTurnApiKey = txtMapzenKey.Text;
+        
         }
 
         private void chkAllowVariant_Click(object sender, EventArgs e)
@@ -93,8 +88,7 @@ namespace PoGo.NecroBot.CLI.Forms
 
         private void WebSocketPage_Click(object sender, EventArgs e)
         {
-            this.settings.WebsocketsConfig.UseWebsocket = chkAllowWebsocket.Checked;
-            this.settings.WebsocketsConfig.WebSocketPort = Convert.ToInt32(txtWebsocketPort.Text);
+          
         }
 
         private void wizardControl1_Finished(object sender, EventArgs e)
@@ -130,5 +124,53 @@ namespace PoGo.NecroBot.CLI.Forms
 
             this.Close();
         }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("http://necrobot2.com/config.json/2017/01/07/how-to-config-auto-snipe/");
+        }
+
+        private void SnipePage_Initialize(object sender, WizardPageInitEventArgs e)
+        {
+           
+        }
+
+        private void LocationPage_Commit(object sender, WizardPageConfirmEventArgs e)
+        {
+            this.settings.LocationConfig.DefaultLatitude = Convert.ToDouble(txtLat.Text);
+            this.settings.LocationConfig.DefaultLongitude = Convert.ToDouble(txtLng.Text);
+
+        }
+
+        private void WalkinSpeedPage_Commit(object sender, WizardPageConfirmEventArgs e)
+        {
+            this.settings.LocationConfig.WalkingSpeedInKilometerPerHour = Convert.ToDouble(txtSpeed.Text);
+            this.settings.LocationConfig.WalkingSpeedVariant = Convert.ToDouble(txtSpeed.Text);
+            this.settings.LocationConfig.UseWalkingSpeedVariant = chkAllowVariant.Checked;
+
+            this.settings.GoogleWalkConfig.UseGoogleWalk = chkEnableGoogle.Checked;
+            this.settings.GoogleWalkConfig.GoogleAPIKey = txtGoogleKey.Text;
+            this.settings.GoogleWalkConfig.UseGoogleWalk = chkAllowYourwalk.Checked;
+
+            this.settings.MapzenWalkConfig.UseMapzenWalk = chkMazen.Checked;
+            this.settings.MapzenWalkConfig.MapzenTurnByTurnApiKey = txtMapzenKey.Text;
+        }
+
+        private void WebSocketPage_Commit(object sender, WizardPageConfirmEventArgs e)
+        {
+            this.settings.WebsocketsConfig.UseWebsocket = chkAllowWebsocket.Checked;
+            this.settings.WebsocketsConfig.WebSocketPort = Convert.ToInt32(txtWebsocketPort.Text);
+        }
+
+        private void SnipePage_Commit(object sender, WizardPageConfirmEventArgs e)
+        {
+            this.settings.SnipeConfig.MinLevelForAutoSnipe = int.Parse(txtMinLevel.Text);
+            this.settings.SnipeConfig.MinIVForAutoSnipe = int.Parse(txtMinIV.Text);
+            this.settings.DataSharingConfig.AutoSnipe = chkEnableSnipe.Checked;
+            this.settings.SnipeConfig.SnipePokemonNotInPokedex = chkSnipeDex.Checked;
+
+        }
+
+      
     }
 }
