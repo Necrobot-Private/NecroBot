@@ -304,9 +304,11 @@ namespace PoGo.NecroBot.CLI
                 StarterConfigForm configForm = new StarterConfigForm(_session, settings, elevationService, configFile);
                 if (configForm.ShowDialog() == DialogResult.OK)
                 {
-                    var fileName = Assembly.GetExecutingAssembly().Location;
+                    var fileName = Assembly.GetEntryAssembly().Location;
+
                     Process.Start(fileName);
                     Environment.Exit(0);
+
                 }
 
                 //if (GlobalSettings.PromptForSetup(_session.Translation))
