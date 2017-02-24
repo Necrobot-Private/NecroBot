@@ -654,7 +654,7 @@ namespace PoGo.NecroBot.Logic
             var settings = pokemonSettings.SingleOrDefault(x => x.PokemonId == pokemon.PokemonId);
 
             // Can't evolve pokemon that are not evolvable.
-            if (settings.EvolutionIds.Count == 0)
+            if (settings.EvolutionIds.Count == 0 && settings.EvolutionBranch.Count ==0)
                 return false;
 
 
