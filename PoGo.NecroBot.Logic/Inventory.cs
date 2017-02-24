@@ -737,6 +737,13 @@ namespace PoGo.NecroBot.Logic
                         candyNeed = branch.CandyCost;
                     }
                 }
+                else
+                {
+                    if(settings.EvolutionBranch.Count == 1)
+                    {
+                        candyNeed = settings.EvolutionBranch.First().CandyCost;
+                    }
+                }
 
                 // Calculate the number of evolutions possible (taking into account +1 candy for evolve and +1 candy for transfer)
                 EvolutionCalculations evolutionInfo = CalculatePokemonEvolution(pokemonLeft, candiesLeft, candyNeed, 1);

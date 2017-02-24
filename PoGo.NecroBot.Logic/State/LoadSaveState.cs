@@ -88,11 +88,17 @@ namespace PoGo.NecroBot.Logic.State
             await Task.Delay(3000, cancellationToken);
             return new CheckTosState();
         }
-
+        private static double lastLat = 0;
+        private static double lastLng = 0;
         public static void SaveLocationToDisk(ISession session, double lat, double lng, double speed)
         {
-            var coordsPath = Path.Combine(session.LogicSettings.ProfileConfigPath, "LastPos.ini");
-            File.WriteAllText(coordsPath, $"{lat}:{lng}");
+            if (!session.Stats.IsSnipping  && ((lastLat ==0 && lastLng ==0 ) || LocationUtils.CalculateDistanceInMeters(lat, lng, lastLat, lastLng) <1000))
+            {
+                lastLat = lat;
+                lastLng = lng;
+                var coordsPath = Path.Combine(session.LogicSettings.ProfileConfigPath, "LastPos.ini");
+                File.WriteAllText(coordsPath, $"{lat}:{lng}");
+            }
         }
 
         public static Tuple<double, double> LoadPositionFromDisk(ISession session)
