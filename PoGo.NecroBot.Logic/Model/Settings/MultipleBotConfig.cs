@@ -1,13 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 using PoGo.NecroBot.Logic.Interfaces.Configuration;
 using POGOProtos.Enums;
+using TinyIoC;
+using PoGo.NecroBot.Logic.State;
 
 namespace PoGo.NecroBot.Logic.Model.Settings
 {
-    public class BotSwitchPokemonFilter
+    public class BotSwitchPokemonFilter    : BaseConfig, IPokemonFilter
     {
         [JsonIgnore]
         [NecrobotConfig(IsPrimaryKey = true, Key = "Allow Switch", Description = "Allow bot use invidual filter for switch", Position = 1)]
@@ -39,13 +42,22 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public string Operator { get; set; }
 
+
+        [NecrobotConfig(Key = "Affect to Pokemons", Description = "List of same pokemon apply this filte", Position = 6)]
+        [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
+
+        public List<PokemonId> AffectToPokemons { get; set; }
+
         public BotSwitchPokemonFilter()
         {
             this.Moves = new List<List<PokemonMove>>();
+            this.AffectToPokemons = new List<PokemonId>();
         }
 
         public BotSwitchPokemonFilter(int iv, int lv, int remain)
         {
+            this.AffectToPokemons = new List<PokemonId>();
+
             this.Operator = "or";
             this.Moves = new List<List<PokemonMove>>();
             this.IV = iv;
@@ -77,6 +89,13 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 {PokemonId.Electabuzz, new BotSwitchPokemonFilter(10, 0, 60)},
                 {PokemonId.Magikarp, new BotSwitchPokemonFilter(95, 0, 60)},
             };
+        }
+
+        public IPokemonFilter GetGlobalFilter()
+        {
+            //var session = TinyIoCContainer.Current.Resolve<ISession>();
+
+            return null;
         }
     }
 

@@ -60,15 +60,17 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
                     necrobotStats.HoursUntilLvl,
                     necrobotStats.MinutesUntilLevel,
                     necrobotStats.LevelupXp - necrobotStats.CurrentXp,
-                    necroBotStatistics.TotalExperience / necroBotStatistics.GetRuntime(),
-                    necroBotStatistics.TotalPokemons / necroBotStatistics.GetRuntime(),
-                    necroBotStatistics.TotalStardust / necroBotStatistics.GetRuntime(),
+                    necroBotStatistics.TotalExperience/necroBotStatistics.GetRuntime(),
+                    necroBotStatistics.TotalPokemons/necroBotStatistics.GetRuntime(),
+                    necroBotStatistics.TotalStardust/necroBotStatistics.GetRuntime(),
                     necroBotStatistics.TotalPokemonTransferred,
                     necroBotStatistics.TotalPokemonEvolved,
                     necroBotStatistics.TotalItemsRemoved,
+                    answerPokestopLimit,
                     answerCatchLimit,
-                    answerPokestopLimit
-                );
+                    session.Profile.PlayerData.Currencies[1].Amount,
+                    session.Profile.PlayerData.Currencies[0].Amount
+                    );
 
                 callback(answerTextmessage);
                 return true;

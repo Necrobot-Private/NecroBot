@@ -127,15 +127,6 @@ namespace PoGo.NecroBot.Logic.Tasks
             DelayingUtils.Delay(session.LogicSettings.DelayBetweenPlayerActions, 0);
         }
 
-        public static EvolveFilter GetEvolveFilter(ISession session, PokemonId id)
-        {
-            if (session.LogicSettings.PokemonEvolveFilters.ContainsKey(id))
-                return session.LogicSettings.PokemonEvolveFilters[id];
-
-            //TODO maybe use global config for evolve
-            return null;
-
-        }
         public static ItemId GetRequireEvolveItem(ISession session, PokemonId from, PokemonId to)
         {
             var settings = session.Inventory.GetPokemonSettings().Result.FirstOrDefault(x => x.PokemonId == from);
@@ -150,7 +141,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             int sequence = 1;
             foreach (var pokemon in pokemonToEvolve)
             {
-                var filter = GetEvolveFilter(session,pokemon.PokemonId);
+                var filter = session.LogicSettings.PokemonEvolveFilters.GetFilter<EvolveFilter>(pokemon.PokemonId);
                 if (await session.Inventory.CanEvolvePokemon(pokemon, null))
                 {
                     try

@@ -148,7 +148,32 @@
 
             <DataGrid.ContextMenu>
                 <ContextMenu >
-                    <MenuItem Header="{Binding Source=SetBuddy, Converter={StaticResource I18NConveter}}" Click="mnuBuddy_Click"  />
+                    <MenuItem Header="{Binding Source=SetBuddy, Converter={StaticResource I18NConveter}}" Click="mnuBuddy_Click">
+                        <MenuItem.Icon>
+                            <Image Source="https://cdn4.iconfinder.com/data/icons/free-retina-icon-set/20/Aim_buddy.png" Width="20" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem  Header="{Binding Source=MenuTransferFilterText, Converter={StaticResource I18NConveter}}" Click="mnuTransferSetting_Click" >
+                        <MenuItem.Icon>
+                            <Image Source="https://cdn2.iconfinder.com/data/icons/elysium-icons/24/Transfer_Horizontal.png" Width="20" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem  Header="{Binding Source=MenuEvolveFilterText, Converter={StaticResource I18NConveter}}" Click="MenuEvolve_Click"  >
+                        <MenuItem.Icon>
+                            <Image Source="https://cdn3.iconfinder.com/data/icons/google-material-design-icons/48/ic_transform_48px-20.png" Width="20" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem  Header="{Binding Source=MenuUpgradeFilterText, Converter={StaticResource I18NConveter}}" Click="MenuUpgrade_Click" >
+                        <MenuItem.Icon>
+                            <Image Source="https://cdn2.iconfinder.com/data/icons/mobile-web-apps-1/32/increase-24.png" Width="20" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="{Binding Source=MenuSnipeFilterText, Converter={StaticResource I18NConveter}}" Click="MenuSnipe_Click"  >
+                        <MenuItem.Icon>
+                            <Image Source="https://cdn3.iconfinder.com/data/icons/social-productivity-black-line-3/1/29-20.png" Width="20" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
                 </ContextMenu>
             </DataGrid.ContextMenu>
             <DataGrid.RowStyle>

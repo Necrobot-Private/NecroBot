@@ -124,35 +124,36 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 21)]
         public int MinIVForAutoSnipe { get; set; }
 
-        [NecrobotConfig(Description = "Min lvl that bot will automatically snipe pokemon", Position = 22)]
-        [DefaultValue(30)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 22)]
-        public int MinLvlForAutoSnipe { get; set; }
+        [NecrobotConfig(Description = "Min Level that bot will automatically snipe pokemon", Position = 21)]
+        [DefaultValue(0)]
+        [Range(0,100)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 21)]
+        public int MinLevelForAutoSnipe { get; set; }
 
-        [NecrobotConfig(Description = "Only auto snipe pokemon has been verified (overwriteable by invidual pokemon)", Position = 24)]
+        [NecrobotConfig(Description = "Only auto snipe pokemon has been verified (overwriteable by invidual pokemon)", Position = 22)]
         [DefaultValue(false)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 24)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 22)]
         public bool AutosnipeVerifiedOnly { get; set; }
 
-        [NecrobotConfig(Description = "Set the amount of candy want bot auto snipe if we has less candy than this value.", Position = 25)]
+        [NecrobotConfig(Description = "Set the amount of candy want bot auto snipe if we has less candy than this value.", Position = 22)]
         [DefaultValue(0)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 25)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 22)]
         public int DefaultAutoSnipeCandy { get; set; }
 
-        [NecrobotConfig(Description = "Total time in minutes bot will ignore autosnipe when out of ball", Position = 26)]
+        [NecrobotConfig(Description = "Total time in minutes bot will ignore autosnipe when out of ball", Position = 23)]
         [DefaultValue(5)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 26)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 23)]
         public int SnipePauseOnOutOfBallTime { get;  set; }
 
-        [NecrobotConfig(Description = "Max distance in km that allow bot autosnipe. set to Z mean not applied", Position = 27)]
+        [NecrobotConfig(Description = "Max distance in km that allow bot autosnipe. set to Z mean not applied", Position = 24)]
         [DefaultValue(0)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 27)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 24)]
         public double AutoSnipeMaxDistance { get;  set; }
 
-        [NecrobotConfig(Description = "Number of autosnipe pokemon in a row that bot pickup for snipe", Position = 28)]
+        [NecrobotConfig(Description = "Number of autosnipe pokemon in a row that bot pickup for snipe", Position = 26)]
         [DefaultValue(10)]
         [Range(1,1000)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 28)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 26)]
         public int AutoSnipeBatchSize { get; set; }
     }
 }

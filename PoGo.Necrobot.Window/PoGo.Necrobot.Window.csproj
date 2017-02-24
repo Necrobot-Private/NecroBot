@@ -220,6 +220,8 @@
       <DependentUpon>SnipeGrid.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\TemplatedAdorner.cs" />
+    <Compile Include="Converters\GrayScaleConverter.cs" />
+    <Compile Include="Converters\ListPokemonIdToTextConverter.cs" />
     <Compile Include="Converters\HeaderFilterConverter.cs" />
     <Compile Include="Converters\I18NMultiConveter.cs" />
     <Compile Include="Converters\I18NConveter.cs" />
@@ -231,7 +233,11 @@
     <Compile Include="Converters\PokemonImageConverter.cs" />
     <Compile Include="Converters\ListCountConverter.cs" />
     <Compile Include="Converters\VisibleWhenGreateThenZeroConverter.cs" />
+    <Compile Include="FilterSetting.xaml.cs">
+      <DependentUpon>FilterSetting.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Model\AddManualSnipeCoordViewModel.cs" />
+    <Compile Include="Model\AffectPokemonViewModel.cs" />
     <Compile Include="Model\EggsListViewModel.cs" />
     <Compile Include="Model\EggViewModel.cs" />
     <Compile Include="Model\GymViewModel.cs" />
@@ -357,6 +363,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\SnipeGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="FilterSetting.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

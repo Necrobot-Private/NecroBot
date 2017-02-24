@@ -510,7 +510,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (item.EncounterId > 0 && expiredCache.Get(item.EncounterId.ToString()) != null) return false;
 
             //fake & annoy data
-            if (Math.Abs(item.Latitude) > 90 || Math.Abs(item.Longitude) > 180) return false;
+            if (Math.Abs(item.Latitude) > 90 || Math.Abs(item.Longitude) > 180 || item.Iv>100) return false;
 
             lock(locker)
             {
@@ -570,21 +570,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                     return true;
                 }
             }
-            SnipeFilter filter = new SnipeFilter()
-            {
-                SnipeIV = session.LogicSettings.MinIVForAutoSnipe,
-                VerifiedOnly = session.LogicSettings.AutosnipeVerifiedOnly,
-                AutoSnipeCandy = session.LogicSettings.DefaultAutoSnipeCandy,
-                Level = session.LogicSettings.MinLvlForAutoSnipe,
-                Operator = "or"
-            };
-
-            var pokemonId = (PokemonId)item.PokemonId;
-
-            if (session.LogicSettings.PokemonSnipeFilters.ContainsKey(pokemonId))
-            {
-                filter = session.LogicSettings.PokemonSnipeFilters[pokemonId];
-            }
+            var pokemonId  = (PokemonId)item.PokemonId;
+           SnipeFilter filter = session.LogicSettings.PokemonSnipeFilters.GetFilter<SnipeFilter>(pokemonId);
 
             lock (locker)
             {

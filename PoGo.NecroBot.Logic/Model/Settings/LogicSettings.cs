@@ -99,6 +99,12 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool FastSoftBanBypass => _settings.SoftBanConfig.FastSoftBanBypass;
         public int ByPassSpinCount => _settings.SoftBanConfig.ByPassSpinCount;
         public bool EvolveAllPokemonWithEnoughCandy => _settings.PokemonConfig.EvolveAllPokemonWithEnoughCandy;
+        public bool EvolveFavoritedOnly => _settings.PokemonConfig.EvolveFavoritedOnly;
+        public string EvolveOperator => _settings.PokemonConfig.EvolveOperator;
+        public double EvolveMinIV => _settings.PokemonConfig.EvolveMinIV;
+        public double EvolveMinCP => _settings.PokemonConfig.EvolveMinCP;
+        public double EvolveMinLevel => _settings.PokemonConfig.EvolveMinLevel;
+
         public bool KeepPokemonsThatCanEvolve => _settings.PokemonConfig.KeepPokemonsThatCanEvolve;
         public bool TransferDuplicatePokemon => _settings.PokemonConfig.TransferDuplicatePokemon;
         public bool TransferDuplicatePokemonOnCapture => _settings.PokemonConfig.TransferDuplicatePokemonOnCapture;
@@ -269,7 +275,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         public DataSharingConfig DataSharingConfig => _settings.DataSharingConfig;
         public int SnipePauseOnOutOfBallTime => GenRandom(_settings.SnipeConfig.SnipePauseOnOutOfBallTime);
-        
+
         public bool UseTransferFilterToCatch => _settings.CustomCatchConfig.UseTransferFilterToCatch;
         public MultipleBotConfig MultipleBotConfig => _settings.MultipleBotConfig;
         public List<AuthConfig> Bots => _settings.Auth.Bots;
@@ -282,5 +288,8 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public NotificationConfig NotificationConfig => _settings.NotificationConfig;
         public CaptchaConfig CaptchaConfig => _settings.CaptchaConfig;
         public GUIConfig UIConfig => _settings.UIConfig;
+
+        public int MinLevelForAutoSnipe => _settings.SnipeConfig.MinLevelForAutoSnipe;
+
     }
 }
