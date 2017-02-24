@@ -461,7 +461,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         public double EvolveMinCP { get; set; }
         [NecrobotConfig(Description = "set MinLevel for bot to evolve", Position = 70)]
-        [DefaultValue(2000)]
+        [DefaultValue(25)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 70)]
         [Range(0, 5000)]
         public double EvolveMinLevel { get;  set; }
