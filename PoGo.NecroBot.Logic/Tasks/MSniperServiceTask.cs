@@ -371,11 +371,9 @@ namespace PoGo.NecroBot.Logic.Tasks
             CancellationToken cancellationToken, MSniperInfo2 encounterId)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
-            double lat = session.Client.CurrentLatitude;
-            double lon = session.Client.CurrentLongitude;
+            double originalLat = session.Client.CurrentLatitude;
+            double originalLng = session.Client.CurrentLongitude;
 
-            bool captchaShowed = false;
             EncounterResponse encounter;
             try
             {
@@ -388,10 +386,6 @@ namespace PoGo.NecroBot.Logic.Tasks
 
 
                 await session.Client.Misc.RandomAPICall();
-
-                //await session.Client.Map.GetMapObjects(true);
-
-                //await Task.Delay(1000, cancellationToken);
 
                 encounter = await session.Client.Encounter.EncounterPokemon(encounterId.EncounterId, encounterId.SpawnPointId);
 
@@ -408,7 +402,6 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
             catch (CaptchaException ex)
             {
-                captchaShowed = true;
                 throw ex;
             }
             catch (Exception)
@@ -417,18 +410,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
             finally
             {
-                if (!captchaShowed)
-                {
-                    //TODO - What if udpate location failed
-                    // Speed set to 0 for random speed.
-                    LocationUtils.UpdatePlayerLocationWithAltitude(
-                        session,
-                        new GeoCoordinate(lat, lon, session.Client.CurrentAltitude),
-                        0
-                    );
-                }
-                else
-                    session.Client.Player.SetCoordinates(lat, lon, session.Client.CurrentAltitude); //only reset d
+                    session.Client.Player.SetCoordinates(originalLat, originalLng, session.Client.CurrentAltitude); //only reset d
             }
 
             if (encounter.Status == EncounterResponse.Types.Status.PokemonInventoryFull)
@@ -552,7 +534,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 pokedexList.AddRange(update.Select(x=>x.Value));
 
-                Logger.Debug($"Pokedex Entry : {pokedexList.Count()}");
+                //Logger.Debug($"Pokedex Entry : {pokedexList.Count()}");
 
                 if (pokedexList.Count>0 && 
                     !pokedexList.Exists(x => x == (PokemonId)item.PokemonId) &&
@@ -627,6 +609,12 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (!CheckSnipeConditions(session)) return;
 
             inProgress = true;
+            double originalLatitude = session.Client.CurrentLatitude;
+            double originalLongitude = session.Client.CurrentLongitude;
+            session.KnownLatitudeBeforeSnipe = originalLatitude;
+            session.KnownLongitudeBeforeSnipe = originalLongitude;
+
+            //Logger.Write($"DEBUG : Location before snipe : {originalLatitude},{originalLongitude}");
 
             var pth = Path.Combine(Directory.GetCurrentDirectory(), "SnipeMS.json");
             try
@@ -684,8 +672,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                             .ThenByDescending(x => x.AddedTime);
 
                         var batch = autoSnipePokemons.Take(session.LogicSettings.AutoSnipeBatchSize);
-                        //mSniperLocation2.AddRange(autoSnipePokemons.Take(10));
-                        //autoSnipePokemons.Clear();
                         if (batch != null && batch.Count() > 0)
                         {
                             mSniperLocation2.AddRange(batch);
@@ -741,11 +727,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                     });
 
                     session.Stats.IsSnipping = true;
-                    var result = location.IsVerified()
+                    var result = (location.IsVerified())
                         ? await CatchFromService(session, cancellationToken, location)
                         : await CatchWithSnipe(session, location, cancellationToken);
-
-                    //var result = await CatchWithSnipe(session, location, cancellationToken);
 
                     if (result)
                     {
@@ -763,6 +747,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
             }
             catch(ActiveSwitchByPokemonException ex) { throw ex; }
+            catch (ActiveSwitchAccountManualException ex)
+            {
+                throw ex;
+            }
             catch (ActiveSwitchByRuleException ex)
             {
                 throw ex;
@@ -784,6 +772,15 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 inProgress = false;
                 session.Stats.IsSnipping = false;
+                //Logger.Write($"DEBUG : Back to home location: {originalLatitude},{originalLongitude}");
+
+                LocationUtils.UpdatePlayerLocationWithAltitude(
+               session,
+               new GeoCoordinate(originalLatitude, originalLongitude),
+               0
+           );
+
+
             }
         }
     }
