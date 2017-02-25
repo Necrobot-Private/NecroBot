@@ -28,8 +28,10 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
             cancellationToken.ThrowIfCancellationRequested();
-
+            
             //make sure not catch pokemon nearby at snipe locaiton.
+
+            //this code is not necsecssarily but still ok to leave here.
 
             if(session.KnownLongitudeBeforeSnipe != 0 && session.KnownLatitudeBeforeSnipe != 0 && 
                 LocationUtils.CalculateDistanceInMeters(session.KnownLatitudeBeforeSnipe, 
@@ -88,7 +90,13 @@ namespace PoGo.NecroBot.Logic.Tasks
             foreach (var pokemon in pokemons)
             {
                 await MSniperServiceTask.Execute(session, cancellationToken);
-
+                
+                //should load it dynamic from - MapSettings.encounterRangeMeters_
+                if (LocationUtils.CalculateDistanceInMeters(pokemon.Latitude, pokemon.Longitude, session.Client.CurrentLatitude, session.Client.CurrentLongitude) > session.Client.GlobalSettings.MapSettings.EncounterRangeMeters)
+                {
+                    Logger.Debug($"THIS POKEMON IS TOO FAR, {pokemon.Latitude}, {pokemon.Longitude}");
+                    continue;
+                }
                 cancellationToken.ThrowIfCancellationRequested();
                 TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
                 string pokemonUniqueKey = $"{pokemon.EncounterId}";
@@ -197,6 +205,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             session.EventDispatcher.Send(new PokeStopListEvent(forts, nearbyPokemons));
 
             var pokemons = mapObjects.MapCells.SelectMany(i => i.CatchablePokemons)
+                .Where(pokemon=>LocationUtils.CalculateDistanceInMeters(pokemon.Latitude, pokemon.Longitude, session.Client.CurrentLatitude, session.Client.CurrentLongitude) <= session.Client.GlobalSettings.MapSettings.EncounterRangeMeters)
                 .OrderBy(
                     i =>
                         LocationUtils.CalculateDistanceInMeters(session.Client.CurrentLatitude,
