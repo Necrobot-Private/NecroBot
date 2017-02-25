@@ -15,6 +15,7 @@ using POGOProtos.Inventory.Item;
 using POGOProtos.Map.Pokemon;
 using POGOProtos.Networking.Responses;
 using TinyIoC;
+using GeoCoordinatePortable;
 
 #endregion
 
@@ -59,6 +60,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (priorityPokemon != null)
             {
                 pokemons.Insert(0, priorityPokemon);
+                LocationUtils.UpdatePlayerLocationWithAltitude(session,
+                        new GeoCoordinate(priorityPokemon.Latitude, priorityPokemon.Longitude, session.Client.CurrentAltitude), 0); // Set speed to 0 for random speed.
                 encounter = await session.Client.Encounter
                     .EncounterPokemon(priorityPokemon.EncounterId, priorityPokemon.SpawnPointId);
 
@@ -121,6 +124,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 if (encounter == null || encounter.Status != EncounterResponse.Types.Status.EncounterSuccess)
                 {
+                    LocationUtils.UpdatePlayerLocationWithAltitude(session,
+                        new GeoCoordinate(pokemon.Latitude, pokemon.Longitude, session.Client.CurrentAltitude), 0); // Set speed to 0 for random speed.
                     encounter =
                         await session.Client.Encounter.EncounterPokemon(pokemon.EncounterId, pokemon.SpawnPointId);
                 }

@@ -34,6 +34,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
                 TranslationString.TelegramCommandProfileMsgBody,
                 session.Profile.PlayerData.Username,
                 playerStats.Level,
+                session.Profile.PlayerData.Currencies[0].Amount,
                 playerStats.Experience,
                 playerStats.NextLevelXp - playerStats.Experience,
                 playerStats.PokemonsCaptured,

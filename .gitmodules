@@ -5,3 +5,6 @@
 [submodule "POGOProtos"]
 	path = POGOProtos
 	url = https://github.com/Necrobot-Private/POGOProtos.git
+[submodule "PoGo.NecroBot.GUI.Electron"]
+	path = PoGo.NecroBot.GUI.Electron
+	url = https://github.com/Necrobot-Private/NecroBot.GUI.Electron.git

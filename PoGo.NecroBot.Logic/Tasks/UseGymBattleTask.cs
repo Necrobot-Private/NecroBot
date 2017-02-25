@@ -208,6 +208,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 switch (result.BattleLog.State)
                 {
                     case BattleState.Active:
+                        _startBattleCounter = 3;
                         Logger.Write($"Time to start Attack Mode", LogLevel.Gym, ConsoleColor.DarkYellow);
                         thisAttackActions = await AttackGym(session, cancellationToken, fortDetails, result, index);
                         battleActions.AddRange(thisAttackActions);
