@@ -56,6 +56,8 @@ namespace PoGo.NecroBot.Logic.State
         DateTime CatchBlockTime { get; set; }
         Statistics RuntimeStatistics { get; }
         GymTeamState GymState { get; set; }
+        double KnownLatitudeBeforeSnipe { get; set; }
+        double KnownLongitudeBeforeSnipe { get; set; }
     }
 
     public class Session : ISession
@@ -254,5 +256,8 @@ namespace PoGo.NecroBot.Logic.State
             return false; //timedout
         }
         public GymTeamState GymState { get; set; }
+
+        public double KnownLatitudeBeforeSnipe { get; set; }
+        public double KnownLongitudeBeforeSnipe { get; set; }
     }
 }

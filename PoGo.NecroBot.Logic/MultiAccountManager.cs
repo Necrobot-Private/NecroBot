@@ -125,9 +125,9 @@ namespace PoGo.NecroBot.Logic
             }
         }
 
-        internal BotAccount GetMinRuntime()
+        internal BotAccount GetMinRuntime(bool ignoreBlockCheck= false)
         {
-            return this.Accounts.OrderBy(x => x.RuntimeTotal).Where(x => x.ReleaseBlockTime < DateTime.Now).FirstOrDefault();
+            return this.Accounts.OrderBy(x => x.RuntimeTotal).Where(x => !ignoreBlockCheck || x.ReleaseBlockTime < DateTime.Now).FirstOrDefault();
         }
 
         public BotAccount Add(AuthConfig authConfig)
@@ -146,7 +146,7 @@ namespace PoGo.NecroBot.Logic
                 runningAccount = Accounts.Last();
             }
             else
-            runningAccount = GetMinRuntime();
+            runningAccount = GetMinRuntime(true);
 
             if (session.LogicSettings.AllowMultipleBot
               && session.LogicSettings.MultipleBotConfig.SelectAccountOnStartUp)
