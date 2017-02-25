@@ -290,5 +290,13 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         public int MinLevelForAutoSnipe => _settings.SnipeConfig.MinLevelForAutoSnipe;
 
+        public bool UseHumanlikeDelays => _settings.HumanlikeDelays.UseHumanlikeDelays;
+        public int CatchSuccessDelay => _settings.HumanlikeDelays.CatchSuccessDelay;
+        public int CatchErrorDelay => _settings.HumanlikeDelays.CatchErrorDelay;
+        public int CatchEscapeDelay => _settings.HumanlikeDelays.CatchEscapeDelay;
+        public int CatchFleeDelay => _settings.HumanlikeDelays.CatchFleeDelay;
+        public int CatchMissedDelay => _settings.HumanlikeDelays.CatchMissedDelay;
+        public int BeforeCatchDelay => _settings.HumanlikeDelays.BeforeCatchDelay;
+
     }
 }

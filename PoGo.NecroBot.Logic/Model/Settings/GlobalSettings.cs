@@ -186,6 +186,11 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [NecrobotConfig(SheetName = "UIConfig", Description = "Define all parametter to display data on UI.")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public GUIConfig UIConfig = new GUIConfig();
+
+        [NecrobotConfig(SheetName = "HumanlikeDelays", Description = "Define the delays for humanlike behaviour when catching pokemon")]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public HumanlikeDelays HumanlikeDelays = new HumanlikeDelays();
+
         public GlobalSettings()
         {
             InitializePropertyDefaultValues(this);

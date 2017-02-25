@@ -251,5 +251,13 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         double EvolveMinCP { get;  }
         double EvolveMinLevel { get; }
         int MinLevelForAutoSnipe { get;  }
+
+        bool UseHumanlikeDelays { get; }
+        int CatchSuccessDelay { get; }
+        int CatchErrorDelay { get; }
+        int CatchEscapeDelay { get; }
+        int CatchFleeDelay { get; }
+        int CatchMissedDelay { get; }
+        int BeforeCatchDelay { get; }
     }
 }
