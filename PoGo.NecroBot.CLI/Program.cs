@@ -394,8 +394,6 @@ namespace PoGo.NecroBot.CLI
 
             ioc.Register<MultiAccountManager>(accountManager);
 
-            
-
             var bot = accountManager.GetStartUpAccount();
 
             _session.ReInitSessionWithNextBot(bot);

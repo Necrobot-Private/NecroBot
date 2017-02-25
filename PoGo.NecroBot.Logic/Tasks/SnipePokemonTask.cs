@@ -963,6 +963,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                 var fullresp = "{ \"pokemons\":" + response + "}".Replace("Mr_mime", "MrMime");
                 scanResultPokewatchers = JsonConvert.DeserializeObject<ScanResultPokewatchers>(fullresp);
             }
+            catch(ActiveSwitchAccountManualException ex)
+            {
+                throw ex;
+            }
             catch (ActiveSwitchByRuleException ex1)
             {
                 throw ex1;

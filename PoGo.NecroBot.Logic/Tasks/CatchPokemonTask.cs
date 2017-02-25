@@ -218,6 +218,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                 // Main CatchPokemon-loop
                 do
                 {
+                    if (session.LogicSettings.UseHumanlikeDelays)
+                    {
+                        DelayingUtils.Delay(session.LogicSettings.BeforeCatchDelay, 0);
+                    }
+
                     if ((session.LogicSettings.MaxPokeballsPerPokemon > 0 &&
                          attemptCounter > session.LogicSettings.MaxPokeballsPerPokemon))
                         break;
@@ -406,7 +411,36 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     attemptCounter++;
 
-                    DelayingUtils.Delay(session.LogicSettings.DelayBetweenPlayerActions, 0);
+                    // If Humanlike delays are used
+                    if (session.LogicSettings.UseHumanlikeDelays)
+                    {
+                        switch (caughtPokemonResponse.Status)
+                        {
+                            case CatchPokemonResponse.Types.CatchStatus.CatchError:
+                                DelayingUtils.Delay(session.LogicSettings.CatchErrorDelay, 0);
+                                break;
+
+                            case CatchPokemonResponse.Types.CatchStatus.CatchSuccess:
+                                DelayingUtils.Delay(session.LogicSettings.CatchSuccessDelay, 0);
+                                break;
+
+                            case CatchPokemonResponse.Types.CatchStatus.CatchEscape:
+                                DelayingUtils.Delay(session.LogicSettings.CatchEscapeDelay, 0);
+                                break;
+
+                            case CatchPokemonResponse.Types.CatchStatus.CatchFlee:
+                                DelayingUtils.Delay(session.LogicSettings.CatchFleeDelay, 0);
+                                break;
+
+                            case CatchPokemonResponse.Types.CatchStatus.CatchMissed:
+                                DelayingUtils.Delay(session.LogicSettings.CatchMissedDelay, 0);
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                    else DelayingUtils.Delay(session.LogicSettings.DelayBetweenPlayerActions, 0);
                 } while (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchMissed ||
                          caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchEscape);
 
