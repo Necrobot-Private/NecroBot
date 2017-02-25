@@ -52,7 +52,6 @@ namespace PoGo.NecroBot.Logic.State
         List<BotActions> Actions { get; }
         CancellationTokenSource CancellationTokenSource { get; set; }
         MemoryCache Cache { get; set; }
-        List<AuthConfig> Accounts { get; }
         DateTime LoggedTime { get; set; }
         DateTime CatchBlockTime { get; set; }
         Statistics RuntimeStatistics { get; }
