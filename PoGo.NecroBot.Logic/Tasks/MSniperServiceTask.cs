@@ -734,8 +734,6 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     LocationUtils.UpdatePlayerLocationWithAltitude(session, new GeoCoordinate(originalLatitude, originalLongitude), 0);
 
-                    Logger.Write($"DEBUG : Location after snipe failed: {session.Client.CurrentLatitude},{session.Client.CurrentLongitude}");
-
                     if (result)
                     {
                         snipeFailedCount = 0;
