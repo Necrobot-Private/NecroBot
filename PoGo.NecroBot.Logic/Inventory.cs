@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Caching;
 using PoGo.NecroBot.Logic.Event.Inventory;
 using PoGo.NecroBot.Logic.Exceptions;
 using PoGo.NecroBot.Logic.Interfaces.Configuration;
@@ -21,11 +20,12 @@ using POGOProtos.Inventory.Item;
 using POGOProtos.Networking.Responses;
 using POGOProtos.Settings.Master;
 using PokemonGo.RocketAPI.Helpers;
-using System.Collections.Concurrent;
 using TinyIoC;
+using static PoGo.NecroBot.Logic.Model.Settings.FilterUtil;
+using POGOProtos.Settings.Master.Pokemon;
 
 #endregion
-using static PoGo.NecroBot.Logic.Model.Settings.FilterUtil;
+
 namespace PoGo.NecroBot.Logic
 {
     public class Inventory
@@ -643,6 +643,25 @@ namespace PoGo.NecroBot.Logic
 
             return true;
         }
+        
+        public int GetCandyToEvolve(PokemonSettings settings, EvolveFilter appliedFilter = null)
+        {
+            EvolutionBranch branch;
+            PokemonId evolveTo = PokemonId.Missingno;
+            if (appliedFilter != null && !string.IsNullOrEmpty(appliedFilter.EvolveTo) && Enum.TryParse<PokemonId>(appliedFilter.EvolveTo, true, out evolveTo))
+            {
+                branch = settings.EvolutionBranch.FirstOrDefault(x => x.Evolution == evolveTo);
+            }
+            else
+            {
+                branch = settings.EvolutionBranch.FirstOrDefault(x => x.EvolutionItemRequirement == ItemId.ItemUnknown);
+            }
+
+            if (branch == null)
+                return -1;
+
+            return branch.CandyCost;
+        }
 
         public async Task<bool> CanEvolvePokemon(PokemonData pokemon, EvolveFilter appliedFilter = null)
         {
@@ -656,26 +675,46 @@ namespace PoGo.NecroBot.Logic
             // Can't evolve pokemon that are not evolvable.
             if (settings.EvolutionIds.Count == 0 && settings.EvolutionBranch.Count ==0)
                 return false;
-
-
+            
             int familyCandy = GetCandyCount(pokemon.PokemonId);
             PokemonId evolveTo = PokemonId.Missingno;
             if (appliedFilter != null && !string.IsNullOrEmpty(appliedFilter.EvolveTo) && Enum.TryParse<PokemonId>(appliedFilter.EvolveTo, true, out evolveTo))
             {
                 var branch = settings.EvolutionBranch.FirstOrDefault(x => x.Evolution == evolveTo);
-                if (branch == null) return false; //wrong setting, do not evolve this pokemon
+                if (branch == null)
+                    return false; //wrong setting, do not evolve this pokemon
 
                 if (branch.EvolutionItemRequirement != ItemId.ItemUnknown)
                 {
                     var itemCount = GetItems().Count(x => x.ItemId == branch.EvolutionItemRequirement);
 
-                    if (itemCount == 0 || familyCandy < branch.CandyCost) return false;
+                    if (itemCount == 0)
+                        return false;
                 }
+
+                if (familyCandy < branch.CandyCost)
+                    return false;
             }
             else
-            // Can't evolve if not enough candy.
-            if (familyCandy < settings.CandyToEvolve)
-                return false;
+            {
+                // Check requirements for all branches, if we meet the requirements for any of them then we return true.
+                foreach (var branch in settings.EvolutionBranch)
+                {
+                    if (branch.EvolutionItemRequirement != ItemId.ItemUnknown)
+                    {
+                        var itemCount = GetItems().Count(x => x.ItemId == branch.EvolutionItemRequirement);
+
+                        if (itemCount == 0)
+                            continue;  // Cannot evolve so check next branch
+                    }
+
+                    if (familyCandy < branch.CandyCost)
+                        continue;  // Cannot evolve so check next branch
+
+                    // If we got here, then we can evolve so break out of loop.
+                    break;
+                }
+            }
 
             return true;
         }
@@ -726,25 +765,11 @@ namespace PoGo.NecroBot.Logic
                 PokemonSettings settings = GetPokemonSettings().Result.FirstOrDefault(x => x.PokemonId == pokemonId);
                 int pokemonLeft = group.Count();
 
-                int candyNeed = settings.CandyToEvolve;
+                int candyNeed = GetCandyToEvolve(settings, filter);
 
-                if (filter.EvolveToPokemonId != PokemonId.Missingno)
-                {
-                    var branch = settings.EvolutionBranch.FirstOrDefault(x => x.Evolution == filter.EvolveToPokemonId);
-
-                    if (branch != null)
-                    {
-                        candyNeed = branch.CandyCost;
-                    }
-                }
-                else
-                {
-                    if(settings.EvolutionBranch.Count == 1)
-                    {
-                        candyNeed = settings.EvolutionBranch.First().CandyCost;
-                    }
-                }
-
+                if (candyNeed == -1)
+                    continue; // If we were unable to determine which branch to use, then skip this pokemon.
+                
                 // Calculate the number of evolutions possible (taking into account +1 candy for evolve and +1 candy for transfer)
                 EvolutionCalculations evolutionInfo = CalculatePokemonEvolution(pokemonLeft, candiesLeft, candyNeed, 1);
 
