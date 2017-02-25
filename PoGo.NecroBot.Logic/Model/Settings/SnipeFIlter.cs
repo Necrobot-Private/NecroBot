@@ -7,6 +7,7 @@ using System.Linq;
 using System;
 using TinyIoC;
 using PoGo.NecroBot.Logic.State;
+using PoGo.NecroBot.Logic.Utils;
 
 namespace PoGo.NecroBot.Logic.Model.Settings
 {
@@ -123,11 +124,13 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
             if (((verified && filter.Level <= level) || !verified) &&
                 filter.Operator == "and" &&
-                (filter.SnipeIV <= iv
-                 && (filter.Moves != null
-                     && filter.Moves.Count > 0
-                     && filter.Moves.Any(x => x[0] == move1 && x[1] == move2))
-                ))
+                filter.SnipeIV <= iv && 
+                (
+                 (filter.Moves == null || filter.Moves.Count ==0) || 
+                 filter.Moves.Any(x => x[0] == move1 && x[1] == move2)
+                )
+                
+                )
             {
                 return true;
             }
