@@ -394,7 +394,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             List<PokemonData> attackers = new List<PokemonData>();
 
-            if (session.LogicSettings.GymConfig.UsePokemonToAttackOnlyByCp)
+            if (session.LogicSettings.GymConfig.UsePokemonToAttackOnlyByCp && defenders.Count() > 1)
             {
                 attackers.AddRange(GetBestToTeam(session, attackers));
                 attackers.ForEach(attacker =>
