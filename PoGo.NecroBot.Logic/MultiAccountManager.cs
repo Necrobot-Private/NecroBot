@@ -237,13 +237,15 @@ namespace PoGo.NecroBot.Logic
 
             if (currentAccount != null)
             {
-                currentAccount.RuntimeTotal += (DateTime.Now - currentAccount.LoggedTime).TotalMinutes;
+                Logic.Logging.Logger.Debug($"Current account {currentAccount.PtcUsername}");
                 currentAccount.IsRunning = false;
 
                 if (session.LoggedTime != DateTime.MinValue)
                 {
                     var playerStats = (session.Inventory.GetPlayerStats()).FirstOrDefault();
                     currentAccount.Level = playerStats.Level;
+                    currentAccount.RuntimeTotal += (DateTime.Now - currentAccount.LoggedTime).TotalMinutes;
+
                 }
 
                 UpdateDatabase(currentAccount);

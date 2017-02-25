@@ -48,7 +48,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                 return;
             }
 
-
             Logger.Write(session.Translation.GetTranslation(TranslationString.LookingForPokemon), LogLevel.Debug);
 
             var nearbyPokemons = await GetNearbyPokemons(session);
