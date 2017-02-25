@@ -466,6 +466,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             var currentLatitude = session.Client.CurrentLatitude;
             var currentLongitude = session.Client.CurrentLongitude;
+            //Logger.Write($"DEBUG current coord inside snipe {currentLatitude},{currentLongitude}");
+
             var catchedPokemon = false;
 
             session.EventDispatcher.Send(new SnipeModeEvent {Active = true});
@@ -508,7 +510,6 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
             finally
             {
-                //if(!isCaptchaShow)
                 LocationUtils.UpdatePlayerLocationWithAltitude(session,
                     new GeoCoordinate(currentLatitude, currentLongitude, session.Client.CurrentAltitude), 0); // Set speed to 0 for random speed.
             }
