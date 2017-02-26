@@ -449,19 +449,19 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 65)]
         public string EvolveOperator { get; set; }
 
-        [NecrobotConfig(Description = "set MinIV  for bot to evolve", Position = 68)]
+        [NecrobotConfig(Description = "Set MinIV  for bot to evolve", Position = 68)]
         [DefaultValue(100)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 68)]
         [Range(0,101)]
         public double EvolveMinIV { get; set; }
-        [NecrobotConfig(Description = "set MinCP  for bot to evolve", Position = 69)]
+        [NecrobotConfig(Description = "Set MinCP  for bot to evolve", Position = 69)]
         [DefaultValue(2000)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 69)]
         [Range(0,5000)]
 
         public double EvolveMinCP { get; set; }
-        [NecrobotConfig(Description = "set MinLevel for bot to evolve", Position = 70)]
-        [DefaultValue(2000)]
+        [NecrobotConfig(Description = "Set MinLevel for bot to evolve", Position = 70)]
+        [DefaultValue(25)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 70)]
         [Range(0, 5000)]
         public double EvolveMinLevel { get;  set; }

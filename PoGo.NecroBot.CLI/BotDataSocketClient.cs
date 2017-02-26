@@ -162,14 +162,11 @@ namespace PoGo.NecroBot.CLI
                 Logger.Write($"Connecting to {socketURL} ....");
                 await ConnectToServer(session, socketURL);
                 servers.Enqueue(socketURL);
-                File.WriteAllLines("debug.log", new string[] { $"server queue {servers.Count}" });  
             }
 
         }
         public static async Task ConnectToServer(ISession session, string socketURL)
         {
-            File.WriteAllLines("debug.log", new string[] { $"new connect to {socketURL}" });
-
             if (!string.IsNullOrEmpty(session.LogicSettings.DataSharingConfig.SnipeDataAccessKey))
             {
                 socketURL += "&access_key=" + session.LogicSettings.DataSharingConfig.SnipeDataAccessKey;
@@ -193,7 +190,6 @@ namespace PoGo.NecroBot.CLI
                     {
                         if (retries == 3)
                         {
-                            File.WriteAllLines("debug.log", new string[] { $"Couldn't establish the connection to necro socket server : {socketURL}" });
                             //failed to make connection to server  times contiuing, temporary stop for 10 mins.
                             session.EventDispatcher.Send(new WarnEvent()
                             {
@@ -238,7 +234,6 @@ namespace PoGo.NecroBot.CLI
                         {
                             Message = "Disconnect to necro socket. New connection will be established when service available..."
                         });
-                        File.WriteAllLines("debug.log", new string[] { $"Disconnect to necro socket. New connection will be established when service available." });
 
                     }
                     catch (Exception)

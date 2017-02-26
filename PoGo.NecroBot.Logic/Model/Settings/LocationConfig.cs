@@ -33,7 +33,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [NecrobotConfig(Description = "Default Longitude that bot will start with.", Position = 4)]
         public double DefaultLongitude { get; set; }
 
-        [DefaultValue(4.16)]
+        [DefaultValue(24.98)]
         [Range(0, 999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 5)]
         [NecrobotConfig(Description = "The walking speed apply for bot to move between pokestops.", Position = 5)]

@@ -125,9 +125,9 @@ namespace PoGo.NecroBot.Logic
             }
         }
 
-        internal BotAccount GetMinRuntime()
+        internal BotAccount GetMinRuntime(bool ignoreBlockCheck= false)
         {
-            return this.Accounts.OrderBy(x => x.RuntimeTotal).Where(x => x.ReleaseBlockTime < DateTime.Now).FirstOrDefault();
+            return this.Accounts.OrderBy(x => x.RuntimeTotal).Where(x => !ignoreBlockCheck || x.ReleaseBlockTime < DateTime.Now).FirstOrDefault();
         }
 
         public BotAccount Add(AuthConfig authConfig)
@@ -146,7 +146,7 @@ namespace PoGo.NecroBot.Logic
                 runningAccount = Accounts.Last();
             }
             else
-            runningAccount = GetMinRuntime();
+            runningAccount = GetMinRuntime(true);
 
             if (session.LogicSettings.AllowMultipleBot
               && session.LogicSettings.MultipleBotConfig.SelectAccountOnStartUp)
@@ -237,13 +237,15 @@ namespace PoGo.NecroBot.Logic
 
             if (currentAccount != null)
             {
-                currentAccount.RuntimeTotal += (DateTime.Now - currentAccount.LoggedTime).TotalMinutes;
+                Logic.Logging.Logger.Debug($"Current account {currentAccount.PtcUsername}");
                 currentAccount.IsRunning = false;
 
                 if (session.LoggedTime != DateTime.MinValue)
                 {
                     var playerStats = (session.Inventory.GetPlayerStats()).FirstOrDefault();
                     currentAccount.Level = playerStats.Level;
+                    currentAccount.RuntimeTotal += (DateTime.Now - currentAccount.LoggedTime).TotalMinutes;
+
                 }
 
                 UpdateDatabase(currentAccount);

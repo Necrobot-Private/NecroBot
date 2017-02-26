@@ -52,11 +52,12 @@ namespace PoGo.NecroBot.Logic.State
         List<BotActions> Actions { get; }
         CancellationTokenSource CancellationTokenSource { get; set; }
         MemoryCache Cache { get; set; }
-        List<AuthConfig> Accounts { get; }
         DateTime LoggedTime { get; set; }
         DateTime CatchBlockTime { get; set; }
         Statistics RuntimeStatistics { get; }
         GymTeamState GymState { get; set; }
+        double KnownLatitudeBeforeSnipe { get; set; }
+        double KnownLongitudeBeforeSnipe { get; set; }
     }
 
     public class Session : ISession
@@ -163,6 +164,8 @@ namespace PoGo.NecroBot.Logic.State
 
         public void Reset(ISettings settings, ILogicSettings logicSettings)
         {
+            this.KnownLatitudeBeforeSnipe = 0; 
+            this.KnownLongitudeBeforeSnipe = 0;
             Client = new Client(settings);
             // ferox wants us to set this manually
             Inventory = new Inventory(this, Client, logicSettings, () =>
@@ -255,5 +258,8 @@ namespace PoGo.NecroBot.Logic.State
             return false; //timedout
         }
         public GymTeamState GymState { get; set; }
+
+        public double KnownLatitudeBeforeSnipe { get; set; }
+        public double KnownLongitudeBeforeSnipe { get; set; }
     }
 }

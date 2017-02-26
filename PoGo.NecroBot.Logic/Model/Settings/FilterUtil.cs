@@ -11,13 +11,21 @@ namespace PoGo.NecroBot.Logic.Model.Settings
     {
         public static T GetApplyFilter<T>(Dictionary<PokemonId, T> source, PokemonId forPokemonId) where T : IPokemonFilter
         {
-            if (source.ContainsKey(forPokemonId)) return source[forPokemonId];
-            foreach (var item in source)
-            {
-                if (item.Value.AffectToPokemons != null && item.Value.AffectToPokemons.Contains(forPokemonId)) return item.Value;
+            if (source == null) return GetDefault<T>();
 
+            try
+            {
+                if (source.ContainsKey(forPokemonId)) return source[forPokemonId];
+                foreach (var item in source)
+                {
+                    if (item.Value.AffectToPokemons != null && item.Value.AffectToPokemons.Contains(forPokemonId)) return item.Value;
+                }
+                return GetDefault<T>();
             }
-            return GetDefault<T>();
+            catch (Exception)
+            {
+                return GetDefault<T>();
+            }
         }
 
         private static T GetDefault<T>() where T : IPokemonFilter
