@@ -57,7 +57,7 @@
                         </Grid>
                     </DockPanel>
                     <StackPanel Orientation="Horizontal">
-                        <Button Margin="0,10,0,10" Width="100" Click="btnCatchHim_Click" Content="Catch Him" >
+                        <Button Margin="0,10,0,10" Width="100" Click="btnCatchHim_Click" Content="Catch This Pokémon" >
                             <Button.Triggers>
                                 <EventTrigger RoutedEvent="Button.Click">
                                     <EventTrigger.Actions>
