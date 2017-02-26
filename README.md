@@ -24,10 +24,15 @@ See https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer for pricing 
 
 <h2>Screenshots</h2>
 
-- Gui App
+- Electron Web UI App
 
 <img src="http://i.imgur.com/Ph1sU94r.png" width="430">
 <img src="http://i.imgur.com/4Dj2RjNr.png" width="430">
+
+- All in One Windows GUI App
+
+<img src="http://image.prntscr.com/image/fd77f0500e4f4a1cb4c8ff78e22b85c4.png" width="430">
+<img src="http://image.prntscr.com/image/016259c838da4dfdb334195f0aa47f70.png" width="430">
 
 - Console App
 
