@@ -27,6 +27,48 @@
     
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
+            <Button Click="Help_Click">
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle Width="20"
+                               Height="20"
+                               Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_book_perspective_help}" />
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                    <TextBlock Margin="4 0 0 0"
+                               VerticalAlignment="Center"
+                               Text="{Binding Source=Help, Converter={StaticResource ResourceKey=I18NConveter}}" />
+
+                    <Popup Margin="10,10,0,13" Name="popHelpArticles"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Top"
+                           
+                           StaysOpen="False"
+                           Width="420" Height="580" IsOpen="False" AllowsTransparency="True">
+                        <Grid Background="WhiteSmoke">
+                            <ListView Name="lsvHelps" Margin="20">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            
+                                            <TextBlock FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato Medium">
+                                                <Hyperlink NavigateUri="{Binding Id}" Click="Hyperlink_Click" CommandParameter="{Binding}">
+                                                    <TextBlock Text="{Binding Path=Title.Text}"></TextBlock>
+                                                </Hyperlink>
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </Grid>
+
+                    </Popup>
+
+                </StackPanel>
+
+            </Button>
+            
             <Button Click="Theme_Selected">
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="20"

@@ -132,7 +132,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 
                 )
             {
-                return true;
+                    return true;
             }
 
             return false;
