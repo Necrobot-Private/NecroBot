@@ -164,6 +164,8 @@ namespace PoGo.NecroBot.Logic.State
 
         public void Reset(ISettings settings, ILogicSettings logicSettings)
         {
+            this.KnownLatitudeBeforeSnipe = 0; 
+            this.KnownLongitudeBeforeSnipe = 0;
             Client = new Client(settings);
             // ferox wants us to set this manually
             Inventory = new Inventory(this, Client, logicSettings, () =>
