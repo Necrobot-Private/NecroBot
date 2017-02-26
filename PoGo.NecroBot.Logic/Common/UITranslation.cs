@@ -27,6 +27,9 @@ namespace PoGo.NecroBot.Logic.Common
         [Description("ALL BOT SNIPE")]
         public string SnipeAllBotText { get; set; }
 
+        [Description("Helps")]
+        public string Help { get; set; }
+
         [Description("Sniper")]
         public string SniperTabTitle { get; set; }
         
