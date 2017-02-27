@@ -155,7 +155,6 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         bool UseNearActionRandom { get; }
         ICollection<KeyValuePair<ItemId, int>> ItemRecycleFilter { get; }
 
-        ICollection<PokemonId> PokemonsToEvolve { get; }
         ICollection<PokemonId> PokemonsToLevelUp { get; }
 
         NotificationConfig NotificationConfig { get; }

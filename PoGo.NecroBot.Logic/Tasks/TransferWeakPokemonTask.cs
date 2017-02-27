@@ -27,14 +27,16 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (session.LogicSettings.AutoFavoritePokemon)
                 await FavoritePokemonTask.Execute(session, cancellationToken);
 
-            await EvolvePokemonTask.Execute(session, cancellationToken);
-
             var pokemons = session.Inventory.GetPokemons();
-            int buff = session.LogicSettings.BulkTransferStogareBuffer;
-            //check for bag, if bag is nearly full, then process bulk transfer.
-            var maxStorage = session.Profile.PlayerData.MaxPokemonStorage;
-            var totalEggs = session.Inventory.GetEggs();
-            if ((maxStorage - totalEggs.Count() - buff) > pokemons.Count()) return;
+
+            if (session.LogicSettings.UseBulkTransferPokemon)
+            {
+                int buff = session.LogicSettings.BulkTransferStogareBuffer;
+                //check for bag, if bag is nearly full, then process bulk transfer.
+                var maxStorage = session.Profile.PlayerData.MaxPokemonStorage;
+                var totalEggs = session.Inventory.GetEggs();
+                if ((maxStorage - totalEggs.Count() - buff) > pokemons.Count()) return;
+            }
 
             var pokemonDatas = pokemons as IList<PokemonData> ?? pokemons.ToList();
 
@@ -48,9 +50,13 @@ namespace PoGo.NecroBot.Logic.Tasks
                     .ToList().OrderBy( poke => poke.Cp );
 
             if (session.LogicSettings.KeepPokemonsThatCanEvolve)
+            {
+                var pokemonToEvolve = session.Inventory.GetPokemonToEvolve(session.LogicSettings.PokemonEvolveFilters);
+
                 pokemonsFiltered =
-                    pokemonDatas.Where(pokemon => !session.LogicSettings.PokemonsToEvolve.Contains(pokemon.PokemonId) )
-                        .ToList().OrderBy( poke => poke.Cp );
+                    pokemonDatas.Where(pokemon => !pokemonToEvolve.Any(p => p.Id == pokemon.Id))
+                        .ToList().OrderBy(poke => poke.Cp);
+            }
 
             var orderedPokemon = pokemonsFiltered.OrderBy(poke => poke.Cp);
             var pokemonToTransfers = new List<PokemonData>();
@@ -94,6 +100,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                     else session.EventDispatcher.Send(new WarnEvent() { Message = session.Translation.GetTranslation(TranslationString.BulkTransferFailed, orderedPokemon.Count()) });
                 }
             }
+
+            // Evolve after transfer.
+            await EvolvePokemonTask.Execute(session, cancellationToken);
         }
 
         private static void PrintTransferedPokemonInfo(ISession session, PokemonData pokemon)

@@ -123,9 +123,6 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public List<PokemonId> PokemonsNotToTransfer = TransferConfig.PokemonsNotToTransferDefault();
 
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public List<PokemonId> PokemonsToEvolve = EvolveConfig.PokemonsToEvolveDefault();
-
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public List<PokemonId> PokemonsToLevelUp = LevelUpConfig.PokemonsToLevelUpDefault();
 
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
@@ -617,7 +614,28 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                             }
                         }
                         break;
-                    
+
+                    case 17:
+                        if (settings["PokemonEvolveFilter"] != null && settings["PokemonsToEvolve"] != null)
+                        {
+                            // Repeat the migration for case 16 just in case PokemonsToEvolve has beed modified.
+                            List<string> pokemonToEvolve = new List<string>();
+                            foreach (var x in settings["PokemonsToEvolve"].Children())
+                            {
+                                var pokemonName = (string)x;
+                                pokemonName = pokemonName[0].ToString().ToUpper() + new string(pokemonName.Skip(1).ToArray());
+
+                                if (settings["PokemonEvolveFilter"][pokemonName] == null)
+                                {
+                                    EvolveFilter ev = new EvolveFilter(0, 0, 0);
+                                    settings["PokemonEvolveFilter"][pokemonName] = JObject.Parse(JsonConvert.SerializeObject(ev));
+                                }
+                            }
+                        }
+
+                        // But this time we are going to remove PokemonsToEvolve.
+                        settings.Remove("PokemonsToEvolve");
+                        break;
                 }
             }
         }
