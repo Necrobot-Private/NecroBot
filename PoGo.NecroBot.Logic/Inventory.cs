@@ -630,6 +630,8 @@ namespace PoGo.NecroBot.Logic
             // Can't evolve pokemon that are not evolvable.
             if (settings.EvolutionIds.Count == 0 && settings.EvolutionBranch.Count ==0)
                 return false;
+            
+            int familyCandy = GetCandyCount(pokemon.PokemonId);
 
             if (checkEvolveFilterRequirements)
             {
@@ -645,9 +647,11 @@ namespace PoGo.NecroBot.Logic
                 {
                     return false;
                 }
+
+                if (appliedFilter.MinCandiesBeforeEvolve > 0 && familyCandy < appliedFilter.MinCandiesBeforeEvolve)
+                    return false;
             }
 
-            int familyCandy = GetCandyCount(pokemon.PokemonId);
             PokemonId evolveTo = PokemonId.Missingno;
             if (appliedFilter != null && !string.IsNullOrEmpty(appliedFilter.EvolveTo) && Enum.TryParse<PokemonId>(appliedFilter.EvolveTo, true, out evolveTo))
             {

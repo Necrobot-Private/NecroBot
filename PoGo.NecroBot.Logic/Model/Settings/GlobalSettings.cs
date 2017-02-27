@@ -633,6 +633,20 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                             }
                         }
 
+                        // Adding new MinCandiesBeforeEvolve to all filters.
+                        if (settings["PokemonEvolveFilter"] != null)
+                        {
+                            foreach (var x in settings["PokemonEvolveFilter"])
+                            {
+                                var filter = ((JProperty)(x)).Value;
+
+                                if (filter["MinCandiesBeforeEvolve"] == null)
+                                {
+                                    filter["MinCandiesBeforeEvolve"] = 0;
+                                }
+                            }
+                        }
+
                         // But this time we are going to remove PokemonsToEvolve.
                         settings.Remove("PokemonsToEvolve");
                         break;
