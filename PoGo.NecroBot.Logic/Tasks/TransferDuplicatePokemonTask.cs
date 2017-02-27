@@ -38,14 +38,12 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (session.LogicSettings.AutoFavoritePokemon)
                 await FavoritePokemonTask.Execute(session, cancellationToken);
 
-            await EvolvePokemonTask.Execute(session, cancellationToken);
-
             var buddy = session.Profile.PlayerData.BuddyPokemon;
             var duplicatePokemons =
                 await
                     session.Inventory.GetDuplicatePokemonToTransfer(
                         session.LogicSettings.PokemonsNotToTransfer,
-                        session.LogicSettings.PokemonsToEvolve,
+                        session.LogicSettings.PokemonEvolveFilters,
                         session.LogicSettings.KeepPokemonsThatCanEvolve,
                         session.LogicSettings.PrioritizeIvOverCp);
             
@@ -54,42 +52,48 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             var orderedPokemon = duplicatePokemons.OrderBy(poke => poke.Cp);
 
-            if (orderedPokemon.Count() == 0) return;
-
-            if (session.LogicSettings.UseBulkTransferPokemon)
+            if (orderedPokemon.Count() > 0)
             {
-                int page = orderedPokemon.Count() / session.LogicSettings.BulkTransferSize + 1;
-                for (int i = 0; i < page; i++)
+                if (session.LogicSettings.UseBulkTransferPokemon)
                 {
-                    TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
-                    var batchTransfer = orderedPokemon.Skip(i * session.LogicSettings.BulkTransferSize).Take(session.LogicSettings.BulkTransferSize);
-                    var t = await session.Client.Inventory.TransferPokemons(batchTransfer.Select(x => x.Id).ToList());
-                    if (t.Result == ReleasePokemonResponse.Types.Result.Success)
+                    int page = orderedPokemon.Count() / session.LogicSettings.BulkTransferSize + 1;
+                    for (int i = 0; i < page; i++)
                     {
-                        foreach (var duplicatePokemon in batchTransfer)
+                        TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
+                        var batchTransfer = orderedPokemon.Skip(i * session.LogicSettings.BulkTransferSize).Take(session.LogicSettings.BulkTransferSize);
+                        var t = await session.Client.Inventory.TransferPokemons(batchTransfer.Select(x => x.Id).ToList());
+                        if (t.Result == ReleasePokemonResponse.Types.Result.Success)
                         {
-                            PrintPokemonInfo(session, duplicatePokemon);
+                            foreach (var duplicatePokemon in batchTransfer)
+                            {
+                                PrintPokemonInfo(session, duplicatePokemon);
+                            }
                         }
+                        else session.EventDispatcher.Send(new WarnEvent() { Message = session.Translation.GetTranslation(TranslationString.BulkTransferFailed, orderedPokemon.Count()) });
                     }
-                    else session.EventDispatcher.Send(new WarnEvent() { Message = session.Translation.GetTranslation(TranslationString.BulkTransferFailed, orderedPokemon.Count()) });
+                }
+                else
+                {
+                    foreach (var duplicatePokemon in orderedPokemon)
+                    {
+                        TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
+                        cancellationToken.ThrowIfCancellationRequested();
+
+                        await session.Client.Inventory.TransferPokemon(duplicatePokemon.Id);
+
+                        PrintPokemonInfo(session, duplicatePokemon);
+
+                        // Padding the TransferEvent with player-choosen delay before instead of after.
+                        // This is to remedy too quick transfers, often happening within a second of the
+                        // previous action otherwise
+
+                        await DelayingUtils.DelayAsync(session.LogicSettings.TransferActionDelay, 0, cancellationToken);
+                    }
                 }
             }
-            else
-                foreach (var duplicatePokemon in orderedPokemon)
-                {
-                    TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
-                    cancellationToken.ThrowIfCancellationRequested();
 
-                    await session.Client.Inventory.TransferPokemon(duplicatePokemon.Id);
-
-                    PrintPokemonInfo(session, duplicatePokemon);
-
-                    // Padding the TransferEvent with player-choosen delay before instead of after.
-                    // This is to remedy too quick transfers, often happening within a second of the
-                    // previous action otherwise
-
-                    await DelayingUtils.DelayAsync(session.LogicSettings.TransferActionDelay, 0, cancellationToken);
-                }
+            // Evolve after transfer
+            await EvolvePokemonTask.Execute(session, cancellationToken);
         }
 
         public static void PrintPokemonInfo(ISession session, PokemonData duplicatePokemon)

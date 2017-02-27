@@ -142,7 +142,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             foreach (var pokemon in pokemonToEvolve)
             {
                 var filter = session.LogicSettings.PokemonEvolveFilters.GetFilter<EvolveFilter>(pokemon.PokemonId);
-                if (await session.Inventory.CanEvolvePokemon(pokemon, null))
+                if (await session.Inventory.CanEvolvePokemon(pokemon, filter))
                 {
                     try
                     {

@@ -92,13 +92,6 @@ namespace PoGo.NecroBot.Logic.State
                             currentFortData: null, sessionAllowTransfer: true);
                         break;
                     case EncounterResponse.Types.Status.PokemonInventoryFull:
-                        if (session.LogicSettings.EvolveAllPokemonAboveIv ||
-                            session.LogicSettings.EvolveAllPokemonWithEnoughCandy ||
-                            session.LogicSettings.UseLuckyEggsWhileEvolving ||
-                            session.LogicSettings.KeepPokemonsThatCanEvolve)
-                        {
-                            await EvolvePokemonTask.Execute(session, cancellationToken);
-                        }
                         if (session.LogicSettings.TransferDuplicatePokemon)
                         {
                             await TransferDuplicatePokemonTask.Execute(session, cancellationToken);

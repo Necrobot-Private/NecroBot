@@ -177,7 +177,6 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public Dictionary<ItemId, ItemUseFilter> ItemUseFilters => _settings.ItemUseFilters;
 
         public ICollection<KeyValuePair<ItemId, int>> ItemRecycleFilter => _settings.ItemRecycleFilter.Select(itemRecycleFilter => new KeyValuePair<ItemId, int>(itemRecycleFilter.Key, itemRecycleFilter.Value)).ToList();
-        public ICollection<PokemonId> PokemonsToEvolve => _settings.PokemonsToEvolve;
         public ICollection<PokemonId> PokemonsToLevelUp => _settings.PokemonsToLevelUp;
         public ICollection<PokemonId> PokemonsNotToTransfer => _settings.PokemonsNotToTransfer;
         public ICollection<PokemonId> PokemonsNotToCatch => _settings.PokemonsToIgnore;

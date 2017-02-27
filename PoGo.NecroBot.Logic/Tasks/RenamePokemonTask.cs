@@ -34,7 +34,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                    await
                        session.Inventory.GetDuplicatePokemonToTransfer(
                            session.LogicSettings.PokemonsNotToTransfer,
-                           session.LogicSettings.PokemonsToEvolve,
+                           session.LogicSettings.PokemonEvolveFilters,
                            session.LogicSettings.KeepPokemonsThatCanEvolve,
                            session.LogicSettings.PrioritizeIvOverCp);
 

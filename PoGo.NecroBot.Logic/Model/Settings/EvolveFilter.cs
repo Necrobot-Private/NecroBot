@@ -21,7 +21,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         }
 
 
-        public EvolveFilter(double evolveIV, double evolveLV, double minCP, bool favorited = false,string evoOperator = "and", string evolveTo = "", List<List<PokemonMove>> moves = null)
+        public EvolveFilter(double evolveIV, double evolveLV, double minCP, bool favorited = false,string evoOperator = "and", string evolveTo = "", List<List<PokemonMove>> moves = null, int minCandiesBeforeEvolve = 0)
         {
             this.Moves = new List<List<PokemonMove>>();
             if (moves != null) this.Moves = moves;
@@ -32,6 +32,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             this.MinCP = minCP;
             this.Operator = evoOperator;
             this.FavoritedOnly = favorited;
+            this.MinCandiesBeforeEvolve = minCandiesBeforeEvolve;
         }
 
         [NecrobotConfig(IsPrimaryKey = true, Key = "Enable Envolve", Description = "Allow bot auto evolve this pokemon", Position = 1)]
@@ -48,18 +49,18 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [NecrobotConfig(Key = "Evolve Min LV", Description = "Min LV for auto evolve", Position = 3)]
         [DefaultValue(95)]
         [Range(0, 999)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
         public double MinLV { get; set; }
 
         [NecrobotConfig(Key = "Evolve Min CP", Description = "Min CP for auto evolve", Position = 4)]
         [DefaultValue(10)]
         [Range(0, 9999)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 3)]
         public double MinCP { get; set; }
 
         [NecrobotConfig(Key = "Moves", Description = "Define list of desire move for evolve", Position = 5)]
         [DefaultValue(null)]
-        [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
+        [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 4)]
         public List<List<PokemonMove>> Moves { get; set; }
 
         [NecrobotConfig(Key = "Operator", Position = 6, Description = "The operator logic use to check for evolve")]
@@ -68,12 +69,12 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 5)]
         public string Operator { get; set; }
 
-        [NecrobotConfig(Key = "Evolve To", Position = 6, Description = "Select branch to envolve to for multiple branch pokemon like Poliwirl")]
+        [NecrobotConfig(Key = "Evolve To", Position = 7, Description = "Select branch to envolve to for multiple branch pokemon like Poliwirl")]
         [DefaultValue("")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 6)]
         public string EvolveTo { get; set; }
 
-        [NecrobotConfig(Key = "Affect To Pokemons", Position = 6, Description = "Set the list of pokemon you want to use the same config")]
+        [NecrobotConfig(Key = "Affect To Pokemons", Position = 8, Description = "Set the list of pokemon you want to use the same config")]
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 7)]
         public List<PokemonId> AffectToPokemons { get; set; }
 
@@ -93,11 +94,15 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             }
         }
 
-        [NecrobotConfig(Key = "Evolve Favorite Only", Position = 6, Description = "If true, bot only evolve pokemon that are favorited only")]
+        [NecrobotConfig(Key = "Evolve Favorite Only", Position = 9, Description = "If true, bot only evolve pokemon that are favorited only")]
         [DefaultValue(false)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 6)]
-
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 8)]
         public bool FavoritedOnly { get; set; }
+
+        [NecrobotConfig(Key = "Min Candies Before Evolve", Position = 10, Description = "If greater than 0, bot will not evolve right away, but instead keep transferring the pokemon to save up at least min candies before evolving.")]
+        [DefaultValue(0)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 9)]
+        public int MinCandiesBeforeEvolve { get; set; }
 
         internal static Dictionary<PokemonId, EvolveFilter> Default()
         {
