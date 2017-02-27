@@ -41,3 +41,4 @@
  * [fedyay]
  * [Brazuca87]
  * [HardKnoxNi69a] (https://github.com/HardKnoxNi69a)
+ * [Lord-Haji] (https://github.com/Lord-Haji)
