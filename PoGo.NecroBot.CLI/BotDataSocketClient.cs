@@ -272,14 +272,18 @@ namespace PoGo.NecroBot.CLI
             }
         }
 
+        private static DateTime lastWarningMessage = DateTime.MinValue;
         private static void OnServerMessage(ISession session, string message)
         {
             var match = Regex.Match(message, "42\\[\"server-message\",(.*)]");
             if (match != null && !string.IsNullOrEmpty(match.Groups[1].Value))
             {
+                var messag = match.Groups[1].Value;
+                if (message.Contains("The connection has been denied") && lastWarningMessage > DateTime.Now.AddMinutes(-5)) return;
+                lastWarningMessage = DateTime.Now;
                 session.EventDispatcher.Send(new NoticeEvent()
                 {
-                    Message = "(SERVER) " + match.Groups[1].Value
+                    Message = "(SNIPE SERVER) " + match.Groups[1].Value
                 });
             }
         }
