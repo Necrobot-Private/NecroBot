@@ -11,7 +11,7 @@ See https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer for pricing 
 </p>
 
 <p align="center">
-    ![Logo](http://image.prntscr.com/image/b238b63b4f044813a91f772241be8d45.jpg =450x)
+    ![Logo](http://image.prntscr.com/image/b238b63b4f044813a91f772241be8d45.jpg=450x)
 </p>
 [![Stories in Ready](https://discordapp.com/api/guilds/220703917871333376/widget.png?style=banner3&time-)](https://discord.gg/7FWyWVp)
 
