@@ -204,17 +204,14 @@ namespace PoGo.NecroBot.Logic
                 var weakPokemonCount = pokemonGroupToTransfer.Count();
                 var canBeRemoved = Math.Min(needToRemove, weakPokemonCount);
 
-#if DEBUG
-                Logger.Write($"Num pokemon of type {pokemonGroupToTransfer.Key} to remove: {canBeRemoved}", Logic.Logging.LogLevel.Debug);
-#endif
+                Logger.Write($"Number of {pokemonGroupToTransfer.Key} to be transferred: {canBeRemoved}", Logic.Logging.LogLevel.Info);
+
                 // Adjust canBeRemoved by subtracting the number of evolve pokemon we are saving.
                 var pokemonToEvolveForThisGroup = pokemonToEvolve.Where(p => p.PokemonId == pokemonGroupToTransfer.Key);
                 var numToSaveForEvolve = pokemonGroupToTransfer.Count(p => pokemonToEvolveForThisGroup.Any(p2 => p2.Id == p.Id));
                 canBeRemoved -= numToSaveForEvolve;
 
-#if DEBUG
-                Logger.Write($"Save {numToSaveForEvolve} pokemon of type {pokemonGroupToTransfer.Key} for evolve. Num to remove: {canBeRemoved}", Logic.Logging.LogLevel.Debug);
-#endif
+                Logger.Write($"Saving {numToSaveForEvolve} {pokemonGroupToTransfer.Key} for evolve. Number of {pokemonGroupToTransfer.Key} to be transferred: {canBeRemoved}", Logic.Logging.LogLevel.Info);
 
                 if (prioritizeIVoverCp)
                 {
