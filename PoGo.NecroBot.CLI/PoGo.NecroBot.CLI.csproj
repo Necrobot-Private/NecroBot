@@ -124,6 +124,7 @@
   <ItemGroup>
     <Content Include="Resources\Ico.ico" />
     <Content Include="FodyWeavers.xml" />
+    <None Include="App.config" />
     <None Include="Resources\msvc.cer" />
     <None Include="Resources\PayPalDonateNow1.png" />
     <None Include="Resources\PayPalDonateNow.png" />
@@ -134,6 +135,10 @@
     </Reference>
     <Reference Include="C5, Version=2.4.5947.17248, Culture=neutral, PublicKeyToken=282361b99ded7e8e, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\C5.2.4.5947.17249\lib\net45\C5.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="CommandLine, Version=1.9.71.2, Culture=neutral, PublicKeyToken=de6f01bd326f8c32, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommandLineParser.1.9.71\lib\net45\CommandLine.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Google.Protobuf, Version=3.2.0.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">

@@ -13,6 +13,7 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
     {
         bool UseWebsocket { get; }
         bool CatchPokemon { get; }
+        bool ByPassCatchFlee { get; }
         int OutOfBallCatchBlockTime { get; }
         int PokeballsToKeepForSnipe { get; }
         int CatchPokemonLimit { get; }

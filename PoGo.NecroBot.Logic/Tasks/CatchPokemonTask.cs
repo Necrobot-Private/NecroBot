@@ -243,12 +243,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                     {
                         //AmountOfBerries++;
                         //if (AmountOfBerries <= session.LogicSettings.MaxBerriesToUsePerPokemon)
-                        await UseBerry(session, 
-                            encounterEV.PokemonId, 
-                            _encounterId, 
+                        await UseBerry(session,
+                            encounterEV.PokemonId,
+                            _encounterId,
                             _spawnPointId,
                             pokemonIv,
-                            pokemonCp.HasValue? pokemonCp.Value: 10000,  //unknow CP pokemon, want to use berry
+                            pokemonCp.HasValue ? pokemonCp.Value : 10000,  //unknow CP pokemon, want to use berry
                             encounterEV.Level,
                             probability,
                             cancellationToken);
@@ -311,6 +311,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                             }
                         }
 
+
                         // Round to 2 decimals
                         normalizedRecticleSize = Math.Round(normalizedRecticleSize, 2);
 
@@ -326,17 +327,44 @@ namespace PoGo.NecroBot.Logic.Tasks
                             LogLevel.Debug);
                     }
 
-                    caughtPokemonResponse =
-                        await session.Client.Encounter.CatchPokemon(
-                            encounter is EncounterResponse || encounter is IncenseEncounterResponse
-                                ? pokemon.EncounterId
-                                : _encounterId,
-                            encounter is EncounterResponse || encounter is IncenseEncounterResponse
-                                ? pokemon.SpawnPointId
-                                : currentFortData.Id, pokeball, normalizedRecticleSize, spinModifier, hitPokemon);
+                    if (CatchFleeContinuouslyCount >= 5 && session.LogicSettings.ByPassCatchFlee)
+                    {
+                        var totalPokeBalls = session.Inventory.GetItems().Where(x => x.ItemId == ItemId.ItemPokeBall).ToList();
 
+                        foreach (var ballItem in totalPokeBalls)
+                        {
+                            Logger.Write($"Trying to bypass catchflee by throw miss pokeball...");
+                            caughtPokemonResponse =
+                            await session.Client.Encounter.CatchPokemon(
+                                encounter is EncounterResponse || encounter is IncenseEncounterResponse
+                                    ? pokemon.EncounterId
+                                    : _encounterId,
+                                encounter is EncounterResponse || encounter is IncenseEncounterResponse
+                                    ? pokemon.SpawnPointId
+                                    : currentFortData.Id, ballItem.ItemId, normalizedRecticleSize, spinModifier, false);
+                            await session.Inventory.UpdateInventoryItem(ballItem.ItemId);
 
-                    await session.Inventory.UpdateInventoryItem(pokeball);
+                            if (caughtPokemonResponse.Status != CatchPokemonResponse.Types.CatchStatus.CatchFlee)
+                            {
+                                CatchFleeContinuouslyCount = 0;
+                                break;
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        caughtPokemonResponse =
+                            await session.Client.Encounter.CatchPokemon(
+                                encounter is EncounterResponse || encounter is IncenseEncounterResponse
+                                    ? pokemon.EncounterId
+                                    : _encounterId,
+                                encounter is EncounterResponse || encounter is IncenseEncounterResponse
+                                    ? pokemon.SpawnPointId
+                                    : currentFortData.Id, pokeball, normalizedRecticleSize, spinModifier, hitPokemon);
+                        await session.Inventory.UpdateInventoryItem(pokeball);
+                    }
+                    
 
                     var evt = new PokemonCaptureEvent()
                     {
@@ -444,11 +472,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                 } while (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchMissed ||
                          caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchEscape);
 
-                if (session.LogicSettings.AllowMultipleBot)
+                if (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchFlee)
                 {
-                    if (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchFlee)
+                    CatchFleeContinuouslyCount++;
+
+                    if (session.LogicSettings.AllowMultipleBot && !session.LogicSettings.ByPassCatchFlee)
                     {
-                        CatchFleeContinuouslyCount++;
                         if (CatchFleeContinuouslyCount > session.LogicSettings.MultipleBotConfig.CatchFleeCount &&
                             TinyIoCContainer.Current.Resolve<MultiAccountManager>().AllowSwitch())
                         {
@@ -461,12 +490,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                             };
                         }
                     }
-                    else
-                    {
-                        //reset if not catch flee.
-                        CatchFleeContinuouslyCount = 0;
-                        MSniperServiceTask.UnblockSnipe();
-                    }
+                }
+                else
+                {
+                    //reset if not catch flee.
+                    CatchFleeContinuouslyCount = 0;
+                    MSniperServiceTask.UnblockSnipe();
                 }
 
                 session.Actions.RemoveAll(x => x == BotActions.Catch);
@@ -694,10 +723,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                 var filter = item.Value;
 
                 var itemRecycleFilter = session.LogicSettings.ItemRecycleFilter.FirstOrDefault(x => x.Key == item.Key);
-                
-                if ( (filter.UseIfExceedBagRecycleFilter && 
-                    !itemRecycleFilter.Equals(new KeyValuePair<ItemId, int>()) && 
-                    itemRecycleFilter.Value< berry.Count)
+
+                if ((filter.UseIfExceedBagRecycleFilter &&
+                    !itemRecycleFilter.Equals(new KeyValuePair<ItemId, int>()) &&
+                    itemRecycleFilter.Value < berry.Count)
                     || ((filter.Pokemons.Count == 0 || filter.Pokemons.Contains(pokemonId)) &&
                     (!AmountOfBerries.ContainsKey(item.Key) || AmountOfBerries[item.Key] < filter.MaxItemsUsePerPokemon) &&
                     filter.Operator.BoolFunc(
@@ -710,7 +739,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     //berry.Count -= 1;
                     if (useCaptureItem.Status == UseItemEncounterResponse.Types.Status.Success)
                     {
-                        if(!AmountOfBerries.ContainsKey(item.Key))
+                        if (!AmountOfBerries.ContainsKey(item.Key))
                         {
                             AmountOfBerries.Add(item.Key, 0);
                         }

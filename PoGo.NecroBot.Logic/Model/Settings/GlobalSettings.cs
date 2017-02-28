@@ -133,6 +133,45 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [NecrobotConfig(SheetName = "CaptchaConfig", Description = "Captcha config to define the way you prefer to resolve captcha")]
         public CaptchaConfig CaptchaConfig = new CaptchaConfig();
 
+        /// <summary>
+        /// this will auto add account to auth.json with this systax by command lin 
+        /// -i true -t abd123{0} -s 10 -e 20 -p abc1234
+        /// or -init true -template abd123{0} -start 10 -eend 20 -password abc1234
+        /// above command will add 20 account to auth.json default is ptc account. -g true will turn on google account
+        /// </summary>
+        /// <param name="isGoogle"></param>
+        /// <param name="template"></param>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <param name="password"></param>
+        public void GenerateAccount(bool isGoogle, string template, int start, int end, string password)
+        {
+            List<AuthConfig> allAcc = new List<AuthConfig>();
+            for (int i = start; i < end; i++)
+            {
+                allAcc.Add(new AuthConfig()
+                {
+                    AuthType = isGoogle ? AuthType.Google : AuthType.Ptc,
+                    GoogleUsername = isGoogle ? string.Format(template, i) : null,
+                    GooglePassword = isGoogle ? password : null,
+                    PtcUsername = !isGoogle ? string.Format(template, i) : null,
+                    PtcPassword = !isGoogle ? password : null,
+                });
+            }
+
+            if(allAcc.Count>0)
+            {
+                this.Auth.AuthConfig = allAcc.First();
+            }
+            this.Auth.Bots = allAcc.Skip(1).ToList();
+            if (this.Auth.Bots.Count > 0) this.Auth.AllowMultipleBot = true;
+
+            string json = JsonConvert.SerializeObject(this.Auth, Formatting.Indented,new StringEnumConverter() { CamelCaseText = true });
+
+            File.WriteAllText("config\\auth.json", json);
+            if (File.Exists("accounts.db")) File.Delete("accounts.db");
+        }
+
         [NecrobotConfig(SheetName = "PokemonsTransferFilter", Description = "Setting up pokemon filter rules")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public Dictionary<PokemonId, TransferFilter> PokemonsTransferFilter = TransferFilter.TransferFilterDefault();

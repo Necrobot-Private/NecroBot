@@ -23,11 +23,47 @@ using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Tasks;
 using PoGo.NecroBot.Logic.Utils;
 using ProgressBar = PoGo.NecroBot.CLI.Resources.ProgressBar;
+using CommandLine;
+using CommandLine.Text;
 
 #endregion using directives
 
 namespace PoGo.NecroBot.CLI
 {
+    class Options
+    {
+        [Option('i', "init", Required = false,
+          HelpText = "Init account")]
+        public bool Init { get; set; }
+
+        [Option('t', "template", DefaultValue = "", Required = false , HelpText = "Prints all messages to standard output.")]
+        public string Template { get; set; }
+
+        [Option('p', "password", DefaultValue = "", Required = false, HelpText = "pasword")]
+        public string Password { get; set; }
+
+        [Option('g', "google", DefaultValue = false, Required = false,HelpText = "is google account")]
+        public bool IsGoogle{ get; set; }
+
+        [Option('s', "start", DefaultValue = 1,HelpText = "Start account", Required = false)]
+        public int Start { get; set; }
+
+
+        [Option('e', "end", DefaultValue = 10, HelpText = "End account",Required = false)]
+        public int End { get; set; }
+
+        [ParserState]
+        public IParserState LastParserState { get; set; }
+
+        [HelpOption]
+        public string GetUsage()
+        {
+            return HelpText.AutoBuild(this,
+              (HelpText current) => HelpText.DefaultParsingErrorsHandler(this, current));
+        }
+    }
+
+
     public class Program
     {
         private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
@@ -110,6 +146,7 @@ namespace PoGo.NecroBot.CLI
                 excelConfigAllow = true;
             }
 
+            //
             Logger.AddLogger(new ConsoleLogger(LogLevel.Service), _subPath);
             Logger.AddLogger(new FileLogger(LogLevel.Service), _subPath);
             Logger.AddLogger(new WebSocketLogger(LogLevel.Service), _subPath);
@@ -170,6 +207,15 @@ namespace PoGo.NecroBot.CLI
                 }
             }
 
+            var options = new Options();
+            if (CommandLine.Parser.Default.ParseArguments(args, options))
+            {
+                // Values are available here
+                if (options.Init)
+                {
+                    settings.GenerateAccount(options.IsGoogle, options.Template, options.Start, options.End, options.Password);
+                }
+            }
             var lastPosFile = Path.Combine(profileConfigPath, "LastPos.ini");
             if (File.Exists(lastPosFile) && settings.LocationConfig.StartFromLastPosition)
             {

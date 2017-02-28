@@ -104,6 +104,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public double EvolveMinIV => _settings.PokemonConfig.EvolveMinIV;
         public double EvolveMinCP => _settings.PokemonConfig.EvolveMinCP;
         public double EvolveMinLevel => _settings.PokemonConfig.EvolveMinLevel;
+        public bool ByPassCatchFlee => _settings.PokemonConfig.ByPassCatchFlee;
 
         public bool KeepPokemonsThatCanEvolve => _settings.PokemonConfig.KeepPokemonsThatCanEvolve;
         public bool TransferDuplicatePokemon => _settings.PokemonConfig.TransferDuplicatePokemon;
