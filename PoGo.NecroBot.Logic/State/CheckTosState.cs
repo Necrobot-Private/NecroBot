@@ -214,7 +214,7 @@ namespace PoGo.NecroBot.Logic.State
 
         public async Task<bool> SelectNickname(ISession session, CancellationToken cancellationToken)
         {
-           var  nickname = session.Settings.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Ptc ? session.Settings.PtcUsername : session.Settings.GooglePassword.Split(new char[] { '@' })[0];
+            var nickname = !session.Settings.Username.Contains("@") ? session.Settings.Username : session.Settings.Username.Split(new char[] { '@' })[0];
 
             while (true)
             {

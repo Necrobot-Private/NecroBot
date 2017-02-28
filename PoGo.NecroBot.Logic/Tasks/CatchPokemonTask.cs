@@ -193,7 +193,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 //add catch to avoid snipe duplicate
                 string uniqueCacheKey =
-                    $"{session.Settings.PtcUsername}{session.Settings.GoogleUsername}{Math.Round(encounterEV.Latitude, 6)}{(int)encounterEV.PokemonId}{Math.Round(encounterEV.Longitude, 6)}";
+                    $"{session.Settings.Username}{Math.Round(encounterEV.Latitude, 6)}{(int)encounterEV.PokemonId}{Math.Round(encounterEV.Longitude, 6)}";
                 session.Cache.Add(uniqueCacheKey, encounterEV, DateTime.Now.AddMinutes(30));
 
                 session.EventDispatcher.Send(encounterEV);
@@ -494,15 +494,15 @@ namespace PoGo.NecroBot.Logic.Tasks
             //if distance is very far. that is snip pokemon
             var accountManager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
 
-            var curentkey = session.Settings.AuthType == AuthType.Google
-                  ? session.Settings.GoogleUsername
-                  : session.Settings.PtcUsername;
+            var curentkey = session.Settings.Username;
 
             curentkey += encounterEV.EncounterId;
             session.Cache.Add(curentkey, encounterEV, DateTime.Now.AddMinutes(15));
 
             var evalNextBot = accountManager.FindAvailableAccountForPokemonSwitch(encounterEV.EncounterId);
-            if (evalNextBot == null) return;
+            if (evalNextBot == null)
+                return;
+
             if (session.Stats.IsSnipping
                 //assume that all pokemon catch from 250+m is snipe
                 || LocationUtils.CalculateDistanceInMeters(
@@ -558,9 +558,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                     )
                 ))
             {
-
-
-
                 if (evalNextBot != null)
                 {
                     //cancel all running task.

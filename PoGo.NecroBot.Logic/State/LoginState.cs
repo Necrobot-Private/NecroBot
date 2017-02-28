@@ -34,7 +34,7 @@ namespace PoGo.NecroBot.Logic.State
         {
             // cancellationToken.ThrowIfCancellationRequested();
             session.EventDispatcher.Send(new LoginEvent(
-                session.Settings.AuthType, $"{session.Settings.GoogleUsername}{session.Settings.PtcUsername}"
+                session.Settings.AuthType, $"{session.Settings.Username}"
                 ));
 
             //session.EventDispatcher.Send(new NoticeEvent
@@ -279,22 +279,11 @@ namespace PoGo.NecroBot.Logic.State
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            if (session.Settings.AuthType == AuthType.Google &&
-                (session.Settings.GoogleUsername == null || session.Settings.GooglePassword == null))
+            if (session.Settings.Username == null || session.Settings.Password == null)
             {
                 session.EventDispatcher.Send(new ErrorEvent
                 {
-                    Message = session.Translation.GetTranslation(TranslationString.MissingCredentialsGoogle)
-                });
-                await Task.Delay(2000, cancellationToken);
-                Environment.Exit(0);
-            }
-            else if (session.Settings.AuthType == AuthType.Ptc &&
-                     (session.Settings.PtcUsername == null || session.Settings.PtcPassword == null))
-            {
-                session.EventDispatcher.Send(new ErrorEvent
-                {
-                    Message = session.Translation.GetTranslation(TranslationString.MissingCredentialsPtc)
+                    Message = session.Translation.GetTranslation(TranslationString.MissingCredentials)
                 });
                 await Task.Delay(2000, cancellationToken);
                 Environment.Exit(0);
