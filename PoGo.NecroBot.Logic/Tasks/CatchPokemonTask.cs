@@ -344,7 +344,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                     : currentFortData.Id, ballItem.ItemId, normalizedRecticleSize, spinModifier, false);
                             await session.Inventory.UpdateInventoryItem(ballItem.ItemId);
 
-                            if (caughtPokemonResponse.Status != CatchPokemonResponse.Types.CatchStatus.CatchFlee)
+                            if (caughtPokemonResponse.Status != CatchPokemonResponse.Types.CatchStatus.CatchFlee && caughtPokemonResponse.Status != CatchPokemonResponse.Types.CatchStatus.CatchMissed)
                             {
                                 CatchFleeContinuouslyCount = 0;
                                 break;
@@ -494,7 +494,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                 else
                 {
                     //reset if not catch flee.
-                    CatchFleeContinuouslyCount = 0;
+                    if (caughtPokemonResponse.Status != CatchPokemonResponse.Types.CatchStatus.CatchMissed)
+                    {
+                        CatchFleeContinuouslyCount = 0;
+                    }
                     MSniperServiceTask.UnblockSnipe();
                 }
 
