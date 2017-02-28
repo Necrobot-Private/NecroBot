@@ -11,6 +11,9 @@ using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Utils;
 using POGOProtos.Data;
 using POGOProtos.Networking.Responses;
+using PoGo.NecroBot.Logic.Exceptions;
+using PoGo.NecroBot.Logic.Model.Settings;
+using System;
 
 #endregion
 
@@ -38,24 +41,15 @@ namespace PoGo.NecroBot.Logic.Tasks
                 if ((maxStorage - totalEggs.Count() - buff) > pokemons.Count()) return;
             }
 
-            var pokemonDatas = pokemons as IList<PokemonData> ?? pokemons.ToList();
-
-            var buddy = session.Profile.PlayerData.BuddyPokemon;
-
             var pokemonsFiltered =
-                pokemonDatas.Where(pokemon => !session.LogicSettings.PokemonsNotToTransfer.Contains(pokemon.PokemonId) &&
-                    pokemon.Favorite == 0 &&
-                    pokemon.Id != buddy.Id &&
-                    pokemon.DeployedFortId == string.Empty) 
-                    .ToList().OrderBy( poke => poke.Cp );
+                pokemons.Where(pokemon => !session.LogicSettings.PokemonsNotToTransfer.Contains(pokemon.PokemonId) &&
+                    session.Inventory.CanTransferPokemon(pokemon));
 
             if (session.LogicSettings.KeepPokemonsThatCanEvolve)
             {
                 var pokemonToEvolve = session.Inventory.GetPokemonToEvolve(session.LogicSettings.PokemonEvolveFilters);
 
-                pokemonsFiltered =
-                    pokemonDatas.Where(pokemon => !pokemonToEvolve.Any(p => p.Id == pokemon.Id))
-                        .ToList().OrderBy(poke => poke.Cp);
+                pokemonsFiltered = pokemonsFiltered.Where(pokemon => !pokemonToEvolve.Any(p => p.Id == pokemon.Id));
             }
 
             var orderedPokemon = pokemonsFiltered.OrderBy(poke => poke.Cp);
@@ -67,8 +61,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 if ((pokemon.Cp >= session.LogicSettings.KeepMinCp) ||
                     (PokemonInfo.CalculatePokemonPerfection(pokemon) >= session.LogicSettings.KeepMinIvPercentage &&
                      session.LogicSettings.PrioritizeIvOverCp) ||
-                     (PokemonInfo.GetLevel(pokemon) >= session.LogicSettings.KeepMinLvl && session.LogicSettings.UseKeepMinLvl) ||
-                    pokemon.Favorite == 1)
+                     (PokemonInfo.GetLevel(pokemon) >= session.LogicSettings.KeepMinLvl && session.LogicSettings.UseKeepMinLvl))
                     continue;
 
                 if (session.LogicSettings.UseBulkTransferPokemon)

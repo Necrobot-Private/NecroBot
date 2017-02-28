@@ -31,12 +31,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                 session.LogicSettings.RenamePokemonRespectTransferRule)
             {
                 var duplicatePokemons =
-                   await
-                       session.Inventory.GetDuplicatePokemonToTransfer(
-                           session.LogicSettings.PokemonsNotToTransfer,
-                           session.LogicSettings.PokemonEvolveFilters,
-                           session.LogicSettings.KeepPokemonsThatCanEvolve,
-                           session.LogicSettings.PrioritizeIvOverCp);
+                    session.Inventory.GetDuplicatePokemonToTransfer(
+                        session.LogicSettings.PokemonsNotToTransfer,
+                        session.LogicSettings.PokemonEvolveFilters,
+                        session.LogicSettings.KeepPokemonsThatCanEvolve,
+                        session.LogicSettings.PrioritizeIvOverCp);
 
                 pokemons = pokemons.Where(x => !duplicatePokemons.Any(p => p.Id == x.Id));
             }
@@ -46,8 +45,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 var pokemonsFiltered =
                     pokemons.Where(pokemon => !session.LogicSettings.PokemonsNotToTransfer.Contains(pokemon.PokemonId) &&
-                        pokemon.Favorite == 0 &&
-                        pokemon.DeployedFortId == string.Empty)
+                        session.Inventory.CanTransferPokemon(pokemon))
                         .ToList().OrderBy(poke => poke.Cp);
 
 
@@ -58,8 +56,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     if ((pokemon.Cp >= session.LogicSettings.KeepMinCp) ||
                         (PokemonInfo.CalculatePokemonPerfection(pokemon) >= session.LogicSettings.KeepMinIvPercentage &&
                          session.LogicSettings.PrioritizeIvOverCp) ||
-                         (PokemonInfo.GetLevel(pokemon) >= session.LogicSettings.KeepMinLvl && session.LogicSettings.UseKeepMinLvl) ||
-                        pokemon.Favorite == 1)
+                         (PokemonInfo.GetLevel(pokemon) >= session.LogicSettings.KeepMinLvl && session.LogicSettings.UseKeepMinLvl))
                         continue;
 
                     weakPokemons.Add(pokemon);

@@ -140,7 +140,7 @@ namespace PoGo.NecroBot.Logic
                 .Where(p => p != null);
         }
 
-        public async Task<IEnumerable<PokemonData>> GetDuplicatePokemonToTransfer(
+        public IEnumerable<PokemonData> GetDuplicatePokemonToTransfer(
             IEnumerable<PokemonId> pokemonsNotToTransfer, Dictionary<PokemonId, EvolveFilter> pokemonEvolveFilters,
             bool keepPokemonsThatCanEvolve = false, bool prioritizeIVoverCp = false
         )
@@ -148,10 +148,7 @@ namespace PoGo.NecroBot.Logic
             var session = TinyIoCContainer.Current.Resolve<ISession>();
             var myPokemon = GetPokemons();
 
-            var pokemonToTransfer = myPokemon
-                .Where(p => !pokemonsNotToTransfer.Contains(p.PokemonId) && p.DeployedFortId == string.Empty &&
-                            p.Favorite == 0 && p.BuddyTotalKmWalked == 0)
-                .ToList();
+            var pokemonToTransfer = myPokemon.Where(p => !pokemonsNotToTransfer.Contains(p.PokemonId) && CanTransferPokemon(p));
 
             try
             {

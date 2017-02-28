@@ -37,19 +37,14 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             if (session.LogicSettings.AutoFavoritePokemon)
                 await FavoritePokemonTask.Execute(session, cancellationToken);
-
-            var buddy = session.Profile.PlayerData.BuddyPokemon;
-            var duplicatePokemons =
-                await
-                    session.Inventory.GetDuplicatePokemonToTransfer(
-                        session.LogicSettings.PokemonsNotToTransfer,
-                        session.LogicSettings.PokemonEvolveFilters,
-                        session.LogicSettings.KeepPokemonsThatCanEvolve,
-                        session.LogicSettings.PrioritizeIvOverCp);
             
-            if (buddy != null)
-                duplicatePokemons = duplicatePokemons.Where(x => x.Id != buddy.Id);
-
+            var duplicatePokemons =
+                session.Inventory.GetDuplicatePokemonToTransfer(
+                    session.LogicSettings.PokemonsNotToTransfer,
+                    session.LogicSettings.PokemonEvolveFilters,
+                    session.LogicSettings.KeepPokemonsThatCanEvolve,
+                    session.LogicSettings.PrioritizeIvOverCp);
+            
             var orderedPokemon = duplicatePokemons.OrderBy(poke => poke.Cp);
 
             if (orderedPokemon.Count() > 0)
