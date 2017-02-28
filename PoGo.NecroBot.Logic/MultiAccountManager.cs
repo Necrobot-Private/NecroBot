@@ -61,7 +61,7 @@ namespace PoGo.NecroBot.Logic
         {
             MigrateDatabase();
             LoadDataFromDB();
-            SyncDatabase(accounts);
+            SyncDatabase(accounts, true /* remove missing accounts */);
         }
 
         public void BlockCurrentBot(int expired = 60)
@@ -151,7 +151,7 @@ namespace PoGo.NecroBot.Logic
             }
         }
 
-        private void SyncDatabase(List<AuthConfig> accounts)
+        private void SyncDatabase(List<AuthConfig> accounts, bool removeMissingAccounts)
         {
             if (accounts.Count() == 0)
                 return;
@@ -183,24 +183,28 @@ namespace PoGo.NecroBot.Logic
                         // Update credentials in database using values from json.
                         existing.Username = item.Username;
                         existing.Password = item.Password;
+                        accountdb.Update(existing);
                     }
                 }
 
-                // Remove accounts that are not in the auth.json but in the database.
-                List<BotAccount> accountsToRemove = new List<BotAccount>();
-                foreach (var item in this.Accounts)
+                if (removeMissingAccounts)
                 {
-                    var existing = accounts.FirstOrDefault(x => x.Username == item.Username && x.AuthType == item.AuthType);
-                    if (existing == null)
+                    // Remove accounts that are not in the auth.json but in the database.
+                    List<BotAccount> accountsToRemove = new List<BotAccount>();
+                    foreach (var item in this.Accounts)
                     {
-                        accountsToRemove.Add(item);
+                        var existing = accounts.FirstOrDefault(x => x.Username == item.Username && x.AuthType == item.AuthType);
+                        if (existing == null)
+                        {
+                            accountsToRemove.Add(item);
+                        }
                     }
-                }
 
-                foreach (var item in accountsToRemove)
-                {
-                    this.Accounts.Remove(item);
-                    accountdb.Delete(item.Id);
+                    foreach (var item in accountsToRemove)
+                    {
+                        this.Accounts.Remove(item);
+                        accountdb.Delete(item.Id);
+                    }
                 }
             }
         }
@@ -212,7 +216,7 @@ namespace PoGo.NecroBot.Logic
 
         public BotAccount Add(AuthConfig authConfig)
         {
-            SyncDatabase(new List<AuthConfig>() { authConfig });
+            SyncDatabase(new List<AuthConfig>() { authConfig }, false /* don't remove missing accounts */);
 
             return this.Accounts.Last();
         }
