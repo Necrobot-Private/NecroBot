@@ -426,6 +426,27 @@ namespace PoGo.NecroBot.Logic.Tasks
             session.GymState.AddPokemon(session, defender, false);
             AnyPokemonStat defenderStat = session.GymState.otherDefenders.FirstOrDefault(f => f.data.Id == defender.Id);
 
+            if(session.LogicSettings.GymConfig.Attackers !=null && session.LogicSettings.GymConfig.Attackers.Count > 0)
+            {
+                var allPokemons = session.Inventory.GetPokemons();
+                foreach (var def in session.LogicSettings.GymConfig.Attackers.OrderByDescending(o => o.Priority))
+                {
+                    var attackersFromConfig = allPokemons.Where(w =>
+                        w.PokemonId == def.Pokemon &&
+                        w.Id != session.Profile.PlayerData.BuddyPokemon?.Id &&
+                        !myTeam.Any(a=> a.Id==w.Id) &&
+                        string.IsNullOrEmpty(w.DeployedFortId) &&
+                        w.Cp >= (def.MinCP ?? 0) &&
+                        w.Cp <= (def.MaxCP ?? 5000) &&
+                        def.IsMoveMatch(w.Move1, w.Move2)
+                    ).ToList();
+
+                    if (attackersFromConfig != null && attackersFromConfig.Count > 0)
+                        return attackersFromConfig.OrderByDescending(o => o.Cp).FirstOrDefault();
+                }
+
+            }
+
             MyPokemonStat myAttacker = session.GymState.myPokemons
                 .Where(w =>
                         !myTeam.Any(a => a.Id == w.data.Id) && //not already in team
@@ -1320,6 +1341,40 @@ namespace PoGo.NecroBot.Logic.Tasks
             List<ulong> excluded = new List<ulong>();
             var pokemonList = session.Inventory.GetPokemons().ToList();
             pokemonList.RemoveAll(x => session.LogicSettings.GymConfig.ExcludeForGyms.Contains(x.PokemonId));
+
+            if(session.LogicSettings.GymConfig.Defenders!=null && session.LogicSettings.GymConfig.Defenders.Count > 0)
+            {
+                foreach (var def in session.LogicSettings.GymConfig.Defenders.OrderByDescending(o => o.Priority))
+                {
+                    var defendersFromConfig = pokemonList.Where(w =>
+                        w.PokemonId == def.Pokemon &&
+                        w.Id != session.Profile.PlayerData.BuddyPokemon?.Id &&
+                        string.IsNullOrEmpty(w.DeployedFortId) &&
+                        w.Cp >= (def.MinCP ?? 0) &&
+                        w.Cp <= (def.MaxCP ?? 5000) &&
+                        def.IsMoveMatch(w.Move1, w.Move2)
+                    ).ToList();
+
+                    if (defendersFromConfig != null && defendersFromConfig.Count > 0)
+                        foreach (var _pokemon in defendersFromConfig.OrderByDescending(o => o.Cp))
+                        {
+                            if (session.LogicSettings.GymConfig.HealDefendersBeforeApplyToGym)
+                            {
+                                if (_pokemon.Stamina <= 0)
+                                    await RevivePokemon(session, _pokemon);
+
+                                if (_pokemon.Stamina < _pokemon.StaminaMax && _pokemon.Stamina > 0)
+                                    await HealPokemon(session, _pokemon);
+                            }
+
+                            if (_pokemon.Stamina < _pokemon.StaminaMax)
+                                excluded.Add(pokemon.Id);
+                            else
+                                return _pokemon;
+                        }
+                }
+
+            }
 
             while (pokemon == null)
             {
