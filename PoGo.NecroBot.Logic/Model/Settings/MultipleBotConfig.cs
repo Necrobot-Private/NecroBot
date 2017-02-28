@@ -109,7 +109,12 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [NecrobotConfig (Description = "Bot will switch to new account after x minutes ", Position = 1)]
         [DefaultValue(55)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
-        public int RuntimeSwitch = 55;
+        public int RuntimeSwitch { get; set; }
+
+        [NecrobotConfig(Description = "Add +-this or anything between to the RuntimeSwitch", Position = 1)]
+        [DefaultValue(10)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
+        public int RuntimeSwitchRandomTime { get; set; }
 
         [NecrobotConfig(Description = "X minitues to block this bot when reach daily limit ", Position = 1)]
         [DefaultValue(15)]
