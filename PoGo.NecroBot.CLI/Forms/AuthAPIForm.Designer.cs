@@ -1,4 +1,6 @@
-﻿namespace PoGo.NecroBot.CLI.Forms
+﻿using PokemonGo.RocketAPI;
+
+namespace PoGo.NecroBot.CLI.Forms
 {
     partial class AuthAPIForm
     {
@@ -95,7 +97,7 @@
             this.radHashServer.Size = new System.Drawing.Size(225, 17);
             this.radHashServer.TabIndex = 5;
             this.radHashServer.TabStop = true;
-            this.radHashServer.Text = $"Pogodev hash server api - Latest API 0.57.2";
+            this.radHashServer.Text = $"Pogodev hash server api - Latest API {Client.API_VERSION}";
             this.radHashServer.UseVisualStyleBackColor = true;
             // 
             // label2
