@@ -246,7 +246,7 @@ namespace PoGo.NecroBot.Logic.State
 
         public int attackDuration
         {
-            get { return 2000; }
+            get { return 1000; }
         }
 
         public SwitchPokemonData(ulong Old, ulong New)
@@ -279,4 +279,5 @@ namespace PoGo.NecroBot.Logic.State
             }
         }
     }
+
 }
