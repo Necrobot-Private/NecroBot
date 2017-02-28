@@ -22,7 +22,7 @@ namespace PoGo.Necrobot.Window.Converters
             {ItemId.ItemUltraBall, "http://i.imgur.com/nGsWvcR.png" },
             {ItemId.ItemMasterBall,"http://i.imgur.com/cyLuJEq.png" } ,
             {ItemId.ItemPotion,"http://i.imgur.com/6MQCO4g.png" } ,
-            {ItemId.ItemSuperPotion,"http://i.imgur.com/LFaT9Lw.png" } ,            
+            {ItemId.ItemSuperPotion,"http://i.imgur.com/LFaT9Lw.png" } ,
             {ItemId.ItemHyperPotion,"http://i.imgur.com/ay1jWQF.png" },
             {ItemId.ItemMaxPotion,"http://i.imgur.com/qEqi8Su.png" } ,
             {ItemId.ItemRevive,"http://i.imgur.com/tswFn3H.png" } ,
