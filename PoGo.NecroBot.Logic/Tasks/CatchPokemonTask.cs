@@ -725,7 +725,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 var itemRecycleFilter = session.LogicSettings.ItemRecycleFilter.FirstOrDefault(x => x.Key == item.Key);
 
                 if ((filter.UseIfExceedBagRecycleFilter &&
-                    !itemRecycleFilter.Equals(new KeyValuePair<ItemId, int>()) &&
+                    itemRecycleFilter.Key == item.Key  &&
                     itemRecycleFilter.Value < berry.Count)
                     || ((filter.Pokemons.Count == 0 || filter.Pokemons.Contains(pokemonId)) &&
                     (!AmountOfBerries.ContainsKey(item.Key) || AmountOfBerries[item.Key] < filter.MaxItemsUsePerPokemon) &&
