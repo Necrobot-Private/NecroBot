@@ -218,7 +218,7 @@
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(35, 13);
             this.label8.TabIndex = 14;
-            this.label8.Text = "Jjskull";
+            this.label8.Text = "jjskuld";
             // 
             // label9
             // 
