@@ -19,108 +19,39 @@ using System;
 
 namespace PoGo.NecroBot.Logic.Tasks
 {
-    public class TransferWeakPokemonTask
+    public class TransferWeakPokemonTask : BaseTransferPokemonTask
     {
         public static async Task Execute(ISession session, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
             if (!session.LogicSettings.TransferWeakPokemon) return;
-
-            if (session.LogicSettings.AutoFavoritePokemon)
-                await FavoritePokemonTask.Execute(session, cancellationToken);
-
-            var pokemons = session.Inventory.GetPokemons();
-
             if (session.LogicSettings.UseBulkTransferPokemon)
             {
                 int buff = session.LogicSettings.BulkTransferStogareBuffer;
                 //check for bag, if bag is nearly full, then process bulk transfer.
                 var maxStorage = session.Profile.PlayerData.MaxPokemonStorage;
+                var totalPokemon = session.Inventory.GetPokemons();
                 var totalEggs = session.Inventory.GetEggs();
-                if ((maxStorage - totalEggs.Count() - buff) > pokemons.Count()) return;
+                if ((maxStorage - totalEggs.Count() - buff) > totalPokemon.Count()) return;
             }
 
-            var pokemonsFiltered =
-                pokemons.Where(pokemon => !session.LogicSettings.PokemonsNotToTransfer.Contains(pokemon.PokemonId) &&
-                    session.Inventory.CanTransferPokemon(pokemon));
+            if (session.LogicSettings.AutoFavoritePokemon)
+                await FavoritePokemonTask.Execute(session, cancellationToken);
 
-            if (session.LogicSettings.KeepPokemonsThatCanEvolve)
-            {
-                var pokemonToEvolve = session.Inventory.GetPokemonToEvolve(session.LogicSettings.PokemonEvolveFilters);
+            var weakPokemon =
+                session.Inventory.GetWeakPokemonToTransfer(
+                    session.LogicSettings.PokemonsNotToTransfer,
+                    session.LogicSettings.PokemonEvolveFilters,
+                    session.LogicSettings.KeepPokemonsThatCanEvolve,
+                    session.LogicSettings.PrioritizeIvOverCp);
 
-                pokemonsFiltered = pokemonsFiltered.Where(pokemon => !pokemonToEvolve.Any(p => p.Id == pokemon.Id));
-            }
+            var orderedPokemon = weakPokemon.OrderBy(poke => poke.Cp);
 
-            var orderedPokemon = pokemonsFiltered.OrderBy(poke => poke.Cp);
-            var pokemonToTransfers = new List<PokemonData>();
-            foreach (var pokemon in orderedPokemon)
-            {
-                TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
-                cancellationToken.ThrowIfCancellationRequested();
-                if ((pokemon.Cp >= session.LogicSettings.KeepMinCp) ||
-                    (PokemonInfo.CalculatePokemonPerfection(pokemon) >= session.LogicSettings.KeepMinIvPercentage &&
-                     session.LogicSettings.PrioritizeIvOverCp) ||
-                     (PokemonInfo.GetLevel(pokemon) >= session.LogicSettings.KeepMinLvl && session.LogicSettings.UseKeepMinLvl))
-                    continue;
-
-                if (session.LogicSettings.UseBulkTransferPokemon)
-                {
-                    pokemonToTransfers.Add(pokemon);
-                }
-                else
-                {
-                    await session.Client.Inventory.TransferPokemon(pokemon.Id);
-                    PrintTransferedPokemonInfo(session, pokemon);
-
-                    await DelayingUtils.DelayAsync(session.LogicSettings.TransferActionDelay, 0, cancellationToken);
-                }
-            }
-            if (session.LogicSettings.UseBulkTransferPokemon && pokemonToTransfers.Count > 0)
-            {
-                int page = orderedPokemon.Count() / session.LogicSettings.BulkTransferSize + 1;
-                for (int i = 0; i < page; i++)
-                {
-                    var batchTransfer = orderedPokemon.Skip(i * session.LogicSettings.BulkTransferSize).Take(session.LogicSettings.BulkTransferSize);
-                    var t = await session.Client.Inventory.TransferPokemons(batchTransfer.Select(x => x.Id).ToList());
-                    if (t.Result == ReleasePokemonResponse.Types.Result.Success)
-                    {
-                        foreach (var duplicatePokemon in batchTransfer)
-                        {
-                            PrintTransferedPokemonInfo(session, duplicatePokemon);
-                        }
-                    }
-                    else session.EventDispatcher.Send(new WarnEvent() { Message = session.Translation.GetTranslation(TranslationString.BulkTransferFailed, orderedPokemon.Count()) });
-                }
-            }
+            await Execute(session, orderedPokemon, cancellationToken);
 
             // Evolve after transfer.
             await EvolvePokemonTask.Execute(session, cancellationToken);
-        }
-
-        private static void PrintTransferedPokemonInfo(ISession session, PokemonData pokemon)
-        {
-            var bestPokemonOfType = (session.LogicSettings.PrioritizeIvOverCp
-                                        ? session.Inventory.GetHighestPokemonOfTypeByIv(pokemon)
-                                        : session.Inventory.GetHighestPokemonOfTypeByCp(pokemon)) ?? pokemon;
-
-            var ev = new TransferPokemonEvent
-            {
-                Id = pokemon.Id,
-                PokemonId = pokemon.PokemonId,
-                Perfection = PokemonInfo.CalculatePokemonPerfection(pokemon),
-                Cp = pokemon.Cp,
-                BestCp = bestPokemonOfType.Cp,
-                BestPerfection = PokemonInfo.CalculatePokemonPerfection(bestPokemonOfType),
-                Candy = session.Inventory.GetCandyCount(pokemon.PokemonId)
-            };
-
-            if (session.Inventory.GetCandyFamily(pokemon.PokemonId) != null)
-            {
-                ev.FamilyId = session.Inventory.GetCandyFamily(pokemon.PokemonId).FamilyId;
-            }
-
-            session.EventDispatcher.Send(ev);
         }
     }
 }

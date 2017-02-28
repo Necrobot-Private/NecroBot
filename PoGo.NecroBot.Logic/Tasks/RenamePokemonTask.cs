@@ -27,8 +27,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             cancellationToken.ThrowIfCancellationRequested();
             TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
             var pokemons = session.Inventory.GetPokemons();
-            if (session.LogicSettings.TransferDuplicatePokemon &&
-                session.LogicSettings.RenamePokemonRespectTransferRule)
+
+            if (session.LogicSettings.TransferDuplicatePokemon && session.LogicSettings.RenamePokemonRespectTransferRule)
             {
                 var duplicatePokemons =
                     session.Inventory.GetDuplicatePokemonToTransfer(
@@ -42,25 +42,13 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             if (session.LogicSettings.TransferWeakPokemon && session.LogicSettings.RenamePokemonRespectTransferRule)
             {
+                var weakPokemons =
+                    session.Inventory.GetWeakPokemonToTransfer(
+                        session.LogicSettings.PokemonsNotToTransfer,
+                        session.LogicSettings.PokemonEvolveFilters,
+                        session.LogicSettings.KeepPokemonsThatCanEvolve,
+                        session.LogicSettings.PrioritizeIvOverCp);
 
-                var pokemonsFiltered =
-                    pokemons.Where(pokemon => !session.LogicSettings.PokemonsNotToTransfer.Contains(pokemon.PokemonId) &&
-                        session.Inventory.CanTransferPokemon(pokemon))
-                        .ToList().OrderBy(poke => poke.Cp);
-
-
-                var weakPokemons = new List<PokemonData>();
-                foreach (var pokemon in pokemonsFiltered)
-                {
-                    cancellationToken.ThrowIfCancellationRequested();
-                    if ((pokemon.Cp >= session.LogicSettings.KeepMinCp) ||
-                        (PokemonInfo.CalculatePokemonPerfection(pokemon) >= session.LogicSettings.KeepMinIvPercentage &&
-                         session.LogicSettings.PrioritizeIvOverCp) ||
-                         (PokemonInfo.GetLevel(pokemon) >= session.LogicSettings.KeepMinLvl && session.LogicSettings.UseKeepMinLvl))
-                        continue;
-
-                    weakPokemons.Add(pokemon);
-                }
                 pokemons = pokemons.Where(x => !weakPokemons.Any(p => p.Id == x.Id));
             }
             foreach (var pokemon in pokemons)
