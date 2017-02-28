@@ -214,7 +214,7 @@
     </Controls:MetroWindow.RightWindowCommands>
 
     <DockPanel LastChildFill="True">
-        <GroupBox x:Name="grbPlayerInfo" DockPanel.Dock="Top" Height="150">
+        <GroupBox x:Name="grbPlayerInfo" DockPanel.Dock="Top" Height="120">
             <GroupBox.Header>
                 <DockPanel LastChildFill="True">
                     <Button Content="Hide" DockPanel.Dock="Right" Name="btnHideInfo" Click="btnHideInfo_Click" />
@@ -231,7 +231,7 @@
                     </Label>
                 </DockPanel>
             </GroupBox.Header>
-            <local:PlayerInfo DataContext="{Binding Path=PlayerInfo}" Margin="10,0,-2,26" />
+            <local:PlayerInfo DataContext="{Binding Path=PlayerInfo}" Margin="10,0,-2,1" />
         </GroupBox>
         <StatusBar DockPanel.Dock="Bottom">
             <StatusBarItem>
@@ -251,7 +251,7 @@
         <TabControl TabStripPlacement="Left" HorizontalAlignment="Stretch" 
                     VerticalAlignment="Stretch" 
                     Name="tabMain"
-                    SelectionChanged="tabMain_SelectionChanged"
+                    SelectionChanged="tabMain_SelectionChanged" Margin="0,0,0,5"
                     >
             <TabControl.Resources>
                 <Style TargetType="{x:Type TabItem}">
@@ -271,7 +271,7 @@
             </TabControl.Resources>
             <TabItem Name="tabMap" >
                 <TabItem.Header>
-                    <TextBlock Margin="7,5,7,5" Text="{Binding  Source=MapTabTitle, Converter={StaticResource ResourceKey=I18NConveter}, FallbackValue=MAPS}" FontSize="15"/>
+                    <TextBlock Margin="7,5,7,5" Text="{Binding  Source=MapTabTitle, Converter={StaticResource ResourceKey=I18NConveter}, FallbackValue=MAPS}" FontSize="14"/>
                 </TabItem.Header>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -290,7 +290,7 @@
             </TabItem>
             <TabItem >
                 <TabItem.Header>
-                    <TextBlock  FontSize="15" Margin="7,5,7,5" Text="{Binding  Source=SniperTabTitle, Converter={StaticResource ResourceKey=I18NConveter}, FallbackValue=MAPS}"/>
+                    <TextBlock  FontSize="14" Margin="7,5,7,5" Text="{Binding  Source=SniperTabTitle, Converter={StaticResource ResourceKey=I18NConveter}, FallbackValue=MAPS}"/>
                 </TabItem.Header>
                 
                 <local:SniperControl x:Name="ctrlSniper" DataContext="{Binding Path=SnipeList}" />
@@ -298,7 +298,7 @@
 
             <TabItem  IsSelected="True">
                 <TabItem.Header>
-                    <TextBlock FontSize="15" Text="{Binding Source=ConsoleTabTitle, Converter={StaticResource ResourceKey=I18NConveter}, FallbackValue=Console}"/>
+                    <TextBlock FontSize="14" Text="{Binding Source=ConsoleTabTitle, Converter={StaticResource ResourceKey=I18NConveter}, FallbackValue=Console}"/>
                 </TabItem.Header>
                 <DockPanel LastChildFill="True">
                     <TextBox HorizontalAlignment="Stretch" 
@@ -335,14 +335,14 @@
 
             </TabItem>
 
-            <TabItem FontSize="15" Header="{Binding Path= PokemonTabHeader, FallbackValue=Pokemon}" Name="tabPokemons">
+            <TabItem FontSize="14" Header="{Binding Path= PokemonTabHeader, FallbackValue=Pokemon}" Name="tabPokemons">
                 <local:PokemonInventory x:Name="ctrPokemonInventory" DataContext="{Binding Path=PokemonList}"
                                         OnPokemonItemSelected="PokemonInventory_OnPokemonItemSelected" />
             </TabItem>
-            <TabItem FontSize="15" Name="tabItems" Header="{Binding Path=ItemsTabHeader, FallbackValue=Pokemon}">
+            <TabItem FontSize="14" Name="tabItems" Header="{Binding Path=ItemsTabHeader, FallbackValue=Pokemon}">
                 <local:ItemsInventory DataContext="{Binding Path=ItemsList}" x:Name="ctrlItemControl" />
             </TabItem>
-            <TabItem FontSize="15" Name="tabEggs" Header="{Binding Source=EggTabHeader , Converter={StaticResource I18NConveter}}">
+            <TabItem FontSize="14" Name="tabEggs" Header="{Binding Source=EggTabHeader , Converter={StaticResource I18NConveter}}">
                 <local:EggsControl DataContext="{Binding Path=EggsList}" x:Name="ctrlEggsControl" />
             </TabItem>
         </TabControl>
