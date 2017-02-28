@@ -148,7 +148,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             return new SnipeFilter(_setting.MinIVForAutoSnipe)
             {
                 SnipeIV = _setting.MinIVForAutoSnipe, 
-                Operator = "and",
+                Operator = "or", //default and is not good becouse you don't have default skills so in IsMatch you will always have false
                 Priority = 5,
                 AutoSnipeCandy = _setting.DefaultAutoSnipeCandy,
                 Level = _setting.MinLevelForAutoSnipe,
