@@ -64,11 +64,17 @@ namespace PoGo.NecroBot.Logic
             SyncDatabase(accounts, true /* remove missing accounts */);
         }
 
-        public void BlockCurrentBot(int expired = 60)
+        public BotAccount GetCurrentAccount()
         {
             var session = TinyIoCContainer.Current.Resolve<ISession>();
             var currentAccount = this.Accounts.FirstOrDefault(
                 x => x.AuthType == session.Settings.AuthType && x.Username == session.Settings.Username);
+            return currentAccount;
+        }
+
+        public void BlockCurrentBot(int expired = 60)
+        {
+            var currentAccount = GetCurrentAccount();
 
             if (currentAccount != null)
             {
@@ -258,24 +264,15 @@ namespace PoGo.NecroBot.Logic
 
         public BotAccount GetSwitchableAccount(BotAccount bot = null)
         {
-            var session = TinyIoCContainer.Current.Resolve<ISession>();
-            var currentAccount = this.Accounts.FirstOrDefault(
-                x => x.AuthType == session.Settings.AuthType && x.Username == session.Settings.Username);
-
-
+            ISession session = TinyIoCContainer.Current.Resolve<ISession>();
+            var currentAccount = GetCurrentAccount();
+            
             if (currentAccount != null)
             {
                 Logic.Logging.Logger.Debug($"Current account {currentAccount.Username}");
                 currentAccount.IsRunning = false;
-
-                if (session.LoggedTime != DateTime.MinValue)
-                {
-                    var playerStats = (session.Inventory.GetPlayerStats()).FirstOrDefault();
-                    currentAccount.Level = playerStats.Level;
-                    currentAccount.RuntimeTotal += (DateTime.Now - currentAccount.LoggedTime).TotalMinutes;
-
-                }
-
+                currentAccount.RuntimeTotal += (DateTime.Now - currentAccount.LoggedTime).TotalMinutes;
+                
                 UpdateDatabase(currentAccount);
             }
 
@@ -374,11 +371,31 @@ namespace PoGo.NecroBot.Logic
         {
             current.RaisePropertyChanged("RuntimeTotal");
             current.RaisePropertyChanged("IsRunning");
+            current.RaisePropertyChanged("Level");
 
             using (var db = new LiteDatabase(ACCOUNT_DB_NAME))
             {
                 var accountdb = db.GetCollection<BotAccount>("accounts");
                 accountdb.Update(current);
+            }
+        }
+
+        // This should be called whenever the inventory is updated (e.g. client.Inventory.OnInventoryUpdated)
+        public void UpdateCurrentAccountLevel()
+        {
+            ISession session = TinyIoCContainer.Current.Resolve<ISession>();
+            var playerStats = (session.Inventory.GetPlayerStats()).FirstOrDefault();
+            if (playerStats != null)
+            {
+                var currentAccount = GetCurrentAccount();
+                if (currentAccount != null)
+                {
+                    if (currentAccount.Level != playerStats.Level)
+                    {
+                        currentAccount.Level = playerStats.Level;
+                        UpdateDatabase(currentAccount);
+                    }
+                }
             }
         }
 
