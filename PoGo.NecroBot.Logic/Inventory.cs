@@ -122,12 +122,9 @@ namespace PoGo.NecroBot.Logic
 
         public IEnumerable<InventoryItem> GetCachedInventory()
         {
-            lock (_player)
+            if (_player == null)
             {
-                if (_player == null)
-                {
-                    _player = GetPlayerData().Result;
-                }
+                _player = GetPlayerData().Result;
             }
 
             return _client.Inventory.InventoryItems.Select(kvp => kvp.Value);
