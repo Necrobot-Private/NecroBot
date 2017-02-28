@@ -449,6 +449,7 @@
     <Compile Include="Strategies\Walk\IWalkStrategy.cs" />
     <Compile Include="Strategies\Walk\MapzenNavigationStrategy.cs" />
     <Compile Include="Strategies\Walk\YoursNavigationStrategy.cs" />
+    <Compile Include="Tasks\BaseTransferPokemonTask.cs" />
     <Compile Include="Tasks\EggsListTask.cs" />
     <Compile Include="Tasks\EvolveSpecificPokemonTask.cs" />
     <Compile Include="Tasks\FavoritePokemonTask.cs" />

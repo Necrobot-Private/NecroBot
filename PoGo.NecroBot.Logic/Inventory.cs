@@ -140,7 +140,7 @@ namespace PoGo.NecroBot.Logic
                 .Where(p => p != null);
         }
 
-        public async Task<IEnumerable<PokemonData>> GetDuplicatePokemonToTransfer(
+        public IEnumerable<PokemonData> GetWeakPokemonToTransfer(
             IEnumerable<PokemonId> pokemonsNotToTransfer, Dictionary<PokemonId, EvolveFilter> pokemonEvolveFilters,
             bool keepPokemonsThatCanEvolve = false, bool prioritizeIVoverCp = false
         )
@@ -148,10 +148,59 @@ namespace PoGo.NecroBot.Logic
             var session = TinyIoCContainer.Current.Resolve<ISession>();
             var myPokemon = GetPokemons();
 
-            var pokemonToTransfer = myPokemon
-                .Where(p => !pokemonsNotToTransfer.Contains(p.PokemonId) && p.DeployedFortId == string.Empty &&
-                            p.Favorite == 0 && p.BuddyTotalKmWalked == 0)
-                .ToList();
+            var pokemonToTransfer = myPokemon.Where(p => !pokemonsNotToTransfer.Contains(p.PokemonId) && CanTransferPokemon(p));
+            try
+            {
+                pokemonToTransfer =
+                    pokemonToTransfer.Where(
+                            p =>
+                            {
+                                var pokemonTransferFilter = session.LogicSettings.PokemonsTransferFilter.GetFilter<TransferFilter>(p.PokemonId);
+
+                                return !pokemonTransferFilter.MovesOperator.BoolFunc(
+                                    pokemonTransferFilter.MovesOperator.ReverseBoolFunc(
+                                        pokemonTransferFilter.MovesOperator.InverseBool(
+                                            pokemonTransferFilter.Moves.Count > 0),
+                                        pokemonTransferFilter.Moves.Any(moveset =>
+                                            pokemonTransferFilter.MovesOperator.ReverseBoolFunc(
+                                                pokemonTransferFilter.MovesOperator.InverseBool(moveset.Count > 0),
+                                                moveset.Intersect(new[] { p.Move1, p.Move2 }).Count() ==
+                                                Math.Max(Math.Min(moveset.Count, 2), 0)))),
+                                    pokemonTransferFilter.KeepMinOperator.BoolFunc(
+                                        p.Cp >= pokemonTransferFilter.KeepMinCp,
+                                        PokemonInfo.CalculatePokemonPerfection(p) >=
+                                        pokemonTransferFilter.KeepMinIvPercentage,
+                                        pokemonTransferFilter.KeepMinOperator.ReverseBoolFunc(
+                                            pokemonTransferFilter.KeepMinOperator.InverseBool(pokemonTransferFilter
+                                                .UseKeepMinLvl),
+                                            PokemonInfo.GetLevel(p) >= pokemonTransferFilter.KeepMinLvl)));
+                            })
+                        .ToList();
+            }
+            catch (ActiveSwitchByRuleException e)
+            {
+                throw e;
+            }
+
+            if (keepPokemonsThatCanEvolve)
+            {
+                var pokemonToEvolve = session.Inventory.GetPokemonToEvolve(session.LogicSettings.PokemonEvolveFilters);
+
+                pokemonToTransfer = pokemonToTransfer.Where(pokemon => !pokemonToEvolve.Any(p => p.Id == pokemon.Id));
+            }
+
+            return pokemonToTransfer.OrderBy(poke => poke.Cp);
+        }
+
+        public IEnumerable<PokemonData> GetDuplicatePokemonToTransfer(
+            IEnumerable<PokemonId> pokemonsNotToTransfer, Dictionary<PokemonId, EvolveFilter> pokemonEvolveFilters,
+            bool keepPokemonsThatCanEvolve = false, bool prioritizeIVoverCp = false
+        )
+        {
+            var session = TinyIoCContainer.Current.Resolve<ISession>();
+            var myPokemon = GetPokemons();
+
+            var pokemonToTransfer = myPokemon.Where(p => !pokemonsNotToTransfer.Contains(p.PokemonId) && CanTransferPokemon(p));
 
             try
             {
