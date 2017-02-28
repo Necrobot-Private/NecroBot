@@ -887,10 +887,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 translator.GetTranslation(TranslationString.FirstStartSetupUsernamePrompt)
             );
 
-            if (settings.Auth.AuthConfig.AuthType == AuthType.Google)
-                settings.Auth.AuthConfig.GoogleUsername = strInput;
-            else
-                settings.Auth.AuthConfig.PtcUsername = strInput;
+            settings.Auth.AuthConfig.Username = strInput;
             Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupUsernameConfirm, strInput));
 
             Logger.Write("", LogLevel.Info);
@@ -899,10 +896,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 translator.GetTranslation(TranslationString.FirstStartSetupPasswordPrompt)
             );
 
-            if (settings.Auth.AuthConfig.AuthType == AuthType.Google)
-                settings.Auth.AuthConfig.GooglePassword = strInput;
-            else
-                settings.Auth.AuthConfig.PtcPassword = strInput;
+            settings.Auth.AuthConfig.Password = strInput;
             Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupPasswordConfirm, strInput));
 
             Logger.Write(translator.GetTranslation(TranslationString.FirstStartAccountCompleted), LogLevel.Info);

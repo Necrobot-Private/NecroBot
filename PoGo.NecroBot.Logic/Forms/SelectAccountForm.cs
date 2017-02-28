@@ -38,7 +38,7 @@ namespace PoGo.NecroBot.Logic.Forms
             foreach (var item in accManager.Accounts)
             {
                 EXListViewItem lvItem = new EXListViewItem(item.AuthType.ToString());
-                lvItem.SubItems.Add( new EXControlListViewSubItem() { Text = item.AppliedUsername });
+                lvItem.SubItems.Add( new EXControlListViewSubItem() { Text = item.Username });
                 lvItem.SubItems.Add(new EXControlListViewSubItem() { Text = item.GetRuntime() });
                 lvItem.SubItems.Add(new EXControlListViewSubItem() { Text = "" });
 

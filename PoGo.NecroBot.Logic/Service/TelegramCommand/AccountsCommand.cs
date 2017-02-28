@@ -37,7 +37,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
                 foreach (var item in manager.Accounts)
                 {
                     message = message +
-                              $"{item.GoogleUsername}{item.PtcUsername}     {item.Level}     {item.GetRuntime()}\r\n";
+                              $"{item.Username}({item.AuthType})     {item.Level}     {item.GetRuntime()}\r\n";
                 }
             }
             else

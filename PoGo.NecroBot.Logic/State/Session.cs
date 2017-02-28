@@ -96,17 +96,13 @@ namespace PoGo.NecroBot.Logic.State
             this.Reset(settings, LogicSettings);
             this.Stats = new SessionStats(this);
             this.accounts.AddRange(logicSettings.Bots);
-            if (!this.accounts.Any(x => (x.AuthType == AuthType.Ptc && x.PtcUsername == settings.PtcUsername) ||
-                                        (x.AuthType == AuthType.Google && x.GoogleUsername == settings.GoogleUsername)
-            ))
+            if (!this.accounts.Any(x => x.AuthType == settings.AuthType && x.Username == settings.Username))
             {
                 this.accounts.Add(new AuthConfig()
                 {
                     AuthType = settings.AuthType,
-                    GooglePassword = settings.GooglePassword,
-                    GoogleUsername = settings.GoogleUsername,
-                    PtcPassword = settings.PtcPassword,
-                    PtcUsername = settings.PtcUsername
+                    Password = settings.Password,
+                    Username = settings.Username
                 });
             }
             if (File.Exists("runtime.log"))
@@ -115,7 +111,7 @@ namespace PoGo.NecroBot.Logic.State
                 foreach (var item in lines)
                 {
                     var arr = item.Split(';');
-                    var acc = this.accounts.FirstOrDefault(p => p.PtcUsername == arr[0] || p.GoogleUsername == arr[1]);
+                    var acc = this.accounts.FirstOrDefault(p => p.Username == arr[0]);
                     if (acc != null)
                     {
                         acc.RuntimeTotal = Convert.ToDouble(arr[1]);
@@ -194,10 +190,8 @@ namespace PoGo.NecroBot.Logic.State
             var nextBot = manager.GetSwitchableAccount(bot);
 
             this.Settings.AuthType = nextBot.AuthType;
-            this.Settings.GooglePassword = nextBot.GooglePassword;
-            this.Settings.GoogleUsername = nextBot.GoogleUsername;
-            this.Settings.PtcPassword = nextBot.PtcPassword;
-            this.Settings.PtcUsername = nextBot.PtcUsername;
+            this.Settings.Password = nextBot.Password;
+            this.Settings.Username = nextBot.Username;
             this.Settings.DefaultAltitude = att == 0 ? this.Client.CurrentAltitude : att;
             this.Settings.DefaultLatitude = lat == 0 ? this.Client.CurrentLatitude : lat;
             this.Settings.DefaultLongitude = lng == 0 ? this.Client.CurrentLongitude : lng;
