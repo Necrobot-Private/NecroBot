@@ -22,7 +22,6 @@ skip_commits:
   files:
   - '**\AssemblyInfo.*'
   - 'CHANGELOG.md'
-  - 'changelogs\**'
 
 # 
 pull_requests:
