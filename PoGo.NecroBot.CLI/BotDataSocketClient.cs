@@ -103,7 +103,7 @@ namespace PoGo.NecroBot.CLI
                 clientData.Pokemons.Add(eve);
             }
         }
-        private static SnipePokemonUpdateEvent lastEncouteredEvent;
+        //private static SnipePokemonUpdateEvent lastEncouteredEvent;
         private static void HandleEvent(SnipePokemonUpdateEvent eve, ISession session)
         {
             lock(clientData)
@@ -334,7 +334,7 @@ namespace PoGo.NecroBot.CLI
 
         private static MemoryCache cache = new MemoryCache("dump");
 
-        static int count = 0;
+        //static int count = 0;
         private static void OnPokemonData(ISession session, string message)
         {
             var match = Regex.Match(message, "42\\[\"pokemon\",(.*)]");

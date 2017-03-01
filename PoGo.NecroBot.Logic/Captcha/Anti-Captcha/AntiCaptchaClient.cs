@@ -8,7 +8,7 @@ namespace PoGo.NecroBot.Logic.Captcha.Anti_Captcha
     {
        
         private const string Host = "api.anti-captcha.com";
-        private  string ClientKey = "xxxxxxx";
+        //private  string ClientKey = "xxxxxxx";
         private const string ProxyHost = "xx.xx.xx.xx";
         private const int ProxyPort = 8282;
         private const string ProxyLogin = "";

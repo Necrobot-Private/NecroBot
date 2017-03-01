@@ -78,7 +78,7 @@ namespace PoGo.NecroBot.Logic.Utils
                         smtp.Send(message);
 
                     }
-                    catch(Exception ex)
+                    catch(Exception)
                     {
                         //Logic.Logging.Logger.Debug("Fail to send notification", ex);
                     }

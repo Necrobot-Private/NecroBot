@@ -342,7 +342,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                                             {
                                                 Logger.Write($"Collected {count * 10} coins", LogLevel.Gym, ConsoleColor.DarkYellow);
 
+                                                // jjskuld - Ignore CS4014 warning for now.
+                                                #pragma warning disable 4014
                                                 PushNotificationClient.SendNotification(session, $"Daily reward collected : {count * 10} coins", $"Congratulations, Your bot has worked hard and collected {count * 10} coins today.");
+                                                #pragma warning restore 4014
                                             }
                                             else
                                                 Logger.Write($"Hmm, we have failed with gaining a reward: {collectDailyBonusResponse}", LogLevel.Gym, ConsoleColor.Magenta);

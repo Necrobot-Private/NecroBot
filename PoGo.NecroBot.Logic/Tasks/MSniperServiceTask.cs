@@ -57,6 +57,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             //TODO - remove this line after MSniper.com back to work
             return;
+            /*
             while (true)
             {
                 try
@@ -97,6 +98,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     Thread.Sleep(500);
                 }
             }
+            */
         }
 
         private static void Connection_Closed()

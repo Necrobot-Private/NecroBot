@@ -55,9 +55,7 @@ namespace PoGo.Necrobot.Window
 
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
         {
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            LoadHelpArticleAsync();
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            LoadHelpArticle();
         }
         private DateTime lastClearLog = DateTime.Now;
         public void LogToConsoleTab(string message, LogLevel level, string color)
@@ -247,7 +245,7 @@ namespace PoGo.Necrobot.Window
         }
 
         DateTime lastTimeLoadHelp = DateTime.MinValue;
-        private async Task LoadHelpArticleAsync()
+        private void LoadHelpArticle()
         {
             if (lastTimeLoadHelp < DateTime.Now.AddMinutes(-30))
             {
@@ -262,9 +260,7 @@ namespace PoGo.Necrobot.Window
         private void Help_Click(object sender, RoutedEventArgs e)
         {
             popHelpArticles.IsOpen = true;
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            LoadHelpArticleAsync();
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            LoadHelpArticle();
         }
 
         private void Hyperlink_Click(object sender, RoutedEventArgs e)
