@@ -24,6 +24,7 @@ using TinyIoC;
 using POGOProtos.Enums;
 using System.Collections.Generic;
 using PoGo.NecroBot.Logic;
+using System.Collections.ObjectModel;
 #endregion
 
 namespace PoGo.NecroBot.Logic.Tasks
@@ -72,6 +73,14 @@ namespace PoGo.NecroBot.Logic.Tasks
             TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
             // If the encounter is null nothing will work below, so exit now
             if (encounter == null) return true;
+
+            var totalBalls = session.Inventory.GetItems().Where(x => x.ItemId == ItemId.ItemPokeBall || x.ItemId == ItemId.ItemGreatBall || x.ItemId == ItemId.ItemUltraBall).Sum(x => x.Count);
+
+            if(session.SaveBallForByPassCatchFlee && totalBalls < 130)
+            {
+                return false;
+            }
+                
             // Exit if user defined max limits reached
             if (session.Stats.CatchThresholdExceeds(session))
             {
@@ -237,7 +246,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         });
                         return false;
                     }
-
+                                                                        
                     // Determine whether to use berries or not
                     if (lastThrow != CatchPokemonResponse.Types.CatchStatus.CatchMissed)
                     {
@@ -327,13 +336,43 @@ namespace PoGo.NecroBot.Logic.Tasks
                             LogLevel.Debug);
                     }
 
-                    if (CatchFleeContinuouslyCount >= 5 && session.LogicSettings.ByPassCatchFlee)
+                    if (CatchFleeContinuouslyCount >= 3 && session.LogicSettings.ByPassCatchFlee)
                     {
-                        var totalPokeBalls = session.Inventory.GetItems().Where(x => x.ItemId == ItemId.ItemPokeBall).ToList();
+                        MSniperServiceTask.BlockSnipe();
 
-                        foreach (var ballItem in totalPokeBalls)
+                        if( totalBalls <= 130)
                         {
-                            Logger.Write($"Trying to bypass catchflee by throw miss pokeball...");
+                            Logger.Write("You don't enought ball to  by pass catchflee");
+                            return false;
+                        }
+                        List<ItemId> ballToByPass = new List<ItemId>();
+                        for (int i = 0; i < session.Inventory.GetItemAmountByType(ItemId.ItemPokeBall)-1; i++)
+                        {
+                            ballToByPass.Add(ItemId.ItemPokeBall);
+
+                        }
+                        for (int i = 0; i < session.Inventory.GetItemAmountByType(ItemId.ItemGreatBall) - 1; i++)
+                        {
+                            ballToByPass.Add(ItemId.ItemGreatBall);
+
+                        }
+                        for (int i = 0; i < session.Inventory.GetItemAmountByType(ItemId.ItemUltraBall) - 1; i++)
+                        {
+                            ballToByPass.Add(ItemId.ItemUltraBall);
+
+                        }
+                        for (int i = 0; i < ballToByPass.Count -1; i++)
+                        {
+                            bool catchMissed = true;
+                            if(i==35 || i ==75 || i ==101 || i>135)
+                            {
+                                catchMissed = false;
+                            }
+                            else
+                            {
+                                catchMissed = true;
+                            }
+
                             caughtPokemonResponse =
                             await session.Client.Encounter.CatchPokemon(
                                 encounter is EncounterResponse || encounter is IncenseEncounterResponse
@@ -341,11 +380,15 @@ namespace PoGo.NecroBot.Logic.Tasks
                                     : _encounterId,
                                 encounter is EncounterResponse || encounter is IncenseEncounterResponse
                                     ? pokemon.SpawnPointId
-                                    : currentFortData.Id, ballItem.ItemId, normalizedRecticleSize, spinModifier, false);
-                            await session.Inventory.UpdateInventoryItem(ballItem.ItemId);
+                                    : currentFortData.Id, ballToByPass[i], 1.0, 1.0, !catchMissed);
+                            await session.Inventory.UpdateInventoryItem(ballToByPass[i]);
+
+                            await Task.Delay(1000);
+                            Logger.Write($"CatchFlee By pass : {ballToByPass[i].ToString()} , Attempt {i}, result {caughtPokemonResponse.Status}");
 
                             if (caughtPokemonResponse.Status != CatchPokemonResponse.Types.CatchStatus.CatchFlee && caughtPokemonResponse.Status != CatchPokemonResponse.Types.CatchStatus.CatchMissed)
                             {
+                                session.SaveBallForByPassCatchFlee = false;
                                 CatchFleeContinuouslyCount = 0;
                                 break;
                             }
@@ -475,13 +518,19 @@ namespace PoGo.NecroBot.Logic.Tasks
                 if (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchFlee)
                 {
                     CatchFleeContinuouslyCount++;
-
+                    if(CatchFleeContinuouslyCount >= 3 && session.LogicSettings.ByPassCatchFlee)
+                    {
+                        session.SaveBallForByPassCatchFlee = true;
+                        Logger.Write("Seem that bot has ben catch flee softban, Bot will start save 100 balls to by pass it.");
+                        
+                    }
                     if (session.LogicSettings.AllowMultipleBot && !session.LogicSettings.ByPassCatchFlee)
                     {
                         if (CatchFleeContinuouslyCount > session.LogicSettings.MultipleBotConfig.CatchFleeCount &&
                             TinyIoCContainer.Current.Resolve<MultiAccountManager>().AllowSwitch())
                         {
                             CatchFleeContinuouslyCount = 0;
+                            session.SaveBallForByPassCatchFlee = false;
 
                             throw new ActiveSwitchByRuleException()
                             {
@@ -497,8 +546,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                     if (caughtPokemonResponse.Status != CatchPokemonResponse.Types.CatchStatus.CatchMissed)
                     {
                         CatchFleeContinuouslyCount = 0;
+                        MSniperServiceTask.UnblockSnipe();
                     }
-                    MSniperServiceTask.UnblockSnipe();
                 }
 
                 session.Actions.RemoveAll(x => x == BotActions.Catch);

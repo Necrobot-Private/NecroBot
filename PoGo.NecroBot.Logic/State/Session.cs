@@ -58,6 +58,8 @@ namespace PoGo.NecroBot.Logic.State
         GymTeamState GymState { get; set; }
         double KnownLatitudeBeforeSnipe { get; set; }
         double KnownLongitudeBeforeSnipe { get; set; }
+        bool SaveBallForByPassCatchFlee { set; get; }
+
     }
 
     public class Session : ISession
@@ -67,6 +69,8 @@ namespace PoGo.NecroBot.Logic.State
         {
             LoggedTime = DateTime.Now;
         }
+
+        public bool SaveBallForByPassCatchFlee { get; set; }
 
         public DateTime LoggedTime { get; set; }
         private List<AuthConfig> accounts;

@@ -282,6 +282,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static bool CheckSnipeConditions(ISession session)
         {
+            if (session.SaveBallForByPassCatchFlee) return false;
+
             //if (waitNextPokestop) return false;
             if (session.LoggedTime > DateTime.Now.AddMinutes(1)) return false; //only snipe after login 1 min.
 

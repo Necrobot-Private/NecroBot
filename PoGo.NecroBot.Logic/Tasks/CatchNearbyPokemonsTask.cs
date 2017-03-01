@@ -31,6 +31,13 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             if (!session.LogicSettings.CatchPokemon) return;
 
+            var totalBalls = session.Inventory.GetItems().Where(x => x.ItemId == ItemId.ItemPokeBall || x.ItemId == ItemId.ItemGreatBall || x.ItemId == ItemId.ItemUltraBall).Sum(x => x.Count);
+
+            if (session.SaveBallForByPassCatchFlee && totalBalls < 130)
+            {
+                return ;
+            }
+
             if (session.Stats.CatchThresholdExceeds(session))
             {
                 if (session.LogicSettings.AllowMultipleBot &&
