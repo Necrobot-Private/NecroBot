@@ -103,6 +103,14 @@ namespace PoGo.NecroBot.Logic.State
                                 Message = session.Translation.GetTranslation(TranslationString.InvFullTransferManually)
                             });
                         }
+
+                        if (session.LogicSettings.EvolveAllPokemonAboveIv ||
+                            session.LogicSettings.EvolveAllPokemonWithEnoughCandy ||
+                            session.LogicSettings.UseLuckyEggsWhileEvolving ||
+                            session.LogicSettings.KeepPokemonsThatCanEvolve)
+                        {
+                            await EvolvePokemonTask.Execute(session, cancellationToken);
+                        }
                         break;
 
                     default:

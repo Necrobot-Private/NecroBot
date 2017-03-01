@@ -252,8 +252,19 @@ namespace PoGo.NecroBot.Logic.Tasks
                         pokemon.IsCatching = false;
                     }
 
-                    await TransferDuplicatePokemonTask.Execute(session, cancellationToken);
-                    await TransferWeakPokemonTask.Execute(session, cancellationToken);
+                    if (session.LogicSettings.TransferDuplicatePokemon)
+                        await TransferDuplicatePokemonTask.Execute(session, cancellationToken);
+
+                    if (session.LogicSettings.TransferWeakPokemon)
+                        await TransferWeakPokemonTask.Execute(session, cancellationToken);
+
+                    if (session.LogicSettings.EvolveAllPokemonAboveIv ||
+                        session.LogicSettings.EvolveAllPokemonWithEnoughCandy ||
+                        session.LogicSettings.UseLuckyEggsWhileEvolving ||
+                        session.LogicSettings.KeepPokemonsThatCanEvolve)
+                    {
+                        await EvolvePokemonTask.Execute(session, cancellationToken);
+                    }
                 }
             } while (pokemon != null && _setting.HumanWalkingSnipeTryCatchEmAll);
 
