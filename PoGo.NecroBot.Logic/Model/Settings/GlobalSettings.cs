@@ -180,10 +180,6 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public Dictionary<ItemId, ItemUseFilter> ItemUseFilters = ItemUseFilter.Default();
 
-        //TODO remove this list.
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public SnipeSettings PokemonToSnipe = SnipeSettings.Default();
-
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public List<PokemonId> PokemonToUseMasterball = CatchConfig.PokemonsToUseMasterballDefault();
 

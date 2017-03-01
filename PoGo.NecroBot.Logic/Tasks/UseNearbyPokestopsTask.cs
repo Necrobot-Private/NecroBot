@@ -70,10 +70,6 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 await UseGymBattleTask.Execute(session, cancellationToken, pokeStop, fortInfo);
 
-
-                if (session.LogicSettings.SnipeAtPokestops || session.LogicSettings.UseSnipeLocationServer)
-                    await SnipePokemonTask.Execute(session, cancellationToken);
-
                 if (!await SetMoveToTargetTask.IsReachedDestination(pokeStop, session, cancellationToken))
                 {
                     pokeStop.CooldownCompleteTimestampMs = DateTime.UtcNow.ToUnixTime() + (pokeStop.Type == FortType.Gym ? session.LogicSettings.GymConfig.VisitTimeout : 5) * 60 * 1000; //5 minutes to cooldown

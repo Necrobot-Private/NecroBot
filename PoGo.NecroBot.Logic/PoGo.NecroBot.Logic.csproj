@@ -380,7 +380,6 @@
     <Compile Include="Model\Settings\ItemRecycleConfig.cs" />
     <Compile Include="Model\Settings\SnipeConfig.cs" />
     <Compile Include="Model\Settings\EvolveFilter.cs" />
-    <Compile Include="Model\Settings\SnipeSettings.cs" />
     <Compile Include="Model\Settings\SoftBanConfig.cs" />
     <Compile Include="Model\Settings\TelegramConfig.cs" />
     <Compile Include="Model\Settings\TransferConfig.cs" />
@@ -507,7 +506,6 @@
     <Compile Include="Tasks\SelectBuddyPokemonTask.cs" />
     <Compile Include="Tasks\SetMoveToTargetTask.cs" />
     <Compile Include="Tasks\MSniperServiceTask.cs" />
-    <Compile Include="Tasks\SnipePokemonTask.cs" />
     <Compile Include="Tasks\TransferDuplicatePokemonTask.cs" />
     <Compile Include="Event\UseLuckyEggEvent.cs" />
     <Compile Include="State\VersionCheckState.cs" />

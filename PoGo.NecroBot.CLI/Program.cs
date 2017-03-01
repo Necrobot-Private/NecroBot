@@ -456,10 +456,6 @@ namespace PoGo.NecroBot.CLI
             if (settings.TelegramConfig.UseTelegramAPI)
                 _session.Telegram = new TelegramService(settings.TelegramConfig.TelegramAPIKey, _session);
 
-            if (_session.LogicSettings.UseSnipeLocationServer ||
-                _session.LogicSettings.HumanWalkingSnipeUsePogoLocationFeeder)
-                SnipePokemonTask.AsyncStart(_session);
-
             if (_session.LogicSettings.EnableHumanWalkingSnipe &&
                 _session.LogicSettings.HumanWalkingSnipeUseFastPokemap)
             {

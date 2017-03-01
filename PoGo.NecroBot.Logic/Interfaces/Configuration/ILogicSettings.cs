@@ -119,11 +119,6 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         int MinPokeballsToSnipe { get; }
         int MinPokeballsWhileSnipe { get; }
         int MaxPokeballsPerPokemon { get; }
-        string SnipeLocationServer { get; }
-        int SnipeLocationServerPort { get; }
-        bool UseSnipeLocationServer { get; }
-        bool UseTransferIvForSnipe { get; }
-        bool SnipeIgnoreUnknownIv { get; }
         int MinDelayBetweenSnipes { get; }
         bool SnipePokemonNotInPokedex { get; }
         bool RandomizeRecycle { get; }
@@ -166,9 +161,6 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         Dictionary<PokemonId, UpgradeFilter> PokemonUpgradeFilters { get; }
 
         Dictionary<PokemonId, BotSwitchPokemonFilter> BotSwitchPokemonFilters { get; }
-
-        SnipeSettings PokemonToSnipe { get; }
-
         bool StartupWelcomeDelay { get; }
         bool UseGoogleWalk { get; }
         double DefaultStepLength { get; }

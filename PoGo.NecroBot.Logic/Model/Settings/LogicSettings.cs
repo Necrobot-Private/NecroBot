@@ -202,7 +202,6 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public string MapzenTurnByTurnApiKey => _settings.MapzenWalkConfig.MapzenTurnByTurnApiKey;
         public string MapzenWalkHeuristic => _settings.MapzenWalkConfig.MapzenWalkHeuristic;
         public string MapzenElevationApiKey => _settings.MapzenWalkConfig.MapzenElevationApiKey;
-
         public bool SnipeAtPokestops => _settings.SnipeConfig.SnipeAtPokestops;
         public bool ActivateMSniper => _settings.SnipeConfig.ActivateMSniper;
         public bool UseTelegramAPI => _settings.TelegramConfig.UseTelegramAPI;
@@ -212,12 +211,6 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public int MinPokeballsWhileSnipe => GenRandom(_settings.SnipeConfig.MinPokeballsWhileSnipe);
         public int MaxPokeballsPerPokemon => GenRandom(_settings.PokemonConfig.MaxPokeballsPerPokemon);
         public bool RandomlyPauseAtStops => _settings.LocationConfig.RandomlyPauseAtStops;
-        public SnipeSettings PokemonToSnipe => _settings.PokemonToSnipe;
-        public string SnipeLocationServer => _settings.SnipeConfig.SnipeLocationServer;
-        public int SnipeLocationServerPort => _settings.SnipeConfig.SnipeLocationServerPort;
-        public bool UseSnipeLocationServer => _settings.SnipeConfig.UseSnipeLocationServer;
-        public bool UseTransferIvForSnipe => _settings.SnipeConfig.UseTransferIvForSnipe;
-        public bool SnipeIgnoreUnknownIv => _settings.SnipeConfig.SnipeIgnoreUnknownIv;
         public int MinDelayBetweenSnipes => GenRandom(_settings.SnipeConfig.MinDelayBetweenSnipes);
         public bool SnipePokemonNotInPokedex => _settings.SnipeConfig.SnipePokemonNotInPokedex;
         public bool RandomizeRecycle => _settings.RecycleConfig.RandomizeRecycle;

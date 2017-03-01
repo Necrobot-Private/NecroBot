@@ -361,10 +361,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                             ballToByPass.Add(ItemId.ItemUltraBall);
 
                         }
+                        bool catchMissed = true;
+
+                        Random r = new Random();
                         for (int i = 0; i < ballToByPass.Count -1; i++)
                         {
-                            bool catchMissed = true;
-                            if(i==35 || i ==75 || i ==101 || i>135)
+                            if(i>100 && r.Next(0,100)<=30)
                             {
                                 catchMissed = false;
                             }
@@ -383,7 +385,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                     : currentFortData.Id, ballToByPass[i], 1.0, 1.0, !catchMissed);
                             await session.Inventory.UpdateInventoryItem(ballToByPass[i]);
 
-                            await Task.Delay(1000);
+                            await Task.Delay(100);
                             Logger.Write($"CatchFlee By pass : {ballToByPass[i].ToString()} , Attempt {i}, result {caughtPokemonResponse.Status}");
 
                             if (caughtPokemonResponse.Status != CatchPokemonResponse.Types.CatchStatus.CatchFlee && caughtPokemonResponse.Status != CatchPokemonResponse.Types.CatchStatus.CatchMissed)
