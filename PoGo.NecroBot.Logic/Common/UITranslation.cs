@@ -113,7 +113,9 @@ namespace PoGo.NecroBot.Logic.Common
 
         #endregion
         #region Pokemon Inventory
-        
+        [Description("Sex")]
+        public string Sex { get; set; }
+
         [Description("Evolve Filter Setting")]
         public string MenuTransferFilterText { get; set; }
 

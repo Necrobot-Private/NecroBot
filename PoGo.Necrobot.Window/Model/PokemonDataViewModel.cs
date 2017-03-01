@@ -34,7 +34,6 @@ namespace PoGo.Necrobot.Window.Model
 
             this.EvolutionBranchs = new List<EvolutionToPokemon>();
             bool first = true;
-
             
             //TODO - implement the candy count for enable evolution
             foreach (var item in setting.EvolutionBranch)
@@ -58,6 +57,7 @@ namespace PoGo.Necrobot.Window.Model
             this.PokemonData = item;
         }
 
+        public string Sex => pokemonData.PokemonDisplay.Gender.ToString();
         public ulong Id
         {
             get

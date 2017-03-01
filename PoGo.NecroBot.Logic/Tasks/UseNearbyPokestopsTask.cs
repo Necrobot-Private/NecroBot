@@ -481,7 +481,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         if (session.SaveBallForByPassCatchFlee)
                         {
                             var totalBalls = session.Inventory.GetItems().Where(x => x.ItemId == ItemId.ItemPokeBall || x.ItemId == ItemId.ItemGreatBall || x.ItemId == ItemId.ItemUltraBall).Sum(x => x.Count);
-                            Logger.Write($"Ball requires for by pass catch flee {totalBalls}/130");
+                            Logger.Write($"Ball requires for by pass catch flee {totalBalls}/{CatchPokemonTask.BALL_REQUIRED_TO_BYPASS_CATCHFLEE}");
                         }
                         else
                             MSniperServiceTask.UnblockSnipe(false);

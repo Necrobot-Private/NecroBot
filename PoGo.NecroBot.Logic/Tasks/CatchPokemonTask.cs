@@ -52,6 +52,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         // await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, currentFortData: null, sessionAllowTransfer: true);
 
         private static int CatchFleeContinuouslyCount = 0;
+        public static readonly int BALL_REQUIRED_TO_BYPASS_CATCHFLEE = 150;
 
         /// <summary>
         /// Because this function sometime being called inside loop, return true it mean we don't want break look, false it mean not need to call this , break a loop from caller function 
@@ -76,7 +77,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             var totalBalls = session.Inventory.GetItems().Where(x => x.ItemId == ItemId.ItemPokeBall || x.ItemId == ItemId.ItemGreatBall || x.ItemId == ItemId.ItemUltraBall).Sum(x => x.Count);
 
-            if(session.SaveBallForByPassCatchFlee && totalBalls < 130)
+            if(session.SaveBallForByPassCatchFlee && totalBalls < BALL_REQUIRED_TO_BYPASS_CATCHFLEE)
             {
                 return false;
             }
@@ -340,7 +341,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     {
                         MSniperServiceTask.BlockSnipe();
 
-                        if( totalBalls <= 130)
+                        if( totalBalls <= BALL_REQUIRED_TO_BYPASS_CATCHFLEE)
                         {
                             Logger.Write("You don't enought ball to  by pass catchflee");
                             return false;
@@ -366,7 +367,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Random r = new Random();
                         for (int i = 0; i < ballToByPass.Count -1; i++)
                         {
-                            if(i>100 && r.Next(0,100)<=30)
+                            if(i>130 && r.Next(0,100)<=30)
                             {
                                 catchMissed = false;
                             }
@@ -424,6 +425,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     if (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess)
                     {
+                        evt.Gender = session.Inventory.GetPokemons().First(x => x.Id == caughtPokemonResponse.CapturedPokemonId).PokemonDisplay.Gender.ToString();
+
                         var totalExp = 0;
                         var totalStarDust = caughtPokemonResponse.CaptureAward.Stardust.Sum();
                         if (encounteredPokemon != null)
