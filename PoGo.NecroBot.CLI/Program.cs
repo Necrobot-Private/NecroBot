@@ -350,6 +350,9 @@ namespace PoGo.NecroBot.CLI
 
             Logger.SetLoggerContext(_session);
 
+            MultiAccountManager accountManager = new MultiAccountManager(logicSettings.Bots);
+            ioc.Register<MultiAccountManager>(accountManager);
+
             if (boolNeedsSetup)
             {
                 StarterConfigForm configForm = new StarterConfigForm(_session, settings, elevationService, configFile);
@@ -433,12 +436,8 @@ namespace PoGo.NecroBot.CLI
             _session.Navigation.WalkStrategy.UpdatePositionEvent += LoadSaveState.SaveLocationToDisk;
 
             ProgressBar.Fill(100);
-
-            var accountManager = new MultiAccountManager(logicSettings.Bots);
-
+            
             var mainAccount = accountManager.Add(settings.Auth.AuthConfig);
-
-            ioc.Register<MultiAccountManager>(accountManager);
 
             var bot = accountManager.GetStartUpAccount();
 

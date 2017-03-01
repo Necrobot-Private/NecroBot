@@ -306,7 +306,7 @@ namespace PoGo.NecroBot.CLI
             ISession session)
         {
             string uniqueCacheKey =
-                $"{session.Settings.PtcUsername}{session.Settings.GoogleUsername}{Math.Round(lat, 6)}{id}{Math.Round(lng, 6)}";
+                $"{session.Settings.Username}{Math.Round(lat, 6)}{id}{Math.Round(lng, 6)}";
             if (session.Cache.Get(uniqueCacheKey) != null) return true;
             if (encounterId > 0 && session.Cache[encounterId.ToString()] != null) return true;
 

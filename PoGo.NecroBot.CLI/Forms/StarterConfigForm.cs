@@ -52,16 +52,8 @@ namespace PoGo.NecroBot.CLI.Forms
         private void wizardPage2_Commit(object sender, WizardPageConfirmEventArgs e)
         {
             this.settings.Auth.AuthConfig.AuthType = comboBox1.Text == "ptc" ? AuthType.Ptc : AuthType.Google;
-            if (this.settings.Auth.AuthConfig.AuthType == AuthType.Ptc)
-            {
-                this.settings.Auth.AuthConfig.PtcUsername = txtUsername.Text;
-                this.settings.Auth.AuthConfig.PtcPassword = txtPassword.Text;
-            }
-            else
-            {
-                this.settings.Auth.AuthConfig.GoogleUsername = txtUsername.Text;
-                this.settings.Auth.AuthConfig.GooglePassword = txtPassword.Text;
-            }
+            this.settings.Auth.AuthConfig.Username = txtUsername.Text;
+            this.settings.Auth.AuthConfig.Password = txtPassword.Text;
         }
 
         private void SelectLanguagePage_Commit(object sender, WizardPageConfirmEventArgs e)

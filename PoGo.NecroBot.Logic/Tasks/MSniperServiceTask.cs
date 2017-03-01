@@ -713,7 +713,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     if (location.AddedTime.AddSeconds(SNIPE_SAFE_TIME) < DateTime.Now) continue;
 
                     //If bot already catch the same pokemon, and very close this location.
-                    string uniqueCacheKey = $"{session.Settings.PtcUsername}{session.Settings.GoogleUsername}{Math.Round(location.Latitude, 6)}{location.PokemonId}{Math.Round(location.Longitude, 6)}";
+                    string uniqueCacheKey = $"{session.Settings.Username}{Math.Round(location.Latitude, 6)}{location.PokemonId}{Math.Round(location.Longitude, 6)}";
 
                     if (session.Cache.Get(uniqueCacheKey) != null) continue;
 

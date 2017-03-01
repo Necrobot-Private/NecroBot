@@ -110,6 +110,7 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         string ProfilePath { get; }
         string ProfileConfigPath { get; }
         string GeneralConfigPath { get; }
+        int SchemaVersion { get; }
         bool SnipeAtPokestops { get; }
         bool ActivateMSniper { get; }
         bool UseTelegramAPI { get; }

@@ -103,7 +103,7 @@ namespace PoGo.NecroBot.Logic.DataDumper
                     : session.Inventory.GetHighestsCp(1000);
                 string file = !string.IsNullOrEmpty(Filename)
                     ? Filename
-                    : $"config\\{session.Settings.GoogleUsername}{session.Settings.PtcUsername}\\allpokemon.xlsx";
+                    : $"config\\{session.Settings.Username}\\allpokemon.xlsx";
                 int rowNum = 1;
                 using (Stream stream = File.OpenWrite(file))
                 using (var package = new ExcelPackage(stream))
