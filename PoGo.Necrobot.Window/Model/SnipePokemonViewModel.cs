@@ -15,8 +15,6 @@ namespace PoGo.Necrobot.Window.Model
 
         public SnipePokemonViewModel(EncounteredEvent e)
         {
-            if (this.Session == null)
-                this.Session = TinyIoCContainer.Current.Resolve<ISession>();
             this.UniqueId = e.EncounterId;
             ulong encounterid = 0;
             ulong.TryParse(e.EncounterId, out encounterid);
@@ -28,8 +26,7 @@ namespace PoGo.Necrobot.Window.Model
             this.Longitude = e.Longitude;
             this.Move1 = e.Move1;
             this.Move2 = e.Move2;
-            if (this.session != null)
-            	this.Expired = DateTime.Now.AddSeconds(this.Session.LogicSettings.UIConfig.SnipeItemListDisplayTime);
+            this.Expired = DateTime.Now.AddSeconds(this.Session.LogicSettings.UIConfig.SnipeItemListDisplayTime);
             this.EncounterId = encounterid;
             this.Level = e.Level;
             this.SpawnPointId = e.SpawnPointId;
