@@ -107,12 +107,15 @@ namespace PoGo.NecroBot.Logic
 
             int schemaVersion = AuthSettings.SchemaVersionBeforeMigration;
 
+            if (!File.Exists("accounts.db"))
+                return;
+            
             // Backup old config file.
             long ts = DateTime.UtcNow.ToUnixTime(); // Add timestamp to avoid file conflicts
             string backupPath = $"accounts-{schemaVersion}-{ts}.backup.db";
             Logging.Logger.Write($"Backing up accounts.db to: {backupPath}", LogLevel.Info);
             File.Copy("accounts.db", backupPath);
-
+            
             // Add future schema migrations below.
             int version;
             for (version = schemaVersion; version < UpdateConfig.CURRENT_SCHEMA_VERSION; version++) 
