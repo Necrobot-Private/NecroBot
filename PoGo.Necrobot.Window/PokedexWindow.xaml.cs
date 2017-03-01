@@ -22,6 +22,7 @@ using PoGo.NecroBot.Logic.Model.Settings;
 using PoGo.Necrobot.Window.Converters;
 using PoGo.NecroBot.Logic.State;
 using PoGo.Necrobot.Window.Model;
+using POGOProtos.Data;
 
 namespace PoGo.Necrobot.Window
 {
@@ -58,11 +59,11 @@ namespace PoGo.Necrobot.Window
         {
             Task.Run(() =>
             {
-                var x = this.session.Inventory.GetPokeDexItems();
+                IEnumerable<PokedexEntry> pokedex = this.session.Inventory.GetPokeDexItems();
                 this.Dispatcher.Invoke(() =>
-               {
-                   dataViewModel.UpdateWith(x);
-               });
+                {
+                    dataViewModel.UpdateWith(pokedex);
+                });
             });
         }
     }

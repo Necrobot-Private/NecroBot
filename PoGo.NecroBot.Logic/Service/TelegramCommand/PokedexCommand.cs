@@ -25,7 +25,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
             if (cmd.ToLower() == Command)
             {
                 var pokedex = session.Inventory.GetPokeDexItems();
-                var pokedexSort = pokedex.OrderBy(x => x.InventoryItemData.PokedexEntry.PokemonId);
+                var pokedexSort = pokedex.OrderBy(x => x.PokemonId);
                 var answerTextmessage = GetMsgHead(session, session.Profile.PlayerData.Username) + "\r\n\r\n";
 
                 answerTextmessage += session.Translation.GetTranslation(TranslationString.PokedexCatchedTelegram);
@@ -33,11 +33,11 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
                 {
                     answerTextmessage +=
                         session.Translation.GetTranslation(TranslationString.PokedexPokemonCatchedTelegram,
-                            Convert.ToInt32(pokedexItem.InventoryItemData.PokedexEntry.PokemonId),
+                            Convert.ToInt32(pokedexItem.PokemonId),
                             session.Translation.GetPokemonTranslation(
-                                pokedexItem.InventoryItemData.PokedexEntry.PokemonId),
-                            pokedexItem.InventoryItemData.PokedexEntry.TimesCaptured,
-                            pokedexItem.InventoryItemData.PokedexEntry.TimesEncountered);
+                                pokedexItem.PokemonId),
+                            pokedexItem.TimesCaptured,
+                            pokedexItem.TimesEncountered);
 
                     if (answerTextmessage.Length > 3800)
                     {
@@ -49,7 +49,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
                 var pokemonsToCapture =
                     Enum.GetValues(typeof(PokemonId))
                         .Cast<PokemonId>()
-                        .Except(pokedex.Select(x => x.InventoryItemData.PokedexEntry.PokemonId));
+                        .Except(pokedex.Select(x => x.PokemonId));
 
                 callback(answerTextmessage);
                 answerTextmessage = "";

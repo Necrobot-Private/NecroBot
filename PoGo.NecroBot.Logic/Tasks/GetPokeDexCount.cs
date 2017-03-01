@@ -19,8 +19,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             var _totalUniqueEncounters = PokeDex.Select(
                 i => new
                 {
-                    Pokemon = i.InventoryItemData.PokedexEntry.PokemonId,
-                    Captures = i.InventoryItemData.PokedexEntry.TimesCaptured
+                    Pokemon = i.PokemonId,
+                    Captures = i.TimesCaptured
                 }
             );
             var _totalCaptures = _totalUniqueEncounters.Count(i => i.Captures > 0);

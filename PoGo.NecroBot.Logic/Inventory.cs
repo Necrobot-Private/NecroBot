@@ -520,13 +520,9 @@ namespace PoGo.NecroBot.Logic
             return UseIncense;
         }
 
-        public List<InventoryItem> GetPokeDexItems()
+        public IEnumerable<PokedexEntry> GetPokeDexItems()
         {
-            var inventory = GetCachedInventory();
-
-            return (from items in inventory
-                    where items.InventoryItemData?.PokedexEntry != null
-                    select items).ToList();
+            return _client.Inventory.Pokedex.Select(p => p.Value);
         }
 
         public async Task<List<Candy>> GetPokemonFamilies(int retries = 0)
