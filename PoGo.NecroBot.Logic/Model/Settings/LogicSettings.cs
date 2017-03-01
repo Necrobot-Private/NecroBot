@@ -215,16 +215,10 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public SnipeSettings PokemonToSnipe => _settings.PokemonToSnipe;
         public string SnipeLocationServer => _settings.SnipeConfig.SnipeLocationServer;
         public int SnipeLocationServerPort => _settings.SnipeConfig.SnipeLocationServerPort;
-        public bool GetSniperInfoFromPokezz => _settings.SnipeConfig.GetSniperInfoFromPokezz;
-        public bool GetOnlyVerifiedSniperInfoFromPokezz => _settings.SnipeConfig.GetOnlyVerifiedSniperInfoFromPokezz;
-        public bool GetSniperInfoFromPokeSnipers => _settings.SnipeConfig.GetSniperInfoFromPokeSnipers;
-        public bool GetSniperInfoFromPokeWatchers => _settings.SnipeConfig.GetSniperInfoFromPokeWatchers;
-        public bool GetSniperInfoFromSkiplagged => _settings.SnipeConfig.GetSniperInfoFromSkiplagged;
         public bool UseSnipeLocationServer => _settings.SnipeConfig.UseSnipeLocationServer;
         public bool UseTransferIvForSnipe => _settings.SnipeConfig.UseTransferIvForSnipe;
         public bool SnipeIgnoreUnknownIv => _settings.SnipeConfig.SnipeIgnoreUnknownIv;
         public int MinDelayBetweenSnipes => GenRandom(_settings.SnipeConfig.MinDelayBetweenSnipes);
-        public double SnipingScanOffset => _settings.SnipeConfig.SnipingScanOffset;
         public bool SnipePokemonNotInPokedex => _settings.SnipeConfig.SnipePokemonNotInPokedex;
         public bool RandomizeRecycle => _settings.RecycleConfig.RandomizeRecycle;
         public int RandomRecycleValue => _settings.RecycleConfig.RandomRecycleValue;

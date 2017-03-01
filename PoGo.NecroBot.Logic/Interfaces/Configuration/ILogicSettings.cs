@@ -121,16 +121,10 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         int MaxPokeballsPerPokemon { get; }
         string SnipeLocationServer { get; }
         int SnipeLocationServerPort { get; }
-        bool GetSniperInfoFromPokezz { get; }
-        bool GetOnlyVerifiedSniperInfoFromPokezz { get; }
-        bool GetSniperInfoFromPokeSnipers { get; }
-        bool GetSniperInfoFromPokeWatchers { get; }
-        bool GetSniperInfoFromSkiplagged { get; }
         bool UseSnipeLocationServer { get; }
         bool UseTransferIvForSnipe { get; }
         bool SnipeIgnoreUnknownIv { get; }
         int MinDelayBetweenSnipes { get; }
-        double SnipingScanOffset { get; }
         bool SnipePokemonNotInPokedex { get; }
         bool RandomizeRecycle { get; }
         int RandomRecycleValue { get; }

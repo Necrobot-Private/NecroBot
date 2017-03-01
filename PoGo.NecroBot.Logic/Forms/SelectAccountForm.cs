@@ -32,7 +32,6 @@ namespace PoGo.NecroBot.Logic.Forms
             this.Show();
             this.WindowState = FormWindowState.Normal;
 
-
             lvAcc.BeginUpdate();
             var accManager = TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>();
             foreach (var item in accManager.Accounts)
