@@ -27,6 +27,8 @@ using PoGo.NecroBot.Logic.Common;
 using System.ServiceModel.Syndication;
 using System.Net;
 using System.Xml;
+using System.IO;
+using System.Net.Http;
 
 namespace PoGo.Necrobot.Window
 {
@@ -55,7 +57,9 @@ namespace PoGo.Necrobot.Window
 
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            LoadHelpArticle();
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            LoadHelpArticleAsync();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         }
         private DateTime lastClearLog = DateTime.Now;
         public void LogToConsoleTab(string message, LogLevel level, string color)
@@ -245,22 +249,26 @@ namespace PoGo.Necrobot.Window
         }
 
         DateTime lastTimeLoadHelp = DateTime.MinValue;
-        private void LoadHelpArticle()
+        private async Task LoadHelpArticleAsync()
         {
             if (lastTimeLoadHelp < DateTime.Now.AddMinutes(-30))
             {
-                var feed = SyndicationFeed.Load(XmlReader.Create("http://necrobot2.com/feed.xml"));
+                var client = new WebClient();
+                var xml = await client.DownloadStringTaskAsync(new Uri("http://necrobot2.com/feed.xml"));
+                var feed = SyndicationFeed.Load(XmlReader.Create(new StringReader(xml)));
                 lastTimeLoadHelp = DateTime.Now;
                 this.Dispatcher.Invoke(() =>
                 {
-                    lsvHelps.ItemsSource = feed.Items.OrderByDescending(x=>x.PublishDate);
+                    lsvHelps.ItemsSource = feed.Items.OrderByDescending(x => x.PublishDate);
                 });
             }
         }
         private void Help_Click(object sender, RoutedEventArgs e)
         {
             popHelpArticles.IsOpen = true;
-            LoadHelpArticle();
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            LoadHelpArticleAsync();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         }
 
         private void Hyperlink_Click(object sender, RoutedEventArgs e)
