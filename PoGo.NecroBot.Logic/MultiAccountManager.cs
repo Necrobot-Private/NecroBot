@@ -121,6 +121,9 @@ namespace PoGo.NecroBot.Logic
                 switch (version)
                 {
                     case 19:
+                        // Just delete the accounts.db so it gets regenerated from scratch.
+                        File.Delete("accounts.db");
+                        /*
                         using (var db = new LiteDatabase(ACCOUNT_DB_NAME))
                         {
                             var accountdb = db.GetCollection<BotAccount>("accounts");
@@ -152,6 +155,7 @@ namespace PoGo.NecroBot.Logic
                                 UpdateDatabase(item);
                             }
                         }
+                        */
                         break;
                 }
             }
