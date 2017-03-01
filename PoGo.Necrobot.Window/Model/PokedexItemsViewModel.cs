@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using POGOProtos.Inventory;
 using POGOProtos.Enums;
 using System.Windows.Media.Animation;
+using POGOProtos.Data;
 
 namespace PoGo.Necrobot.Window.Model
 {
@@ -18,12 +19,12 @@ namespace PoGo.Necrobot.Window.Model
             DefaultValues();
         }
 
-        public PokedexItemsViewModel(List<InventoryItem> list)
+        public PokedexItemsViewModel(IEnumerable<PokedexEntry> pokedex)
         {
             Entries = new ObservableCollection<PokeDexEntryViewModel>();
 
             DefaultValues();
-            UpdateWith(list);
+            UpdateWith(pokedex);
         }
 
         private void DefaultValues()
@@ -42,12 +43,10 @@ namespace PoGo.Necrobot.Window.Model
 
         public ObservableCollection<PokeDexEntryViewModel> Entries { get; set; }
 
-        internal void UpdateWith(List<InventoryItem> list)
+        internal void UpdateWith(IEnumerable<PokedexEntry> pokedex)
         {
-            foreach (var item in list)
+            foreach (var entry in pokedex)
             {
-                var entry = item.InventoryItemData.PokedexEntry;
-
                 var x = this.Entries.FirstOrDefault(p => p.PokemonId == entry.PokemonId);
                 x.Caught = entry.TimesCaptured;
                 x.Seen = entry.TimesEncountered;

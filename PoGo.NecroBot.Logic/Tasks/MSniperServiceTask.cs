@@ -530,10 +530,10 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (session.LogicSettings.SnipePokemonNotInPokedex)
             {
                 //sometime the API return pokedex not correct, we need cahe this list, need lean everyetime peopellogi
-                var pokedex = session.Inventory.GetPokeDexItems().Select(x => x.InventoryItemData?.PokedexEntry?.PokemonId).Where(x => x != null).ToList();
-                var update = pokedex.Where(x => !pokedexList.Contains(x.Value)).ToList();
+                var pokedex = session.Inventory.GetPokeDexItems().Select(x => x.PokemonId);
+                var update = pokedex.Where(x => !pokedexList.Contains(x));
 
-                pokedexList.AddRange(update.Select(x => x.Value));
+                pokedexList.AddRange(update);
 
                 //Logger.Debug($"Pokedex Entry : {pokedexList.Count()}");
 
