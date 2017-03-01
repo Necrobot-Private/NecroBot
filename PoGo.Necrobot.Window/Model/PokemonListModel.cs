@@ -50,7 +50,7 @@ namespace PoGo.Necrobot.Window.Model
         public PokemonListViewModel(ISession session)
         {
             Filter = new PokemonViewFilter();
-            this.Session = Session;
+            this.Session = session;
         }
 
         // Caches
