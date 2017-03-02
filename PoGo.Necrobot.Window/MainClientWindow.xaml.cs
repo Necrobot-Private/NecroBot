@@ -27,6 +27,8 @@ using PoGo.NecroBot.Logic.Common;
 using System.ServiceModel.Syndication;
 using System.Net;
 using System.Xml;
+using System.IO;
+using System.Net.Http;
 
 namespace PoGo.Necrobot.Window
 {
@@ -251,11 +253,13 @@ namespace PoGo.Necrobot.Window
         {
             if (lastTimeLoadHelp < DateTime.Now.AddMinutes(-30))
             {
-                var feed = SyndicationFeed.Load(XmlReader.Create("http://necrobot2.com/feed.xml"));
+                var client = new WebClient();
+                var xml = await client.DownloadStringTaskAsync(new Uri("http://necrobot2.com/feed.xml"));
+                var feed = SyndicationFeed.Load(XmlReader.Create(new StringReader(xml)));
                 lastTimeLoadHelp = DateTime.Now;
                 this.Dispatcher.Invoke(() =>
                 {
-                    lsvHelps.ItemsSource = feed.Items.OrderByDescending(x=>x.PublishDate);
+                    lsvHelps.ItemsSource = feed.Items.OrderByDescending(x => x.PublishDate);
                 });
             }
         }

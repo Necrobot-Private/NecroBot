@@ -93,6 +93,13 @@ namespace PoGo.NecroBot.Logic.Tasks
                             await TransferDuplicatePokemonTask.Execute(session, cancellationToken);
                         if (session.LogicSettings.TransferWeakPokemon)
                             await TransferWeakPokemonTask.Execute(session, cancellationToken);
+                        if (session.LogicSettings.EvolveAllPokemonAboveIv ||
+                            session.LogicSettings.EvolveAllPokemonWithEnoughCandy ||
+                            session.LogicSettings.UseLuckyEggsWhileEvolving ||
+                            session.LogicSettings.KeepPokemonsThatCanEvolve)
+                        {
+                            await EvolvePokemonTask.Execute(session, cancellationToken);
+                        }
                     }
                     else
                         session.EventDispatcher.Send(new WarnEvent

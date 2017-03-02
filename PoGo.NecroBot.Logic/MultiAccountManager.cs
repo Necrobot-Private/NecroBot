@@ -107,13 +107,16 @@ namespace PoGo.NecroBot.Logic
 
             int schemaVersion = AuthSettings.SchemaVersionBeforeMigration;
 
+            if (!File.Exists("accounts.db"))
+                return;
+            
             // Backup old config file.
             long ts = DateTime.UtcNow.ToUnixTime(); // Add timestamp to avoid file conflicts
             if (File.Exists("accounts.db"))
             {
                 string backupPath = $"accounts-{schemaVersion}-{ts}.backup.db";
                 Logging.Logger.Write($"Backing up accounts.db to: {backupPath}", LogLevel.Info);
-
+            
                 File.Copy("accounts.db", backupPath);
             }
             // Add future schema migrations below.
@@ -124,6 +127,9 @@ namespace PoGo.NecroBot.Logic
                 switch (version)
                 {
                     case 19:
+                        // Just delete the accounts.db so it gets regenerated from scratch.
+                        File.Delete("accounts.db");
+                        /*
                         using (var db = new LiteDatabase(ACCOUNT_DB_NAME))
                         {
                             var accountdb = db.GetCollection<BotAccount>("accounts");
@@ -155,6 +161,7 @@ namespace PoGo.NecroBot.Logic
                                 UpdateDatabase(item);
                             }
                         }
+                        */
                         break;
                 }
             }

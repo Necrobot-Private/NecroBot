@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using PoGo.NecroBot.Logic.Event;
-using POGOProtos.Enums;
 using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.Model;
-using POGOProtos.Networking.Responses;
 using POGOProtos.Data;
 using PoGo.NecroBot.Logic.Tasks;
 using PoGo.NecroBot.Logic.PoGoUtils;
 using POGOProtos.Inventory;
+using PoGo.NecroBot.Logic.State;
+using TinyIoC;
 
 namespace PoGo.Necrobot.Window.Model
 {
@@ -36,10 +34,8 @@ namespace PoGo.Necrobot.Window.Model
             this.OtherList = new ObservableCollectionExt<SnipePokemonViewModel>();
             this.SnipeQueueItems = new ObservableCollectionExt<SnipePokemonViewModel>();
             this.PokedexSnipeItems = new ObservableCollectionExt<SnipePokemonViewModel>();
-            this.IV100List = new ObservableCollectionExt<Model.SnipePokemonViewModel>()
-            {
+            this.IV100List = new ObservableCollectionExt<Model.SnipePokemonViewModel>();
 
-            };
 #pragma warning disable 4014 // added to get rid of compiler warning. Remove this if async code is used below.
             //RefreshList();
 #pragma warning restore 4014
@@ -108,7 +104,7 @@ namespace PoGo.Necrobot.Window.Model
         {
             this.PokedexSnipeItems.RemoveAll(x => ShouldRemove(x ,model));
 
-            if (pokedex != null && !pokedex.Exists(p => p.PokemonId == model.PokemonId))
+            if (pokedex != null && !pokedex.Any(p => p.PokemonId == model.PokemonId))
             {
                 this.PokedexSnipeItems.Insert(0, model);
             }
@@ -167,6 +163,10 @@ namespace PoGo.Necrobot.Window.Model
                              .GroupBy(x => x.PokemonId)
                              .Select(x => x.First())
                              .ToList();
+                             
+            // Remove pokedex items from pokemon snipe list.
+            this.PokedexSnipeItems.RemoveAll(x => pokedex.Any(p => p.PokemonId == x.PokemonId));
+            RaisePropertyChanged("PokedexSnipeItems");
         }
 
         private void HandleRarePokemon(SnipePokemonViewModel model)
