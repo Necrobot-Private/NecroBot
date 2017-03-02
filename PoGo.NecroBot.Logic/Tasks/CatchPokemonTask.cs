@@ -389,7 +389,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                             await Task.Delay(100);
                             Logger.Write($"CatchFlee By pass : {ballToByPass[i].ToString()} , Attempt {i}, result {caughtPokemonResponse.Status}");
 
-                            if (caughtPokemonResponse.Status != CatchPokemonResponse.Types.CatchStatus.CatchFlee && caughtPokemonResponse.Status != CatchPokemonResponse.Types.CatchStatus.CatchMissed)
+                            if (caughtPokemonResponse.Status != CatchPokemonResponse.Types.CatchStatus.CatchMissed)
                             {
                                 session.SaveBallForByPassCatchFlee = false;
                                 CatchFleeContinuouslyCount = 0;
