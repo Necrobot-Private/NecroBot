@@ -288,6 +288,11 @@ namespace PoGo.Necrobot.Window.Controls
 
         }
 
+        private void UserControl_Initialized(object sender, System.EventArgs e)
+        {
+
+        }
+
         //ICommand transferPokemonCommand;
         //public ICommand TransferPokemonCommand
         //{

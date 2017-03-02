@@ -9,7 +9,7 @@
              xmlns:cv="clr-namespace:PoGo.Necrobot.Window.Converters"
              xmlns:t="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="900">
+             d:DesignHeight="300" d:DesignWidth="900" Initialized="UserControl_Initialized">
     <Control.Resources>
         <cv:PokemonIdToImageConverter x:Key="PokemonIdToImageConverter" />
         <cv:InverseBooleanConverter x:Key="InverseBooleanConverter" />

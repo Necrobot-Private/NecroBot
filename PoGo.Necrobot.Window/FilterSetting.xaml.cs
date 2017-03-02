@@ -202,5 +202,11 @@ namespace PoGo.Necrobot.Window
         {
             data.AffectToPokemons = this.pokemonList.Where(x => x.Selected).Select(x => x.Pokemon).ToList();
         }
+
+        private void MetroWindow_Initialized(object sender, EventArgs e)
+        {
+            if (System.Windows.SystemParameters.PrimaryScreenWidth < 1366)
+                this.WindowState = WindowState.Maximized;
+        }
     }
 }
