@@ -38,7 +38,7 @@ namespace PoGo.Necrobot.Window
             {
                 string filename = openDlg.FileName;
 
-                AppConfigWindow settingWindow = new AppConfigWindow(this, filename);
+                SettingsWindow settingWindow = new SettingsWindow(this, filename);
                 this.Hide();
                 settingWindow.Show();
             }

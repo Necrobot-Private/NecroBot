@@ -48,24 +48,7 @@ namespace PoGo.NecroBot.Logic.Captcha
                     }
                 }
 
-                //Anti captcha   - Havent test it, temporary comment until has key to test
-                //if (!resolved && session.LogicSettings.CaptchaConfig.EnableAntiCaptcha && !string.IsNullOrEmpty(session.LogicSettings.CaptchaConfig.AntiCaptchaAPIKey))
-                //{
-                //    if (needGetNewCaptcha)
-                //    {
-                //        captchaUrl = await GetNewCaptchaURL(session);
-                //    }
-                //    if (string.IsNullOrEmpty(captchaUrl)) return true;
-
-                //    Logger.Write("Auto resolving captcha by using anti captcha service");
-                //    captchaResponse = await GetCaptchaResposeByAntiCaptcha(session, captchaUrl);
-                //    needGetNewCaptcha = true;
-                //    if (!string.IsNullOrEmpty(captchaResponse))
-                //    {
-                //        resolved = await Resolve(session, captchaResponse);
-                //    }
-
-                //}
+              
 
                 //use 2 captcha
                 if (!resolved && session.LogicSettings.CaptchaConfig.Enable2Captcha &&
@@ -85,6 +68,25 @@ namespace PoGo.NecroBot.Logic.Captcha
                         resolved = await Resolve(session, captchaResponse);
                     }
                 }
+
+                if (!resolved && session.LogicSettings.CaptchaConfig.EnableAntiCaptcha && !string.IsNullOrEmpty(session.LogicSettings.CaptchaConfig.AntiCaptchaAPIKey))
+                {
+                    if (needGetNewCaptcha)
+                    {
+                        captchaUrl = await GetNewCaptchaURL(session);
+                    }
+                    if (string.IsNullOrEmpty(captchaUrl)) return true;
+
+                    Logger.Write("Auto resolving captcha by using anti captcha service");
+                    captchaResponse = await GetCaptchaResposeByAntiCaptcha(session, captchaUrl);
+                    needGetNewCaptcha = true;
+                    if (!string.IsNullOrEmpty(captchaResponse))
+                    {
+                        resolved = await Resolve(session, captchaResponse);
+                    }
+
+                }
+
             }
 
             //captchaRespose = "";
@@ -179,15 +181,15 @@ namespace PoGo.NecroBot.Logic.Captcha
 
             {
                 result = await AntiCaptchaClient.SolveCaptcha(captchaUrl,
-                    POKEMON_GO_GOOGLE_KEY,
                     session.LogicSettings.CaptchaConfig.AntiCaptchaAPIKey,
+                    POKEMON_GO_GOOGLE_KEY,
                     session.LogicSettings.CaptchaConfig.ProxyHost,
                     session.LogicSettings.CaptchaConfig.ProxyPort);
                 solved = !string.IsNullOrEmpty(result);
             }
             if (solved)
             {
-                Logger.Write("Captcha has been resolved automatically by 2Captcha ");
+                Logger.Write("Captcha has been resolved automatically by Anti-Captcha ");
             }
             return result;
         }

@@ -11,6 +11,7 @@ using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Utils;
 using PokemonGo.RocketAPI;
 using POGOProtos.Networking.Responses;
+using PoGo.NecroBot.Logic.Logging;
 
 namespace PoGo.NecroBot.Logic.Strategies.Walk
 {
@@ -27,7 +28,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
 
         public event UpdatePositionDelegate UpdatePositionEvent;
 
-        public abstract Task<PlayerUpdateResponse> Walk(IGeoLocation targetLocation, Func<Task> functionExecutedWhileWalking, ISession session, CancellationToken cancellationToken, double walkSpeed = 0.0);
+        public abstract Task Walk(IGeoLocation targetLocation, Func<Task> functionExecutedWhileWalking, ISession session, CancellationToken cancellationToken, double walkSpeed = 0.0);
 
         public virtual string RouteName { get; }
 
@@ -58,9 +59,9 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
             }
         }
 
-        internal void DoUpdatePositionEvent(double latitude, double longitude)
+        internal void DoUpdatePositionEvent(ISession session, double latitude, double longitude, double speed, double variant =0)
         {
-            UpdatePositionEvent?.Invoke(latitude, longitude);
+            UpdatePositionEvent?.Invoke(session, latitude, longitude, speed);
         }
 
         /// <summary>
@@ -85,7 +86,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
             return LocationUtils.CreateWaypoint(geo, randomDistance, randomBearingDegrees);
         }
 
-        public Task<PlayerUpdateResponse> RedirectToNextFallbackStrategy(ILogicSettings logicSettings,
+        public Task RedirectToNextFallbackStrategy(ILogicSettings logicSettings,
             IGeoLocation targetLocation, Func<Task> functionExecutedWhileWalking, ISession session,
             CancellationToken cancellationToken, double walkSpeed = 0.0)
         {
@@ -97,11 +98,10 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
             return nextStrategy.Walk(targetLocation, functionExecutedWhileWalking, session, cancellationToken);
         }
 
-        public async Task<PlayerUpdateResponse> DoWalk(List<GeoCoordinate> points, ISession session,
+        public async Task DoWalk(List<GeoCoordinate> points, ISession session,
             Func<Task> functionExecutedWhileWalking, GeoCoordinate sourceLocation, GeoCoordinate targetLocation,
             CancellationToken cancellationToken, double walkSpeed = 0.0)
         {
-            PlayerUpdateResponse result = null;
             var currentLocation = new GeoCoordinate(_client.CurrentLatitude, _client.CurrentLongitude,
                 _client.CurrentAltitude);
 
@@ -143,6 +143,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
                     _currentWalkingSpeed = session.Navigation.VariantRandom(session, _currentWalkingSpeed);
 
                 var speedInMetersPerSecond = (walkSpeed > 0 ? walkSpeed : _currentWalkingSpeed) / 3.6;
+
                 var nextStepBearing = LocationUtils.DegreeBearing(currentLocation, nextStep);
                 //particular steps are limited by minimal length, first step is calculated from the original speed per second (distance in 1s)
                 var nextStepDistance = Math.Max(RandomizeStepLength(_minStepLengthInMeters), speedInMetersPerSecond);
@@ -153,18 +154,17 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
                 var previousLocation =
                     currentLocation; //store the current location for comparison and correction purposes
                 var requestSendDateTime = DateTime.Now;
-                result =
-                    await LocationUtils.UpdatePlayerLocationWithAltitude(session, waypoint,
+                LocationUtils.UpdatePlayerLocationWithAltitude(session, waypoint,
                         (float) speedInMetersPerSecond);
 
                 var realDistanceToTarget = LocationUtils.CalculateDistanceInMeters(currentLocation, targetLocation);
-                if (realDistanceToTarget < 30)
+                if (realDistanceToTarget < 2)
                     break;
 
                 do
                 {
                     cancellationToken.ThrowIfCancellationRequested();
-
+                    TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
                     var msToPositionChange = (DateTime.Now - requestSendDateTime).TotalMilliseconds;
                     currentLocation = new GeoCoordinate(_client.CurrentLatitude, _client.CurrentLongitude);
                     var currentDistanceToWaypoint = LocationUtils.CalculateDistanceInMeters(currentLocation, nextStep);
@@ -204,6 +204,8 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
                         //also add the distance raise (bot overhead corrections) to the normal step length
                         Math.Max(RandomizeStepLength(_minStepLengthInMeters) + distanceRaise,
                             (msToPositionChange / 1000) * speedInMetersPerSecond) + distanceRaise);
+                    int timeToWalk = (int)((nextStepDistance * 1000) / speedInMetersPerSecond);
+                    //Logger.Debug($"nextStepDistance {nextStepDistance} need {timeToWalk} ms");
 
                     waypoint = LocationUtils.CreateWaypoint(currentLocation, nextStepDistance, nextStepBearing);
                     walkedPointsList.Add(waypoint);
@@ -211,19 +213,17 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
                     //store the current location for comparison and correction purposes
                     previousLocation = currentLocation;
                     requestSendDateTime = DateTime.Now;
-                    result = await LocationUtils
-                        .UpdatePlayerLocationWithAltitude(session, waypoint, (float) speedInMetersPerSecond);
+                    LocationUtils.UpdatePlayerLocationWithAltitude(session, waypoint, (float) speedInMetersPerSecond);
 
-                    UpdatePositionEvent?.Invoke(waypoint.Latitude, waypoint.Longitude);
+                    UpdatePositionEvent?.Invoke(session, waypoint.Latitude, waypoint.Longitude, _currentWalkingSpeed);
 
+                    await Task.Delay(timeToWalk); 
                     if (functionExecutedWhileWalking != null)
                         await functionExecutedWhileWalking(); // look for pokemon
                 } while (LocationUtils.CalculateDistanceInMeters(currentLocation, nextStep) >= 2);
 
-                UpdatePositionEvent?.Invoke(nextStep.Latitude, nextStep.Longitude);
+                UpdatePositionEvent?.Invoke(session, nextStep.Latitude, nextStep.Longitude, _currentWalkingSpeed);
             }
-
-            return result;
         }
 
 

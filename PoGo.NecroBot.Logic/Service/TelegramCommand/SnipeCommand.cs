@@ -19,6 +19,8 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
         {
         }
 
+        // jjskuld - Ignore CS1998 warning for now.
+        #pragma warning disable 1998
         public override async Task<bool> OnCommand(ISession session, string commandText, Action<string> callback)
         {
             var cmd = commandText.Split(' ');
@@ -28,7 +30,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
                 var pokemonData = cmd[1].Split(',');
                 PokemonId pid = (PokemonId) Enum.Parse(typeof(PokemonId), pokemonData[0].Trim(), true);
 
-                await MSniperServiceTask.AddSnipeItem(session, new MSniperServiceTask.MSniperInfo2()
+                MSniperServiceTask.AddSnipeItem(session, new MSniperServiceTask.MSniperInfo2()
                 {
                     PokemonId = (short) pid,
                     Latitude = Convert.ToDouble(pokemonData[1].Trim()),
@@ -39,5 +41,6 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
             }
             return false;
         }
+        #pragma warning restore 1998
     }
 }

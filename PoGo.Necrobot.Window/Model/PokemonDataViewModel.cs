@@ -1,52 +1,195 @@
-﻿using PoGo.NecroBot.Logic.PoGoUtils;
+﻿using PoGo.NecroBot.Logic.Model;
+using PoGo.NecroBot.Logic.PoGoUtils;
+using PoGo.NecroBot.Logic.State;
+using PoGo.NecroBot.Logic.Tasks;
 using POGOProtos.Data;
 using POGOProtos.Enums;
-using POGOProtos.Inventory;
+using POGOProtos.Inventory.Item;
 using POGOProtos.Settings.Master;
+using PokemonGo.RocketAPI.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace PoGo.Necrobot.Window.Model
 {
+    public class EvolutionToPokemon : ViewModelBase
+    {
+        public int CandyNeed { get; set; }
+        public ulong OriginPokemonId { get; set; }
+        public PokemonId Pokemon { get; set; }
+        public bool AllowEvolve { get; set; }
+        public ItemId ItemNeed { get; set; }
+    }
     public class PokemonDataViewModel : ViewModelBase
     {
-        public PokemonDataViewModel(PokemonData pokemon, PokemonSettings setting, Candy candy)
+        public PokemonDataViewModel(ISession session, PokemonData pokemon)
         {
-            this.PowerupText = "Upgrade";
-            this.AllowPowerup = true;
-
+            this.Session = session;
             this.PokemonData = pokemon;
-            this.Id = pokemon.Id;
-            this.PokemonName = pokemon.PokemonId;
-            this.HP = pokemon.Stamina;
-            this.MaxHP = pokemon.StaminaMax;
-            this.IV = PokemonInfo.CalculatePokemonPerfection(pokemon);
-            this.CP = PokemonInfo.CalculateCp(pokemon);
-            this.Level = (int)PokemonInfo.GetLevel(pokemon);
-            this.Favorited = pokemon.Favorite > 0;
-            this.IsSelected = false;
-            this.Move1 = pokemon.Move1.ToString();
-            this.Move2 = pokemon.Move2.ToString();
+            this.Displayed = true;
+            var pkmSettings = session.Inventory.GetPokemonSettings().Result;
+            var setting = pkmSettings.FirstOrDefault(x => x.PokemonId == pokemon.PokemonId);
+
+            this.EvolutionBranchs = new List<EvolutionToPokemon>();
+            bool first = true;
             
-            this.PokemonSettings = setting;
-            this.AllowEvolve = candy.Candy_ >= setting.CandyToEvolve && setting.EvolutionIds.Count > 0;
-            this.Candy = candy.Candy_;
+            //TODO - implement the candy count for enable evolution
+            foreach (var item in setting.EvolutionBranch)
+            {
+                this.EvolutionBranchs.Add(new EvolutionToPokemon()
+                {
+                    CandyNeed = item.CandyCost,
+                    ItemNeed = item.EvolutionItemRequirement,
+                    Pokemon = item.Evolution,
+                    AllowEvolve = first,
+                    OriginPokemonId = pokemon.Id
+                });
+                first = false;
+
+            }
         }
 
-        internal void UpdateWith(PokemonData item, Candy candy = null)
+        public List<EvolutionToPokemon> EvolutionBranchs { get; set; }
+        internal void UpdateWith(PokemonData item)
         {
-            this.IsTransfering = false;
-            this.IsEvolving = false;
-            this.IsFavoriting = false;
-            this.CP = item.Cp;
-            this.Level = (int)PokemonInfo.GetLevel(item);
-            if (candy != null)
+            this.PokemonData = item;
+        }
+
+        public string Sex => pokemonData.PokemonDisplay.Gender.ToString();
+        public ulong Id
+        {
+            get
             {
-                this.Candy = candy.Candy_;
-                this.AllowEvolve = candy.Candy_ >= this.PokemonSettings.CandyToEvolve && this.PokemonSettings.EvolutionIds.Count > 0;
+                return PokemonData.Id;
+            }
+        }
+
+        public string PokemonName
+        {
+            get
+            {
+                return string.IsNullOrEmpty(PokemonData.Nickname) ? PokemonData.PokemonId.ToString() : PokemonData.Nickname;
+            }
+
+            set
+            {
+                if (PokemonData.Nickname != value)
+                {
+                    // Fire off the rename
+                    Task.Run(async () =>
+                    {
+                        await RenameSinglePokemonTask.Execute(
+                            this.Session,
+                            PokemonData.Id,
+                            value,
+                            this.Session.CancellationTokenSource.Token);
+                    });
+                }
+            }
+        }
+
+        public PokemonId PokemonId
+        {
+            get
+            {
+                return PokemonData.PokemonId;
+            }
+        }
+
+        public string Move1
+        {
+            get
+            {
+                return PokemonData.Move1.ToString().Replace("Fast", "");
+            }
+        }
+
+        public string Move2
+        {
+            get
+            {
+                return PokemonData.Move2.ToString();
+            }
+        }
+
+        public PokemonFamilyId FamilyId
+        {
+            get
+            {
+                return PokemonSettings.FamilyId;
+            }
+        }
+
+        public PokemonSettings PokemonSettings
+        {
+            get
+            {
+                return this.Session.Inventory.GetPokemonSettings().Result.FirstOrDefault(x => x.PokemonId == PokemonId);
+            }
+        }
+
+        public int Candy
+        {
+            get
+            {
+                return this.Session.Inventory.GetCandyCount(this.PokemonData.PokemonId);
+            }
+        }
+
+        public bool AllowPowerup
+        {
+            get
+            {
+                return this.Session.Inventory.CanUpgradePokemon(this.PokemonData);
+            }
+        }
+
+        public bool AllowEvolve
+        {
+            get
+            {
+                return this.Session.Inventory.CanEvolvePokemon(this.PokemonData).Result;
+            }
+        }
+
+        public bool AllowTransfer
+        {
+            get
+            {
+                return this.Session.Inventory.CanTransferPokemon(this.PokemonData);
+            }
+        }
+
+        public DateTime CaughtTime => TimeUtil.GetDateTimeFromMilliseconds((long)pokemonData.CreationTimeMs).ToLocalTime();
+
+        private GeoLocation geoLocation;
+        public GeoLocation GeoLocation
+        {
+            get
+            {
+                return geoLocation;
+            }
+
+            set
+            {
+                geoLocation = value;
+                RaisePropertyChanged("CaughtLocation");
+            }
+        }
+
+        public string CaughtLocation
+        {
+            get
+            {
+                if (geoLocation == null)
+                {
+                    // Just return latitude, longitude string
+                    return new GeoLocation(pokemonData.CapturedCellId).ToString();
+                }
+
+                return geoLocation.ToString();
             }
         }
 
@@ -58,11 +201,8 @@ namespace PoGo.Necrobot.Window.Model
             {
                 isTransfering = value;
                 RaisePropertyChanged("IsTransfering");
-
             }
         }
-        public string Move1 { get; set; }
-        public string Move2 { get; set; }
 
         private bool isEvolving;
         public bool IsEvolving
@@ -72,79 +212,93 @@ namespace PoGo.Necrobot.Window.Model
             {
                 isEvolving = value;
                 RaisePropertyChanged("IsEvolving");
-
             }
         }
-        public bool IsSelected { get; set; }
-        public PokemonId PokemonName { get; set; }
 
-        public int Level { get; set; }
-
-        private int candy;
-        public int Candy
+        private bool isFavoriting;
+        public bool IsFavoriting
         {
-            get { return candy; }
+            get { return isFavoriting; }
             set
             {
-                this.candy = value;
-                RaisePropertyChanged("Candy");
+                isFavoriting = value;
+                RaisePropertyChanged("IsFavoriting");
             }
         }
-        private int cp;
+
+        private bool isUpgrading;
+        public bool IsUpgrading
+        {
+            get { return isUpgrading; }
+            set
+            {
+                isUpgrading = value;
+                RaisePropertyChanged("IsUpgrading");
+                RaisePropertyChanged("PowerupText");
+            }
+        }
+
+        private bool isSelected;
+        public bool IsSelected
+        {
+            get { return isSelected; }
+            set
+            {
+                isSelected = value;
+                RaisePropertyChanged("IsSelected");
+            }
+        }
+
+        public double Level
+        {
+            get
+            {
+                return PokemonInfo.GetLevel(PokemonData);
+            }
+        }
+
         public int CP
         {
-            get { return cp; }
-            set
+            get
             {
-                this.cp = value;
-                RaisePropertyChanged("CP");
+                return PokemonData.Cp;
             }
         }
 
-        public double IV { get; set; }
+        public double IV
+        {
+            get
+            {
+                return PokemonInfo.CalculatePokemonPerfection(PokemonData);
+            }
+        }
 
-        public DateTime CaughtTime { get; set; }
 
-        public ulong Id { get; set; }
-        int hp;
         public int HP
         {
-            get { return hp; }
-            set
+            get
             {
-                hp = value;
-                RaisePropertyChanged("HP");
+                return PokemonData.Stamina;
             }
         }
-        public int MaxHP { get; set; }
 
-        private bool favorited;
+        public int MaxHP
+        {
+            get
+            {
+                return PokemonData.StaminaMax;
+            }
+        }
 
         public bool Favorited
         {
-            get { return favorited; }
-            set
+            get
             {
-                favorited = value;
-                RaisePropertyChanged("Favorited");
-            }
-        }
-        public string HPDisplay => $"{HP} ({Math.Round(((100.0 * HP) / MaxHP), 2):P}";
-
-        private bool allowEvolve;
-
-        public bool AllowEvolve
-        {
-            get { return allowEvolve; }
-            set
-            {
-                this.allowEvolve = value;
-                RaisePropertyChanged("AllowEvolve");
+                return PokemonData.Favorite == 1;
             }
         }
 
-        public PokemonSettings PokemonSettings { get; private set; }
-        public bool IsFavoriting { get; set; }
+        public string HPDisplay => $"{HP}/{MaxHP}";
 
         public string PokemonIcon
         {
@@ -161,8 +315,85 @@ namespace PoGo.Necrobot.Window.Model
             }
         }
 
-        public PokemonData PokemonData { get; set; }
-        public bool AllowPowerup { get; internal set; }
-        public string PowerupText { get; internal set; }
+        private PokemonData pokemonData;
+        public PokemonData PokemonData
+        {
+            get
+            {
+                return pokemonData;
+            }
+
+            set
+            {
+                PokemonData oldData = pokemonData;
+                pokemonData = value;
+
+                if (oldData != null)
+                {
+                    if (oldData.Id != pokemonData.Id)
+                        RaisePropertyChanged("Id");
+
+                    if (oldData.Nickname != pokemonData.Nickname)
+                        RaisePropertyChanged("PokemonName");
+
+                    if (oldData.Cp != pokemonData.Cp)
+                    {
+                        RaisePropertyChanged("CP");
+                        RaisePropertyChanged("Level");
+                    }
+
+                    if (oldData.Stamina != pokemonData.Stamina)
+                        RaisePropertyChanged("HP");
+
+                    if (oldData.StaminaMax != pokemonData.StaminaMax)
+                        RaisePropertyChanged("MaxHP");
+
+                    if (oldData.Stamina != pokemonData.Stamina || oldData.StaminaMax != pokemonData.StaminaMax)
+                        RaisePropertyChanged("HPDisplay");
+
+                    RaisePropertyChanged("Candy");
+                    RaisePropertyChanged("AllowPowerup");
+                    RaisePropertyChanged("AllowEvolve");
+                    RaisePropertyChanged("AllowTransfer");
+
+                    // RaisePropertyChanged("IV");
+
+                    if (oldData.Favorite != pokemonData.Favorite)
+                        RaisePropertyChanged("Favorited");
+                }
+                else
+                {
+                    RaisePropertyChanged("Id");
+                    RaisePropertyChanged("PokemonName");
+                    RaisePropertyChanged("Candy");
+                    RaisePropertyChanged("AllowPowerup");
+                    RaisePropertyChanged("AllowEvolve");
+                    RaisePropertyChanged("AllowTransfer");
+                    RaisePropertyChanged("IV");
+                    RaisePropertyChanged("CP");
+                    RaisePropertyChanged("HP");
+                    RaisePropertyChanged("MaxHP");
+                    RaisePropertyChanged("HPDisplay");
+                    RaisePropertyChanged("Level");
+                    RaisePropertyChanged("Favorited");
+                    RaisePropertyChanged("Move1");
+                    RaisePropertyChanged("Move2");
+                    RaisePropertyChanged("PokemonIcon");
+                }
+            }
+        }
+
+        public string PowerupText
+        {
+            get
+            {
+                if (IsUpgrading)
+                    return "Upgrading...";
+                else
+                    return "Upgrade";
+            }
+        }
+
+        public bool Displayed { get; set; }
     }
 }

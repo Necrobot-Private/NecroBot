@@ -14,6 +14,5 @@ namespace PoGo.Necrobot.Window
         ISession currentSession;
         Model.DataContext datacontext;
         StatisticsAggregator playerStats;
-        GetPlayerResponse playerProfile;
     }
 }

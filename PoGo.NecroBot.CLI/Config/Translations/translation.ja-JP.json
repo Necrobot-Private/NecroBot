@@ -517,6 +517,10 @@
       "Value": "おそらくGoogleがサーバダウンしています。しばらく経ってからBOTを開始してください。"
     },
     {
+      "Key": "missingCredentials",
+      "Value": "auth.jsonにユーザー名とパスワードが記述されていません！"
+    },
+    {
       "Key": "missingCredentialsGoogle",
       "Value": "auth.jsonにGoogleのユーザー名とパスワードが記述されていません！"
     },
@@ -590,7 +594,7 @@
     },
     {
       "Key": "amountPkmSeenCaught",
-      "Value": "見つけたポケモン: {0}/151　 捕まえたポケモン: {1}/151"
+      "Value": "見つけたポケモン: {0}/231　 捕まえたポケモン: {1}/231"
     },
     {
       "Key": "pkmPotentialEvolveCount",

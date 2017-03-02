@@ -24,9 +24,23 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static async Task Execute(ISession session, FortData currentFortData,
             CancellationToken cancellationToken)
         {
+            TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
             cancellationToken.ThrowIfCancellationRequested();
             if (!session.LogicSettings.CatchPokemon ||
                 session.CatchBlockTime > DateTime.Now) return;
+
+            if (session.KnownLongitudeBeforeSnipe != 0 && session.KnownLatitudeBeforeSnipe != 0 &&
+                LocationUtils.CalculateDistanceInMeters(session.KnownLatitudeBeforeSnipe,
+                session.KnownLongitudeBeforeSnipe,
+                session.Client.CurrentLatitude,
+                session.Client.CurrentLongitude) > 1000)
+            {
+                Logger.Write($"ERROR - Bot stucked at snipe location({session.Client.CurrentLatitude},{session.Client.CurrentLongitude}). Teleport him back home - if you see this message please PM samuraitruong");
+
+                session.Client.Player.SetCoordinates(session.KnownLatitudeBeforeSnipe, session.KnownLongitudeBeforeSnipe, session.Client.CurrentAltitude);
+                return;
+            }
+
 
             Logger.Write(session.Translation.GetTranslation(TranslationString.LookingForLurePokemon), LogLevel.Debug);
 
@@ -34,9 +48,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             var pokemonId = currentFortData.LureInfo.ActivePokemonId;
 
-            if ((session.LogicSettings.UsePokemonSniperFilterOnly &&
-                 !session.LogicSettings.PokemonToSnipe.Pokemon.Contains(pokemonId)) ||
-                (session.LogicSettings.UsePokemonToNotCatchFilter &&
+            if ((session.LogicSettings.UsePokemonToNotCatchFilter &&
                  session.LogicSettings.PokemonsNotToCatch.Contains(pokemonId)))
             {
                 session.EventDispatcher.Send(new NoticeEvent
@@ -81,6 +93,13 @@ namespace PoGo.NecroBot.Logic.Tasks
                             await TransferDuplicatePokemonTask.Execute(session, cancellationToken);
                         if (session.LogicSettings.TransferWeakPokemon)
                             await TransferWeakPokemonTask.Execute(session, cancellationToken);
+                        if (session.LogicSettings.EvolveAllPokemonAboveIv ||
+                            session.LogicSettings.EvolveAllPokemonWithEnoughCandy ||
+                            session.LogicSettings.UseLuckyEggsWhileEvolving ||
+                            session.LogicSettings.KeepPokemonsThatCanEvolve)
+                        {
+                            await EvolvePokemonTask.Execute(session, cancellationToken);
+                        }
                     }
                     else
                         session.EventDispatcher.Send(new WarnEvent
@@ -106,7 +125,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             // Looking for any lure pokestop neaby
 
             var mapObjects = await session.Client.Map.GetMapObjects();
-            var pokeStops = mapObjects.Item1.MapCells.SelectMany(i => i.Forts)
+            var pokeStops = mapObjects.MapCells.SelectMany(i => i.Forts)
                 .Where(
                     i =>
                         (i.Type == FortType.Checkpoint) &&

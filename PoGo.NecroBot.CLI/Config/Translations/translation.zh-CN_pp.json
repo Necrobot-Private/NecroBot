@@ -517,6 +517,10 @@
       "Value": "Google服务器可能正在维护, 请稍后再尝试登录.\t\t"
     },
     {
+      "Key": "missingCredentials",
+      "Value": "您需要在auth.json中填写账号和密码!\t\t"
+    },
+    {
       "Key": "missingCredentialsGoogle",
       "Value": "您需要在auth.json中填写Google账号和密码!\t\t"
     },
@@ -590,7 +594,7 @@
     },
     {
       "Key": "amountPkmSeenCaught",
-      "Value": "已遇见:{0}/151只神奇宝贝,已捕捉:{1}/151只\t\t\t"
+      "Value": "已遇见:{0}/231只神奇宝贝,已捕捉:{1}/231只\t\t\t"
     },
     {
       "Key": "pkmPotentialEvolveCount",

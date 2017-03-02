@@ -31,16 +31,15 @@ namespace PoGo.Necrobot.Window
             AppDomain currentDomain = AppDomain.CurrentDomain;
             currentDomain.UnhandledException += new UnhandledExceptionEventHandler(this.ErrorHandler);
         }
-
         
         private void ErrorHandler(object sender, UnhandledExceptionEventArgs e)
         {
             Debug.WriteLine(e.ExceptionObject.ToString());
+            ConsoleHelper.ShowConsoleWindow();
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
-
             base.OnStartup(e);
         }
 
@@ -53,16 +52,29 @@ namespace PoGo.Necrobot.Window
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             string languageCode = "en";
+            
+            var profileConfigPath = Path.Combine(Directory.GetCurrentDirectory(), "config");
+            var configFile = Path.Combine(profileConfigPath, "config.json");
+            var translationsDir = Path.Combine(profileConfigPath, "Translations");
+            var subPath = "";
+            var validateJSON = false; // TODO Need to re-enable validation for GUI.
 
-            if (File.Exists("config\\config.json"))
+            if (File.Exists(configFile))
             {
-                var config = GlobalSettings.Load("config",false);
-                languageCode = config.ConsoleConfig.TranslationLanguageCode;
+                try {
+                    var config = GlobalSettings.Load(subPath, validateJSON);
+                    languageCode = config.ConsoleConfig.TranslationLanguageCode;
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Config error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Shutdown();
+                }
             }
 
-            if (!System.IO.Directory.Exists(@"config\Translations"))
+            if (!Directory.Exists(translationsDir))
             {
-                System.IO.Directory.CreateDirectory(@"config\Translations");
+                Directory.CreateDirectory(translationsDir);
             }
 
             var uiTranslation = new UITranslation(languageCode);

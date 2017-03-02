@@ -517,6 +517,10 @@
       "Value": "谷歌服务器可能正在维护, 请稍后再尝试登录.\t\t"
     },
     {
+      "Key": "missingCredentials",
+      "Value": "您需要在auth.json中填写谷歌账号和密码!\t\t"
+    },
+    {
       "Key": "missingCredentialsGoogle",
       "Value": "您需要在auth.json中填写谷歌账号和密码!\t\t"
     },
@@ -590,7 +594,7 @@
     },
     {
       "Key": "amountPkmSeenCaught",
-      "Value": "遇见了:{0}/151种宝可梦,捕捉到了:{1}/151种宝可梦\t\t\t\t"
+      "Value": "遇见了:{0}/231种宝可梦,捕捉到了:{1}/231种宝可梦\t\t\t\t"
     },
     {
       "Key": "pkmPotentialEvolveCount",

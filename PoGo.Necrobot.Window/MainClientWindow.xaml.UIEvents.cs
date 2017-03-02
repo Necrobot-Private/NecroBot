@@ -13,6 +13,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TinyIoC;
 
 namespace PoGo.Necrobot.Window
 {
@@ -35,6 +36,13 @@ namespace PoGo.Necrobot.Window
         {
             this.datacontext.PokemonList.OnFavorited(ev);
         }
+        public void OnBotEvent(BotSwitchedEvent ex)
+        {
+            //this.botMap.Reset();
+            this.datacontext.Reset();
+            this.popSwithAccount.IsOpen = true;
+            //show popup...
+        }
         public void OnBotEvent(FinishUpgradeEvent e)
         {
             this.datacontext.PokemonList.OnUpgradeEnd(e);
@@ -47,9 +55,9 @@ namespace PoGo.Necrobot.Window
         {
             this.datacontext.PokemonList.OnEvolved(ev);
         }
-        public void OnBotEvent(PokemonCaptureEvent inventory)
+        public void OnBotEvent(PokemonCaptureEvent capture)
         {
-            this.datacontext.Sidebar.AddOrUpdate(new CatchPokemonViewModel(inventory));
+            this.datacontext.Sidebar.AddOrUpdate(new CatchPokemonViewModel(capture));
         }
         public void OnBotEvent(LoginEvent ev)
         {
@@ -69,36 +77,32 @@ namespace PoGo.Necrobot.Window
         {
             datacontext.EggsList.OnEggIncubatorStatus(e);
         }
-        public void OnBotEvent(InventoryRefreshedEvent inventory)
+        public void OnBotEvent(InventoryRefreshedEvent e)
         {
-
             if (currentSession.Profile == null || currentSession.Profile.PlayerData == null) return;
 
-            var data = inventory.Inventory;
+            var maxPokemonStorage = currentSession.Profile?.PlayerData?.MaxPokemonStorage;
+            var maxItemStorage = currentSession.Profile?.PlayerData?.MaxItemStorage;
+            var pokemons = currentSession.Inventory.GetPokemons();
 
-            var maxPokemonStogare = currentSession.Profile?.PlayerData?.MaxPokemonStorage;
-            var maxItemStogare = currentSession.Profile?.PlayerData?.MaxItemStorage;
-            var pokemons = data.InventoryDelta.InventoryItems
-                .Select(x => x.InventoryItemData?.PokemonData)
-                .Where(x => x != null && !x.IsEgg)
-                .ToList();
-
-            datacontext.SnipeList.OnInventoryRefreshed(inventory.Inventory);
+            var inventory = currentSession.Inventory.GetCachedInventory();
+            datacontext.SnipeList.OnInventoryRefreshed(inventory);
             datacontext.PlayerInfo.OnInventoryRefreshed(inventory);
+            datacontext.EggsList.OnInventoryRefreshed(inventory);
 
-            datacontext.EggsList.OnInventoryRefreshed(inventory.Inventory);
-            var items = data.InventoryDelta.InventoryItems.Select(x => x.InventoryItemData?.Item).Where(x => x != null).ToList();
-            this.datacontext.MaxItemStogare = maxItemStogare.Value;
+            var items = inventory.Select(x => x.InventoryItemData?.Item).Where(x => x != null).ToList();
+            this.datacontext.MaxItemStorage = maxItemStorage.Value;
+            this.datacontext.RaisePropertyChanged("MaxItemStorage");
+
             this.datacontext.ItemsList.Update(items);
-            this.datacontext.PokemonList.Update(pokemons, inventory.Candies, inventory.PokemonSettings);
-            this.datacontext.RaisePropertyChanged("PokemonTabHeader");
             this.datacontext.RaisePropertyChanged("ItemsTabHeader");
-            this.datacontext.RaisePropertyChanged("MaxItemStogare");
+
+            this.datacontext.PokemonList.Update(pokemons);
+            this.datacontext.RaisePropertyChanged("PokemonTabHeader");
+
             UIUpdateSafe(() =>
              {
-                 tabPokemons.Header = $"   POKEMONS ({this.datacontext.Pokemons.Count}/{maxPokemonStogare})  ";
-                 //tabItems.Header = $"   POKEMONS ({this.datacontext.Pokemons.Count}/{maxPokemonStogare})  ";
-
+                 tabPokemons.Header = $"   Pokemons ({this.datacontext.Pokemons.Count}/{maxPokemonStorage})   ";
              });
         }
 
@@ -119,8 +123,10 @@ namespace PoGo.Necrobot.Window
             this.datacontext.UI.PlayerStatus = "Playing";
             this.datacontext.UI.PlayerName = userLogged.Profile.PlayerData.Username;
             this.datacontext.RaisePropertyChanged("UI");
+
             this.Dispatcher.Invoke(() =>
             {
+                this.popSwithAccount.IsOpen = false;
                 lblAccount.Content = $"{this.datacontext.UI.PlayerStatus} as : {this.datacontext.UI.PlayerName}";
 
             });
@@ -139,6 +145,10 @@ namespace PoGo.Necrobot.Window
             lblAccount.Content = $"{this.datacontext.UI.PlayerStatus} as : {this.datacontext.UI.PlayerName}";
 
         }
+        public void OnBotEvent(RenamePokemonEvent renamePokemonEvent)
+        {
+            this.datacontext.PokemonList.OnRename(renamePokemonEvent);
+        }
         public void OnBotEvent(TransferPokemonEvent transferedPkm)
         {
             this.datacontext.PokemonList.OnTransfer(transferedPkm);
@@ -149,7 +159,8 @@ namespace PoGo.Necrobot.Window
         }
         public void OnBotEvent(FortUsedEvent ev)
         {
-            this.botMap.MarkFortAsLooted(ev.Id);
+            this.datacontext.Sidebar.AddOrUpdate(new PokestopItemViewModel(ev));
+            this.botMap.MarkFortAsLooted(ev.Fort);
         }
         public void OnBotEvent(PokeStopListEvent ev)
         {
@@ -158,10 +169,32 @@ namespace PoGo.Necrobot.Window
         public void OnBotEvent(UpdatePositionEvent ev)
         {
             this.botMap.UpdatePlayerPosition(ev.Latitude, ev.Longitude);
+            this.datacontext.PlayerInfo.UpdateSpeed(ev.Speed);
         }
         public void OnBotEvent(AutoSnipePokemonAddedEvent ev)
         {
             datacontext.SnipeList.OnSnipeItemQueue(ev.EncounteredEvent);
+        }
+        public void OnBotEvent(PokestopLimitUpdate ev)
+        {
+            this.datacontext.PlayerInfo.UpdatePokestopLimit(ev);
+        }
+        public void OnBotEvent(CatchLimitUpdate ev)
+        {
+            this.datacontext.PlayerInfo.UpdateCatchLimit(ev);
+        }
+
+        public void OnBotEvent(ErrorEvent ev)
+        {
+            if(ev.RequireExit)
+            {
+                popSwithAccount.IsOpen = false;
+                txtLastError.Text = ev.Message;
+                popError.IsOpen = true;
+            }
+        }
+        public void OnBotEvent(IEvent evt)
+        {
         }
         internal void HandleBotEvent(IEvent evt)
         {
@@ -181,8 +214,7 @@ namespace PoGo.Necrobot.Window
                     }
                 });
             });
+        }
+        #endregion
     }
-    #endregion
-
-}
 }

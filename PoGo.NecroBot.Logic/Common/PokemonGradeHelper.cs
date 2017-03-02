@@ -5,7 +5,7 @@ using PoGo.NecroBot.Logic.Model;
 using POGOProtos.Enums;
 
 namespace PoGo.NecroBot.Logic.Common
-{  
+{
     public static class PokemonGradeHelper
     {
         private static Dictionary<PokemonGrades, string> RarityColors = new Dictionary<PokemonGrades, string>()
@@ -66,7 +66,8 @@ namespace PoGo.NecroBot.Logic.Common
                         PokemonId.Voltorb,
                         PokemonId.Goldeen,
                         PokemonId.Eevee,
-                        PokemonId.Magikarp
+                        PokemonId.Magikarp,
+                        PokemonId.Natu
                     }
                 },
                 {
@@ -108,6 +109,23 @@ namespace PoGo.NecroBot.Logic.Common
                         PokemonId.Horsea,
                         PokemonId.Staryu,
                         PokemonId.Jynx,
+                       PokemonId.Chikorita,
+                       PokemonId.Totodile,
+                       PokemonId.Sentret,
+                       PokemonId.Hoothoot,
+                       PokemonId.Ledyba,
+                       PokemonId.Spinarak,
+                       PokemonId.Sunkern,
+                       PokemonId.Wooper,
+                       PokemonId.Murkrow,
+                       PokemonId.Snubbull,
+                       PokemonId.Teddiursa ,
+                       PokemonId.Slugma       ,
+                       PokemonId.Swinub       ,
+                       PokemonId.Remoraid     ,
+                       PokemonId.Houndour     ,
+                       PokemonId.Phanpy       ,
+                       PokemonId.Marill
                     }
                 },
                 {
@@ -140,7 +158,36 @@ namespace PoGo.NecroBot.Logic.Common
                         PokemonId.Lickitung,
                         PokemonId.Weezing,
                         PokemonId.Seaking,
-                        PokemonId.Starmie
+                        PokemonId.Starmie    ,
+                        PokemonId.Bayleef,
+                            PokemonId.Cyndaquil,
+                            PokemonId.Croconaw,
+                            PokemonId.Furret,
+                            PokemonId.Ledian,
+                            PokemonId.Ariados,
+                            PokemonId.Chinchou,
+                            PokemonId.Sudowoodo,
+                            PokemonId.Hoppip,
+                            PokemonId.Aipom,
+                            PokemonId.Yanma,
+                            PokemonId.Misdreavus,
+                            PokemonId.Wobbuffet,
+                            PokemonId.Dunsparce,
+                            PokemonId.Gligar,
+                            PokemonId.Granbull,
+                            PokemonId.Qwilfish,
+                            PokemonId.Shuckle,
+                            PokemonId.Heracross,
+                            PokemonId.Sneasel,
+                            PokemonId.Magcargo,
+                            PokemonId.Piloswine,
+                            PokemonId.Corsola,
+                            PokemonId.Octillery,
+                            PokemonId.Mantine,
+                            PokemonId.Skarmory,
+                            PokemonId.Stantler,
+                            PokemonId.Larvitar,
+
                     }
                 },
                 {
@@ -164,11 +211,36 @@ namespace PoGo.NecroBot.Logic.Common
                         PokemonId.Muk,
                         PokemonId.Exeggutor,
                         PokemonId.Tangela,
+                        PokemonId.Meganium,
+                        PokemonId.Quilava,
+                        PokemonId.Feraligatr,
+                        PokemonId.Noctowl,
+                        PokemonId.Lanturn,
+                        PokemonId.Skiploom,
+                        PokemonId.Quagsire,
+                        PokemonId.Unown,
+                        PokemonId.Girafarig,
+                        PokemonId.Pineco,
+                        PokemonId.Ursaring,
+                        PokemonId.Delibird,
+                        PokemonId.Houndoom,
+                        PokemonId.Donphan,
+                        PokemonId.Smeargle,
+                        PokemonId.Hitmontop,
+                        PokemonId.Miltank,
+                        PokemonId.Blissey,
+                        PokemonId.Pupitar,
+                        PokemonId.Xatu    ,
+                        PokemonId.Mareep    ,
+                        PokemonId.Flaaffy ,
+                        PokemonId.Azumarill
+
                     }
                 },
                 {
                     PokemonGrades.VeryRare, new List<PokemonId>()
                     {
+
                         PokemonId.Gyarados,
                         PokemonId.Lapras,
                         PokemonId.Vaporeon,
@@ -188,6 +260,18 @@ namespace PoGo.NecroBot.Logic.Common
                         PokemonId.Dewgong,
                         PokemonId.Marowak,
                         PokemonId.Gengar,
+                        PokemonId.Tyranitar ,
+                        PokemonId.Pupitar,
+                        PokemonId.Togetic,
+                        PokemonId.Blissey,
+                        PokemonId.Steelix    ,
+                        PokemonId.Crobat,
+                        PokemonId.Espeon,
+                        PokemonId.Umbreon,
+                        PokemonId.Typhlosion,
+                        PokemonId.Jumpluff,
+                        PokemonId.Forretress,
+                        PokemonId.Ampharos
                     }
                 },
                 {
@@ -197,11 +281,19 @@ namespace PoGo.NecroBot.Logic.Common
                         PokemonId.Charmeleon,
                         PokemonId.Wartortle,
                         PokemonId.Porygon,
+                        PokemonId.Porygon2,
                         PokemonId.Omanyte,
                         PokemonId.Aerodactyl,
                         PokemonId.Charizard,
                         PokemonId.Blastoise,
-                        PokemonId.Ivysaur
+                        PokemonId.Ivysaur   ,
+                        PokemonId.Politoed,
+                        PokemonId.Sunflora,
+                        PokemonId.Steelix,
+                        PokemonId.Scizor,
+                        PokemonId.Kingdra,
+                        PokemonId.Porygon,
+
                     }
                 },
                 {

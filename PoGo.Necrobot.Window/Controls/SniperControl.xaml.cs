@@ -1,6 +1,7 @@
 ﻿using PoGo.Necrobot.Window.Model;
 using PoGo.NecroBot.CLI;
 using PoGo.NecroBot.Logic.Event;
+using PoGo.NecroBot.Logic.Event.Snipe;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Tasks;
 using POGOProtos.Enums;
@@ -32,11 +33,16 @@ namespace PoGo.Necrobot.Window.Controls
             InitializeComponent();
         }
 
-        private void SnipeGrid_OnSnipePokemon(Model.SnipePokemonViewModel selected)
+        private void SnipeGrid_OnSnipePokemon(Model.SnipePokemonViewModel selected, bool all)
         {
             var data = selected.Ref as EncounteredEvent;
-            Task.Run(async () =>
+            Task.Run(() =>
             {
+                if(all)
+                {
+                    this.Session.EventDispatcher.Send(new AllBotSnipeEvent(data.EncounterId));
+                };
+
                 var move1 = PokemonMove.MoveUnset;
                 var move2 = PokemonMove.MoveUnset;
                 Enum.TryParse<PokemonMove>(data.Move1, true, out move1);
@@ -47,7 +53,7 @@ namespace PoGo.Necrobot.Window.Controls
                 if (!caught)
                 {
                     
-                    await MSniperServiceTask.AddSnipeItem(this.Session, new MSniperServiceTask.MSniperInfo2()
+                    MSniperServiceTask.AddSnipeItem(this.Session, new MSniperServiceTask.MSniperInfo2()
                     {
                         Latitude = data.Latitude,
                         Longitude = data.Longitude,
@@ -72,16 +78,19 @@ namespace PoGo.Necrobot.Window.Controls
         {
             var model = (SnipeListViewModel)DataContext;
             var current = model.ManualSnipe;
-            Task.Run(async () =>
+            Task.Run(() =>
             {
-                await MSniperServiceTask.AddSnipeItem(Session, new MSniperServiceTask.MSniperInfo2()
+                MSniperServiceTask.AddSnipeItem(Session, new MSniperServiceTask.MSniperInfo2()
                 {
                     PokemonId = (short)current.PokemonId,
                     Latitude = current.Latitude,
                     Longitude = current.Longitude
                 }, true);
                 current.Clear();
-                rtbFreeText.Document.Blocks.Clear();
+                this.Dispatcher.Invoke(() =>
+                {
+                    rtbFreeText.Document.Blocks.Clear();
+                });
             });
         }
 

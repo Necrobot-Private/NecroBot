@@ -5,6 +5,12 @@
 # version format
 version: 0.0.0.{build}
 
+# branches to build
+branches:
+  # whitelist
+  only:
+    - master
+    
 # Do not build on tags
 skip_tags: false
 
@@ -153,7 +159,9 @@ test: off
 #---------------------------------#
 
 artifacts:
-  
+  - path: '\$(PLATFORM)\$(CONFIGURATION)\NecroBot2.Win'
+    name: NecroBot2.WIN
+
   - path: '\$(PLATFORM)\$(CONFIGURATION)\NecroBot2'
     name: NecroBot2.Console
 
@@ -162,8 +170,7 @@ artifacts:
     
   - path: '\$(PLATFORM)\$(CONFIGURATION)\NecroBot2GUI.Electron'
     name: NecroBot2.GUI.Electron
-  - path: '\$(PLATFORM)\$(CONFIGURATION)\NecroBot2.Win'
-    name: NecroBot2.WIN
+
 #---------------------------------#
 #     deployment configuration    #
 #---------------------------------#
@@ -178,7 +185,7 @@ deploy:
     description: '[CHANGELOG.md](https://github.com/Necrobot-Private/NecroBot/blob/master/CHANGELOG.md)'
     release: NecroBot2 $(APPVEYOR_REPO_TAG_NAME)
     auth_token: $(access_token)
-    artifact: NecroBot2.Console;NecroBot2.GUI;NecroBot2.GUI.Electron;NecroBot2.WIN
+    artifact: NecroBot2.WIN;NecroBot2.Console;NecroBot2.GUI;NecroBot2.GUI.Electron
     draft: false
     prerelease: false
     force_update: true
@@ -230,13 +237,3 @@ on_failure:
 
 # after build failure or success
 on_finish:
-
-#---------------------------------#
-#  notifications configuration    #
-#---------------------------------#
-notifications:
-  - provider: Webhook
-    url: https://webhooks.gitter.im/e/edd3d77d0afd21a6916b
-    on_build_success: true
-    on_build_failure: true
-    on_build_status_changed: true

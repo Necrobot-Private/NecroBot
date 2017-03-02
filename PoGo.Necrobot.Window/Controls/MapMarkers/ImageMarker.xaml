@@ -3,5 +3,5 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	x:Class="PoGo.Necrobot.Window.Controls.MapMarkers.ImageMarker"
 	Height="30" Width="30" Opacity="10">
-		<Image Name="icon" Source="{Binding Path=ImageIcon, FallbackValue=pokestop-normal.png}" VerticalAlignment="Center" HorizontalAlignment="Center" />
+    <Image Name="icon" Source="{Binding Path=ImageIcon, FallbackValue=images/Normal.png}" VerticalAlignment="Center" HorizontalAlignment="Center" />
 </UserControl>

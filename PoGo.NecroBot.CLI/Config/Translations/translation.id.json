@@ -521,6 +521,10 @@
       "Value": "Server Google mungkin sedang mati, harap sabar dan jalankan bot-nya lain waktu."
     },
     {
+      "Key": "missingCredentials",
+      "Value": "Kamu harus mengisi Username dan Password di auth.json!"
+    },
+    {
       "Key": "missingCredentialsGoogle",
       "Value": "Kamu harus mengisi GoogleUsername dan GooglePassword di auth.json!"
     },
@@ -594,7 +598,7 @@
     },
     {
       "Key": "amountPkmSeenCaught",
-      "Value": "Jumlah Pokemon terlihat: {0}/151, Tertangkap: {1}/151"
+      "Value": "Jumlah Pokemon terlihat: {0}/231, Tertangkap: {1}/231"
     },
     {
       "Key": "pkmPotentialEvolveCount",

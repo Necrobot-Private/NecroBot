@@ -11,9 +11,10 @@ namespace PoGo.Necrobot.Window.Model
 {
     public class PokemonViewModelBase : ViewModelBase
     {
+        
         public PokemonId PokemonId { get; set; }
-        public string PokemonName => PokemonId.ToString();
-
+        public string PokemonName => this.PokemonId.ToString();
+        
         public string PokemonRarityColor => PokemonGradeHelper.GetGradeColor(PokemonId);
 
         public string PokemonIcon

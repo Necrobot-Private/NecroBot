@@ -20,19 +20,7 @@ namespace PoGo.NecroBot.CLI
                 pokemonCaptureEvent.Longitude, pokemonCaptureEvent.Id);
         }
 
-        public static void HandleEvent(SnipePokemonFoundEvent ev, ISession session)
-        {
-            HumanWalkSnipeTask.AddSnipePokemon("Local Feeder",
-                ev.PokemonFound.Id,
-                ev.PokemonFound.Latitude,
-                ev.PokemonFound.Longitude,
-                ev.PokemonFound.ExpirationTimestamp,
-                ev.PokemonFound.IV,
-                session
-            );
-        }
-
-        public static void HandleEvent(EncounteredEvent ev, ISession session)
+               public static void HandleEvent(EncounteredEvent ev, ISession session)
         {
             if (!ev.IsRecievedFromSocket) return;
 
@@ -44,6 +32,10 @@ namespace PoGo.NecroBot.CLI
                 ev.IV,
                 session
             );
+        }
+
+        public static void HandleEvent(IEvent evt, ISession session)
+        {
         }
 
         internal void Listen(IEvent evt, ISession session)

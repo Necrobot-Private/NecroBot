@@ -15,9 +15,9 @@ namespace PoGo.Necrobot.Window.Model
 
         public MapViewModel()
         {
-            this.NearbyPokemons = new ObservableCollection<MapPokemonViewModel>();
+            this.NearbyPokemons = new ObservableCollectionExt<MapPokemonViewModel>();
         }
-        public ObservableCollection<MapPokemonViewModel> NearbyPokemons { get; set; }
+        public ObservableCollectionExt<MapPokemonViewModel> NearbyPokemons { get; set; }
 
         public double CurrentLatitude { get { return lat; }
             set

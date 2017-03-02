@@ -521,6 +521,10 @@
       "Value": "無法連上 Google 伺服器，請稍後再試，謝謝您的耐心等候。\t\t"
     },
     {
+      "Key": "missingCredentials",
+      "Value": "您需要在 auth.json 中填寫帳號和密碼！\t\t"
+    },
+    {
       "Key": "missingCredentialsGoogle",
       "Value": "您需要在 auth.json 中填寫 Google 帳號和密碼！\t\t"
     },
@@ -594,7 +598,7 @@
     },
     {
       "Key": "amountPkmSeenCaught",
-      "Value": "遇過的神奇寶貝：{0}/151，捕捉過的神奇寶貝：{1}/151\t\t\t\t"
+      "Value": "遇過的神奇寶貝：{0}/231，捕捉過的神奇寶貝：{1}/231\t\t\t\t"
     },
     {
       "Key": "pkmPotentialEvolveCount",

@@ -14,10 +14,9 @@ namespace PoGo.Necrobot.Window.Model
     {
         public UIViewModel UI { get; set; }
         public PlayerInfoModel PlayerInfo { get; set; }
-        public string AA { get; set; }
         public List<PokemonData> internalPokemons;
 
-        public PokemonListModel PokemonList { get; set; }
+        public PokemonListViewModel PokemonList { get; set; }
         public SidebarViewModel Sidebar { get; set; }
 
         public SnipeListViewModel SnipeList { get; set; }
@@ -39,20 +38,20 @@ namespace PoGo.Necrobot.Window.Model
             }
         }
 
-        public int MaxItemStogare { get; set; }
+        public int MaxItemStorage { get; set; }
         public DataContext()
         {
             UI = new UIViewModel();
             Map = new MapViewModel();
 
-            MaxItemStogare = 350;
+            MaxItemStorage = 350;
             ItemsList = new ItemsListViewModel();
             Sidebar = new SidebarViewModel();
             internalPokemons = new List<PokemonData>();
             SnipeList = new SnipeListViewModel();
             EggsList = new EggsListViewModel();
 
-            PokemonList = new PokemonListModel()
+            PokemonList = new PokemonListViewModel(this.Session)
             {
                 Pokemons = new ObservableCollection<PokemonDataViewModel>()
             };
@@ -62,7 +61,7 @@ namespace PoGo.Necrobot.Window.Model
         {
             get
             {
-                return $"   POKEMONS ({PokemonList.Pokemons.Count} / 250)   ";
+                return $"   Pokemons ({PokemonList.Pokemons.Count}/250)   ";
             }
         }
 
@@ -70,15 +69,17 @@ namespace PoGo.Necrobot.Window.Model
         {
             this.PokemonList.Pokemons.Clear();
             this.ItemsList.Items.Clear();
-            this.ItemsList.RaisePropertyChanged("TotalItem");
+            this.EggsList.Eggs.Clear();
+            this.EggsList.Incubators.Clear();
 
+            this.ItemsList.RaisePropertyChanged("TotalItem");
         }
 
         public string ItemsTabHeader
         {
             get
             {
-                return $"   ITEMS ({ ItemsList.Items.Sum(x=>x.ItemCount)} / {MaxItemStogare})   ";
+                return $"   Items ({ ItemsList.Items.Sum(x=>x.ItemCount)}/{MaxItemStorage})   ";
 
             }
         }

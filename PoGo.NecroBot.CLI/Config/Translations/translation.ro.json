@@ -517,6 +517,10 @@
       "Value": "Serverele Google sunt probabil căzute. Te rugăm să ai răbdare și să pornești botul mai târziu."
     },
     {
+      "Key": "missingCredentials",
+      "Value": "Va trebui să completezi Username și Password în auth.json!"
+    },
+    {
       "Key": "missingCredentialsGoogle",
       "Value": "Va trebui să completezi GoogleUsername și GooglePassword în auth.json!"
     },
@@ -590,7 +594,7 @@
     },
     {
       "Key": "amountPkmSeenCaught",
-      "Value": "Cantitatea de pokemoni văzută: {0}/151, cantitatea de pokemoni prinsă: {1}/151"
+      "Value": "Cantitatea de pokemoni văzută: {0}/231, cantitatea de pokemoni prinsă: {1}/231"
     },
     {
       "Key": "pkmPotentialEvolveCount",

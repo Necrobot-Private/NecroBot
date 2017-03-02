@@ -10,6 +10,7 @@ using PoGo.NecroBot.Logic.State;
 using PokemonGo.RocketAPI.Extensions;
 using POGOProtos.Map.Fort;
 using POGOProtos.Networking.Responses;
+using TinyIoC;
 
 #endregion
 
@@ -18,19 +19,14 @@ namespace PoGo.NecroBot.Logic.Tasks
     public class SetMoveToTargetTask
     {
         public static string TARGET_ID = "NECRO2_FORT";
-
-        private static FortDetailsResponse _fortInfo;
+        
         private static FortData _targetStop;
-
-        public static FortDetailsResponse FortInfo
-        {
-            get { return _fortInfo; }
-        }
-
+        
         static Queue<FortData> queue = new Queue<FortData>();
 
-        public static async Task Execute(ISession session, double lat, double lng, string fortId = "")
+        public static async Task Execute(double lat, double lng, string fortId = "")
         {
+            ISession session = TinyIoCContainer.Current.Resolve<ISession>();
             await Task.Run(() =>
             {
                 if (!string.IsNullOrEmpty(fortId))

@@ -140,7 +140,7 @@ namespace PoGo.Necrobot.Window.Controls.MapMarkers
         {
             Task.Run(async() =>
             {
-                await SetMoveToTargetTask.Execute(session, nearbyModel.Latitude, nearbyModel.Longitude, nearbyModel.FortId);
+                await SetMoveToTargetTask.Execute(nearbyModel.Latitude, nearbyModel.Longitude, nearbyModel.FortId);
             });
             this.Dispatcher.Invoke(() =>
             {

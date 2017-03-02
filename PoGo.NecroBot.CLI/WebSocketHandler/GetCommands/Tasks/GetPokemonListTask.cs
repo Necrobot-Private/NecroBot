@@ -14,19 +14,20 @@ namespace PoGo.NecroBot.CLI.WebSocketHandler.GetCommands.Tasks
 {
     internal class GetPokemonListTask
     {
+        // jjskuld - Ignore CS1998 warning for now.
+        #pragma warning disable 1998
         public static async Task Execute(ISession session, WebSocketSession webSocketSession, string requestID)
         {
             //using (var blocker = new BlockableScope(session, BotActions.ListItems))
             {
                 //if (!await blocker.WaitToRun()) return;
 
-                var allPokemonInBag = await session.Inventory.GetHighestsCp(1000);
-                var families = await session.Inventory.GetPokemonFamilies();
-                var settings = await session.Inventory.GetPokemonSettings();
+                var allPokemonInBag = session.Inventory.GetHighestsCp(1000);
                 var list = new List<PokemonListWeb>();
-                allPokemonInBag.ToList().ForEach(o => list.Add(new PokemonListWeb(o, families, settings)));
+                allPokemonInBag.ToList().ForEach(o => list.Add(new PokemonListWeb(session, o)));
                 webSocketSession.Send(EncodingHelper.Serialize(new PokemonListResponce(list, requestID)));
             }
         }
+        #pragma warning restore 1998
     }
 }

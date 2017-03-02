@@ -469,6 +469,10 @@
       "Value": "Google servers are probably down, Please be patient and start the bot later."
     },
     {
+      "Key": "missingCredentials",
+      "Value": "Jums reikia užpildyti Username ir Password faile auth.json!"
+    },
+    {
       "Key": "missingCredentialsGoogle",
       "Value": "Jums reikia užpildyti GoogleUsername ir GooglePassword faile auth.json!"
     },
@@ -526,7 +530,7 @@
     },
     {
       "Key": "amountPkmSeenCaught",
-      "Value": "Pokemonų matyta: {0}/151, Pokemonų pagauta: {1}/151"
+      "Value": "Pokemonų matyta: {0}/231, Pokemonų pagauta: {1}/231"
     },
     {
       "Key": "pkmPotentialEvolveCount",

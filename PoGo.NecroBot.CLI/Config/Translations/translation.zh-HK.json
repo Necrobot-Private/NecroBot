@@ -513,6 +513,10 @@
       "Value": "無法連接 Google 服務器，請稍後再試"
     },
     {
+      "Key": "missingCredentials",
+      "Value": "您需要在 auth.json 中填寫帳戶和密碼！"
+    },
+    {
       "Key": "missingCredentialsGoogle",
       "Value": "您需要在 auth.json 中填寫 Google 帳戶和密碼！"
     },
@@ -586,7 +590,7 @@
     },
     {
       "Key": "amountPkmSeenCaught",
-      "Value": "見過的小精靈: {0}/151, 捕捉過的小精靈: {1}/151"
+      "Value": "見過的小精靈: {0}/231, 捕捉過的小精靈: {1}/231"
     },
     {
       "Key": "pkmPotentialEvolveCount",

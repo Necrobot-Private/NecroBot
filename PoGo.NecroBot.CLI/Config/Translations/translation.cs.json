@@ -441,6 +441,10 @@
       "Value": "Google servery pravděpodobně nefungují, prosím buďte trpělivý a spusťte program později."
     },
     {
+      "Key": "MissingCredentials",
+      "Value": "Musíte vyplnit Username a Password v auth.json!"
+    },
+    {
       "Key": "MissingCredentialsGoogle",
       "Value": "Musíte vyplnit GoogleUsername a GooglePassword v auth.json!"
     },
@@ -514,7 +518,7 @@
     },
     {
       "Key": "AmountPkmSeenCaught",
-      "Value": "Počet spatřených pokemonů: {0}/151, Počet chycených pokemonů: {1}/151"
+      "Value": "Počet spatřených pokemonů: {0}/231, Počet chycených pokemonů: {1}/231"
     },
     {
       "Key": "PkmPotentialEvolveCount",

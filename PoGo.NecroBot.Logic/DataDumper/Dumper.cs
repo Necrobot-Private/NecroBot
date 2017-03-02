@@ -99,11 +99,11 @@ namespace PoGo.NecroBot.Logic.DataDumper
             await Task.Run(() =>
             {
                 var allPokemonInBag = session.LogicSettings.PrioritizeIvOverCp
-                    ? session.Inventory.GetHighestsPerfect(1000).Result
-                    : session.Inventory.GetHighestsCp(1000).Result;
+                    ? session.Inventory.GetHighestsPerfect(1000)
+                    : session.Inventory.GetHighestsCp(1000);
                 string file = !string.IsNullOrEmpty(Filename)
                     ? Filename
-                    : $"config\\{session.Settings.GoogleUsername}{session.Settings.PtcUsername}\\allpokemon.xlsx";
+                    : $"config\\{session.Settings.Username}\\allpokemon.xlsx";
                 int rowNum = 1;
                 using (Stream stream = File.OpenWrite(file))
                 using (var package = new ExcelPackage(stream))
@@ -143,7 +143,7 @@ namespace PoGo.NecroBot.Logic.DataDumper
                         ws.Cells[rowNum + 1, 9].Value = item.Stamina;
                         ws.Cells[rowNum + 1, 10].Value = item.StaminaMax;
                         ws.Cells[rowNum + 1, 11].Value = PokemonInfo.CalculateCp(item);
-                        ws.Cells[rowNum + 1, 12].Value = session.Inventory.GetCandy(item.PokemonId);
+                        ws.Cells[rowNum + 1, 12].Value = session.Inventory.GetCandyCount(item.PokemonId);
                         ws.Cells[rowNum + 1, 13].Value = PokemonInfo.GetLevel(item);
                         ws.Cells[rowNum + 1, 14].Value = item.Move1.ToString();
                         ws.Cells[rowNum + 1, 15].Value = item.Move2.ToString();

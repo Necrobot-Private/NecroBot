@@ -12,6 +12,7 @@ using PoGo.NecroBot.Logic.Model.Settings;
 using PoGo.NecroBot.Logic.State;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Networking.Responses;
+using TinyIoC;
 
 #endregion
 
@@ -37,19 +38,22 @@ namespace PoGo.NecroBot.Logic.Utils
         public int TotalPokemonTransferred;
         public int TotalStardust;
         public int LevelForRewards = -1;
+        public bool isRandomTimeSet = false;
+        public int newRandomSwitchTime = 1; // Initializing random switch time
 
         public StatsExport StatsExport => _exportStats;
 
         public void Dirty(Inventory inventory, ISession session)
         {
             _exportStats = GetCurrentInfo(inventory);
+            TotalStardust = inventory.GetStarDust();
             DirtyEvent?.Invoke();
             OnStatisticChanged(session);
         }
 
         public void OnStatisticChanged(ISession session)
         {
-            if (MultipleBotConfig.IsMultiBotActive(session.LogicSettings))
+            if (MultipleBotConfig.IsMultiBotActive(session.LogicSettings) &&  TinyIoCContainer.Current.Resolve<MultiAccountManager>().AllowSwitch())
             {
                 var config = session.LogicSettings.MultipleBotConfig;
 
@@ -87,9 +91,20 @@ namespace PoGo.NecroBot.Logic.Utils
                     };
                 }
 
-                var totalMin = (DateTime.Now - _initSessionDateTime).TotalMinutes;
-                if (config.RuntimeSwitch > 0 && config.RuntimeSwitch <= totalMin)
+                // When bot starts OR did the account switch by time, random time for Runtime has not been set. So we need to set it
+                if (!isRandomTimeSet)
                 {
+                    Random random = new Random();
+                    newRandomSwitchTime = config.RuntimeSwitch + random.Next((config.RuntimeSwitchRandomTime * -1), config.RuntimeSwitchRandomTime);
+                    isRandomTimeSet = true;
+                }
+
+                var totalMin = (DateTime.Now - _initSessionDateTime).TotalMinutes;
+                if (newRandomSwitchTime > 0 && newRandomSwitchTime <= totalMin)
+                {
+                    // Setup random time to false, so that next account generates new random runtime
+                    isRandomTimeSet = false;
+
                     session.CancellationTokenSource.Cancel();
                     //Activate switcher by pokestop
                     throw new ActiveSwitchByRuleException()
@@ -110,12 +125,12 @@ namespace PoGo.NecroBot.Logic.Utils
 
         public StatsExport GetCurrentInfo(Inventory inventory)
         {
-            var stats = inventory.GetPlayerStats().Result;
+            var stats = inventory.GetPlayerStats();
             StatsExport output = null;
             var stat = stats.FirstOrDefault();
             if (stat != null)
             {
-                var ep = stat.NextLevelXp - stat.PrevLevelXp - (stat.Experience - stat.PrevLevelXp);
+                var ep = stat.NextLevelXp - stat.Experience;
                 var time = Math.Round(ep / (TotalExperience / GetRuntime()), 2);
                 var hours = 0.00;
                 var minutes = 0.00;
@@ -160,8 +175,8 @@ namespace PoGo.NecroBot.Logic.Utils
                     Level = stat.Level,
                     HoursUntilLvl = hours,
                     MinutesUntilLevel = minutes,
-                    CurrentXp = stat.Experience - stat.PrevLevelXp - GetXpDiff(stat.Level),
-                    LevelupXp = stat.NextLevelXp - stat.PrevLevelXp - GetXpDiff(stat.Level)
+                    CurrentXp = stat.Experience,
+                    LevelupXp = stat.NextLevelXp
                 };
             }
             return output;
@@ -177,6 +192,7 @@ namespace PoGo.NecroBot.Logic.Utils
             this.TotalStardust = 0;
             this.TotalPokemonTransferred = 0;
             this._initSessionDateTime = DateTime.Now;
+            this._exportStats = new StatsExport();
         }
 
         public async Task<LevelUpRewardsResponse> Execute(ISession ctx)

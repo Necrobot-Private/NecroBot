@@ -13,6 +13,7 @@ using POGOProtos.Enums;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Map.Fort;
 using POGOProtos.Networking.Responses;
+using PoGo.NecroBot.Logic.Event.Snipe;
 
 #endregion
 
@@ -32,10 +33,28 @@ namespace PoGo.NecroBot.CLI
             Logger.Write(errorEvent.ToString(), LogLevel.Error, force: true);
         }
 
+        private static void HandleEvent(SnipePokemonUpdateEvent e, ISession session)
+        {
+
+            //move to resource later
+            if (e.IsRemoteEvent) {
+                Logger.Write($"Expired snipe pokemon has been removed from queue : {e.Data.PokemonId} ");
+        }
+        }
 
         private static void HandleEvent(NoticeEvent noticeEvent, ISession session)
         {
             Logger.Write(noticeEvent.ToString());
+        }
+
+        public static void HandleEvent(PokestopLimitUpdate ev, ISession session)
+        {
+            Logger.Write($"(POKESTOP LIMIT) {ev.Value}/{ev.Limit}", LogLevel.Info, ConsoleColor.Yellow);
+        }
+
+        public static void HandleEvent(CatchLimitUpdate ev, ISession session)
+        {
+            Logger.Write($"(CATCH LIMIT) {ev.Value}/{ev.Limit}", LogLevel.Info, ConsoleColor.Yellow);
         }
 
         private static void HandleEvent(TargetLocationEvent ev, ISession session)
@@ -90,7 +109,7 @@ namespace PoGo.NecroBot.CLI
                     transferPokemonEvent.Perfection.ToString("0.00"),
                     transferPokemonEvent.BestCp.ToString(),
                     transferPokemonEvent.BestPerfection.ToString("0.00"),
-                    transferPokemonEvent.FamilyCandies
+                    transferPokemonEvent.Candy
                 ),
                 LogLevel.Transfer
             );
@@ -106,6 +125,19 @@ namespace PoGo.NecroBot.CLI
                     upgradePokemonEvent.BestCp.ToString(),
                     upgradePokemonEvent.BestPerfection.ToString("0.00")),
                 LogLevel.LevelUp);
+        }
+
+        private static void HandleEvent(RenamePokemonEvent renamePokemonEvent, ISession session)
+        {
+            Logger.Write(
+                session.Translation.GetTranslation(
+                    TranslationString.PokemonRename,
+                    session.Translation.GetPokemonTranslation(renamePokemonEvent.PokemonId),
+                    renamePokemonEvent.Id,
+                    renamePokemonEvent.OldNickname,
+                    renamePokemonEvent.NewNickname
+                ),
+                LogLevel.Info);
         }
 
         private static void HandleEvent(ItemRecycledEvent itemRecycledEvent, ISession session)
@@ -244,8 +276,8 @@ namespace PoGo.NecroBot.CLI
                     pokemonCaptureEvent.Attempt)
                 : session.Translation.GetTranslation(TranslationString.CatchStatus, strStatus);
 
-            var familyCandies = pokemonCaptureEvent.FamilyCandies > 0
-                ? session.Translation.GetTranslation(TranslationString.Candies, pokemonCaptureEvent.FamilyCandies)
+            var familyCandies = pokemonCaptureEvent.Candy?.Candy_ > 0
+                ? session.Translation.GetTranslation(TranslationString.Candies, pokemonCaptureEvent.Candy.Candy_)
                 : "";
 
             string message;
@@ -260,7 +292,9 @@ namespace PoGo.NecroBot.CLI
                     returnRealBallName(pokemonCaptureEvent.Pokeball), pokemonCaptureEvent.BallAmount,
                     pokemonCaptureEvent.Exp, familyCandies, pokemonCaptureEvent.Latitude.ToString("0.000000"),
                     pokemonCaptureEvent.Longitude.ToString("0.000000"),
-                    pokemonCaptureEvent.Move1, pokemonCaptureEvent.Move2, pokemonCaptureEvent.Rarity
+                    pokemonCaptureEvent.Move1, pokemonCaptureEvent.Move2, pokemonCaptureEvent.Rarity,
+                    pokemonCaptureEvent.CaptureReason,
+                    pokemonCaptureEvent.Gender
                 );
                 Logger.Write(message, LogLevel.Caught);
             }
@@ -295,6 +329,18 @@ namespace PoGo.NecroBot.CLI
             {
                 case ItemId.ItemRazzBerry:
                     strBerry = session.Translation.GetTranslation(TranslationString.ItemRazzBerry);
+                    break;
+                case ItemId.ItemNanabBerry:
+                    strBerry = session.Translation.GetTranslation(TranslationString.ItemNanabBerry);
+                    break;
+                case ItemId.ItemPinapBerry:
+                    strBerry = session.Translation.GetTranslation(TranslationString.ItemPinapBerry);
+                    break;
+                case ItemId.ItemWeparBerry:
+                    strBerry = session.Translation.GetTranslation(TranslationString.ItemWeparBerry);
+                    break;
+                case ItemId.ItemBlukBerry:
+                    strBerry = session.Translation.GetTranslation(TranslationString.ItemBlukBerry);
                     break;
                 default:
                     strBerry = useBerryEvent.BerryType.ToString();
@@ -627,6 +673,10 @@ namespace PoGo.NecroBot.CLI
             Logger.Write(
                 $"User Revive: {ev.Type} on Pokemon: {ev.PokemonId} with CP: {ev.PokemonCp}. Remaining: {ev.Remaining}"
             );
+        }
+
+        public static void HandleEvent(IEvent evt, ISession session)
+        {
         }
 
         internal void Listen(IEvent evt, ISession session)

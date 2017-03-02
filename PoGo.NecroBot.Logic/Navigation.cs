@@ -17,7 +17,7 @@ using POGOProtos.Networking.Responses;
 
 namespace PoGo.NecroBot.Logic
 {
-    public delegate void UpdatePositionDelegate(double lat, double lng);
+    public delegate void UpdatePositionDelegate(ISession session, double lat, double lng, double speed);
 
     public class Navigation
     {
@@ -88,16 +88,17 @@ namespace PoGo.NecroBot.Logic
 
         private object ensureOneWalkEvent = new object();
 
-        public async Task<PlayerUpdateResponse> Move(IGeoLocation targetLocation,
+        public async Task Move(IGeoLocation targetLocation,
             Func<Task> functionExecutedWhileWalking,
             ISession session,
             CancellationToken cancellationToken, double customWalkingSpeed = 0.0)
         {
             cancellationToken.ThrowIfCancellationRequested();
-
+            TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
             // If the stretegies become bigger, create a factory for easy management
 
-            return await WalkStrategy.Walk(targetLocation, functionExecutedWhileWalking, session, cancellationToken, customWalkingSpeed);
+            //Logging.Logger.Write($"Navigation - Walking speed {customWalkingSpeed}");
+            await WalkStrategy.Walk(targetLocation, functionExecutedWhileWalking, session, cancellationToken, customWalkingSpeed);
         }
 
         private void InitializeWalkStrategies(ILogicSettings logicSettings)

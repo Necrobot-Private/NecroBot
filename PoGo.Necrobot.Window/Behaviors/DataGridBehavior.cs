@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PoGo.Necrobot.Window.Controls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -58,6 +59,11 @@ namespace PoGo.Necrobot.Window.Behaviors
                 };
                 dataGrid.ItemContainerGenerator.ItemsChanged += itemsChangedHandler;
             }
+        }
+
+        private static void DataGrid_LoadingRow(object sender, Microsoft.Windows.Controls.DataGridRowEventArgs e)
+        {
+            
         }
 
         #endregion // DisplayRowNumber

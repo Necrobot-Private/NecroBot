@@ -1,4 +1,6 @@
-﻿namespace PoGo.NecroBot.CLI.Forms
+﻿using PokemonGo.RocketAPI;
+
+namespace PoGo.NecroBot.CLI.Forms
 {
     partial class AuthAPIForm
     {
@@ -95,7 +97,7 @@
             this.radHashServer.Size = new System.Drawing.Size(225, 17);
             this.radHashServer.TabIndex = 5;
             this.radHashServer.TabStop = true;
-            this.radHashServer.Text = "Pogodev hash server api - Latest API 0.53";
+            this.radHashServer.Text = $"Pogodev hash server api - Latest API {Client.API_VERSION}";
             this.radHashServer.UseVisualStyleBackColor = true;
             // 
             // label2
@@ -115,9 +117,9 @@
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(252, 52);
             this.label3.TabIndex = 7;
-            this.label3.Text = "We don\'t provide key, you have to buy it  from Pogodev. RPM = Request per minute," +
-    " it depend on how fast your config setup.  150RPM will sufficient enought for 2-" +
-    "3 normal bot. ";
+            this.label3.Text = "We don\'t provide key, you have to buy it from Pogodev. RPM = Requests per minute," +
+    " it depends on how fast your config setup is.  150RPM will be sufficient for 2-" +
+    "3 normal bots. ";
             // 
             // btnCancel
             // 

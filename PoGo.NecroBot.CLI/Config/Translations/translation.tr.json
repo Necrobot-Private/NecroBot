@@ -517,6 +517,10 @@
       "Value": "Google sunucuları şu an yanıt vermiyor. Daha sonra tekrar deneyin."
     },
     {
+      "Key": "missingCredentials",
+      "Value": "\"auth.json\" dosyasına Username ve Password değerlerini girmeniz gerekiyor!"
+    },
+    {
       "Key": "missingCredentialsGoogle",
       "Value": "\"auth.json\" dosyasına GoogleUsername ve GooglePassword değerlerini girmeniz gerekiyor!"
     },
@@ -590,7 +594,7 @@
     },
     {
       "Key": "amountPkmSeenCaught",
-      "Value": "Karşılaşılan Pokémon Sayısı: {0}/151, Yakalanan Pokémon Sayısı: {1}/151"
+      "Value": "Karşılaşılan Pokémon Sayısı: {0}/231, Yakalanan Pokémon Sayısı: {1}/231"
     },
     {
       "Key": "pkmPotentialEvolveCount",

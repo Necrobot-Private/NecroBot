@@ -23,11 +23,48 @@ using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Tasks;
 using PoGo.NecroBot.Logic.Utils;
 using ProgressBar = PoGo.NecroBot.CLI.Resources.ProgressBar;
+using CommandLine;
+using CommandLine.Text;
+using PokemonGo.RocketAPI;
 
-#endregion
+#endregion using directives
 
 namespace PoGo.NecroBot.CLI
 {
+    class Options
+    {
+        [Option('i', "init", Required = false,
+          HelpText = "Init account")]
+        public bool Init { get; set; }
+
+        [Option('t', "template", DefaultValue = "", Required = false , HelpText = "Prints all messages to standard output.")]
+        public string Template { get; set; }
+
+        [Option('p', "password", DefaultValue = "", Required = false, HelpText = "pasword")]
+        public string Password { get; set; }
+
+        [Option('g', "google", DefaultValue = false, Required = false,HelpText = "is google account")]
+        public bool IsGoogle{ get; set; }
+
+        [Option('s', "start", DefaultValue = 1,HelpText = "Start account", Required = false)]
+        public int Start { get; set; }
+
+
+        [Option('e', "end", DefaultValue = 10, HelpText = "End account",Required = false)]
+        public int End { get; set; }
+
+        [ParserState]
+        public IParserState LastParserState { get; set; }
+
+        [HelpOption]
+        public string GetUsage()
+        {
+            return HelpText.AutoBuild(this,
+              (HelpText current) => HelpText.DefaultParsingErrorsHandler(this, current));
+        }
+    }
+
+
     public class Program
     {
         private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
@@ -53,7 +90,9 @@ namespace PoGo.NecroBot.CLI
         public static void RunBotWithParameters(Action<ISession, StatisticsAggregator> onBotStarted, string[] args)
         {
             var ioc = TinyIoC.TinyIoCContainer.Current;
-
+            //Setup Logger for API
+            APIConfiguration.Logger = new APILogListener();
+            
             Application.EnableVisualStyles();
             var strCulture = Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName;
 
@@ -84,6 +123,7 @@ namespace PoGo.NecroBot.CLI
                     case "true":
                         _enableJsonValidation = true;
                         break;
+
                     case "false":
                         _enableJsonValidation = false;
                         break;
@@ -96,6 +136,7 @@ namespace PoGo.NecroBot.CLI
                     case "true":
                         _ignoreKillSwitch = false;
                         break;
+
                     case "false":
                         _ignoreKillSwitch = true;
                         break;
@@ -108,6 +149,7 @@ namespace PoGo.NecroBot.CLI
                 excelConfigAllow = true;
             }
 
+            //
             Logger.AddLogger(new ConsoleLogger(LogLevel.Service), _subPath);
             Logger.AddLogger(new FileLogger(LogLevel.Service), _subPath);
             Logger.AddLogger(new WebSocketLogger(LogLevel.Service), _subPath);
@@ -147,7 +189,7 @@ namespace PoGo.NecroBot.CLI
                     ProfilePath = profilePath,
                     ProfileConfigPath = profileConfigPath,
                     GeneralConfigPath = Path.Combine(Directory.GetCurrentDirectory(), "config"),
-                    ConsoleConfig = {TranslationLanguageCode = strCulture}
+                    ConsoleConfig = { TranslationLanguageCode = strCulture }
                 };
 
                 boolNeedsSetup = true;
@@ -168,6 +210,15 @@ namespace PoGo.NecroBot.CLI
                 }
             }
 
+            var options = new Options();
+            if (CommandLine.Parser.Default.ParseArguments(args, options))
+            {
+                // Values are available here
+                if (options.Init)
+                {
+                    settings.GenerateAccount(options.IsGoogle, options.Template, options.Start, options.End, options.Password);
+                }
+            }
             var lastPosFile = Path.Combine(profileConfigPath, "LastPos.ini");
             if (File.Exists(lastPosFile) && settings.LocationConfig.StartFromLastPosition)
             {
@@ -177,8 +228,13 @@ namespace PoGo.NecroBot.CLI
                 {
                     var lat = double.Parse(crds[0]);
                     var lng = double.Parse(crds[1]);
-                    settings.LocationConfig.DefaultLatitude = lat;
-                    settings.LocationConfig.DefaultLongitude = lng;
+                    //If lastcoord is snipe coord, bot start from default location
+
+                    if (LocationUtils.CalculateDistanceInMeters(lat, lng, settings.LocationConfig.DefaultLatitude, settings.LocationConfig.DefaultLongitude) < 2000)
+                    {
+                        settings.LocationConfig.DefaultLatitude = lat;
+                        settings.LocationConfig.DefaultLongitude = lng;
+                    }
                 }
                 catch (Exception)
                 {
@@ -261,7 +317,7 @@ namespace PoGo.NecroBot.CLI
                             "You select pogodev API but not provide API Key, please press any key to exit and correct you auth.json, \r\n The Pogodev API key call be purchased at - https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer",
                             LogLevel.Error
                         );
-
+                        
                         Console.ReadKey();
                         Environment.Exit(0);
                     }
@@ -297,14 +353,19 @@ namespace PoGo.NecroBot.CLI
 
             Logger.SetLoggerContext(_session);
 
+            MultiAccountManager accountManager = new MultiAccountManager(logicSettings.Bots);
+            ioc.Register<MultiAccountManager>(accountManager);
+
             if (boolNeedsSetup)
             {
                 StarterConfigForm configForm = new StarterConfigForm(_session, settings, elevationService, configFile);
                 if (configForm.ShowDialog() == DialogResult.OK)
                 {
-                    var fileName = Assembly.GetExecutingAssembly().Location;
+                    var fileName = Assembly.GetEntryAssembly().Location;
+
                     Process.Start(fileName);
                     Environment.Exit(0);
+
                 }
 
                 //if (GlobalSettings.PromptForSetup(_session.Translation))
@@ -374,17 +435,12 @@ namespace PoGo.NecroBot.CLI
             ProgressBar.Fill(90);
 
             _session.Navigation.WalkStrategy.UpdatePositionEvent +=
-                (lat, lng) => _session.EventDispatcher.Send(new UpdatePositionEvent {Latitude = lat, Longitude = lng});
-            _session.Navigation.WalkStrategy.UpdatePositionEvent += SaveLocationToDisk;
+                (session, lat, lng, speed) => _session.EventDispatcher.Send(new UpdatePositionEvent { Latitude = lat, Longitude = lng, Speed = speed });
+            _session.Navigation.WalkStrategy.UpdatePositionEvent += LoadSaveState.SaveLocationToDisk;
 
             ProgressBar.Fill(100);
-
-
-            var accountManager = new MultiAccountManager(logicSettings.Bots);
-
-            accountManager.Add(settings.Auth.AuthConfig);
-
-            ioc.Register<MultiAccountManager>(accountManager);
+            
+            var mainAccount = accountManager.Add(settings.Auth.AuthConfig);
 
             var bot = accountManager.GetStartUpAccount();
 
@@ -403,18 +459,17 @@ namespace PoGo.NecroBot.CLI
             if (settings.TelegramConfig.UseTelegramAPI)
                 _session.Telegram = new TelegramService(settings.TelegramConfig.TelegramAPIKey, _session);
 
-            if (_session.LogicSettings.UseSnipeLocationServer ||
-                _session.LogicSettings.HumanWalkingSnipeUsePogoLocationFeeder)
-                SnipePokemonTask.AsyncStart(_session);
-
             if (_session.LogicSettings.EnableHumanWalkingSnipe &&
                 _session.LogicSettings.HumanWalkingSnipeUseFastPokemap)
             {
+                // jjskuld - Ignore CS4014 warning for now.
+                #pragma warning disable 4014
                 HumanWalkSnipeTask.StartFastPokemapAsync(_session,
                     _session.CancellationTokenSource.Token); // that need to keep data live
+                #pragma warning restore 4014
             }
 
-            if (_session.LogicSettings.DataSharingEnable)
+            if (_session.LogicSettings.DataSharingConfig.EnableSyncData)
             {
                 BotDataSocketClient.StartAsync(_session);
                 _session.EventDispatcher.EventReceived += evt => BotDataSocketClient.Listen(evt, _session);
@@ -423,15 +478,18 @@ namespace PoGo.NecroBot.CLI
 
             if (_session.LogicSettings.ActivateMSniper)
             {
-                MSniperServiceTask.ConnectToService();
-                _session.EventDispatcher.EventReceived += evt => MSniperServiceTask.AddToList(evt);
+                ServicePointManager.ServerCertificateValidationCallback +=
+                    (sender, certificate, chain, sslPolicyErrors) => true;
+                //temporary disable MSniper connection because site under attacking.
+                //MSniperServiceTask.ConnectToService();
+                //_session.EventDispatcher.EventReceived += evt => MSniperServiceTask.AddToList(evt);
             }
             var trackFile = Path.GetTempPath() + "\\necrobot2.io";
 
             if (!File.Exists(trackFile) || File.GetLastWriteTime(trackFile) < DateTime.Now.AddDays(-1))
             {
                 Thread.Sleep(10000);
-                Thread mThread = new Thread(delegate()
+                Thread mThread = new Thread(delegate ()
                 {
                     var infoForm = new InfoForm();
                     infoForm.ShowDialog();
@@ -442,19 +500,12 @@ namespace PoGo.NecroBot.CLI
                 mThread.Start();
             }
 
-
             QuitEvent.WaitOne();
         }
 
         private static void EventDispatcher_EventReceived(IEvent evt)
         {
             throw new NotImplementedException();
-        }
-
-        private static void SaveLocationToDisk(double lat, double lng)
-        {
-            var coordsPath = Path.Combine(_session.LogicSettings.ProfileConfigPath, "LastPos.ini");
-            File.WriteAllText(coordsPath, $"{lat}:{lng}");
         }
 
         private static bool CheckMKillSwitch()
@@ -475,7 +526,6 @@ namespace PoGo.NecroBot.CLI
                         var strStatus1 = strSplit1[0];
                         var strReason1 = strSplit1[1];
                         var strExitMsg = strSplit1[2];
-
 
                         if (strStatus1.ToLower().Contains("disable"))
                         {
@@ -546,7 +596,6 @@ namespace PoGo.NecroBot.CLI
             return false;
         }
 
-
         private static void UnhandledExceptionEventHandler(object obj, UnhandledExceptionEventArgs args)
         {
             Logger.Write("Exception caught, writing LogBuffer.", force: true);
@@ -566,8 +615,10 @@ namespace PoGo.NecroBot.CLI
                     case "y":
                         // Override killswitch
                         return true;
+
                     case "n":
                         return false;
+
                     default:
                         Logger.Write("Enter y or n", LogLevel.Error);
                         continue;

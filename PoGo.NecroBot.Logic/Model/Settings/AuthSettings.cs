@@ -28,6 +28,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
     public class AuthSettings
     {
         [JsonIgnore]
+        public static int SchemaVersionBeforeMigration { get; set; }
+
+        [JsonIgnore]
         private string _filePath;
 
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore, Order = 1)]
@@ -265,23 +268,13 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             }
             catch (JsonReaderException exception)
             {
-                if (exception.Message.Contains("Unexpected character") && exception.Message.Contains("PtcUsername"))
-                    Logger.Write("JSON Exception: You need to properly configure your PtcUsername using quotations.",
+                if (exception.Message.Contains("Unexpected character") && exception.Message.Contains("Username"))
+                    Logger.Write("JSON Exception: You need to properly configure your Username using quotations.",
                         LogLevel.Error);
                 else if (exception.Message.Contains("Unexpected character") &&
-                         exception.Message.Contains("PtcPassword"))
+                         exception.Message.Contains("Password"))
                     Logger.Write(
-                        "JSON Exception: You need to properly configure your PtcPassword using quotations.",
-                        LogLevel.Error);
-                else if (exception.Message.Contains("Unexpected character") &&
-                         exception.Message.Contains("GoogleUsername"))
-                    Logger.Write(
-                        "JSON Exception: You need to properly configure your GoogleUsername using quotations.",
-                        LogLevel.Error);
-                else if (exception.Message.Contains("Unexpected character") &&
-                         exception.Message.Contains("GooglePassword"))
-                    Logger.Write(
-                        "JSON Exception: You need to properly configure your GooglePassword using quotations.",
+                        "JSON Exception: You need to properly configure your Password using quotations.",
                         LogLevel.Error);
                 else
                     Logger.Write("JSON Exception: " + exception.Message, LogLevel.Error);
@@ -290,12 +283,14 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         private static void MigrateSettings(int schemaVersion, JObject settings, string configFile, string schemaFile)
         {
+            SchemaVersionBeforeMigration = schemaVersion;
+
             if (schemaVersion == UpdateConfig.CURRENT_SCHEMA_VERSION)
             {
                 Logger.Write("Auth Configuration is up-to-date. Schema version: " + schemaVersion);
                 return;
             }
-
+            
             // Backup old config file.
             long ts = DateTime.UtcNow.ToUnixTime(); // Add timestamp to avoid file conflicts
             string backupPath = configFile.Replace(".json", $"-{schemaVersion}-{ts}.backup.json");
@@ -318,6 +313,60 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                         settings["DeviceConfig"]["DeviceModelIdentifier"] = null;
                         settings["DeviceConfig"]["FirmwareTags"] = null;
                         settings["DeviceConfig"]["FirmwareFingerprint"] = null;
+                        break;
+
+                    case 19:
+                        // Update main auth setting
+                        if (settings["AuthConfig"] != null)
+                        {
+                            JObject bot = (JObject)settings["AuthConfig"];
+                            if ((string)bot["AuthType"] == "google")
+                            {
+                                if (!string.IsNullOrEmpty((string)bot["GoogleUsername"]))
+                                    bot["Username"] = bot["GoogleUsername"];
+                                if (!string.IsNullOrEmpty((string)bot["GooglePassword"]))
+                                    bot["Password"] = bot["GooglePassword"];
+                            }
+                            else
+                            {
+                                if (!string.IsNullOrEmpty((string)bot["PtcUsername"]))
+                                    bot["Username"] = bot["PtcUsername"];
+                                if (!string.IsNullOrEmpty((string)bot["PtcPassword"]))
+                                    bot["Password"] = bot["PtcPassword"];
+                            }
+
+                            bot.Remove("GoogleUsername");
+                            bot.Remove("GooglePassword");
+                            bot.Remove("PtcUsername");
+                            bot.Remove("PtcPassword");
+                        }
+
+                        // Update multibot settings
+                        if (settings["Bots"] != null)
+                        {
+                            foreach (JObject bot in settings["Bots"])
+                            {
+                                if ((string)bot["AuthType"] == "google")
+                                {
+                                    if (!string.IsNullOrEmpty((string)bot["GoogleUsername"]))
+                                        bot["Username"] = bot["GoogleUsername"];
+                                    if (!string.IsNullOrEmpty((string)bot["GooglePassword"]))
+                                        bot["Password"] = bot["GooglePassword"];
+                                }
+                                else
+                                {
+                                    if (!string.IsNullOrEmpty((string)bot["PtcUsername"]))
+                                        bot["Username"] = bot["PtcUsername"];
+                                    if (!string.IsNullOrEmpty((string)bot["PtcPassword"]))
+                                        bot["Password"] = bot["PtcPassword"];
+                                }
+
+                                bot.Remove("GoogleUsername");
+                                bot.Remove("GooglePassword");
+                                bot.Remove("PtcUsername");
+                                bot.Remove("PtcPassword");
+                            }
+                        }
                         break;
 
                     // Add more here.

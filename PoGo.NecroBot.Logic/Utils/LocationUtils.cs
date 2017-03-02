@@ -6,6 +6,7 @@ using GeoCoordinatePortable;
 using PoGo.NecroBot.Logic.Service.Elevation;
 using PoGo.NecroBot.Logic.State;
 using POGOProtos.Networking.Responses;
+using PoGo.NecroBot.Logic.Logging;
 
 #endregion
 
@@ -13,15 +14,17 @@ namespace PoGo.NecroBot.Logic.Utils
 {
     public static class LocationUtils
     {
-        public static async Task<PlayerUpdateResponse> UpdatePlayerLocationWithAltitude(ISession session,
+        public static void UpdatePlayerLocationWithAltitude(ISession session,
             GeoCoordinate position, float speed)
         {
             double altitude = session.ElevationService.GetElevation(position.Latitude, position.Longitude);
-            //need retry to make sure we back to ogirinal location
 
-            var result = await session.Client.Player
-                .UpdatePlayerLocation(position.Latitude, position.Longitude, altitude, speed);
-            return result;
+            session.Client.Player.UpdatePlayerLocation(position.Latitude, position.Longitude, altitude, speed);
+        }
+
+        public static bool IsValidLocation(double latitude, double longitude)
+        {
+            return latitude <= 90 && latitude >= -90 && longitude >= -180 && longitude <= 180;
         }
 
         public static double CalculateDistanceInMeters(double sourceLat, double sourceLng,

@@ -38,7 +38,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.Step2 = new AeroWizard.WizardPage();
             this.rdoCharmander = new System.Windows.Forms.RadioButton();
-            this.rdoSquirle = new System.Windows.Forms.RadioButton();
+            this.rdoSquirtle = new System.Windows.Forms.RadioButton();
             this.rdoBulbasaur = new System.Windows.Forms.RadioButton();
             this.Step2_2 = new AeroWizard.WizardPage();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
@@ -148,7 +148,7 @@
             this.Step2.AllowBack = false;
             this.Step2.AllowCancel = false;
             this.Step2.Controls.Add(this.rdoCharmander);
-            this.Step2.Controls.Add(this.rdoSquirle);
+            this.Step2.Controls.Add(this.rdoSquirtle);
             this.Step2.Controls.Add(this.rdoBulbasaur);
             this.Step2.Name = "Step2";
             this.Step2.ShowCancel = false;
@@ -167,15 +167,15 @@
             this.rdoCharmander.Text = "Charmander";
             this.rdoCharmander.UseVisualStyleBackColor = true;
             // 
-            // rdoSquirle
+            // rdoSquirtle
             // 
-            this.rdoSquirle.AutoSize = true;
-            this.rdoSquirle.Location = new System.Drawing.Point(250, 34);
-            this.rdoSquirle.Name = "rdoSquirle";
-            this.rdoSquirle.Size = new System.Drawing.Size(61, 19);
-            this.rdoSquirle.TabIndex = 1;
-            this.rdoSquirle.Text = "Squirle";
-            this.rdoSquirle.UseVisualStyleBackColor = true;
+            this.rdoSquirtle.AutoSize = true;
+            this.rdoSquirtle.Location = new System.Drawing.Point(250, 34);
+            this.rdoSquirtle.Name = "rdoSquirtle";
+            this.rdoSquirtle.Size = new System.Drawing.Size(61, 19);
+            this.rdoSquirtle.TabIndex = 1;
+            this.rdoSquirtle.Text = "Squirtle";
+            this.rdoSquirtle.UseVisualStyleBackColor = true;
             // 
             // rdoBulbasaur
             // 
@@ -329,7 +329,7 @@
         private AeroWizard.WizardPage Step2_2;
         private AeroWizard.WizardPage SavingGender_Page;
         private System.Windows.Forms.RadioButton rdoCharmander;
-        private System.Windows.Forms.RadioButton rdoSquirle;
+        private System.Windows.Forms.RadioButton rdoSquirtle;
         private System.Windows.Forms.RadioButton rdoBulbasaur;
         private AeroWizard.WizardPage Step3;
         private System.Windows.Forms.Label label1;

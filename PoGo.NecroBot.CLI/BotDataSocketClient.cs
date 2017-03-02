@@ -16,6 +16,9 @@ using PoGo.NecroBot.Logic.Tasks;
 using POGOProtos.Enums;
 using WebSocketSharp;
 using Logger = PoGo.NecroBot.Logic.Logging.Logger;
+using System.Runtime.Caching;
+using System.Reflection;
+using TinyIoC;
 
 namespace PoGo.NecroBot.CLI
 {
@@ -25,11 +28,59 @@ namespace PoGo.NecroBot.CLI
         {
             public string Header { get; set; }
             public string Body { get; set; }
-            public long TimeTimestamp { get;  set; }
+            public long TimeTimestamp { get; set; }
             public string Hash { get; set; }
         }
-        private static List<EncounteredEvent> events = new List<EncounteredEvent>();
+        public class SocketClientUpdate
+        {
+            public List<EncounteredEvent> Pokemons { get; set; }
+
+            public List<SnipeFailedEvent> SnipeFailedPokemons { get; set; }
+            public List<string> ExpiredPokemons { get; set; }
+            public string ClientVersion { get; set; }
+            public List<string> ManualSnipes { get; set; }
+            public string Identitier { get; set; }
+
+            public SocketClientUpdate()
+            {
+                this.Identitier = TinyIoCContainer.Current.Resolve<ISession>().LogicSettings.DataSharingConfig.DataServiceIdentification;
+                this.ManualSnipes = new List<string>();
+                this.Pokemons = new List<EncounteredEvent>();
+                this.SnipeFailedPokemons = new List<SnipeFailedEvent>();
+                this.ExpiredPokemons = new List<string>();
+                this.ClientVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+
+            }
+
+            public bool HasData()
+            {
+                return Pokemons.Count > 0 || SnipeFailedPokemons.Count > 0 || ExpiredPokemons.Count > 0;
+            }
+        }
+        private static SocketClientUpdate clientData = new SocketClientUpdate();
+
         private const int POLLING_INTERVAL = 5000;
+
+        public static void HandleEvent(AllBotSnipeEvent e, ISession session)
+        {
+            lock(clientData)
+            {
+                if(!string.IsNullOrEmpty(clientData.Identitier))
+                {
+                    clientData.ManualSnipes.Add(e.EncounterId);
+                }
+            }
+        }
+        public static void HandleEvent(IEvent evt, ISession session)
+        {
+        }
+        public static void HandleEvent(SnipeFailedEvent e, ISession sesion)
+        {
+            lock (clientData)
+            {
+                clientData.SnipeFailedPokemons.Add(e);
+            }
+        }
 
         public static void Listen(IEvent evt, ISession session)
         {
@@ -46,15 +97,23 @@ namespace PoGo.NecroBot.CLI
 
         private static void HandleEvent(EncounteredEvent eve, ISession session)
         {
-            lock (events)
+            lock (clientData)
             {
-                events.Add(eve);
+                if (eve.IsRecievedFromSocket || cache.Get(eve.EncounterId) != null) return;
+                clientData.Pokemons.Add(eve);
             }
         }
-
+        //private static SnipePokemonUpdateEvent lastEncouteredEvent;
+        private static void HandleEvent(SnipePokemonUpdateEvent eve, ISession session)
+        {
+            lock(clientData)
+            {
+                clientData.ExpiredPokemons.Add(eve.EncounterId);
+            }
+        }
         private static string Serialize(dynamic evt)
         {
-            var jsonSerializerSettings = new JsonSerializerSettings {TypeNameHandling = TypeNameHandling.All};
+            var jsonSerializerSettings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All };
 
             // Add custom seriaizer to convert uong to string (ulong shoud not appear to json according to json specs)
             jsonSerializerSettings.Converters.Add(new IdToStringConverter());
@@ -69,7 +128,6 @@ namespace PoGo.NecroBot.CLI
             return json;
         }
 
-        private static int retries = 0;
         static List<EncounteredEvent> processing = new List<EncounteredEvent>();
 
         public static String SHA256Hash(String value)
@@ -89,17 +147,35 @@ namespace PoGo.NecroBot.CLI
 
         public static async Task Start(Session session, CancellationToken cancellationToken)
         {
+
+            //Disable autosniper service until finger out how to make it work with API change
+
             await Task.Delay(30000, cancellationToken); //delay running 30s
 
             ServicePointManager.Expect100Continue = false;
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            var socketURL = session.LogicSettings.DataSharingDataUrl;
+            while (true)
+            {
+                var socketURL = servers.Dequeue();
+                Logger.Write($"Connecting to {socketURL} ....");
+                await ConnectToServer(session, socketURL);
+                servers.Enqueue(socketURL);
+            }
 
+        }
+        public static async Task ConnectToServer(ISession session, string socketURL)
+        {
+            if (!string.IsNullOrEmpty(session.LogicSettings.DataSharingConfig.SnipeDataAccessKey))
+            {
+                socketURL += "&access_key=" + session.LogicSettings.DataSharingConfig.SnipeDataAccessKey;
+            }
+
+            int retries = 0;
             using (var ws = new WebSocket(socketURL))
             {
-                ws.Log.Level = LogLevel.Fatal;
+                ws.Log.Level = LogLevel.Fatal; ;
                 ws.Log.Output = (logData, message) =>
                 {
                     //silenly, no log exception message to screen that scare people :)
@@ -110,21 +186,24 @@ namespace PoGo.NecroBot.CLI
                 ws.Connect();
                 while (true)
                 {
-                    cancellationToken.ThrowIfCancellationRequested();
                     try
                     {
-                        if (retries == 5)
+                        if (retries == 3)
                         {
                             //failed to make connection to server  times contiuing, temporary stop for 10 mins.
                             session.EventDispatcher.Send(new WarnEvent()
                             {
-                                Message = "Couldn't establish the connection to necro socket server, Bot will re-connect after 10 mins"
+                                Message = $"Couldn't establish the connection to necro socket server : {socketURL}"
                             });
-                            await Task.Delay(1 * 60 * 1000, cancellationToken);
+                            if (session.LogicSettings.DataSharingConfig.EnableFailoverDataServers && servers.Count > 1)
+                            {
+                                break;
+                            }
+                            await Task.Delay(1 * 60 * 1000);
                             retries = 0;
                         }
 
-                        if (events.Count > 0 && ws.ReadyState != WebSocketState.Open)
+                        if (ws.ReadyState != WebSocketState.Open)
                         {
                             retries++;
                             ws.Connect();
@@ -135,35 +214,17 @@ namespace PoGo.NecroBot.CLI
                             //Logger.Write("Connected to necrobot data service.");
                             retries = 0;
 
-                            lock (events)
+                            if (ws.IsAlive && clientData.HasData())
                             {
-                                processing.Clear();
-                                processing.AddRange(events.Take(10));
-                            }
-
-                            if (processing.Count > 0 && ws.IsAlive)
-                            {
-                                //if (processing.Count == 1)
-                                //{
-                                //    //serialize list will make data bigger, code ugly but save bandwidth and help socket process faster
-                                //    var data = Serialize(processing.First());
-                                //    ws.Send($"42[\"pokemon\",{data}]");
-                                //}
-                                //else
-                                //{
-                                var data = Serialize(processing);
+                                var data = JsonConvert.SerializeObject(clientData);// Serialize(processing);
+                                clientData = new SocketClientUpdate();
 
                                 var message = Encrypt(data);
                                 var actualMessage = JsonConvert.SerializeObject(message);
+                                ws.Send($"42[\"client-update\",{actualMessage}]");
+                            }
 
-                                ws.Send($"42[\"pokemons-secure\",{actualMessage}]");
-                                //}
-                            }
-                            lock (events)
-                            {
-                                events.RemoveAll(x => processing.Any(t => t.EncounterId == x.EncounterId));
-                            }
-                            await Task.Delay(POLLING_INTERVAL, cancellationToken);
+                            await Task.Delay(POLLING_INTERVAL);
                             ws.Ping();
                         }
                     }
@@ -173,6 +234,7 @@ namespace PoGo.NecroBot.CLI
                         {
                             Message = "Disconnect to necro socket. New connection will be established when service available..."
                         });
+
                     }
                     catch (Exception)
                     {
@@ -180,7 +242,7 @@ namespace PoGo.NecroBot.CLI
                     finally
                     {
                         //everytime disconnected with server bot wil reconnect after 15 sec
-                        await Task.Delay(POLLING_INTERVAL, cancellationToken);
+                        await Task.Delay(POLLING_INTERVAL);
                     }
                 }
             }
@@ -190,21 +252,39 @@ namespace PoGo.NecroBot.CLI
         {
             try
             {
+                OnPokemonRemoved(session, e.Data);
+                OnPokemonUpdateData(session, e.Data);
                 OnPokemonData(session, e.Data);
                 OnSnipePokemon(session, e.Data);
-
+                OnServerMessage(session, e.Data);
                 //ONFPMBridgeData(session, e.Data); //Nolonger use
             }
 
-            #pragma warning disable 0168 // Comment Suppress compiler warning - ex is used in DEBUG section
+#pragma warning disable 0168 // Comment Suppress compiler warning - ex is used in DEBUG section
             catch (Exception ex)
-            #pragma warning restore 0168
+#pragma warning restore 0168
             {
                 // Comment Suppress compiler warning - ex is used in DEBUG section
-                #if DEBUG
+#if DEBUG
                 Logger.Write("ERROR TO ADD SNIPE< DEBUG ONLY " + ex.Message + "\r\n " + ex.StackTrace,
                     Logic.Logging.LogLevel.Info, ConsoleColor.Yellow);
-                #endif
+#endif
+            }
+        }
+
+        private static DateTime lastWarningMessage = DateTime.MinValue;
+        private static void OnServerMessage(ISession session, string message)
+        {
+            var match = Regex.Match(message, "42\\[\"server-message\",(.*)]");
+            if (match != null && !string.IsNullOrEmpty(match.Groups[1].Value))
+            {
+                var messag = match.Groups[1].Value;
+                if (message.Contains("The connection has been denied") && lastWarningMessage > DateTime.Now.AddMinutes(-5)) return;
+                lastWarningMessage = DateTime.Now;
+                session.EventDispatcher.Send(new NoticeEvent()
+                {
+                    Message = "(SNIPE SERVER) " + match.Groups[1].Value
+                });
             }
         }
 
@@ -214,7 +294,11 @@ namespace PoGo.NecroBot.CLI
             if (match != null && !string.IsNullOrEmpty(match.Groups[1].Value))
             {
                 //var data = JsonConvert.DeserializeObject<List<Logic.Tasks.HumanWalkSnipeTask.FastPokemapItem>>(match.Groups[1].Value);
+
+                // jjskuld - Ignore CS4014 warning for now.
+#pragma warning disable 4014
                 HumanWalkSnipeTask.AddFastPokemapItem(match.Groups[1].Value);
+#pragma warning restore 4014
             }
         }
 
@@ -222,13 +306,35 @@ namespace PoGo.NecroBot.CLI
             ISession session)
         {
             string uniqueCacheKey =
-                $"{session.Settings.PtcUsername}{session.Settings.GoogleUsername}{Math.Round(lat, 6)}{id}{Math.Round(lng, 6)}";
+                $"{session.Settings.Username}{Math.Round(lat, 6)}{id}{Math.Round(lng, 6)}";
             if (session.Cache.Get(uniqueCacheKey) != null) return true;
             if (encounterId > 0 && session.Cache[encounterId.ToString()] != null) return true;
 
             return false;
         }
+        private static void OnPokemonUpdateData(ISession session, string message)
+        {
+            var match = Regex.Match(message, "42\\[\"pokemon-update\",(.*)]");
+            if (match != null && !string.IsNullOrEmpty(match.Groups[1].Value))
+            {
+                var data = JsonConvert.DeserializeObject<EncounteredEvent>(match.Groups[1].Value);
+                MSniperServiceTask.RemoveExpiredSnipeData(session, data.EncounterId);
+            }
+        }
 
+        private static void OnPokemonRemoved(ISession session, string message)
+        {
+            var match = Regex.Match(message, "42\\[\"pokemon-remove\",(.*)]");
+            if (match != null && !string.IsNullOrEmpty(match.Groups[1].Value))
+            {
+                var data = JsonConvert.DeserializeObject<EncounteredEvent>(match.Groups[1].Value);
+                MSniperServiceTask.RemoveExpiredSnipeData(session, data.EncounterId);
+            }
+        }
+
+        private static MemoryCache cache = new MemoryCache("dump");
+
+        //static int count = 0;
         private static void OnPokemonData(ISession session, string message)
         {
             var match = Regex.Match(message, "42\\[\"pokemon\",(.*)]");
@@ -236,33 +342,44 @@ namespace PoGo.NecroBot.CLI
             {
                 var data = JsonConvert.DeserializeObject<EncounteredEvent>(match.Groups[1].Value);
                 data.IsRecievedFromSocket = true;
+                ulong encounterid = 0;
+                if (Math.Abs(data.Latitude) > 90 || Math.Abs(data.Longitude) > 180)
+                {
+                    return;
+                };
+
+                ulong.TryParse(data.EncounterId, out encounterid);
+                if (encounterid > 0 && cache.Get(encounterid.ToString()) == null)
+                {
+                    cache.Add(encounterid.ToString(), DateTime.Now, DateTime.Now.AddMinutes(15));
+                }
+
                 session.EventDispatcher.Send(data);
-                if (session.LogicSettings.AllowAutoSnipe)
+                if (session.LogicSettings.DataSharingConfig.AutoSnipe)
                 {
                     var move1 = PokemonMove.MoveUnset;
                     var move2 = PokemonMove.MoveUnset;
                     Enum.TryParse<PokemonMove>(data.Move1, true, out move1);
                     Enum.TryParse<PokemonMove>(data.Move2, true, out move2);
-                    ulong encounterid = 0;
-                    ulong.TryParse(data.EncounterId, out encounterid);
+
                     bool caught = CheckIfPokemonBeenCaught(data.Latitude, data.Longitude,
                         data.PokemonId, encounterid, session);
                     if (!caught)
                     {
                         var added = MSniperServiceTask.AddSnipeItem(session, new MSniperServiceTask.MSniperInfo2()
-                            {
-                                UniqueIdentifier = data.EncounterId,
-                                Latitude = data.Latitude,
-                                Longitude = data.Longitude,
-                                EncounterId = encounterid,
-                                SpawnPointId = data.SpawnPointId,
-                                PokemonId = (short) data.PokemonId,
-                                Iv = data.IV,
-                                Move1 = move1,
-                                Move2 = move2,
-                                ExpiredTime = data.ExpireTimestamp
-                            })
-                            .Result;
+                        {
+                            UniqueIdentifier = data.EncounterId,
+                            Latitude = data.Latitude,
+                            Longitude = data.Longitude,
+                            EncounterId = encounterid,
+                            SpawnPointId = data.SpawnPointId,
+                            PokemonId = (short)data.PokemonId,
+                            Level = data.Level,
+                            Iv = data.IV,
+                            Move1 = move1,
+                            Move2 = move2,
+                            ExpiredTime = data.ExpireTimestamp
+                        });
                         if (added)
                         {
                             session.EventDispatcher.Send(new AutoSnipePokemonAddedEvent(data));
@@ -280,9 +397,9 @@ namespace PoGo.NecroBot.CLI
                 var data = JsonConvert.DeserializeObject<EncounteredEvent>(match.Groups[1].Value);
 
                 //not your snipe item, return need more encrypt here and configuration to allow catch others item
-                if (string.IsNullOrEmpty(session.LogicSettings.DataSharingIdentifiation) ||
+                if (string.IsNullOrEmpty(session.LogicSettings.DataSharingConfig.DataServiceIdentification) ||
                     string.IsNullOrEmpty(data.RecieverId) ||
-                    data.RecieverId.ToLower() != session.LogicSettings.DataSharingIdentifiation.ToLower()) return;
+                    data.RecieverId.ToLower() != session.LogicSettings.DataSharingConfig.DataServiceIdentification.ToLower()) return;
 
                 var move1 = PokemonMove.Absorb;
                 var move2 = PokemonMove.Absorb;
@@ -301,25 +418,40 @@ namespace PoGo.NecroBot.CLI
                 }
 
                 MSniperServiceTask.AddSnipeItem(session, new MSniperServiceTask.MSniperInfo2()
-                    {
-                        UniqueIdentifier = data.EncounterId,
-                        Latitude = data.Latitude,
-                        Longitude = data.Longitude,
-                        EncounterId = encounterid,
-                        SpawnPointId = data.SpawnPointId,
-                        PokemonId = (short) data.PokemonId,
-                        Iv = data.IV,
-                        Move1 = move1,
-                        ExpiredTime = data.ExpireTimestamp,
-                        Move2 = move2
-                    }, true)
-                    .Wait();
+                {
+                    UniqueIdentifier = data.EncounterId,
+                    Latitude = data.Latitude,
+                    Longitude = data.Longitude,
+                    EncounterId = encounterid,
+                    SpawnPointId = data.SpawnPointId,
+                    Level = data.Level,
+                    PokemonId = (short)data.PokemonId,
+                    Iv = data.IV,
+                    Move1 = move1,
+                    ExpiredTime = data.ExpireTimestamp,
+                    Move2 = move2
+                }, true);
             }
         }
-
+        private static Queue<string> servers = new Queue<string>();
         internal static Task StartAsync(Session session,
             CancellationToken cancellationToken = default(CancellationToken))
         {
+            var config = session.LogicSettings.DataSharingConfig;
+
+            if (config.EnableSyncData)
+            {
+                servers.Enqueue(config.DataRecieverURL);
+
+                if (config.EnableFailoverDataServers)
+                {
+                    foreach (var item in config.FailoverDataServers.Split(";".ToCharArray(), StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        servers.Enqueue(item);
+                    }
+                }
+            }
+
             return Task.Run(() => Start(session, cancellationToken), cancellationToken);
         }
 

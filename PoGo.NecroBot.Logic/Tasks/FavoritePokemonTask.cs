@@ -11,6 +11,7 @@ using PoGo.NecroBot.Logic.Model;
 using PoGo.NecroBot.Logic.PoGoUtils;
 using PoGo.NecroBot.Logic.State;
 using POGOProtos.Networking.Responses;
+using PoGo.NecroBot.Logic.Utils;
 
 #endregion
 
@@ -23,37 +24,42 @@ namespace PoGo.NecroBot.Logic.Tasks
             cancellationToken.ThrowIfCancellationRequested();
             //await session.Inventory.RefreshCachedInventory();
 
-            var pokemons = await session.Inventory.GetPokemons();
+            if (!session.LogicSettings.AutoFavoritePokemon) return;
+
+            var pokemons = session.Inventory.GetPokemons().Where(x=>x.Favorite ==0);
 
             foreach (var pokemon in pokemons)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-
+                TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
                 var perfection = Math.Round(PokemonInfo.CalculatePokemonPerfection(pokemon));
 
-                if (session.LogicSettings.AutoFavoritePokemon &&
-                    perfection >= session.LogicSettings.FavoriteMinIvPercentage && pokemon.Cp >= session.LogicSettings.FavoriteMinCp && pokemon.Favorite != 1)
+                if (session.LogicSettings.FavoriteOperator.BoolFunc(
+                    perfection >= session.LogicSettings.FavoriteMinIvPercentage , 
+                    pokemon.Cp >= session.LogicSettings.FavoriteMinCp,
+                    PokemonInfo.GetLevel(pokemon) >= session.LogicSettings.FavoriteMinLevel))
                 {
-                    await session.Client.Inventory.SetFavoritePokemon(pokemon.Id, true);
-                    await session.Inventory.MarkAsFavorite(pokemon);
-                    session.EventDispatcher.Send(new NoticeEvent
+                    var response = await session.Client.Inventory.SetFavoritePokemon(pokemon.Id, true);
+                    if (response.Result == SetFavoritePokemonResponse.Types.Result.Success)
                     {
-                        Message =
-                            session.Translation.GetTranslation(TranslationString.PokemonFavorite, perfection,
-                                session.Translation.GetPokemonTranslation(pokemon.PokemonId), pokemon.Cp)
-                    });
+                        session.EventDispatcher.Send(new NoticeEvent
+                        {
+                            Message =
+                                session.Translation.GetTranslation(TranslationString.PokemonFavorite, perfection,
+                                    session.Translation.GetPokemonTranslation(pokemon.PokemonId), pokemon.Cp)
+                        });
+                    }
                 }
             }
         }
 
         public static async Task Execute(ISession session, ulong pokemonId, bool favorite)
         {
-            using (var blocker = new BlockableScope(session, BotActions.Favorite))
-            {
-                if (!await blocker.WaitToRun()) return;
-
-                var all = await session.Inventory.GetPokemons();
-                var pokemon = all.FirstOrDefault(p => p.Id == pokemonId);
+            //using (var blocker = new BlockableScope(session, BotActions.Favorite))
+            //{
+                //if (!await blocker.WaitToRun()) return;
+                
+                var pokemon = session.Inventory.GetPokemons().FirstOrDefault(p => p.Id == pokemonId);
                 if (pokemon != null)
                 {
                     var perfection = Math.Round(PokemonInfo.CalculatePokemonPerfection(pokemon));
@@ -61,18 +67,26 @@ namespace PoGo.NecroBot.Logic.Tasks
                     var response = await session.Client.Inventory.SetFavoritePokemon(pokemonId, favorite);
                     if (response.Result == SetFavoritePokemonResponse.Types.Result.Success)
                     {
-                        await session.Inventory.MarkAsFavorite(pokemon);
+                        // Reload pokemon to refresh favorite flag.
+                        pokemon = session.Inventory.GetPokemons().FirstOrDefault(p => p.Id == pokemonId);
+
                         session.EventDispatcher.Send(new FavoriteEvent(pokemon, response));
+
+                        string message;
+                        if (favorite)
+                            message = session.Translation.GetTranslation(TranslationString.PokemonFavorite, perfection,
+                                session.Translation.GetPokemonTranslation(pokemon.PokemonId), pokemon.Cp);
+                        else
+                            message = session.Translation.GetTranslation(TranslationString.PokemonUnFavorite, perfection,
+                                session.Translation.GetPokemonTranslation(pokemon.PokemonId), pokemon.Cp);
+                        
+                        session.EventDispatcher.Send(new NoticeEvent
+                        {
+                            Message = message
+                        });
                     }
-
-
-                    session.EventDispatcher.Send(new NoticeEvent
-                    {
-                        Message = session.Translation.GetTranslation(TranslationString.PokemonFavorite, perfection,
-                            session.Translation.GetPokemonTranslation(pokemon.PokemonId), pokemon.Cp)
-                    });
                 }
-            }
+            //}
         }
     }
 }
