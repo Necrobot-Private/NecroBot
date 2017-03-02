@@ -24,7 +24,7 @@
             Value="pack://application:,,,/Resources/#Lato-light" />
         </Style>
     </Control.Resources>
-    
+
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
             <Button Click="Help_Click">
@@ -51,7 +51,7 @@
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            
+
                                             <TextBlock FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato Medium">
                                                 <Hyperlink NavigateUri="{Binding Id}" Click="Hyperlink_Click" CommandParameter="{Binding}">
                                                     <TextBlock Text="{Binding Path=Title.Text}"></TextBlock>
@@ -68,7 +68,7 @@
                 </StackPanel>
 
             </Button>
-            
+
             <Button Click="Theme_Selected">
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="20"
@@ -112,7 +112,7 @@
                                 <RadioButton GroupName="Theme" Foreground="Violet" Content="Violet" Checked="OnTheme_Checked" Width="90"  Margin="0,5,0,5"></RadioButton>
                                 <RadioButton GroupName="Theme" Foreground="Yellow" Content="Yellow" Checked="OnTheme_Checked" Width="90"  Margin="0,5,0,5"></RadioButton>
 
-                        </WrapPanel>
+                            </WrapPanel>
                         </Grid>
 
                     </Popup>
@@ -162,7 +162,7 @@
                     <TextBlock Margin="4 0 0 0"
                                VerticalAlignment="Center"
                                Text="{Binding Source=AccountSetting, Converter={StaticResource I18NConveter}}" />
-                    
+
                     <Popup Margin="10,10,0,13" Name="popAccounts"
                            HorizontalAlignment="Left"
                            VerticalAlignment="Top"
@@ -179,11 +179,11 @@
                                     <DataGridTemplateColumn Header="">
                                         <DataGridTemplateColumn.CellEditingTemplate>
                                             <DataTemplate>
-                                                
+
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellEditingTemplate>
                                         <DataGridTemplateColumn.CellTemplate>
-                                            
+
                                             <DataTemplate>
                                                 <StackPanel>
                                                     <Button   Name="btnSwitchAcount" Click="btnSwitchAcount_Click" CommandParameter="{Binding}" Foreground="Green" Background="Transparent"  IsEnabled="{Binding IsRunning, Converter= {StaticResource InverseBooleanConverter}}" Cursor="Hand">
@@ -195,7 +195,7 @@
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
                                 </DataGrid.Columns>
-                            
+
                             </DataGrid>
                         </Border>
                     </Popup>
@@ -205,9 +205,9 @@
                 <StackPanel Orientation="Horizontal">
                     <Image Source="http://www.northernyouth.ca/wp-content/uploads/2014/11/NYL-Donate-Button.png" Height="30"/>
                 </StackPanel>
-                
+
             </Button>
-            
+
         </Controls:WindowCommands>
     </Controls:MetroWindow.RightWindowCommands>
 
@@ -246,6 +246,22 @@
                 </StackPanel>
             </Border>
         </Popup>
+
+        <Popup Name="popError" Placement="Center" IsOpen="False" Width="400" Height="auto" >
+            <Border BorderBrush="Red" Background="WhiteSmoke" BorderThickness="2">
+                <StackPanel>
+                    <StackPanel Background="Red">
+                        <TextBlock  Text="{Binding Source=ErrorPopupTitle, Converter={StaticResource I18NConveter}}" Margin="15,5,5,5" FontSize="18.667" FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato Heavy" Foreground="White"></TextBlock>
+                    </StackPanel>
+                    <StackPanel Margin="10">
+                        <TextBlock Name="txtLastError" Text="" TextWrapping="Wrap" FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato" FontSize="16"></TextBlock>
+                        <Button Margin="30,10, 10,30" Click="btnExit_Click" Name="btnExit" Content="{Binding Source=ClickHereExit, Converter={StaticResource I18NConveter}}" FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato Heavy" FontSize="18.667" ></Button>
+                    </StackPanel>
+                </StackPanel>
+
+            </Border>
+        </Popup>
+
         <TabControl TabStripPlacement="Left" HorizontalAlignment="Stretch" 
                     VerticalAlignment="Stretch" 
                     Name="tabMain"
@@ -278,19 +294,19 @@
                         <ColumnDefinition Width="auto" />
                     </Grid.ColumnDefinitions>
                     <local:MapControl x:Name="botMap" Grid.Column="0" DataContext="{Binding Path=Map}" />
-                    
+
                     <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
                     <local:SidebarControl Visibility="Visible" DataContext="{Binding Path=Sidebar}"
                                           x:Name="sidebarControl" Grid.Column="2" HorizontalAlignment="Stretch"
                                           VerticalAlignment="Stretch" MinWidth="200" />
-                    
+
                 </Grid>
             </TabItem>
             <TabItem >
                 <TabItem.Header>
                     <TextBlock  FontSize="14" Margin="7,5,7,5" Text="{Binding  Source=SniperTabTitle, Converter={StaticResource ResourceKey=I18NConveter}, FallbackValue=MAPS}"/>
                 </TabItem.Header>
-                
+
                 <local:SniperControl x:Name="ctrlSniper" DataContext="{Binding Path=SnipeList}" />
             </TabItem>
 
@@ -323,12 +339,12 @@
                     FontSize="15" 
                     IsReadOnly="True" 
                     FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato Light">
-                    <FlowDocument>
-                        <Paragraph LineHeight="25">
-                            <Run Text="" />
-                        </Paragraph>
-                    </FlowDocument>
-                </RichTextBox>
+                        <FlowDocument>
+                            <Paragraph LineHeight="25">
+                                <Run Text="" />
+                            </Paragraph>
+                        </FlowDocument>
+                    </RichTextBox>
                 </DockPanel>
 
             </TabItem>
@@ -344,7 +360,7 @@
                 <local:EggsControl DataContext="{Binding Path=EggsList}" x:Name="ctrlEggsControl" />
             </TabItem>
         </TabControl>
-        
+
     </DockPanel>
 
 

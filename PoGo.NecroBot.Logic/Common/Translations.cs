@@ -318,7 +318,8 @@ namespace PoGo.NecroBot.Logic.Common
         TelegramCommandLocMsgHead,
         TelegramCommandProfileMsgBody,
         TelegramCommandStatusMsgBody,
-        MultiAccountAutoSelect
+        MultiAccountAutoSelect,
+        PtcLoginFail
     }
 
     public class Translation : ITranslation
@@ -332,6 +333,7 @@ namespace PoGo.NecroBot.Logic.Common
         private readonly List<KeyValuePair<TranslationString, string>> _translationStrings = new List
             <KeyValuePair<TranslationString, string>>
             {
+              new KeyValuePair<TranslationString, string>(TranslationString.PtcLoginFail, "Your PTC account is wrong password, or being lock, or not active"),
                 new KeyValuePair<TranslationString, string>(TranslationString.MultiAccountAutoSelect, "PLEASE SELECT AN ACCOUNT TO START. AUTO START AFTER {0} SECOND"),
                 new KeyValuePair<TranslationString, string>(TranslationString.WebSocketStarted, "Websocket listening on at  wss://localhost:{0} or ws://localhost:{1} "),
                 new KeyValuePair<TranslationString, string>(TranslationString.TargetLocationSet,

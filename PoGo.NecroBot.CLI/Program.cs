@@ -25,6 +25,7 @@ using PoGo.NecroBot.Logic.Utils;
 using ProgressBar = PoGo.NecroBot.CLI.Resources.ProgressBar;
 using CommandLine;
 using CommandLine.Text;
+using PokemonGo.RocketAPI;
 
 #endregion using directives
 
@@ -89,7 +90,9 @@ namespace PoGo.NecroBot.CLI
         public static void RunBotWithParameters(Action<ISession, StatisticsAggregator> onBotStarted, string[] args)
         {
             var ioc = TinyIoC.TinyIoCContainer.Current;
-
+            //Setup Logger for API
+            APIConfiguration.Logger = new APILogListener();
+            
             Application.EnableVisualStyles();
             var strCulture = Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName;
 
@@ -314,7 +317,7 @@ namespace PoGo.NecroBot.CLI
                             "You select pogodev API but not provide API Key, please press any key to exit and correct you auth.json, \r\n The Pogodev API key call be purchased at - https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer",
                             LogLevel.Error
                         );
-
+                        
                         Console.ReadKey();
                         Environment.Exit(0);
                     }

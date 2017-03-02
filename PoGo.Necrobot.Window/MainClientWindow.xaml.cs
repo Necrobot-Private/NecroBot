@@ -274,5 +274,10 @@ namespace PoGo.Necrobot.Window
             Process.Start(hlink.NavigateUri.ToString());
             popHelpArticles.IsOpen = false;
         }
+
+        private void btnExit_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
     }
 }

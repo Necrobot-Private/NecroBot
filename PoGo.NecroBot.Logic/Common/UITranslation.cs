@@ -14,7 +14,13 @@ namespace PoGo.NecroBot.Logic.Common
     public class UITranslation
     {
         #region Main screen
-            
+        [Description("Bot Exit!!!")]
+        public string ErrorPopupTitle { get; set; }
+
+        [Description("CLICK HERE TO EXIT")]
+        public string ClickHereExit { get; set; }
+
+
         [Description("Accounts")]
         public string AccountSetting { get; set; }
         

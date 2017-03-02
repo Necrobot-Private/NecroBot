@@ -241,6 +241,7 @@
     <Compile Include="Event\Gym\GymWalkToTargetEvent.cs" />
     <Compile Include="Event\HumanWalkingEvent.cs" />
     <Compile Include="Event\HumanWalkSnipeEvent.cs" />
+    <Compile Include="Event\InfoEvent.cs" />
     <Compile Include="Event\InventoryListEvent.cs" />
     <Compile Include="Event\Inventory\FavoriteEvent.cs" />
     <Compile Include="Event\Inventory\InventoryItemUpdateEvent.cs" />
@@ -314,6 +315,7 @@
     <Compile Include="Interfaces\Configuration\ILogicSettings.cs" />
     <Compile Include="Inventory.cs" />
     <Compile Include="Localization\Localizer.cs" />
+    <Compile Include="Logging\APILogListener.cs" />
     <Compile Include="Logging\WebSocketLogger.cs" />
     <Compile Include="Logging\FileLogger.cs" />
     <Compile Include="Logging\Logger.cs" />

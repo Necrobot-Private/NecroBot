@@ -237,6 +237,26 @@ namespace PoGo.NecroBot.Logic.State
                     }
                     state = new LoginState();
                 }
+                catch(PtcLoginException ex)
+                {
+                    #pragma warning disable 4014
+                    SendNotification(session, $"PTC Login failed!!!! {session.Settings.Username}", session.Translation.GetTranslation(TranslationString.PtcLoginFail), true);
+                    #pragma warning restore 4014
+
+                    if (session.LogicSettings.AllowMultipleBot)
+                    {
+                        TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(60); //need remove acc
+                        session.ReInitSessionWithNextBot();
+                        state = new LoginState();
+                    }
+                    else {
+                        session.EventDispatcher.Send(new ErrorEvent { RequireExit = true, Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey) });
+                        session.EventDispatcher.Send(new ErrorEvent { RequireExit = true, Message = session.Translation.GetTranslation(TranslationString.PtcLoginFail)  + $" ({ex.Message})"});
+
+                        Console.ReadKey();
+                        Environment.Exit(1);
+                    }
+                }
                 catch (LoginFailedException)
                 {
                     // TODO - await is legal here! USE it or use pragma to suppress compilerwarning and write a comment why it is not used
@@ -253,7 +273,7 @@ namespace PoGo.NecroBot.Logic.State
                         state = new LoginState();
                     }
                     else {
-                        session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey) });
+                        session.EventDispatcher.Send(new ErrorEvent { RequireExit = true, Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey) });
                         Console.ReadKey();
                         Environment.Exit(1);
                     }
@@ -266,7 +286,7 @@ namespace PoGo.NecroBot.Logic.State
                         Message = session.Translation.GetTranslation(TranslationString.MinimumClientVersionException, ex.CurrentApiVersion.ToString(), ex.MinimumClientVersion.ToString())
                     });
 
-                    session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey) });
+                    session.EventDispatcher.Send(new ErrorEvent { RequireExit = true, Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey) });
                     Console.ReadKey();
                     Environment.Exit(1);
                 }
@@ -284,7 +304,7 @@ namespace PoGo.NecroBot.Logic.State
                     session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.PtcOffline) });
                     session.EventDispatcher.Send(new NoticeEvent { Message = session.Translation.GetTranslation(TranslationString.TryingAgainIn, 15) });
 
-                    await Delay(15000);
+                    await Delay(1000);
                     state = _initialState;
                 }
                 catch (GoogleOfflineException)
