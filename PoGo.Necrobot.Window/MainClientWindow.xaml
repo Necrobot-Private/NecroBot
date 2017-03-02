@@ -15,7 +15,7 @@
                       ResizeMode="CanResizeWithGrip"
                       WindowTransitionsEnabled="False"
                       WindowStartupLocation="CenterScreen" 
-                      Loaded="MetroWindow_Loaded">
+                      Loaded="MetroWindow_Loaded" Initialized="MetroWindow_Initialized">
     <Control.Resources>
         <c:I18NConveter x:Key="I18NConveter"/>
         <c:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
@@ -167,7 +167,7 @@
                            HorizontalAlignment="Left"
                            VerticalAlignment="Top"
                            Width="700" Height="350" IsOpen="False" AllowsTransparency="True" StaysOpen="False"
-                           Placement="Left"
+                           Placement="Left" Initialized="popAccounts_Initialized"
                            >
                         <Border CornerRadius="4,4,4,4" BorderBrush="DodgerBlue" BorderThickness="1,3,1,5" Background="White">
                             <DataGrid  Margin="20,20,20,20" Name="gridAccounts" AutoGenerateColumns="False" CanUserDeleteRows="False" CanUserAddRows="False">

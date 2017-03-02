@@ -283,5 +283,16 @@ namespace PoGo.Necrobot.Window
         {
             Application.Current.Shutdown();
         }
+
+        private void popAccounts_Initialized(object sender, EventArgs e)
+        {
+
+        }
+
+        private void MetroWindow_Initialized(object sender, EventArgs e)
+        {
+            if(System.Windows.SystemParameters.PrimaryScreenWidth<1366)
+            this.WindowState = WindowState.Maximized;
+        }
     }
 }

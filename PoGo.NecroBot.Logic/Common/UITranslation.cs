@@ -119,6 +119,18 @@ namespace PoGo.NecroBot.Logic.Common
 
         #endregion
         #region Pokemon Inventory
+        [Description("TRANSFER CONFIRM?")]
+        public string TransferConfirmCaption { get; set; }
+
+        [Description("Types")]
+        public string Types { get; set; }
+
+        [Description ("TRANSFER")]
+        public string TransferConfirmButton { get; set; }
+
+        [Description("Do you want to transfer {0} IV:{1:0.00}% Level:{2}")]
+        public string TransferConfirmText { get; set; }
+
         [Description("Sex")]
         public string Sex { get; set; }
 
