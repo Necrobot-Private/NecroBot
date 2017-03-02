@@ -559,7 +559,6 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="config.xlsm" />
-    <None Include="App.config" />
     <None Include="packages.config" />
     <None Include="Resources\msvc.cer" />
   </ItemGroup>
