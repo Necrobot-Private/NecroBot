@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 using PokemonGo.RocketAPI.Enums;
+using Newtonsoft.Json.Converters;
 
 namespace PoGo.NecroBot.Logic.Model.Settings
 {
@@ -13,6 +14,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
     {
         public AuthConfig() : base() { }
         [DefaultValue(AuthType.Google)]
+        //[JsonConverter(typeof(StringEnumConverter))]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public AuthType AuthType { get; set; }
 

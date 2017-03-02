@@ -148,10 +148,6 @@ namespace PoGo.Necrobot.Window
                 setting.PokemonsNotToTransfer = setting.PokemonsTransferFilter.Where(p => p.Value.DoNotTransfer).Select(p => p.Key).ToList();
             }
 
-            if (setting.SnipePokemonFilter != null)
-            {
-                setting.PokemonToSnipe.Pokemon = setting.SnipePokemonFilter.Select(p => p.Key).ToList();
-            }
             return setting;
 
         }

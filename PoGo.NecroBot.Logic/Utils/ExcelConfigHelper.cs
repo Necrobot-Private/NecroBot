@@ -547,10 +547,6 @@ namespace PoGo.NecroBot.Logic.Utils
                     .ToList();
             }
             
-            if (setting.SnipePokemonFilter != null)
-            {
-                setting.PokemonToSnipe.Pokemon = setting.SnipePokemonFilter.Select(p => p.Key).ToList();
-            }
             return setting;
         }
 

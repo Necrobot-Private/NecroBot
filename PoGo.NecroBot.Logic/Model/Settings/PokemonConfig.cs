@@ -465,5 +465,11 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 70)]
         [Range(0, 5000)]
         public double EvolveMinLevel { get;  set; }
+
+        [NecrobotConfig(Description = "Allow bot bypass catchflee - not recomment use this feature", Position = 71)]
+        [DefaultValue(false)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 71)]
+        public bool ByPassCatchFlee{ get; set; }
+
     }
 }

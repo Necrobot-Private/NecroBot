@@ -14,7 +14,13 @@ namespace PoGo.NecroBot.Logic.Common
     public class UITranslation
     {
         #region Main screen
-            
+        [Description("Bot Exit!!!")]
+        public string ErrorPopupTitle { get; set; }
+
+        [Description("CLICK HERE TO EXIT")]
+        public string ClickHereExit { get; set; }
+
+
         [Description("Accounts")]
         public string AccountSetting { get; set; }
         
@@ -113,7 +119,9 @@ namespace PoGo.NecroBot.Logic.Common
 
         #endregion
         #region Pokemon Inventory
-        
+        [Description("Sex")]
+        public string Sex { get; set; }
+
         [Description("Evolve Filter Setting")]
         public string MenuTransferFilterText { get; set; }
 

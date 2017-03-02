@@ -90,6 +90,10 @@ namespace PoGo.NecroBot.Logic.State
                     Message = session.Translation.GetTranslation(TranslationString.TryingAgainIn, 20)
                 });
             }
+            catch(PtcLoginException ex)
+            {
+                throw ex;
+            }
             catch (AccountNotVerifiedException ex)
             {
                 session.EventDispatcher.Send(new ErrorEvent
@@ -104,6 +108,7 @@ namespace PoGo.NecroBot.Logic.State
 
                 session.EventDispatcher.Send(new ErrorEvent
                 {
+                    RequireExit = true,
                     Message =  e.Message
 
                 });
@@ -143,6 +148,7 @@ namespace PoGo.NecroBot.Logic.State
                 }
                 session.EventDispatcher.Send(new ErrorEvent
                 {
+                    RequireExit = true,
                     Message = session.Translation.GetTranslation(TranslationString.GoogleError)
                 });
                 await Task.Delay(2000, cancellationToken);
@@ -159,6 +165,7 @@ namespace PoGo.NecroBot.Logic.State
             {
                 session.EventDispatcher.Send(new ErrorEvent
                 {
+                    RequireExit =true,
                     Message = session.Translation.GetTranslation(TranslationString.IPBannedError)
                 });
                 await Task.Delay(2000, cancellationToken);
@@ -176,8 +183,8 @@ namespace PoGo.NecroBot.Logic.State
                             ex.MinimumClientVersion.ToString()
                         )
                 });
+                session.EventDispatcher.Send(new ErrorEvent() { RequireExit = true, Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey, LogLevel.Error) });
 
-                Logger.Write(session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey, LogLevel.Error));
                 Console.ReadKey();
                 Environment.Exit(1);
             }
@@ -213,8 +220,10 @@ namespace PoGo.NecroBot.Logic.State
 
                     if (totalPercent > 100)
                     {
-                        Logger.Write(session.Translation.GetTranslation(TranslationString.TotalRecyclePercentGreaterThan100), LogLevel.Error);
+
+                        session.EventDispatcher.Send(new ErrorEvent() { RequireExit = true, Message = session.Translation.GetTranslation(TranslationString.TotalRecyclePercentGreaterThan100) });
                         Logger.Write("Press any key to exit, then fix your configuration and run the bot again.", LogLevel.Warning);
+
                         Console.ReadKey();
                         Environment.Exit(1);
                     }
@@ -236,7 +245,8 @@ namespace PoGo.NecroBot.Logic.State
 
                     if (maxTheoreticalItems > session.Profile.PlayerData.MaxItemStorage)
                     {
-                        Logger.Write(session.Translation.GetTranslation(TranslationString.MaxItemsCombinedOverMaxItemStorage, maxTheoreticalItems, session.Profile.PlayerData.MaxItemStorage), LogLevel.Error);
+                        session.EventDispatcher.Send(new ErrorEvent() { RequireExit = true, Message = session.Translation.GetTranslation(TranslationString.MaxItemsCombinedOverMaxItemStorage, maxTheoreticalItems, session.Profile.PlayerData.MaxItemStorage) });
+
                         Logger.Write("Press any key to exit, then fix your configuration and run the bot again.", LogLevel.Warning);
                         Console.ReadKey();
                         Environment.Exit(1);
@@ -283,9 +293,10 @@ namespace PoGo.NecroBot.Logic.State
             {
                 session.EventDispatcher.Send(new ErrorEvent
                 {
+                    RequireExit = true,
                     Message = session.Translation.GetTranslation(TranslationString.MissingCredentials)
                 });
-                await Task.Delay(2000, cancellationToken);
+                Console.Read();
                 Environment.Exit(0);
             }
         }

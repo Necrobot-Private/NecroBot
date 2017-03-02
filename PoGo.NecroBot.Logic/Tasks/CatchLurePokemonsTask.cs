@@ -48,9 +48,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             var pokemonId = currentFortData.LureInfo.ActivePokemonId;
 
-            if ((session.LogicSettings.UsePokemonSniperFilterOnly &&
-                 !session.LogicSettings.PokemonToSnipe.Pokemon.Contains(pokemonId)) ||
-                (session.LogicSettings.UsePokemonToNotCatchFilter &&
+            if ((session.LogicSettings.UsePokemonToNotCatchFilter &&
                  session.LogicSettings.PokemonsNotToCatch.Contains(pokemonId)))
             {
                 session.EventDispatcher.Send(new NoticeEvent

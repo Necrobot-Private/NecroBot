@@ -11,7 +11,7 @@
         mc:Ignorable="d"
         Title="Filter Config"
         Height="768"
-        Width="1024" 
+        Width="1366" 
         BorderThickness="0" 
         GlowBrush="Black"
         ResizeMode="CanResizeWithGrip"

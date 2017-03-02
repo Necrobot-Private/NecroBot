@@ -183,6 +183,16 @@ namespace PoGo.Necrobot.Window
         {
             this.datacontext.PlayerInfo.UpdateCatchLimit(ev);
         }
+
+        public void OnBotEvent(ErrorEvent ev)
+        {
+            if(ev.RequireExit)
+            {
+                popSwithAccount.IsOpen = false;
+                txtLastError.Text = ev.Message;
+                popError.IsOpen = true;
+            }
+        }
         public void OnBotEvent(IEvent evt)
         {
         }

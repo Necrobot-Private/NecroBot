@@ -25,6 +25,8 @@ using POGOProtos.Map.Pokemon;
 using POGOProtos.Networking.Responses;
 using System.Runtime.Caching;
 using System.Security.Cryptography.X509Certificates;
+using PoGo.NecroBot.Logic.PoGoUtils;
+using POGOProtos.Inventory.Item;
 
 namespace PoGo.NecroBot.Logic.Tasks
 {
@@ -284,6 +286,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static bool CheckSnipeConditions(ISession session)
         {
+            if (session.SaveBallForByPassCatchFlee) return false;
+
             //if (waitNextPokestop) return false;
             if (session.LoggedTime > DateTime.Now.AddMinutes(1)) return false; //only snipe after login 1 min.
 
@@ -367,6 +371,150 @@ namespace PoGo.NecroBot.Logic.Tasks
                     pokedexSnipePokemons.RemoveAll(x => x.EncounterId.ToString() == encounterId);
                 }
             }
+        }
+
+        public static async Task<bool> SnipeUnverifiedPokemon(ISession session, IEnumerable<PokemonId> pokemonIds, double latitude,
+       double longitude, CancellationToken cancellationToken)
+        {
+            var currentLatitude = session.Client.CurrentLatitude;
+            var currentLongitude = session.Client.CurrentLongitude;
+
+            var catchedPokemon = false;
+
+            session.EventDispatcher.Send(new SnipeModeEvent { Active = true });
+
+            List<MapPokemon> catchablePokemon;
+            int retry = 3;
+
+            bool isCaptchaShow = false;
+            try
+            {
+                do
+                {
+                    retry--;
+                    LocationUtils.UpdatePlayerLocationWithAltitude(session, new GeoCoordinate(latitude, longitude, 10d), 0); // Set speed to 0 for random speed.
+                    latitude += 0.00000001;
+                    longitude += 0.00000001;
+
+                    session.EventDispatcher.Send(new UpdatePositionEvent
+                    {
+                        Longitude = longitude,
+                        Latitude = latitude
+                    });
+                    var mapObjects = await session.Client.Map.GetMapObjects(true, false);
+                    catchablePokemon =
+                        mapObjects.MapCells.SelectMany(q => q.CatchablePokemons)
+                            .Where(q => pokemonIds.Contains(q.PokemonId))
+                            .OrderByDescending(pokemon => PokemonInfo.CalculateMaxCp(pokemon.PokemonId))
+                            .ToList();
+                } while (catchablePokemon.Count == 0 && retry > 0);
+            }
+            catch (HasherException ex) { throw ex; }
+            catch (CaptchaException ex)
+            {
+                throw ex;
+            }
+            catch (Exception e)
+            {
+                Logger.Write($"Error: {e.Message}", LogLevel.Error);
+                throw e;
+            }
+            finally
+            {
+                LocationUtils.UpdatePlayerLocationWithAltitude(session,
+                    new GeoCoordinate(currentLatitude, currentLongitude, session.Client.CurrentAltitude), 0); // Set speed to 0 for random speed.
+            }
+
+            if (catchablePokemon.Count == 0)
+            {
+                session.EventDispatcher.Send(new SnipeEvent
+                {
+                    Message = session.Translation.GetTranslation(TranslationString.NoPokemonToSnipe),
+                });
+
+                session.EventDispatcher.Send(new SnipeFailedEvent
+                {
+                    Latitude = latitude,
+                    Longitude = longitude,
+                    PokemonId = pokemonIds.FirstOrDefault()
+                });
+
+                return false;
+            }
+
+            isCaptchaShow = false;
+            foreach (var pokemon in catchablePokemon)
+            {
+                EncounterResponse encounter;
+                try
+                {
+                    LocationUtils.UpdatePlayerLocationWithAltitude(session,
+                        new GeoCoordinate(latitude, longitude, session.Client.CurrentAltitude), 0); // Set speed to 0 for random speed.
+
+                    encounter =
+                        session.Client.Encounter.EncounterPokemon(pokemon.EncounterId, pokemon.SpawnPointId).Result;
+                }
+                catch (HasherException ex) { throw ex; }
+                catch (CaptchaException ex)
+                {
+                    isCaptchaShow = true;
+                    throw ex;
+                }
+                finally
+                {
+                    if (!isCaptchaShow)
+                        LocationUtils.UpdatePlayerLocationWithAltitude(session,
+                            // Set speed to 0 for random speed.
+                            new GeoCoordinate(currentLatitude, currentLongitude, session.Client.CurrentAltitude), 0);
+                }
+
+                switch (encounter.Status)
+                {
+                    case EncounterResponse.Types.Status.EncounterSuccess:
+                        session.EventDispatcher.Send(new UpdatePositionEvent
+                        {
+                            Latitude = currentLatitude,
+                            Longitude = currentLongitude
+                        });
+                        catchedPokemon = await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon,
+                            currentFortData: null, sessionAllowTransfer: true);
+                        break;
+
+                    case EncounterResponse.Types.Status.PokemonInventoryFull:
+                        if (session.LogicSettings.TransferDuplicatePokemon)
+                        {
+                            await TransferDuplicatePokemonTask.Execute(session, cancellationToken);
+                        }
+                        else
+                        {
+                            session.EventDispatcher.Send(new WarnEvent
+                            {
+                                Message = session.Translation.GetTranslation(TranslationString.InvFullTransferManually)
+                            });
+                        }
+                        return false;
+
+                    default:
+                        session.EventDispatcher.Send(new WarnEvent
+                        {
+                            Message =
+                                session.Translation.GetTranslation(
+                                    TranslationString.EncounterProblem, encounter.Status)
+                        });
+                        break;
+                }
+
+                if (!Equals(catchablePokemon.ElementAtOrDefault(catchablePokemon.Count - 1), pokemon))
+                    await Task.Delay(session.LogicSettings.DelayBetweenPokemonCatch, cancellationToken);
+            }
+
+            if (catchedPokemon)
+            {
+                session.Stats.SnipeCount++;
+            }
+            session.EventDispatcher.Send(new SnipeModeEvent { Active = false });
+            return true;
+            //await Task.Delay(session.LogicSettings.DelayBetweenPlayerActions, cancellationToken);
         }
 
         public static async Task<bool> CatchFromService(ISession session,
@@ -525,8 +673,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
             if (OutOffBallBlock > DateTime.Now ||
                 autoSnipePokemons.Exists(x => x.EncounterId == item.EncounterId && item.EncounterId > 0) ||
-                (item.EncounterId > 0 && session.Cache[item.EncounterId.ToString()] != null) ||
-                (session.LogicSettings.SnipeIgnoreUnknownIv && item.Iv == 0 && !byPassValidation)) return false;
+                (item.EncounterId > 0 && session.Cache[item.EncounterId.ToString()] != null)) return false;
 
             item.Iv = Math.Round(item.Iv, 2);
             if (session.LogicSettings.SnipePokemonNotInPokedex)
@@ -595,7 +742,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             cancellationToken.ThrowIfCancellationRequested();
             TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
-            return await SnipePokemonTask.Snipe(
+            return await SnipeUnverifiedPokemon(
                 session,
                 new List<PokemonId>() { (PokemonId)encounterId.PokemonId },
                 encounterId.Latitude,
@@ -606,6 +753,30 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static int snipeFailedCount = 0;
         private static bool waitNextPokestop = true;
+
+        public static bool CheckPokeballsToSnipe(int minPokeballs, ISession session,
+           CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
+
+            var pokeBallsCount = session.Inventory.GetItemAmountByType(ItemId.ItemPokeBall);
+            pokeBallsCount += session.Inventory.GetItemAmountByType(ItemId.ItemGreatBall);
+            pokeBallsCount += session.Inventory.GetItemAmountByType(ItemId.ItemUltraBall);
+            pokeBallsCount += session.Inventory.GetItemAmountByType(ItemId.ItemMasterBall);
+
+            if (pokeBallsCount >= minPokeballs)
+                return true;
+
+            session.EventDispatcher.Send(new SnipeEvent
+            {
+                Message =
+                    session.Translation.GetTranslation(TranslationString.NotEnoughPokeballsToSnipe, pokeBallsCount,
+                        minPokeballs)
+            });
+
+            return false;
+        }
 
         public static async Task Execute(ISession session, CancellationToken cancellationToken)
         {
@@ -629,7 +800,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     return;
                 }
 
-                if (autoSnipePokemons.Count > 0 && !SnipePokemonTask.CheckPokeballsToSnipe(
+                if (autoSnipePokemons.Count > 0 && !CheckPokeballsToSnipe(
                         session.LogicSettings.MinPokeballsToSnipe + 1, session, cancellationToken))
                 {
                     session.EventDispatcher.Send(new WarnEvent()
@@ -699,7 +870,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     if (location.EncounterId > 0 && session.Cache[location.EncounterId.ToString()] != null) continue;
 
-                    if (!SnipePokemonTask.CheckPokeballsToSnipe(session.LogicSettings.MinPokeballsWhileSnipe + 1, session, cancellationToken))
+                    if (!CheckPokeballsToSnipe(session.LogicSettings.MinPokeballsWhileSnipe + 1, session, cancellationToken))
                     {
                         session.EventDispatcher.Send(new WarnEvent()
                         {
