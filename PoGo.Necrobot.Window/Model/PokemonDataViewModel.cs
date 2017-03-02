@@ -24,16 +24,17 @@ namespace PoGo.Necrobot.Window.Model
     }
     public class PokemonDataViewModel : ViewModelBase
     {
+        private PokemonSettings setting;
         public PokemonDataViewModel(ISession session, PokemonData pokemon)
         {
             this.Session = session;
             this.PokemonData = pokemon;
             this.Displayed = true;
             var pkmSettings = session.Inventory.GetPokemonSettings().Result;
-            var setting = pkmSettings.FirstOrDefault(x => x.PokemonId == pokemon.PokemonId);
+            setting = pkmSettings.FirstOrDefault(x => x.PokemonId == pokemon.PokemonId);
 
             this.EvolutionBranchs = new List<EvolutionToPokemon>();
-            
+
             //TODO - implement the candy count for enable evolution
             foreach (var item in setting.EvolutionBranch)
             {
@@ -55,6 +56,13 @@ namespace PoGo.Necrobot.Window.Model
             this.PokemonData = item;
         }
 
+        public string Types
+        {
+            get
+            {
+                return setting.Type.ToString() + ((setting.Type2 != PokemonType.None) ? "," + setting.Type2.ToString() : "");
+            }
+        }
         public string Sex => pokemonData.PokemonDisplay.Gender.ToString();
         public ulong Id
         {

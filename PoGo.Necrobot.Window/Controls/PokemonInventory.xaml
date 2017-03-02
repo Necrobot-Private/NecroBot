@@ -219,6 +219,7 @@
                 <DataGridTextColumn Binding="{Binding Candy, StringFormat=\{0\}}" Header="{Binding Source=Candy, Converter={StaticResource I18NConveter}}" MinWidth="50" IsReadOnly="True"/>
                 <DataGridTextColumn Binding="{Binding Move1, StringFormat=\{0\}}" Header="{Binding Source=Move1, Converter={StaticResource I18NConveter}}" MinWidth="90" IsReadOnly="True"/>
                 <DataGridTextColumn Binding="{Binding Move2, StringFormat=\{0\}}" Header="{Binding Source=Move2, Converter={StaticResource I18NConveter}}" MinWidth="90" IsReadOnly="True"/>
+                <DataGridTextColumn Binding="{Binding Types, StringFormat=\{0\}}" Header="{Binding Source=Types, Converter={StaticResource I18NConveter}}" MinWidth="100" IsReadOnly="True"/>
                 <DataGridTextColumn Binding="{Binding CaughtTime, StringFormat=\{0\}}" Header="{Binding Source=CaughtTime, Converter={StaticResource I18NConveter}}" MinWidth="90" IsReadOnly="True"/>
                 <DataGridTextColumn Binding="{Binding CaughtLocation}" Header="{Binding Source=CaughtLocation, Converter={StaticResource I18NConveter}}" MinWidth="90" IsReadOnly="True"/>
 

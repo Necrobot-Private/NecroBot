@@ -122,6 +122,9 @@ namespace PoGo.NecroBot.Logic.Common
         [Description("TRANSFER CONFIRM?")]
         public string TransferConfirmCaption { get; set; }
 
+        [Description("Types")]
+        public string Types { get; set; }
+
         [Description ("TRANSFER")]
         public string TransferConfirmButton { get; set; }
 
