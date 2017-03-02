@@ -329,11 +329,10 @@
                                        PlacementTarget="{Binding ElementName=buttonEvolve}"
                                        StaysOpen="True" Width="300">
                                     <Grid Background="White">
-                                        <Border BorderBrush="LightGray" BorderThickness="1,1,1,1">
+                                        <Border BorderBrush="Green" BorderThickness="1,1,1,1">
                                             <StackPanel Background="WhiteSmoke">
-                                                <StackPanel Margin="0,3,1,3">
-                                                    <DockPanel LastChildFill="True" Background="LightSkyBlue">
-
+                                                <StackPanel Background="Green">
+                                                    <DockPanel LastChildFill="True" Margin="3,3,3,3">
                                                         <Button DockPanel.Dock="Right" Background="Transparent">
                                                             <Image DockPanel.Dock="Right" Source="http://icons.iconarchive.com/icons/oxygen-icons.org/oxygen/256/Actions-application-exit-icon.png" Width="24"/>
                                                             <Button.Triggers>
@@ -351,11 +350,11 @@
                                                             </Button.Triggers>
                                                         </Button>
 
-                                                        <TextBlock Margin="20,5,0,0" Text="{Binding Source=EvolvePopupCaption, Converter={StaticResource I18NConveter}}" Foreground="White" FontWeight="Bold" ></TextBlock>
+                                                        <TextBlock Margin="20,5,0,0" Text="{Binding Source=EvolvePopupCaption, Converter={StaticResource I18NConveter}}" Foreground="White" FontWeight="Bold" FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato Semibold" FontSize="18.667" ></TextBlock>
                                                     </DockPanel>
                                                 </StackPanel>
 
-                                                <StackPanel Margin="20,20,20,20" >
+                                                <StackPanel Margin="20,5,20,5" >
                                                     <TextBlock TextWrapping="Wrap" Foreground="DarkOrange" Text="{Binding Source=EvolveConfirm, Converter={StaticResource I18NConveter}}" />
                                                     <StackPanel Orientation="Horizontal">
                                                         <ListView Margin="10" ItemsSource="{Binding Path=EvolutionBranchs}" HorizontalAlignment="Stretch">
