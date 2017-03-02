@@ -20,6 +20,7 @@
         <cv:AllowTransferCheckConverter x:Key="AllowTransferCheckConverter"/>
         <cv:IVToColorConverter x:Key="IVToColorConverter"    />
         <cv:I18NConveter x:Key="I18NConveter"/>
+        <cv:I18NMultiConveter x:Key="I18NMultiConveter"/>
         <cv:EnumToNumberConverter x:Key="EnumToNumberConverter"></cv:EnumToNumberConverter>
     </Control.Resources>
     <DockPanel LastChildFill="True">
@@ -225,7 +226,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel  Orientation="Horizontal">
-                                <Button Margin="0,0,10,0" Click="btnTransfer_Click" CommandParameter="{Binding Id}" Content="{Binding Path=IsTransfering, Converter={StaticResource ResourceKey= FriendlyTransferTextConverter}}">
+                                <Button Margin="0,0,10,0" CommandParameter="{Binding Id}" Content="{Binding Path=IsTransfering, Converter={StaticResource ResourceKey= FriendlyTransferTextConverter}}">
                                     <Button.IsEnabled>
                                         <MultiBinding Converter="{StaticResource ResourceKey=AllowTransferCheckConverter}">
                                             <Binding Path="AllowTransfer"/>
@@ -233,8 +234,71 @@
                                             <Binding Path="IsTransfering"/>
                                         </MultiBinding>
                                     </Button.IsEnabled>
+                                    <Button.Triggers>
+                                        <EventTrigger RoutedEvent="Button.Click">
+                                            <EventTrigger.Actions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <BooleanAnimationUsingKeyFrames
+                                                             Storyboard.TargetName="popTransferConfirmation"
+                                                             Storyboard.TargetProperty="IsOpen">
+                                                            <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="True" />
+                                                        </BooleanAnimationUsingKeyFrames>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </EventTrigger.Actions>
+                                        </EventTrigger>
+                                    </Button.Triggers>
+                                    
                                 </Button>
 
+                                <Popup  x:Name="popTransferConfirmation"
+                                       PlacementTarget="{Binding ElementName=buttonEvolve}"
+                                       StaysOpen="True" Width="300">
+                                    <Grid Background="White">
+                                        <Border BorderBrush="Red" BorderThickness="1,1,1,1" >
+                                            <StackPanel>
+                                                <StackPanel Background="Red">
+                                                    <DockPanel Margin="3,3,3,3" LastChildFill="True" Background="Red">
+                                                        <Button BorderBrush="Transparent" DockPanel.Dock="Right" Background="Transparent">
+                                                            <Image  DockPanel.Dock="Right" Source="http://icons.iconarchive.com/icons/oxygen-icons.org/oxygen/256/Actions-application-exit-icon.png" Width="24"/>
+                                                            <Button.Triggers>
+                                                                <EventTrigger RoutedEvent="Button.Click">
+                                                                    <BeginStoryboard>
+                                                                        <Storyboard>
+                                                                            <BooleanAnimationUsingKeyFrames
+                                                             Storyboard.TargetName="popTransferConfirmation"
+                                                             Storyboard.TargetProperty="IsOpen">
+                                                                                <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="False" />
+                                                                            </BooleanAnimationUsingKeyFrames>
+                                                                        </Storyboard>
+                                                                    </BeginStoryboard>
+                                                                </EventTrigger>
+                                                            </Button.Triggers>
+                                                        </Button>
+
+                                                        <TextBlock Margin="10,3,0,0" Foreground="White" Text="{Binding Source=TransferConfirmCaption, Converter={StaticResource I18NConveter}}" FontWeight="Bold" FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato Semibold" FontSize="18.667" ></TextBlock>
+                                                    </DockPanel>
+                                                </StackPanel>
+
+                                                <StackPanel Margin="20,20,20,20" >
+                                                    <TextBlock TextWrapping="Wrap" Foreground="Red">
+                                                        <TextBlock.Text>
+                                                            <MultiBinding Converter="{StaticResource I18NMultiConveter}" >
+                                                                <Binding Source="TransferConfirmText"></Binding>
+                                                                <Binding Path="PokemonName"></Binding>
+                                                                <Binding Path="IV"></Binding>
+                                                                <Binding Path="Level"></Binding>
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
+                                                    <Button  Click="btnTransfer_Click" CommandParameter="{Binding Id}" HorizontalAlignment="Center" Margin="20,20,20,20"  Content="{Binding Source=TransferConfirmButton, Converter={StaticResource I18NConveter}}" Width="100"></Button>    
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </Border>
+                                    </Grid>
+                                </Popup>
+                                
                                 <Button Name="buttonEvolve" Margin="0,0,10,0"   CommandParameter="{Binding Id}" Content="{Binding Path=IsEvolving, Converter={StaticResource ResourceKey=FriendlyEvolveTextConverter}}">
                                     <Button.IsEnabled>
                                         <MultiBinding Converter="{StaticResource ResourceKey=CheckAllowEvolveConverter}">

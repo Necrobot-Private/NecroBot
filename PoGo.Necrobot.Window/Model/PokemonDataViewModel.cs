@@ -33,7 +33,6 @@ namespace PoGo.Necrobot.Window.Model
             var setting = pkmSettings.FirstOrDefault(x => x.PokemonId == pokemon.PokemonId);
 
             this.EvolutionBranchs = new List<EvolutionToPokemon>();
-            bool first = true;
             
             //TODO - implement the candy count for enable evolution
             foreach (var item in setting.EvolutionBranch)
@@ -43,10 +42,9 @@ namespace PoGo.Necrobot.Window.Model
                     CandyNeed = item.CandyCost,
                     ItemNeed = item.EvolutionItemRequirement,
                     Pokemon = item.Evolution,
-                    AllowEvolve = first,
+                    AllowEvolve = session.Inventory.CanEvolvePokemon(pokemon).Result,
                     OriginPokemonId = pokemon.Id
                 });
-                first = false;
 
             }
         }
