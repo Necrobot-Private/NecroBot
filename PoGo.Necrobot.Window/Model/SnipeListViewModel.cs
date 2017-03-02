@@ -52,37 +52,56 @@ namespace PoGo.Necrobot.Window.Model
             }
         }
 
+        ObservableCollectionExt<EncounteredEvent> pending = new ObservableCollectionExt<EncounteredEvent>();
+
+        private DateTime lastUpdateTime = DateTime.Now;
+
         internal void OnSnipeData(EncounteredEvent e)
         {
             if (!e.IsRecievedFromSocket) return;
-            var model = new SnipePokemonViewModel(e);
-            var grade = PokemonGradeHelper.GetPokemonGrade(model.PokemonId);
-            PokemonData best = null;
-
-            if (bestPokemons != null)
-                best = bestPokemons.FirstOrDefault(x => x.PokemonId == model.PokemonId);
-
-            if (best == null || PokemonInfo.CalculatePokemonPerfection(best) < model.IV)
+            lock(pending)
             {
-                model.Recommend = true;
-            }
-            if (model.IV >= 100)
-                Handle100IV(model);
-            else
-                if (grade == PokemonGrades.Legendary ||
-                grade == PokemonGrades.VeryRare ||
-                grade == PokemonGrades.Epic ||
-                grade == PokemonGrades.Rare)
-            {
-                HandleRarePokemon(model);
-            }
-            else
-            {
-                HandleOthers(model);
-            }
+                pending.Add(e);
 
-            HandlePokedex(model);
-            //CHeck if pkm not in
+                if (lastUpdateTime > DateTime.Now.AddSeconds(-15))
+                {
+                    return;
+                }
+                else {
+                    foreach (var item in pending)
+                    {
+                        var model = new SnipePokemonViewModel(item);
+                        var grade = PokemonGradeHelper.GetPokemonGrade(model.PokemonId);
+                        PokemonData best = null;
+
+                        if (bestPokemons != null)
+                            best = bestPokemons.FirstOrDefault(x => x.PokemonId == model.PokemonId);
+
+                        if (best == null || PokemonInfo.CalculatePokemonPerfection(best) < model.IV)
+                        {
+                            model.Recommend = true;
+                        }
+                        if (model.IV >= 100)
+                            Handle100IV(model);
+                        else
+                            if (grade == PokemonGrades.Legendary ||
+                            grade == PokemonGrades.VeryRare ||
+                            grade == PokemonGrades.Epic ||
+                            grade == PokemonGrades.Rare)
+                        {
+                            HandleRarePokemon(model);
+                        }
+                        else
+                        {
+                            HandleOthers(model);
+                        }
+
+                        HandlePokedex(model);
+                    }
+                    pending.RemoveAll(x => true);
+                    lastUpdateTime = DateTime.Now;
+                }
+            }
         }
 
         public void OnPokemonSnipeStarted(MSniperServiceTask.MSniperInfo2 pokemon)
