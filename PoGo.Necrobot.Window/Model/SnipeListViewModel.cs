@@ -58,49 +58,49 @@ namespace PoGo.Necrobot.Window.Model
 
         internal void OnSnipeData(EncounteredEvent e)
         {
+            var session = TinyIoCContainer.Current.Resolve<ISession>();
             if (!e.IsRecievedFromSocket) return;
-            lock(pending)
+            lock (pending)
             {
                 pending.Add(e);
 
-                if (lastUpdateTime > DateTime.Now.AddSeconds(-15))
+                if (lastUpdateTime > DateTime.Now.AddSeconds(-session.LogicSettings.UIConfig.SnipeListRefreshInterval))
                 {
                     return;
                 }
-                else {
-                    foreach (var item in pending)
+
+                foreach (var item in pending)
+                {
+                    var model = new SnipePokemonViewModel(item);
+                    var grade = PokemonGradeHelper.GetPokemonGrade(model.PokemonId);
+                    PokemonData best = null;
+
+                    if (bestPokemons != null)
+                        best = bestPokemons.FirstOrDefault(x => x.PokemonId == model.PokemonId);
+
+                    if (best == null || PokemonInfo.CalculatePokemonPerfection(best) < model.IV)
                     {
-                        var model = new SnipePokemonViewModel(item);
-                        var grade = PokemonGradeHelper.GetPokemonGrade(model.PokemonId);
-                        PokemonData best = null;
-
-                        if (bestPokemons != null)
-                            best = bestPokemons.FirstOrDefault(x => x.PokemonId == model.PokemonId);
-
-                        if (best == null || PokemonInfo.CalculatePokemonPerfection(best) < model.IV)
-                        {
-                            model.Recommend = true;
-                        }
-                        if (model.IV >= 100)
-                            Handle100IV(model);
-                        else
-                            if (grade == PokemonGrades.Legendary ||
-                            grade == PokemonGrades.VeryRare ||
-                            grade == PokemonGrades.Epic ||
-                            grade == PokemonGrades.Rare)
-                        {
-                            HandleRarePokemon(model);
-                        }
-                        else
-                        {
-                            HandleOthers(model);
-                        }
-
-                        HandlePokedex(model);
+                        model.Recommend = true;
                     }
-                    pending.RemoveAll(x => true);
-                    lastUpdateTime = DateTime.Now;
+                    if (model.IV >= 100)
+                        Handle100IV(model);
+                    else
+                        if (grade == PokemonGrades.Legendary ||
+                        grade == PokemonGrades.VeryRare ||
+                        grade == PokemonGrades.Epic ||
+                        grade == PokemonGrades.Rare)
+                    {
+                        HandleRarePokemon(model);
+                    }
+                    else
+                    {
+                        HandleOthers(model);
+                    }
+
+                    HandlePokedex(model);
                 }
+                pending.RemoveAll(x => true);
+                lastUpdateTime = DateTime.Now;
             }
         }
 
@@ -121,7 +121,7 @@ namespace PoGo.Necrobot.Window.Model
 
         private void HandlePokedex(SnipePokemonViewModel model)
         {
-            this.PokedexSnipeItems.RemoveAll(x => ShouldRemove(x ,model));
+            this.PokedexSnipeItems.RemoveAll(x => ShouldRemove(x, model));
 
             if (pokedex != null && !pokedex.Any(p => p.PokemonId == model.PokemonId))
             {
@@ -148,7 +148,7 @@ namespace PoGo.Necrobot.Window.Model
             if (x.EncounterId > 0 && x.EncounterId == y.EncounterId) return true;
 
             //unverified data
-            if(x.EncounterId ==0 && 
+            if (x.EncounterId == 0 &&
                 Math.Round(x.Latitude, 6) == Math.Round(y.Latitude, 6) &&
                 Math.Round(x.Longitude, 6) == Math.Round(y.Longitude, 6) &&
                 x.PokemonId == y.PokemonId) return true;
@@ -160,7 +160,7 @@ namespace PoGo.Necrobot.Window.Model
                 x.PokemonId == y.PokemonId) return true;
 
 
-            return false; 
+            return false;
         }
         private void HandleOthers(SnipePokemonViewModel model)
         {
@@ -182,7 +182,7 @@ namespace PoGo.Necrobot.Window.Model
                              .GroupBy(x => x.PokemonId)
                              .Select(x => x.First())
                              .ToList();
-                             
+
             // Remove pokedex items from pokemon snipe list.
             this.PokedexSnipeItems.RemoveAll(x => pokedex.Any(p => p.PokemonId == x.PokemonId));
             RaisePropertyChanged("PokedexSnipeItems");
