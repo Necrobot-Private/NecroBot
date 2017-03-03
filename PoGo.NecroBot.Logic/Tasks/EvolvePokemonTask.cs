@@ -111,17 +111,23 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             var inventoryContent = session.Inventory.GetItems();
 
-            var luckyEggs = inventoryContent.Where(p => p.ItemId == ItemId.ItemLuckyEgg);
-            var luckyEgg = luckyEggs.FirstOrDefault();
+            var luckyEgg = inventoryContent.FirstOrDefault(p => p.ItemId == ItemId.ItemLuckyEgg);
+            
+            if (luckyEgg.Count == 0) // We tried to use egg but we don't have any more. Just return.
+                return;
 
             if (_lastLuckyEggTime.AddMinutes(30).Ticks > DateTime.Now.Ticks)
                 return;
 
-            _lastLuckyEggTime = DateTime.Now;
             var responseLuckyEgg = await session.Client.Inventory.UseItemXpBoost();
             if (responseLuckyEgg.Result == UseItemXpBoostResponse.Types.Result.Success)
             {
-                if (luckyEgg != null) session.EventDispatcher.Send(new UseLuckyEggEvent { Count = luckyEgg.Count - 1 });
+                _lastLuckyEggTime = DateTime.Now;
+
+                // Get refreshed lucky egg so we have an accurate count.
+                luckyEgg = inventoryContent.FirstOrDefault(p => p.ItemId == ItemId.ItemLuckyEgg);
+
+                if (luckyEgg != null) session.EventDispatcher.Send(new UseLuckyEggEvent { Count = luckyEgg.Count });
                 TinyIoCContainer.Current.Resolve<MultiAccountManager>().DisableSwitchAccountUntil(DateTime.Now.AddMinutes(30));
             }
             DelayingUtils.Delay(session.LogicSettings.DelayBetweenPlayerActions, 0);
