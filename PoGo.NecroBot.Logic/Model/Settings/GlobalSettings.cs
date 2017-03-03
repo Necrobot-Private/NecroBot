@@ -123,9 +123,6 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public List<PokemonId> PokemonsNotToTransfer = TransferConfig.PokemonsNotToTransferDefault();
 
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public List<PokemonId> PokemonsToEvolve = EvolveConfig.PokemonsToEvolveDefault();
-
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public List<PokemonId> PokemonsToLevelUp = LevelUpConfig.PokemonsToLevelUpDefault();
 
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
@@ -136,6 +133,45 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [NecrobotConfig(SheetName = "CaptchaConfig", Description = "Captcha config to define the way you prefer to resolve captcha")]
         public CaptchaConfig CaptchaConfig = new CaptchaConfig();
 
+        /// <summary>
+        /// this will auto add account to auth.json with this systax by command lin 
+        /// -i true -t abd123{0} -s 10 -e 20 -p abc1234
+        /// or -init true -template abd123{0} -start 10 -eend 20 -password abc1234
+        /// above command will add 20 account to auth.json default is ptc account. -g true will turn on google account
+        /// </summary>
+        /// <param name="isGoogle"></param>
+        /// <param name="template"></param>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <param name="password"></param>
+        public void GenerateAccount(bool isGoogle, string template, int start, int end, string password)
+        {
+            List<AuthConfig> allAcc = new List<AuthConfig>();
+            for (int i = start; i < end; i++)
+            {
+                allAcc.Add(new AuthConfig()
+                {
+                    AuthType = isGoogle ? AuthType.Google : AuthType.Ptc,
+                    GoogleUsername = isGoogle ? string.Format(template, i) : null,
+                    GooglePassword = isGoogle ? password : null,
+                    PtcUsername = !isGoogle ? string.Format(template, i) : null,
+                    PtcPassword = !isGoogle ? password : null,
+                });
+            }
+
+            if(allAcc.Count>0)
+            {
+                this.Auth.AuthConfig = allAcc.First();
+            }
+            this.Auth.Bots = allAcc.Skip(1).ToList();
+            if (this.Auth.Bots.Count > 0) this.Auth.AllowMultipleBot = true;
+
+            string json = JsonConvert.SerializeObject(this.Auth, Formatting.Indented,new StringEnumConverter() { CamelCaseText = true });
+
+            File.WriteAllText("config\\auth.json", json);
+            if (File.Exists("accounts.db")) File.Delete("accounts.db");
+        }
+
         [NecrobotConfig(SheetName = "PokemonsTransferFilter", Description = "Setting up pokemon filter rules")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public Dictionary<PokemonId, TransferFilter> PokemonsTransferFilter = TransferFilter.TransferFilterDefault();
@@ -143,10 +179,6 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [NecrobotConfig(SheetName = "Item Use Filters", Description = "Define logic to use item when catching Pokemon")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public Dictionary<ItemId, ItemUseFilter> ItemUseFilters = ItemUseFilter.Default();
-
-        //TODO remove this list.
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public SnipeSettings PokemonToSnipe = SnipeSettings.Default();
 
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public List<PokemonId> PokemonToUseMasterball = CatchConfig.PokemonsToUseMasterballDefault();
@@ -186,6 +218,11 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [NecrobotConfig(SheetName = "UIConfig", Description = "Define all parametter to display data on UI.")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public GUIConfig UIConfig = new GUIConfig();
+
+        [NecrobotConfig(SheetName = "HumanlikeDelays", Description = "Define the delays for humanlike behaviour when catching pokemon")]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public HumanlikeDelays HumanlikeDelays = new HumanlikeDelays();
+
         public GlobalSettings()
         {
             InitializePropertyDefaultValues(this);
@@ -612,7 +649,42 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                             }
                         }
                         break;
-                    
+
+                    case 17:
+                        if (settings["PokemonEvolveFilter"] != null && settings["PokemonsToEvolve"] != null)
+                        {
+                            // Repeat the migration for case 16 just in case PokemonsToEvolve has beed modified.
+                            List<string> pokemonToEvolve = new List<string>();
+                            foreach (var x in settings["PokemonsToEvolve"].Children())
+                            {
+                                var pokemonName = (string)x;
+                                pokemonName = pokemonName[0].ToString().ToUpper() + new string(pokemonName.Skip(1).ToArray());
+
+                                if (settings["PokemonEvolveFilter"][pokemonName] == null)
+                                {
+                                    EvolveFilter ev = new EvolveFilter(0, 0, 0);
+                                    settings["PokemonEvolveFilter"][pokemonName] = JObject.Parse(JsonConvert.SerializeObject(ev));
+                                }
+                            }
+                        }
+
+                        // Adding new MinCandiesBeforeEvolve to all filters.
+                        if (settings["PokemonEvolveFilter"] != null)
+                        {
+                            foreach (var x in settings["PokemonEvolveFilter"])
+                            {
+                                var filter = ((JProperty)(x)).Value;
+
+                                if (filter["MinCandiesBeforeEvolve"] == null)
+                                {
+                                    filter["MinCandiesBeforeEvolve"] = 0;
+                                }
+                            }
+                        }
+
+                        // But this time we are going to remove PokemonsToEvolve.
+                        settings.Remove("PokemonsToEvolve");
+                        break;
                 }
             }
         }
@@ -850,10 +922,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 translator.GetTranslation(TranslationString.FirstStartSetupUsernamePrompt)
             );
 
-            if (settings.Auth.AuthConfig.AuthType == AuthType.Google)
-                settings.Auth.AuthConfig.GoogleUsername = strInput;
-            else
-                settings.Auth.AuthConfig.PtcUsername = strInput;
+            settings.Auth.AuthConfig.Username = strInput;
             Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupUsernameConfirm, strInput));
 
             Logger.Write("", LogLevel.Info);
@@ -862,10 +931,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 translator.GetTranslation(TranslationString.FirstStartSetupPasswordPrompt)
             );
 
-            if (settings.Auth.AuthConfig.AuthType == AuthType.Google)
-                settings.Auth.AuthConfig.GooglePassword = strInput;
-            else
-                settings.Auth.AuthConfig.PtcPassword = strInput;
+            settings.Auth.AuthConfig.Password = strInput;
             Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupPasswordConfirm, strInput));
 
             Logger.Write(translator.GetTranslation(TranslationString.FirstStartAccountCompleted), LogLevel.Info);

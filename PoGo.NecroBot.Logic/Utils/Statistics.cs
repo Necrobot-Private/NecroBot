@@ -38,6 +38,8 @@ namespace PoGo.NecroBot.Logic.Utils
         public int TotalPokemonTransferred;
         public int TotalStardust;
         public int LevelForRewards = -1;
+        public bool isRandomTimeSet = false;
+        public int newRandomSwitchTime = 1; // Initializing random switch time
 
         public StatsExport StatsExport => _exportStats;
 
@@ -89,9 +91,20 @@ namespace PoGo.NecroBot.Logic.Utils
                     };
                 }
 
-                var totalMin = (DateTime.Now - _initSessionDateTime).TotalMinutes;
-                if (config.RuntimeSwitch > 0 && config.RuntimeSwitch <= totalMin)
+                // When bot starts OR did the account switch by time, random time for Runtime has not been set. So we need to set it
+                if (!isRandomTimeSet)
                 {
+                    Random random = new Random();
+                    newRandomSwitchTime = config.RuntimeSwitch + random.Next((config.RuntimeSwitchRandomTime * -1), config.RuntimeSwitchRandomTime);
+                    isRandomTimeSet = true;
+                }
+
+                var totalMin = (DateTime.Now - _initSessionDateTime).TotalMinutes;
+                if (newRandomSwitchTime > 0 && newRandomSwitchTime <= totalMin)
+                {
+                    // Setup random time to false, so that next account generates new random runtime
+                    isRandomTimeSet = false;
+
                     session.CancellationTokenSource.Cancel();
                     //Activate switcher by pokestop
                     throw new ActiveSwitchByRuleException()
@@ -163,6 +176,7 @@ namespace PoGo.NecroBot.Logic.Utils
                     HoursUntilLvl = hours,
                     MinutesUntilLevel = minutes,
                     CurrentXp = stat.Experience,
+                    PreviousXp = stat.PrevLevelXp,
                     LevelupXp = stat.NextLevelXp
                 };
             }
@@ -237,6 +251,7 @@ namespace PoGo.NecroBot.Logic.Utils
         public double HoursUntilLvl;
         public int Level;
         public long LevelupXp;
+        public long PreviousXp;
         public double MinutesUntilLevel;
     }
 }

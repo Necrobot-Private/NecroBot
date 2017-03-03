@@ -8,14 +8,14 @@
                       xmlns:c="clr-namespace:PoGo.Necrobot.Window.Converters"
                       Title="Necrobot 2 - Window GUI"
                       Height="768"
-                      Width="1024"
-                      MinWidth="800"
+                      Width="1366"
+                      MinWidth="1024"
                       BorderThickness="0"
                       GlowBrush="Black"
                       ResizeMode="CanResizeWithGrip"
                       WindowTransitionsEnabled="False"
                       WindowStartupLocation="CenterScreen" 
-                      Loaded="MetroWindow_Loaded">
+                      Loaded="MetroWindow_Loaded" Initialized="MetroWindow_Initialized">
     <Control.Resources>
         <c:I18NConveter x:Key="I18NConveter"/>
         <c:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
@@ -24,9 +24,51 @@
             Value="pack://application:,,,/Resources/#Lato-light" />
         </Style>
     </Control.Resources>
-    
+
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
+            <Button Click="Help_Click">
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle Width="20"
+                               Height="20"
+                               Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_book_perspective_help}" />
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                    <TextBlock Margin="4 0 0 0"
+                               VerticalAlignment="Center"
+                               Text="{Binding Source=Help, Converter={StaticResource ResourceKey=I18NConveter}}" />
+
+                    <Popup Margin="10,10,0,13" Name="popHelpArticles"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Top"
+                           
+                           StaysOpen="False"
+                           Width="420" Height="580" IsOpen="False" AllowsTransparency="True">
+                        <Grid Background="WhiteSmoke">
+                            <ListView Name="lsvHelps" Margin="20">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+
+                                            <TextBlock FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato Medium">
+                                                <Hyperlink NavigateUri="{Binding Id}" Click="Hyperlink_Click" CommandParameter="{Binding}">
+                                                    <TextBlock Text="{Binding Path=Title.Text}"></TextBlock>
+                                                </Hyperlink>
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </Grid>
+
+                    </Popup>
+
+                </StackPanel>
+
+            </Button>
+
             <Button Click="Theme_Selected">
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="20"
@@ -70,7 +112,7 @@
                                 <RadioButton GroupName="Theme" Foreground="Violet" Content="Violet" Checked="OnTheme_Checked" Width="90"  Margin="0,5,0,5"></RadioButton>
                                 <RadioButton GroupName="Theme" Foreground="Yellow" Content="Yellow" Checked="OnTheme_Checked" Width="90"  Margin="0,5,0,5"></RadioButton>
 
-                        </WrapPanel>
+                            </WrapPanel>
                         </Grid>
 
                     </Popup>
@@ -120,30 +162,28 @@
                     <TextBlock Margin="4 0 0 0"
                                VerticalAlignment="Center"
                                Text="{Binding Source=AccountSetting, Converter={StaticResource I18NConveter}}" />
-                    
+
                     <Popup Margin="10,10,0,13" Name="popAccounts"
                            HorizontalAlignment="Left"
                            VerticalAlignment="Top"
                            Width="700" Height="350" IsOpen="False" AllowsTransparency="True" StaysOpen="False"
-                           Placement="Left"
+                           Placement="Left" Initialized="popAccounts_Initialized"
                            >
                         <Border CornerRadius="4,4,4,4" BorderBrush="DodgerBlue" BorderThickness="1,3,1,5" Background="White">
                             <DataGrid  Margin="20,20,20,20" Name="gridAccounts" AutoGenerateColumns="False" CanUserDeleteRows="False" CanUserAddRows="False">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Binding="{Binding AuthType}" Header="AuthType"></DataGridTextColumn>
-                                    <DataGridTextColumn Binding="{Binding PtcUsername}" Header="PTC Username"></DataGridTextColumn>
-                                    <DataGridTextColumn Binding="{Binding PtcPassword}" Header="PTC Password"></DataGridTextColumn>
-                                    <DataGridTextColumn Binding="{Binding GoogleUsername}" Header="GG Username"></DataGridTextColumn>
-                                    <DataGridTextColumn Binding="{Binding GooglePassword}" Header="GG Password"></DataGridTextColumn>
+                                    <DataGridTextColumn Binding="{Binding Username}" Header="Username"></DataGridTextColumn>
+                                    <DataGridTextColumn Binding="{Binding Password}" Header="Password"></DataGridTextColumn>
                                     <DataGridTextColumn Binding="{Binding Level}" Header="Level"></DataGridTextColumn>
                                     <DataGridTemplateColumn Header="">
                                         <DataGridTemplateColumn.CellEditingTemplate>
                                             <DataTemplate>
-                                                
+
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellEditingTemplate>
                                         <DataGridTemplateColumn.CellTemplate>
-                                            
+
                                             <DataTemplate>
                                                 <StackPanel>
                                                     <Button   Name="btnSwitchAcount" Click="btnSwitchAcount_Click" CommandParameter="{Binding}" Foreground="Green" Background="Transparent"  IsEnabled="{Binding IsRunning, Converter= {StaticResource InverseBooleanConverter}}" Cursor="Hand">
@@ -155,7 +195,7 @@
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
                                 </DataGrid.Columns>
-                            
+
                             </DataGrid>
                         </Border>
                     </Popup>
@@ -165,14 +205,14 @@
                 <StackPanel Orientation="Horizontal">
                     <Image Source="http://www.northernyouth.ca/wp-content/uploads/2014/11/NYL-Donate-Button.png" Height="30"/>
                 </StackPanel>
-                
+
             </Button>
-            
+
         </Controls:WindowCommands>
     </Controls:MetroWindow.RightWindowCommands>
 
     <DockPanel LastChildFill="True">
-        <GroupBox x:Name="grbPlayerInfo" DockPanel.Dock="Top" Height="150">
+        <GroupBox x:Name="grbPlayerInfo" DockPanel.Dock="Top" Height="120">
             <GroupBox.Header>
                 <DockPanel LastChildFill="True">
                     <Button Content="Hide" DockPanel.Dock="Right" Name="btnHideInfo" Click="btnHideInfo_Click" />
@@ -189,7 +229,7 @@
                     </Label>
                 </DockPanel>
             </GroupBox.Header>
-            <local:PlayerInfo DataContext="{Binding Path=PlayerInfo}" Margin="10,0,-2,26" />
+            <local:PlayerInfo DataContext="{Binding Path=PlayerInfo}" Margin="10,0,-2,1" />
         </GroupBox>
         <StatusBar DockPanel.Dock="Bottom">
             <StatusBarItem>
@@ -206,10 +246,26 @@
                 </StackPanel>
             </Border>
         </Popup>
+
+        <Popup Name="popError" Placement="Center" IsOpen="False" Width="400" Height="auto" >
+            <Border BorderBrush="Red" Background="WhiteSmoke" BorderThickness="2">
+                <StackPanel>
+                    <StackPanel Background="Red">
+                        <TextBlock  Text="{Binding Source=ErrorPopupTitle, Converter={StaticResource I18NConveter}}" Margin="15,5,5,5" FontSize="18.667" FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato Heavy" Foreground="White"></TextBlock>
+                    </StackPanel>
+                    <StackPanel Margin="10">
+                        <TextBlock Name="txtLastError" Text="" TextWrapping="Wrap" FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato" FontSize="16"></TextBlock>
+                        <Button Margin="30,10, 10,30" Click="btnExit_Click" Name="btnExit" Content="{Binding Source=ClickHereExit, Converter={StaticResource I18NConveter}}" FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato Heavy" FontSize="18.667" ></Button>
+                    </StackPanel>
+                </StackPanel>
+
+            </Border>
+        </Popup>
+
         <TabControl TabStripPlacement="Left" HorizontalAlignment="Stretch" 
                     VerticalAlignment="Stretch" 
                     Name="tabMain"
-                    SelectionChanged="tabMain_SelectionChanged"
+                    SelectionChanged="tabMain_SelectionChanged" Margin="0,0,0,5"
                     >
             <TabControl.Resources>
                 <Style TargetType="{x:Type TabItem}">
@@ -229,7 +285,7 @@
             </TabControl.Resources>
             <TabItem Name="tabMap" >
                 <TabItem.Header>
-                    <TextBlock Margin="7,5,7,5" Text="{Binding  Source=MapTabTitle, Converter={StaticResource ResourceKey=I18NConveter}, FallbackValue=MAPS}" FontSize="15"/>
+                    <TextBlock Margin="7,5,7,5" Text="{Binding  Source=MapTabTitle, Converter={StaticResource ResourceKey=I18NConveter}, FallbackValue=MAPS}" FontSize="14"/>
                 </TabItem.Header>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -238,25 +294,25 @@
                         <ColumnDefinition Width="auto" />
                     </Grid.ColumnDefinitions>
                     <local:MapControl x:Name="botMap" Grid.Column="0" DataContext="{Binding Path=Map}" />
-                    
+
                     <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
                     <local:SidebarControl Visibility="Visible" DataContext="{Binding Path=Sidebar}"
                                           x:Name="sidebarControl" Grid.Column="2" HorizontalAlignment="Stretch"
                                           VerticalAlignment="Stretch" MinWidth="200" />
-                    
+
                 </Grid>
             </TabItem>
             <TabItem >
                 <TabItem.Header>
-                    <TextBlock  FontSize="15" Margin="7,5,7,5" Text="{Binding  Source=SniperTabTitle, Converter={StaticResource ResourceKey=I18NConveter}, FallbackValue=MAPS}"/>
+                    <TextBlock  FontSize="14" Margin="7,5,7,5" Text="{Binding  Source=SniperTabTitle, Converter={StaticResource ResourceKey=I18NConveter}, FallbackValue=MAPS}"/>
                 </TabItem.Header>
-                
+
                 <local:SniperControl x:Name="ctrlSniper" DataContext="{Binding Path=SnipeList}" />
             </TabItem>
 
             <TabItem  IsSelected="True">
                 <TabItem.Header>
-                    <TextBlock FontSize="15" Text="{Binding Source=ConsoleTabTitle, Converter={StaticResource ResourceKey=I18NConveter}, FallbackValue=Console}"/>
+                    <TextBlock FontSize="14" Text="{Binding Source=ConsoleTabTitle, Converter={StaticResource ResourceKey=I18NConveter}, FallbackValue=Console}"/>
                 </TabItem.Header>
                 <DockPanel LastChildFill="True">
                     <TextBox HorizontalAlignment="Stretch" 
@@ -283,28 +339,28 @@
                     FontSize="15" 
                     IsReadOnly="True" 
                     FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato Light">
-                    <FlowDocument>
-                        <Paragraph LineHeight="25">
-                            <Run Text="" />
-                        </Paragraph>
-                    </FlowDocument>
-                </RichTextBox>
+                        <FlowDocument>
+                            <Paragraph LineHeight="25">
+                                <Run Text="" />
+                            </Paragraph>
+                        </FlowDocument>
+                    </RichTextBox>
                 </DockPanel>
 
             </TabItem>
 
-            <TabItem FontSize="15" Header="{Binding Path= PokemonTabHeader, FallbackValue=Pokemon}" Name="tabPokemons">
+            <TabItem FontSize="14" Header="{Binding Path= PokemonTabHeader, FallbackValue=Pokemon}" Name="tabPokemons">
                 <local:PokemonInventory x:Name="ctrPokemonInventory" DataContext="{Binding Path=PokemonList}"
                                         OnPokemonItemSelected="PokemonInventory_OnPokemonItemSelected" />
             </TabItem>
-            <TabItem FontSize="15" Name="tabItems" Header="{Binding Path=ItemsTabHeader, FallbackValue=Pokemon}">
+            <TabItem FontSize="14" Name="tabItems" Header="{Binding Path=ItemsTabHeader, FallbackValue=Pokemon}">
                 <local:ItemsInventory DataContext="{Binding Path=ItemsList}" x:Name="ctrlItemControl" />
             </TabItem>
-            <TabItem FontSize="15" Name="tabEggs" Header="{Binding Source=EggTabHeader , Converter={StaticResource I18NConveter}}">
+            <TabItem FontSize="14" Name="tabEggs" Header="{Binding Source=EggTabHeader , Converter={StaticResource I18NConveter}}">
                 <local:EggsControl DataContext="{Binding Path=EggsList}" x:Name="ctrlEggsControl" />
             </TabItem>
         </TabControl>
-        
+
     </DockPanel>
 
 

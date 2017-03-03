@@ -22,7 +22,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         public static async Task Execute(ISession session, CancellationToken cancellationToken)
         {
-            
+
             cancellationToken.ThrowIfCancellationRequested();
             TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
 
@@ -93,8 +93,14 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             foreach (var item in items)
             {
-                if (item.Count <= 0) continue;
+                if (item.Count <= 1 || 
+                    (session.SaveBallForByPassCatchFlee && 
+                        (item.ItemId == ItemId.ItemPokeBall || 
+                        item.ItemId == ItemId.ItemGreatBall || 
+                        item.ItemId == ItemId.ItemUltraBall))
 
+                    ) continue;
+                
                 cancellationToken.ThrowIfCancellationRequested();
                 TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
                 await session.Client.Inventory.RecycleItem(item.ItemId, item.Count);
@@ -128,7 +134,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 await session.Client.Inventory.RecycleItem(item, itemsToRecycle);
                 await session.Inventory.UpdateInventoryItem(item);
                 if (session.LogicSettings.VerboseRecycling)
-                    session.EventDispatcher.Send(new ItemRecycledEvent {Id = item, Count = itemsToRecycle});
+                    session.EventDispatcher.Send(new ItemRecycledEvent { Id = item, Count = itemsToRecycle });
 
                 DelayingUtils.Delay(session.LogicSettings.RecycleActionDelay, 500);
             }
@@ -142,6 +148,9 @@ namespace PoGo.NecroBot.Logic.Tasks
             var masterBallsCount = session.Inventory.GetItemAmountByType(ItemId.ItemMasterBall);
 
             int totalBallsCount = pokeBallsCount + greatBallsCount + ultraBallsCount + masterBallsCount;
+
+            if (session.SaveBallForByPassCatchFlee) return;
+
             int random = rnd.Next(-1 * session.LogicSettings.RandomRecycleValue, session.LogicSettings.RandomRecycleValue + 1);
 
             int totalPokeballsToKeep;
@@ -249,7 +258,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             int totalRevivesToKeep;
             if (session.LogicSettings.UseRecyclePercentsInsteadOfTotals)
             {
-                totalRevivesToKeep = (int) Math.Floor(session.LogicSettings.PercentOfInventoryRevivesToKeep / 100.0 * session.Profile.PlayerData.MaxItemStorage);
+                totalRevivesToKeep = (int)Math.Floor(session.LogicSettings.PercentOfInventoryRevivesToKeep / 100.0 * session.Profile.PlayerData.MaxItemStorage);
             }
             else
             {
@@ -349,7 +358,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     await session.Inventory.UpdateInventoryItem(item);
 
                     if (session.LogicSettings.VerboseRecycling)
-                        session.EventDispatcher.Send(new ItemRecycledEvent {Id = item, Count = count});
+                        session.EventDispatcher.Send(new ItemRecycledEvent { Id = item, Count = count });
 
                     DelayingUtils.Delay(session.LogicSettings.RecycleActionDelay, 500);
                 }

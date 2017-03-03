@@ -161,6 +161,7 @@ namespace PoGo.NecroBot.Logic.Common
         GoogleTwoFactorAuthExplanation,
         GoogleError,
         GoogleOffline,
+        MissingCredentials,
         MissingCredentialsGoogle,
         MissingCredentialsPtc,
         SnipeScan,
@@ -317,7 +318,8 @@ namespace PoGo.NecroBot.Logic.Common
         TelegramCommandLocMsgHead,
         TelegramCommandProfileMsgBody,
         TelegramCommandStatusMsgBody,
-        MultiAccountAutoSelect
+        MultiAccountAutoSelect,
+        PtcLoginFail
     }
 
     public class Translation : ITranslation
@@ -331,6 +333,7 @@ namespace PoGo.NecroBot.Logic.Common
         private readonly List<KeyValuePair<TranslationString, string>> _translationStrings = new List
             <KeyValuePair<TranslationString, string>>
             {
+              new KeyValuePair<TranslationString, string>(TranslationString.PtcLoginFail, "Your PTC account is wrong password, or being lock, or not active"),
                 new KeyValuePair<TranslationString, string>(TranslationString.MultiAccountAutoSelect, "PLEASE SELECT AN ACCOUNT TO START. AUTO START AFTER {0} SECOND"),
                 new KeyValuePair<TranslationString, string>(TranslationString.WebSocketStarted, "Websocket listening on at  wss://localhost:{0} or ws://localhost:{1} "),
                 new KeyValuePair<TranslationString, string>(TranslationString.TargetLocationSet,
@@ -373,7 +376,7 @@ namespace PoGo.NecroBot.Logic.Common
 
                 //Logging Cleanup (mostly uneccessary information, may want a verbose pokemon capture logger setting)
                 new KeyValuePair<TranslationString, string>(TranslationString.EventPokemonCaptureSuccess,
-                    "({0}) | ({1}) {2} Lvl: {3} CP: ({4}/{5}) IV: {6}% | Chance: {7}% | {8}m dist | with a {9} ({10} left). | {11} EXP earned | {12} | lat: {13} long: {14} | Move1: {15} Move2: {16} | Rarity: {17} | Capture Reason: {18}"),
+                    "({0}) | ({1}) {2} Lvl: {3} CP: ({4}/{5}) IV: {6}% | Chance: {7}% | {8}m dist | with a {9} ({10} left). | {11} EXP earned | {12} | lat: {13} long: {14} | Move1: {15} Move2: {16} | Rarity: {17} | Capture Reason: {18} | Sex: {19}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.EventPokemonCaptureFailed,
                     "({0}) | ({1}) {2} Lvl: {3} CP: ({4}/{5}) IV: {6}% | Chance: {7}% | {8}m dist | with a {9} ({10} left). | lat: {11} long: {12} | Move1: {13} Move2: {14} | Rarity :{15}"),
 
@@ -560,6 +563,8 @@ namespace PoGo.NecroBot.Logic.Common
                     "Make sure you have entered the right Email & Password."),
                 new KeyValuePair<TranslationString, string>(TranslationString.GoogleOffline,
                     "Google servers are probably down, Please be patient and start the bot later."),
+                new KeyValuePair<TranslationString, string>(TranslationString.MissingCredentials,
+                    "You need to fill out Username and Password in auth.json!"),
                 new KeyValuePair<TranslationString, string>(TranslationString.MissingCredentialsGoogle,
                     "You need to fill out GoogleUsername and GooglePassword in auth.json!"),
                 new KeyValuePair<TranslationString, string>(TranslationString.MissingCredentialsPtc,
@@ -852,9 +857,9 @@ namespace PoGo.NecroBot.Logic.Common
                 new KeyValuePair<TranslationString, string>(TranslationString.TelegramCommandLocMsgHead,
                     "{0}'s location:"),
                 new KeyValuePair<TranslationString, string>(TranslationString.TelegramCommandProfileMsgBody,
-                    "Account: {0}\nLevel: {1}\nTotal XP: {2}\nXP until level up: {3}\nPokemon caught: {4}\nPokemon sent: {5}\nPokemon in bag: {6}\nPokemon evolved: {7}\nPokestops visited: {8}\nItems in bag: {9}\nStardust: {10}\nEggs hatched: {11}\nPokedex entries: {12}\nKM walked: {13:n0}"),
+                    "Account: {0}\nLevel: {1}\nPokecoins: {2}\nTotal XP: {3}\nXP until level up: {4}\nPokemon caught: {5}\nPokemon sent: {6}\nPokemon in bag: {7}\nPokemon evolved: {8}\nPokestops visited: {9}\nItems in bag: {10}\nStardust: {11}\nEggs hatched: {12}\nPokedex entries: {13}\nKM walked: {14:n0}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.TelegramCommandStatusMsgBody,
-                    "Bot: Necrobot2 v{0}\nAccount: {1}\nRuntime: {2}\nLevel: {3}\nAdvance in: {4}h {5}m | {6} EP\nXP / h: {7:n0}\nPokemon / h: {8:n0}\nStardust / h: {9:n0}\nPokemon Sent: {10}\nPokemon Evolved: {11}\nRecycled: {12}\nPokestop limit: {13}\nCatch limit: {14}"),
+                    "Bot: Necrobot2 v{0}\nAccount: {1}\nRuntime: {2}\nLevel: {3}\nStardust: {15}\nPokecoins: {16}\nAdvance in: {4}h {5}m | {6} EP\nXP / h: {7:n0}\nPokemon / h: {8:n0}\nStardust / h: {9:n0}\nPokemon Sent: {10}\nPokemon Evolved: {11}\nRecycled: {12}\nPokestop limit: {13}\nCatch limit: {14}"),
             };
 
         [JsonProperty("PokemonStrings",

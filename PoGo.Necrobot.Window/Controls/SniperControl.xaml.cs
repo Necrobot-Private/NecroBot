@@ -87,7 +87,10 @@ namespace PoGo.Necrobot.Window.Controls
                     Longitude = current.Longitude
                 }, true);
                 current.Clear();
-                rtbFreeText.Document.Blocks.Clear();
+                this.Dispatcher.Invoke(() =>
+                {
+                    rtbFreeText.Document.Blocks.Clear();
+                });
             });
         }
 

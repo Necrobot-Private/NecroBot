@@ -168,8 +168,8 @@ namespace PoGo.Necrobot.Window.Model
             this.TimeToLevelUp = $"{stat.StatsExport.HoursUntilLvl:00}h :{stat.StatsExport.MinutesUntilLevel:00}m";
             this.Level = stat.StatsExport.Level;
             this.Stardust = stat.TotalStardust;
-            this.Exp = stat.StatsExport.CurrentXp;
-            this.LevelExp = stat.StatsExport.LevelupXp;
+            this.Exp = stat.StatsExport.CurrentXp - stat.StatsExport.PreviousXp;
+            this.LevelExp = stat.StatsExport.LevelupXp - stat.StatsExport.PreviousXp;
             this.PokemonTransfered = stat.TotalPokemonTransferred;
             this.RaisePropertyChanged("TotalPokemonTransferred;");
             this.RaisePropertyChanged("Runtime");

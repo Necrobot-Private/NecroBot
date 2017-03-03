@@ -89,15 +89,6 @@ namespace PoGo.NecroBot.Logic.Utils
                     });
                 }
             }
-            foreach (var item in setting.PokemonsToEvolve)
-            {
-                if (!setting.PokemonEvolveFilter.ContainsKey(item))
-                {
-                    setting.PokemonEvolveFilter.Add(item, new EvolveFilter()
-                    {
-                    });
-                }
-            }
         }
 
         private static void BuildDictionaryDataSheet<T>(ExcelWorksheet sheet, Dictionary<PokemonId, T> dictionary)
@@ -555,12 +546,7 @@ namespace PoGo.NecroBot.Logic.Utils
                     .Select(p => p.Key)
                     .ToList();
             }
-            setting.PokemonsToEvolve = setting.PokemonEvolveFilter.Select(x => x.Key).ToList();
-
-            if (setting.SnipePokemonFilter != null)
-            {
-                setting.PokemonToSnipe.Pokemon = setting.SnipePokemonFilter.Select(p => p.Key).ToList();
-            }
+            
             return setting;
         }
 

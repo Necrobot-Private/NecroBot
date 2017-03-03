@@ -16,7 +16,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [NecrobotConfig(Description = "When you set this to true, Bot will use teleport instead of walking. this is not recommended.", Position = 1)]
         public bool DisableHumanWalking { get; set; }
 
-        [DefaultValue(true)]
+        [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
         [NecrobotConfig(Description = "When set to true, bot will start from the last known location instead of default location", Position = 2)]
         public bool StartFromLastPosition { get; set; }
@@ -33,7 +33,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [NecrobotConfig(Description = "Default Longitude that bot will start with.", Position = 4)]
         public double DefaultLongitude { get; set; }
 
-        [DefaultValue(4.16)]
+        [DefaultValue(24.98)]
         [Range(0, 999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 5)]
         [NecrobotConfig(Description = "The walking speed apply for bot to move between pokestops.", Position = 5)]

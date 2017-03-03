@@ -23,11 +23,48 @@ using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Tasks;
 using PoGo.NecroBot.Logic.Utils;
 using ProgressBar = PoGo.NecroBot.CLI.Resources.ProgressBar;
+using CommandLine;
+using CommandLine.Text;
+using PokemonGo.RocketAPI;
 
 #endregion using directives
 
 namespace PoGo.NecroBot.CLI
 {
+    class Options
+    {
+        [Option('i', "init", Required = false,
+          HelpText = "Init account")]
+        public bool Init { get; set; }
+
+        [Option('t', "template", DefaultValue = "", Required = false , HelpText = "Prints all messages to standard output.")]
+        public string Template { get; set; }
+
+        [Option('p', "password", DefaultValue = "", Required = false, HelpText = "pasword")]
+        public string Password { get; set; }
+
+        [Option('g', "google", DefaultValue = false, Required = false,HelpText = "is google account")]
+        public bool IsGoogle{ get; set; }
+
+        [Option('s', "start", DefaultValue = 1,HelpText = "Start account", Required = false)]
+        public int Start { get; set; }
+
+
+        [Option('e', "end", DefaultValue = 10, HelpText = "End account",Required = false)]
+        public int End { get; set; }
+
+        [ParserState]
+        public IParserState LastParserState { get; set; }
+
+        [HelpOption]
+        public string GetUsage()
+        {
+            return HelpText.AutoBuild(this,
+              (HelpText current) => HelpText.DefaultParsingErrorsHandler(this, current));
+        }
+    }
+
+
     public class Program
     {
         private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
@@ -53,7 +90,9 @@ namespace PoGo.NecroBot.CLI
         public static void RunBotWithParameters(Action<ISession, StatisticsAggregator> onBotStarted, string[] args)
         {
             var ioc = TinyIoC.TinyIoCContainer.Current;
-
+            //Setup Logger for API
+            APIConfiguration.Logger = new APILogListener();
+            
             Application.EnableVisualStyles();
             var strCulture = Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName;
 
@@ -110,6 +149,7 @@ namespace PoGo.NecroBot.CLI
                 excelConfigAllow = true;
             }
 
+            //
             Logger.AddLogger(new ConsoleLogger(LogLevel.Service), _subPath);
             Logger.AddLogger(new FileLogger(LogLevel.Service), _subPath);
             Logger.AddLogger(new WebSocketLogger(LogLevel.Service), _subPath);
@@ -170,6 +210,15 @@ namespace PoGo.NecroBot.CLI
                 }
             }
 
+            var options = new Options();
+            if (CommandLine.Parser.Default.ParseArguments(args, options))
+            {
+                // Values are available here
+                if (options.Init)
+                {
+                    settings.GenerateAccount(options.IsGoogle, options.Template, options.Start, options.End, options.Password);
+                }
+            }
             var lastPosFile = Path.Combine(profileConfigPath, "LastPos.ini");
             if (File.Exists(lastPosFile) && settings.LocationConfig.StartFromLastPosition)
             {
@@ -179,8 +228,13 @@ namespace PoGo.NecroBot.CLI
                 {
                     var lat = double.Parse(crds[0]);
                     var lng = double.Parse(crds[1]);
-                    settings.LocationConfig.DefaultLatitude = lat;
-                    settings.LocationConfig.DefaultLongitude = lng;
+                    //If lastcoord is snipe coord, bot start from default location
+
+                    if (LocationUtils.CalculateDistanceInMeters(lat, lng, settings.LocationConfig.DefaultLatitude, settings.LocationConfig.DefaultLongitude) < 2000)
+                    {
+                        settings.LocationConfig.DefaultLatitude = lat;
+                        settings.LocationConfig.DefaultLongitude = lng;
+                    }
                 }
                 catch (Exception)
                 {
@@ -263,7 +317,7 @@ namespace PoGo.NecroBot.CLI
                             "You select pogodev API but not provide API Key, please press any key to exit and correct you auth.json, \r\n The Pogodev API key call be purchased at - https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer",
                             LogLevel.Error
                         );
-
+                        
                         Console.ReadKey();
                         Environment.Exit(0);
                     }
@@ -299,14 +353,19 @@ namespace PoGo.NecroBot.CLI
 
             Logger.SetLoggerContext(_session);
 
+            MultiAccountManager accountManager = new MultiAccountManager(logicSettings.Bots);
+            ioc.Register<MultiAccountManager>(accountManager);
+
             if (boolNeedsSetup)
             {
                 StarterConfigForm configForm = new StarterConfigForm(_session, settings, elevationService, configFile);
                 if (configForm.ShowDialog() == DialogResult.OK)
                 {
-                    var fileName = Assembly.GetExecutingAssembly().Location;
+                    var fileName = Assembly.GetEntryAssembly().Location;
+
                     Process.Start(fileName);
                     Environment.Exit(0);
+
                 }
 
                 //if (GlobalSettings.PromptForSetup(_session.Translation))
@@ -380,14 +439,8 @@ namespace PoGo.NecroBot.CLI
             _session.Navigation.WalkStrategy.UpdatePositionEvent += LoadSaveState.SaveLocationToDisk;
 
             ProgressBar.Fill(100);
-
-            var accountManager = new MultiAccountManager(logicSettings.Bots);
-
-            var mainAccount = accountManager.Add(settings.Auth.AuthConfig);
-
-            ioc.Register<MultiAccountManager>(accountManager);
-
             
+            var mainAccount = accountManager.Add(settings.Auth.AuthConfig);
 
             var bot = accountManager.GetStartUpAccount();
 
@@ -405,10 +458,6 @@ namespace PoGo.NecroBot.CLI
 
             if (settings.TelegramConfig.UseTelegramAPI)
                 _session.Telegram = new TelegramService(settings.TelegramConfig.TelegramAPIKey, _session);
-
-            if (_session.LogicSettings.UseSnipeLocationServer ||
-                _session.LogicSettings.HumanWalkingSnipeUsePogoLocationFeeder)
-                SnipePokemonTask.AsyncStart(_session);
 
             if (_session.LogicSettings.EnableHumanWalkingSnipe &&
                 _session.LogicSettings.HumanWalkingSnipeUseFastPokemap)

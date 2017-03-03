@@ -5,20 +5,26 @@ using Newtonsoft.Json;
 using POGOProtos.Enums;
 using System.Linq;
 using System;
+using TinyIoC;
+using PoGo.NecroBot.Logic.State;
+using PoGo.NecroBot.Logic.Utils;
 
 namespace PoGo.NecroBot.Logic.Model.Settings
 {
     [JsonObject(Description = "", ItemRequired = Required.DisallowNull)] //Dont set Title
-    public class SnipeFilter : BaseConfig
+    public class SnipeFilter : BaseConfig, IPokemonFilter
     {
         public SnipeFilter() : base()
         {
             this.Priority = 5;
             Moves = new List<List<PokemonMove>>();
+            this.AffectToPokemons = new List<PokemonId>();
         }
 
         public SnipeFilter(int snipeMinIV, List<List<PokemonMove>> moves = null) : base()
         {
+
+            this.AffectToPokemons = new List<PokemonId>();
             this.Operator = "or";
             this.SnipeIV = snipeMinIV;
             this.Moves = moves;
@@ -75,7 +81,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 9)]
         public bool AllowMultiAccountSnipe { get; set; }
 
-
+        [NecrobotConfig(Key = "Affect To Pokemon", Description = "Define list pokemon using this filter too", Position = 9)]
+        [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 9)]
+        public List<PokemonId> AffectToPokemons { get; set; }
         internal static Dictionary<PokemonId, SnipeFilter> SniperFilterDefault()
         {
             return new Dictionary<PokemonId, SnipeFilter>
@@ -101,15 +109,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 return true;
             }
 
-            //if not verified and undetermine move. If not verify, level won't apply
-            if (((verified && filter.Level <= level) || !verified) &&
-                filter.SnipeIV <= iv &&
-                move1 == PokemonMove.MoveUnset && move2 == PokemonMove.MoveUnset &&
-                (filter.Moves == null || filter.Moves.Count == 0))
-            {
-                return true;
-            }
-            //need refactore this to better 
+           //need refactore this to better 
             if (((verified && filter.Level <= level) || !verified) &&
                 (string.IsNullOrEmpty(filter.Operator) || filter.Operator == "or") &&
                 (filter.SnipeIV <= iv
@@ -124,18 +124,36 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
             if (((verified && filter.Level <= level) || !verified) &&
                 filter.Operator == "and" &&
-                (filter.SnipeIV <= iv
-                 && (filter.Moves != null
-                     && filter.Moves.Count > 0
-                     && filter.Moves.Any(x => x[0] == move1 && x[1] == move2))
-                ))
+                filter.SnipeIV <= iv && 
+                (
+                 (filter.Moves == null || filter.Moves.Count ==0) || 
+                 filter.Moves.Any(x => x[0] == move1 && x[1] == move2)
+                )
+                
+                )
             {
-                return true;
+                    return true;
             }
 
             return false;
 
 
+        }
+
+        public IPokemonFilter GetGlobalFilter()
+        {
+            var session = TinyIoCContainer.Current.Resolve<ISession>();
+
+            var _setting = session.LogicSettings;
+            return new SnipeFilter(_setting.MinIVForAutoSnipe)
+            {
+                SnipeIV = _setting.MinIVForAutoSnipe, 
+                Operator = "and",
+                Priority = 5,
+                AutoSnipeCandy = _setting.DefaultAutoSnipeCandy,
+                Level = _setting.MinLevelForAutoSnipe,
+                VerifiedOnly = _setting.AutosnipeVerifiedOnly
+            };
         }
     }
 }

@@ -241,6 +241,7 @@
     <Compile Include="Event\Gym\GymWalkToTargetEvent.cs" />
     <Compile Include="Event\HumanWalkingEvent.cs" />
     <Compile Include="Event\HumanWalkSnipeEvent.cs" />
+    <Compile Include="Event\InfoEvent.cs" />
     <Compile Include="Event\InventoryListEvent.cs" />
     <Compile Include="Event\Inventory\FavoriteEvent.cs" />
     <Compile Include="Event\Inventory\InventoryItemUpdateEvent.cs" />
@@ -314,6 +315,7 @@
     <Compile Include="Interfaces\Configuration\ILogicSettings.cs" />
     <Compile Include="Inventory.cs" />
     <Compile Include="Localization\Localizer.cs" />
+    <Compile Include="Logging\APILogListener.cs" />
     <Compile Include="Logging\WebSocketLogger.cs" />
     <Compile Include="Logging\FileLogger.cs" />
     <Compile Include="Logging\Logger.cs" />
@@ -357,13 +359,16 @@
     <Compile Include="Model\Settings\EvolveConfig.cs" />
     <Compile Include="Model\Settings\CatchFilter.cs" />
     <Compile Include="Model\Settings\ExcelConfigAttribute.cs" />
+    <Compile Include="Model\Settings\FilterUtil.cs" />
     <Compile Include="Model\Settings\GlobalSettings.cs" />
     <Compile Include="Model\Settings\GoogleWalkConfig.cs" />
     <Compile Include="Model\Settings\GpxConfig.cs" />
     <Compile Include="Model\Settings\GUIConfig.cs" />
     <Compile Include="Model\Settings\GymConfig.cs" />
+    <Compile Include="Model\Settings\HumanlikeDelays.cs" />
     <Compile Include="Model\Settings\HumanWalkSnipeConfig.cs" />
     <Compile Include="Model\Settings\HumanWalkSnipeFilter.cs" />
+    <Compile Include="Model\Settings\IPokemonFilter.cs" />
     <Compile Include="Model\Settings\ItemRecycleFilter.cs" />
     <Compile Include="Model\Settings\LevelUpConfig.cs" />
     <Compile Include="Model\Settings\Location.cs" />
@@ -377,7 +382,6 @@
     <Compile Include="Model\Settings\ItemRecycleConfig.cs" />
     <Compile Include="Model\Settings\SnipeConfig.cs" />
     <Compile Include="Model\Settings\EvolveFilter.cs" />
-    <Compile Include="Model\Settings\SnipeSettings.cs" />
     <Compile Include="Model\Settings\SoftBanConfig.cs" />
     <Compile Include="Model\Settings\TelegramConfig.cs" />
     <Compile Include="Model\Settings\TransferConfig.cs" />
@@ -446,6 +450,7 @@
     <Compile Include="Strategies\Walk\IWalkStrategy.cs" />
     <Compile Include="Strategies\Walk\MapzenNavigationStrategy.cs" />
     <Compile Include="Strategies\Walk\YoursNavigationStrategy.cs" />
+    <Compile Include="Tasks\BaseTransferPokemonTask.cs" />
     <Compile Include="Tasks\EggsListTask.cs" />
     <Compile Include="Tasks\EvolveSpecificPokemonTask.cs" />
     <Compile Include="Tasks\FavoritePokemonTask.cs" />
@@ -503,7 +508,6 @@
     <Compile Include="Tasks\SelectBuddyPokemonTask.cs" />
     <Compile Include="Tasks\SetMoveToTargetTask.cs" />
     <Compile Include="Tasks\MSniperServiceTask.cs" />
-    <Compile Include="Tasks\SnipePokemonTask.cs" />
     <Compile Include="Tasks\TransferDuplicatePokemonTask.cs" />
     <Compile Include="Event\UseLuckyEggEvent.cs" />
     <Compile Include="State\VersionCheckState.cs" />
@@ -555,7 +559,6 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="config.xlsm" />
-    <None Include="App.config" />
     <None Include="packages.config" />
     <None Include="Resources\msvc.cer" />
   </ItemGroup>

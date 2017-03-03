@@ -1,8 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 using POGOProtos.Enums;
+using TinyIoC;
+using PoGo.NecroBot.Logic.State;
 
 namespace PoGo.NecroBot.Logic.Model.Settings
 {
@@ -13,14 +16,15 @@ namespace PoGo.NecroBot.Logic.Model.Settings
     }
 
     [JsonObject(Description = "", ItemRequired = Required.DisallowNull)] //Dont set Title
-    public class TransferFilter
+    public class TransferFilter : BaseConfig, IPokemonFilter
     {
         public TransferFilter()
         {
-            MovesOperator = "and";
-            KeepMinOperator = Operator.or.ToString();
-            Moves = new List<List<PokemonMove>>();
-            DeprecatedMoves = new List<PokemonMove>();
+            this.AffectToPokemons = new List<PokemonId>();
+            this.MovesOperator = "and";
+            this.KeepMinOperator = Operator.or.ToString();
+            this.Moves = new List<List<PokemonMove>>();
+            this.DeprecatedMoves = new List<PokemonMove>();
         }
 
         public TransferFilter(int keepMinCp, int keepMinLvl, bool useKeepMinLvl, float keepMinIvPercentage,
@@ -28,6 +32,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             List<List<PokemonMove>> moves = null, List<PokemonMove> deprecatedMoves = null, string movesOperator = "or",
             bool catchOnlyPokemonMeetTransferCriteria = false)
         {
+            this.AffectToPokemons = new List<PokemonId>();
             DoNotTransfer = false;
             AllowTransfer = true;
             KeepMinCp = keepMinCp;
@@ -44,7 +49,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         }
 
         [JsonIgnore]
-        [NecrobotConfig(IsPrimaryKey = true, Key = "Allow Transfer", Position = 1, Description = "If TRUE bot will transfer this type of pokemon when match with filter condition.")]
+        [NecrobotConfig(HiddenOnGui = true,IsPrimaryKey = true, Key = "Allow Transfer", Position = 1, Description = "If TRUE bot will transfer this type of pokemon when match with filter condition.")]
         public bool AllowTransfer { get; set; }
 
         [JsonIgnore]
@@ -108,6 +113,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 10)]
         public bool CatchOnlyPokemonMeetTransferCriteria { get; set; }
 
+        [NecrobotConfig(Key = "AffectToPokemons", Position = 12, Description = "Define the list of pokemon which this setting will affects to")]
+        [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 11)]
+        public List<PokemonId> AffectToPokemons { get; set; }
 
         internal static Dictionary<PokemonId, TransferFilter> TransferFilterDefault()
         {
@@ -143,6 +151,15 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 {PokemonId.Snorlax, new TransferFilter(2600, 6, false, 90, "or", 1,new List<List<PokemonMove>>() { new List<PokemonMove>() { PokemonMove.ZenHeadbuttFast,PokemonMove.HyperBeam }},null,"and")},
                 {PokemonId.Dragonite, new TransferFilter(2600, 6, false, 90, "or", 1,new List<List<PokemonMove>>() { new List<PokemonMove>() { PokemonMove.DragonBreath,PokemonMove.DragonClaw }},null,"and")},
             };
+        }
+
+        public IPokemonFilter GetGlobalFilter()
+        {
+            var session = TinyIoCContainer.Current.Resolve<ISession>();
+            var _logicSettings = session.LogicSettings;
+            return new TransferFilter(_logicSettings.KeepMinCp, _logicSettings.KeepMinLvl, _logicSettings.UseKeepMinLvl,
+                _logicSettings.KeepMinIvPercentage,
+                _logicSettings.KeepMinOperator, _logicSettings.KeepMinDuplicatePokemon);
         }
     }
 }

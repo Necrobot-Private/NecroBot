@@ -88,9 +88,27 @@ namespace PoGo.NecroBot.Logic.State
             await Task.Delay(3000, cancellationToken);
             return new CheckTosState();
         }
-
+        private static double lastLat = 0;
+        private static double lastLng = 0;
         public static void SaveLocationToDisk(ISession session, double lat, double lng, double speed)
         {
+            if (session.Stats.IsSnipping)
+                return;
+
+            // Make sure new location is valid.
+            if (!LocationUtils.IsValidLocation(lat, lng))
+                return;
+
+            // If last location is valid, make sure distance between last location and new location is less than 1000m.
+            if ((lastLat != 0 || lastLng != 0) && LocationUtils.CalculateDistanceInMeters(lat, lng, lastLat, lastLng) > 1000)
+                return;
+
+            // Don't save new position if it is outside of our max travel distance.
+            if (LocationUtils.CalculateDistanceInMeters(lat, lng, session.Settings.DefaultLatitude, session.Settings.DefaultLongitude) > session.LogicSettings.MaxTravelDistanceInMeters)
+                return;
+            
+            lastLat = lat;
+            lastLng = lng;
             var coordsPath = Path.Combine(session.LogicSettings.ProfileConfigPath, "LastPos.ini");
             File.WriteAllText(coordsPath, $"{lat}:{lng}");
         }

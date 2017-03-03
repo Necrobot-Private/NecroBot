@@ -151,10 +151,7 @@ namespace PoGo.NecroBot.Logic.State
 
         public string GetUsername()
         {
-            string username = ownerSession.Settings.AuthType == AuthType.Ptc
-            ? ownerSession.Settings.PtcUsername
-            : ownerSession.Settings.GoogleUsername;
-            return username;
+            return ownerSession.Settings.Username;
         }
 
         public string GetDBPath(string username)

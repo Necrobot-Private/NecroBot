@@ -35,6 +35,7 @@ namespace PoGo.Necrobot.Window
         private void ErrorHandler(object sender, UnhandledExceptionEventArgs e)
         {
             Debug.WriteLine(e.ExceptionObject.ToString());
+            ConsoleHelper.ShowConsoleWindow();
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -60,8 +61,15 @@ namespace PoGo.Necrobot.Window
 
             if (File.Exists(configFile))
             {
-                var config = GlobalSettings.Load(subPath, validateJSON);
-                languageCode = config.ConsoleConfig.TranslationLanguageCode;
+                try {
+                    var config = GlobalSettings.Load(subPath, validateJSON);
+                    languageCode = config.ConsoleConfig.TranslationLanguageCode;
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Config error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Shutdown();
+                }
             }
 
             if (!Directory.Exists(translationsDir))
