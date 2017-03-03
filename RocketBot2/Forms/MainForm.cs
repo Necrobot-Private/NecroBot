@@ -407,7 +407,7 @@ namespace RocketBot2.Forms
                 StarterConfigForm configForm = new StarterConfigForm(_session, settings, elevationService, configFile);
                 if (configForm.ShowDialog() == DialogResult.OK)
                 {
-                    var fileName = Assembly.GetExecutingAssembly().Location;
+                    var fileName = Assembly.GetEntryAssembly().Location;
                     Process.Start(fileName);
                     Environment.Exit(0);
                 }
@@ -437,7 +437,7 @@ namespace RocketBot2.Forms
             }
 
             //ProgressBar.Start("NecroBot2 is starting up", 10);
-
+            
             if (settings.WebsocketsConfig.UseWebsocket)
             {
                 var websocket = new WebSocketInterface(settings.WebsocketsConfig.WebSocketPort, _session);
