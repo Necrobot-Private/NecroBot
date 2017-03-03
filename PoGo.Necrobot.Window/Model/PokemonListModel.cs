@@ -5,7 +5,6 @@ using System.Linq;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Event.Inventory;
 using PoGo.NecroBot.Logic.State;
-using Caching;
 using POGOProtos.Inventory;
 using System;
 using System.Threading.Tasks;
@@ -52,10 +51,7 @@ namespace PoGo.Necrobot.Window.Model
             Filter = new PokemonViewFilter();
             this.Session = Session;
         }
-
-        // Caches
-        public static LRUCache<ulong, string> LocationsCache = new LRUCache<ulong, string>(capacity: 500);
-
+        
         public ObservableCollection<PokemonDataViewModel> Pokemons { get; set; }
         public PokemonViewFilter Filter { get; set; }
         internal void Update(IEnumerable<PokemonData> pokemons)
