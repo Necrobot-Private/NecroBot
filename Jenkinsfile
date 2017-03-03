@@ -1,6 +1,7 @@
 node {
 	stage 'Checkout'
 		checkout scm
+		bat 'git submodule update --init'
 
 	stage 'Build'
 		bat 'nuget restore "NecroBot.sln"'
