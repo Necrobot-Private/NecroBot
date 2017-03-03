@@ -20,15 +20,19 @@ namespace PoGo.NecroBot.Logic.State
             }
             else
             {
-                if (session.LogicSettings.EvolveAllPokemonAboveIv ||
-                    session.LogicSettings.EvolveAllPokemonWithEnoughCandy
-                    || session.LogicSettings.UseLuckyEggsWhileEvolving ||
-                    session.LogicSettings.KeepPokemonsThatCanEvolve)
-                    await EvolvePokemonTask.Execute(session, cancellationToken);
                 if (session.LogicSettings.UseEggIncubators)
                     await UseIncubatorsTask.Execute(session, cancellationToken);
                 if (session.LogicSettings.TransferDuplicatePokemon)
                     await TransferDuplicatePokemonTask.Execute(session, cancellationToken);
+                if (session.LogicSettings.TransferWeakPokemon)
+                    await TransferWeakPokemonTask.Execute(session, cancellationToken);
+                if (session.LogicSettings.EvolveAllPokemonAboveIv ||
+                    session.LogicSettings.EvolveAllPokemonWithEnoughCandy ||
+                    session.LogicSettings.UseLuckyEggsWhileEvolving ||
+                    session.LogicSettings.KeepPokemonsThatCanEvolve)
+                {
+                    await EvolvePokemonTask.Execute(session, cancellationToken);
+                }
                 if (session.LogicSettings.UseLuckyEggConstantly)
                     await UseLuckyEggConstantlyTask.Execute(session, cancellationToken);
                 if (session.LogicSettings.UseIncenseConstantly)

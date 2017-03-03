@@ -54,6 +54,21 @@ namespace PoGo.NecroBot.Logic.State
                         TutorialState.AvatarSelection
                     });
                 }
+
+                if (!tutState.Contains(TutorialState.PokemonBerry))
+                {
+                    await
+                        session.Client.Misc.MarkTutorialComplete(new RepeatedField<TutorialState>()
+                        {
+                            TutorialState.PokemonBerry
+                        });
+                    session.EventDispatcher.Send(new NoticeEvent()
+                    {
+                        Message = "Finish extra tutorial : Berry tutorial"
+                    });
+                    await DelayingUtils.DelayAsync(3000, 2000, cancellationToken);
+                }
+
                 return new InfoState();
             }
 
@@ -156,7 +171,7 @@ namespace PoGo.NecroBot.Logic.State
                     await
                         session.Client.Misc.MarkTutorialComplete(new RepeatedField<TutorialState>()
                         {
-                        TutorialState.FirstTimeExperienceComplete
+                                TutorialState.FirstTimeExperienceComplete 
                         });
                     session.EventDispatcher.Send(new NoticeEvent()
                     {
@@ -164,6 +179,21 @@ namespace PoGo.NecroBot.Logic.State
                     });
                     await DelayingUtils.DelayAsync(3000, 2000, cancellationToken);
                 }
+
+                if (!tutState.Contains(TutorialState.PokemonBerry))
+                {
+                    await
+                        session.Client.Misc.MarkTutorialComplete(new RepeatedField<TutorialState>()
+                        {
+                            TutorialState.PokemonBerry
+                        });
+                    session.EventDispatcher.Send(new NoticeEvent()
+                    {
+                        Message = "Finish berry tutorial..."
+                    });
+                    await DelayingUtils.DelayAsync(3000, 2000, cancellationToken);
+                }
+
             }
             return new InfoState();
         }
@@ -214,7 +244,7 @@ namespace PoGo.NecroBot.Logic.State
 
         public async Task<bool> SelectNickname(ISession session, CancellationToken cancellationToken)
         {
-           var  nickname = session.Settings.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Ptc ? session.Settings.PtcUsername : session.Settings.GooglePassword.Split(new char[] { '@' })[0];
+            var nickname = !session.Settings.Username.Contains("@") ? session.Settings.Username : session.Settings.Username.Split(new char[] { '@' })[0];
 
             while (true)
             {

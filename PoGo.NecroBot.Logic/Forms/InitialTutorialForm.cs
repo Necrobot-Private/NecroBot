@@ -223,7 +223,7 @@ namespace PoGo.NecroBot.Logic.Forms
                                 {
                                     encounterTutorialCompleteResponse = session.Client.Misc.MarkTutorialComplete(new RepeatedField<TutorialState>()
                                     {
-                                        TutorialState.FirstTimeExperienceComplete
+                                        TutorialState.FirstTimeExperienceComplete , TutorialState.PokemonBerry
                                     }).Result;
 
                                     if (encounterTutorialCompleteResponse.Result == EncounterTutorialCompleteResponse.Types.Result.Success)

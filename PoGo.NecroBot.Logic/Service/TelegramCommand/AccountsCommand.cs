@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.State;
+using TinyIoC;
 
 namespace PoGo.NecroBot.Logic.Service.TelegramCommand
 {
@@ -31,14 +32,12 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
 
             if (session.LogicSettings.AllowMultipleBot)
             {
-                foreach (var item in session.Accounts)
-                {
-                    var day = (int) item.RuntimeTotal / 1440;
-                    var hour = (int) (item.RuntimeTotal - (day * 1400)) / 60;
-                    var min = (int) (item.RuntimeTotal - (day * 1400) - hour * 60);
+                var manager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
 
+                foreach (var item in manager.Accounts)
+                {
                     message = message +
-                              $"{item.GoogleUsername}{item.PtcUsername}     {day:00}:{hour:00}:{min:00}:00\r\n";
+                              $"{item.Username}({item.AuthType})     {item.Level}     {item.GetRuntime()}\r\n";
                 }
             }
             else

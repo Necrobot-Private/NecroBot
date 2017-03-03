@@ -20,11 +20,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             _settings = settings;
             _elevationService = elevationService;
         }
-
-
-        public string GoogleUsername => _settings.Auth.AuthConfig.GoogleUsername;
-        public string GooglePassword => _settings.Auth.AuthConfig.GooglePassword;
-
+        
         #region Auth Config Values
 
         public bool UseProxy
@@ -76,34 +72,20 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             set { _settings.Auth.AuthConfig.AuthType = value; }
         }
 
-        string ISettings.GoogleUsername
+        string ISettings.Username
         {
-            get { return _settings.Auth.AuthConfig.GoogleUsername; }
+            get { return _settings.Auth.AuthConfig.Username; }
 
-            set { _settings.Auth.AuthConfig.GoogleUsername = value; }
+            set { _settings.Auth.AuthConfig.Username = value; }
         }
 
-        string ISettings.GooglePassword
+        string ISettings.Password
         {
-            get { return _settings.Auth.AuthConfig.GooglePassword; }
+            get { return _settings.Auth.AuthConfig.Password; }
 
-            set { _settings.Auth.AuthConfig.GooglePassword = value; }
+            set { _settings.Auth.AuthConfig.Password = value; }
         }
-
-        string ISettings.PtcUsername
-        {
-            get { return _settings.Auth.AuthConfig.PtcUsername; }
-
-            set { _settings.Auth.AuthConfig.PtcUsername = value; }
-        }
-
-        string ISettings.PtcPassword
-        {
-            get { return _settings.Auth.AuthConfig.PtcPassword; }
-
-            set { _settings.Auth.AuthConfig.PtcPassword = value; }
-        }
-
+        
         #endregion Auth Config Values
 
         #region Device Config Values

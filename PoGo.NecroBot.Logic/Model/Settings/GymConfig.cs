@@ -171,6 +171,14 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool SaveMaxRevives { get; set; }
 
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [NecrobotConfig(Description = "Defenders from list", Position = 29)]
+        public List<TeamMemberConfig> Defenders { get; set; } = TeamMemberConfig.GetDefaultDefenders();
+
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [NecrobotConfig(Description = "Attackers from list", Position = 30)]
+        public List<TeamMemberConfig> Attackers { get; set; } = TeamMemberConfig.GetDefaultAttackers();
+
         private static ICollection<KeyValuePair<PokemonId, PokemonMove>> GetDefaults()
         {
             return new List<KeyValuePair<PokemonId, PokemonMove>>()
@@ -183,6 +191,72 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 new KeyValuePair<PokemonId, PokemonMove>( PokemonId.Gyarados, PokemonMove.HydroPump ),
                 new KeyValuePair<PokemonId, PokemonMove>( PokemonId.Exeggutor, PokemonMove.SolarBeam ),
             };
+        }
+    }
+
+    [JsonObject(Description = "", ItemRequired = Required.DisallowNull)]
+    public class TeamMemberConfig : BaseConfig
+    {
+        public TeamMemberConfig() : base()
+        {
+        }
+
+        [NecrobotConfig(Description = "Pokemon to use", Position = 1)]
+        [JsonProperty(Required = Required.Always, DefaultValueHandling = DefaultValueHandling.Populate)]
+        public PokemonId Pokemon { get; set; }
+
+        [NecrobotConfig(Description = "Min CP to use in team", Position = 2)]
+        [Range(1, 5000)]
+        [DefaultValue(null)]
+        [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate)]
+        public int? MinCP { get; set; }
+
+        [NecrobotConfig(Description = "Max CP to use in team", Position = 3)]
+        [Range(1, 5000)]
+        [DefaultValue(null)]
+        [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate)]
+        public int? MaxCP { get; set; }
+
+        [NecrobotConfig(Description = "Priority", Position = 4)]
+        [Range(1, 100)]
+        [DefaultValue(5)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
+        public int Priority { get; set; }
+
+        [NecrobotConfig(Key = "Moves", Description = "Defined wanted moves to use", Position = 5)]
+        [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 5)]
+        [DefaultValue(null)]
+        public List<PokemonMove[]> Moves { get; set; }
+
+        internal static List<TeamMemberConfig> GetDefaultDefenders()
+        {
+            return new List<TeamMemberConfig>()
+            {
+                { new TeamMemberConfig() { Pokemon=PokemonId.Lapras, MinCP=1000 } },
+                { new TeamMemberConfig() { Pokemon=PokemonId.Snorlax,  MinCP=1000, MaxCP=2400 } },
+                { new TeamMemberConfig() { Pokemon=PokemonId.Vaporeon,  MinCP=2000, Moves = new List<PokemonMove[]>() { new PokemonMove[2] { PokemonMove.MoveUnset, PokemonMove.HydroPump } } } },
+                { new TeamMemberConfig() { Pokemon=PokemonId.Dragonite,  MinCP=2000, MaxCP=2499 } }
+            };
+        }
+
+        internal static List<TeamMemberConfig> GetDefaultAttackers()
+        {
+            return new List<TeamMemberConfig>()
+            {
+                { new TeamMemberConfig() { Pokemon=PokemonId.Dragonite, MinCP=2500 } },
+                { new TeamMemberConfig() { Pokemon=PokemonId.Vaporeon, MinCP=2000 } },
+                { new TeamMemberConfig() { Pokemon=PokemonId.Gyarados, MinCP=2000 } },
+                { new TeamMemberConfig() { Pokemon=PokemonId.Snorlax, MinCP=2401 } },
+            };
+        }
+
+        internal bool IsMoveMatch(PokemonMove move1, PokemonMove move2)
+        {
+            if(Moves!=null && Moves.Count > 0)
+            {
+                return Moves.Find(f => (f[0] == move1 || f[0] == PokemonMove.MoveUnset) && (f[1] == move2 || f[1] == PokemonMove.MoveUnset)) != null;
+            }
+            return true;
         }
     }
 }

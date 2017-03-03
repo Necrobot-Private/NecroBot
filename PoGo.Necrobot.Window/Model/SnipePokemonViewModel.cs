@@ -21,7 +21,7 @@ namespace PoGo.Necrobot.Window.Model
             ulong.TryParse(e.EncounterId, out encounterid);
             this.Ref = e;
             this.AllowSnipe = true;
-            PokemonId = e.PokemonId;
+            this.PokemonId = e.PokemonId;
             this.IV = e.IV;
             this.Latitude = e.Latitude;
             this.Longitude = e.Longitude;
@@ -31,7 +31,7 @@ namespace PoGo.Necrobot.Window.Model
             this.EncounterId = encounterid;
             this.Level = e.Level;
             this.SpawnPointId = e.SpawnPointId;
-            this.Verified = (this.EncounterId>0 ? "Verified":"");
+            this.Verified = (this.EncounterId>0 && !this.SpawnPointId.Contains("-") ? "Verified":"");
             
         }
         public string PokemonName => PokemonId.ToString();

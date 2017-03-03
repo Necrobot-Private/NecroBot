@@ -67,16 +67,6 @@ namespace PoGo.Necrobot.Window
                     });
                 }
             }
-            foreach (var item in setting.PokemonsToEvolve)
-            {
-                if (!setting.PokemonEvolveFilter.ContainsKey(item))
-                {
-                    setting.PokemonEvolveFilter.Add(item, new EvolveFilter()
-                    {
-
-                    });
-                }
-            }
         }
         public SettingsWindow()
         {
@@ -157,12 +147,7 @@ namespace PoGo.Necrobot.Window
             {
                 setting.PokemonsNotToTransfer = setting.PokemonsTransferFilter.Where(p => p.Value.DoNotTransfer).Select(p => p.Key).ToList();
             }
-            setting.PokemonsToEvolve = setting.PokemonEvolveFilter.Select(x => x.Key).ToList();
 
-            if (setting.SnipePokemonFilter != null)
-            {
-                setting.PokemonToSnipe.Pokemon = setting.SnipePokemonFilter.Select(p => p.Key).ToList();
-            }
             return setting;
 
         }
@@ -205,7 +190,21 @@ namespace PoGo.Necrobot.Window
                 };
 
                 return txt;
+            }
 
+            if (item.PropertyType == typeof(List<PokemonId>))
+            {
+                binding.Converter = new ListPokemonIdToTextConverter();
+
+                DataGridTextColumn txt = new DataGridTextColumn()
+                {
+                    Binding = binding,
+                    Header = header,
+                    Width = 220,
+                    IsReadOnly = false
+                };
+
+                return txt;
             }
 
             if (item.PropertyType == typeof(string) ||

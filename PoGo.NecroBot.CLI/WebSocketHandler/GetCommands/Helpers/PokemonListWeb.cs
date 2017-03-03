@@ -23,6 +23,7 @@ namespace PoGo.NecroBot.CLI.WebSocketHandler.GetCommands.Helpers
         }
 
         public double IvPerfection => PokemonInfo.CalculatePokemonPerfection(Base);
+        public double Level => PokemonInfo.GetLevel(Base);
         public int FamilyCandies => PokemonInfo.GetCandy(_session, Base);
     }
 }

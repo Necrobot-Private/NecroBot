@@ -23,7 +23,8 @@ using POGOProtos.Networking.Responses;
 using TinyIoC;
 using POGOProtos.Enums;
 using System.Collections.Generic;
-
+using PoGo.NecroBot.Logic;
+using System.Collections.ObjectModel;
 #endregion
 
 namespace PoGo.NecroBot.Logic.Tasks
@@ -51,6 +52,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         // await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, currentFortData: null, sessionAllowTransfer: true);
 
         private static int CatchFleeContinuouslyCount = 0;
+        public static readonly int BALL_REQUIRED_TO_BYPASS_CATCHFLEE = 150;
 
         /// <summary>
         /// Because this function sometime being called inside loop, return true it mean we don't want break look, false it mean not need to call this , break a loop from caller function 
@@ -72,6 +74,14 @@ namespace PoGo.NecroBot.Logic.Tasks
             TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
             // If the encounter is null nothing will work below, so exit now
             if (encounter == null) return true;
+
+            var totalBalls = session.Inventory.GetItems().Where(x => x.ItemId == ItemId.ItemPokeBall || x.ItemId == ItemId.ItemGreatBall || x.ItemId == ItemId.ItemUltraBall).Sum(x => x.Count);
+
+            if(session.SaveBallForByPassCatchFlee && totalBalls < BALL_REQUIRED_TO_BYPASS_CATCHFLEE)
+            {
+                return false;
+            }
+                
             // Exit if user defined max limits reached
             if (session.Stats.CatchThresholdExceeds(session))
             {
@@ -193,7 +203,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 //add catch to avoid snipe duplicate
                 string uniqueCacheKey =
-                    $"{session.Settings.PtcUsername}{session.Settings.GoogleUsername}{Math.Round(encounterEV.Latitude, 6)}{(int)encounterEV.PokemonId}{Math.Round(encounterEV.Longitude, 6)}";
+                    $"{session.Settings.Username}{Math.Round(encounterEV.Latitude, 6)}{(int)encounterEV.PokemonId}{Math.Round(encounterEV.Longitude, 6)}";
                 session.Cache.Add(uniqueCacheKey, encounterEV, DateTime.Now.AddMinutes(30));
 
                 session.EventDispatcher.Send(encounterEV);
@@ -218,6 +228,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                 // Main CatchPokemon-loop
                 do
                 {
+                    if (session.LogicSettings.UseHumanlikeDelays)
+                    {
+                        DelayingUtils.Delay(session.LogicSettings.BeforeCatchDelay, 0);
+                    }
+
                     if ((session.LogicSettings.MaxPokeballsPerPokemon > 0 &&
                          attemptCounter > session.LogicSettings.MaxPokeballsPerPokemon))
                         break;
@@ -232,18 +247,18 @@ namespace PoGo.NecroBot.Logic.Tasks
                         });
                         return false;
                     }
-
+                                                                        
                     // Determine whether to use berries or not
                     if (lastThrow != CatchPokemonResponse.Types.CatchStatus.CatchMissed)
                     {
                         //AmountOfBerries++;
                         //if (AmountOfBerries <= session.LogicSettings.MaxBerriesToUsePerPokemon)
-                        await UseBerry(session, 
-                            encounterEV.PokemonId, 
-                            _encounterId, 
+                        await UseBerry(session,
+                            encounterEV.PokemonId,
+                            _encounterId,
                             _spawnPointId,
                             pokemonIv,
-                            pokemonCp.HasValue? pokemonCp.Value: 10000,  //unknow CP pokemon, want to use berry
+                            pokemonCp.HasValue ? pokemonCp.Value : 10000,  //unknow CP pokemon, want to use berry
                             encounterEV.Level,
                             probability,
                             cancellationToken);
@@ -306,6 +321,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                             }
                         }
 
+
                         // Round to 2 decimals
                         normalizedRecticleSize = Math.Round(normalizedRecticleSize, 2);
 
@@ -321,17 +337,80 @@ namespace PoGo.NecroBot.Logic.Tasks
                             LogLevel.Debug);
                     }
 
-                    caughtPokemonResponse =
-                        await session.Client.Encounter.CatchPokemon(
-                            encounter is EncounterResponse || encounter is IncenseEncounterResponse
-                                ? pokemon.EncounterId
-                                : _encounterId,
-                            encounter is EncounterResponse || encounter is IncenseEncounterResponse
-                                ? pokemon.SpawnPointId
-                                : currentFortData.Id, pokeball, normalizedRecticleSize, spinModifier, hitPokemon);
+                    if (CatchFleeContinuouslyCount >= 3 && session.LogicSettings.ByPassCatchFlee)
+                    {
+                        MSniperServiceTask.BlockSnipe();
 
+                        if( totalBalls <= BALL_REQUIRED_TO_BYPASS_CATCHFLEE)
+                        {
+                            Logger.Write("You don't enought ball to  by pass catchflee");
+                            return false;
+                        }
+                        List<ItemId> ballToByPass = new List<ItemId>();
+                        for (int i = 0; i < session.Inventory.GetItemAmountByType(ItemId.ItemPokeBall)-1; i++)
+                        {
+                            ballToByPass.Add(ItemId.ItemPokeBall);
 
-                    await session.Inventory.UpdateInventoryItem(pokeball);
+                        }
+                        for (int i = 0; i < session.Inventory.GetItemAmountByType(ItemId.ItemGreatBall) - 1; i++)
+                        {
+                            ballToByPass.Add(ItemId.ItemGreatBall);
+
+                        }
+                        for (int i = 0; i < session.Inventory.GetItemAmountByType(ItemId.ItemUltraBall) - 1; i++)
+                        {
+                            ballToByPass.Add(ItemId.ItemUltraBall);
+
+                        }
+                        bool catchMissed = true;
+
+                        Random r = new Random();
+                        for (int i = 0; i < ballToByPass.Count -1; i++)
+                        {
+                            if(i>130 && r.Next(0,100)<=30)
+                            {
+                                catchMissed = false;
+                            }
+                            else
+                            {
+                                catchMissed = true;
+                            }
+
+                            caughtPokemonResponse =
+                            await session.Client.Encounter.CatchPokemon(
+                                encounter is EncounterResponse || encounter is IncenseEncounterResponse
+                                    ? pokemon.EncounterId
+                                    : _encounterId,
+                                encounter is EncounterResponse || encounter is IncenseEncounterResponse
+                                    ? pokemon.SpawnPointId
+                                    : currentFortData.Id, ballToByPass[i], 1.0, 1.0, !catchMissed);
+                            await session.Inventory.UpdateInventoryItem(ballToByPass[i]);
+
+                            await Task.Delay(100);
+                            Logger.Write($"CatchFlee By pass : {ballToByPass[i].ToString()} , Attempt {i}, result {caughtPokemonResponse.Status}");
+
+                            if (caughtPokemonResponse.Status != CatchPokemonResponse.Types.CatchStatus.CatchMissed)
+                            {
+                                session.SaveBallForByPassCatchFlee = false;
+                                CatchFleeContinuouslyCount = 0;
+                                break;
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        caughtPokemonResponse =
+                            await session.Client.Encounter.CatchPokemon(
+                                encounter is EncounterResponse || encounter is IncenseEncounterResponse
+                                    ? pokemon.EncounterId
+                                    : _encounterId,
+                                encounter is EncounterResponse || encounter is IncenseEncounterResponse
+                                    ? pokemon.SpawnPointId
+                                    : currentFortData.Id, pokeball, normalizedRecticleSize, spinModifier, hitPokemon);
+                        await session.Inventory.UpdateInventoryItem(pokeball);
+                    }
+                    
 
                     var evt = new PokemonCaptureEvent()
                     {
@@ -346,6 +425,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     if (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess)
                     {
+                        evt.Gender = session.Inventory.GetPokemons().First(x => x.Id == caughtPokemonResponse.CapturedPokemonId).PokemonDisplay.Gender.ToString();
+
                         var totalExp = 0;
                         var totalStarDust = caughtPokemonResponse.CaptureAward.Stardust.Sum();
                         if (encounteredPokemon != null)
@@ -406,19 +487,55 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     attemptCounter++;
 
-                    DelayingUtils.Delay(session.LogicSettings.DelayBetweenPlayerActions, 0);
+                    // If Humanlike delays are used
+                    if (session.LogicSettings.UseHumanlikeDelays)
+                    {
+                        switch (caughtPokemonResponse.Status)
+                        {
+                            case CatchPokemonResponse.Types.CatchStatus.CatchError:
+                                DelayingUtils.Delay(session.LogicSettings.CatchErrorDelay, 0);
+                                break;
+
+                            case CatchPokemonResponse.Types.CatchStatus.CatchSuccess:
+                                DelayingUtils.Delay(session.LogicSettings.CatchSuccessDelay, 0);
+                                break;
+
+                            case CatchPokemonResponse.Types.CatchStatus.CatchEscape:
+                                DelayingUtils.Delay(session.LogicSettings.CatchEscapeDelay, 0);
+                                break;
+
+                            case CatchPokemonResponse.Types.CatchStatus.CatchFlee:
+                                DelayingUtils.Delay(session.LogicSettings.CatchFleeDelay, 0);
+                                break;
+
+                            case CatchPokemonResponse.Types.CatchStatus.CatchMissed:
+                                DelayingUtils.Delay(session.LogicSettings.CatchMissedDelay, 0);
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                    else DelayingUtils.Delay(session.LogicSettings.DelayBetweenPlayerActions, 0);
                 } while (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchMissed ||
                          caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchEscape);
 
-                if (session.LogicSettings.AllowMultipleBot)
+                if (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchFlee)
                 {
-                    if (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchFlee)
+                    CatchFleeContinuouslyCount++;
+                    if(CatchFleeContinuouslyCount >= 3 && session.LogicSettings.ByPassCatchFlee)
                     {
-                        CatchFleeContinuouslyCount++;
+                        session.SaveBallForByPassCatchFlee = true;
+                        Logger.Write("Seem that bot has ben catch flee softban, Bot will start save 100 balls to by pass it.");
+                        
+                    }
+                    if (session.LogicSettings.AllowMultipleBot && !session.LogicSettings.ByPassCatchFlee)
+                    {
                         if (CatchFleeContinuouslyCount > session.LogicSettings.MultipleBotConfig.CatchFleeCount &&
                             TinyIoCContainer.Current.Resolve<MultiAccountManager>().AllowSwitch())
                         {
                             CatchFleeContinuouslyCount = 0;
+                            session.SaveBallForByPassCatchFlee = false;
 
                             throw new ActiveSwitchByRuleException()
                             {
@@ -427,9 +544,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                             };
                         }
                     }
-                    else
+                }
+                else
+                {
+                    //reset if not catch flee.
+                    if (caughtPokemonResponse.Status != CatchPokemonResponse.Types.CatchStatus.CatchMissed)
                     {
-                        //reset if not catch flee.
                         CatchFleeContinuouslyCount = 0;
                         MSniperServiceTask.UnblockSnipe();
                     }
@@ -460,15 +580,15 @@ namespace PoGo.NecroBot.Logic.Tasks
             //if distance is very far. that is snip pokemon
             var accountManager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
 
-            var curentkey = session.Settings.AuthType == AuthType.Google
-                  ? session.Settings.GoogleUsername
-                  : session.Settings.PtcUsername;
+            var curentkey = session.Settings.Username;
 
             curentkey += encounterEV.EncounterId;
             session.Cache.Add(curentkey, encounterEV, DateTime.Now.AddMinutes(15));
 
             var evalNextBot = accountManager.FindAvailableAccountForPokemonSwitch(encounterEV.EncounterId);
-            if (evalNextBot == null) return;
+            if (evalNextBot == null)
+                return;
+
             if (session.Stats.IsSnipping
                 //assume that all pokemon catch from 250+m is snipe
                 || LocationUtils.CalculateDistanceInMeters(
@@ -478,6 +598,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                     session.Client.CurrentLongitude
                 ) > 1000)
             {
+
+                var snipePokemonFiler = session.LogicSettings.PokemonSnipeFilters.GetFilter<SnipeFilter>(encounterEV.PokemonId);
 
                 if (session.LogicSettings.PokemonSnipeFilters.ContainsKey(encounterEV.PokemonId))
                 {
@@ -522,9 +644,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                     )
                 ))
             {
-
-
-
                 if (evalNextBot != null)
                 {
                     //cancel all running task.
@@ -658,10 +777,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                 var filter = item.Value;
 
                 var itemRecycleFilter = session.LogicSettings.ItemRecycleFilter.FirstOrDefault(x => x.Key == item.Key);
-                
-                if ( (filter.UseIfExceedBagRecycleFilter && 
-                    !itemRecycleFilter.Equals(new KeyValuePair<ItemId, int>()) && 
-                    itemRecycleFilter.Value< berry.Count)
+
+                if ((filter.UseIfExceedBagRecycleFilter &&
+                    itemRecycleFilter.Key == item.Key  &&
+                    itemRecycleFilter.Value < berry.Count)
                     || ((filter.Pokemons.Count == 0 || filter.Pokemons.Contains(pokemonId)) &&
                     (!AmountOfBerries.ContainsKey(item.Key) || AmountOfBerries[item.Key] < filter.MaxItemsUsePerPokemon) &&
                     filter.Operator.BoolFunc(
@@ -674,7 +793,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     //berry.Count -= 1;
                     if (useCaptureItem.Status == UseItemEncounterResponse.Types.Status.Success)
                     {
-                        if(!AmountOfBerries.ContainsKey(item.Key))
+                        if (!AmountOfBerries.ContainsKey(item.Key))
                         {
                             AmountOfBerries.Add(item.Key, 0);
                         }

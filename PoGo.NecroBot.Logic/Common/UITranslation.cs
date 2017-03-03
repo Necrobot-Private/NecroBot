@@ -14,7 +14,13 @@ namespace PoGo.NecroBot.Logic.Common
     public class UITranslation
     {
         #region Main screen
-            
+        [Description("Bot Exit!!!")]
+        public string ErrorPopupTitle { get; set; }
+
+        [Description("CLICK HERE TO EXIT")]
+        public string ClickHereExit { get; set; }
+
+
         [Description("Accounts")]
         public string AccountSetting { get; set; }
         
@@ -26,6 +32,9 @@ namespace PoGo.NecroBot.Logic.Common
 
         [Description("ALL BOT SNIPE")]
         public string SnipeAllBotText { get; set; }
+
+        [Description("Helps")]
+        public string Help { get; set; }
 
         [Description("Sniper")]
         public string SniperTabTitle { get; set; }
@@ -110,7 +119,34 @@ namespace PoGo.NecroBot.Logic.Common
 
         #endregion
         #region Pokemon Inventory
-        
+        [Description("TRANSFER CONFIRM?")]
+        public string TransferConfirmCaption { get; set; }
+
+        [Description("Types")]
+        public string Types { get; set; }
+
+        [Description ("TRANSFER")]
+        public string TransferConfirmButton { get; set; }
+
+        [Description("Do you want to transfer {0} IV:{1:0.00}% Level:{2}")]
+        public string TransferConfirmText { get; set; }
+
+        [Description("Sex")]
+        public string Sex { get; set; }
+
+        [Description("Evolve Filter Setting")]
+        public string MenuTransferFilterText { get; set; }
+
+        [Description("Evolve Filter Setting")]
+        public string MenuEvolveFilterText { get; set; }
+
+        [Description("Snipe Filter Setting")]
+        public string MenuSnipeFilterText { get; set; }
+
+        [Description("Snipe Upgrade Setting")]
+        public string MenuUpgradeFilterText { get; set; }
+
+
         [Description("This pokemon can be evolve to below pokemon , please select the branch you want to evolve to")]
         public string EvolveConfirm { get; set; }
 
@@ -236,8 +272,10 @@ namespace PoGo.NecroBot.Logic.Common
         public string Hide { get; set; }
         [Description("SHOW")]
         public string Show { get; set; }
+        [Description("Transfer filter - {0}")]
+        public string TransferFilterFormTitle { get; set; }
         #endregion
-            
+
         private Dictionary<string, string> translations = new Dictionary<string, string>();
         private string languageCode = "en";
         private string translationFile = @"Config\Translations\ui.{0}.json";

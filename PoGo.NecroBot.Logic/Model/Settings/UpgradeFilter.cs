@@ -1,16 +1,19 @@
 ﻿#region using directives
 
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 using POGOProtos.Enums;
+using TinyIoC;
+using PoGo.NecroBot.Logic.State;
 
 #endregion
 
 namespace PoGo.NecroBot.Logic.Model.Settings
 {
-    public class UpgradeFilter    : BaseConfig
+    public class UpgradeFilter    : BaseConfig, IPokemonFilter
     {
         internal enum Operator
         {
@@ -27,11 +30,13 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public UpgradeFilter(): base()
         {
             this.Moves = new List<List<PokemonMove>>();
+            this.AffectToPokemons = new List<PokemonId>();
         }
 
         public UpgradeFilter(double minLevel, double upgradePokemonCpMinimum, double upgradePokemonIvMinimum,
             string upgradePokemonMinimumStatsOperator, bool onlyUpgradeFavorites)
         {
+            this.AffectToPokemons = new List<PokemonId>();
             this.Moves = new List<List<PokemonMove>>();
             UpgradePokemonLvlMinimum = minLevel;
             UpgradePokemonCpMinimum = upgradePokemonCpMinimum;
@@ -78,12 +83,29 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 6)]
         public List<List<PokemonMove>> Moves { get; set; } = new List<List<PokemonMove>>();
 
+        [NecrobotConfig(Key = "Affect To Pokemons", Position = 7, Description = "Define list pokemon that this upgrade filter also be applied to")]
+        [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 6)]
+
+        public List<PokemonId> AffectToPokemons { get; set; }
+
         internal static Dictionary<PokemonId, UpgradeFilter> Default()
         {
             return new Dictionary<PokemonId, UpgradeFilter>
             {
                 {PokemonId.Dratini, new UpgradeFilter(100, 600, 99, "or", false)}
             };
+        }
+
+        public IPokemonFilter GetGlobalFilter()
+        {
+            var session = TinyIoCContainer.Current.Resolve<ISession>();
+            var _logicSettings = session.LogicSettings;
+            return new UpgradeFilter(_logicSettings.UpgradePokemonLvlMinimum, _logicSettings.UpgradePokemonCpMinimum,
+                _logicSettings.UpgradePokemonIvMinimum, _logicSettings.UpgradePokemonMinimumStatsOperator,
+                _logicSettings.OnlyUpgradeFavorites);
+
+
+
         }
     }
 }

@@ -438,5 +438,38 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [DefaultValue(30)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 65)]
         public double UpgradePokemonLvlMinimum { get;  set; }
+
+        [NecrobotConfig(Description = "Global settting - Allow bot only evolve favorited pokemons", Position = 66)]
+        [DefaultValue(true)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 66)]
+
+        public bool EvolveFavoritedOnly { get; set; }
+        [NecrobotConfig(Description = "The logic check to evolve pokemon", Position = 66)]
+        [DefaultValue("and")]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 65)]
+        public string EvolveOperator { get; set; }
+
+        [NecrobotConfig(Description = "Set MinIV  for bot to evolve", Position = 68)]
+        [DefaultValue(100)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 68)]
+        [Range(0,101)]
+        public double EvolveMinIV { get; set; }
+        [NecrobotConfig(Description = "Set MinCP  for bot to evolve", Position = 69)]
+        [DefaultValue(2000)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 69)]
+        [Range(0,5000)]
+
+        public double EvolveMinCP { get; set; }
+        [NecrobotConfig(Description = "Set MinLevel for bot to evolve", Position = 70)]
+        [DefaultValue(25)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 70)]
+        [Range(0, 5000)]
+        public double EvolveMinLevel { get;  set; }
+
+        [NecrobotConfig(Description = "Allow bot bypass catchflee - not recomment use this feature", Position = 71)]
+        [DefaultValue(false)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 71)]
+        public bool ByPassCatchFlee{ get; set; }
+
     }
 }

@@ -17,7 +17,7 @@ namespace PoGo.Necrobot.Window.Model
     {
         public PokemonViewFilter() : base()
         {
-            this.MaxCP = 3500;
+            this.MaxCP = 5000;
             this.MaxLevel = 50;
             this.MaxIV = 100;
         }

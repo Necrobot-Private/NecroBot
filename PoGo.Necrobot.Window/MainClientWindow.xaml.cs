@@ -24,6 +24,11 @@ using PoGo.NecroBot.Logic.Logging;
 using System.Diagnostics;
 using TinyIoC;
 using PoGo.NecroBot.Logic.Common;
+using System.ServiceModel.Syndication;
+using System.Net;
+using System.Xml;
+using System.IO;
+using System.Net.Http;
 
 namespace PoGo.Necrobot.Window
 {
@@ -32,7 +37,6 @@ namespace PoGo.Necrobot.Window
     /// </summary>
     public partial class MainClientWindow : MetroWindow
     {
-
         public MainClientWindow()
         {
             InitializeComponent();
@@ -53,13 +57,13 @@ namespace PoGo.Necrobot.Window
 
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
         {
-
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            LoadHelpArticleAsync();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         }
         private DateTime lastClearLog = DateTime.Now;
         public void LogToConsoleTab(string message, LogLevel level, string color)
-        {
-
-
+        { 
             Dictionary<LogLevel, string> colors = new Dictionary<LogLevel, string>()
             {
                 { LogLevel.Error, "Red" },
@@ -123,11 +127,8 @@ namespace PoGo.Necrobot.Window
         private void OnPlayerStatisticChanged()
         {
             var stat = this.playerStats.GetCurrent();
-
-
             this.datacontext.PlayerInfo.DirtyEventHandle(stat);
         }
-
         private void PokemonInventory_OnPokemonItemSelected(PokemonDataViewModel selected)
         {
             var numberSelected = datacontext.PokemonList.Pokemons.Count(x => x.IsSelected);
@@ -145,7 +146,6 @@ namespace PoGo.Necrobot.Window
             }
             else
             {
-
                 consoleMenuText.Text = translator.HideConsole;
                 ConsoleHelper.ShowConsoleWindow();
 
@@ -180,8 +180,6 @@ namespace PoGo.Necrobot.Window
         {
             ResourceDictionary dict = new ResourceDictionary();
             dict.Source = new Uri($"pack://application:,,,/MahApps.Metro;component/Styles/Accents/{color}.xaml", UriKind.Absolute);
-
-
             var theme = Application.Current.Resources.MergedDictionaries.LastOrDefault();
             Application.Current.Resources.MergedDictionaries.Add(dict);
             Application.Current.Resources.MergedDictionaries.Remove(theme);
@@ -248,6 +246,53 @@ namespace PoGo.Necrobot.Window
             var manager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
 
             manager.SwitchAccountTo(account);
+        }
+
+        DateTime lastTimeLoadHelp = DateTime.MinValue;
+        private async Task LoadHelpArticleAsync()
+        {
+            if (lastTimeLoadHelp < DateTime.Now.AddMinutes(-30))
+            {
+                var client = new WebClient();
+                var xml = await client.DownloadStringTaskAsync(new Uri("http://necrobot2.com/feed.xml"));
+                var feed = SyndicationFeed.Load(XmlReader.Create(new StringReader(xml)));
+                lastTimeLoadHelp = DateTime.Now;
+                this.Dispatcher.Invoke(() =>
+                {
+                    lsvHelps.ItemsSource = feed.Items.OrderByDescending(x => x.PublishDate);
+                });
+            }
+        }
+        private void Help_Click(object sender, RoutedEventArgs e)
+        {
+            popHelpArticles.IsOpen = true;
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            LoadHelpArticleAsync();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+        }
+
+        private void Hyperlink_Click(object sender, RoutedEventArgs e)
+        {
+            var hlink = sender as Hyperlink;
+            
+            Process.Start(hlink.NavigateUri.ToString());
+            popHelpArticles.IsOpen = false;
+        }
+
+        private void btnExit_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        private void popAccounts_Initialized(object sender, EventArgs e)
+        {
+
+        }
+
+        private void MetroWindow_Initialized(object sender, EventArgs e)
+        {
+            if(System.Windows.SystemParameters.PrimaryScreenWidth<1366)
+            this.WindowState = WindowState.Maximized;
         }
     }
 }
