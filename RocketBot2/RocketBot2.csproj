@@ -96,7 +96,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="CommandLine, Version=1.9.71.2, Culture=neutral, PublicKeyToken=de6f01bd326f8c32, processorArchitecture=MSIL">
-      <HintPath>..\packages\CommandLineParser.1.9.71\lib\net45\CommandLine.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\CommandLineParser.1.9.71\lib\net45\CommandLine.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="GMap.NET.Core, Version=1.7.5.0, Culture=neutral, PublicKeyToken=b85b9027b614afef, processorArchitecture=MSIL">
@@ -140,7 +140,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.AppContext.4.0.0-beta-22416\lib\net45\System.AppContext.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\System.AppContext.4.0.0-beta-22416\lib\net45\System.AppContext.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
@@ -167,7 +167,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Globalization.Calendars, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Globalization.Calendars.4.0.0-beta-22416\lib\net45\System.Globalization.Calendars.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\System.Globalization.Calendars.4.0.0-beta-22416\lib\net45\System.Globalization.Calendars.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.IO, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -180,15 +180,15 @@
     </Reference>
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.IO.Compression.ZipFile, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.IO.Compression.ZipFile.4.0.0-beta-22416\lib\net45\System.IO.Compression.ZipFile.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\System.IO.Compression.ZipFile.4.0.0-beta-22416\lib\net45\System.IO.Compression.ZipFile.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.IO.FileSystem, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.IO.FileSystem.4.0.0-beta-22416\lib\net45\System.IO.FileSystem.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\System.IO.FileSystem.4.0.0-beta-22416\lib\net45\System.IO.FileSystem.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.IO.FileSystem.Primitives.4.0.0-beta-22416\lib\net45\System.IO.FileSystem.Primitives.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\System.IO.FileSystem.Primitives.4.0.0-beta-22416\lib\net45\System.IO.FileSystem.Primitives.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Management" />
@@ -197,7 +197,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Sockets, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Net.Sockets.4.0.0-beta-22416\lib\net45\System.Net.Sockets.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\System.Net.Sockets.4.0.0-beta-22416\lib\net45\System.Net.Sockets.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Numerics" />
@@ -215,7 +215,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Runtime.Handles, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.Handles.4.0.0-beta-22605\lib\net45\System.Runtime.Handles.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\System.Runtime.Handles.4.0.0-beta-22605\lib\net45\System.Runtime.Handles.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Runtime.InteropServices, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -231,18 +231,18 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Security.Cryptography.Encoding.4.0.0-beta-22605\lib\net45\System.Security.Cryptography.Encoding.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\System.Security.Cryptography.Encoding.4.0.0-beta-22605\lib\net45\System.Security.Cryptography.Encoding.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Security.Cryptography.Encryption, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Security.Cryptography.Encryption.4.0.0-beta-22605\lib\net45\System.Security.Cryptography.Encryption.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\System.Security.Cryptography.Encryption.4.0.0-beta-22605\lib\net45\System.Security.Cryptography.Encryption.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp">
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Security.Cryptography.X509Certificates.4.0.0-beta-22605\lib\net45\System.Security.Cryptography.X509Certificates.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\System.Security.Cryptography.X509Certificates.4.0.0-beta-22605\lib\net45\System.Security.Cryptography.X509Certificates.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.Extensions" />
@@ -634,7 +634,7 @@
       <Project>{0739e40d-c589-4aeb-93e5-ee8cd6773c60}</Project>
       <Name>PoGo.NecroBot.Logic</Name>
     </ProjectReference>
-    <ProjectReference Include="..\POGOProtos\POGOProtos.csproj">
+    <ProjectReference Include="$(SolutionDir)\POGOProtos\POGOProtos.csproj">
       <Project>{a03a7bb2-4f0b-467b-84b2-9a76e6aae6fb}</Project>
       <Name>POGOProtos</Name>
     </ProjectReference>
