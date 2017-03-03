@@ -176,6 +176,7 @@ namespace PoGo.NecroBot.Logic.Utils
                     HoursUntilLvl = hours,
                     MinutesUntilLevel = minutes,
                     CurrentXp = stat.Experience,
+                    PreviousXp = stat.PrevLevelXp,
                     LevelupXp = stat.NextLevelXp
                 };
             }
@@ -250,6 +251,7 @@ namespace PoGo.NecroBot.Logic.Utils
         public double HoursUntilLvl;
         public int Level;
         public long LevelupXp;
+        public long PreviousXp;
         public double MinutesUntilLevel;
     }
 }
