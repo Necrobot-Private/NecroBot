@@ -80,6 +80,9 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         int DelayBetweenPlayerActions { get; }
         bool UsePokemonToNotCatchFilter { get; }
         bool UsePokemonSniperFilterOnly { get; }
+        string SnipeLocationServer { get; }
+        int SnipeLocationServerPort { get; }
+        bool UseSnipeLocationServer { get; }
         int KeepMinDuplicatePokemon { get; }
         bool PrioritizeIvOverCp { get; }
         int AmountOfTimesToUpgradeLoop { get; }

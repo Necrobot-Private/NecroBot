@@ -63,6 +63,10 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool UseWebsocket => _settings.WebsocketsConfig.UseWebsocket;
         public bool CatchPokemon => _settings.PokemonConfig.CatchPokemon;
         public int OutOfBallCatchBlockTime => GenRandom(_settings.PokemonConfig.OutOfBallCatchBlockTime);
+        public string SnipeLocationServer => _settings.SnipeConfig.SnipeLocationServer;
+        public int SnipeLocationServerPort => _settings.SnipeConfig.SnipeLocationServerPort;
+
+        public bool UseSnipeLocationServer => _settings.SnipeConfig.UseSnipeLocationServer;
         public int PokeballsToKeepForSnipe => GenRandom(_settings.PokemonConfig.PokeballToKeepForSnipe);
         public double AutoSnipeMaxDistance => GenRandom(_settings.SnipeConfig.AutoSnipeMaxDistance);
         public int AutoSnipeBatchSize => _settings.SnipeConfig.AutoSnipeBatchSize;
