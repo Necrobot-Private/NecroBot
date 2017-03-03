@@ -9,7 +9,6 @@ using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Model.Settings;
 using PoGo.NecroBot.Logic.State;
-using C5;
 
 namespace PoGo.NecroBot.Logic.Utils
 {
