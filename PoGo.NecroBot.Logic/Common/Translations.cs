@@ -757,7 +757,7 @@ namespace PoGo.NecroBot.Logic.Common
                     "Your are out of ball because snipe so fast, you can reduce snipe speed by update MinIVForAutoSnipe or SnipePokemonFilters, Auto snipe will be disable in {0} mins"),
                 new KeyValuePair<TranslationString, string>(TranslationString.SniperCount, "Sniper count {0}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.SnipeExceeds,
-                    "Sniper need to take a rest before your account is banned"),
+                    "Sniper needs to take a rest before your account is banned"),
                 new KeyValuePair<TranslationString, string>(TranslationString.CatchExceeds,
                     "You are catching too fast. Your cannot catch another one until {0} seconds later"),
                 new KeyValuePair<TranslationString, string>(TranslationString.PokeStopExceeds,
