@@ -12,6 +12,6 @@ node {
 		archiveArtifacts artifacts: 'PoGo.NecroBot.CLI/bin/Release/', fingerprint: true, onlyIfSuccessful: true
 		bat 'copy "PoGo.NecroBot.CLI\\bin\\Release\\Necrobot2.exe" "${OUTPUT_PATH}" /Y'
 		bat 'copy "PoGo.Necrobot.Window\\bin\\Release\\Necrobot2.Win.exe" "${OUTPUT_PATH}" /Y'
-		bat '"7z.exe" a $ENV.OUTPUT_PATH\\Necrobot.CLI.zip PoGo.NecroBot.CLI\\bin\\Release\\*.*'
-		bat '"7z.exe" a $ENV.OUTPUT_PATH\\Necrobot.WIN.zip PoGo.NecroBot.Window\\bin\\Release\\*.*'
+		bat '"7z.exe" a ${OUTPUT_PATH}\\Necrobot.CLI.zip PoGo.NecroBot.CLI\\bin\\Release\\*.*'
+		bat '"7z.exe" a ${OUTPUT_PATH}\\Necrobot.WIN.zip PoGo.NecroBot.Window\\bin\\Release\\*.*'
 	}
