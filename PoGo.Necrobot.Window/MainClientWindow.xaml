@@ -176,6 +176,7 @@
                                     <DataGridTextColumn Binding="{Binding Username}" Header="Username"></DataGridTextColumn>
                                     <DataGridTextColumn Binding="{Binding Password}" Header="Password"></DataGridTextColumn>
                                     <DataGridTextColumn Binding="{Binding Level}" Header="Level"></DataGridTextColumn>
+                                    <DataGridTextColumn Binding="{Binding LastLogin}" Header="LastLogin"></DataGridTextColumn>
                                     <DataGridTemplateColumn Header="">
                                         <DataGridTemplateColumn.CellEditingTemplate>
                                             <DataTemplate>

@@ -43,11 +43,14 @@ namespace PoGo.NecroBot.Logic.State
             //});
 
             CheckLogin(session, cancellationToken);
+
+            bool successfullyLoggedIn = false;
             try
             {
                 if (session.Settings.AuthType == AuthType.Google || session.Settings.AuthType == AuthType.Ptc)
                 {
                     session.Profile = await session.Client.Login.DoLogin();
+                    successfullyLoggedIn = true;
                 }
                 else
                 {
@@ -197,6 +200,16 @@ namespace PoGo.NecroBot.Logic.State
                 Logger.Write(e.ToString());
                 await Task.Delay(20000, cancellationToken);
                 return this;
+            }
+            finally
+            {
+                var accountManager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
+                var currentAccount = accountManager?.GetCurrentAccount();
+                if (currentAccount != null)
+                {
+                    currentAccount.LastLogin = successfullyLoggedIn ? "Success" : "Failure";
+                    accountManager.UpdateDatabase(currentAccount);
+                }
             }
             try
             {
