@@ -8,6 +8,6 @@ node {
 		bat "\"${tool 'MSBuild'}\" NecroBot.sln /p:Configuration=Release /p:Platform=\"Any CPU\" /p:ProductVersion=1.0.1.${env.BUILD_NUMBER}"
 
 	stage 'Archive'
-		archive 'Necrobot2/bin/Release/**'
+		archive 'PoGo.NecroBot.CLI\bin\Release**'
 
 }
