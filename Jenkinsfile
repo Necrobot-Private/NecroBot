@@ -1,4 +1,8 @@
+def branch = env.BRANCH_NAME
+
 node {
+	stage 'test'
+	bat 'echo $BRANCH_NAME'
 	stage 'Checkout'
 		checkout scm
 		bat 'git submodule update --init'
