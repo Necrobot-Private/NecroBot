@@ -1,4 +1,7 @@
 node {
+	stage 'Test'
+	echo $OUTPUT_PATH
+	
 	stage 'Checkout'
 		checkout scm
 		bat 'git submodule update --init'
