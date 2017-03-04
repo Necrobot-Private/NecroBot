@@ -1,8 +1,6 @@
-def branch = env.BRANCH_NAME
-
 node {
 	stage 'test'
-	bat 'echo $BRANCH_NAME'
+	bat 'echo ${env.BRANCH_NAME}'
 	stage 'Checkout'
 		checkout scm
 		bat 'git submodule update --init'
@@ -14,8 +12,8 @@ node {
 	stage 'Archive'
 		archive 'PoGo.NecroBot.CLI/bin/Release/**'
 		archiveArtifacts artifacts: 'PoGo.NecroBot.CLI/bin/Release/', fingerprint: true, onlyIfSuccessful: true
-		bat 'copy "PoGo.NecroBot.CLI\\bin\\Release\\Necrobot2.exe" "d:\\J\\Out\\${BRANCH_NAME}" /Y'
-		bat 'copy "PoGo.Necrobot.Window\\bin\\Release\\Necrobot2.Win.exe" "d:\\J\\Out\\${BRANCH_NAME}" /Y'
-		bat '"C:\\Program Files\\7-Zip\\7z.exe" a d:\\j\\out\\${BRANCH_NAME}\\Necrobot.CLI.zip PoGo.NecroBot.CLI\\bin\\Release\\*.*'
-		bat '"C:\\Program Files\\7-Zip\\7z.exe" a d:\\j\\out\\${BRANCH_NAME}\\Necrobot.WIN.zip PoGo.NecroBot.Window\\bin\\Release\\*.*'
+		bat 'copy "PoGo.NecroBot.CLI\\bin\\Release\\Necrobot2.exe" "d:\\J\\Out\\${env.BRANCH_NAME}" /Y'
+		bat 'copy "PoGo.Necrobot.Window\\bin\\Release\\Necrobot2.Win.exe" "d:\\J\\Out\\${env.BRANCH_NAME}" /Y'
+		bat '"C:\\Program Files\\7-Zip\\7z.exe" a d:\\j\\out\\${env.BRANCH_NAME}\\Necrobot.CLI.zip PoGo.NecroBot.CLI\\bin\\Release\\*.*'
+		bat '"C:\\Program Files\\7-Zip\\7z.exe" a d:\\j\\out\\${env.BRANCH_NAME}\\Necrobot.WIN.zip PoGo.NecroBot.Window\\bin\\Release\\*.*'
 	}
