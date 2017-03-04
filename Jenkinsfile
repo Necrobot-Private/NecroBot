@@ -14,4 +14,4 @@ node {
 		bat 'copy "PoGo.Necrobot.Window\\bin\\Release\\Necrobot2.Win.exe" "${OUTPUT_PATH}" /Y'
 		bat '"7z.exe" a ${OUTPUT_PATH}\\Necrobot.CLI.zip PoGo.NecroBot.CLI\\bin\\Release\\*.*'
 		bat '"7z.exe" a ${OUTPUT_PATH}\\Necrobot.WIN.zip PoGo.NecroBot.Window\\bin\\Release\\*.*'
-	\
+	}
