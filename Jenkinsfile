@@ -10,7 +10,13 @@ node {
 	stage 'Archive'
 	{
 		archive 'PoGo.NecroBot.CLI/bin/Release/**'
-		archiveArtifacts artifacts: 'PoGo.NecroBot.CLI/bin/Release/*.*', fingerprint: true
+		archiveArtifacts artifacts: 'PoGo.NecroBot.CLI/bin/Release/', fingerprint: true, onlyIfSuccessful: true
+		bat 'copy PoGo.NecroBot.CLI/bin/Release/Necrobot2.exe d:/J/Out'
+		bat 'copy PoGo.NecroBot.WIN/bin/Release/Necrobot2.Win.exe d:/J/Out'
 	}
+	stage 'Publish'
+	{
 
+
+	}
 }
