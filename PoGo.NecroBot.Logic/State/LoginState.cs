@@ -42,7 +42,7 @@ namespace PoGo.NecroBot.Logic.State
             //    Message = session.Translation.GetTranslation(TranslationString.LoggingIn, session.Settings.AuthType)
             //});
 
-            await CheckLogin(session, cancellationToken);
+            CheckLogin(session, cancellationToken);
             try
             {
                 if (session.Settings.AuthType == AuthType.Google || session.Settings.AuthType == AuthType.Ptc)
@@ -285,7 +285,7 @@ namespace PoGo.NecroBot.Logic.State
             return new LoadSaveState();
         }
 
-        private static async Task CheckLogin(ISession session, CancellationToken cancellationToken)
+        private static void CheckLogin(ISession session, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
