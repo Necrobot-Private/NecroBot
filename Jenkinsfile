@@ -1,7 +1,4 @@
 node {
-	stage 'Test'
-	bat 'echo ${env.OUTPUT_PATH}'
-
 	stage 'Checkout'
 		checkout scm
 		bat 'git submodule update --init'
@@ -13,8 +10,8 @@ node {
 	stage 'Archive'
 		archive 'PoGo.NecroBot.CLI/bin/Release/**'
 		archiveArtifacts artifacts: 'PoGo.NecroBot.CLI/bin/Release/', fingerprint: true, onlyIfSuccessful: true
-		bat 'copy "PoGo.NecroBot.CLI\\bin\\Release\\Necrobot2.exe" "${OUTPUT_PATH}" /Y'
-		bat 'copy "PoGo.Necrobot.Window\\bin\\Release\\Necrobot2.Win.exe" "${OUTPUT_PATH}" /Y'
-		bat '"7z.exe" a ${OUTPUT_PATH}\\Necrobot.CLI.zip PoGo.NecroBot.CLI\\bin\\Release\\*.*'
-		bat '"7z.exe" a ${OUTPUT_PATH}\\Necrobot.WIN.zip PoGo.NecroBot.Window\\bin\\Release\\*.*'
+		bat 'copy "PoGo.NecroBot.CLI\\bin\\Release\\Necrobot2.exe" "d:\\J\\Out" /Y'
+		bat 'copy "PoGo.Necrobot.Window\\bin\\Release\\Necrobot2.Win.exe" "d:\\J\\Out" /Y'
+		bat '"C:\\Program Files\\7-Zip\\7z.exe" a d:\\j\\out\\Necrobot.CLI.zip PoGo.NecroBot.CLI\\bin\\Release\\*.*'
+		bat '"C:\\Program Files\\7-Zip\\7z.exe" a d:\\j\\out\\Necrobot.WIN.zip PoGo.NecroBot.Window\\bin\\Release\\*.*'
 	}
