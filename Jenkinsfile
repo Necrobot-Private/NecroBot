@@ -1,6 +1,6 @@
 node {
 	stage 'Test'
-	echo ${OUTPUT_PATH}
+	bat 'echo ${OUTPUT_PATH}'
 
 	stage 'Checkout'
 		checkout scm
