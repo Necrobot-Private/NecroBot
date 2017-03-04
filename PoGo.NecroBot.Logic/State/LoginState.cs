@@ -42,12 +42,15 @@ namespace PoGo.NecroBot.Logic.State
             //    Message = session.Translation.GetTranslation(TranslationString.LoggingIn, session.Settings.AuthType)
             //});
 
-            await CheckLogin(session, cancellationToken);
+            CheckLogin(session, cancellationToken);
+
+            bool successfullyLoggedIn = false;
             try
             {
                 if (session.Settings.AuthType == AuthType.Google || session.Settings.AuthType == AuthType.Ptc)
                 {
                     session.Profile = await session.Client.Login.DoLogin();
+                    successfullyLoggedIn = true;
                 }
                 else
                 {
@@ -198,6 +201,16 @@ namespace PoGo.NecroBot.Logic.State
                 await Task.Delay(20000, cancellationToken);
                 return this;
             }
+            finally
+            {
+                var accountManager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
+                var currentAccount = accountManager?.GetCurrentAccount();
+                if (currentAccount != null)
+                {
+                    currentAccount.LastLogin = successfullyLoggedIn ? "Success" : "Failure";
+                    accountManager.UpdateDatabase(currentAccount);
+                }
+            }
             try
             {
                 await DownloadProfile(session);
@@ -285,7 +298,7 @@ namespace PoGo.NecroBot.Logic.State
             return new LoadSaveState();
         }
 
-        private static async Task CheckLogin(ISession session, CancellationToken cancellationToken)
+        private static void CheckLogin(ISession session, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 

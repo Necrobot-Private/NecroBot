@@ -45,10 +45,13 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static bool isConnected = false;
         public static double minIvPercent = 0.0; //no iv filter
         private static string _botIdentiy;
+#pragma warning disable 0649
         private static HubConnection _connection;
         private static IHubProxy _msniperHub;
-
+#pragma warning restore 0649
+#pragma warning disable 0414
         private static string _msniperServiceUrl = "https://www.msniper.com/signalr";
+#pragma warning restore 0414
 
         private static List<PokemonId> pokedexList = new List<PokemonId>();
         #endregion Variables
@@ -449,7 +452,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 try
                 {
                     LocationUtils.UpdatePlayerLocationWithAltitude(session,
-                        new GeoCoordinate(latitude, longitude, session.Client.CurrentAltitude), 0); // Set speed to 0 for random speed.
+                        new GeoCoordinate(pokemon.Latitude, pokemon.Longitude, session.Client.CurrentAltitude), 0); // Set speed to 0 for random speed.
 
                     encounter =
                         session.Client.Encounter.EncounterPokemon(pokemon.EncounterId, pokemon.SpawnPointId).Result;
