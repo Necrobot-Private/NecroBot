@@ -424,9 +424,6 @@
     <Compile Include="WebSocketInterface.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Config\log4net.config" />
     <None Include="Config\log4net.unix.config" />
     <None Include="cert.pfx">
