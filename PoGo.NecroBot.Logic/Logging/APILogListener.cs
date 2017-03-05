@@ -20,9 +20,9 @@ namespace PoGo.NecroBot.Logic.Logging
             if (session.Settings.DisplayVerboseLog && lastVerboseLog< DateTime.Now.AddSeconds(-60))
             {
                 lastVerboseLog = DateTime.Now;
-                Logger.Write($"(HASH SERVER) Key[{info.MaskedAPIKey}] Last 1 minute  {info.Last60MinAPICalles} request/min , AVG: {info.Last60MinAPIAvgTime:0.00} ms/request , Fastest : {info.Fastest}, Slowest: {info.Slowest}", LogLevel.Info, ConsoleColor.White);
+                Logger.Write($"(HASH SERVER) Key[{info.MaskedAPIKey}] Last 1 minute  {info.Last60MinAPICalles} request/min , AVG: {info.Last60MinAPIAvgTime:0.00} ms/request , Fastest : {info.Fastest}, Slowest: {info.Slowest}, Available {info.HealthyRate:0.00%}", LogLevel.Info, ConsoleColor.White);
             }
-            session.EventDispatcher.Send(new StatusBarEvent($"[{info.MaskedAPIKey}] - {info.Last60MinAPICalles} request/min , AVG: {info.Last60MinAPIAvgTime:0.00} ms/request , Fastest : {info.Fastest}, Slowest: {info.Slowest}"));
+            session.EventDispatcher.Send(new StatusBarEvent($"[{info.MaskedAPIKey}] - {info.Last60MinAPICalles} request/min , AVG: {info.Last60MinAPIAvgTime:0.00} ms/request , Fastest : {info.Fastest}, Slowest: {info.Slowest}, Available {info.HealthyRate:0.00%}"));
         }
 
         public void LogCritical(string message, dynamic data)
