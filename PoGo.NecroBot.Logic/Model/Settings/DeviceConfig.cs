@@ -130,15 +130,15 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         public static string GetDeviceId(string username)
         {
-            Directory.CreateDirectory("Devices");
-            string keyFile = $"Devices\\{username}.key";
+            Directory.CreateDirectory($"config\\{username}");
+            string keyFile = $"config\\{username}\\device.id";
 
             if (File.Exists(keyFile)) return File.ReadAllText(keyFile);
 
             string hashUsername = "";
             using (SHA1Managed sha1 = new SHA1Managed())
             {
-                var hash = sha1.ComputeHash(Encoding.UTF8.GetBytes(username));
+                var hash = sha1.ComputeHash(Encoding.UTF8.GetBytes(username + Path.GetRandomFileName()));
                 var sb = new StringBuilder(hash.Length * 2);
 
                 foreach (byte b in hash)
