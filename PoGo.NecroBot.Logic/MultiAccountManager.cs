@@ -35,6 +35,7 @@ namespace PoGo.NecroBot.Logic
                         
             // AutoId will be automatically incremented.
             public int Id { get; set; }
+            public string Nickname { get; set; }
             public DateTime LoggedTime { get; set; }
             public int Level { get; set; }
             public string LastLogin { get; set; }
@@ -381,6 +382,7 @@ namespace PoGo.NecroBot.Logic
         private BotAccount runningAccount;
         public void UpdateDatabase(BotAccount current)
         {
+            current.RaisePropertyChanged("Nickname");
             current.RaisePropertyChanged("RuntimeTotal");
             current.RaisePropertyChanged("IsRunning");
             current.RaisePropertyChanged("Level");
