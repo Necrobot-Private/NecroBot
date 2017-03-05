@@ -43,6 +43,7 @@ using RocketBot2.CommandLineUtility;
 using System.Diagnostics;
 using RocketBot2.Logic.Utils;
 using PokemonGo.RocketAPI;
+using TinyIoC;
 
 #endregion
 
@@ -515,7 +516,6 @@ namespace RocketBot2.Forms
             _settings = settings;
             _excelConfigAllow = excelConfigAllow;
         }
-
         private async Task StartBot()
         {
             await _machine.AsyncStart(new Logic.State.VersionCheckState(), _session, _subPath, _excelConfigAllow);
