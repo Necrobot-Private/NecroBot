@@ -171,13 +171,22 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool SaveMaxRevives { get; set; }
 
+        [NecrobotConfig(Description = "MaxTrainingRounds", Position = 29)]
+        [DefaultValue(5)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
+        public int MaxTrainingRoundsOnOneGym { get; set; }
+
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
-        [NecrobotConfig(Description = "Defenders from list", Position = 29)]
+        [NecrobotConfig(Description = "Defenders from list", Position = 30)]
         public List<TeamMemberConfig> Defenders { get; set; } = TeamMemberConfig.GetDefaultDefenders();
 
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
-        [NecrobotConfig(Description = "Attackers from list", Position = 30)]
+        [NecrobotConfig(Description = "Attackers from list", Position = 31)]
         public List<TeamMemberConfig> Attackers { get; set; } = TeamMemberConfig.GetDefaultAttackers();
+
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [NecrobotConfig(Description = "Trainers from list", Position = 32)]
+        public List<TeamMemberConfig> Trainers { get; set; } = TeamMemberConfig.GetDefaultTrainers();
 
         private static ICollection<KeyValuePair<PokemonId, PokemonMove>> GetDefaults()
         {
@@ -247,6 +256,17 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 { new TeamMemberConfig() { Pokemon=PokemonId.Vaporeon, MinCP=2000 } },
                 { new TeamMemberConfig() { Pokemon=PokemonId.Gyarados, MinCP=2000 } },
                 { new TeamMemberConfig() { Pokemon=PokemonId.Snorlax, MinCP=2401 } },
+            };
+        }
+
+        internal static List<TeamMemberConfig> GetDefaultTrainers()
+        {
+            return new List<TeamMemberConfig>()
+            {
+                { new TeamMemberConfig() { Pokemon=PokemonId.Dragonite, MaxCP=2000, Priority=100 } },
+                { new TeamMemberConfig() { Pokemon=PokemonId.Vaporeon, MaxCP=2000, Priority=25 } },
+                { new TeamMemberConfig() { Pokemon=PokemonId.Gyarados, MaxCP=2000, Priority=50 } },
+                { new TeamMemberConfig() { Pokemon=PokemonId.Snorlax, MaxCP=2000, Priority=10 } },
             };
         }
 
