@@ -117,7 +117,7 @@ namespace PoGo.NecroBot.CLI.Forms
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(252, 52);
             this.label3.TabIndex = 7;
-            this.label3.Text = "We don\'t provide key, you have to buy it from Pogodev. RPM = Requests per minute," +
+            this.label3.Text = "We don\'t provide keys, you will have to buy it from Pogodev. RPM = Requests per minute," +
     " it depends on how fast your config setup is.  150RPM will be sufficient for 2-" +
     "3 normal bots. ";
             // 
