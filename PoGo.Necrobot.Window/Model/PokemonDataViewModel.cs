@@ -55,7 +55,6 @@ namespace PoGo.Necrobot.Window.Model
         {
             this.PokemonData = item;
         }
-
         public string Types
         {
             get

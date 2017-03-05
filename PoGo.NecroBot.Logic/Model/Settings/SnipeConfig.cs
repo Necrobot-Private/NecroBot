@@ -7,8 +7,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
     [JsonObject(Title = "Snipe Config", Description = "Set your snipe settings.", ItemRequired = Required.DisallowNull)]
     public class SnipeConfig : BaseConfig
     {
-        public SnipeConfig() : base() {}
-        [NecrobotConfig (Description = "Tell bot to use location service, detail at  - https://github.com/5andr0/PogoLocationFeeder", Position =1)]
+        [NecrobotConfig(Description = "Tell bot to use location service, detail at  - https://github.com/5andr0/PogoLocationFeeder", Position = 1)]
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public bool UseSnipeLocationServer { get; set; }
@@ -26,7 +25,6 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [Range(1, 65535)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 3)]
         public int SnipeLocationServerPort { get; set; }
-
 
         [NecrobotConfig(Description = "Number of ball in inventory to get sniper function work. ", Position = 9)]
         [DefaultValue(20)]
