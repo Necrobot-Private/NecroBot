@@ -119,12 +119,9 @@ namespace PoGo.NecroBot.Logic.State
                         Environment.Exit(0);
                     }
                 }
-                catch (APIBadRequestException ex)
+                catch (APIBadRequestException)
                 {
-                    Logger.Write("Bad Request - If you see this message please copy error log & screenshot send back to dev asap.", level: LogLevel.Error);
-                    
-                    session.EventDispatcher.Send(new ErrorEvent() {Message = ex.Message});
-                    Logger.Write(ex.StackTrace, level: LogLevel.Error);
+                    session.EventDispatcher.Send(new ErrorEvent() {Message = "Unexpected error happen, bot will re-login"});
 
                     if (session.LogicSettings.AllowMultipleBot)
                         session.ReInitSessionWithNextBot();

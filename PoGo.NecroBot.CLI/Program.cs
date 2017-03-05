@@ -469,6 +469,11 @@ namespace PoGo.NecroBot.CLI
                 #pragma warning restore 4014
             }
 
+            if (_session.LogicSettings.UseSnipeLocationServer ||
+              _session.LogicSettings.HumanWalkingSnipeUsePogoLocationFeeder)
+                SnipePokemonTask.AsyncStart(_session);
+
+
             if (_session.LogicSettings.DataSharingConfig.EnableSyncData)
             {
                 BotDataSocketClient.StartAsync(_session);
