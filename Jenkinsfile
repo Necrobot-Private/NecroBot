@@ -8,7 +8,7 @@ node {
 		bat "\"${tool 'MSBuild'}\" \"NecroBot-Private for Pokemon GO.sln\" /p:Configuration=Release /p:Platform=\"Any CPU\" /p:ProductVersion=1.0.1.${env.BUILD_NUMBER}"
 
 	stage 'Archive'
-		archive 'PoGo.NecroBot.CLI/bin/Release/**'
+		archive '**/bin/Release/**'
 		archiveArtifacts artifacts: 'PoGo.NecroBot.CLI/bin/Release/', fingerprint: true, onlyIfSuccessful: true
 		bat 'copy "PoGo.NecroBot.CLI\\bin\\Release\\Necrobot2.exe" "d:\\J\\Out\\" /Y'
 		bat 'copy "PoGo.Necrobot.Window\\bin\\Release\\Necrobot2.Win.exe" "d:\\J\\Out\\" /Y'

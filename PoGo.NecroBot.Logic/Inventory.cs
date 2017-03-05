@@ -735,7 +735,6 @@ namespace PoGo.NecroBot.Logic
                     if (familyCandy < branch.CandyCost)
                         continue;  // Cannot evolve so check next branch
 
-
                     // If we got here, then we can evolve so break out of loop.
                     canEvolve = true;
                 }

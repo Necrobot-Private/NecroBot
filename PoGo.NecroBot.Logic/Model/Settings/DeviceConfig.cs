@@ -1,6 +1,10 @@
+using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
+using System.IO;
+using System.Text;
+using System.Security.Cryptography;
 
 namespace PoGo.NecroBot.Logic.Model.Settings
 {
@@ -119,5 +123,33 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [RegularExpression(@"[[a-zA-Z0-9_\-\/\.\:]")]
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 15)]
         public string FirmwareFingerprint;
+
+        [DefaultValue(false)]
+        [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 15)]
+        public bool UseRandomDeviceId;
+
+        public static string GetDeviceId(string username)
+        {
+            Directory.CreateDirectory($"config\\{username}");
+            string keyFile = $"config\\{username}\\device.id";
+
+            if (File.Exists(keyFile)) return File.ReadAllText(keyFile);
+
+            string hashUsername = "";
+            using (SHA1Managed sha1 = new SHA1Managed())
+            {
+                var hash = sha1.ComputeHash(Encoding.UTF8.GetBytes(username + Path.GetRandomFileName()));
+                var sb = new StringBuilder(hash.Length * 2);
+
+                foreach (byte b in hash)
+                {
+                    sb.Append(b.ToString("X2"));
+                }
+
+                hashUsername =  sb.ToString();
+            }
+            File.WriteAllText(keyFile, hashUsername);
+            return hashUsername;
+        }
     }
 }
