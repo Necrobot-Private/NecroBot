@@ -20,6 +20,7 @@
         <c:I18NConveter x:Key="I18NConveter"/>
         <c:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
         <c:TimestampToDateTimeConverter x:Key="TimestampToDateTimeConverter"/>
+        <c:DurationTextConverter x:Key="DurationTextConverter"/>
         <Style x:Key="LatoFont">
             <Setter Property="TextElement.FontFamily" 
             Value="pack://application:,,,/Resources/#Lato-light" />
@@ -179,6 +180,7 @@
                                     <DataGridTextColumn Binding="{Binding Level}" Header="Level"></DataGridTextColumn>
                                     <DataGridTextColumn Binding="{Binding LastLogin}" Header="Login"></DataGridTextColumn>
                                     <DataGridTextColumn Binding="{Binding LastLoginTimestamp, Converter={StaticResource TimestampToDateTimeConverter }}" Header="Login Time"></DataGridTextColumn>
+                                    <DataGridTextColumn Binding="{Binding RuntimeTotal, Converter={StaticResource DurationTextConverter} }" Header="Runtime"></DataGridTextColumn>
                                     <DataGridTemplateColumn Header="">
                                         <DataGridTemplateColumn.CellEditingTemplate>
                                             <DataTemplate>

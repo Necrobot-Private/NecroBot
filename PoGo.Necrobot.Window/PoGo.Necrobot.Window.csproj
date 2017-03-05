@@ -225,6 +225,7 @@
     <Compile Include="Converters\I18NConveter.cs" />
     <Compile Include="Converters\EnumToNumberConverter.cs" />
     <Compile Include="Converters\ListPokemonIdConverter.cs" />
+    <Compile Include="Converters\DurationTextConverter.cs" />
     <Compile Include="Converters\TimestampToDateTimeConverter.cs" />
     <Compile Include="Converters\PokemonIdToImageConverter.cs" />
     <Compile Include="Converters\ValueConverterGroup.cs" />
