@@ -14,6 +14,7 @@ using PokemonGo.RocketAPI.Enums;
 using PokemonGo.RocketAPI.Exceptions;
 using POGOProtos.Enums;
 using TinyIoC;
+using PokemonGo.RocketAPI.Util;
 
 #endregion
 
@@ -208,6 +209,7 @@ namespace PoGo.NecroBot.Logic.State
                 if (currentAccount != null)
                 {
                     currentAccount.LastLogin = successfullyLoggedIn ? "Success" : "Failure";
+                    currentAccount.LastLoginTimestamp = TimeUtil.GetCurrentTimestampInMilliseconds();
                     accountManager.UpdateDatabase(currentAccount);
                 }
             }
