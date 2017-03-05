@@ -204,6 +204,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Caching.cs" />
     <Compile Include="Captcha\Anti-Captcha\AnticaptchaApiWrapper.cs" />
     <Compile Include="Captcha\Anti-Captcha\AntiCaptchaClient.cs" />
     <Compile Include="Captcha\Anti-Captcha\AnticaptchaResult.cs" />

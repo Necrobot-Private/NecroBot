@@ -86,13 +86,13 @@ namespace PoGo.NecroBot.CLI.Forms
         private void wizardControl1_Finished(object sender, EventArgs e)
         {
             GlobalSettings.SaveFiles(settings, this.configFile);
-            new Session(new ClientSettings(settings, elevationService), new LogicSettings(settings), elevationService);
+            new Session(settings,new ClientSettings(settings, elevationService), new LogicSettings(settings), elevationService);
             Logger.Write(Session.Translation.GetTranslation(TranslationString.FirstStartSetupCompleted), LogLevel.Info);
         }
 
         private void SelectLanguagePage_Click(object sender, EventArgs e)
         {
-            this.Session = new Session(
+            this.Session = new Session(settings,
                 new ClientSettings(settings, elevationService),
                 new LogicSettings(settings),
                 elevationService
@@ -111,7 +111,7 @@ namespace PoGo.NecroBot.CLI.Forms
         {
             DialogResult = DialogResult.OK;
             GlobalSettings.SaveFiles(settings, this.configFile);
-            new Session(new ClientSettings(settings, elevationService), new LogicSettings(settings), elevationService);
+            new Session(settings,new ClientSettings(settings, elevationService), new LogicSettings(settings), elevationService);
             Logger.Write(Session.Translation.GetTranslation(TranslationString.FirstStartSetupCompleted), LogLevel.Info);
 
             this.Close();

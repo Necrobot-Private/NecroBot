@@ -101,7 +101,6 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 await MSniperServiceTask.Execute(session, cancellationToken);
                 
-                //should load it dynamic from - MapSettings.encounterRangeMeters_
                 if (LocationUtils.CalculateDistanceInMeters(pokemon.Latitude, pokemon.Longitude, session.Client.CurrentLatitude, session.Client.CurrentLongitude) > session.Client.GlobalSettings.MapSettings.EncounterRangeMeters)
                 {
                     Logger.Debug($"THIS POKEMON IS TOO FAR, {pokemon.Latitude}, {pokemon.Longitude}");
