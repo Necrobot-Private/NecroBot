@@ -741,7 +741,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             );
 
             settings.ConsoleConfig.TranslationLanguageCode = strInput;
-            session = new Session(
+            session = new Session(settings,
                 new ClientSettings(settings, elevationService),
                 new LogicSettings(settings),
                 elevationService
