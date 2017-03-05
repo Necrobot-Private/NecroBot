@@ -73,6 +73,21 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 await UseGymBattleTask.Execute(session, cancellationToken, pokeStop, fortInfo);
 
+                if (fortInfo.Type == FortType.Gym &&
+                    (session.GymState.getGymDetails(session, pokeStop).GymState.FortData.OwnedByTeam == session.Profile.PlayerData.Team || session.GymState.capturedGymId.Equals(fortInfo.FortId)) &&
+                    session.LogicSettings.GymConfig.Enable &&
+                    session.LogicSettings.GymConfig.EnableGymTraining)
+                {
+                    if (string.IsNullOrEmpty(session.GymState.trainingGymId) || !session.GymState.trainingGymId.Equals(fortInfo.FortId))
+                    {
+                        session.GymState.trainingGymId = fortInfo.FortId;
+                        session.GymState.trainingRound = 0;
+                    }
+                    session.GymState.trainingRound++;
+                    if (session.GymState.trainingRound <= session.LogicSettings.GymConfig.MaxTrainingRoundsOnOneGym)
+                        continue;
+                }
+
                 if (!await SetMoveToTargetTask.IsReachedDestination(pokeStop, session, cancellationToken))
                 {
                     pokeStop.CooldownCompleteTimestampMs = DateTime.UtcNow.ToUnixTime() + (pokeStop.Type == FortType.Gym ? session.LogicSettings.GymConfig.VisitTimeout : 5) * 60 * 1000; //5 minutes to cooldown
