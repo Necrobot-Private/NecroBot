@@ -64,8 +64,8 @@ namespace PoGo.NecroBot.Logic.State
 
     public class Session : ISession
     {
-        public Session(ISettings settings, ILogicSettings logicSettings, IElevationService elevationService) : this(
-            settings, logicSettings, elevationService, Common.Translation.Load(logicSettings))
+        public Session(GlobalSettings globalSettings,ISettings settings, ILogicSettings logicSettings, IElevationService elevationService) : this(
+           globalSettings, settings, logicSettings, elevationService, Common.Translation.Load(logicSettings))
         {
             LoggedTime = DateTime.Now;
         }
@@ -80,9 +80,10 @@ namespace PoGo.NecroBot.Logic.State
             get { return this.botActions; }
         }
 
-        public Session(ISettings settings, ILogicSettings logicSettings,
+        public Session(GlobalSettings globalSettings, ISettings settings, ILogicSettings logicSettings,
             IElevationService elevationService, ITranslation translation)
         {
+            this.GlobalSettings = globalSettings;
             this.CancellationTokenSource = new CancellationTokenSource();
             this.Forts = new List<FortData>();
             this.VisibleForts = new List<FortData>();
@@ -166,6 +167,11 @@ namespace PoGo.NecroBot.Logic.State
         {
             this.KnownLatitudeBeforeSnipe = 0; 
             this.KnownLongitudeBeforeSnipe = 0;
+            if(this.GlobalSettings.Auth.DeviceConfig.UseRandomDeviceId)
+            {
+                settings.DeviceId = DeviceConfig.GetDeviceId(settings.Username);
+                Logger.Debug($"Username : {Settings.Username} , Device ID :{Settings.DeviceId}");
+            }
             Client = new Client(settings);
             // ferox wants us to set this manually
             Inventory = new Inventory(this, Client, logicSettings, () =>
