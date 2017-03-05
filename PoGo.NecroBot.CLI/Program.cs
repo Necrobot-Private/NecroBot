@@ -345,7 +345,7 @@ namespace PoGo.NecroBot.CLI
                 }
             }
 
-            _session = new Session(
+            _session = new Session(settings,
                 new ClientSettings(settings, elevationService), logicSettings, elevationService,
                 translation
             );

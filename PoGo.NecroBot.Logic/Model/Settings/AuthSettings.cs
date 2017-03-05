@@ -109,6 +109,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         //    }
         //}
 
+        
         public AuthSettings()
         {
             InitializePropertyDefaultValues(this);
