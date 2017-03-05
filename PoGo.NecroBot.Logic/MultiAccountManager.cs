@@ -38,6 +38,7 @@ namespace PoGo.NecroBot.Logic
             public DateTime LoggedTime { get; set; }
             public int Level { get; set; }
             public string LastLogin { get; set; }
+            public long LastLoginTimestamp { get; set; }
 
             public event PropertyChangedEventHandler PropertyChanged;
 
@@ -384,6 +385,7 @@ namespace PoGo.NecroBot.Logic
             current.RaisePropertyChanged("IsRunning");
             current.RaisePropertyChanged("Level");
             current.RaisePropertyChanged("LastLogin");
+            current.RaisePropertyChanged("LastLoginTimestamp");
 
             using (var db = new LiteDatabase(ACCOUNT_DB_NAME))
             {
