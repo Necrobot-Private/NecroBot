@@ -66,10 +66,10 @@ namespace PoGo.NecroBot.Logic.State
 
             var remoteReleaseUrl =
                 $"https://github.com/Necrobot-Private/NecroBot/releases/download/v{RemoteVersion}/";
-            string zipName = "NecroBot.Console.zip";
+            string zipName = "NecroBot2.Console.zip";
             if (Assembly.GetEntryAssembly().FullName.ToLower().Contains("necrobot2.win"))
             {
-                zipName = "NecroBot.Win.zip";
+                zipName = "NecroBot2.Win.zip";
             }
             var downloadLink = remoteReleaseUrl + zipName;
 
