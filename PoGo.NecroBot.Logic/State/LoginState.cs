@@ -33,6 +33,8 @@ namespace PoGo.NecroBot.Logic.State
 
         public async Task<IState> Execute(ISession session, CancellationToken cancellationToken)
         {
+            var accountManager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
+
             // cancellationToken.ThrowIfCancellationRequested();
             session.EventDispatcher.Send(new LoginEvent(
                 session.Settings.AuthType, $"{session.Settings.Username}"
@@ -204,7 +206,6 @@ namespace PoGo.NecroBot.Logic.State
             }
             finally
             {
-                var accountManager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
                 var currentAccount = accountManager?.GetCurrentAccount();
                 if (currentAccount != null)
                 {
@@ -224,6 +225,29 @@ namespace PoGo.NecroBot.Logic.State
                         LogLevel.Warning
                     );
                     Console.ReadKey();
+                }
+                else
+                {
+                    if (successfullyLoggedIn)
+                    {
+                        var currentAccount = accountManager?.GetCurrentAccount();
+                        if (currentAccount != null)
+                        {
+                            if (session.Profile.Banned)
+                            {
+                                currentAccount.LastLogin = "Banned";
+                                accountManager.UpdateDatabase(currentAccount);
+                            }
+                            else
+                            {
+                                if (currentAccount.Nickname != session.Profile.PlayerData.Username)
+                                {
+                                    currentAccount.Nickname = session.Profile.PlayerData.Username;
+                                    accountManager.UpdateDatabase(currentAccount);
+                                }
+                            }
+                        }
+                    }
                 }
 
                 if (session.LogicSettings.UseRecyclePercentsInsteadOfTotals)
