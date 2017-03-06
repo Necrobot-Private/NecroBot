@@ -169,7 +169,21 @@ namespace PoGo.NecroBot.Logic.State
             this.KnownLongitudeBeforeSnipe = 0;
             if(this.GlobalSettings.Auth.DeviceConfig.UseRandomDeviceId)
             {
-                settings.DeviceId = DeviceConfig.GetDeviceId(settings.Username);
+                var manager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
+                var currentAccount = manager.GetCurrentAccount();
+                if (currentAccount != null)
+                {
+                    if (string.IsNullOrEmpty(currentAccount.RandomDeviceIdSalt))
+                    {
+                        currentAccount.RandomDeviceIdSalt = Path.GetRandomFileName();
+                        manager.UpdateDatabase(currentAccount);
+                    }
+                    settings.DeviceId = DeviceConfig.GetDeviceId(settings.Username, currentAccount.RandomDeviceIdSalt);
+                }
+                else
+                {
+                    settings.DeviceId = DeviceConfig.GetDeviceId(settings.Username, Path.GetRandomFileName());
+                }
                 Logger.Debug($"Username : {Settings.Username} , Device ID :{Settings.DeviceId}");
             }
             Client = new Client(settings);
