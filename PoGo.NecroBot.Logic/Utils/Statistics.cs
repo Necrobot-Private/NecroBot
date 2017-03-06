@@ -47,6 +47,7 @@ namespace PoGo.NecroBot.Logic.Utils
         {
             _exportStats = GetCurrentInfo(inventory);
             TotalStardust = inventory.GetStarDust();
+            TinyIoCContainer.Current.Resolve<MultiAccountManager>().DirtyEventHandle(this);
             DirtyEvent?.Invoke();
             OnStatisticChanged(session);
         }
