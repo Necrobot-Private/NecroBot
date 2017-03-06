@@ -530,7 +530,6 @@ namespace RocketBot2.Forms
             }
             else
             {  menuStrip1.Items.Remove(accountsToolStripMenuItem); }
-            
         }
 
         private async Task StartBot()
@@ -834,6 +833,7 @@ namespace RocketBot2.Forms
                 return;
             }
             startStopBotToolStripMenuItem.Text = @"■ Exit RocketBot2";
+            accountsToolStripMenuItem.Enabled = false;
             _botStarted = true;
             btnRefresh.Enabled = true;
             Task.Run(StartBot);
