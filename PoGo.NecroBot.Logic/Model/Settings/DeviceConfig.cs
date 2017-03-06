@@ -128,7 +128,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 15)]
         public bool UseRandomDeviceId;
 
-        public static string GetDeviceId(string username)
+        public static string GetDeviceId(string username, string salt)
         {
             Directory.CreateDirectory($"config\\{username}");
             string keyFile = $"config\\{username}\\device.id";
@@ -138,7 +138,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             string hashUsername = "";
             using (SHA1Managed sha1 = new SHA1Managed())
             {
-                var hash = sha1.ComputeHash(Encoding.UTF8.GetBytes(username + Path.GetRandomFileName()));
+                var hash = sha1.ComputeHash(Encoding.UTF8.GetBytes(username + salt));
                 var sb = new StringBuilder(hash.Length * 2);
 
                 foreach (byte b in hash)
