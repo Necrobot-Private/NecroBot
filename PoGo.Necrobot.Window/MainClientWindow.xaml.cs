@@ -227,12 +227,7 @@ namespace PoGo.Necrobot.Window
                 }
             }
         }
-
-        private void menuAuth_Click(object sender, RoutedEventArgs e)
-        {
-            popAccounts.IsOpen = true;
-        }
-
+        
         private void btnDonate_Click(object sender, RoutedEventArgs e)
         {
             Process.Start("http://snipe.necrobot2.com?donate");
@@ -283,12 +278,7 @@ namespace PoGo.Necrobot.Window
         {
             Application.Current.Shutdown();
         }
-
-        private void popAccounts_Initialized(object sender, EventArgs e)
-        {
-
-        }
-
+        
         private void MetroWindow_Initialized(object sender, EventArgs e)
         {
             if(System.Windows.SystemParameters.PrimaryScreenWidth<1366)

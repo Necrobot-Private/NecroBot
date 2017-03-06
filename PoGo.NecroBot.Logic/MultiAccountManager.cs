@@ -4,6 +4,7 @@ using PoGo.NecroBot.Logic.Forms;
 using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.Model.Settings;
 using PoGo.NecroBot.Logic.State;
+using PoGo.NecroBot.Logic.Utils;
 using POGOProtos.Data.Player;
 using POGOProtos.Networking.Responses;
 using PokemonGo.RocketAPI.Extensions;
@@ -40,6 +41,25 @@ namespace PoGo.NecroBot.Logic
             public int Level { get; set; }
             public string LastLogin { get; set; }
             public long LastLoginTimestamp { get; set; }
+            public int Stardust { get; set; }
+            public long CurrentXp { get; set; }
+            public long PrevLevelXp { get; set; }
+            public long NextLevelXp { get; set; }
+
+            [BsonIgnore]
+            public string ExperienceInfo
+            {
+                get
+                {
+                    int percentComplete = 0;
+                    double xp = CurrentXp - PrevLevelXp;
+                    double levelXp = NextLevelXp - PrevLevelXp;
+
+                    if (levelXp > 0)
+                        percentComplete = (int)Math.Floor(xp / levelXp * 100);
+                    return $"{xp}/{levelXp} ({percentComplete}%)";
+                }
+            }
 
             public event PropertyChangedEventHandler PropertyChanged;
 
@@ -451,6 +471,26 @@ namespace PoGo.NecroBot.Logic
             this.runningAccount.LoggedTime = DateTime.Now;
             this.runningAccount.Level = playerStats.FirstOrDefault().Level;
             UpdateDatabase(this.runningAccount);
+        }
+
+        internal void DirtyEventHandle(Statistics stat)
+        {
+            var account = GetCurrentAccount();
+            if (account == null)
+                return;
+
+            account.Level = stat.StatsExport.Level;
+            account.Stardust = stat.TotalStardust;
+            account.CurrentXp = stat.StatsExport.CurrentXp;
+            account.NextLevelXp = stat.StatsExport.LevelupXp;
+            account.PrevLevelXp = stat.StatsExport.PreviousXp;
+            
+            account.RaisePropertyChanged("Level");
+            account.RaisePropertyChanged("Stardust");
+            account.RaisePropertyChanged("CurrentXp");
+            account.RaisePropertyChanged("NextLevelXp");
+            account.RaisePropertyChanged("PrevLevelXp");
+            account.RaisePropertyChanged("ExperienceInfo");
         }
     }
 }
