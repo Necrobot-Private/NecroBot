@@ -117,6 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="necro_logo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\necro_logo.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -1460,5 +1464,11 @@
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD//wAADA8AAAADAACAAwAAgAMAAOABAADAAQAA4AEAAOAD
         AADwBwAA+A8AAPgPAAD4DwAA/B8AAPw/AAD//wAA
 </value>
+  </data>
+  <data name="PayPalDonateNow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PayPalDonateNow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EncryptKey" xml:space="preserve">
+    <value>Vy9UuYCmwv66rqLY</value>
   </data>
 </root>

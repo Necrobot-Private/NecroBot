@@ -1,11 +1,11 @@
 #region using directives
 
 using System;
-using System.Text;
-using System.IO;
-using PoGo.NecroBot.Logic.State;
 using System.Collections.Concurrent;
+using System.IO;
+using System.Text;
 using PoGo.NecroBot.Logic.Event;
+using PoGo.NecroBot.Logic.State;
 
 #endregion
 
@@ -19,7 +19,7 @@ namespace PoGo.NecroBot.Logic.Logging
         private readonly LogLevel _maxLogLevel;
         private string logPath;
         private ConcurrentQueue<LogEvent> _messageQueue = new ConcurrentQueue<LogEvent>();
-        
+
         public void TurnOffLogBuffering()
         {
             // No buffering for file logger.
@@ -47,7 +47,9 @@ namespace PoGo.NecroBot.Logic.Logging
 
             logPath = Path.Combine(path, fileName);
         }
-        
+
+        private object ioLocker = new object();
+
         /// <summary>
         ///     Log a specific message by LogLevel. Won't log if the LogLevel is greater than the maxLogLevel set.
         /// </summary>
@@ -63,19 +65,22 @@ namespace PoGo.NecroBot.Logic.Logging
 
             var finalMessage = Logger.GetFinalMessage(message, level, color);
 
-            // Add message to the queue
-            _messageQueue.Enqueue(new LogEvent
+            lock (ioLocker)
             {
-                Message = finalMessage,
-                Color = Logger.GetHexColor(Console.ForegroundColor)
-            });
+                // Add message to the queue
+                _messageQueue.Enqueue(new LogEvent
+                {
+                    Message = finalMessage,
+                    Color = Logger.GetHexColor(Console.ForegroundColor)
+                });
 
-            LogEvent logEventToSend;
-            while (_messageQueue.TryDequeue(out logEventToSend))
-            {
+                LogEvent logEventToSend;
                 using (StreamWriter sw = File.AppendText(logPath))
                 {
-                    sw.WriteLine(finalMessage);
+                    while (_messageQueue.TryDequeue(out logEventToSend))
+                    {
+                        sw.WriteLine(finalMessage);
+                    }
                 }
             }
         }

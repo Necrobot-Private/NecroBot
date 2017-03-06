@@ -2,7 +2,7 @@
   "TranslationStrings": [
     {
       "Key": "HumanWalkSnipeNotEnoughtBalls",
-      "Value": "(HUMAN WALK) Not enought balls to activate catch Em-All mode. ({0})/{1}"
+      "Value": "(HUMAN WALK) Not enough Pokeballs to activate catch Em-All mode. ({0})/{1}"
     },
     {
       "Key": "HumanWalkSnipe",
@@ -10,7 +10,7 @@
     },
     {
       "Key": "HumanWalkSnipeUpdate",
-      "Value": "(HUMAN WALK) Found {0} pokemon matched with you filters. Human walking sniper won't catch em all, but try to catch as many as possible"
+      "Value": "(HUMAN WALK) Found {0} pokemon matched with you filters. Human walking sniper won't catch em all, but will try to catch as many as possible"
     },
     {
       "Key": "HumanWalkSnipeAddedPokestop",
@@ -26,7 +26,7 @@
     },
     {
       "Key": "SnipeExceeds",
-      "Value": "Sniper need to take a rest before your account is banned"
+      "Value": "Sniper needs to take a rest before your account is banned"
     },
     {
       "Key": "CatchExceeds",
@@ -493,10 +493,6 @@
       "Value": "\n CP: {0} | IV: {1}% | Move: {2} + {3} | 名称: {4}"
     },
     {
-      "Key": "helpTemplate",
-      "Value": "命令: \n \n /top <数量> - 显示您最强的神奇宝贝列表. \t\t\n /all - 显示您所有神奇宝贝列表. \t\t\n /profile - 显示您个人详细信息. \t\t\n /loc - 显示您的位置. \t\t\n /items - 显示您的物品.\t\t"
-    },
-    {
       "Key": "statsXpTemplateString",
       "Value": "{0}(预计升级需要{1}小时{2}分钟|{3:n0}/{4:n0}经验)"
     },
@@ -519,6 +515,10 @@
     {
       "Key": "googleOffline",
       "Value": "Google服务器可能正在维护, 请稍后再尝试登录.\t\t"
+    },
+    {
+      "Key": "missingCredentials",
+      "Value": "您需要在auth.json中填写账号和密码!\t\t"
     },
     {
       "Key": "missingCredentialsGoogle",
@@ -594,7 +594,7 @@
     },
     {
       "Key": "amountPkmSeenCaught",
-      "Value": "已遇见:{0}/151只神奇宝贝,已捕捉:{1}/151只\t\t\t"
+      "Value": "已遇见:{0}/231只神奇宝贝,已捕捉:{1}/231只\t\t\t"
     },
     {
       "Key": "pkmPotentialEvolveCount",

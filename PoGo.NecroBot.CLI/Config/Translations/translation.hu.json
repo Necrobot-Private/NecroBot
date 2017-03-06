@@ -2,7 +2,7 @@
   "TranslationStrings": [
     {
       "Key": "HumanWalkSnipeNotEnoughtBalls",
-      "Value": "(HUMAN WALK) Not enought balls to activate catch Em-All mode. ({0})/{1}"
+      "Value": "(HUMAN WALK) Not enough Pokeballs to activate catch Em-All mode. ({0})/{1}"
     },
     {
       "Key": "HumanWalkSnipe",
@@ -10,7 +10,7 @@
     },
     {
       "Key": "HumanWalkSnipeUpdate",
-      "Value": "(HUMAN WALK) Found {0} pokemon matched with you filters. Human walking sniper won't catch em all, but try to catch as many as possible"
+      "Value": "(HUMAN WALK) Found {0} pokemon matched with you filters. Human walking sniper won't catch em all, but will try to catch as many as possible"
     },
     {
       "Key": "HumanWalkSnipeAddedPokestop",
@@ -26,7 +26,7 @@
     },
     {
       "Key": "SnipeExceeds",
-      "Value": "Sniper need to take a rest before your account is banned"
+      "Value": "Sniper needs to take a rest before your account is banned"
     },
     {
       "Key": "CatchExceeds",
@@ -493,10 +493,6 @@
       "Value": " \n CP: {0} | IV: {1}% | Move: {2} + {3} | Nev: {4}"
     },
     {
-      "Key": "helpTemplate",
-      "Value": "Parancsok: \n \n /top <cp/iv> <amount> - Legjobb pokemonok megjelenitese. \n /all <cp/iv> - Osszes pokemon megjelenitese. \n /profile - Profil megjelenitese. \n /loc - Pozicio megjelenitese. \n /items - Targyak megjelenitese \n /status - Bot statuszanak megjelenitese. \n /pokedex - Pokedex allapotanak megjelenitese. "
-    },
-    {
       "Key": "statsXpTemplateString",
       "Value": "{0} (Futas ido {1}h {2}m | {3:n0}/{4:n0} XP)"
     },
@@ -519,6 +515,10 @@
     {
       "Key": "googleOffline",
       "Value": "A Google szerverek valoszinuleg tulterheltek vagy lealltak, legy turelmes es probald ujra kesobb."
+    },
+    {
+      "Key": "missingCredentials",
+      "Value": "Ki kell toltened a Username es Password sorokat az auth.json fajlban!"
     },
     {
       "Key": "missingCredentialsGoogle",
@@ -594,7 +594,7 @@
     },
     {
       "Key": "amountPkmSeenCaught",
-      "Value": "Latott pokemonok: {0}/151, Elkapott pokemonok: {1}/151"
+      "Value": "Latott pokemonok: {0}/231, Elkapott pokemonok: {1}/231"
     },
     {
       "Key": "pkmPotentialEvolveCount",

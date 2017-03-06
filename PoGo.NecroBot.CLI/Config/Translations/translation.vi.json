@@ -2,7 +2,7 @@
   "TranslationStrings": [
     {
       "Key": "HumanWalkSnipeNotEnoughtBalls",
-      "Value": "(HUMAN WALK) Not enought balls to activate catch Em-All mode. ({0})/{1}"
+      "Value": "(HUMAN WALK) Not enough Pokeballs to activate catch Em-All mode. ({0})/{1}"
     },
     {
       "Key": "HumanWalkSnipe",
@@ -10,7 +10,7 @@
     },
     {
       "Key": "HumanWalkSnipeUpdate",
-      "Value": "(HUMAN WALK) Found {0} pokemon matched with you filters. Human walking sniper won't catch em all, but try to catch as many as possible"
+      "Value": "(HUMAN WALK) Found {0} pokemon matched with you filters. Human walking sniper won't catch em all, but will try to catch as many as possible"
     },
     {
       "Key": "HumanWalkSnipeAddedPokestop",
@@ -26,7 +26,7 @@
     },
     {
       "Key": "SnipeExceeds",
-      "Value": "Sniper need to take a rest before your account is banned"
+      "Value": "Sniper needs to take a rest before your account is banned"
     },
     {
       "Key": "CatchExceeds",
@@ -489,10 +489,6 @@
       "Value": "\n CP: {0} | IV: {1}% | Move: {2} + {3} | Name: {4}"
     },
     {
-      "Key": "helpTemplate",
-      "Value": "Các Lệnh: \n \n /top <Số lượng> - Hiển thị những Pokemon trong TOP <số lượng>. \n /all - Hiển thị tất cả Pokemon. \n /profile - Hiển thị thông tin. \n /loc - Hiển thị vị trí hiện tại. \n /items - Hiển thị những vật phẩm trong túi."
-    },
-    {
       "Key": "statsXpTemplateString",
       "Value": "{0} (Lên cấp trong {1}h {2}m | {3:n0}/{4:n0} XP)"
     },
@@ -515,6 +511,10 @@
     {
       "Key": "googleOffline",
       "Value": "Server Google có thể đã sập. Hãy kiên nhẫn và mở bot sau 1 ít phút nữa."
+    },
+    {
+      "Key": "missingCredentials",
+      "Value": "Bạn cần điền Username và Password trong auth.json!"
     },
     {
       "Key": "missingCredentialsGoogle",
@@ -590,7 +590,7 @@
     },
     {
       "Key": "amountPkmSeenCaught",
-      "Value": "Số loài Pokemon đã thấy: {0}/151, số loài Pokemon đã bắt: {1}/151"
+      "Value": "Số loài Pokemon đã thấy: {0}/231, số loài Pokemon đã bắt: {1}/231"
     },
     {
       "Key": "pkmPotentialEvolveCount",

@@ -1,17 +1,19 @@
 ﻿#region using directives
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using PoGo.NecroBot.Logic.Logging;
+using PoGo.NecroBot.Logic.Event;
+using PoGo.NecroBot.Logic.Event.Inventory;
+using PoGo.NecroBot.Logic.Model;
 using PoGo.NecroBot.Logic.PoGoUtils;
 using PoGo.NecroBot.Logic.State;
+using PokemonGo.RocketAPI.Exceptions;
 using POGOProtos.Data;
-using PoGo.NecroBot.Logic.Event;
 using POGOProtos.Inventory;
+using POGOProtos.Networking.Responses;
 using POGOProtos.Settings.Master;
-using System;
 
 #endregion
 
@@ -19,28 +21,25 @@ namespace PoGo.NecroBot.Logic.Tasks
 {
     public class UpgradeSinglePokemonTask
     {
-        private static async Task<bool> UpgradeSinglePokemon(ISession session, PokemonData pokemon, List<Candy> pokemonFamilies, List<PokemonSettings> pokemonSettings)
+        public static async Task<bool> UpgradeSinglePokemon(ISession session, PokemonData pokemon)
         {
-            var playerLevel = session.Inventory.GetPlayerStats().Result.FirstOrDefault().Level;
-            var pokemonLevel = PokemonInfo.GetLevel(pokemon);
-
-            if (pokemonLevel  > playerLevel ) return false;
-
-            var settings = pokemonSettings.Single(x => x.PokemonId == pokemon.PokemonId);
-            var familyCandy = pokemonFamilies.Single(x => settings.FamilyId == x.FamilyId);
-
-            if (familyCandy.Candy_ <= 10) return false;
+            if (!session.Inventory.CanUpgradePokemon(pokemon))
+                return false;
 
             var upgradeResult = await session.Inventory.UpgradePokemon(pokemon.Id);
 
-            var bestPokemonOfType = (session.LogicSettings.PrioritizeIvOverCp
-    ? await session.Inventory.GetHighestPokemonOfTypeByIv(upgradeResult.UpgradedPokemon)
-    : await session.Inventory.GetHighestPokemonOfTypeByCp(upgradeResult.UpgradedPokemon)) ?? upgradeResult.UpgradedPokemon;
-
-            if (upgradeResult.Result.ToString().ToLower().Contains("success"))
+            if (upgradeResult.Result == UpgradePokemonResponse.Types.Result.Success && upgradeResult.UpgradedPokemon != null)
             {
+                var bestPokemonOfType = (session.LogicSettings.PrioritizeIvOverCp
+                                        ? session.Inventory.GetHighestPokemonOfTypeByIv(upgradeResult
+                                            .UpgradedPokemon)
+                                        : session.Inventory.GetHighestPokemonOfTypeByCp(upgradeResult
+                                            .UpgradedPokemon)) ?? upgradeResult.UpgradedPokemon;
+
                 session.EventDispatcher.Send(new UpgradePokemonEvent()
                 {
+                    Candy = session.Inventory.GetCandyCount(pokemon.PokemonId),
+                    Pokemon = upgradeResult.UpgradedPokemon,
                     PokemonId = upgradeResult.UpgradedPokemon.PokemonId,
                     Cp = upgradeResult.UpgradedPokemon.Cp,
                     Id = upgradeResult.UpgradedPokemon.Id,
@@ -48,55 +47,66 @@ namespace PoGo.NecroBot.Logic.Tasks
                     BestPerfection = PokemonInfo.CalculatePokemonPerfection(bestPokemonOfType),
                     Perfection = PokemonInfo.CalculatePokemonPerfection(upgradeResult.UpgradedPokemon)
                 });
+
+                return true;
             }
-            return true;
-
+            return false;            
         }
-        public static async Task Execute(ISession session, ulong pokemonId, bool isMax = false)
+
+        public static async Task Execute(ISession session, ulong pokemonId, bool isMax = false, int numUpgrades = -1)
         {
-            using (var block = new BlockableScope(session, Model.BotActions.Upgrade))
+            using (var block = new BlockableScope(session, BotActions.Upgrade))
             {
-                if (!await block.WaitToRun()) return;
-                await session.Inventory.RefreshCachedInventory();
+                if (numUpgrades == -1)
+                    numUpgrades = session.LogicSettings.AmountOfTimesToUpgradeLoop;
 
-                if (session.Inventory.GetStarDust() <= session.LogicSettings.GetMinStarDustForLevelUp)
-                    return;
-                var pokemonToUpgrade = await session.Inventory.GetSinglePokemon(pokemonId);
-
-                if (pokemonToUpgrade == null)
+                PokemonData pokemonToUpgrade = null;
+                try
                 {
-                    session.Actions.RemoveAll(x => x == Model.BotActions.Upgrade);
-                    return;
-
-                }
-
-                var myPokemonSettings = await session.Inventory.GetPokemonSettings();
-                var pokemonSettings = myPokemonSettings.ToList();
-
-                var myPokemonFamilies = await session.Inventory.GetPokemonFamilies();
-                var pokemonFamilies = myPokemonFamilies.ToList();
-
-                bool upgradable = false;
-                int upgradeTimes = 0;
-                do
-                {
-                    try
+                    if (await block.WaitToRun())
                     {
-                        upgradable = await UpgradeSinglePokemon(session, pokemonToUpgrade, pokemonFamilies, pokemonSettings); ;
-                        if (upgradable)
+                        if (session.Inventory.GetStarDust() <= session.LogicSettings.GetMinStarDustForLevelUp)
+                            return;
+
+                        pokemonToUpgrade = session.Inventory.GetSinglePokemon(pokemonId);
+                        if (pokemonToUpgrade == null)
+                            return;
+
+                        bool upgradable = false;
+                        int upgradeTimes = 0;
+                        do
                         {
-                            await Task.Delay(session.LogicSettings.DelayBetweenPokemonUpgrade);
-                        }
-                        upgradeTimes++;
+                            try
+                            {
+                                upgradable = await UpgradeSinglePokemon(session, pokemonToUpgrade);
 
-                    }
-                    catch (Exception)
-                    {
-                        //make sure no exception happen
+                                if (upgradable)
+                                {
+                                    await Task.Delay(session.LogicSettings.DelayBetweenPokemonUpgrade);
+                                }
+                                upgradeTimes++;
+                            }
+                            catch (CaptchaException cex)
+                            {
+                                throw cex;
+                            }
+                            catch (Exception)
+                            {
+                                //make sure no exception happen
+                            }
+                        } while (upgradable && (isMax || upgradeTimes < numUpgrades));
                     }
                 }
-                while (upgradable && (isMax || upgradeTimes < session.LogicSettings.AmountOfTimesToUpgradeLoop));
-
+                finally
+                {
+                    // Reload pokemon after upgrade.
+                    var upgradedPokemon = session.Inventory.GetSinglePokemon(pokemonId);
+                    session.EventDispatcher.Send(new FinishUpgradeEvent()
+                    {
+                        PokemonId = pokemonId,
+                        Pokemon = upgradedPokemon
+                    });
+                }
             }
         }
     }

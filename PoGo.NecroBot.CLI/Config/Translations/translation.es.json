@@ -501,6 +501,10 @@
       "Value": "Los servidores de Google parecen caídos. Por favor, sea paciente e intente utilizar el bot más tarde."
     },
     {
+      "Key": "missingCredentials",
+      "Value": "Es necesario rellenar Username y Password en auth.json para utilizar el bot"
+    },
+    {
       "Key": "missingCredentialsGoogle",
       "Value": "Es necesario rellenar GoogleUsername y GooglePassword en auth.json para utilizar el bot"
     },
@@ -574,7 +578,7 @@
     },
     {
       "Key": "amountPkmSeenCaught",
-      "Value": "Cantidad de Pokémon vistos: {0}/151, Cantidad de Pokémon capturados: {1}/151"
+      "Value": "Cantidad de Pokémon vistos: {0}/231, Cantidad de Pokémon capturados: {1}/231"
     },
     {
       "Key": "pkmPotentialEvolveCount",

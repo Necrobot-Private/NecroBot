@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using GeoCoordinatePortable;
-using PoGo.NecroBot.Logic.Model.Google;
+using PoGo.NecroBot.Logic.Model;
 using PoGo.NecroBot.Logic.Service;
 using PoGo.NecroBot.Logic.State;
 using PokemonGo.RocketAPI;
 using POGOProtos.Networking.Responses;
-using PoGo.NecroBot.Logic.Event;
-using PoGo.NecroBot.Logic.Utils;
-using PoGo.NecroBot.Logic.Model;
+using PoGo.NecroBot.Logic.Logging;
 
 namespace PoGo.NecroBot.Logic.Strategies.Walk
 {
@@ -25,10 +23,11 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
 
         public override string RouteName => "Google Walk";
 
-        public override async Task<PlayerUpdateResponse> Walk(IGeoLocation targetLocation, Func<Task> functionExecutedWhileWalking, ISession session, CancellationToken cancellationToken, double walkSpeed = 0.0)
+        public override async Task Walk(IGeoLocation targetLocation,
+            Func<Task> functionExecutedWhileWalking, ISession session, CancellationToken cancellationToken,
+            double walkSpeed = 0.0)
         {
             GetGoogleInstance(session);
-
             _minStepLengthInMeters = session.LogicSettings.DefaultStepLength;
             var currentLocation = new GeoCoordinate(_client.CurrentLatitude, _client.CurrentLongitude, _client.CurrentAltitude);
             var destinaionCoordinate = new GeoCoordinate(targetLocation.Latitude, targetLocation.Longitude);
@@ -37,13 +36,14 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
 
             if (googleWalk == null)
             {
-                return await RedirectToNextFallbackStrategy(session.LogicSettings, targetLocation, functionExecutedWhileWalking, session, cancellationToken, walkSpeed);
+                await RedirectToNextFallbackStrategy(session.LogicSettings, targetLocation, functionExecutedWhileWalking, session, cancellationToken, walkSpeed);
+                return;
             }
-            
+
             base.OnStartWalking(session, targetLocation, googleWalk.Distance);
 
-            List <GeoCoordinate> points = googleWalk.Waypoints;
-            return await DoWalk(points, session, functionExecutedWhileWalking, currentLocation, destinaionCoordinate, cancellationToken, walkSpeed);
+            List<GeoCoordinate> points = googleWalk.Waypoints;
+            await DoWalk(points, session, functionExecutedWhileWalking, currentLocation, destinaionCoordinate, cancellationToken, walkSpeed);
         }
 
         private void GetGoogleInstance(ISession session)
@@ -52,7 +52,8 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
                 _googleDirectionsService = new GoogleDirectionsService(session);
         }
 
-        public override double CalculateDistance(double sourceLat, double sourceLng, double destinationLat, double destinationLng, ISession session = null)
+        public override double CalculateDistance(double sourceLat, double sourceLng, double destinationLat,
+            double destinationLng, ISession session = null)
         {
             // Too expensive to calculate true distance.
             return 1.5 * base.CalculateDistance(sourceLat, sourceLng, destinationLat, destinationLng);

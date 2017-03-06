@@ -1,22 +1,30 @@
 #region using directives
+
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Caching;
+using System.Threading;
+using System.Threading.Tasks;
 using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.Event;
+using PoGo.NecroBot.Logic.Event.Inventory;
 using PoGo.NecroBot.Logic.Interfaces.Configuration;
+using PoGo.NecroBot.Logic.Logging;
+using PoGo.NecroBot.Logic.Model;
 using PoGo.NecroBot.Logic.Model.Settings;
 using PoGo.NecroBot.Logic.Service;
-using PokemonGo.RocketAPI;
-using POGOProtos.Networking.Responses;
 using PoGo.NecroBot.Logic.Service.Elevation;
-using System.Collections.Generic;
-using POGOProtos.Map.Fort;
-using System;
+using PoGo.NecroBot.Logic.Tasks;
+using PoGo.NecroBot.Logic.Utils;
+using PokemonGo.RocketAPI;
+using PokemonGo.RocketAPI.Enums;
 using PokemonGo.RocketAPI.Extensions;
-using PoGo.NecroBot.Logic.Model;
-using System.Threading.Tasks;
-using System.Threading;
-using System.Runtime.Caching;
-using PoGo.NecroBot.Logic.Logging;
+using POGOProtos.Map.Fort;
+using POGOProtos.Networking.Responses;
+using static PoGo.NecroBot.Logic.Utils.PushNotificationClient;
+using TinyIoC;
 
 #endregion
 
@@ -37,32 +45,45 @@ namespace PoGo.NecroBot.Logic.State
         IElevationService ElevationService { get; set; }
         List<FortData> Forts { get; set; }
         List<FortData> VisibleForts { get; set; }
-        void ResetSessionToWithNextBot(AuthConfig authConfig = null, double lat = 0, double lng = 0, double att = 0);
+        bool ReInitSessionWithNextBot(MultiAccountManager.BotAccount authConfig = null, double lat = 0, double lng = 0, double att = 0);
         void AddForts(List<FortData> mapObjects);
         void AddVisibleForts(List<FortData> mapObjects);
         Task<bool> WaitUntilActionAccept(BotActions action, int timeout = 30000);
         List<BotActions> Actions { get; }
         CancellationTokenSource CancellationTokenSource { get; set; }
         MemoryCache Cache { get; set; }
-        List<AuthConfig> Accounts { get; }
         DateTime LoggedTime { get; set; }
         DateTime CatchBlockTime { get; set; }
+        Statistics RuntimeStatistics { get; }
+        GymTeamState GymState { get; set; }
+        double KnownLatitudeBeforeSnipe { get; set; }
+        double KnownLongitudeBeforeSnipe { get; set; }
+        bool SaveBallForByPassCatchFlee { set; get; }
 
-        void BlockCurrentBot(int expired = 15);
     }
-
 
     public class Session : ISession
     {
-        public Session(ISettings settings, ILogicSettings logicSettings, IElevationService elevationService) : this(settings, logicSettings, elevationService, Common.Translation.Load(logicSettings))
+        public Session(GlobalSettings globalSettings,ISettings settings, ILogicSettings logicSettings, IElevationService elevationService) : this(
+           globalSettings, settings, logicSettings, elevationService, Common.Translation.Load(logicSettings))
         {
             LoggedTime = DateTime.Now;
         }
+
+        public bool SaveBallForByPassCatchFlee { get; set; }
+
         public DateTime LoggedTime { get; set; }
         private List<AuthConfig> accounts;
-        public List<BotActions> Actions { get { return this.botActions; } }
-        public Session(ISettings settings, ILogicSettings logicSettings, IElevationService elevationService, ITranslation translation)
+
+        public List<BotActions> Actions
         {
+            get { return this.botActions; }
+        }
+
+        public Session(GlobalSettings globalSettings, ISettings settings, ILogicSettings logicSettings,
+            IElevationService elevationService, ITranslation translation)
+        {
+            this.GlobalSettings = globalSettings;
             this.CancellationTokenSource = new CancellationTokenSource();
             this.Forts = new List<FortData>();
             this.VisibleForts = new List<FortData>();
@@ -70,6 +91,7 @@ namespace PoGo.NecroBot.Logic.State
             this.accounts = new List<AuthConfig>();
             this.EventDispatcher = new EventDispatcher();
             this.LogicSettings = logicSettings;
+            this.RuntimeStatistics = new Statistics();
 
             this.ElevationService = elevationService;
 
@@ -79,20 +101,32 @@ namespace PoGo.NecroBot.Logic.State
             this.Reset(settings, LogicSettings);
             this.Stats = new SessionStats(this);
             this.accounts.AddRange(logicSettings.Bots);
-            if (!this.accounts.Any(x => (x.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Ptc && x.PtcUsername == settings.PtcUsername) ||
-                                        (x.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Google && x.GoogleUsername == settings.GoogleUsername)
-                                        ))
+            if (!this.accounts.Any(x => x.AuthType == settings.AuthType && x.Username == settings.Username))
             {
                 this.accounts.Add(new AuthConfig()
                 {
                     AuthType = settings.AuthType,
-                    GooglePassword = settings.GooglePassword,
-                    GoogleUsername = settings.GoogleUsername,
-                    PtcPassword = settings.PtcPassword,
-                    PtcUsername = settings.PtcUsername
+                    Password = settings.Password,
+                    Username = settings.Username
                 });
             }
+            if (File.Exists("runtime.log"))
+            {
+                var lines = File.ReadAllLines("runtime.log");
+                foreach (var item in lines)
+                {
+                    var arr = item.Split(';');
+                    var acc = this.accounts.FirstOrDefault(p => p.Username == arr[0]);
+                    if (acc != null)
+                    {
+                        acc.RuntimeTotal = Convert.ToDouble(arr[1]);
+                    }
+                }
+            }
+
+            GymState = new GymTeamState();
         }
+
         public List<FortData> Forts { get; set; }
         public List<FortData> VisibleForts { get; set; }
         public GlobalSettings GlobalSettings { get; set; }
@@ -119,70 +153,78 @@ namespace PoGo.NecroBot.Logic.State
         public IElevationService ElevationService { get; set; }
         public CancellationTokenSource CancellationTokenSource { get; set; }
         public MemoryCache Cache { get; set; }
+
         public List<AuthConfig> Accounts
         {
-            get
-            {
-                return this.accounts;
-            }
+            get { return this.accounts; }
         }
 
         public DateTime CatchBlockTime { get; set; }
+        public Statistics RuntimeStatistics { get; }
         private List<BotActions> botActions = new List<BotActions>();
+
         public void Reset(ISettings settings, ILogicSettings logicSettings)
         {
-            Client = new Client(Settings);
+            this.KnownLatitudeBeforeSnipe = 0; 
+            this.KnownLongitudeBeforeSnipe = 0;
+            if(this.GlobalSettings.Auth.DeviceConfig.UseRandomDeviceId)
+            {
+                settings.DeviceId = DeviceConfig.GetDeviceId(settings.Username);
+                Logger.Debug($"Username : {Settings.Username} , Device ID :{Settings.DeviceId}");
+            }
+            Client = new Client(settings);
             // ferox wants us to set this manually
-            Inventory = new Inventory(Client, logicSettings);
+            Inventory = new Inventory(this, Client, logicSettings, () =>
+            {
+                var candy = this.Inventory.GetPokemonFamilies().Result.ToList();
+                var pokemonSettings = this.Inventory.GetPokemonSettings().Result.ToList();
+                this.EventDispatcher.Send(new InventoryRefreshedEvent(null, pokemonSettings, candy));
+            });
             Navigation = new Navigation(Client, logicSettings);
             Navigation.WalkStrategy.UpdatePositionEvent +=
-                (lat, lng) => this.EventDispatcher.Send(new UpdatePositionEvent { Latitude = lat, Longitude = lng });
+                (session, lat, lng,s) => this.EventDispatcher.Send(new UpdatePositionEvent {Latitude = lat, Longitude = lng, Speed = s});
+
+            Navigation.WalkStrategy.UpdatePositionEvent += LoadSaveState.SaveLocationToDisk;
         }
+
         //TODO : Need add BotManager to manage all feature related to multibot, 
-        public void ResetSessionToWithNextBot(AuthConfig bot = null, double lat = 0, double lng = 0, double att = 0)
+        public bool ReInitSessionWithNextBot(MultiAccountManager.BotAccount bot = null, double lat = 0, double lng = 0, double att = 0)
         {
             this.CatchBlockTime = DateTime.Now; //remove any block
-            
-            var currentAccount = this.accounts.FirstOrDefault(x => (x.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Ptc && x.PtcUsername == this.Settings.PtcUsername) ||
-                                        (x.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Google && x.GoogleUsername == this.Settings.GoogleUsername));
-            if (LoggedTime != DateTime.MinValue)
+            MSniperServiceTask.BlockSnipe();
+            this.VisibleForts.Clear();
+            this.Forts.Clear();
+
+            var manager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
+
+            var nextBot = manager.GetSwitchableAccount(bot);
+
+            this.Settings.AuthType = nextBot.AuthType;
+            this.Settings.Password = nextBot.Password;
+            this.Settings.Username = nextBot.Username;
+            this.Settings.DefaultAltitude = att == 0 ? this.Client.CurrentAltitude : att;
+            this.Settings.DefaultLatitude = lat == 0 ? this.Client.CurrentLatitude : lat;
+            this.Settings.DefaultLongitude = lng == 0 ? this.Client.CurrentLongitude : lng;
+            this.Stats = new SessionStats(this);
+            this.Reset(this.Settings, this.LogicSettings);
+            //CancellationTokenSource.Cancel();
+            this.CancellationTokenSource = new CancellationTokenSource();
+
+            this.EventDispatcher.Send(new BotSwitchedEvent(nextBot)
             {
-                currentAccount.RuntimeTotal += (DateTime.Now - LoggedTime).TotalMinutes;
-            }
+            });
 
-            this.accounts = this.accounts.OrderByDescending(p => p.RuntimeTotal).ToList();
-
-            var nextBot = bot != null ? bot : this.accounts.LastOrDefault(p => p != currentAccount && p.ReleaseBlockTime < DateTime.Now);
-            if (nextBot != null)
+            if (this.LogicSettings.MultipleBotConfig.DisplayList)
             {
-                this.Settings.AuthType = nextBot.AuthType;
-                this.Settings.GooglePassword = nextBot.GooglePassword;
-                this.Settings.GoogleUsername = nextBot.GoogleUsername;
-                this.Settings.PtcPassword = nextBot.PtcPassword;
-                this.Settings.PtcUsername = nextBot.PtcUsername;
-                this.Settings.DefaultAltitude = att == 0 ? this.Client.CurrentAltitude : att;
-                this.Settings.DefaultLatitude = lat == 0 ? this.Client.CurrentLatitude : lat;
-                this.Settings.DefaultLongitude = lng == 0 ? this.Client.CurrentLongitude : lng;
-                this.Stats = new SessionStats(this);
-                this.Reset(this.Settings, this.LogicSettings);
-                CancellationTokenSource.Cancel();
-                this.CancellationTokenSource = new CancellationTokenSource();
-                
-                this.EventDispatcher.Send(new BotSwitchedEvent() {
-                });
-
-                if(this.LogicSettings.MultipleBotConfig.DisplayList)
-                {
-                    foreach (var item in this.accounts)
-                    {
-                        Logger.Write($"{item.PtcUsername}{item.GoogleUsername} \tRuntime : {item.RuntimeTotal:0.00} min ");
-                    }
-                }
+                manager.DumpAccountList();
             }
-
+            return true;
         }
+
         public void AddForts(List<FortData> data)
         {
+            data.RemoveAll(x => LocationUtils.CalculateDistanceInMeters(x.Latitude, x.Longitude, this.Settings.DefaultLatitude, this.Settings.DefaultLongitude) > 10000);
+
             this.Forts.RemoveAll(p => data.Any(x => x.Id == p.Id && x.Type == FortType.Checkpoint));
             this.Forts.AddRange(data.Where(x => x.Type == FortType.Checkpoint));
             foreach (var item in data.Where(p => p.Type == FortType.Gym))
@@ -205,6 +247,7 @@ namespace PoGo.NecroBot.Logic.State
             var notexist = mapObjects.Where(p => !this.VisibleForts.Any(x => x.Id == p.Id));
             this.VisibleForts.AddRange(notexist);
         }
+
         public async Task<bool> WaitUntilActionAccept(BotActions action, int timeout = 30000)
         {
             if (botActions.Count == 0) return true;
@@ -218,13 +261,9 @@ namespace PoGo.NecroBot.Logic.State
             }
             return false; //timedout
         }
+        public GymTeamState GymState { get; set; }
 
-        public void BlockCurrentBot(int expired = 60)
-        {
-            var currentAccount = this.accounts.FirstOrDefault(x => (x.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Ptc && x.PtcUsername == this.Settings.PtcUsername) ||
-                                       (x.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Google && x.GoogleUsername == this.Settings.GoogleUsername));
-
-            currentAccount.ReleaseBlockTime = DateTime.Now.AddMinutes(expired);
-        }
+        public double KnownLatitudeBeforeSnipe { get; set; }
+        public double KnownLongitudeBeforeSnipe { get; set; }
     }
 }

@@ -2,7 +2,7 @@
   "TranslationStrings": [
     {
       "Key": "HumanWalkSnipeNotEnoughtBalls",
-      "Value": "(HUMAN WALK) Not enought balls to activate catch Em-All mode. ({0})/{1}"
+      "Value": "(HUMAN WALK) Not enough Pokeballs to activate catch Em-All mode. ({0})/{1}"
     },
     {
       "Key": "HumanWalkSnipe",
@@ -10,7 +10,7 @@
     },
     {
       "Key": "HumanWalkSnipeUpdate",
-      "Value": "(HUMAN WALK) Found {0} pokemon matched with you filters. Human walking sniper won't catch em all, but try to catch as many as possible"
+      "Value": "(HUMAN WALK) Found {0} pokemon matched with you filters. Human walking sniper won't catch em all, but will try to catch as many as possible"
     },
     {
       "Key": "HumanWalkSnipeAddedPokestop",
@@ -26,7 +26,7 @@
     },
     {
       "Key": "SnipeExceeds",
-      "Value": "Sniper need to take a rest before your account is banned"
+      "Value": "Sniper needs to take a rest before your account is banned"
     },
     {
       "Key": "CatchExceeds",
@@ -407,6 +407,10 @@
     {
       "Key": "pokemonIgnoreFilter",
       "Value": "[Pokémon-Ignore-Filter] - Ignorerer {0} som angivet i indstillingerne!"
+    },
+    {
+      "Key": "MissingCredentials",
+      "Value": "Du er nød til at fylde Username og Password ud i auth.json!"
     },
     {
       "Key": "MissingCredentialsGoogle",

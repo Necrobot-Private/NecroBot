@@ -1,16 +1,19 @@
 ﻿#region using directives
 
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 using POGOProtos.Enums;
+using TinyIoC;
+using PoGo.NecroBot.Logic.State;
 
 #endregion
 
 namespace PoGo.NecroBot.Logic.Model.Settings
 {
-    public class UpgradeFilter
+    public class UpgradeFilter    : BaseConfig, IPokemonFilter
     {
         internal enum Operator
         {
@@ -24,15 +27,18 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             iv
         }
 
-        public UpgradeFilter()
+        public UpgradeFilter(): base()
         {
-
+            this.Moves = new List<List<PokemonMove>>();
+            this.AffectToPokemons = new List<PokemonId>();
         }
 
-        public UpgradeFilter(string levelUpByCPorIv, double upgradePokemonCpMinimum, double upgradePokemonIvMinimum,
+        public UpgradeFilter(double minLevel, double upgradePokemonCpMinimum, double upgradePokemonIvMinimum,
             string upgradePokemonMinimumStatsOperator, bool onlyUpgradeFavorites)
         {
-            LevelUpByCPorIv = levelUpByCPorIv;
+            this.AffectToPokemons = new List<PokemonId>();
+            this.Moves = new List<List<PokemonMove>>();
+            UpgradePokemonLvlMinimum = minLevel;
             UpgradePokemonCpMinimum = upgradePokemonCpMinimum;
             UpgradePokemonIvMinimum = upgradePokemonIvMinimum;
             UpgradePokemonMinimumStatsOperator = upgradePokemonMinimumStatsOperator;
@@ -41,44 +47,65 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         }
 
         [JsonIgnore]
-        [ExcelConfig(IsPrimaryKey = true, Key = "Allow Upgrade", Position = 1, Description = "TRUE is allow custom filter for level up")]
+        [NecrobotConfig(IsPrimaryKey = true, Key = "Allow Upgrade", Position = 1, Description = "TRUE is allow custom filter for level up")]
         public bool AllowTransfer { get; set; }
 
-        [ExcelConfig(Key = "LevelUpByCPorIv", Position =2, Description ="Upgrade by IV or CP")]
-        [DefaultValue("iv")]
-        [EnumDataType(typeof(CPorIv))]
+        [NecrobotConfig(Key = "Min Level To Upgrade", Position = 2, Description ="Min Level to upgrade")]
+        [Range(0,100)]
+        [DefaultValue(30)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
-        public string LevelUpByCPorIv { get; set; } = "iv";
+        public double UpgradePokemonLvlMinimum { get; set; }
 
-        [ExcelConfig(Key = "MIN CP", Position = 3, Description = "Upgrade by IV or CP")]
-        [DefaultValue(1250)]
+        [NecrobotConfig(Key = "Min Upgrade CP", Position = 3, Description = "Upgrade by IV or CP")]
+        [DefaultValue(2250)]
         [Range(0, 9999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
-        public double UpgradePokemonCpMinimum { get; set; } = 1250;
+        public double UpgradePokemonCpMinimum { get; set; } 
 
-        [ExcelConfig(Key = "MIN IV ", Position = 4, Description = "Define Min IV to upgrade")]
-        [DefaultValue(90)]
-        [Range(0, 100)]
+        [NecrobotConfig(Key = "Min Upgrade IV", Position = 4, Description = "Define Min IV to upgrade")]
+        [DefaultValue(100)]
+        [Range(0, 101)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 3)]
-        public double UpgradePokemonIvMinimum { get; set; } = 90;
+        public double UpgradePokemonIvMinimum { get; set; } 
 
-        [ExcelConfig(Key = "Operator", Position = 5, Description = "Operator logic to check pokemon for upgrade")]
+        [NecrobotConfig(Key = "Operator", Position = 5, Description = "Operator logic to check pokemon for upgrade")]
         [DefaultValue("or")]
         [EnumDataType(typeof(Operator))]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 4)]
-        public string UpgradePokemonMinimumStatsOperator { get; set; } = "or";
+        public string UpgradePokemonMinimumStatsOperator { get; set; }
 
-        [ExcelConfig(Key = "Only Farovite", Position = 6, Description = "TRUE-> ONLy upgrade pokemon that you marked favorite or auto mark as favorite")]
+        [NecrobotConfig(Key = "Only Farovite", Position = 6, Description = "If true, Bot only upgrade pokemon that favorite only, it will ignore all those condition check.")]
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 5)]
         public bool OnlyUpgradeFavorites { get; set; }
+
+        [NecrobotConfig(Key = "Move Set", Position = 6, Description = "Only update if move set match with pair in the list")]
+        [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 6)]
+        public List<List<PokemonMove>> Moves { get; set; } = new List<List<PokemonMove>>();
+
+        [NecrobotConfig(Key = "Affect To Pokemons", Position = 7, Description = "Define list pokemon that this upgrade filter also be applied to")]
+        [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 6)]
+
+        public List<PokemonId> AffectToPokemons { get; set; }
 
         internal static Dictionary<PokemonId, UpgradeFilter> Default()
         {
             return new Dictionary<PokemonId, UpgradeFilter>
             {
-                {PokemonId.Dratini, new UpgradeFilter("iv", 600, 99, "or", false)}
+                {PokemonId.Dratini, new UpgradeFilter(100, 600, 99, "or", false)}
             };
+        }
+
+        public IPokemonFilter GetGlobalFilter()
+        {
+            var session = TinyIoCContainer.Current.Resolve<ISession>();
+            var _logicSettings = session.LogicSettings;
+            return new UpgradeFilter(_logicSettings.UpgradePokemonLvlMinimum, _logicSettings.UpgradePokemonCpMinimum,
+                _logicSettings.UpgradePokemonIvMinimum, _logicSettings.UpgradePokemonMinimumStatsOperator,
+                _logicSettings.OnlyUpgradeFavorites);
+
+
+
         }
     }
 }

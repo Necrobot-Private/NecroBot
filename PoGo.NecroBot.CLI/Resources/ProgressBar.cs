@@ -39,10 +39,10 @@ namespace PoGo.NecroBot.CLI.Resources
                 Console.CursorLeft = 47 + _leftOffset;
                 Console.Write(@"]");
                 Console.CursorLeft = 1 + _leftOffset;
-                var segment = 45.5f/Total;
+                var segment = 45.5f / Total;
 
                 var pos = 1 + _leftOffset;
-                for (var i = 0; i < segment*amt; i++)
+                for (var i = 0; i < segment * amt; i++)
                 {
                     Console.BackgroundColor = barColor;
                     Console.CursorLeft = pos++;

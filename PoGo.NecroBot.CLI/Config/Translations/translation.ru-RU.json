@@ -489,10 +489,6 @@
       "Value": "\n CP: {0} | IV: {1}% | Move: {2} + {3} | Имя: {4}"
     },
     {
-      "Key": "helpTemplate",
-      "Value": "Команды: \n \n /top <cp/iv> <количество> - показать лучших покемонов. \n /all <cp/iv> - показать всех ваших покемонов. \n /profile - показать профиль игрока. \n /loc - показать локацию. \n /items - показать инвентарь. \n /status - показать статус. \n /pokedex - ваш покедэкс. \n /restart - перезапустить бота."
-    },
-    {
       "Key": "statsXpTemplateString",
       "Value": "{0} (след.через {1}ч{2}м|{3}/{4} XP)"
     },
@@ -515,6 +511,10 @@
     {
       "Key": "googleOffline",
       "Value": "Google servers are probably down, Please be patient and start the bot later."
+    },
+    {
+      "Key": "missingCredentials",
+      "Value": "Вам нужно заполнить настройки Username и Password в auth.json!"
     },
     {
       "Key": "missingCredentialsGoogle",
@@ -590,7 +590,7 @@
     },
     {
       "Key": "amountPkmSeenCaught",
-      "Value": "Покемонов изучено: {0}/151, Покемонов поймано: {1}/151"
+      "Value": "Покемонов изучено: {0}/231, Покемонов поймано: {1}/231"
     },
     {
       "Key": "pkmPotentialEvolveCount",

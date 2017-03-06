@@ -280,8 +280,8 @@ namespace PoGo.NecroBot.GUI
                     var captionHeight = SystemParameters.CaptionHeight;
 
                     // Set the indicated size.
-                    newWindow.Width = screenRect.Width + verticalBorderWidth*2;
-                    newWindow.Height = screenRect.Height + captionHeight + horizontalBorderHeight*2;
+                    newWindow.Width = screenRect.Width + verticalBorderWidth * 2;
+                    newWindow.Height = screenRect.Height + captionHeight + horizontalBorderHeight * 2;
                 }
 
                 // Show the window.

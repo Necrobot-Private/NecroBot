@@ -1,9 +1,14 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/mvr6v0v99gscqxbn/branch/master?svg=true)](https://ci.appveyor.com/project/NzV/necrobot/branch/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/g1dtrcdnjjbxugw6?svg=true)](https://ci.appveyor.com/project/jjskuld/necrobot/branch/master)
 [![Github All Releases](https://img.shields.io/github/downloads/Necrobot-Private/NecroBot/total.svg?maxAge=258)](https://github.com/Necrobot-Private/NecroBot/releases)
 [![GitHub license](https://img.shields.io/badge/license-AGPL-blue.svg)](https://raw.githubusercontent.com/Necrobot-Private/NecroBot/master/LICENSE.md)
 
-<h1>Pokémon Go 0.49.1 API is now being forced so the bot killswitch has been activated! Stay tuned for updates.</h1>
+<h1>Necrobot2 is now compatible with 0.57.3 API.</h1>
 
+<p>
+Necrobot2 itself is free but now you will need to purchase an API key to run the bot.
+<br/>
+See https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer for pricing for API keys.
+</p>
 
 <p align="center">
 
@@ -19,22 +24,26 @@
 
 <h2>Screenshots</h2>
 
-- Gui App
+- Electron Web UI App
 
 <img src="http://i.imgur.com/Ph1sU94r.png" width="430">
 <img src="http://i.imgur.com/4Dj2RjNr.png" width="430">
+
+- All in One Windows GUI App
+
+<img src="http://image.prntscr.com/image/fd77f0500e4f4a1cb4c8ff78e22b85c4.png" width="430">
+<img src="http://image.prntscr.com/image/016259c838da4dfdb334195f0aa47f70.png" width="430">
 
 - Console App
 
 <img src="http://i.imgur.com/z6UfTm8.png" width="430">
 
 <h2><a name="getting-started">Getting Started</a></h2>
-Make sure you check out our [Wiki](https://github.com/Necrobot-Private/NecroBot/wiki) to get started.    <b><---- Wiki links will be updated soon. Stay tuned.</b>
+
+Please visit our website [http://necrobot2.com](http://necrobot2.com) to find some tips for setup and running.
+
+</b>
 <br/>
-
-
-
-<h2><a name="features">Awesome Test Features</a></h2>
 
 ## [Credits](http://pastebin.com/Yh4ynXbv)
 

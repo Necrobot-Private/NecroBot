@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PoGo.NecroBot.Logic.Event
+﻿namespace PoGo.NecroBot.Logic.Event
 {
-    public class BotSwitchedEvent :IEvent
+    public class BotSwitchedEvent : IEvent
     {
+        private MultiAccountManager.BotAccount Account;
+
+        public BotSwitchedEvent(MultiAccountManager.BotAccount nextBot)
+        {
+            this.Account = nextBot;
+        }
     }
 }

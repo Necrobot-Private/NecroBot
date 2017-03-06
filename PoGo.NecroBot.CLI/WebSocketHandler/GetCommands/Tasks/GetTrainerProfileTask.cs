@@ -6,7 +6,6 @@ using PoGo.NecroBot.CLI.WebSocketHandler.GetCommands.Events;
 using PoGo.NecroBot.CLI.WebSocketHandler.GetCommands.Helpers;
 using PoGo.NecroBot.Logic.State;
 using SuperSocket.WebSocket;
-using PoGo.NecroBot.Logic.Model;
 
 #endregion
 
@@ -14,18 +13,21 @@ namespace PoGo.NecroBot.CLI.WebSocketHandler.GetCommands.Tasks
 {
     internal class GetTrainerProfileTask
     {
+        // jjskuld - Ignore CS1998 warning for now.
+        #pragma warning disable 1998
         public static async Task Execute(ISession session, WebSocketSession webSocketSession, string requestID)
         {
-            using (var blocker = new BlockableScope(session, BotActions.GetProfile))
+            //using (var blocker = new BlockableScope(session, BotActions.GetProfile))
             {
-                if (!await blocker.WaitToRun()) return;
+                // if (!await blocker.WaitToRun()) return;
 
-                var playerStats = (await session.Inventory.GetPlayerStats()).FirstOrDefault();
+                var playerStats = (session.Inventory.GetPlayerStats()).FirstOrDefault();
                 if (playerStats == null)
                     return;
                 var tmpData = new TrainerProfileWeb(session.Profile.PlayerData, playerStats);
                 webSocketSession.Send(EncodingHelper.Serialize(new TrainerProfileResponce(tmpData, requestID)));
             }
         }
+        #pragma warning restore 1998
     }
 }

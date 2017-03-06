@@ -2,7 +2,7 @@
   "TranslationStrings": [
     {
       "Key": "HumanWalkSnipeNotEnoughtBalls",
-      "Value": "(HUMAN WALK) Not enought balls to activate catch Em-All mode. ({0})/{1}"
+      "Value": "(HUMAN WALK) Not enough Pokeballs to activate catch Em-All mode. ({0})/{1}"
     },
     {
       "Key": "HumanWalkSnipe",
@@ -10,7 +10,7 @@
     },
     {
       "Key": "HumanWalkSnipeUpdate",
-      "Value": "(HUMAN WALK) Found {0} pokemon matched with you filters. Human walking sniper won't catch em all, but try to catch as many as possible"
+      "Value": "(HUMAN WALK) Found {0} pokemon matched with you filters. Human walking sniper won't catch em all, but will try to catch as many as possible"
     },
     {
       "Key": "HumanWalkSnipeAddedPokestop",
@@ -26,7 +26,7 @@
     },
     {
       "Key": "SnipeExceeds",
-      "Value": "Sniper need to take a rest before your account is banned"
+      "Value": "Sniper needs to take a rest before your account is banned"
     },
     {
       "Key": "CatchExceeds",
@@ -493,10 +493,6 @@
       "Value": "\n CP: {0} | IV: {1}% | Move: {2} + {3} | {4}"
     },
     {
-      "Key": "helpTemplate",
-      "Value": "Commands: \n \n /top <cp/iv> <amount> - トップのポケモンを表示 \n /all <cp/iv> - 全てのポケモンを表示 \n /profile - プロファイルを表示 \n /loc - 座標を表示。 \n /items - アイテムを表示 \n /status - BOTの状態を表示. \n /pokedex - ずかんを表示 "
-    },
-    {
       "Key": "statsXpTemplateString",
       "Value": "{0} (あと {1}時間 {2}分でレベルアップ | {3:n0}/{4:n0} 経験値)"
     },
@@ -519,6 +515,10 @@
     {
       "Key": "googleOffline",
       "Value": "おそらくGoogleがサーバダウンしています。しばらく経ってからBOTを開始してください。"
+    },
+    {
+      "Key": "missingCredentials",
+      "Value": "auth.jsonにユーザー名とパスワードが記述されていません！"
     },
     {
       "Key": "missingCredentialsGoogle",
@@ -594,7 +594,7 @@
     },
     {
       "Key": "amountPkmSeenCaught",
-      "Value": "見つけたポケモン: {0}/151　 捕まえたポケモン: {1}/151"
+      "Value": "見つけたポケモン: {0}/231　 捕まえたポケモン: {1}/231"
     },
     {
       "Key": "pkmPotentialEvolveCount",

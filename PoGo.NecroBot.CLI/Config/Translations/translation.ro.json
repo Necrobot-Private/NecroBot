@@ -2,7 +2,7 @@
   "TranslationStrings": [
     {
       "Key": "HumanWalkSnipeNotEnoughtBalls",
-      "Value": "(HUMAN WALK) Not enought balls to activate catch Em-All mode. ({0})/{1}"
+      "Value": "(HUMAN WALK) Not enough Pokeballs to activate catch Em-All mode. ({0})/{1}"
     },
     {
       "Key": "HumanWalkSnipe",
@@ -10,7 +10,7 @@
     },
     {
       "Key": "HumanWalkSnipeUpdate",
-      "Value": "(HUMAN WALK) Found {0} pokemon matched with you filters. Human walking sniper won't catch em all, but try to catch as many as possible"
+      "Value": "(HUMAN WALK) Found {0} pokemon matched with you filters. Human walking sniper won't catch em all, but will try to catch as many as possible"
     },
     {
       "Key": "HumanWalkSnipeAddedPokestop",
@@ -26,7 +26,7 @@
     },
     {
       "Key": "SnipeExceeds",
-      "Value": "Sniper need to take a rest before your account is banned"
+      "Value": "Sniper needs to take a rest before your account is banned"
     },
     {
       "Key": "CatchExceeds",
@@ -493,10 +493,6 @@
       "Value": "\n CP: {0} | IV: {1}% | Move: {2} + {3} | Nume: {4}"
     },
     {
-      "Key": "helpTemplate",
-      "Value": "Comenzi: \n \n /top <cp/iv> <cantitate> - Afișează pokemonii tăi de top. \n /all <cp/iv> - Afișează toți pokemonii tăi. \n /profile - Afișează profilul tău. \n /loc - Afișează locația ta. \n /items - Afișează obiectele tale. \n /status - Afișează statusul botului. \n /pokedex - Afișează pokedexul tău."
-    },
-    {
       "Key": "statsXpTemplateString",
       "Value": "{0} (Avansezi la următorul nivel în {1}h {2}min | {3:n0}/{4:n0} XP)"
     },
@@ -519,6 +515,10 @@
     {
       "Key": "googleOffline",
       "Value": "Serverele Google sunt probabil căzute. Te rugăm să ai răbdare și să pornești botul mai târziu."
+    },
+    {
+      "Key": "missingCredentials",
+      "Value": "Va trebui să completezi Username și Password în auth.json!"
     },
     {
       "Key": "missingCredentialsGoogle",
@@ -594,7 +594,7 @@
     },
     {
       "Key": "amountPkmSeenCaught",
-      "Value": "Cantitatea de pokemoni văzută: {0}/151, cantitatea de pokemoni prinsă: {1}/151"
+      "Value": "Cantitatea de pokemoni văzută: {0}/231, cantitatea de pokemoni prinsă: {1}/231"
     },
     {
       "Key": "pkmPotentialEvolveCount",

@@ -5,6 +5,8 @@ using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.State;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Networking.Responses;
+using TinyIoC;
+using System;
 
 namespace PoGo.NecroBot.Logic.Tasks
 {
@@ -13,10 +15,9 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static async Task Execute(ISession session, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-
-            await session.Inventory.RefreshCachedInventory();
-
-            var currentAmountOfIncense = await session.Inventory.GetItemAmountByType(ItemId.ItemIncenseOrdinary);
+            TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
+            
+            var currentAmountOfIncense = session.Inventory.GetItemAmountByType(ItemId.ItemIncenseOrdinary);
             if (currentAmountOfIncense == 0)
             {
                 Logger.Write(session.Translation.GetTranslation(TranslationString.NoIncenseAvailable));
@@ -31,6 +32,9 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             if (UseIncense.Result == UseIncenseResponse.Types.Result.Success)
             {
+                var totalMS = UseIncense.AppliedIncense.ExpireMs - UseIncense.AppliedIncense.AppliedMs;
+
+                TinyIoCContainer.Current.Resolve<MultiAccountManager>().DisableSwitchAccountUntil(DateTime.Now.AddMilliseconds(totalMS));
                 Logger.Write(session.Translation.GetTranslation(TranslationString.UsedIncense));
             }
             else if (UseIncense.Result == UseIncenseResponse.Types.Result.NoneInInventory)

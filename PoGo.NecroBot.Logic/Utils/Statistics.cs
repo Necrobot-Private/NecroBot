@@ -6,12 +6,13 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Google.Protobuf.Collections;
+using PoGo.NecroBot.Logic.Exceptions;
 using PoGo.NecroBot.Logic.Logging;
+using PoGo.NecroBot.Logic.Model.Settings;
 using PoGo.NecroBot.Logic.State;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Networking.Responses;
-using PoGo.NecroBot.Logic.Exceptions;
-using PoGo.NecroBot.Logic.Model.Settings;
+using TinyIoC;
 
 #endregion
 
@@ -32,28 +33,34 @@ namespace PoGo.NecroBot.Logic.Utils
         public int TotalExperience;
         public int TotalItemsRemoved;
         public int TotalPokemons = 0;
+        public int TotalPokemonEvolved = 0;
         public int TotalPokestops = 0;
         public int TotalPokemonTransferred;
         public int TotalStardust;
         public int LevelForRewards = -1;
+        public bool isRandomTimeSet = false;
+        public int newRandomSwitchTime = 1; // Initializing random switch time
+
+        public StatsExport StatsExport => _exportStats;
 
         public void Dirty(Inventory inventory, ISession session)
         {
             _exportStats = GetCurrentInfo(inventory);
+            TotalStardust = inventory.GetStarDust();
             DirtyEvent?.Invoke();
             OnStatisticChanged(session);
         }
 
         public void OnStatisticChanged(ISession session)
         {
-            if (MultipleBotConfig.IsMultiBotActive(session.LogicSettings))
+            if (MultipleBotConfig.IsMultiBotActive(session.LogicSettings) &&  TinyIoCContainer.Current.Resolve<MultiAccountManager>().AllowSwitch())
             {
                 var config = session.LogicSettings.MultipleBotConfig;
 
                 if (config.PokestopSwitch > 0 && config.PokestopSwitch <= this.TotalPokestops)
                 {
                     session.CancellationTokenSource.Cancel();
-                    
+
                     //Activate switcher by pokestop
                     throw new ActiveSwitchByRuleException()
                     {
@@ -84,9 +91,20 @@ namespace PoGo.NecroBot.Logic.Utils
                     };
                 }
 
-                var totalMin = (DateTime.Now - _initSessionDateTime).TotalMinutes;
-                if (config.RuntimeSwitch> 0 && config.RuntimeSwitch <= totalMin)
+                // When bot starts OR did the account switch by time, random time for Runtime has not been set. So we need to set it
+                if (!isRandomTimeSet)
                 {
+                    Random random = new Random();
+                    newRandomSwitchTime = config.RuntimeSwitch + random.Next((config.RuntimeSwitchRandomTime * -1), config.RuntimeSwitchRandomTime);
+                    isRandomTimeSet = true;
+                }
+
+                var totalMin = (DateTime.Now - _initSessionDateTime).TotalMinutes;
+                if (newRandomSwitchTime > 0 && newRandomSwitchTime <= totalMin)
+                {
+                    // Setup random time to false, so that next account generates new random runtime
+                    isRandomTimeSet = false;
+
                     session.CancellationTokenSource.Cancel();
                     //Activate switcher by pokestop
                     throw new ActiveSwitchByRuleException()
@@ -96,24 +114,23 @@ namespace PoGo.NecroBot.Logic.Utils
                     };
                 }
             }
-
         }
 
         public event StatisticsDirtyDelegate DirtyEvent;
 
-        private string FormatRuntime()
+        public string FormatRuntime()
         {
             return (DateTime.Now - _initSessionDateTime).ToString(@"dd\.hh\:mm\:ss");
         }
 
         public StatsExport GetCurrentInfo(Inventory inventory)
         {
-            var stats = inventory.GetPlayerStats().Result;
+            var stats = inventory.GetPlayerStats();
             StatsExport output = null;
             var stat = stats.FirstOrDefault();
             if (stat != null)
             {
-                var ep = stat.NextLevelXp - stat.PrevLevelXp - (stat.Experience - stat.PrevLevelXp);
+                var ep = stat.NextLevelXp - stat.Experience;
                 var time = Math.Round(ep / (TotalExperience / GetRuntime()), 2);
                 var hours = 0.00;
                 var minutes = 0.00;
@@ -150,16 +167,17 @@ namespace PoGo.NecroBot.Logic.Utils
                 LevelForRewards = stat.Level;
                 if (Result2.ToString().ToLower().Contains("success"))
                 {
-                    string[] tokens = Result2.Result.ToString().Split(new[] { "itemId" }, StringSplitOptions.None);
-                    Logging.Logger.Write("Items Awarded:" + Result2.ItemsAwarded.ToString());
+                    string[] tokens = Result2.Result.ToString().Split(new[] {"itemId"}, StringSplitOptions.None);
+                    Logger.Write("Items Awarded:" + Result2.ItemsAwarded.ToString());
                 }
                 output = new StatsExport
                 {
                     Level = stat.Level,
                     HoursUntilLvl = hours,
                     MinutesUntilLevel = minutes,
-                    CurrentXp = stat.Experience - stat.PrevLevelXp - GetXpDiff(stat.Level),
-                    LevelupXp = stat.NextLevelXp - stat.PrevLevelXp - GetXpDiff(stat.Level)
+                    CurrentXp = stat.Experience,
+                    PreviousXp = stat.PrevLevelXp,
+                    LevelupXp = stat.NextLevelXp
                 };
             }
             return output;
@@ -170,10 +188,12 @@ namespace PoGo.NecroBot.Logic.Utils
             this.TotalExperience = 0;
             this.TotalItemsRemoved = 0;
             this.TotalPokemons = 0;
+            this.TotalPokemonEvolved = 0;
             this.TotalPokestops = 0;
             this.TotalStardust = 0;
             this.TotalPokemonTransferred = 0;
             this._initSessionDateTime = DateTime.Now;
+            this._exportStats = new StatsExport();
         }
 
         public async Task<LevelUpRewardsResponse> Execute(ISession ctx)
@@ -231,6 +251,7 @@ namespace PoGo.NecroBot.Logic.Utils
         public double HoursUntilLvl;
         public int Level;
         public long LevelupXp;
+        public long PreviousXp;
         public double MinutesUntilLevel;
     }
 }

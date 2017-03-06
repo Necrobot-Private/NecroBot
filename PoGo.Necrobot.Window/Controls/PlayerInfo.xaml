@@ -1,0 +1,108 @@
+﻿<UserControl x:Class="PoGo.Necrobot.Window.Controls.PlayerInfo"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PoGo.Necrobot.Window.Controls"
+             xmlns:c="clr-namespace:PoGo.Necrobot.Window.Converters"
+             mc:Ignorable="d"  Width="875">
+    <Control.Resources>
+        <c:PokemonIdToImageConverter x:Key="PokemonIdToImageConverter"/>
+        <c:I18NConveter x:Key="I18NConveter"></c:I18NConveter>
+        <c:I18NMultiConveter x:Key="I18NMultiConveter"></c:I18NMultiConveter>
+    </Control.Resources>
+    
+    <DockPanel LastChildFill="True">
+        <StackPanel DockPanel.Dock="Left" Width="75" Orientation="Vertical">
+            <Image  Name="image" Width="45"  Source="{Binding Path=BuddyPokemonId, FallbackValue=https://img.pokemondb.net/artwork/garchomp.jpg, Converter={StaticResource PokemonIdToImageConverter}}">
+                </Image>
+            
+                <TextBlock TextAlignment="Center">
+                    <TextBlock.Text>
+                         <MultiBinding  StringFormat="{}{0:0.00}/{1:0.00}" FallbackValue="xxx/xxx">
+                            <Binding Path="BuddyTotalKM"></Binding>
+                            <Binding Path="BuddyCurrentKM"></Binding>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+        </StackPanel>
+        
+        <Grid Margin="10,0,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"></RowDefinition>
+                <RowDefinition Height="25"></RowDefinition>
+                <RowDefinition Height="25"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Column="0" Grid.Row="0">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="Level: {0}" FallbackValue="Level: 40">
+                        <Binding Path="Level" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+
+            <TextBlock  Grid.Column="1" Grid.Row="0">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="EXP: {0}/{1} ({2}%)" FallbackValue="EXP: 100000/500000 (20%)">
+                        <Binding Path="Exp" />
+                        <Binding Path="LevelExp" />
+                        <Binding Path="PercentComplete" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+            <TextBlock Grid.Column="2" Grid.Row="0" x:Name="textBlock" HorizontalAlignment="Left"  TextWrapping="Wrap" Text="{Binding Path=EXPPerHour, FallbackValue=EXP/H: 123, StringFormat=EXP/H: {0}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top"/>
+            <TextBlock Grid.Column="3" Grid.Row="0" x:Name="textBlock_Copy" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Path=PKMPerHour, FallbackValue=PKM/H: 123 ,StringFormat=PKM/H: {0}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" RenderTransformOrigin="6.212,4.375"/>
+            <TextBlock Grid.Column="0" Grid.Row="1" x:Name="textBlock1" HorizontalAlignment="Left"  TextWrapping="Wrap" Text="{Binding Runtime, FallbackValue=Runtime: xx:xx:xx:xx, StringFormat=Runtime: {0}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top"/>
+
+            <TextBlock Grid.Column="1" Grid.Row="1" x:Name="textBlock2" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding TimeToLevelUp, FallbackValue=Level Up in :1d 24h, StringFormat=Level Up in {0}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" RenderTransformOrigin="-0.51,0.5"/>
+            <TextBlock Grid.Column="2" Grid.Row="1" x:Name="textBlock3" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Stardust, FallbackValue=Stardust: 90000, StringFormat=Stardust: \{0\}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top"/>
+
+            <TextBlock Grid.Column="4" Grid.Row="1"  HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top">
+                <TextBlock.Text>
+                    <MultiBinding Converter="{StaticResource ResourceKey=I18NMultiConveter}">
+                        <Binding Source="PokestopLimit"></Binding>
+                        <Binding Path="PokestopLimit"></Binding>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+
+            <TextBlock Grid.Column="4" Grid.Row="0"  HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top">
+                <TextBlock.Text>
+                    <MultiBinding Converter="{StaticResource ResourceKey=I18NMultiConveter}">
+                        <Binding Source="CatchLimit"></Binding>
+                        <Binding Path="CatchLimit"></Binding>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+
+            <TextBlock Grid.Column="3" Grid.Row="1"  HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top">
+                <TextBlock.Text>
+                    <MultiBinding Converter="{StaticResource ResourceKey=I18NMultiConveter}">
+                        <Binding Source="WalkSpeed"></Binding>
+                        <Binding Path="WalkSpeed"></Binding>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+
+            <TextBlock Grid.Column="0" Grid.Row="2"  HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top">
+                <TextBlock.Text>
+                    <MultiBinding Converter="{StaticResource ResourceKey=I18NMultiConveter}">
+                        <Binding Source="PokemonTransfered"></Binding>
+                        <Binding Path="PokemonTransfered"></Binding>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+            
+
+        </Grid>
+    </DockPanel>
+
+</UserControl>

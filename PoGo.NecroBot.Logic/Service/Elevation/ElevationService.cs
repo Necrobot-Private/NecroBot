@@ -1,8 +1,9 @@
-﻿using Caching;
-using PoGo.NecroBot.Logic.Model.Settings;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Caching;
+using PoGo.NecroBot.Logic.Logging;
+using PoGo.NecroBot.Logic.Model.Settings;
 
 namespace PoGo.NecroBot.Logic.Service.Elevation
 {
@@ -18,13 +19,19 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
         {
             _settings = settings;
 
-            if (!string.IsNullOrEmpty(settings.MapzenWalkConfig.MapzenElevationApiKey))
-                ElevationServiceQueue.Add(new MapzenElevationService(settings, cache));
+            if (_settings.MapzenWalkConfig.UseMapzenWalk)
+            {
+                if (!string.IsNullOrEmpty(settings.MapzenWalkConfig.MapzenElevationApiKey))
+                    ElevationServiceQueue.Add(new MapzenElevationService(settings, cache));
+            }
 
-            ElevationServiceQueue.Add(new MapQuestElevationService(settings, cache));
+            //ElevationServiceQueue.Add(new MapQuestElevationService(settings, cache));
 
-            if (!string.IsNullOrEmpty(settings.GoogleWalkConfig.GoogleElevationAPIKey))
-                ElevationServiceQueue.Add(new GoogleElevationService(settings, cache));
+            if (_settings.GoogleWalkConfig.UseGoogleWalk)
+            {
+                if (!string.IsNullOrEmpty(settings.GoogleWalkConfig.GoogleElevationAPIKey))
+                    ElevationServiceQueue.Add(new GoogleElevationService(settings, cache));
+            }
 
             ElevationServiceQueue.Add(new RandomElevationService(settings, cache));
         }
@@ -66,11 +73,17 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
             if (elevation == 0 || elevation < -100)
             {
                 // Error getting elevation so just return 0.
-                Logging.Logger.Write($"{service.GetServiceId()} response not reliable: {elevation.ToString()}, and will be blacklisted for one hour.", Logging.LogLevel.Warning);
+                Logger.Write(
+                    $"{service.GetServiceId()} response not reliable: {elevation.ToString()}, and will be blacklisted for one hour.",
+                    LogLevel.Warning
+                );
                 BlacklistStrategy(service.GetType());
 
-                Logging.Logger.Write($"Falling back to next elevation strategy: {GetService().GetServiceId()}.", Logging.LogLevel.Warning);
-                
+                Logger.Write(
+                    $"Falling back to next elevation strategy: {GetService().GetServiceId()}.",
+                    LogLevel.Warning
+                );
+
                 // After blacklisting, retry.
                 return GetElevation(lat, lng);
             }

@@ -489,6 +489,10 @@
       "Value": "I server di Google sono malfunzionanti. Riprova più tardi."
     },
     {
+      "Key": "missingCredentials",
+      "Value": "Devi riempire i campi Username e Password nel file auth.json!"
+    },
+    {
       "Key": "missingCredentialsGoogle",
       "Value": "Devi riempire i campi GoogleUsername e GooglePassword nel file auth.json!"
     },
@@ -562,7 +566,7 @@
     },
     {
       "Key": "amountPkmSeenCaught",
-      "Value": "Pokémon Visti: {0}/151, Pokémon catturati: {1}/151"
+      "Value": "Pokémon Visti: {0}/231, Pokémon catturati: {1}/231"
     },
     {
       "Key": "pkmPotentialEvolveCount",

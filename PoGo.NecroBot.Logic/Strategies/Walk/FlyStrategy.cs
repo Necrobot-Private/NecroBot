@@ -1,29 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using GeoCoordinatePortable;
-using PoGo.NecroBot.Logic.Event;
+using PoGo.NecroBot.Logic.Model;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Utils;
 using PokemonGo.RocketAPI;
 using POGOProtos.Networking.Responses;
-using PoGo.NecroBot.Logic.Model;
 
 namespace PoGo.NecroBot.Logic.Strategies.Walk
 {
     class FlyStrategy : BaseWalkStrategy
     {
-        public FlyStrategy(Client client)  : base(client)
+        public FlyStrategy(Client client) : base(client)
         {
         }
 
         public override string RouteName => "Necrobot Flying";
 
 
-        public override  async Task<PlayerUpdateResponse> Walk(IGeoLocation targetLocation, Func<Task> functionExecutedWhileWalking, ISession session, CancellationToken cancellationToken, double walkSpeed = 0.0)
+        public override async Task Walk(IGeoLocation targetLocation,
+            Func<Task> functionExecutedWhileWalking, ISession session, CancellationToken cancellationToken,
+            double walkSpeed = 0.0)
         {
             var curLocation = new GeoCoordinate(_client.CurrentLatitude, _client.CurrentLongitude);
             var destinaionCoordinate = new GeoCoordinate(targetLocation.Latitude, targetLocation.Longitude);
@@ -37,13 +35,14 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
                 var waypoint = LocationUtils.CreateWaypoint(curLocation, nextWaypointDistance, nextWaypointBearing);
                 var sentTime = DateTime.Now;
 
-                var result = await LocationUtils.UpdatePlayerLocationWithAltitude(session, waypoint, 0); // We are setting speed to 0, so it will be randomly generated speed.
-                base.DoUpdatePositionEvent(waypoint.Latitude, waypoint.Longitude);
+                // We are setting speed to 0, so it will be randomly generated speed.
+                LocationUtils.UpdatePlayerLocationWithAltitude(session, waypoint, 0);
+                base.DoUpdatePositionEvent(session, waypoint.Latitude, waypoint.Longitude, walkSpeed,0);
 
                 do
                 {
                     cancellationToken.ThrowIfCancellationRequested();
-
+                    TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
                     var millisecondsUntilGetUpdatePlayerLocationResponse =
                         (DateTime.Now - sentTime).TotalMilliseconds;
 
@@ -60,26 +59,27 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
                     nextWaypointBearing = LocationUtils.DegreeBearing(curLocation, destinaionCoordinate);
                     waypoint = LocationUtils.CreateWaypoint(curLocation, nextWaypointDistance, nextWaypointBearing);
                     sentTime = DateTime.Now;
-                    result = await LocationUtils.UpdatePlayerLocationWithAltitude(session, waypoint, 0);  // We are setting speed to 0, so it will be randomly generated speed.
-                    base.DoUpdatePositionEvent(waypoint.Latitude, waypoint.Longitude);
+                    // We are setting speed to 0, so it will be randomly generated speed.
+                    LocationUtils.UpdatePlayerLocationWithAltitude(session, waypoint, 0);
+                    base.DoUpdatePositionEvent(session, waypoint.Latitude, waypoint.Longitude, walkSpeed);
 
 
                     if (functionExecutedWhileWalking != null)
                         await functionExecutedWhileWalking(); // look for pokemon
                 } while (LocationUtils.CalculateDistanceInMeters(curLocation, destinaionCoordinate) >= 10);
-                return result;
             }
             else
             {
-                var result = await LocationUtils.UpdatePlayerLocationWithAltitude(session, targetLocation.ToGeoCoordinate(), 0);  // We are setting speed to 0, so it will be randomly generated speed.
-                base.DoUpdatePositionEvent(targetLocation.Latitude, targetLocation.Longitude);
+                // We are setting speed to 0, so it will be randomly generated speed.
+                LocationUtils.UpdatePlayerLocationWithAltitude(session, targetLocation.ToGeoCoordinate(), 0);
+                base.DoUpdatePositionEvent(session, targetLocation.Latitude, targetLocation.Longitude,walkSpeed);
                 if (functionExecutedWhileWalking != null)
                     await functionExecutedWhileWalking(); // look for pokemon
-                return result;
             }
         }
 
-        public override double CalculateDistance(double sourceLat, double sourceLng, double destinationLat, double destinationLng, ISession session = null)
+        public override double CalculateDistance(double sourceLat, double sourceLng, double destinationLat,
+            double destinationLng, ISession session = null)
         {
             return LocationUtils.CalculateDistanceInMeters(sourceLat, sourceLng, destinationLat, destinationLng);
         }

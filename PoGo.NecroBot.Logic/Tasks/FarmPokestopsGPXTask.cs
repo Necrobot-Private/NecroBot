@@ -7,14 +7,11 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using GeoCoordinatePortable;
 using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.Event;
+using PoGo.NecroBot.Logic.Model;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Utils;
-using PokemonGo.RocketAPI.Extensions;
-using POGOProtos.Map.Fort;
-using PoGo.NecroBot.Logic.Model;
 
 #endregion
 
@@ -45,7 +42,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 _resumeTrack = curTrk;
                 cancellationToken.ThrowIfCancellationRequested();
-
+                TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
                 var track = tracks.ElementAt(curTrk);
                 var trackSegments = track.Segments;
 
@@ -53,6 +50,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     _resumeTrackSeg = curTrkSeg;
                     cancellationToken.ThrowIfCancellationRequested();
+                    TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
 
                     var trackPoints = trackSegments.ElementAt(curTrkSeg).TrackPoints;
 
@@ -60,7 +58,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     {
                         _resumeTrackPt = curTrkPt;
                         cancellationToken.ThrowIfCancellationRequested();
-
+                        TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
                         var nextPoint = trackPoints.ElementAt(curTrkPt);
                         var distance = LocationUtils.CalculateDistanceInMeters(session.Client.CurrentLatitude,
                             session.Client.CurrentLongitude,
@@ -81,13 +79,14 @@ namespace PoGo.NecroBot.Logic.Tasks
                         var lat = Convert.ToDouble(trackPoints.ElementAt(curTrkPt).Lat, CultureInfo.InvariantCulture);
                         var lng = Convert.ToDouble(trackPoints.ElementAt(curTrkPt).Lon, CultureInfo.InvariantCulture);
 
-                        IGeoLocation destination = new GPXPointLocation(lat, lng, LocationUtils.getElevation(session.ElevationService, lat, lng));
+                        IGeoLocation destination = new GPXPointLocation(lat, lng,
+                            LocationUtils.getElevation(session.ElevationService, lat, lng));
 
                         await session.Navigation.Move(destination,
                             async () =>
                             {
-                                    await MSniperServiceTask.Execute(session, cancellationToken);
-                                
+                                await MSniperServiceTask.Execute(session, cancellationToken);
+
                                 await CatchNearbyPokemonsTask.Execute(session, cancellationToken);
                                 //Catch Incense Pokemon
                                 await CatchIncensePokemonsTask.Execute(session, cancellationToken);
@@ -99,10 +98,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                         await eggWalker.ApplyDistance(distance, cancellationToken);
 
                         // Return to FarmState/StateMachine if we have reached both user defined limits
-                        if ((UseNearbyPokestopsTask._pokestopLimitReached || UseNearbyPokestopsTask._pokestopTimerReached) &&
-                            (CatchPokemonTask._catchPokemonLimitReached || CatchPokemonTask._catchPokemonTimerReached))
+                        if ((UseNearbyPokestopsTask._pokestopLimitReached ||
+                             UseNearbyPokestopsTask._pokestopTimerReached) &&
+                            session.Stats.CatchThresholdExceeds(session))
                             return;
-
                     } //end trkpts
                     _resumeTrackPt = 0;
                 } //end trksegs

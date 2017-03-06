@@ -1,4 +1,138 @@
 # Change Log
+
+## [v1.0.0.88](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.88) (2017-02-02)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.86...v1.0.0.88)
+
+## Bugs & Enhancements
+- Updated for 0.55 API
+
+## [v1.0.0.86](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.86) (2017-02-01)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.82...v1.0.0.86)
+
+## Bugs & Enhancements
+- Fix inventory crashes
+- Fix stardust updates
+
+## [v1.0.0.82](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.82) (2017-01-31)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.81...v1.0.0.82)
+
+- Bug fix: #662 - Starting from last position should work again.
+
+## [v1.0.0.81](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.81) (2017-01-31)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.76...v1.0.0.81)
+
+## Bugs & Enhancements
+- Bug fix: Fix inventory updates to properly update console and GUI
+
+## [v1.0.0.76](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.76) (2017-01-27)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.72...v1.0.0.76)
+
+## [v1.0.0.72](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.72) (2017-01-24)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.71...v1.0.0.72)
+
+## Bugs & Enhancements
+- Bug fix: #640 - First time tutorial does not complete properly all the time.
+ 
+## [v1.0.0.71](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.71) (2017-01-24)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.70...v1.0.0.71)
+
+## Bugs & Enhancements
+- Bug fix: Re-enable killswitch override (use at your own discretion)
+- Enhancements to multi account manager
+
+## [v1.0.0.70](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.70) (2017-01-23)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.69...v1.0.0.70)
+
+## Bugs & Enhancements
+- Bug fix: #91
+- Ban safety - More conservative default daily limits for pokestops and pokemons caught.
+
+## [v1.0.0.69](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.69) (2017-01-22)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.66...v1.0.0.69)
+## Bugs & Enhancements
+- Bug fix: More fixes for API 0.53
+- Bug fix: #598 - Empty inventory in WPF GUI
+
+## [v1.0.0.66](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.62) (2017-01-21)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.62...v1.0.0.66)
+## Bugs & Enhancement---	Allow rename favorited Pokemon
+-	Support API 0.53 from FP Hash service
+- Fix scroll on window GUI
+-	Fix CP/Level/IV calculation
+-	Train GYM feature
+-	Allow display release notes on update screen
+-	Fix issue display total exp wrong on telegram
+- Minor fixes
+
+## [v1.0.0.62](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.62) (2017-01-15)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.60...v1.0.0.62)
+## Bugs & Enhancements
+- Pokedex screen added to alow you see all the list pokemon you already caught so far
+- Sniper tab with allow you see all the snipe data now we can do manual snipe from GUI
+- Eggs screen is added and working, you can put egg in incubators and view status
+- Many minor /major fix  -  few request and bot will work faster about 10% 
+- GUI look statble now to ready to develop advance feature - actualy, many minor bug  but not a big deal
+- An extra function allow you change theme color for NECROBOT gui  with support 24 basic color
+- Many minor fix and enhancemen
+
+## [v1.0.0.60](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.60) (2017-01-14)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.56...v1.0.0.60)
+## Bugs & Enhancements
+- GUI BUG FIX : Crash when change account
+- Bug fix: freeze when select gender
+- Bug fix : Auto update wrong with GUI
+- Ehancement : Autosnipe with candy setting - which allow you setup min amount of candy and bot will snipe pokemon until you have that min amount candy. BOT will still snipe that pokemon depend on IV config after reach candy setting
+- Ehancement : Recycle item by percentage
+
+
+## [v1.0.0.51](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.51) (2017-01-09)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.50...v1.0.0.51)
+## Bugs & Enhancements
+- Fix Bug - Better client emulation in API
+
+## [v1.0.0.50](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.50) (2017-01-04)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.47...v1.0.0.50)
+## Bugs & Enhancements
+- Enhancement - Add reconnection mechanism when PF hash server down - bot wont exist 
+
+## [v1.0.0.47](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.47) (2017-01-02)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.46...v1.0.0.47)
+## Bugs & Enhancements
+- FIX Bug - Bulk transfer not working number of pokemons > 100
+- FIX Bug - Fix berry displaye wrong (-1 remaining)
+- Fix Bug - Multi account didn't switch if there only 1 bot config in auth.json
+- Enhancement -Allow enter MinSNipeIV =101 to exclude pokemon to snipe
+
+
+## [v1.0.0.46](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.46) (2017-01-01)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.45...v1.0.0.46)
+## Feature
+- FIX bug - Crash when swith account during snipe
+- FIX bug - Manual snipe doesn't work if not enable autosnipe
+- FIX bug - Envole pokemon duplicate not print the message
+
+## [v1.0.0.45](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.45) (2016-12-27)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.40...v1.0.0.45)
+## Feature
+- Improve autosniper feature
+- Allow snipe pokemon not in dex
+- Fix misc bug
+
+
+## [v1.0.0.36](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.37) (2016-12-27)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.36...v1.0.0.37)
+## Feature
+- Optimize to reduce request & API Call 
+
+## [v1.0.0.36](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.36) (2016-12-27)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.33...v1.0.0.36)
+## Feature
+- Add support for Hash Server 0.51
+- Add captcha support manual & auto resolve
+- Add notification service 
+- Snipe by telegram command (/snipe Pokemon,Lat,Long )
+
+
 ## [v1.0.0.32](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.30) (2016-11-20)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.30...v1.0.0.32)
 ## Feature

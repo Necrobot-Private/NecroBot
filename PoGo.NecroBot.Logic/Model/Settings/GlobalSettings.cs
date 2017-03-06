@@ -15,11 +15,12 @@ using Newtonsoft.Json.Schema;
 using Newtonsoft.Json.Schema.Generation;
 using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.Logging;
+using PoGo.NecroBot.Logic.Service.Elevation;
 using PoGo.NecroBot.Logic.State;
 using PokemonGo.RocketAPI.Enums;
-using POGOProtos.Enums;
-using PoGo.NecroBot.Logic.Service.Elevation;
 using PokemonGo.RocketAPI.Extensions;
+using POGOProtos.Enums;
+using POGOProtos.Inventory.Item;
 
 #endregion
 
@@ -38,83 +39,83 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public string ProfilePath;
 
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
-        [ExcelConfig(SheetName = "ConsoleConfig", Description = "Setting up the console output")]
+        [NecrobotConfig(SheetName = "ConsoleConfig", Description = "Setting up the console output")]
         public ConsoleConfig ConsoleConfig = new ConsoleConfig();
 
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
-        [ExcelConfig(SheetName = "UpdateConfig", Description = "Setting up the auto checking for every time bot start up")]
+        [NecrobotConfig(SheetName = "UpdateConfig", Description = "Setting up the auto checking for every time bot start up")]
         public UpdateConfig UpdateConfig = new UpdateConfig();
 
-        [ExcelConfig(SheetName = "WebsocketsConfig", Description = "Setting up the web socket that allow bot to communicate with Visualizer.")]
+        [NecrobotConfig(SheetName = "WebsocketsConfig", Description = "Setting up the web socket that allow bot to communicate with Visualizer.")]
 
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public WebsocketsConfig WebsocketsConfig = new WebsocketsConfig();
 
-        [ExcelConfig(SheetName = "LocationConfig", Description = "Setting up location setting for bot.")]
+        [NecrobotConfig(SheetName = "LocationConfig", Description = "Setting up location setting for bot.")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public LocationConfig LocationConfig = new LocationConfig();
 
-        [ExcelConfig(SheetName = "TelegramConfig", Description = "Setting up Telegram API to allow control bot from Telegram .")]
+        [NecrobotConfig(SheetName = "TelegramConfig", Description = "Setting up Telegram API to allow control bot from Telegram .")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public TelegramConfig TelegramConfig = new TelegramConfig();
 
-        [ExcelConfig(SheetName = "GPXConfig", Description = "Setup GPS Pathing for bot.")]
+        [NecrobotConfig(SheetName = "GPXConfig", Description = "Setup GPS Pathing for bot.")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public GpxConfig GPXConfig = new GpxConfig();
 
-        [ExcelConfig(SheetName = "SnipeConfig", Description = "Setting up option for snipe.")]
+        [NecrobotConfig(SheetName = "SnipeConfig", Description = "Setting up option for snipe.")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public SnipeConfig SnipeConfig = new SnipeConfig();
 
-        [ExcelConfig(SheetName = "HumanWalkSnipeConfig", Description = "Setting up option for human walk snipe.")]
+        [NecrobotConfig(SheetName = "HumanWalkSnipeConfig", Description = "Setting up option for human walk snipe.")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public HumanWalkSnipeConfig HumanWalkSnipeConfig = new HumanWalkSnipeConfig();
 
-        [ExcelConfig(SheetName = "DataSharingConfig", Description = "Setting up data socket sharing.")]
+        [NecrobotConfig(SheetName = "DataSharingConfig", Description = "Setting up data socket sharing.")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public DataSharingConfig DataSharingConfig = new DataSharingConfig();
 
-        [ExcelConfig(SheetName = "PokeStopConfig", Description = "Setting up for farming pokestop.")]
+        [NecrobotConfig(SheetName = "PokeStopConfig", Description = "Setting up for farming pokestop.")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public PokeStopConfig PokeStopConfig = new PokeStopConfig();
 
-        [ExcelConfig(SheetName = "GymConfig", Description = "Setting up for gym and battle.")]
+        [NecrobotConfig(SheetName = "GymConfig", Description = "Setting up for gym and battle.")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public GymConfig GymConfig = new GymConfig();
 
-        [ExcelConfig(SheetName = "PokemonConfig", Description = "Setting up for pokemon catching, evolve, transfer, upgrade.")]
+        [NecrobotConfig(SheetName = "PokemonConfig", Description = "Setting up for pokemon catching, evolve, transfer, upgrade.")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public PokemonConfig PokemonConfig = new PokemonConfig();
 
-        [ExcelConfig(SheetName = "RecycleConfig", Description = "Setting up for inventory cleanup.")]
+        [NecrobotConfig(SheetName = "RecycleConfig", Description = "Setting up for inventory cleanup.")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public ItemRecycleConfig RecycleConfig = new ItemRecycleConfig();
 
-        [ExcelConfig(SheetName = "CustomCatchConfig", Description = "Setting up for some custom parametter for catching.")]
+        [NecrobotConfig(SheetName = "CustomCatchConfig", Description = "Setting up for some custom parametter for catching.")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public CustomCatchConfig CustomCatchConfig = new CustomCatchConfig();
 
-        [ExcelConfig(SheetName = "PlayerConfig", Description = "Setting up for some custom parametter for bot perfom user action.")]
+        [NecrobotConfig(SheetName = "PlayerConfig", Description = "Setting up for some custom parametter for bot perfom user action.")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public PlayerConfig PlayerConfig = new PlayerConfig();
 
-        [ExcelConfig(SheetName = "SoftBanConfig", Description = "Setting up for softban resolve.")]
+        [NecrobotConfig(SheetName = "SoftBanConfig", Description = "Setting up for softban resolve.")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public SoftBanConfig SoftBanConfig = new SoftBanConfig();
 
-        [ExcelConfig (SheetName = "GoogleWalkConfig", Description = "Setup parametter for google walk such as api key, account, rules..")]
+        [NecrobotConfig(SheetName = "GoogleWalkConfig", Description = "Setup parametter for google walk such as api key, account, rules..")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public GoogleWalkConfig GoogleWalkConfig = new GoogleWalkConfig();
 
-        [ExcelConfig(SheetName = "YoursWalkConfig", Description = "Setup parametter for YoursWalkConfig walk such as api key, account, rules..")]
+        [NecrobotConfig(SheetName = "YoursWalkConfig", Description = "Setup parametter for YoursWalkConfig walk such as api key, account, rules..")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public YoursWalkConfig YoursWalkConfig = new YoursWalkConfig();
 
-        [ExcelConfig(SheetName = "MapzenWalkConfig", Description = "Setup parametter for MapzenWalkConfig walk such as api key, account, rules..")]
+        [NecrobotConfig(SheetName = "MapzenWalkConfig", Description = "Setup parametter for MapzenWalkConfig walk such as api key, account, rules..")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public MapzenWalkConfig MapzenWalkConfig = new MapzenWalkConfig();
 
-        //[ExcelConfig (SheetName = "ItemRecycleFilter", Description ="Set number of each item we want bot to keep when it perfom recycle for get free space")]
+        [NecrobotConfig(SheetName = "ItemRecycleFilter", Description = "Set number of each item we want bot to keep when it perfom recycle for get free space")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public List<ItemRecycleFilter> ItemRecycleFilter = Settings.ItemRecycleFilter.ItemRecycleFilterDefault();
 
@@ -122,52 +123,105 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public List<PokemonId> PokemonsNotToTransfer = TransferConfig.PokemonsNotToTransferDefault();
 
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public List<PokemonId> PokemonsToEvolve = EvolveConfig.PokemonsToEvolveDefault();
-
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public List<PokemonId> PokemonsToLevelUp = LevelUpConfig.PokemonsToLevelUpDefault();
 
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public List<PokemonId> PokemonsToIgnore = CatchConfig.PokemonsToIgnoreDefault();
 
-        [ExcelConfig(SheetName = "PokemonsTransferFilter", Description = "Setting up pokemon filter rules")]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
+
+        [NecrobotConfig(SheetName = "CaptchaConfig", Description = "Captcha config to define the way you prefer to resolve captcha")]
+        public CaptchaConfig CaptchaConfig = new CaptchaConfig();
+
+        /// <summary>
+        /// this will auto add account to auth.json with this systax by command lin 
+        /// -i true -t abd123{0} -s 10 -e 20 -p abc1234
+        /// or -init true -template abd123{0} -start 10 -eend 20 -password abc1234
+        /// above command will add 20 account to auth.json default is ptc account. -g true will turn on google account
+        /// </summary>
+        /// <param name="isGoogle"></param>
+        /// <param name="template"></param>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <param name="password"></param>
+        public void GenerateAccount(bool isGoogle, string template, int start, int end, string password)
+        {
+            List<AuthConfig> allAcc = new List<AuthConfig>();
+            for (int i = start; i < end; i++)
+            {
+                allAcc.Add(new AuthConfig()
+                {
+                    AuthType = isGoogle ? AuthType.Google : AuthType.Ptc,
+                    GoogleUsername = isGoogle ? string.Format(template, i) : null,
+                    GooglePassword = isGoogle ? password : null,
+                    PtcUsername = !isGoogle ? string.Format(template, i) : null,
+                    PtcPassword = !isGoogle ? password : null,
+                });
+            }
+
+            if(allAcc.Count>0)
+            {
+                this.Auth.AuthConfig = allAcc.First();
+            }
+            this.Auth.Bots = allAcc.Skip(1).ToList();
+            if (this.Auth.Bots.Count > 0) this.Auth.AllowMultipleBot = true;
+
+            string json = JsonConvert.SerializeObject(this.Auth, Formatting.Indented,new StringEnumConverter() { CamelCaseText = true });
+
+            File.WriteAllText("config\\auth.json", json);
+            if (File.Exists("accounts.db")) File.Delete("accounts.db");
+        }
+
+        [NecrobotConfig(SheetName = "PokemonsTransferFilter", Description = "Setting up pokemon filter rules")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public Dictionary<PokemonId, TransferFilter> PokemonsTransferFilter = TransferFilter.TransferFilterDefault();
 
+        [NecrobotConfig(SheetName = "Item Use Filters", Description = "Define logic to use item when catching Pokemon")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public SnipeSettings PokemonToSnipe = SnipeSettings.Default();
+        public Dictionary<ItemId, ItemUseFilter> ItemUseFilters = ItemUseFilter.Default();
 
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public List<PokemonId> PokemonToUseMasterball = CatchConfig.PokemonsToUseMasterballDefault();
 
-        [ExcelConfig(Description = "Setting up human walk snipe filter by pokemon", SheetName = "HumanWalkSnipeFilter")]
+        [NecrobotConfig(Description = "Setting up human walk snipe filter by pokemon", SheetName = "HumanWalkSnipeFilter")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public Dictionary<PokemonId, HumanWalkSnipeFilter> HumanWalkSnipeFilters = HumanWalkSnipeFilter.Default();
 
-        [ExcelConfig(Description = "Setting up pokemon filter for level up", SheetName = "PokemonUpgradeFilter")]
+        [NecrobotConfig(Description = "Setting up pokemon filter for level up", SheetName = "PokemonUpgradeFilter")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public Dictionary<PokemonId, UpgradeFilter> PokemonUpgradeFilters = UpgradeFilter.Default();
 
-        [ExcelConfig (Description ="Setting up bot to use multiple account" , SheetName = "MultipleBotConfig")]
+        [NecrobotConfig(Description = "Setting up bot to use multiple account", SheetName = "MultipleBotConfig")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public MultipleBotConfig MultipleBotConfig = MultipleBotConfig.Default();
 
-        [ExcelConfig(SheetName = "SnipePokemonFilter", Description ="Setup list pokemon for auto snipe")]
+        [NecrobotConfig(Description = "Setting up notifications setting", SheetName = "NotificationConfig")]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public NotificationConfig NotificationConfig = new NotificationConfig();
+
+        [NecrobotConfig(SheetName = "SnipePokemonFilter", Description = "Setup list pokemon for auto snipe")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public Dictionary<PokemonId, SnipeFilter> SnipePokemonFilter = SnipeFilter.SniperFilterDefault();
 
-        [ExcelConfig(SheetName = "EvolvePokemonFilter", Description = "Setup list pokemon for auto evolve")]
+        [NecrobotConfig(SheetName = "PokemonEvolveFilter", Description = "Setup list pokemon for auto evolve")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public Dictionary<PokemonId, EvolveFilter> EvolvePokemonFilter = EvolveFilter.Default();
+        public Dictionary<PokemonId, EvolveFilter> PokemonEvolveFilter = EvolveFilter.Default();
 
-        [ExcelConfig(SheetName = "CatchPokemonFilter", Description = "Setup list pokemon for catch")]
+        [NecrobotConfig(SheetName = "CatchPokemonFilter", Description = "Setup list pokemon for catch")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public Dictionary<PokemonId, CatchFilter> CatchPokemonFilter = CatchFilter.Default();
 
-        [ExcelConfig(SheetName = "BotSwitchPokemonFilter", Description = "Define the filter to switch bot in multiple account mode.")]
+        [NecrobotConfig(SheetName = "BotSwitchPokemonFilter", Description = "Define the filter to switch bot in multiple account mode.")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         public Dictionary<PokemonId, BotSwitchPokemonFilter> BotSwitchPokemonFilters = BotSwitchPokemonFilter.Default();
 
+        [NecrobotConfig(SheetName = "UIConfig", Description = "Define all parametter to display data on UI.")]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public GUIConfig UIConfig = new GUIConfig();
+
+        [NecrobotConfig(SheetName = "HumanlikeDelays", Description = "Define the delays for humanlike behaviour when catching pokemon")]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public HumanlikeDelays HumanlikeDelays = new HumanlikeDelays();
 
         public GlobalSettings()
         {
@@ -212,7 +266,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                     SchemaReferenceHandling = SchemaReferenceHandling.None
                 };
                 // change Zone enum to generate a string property
-                var strEnumGen = new StringEnumGenerationProvider {CamelCaseText = true};
+                var strEnumGen = new StringEnumGenerationProvider { CamelCaseText = true };
                 generator.GenerationProviders.Add(strEnumGen);
                 // generate json schema 
                 var type = typeof(GlobalSettings);
@@ -223,6 +277,8 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 return _schema;
             }
         }
+
+
 
         //private JObject _jsonObject;
         //public JObject JsonObject
@@ -262,10 +318,26 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public static GlobalSettings Load(string path, bool validate = false)
         {
             GlobalSettings settings;
-            var profilePath = Path.Combine(Directory.GetCurrentDirectory(), path);
-            var profileConfigPath = Path.Combine(profilePath, "config");
-            var configFile = Path.Combine(profileConfigPath, "config.json");
-            var schemaFile = Path.Combine(profileConfigPath, "config.schema.json");
+
+            var profilePath = "";
+            var profileConfigPath = "";
+            var configFile = "";
+            var schemaFile = "";
+
+
+            if (Path.IsPathRooted(path))
+            {
+                profileConfigPath = Path.GetDirectoryName(path);
+                configFile = path;
+                schemaFile = path.Replace(".json", ".schema.json");
+            }
+            else
+            {
+                profilePath = Path.Combine(Directory.GetCurrentDirectory(), path);
+                profileConfigPath = Path.Combine(profilePath, "config");
+                configFile = Path.Combine(profileConfigPath, "config.json");
+                schemaFile = Path.Combine(profileConfigPath, "config.schema.json");
+            }
             var shouldExit = false;
             int schemaVersionBeforeUpgrade = 0;
 
@@ -299,7 +371,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                     }
 
                     var jsonSettings = new JsonSerializerSettings();
-                    jsonSettings.Converters.Add(new StringEnumConverter {CamelCaseText = true});
+                    jsonSettings.Converters.Add(new StringEnumConverter { CamelCaseText = true });
                     jsonSettings.ObjectCreationHandling = ObjectCreationHandling.Replace;
                     jsonSettings.DefaultValueHandling = DefaultValueHandling.Populate;
 
@@ -346,9 +418,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                                     {
                                         Logger.Write(
                                             "config.json [Line: " + error.LineNumber + ", Position: " + error.LinePosition +
-                                            "]: " +
-                                            error.Path + " " +
-                                            error.Message, LogLevel.Error);
+                                            "]: " + error.Path + " " + error.Message, LogLevel.Error);
                                     }
 
                                 Logger.Write(
@@ -382,7 +452,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                     foreach (var filter in settings.PokemonsTransferFilter.Where(x => x.Value.Moves == null))
                     {
                         filter.Value.Moves = filter.Value.DeprecatedMoves != null
-                            ? new List<List<PokemonMove>> {filter.Value.DeprecatedMoves}
+                            ? new List<List<PokemonMove>> { filter.Value.DeprecatedMoves }
                             : filter.Value.Moves ?? new List<List<PokemonMove>>();
                     }
                     foreach (var filter in settings.PokemonsTransferFilter.Where(x => x.Value.MovesOperator == null))
@@ -407,7 +477,8 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             settings.GeneralConfigPath = Path.Combine(Directory.GetCurrentDirectory(), "config");
 
             settings.Save(configFile);
-            settings.Auth.Load(Path.Combine(profileConfigPath, "auth.json"), Path.Combine(profileConfigPath, "auth.schema.json"), schemaVersionBeforeUpgrade, validate);
+            settings.Auth.Load(Path.Combine(profileConfigPath, "auth.json"),
+                Path.Combine(profileConfigPath, "auth.schema.json"), schemaVersionBeforeUpgrade, validate);
 
             return shouldExit ? null : settings;
         }
@@ -439,7 +510,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             for (version = schemaVersion; version < UpdateConfig.CURRENT_SCHEMA_VERSION; version++)
             {
                 Logger.Write($"Migrating configuration from schema version {version} to {version + 1}", LogLevel.Info);
-                switch(version)
+                switch (version)
                 {
                     case 1:
                         // Delete the auto complete tutorial settings.
@@ -454,7 +525,166 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                         ((JObject)settings["UpdateConfig"]).Remove("TransferConfigAndAuthOnUpdate");
                         break;
 
+                    case 6:
+                        // Rename AustoSnipeCandy to AutoSnipeCandy
+                        if (settings["SnipePokemonFilter"] != null)
+                        {
+                            foreach (var x in settings["SnipePokemonFilter"])
+                            {
+                                var key = ((JProperty)(x)).Name;
+                                var filter = ((JProperty)(x)).Value;
+
+                                if (filter["AustoSnipeCandy"] != null)
+                                {
+                                    filter["AutoSnipeCandy"] = filter["AustoSnipeCandy"];
+                                    ((JObject)filter).Remove("AustoSnipeCandy");
+                                }
+                            }
+                        }
+                        break;
+
+                    case 7:
+                        // We making the limits more conservative.
+                        if (settings["PokemonConfig"] != null)
+                        {
+                            if ((int)(settings["PokemonConfig"]["CatchPokemonLimit"]) == 998)
+                                settings["PokemonConfig"]["CatchPokemonLimit"] = 700;
+                            if ((int)(settings["PokemonConfig"]["CatchPokemonLimitMinutes"]) == 1470)
+                                settings["PokemonConfig"]["CatchPokemonLimitMinutes"] = 1200;
+                            if ((int)(settings["PokeStopConfig"]["PokeStopLimit"]) == 1998)
+                                settings["PokeStopConfig"]["PokeStopLimit"] = 1500;
+                            if ((int)(settings["PokeStopConfig"]["PokeStopLimitMinutes"]) == 1470)
+                                settings["PokeStopConfig"]["PokeStopLimitMinutes"] = 1200;
+                        }
+                        break;
+                    case 8:
+                        string oldTemplate = (string)settings["PokemonConfig"]["RenameTemplate"];
+                        settings["PokemonConfig"]["RenameTemplate"] = oldTemplate.Replace("{0}", "{Name}").Replace("{1}", "{IV}") + "_LV{Level}";
+                        break;
+
+                    case 9:
+                        if (settings["PlayerConfig"]["RandomizeSettingsByPercent"] == null)
+                        {
+                            settings["PlayerConfig"]["RandomizeSettingsByPercent"] = 5;
+                        }
+                        break;
+
+                    case 10:
+                    case 11:
+                        if ((string)settings["PokemonConfig"]["DefaultBuddyPokemon"] == "dragonite" ||
+                            (string)settings["PokemonConfig"]["DefaultBuddyPokemon"] == null ||
+                            (string)settings["PokemonConfig"]["DefaultBuddyPokemon"] == "")
+                            settings["PokemonConfig"]["DefaultBuddyPokemon"] = "";
+                        else
+                        {
+                            // Upper case first letter.
+                            char[] a = ((string)settings["PokemonConfig"]["DefaultBuddyPokemon"]).ToCharArray();
+                            a[0] = char.ToUpper(a[0]);
+                            settings["PokemonConfig"]["DefaultBuddyPokemon"] = new string(a);
+                        }
+                        break;
+                    case 13:
+                        settings["PokemonConfig"]["FavoriteOperator"] = "and";
+                        settings["PokemonConfig"]["FavoriteMinLevel"] = 0;
+                        break;
                     // Add more here.
+                    case 14:
+                        //migrate berries setting
+                        if (settings["PokemonConfig"]["UseBerriesMinIv"] != null && settings["ItemUseFilters"] != null)
+                        {
+                            settings["ItemUseFilters"]["ItemRazzBerry"]["UseItemMinIV"] = (int)settings["PokemonConfig"]["UseBerriesMinIv"];
+                            settings["ItemUseFilters"]["ItemRazzBerry"]["UseItemMinCP"] = settings["PokemonConfig"]["UseBerriesMinCp"];
+                            settings["ItemUseFilters"]["ItemRazzBerry"]["CatchProbability"] = settings["PokemonConfig"]["UseBerriesBelowCatchProbability"];
+                            settings["ItemUseFilters"]["ItemRazzBerry"]["Operator"] = settings["PokemonConfig"]["UseBerriesOperator"];
+                            settings["ItemUseFilters"]["ItemRazzBerry"]["MaxItemsUsePerPokemon"] = settings["PokemonConfig"]["MaxBerriesToUsePerPokemon"];
+                            //delete old 
+
+                            ((JObject)settings["PokemonConfig"]).Remove("UseBerriesMinIv");
+                            ((JObject)settings["PokemonConfig"]).Remove("UseBerriesMinCp");
+                            ((JObject)settings["PokemonConfig"]).Remove("UseBerriesBelowCatchProbability");
+                            ((JObject)settings["PokemonConfig"]).Remove("UseBerriesOperator");
+                            ((JObject)settings["PokemonConfig"]).Remove("MaxBerriesToUsePerPokemon");
+                        }
+
+                        break;
+                    case 15:
+                        List<string> existing = new List<string>();
+                        foreach (var x in settings["ItemRecycleFilter"].Children())
+                        {
+                            existing.Add((string)x["Key"]);
+                        }
+
+                        List<ItemId> newItems = new List<ItemId>() { ItemId.ItemDragonScale, ItemId.ItemUpGrade, ItemId.ItemKingsRock, ItemId.ItemSunStone, ItemId.ItemMetalCoat };
+
+                        foreach (var item in newItems)
+                        {
+                            if (!existing.Any(x => x.ToLower() == item.ToString().ToLower()))
+                            {
+                                var itemName = item.ToString();
+                                itemName = itemName.Replace("Item", "item");
+
+                                var last = settings["ItemRecycleFilter"].Children().Last();
+                                var newFilter = JObject.Parse(@"{""Key"":""" + itemName + @""",""Value"":100}");
+
+                                last.AddAfterSelf(newFilter);
+                            }
+                        }
+
+                        break;
+
+                    case 16:
+                        if (settings["PokemonEvolveFilter"] != null && settings["PokemonsToEvolve"] != null)
+                        {
+                            List<string> pokemonToEvolve = new List<string>();
+                            foreach (var x in settings["PokemonsToEvolve"].Children())
+                            {
+                                var pokemonName = (string)x;
+                                pokemonName = pokemonName[0].ToString().ToUpper() + new string(pokemonName.Skip(1).ToArray());
+
+                                if (settings["PokemonEvolveFilter"][pokemonName] == null)
+                                {
+                                    EvolveFilter ev = new EvolveFilter(0, 0, 0);
+                                    settings["PokemonEvolveFilter"][pokemonName] = JObject.Parse(JsonConvert.SerializeObject(ev));
+                                }
+                            }
+                        }
+                        break;
+
+                    case 17:
+                        if (settings["PokemonEvolveFilter"] != null && settings["PokemonsToEvolve"] != null)
+                        {
+                            // Repeat the migration for case 16 just in case PokemonsToEvolve has beed modified.
+                            List<string> pokemonToEvolve = new List<string>();
+                            foreach (var x in settings["PokemonsToEvolve"].Children())
+                            {
+                                var pokemonName = (string)x;
+                                pokemonName = pokemonName[0].ToString().ToUpper() + new string(pokemonName.Skip(1).ToArray());
+
+                                if (settings["PokemonEvolveFilter"][pokemonName] == null)
+                                {
+                                    EvolveFilter ev = new EvolveFilter(0, 0, 0);
+                                    settings["PokemonEvolveFilter"][pokemonName] = JObject.Parse(JsonConvert.SerializeObject(ev));
+                                }
+                            }
+                        }
+
+                        // Adding new MinCandiesBeforeEvolve to all filters.
+                        if (settings["PokemonEvolveFilter"] != null)
+                        {
+                            foreach (var x in settings["PokemonEvolveFilter"])
+                            {
+                                var filter = ((JProperty)(x)).Value;
+
+                                if (filter["MinCandiesBeforeEvolve"] == null)
+                                {
+                                    filter["MinCandiesBeforeEvolve"] = 0;
+                                }
+                            }
+                        }
+
+                        // But this time we are going to remove PokemonsToEvolve.
+                        settings.Remove("PokemonsToEvolve");
+                        break;
                 }
             }
         }
@@ -466,14 +696,18 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         public static bool PromptForSetup(ITranslation translator)
         {
-            bool promptForSetup = PromptForBoolean(translator, translator.GetTranslation(TranslationString.FirstStartPrompt, "Y", "N"));
+            bool promptForSetup = PromptForBoolean(
+                translator,
+                translator.GetTranslation(TranslationString.FirstStartPrompt, "Y", "N")
+            );
             if (!promptForSetup)
                 Logger.Write(translator.GetTranslation(TranslationString.FirstStartAutoGenSettings));
 
             return promptForSetup;
         }
 
-        public static Session SetupSettings(Session session, GlobalSettings settings, IElevationService elevationService, string configPath)
+        public static Session SetupSettings(Session session, GlobalSettings settings,
+            IElevationService elevationService, string configPath)
         {
             var newSession = SetupTranslationCode(session, elevationService, session.Translation, settings);
 
@@ -491,15 +725,27 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             return newSession;
         }
 
-        private static Session SetupTranslationCode(Session session, IElevationService elevationService, ITranslation translator, GlobalSettings settings)
+        private static Session SetupTranslationCode(Session session, IElevationService elevationService,
+            ITranslation translator, GlobalSettings settings)
         {
-            if (false == PromptForBoolean(translator, translator.GetTranslation(TranslationString.FirstStartLanguagePrompt, "Y", "N")))
+            if (false == PromptForBoolean(
+                    translator,
+                    translator.GetTranslation(TranslationString.FirstStartLanguagePrompt, "Y", "N")
+                )
+            )
                 return session;
 
-            string strInput = PromptForString(translator, translator.GetTranslation(TranslationString.FirstStartLanguageCodePrompt));
+            string strInput = PromptForString(
+                translator,
+                translator.GetTranslation(TranslationString.FirstStartLanguageCodePrompt)
+            );
 
             settings.ConsoleConfig.TranslationLanguageCode = strInput;
-            session = new Session(new ClientSettings(settings, elevationService), new LogicSettings(settings), elevationService);
+            session = new Session(settings,
+                new ClientSettings(settings, elevationService),
+                new LogicSettings(settings),
+                elevationService
+            );
             translator = session.Translation;
             Logger.Write(translator.GetTranslation(TranslationString.FirstStartLanguageConfirm, strInput));
 
@@ -508,70 +754,134 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         private static void SetupProxyConfig(ITranslation translator, GlobalSettings settings)
         {
-            if (false == PromptForBoolean(translator, translator.GetTranslation(TranslationString.FirstStartSetupProxyPrompt, "Y", "N")))
+            if (false == PromptForBoolean(
+                    translator,
+                    translator.GetTranslation(TranslationString.FirstStartSetupProxyPrompt, "Y", "N")
+                )
+            )
                 return;
-            
+
             settings.Auth.ProxyConfig.UseProxy = true;
 
-            string strInput = PromptForString(translator, translator.GetTranslation(TranslationString.FirstStartSetupProxyHostPrompt));
+            string strInput = PromptForString(
+                translator,
+                translator.GetTranslation(TranslationString.FirstStartSetupProxyHostPrompt)
+            );
             settings.Auth.ProxyConfig.UseProxyHost = strInput;
             Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupProxyHostConfirm, strInput));
-            
-            strInput = PromptForString(translator, translator.GetTranslation(TranslationString.FirstStartSetupProxyPortPrompt));
+
+            strInput = PromptForString(
+                translator,
+                translator.GetTranslation(TranslationString.FirstStartSetupProxyPortPrompt)
+            );
             settings.Auth.ProxyConfig.UseProxyPort = strInput;
             Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupProxyPortConfirm, strInput));
-            
-            if (false == PromptForBoolean(translator, translator.GetTranslation(TranslationString.FirstStartSetupProxyAuthPrompt, "Y", "N")))
+
+            if (false == PromptForBoolean(
+                    translator,
+                    translator.GetTranslation(TranslationString.FirstStartSetupProxyAuthPrompt, "Y", "N")
+                )
+            )
                 return;
-            
+
             settings.Auth.ProxyConfig.UseProxyAuthentication = true;
-            
-            strInput = PromptForString(translator, translator.GetTranslation(TranslationString.FirstStartSetupProxyUsernamePrompt));
+
+            strInput = PromptForString(
+                translator,
+                translator.GetTranslation(TranslationString.FirstStartSetupProxyUsernamePrompt)
+            );
             settings.Auth.ProxyConfig.UseProxyUsername = strInput;
             Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupProxyUsernameConfirm, strInput));
 
-            strInput = PromptForString(translator, translator.GetTranslation(TranslationString.FirstStartSetupProxyPasswordPrompt));
+            strInput = PromptForString(
+                translator,
+                translator.GetTranslation(TranslationString.FirstStartSetupProxyPasswordPrompt)
+            );
             settings.Auth.ProxyConfig.UseProxyPassword = strInput;
             Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupProxyPasswordConfirm, strInput));
         }
-        
+
         private static void SetupWalkingConfig(ITranslation translator, GlobalSettings settings)
         {
-            if (false == PromptForBoolean(translator, translator.GetTranslation(TranslationString.FirstStartSetupWalkingSpeedPrompt, "Y", "N")))
+            if (false == PromptForBoolean(
+                    translator,
+                    translator.GetTranslation(TranslationString.FirstStartSetupWalkingSpeedPrompt, "Y", "N")
+                )
+            )
                 return;
 
-            settings.LocationConfig.WalkingSpeedInKilometerPerHour = PromptForDouble(translator, translator.GetTranslation(TranslationString.FirstStartSetupWalkingSpeedKmHPrompt));
-            Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupWalkingSpeedKmHConfirm, settings.LocationConfig.WalkingSpeedInKilometerPerHour.ToString()));
+            settings.LocationConfig.WalkingSpeedInKilometerPerHour = PromptForDouble(
+                translator,
+                translator.GetTranslation(TranslationString.FirstStartSetupWalkingSpeedKmHPrompt)
+            );
+            Logger.Write(
+                translator.GetTranslation(TranslationString.FirstStartSetupWalkingSpeedKmHConfirm,
+                settings.LocationConfig.WalkingSpeedInKilometerPerHour.ToString()
+                )
+            );
 
-            settings.LocationConfig.UseWalkingSpeedVariant = PromptForBoolean(translator, translator.GetTranslation(TranslationString.FirstStartSetupUseWalkingSpeedVariantPrompt, "Y", "N"));
+            settings.LocationConfig.UseWalkingSpeedVariant = PromptForBoolean(
+                translator,
+                translator.GetTranslation(TranslationString.FirstStartSetupUseWalkingSpeedVariantPrompt, "Y", "N")
+            );
 
-            settings.LocationConfig.WalkingSpeedVariant = PromptForDouble(translator, translator.GetTranslation(TranslationString.FirstStartSetupWalkingSpeedVariantPrompt));
-            Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupWalkingSpeedVariantConfirm, settings.LocationConfig.WalkingSpeedVariant.ToString()));
+            settings.LocationConfig.WalkingSpeedVariant = PromptForDouble(
+                translator,
+                translator.GetTranslation(TranslationString.FirstStartSetupWalkingSpeedVariantPrompt)
+            );
+            Logger.Write(
+                translator.GetTranslation(
+                    TranslationString.FirstStartSetupWalkingSpeedVariantConfirm,
+                    settings.LocationConfig.WalkingSpeedVariant.ToString()
+                )
+            );
         }
-        
+
         private static void SetupWebSocketConfig(ITranslation translator, GlobalSettings settings)
         {
-            if (false == PromptForBoolean(translator, translator.GetTranslation(TranslationString.FirstStartSetupWebSocketPrompt, "Y", "N")))
+            if (false == PromptForBoolean(
+                    translator,
+                    translator.GetTranslation(TranslationString.FirstStartSetupWebSocketPrompt, "Y", "N")
+                )
+            )
                 return;
-            
+
             settings.WebsocketsConfig.UseWebsocket = true;
 
-            settings.WebsocketsConfig.WebSocketPort = PromptForInteger(translator, translator.GetTranslation(TranslationString.FirstStartSetupWebSocketPortPrompt));
-            Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupWebSocketPortConfirm, settings.WebsocketsConfig.WebSocketPort.ToString()));
+            settings.WebsocketsConfig.WebSocketPort = PromptForInteger(
+                translator,
+                translator.GetTranslation(TranslationString.FirstStartSetupWebSocketPortPrompt)
+            );
+            Logger.Write(
+                translator.GetTranslation(
+                    TranslationString.FirstStartSetupWebSocketPortConfirm,
+                    settings.WebsocketsConfig.WebSocketPort.ToString()
+                )
+            );
         }
 
         private static void SetupTelegramConfig(ITranslation translator, GlobalSettings settings)
         {
-            if (false == PromptForBoolean(translator, translator.GetTranslation(TranslationString.FirstStartSetupTelegramPrompt, "Y", "N")))
+            if (false == PromptForBoolean(
+                    translator,
+                    translator.GetTranslation(TranslationString.FirstStartSetupTelegramPrompt, "Y", "N")
+                )
+            )
                 return;
 
             settings.TelegramConfig.UseTelegramAPI = true;
 
-            string strInput = PromptForString(translator, translator.GetTranslation(TranslationString.FirstStartSetupTelegramCodePrompt));
+            string strInput = PromptForString(
+                translator,
+                translator.GetTranslation(TranslationString.FirstStartSetupTelegramCodePrompt)
+            );
             settings.TelegramConfig.TelegramAPIKey = strInput;
             Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupTelegramCodeConfirm, strInput));
 
-            strInput = PromptForString(translator, translator.GetTranslation(TranslationString.FirstStartSetupTelegramPasswordPrompt));
+            strInput = PromptForString(
+                translator,
+                translator.GetTranslation(TranslationString.FirstStartSetupTelegramPasswordPrompt)
+            );
             settings.TelegramConfig.TelegramPassword = strInput;
             Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupTelegramPasswordConfirm, strInput));
         }
@@ -580,8 +890,14 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         {
             Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupAccount), LogLevel.Info);
 
-            string accountType = PromptForString(translator, translator.GetTranslation(TranslationString.FirstStartSetupTypePrompt, "google", "ptc"), new string[] { "google", "ptc" }, translator.GetTranslation(TranslationString.FirstStartSetupTypePromptError, "google", "ptc"), false);
-            
+            string accountType = PromptForString(
+                translator,
+                translator.GetTranslation(TranslationString.FirstStartSetupTypePrompt, "google", "ptc"),
+                new string[] { "google", "ptc" },
+                translator.GetTranslation(TranslationString.FirstStartSetupTypePromptError, "google", "ptc"),
+                false
+            );
+
             switch (accountType)
             {
                 case "google":
@@ -592,27 +908,30 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                     break;
             }
 
-            Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupTypeConfirm, accountType.ToUpper()));
+            Logger.Write(
+                translator.GetTranslation(TranslationString.FirstStartSetupTypeConfirm, accountType.ToUpper()
+                )
+            );
         }
 
         private static void SetupUserAccount(ITranslation translator, GlobalSettings settings)
         {
             Logger.Write("", LogLevel.Info);
-            var strInput = PromptForString(translator, translator.GetTranslation(TranslationString.FirstStartSetupUsernamePrompt));
-            
-            if (settings.Auth.AuthConfig.AuthType == AuthType.Google)
-                settings.Auth.AuthConfig.GoogleUsername = strInput;
-            else
-                settings.Auth.AuthConfig.PtcUsername = strInput;
+            var strInput = PromptForString(
+                translator,
+                translator.GetTranslation(TranslationString.FirstStartSetupUsernamePrompt)
+            );
+
+            settings.Auth.AuthConfig.Username = strInput;
             Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupUsernameConfirm, strInput));
 
             Logger.Write("", LogLevel.Info);
-            strInput = PromptForString(translator, translator.GetTranslation(TranslationString.FirstStartSetupPasswordPrompt));
-            
-            if (settings.Auth.AuthConfig.AuthType == AuthType.Google)
-                settings.Auth.AuthConfig.GooglePassword = strInput;
-            else
-                settings.Auth.AuthConfig.PtcPassword = strInput;
+            strInput = PromptForString(
+                translator,
+                translator.GetTranslation(TranslationString.FirstStartSetupPasswordPrompt)
+            );
+
+            settings.Auth.AuthConfig.Password = strInput;
             Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupPasswordConfirm, strInput));
 
             Logger.Write(translator.GetTranslation(TranslationString.FirstStartAccountCompleted), LogLevel.Info);
@@ -620,12 +939,17 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         private static void SetupConfig(ITranslation translator, GlobalSettings settings)
         {
-            if (false == PromptForBoolean(translator, translator.GetTranslation(TranslationString.FirstStartDefaultLocationPrompt, "Y", "N")))
+            if (false == PromptForBoolean(
+                    translator,
+                    translator.GetTranslation(
+                        TranslationString.FirstStartDefaultLocationPrompt, "Y", "N")
+                )
+            )
             {
                 Logger.Write(translator.GetTranslation(TranslationString.FirstStartDefaultLocationSet));
                 return;
             }
-            
+
             Logger.Write(translator.GetTranslation(TranslationString.FirstStartDefaultLocation), LogLevel.Info);
             Logger.Write(translator.GetTranslation(TranslationString.FirstStartSetupDefaultLatLongPrompt));
             while (true)
@@ -665,16 +989,20 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             }
         }
 
-        private static void SaveFiles(GlobalSettings settings, string configFile)
+        public static void SaveFiles(GlobalSettings settings, string configFile)
         {
             settings.Save(configFile);
-            settings.Auth.Load(Path.Combine(settings.ProfileConfigPath, "auth.json"), Path.Combine(settings.ProfileConfigPath, "auth.schema.json"), settings.UpdateConfig.SchemaVersion);
+            settings.Auth.Load(
+                Path.Combine(settings.ProfileConfigPath, "auth.json"),
+                Path.Combine(settings.ProfileConfigPath, "auth.schema.json"),
+                settings.UpdateConfig.SchemaVersion
+            );
         }
 
         public void Save(string fullPath, bool validate = false)
         {
             var output = JsonConvert.SerializeObject(this, Formatting.Indented,
-                new StringEnumConverter {CamelCaseText = true});
+                new StringEnumConverter { CamelCaseText = true });
 
             var folder = Path.GetDirectoryName(fullPath);
             if (folder != null && !Directory.Exists(folder))
@@ -698,9 +1026,8 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             foreach (var error in errors)
             {
                 Logger.Write(
-                    "config.json [Line: " + error.LineNumber + ", Position: " + error.LinePosition + "]: " + error.Path +
-                    " " +
-                    error.Message, LogLevel.Error);
+                    "config.json [Line: " + error.LineNumber + ", Position: " + error.LinePosition + "]: " +
+                    error.Path + " " + error.Message, LogLevel.Error);
                 //"Default value is '" + error.Schema.Default + "'"
             }
             Logger.Write("Fix config.json and restart NecroBot or press a key to ignore and continue...",
@@ -724,7 +1051,6 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                     default:
                         if (string.IsNullOrEmpty(errorPrompt))
                             errorPrompt = translator.GetTranslation(TranslationString.PromptError, "y", "n");
-
                         Logger.Write(errorPrompt, LogLevel.Error);
                         continue;
                 }
@@ -775,7 +1101,8 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             }
         }
 
-        public static string PromptForString(ITranslation translator, string initialPrompt, string[] validStrings = null, string errorPrompt = null, bool caseSensitive = true)
+        public static string PromptForString(ITranslation translator, string initialPrompt,
+            string[] validStrings = null, string errorPrompt = null, bool caseSensitive = true)
         {
             while (true)
             {
@@ -800,7 +1127,10 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 // If we got here, no valid strings.
                 if (string.IsNullOrEmpty(errorPrompt))
                 {
-                    errorPrompt = translator.GetTranslation(TranslationString.PromptErrorString, string.Join(",", validStrings));
+                    errorPrompt = translator.GetTranslation(
+                        TranslationString.PromptErrorString,
+                        string.Join(",", validStrings)
+                    );
                 }
                 Logger.Write(errorPrompt, LogLevel.Error);
             }

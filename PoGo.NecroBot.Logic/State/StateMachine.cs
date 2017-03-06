@@ -2,16 +2,19 @@
 
 using System;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
-using PoGo.NecroBot.Logic.Event;
-using PoGo.NecroBot.Logic.Tasks;
+using PoGo.NecroBot.Logic.Captcha;
 using PoGo.NecroBot.Logic.Common;
+using PoGo.NecroBot.Logic.Event;
+using PoGo.NecroBot.Logic.Exceptions;
 using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.Model.Settings;
-using PokemonGo.RocketAPI.Exceptions;
-using PoGo.NecroBot.Logic.Exceptions;
+using PoGo.NecroBot.Logic.Tasks;
 using PoGo.NecroBot.Logic.Utils;
+using PokemonGo.RocketAPI.Exceptions;
+using static System.Threading.Tasks.Task;
+using static PoGo.NecroBot.Logic.Utils.PushNotificationClient;
+using TinyIoC;
 
 #endregion
 
@@ -21,9 +24,9 @@ namespace PoGo.NecroBot.Logic.State
     {
         private IState _initialState;
 
-        public Task AsyncStart(IState initialState, Session session, string subPath, bool excelConfigAllowed=false)
+        public Task AsyncStart(IState initialState, Session session, string subPath, bool excelConfigAllowed = false)
         {
-            return Task.Run(() => Start(initialState, session, subPath, excelConfigAllowed));
+            return Run(() => Start(initialState, session, subPath, excelConfigAllowed));
         }
 
         public void SetFailureState(IState state)
@@ -39,7 +42,7 @@ namespace PoGo.NecroBot.Logic.State
             var profilePath = Path.Combine(Directory.GetCurrentDirectory(), subPath);
             var profileConfigPath = Path.Combine(profilePath, "config");
             globalSettings = GlobalSettings.Load(subPath);
-      
+
             FileSystemWatcher configWatcher = new FileSystemWatcher();
             configWatcher.Path = profileConfigPath;
             configWatcher.Filter = "config.json";
@@ -52,6 +55,7 @@ namespace PoGo.NecroBot.Logic.State
                 {
                     globalSettings = GlobalSettings.Load(subPath);
                     session.LogicSettings = new LogicSettings(globalSettings);
+                    // BUG: duplicate boolean negation will take no effect
                     configWatcher.EnableRaisingEvents = !configWatcher.EnableRaisingEvents;
                     configWatcher.EnableRaisingEvents = !configWatcher.EnableRaisingEvents;
                     Logger.Write(" ##### config.json ##### ", LogLevel.Info);
@@ -61,7 +65,11 @@ namespace PoGo.NecroBot.Logic.State
             //watch the excel config file
             if (excelConfigAllowed)
             {
-                Task.Run(async () =>
+                // TODO - await is legal here! USE it or use pragma to suppress compilerwarning and write a comment why it is not used
+                // TODO: Attention - do not touch (add pragma) when you do not know what you are doing ;)
+                // jjskuld - Ignore CS4014 warning for now.
+                #pragma warning disable 4014
+                Run(async () =>
                 {
                     while (true)
                     {
@@ -74,14 +82,15 @@ namespace PoGo.NecroBot.Logic.State
                                 session.LogicSettings = new LogicSettings(globalSettings);
                                 Logger.Write(" ##### config.xlsm ##### ", LogLevel.Info);
                             }
-                            await Task.Delay(5000);
+                            await Delay(5000);
                         }
                         catch (Exception)
                         {
-
+                            // TODO Bad practice! Wanna log this?
                         }
                     }
                 });
+                #pragma warning restore 4014
             }
 
             int apiCallFailured = 0;
@@ -92,8 +101,9 @@ namespace PoGo.NecroBot.Logic.State
                     state = await state.Execute(session, session.CancellationTokenSource.Token);
 
                     // Exit the bot if both catching and looting has reached its limits
-                    if ((UseNearbyPokestopsTask._pokestopLimitReached || UseNearbyPokestopsTask._pokestopTimerReached) &&
-                        (CatchPokemonTask._catchPokemonLimitReached || CatchPokemonTask._catchPokemonTimerReached))
+                    if ((UseNearbyPokestopsTask._pokestopLimitReached ||
+                         UseNearbyPokestopsTask._pokestopTimerReached) &&
+                        session.Stats.CatchThresholdExceeds(session))
                     {
                         session.EventDispatcher.Send(new ErrorEvent
                         {
@@ -103,64 +113,167 @@ namespace PoGo.NecroBot.Logic.State
                         session.CancellationTokenSource.Cancel();
 
                         // A bit rough here; works but can be improved
-                        await Task.Delay(10000);
+                        await Delay(10000);
                         state = null;
                         session.CancellationTokenSource.Dispose();
                         Environment.Exit(0);
                     }
                 }
+                catch (APIBadRequestException)
+                {
+                    session.EventDispatcher.Send(new ErrorEvent() {Message = "Unexpected error happen, bot will re-login"});
+
+                    if (session.LogicSettings.AllowMultipleBot)
+                        session.ReInitSessionWithNextBot();
+                    state = new LoginState();
+                }
+                catch (AccountNotVerifiedException)
+                {
+                    if (session.LogicSettings.AllowMultipleBot)
+                    {
+                        session.ReInitSessionWithNextBot();
+                        state = new LoginState();
+                    }
+                    else
+                    {
+                        Console.Read();
+                        Environment.Exit(0);
+                    }
+                }
+                catch(ActiveSwitchAccountManualException ex)
+                {
+                    session.EventDispatcher.Send(new WarnEvent { Message = "Switch account requested by user" });
+                    session.ReInitSessionWithNextBot(ex.RequestedAccount, session.Client.CurrentLatitude, session.Client.CurrentLongitude, session.Client.CurrentAltitude);
+                    state = new LoginState();
+
+                }
                 catch (ActiveSwitchByPokemonException rsae)
                 {
-                    session.EventDispatcher.Send(new WarnEvent { Message = "Encountered a good pokemon , switch another bot to catch him too." });
-                    session.ResetSessionToWithNextBot(rsae.Bot,session.Client.CurrentLatitude, session.Client.CurrentLongitude, session.Client.CurrentAltitude);
-                    state = new LoginState(rsae.LastEncounterPokemonId);
+                    if (rsae.Snipe && rsae.EncounterData != null)
+                        session.EventDispatcher.Send(new WarnEvent { Message = $"Detected a good pokemon with snipe {rsae.EncounterData.PokemonId.ToString()}   IV:{rsae.EncounterData.IV}  Move:{rsae.EncounterData.Move1}/ Move:{rsae.EncounterData.Move2}   LV: Move:{rsae.EncounterData.Level}" });
+                    else
+                        session.EventDispatcher.Send(new WarnEvent { Message = "Encountered a good pokemon, switch another bot to catch him too." });
+                    
+                    session.ReInitSessionWithNextBot(rsae.Bot, session.Client.CurrentLatitude, session.Client.CurrentLongitude, session.Client.CurrentAltitude);
+                    state = new LoginState(rsae.LastEncounterPokemonId, rsae.EncounterData);
                 }
                 catch (ActiveSwitchByRuleException se)
                 {
                     session.EventDispatcher.Send(new WarnEvent { Message = $"Switch bot account activated by : {se.MatchedRule.ToString()}  - {se.ReachedValue} " });
-                    if (se.MatchedRule == SwitchRules.PokestopSoftban)
+                    if (se.MatchedRule == SwitchRules.EmptyMap)
                     {
-                        session.BlockCurrentBot();
-                        session.ResetSessionToWithNextBot();
+                        TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(90);
+                        session.ReInitSessionWithNextBot();
                     }
-                    else 
-                    if(se.MatchedRule == SwitchRules.CatchFlee)
+                    else if (se.MatchedRule == SwitchRules.PokestopSoftban)
                     {
-                        session.BlockCurrentBot(60);
-                        session.ResetSessionToWithNextBot();
+                        TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot();
+                        session.ReInitSessionWithNextBot();
+                    }
+                    else if (se.MatchedRule == SwitchRules.CatchFlee)
+                    {
+                        TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(60);
+                        session.ReInitSessionWithNextBot();
                     }
                     else
                     {
-                        if (session.LogicSettings.MultipleBotConfig.StartFromDefaultLocation)
+                        if (se.MatchedRule == SwitchRules.CatchLimitReached ||
+                            se.MatchedRule == SwitchRules.SpinPokestopReached)
                         {
-                            session.ResetSessionToWithNextBot(null, globalSettings.LocationConfig.DefaultLatitude, globalSettings.LocationConfig.DefaultLongitude, session.Client.CurrentAltitude);
+                            // TODO - await is legal here! USE it or use pragma to suppress compilerwarning and write a comment why it is not used
+                            // TODO: Attention - do not touch (add pragma) when you do not know what you are doing ;)
+                            // jjskuld - Ignore CS4014 warning for now.
+                            #pragma warning disable 4014
+                            SendNotification(session, $"{se.MatchedRule} - {session.Settings.Username}", "This bot has reach limit, it will be blocked for 60 mins for safety.", true);
+                            #pragma warning restore 4014
+                            session.EventDispatcher.Send(new WarnEvent() { Message = $"You reach limited. bot will sleep for {session.LogicSettings.MultipleBotConfig.OnLimitPauseTimes} min" });
+
+                            TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(session.LogicSettings.MultipleBotConfig.OnLimitPauseTimes);
+
+                            session.ReInitSessionWithNextBot();
                         }
                         else
                         {
-                            session.ResetSessionToWithNextBot(); //current location
+                            if (session.LogicSettings.MultipleBotConfig.StartFromDefaultLocation)
+                            {
+                                session.ReInitSessionWithNextBot(null, globalSettings.LocationConfig.DefaultLatitude, globalSettings.LocationConfig.DefaultLongitude, session.Client.CurrentAltitude);
+                            }
+                            else
+                            {
+                                session.ReInitSessionWithNextBot(); //current location
+                            }
                         }
                     }
                     //return to login state
                     state = new LoginState();
                 }
 
-                catch (InvalidResponseException)
+                catch (InvalidResponseException e)
                 {
-                    session.EventDispatcher.Send(new ErrorEvent { Message = "Niantic Servers unstable, throttling API Calls." });
-                    await Task.Delay(1000);
-                    apiCallFailured++;
-                    if(apiCallFailured > 20)
+                    session.EventDispatcher.Send(new ErrorEvent { Message = $"Niantic Servers unstable, throttling API Calls. {e.Message}" });
+                    await Delay(1000);
+                    if (session.LogicSettings.AllowMultipleBot)
                     {
-                        apiCallFailured = 0;
-                        session.BlockCurrentBot(30);
-                        session.ResetSessionToWithNextBot();
-                        state = new LoginState();
+                        apiCallFailured++;
+                        if (apiCallFailured > 20)
+                        {
+                            apiCallFailured = 0;
+                            TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(30);
+                            session.ReInitSessionWithNextBot();
+                        }
                     }
+                    state = new LoginState();
                 }
                 catch (OperationCanceledException)
                 {
                     session.EventDispatcher.Send(new ErrorEvent {Message = "Current Operation was canceled."});
-                    state = _initialState;
+                    if (session.LogicSettings.AllowMultipleBot)
+                    {
+                        TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(30);
+                        session.ReInitSessionWithNextBot();
+                    }
+                    state = new LoginState();
+                }
+                catch(PtcLoginException ex)
+                {
+                    #pragma warning disable 4014
+                    SendNotification(session, $"PTC Login failed!!!! {session.Settings.Username}", session.Translation.GetTranslation(TranslationString.PtcLoginFail), true);
+                    #pragma warning restore 4014
+
+                    if (session.LogicSettings.AllowMultipleBot)
+                    {
+                        TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(60); //need remove acc
+                        session.ReInitSessionWithNextBot();
+                        state = new LoginState();
+                    }
+                    else {
+                        session.EventDispatcher.Send(new ErrorEvent { RequireExit = true, Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey) });
+                        session.EventDispatcher.Send(new ErrorEvent { RequireExit = true, Message = session.Translation.GetTranslation(TranslationString.PtcLoginFail)  + $" ({ex.Message})"});
+
+                        Console.ReadKey();
+                        Environment.Exit(1);
+                    }
+                }
+                catch (LoginFailedException)
+                {
+                    // TODO - await is legal here! USE it or use pragma to suppress compilerwarning and write a comment why it is not used
+                    // TODO: Attention - do not touch (add pragma) when you do not know what you are doing ;)
+                    // jjskuld - Ignore CS4014 warning for now.
+                    #pragma warning disable 4014
+                    SendNotification(session, $"Banned!!!! {session.Settings.Username}", session.Translation.GetTranslation(TranslationString.AccountBanned), true);
+                    #pragma warning restore 4014
+
+                    if (session.LogicSettings.AllowMultipleBot)
+                    {
+                        TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(24 * 60); //need remove acc
+                        session.ReInitSessionWithNextBot();
+                        state = new LoginState();
+                    }
+                    else {
+                        session.EventDispatcher.Send(new ErrorEvent { RequireExit = true, Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey) });
+                        Console.ReadKey();
+                        Environment.Exit(1);
+                    }
                 }
                 catch (MinimumClientVersionException ex)
                 {
@@ -170,23 +283,25 @@ namespace PoGo.NecroBot.Logic.State
                         Message = session.Translation.GetTranslation(TranslationString.MinimumClientVersionException, ex.CurrentApiVersion.ToString(), ex.MinimumClientVersion.ToString())
                     });
 
-                    session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey) });
+                    session.EventDispatcher.Send(new ErrorEvent { RequireExit = true, Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey) });
                     Console.ReadKey();
-                    System.Environment.Exit(1);
+                    Environment.Exit(1);
                 }
-                catch (LoginFailedException)
+                catch (TokenRefreshException ex)
                 {
-                    session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.AccountBanned) });
-                    session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey) });
-                    Console.ReadKey();
-                    System.Environment.Exit(1);
+                    session.EventDispatcher.Send(new ErrorEvent() {Message = ex.Message});
+
+                    if (session.LogicSettings.AllowMultipleBot)
+                        session.ReInitSessionWithNextBot();
+                    state = new LoginState();
                 }
+
                 catch (PtcOfflineException)
                 {
                     session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.PtcOffline) });
                     session.EventDispatcher.Send(new NoticeEvent { Message = session.Translation.GetTranslation(TranslationString.TryingAgainIn, 15) });
 
-                    await Task.Delay(15000);
+                    await Delay(1000);
                     state = _initialState;
                 }
                 catch (GoogleOfflineException)
@@ -194,7 +309,7 @@ namespace PoGo.NecroBot.Logic.State
                     session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.GoogleOffline) });
                     session.EventDispatcher.Send(new NoticeEvent { Message = session.Translation.GetTranslation(TranslationString.TryingAgainIn, 15) });
 
-                    await Task.Delay(15000);
+                    await Delay(15000);
                     state = _initialState;
                 }
                 catch (AccessTokenExpiredException)
@@ -202,23 +317,51 @@ namespace PoGo.NecroBot.Logic.State
                     session.EventDispatcher.Send(new NoticeEvent { Message = "Access Token Expired. Logging in again..." });
                     state = _initialState;
                 }
-                catch (CaptchaException)
+                catch (CaptchaException captchaException)
                 {
-                    // TODO Show the captcha.
-                    session.EventDispatcher.Send(new WarnEvent { Message = session.Translation.GetTranslation(TranslationString.CaptchaShown) });
-                    session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey) });
-                    Console.ReadKey();
-                    Environment.Exit(0);
+                    var resolved = await CaptchaManager.SolveCaptcha(session, captchaException.Url);
+                    if (!resolved)
+                    {
+                        await SendNotification(session, $"Captcha required {session.Settings.Username}", session.Translation.GetTranslation(TranslationString.CaptchaShown), true);
+                        session.EventDispatcher.Send(new WarnEvent { Message = session.Translation.GetTranslation(TranslationString.CaptchaShown) });
+                        Logger.Debug("Captcha not resolved");
+                        if (session.LogicSettings.AllowMultipleBot)
+                        {
+                            Logger.Debug("Change account");
+                            TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(15);
+                            session.ReInitSessionWithNextBot();
+                            state = new LoginState();
+                        }
+                        else
+                        {
+                            session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey) });
+                            Console.ReadKey();
+                            Environment.Exit(0);
+                        }
+                    }
+                    else
+                    {
+                        //resolve captcha
+                        state = new LoginState();
+                    }
+                }
+                catch (HasherException ex)
+                {
+                    session.EventDispatcher.Send(new ErrorEvent {Message = ex.Message});
+                    //  session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey) });
+                    state = new IdleState();
+                    //Console.ReadKey();
+                    //System.Environment.Exit(1);
                 }
                 catch (Exception ex)
                 {
-                    session.EventDispatcher.Send(new ErrorEvent {Message = "Pokemon Servers might be offline / unstable. Trying again..."});
+                    session.EventDispatcher.Send(new ErrorEvent { Message = "Pokemon Servers might be offline / unstable. Trying again..." });
                     session.EventDispatcher.Send(new ErrorEvent { Message = "Error: " + ex });
                     if (state is LoginState)
                     {
                     }
                     else
-                    state = _initialState;
+                        state = _initialState;
                 }
             } while (state != null);
             configWatcher.EnableRaisingEvents = false;

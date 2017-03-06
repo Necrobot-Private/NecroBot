@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Utils;
-using System.Collections.Generic;
 
 #endregion
 
@@ -27,15 +26,15 @@ namespace PoGo.NecroBot.Logic.State
                 {
                     var distance = LocationUtils.CalculateDistanceInMeters(latLngFromFile.Item1, latLngFromFile.Item2,
                         session.Settings.DefaultLatitude, session.Settings.DefaultLongitude);
-                    var lastModified = File.Exists(coordsPath) ? (DateTime?)File.GetLastWriteTime(coordsPath) : null;
+                    var lastModified = File.Exists(coordsPath) ? (DateTime?) File.GetLastWriteTime(coordsPath) : null;
                     if (lastModified != null)
                     {
                         var hoursSinceModified = (DateTime.Now - lastModified).HasValue
-                            ? (double?)((DateTime.Now - lastModified).Value.Minutes / 60.0)
+                            ? (double?) ((DateTime.Now - lastModified).Value.Minutes / 60.0)
                             : null;
                         if (hoursSinceModified != null && hoursSinceModified != 0)
                         {
-                            var kmph = distance / 1000 / (double)hoursSinceModified;
+                            var kmph = distance / 1000 / (double) hoursSinceModified;
                             if (kmph < 80) // If speed required to get to the default location is < 80km/hr
                             {
                                 File.Delete(coordsPath);
@@ -85,12 +84,36 @@ namespace PoGo.NecroBot.Logic.State
                     });
                 }
             }
-            
+
             await Task.Delay(3000, cancellationToken);
             return new CheckTosState();
         }
+        private static double lastLat = 0;
+        private static double lastLng = 0;
+        public static void SaveLocationToDisk(ISession session, double lat, double lng, double speed)
+        {
+            if (session.Stats.IsSnipping)
+                return;
 
-        private static Tuple<double, double> LoadPositionFromDisk(ISession session)
+            // Make sure new location is valid.
+            if (!LocationUtils.IsValidLocation(lat, lng))
+                return;
+
+            // If last location is valid, make sure distance between last location and new location is less than 1000m.
+            if ((lastLat != 0 || lastLng != 0) && LocationUtils.CalculateDistanceInMeters(lat, lng, lastLat, lastLng) > 1000)
+                return;
+
+            // Don't save new position if it is outside of our max travel distance.
+            if (LocationUtils.CalculateDistanceInMeters(lat, lng, session.Settings.DefaultLatitude, session.Settings.DefaultLongitude) > session.LogicSettings.MaxTravelDistanceInMeters)
+                return;
+            
+            lastLat = lat;
+            lastLng = lng;
+            var coordsPath = Path.Combine(session.LogicSettings.ProfileConfigPath, "LastPos.ini");
+            File.WriteAllText(coordsPath, $"{lat}:{lng}");
+        }
+
+        public static Tuple<double, double> LoadPositionFromDisk(ISession session)
         {
             if (
                 File.Exists(Path.Combine(session.LogicSettings.ProfileConfigPath, "LastPos.ini")) &&

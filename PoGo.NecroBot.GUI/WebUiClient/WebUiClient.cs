@@ -37,7 +37,8 @@ namespace PoGo.NecroBot.GUI.WebUiClient
 
         private string _lastCommitCheckRef = "";
 
-        public WebUiClient(string owner, string repoName, string htlmRootPath, string htlmDefaultFilePath, string version)
+        public WebUiClient(string owner, string repoName, string htlmRootPath,
+            string htlmDefaultFilePath, string version)
         {
             RepoOwner = owner;
             RepoName = repoName;
@@ -136,8 +137,8 @@ namespace PoGo.NecroBot.GUI.WebUiClient
                             if (totalSize > 0)
                             {
                                 downloadsize += readSize;
-                                var percentComplete = (int) (downloadsize/(float) totalSize*100);
-                                var fixpercentComplete = (int) (percentComplete*0.8);
+                                var percentComplete = (int) (downloadsize / (float) totalSize * 100);
+                                var fixpercentComplete = (int) (percentComplete * 0.8);
                                 progress?.Report(fixpercentComplete);
                             }
 

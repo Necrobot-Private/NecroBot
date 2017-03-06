@@ -7,12 +7,14 @@ using System.Threading.Tasks;
 using Google.Protobuf;
 using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.Event;
+using PoGo.NecroBot.Logic.Event.Player;
+using PoGo.NecroBot.Logic.Exceptions;
 using PoGo.NecroBot.Logic.Logging;
 using PokemonGo.RocketAPI.Enums;
 using PokemonGo.RocketAPI.Exceptions;
 using POGOProtos.Enums;
-using System.IO;
-using PoGo.NecroBot.Logic.Exceptions;
+using TinyIoC;
+using PokemonGo.RocketAPI.Util;
 
 #endregion
 
@@ -21,26 +23,35 @@ namespace PoGo.NecroBot.Logic.State
     public class LoginState : IState
     {
         private PokemonId pokemonToCatch;
-        public LoginState(PokemonId pokemonToCatch= PokemonId.Missingno)
+        private EncounteredEvent encounterData;
+
+        public LoginState(PokemonId pokemonToCatch = PokemonId.Missingno, EncounteredEvent encounterData = null)
         {
+            this.encounterData = encounterData;
             this.pokemonToCatch = pokemonToCatch;
         }
+
         public async Task<IState> Execute(ISession session, CancellationToken cancellationToken)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-            session.EventDispatcher.Send(new NoticeEvent
-            {
-                Message = session.Translation.GetTranslation(TranslationString.LoggingIn, session.Settings.AuthType)
-            });
+            // cancellationToken.ThrowIfCancellationRequested();
+            session.EventDispatcher.Send(new LoginEvent(
+                session.Settings.AuthType, $"{session.Settings.Username}"
+                ));
 
-            await CheckLogin(session, cancellationToken);
+            //session.EventDispatcher.Send(new NoticeEvent
+            //{
+            //    Message = session.Translation.GetTranslation(TranslationString.LoggingIn, session.Settings.AuthType)
+            //});
 
+            CheckLogin(session, cancellationToken);
+
+            bool successfullyLoggedIn = false;
             try
             {
                 if (session.Settings.AuthType == AuthType.Google || session.Settings.AuthType == AuthType.Ptc)
                 {
-                    await session.Client.Login.DoLogin();
-                    await LogLoginHistory(session, cancellationToken); 
+                    session.Profile = await session.Client.Login.DoLogin();
+                    successfullyLoggedIn = true;
                 }
                 else
                 {
@@ -54,16 +65,25 @@ namespace PoGo.NecroBot.Logic.State
             {
                 throw ae.Flatten().InnerException;
             }
-            catch (LoginFailedException)
+            catch (APIBadRequestException)
             {
                 session.EventDispatcher.Send(new ErrorEvent
                 {
                     Message = session.Translation.GetTranslation(TranslationString.LoginInvalid)
                 });
+
                 await Task.Delay(2000, cancellationToken);
-                Environment.Exit(0);
+                throw new LoginFailedException();
             }
-            catch (Exception ex) when (ex is PtcOfflineException || ex is AccessTokenExpiredException)
+            catch (AccessTokenExpiredException)
+            {
+                session.EventDispatcher.Send(new ErrorEvent
+                {
+                    Message = session.Translation.GetTranslation(TranslationString.AccessTokenExpired)
+                });
+                return new LoginState();
+            }
+            catch (PtcOfflineException)
             {
                 session.EventDispatcher.Send(new ErrorEvent
                 {
@@ -74,14 +94,35 @@ namespace PoGo.NecroBot.Logic.State
                     Message = session.Translation.GetTranslation(TranslationString.TryingAgainIn, 20)
                 });
             }
-            catch (AccountNotVerifiedException)
+            catch(PtcLoginException ex)
+            {
+                throw ex;
+            }
+            catch (AccountNotVerifiedException ex)
             {
                 session.EventDispatcher.Send(new ErrorEvent
                 {
                     Message = session.Translation.GetTranslation(TranslationString.AccountNotVerified)
                 });
                 await Task.Delay(2000, cancellationToken);
+                throw ex;
+            }
+            catch(GoogleTwoFactorException e)
+            {
+
+                session.EventDispatcher.Send(new ErrorEvent
+                {
+                    RequireExit = true,
+                    Message =  e.Message
+
+                });
+                session.EventDispatcher.Send(new ErrorEvent
+                {
+                    Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey)
+                });
+                Console.Read();
                 Environment.Exit(0);
+
             }
             catch (GoogleException e)
             {
@@ -111,15 +152,24 @@ namespace PoGo.NecroBot.Logic.State
                 }
                 session.EventDispatcher.Send(new ErrorEvent
                 {
+                    RequireExit = true,
                     Message = session.Translation.GetTranslation(TranslationString.GoogleError)
                 });
                 await Task.Delay(2000, cancellationToken);
                 Environment.Exit(0);
             }
+            catch (ActiveSwitchByRuleException)
+            {
+            }
+            catch (OperationCanceledException)
+            {
+                //just continue login if this happen, most case is bot switching...
+            }
             catch (InvalidProtocolBufferException ex) when (ex.Message.Contains("SkipLastField"))
             {
                 session.EventDispatcher.Send(new ErrorEvent
                 {
+                    RequireExit =true,
                     Message = session.Translation.GetTranslation(TranslationString.IPBannedError)
                 });
                 await Task.Delay(2000, cancellationToken);
@@ -130,12 +180,21 @@ namespace PoGo.NecroBot.Logic.State
                 // We need to terminate the client.
                 session.EventDispatcher.Send(new ErrorEvent
                 {
-                    Message = session.Translation.GetTranslation(TranslationString.MinimumClientVersionException, ex.CurrentApiVersion.ToString(), ex.MinimumClientVersion.ToString())
+                    Message = session.Translation
+                        .GetTranslation(
+                            TranslationString.MinimumClientVersionException,
+                            ex.CurrentApiVersion.ToString(),
+                            ex.MinimumClientVersion.ToString()
+                        )
                 });
+                session.EventDispatcher.Send(new ErrorEvent() { RequireExit = true, Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey, LogLevel.Error) });
 
-                Logger.Write(session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey, LogLevel.Error));
                 Console.ReadKey();
-                System.Environment.Exit(1);
+                Environment.Exit(1);
+            }
+            catch (CaptchaException captcha)
+            {
+                throw captcha;
             }
             catch (Exception e)
             {
@@ -143,81 +202,116 @@ namespace PoGo.NecroBot.Logic.State
                 await Task.Delay(20000, cancellationToken);
                 return this;
             }
-            try {
+            finally
+            {
+                var accountManager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
+                var currentAccount = accountManager?.GetCurrentAccount();
+                if (currentAccount != null)
+                {
+                    currentAccount.LastLogin = successfullyLoggedIn ? "Success" : "Failure";
+                    currentAccount.LastLoginTimestamp = TimeUtil.GetCurrentTimestampInMilliseconds();
+                    accountManager.UpdateDatabase(currentAccount);
+                }
+            }
+            try
+            {
                 await DownloadProfile(session);
                 if (session.Profile == null)
                 {
                     await Task.Delay(20000, cancellationToken);
-                    Logger.Write("Due to login failure your player profile could not be retrieved. Press any key to re-try login.", LogLevel.Warning);
+                    Logger.Write(
+                        "Due to login failure your player profile could not be retrieved. Press any key to re-try login.",
+                        LogLevel.Warning
+                    );
                     Console.ReadKey();
                 }
 
-                int maxTheoreticalItems = session.LogicSettings.TotalAmountOfPokeballsToKeep +
-                    session.LogicSettings.TotalAmountOfPotionsToKeep +
-                    session.LogicSettings.TotalAmountOfRevivesToKeep +
-                    session.LogicSettings.TotalAmountOfBerriesToKeep;
-
-                if (maxTheoreticalItems > session.Profile.PlayerData.MaxItemStorage)
+                if (session.LogicSettings.UseRecyclePercentsInsteadOfTotals)
                 {
-                    Logger.Write(session.Translation.GetTranslation(TranslationString.MaxItemsCombinedOverMaxItemStorage, maxTheoreticalItems, session.Profile.PlayerData.MaxItemStorage), LogLevel.Error);
-                    Logger.Write("Press any key to exit, then fix your configuration and run the bot again.", LogLevel.Warning);
-                    Console.ReadKey();
-                    System.Environment.Exit(1);
+                    int totalPercent = session.LogicSettings.PercentOfInventoryPokeballsToKeep +
+                                       session.LogicSettings.PercentOfInventoryPotionsToKeep +
+                                       session.LogicSettings.PercentOfInventoryRevivesToKeep +
+                                       session.LogicSettings.PercentOfInventoryBerriesToKeep;
+
+                    if (totalPercent > 100)
+                    {
+
+                        session.EventDispatcher.Send(new ErrorEvent() { RequireExit = true, Message = session.Translation.GetTranslation(TranslationString.TotalRecyclePercentGreaterThan100) });
+                        Logger.Write("Press any key to exit, then fix your configuration and run the bot again.", LogLevel.Warning);
+
+                        Console.ReadKey();
+                        Environment.Exit(1);
+                    }
+                    else
+                    {
+                        Logger.Write(session.Translation.GetTranslation(TranslationString.UsingRecyclePercentsInsteadOfTotals, session.Profile.PlayerData.MaxItemStorage), LogLevel.Info);
+                        Logger.Write(session.Translation.GetTranslation(TranslationString.PercentPokeballsToKeep, session.LogicSettings.PercentOfInventoryPokeballsToKeep, (int)Math.Floor(session.LogicSettings.PercentOfInventoryPokeballsToKeep / 100.0 * session.Profile.PlayerData.MaxItemStorage)), LogLevel.Info);
+                        Logger.Write(session.Translation.GetTranslation(TranslationString.PercentPotionsToKeep, session.LogicSettings.PercentOfInventoryPotionsToKeep, (int)Math.Floor(session.LogicSettings.PercentOfInventoryPotionsToKeep / 100.0 * session.Profile.PlayerData.MaxItemStorage)), LogLevel.Info);
+                        Logger.Write(session.Translation.GetTranslation(TranslationString.PercentRevivesToKeep, session.LogicSettings.PercentOfInventoryRevivesToKeep, (int)Math.Floor(session.LogicSettings.PercentOfInventoryRevivesToKeep / 100.0 * session.Profile.PlayerData.MaxItemStorage)), LogLevel.Info);
+                        Logger.Write(session.Translation.GetTranslation(TranslationString.PercentBerriesToKeep, session.LogicSettings.PercentOfInventoryBerriesToKeep, (int)Math.Floor(session.LogicSettings.PercentOfInventoryBerriesToKeep / 100.0 * session.Profile.PlayerData.MaxItemStorage)), LogLevel.Info);
+                    }
+                }
+                else
+                {
+                    int maxTheoreticalItems = session.LogicSettings.TotalAmountOfPokeballsToKeep +
+                                              session.LogicSettings.TotalAmountOfPotionsToKeep +
+                                              session.LogicSettings.TotalAmountOfRevivesToKeep +
+                                              session.LogicSettings.TotalAmountOfBerriesToKeep;
+
+                    if (maxTheoreticalItems > session.Profile.PlayerData.MaxItemStorage)
+                    {
+                        session.EventDispatcher.Send(new ErrorEvent() { RequireExit = true, Message = session.Translation.GetTranslation(TranslationString.MaxItemsCombinedOverMaxItemStorage, maxTheoreticalItems, session.Profile.PlayerData.MaxItemStorage) });
+
+                        Logger.Write("Press any key to exit, then fix your configuration and run the bot again.", LogLevel.Warning);
+                        Console.ReadKey();
+                        Environment.Exit(1);
+                    }
                 }
             }
-            catch(ActiveSwitchByRuleException)
+            catch (ActiveSwitchByRuleException)
             {
-                //sometime the switch active happen same time with login by token expired. we need ignore it 
+            }
+            catch (OperationCanceledException)
+            {
+                //just continue login if this happen, most case is bot switching...
+            }
+            catch (CaptchaException ex)
+            {
+                throw ex;
             }
 
-            session.LoggedTime = DateTime.Now;
-            if(this.pokemonToCatch != PokemonId.Missingno)
+            catch (APIBadRequestException)
             {
-                return new BotSwitcherState(this.pokemonToCatch);
+                throw new LoginFailedException();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            session.LoggedTime = DateTime.Now;
+            session.EventDispatcher.Send(new LoggedEvent()
+            {
+                Profile = session.Profile
+            });
+            if (this.pokemonToCatch != PokemonId.Missingno)
+            {
+                return new BotSwitcherState(this.pokemonToCatch, this.encounterData);
             }
             return new LoadSaveState();
         }
 
-        private async Task LogLoginHistory(ISession session, CancellationToken cancellationToken)
-        {
-            string logFile = $"config\\login{DateTime.Now:dd-MM-yyyy}.log";
-            //if(!File.Exists(logFile) )
-            //{
-            //    File.CreateText(logFile);
-            //}
-
-            await Task.Run(() =>
-            {
-                try {
-                    string username = session.Settings.AuthType == AuthType.Ptc ? session.Settings.PtcUsername : session.Settings.GoogleUsername;
-                    File.AppendAllText(logFile, $"{DateTime.Now:dd-MM-yyyy hh:mm:ss}\t\t{username}\r\n");
-                }
-                catch(Exception) { }
-            });
-        }
-
-        private static async Task CheckLogin(ISession session, CancellationToken cancellationToken)
+        private static void CheckLogin(ISession session, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            if (session.Settings.AuthType == AuthType.Google &&
-                (session.Settings.GoogleUsername == null || session.Settings.GooglePassword == null))
+            if (session.Settings.Username == null || session.Settings.Password == null)
             {
                 session.EventDispatcher.Send(new ErrorEvent
                 {
-                    Message = session.Translation.GetTranslation(TranslationString.MissingCredentialsGoogle)
+                    RequireExit = true,
+                    Message = session.Translation.GetTranslation(TranslationString.MissingCredentials)
                 });
-                await Task.Delay(2000, cancellationToken);
-                Environment.Exit(0);
-            }
-            else if (session.Settings.AuthType == AuthType.Ptc &&
-                     (session.Settings.PtcUsername == null || session.Settings.PtcPassword == null))
-            {
-                session.EventDispatcher.Send(new ErrorEvent
-                {
-                    Message = session.Translation.GetTranslation(TranslationString.MissingCredentialsPtc)
-                });
-                await Task.Delay(2000, cancellationToken);
+                Console.Read();
                 Environment.Exit(0);
             }
         }
@@ -226,16 +320,24 @@ namespace PoGo.NecroBot.Logic.State
         {
             try
             {
-                session.Profile = await session.Client.Player.GetPlayer();
-                session.EventDispatcher.Send(new ProfileEvent { Profile = session.Profile });
+                //TODO : need get all data at 1 call here to save speed login.
+                session.Profile = await session.Inventory.GetPlayerData();
+                var stats = session.Inventory.GetPlayerStats();
+
+                TinyIoCContainer.Current.Resolve<MultiAccountManager>().Logged(session.Profile, stats);
+                session.EventDispatcher.Send(new ProfileEvent {Profile = session.Profile, Stats = stats});
             }
-            catch (System.UriFormatException e)
+            catch (UriFormatException e)
             {
-                session.EventDispatcher.Send(new ErrorEvent { Message = e.ToString() });
+                session.EventDispatcher.Send(new ErrorEvent {Message = e.ToString()});
+            }
+            catch (CaptchaException ex)
+            {
+                throw ex;
             }
             catch (Exception ex)
             {
-                session.EventDispatcher.Send(new ErrorEvent { Message = ex.ToString() });
+                session.EventDispatcher.Send(new ErrorEvent {Message = ex.ToString()});
             }
         }
     }

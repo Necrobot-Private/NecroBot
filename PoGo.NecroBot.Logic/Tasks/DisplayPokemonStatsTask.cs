@@ -2,14 +2,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using PoGo.NecroBot.Logic.DataDumper;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.PoGoUtils;
 using PoGo.NecroBot.Logic.State;
-using System.Globalization;
-using System.Threading;
 
 #endregion
 
@@ -21,32 +22,45 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         public static List<ulong> PokemonIdcp = new List<ulong>();
 
+        // jjskuld - Ignore CS1998 warning for now.
+        #pragma warning disable 1998
         public static async Task Execute(ISession session)
         {
-            var myPokemonFamilies = await session.Inventory.GetPokemonFamilies();
-            var myPokeSettings = await session.Inventory.GetPokemonSettings();
-
             var highestsPokemonCp =
-                await session.Inventory.GetHighestsCp(session.LogicSettings.AmountOfPokemonToDisplayOnStart);
+                session.Inventory.GetHighestsCp(session.LogicSettings.AmountOfPokemonToDisplayOnStart);
 
             var pokemonPairedWithStatsCp =
                 highestsPokemonCp.Select(
-                    pokemon =>
-                        Tuple.Create(pokemon, PokemonInfo.CalculateMaxCp(pokemon),
-                            PokemonInfo.CalculatePokemonPerfection(pokemon), PokemonInfo.GetLevel(pokemon),
-                            PokemonInfo.GetPokemonMove1(pokemon), PokemonInfo.GetPokemonMove2(pokemon),
-                            PokemonInfo.GetCandy(pokemon, myPokemonFamilies, myPokeSettings))).ToList();
+                        pokemon =>
+                            Tuple.Create(
+                                pokemon,
+                                PokemonInfo.CalculateMaxCp(pokemon.PokemonId),
+                                PokemonInfo.CalculatePokemonPerfection(pokemon),
+                                PokemonInfo.GetLevel(pokemon),
+                                PokemonInfo.GetPokemonMove1(pokemon),
+                                PokemonInfo.GetPokemonMove2(pokemon),
+                                PokemonInfo.GetCandy(session, pokemon)
+                            )
+                    )
+                    .ToList();
 
             var highestsPokemonPerfect =
-                await session.Inventory.GetHighestsPerfect(session.LogicSettings.AmountOfPokemonToDisplayOnStart);
+                session.Inventory.GetHighestsPerfect(session.LogicSettings.AmountOfPokemonToDisplayOnStart);
 
             var pokemonPairedWithStatsIv =
                 highestsPokemonPerfect.Select(
-                    pokemon =>
-                        Tuple.Create(pokemon, PokemonInfo.CalculateMaxCp(pokemon),
-                            PokemonInfo.CalculatePokemonPerfection(pokemon), PokemonInfo.GetLevel(pokemon),
-                            PokemonInfo.GetPokemonMove1(pokemon), PokemonInfo.GetPokemonMove2(pokemon),
-                            PokemonInfo.GetCandy(pokemon, myPokemonFamilies, myPokeSettings))).ToList();
+                        pokemon =>
+                            Tuple.Create(
+                                pokemon,
+                                PokemonInfo.CalculateMaxCp(pokemon.PokemonId),
+                                PokemonInfo.CalculatePokemonPerfection(pokemon),
+                                PokemonInfo.GetLevel(pokemon),
+                                PokemonInfo.GetPokemonMove1(pokemon),
+                                PokemonInfo.GetPokemonMove2(pokemon),
+                                PokemonInfo.GetCandy(session, pokemon)
+                            )
+                    )
+                    .ToList();
 
             session.EventDispatcher.Send(
                 new DisplayHighestsPokemonEvent
@@ -63,8 +77,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                 });
 
             var allPokemonInBag = session.LogicSettings.PrioritizeIvOverCp
-                ? await session.Inventory.GetHighestsPerfect(1000)
-                : await session.Inventory.GetHighestsCp(1000);
+                ? session.Inventory.GetHighestsPerfect(1000)
+                : session.Inventory.GetHighestsCp(1000);
             if (session.LogicSettings.DumpPokemonStats)
             {
                 const string dumpFileName = "PokeBagStats";
@@ -72,7 +86,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     Dumper.ClearDumpFile(session, dumpFileName);
 
-                    string[] data = {
+                    string[] data =
+                    {
                         "pokemonid",
                         "pokemonlevel",
                         "cp",
@@ -107,7 +122,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     foreach (var pokemon in allPokemonInBag)
                     {
-                        string[] pokemonData = {
+                        string[] pokemonData =
+                        {
                             session.Translation.GetPokemonTranslation(pokemon.PokemonId),
                             PokemonInfo.GetLevel(pokemon).ToString(),
                             pokemon.Cp.ToString(),
@@ -116,7 +132,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                             pokemon.StaminaMax.ToString(),
                             pokemon.Move1.ToString(),
                             pokemon.Move2.ToString(),
-                            PokemonInfo.GetCandy(pokemon, myPokemonFamilies, myPokeSettings).ToString(),
+                            PokemonInfo.GetCandy(session, pokemon).ToString(),
                             pokemon.OwnerName,
                             pokemon.Origin.ToString(),
                             pokemon.HeightM.ToString(),
@@ -139,11 +155,14 @@ namespace PoGo.NecroBot.Logic.Tasks
                     // restore culture
                     Thread.CurrentThread.CurrentCulture = prevCulture;
                 }
-                catch (System.IO.IOException)
+                catch (IOException)
                 {
-                    session.EventDispatcher.Send(new ErrorEvent { Message = $"Could not write {dumpFileName} dump file." });
+                    session.EventDispatcher.Send(
+                        new ErrorEvent {Message = $"Could not write {dumpFileName} dump file."}
+                    );
                 }
             }
         }
+        #pragma warning restore 1998
     }
 }
