@@ -45,6 +45,7 @@ namespace PoGo.NecroBot.Logic
             public long CurrentXp { get; set; }
             public long PrevLevelXp { get; set; }
             public long NextLevelXp { get; set; }
+            public string RandomDeviceIdSalt { get; set; }
 
             [BsonIgnore]
             public string ExperienceInfo
