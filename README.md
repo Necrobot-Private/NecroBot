@@ -42,7 +42,7 @@ See https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer for pricing 
 - <img src="http://emojipedia-us.s3.amazonaws.com/cache/fc/7c/fc7cb7a82f151e73b1f8a2258e0f5cb7.png" width="30" height="30">  - Outputs caught Pokémon in Turkey name.
 - <img src="http://emojipedia-us.s3.amazonaws.com/cache/73/68/736811c48e6420d34c45118c7bf052f5.png" width="30" height="30">  - Outputs caught Pokémon in U.S. Virgin Islands name.
 
-<h2>Screenshots</h2>
+## `Screenshots`
 
 - Electron Web UI App
 
@@ -58,7 +58,7 @@ See https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer for pricing 
 
 <img src="http://i.imgur.com/z6UfTm8.png" width="430">
 
-<h2><a name="getting-started">Getting Started</a></h2>
+## `Getting Started`
 
 Please visit our website [http://necrobot2.com](http://necrobot2.com) to find some tips for setup and running.
 
@@ -70,7 +70,7 @@ Please visit our website [http://necrobot2.com](http://necrobot2.com) to find so
 
 
 
-<h2><a name="legal">Legal Disclaimer</a></h2>
+## `Legal Disclaimer`
 
 This Website and Project is in no way affiliated with, authorized, maintained, sponsored or endorsed by ANYONE. This is an independent and unofficial project for educational use ONLY. Do not use for any other purpose than education, testing and research.
 
