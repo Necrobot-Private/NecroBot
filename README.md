@@ -70,7 +70,7 @@ Please visit our website [http://necrobot2.com](http://necrobot2.com) to find so
 
 This Website and Project is in no way affiliated with, authorized, maintained, sponsored or endorsed by ANYONE. This is an independent and unofficial project for educational use ONLY. Do not use for any other purpose than education, testing and research.
 
-## `Using this project for anything other than education, testing or research is not advised.`
+<h2>Using this project for anything other than education, testing or research is not advised.</h2>
 
 This is not a public release, just a project with releases for code testers for education and research on any privacy issues for the end user.
 
