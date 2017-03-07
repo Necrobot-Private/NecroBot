@@ -18,7 +18,6 @@ using GMap.NET;
 using GMap.NET.MapProviders;
 using GMap.NET.WindowsForms;
 using POGOProtos.Data;
-using POGOProtos.Inventory;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Map.Fort;
 using POGOProtos.Map.Pokemon;
@@ -48,7 +47,7 @@ using PokemonGo.RocketAPI;
 
 
 namespace RocketBot2.Forms
-{ 
+{
     public partial class MainForm : Form
     {
         public static MainForm Instance;
@@ -510,10 +509,6 @@ namespace RocketBot2.Forms
 
             _session.ReInitSessionWithNextBot(bot);
 
-            _machine = machine;
-            _settings = settings;
-            _excelConfigAllow = excelConfigAllow;
-
             if (accountManager.Accounts.Count > 1)
             {
                 foreach (var item in accountManager.Accounts)
@@ -529,7 +524,13 @@ namespace RocketBot2.Forms
                 }
             }
             else
-            {  menuStrip1.Items.Remove(accountsToolStripMenuItem); }
+            {
+                menuStrip1.Items.Remove(accountsToolStripMenuItem);
+            }
+
+            _machine = machine;
+            _settings = settings;
+            _excelConfigAllow = excelConfigAllow;
         }
 
         private async Task StartBot()
@@ -782,14 +783,34 @@ namespace RocketBot2.Forms
         {
             if (text.Length <= 0)
                 return;
+
             if (Instance.InvokeRequired)
             {
-                Instance.Invoke(new Action<Color, string>(ColoredConsoleWrite), color, text.Replace("NecroBot", "RocketBot"));
+                Instance.Invoke(new Action<Color, string>(ColoredConsoleWrite), color, text);
                 return;
             }
+
+            if (text.Contains("PokemonGo.RocketAPI.Exceptions.InvalidResponseException: Error with API request type: DownloadRemoteConfigVersion"))
+            {
+                Instance.logTextBox.SelectionColor = Color.Red;
+                Instance.logTextBox.AppendText($"Error with API request type: DownloadRemoteConfigVersion\r\nRocketBot restart in 10 seconds.\r\n");
+                Instance.logTextBox.ScrollToCaret();
+                Instance._botStarted = false;
+                Task.Delay(10000);
+                Application.Restart();
+                return;
+            }
+
+            if (text.Contains("PokemonGo.RocketAPI.Exceptions.CaptchaException:"))
+            {
+                Instance.logTextBox.SelectionColor = Color.Yellow;
+                Instance.logTextBox.AppendText($"Warning: with CaptchaException not login conected\r\nPlease refresh Inventory list.\r\n");
+                Instance.logTextBox.ScrollToCaret();
+                return;
+            }
+
             Instance.logTextBox.SelectionColor = color;
-            Instance.logTextBox.AppendText(text + "\n");
-            Instance.logTextBox.Select(Instance.logTextBox.Text.Length, +1);
+            Instance.logTextBox.AppendText(text + $"\r\n");
             Instance.logTextBox.ScrollToCaret();
         }
 
@@ -1183,7 +1204,7 @@ namespace RocketBot2.Forms
                     .Where(aItems => aItems?.Item != null)
                     .SelectMany(aItems => aItems.Item)
                     .ToDictionary(item => item.ItemId, item => TimeHelper.FromUnixTimeUtc(item.ExpireMs));
-                
+
                 flpItems.Controls.Clear();
 
                 foreach (var item in items)
@@ -1400,7 +1421,7 @@ namespace RocketBot2.Forms
                 }
             }
             */
-            DialogResult result = MessageBox.Show("Do you want to override killswitch to bot at your own risk? Y/N \n\r" + strReason, Application.ProductName + " - Use Old API detected", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+        DialogResult result = MessageBox.Show($"{strReason} \n\r Do you want to override killswitch to bot at your own risk? Y/N", $"{Application.ProductName} - Old API detected", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             switch (result)
             {
                 case DialogResult.Yes: return true;
