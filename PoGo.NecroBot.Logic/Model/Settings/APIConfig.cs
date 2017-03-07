@@ -17,7 +17,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         [DefaultValue("")]
         [MinLength(0)]
-        [MaxLength(100)]
+        [MaxLength(4000)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 9)]
         public string AuthAPIKey { get; set; }
 
