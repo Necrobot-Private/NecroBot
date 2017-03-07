@@ -754,8 +754,7 @@ namespace PoGo.NecroBot.Logic
 
             foreach (var pokemon in myPokemons)
             {
-                if (!filters.ContainsKey(pokemon.PokemonId)) continue;
-                var filter = filters[pokemon.PokemonId];
+                var filter = filters.GetFilter<EvolveFilter>(pokemon.PokemonId);
 
                 if (CanEvolvePokemon(pokemon, filter, true).Result)
                 {

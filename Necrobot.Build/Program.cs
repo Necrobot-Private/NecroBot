@@ -31,6 +31,7 @@ namespace Necrobot.Build
             Directory.CreateDirectory(antifactFolder);
             ZipFile.CreateFromDirectory($"{buildFolder}\\PoGo.NecroBot.CLI\\bin\\release", $"{antifactFolder}\\Necrobot.CLI.zip");
             ZipFile.CreateFromDirectory($"{buildFolder}\\PoGo.NecroBot.Window\\bin\\release", $"{antifactFolder}\\Necrobot.Win.zip");
+            ZipFile.CreateFromDirectory($"{buildFolder}\\PoGo.NecroBot.GUI.Electron\\dist\\win-unpacked", $"{antifactFolder}\\Necrobot.Electron.GUI.zip");
 
             ReleasePage.GeneratePage($"{releaseSite}\\_posts\\release-template.md", $"{releaseSite}\\_posts\\{DateTime.Now:yyyy-MM-dd}-release-version-{version}.md", new ReleaseInfo()
             {
@@ -39,7 +40,9 @@ namespace Necrobot.Build
                 Downloads = new List<KeyValuePair<string, string>>() {
 
                 new KeyValuePair<string, string>("Necrobot Console CLI",$"/releases/{version}/Necrobot.CLI.zip"),
-                new KeyValuePair<string, string>("Necrobot Window GUI", $"/releases/{version}/Necrobot.Win.zip") }
+                new KeyValuePair<string, string>("Necrobot Window GUI", $"/releases/{version}/Necrobot.Win.zip") ,
+                new KeyValuePair<string, string>("Necrobot Electron GUI", $"/releases/{version}/Necrobot.Electron.GUI.zip") 
+            },
             });
         }
     }
