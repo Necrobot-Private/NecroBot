@@ -1,4 +1,4 @@
-BotStatus=DISABLE;
+﻿BotStatus=DISABLE;
 //============================================//
                 POKEMON GO 0.57.4
 //============================================//
@@ -10,4 +10,3 @@ Niantic made in 0.57.4. So the bot will be temporarily disabled.
 
 For support/questions:
 OFFICIAL NECROBOT2 Discord: https://discord.gg/7FWyWVp
-
