@@ -244,10 +244,11 @@ namespace PoGo.NecroBot.CLI
 
             if (!_ignoreKillSwitch)
             {
-                if (CheckKillSwitch() || CheckMKillSwitch())
+                if (CheckMKillSwitch())
                 {
                     return;
                 }
+                CheckKillSwitch();
             }
 
             var logicSettings = new LogicSettings(settings);
@@ -577,7 +578,7 @@ namespace PoGo.NecroBot.CLI
                         {
                             Logger.Write(strReason + $"\n", LogLevel.Warning);
 
-                            if (PromptForKillSwitchOverride())
+                            if (PromptForKillSwitchOverride(strReason))
                             {
                                 // Override
                                 Logger.Write("Overriding killswitch... you have been warned!", LogLevel.Warning);
@@ -586,6 +587,7 @@ namespace PoGo.NecroBot.CLI
 
                             Logger.Write("The bot will now close, please press enter to continue", LogLevel.Error);
                             Console.ReadLine();
+                            Environment.Exit(0);
                             return true;
                         }
                     }
@@ -607,28 +609,35 @@ namespace PoGo.NecroBot.CLI
             //throw new Exception();
         }
 
-        public static bool PromptForKillSwitchOverride()
+        public static bool PromptForKillSwitchOverride(string strReason)
         {
             Logger.Write("Do you want to override killswitch to bot at your own risk? Y/N", LogLevel.Warning);
 
-            while (true)
+            /*while (true)
+              {
+                  var strInput = Console.ReadLine().ToLower();
+
+                  switch (strInput)
+                  {
+                      case "y":
+                          // Override killswitch
+                          return true;
+
+                      case "n":
+                          return false;
+
+                      default:
+                          Logger.Write("Enter y or n", LogLevel.Error);
+                          continue;
+                  }
+              }*/
+            DialogResult result = MessageBox.Show($"{strReason} \n\r Do you want to override killswitch to bot at your own risk? Y/N", $"{Application.ProductName} - Old API detected", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            switch (result)
             {
-                var strInput = Console.ReadLine().ToLower();
-
-                switch (strInput)
-                {
-                    case "y":
-                        // Override killswitch
-                        return true;
-
-                    case "n":
-                        return false;
-
-                    default:
-                        Logger.Write("Enter y or n", LogLevel.Error);
-                        continue;
-                }
+                case DialogResult.Yes: return true;
+                case DialogResult.No: return false;
             }
+            return false;
         }
     }
 }
