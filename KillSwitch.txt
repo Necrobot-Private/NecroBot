@@ -2,9 +2,7 @@ BotStatus=DISABLE;
 //================================================================//
                 POKEMON GO 0.57.4
 //================================================================//
-Necrobot is now compatible with 0.57.4 API.
-
-However we are investigating changes to the authentication that
+We are investigating changes to the authentication that
 Niantic made in 0.57.4. So the bot will be temporarily disabled.
 //================================================================//
                          Updated: 3/08/2017
