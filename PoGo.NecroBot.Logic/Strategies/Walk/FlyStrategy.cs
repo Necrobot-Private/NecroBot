@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using GeoCoordinatePortable;
 using PoGo.NecroBot.Logic.Model;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Utils;
 using PokemonGo.RocketAPI;
-using POGOProtos.Networking.Responses;
+using System.Device.Location;
 
 namespace PoGo.NecroBot.Logic.Strategies.Walk
 {

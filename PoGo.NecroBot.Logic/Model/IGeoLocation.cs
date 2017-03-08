@@ -1,7 +1,7 @@
-﻿using GeoCoordinatePortable;
-using POGOProtos.Data;
+﻿using POGOProtos.Data;
 using POGOProtos.Map.Fort;
 using POGOProtos.Networking.Responses;
+using System.Device.Location;
 
 namespace PoGo.NecroBot.Logic.Model
 {
