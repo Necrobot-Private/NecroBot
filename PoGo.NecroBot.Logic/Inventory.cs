@@ -772,9 +772,9 @@ namespace PoGo.NecroBot.Logic
                 PokemonId pokemonId = g.Key;
 
                 var orderedGroup = g.OrderByDescending(p => p.Cp);
-                
+
                 //if (!filters.ContainsKey(pokemon.PokemonId)) continue;
-                var filter = filters[pokemonId];
+                var filter = filters.GetFilter<EvolveFilter>(pokemonId);
 
                 int candiesLeft = GetCandyCount(pokemonId);
                 PokemonSettings settings = GetPokemonSettings().Result.FirstOrDefault(x => x.PokemonId == pokemonId);

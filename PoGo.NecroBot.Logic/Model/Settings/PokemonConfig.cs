@@ -471,5 +471,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 71)]
         public bool ByPassCatchFlee{ get; set; }
 
+        [NecrobotConfig(Description = "Allow bot evolve pokemon or not", Position = 72)]
+        [DefaultValue(false)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 71)]
+        public bool EnableEvolvePokemon { get; set; }
     }
 }

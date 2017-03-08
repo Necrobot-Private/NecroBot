@@ -30,6 +30,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             cancellationToken.ThrowIfCancellationRequested();
 
             //await session.Inventory.RefreshCachedInventory();
+            if (!session.LogicSettings.EnableEvolvePokemon) return;
 
             var pokemonToEvolveTask = session.Inventory
                 .GetPokemonToEvolve(session.LogicSettings.PokemonEvolveFilters);
