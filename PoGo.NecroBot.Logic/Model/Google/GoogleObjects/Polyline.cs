@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using GeoCoordinatePortable;
+using System.Device.Location;
 
 namespace PoGo.NecroBot.Logic.Model.Google.GoogleObjects
 {

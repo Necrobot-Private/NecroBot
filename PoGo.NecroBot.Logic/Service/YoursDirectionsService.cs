@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Net;
-using GeoCoordinatePortable;
 using PoGo.NecroBot.Logic.Model.Yours;
 using PoGo.NecroBot.Logic.State;
+using System.Device.Location;
 
 namespace PoGo.NecroBot.Logic.Service
 {

@@ -12,7 +12,6 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using CloudFlareUtilities;
-using GeoCoordinatePortable;
 using Newtonsoft.Json;
 using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.Event;
@@ -30,6 +29,7 @@ using Quobject.Collections.Immutable;
 using Quobject.SocketIoClientDotNet.Client;
 using Socket = Quobject.SocketIoClientDotNet.Client.Socket;
 using PoGo.NecroBot.Logic.Logging;
+using System.Device.Location;
 
 #endregion
 
