@@ -12,7 +12,7 @@ using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Strategies.Walk;
 using PokemonGo.RocketAPI;
 using POGOProtos.Networking.Responses;
-using GeoCoordinatePortable;
+using System.Device.Location;
 using POGOProtos.Map.Fort;
 using PoGo.NecroBot.Logic.Utils;
 using PokemonGo.RocketAPI.Extensions;
