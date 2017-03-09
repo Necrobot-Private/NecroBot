@@ -1,12 +1,14 @@
-﻿BotStatus=DISABLE;
-//============================================//
-                POKEMON GO 0.57.4
-//============================================//
-We are investigating changes to the authentication that
-Niantic made in 0.57.4. So the bot will be temporarily disabled.
-//============================================//
-                Updated: 3/08/2017
+BotStatus=ENABLE;
+//================================================================//
+                        POKEMON GO 0.57.4
+//================================================================//
+
+            Necrobot is now compatible with 0.57.4 API.
+
+//================================================================//
+                        Updated: 3/08/2017
 
 
 For support/questions:
 OFFICIAL NECROBOT2 Discord: https://discord.gg/7FWyWVp
+
