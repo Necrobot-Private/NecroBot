@@ -19,6 +19,7 @@ using PoGo.NecroBot.Logic.Model.Settings;
 using TinyIoC;
 using PokemonGo.RocketAPI.Util;
 using POGOProtos.Inventory.Item;
+using System.Device.Location;
 
 #endregion
 
@@ -393,7 +394,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             var distance = LocationUtils.CalculateDistanceInMeters(pokeStop.Latitude, pokeStop.Longitude, session.Client.CurrentLatitude, session.Client.CurrentLongitude);
             if (distance > 30)
             {
-                LocationUtils.UpdatePlayerLocationWithAltitude(session, new GeoCoordinatePortable.GeoCoordinate(pokeStop.Latitude, pokeStop.Longitude), 0);
+                LocationUtils.UpdatePlayerLocationWithAltitude(session, new GeoCoordinate(pokeStop.Latitude, pokeStop.Longitude), 0);
                 await session.Client.Misc.RandomAPICall();
             }
 
@@ -421,7 +422,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                         latitude += 0.000003;
                         longitude += 0.000005;
-                        LocationUtils.UpdatePlayerLocationWithAltitude(session, new GeoCoordinatePortable.GeoCoordinate(latitude, longitude), 0);
+                        LocationUtils.UpdatePlayerLocationWithAltitude(session, new GeoCoordinate(latitude, longitude), 0);
                         retry--;
                     }
                 }

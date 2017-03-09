@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using GeoCoordinatePortable;
 using Newtonsoft.Json;
 using PoGo.NecroBot.Logic.Exceptions;
 using PoGo.NecroBot.Logic.Model.Google;
 using PoGo.NecroBot.Logic.Model.Google.GoogleObjects;
 using PoGo.NecroBot.Logic.State;
+using System.Device.Location;
 
 namespace PoGo.NecroBot.Logic.Service
 {
