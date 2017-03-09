@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using GeoCoordinatePortable;
 using Microsoft.AspNet.SignalR.Client;
 using Newtonsoft.Json;
 using PoGo.NecroBot.Logic.Common;
@@ -27,6 +26,7 @@ using System.Runtime.Caching;
 using System.Security.Cryptography.X509Certificates;
 using PoGo.NecroBot.Logic.PoGoUtils;
 using POGOProtos.Inventory.Item;
+using System.Device.Location;
 
 namespace PoGo.NecroBot.Logic.Tasks
 {
