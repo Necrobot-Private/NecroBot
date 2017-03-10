@@ -511,7 +511,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         continue;
                     }
                     //check if pokemon in the snip list
-                    if (!pokemonToBeSnipedIds.ContainsKey(item.PokemonId)) continue;
+                    if (!pokemonToBeCaughtLocallyIds.ContainsKey(item.PokemonId)) continue;
 
                     count++;
                     var snipeSetting = _setting.HumanWalkSnipeFilters.FirstOrDefault(x => x.Key == item.PokemonId);
@@ -672,7 +672,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             };
 
             //in some case, we caught the pokemon before data refresh, we need add a fake pokemon to list to avoid it add back and waste time 
-            if (!exist && pokemonToBeSnipedIds.ContainsKey(id))
+            if (!exist && pokemonToBeCaughtLocallyIds.ContainsKey(id))
             {
                 var pokemonInfo = new SnipePokemonInfo()
                 {
