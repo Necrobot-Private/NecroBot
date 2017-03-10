@@ -136,7 +136,9 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 if (session.CatchBlockTime > DateTime.Now) return;
 
-                if ((session.LogicSettings.UsePokemonToNotCatchFilter &&
+                if ((session.LogicSettings.UsePokemonSniperFilterOnly &&
+                     !session.LogicSettings.PokemonToCatchLocally.Pokemon.Contains(pokemon.PokemonId)) ||
+                    (session.LogicSettings.UsePokemonToNotCatchFilter &&
                      session.LogicSettings.PokemonsNotToCatch.Contains(pokemon.PokemonId)))
                 {
                     Logger.Write(session.Translation.GetTranslation(TranslationString.PokemonSkipped,

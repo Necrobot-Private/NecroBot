@@ -122,11 +122,10 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             if (_setting.HumanWalkingSnipeUseSnipePokemonList)
             {
-                //get data from snipe filter instead
-                //foreach (var pokemonId in _setting.PokemonToSnipe.Pokemon)
-                //{
-                //    pokemonToBeSnipedIds[pokemonId] = pokemonId;
-                //}
+                foreach (var pokemonId in _setting.PokemonToCatchLocally.Pokemon)
+                {
+                    pokemonToBeCaughtLocallyIds[pokemonId] = pokemonId;
+                }
             }
 
             foreach (var pokemonId in _setting.HumanWalkSnipeFilters
