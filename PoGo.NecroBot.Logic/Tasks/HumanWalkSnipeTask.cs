@@ -54,7 +54,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         private static ISession _session;
         private static ILogicSettings _setting;
         private static int pokestopCount = 0;
-        private static ConcurrentDictionary<PokemonId, PokemonId> pokemonToBeSnipedIds = new ConcurrentDictionary<PokemonId, PokemonId>();
+        private static ConcurrentDictionary<PokemonId, PokemonId> pokemonToBeCaughtLocallyIds = new ConcurrentDictionary<PokemonId, PokemonId>();
         static bool prioritySnipeFlag = false;
         private static DateTime lastUpdated = DateTime.Now.AddMinutes(-10);
 
@@ -118,7 +118,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             _session = session;
             _setting = _session.LogicSettings;
-            pokemonToBeSnipedIds = new ConcurrentDictionary<PokemonId, PokemonId>();
+            pokemonToBeCaughtLocallyIds = new ConcurrentDictionary<PokemonId, PokemonId>();
 
             if (_setting.HumanWalkingSnipeUseSnipePokemonList)
             {
@@ -129,10 +129,10 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
 
             foreach (var pokemonId in _setting.HumanWalkSnipeFilters
-                .Where(x => !pokemonToBeSnipedIds.ContainsKey(x.Key))
+                .Where(x => !pokemonToBeCaughtLocallyIds.ContainsKey(x.Key))
                 .Select(x => x.Key))
             {
-                pokemonToBeSnipedIds[pokemonId] = pokemonId;
+                pokemonToBeCaughtLocallyIds[pokemonId] = pokemonId;
             }
             //this will combine with pokemon snipe filter
         }
