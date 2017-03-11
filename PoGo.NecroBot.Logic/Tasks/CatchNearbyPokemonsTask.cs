@@ -136,7 +136,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 if (session.CatchBlockTime > DateTime.Now) return;
 
-                if ((session.LogicSettings.UsePokemonSniperFilterOnly &&
+                if ((session.LogicSettings.UsePokemonToCatchLocallyListOnly &&
                      !session.LogicSettings.PokemonToCatchLocally.Pokemon.Contains(pokemon.PokemonId)) ||
                     (session.LogicSettings.UsePokemonToNotCatchFilter &&
                      session.LogicSettings.PokemonsNotToCatch.Contains(pokemon.PokemonId)))

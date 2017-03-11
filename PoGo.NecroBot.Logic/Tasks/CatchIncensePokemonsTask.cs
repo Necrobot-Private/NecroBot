@@ -52,7 +52,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 if (session.Cache.Get(incensePokemon.EncounterId.ToString()) != null)
                     return; //pokemon been ignore before
 
-                if ((session.LogicSettings.UsePokemonSniperFilterOnly && !session.LogicSettings.PokemonToCatchLocally.Pokemon.Contains(pokemon.PokemonId))
+                if ((session.LogicSettings.UsePokemonToCatchLocallyListOnly && !session.LogicSettings.PokemonToCatchLocally.Pokemon.Contains(pokemon.PokemonId))
                     || (session.LogicSettings.UsePokemonToNotCatchFilter && session.LogicSettings.PokemonsNotToCatch.Contains(pokemon.PokemonId)))
                 {
                     Logger.Write(session.Translation.GetTranslation(TranslationString.PokemonIgnoreFilter,
