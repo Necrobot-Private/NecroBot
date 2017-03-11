@@ -150,6 +150,7 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         ICollection<KeyValuePair<ItemId, int>> ItemRecycleFilter { get; }
 
         ICollection<PokemonId> PokemonsToLevelUp { get; }
+        CatchSettings PokemonToCatchLocally { get; }
 
         NotificationConfig NotificationConfig { get; }
         ICollection<PokemonId> PokemonsNotToTransfer { get; }
