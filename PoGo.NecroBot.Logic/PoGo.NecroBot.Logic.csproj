@@ -376,6 +376,7 @@
     <Compile Include="Model\Settings\ItemRecycleConfig.cs" />
     <Compile Include="Model\Settings\SnipeConfig.cs" />
     <Compile Include="Model\Settings\EvolveFilter.cs" />
+    <Compile Include="Model\Settings\CatchSettings.cs" />
     <Compile Include="Model\Settings\SoftBanConfig.cs" />
     <Compile Include="Model\Settings\TelegramConfig.cs" />
     <Compile Include="Model\Settings\TransferConfig.cs" />
