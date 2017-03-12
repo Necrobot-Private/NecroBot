@@ -52,6 +52,15 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup>
+    <SignManifests>false</SignManifests>		
+  </PropertyGroup>		
+  <PropertyGroup>		
+    <ManifestCertificateThumbprint>FABFDFD920EF90E9348A803A9225ADFB5B8BF8AB</ManifestCertificateThumbprint>		
+  </PropertyGroup>		
+  <PropertyGroup>		
+    <ManifestKeyFile>PoGo.NecroBot.CLI_TemporaryKey.pfx</ManifestKeyFile>		
+  </PropertyGroup>		
+  <PropertyGroup>
     <ApplicationIcon>Resources\Ico.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
@@ -281,6 +290,9 @@
     <None Include="packages.config" />
     <None Include="Config\log4net.config" />
     <None Include="Config\log4net.unix.config" />
+    <None Include="cert.pfx">		
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>		
+    </None>
     <None Include="Config\Translations\translation.ca.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
