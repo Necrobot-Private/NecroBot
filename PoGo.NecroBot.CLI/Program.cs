@@ -26,6 +26,7 @@ using ProgressBar = PoGo.NecroBot.CLI.Resources.ProgressBar;
 using CommandLine;
 using CommandLine.Text;
 using PokemonGo.RocketAPI;
+using System.Text;
 
 #endregion using directives
 
@@ -444,7 +445,7 @@ namespace PoGo.NecroBot.CLI
             //TODO: temporary api key
             settings.Auth.APIConfig.UseLegacyAPI = false;
             settings.Auth.APIConfig.UsePogoDevAPI = true;
-            byte[] encodedDataAsBytes = Convert.FromBase64String(Properties.Resources.EncryptKeyApi);
+            byte[] encodedDataAsBytes = Convert.FromBase64String(PoGo.NecroBot.CLI.Properties.Resources.EncrypKeyApi);
             settings.Auth.APIConfig.AuthAPIKey = Encoding.ASCII.GetString(encodedDataAsBytes);
             //
             
