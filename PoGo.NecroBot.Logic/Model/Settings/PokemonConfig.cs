@@ -356,7 +356,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [NecrobotConfig(Description = "UsePokemonToCatchLocallyListOnly", Position = 56)]
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 56)]
-        public bool UsePokemonSniperFilterOnly { get; set; }
+        public bool UsePokemonToCatchLocallyListOnly { get; set; }
 
         /*Dump Stats*/
         [NecrobotConfig(Description = "Allow bot dump list pokemon to csv file", Position = 57)]
