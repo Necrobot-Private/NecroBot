@@ -1,4 +1,19 @@
 # Change Log
+## [v1.0.0.135](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.135) (2017-03-12)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.88...v1.0.0.135)
+
+## Bugs & Enhancements
+- Updated for 0.57.4 API
+- Set Which Pokemon To Catch Locally With True/False Switch
+- Better Error Handling
+- Update To .NET 4.6.2
+- KillSwitch OverRide PopUp
+- Remove Unused References For Stabilty Improvements
+- Add Random DeviceID For Multi-Bot
+- Add Timers For Multi-Bot
+- Better Client Emulation For Maximum Safety
+- Adjustable Refresh Time For Snipe List
+- Many More Enhancements
 
 ## [v1.0.0.88](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.88) (2017-02-02)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.86...v1.0.0.88)

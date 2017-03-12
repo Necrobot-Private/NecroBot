@@ -79,7 +79,7 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         float UpgradePokemonIvMinimum { get; }
         int DelayBetweenPlayerActions { get; }
         bool UsePokemonToNotCatchFilter { get; }
-        bool UsePokemonSniperFilterOnly { get; }
+        bool UsePokemonToCatchLocallyListOnly { get; }
         string SnipeLocationServer { get; }
         int SnipeLocationServerPort { get; }
         bool UseSnipeLocationServer { get; }
