@@ -441,6 +441,13 @@ namespace PoGo.NecroBot.CLI
 
             ProgressBar.Fill(100);
             
+            //TODO: temporary api key
+            settings.Auth.APIConfig.UseLegacyAPI = false;
+            settings.Auth.APIConfig.UsePogoDevAPI = true;
+            byte[] encodedDataAsBytes = Convert.FromBase64String(Properties.Resources.EncryptKeyApi);
+            settings.Auth.APIConfig.AuthAPIKey = Encoding.ASCII.GetString(encodedDataAsBytes);
+            //
+            
             var mainAccount = accountManager.Add(settings.Auth.AuthConfig);
 
             var bot = accountManager.GetStartUpAccount();
