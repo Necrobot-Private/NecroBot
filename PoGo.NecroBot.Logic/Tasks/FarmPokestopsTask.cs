@@ -7,7 +7,7 @@ using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.Model;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Utils;
-using GeoCoordinatePortable;
+using System.Device.Location;
 
 #endregion
 

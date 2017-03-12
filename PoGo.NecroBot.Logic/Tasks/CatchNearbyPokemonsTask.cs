@@ -15,8 +15,8 @@ using POGOProtos.Inventory.Item;
 using POGOProtos.Map.Pokemon;
 using POGOProtos.Networking.Responses;
 using TinyIoC;
-using GeoCoordinatePortable;
 using System.Collections.Generic;
+using System.Device.Location;
 
 #endregion
 
@@ -136,7 +136,9 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 if (session.CatchBlockTime > DateTime.Now) return;
 
-                if ((session.LogicSettings.UsePokemonToNotCatchFilter &&
+                if ((session.LogicSettings.UsePokemonToCatchLocallyListOnly &&
+                     !session.LogicSettings.PokemonToCatchLocally.Pokemon.Contains(pokemon.PokemonId)) ||
+                    (session.LogicSettings.UsePokemonToNotCatchFilter &&
                      session.LogicSettings.PokemonsNotToCatch.Contains(pokemon.PokemonId)))
                 {
                     Logger.Write(session.Translation.GetTranslation(TranslationString.PokemonSkipped,

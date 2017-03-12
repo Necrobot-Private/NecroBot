@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using GeoCoordinatePortable;
 using Newtonsoft.Json.Linq;
+using System.Device.Location;
 
 namespace PoGo.NecroBot.Logic.Model.Mapzen
 {
