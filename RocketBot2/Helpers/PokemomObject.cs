@@ -6,6 +6,8 @@ using POGOProtos.Enums;
 using POGOProtos.Networking.Responses;
 using PoGo.NecroBot.Logic.State;
 using RocketBot2.Forms;
+using System.Linq;
+using POGOProtos.Settings.Master;
 
 namespace RocketBot2.Helpers
 {
@@ -81,9 +83,10 @@ namespace RocketBot2.Helpers
         {
             get
             {
-                return PokemonInfo.GetCandy(_session, PokemonData);
+               return PokemonInfo.GetCandy(_session, PokemonData);
             }
         }
+
         public int CandyToEvolve
         {
             get
@@ -113,25 +116,18 @@ namespace RocketBot2.Helpers
             get { return EvolveTimes > 0; }
         }
 
-        public static async void Initilize(Session session)//, DownloadItemTemplatesResponse itemtemplates)
+        public static void Initilize(Session session, List<PokemonSettings> templates)
         {
             if (!_initialized)
             {
                 _initialized = true;
                 _session = session;
-                //TODO:
-                // bug pogodev api
-                return;
 
-                var itemtemplates = await _session.Client.Download.GetItemTemplates();
-                foreach (var t in itemtemplates.ItemTemplates)
+                foreach (var t in templates)
                 {
                     if (t != null)
                     {
-                        if (t.PokemonSettings != null)
-                        {
-                            CandyToEvolveDict.Add(t.PokemonSettings.PokemonId, t.PokemonSettings.CandyToEvolve);
-                        }
+                        CandyToEvolveDict.Add(t.PokemonId, t.CandyToEvolve);
                     }
                 }
             }

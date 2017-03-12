@@ -32,7 +32,6 @@ using PoGo.NecroBot.Logic.Model.Settings;
 using PoGo.NecroBot.Logic.Service.Elevation;
 using RocketBot2.Helpers;
 using RocketBot2.Models;
-using RocketBot2.Logic.Event;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic;
 using System.Reflection;
@@ -40,7 +39,6 @@ using PoGo.NecroBot.Logic.Tasks;
 using System.Net;
 using RocketBot2.CommandLineUtility;
 using System.Diagnostics;
-using RocketBot2.Logic.Utils;
 using PokemonGo.RocketAPI;
 
 #endregion
@@ -482,23 +480,23 @@ namespace RocketBot2.Forms
             _session.Navigation.WalkStrategy.UpdatePositionEvent += LoadSaveState.SaveLocationToDisk;
 
             Navigation.GetHumanizeRouteEvent +=
-                (points)  => _session.EventDispatcher.Send(new GetHumanizeRouteEvent { Points = points} );
+                (points)  => _session.EventDispatcher.Send(new Logic.Event.GetHumanizeRouteEvent { Points = points} );
             Navigation.GetHumanizeRouteEvent += UpdateMap;
 
             UseNearbyPokestopsTask.LootPokestopEvent +=
-                pokestop => _session.EventDispatcher.Send(new LootPokestopEvent { Pokestop = pokestop });
+                pokestop => _session.EventDispatcher.Send(new Logic.Event.LootPokestopEvent { Pokestop = pokestop });
             UseNearbyPokestopsTask.LootPokestopEvent += UpdateMap;
 
             CatchNearbyPokemonsTask.PokemonEncounterEvent +=
-                mappokemons => _session.EventDispatcher.Send(new PokemonsEncounterEvent { EncounterPokemons = mappokemons });
+                mappokemons => _session.EventDispatcher.Send(new Logic.Event.PokemonsEncounterEvent { EncounterPokemons = mappokemons });
             CatchNearbyPokemonsTask.PokemonEncounterEvent += UpdateMap;
 
             CatchIncensePokemonsTask.PokemonEncounterEvent +=
-                mappokemons => _session.EventDispatcher.Send(new PokemonsEncounterEvent { EncounterPokemons = mappokemons });
+                mappokemons => _session.EventDispatcher.Send(new Logic.Event.PokemonsEncounterEvent { EncounterPokemons = mappokemons });
             CatchIncensePokemonsTask.PokemonEncounterEvent += UpdateMap;
 
             CatchLurePokemonsTask.PokemonEncounterEvent +=
-                         mappokemons => _session.EventDispatcher.Send(new PokemonsEncounterEvent { EncounterPokemons = mappokemons });
+                         mappokemons => _session.EventDispatcher.Send(new Logic.Event.PokemonsEncounterEvent { EncounterPokemons = mappokemons });
             CatchLurePokemonsTask.PokemonEncounterEvent += UpdateMap;
 
             //ProgressBar.Fill(100);
@@ -728,7 +726,7 @@ namespace RocketBot2.Forms
                 Navigation_UpdatePositionEvent(_session.Client.CurrentLatitude,
                     _session.Client.CurrentLongitude);
                 //get optimized route
-                var _pokeStops = RouteOptimizeUtil.Optimize(_session.Forts.ToArray(), _session.Client.CurrentLatitude,
+                var _pokeStops = Logic.Utils.RouteOptimizeUtil.Optimize(_session.Forts.ToArray(), _session.Client.CurrentLatitude,
                     _session.Client.CurrentLongitude);
                 InitializePokestopsAndRoute(_pokeStops);
                 encounterPokemonsCount = 0;
@@ -848,9 +846,9 @@ namespace RocketBot2.Forms
 
         #region EVENTS
 
-        private void btnRefresh_Click(object sender, EventArgs e)
+        private async void btnRefresh_Click(object sender, EventArgs e)
         {
-            ReloadPokemonList();
+            await ReloadPokemonList();
         }
 
         private void startStopBotToolStripMenuItem_Click(object sender, EventArgs e)
@@ -860,6 +858,16 @@ namespace RocketBot2.Forms
                 Environment.Exit(0);
                 return;
             }
+
+            //TODO: temporary
+            if (_settings.Auth.APIConfig.UseLegacyAPI)
+            {
+                Logger.Write("The PoGoDev Community Has Updated The Hashing Service To Be Compatible With 0.57.4 So We Have Updated Our Code To Be Compliant. Unfortunately During This Update Niantic Has Also Attempted To Block The Legacy .45 Service Again So At The Moment Only Hashing Service Users Are Able To Login Successfully. Please Be Patient As Always We Will Attempt To Keep The Bot 100% Free But Please Realize We Have Already Done Quite A Few Workarounds To Keep .45 Alive For You Guys.  Even If We Are Able To Get Access Again To The .45 API Again It Is Over 3 Months Old So Is Going To Be More Detectable And Cause Captchas. Please Consider Upgrading To A Paid API Key To Avoid Captchas And You Will  Be Connecting Using Latest Version So Less Detectable So More Safe For You In The End.", LogLevel.Error);
+                Instance.startStopBotToolStripMenuItem.Text = @"■ Exit RocketBot2";
+                _botStarted = true;
+                return;
+            }
+
             startStopBotToolStripMenuItem.Text = @"■ Exit RocketBot2";
             accountsToolStripMenuItem.Enabled = false;
             _botStarted = true;
@@ -879,7 +887,7 @@ namespace RocketBot2.Forms
             UpdateMap();
         }
         #endregion EVENTS
-       
+
         #region POKEMON LIST
 
         private void InitializePokemonForm()
@@ -909,8 +917,8 @@ namespace RocketBot2.Forms
                     .Count(p => p == pok.PokemonId) > 1)
                     e.Item.BackColor = Color.LightGreen;
 
-                    e.Item.Text = _session.Translation.GetPokemonTranslation(pok.PokemonId);
-                                   
+                e.Item.Text = _session.Translation.GetPokemonTranslation(pok.PokemonId);
+
                 foreach (OLVListSubItem sub in e.Item.SubItems)
                 {
                     // ReSharper disable once PossibleNullReferenceException
@@ -990,7 +998,7 @@ namespace RocketBot2.Forms
             };
         }
 
-        private void olvPokemonList_ButtonClick(object sender, CellClickEventArgs e)
+        private async void olvPokemonList_ButtonClick(object sender, CellClickEventArgs e)
         {
             try
             {
@@ -1015,7 +1023,7 @@ namespace RocketBot2.Forms
             catch (Exception ex)
             {
                 Logger.Write(ex.ToString(), LogLevel.Error);
-                ReloadPokemonList();
+                await ReloadPokemonList();
             }
         }
 
@@ -1027,8 +1035,13 @@ namespace RocketBot2.Forms
             {
                 _pokemons.Add(pokemon.Id);
             }
-            await TransferPokemonTask.Execute(_session, _session.CancellationTokenSource.Token, _pokemons);
-            ReloadPokemonList();
+            await Task.Run(async () =>
+             {
+                 await TransferPokemonTask.Execute(
+                     _session, _session.CancellationTokenSource.Token, _pokemons
+                 );
+             });
+            await ReloadPokemonList();
         }
 
         private async void PowerUpPokemon(IEnumerable<PokemonData> pokemons)
@@ -1036,9 +1049,9 @@ namespace RocketBot2.Forms
             SetState(false);
             foreach (var pokemon in pokemons)
             {
-                await LevelUpSpecificPokemonTask.Execute(_session, pokemon.Id);
+                await Task.Run(async () => { await UpgradeSinglePokemonTask.Execute(_session, pokemon.Id, false, 1 /* Only upgrade 1 time */); });
             }
-            ReloadPokemonList();
+            await ReloadPokemonList();
         }
 
         private async void EvolvePokemon(IEnumerable<PokemonData> pokemons)
@@ -1046,12 +1059,12 @@ namespace RocketBot2.Forms
             SetState(false);
             foreach (var pokemon in pokemons)
             {
-                await Logic.Tasks.EvolveSpecificPokemonTask.Execute(_session, pokemon.Id);
+                await Task.Run(async () => { await Logic.Tasks.EvolveSpecificPokemonTask.Execute(_session, pokemon.Id); });
             }
-            ReloadPokemonList();
+            await ReloadPokemonList();
         }
 
-        private void CleanUpTransferPokemon(PokemonObject pokemon, string type)
+        private async void CleanUpTransferPokemon(PokemonObject pokemon, string type)
         {
             var et = pokemon.EvolveTimes;
             var pokemonCount =
@@ -1061,7 +1074,7 @@ namespace RocketBot2.Forms
 
             if (pokemonCount < et)
             {
-                ReloadPokemonList();
+                await ReloadPokemonList();
                 return;
             }
 
@@ -1094,13 +1107,13 @@ namespace RocketBot2.Forms
             }
         }
 
-        private void CleanUpEvolvePokemon(PokemonObject pokemon, string type)
+        private async void CleanUpEvolvePokemon(PokemonObject pokemon, string type)
         {
             var et = pokemon.EvolveTimes;
 
             if (et < 1)
             {
-                ReloadPokemonList();
+                await ReloadPokemonList();
                 return;
             }
 
@@ -1154,18 +1167,24 @@ namespace RocketBot2.Forms
                     }
                     continue;
                 }
-                await RenameSinglePokemonTask.Execute(_session, pokemon.Id, nickname, _session.CancellationTokenSource.Token);
+                await Task.Run(async () => { await RenameSinglePokemonTask.Execute(_session, pokemon.Id, nickname, _session.CancellationTokenSource.Token); });
             }
-            ReloadPokemonList();
+            await ReloadPokemonList();
         }
 
-        private void ReloadPokemonList()
+        private async Task ReloadPokemonList()
         {
             SetState(false);
             try
             {
-                PokemonObject.Initilize(_session);
+                if (_session.Client.Download.ItemTemplates == null)
+                    await _session.Client.Download.GetItemTemplates();
 
+                var templates =  _session.Client.Download.ItemTemplates.Where(x => x.PokemonSettings != null)
+                        .Select(x => x.PokemonSettings)
+                        .ToList();
+
+                PokemonObject.Initilize(_session, templates);
 
                 var pokemons =
                     _session.Inventory.GetPokemons()
@@ -1179,7 +1198,7 @@ namespace RocketBot2.Forms
                 foreach (var pokemon in pokemons)
                 {
                     var pokemonObject = new PokemonObject(pokemon);
-
+                    //pokemonObject.Candy = PokemonInfo.GetCandy(_session, pokemon);
                     pokemonObjects.Add(pokemonObject);
                 }
 
@@ -1259,7 +1278,7 @@ namespace RocketBot2.Forms
                                 SetState(true);
                                 return;
                             }
-                            await UseLuckyEggTask.Execute(_session);
+                            await Task.Run(async () => { await UseLuckyEggTask.Execute(_session); });
                         }
                         break;
                     case ItemId.ItemIncenseOrdinary:
@@ -1270,16 +1289,16 @@ namespace RocketBot2.Forms
                                 SetState(true);
                                 return;
                             }
-                            await UseIncenseTask.Execute(_session);
+                            await Task.Run(async () => { await UseIncenseTask.Execute(_session); });
                         }
                         break;
                     default:
                         {
-                            await RecycleItemsTask.DropItem(_session, item.ItemId, decimal.ToInt32(form.numCount.Value));
+                            await Task.Run(async () => { await RecycleItemsTask.DropItem(_session, item.ItemId, decimal.ToInt32(form.numCount.Value)); });
                         }
                         break;
                 }
-                ReloadPokemonList();
+                await ReloadPokemonList();
             }
         }
 
@@ -1294,14 +1313,14 @@ namespace RocketBot2.Forms
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-           // Thread.Sleep(10000);
+            // Thread.Sleep(10000);
             Thread mThread = new Thread(delegate ()
             {
-                 var infoForm = new InfoForm();
+                var infoForm = new InfoForm();
                 infoForm.ShowDialog();
             });
             mThread.SetApartmentState(ApartmentState.STA);
-             mThread.Start();
+            mThread.Start();
         }
 
         //**** Program functions
@@ -1428,7 +1447,7 @@ namespace RocketBot2.Forms
                 }
             }
             */
-        DialogResult result = MessageBox.Show($"{strReason} \n\r Do you want to override killswitch to bot at your own risk? Y/N", $"{Application.ProductName} - Old API detected", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            DialogResult result = MessageBox.Show($"{strReason} \n\r Do you want to override killswitch to bot at your own risk? Y/N", $"{Application.ProductName} - Old API detected", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             switch (result)
             {
                 case DialogResult.Yes: return true;
