@@ -16,6 +16,17 @@
                       WindowTransitionsEnabled="False"
                       WindowStartupLocation="CenterScreen" 
                       Loaded="MetroWindow_Loaded" Initialized="MetroWindow_Initialized">
+    <Controls:MetroWindow.TitleTemplate>
+        <DataTemplate>
+            <TextBlock x:Name="TitleText"
+                       Text="Necrobot 2 - Window GUI"
+                       TextTrimming="CharacterEllipsis"
+                       VerticalAlignment="Center"
+                       Margin="7, 0, 0, 0"
+                       FontWeight="Normal"
+                       FontFamily="pack://application:,,,/Resources/#Lato-light"/>
+        </DataTemplate>
+    </Controls:MetroWindow.TitleTemplate>
     <Control.Resources>
         <c:I18NConveter x:Key="I18NConveter"/>
         <c:InverseBooleanConverter x:Key="InverseBooleanConverter"/>

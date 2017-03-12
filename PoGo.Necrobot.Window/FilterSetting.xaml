@@ -18,6 +18,17 @@
         MinWidth="800"
         WindowTransitionsEnabled="False"
         WindowStartupLocation="CenterScreen" Initialized="MetroWindow_Initialized" >
+    <Controls:MetroWindow.TitleTemplate>
+        <DataTemplate>
+            <TextBlock x:Name="TitleText"
+                       Text="Filter Config"
+                       TextTrimming="CharacterEllipsis"
+                       VerticalAlignment="Center"
+                       Margin="7, 0, 0, 0"
+                       FontWeight="Normal"
+                       FontFamily="pack://application:,,,/Resources/#Lato-light"/>
+        </DataTemplate>
+    </Controls:MetroWindow.TitleTemplate>
     <Control.Resources>
         <cv:PokemonIdToImageConverter x:Key="PokemonIdToImageConverter" />
         <cv:InverseBooleanConverter x:Key="InverseBooleanConverter" />
