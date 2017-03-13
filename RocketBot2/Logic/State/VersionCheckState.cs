@@ -50,7 +50,7 @@ namespace RocketBot2.Logic.State
             }
 
             var autoUpdate = session.LogicSettings.AutoUpdate;
-           var isLatest = IsLatest();
+            var isLatest = IsLatest();
             if (isLatest)
             {
                 session.EventDispatcher.Send(new UpdateEvent
@@ -65,7 +65,7 @@ namespace RocketBot2.Logic.State
 
             var remoteReleaseUrl =
                 $"https://github.com/TheUnnamedOrganisation/RocketBot/releases/download/v{RemoteVersion}/";
-            string zipName = "Release.zip";
+            string zipName = "RocketBot2.zip";
             var downloadLink = remoteReleaseUrl + zipName;
 
             var baseDir = Directory.GetCurrentDirectory();
@@ -73,7 +73,7 @@ namespace RocketBot2.Logic.State
             var tempPath = Path.Combine(baseDir, "tmp");
             var extractedDir = Path.Combine(tempPath, "RocketBot2");
             var destinationDir = baseDir + Path.DirectorySeparatorChar;
-             bool updated = false;
+            bool updated = false;
             AutoUpdateForm autoUpdateForm = new AutoUpdateForm()
             {
                 Session = session,
