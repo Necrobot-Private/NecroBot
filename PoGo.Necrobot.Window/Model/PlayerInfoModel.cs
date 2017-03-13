@@ -130,8 +130,12 @@ namespace PoGo.Necrobot.Window.Model
         internal void OnProfileUpdate(ProfileEvent profile)
         {
             var stats = profile.Stats;
-            Exp = stats.FirstOrDefault(x => x.Experience > 0).Experience;
-            LevelExp = stats.FirstOrDefault(x => x.NextLevelXp > 0).NextLevelXp;
+            var playerStats = stats.FirstOrDefault(x => x.Experience > 0);
+            if (playerStats != null)
+            {
+                Exp = playerStats.Experience;
+                LevelExp = playerStats.NextLevelXp;
+            }
 
             this.playerProfile = profile.Profile;
         }
