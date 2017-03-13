@@ -15,6 +15,7 @@ using PokemonGo.RocketAPI.Exceptions;
 using static System.Threading.Tasks.Task;
 using static PoGo.NecroBot.Logic.Utils.PushNotificationClient;
 using TinyIoC;
+using static PoGo.NecroBot.Logic.MultiAccountManager;
 
 #endregion
 
@@ -32,6 +33,18 @@ namespace PoGo.NecroBot.Logic.State
         public void SetFailureState(IState state)
         {
             _initialState = state;
+        }
+
+        private void ReInitializeSession(ISession session, GlobalSettings globalSettings, BotAccount requestedAccount = null)
+        {
+            if (session.LogicSettings.MultipleBotConfig.StartFromDefaultLocation)
+            {
+                session.ReInitSessionWithNextBot(requestedAccount, globalSettings.LocationConfig.DefaultLatitude, globalSettings.LocationConfig.DefaultLongitude, session.Client.CurrentAltitude);
+            }
+            else
+            {
+                session.ReInitSessionWithNextBot(); //current location
+            }
         }
 
         public async Task Start(IState initialState, ISession session, string subPath, bool excelConfigAllowed = false)
@@ -124,14 +137,14 @@ namespace PoGo.NecroBot.Logic.State
                     session.EventDispatcher.Send(new ErrorEvent() {Message = "Unexpected error happen, bot will re-login"});
 
                     if (session.LogicSettings.AllowMultipleBot)
-                        session.ReInitSessionWithNextBot();
+                        ReInitializeSession(session, globalSettings);
                     state = new LoginState();
                 }
                 catch (AccountNotVerifiedException)
                 {
                     if (session.LogicSettings.AllowMultipleBot)
                     {
-                        session.ReInitSessionWithNextBot();
+                        ReInitializeSession(session, globalSettings);
                         state = new LoginState();
                     }
                     else
@@ -143,7 +156,7 @@ namespace PoGo.NecroBot.Logic.State
                 catch(ActiveSwitchAccountManualException ex)
                 {
                     session.EventDispatcher.Send(new WarnEvent { Message = "Switch account requested by user" });
-                    session.ReInitSessionWithNextBot(ex.RequestedAccount, session.Client.CurrentLatitude, session.Client.CurrentLongitude, session.Client.CurrentAltitude);
+                    ReInitializeSession(session, globalSettings, ex.RequestedAccount);
                     state = new LoginState();
 
                 }
@@ -163,17 +176,17 @@ namespace PoGo.NecroBot.Logic.State
                     if (se.MatchedRule == SwitchRules.EmptyMap)
                     {
                         TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(90);
-                        session.ReInitSessionWithNextBot();
+                        ReInitializeSession(session, globalSettings);
                     }
                     else if (se.MatchedRule == SwitchRules.PokestopSoftban)
                     {
                         TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot();
-                        session.ReInitSessionWithNextBot();
+                        ReInitializeSession(session, globalSettings);
                     }
                     else if (se.MatchedRule == SwitchRules.CatchFlee)
                     {
                         TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(60);
-                        session.ReInitSessionWithNextBot();
+                        ReInitializeSession(session, globalSettings);
                     }
                     else
                     {
@@ -190,18 +203,11 @@ namespace PoGo.NecroBot.Logic.State
 
                             TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(session.LogicSettings.MultipleBotConfig.OnLimitPauseTimes);
 
-                            session.ReInitSessionWithNextBot();
+                            ReInitializeSession(session, globalSettings);
                         }
                         else
                         {
-                            if (session.LogicSettings.MultipleBotConfig.StartFromDefaultLocation)
-                            {
-                                session.ReInitSessionWithNextBot(null, globalSettings.LocationConfig.DefaultLatitude, globalSettings.LocationConfig.DefaultLongitude, session.Client.CurrentAltitude);
-                            }
-                            else
-                            {
-                                session.ReInitSessionWithNextBot(); //current location
-                            }
+                            ReInitializeSession(session, globalSettings);
                         }
                     }
                     //return to login state
@@ -219,9 +225,31 @@ namespace PoGo.NecroBot.Logic.State
                         {
                             apiCallFailured = 0;
                             TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(30);
-                            session.ReInitSessionWithNextBot();
+
+                            ReInitializeSession(session, globalSettings);
                         }
                     }
+                    state = new LoginState();
+                }
+                catch (SessionInvalidatedException e)
+                {
+                    session.EventDispatcher.Send(new ErrorEvent { Message = $"Hashing Servers errors, throttling calls. {e.Message}" });
+                    await Delay(1000);
+                    if (session.LogicSettings.AllowMultipleBot)
+                    {
+                        apiCallFailured++;
+                        if (apiCallFailured > 3)
+                        {
+                            apiCallFailured = 0;
+                            TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(30);
+
+                            ReInitializeSession(session, globalSettings);
+                        }
+                    }
+
+                    // Resetting position
+                    session.EventDispatcher.Send(new ErrorEvent { Message = $"Resetting position before relogging in." });
+                    session.Client.Player.UpdatePlayerLocation(session.Client.Settings.DefaultLatitude, session.Client.Settings.DefaultLongitude, session.Client.Settings.DefaultAltitude, 0);
                     state = new LoginState();
                 }
                 catch (OperationCanceledException)
@@ -230,7 +258,7 @@ namespace PoGo.NecroBot.Logic.State
                     if (session.LogicSettings.AllowMultipleBot)
                     {
                         TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(30);
-                        session.ReInitSessionWithNextBot();
+                        ReInitializeSession(session, globalSettings);
                     }
                     state = new LoginState();
                 }
@@ -243,7 +271,7 @@ namespace PoGo.NecroBot.Logic.State
                     if (session.LogicSettings.AllowMultipleBot)
                     {
                         TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(60); //need remove acc
-                        session.ReInitSessionWithNextBot();
+                        ReInitializeSession(session, globalSettings);
                         state = new LoginState();
                     }
                     else {
@@ -266,7 +294,7 @@ namespace PoGo.NecroBot.Logic.State
                     if (session.LogicSettings.AllowMultipleBot)
                     {
                         TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(24 * 60); //need remove acc
-                        session.ReInitSessionWithNextBot();
+                        ReInitializeSession(session, globalSettings);
                         state = new LoginState();
                     }
                     else {
@@ -292,7 +320,7 @@ namespace PoGo.NecroBot.Logic.State
                     session.EventDispatcher.Send(new ErrorEvent() {Message = ex.Message});
 
                     if (session.LogicSettings.AllowMultipleBot)
-                        session.ReInitSessionWithNextBot();
+                        ReInitializeSession(session, globalSettings);
                     state = new LoginState();
                 }
 
@@ -329,7 +357,7 @@ namespace PoGo.NecroBot.Logic.State
                         {
                             Logger.Debug("Change account");
                             TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(15);
-                            session.ReInitSessionWithNextBot();
+                            ReInitializeSession(session, globalSettings);
                             state = new LoginState();
                         }
                         else
