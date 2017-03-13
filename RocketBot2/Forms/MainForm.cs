@@ -113,7 +113,7 @@ namespace RocketBot2.Forms
 
             gMapControl1.MinZoom = 1;
             gMapControl1.MaxZoom = 20;
-            gMapControl1.Zoom = 16;
+            gMapControl1.Zoom = 17;
 
             gMapControl1.Overlays.Add(_searchAreaOverlay);
             gMapControl1.Overlays.Add(_pokestopsOverlay);
@@ -868,6 +868,7 @@ namespace RocketBot2.Forms
                 _botStarted = true;
                 return;
             }
+            //
 
             startStopBotToolStripMenuItem.Text = @"■ Exit RocketBot2";
             accountsToolStripMenuItem.Enabled = false;
