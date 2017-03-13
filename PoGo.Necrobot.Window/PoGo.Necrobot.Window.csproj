@@ -99,6 +99,14 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DotNetBrowser, Version=1.9.0.0, Culture=neutral, PublicKeyToken=b0b5aaca9c95c84e, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\DotNetBrowser.1.9\lib\DotNetBrowser.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DotNetBrowser.Chromium, Version=1.9.0.0, Culture=neutral, PublicKeyToken=b0b5aaca9c95c84e, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\DotNetBrowser.1.9\lib\DotNetBrowser.Chromium.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Geocoding, Version=3.6.0.0, Culture=neutral, PublicKeyToken=7c714700b88674c7, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\Geocoding.net.3.6.0\lib\net40\Geocoding.dll</HintPath>
       <Private>True</Private>
@@ -560,6 +568,7 @@
     <None Include="Resources\ajax-loader.gif" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="teamdev.licenses" />
     <Resource Include="Resources\Fonts\Lato\SIL Open Font License.txt" />
     <Resource Include="Controls\MapMarkers\images\location.png" />
     <Resource Include="Controls\MapMarkers\images\Lured.png" />
@@ -624,7 +633,8 @@ foreach (var item in filesToCleanup)
   <Import Project="$(SolutionDir)\packages\Selenium.WebDriver.ChromeDriver.2.27.0\build\Selenium.WebDriver.ChromeDriver.targets" Condition="Exists('$(SolutionDir)\packages\Selenium.WebDriver.ChromeDriver.2.27.0\build\Selenium.WebDriver.ChromeDriver.targets')" />
   <PropertyGroup>
     <PostBuildEvent>cd "$(TargetDir)"
-del *.config</PostBuildEvent>
+del *.config
+xcopy /y /f /e $(SolutionDir)PoGo.NecroBot.GUI.Electron\PokeEase-Necrobot-Private $(TargetDir)\PokeEase\</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

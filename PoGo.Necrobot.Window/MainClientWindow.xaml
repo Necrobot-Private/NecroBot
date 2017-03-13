@@ -280,7 +280,15 @@
 
                 </DataGrid>
             </TabItem>
-            <TabItem Name="tabMap" >
+            <TabItem Name="tabBrowser">
+                <TabItem.Header>
+                    <TextBlock Margin="7,5,7,5" Text="{Binding  Source=BrowserTabTitle, Converter={StaticResource ResourceKey=I18NConveter}, FallbackValue=Browser}" FontSize="14"/>
+                </TabItem.Header>
+                <Grid Name="browserLayout">
+                    
+                </Grid>
+            </TabItem>
+            <TabItem Name="tabMap">
                 <TabItem.Header>
                     <TextBlock Margin="7,5,7,5" Text="{Binding  Source=MapTabTitle, Converter={StaticResource ResourceKey=I18NConveter}, FallbackValue=MAPS}" FontSize="14"/>
                 </TabItem.Header>
