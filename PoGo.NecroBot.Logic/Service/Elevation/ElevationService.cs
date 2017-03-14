@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Caching;
 using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.Model.Settings;
+using PoGo.NecroBot.Logic.Model;
 
 namespace PoGo.NecroBot.Logic.Service.Elevation
 {
     public class ElevationService : IElevationService
     {
         private GlobalSettings _settings;
-        LRUCache<string, double> cache = new LRUCache<string, double>(capacity: 500);
-
+        
         private List<IElevationService> ElevationServiceQueue = new List<IElevationService>();
         public Dictionary<Type, DateTime> ElevationServiceBlacklist = new Dictionary<Type, DateTime>();
 
@@ -22,18 +21,18 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
             if (_settings.MapzenWalkConfig.UseMapzenWalk)
             {
                 if (!string.IsNullOrEmpty(settings.MapzenWalkConfig.MapzenElevationApiKey))
-                    ElevationServiceQueue.Add(new MapzenElevationService(settings, cache));
+                    ElevationServiceQueue.Add(new MapzenElevationService(settings));
             }
 
-            //ElevationServiceQueue.Add(new MapQuestElevationService(settings, cache));
+            //ElevationServiceQueue.Add(new MapQuestElevationService(settings));
 
             if (_settings.GoogleWalkConfig.UseGoogleWalk)
             {
                 if (!string.IsNullOrEmpty(settings.GoogleWalkConfig.GoogleElevationAPIKey))
-                    ElevationServiceQueue.Add(new GoogleElevationService(settings, cache));
+                    ElevationServiceQueue.Add(new GoogleElevationService(settings));
             }
 
-            ElevationServiceQueue.Add(new RandomElevationService(settings, cache));
+            ElevationServiceQueue.Add(new RandomElevationService(settings));
         }
 
         public bool IsElevationServiceBlacklisted(Type strategy)
@@ -69,12 +68,18 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
         public double GetElevation(double lat, double lng)
         {
             IElevationService service = GetService();
-            double elevation = service.GetElevation(lat, lng);
-            if (elevation == 0 || elevation < -100)
+            
+            if (service is RandomElevationService)
             {
-                // Error getting elevation so just return 0.
+                // Don't hit the database for random elevation service.
+                return service.GetElevation(lat, lng);
+            }
+
+            ElevationLocation elevationLocation = ElevationLocation.FindOrUpdateInDatabase(lat, lng, service).Result;
+            if (elevationLocation == null)
+            {
                 Logger.Write(
-                    $"{service.GetServiceId()} response not reliable: {elevation.ToString()}, and will be blacklisted for one hour.",
+                    $"{service.GetServiceId()} response not reliable and will be blacklisted for one hour.",
                     LogLevel.Warning
                 );
                 BlacklistStrategy(service.GetType());
@@ -88,7 +93,7 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
                 return GetElevation(lat, lng);
             }
 
-            return elevation;
+            return BaseElevationService.GetRandomElevation(elevationLocation.Altitude);
         }
 
         public string GetServiceId()

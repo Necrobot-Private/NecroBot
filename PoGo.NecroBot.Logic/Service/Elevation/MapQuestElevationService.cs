@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using Caching;
 using Newtonsoft.Json;
 using PoGo.NecroBot.Logic.Exceptions;
 using PoGo.NecroBot.Logic.Model.Settings;
@@ -24,7 +23,7 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
     {
         private string mapQuestDemoApiKey = $"Kmjtd|luua2qu7n9,7a=o5-lzbgq";
 
-        public MapQuestElevationService(GlobalSettings settings, LRUCache<string, double> cache) : base(settings, cache)
+        public MapQuestElevationService(GlobalSettings settings) : base(settings)
         {
             if (!string.IsNullOrEmpty(mapQuestDemoApiKey))
                 _apiKey = mapQuestDemoApiKey;
