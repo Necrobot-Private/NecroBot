@@ -394,14 +394,6 @@ namespace PoGo.NecroBot.CLI
                 }
             }
 
-            //ProgressBar.Start("NecroBot2 is starting up", 10);
-
-            if (settings.WebsocketsConfig.UseWebsocket)
-            {
-                var websocket = new WebSocketInterface(settings.WebsocketsConfig.WebSocketPort, _session);
-                _session.EventDispatcher.EventReceived += evt => websocket.Listen(evt, _session);
-            }
-            
             ProgressBar.Start("NecroBot2 is starting up", 10);
 
             ProgressBar.Fill(20);
@@ -454,6 +446,12 @@ namespace PoGo.NecroBot.CLI
                 return;
             }
             //
+            
+            if (settings.WebsocketsConfig.UseWebsocket)
+            {
+                var websocket = new WebSocketInterface(settings.WebsocketsConfig.WebSocketPort, _session);
+                _session.EventDispatcher.EventReceived += evt => websocket.Listen(evt, _session);
+            }
             
             var mainAccount = accountManager.Add(settings.Auth.AuthConfig);
 
