@@ -84,6 +84,7 @@ namespace PoGo.NecroBot.CLI
         [STAThread]
         private static void Main(string[] args)
         {
+            Application.EnableVisualStyles();
             RunBotWithParameters(null, args);
         }
 
@@ -93,7 +94,7 @@ namespace PoGo.NecroBot.CLI
             //Setup Logger for API
             APIConfiguration.Logger = new APILogListener();
             
-            Application.EnableVisualStyles();
+            //Application.EnableVisualStyles();
             var strCulture = Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName;
 
             var culture = CultureInfo.CreateSpecificCulture("en");
