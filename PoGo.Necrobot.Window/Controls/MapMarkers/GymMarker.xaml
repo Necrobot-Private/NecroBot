@@ -15,7 +15,7 @@
     <Grid>
         <Button Background="Transparent" BorderThickness="0">
             <Image Name="icon" 
-               Source="{Binding Path=GymIcon, FallbackValue=images/Normal.png}" 
+               Source="{Binding Path=GymIcon}" 
                VerticalAlignment="Center" 
                HorizontalAlignment="Center" 
                IsHitTestVisible="false" 
