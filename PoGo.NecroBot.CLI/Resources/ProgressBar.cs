@@ -20,6 +20,7 @@ namespace PoGo.NecroBot.CLI.Resources
 
             _leftOffset = startText.Length + 1;
             Fill(startAmt);
+            Console.Write(Environment.NewLine);
         }
 
         public static void Fill(int amt, ConsoleColor barColor = ConsoleColor.Red)
