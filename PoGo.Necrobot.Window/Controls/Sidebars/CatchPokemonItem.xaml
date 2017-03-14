@@ -37,7 +37,7 @@
                     </StackPanel>
 
                     <StackPanel  Orientation="Horizontal">
-                        <StackPanel  Visibility="{Binding Pokeballs, Converter={ StaticResource CollapseWhenGreateThenZeroConverter}}" Orientation="Horizontal">
+                        <StackPanel  Visibility="{Binding PokeBalls, Converter={ StaticResource CollapseWhenGreateThenZeroConverter}}" Orientation="Horizontal">
                             <Image  Source="https://raw.githubusercontent.com/Superviral/Pokemon-GO-App-Assets-and-Images/master/App%20Converted%20Images/pokeball_store.png" Width="25"></Image>
                             <TextBlock Margin="3,5,0,0" Text="{Binding PokeBalls, StringFormat={}x{0}}"></TextBlock>
                         </StackPanel>
@@ -52,8 +52,8 @@
                         </StackPanel>
                     </StackPanel>
 
-                    <StackPanel Orientation="Horizontal" Visibility="{Binding EXP, Converter={ StaticResource CollapseWhenGreateThenZeroConverter}}">
-                        <TextBlock Margin="3,5,0,0" Text="{Binding Path=EXP, StringFormat={}+{0} EXP}"></TextBlock>
+                    <StackPanel Orientation="Horizontal" Visibility="{Binding Exp, Converter={ StaticResource CollapseWhenGreateThenZeroConverter}}">
+                        <TextBlock Margin="3,5,0,0" Text="{Binding Path=Exp, StringFormat={}+{0} EXP}"></TextBlock>
                     </StackPanel>
 
                 </StackPanel>
