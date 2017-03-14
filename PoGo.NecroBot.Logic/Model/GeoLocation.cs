@@ -90,12 +90,13 @@ namespace PoGo.NecroBot.Logic.Model
 
         public static async Task<GeoLocation> FindOrUpdateInDatabase(double latitude, double longitude)
         {
-            if (!Directory.Exists(CACHE_DIR))
-            {
-                Directory.CreateDirectory(CACHE_DIR);
-            }
             using (await DB_LOCK.LockAsync())
             {
+                if (!Directory.Exists(CACHE_DIR))
+                {
+                    Directory.CreateDirectory(CACHE_DIR);
+                }
+
                 using (var db = new LiteDatabase(DB_NAME))
                 {
                     db.GetCollection<GeoLocation>("locations").EnsureIndex(s => s.Id);
