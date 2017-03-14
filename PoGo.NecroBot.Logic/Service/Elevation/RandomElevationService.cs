@@ -1,5 +1,4 @@
 ﻿using System;
-using Caching;
 using PoGo.NecroBot.Logic.Model.Settings;
 
 namespace PoGo.NecroBot.Logic.Service.Elevation
@@ -10,7 +9,7 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
         private double maxElevation = 50;
         private Random rand = new Random();
 
-        public RandomElevationService(GlobalSettings settings, LRUCache<string, double> cache) : base(settings, cache)
+        public RandomElevationService(GlobalSettings settings) : base(settings)
         {
         }
 
