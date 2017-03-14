@@ -248,14 +248,22 @@ namespace PoGo.Necrobot.Window
         {
             if (lastTimeLoadHelp < DateTime.Now.AddMinutes(-30))
             {
-                var client = new WebClient();
-                var xml = await client.DownloadStringTaskAsync(new Uri("http://necrobot2.com/feed.xml"));
-                var feed = SyndicationFeed.Load(XmlReader.Create(new StringReader(xml)));
-                lastTimeLoadHelp = DateTime.Now;
-                this.Dispatcher.Invoke(() =>
+                using (HttpClient client = new HttpClient())
                 {
-                    lsvHelps.ItemsSource = feed.Items.OrderByDescending(x => x.PublishDate);
-                });
+                    var responseContent = await client.GetAsync("http://necrobot2.com/feed.xml");
+                    if (responseContent.StatusCode != HttpStatusCode.OK)
+                        return;
+
+                    var xml = await responseContent.Content.ReadAsStringAsync();
+                    
+                    var feed = SyndicationFeed.Load(XmlReader.Create(new StringReader(xml)));
+                    lastTimeLoadHelp = DateTime.Now;
+
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        lsvHelps.ItemsSource = feed.Items.OrderByDescending(x => x.PublishDate);
+                    });
+                }
             }
         }
         private void Help_Click(object sender, RoutedEventArgs e)

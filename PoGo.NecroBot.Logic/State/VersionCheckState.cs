@@ -18,6 +18,7 @@ using PoGo.NecroBot.Logic.Event.UI;
 using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.Utils;
 using PoGo.NecroBot.Logic.Forms;
+using System.Net.Http;
 
 #endregion
 
@@ -78,7 +79,7 @@ namespace PoGo.NecroBot.Logic.State
             var tempPath = Path.Combine(baseDir, "tmp");
             var extractedDir = Path.Combine(tempPath, "NecroBot2");
             var destinationDir = baseDir + Path.DirectorySeparatorChar;
-             bool updated = false;
+            bool updated = false;
             AutoUpdateForm autoUpdateForm = new AutoUpdateForm()
             {
                 Session = session,
@@ -150,11 +151,12 @@ namespace PoGo.NecroBot.Logic.State
 
        
 
-        private static string DownloadServerVersion()
+        private static async Task<string> DownloadServerVersion()
         {
-            using (var wC = new NecroWebClient())
+            using (HttpClient client = new HttpClient())
             {
-                return wC.DownloadString(VersionUri);
+                var responseContent = await client.GetAsync(VersionUri);
+                return await responseContent.Content.ReadAsStringAsync();
             }
         }
 
@@ -169,7 +171,7 @@ namespace PoGo.NecroBot.Logic.State
             try
             {
                 var regex = new Regex(@"\[assembly\: AssemblyVersion\(""(\d{1,})\.(\d{1,})\.(\d{1,})\.(\d{1,})""\)\]");
-                var match = regex.Match(DownloadServerVersion());
+                var match = regex.Match(DownloadServerVersion().Result);
 
                 if (!match.Success)
                     return false;

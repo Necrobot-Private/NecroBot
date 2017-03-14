@@ -19,6 +19,7 @@ using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.Utils;
 using PokemonGo.RocketAPI.Extensions;
 using PokemonGo.RocketAPI.Helpers;
+using System.Net.Http;
 
 #endregion
 
@@ -428,15 +429,26 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         public void CheckProxy(ITranslation translator)
         {
-            using (var tempWebClient = new NecroWebClient())
+            string unproxiedIp;
+            using (HttpClient client = new HttpClient())
             {
-                var unproxiedIp = WebClientExtensions.DownloadString(tempWebClient,
-                    new Uri("https://api.ipify.org/?format=text"));
-                if (ProxyConfig.UseProxy)
+                var responseContent = client.GetAsync("https://api.ipify.org/?format=text").Result;
+                unproxiedIp = responseContent.Content.ReadAsStringAsync().Result;
+            }
+
+            if (ProxyConfig.UseProxy)
+            {
+                var httpClientHandler = new HttpClientHandler
                 {
-                    tempWebClient.Proxy = InitProxy();
-                    var proxiedIPres = WebClientExtensions.DownloadString(tempWebClient,
-                        new Uri("https://api.ipify.org/?format=text"));
+                    Proxy = InitProxy(),
+                    UseProxy = true
+                };
+
+                using (HttpClient client = new HttpClient(httpClientHandler))
+                {
+                    var responseContent = client.GetAsync("https://api.ipify.org/?format=text").Result;
+                    var proxiedIPres = responseContent.Content.ReadAsStringAsync().Result;
+
                     var proxiedIp = proxiedIPres == null ? "INVALID PROXY" : proxiedIPres;
                     Logger.Write(translator.GetTranslation(TranslationString.Proxied, unproxiedIp, proxiedIp),
                         LogLevel.Info, unproxiedIp == proxiedIp ? ConsoleColor.Red : ConsoleColor.Green);
@@ -449,11 +461,11 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                     Console.ReadKey();
                     Environment.Exit(0);
                 }
-                else
-                {
-                    Logger.Write(translator.GetTranslation(TranslationString.Unproxied, unproxiedIp), LogLevel.Info,
-                        ConsoleColor.Red);
-                }
+            }
+            else
+            {
+                Logger.Write(translator.GetTranslation(TranslationString.Unproxied, unproxiedIp), LogLevel.Info,
+                    ConsoleColor.Red);
             }
         }
 
