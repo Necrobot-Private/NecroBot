@@ -443,7 +443,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                         evt.Stardust = stardust;
                         evt.UniqueId = caughtPokemonResponse.CapturedPokemonId;
                         evt.Candy = session.Inventory.GetCandyFamily(pokemon.PokemonId);
+                    }
 
+                    if (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess ||
+                        caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchFlee)
+                    {
+                        // Also count catch flee against the catch limit
                         if (session.LogicSettings.UseCatchLimit)
                         {
                             session.Stats.AddPokemonTimestamp(DateTime.Now.Ticks);

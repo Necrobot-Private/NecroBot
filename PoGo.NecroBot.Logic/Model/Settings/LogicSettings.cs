@@ -70,10 +70,10 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public int PokeballsToKeepForSnipe => GenRandom(_settings.PokemonConfig.PokeballToKeepForSnipe);
         public double AutoSnipeMaxDistance => GenRandom(_settings.SnipeConfig.AutoSnipeMaxDistance);
         public int AutoSnipeBatchSize => _settings.SnipeConfig.AutoSnipeBatchSize;
-        public int CatchPokemonLimit => GenRandom(_settings.PokemonConfig.CatchPokemonLimit);
-        public int CatchPokemonLimitMinutes => GenRandom(_settings.PokemonConfig.CatchPokemonLimitMinutes);
-        public int PokeStopLimit => GenRandom(_settings.PokeStopConfig.PokeStopLimit);
-        public int PokeStopLimitMinutes => GenRandom(_settings.PokeStopConfig.PokeStopLimitMinutes);
+        public int CatchPokemonLimit => _settings.PokemonConfig.CatchPokemonLimit;
+        public int CatchPokemonLimitMinutes => _settings.PokemonConfig.CatchPokemonLimitMinutes;
+        public int PokeStopLimit => _settings.PokeStopConfig.PokeStopLimit;
+        public int PokeStopLimitMinutes => _settings.PokeStopConfig.PokeStopLimitMinutes;
         public int SnipeCountLimit => GenRandom(_settings.SnipeConfig.SnipeCountLimit);
         public int SnipeRestSeconds => GenRandom(_settings.SnipeConfig.SnipeRestSeconds);
         public bool TransferWeakPokemon => _settings.PokemonConfig.TransferWeakPokemon;
