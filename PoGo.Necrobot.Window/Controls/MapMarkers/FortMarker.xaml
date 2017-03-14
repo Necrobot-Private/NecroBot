@@ -14,7 +14,7 @@
     <Grid>
         <Button Background="Transparent" BorderThickness="0">
             <Image Name="icon" 
-               Source="{Binding Path=FortIcon, FallbackValue=images/Normal.png}" 
+               Source="{Binding Path=FortIcon}" 
                VerticalAlignment="Center" 
                HorizontalAlignment="Center" 
                IsHitTestVisible="false" 
