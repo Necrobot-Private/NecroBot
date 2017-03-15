@@ -298,11 +298,11 @@ namespace RocketBot2.Forms
 
              if (!_ignoreKillSwitch)
              {
-                 if (CheckMKillSwitch())
+                 if (CheckMKillSwitch().Result)
                  {
                      return;
                  }
-                 _botStarted = CheckKillSwitch();
+                 _botStarted = CheckKillSwitch().Result;
              }
 
             var logicSettings = new LogicSettings(settings);
@@ -1384,17 +1384,17 @@ namespace RocketBot2.Forms
             throw new NotImplementedException();
         }
 
-        private  static bool CheckMKillSwitch()
+        private async static Task<bool> CheckMKillSwitch()
         {
             using (HttpClient client = new HttpClient())
             {
                 try
                 {
-                    var responseContent =  client.GetAsync(StrMasterKillSwitchUri).Result;
+                    var responseContent = await client.GetAsync(StrMasterKillSwitchUri);
                     if (responseContent.StatusCode != HttpStatusCode.OK)
                         return true;
 
-                    var strResponse1 = responseContent.Content.ReadAsStringAsync().Result;
+                    var strResponse1 = await responseContent.Content.ReadAsStringAsync();
 
                     if (string.IsNullOrEmpty(strResponse1))
                         return true;
@@ -1432,17 +1432,17 @@ namespace RocketBot2.Forms
             return false;
         }
 
-        private  static bool CheckKillSwitch()
+        private async static Task<bool> CheckKillSwitch()
         {
             using (HttpClient client = new HttpClient())
             {
                 try
                 {
-                    var responseContent = client.GetAsync(StrKillSwitchUri).Result;
+                    var responseContent = await client.GetAsync(StrKillSwitchUri);
                     if (responseContent.StatusCode != HttpStatusCode.OK)
                         return true;
 
-                    var strResponse = responseContent.Content.ReadAsStringAsync().Result;
+                    var strResponse = await responseContent.Content.ReadAsStringAsync();
                     if (string.IsNullOrEmpty(strResponse))
                         return true;
 
