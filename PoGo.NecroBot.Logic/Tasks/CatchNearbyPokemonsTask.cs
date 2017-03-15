@@ -30,7 +30,8 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static async Task Execute(ISession session, CancellationToken cancellationToken,
             PokemonId priority = PokemonId.Missingno, bool sessionAllowTransfer = true)
         {
-            TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
+            var manager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
+            manager.ThrowIfSwitchAccountRequested();
             cancellationToken.ThrowIfCancellationRequested();
 
             if (!session.LogicSettings.CatchPokemon) return;
@@ -44,8 +45,9 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             if (session.Stats.CatchThresholdExceeds(session))
             {
-                if (session.LogicSettings.MultipleBotConfig.SwitchOnCatchLimit &&
-                    TinyIoCContainer.Current.Resolve<MultiAccountManager>().AllowSwitch()
+                if (manager.AllowMultipleBot() &&
+                    session.LogicSettings.MultipleBotConfig.SwitchOnCatchLimit &&
+                    manager.AllowSwitch()
                     )
                 {
                     throw new ActiveSwitchByRuleException()
