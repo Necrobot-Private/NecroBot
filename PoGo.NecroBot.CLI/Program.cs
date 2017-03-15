@@ -26,6 +26,8 @@ using ProgressBar = PoGo.NecroBot.CLI.Resources.ProgressBar;
 using CommandLine;
 using CommandLine.Text;
 using PokemonGo.RocketAPI;
+using System.Threading.Tasks;
+using System.Net.Http;
 
 #endregion using directives
 
@@ -245,11 +247,8 @@ namespace PoGo.NecroBot.CLI
 
             if (!_ignoreKillSwitch)
             {
-                if (CheckMKillSwitch())
-                {
+                if (CheckMKillSwitch().Result || CheckKillSwitch().Result)
                     return;
-                }
-                CheckKillSwitch();
             }
 
             var logicSettings = new LogicSettings(settings);
@@ -526,15 +525,19 @@ namespace PoGo.NecroBot.CLI
             throw new NotImplementedException();
         }
 
-        private static bool CheckMKillSwitch()
+        private async static Task<bool> CheckMKillSwitch()
         {
-            using (var wC = new WebClient())
+            using (HttpClient client = new HttpClient())
             {
                 try
                 {
-                    var strResponse1 = WebClientExtensions.DownloadString(wC, StrMasterKillSwitchUri);
+                    var responseContent = await client.GetAsync(StrMasterKillSwitchUri);
+                    if (responseContent.StatusCode != HttpStatusCode.OK)
+                        return true;
 
-                    if (strResponse1 == null)
+                    var strResponse1 = await responseContent.Content.ReadAsStringAsync();
+                    
+                    if (string.IsNullOrEmpty(strResponse1))
                         return true;
 
                     var strSplit1 = strResponse1.Split(';');
@@ -558,26 +561,31 @@ namespace PoGo.NecroBot.CLI
                     }
                     else
                         return false;
+
+
                 }
-                catch (WebException)
+                catch (Exception ex)
                 {
-                    // ignored
+                    Logger.Write(ex.Message, LogLevel.Error);
                 }
             }
-
+            
             return false;
         }
 
-        private static bool CheckKillSwitch()
+        private async static Task<bool> CheckKillSwitch()
         {
-            using (var wC = new WebClient())
+            using (HttpClient client = new HttpClient())
             {
                 try
                 {
-                    var strResponse = WebClientExtensions.DownloadString(wC, StrKillSwitchUri);
+                    var responseContent = await client.GetAsync(StrKillSwitchUri);
+                    if (responseContent.StatusCode != HttpStatusCode.OK)
+                        return true;
 
-                    if (strResponse == null)
-                        return false;
+                    var strResponse = await responseContent.Content.ReadAsStringAsync();
+                    if (string.IsNullOrEmpty(strResponse))
+                        return true;
 
                     var strSplit = strResponse.Split(';');
 
@@ -606,9 +614,9 @@ namespace PoGo.NecroBot.CLI
                     else
                         return false;
                 }
-                catch (WebException)
+                catch (Exception ex)
                 {
-                    // ignored
+                    Logger.Write(ex.Message, LogLevel.Error);
                 }
             }
 
