@@ -107,17 +107,20 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static async Task CheckLimit(ISession session)
         {
-            bool allowSwitch = TinyIoCContainer.Current.Resolve<MultiAccountManager>().AllowSwitch();
+            var manager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
+            bool allowSwitch = manager.AllowSwitch();
             var multiConfig = session.LogicSettings.MultipleBotConfig;
 
             if (session.Stats.CatchThresholdExceeds(session, false) &&
                 multiConfig.SwitchOnCatchLimit &&
+                manager.AllowMultipleBot() &&
                 allowSwitch)
             {
                 throw new ActiveSwitchByRuleException(SwitchRules.CatchLimitReached, session.LogicSettings.CatchPokemonLimit);
             }
             if (session.Stats.SearchThresholdExceeds(session, false) &&
                 multiConfig.SwitchOnPokestopLimit &&
+                manager.AllowMultipleBot() &&
                 allowSwitch)
             {
                 throw new ActiveSwitchByRuleException(SwitchRules.SpinPokestopReached, session.LogicSettings.PokeStopLimit);
@@ -127,7 +130,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 session.Stats.SearchThresholdExceeds(session, false)
                 )
             {
-                if (allowSwitch)
+                if (manager.AllowMultipleBot() && allowSwitch)
                 {
                     throw new ActiveSwitchByRuleException(SwitchRules.SpinPokestopReached, session.LogicSettings.PokeStopLimit);
                 }
@@ -369,13 +372,15 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static async Task FarmPokestop(ISession session, FortData pokeStop, FortDetailsResponse fortInfo, CancellationToken cancellationToken, bool doNotRetry = false)
         {
+            var manager = TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>();
+
             // If the cooldown is in the future than don't farm the pokestop.
             if (pokeStop.CooldownCompleteTimestampMs > DateTime.UtcNow.ToUnixTime())
                 return;
 
             if (session.Stats.SearchThresholdExceeds(session, true))
             {
-                if (session.LogicSettings.MultipleBotConfig.SwitchOnPokestopLimit)
+                if (manager.AllowMultipleBot() && session.LogicSettings.MultipleBotConfig.SwitchOnPokestopLimit)
                 {
                     throw new Exceptions.ActiveSwitchByRuleException(SwitchRules.SpinPokestopReached, session.LogicSettings.PokeStopLimit);
                 }
@@ -531,25 +536,32 @@ namespace PoGo.NecroBot.Logic.Tasks
             } while (fortTry < retryNumber - zeroCheck);
             //Stop trying if softban is cleaned earlier or if 40 times fort looting failed.
 
-            if (fortTry >= retryNumber - zeroCheck)
+            if (manager.AllowMultipleBot())
             {
-                softbanCount++;
-
-                //only check if PokestopSoftbanCount > 0
-                if (MultipleBotConfig.IsMultiBotActive(session.LogicSettings) &&
-                    session.LogicSettings.MultipleBotConfig.PokestopSoftbanCount > 0 &&
-                    session.LogicSettings.MultipleBotConfig.PokestopSoftbanCount <= softbanCount &&
-                    TinyIoCContainer.Current.Resolve<MultiAccountManager>().AllowSwitch())
+                if (fortTry >= retryNumber - zeroCheck)
                 {
-                    softbanCount = 0;
+                    softbanCount++;
 
-                    //Activate switcher by pokestop
-                    throw new ActiveSwitchByRuleException()
+                    //only check if PokestopSoftbanCount > 0
+                    if (MultipleBotConfig.IsMultiBotActive(session.LogicSettings, manager) &&
+                        session.LogicSettings.MultipleBotConfig.PokestopSoftbanCount > 0 &&
+                        session.LogicSettings.MultipleBotConfig.PokestopSoftbanCount <= softbanCount &&
+                        TinyIoCContainer.Current.Resolve<MultiAccountManager>().AllowSwitch())
                     {
-                        MatchedRule = SwitchRules.PokestopSoftban,
-                        ReachedValue = session.LogicSettings.MultipleBotConfig.PokestopSoftbanCount
-                    };
+                        softbanCount = 0;
+
+                        //Activate switcher by pokestop
+                        throw new ActiveSwitchByRuleException()
+                        {
+                            MatchedRule = SwitchRules.PokestopSoftban,
+                            ReachedValue = session.LogicSettings.MultipleBotConfig.PokestopSoftbanCount
+                        };
+                    }
                 }
+            }
+            else
+            {
+                softbanCount = 0; //reset softban count
             }
 
             if (session.LogicSettings.RandomlyPauseAtStops && !doNotRetry)
@@ -571,6 +583,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         //For non GPX pathing, it returns all pokestops in range.
         private static async Task<Tuple<List<FortData>, List<FortData>>> GetPokeStops(ISession session)
         {
+            var manager = TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>();
             List<FortData> mapObjects = await UpdateFortsData(session);
             session.AddForts(mapObjects);
 
@@ -585,6 +598,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     });
                     mapEmptyCount++;
                     if (mapEmptyCount == 5 &&
+                        manager.AllowMultipleBot() &&
                         TinyIoCContainer.Current.Resolve<MultiAccountManager>().AllowSwitch())
                     {
                         mapEmptyCount = 0;
