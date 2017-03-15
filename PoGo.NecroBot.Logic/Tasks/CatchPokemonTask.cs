@@ -85,8 +85,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             // Exit if user defined max limits reached
             if (session.Stats.CatchThresholdExceeds(session))
             {
-                if (session.LogicSettings.AllowMultipleBot &&
-                    session.LogicSettings.MultipleBotConfig.SwitchOnCatchLimit &&
+                if (session.LogicSettings.MultipleBotConfig.SwitchOnCatchLimit &&
                         TinyIoCContainer.Current.Resolve<MultiAccountManager>().AllowSwitch())
                 {
                     throw new ActiveSwitchByRuleException()
@@ -534,7 +533,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Logger.Write("Seem that bot has ben catch flee softban, Bot will start save 100 balls to by pass it.");
                         
                     }
-                    if (session.LogicSettings.AllowMultipleBot && !session.LogicSettings.ByPassCatchFlee)
+                    if (!session.LogicSettings.ByPassCatchFlee)
                     {
                         if (CatchFleeContinuouslyCount > session.LogicSettings.MultipleBotConfig.CatchFleeCount &&
                             TinyIoCContainer.Current.Resolve<MultiAccountManager>().AllowSwitch())
@@ -609,8 +608,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 if (session.LogicSettings.PokemonSnipeFilters.ContainsKey(encounterEV.PokemonId))
                 {
                     var filter = session.LogicSettings.PokemonSnipeFilters[encounterEV.PokemonId];
-                    if (session.LogicSettings.AllowMultipleBot &&
-                        filter.AllowMultiAccountSnipe &&
+                    if (filter.AllowMultiAccountSnipe &&
                         filter.IsMatch(encounterEV.IV,
                         (PokemonMove)Enum.Parse(typeof(PokemonMove), encounterEV.Move1),
                         (PokemonMove)Enum.Parse(typeof(PokemonMove), encounterEV.Move2),

@@ -112,14 +112,12 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             if (session.Stats.CatchThresholdExceeds(session, false) &&
                 multiConfig.SwitchOnCatchLimit &&
-                session.LogicSettings.AllowMultipleBot &&
                 allowSwitch)
             {
                 throw new ActiveSwitchByRuleException(SwitchRules.CatchLimitReached, session.LogicSettings.CatchPokemonLimit);
             }
             if (session.Stats.SearchThresholdExceeds(session, false) &&
                 multiConfig.SwitchOnPokestopLimit &&
-                session.LogicSettings.AllowMultipleBot &&
                 allowSwitch)
             {
                 throw new ActiveSwitchByRuleException(SwitchRules.SpinPokestopReached, session.LogicSettings.PokeStopLimit);
@@ -129,7 +127,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 session.Stats.SearchThresholdExceeds(session, false)
                 )
             {
-                if (session.LogicSettings.AllowMultipleBot && allowSwitch)
+                if (allowSwitch)
                 {
                     throw new ActiveSwitchByRuleException(SwitchRules.SpinPokestopReached, session.LogicSettings.PokeStopLimit);
                 }
@@ -377,7 +375,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             if (session.Stats.SearchThresholdExceeds(session, true))
             {
-                if (session.LogicSettings.AllowMultipleBot && session.LogicSettings.MultipleBotConfig.SwitchOnPokestopLimit)
+                if (session.LogicSettings.MultipleBotConfig.SwitchOnPokestopLimit)
                 {
                     throw new Exceptions.ActiveSwitchByRuleException(SwitchRules.SpinPokestopReached, session.LogicSettings.PokeStopLimit);
                 }
@@ -533,32 +531,25 @@ namespace PoGo.NecroBot.Logic.Tasks
             } while (fortTry < retryNumber - zeroCheck);
             //Stop trying if softban is cleaned earlier or if 40 times fort looting failed.
 
-            if (session.LogicSettings.AllowMultipleBot)
+            if (fortTry >= retryNumber - zeroCheck)
             {
-                if (fortTry >= retryNumber - zeroCheck)
+                softbanCount++;
+
+                //only check if PokestopSoftbanCount > 0
+                if (MultipleBotConfig.IsMultiBotActive(session.LogicSettings) &&
+                    session.LogicSettings.MultipleBotConfig.PokestopSoftbanCount > 0 &&
+                    session.LogicSettings.MultipleBotConfig.PokestopSoftbanCount <= softbanCount &&
+                    TinyIoCContainer.Current.Resolve<MultiAccountManager>().AllowSwitch())
                 {
-                    softbanCount++;
+                    softbanCount = 0;
 
-                    //only check if PokestopSoftbanCount > 0
-                    if (MultipleBotConfig.IsMultiBotActive(session.LogicSettings) &&
-                        session.LogicSettings.MultipleBotConfig.PokestopSoftbanCount > 0 &&
-                        session.LogicSettings.MultipleBotConfig.PokestopSoftbanCount <= softbanCount &&
-                        TinyIoCContainer.Current.Resolve<MultiAccountManager>().AllowSwitch())
+                    //Activate switcher by pokestop
+                    throw new ActiveSwitchByRuleException()
                     {
-                        softbanCount = 0;
-
-                        //Activate switcher by pokestop
-                        throw new ActiveSwitchByRuleException()
-                        {
-                            MatchedRule = SwitchRules.PokestopSoftban,
-                            ReachedValue = session.LogicSettings.MultipleBotConfig.PokestopSoftbanCount
-                        };
-                    }
+                        MatchedRule = SwitchRules.PokestopSoftban,
+                        ReachedValue = session.LogicSettings.MultipleBotConfig.PokestopSoftbanCount
+                    };
                 }
-            }
-            else
-            {
-                softbanCount = 0; //reset softban count
             }
 
             if (session.LogicSettings.RandomlyPauseAtStops && !doNotRetry)
@@ -594,7 +585,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                     });
                     mapEmptyCount++;
                     if (mapEmptyCount == 5 &&
-                        session.LogicSettings.AllowMultipleBot &&
                         TinyIoCContainer.Current.Resolve<MultiAccountManager>().AllowSwitch())
                     {
                         mapEmptyCount = 0;
