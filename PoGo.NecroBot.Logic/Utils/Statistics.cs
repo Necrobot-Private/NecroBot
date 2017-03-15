@@ -54,7 +54,8 @@ namespace PoGo.NecroBot.Logic.Utils
 
         public void OnStatisticChanged(ISession session)
         {
-            if (MultipleBotConfig.IsMultiBotActive(session.LogicSettings) &&  TinyIoCContainer.Current.Resolve<MultiAccountManager>().AllowSwitch())
+            var manager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
+            if (MultipleBotConfig.IsMultiBotActive(session.LogicSettings, manager) &&  manager.AllowSwitch())
             {
                 var config = session.LogicSettings.MultipleBotConfig;
 
