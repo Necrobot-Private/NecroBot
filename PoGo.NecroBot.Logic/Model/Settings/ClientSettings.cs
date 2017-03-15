@@ -67,23 +67,23 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         
         AuthType ISettings.AuthType
         {
-            get { return _settings.Auth.AuthConfig.AuthType; }
+            get { return _settings.Auth.CurrentAuthConfig.AuthType; }
 
-            set { _settings.Auth.AuthConfig.AuthType = value; }
+            set { _settings.Auth.CurrentAuthConfig.AuthType = value; }
         }
 
         string ISettings.Username
         {
-            get { return _settings.Auth.AuthConfig.Username; }
+            get { return _settings.Auth.CurrentAuthConfig.Username; }
 
-            set { _settings.Auth.AuthConfig.Username = value; }
+            set { _settings.Auth.CurrentAuthConfig.Username = value; }
         }
 
         string ISettings.Password
         {
-            get { return _settings.Auth.AuthConfig.Password; }
+            get { return _settings.Auth.CurrentAuthConfig.Password; }
 
-            set { _settings.Auth.AuthConfig.Password = value; }
+            set { _settings.Auth.CurrentAuthConfig.Password = value; }
         }
         
         #endregion Auth Config Values

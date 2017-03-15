@@ -16,7 +16,6 @@ using Newtonsoft.Json.Schema;
 using Newtonsoft.Json.Schema.Generation;
 using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.Logging;
-using PoGo.NecroBot.Logic.Utils;
 using PokemonGo.RocketAPI.Extensions;
 using PokemonGo.RocketAPI.Helpers;
 using System.Net.Http;
@@ -34,8 +33,38 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonIgnore]
         private string _filePath;
 
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore, Order = 1)]
-        public AuthConfig AuthConfig = new AuthConfig();
+        // Deprecated and will be removed in future release.
+        [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Ignore, Order = 1)]
+        public AuthConfig AuthConfig = null;
+
+        [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Ignore, Order = 1)]
+        public List<AuthConfig> Bots = new List<AuthConfig>();
+        
+        [JsonIgnore]
+        private AuthConfig _currentAuthConfig;
+
+        [JsonIgnore]
+        public AuthConfig CurrentAuthConfig
+        {
+            get
+            {
+                if (_currentAuthConfig == null)
+                {
+                    if (Bots.Count == 0)
+                        Bots.Add(new AuthConfig());
+
+                    _currentAuthConfig = Bots.FirstOrDefault();
+                }
+
+                return _currentAuthConfig;
+            }
+
+            set
+            {
+                _currentAuthConfig = value;
+            }
+        }
+        
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore, Order = 2)]
         public ProxyConfig ProxyConfig = new ProxyConfig();
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore, Order = 3)]
@@ -43,14 +72,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore, Order = 3)]
         public APIConfig APIConfig = new APIConfig();
-
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 4)]
-        [DefaultValue(false)]
-        public bool AllowMultipleBot = false;
-
-        [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Ignore, Order = 5)]
-        public List<AuthConfig> Bots= new List<AuthConfig>();
-
+        
         private JSchema _schema;
 
         private JSchema JsonSchema
@@ -369,6 +391,45 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                                 bot.Remove("PtcPassword");
                             }
                         }
+                        break;
+
+                    case 20:
+                        if (settings["AuthConfig"] != null)
+                        {
+                            JObject originalBot = (JObject)settings["AuthConfig"];
+                            var username = (string)originalBot["Username"];
+                            var password = (string)originalBot["Password"];
+                            var authType = (string)originalBot["AuthType"];
+
+                            if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password) && !string.IsNullOrEmpty(authType))
+                            {
+                                JObject foundBot = null;
+                                foreach (JObject bot in settings["Bots"])
+                                {
+                                    if ((string)bot["AuthType"] == authType && (string)bot["Username"] == username)
+                                    {
+                                        // Found
+                                        foundBot = bot;
+                                        break;
+                                    }
+                                }
+
+                                // If not found then we need to insert it.
+                                if (foundBot == null)
+                                {
+                                    JObject newBot = new JObject();
+                                    newBot["Username"] = username;
+                                    newBot["Password"] = password;
+                                    newBot["AuthType"] = authType;
+                                    ((JArray)settings["Bots"]).Insert(0, newBot);
+                                }
+                            }
+
+                            // Delete AuthConfig now
+                            settings.Remove("AuthConfig");
+                        }
+
+                        settings.Remove("AllowMultipleBot");
                         break;
 
                     // Add more here.

@@ -19,7 +19,7 @@
 
         <Grid>
         <Border BorderBrush="BlanchedAlmond" BorderThickness="1,0,0,1">
-            <ListBox ItemsSource="{Binding Path=HistoryItems}" />
+            <ListBox VirtualizingStackPanel.VirtualizationMode="Recycling" ItemsSource="{Binding Path=HistoryItems}" />
         </Border>
         </Grid>
 

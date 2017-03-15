@@ -30,20 +30,14 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
                 return false;
             }
 
-            if (session.LogicSettings.AllowMultipleBot)
-            {
-                var manager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
+            var manager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
 
-                foreach (var item in manager.Accounts)
-                {
-                    message = message +
-                              $"{item.Username}({item.AuthType})     {item.Level}     {item.GetRuntime()}\r\n";
-                }
-            }
-            else
+            foreach (var item in manager.Accounts)
             {
-                message = message + "Multiple bot is disabled. please use /profile for current account details";
+                message = message +
+                            $"{item.Username}({item.AuthType})     {item.Level}     {item.GetRuntime()}\r\n";
             }
+            
             callback(message);
             return true;
         }
