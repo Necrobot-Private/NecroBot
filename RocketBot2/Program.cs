@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using RocketBot2.Forms;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using RocketBot2.CommandLineUtility;
 
 #endregion
 
@@ -30,13 +31,17 @@ namespace RocketBot2
 
         private static void Main(string[] args)
         {
-            
-            IntPtr hMenu = Process.GetCurrentProcess().MainWindowHandle;
-            IntPtr hSystemMenu = GetSystemMenu(hMenu, false);
+            // Command line parsing
+            var commandLine = new Arguments(args);
+            // Look for specific arguments values
+            if (commandLine["rmX"] != null && commandLine["rmX"].Length > 0)
+            {
+                IntPtr hMenu = Process.GetCurrentProcess().MainWindowHandle;
+                IntPtr hSystemMenu = GetSystemMenu(hMenu, false);
 
-            EnableMenuItem(hSystemMenu, SC_CLOSE, MF_GRAYED);
-            RemoveMenu(hSystemMenu, SC_CLOSE, MF_BYCOMMAND);
-            
+                EnableMenuItem(hSystemMenu, SC_CLOSE, MF_GRAYED);
+                RemoveMenu(hSystemMenu, SC_CLOSE, MF_BYCOMMAND);
+            }
 
             Application.EnableVisualStyles();
             Application.Run(new MainForm(args));
