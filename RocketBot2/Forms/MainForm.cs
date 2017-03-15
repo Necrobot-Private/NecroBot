@@ -41,7 +41,6 @@ using RocketBot2.CommandLineUtility;
 using System.Diagnostics;
 using PokemonGo.RocketAPI;
 using RocketBot2.Win32;
-using System.Threading.Tasks;
 using System.Net.Http;
 
 #endregion
@@ -297,14 +296,14 @@ namespace RocketBot2.Forms
                 }
             }
 
-            if (!_ignoreKillSwitch)
-            {
-                if (CheckMKillSwitch().Result)
-                {
-                    return;
-                }
-                _botStarted = CheckKillSwitch().Result;
-            }
+             if (!_ignoreKillSwitch)
+             {
+                 if (CheckMKillSwitch().Result)
+                 {
+                     return;
+                 }
+                 _botStarted = CheckKillSwitch().Result;
+             }
 
             var logicSettings = new LogicSettings(settings);
             var translation = Translation.Load(logicSettings);
@@ -432,10 +431,10 @@ namespace RocketBot2.Forms
                 else
                 {
                     GlobalSettings.Load(_subPath, _enableJsonValidation);
-                    /*
+                    
                     Logger.Write("Press a Key to continue...",
                         LogLevel.Warning);
-                    Console.ReadKey();*/
+                    Console.ReadKey();
                     return;
                 }
 
@@ -445,9 +444,8 @@ namespace RocketBot2.Forms
                 }
             }
 
-            //Resources.ProgressBar.Start("RocketBot2 is starting up", 10);
-            
             Resources.ProgressBar.Start("RocketBot2 is starting up", 10);
+
             Resources.ProgressBar.Fill(20);
 
             var machine = new StateMachine();
