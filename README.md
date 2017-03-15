@@ -10,8 +10,6 @@ Necrobot2 itself is free but now you will need to purchase an API key from Bossl
 See https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer for pricing for API keys.
 </p>
 
-<p align="center">
-
 <a href="">
     <img alt="Logo" src="http://image.prntscr.com/image/b238b63b4f044813a91f772241be8d45.jpg" width="450">
 </a>
