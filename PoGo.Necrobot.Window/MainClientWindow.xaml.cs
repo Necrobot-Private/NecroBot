@@ -37,6 +37,30 @@ namespace PoGo.Necrobot.Window
     /// </summary>
     public partial class MainClientWindow : MetroWindow
     {
+        private static Dictionary<LogLevel, string> ConsoleColors = new Dictionary<LogLevel, string>()
+            {
+                { LogLevel.Error, "Red" },
+                { LogLevel.Caught, "Green" },
+                { LogLevel.Info, "DarkCyan" } ,
+                { LogLevel.Warning, "DarkYellow" } ,
+                { LogLevel.Pokestop,"Cyan" }  ,
+                { LogLevel.Farming,"Magenta" },
+                { LogLevel.Sniper,"White" },
+                { LogLevel.Recycling,"DarkMagenta" },
+                { LogLevel.Flee,"DarkYellow" },
+                { LogLevel.Transfer,"DarkGreen" },
+                { LogLevel.Evolve,"DarkGreen" },
+                { LogLevel.Berry,"DarkYellow" },
+                { LogLevel.Egg,"DarkYellow" },
+                { LogLevel.Debug,"Gray" },
+                { LogLevel.Update,"White" },
+                { LogLevel.New,"Green" },
+                { LogLevel.SoftBan,"Red" },
+                { LogLevel.LevelUp,"Magenta" },
+                { LogLevel.Gym,"Magenta" },
+                { LogLevel.Service ,"White" }
+            };
+
         public MainClientWindow()
         {
             InitializeComponent();
@@ -64,33 +88,10 @@ namespace PoGo.Necrobot.Window
         private DateTime lastClearLog = DateTime.Now;
         public void LogToConsoleTab(string message, LogLevel level, string color)
         { 
-            Dictionary<LogLevel, string> colors = new Dictionary<LogLevel, string>()
-            {
-                { LogLevel.Error, "Red" },
-                { LogLevel.Caught, "Green" },
-                { LogLevel.Info, "DarkCyan" } ,
-                { LogLevel.Warning, "DarkYellow" } ,
-                { LogLevel.Pokestop,"Cyan" }  ,
-                { LogLevel.Farming,"Magenta" },
-                { LogLevel.Sniper,"White" },
-                { LogLevel.Recycling,"DarkMagenta" },
-                { LogLevel.Flee,"DarkYellow" },
-                { LogLevel.Transfer,"DarkGreen" },
-                { LogLevel.Evolve,"DarkGreen" },
-                { LogLevel.Berry,"DarkYellow" },
-                { LogLevel.Egg,"DarkYellow" },
-                { LogLevel.Debug,"Gray" },
-                { LogLevel.Update,"White" },
-                { LogLevel.New,"Green" },
-                { LogLevel.SoftBan,"Red" },
-                { LogLevel.LevelUp,"Magenta" },
-                { LogLevel.Gym,"Magenta" },
-                { LogLevel.Service ,"White" }
-            };
+            if (string.IsNullOrEmpty(color) || color == "Black")
+                color = ConsoleColors[level];
 
-            if (string.IsNullOrEmpty(color) || color == "Black") color = colors[level];
-
-            this.Invoke(() =>
+            consoleLog.Dispatcher.BeginInvoke(new Action(() =>
             {
                 if (lastClearLog.AddMinutes(15) < DateTime.Now)
                 {
@@ -102,7 +103,7 @@ namespace PoGo.Necrobot.Window
                 consoleLog.AppendText(message + "\r", color);
 
                 consoleLog.ScrollToEnd();
-            });
+            }));
         }
 
         public void OnBotStartedEventHandler(ISession session, StatisticsAggregator stat)
