@@ -196,9 +196,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             return new MultipleBotConfig();
         }
 
-        public static bool IsMultiBotActive(ILogicSettings logicSettings)
+        public static bool IsMultiBotActive(ILogicSettings logicSettings, MultiAccountManager manager)
         {
-            return logicSettings.Bots != null && logicSettings.Bots.Count >= 1;
+            return manager.AllowMultipleBot() && logicSettings.Bots != null && logicSettings.Bots.Count >= 1;
         }
     }
 }
