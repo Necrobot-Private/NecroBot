@@ -5,7 +5,7 @@
 <h1>Necrobot2 is now compatible with 0.57.4 API.</h1>
 
 <p>
-Necrobot2 itself is free but now you will need to purchase an API key to run the bot.
+Necrobot2 itself is free but now you will need to purchase an API key from Bossland in order to run the bot.
 <br/>
 See https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer for pricing for API keys.
 </p>
@@ -15,6 +15,7 @@ See https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer for pricing 
 <a href="">
     <img alt="Logo" src="http://image.prntscr.com/image/b238b63b4f044813a91f772241be8d45.jpg" width="450">
 </a>
+
 [![Stories in Ready](https://discordapp.com/api/guilds/220703917871333376/widget.png?style=banner3&time-)](https://discord.gg/7FWyWVp)
 
 <strong><em> The contents of this repo are a proof of concept and are for educational use only </em></strong>
