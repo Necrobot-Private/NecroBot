@@ -245,18 +245,31 @@ namespace PoGo.NecroBot.Logic
             }
         }
 
-        internal BotAccount GetMinRuntime(bool ignoreBlockCheck= false)
+        internal BotAccount GetMinRuntime(bool ignoreBlockCheck = false)
         {
             return this.Accounts.OrderBy(x => x.RuntimeTotal).Where(x => !ignoreBlockCheck || x.ReleaseBlockTime < DateTime.Now).FirstOrDefault();
+        }
+
+        public bool AllowMultipleBot()
+        {
+            return this.Accounts.Count > 1;
         }
 
         public BotAccount GetStartUpAccount()
         {
             ISession session = TinyIoC.TinyIoCContainer.Current.Resolve<ISession>();
 
-            runningAccount = GetMinRuntime(true);
-            
-            if (session.LogicSettings.MultipleBotConfig.SelectAccountOnStartUp)
+            if (!AllowMultipleBot())
+            {
+                runningAccount = Accounts.Last();
+            }
+            else
+            {
+                runningAccount = GetMinRuntime(true);
+            }
+
+            if (AllowMultipleBot()
+              && session.LogicSettings.MultipleBotConfig.SelectAccountOnStartUp)
             {
                 SelectAccountForm f = new SelectAccountForm();
                 f.ShowDialog();

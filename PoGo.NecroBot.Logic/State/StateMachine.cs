@@ -49,6 +49,8 @@ namespace PoGo.NecroBot.Logic.State
 
         public async Task Start(IState initialState, ISession session, string subPath, bool excelConfigAllowed = false)
         {
+            var manager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
+
             GlobalSettings globalSettings = null;
 
             var state = initialState;
@@ -136,13 +138,22 @@ namespace PoGo.NecroBot.Logic.State
                 {
                     session.EventDispatcher.Send(new ErrorEvent() {Message = "Unexpected error happen, bot will re-login"});
 
-                    ReInitializeSession(session, globalSettings);
+                    if (manager.AllowMultipleBot())
+                        ReInitializeSession(session, globalSettings);
                     state = new LoginState();
                 }
                 catch (AccountNotVerifiedException)
                 {
-                    ReInitializeSession(session, globalSettings);
-                    state = new LoginState();
+                    if (manager.AllowMultipleBot())
+                    {
+                        ReInitializeSession(session, globalSettings);
+                        state = new LoginState();
+                    }
+                    else
+                    {
+                        Console.Read();
+                        Environment.Exit(0);
+                    }
                 }
                 catch(ActiveSwitchAccountManualException ex)
                 {
@@ -209,13 +220,16 @@ namespace PoGo.NecroBot.Logic.State
                 {
                     session.EventDispatcher.Send(new ErrorEvent { Message = $"Niantic Servers unstable, throttling API Calls. {e.Message}" });
                     await Delay(1000);
-                    apiCallFailured++;
-                    if (apiCallFailured > 20)
+                    if (manager.AllowMultipleBot())
                     {
-                        apiCallFailured = 0;
-                        TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(30);
+                        apiCallFailured++;
+                        if (apiCallFailured > 20)
+                        {
+                            apiCallFailured = 0;
+                            TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(30);
 
-                        ReInitializeSession(session, globalSettings);
+                            ReInitializeSession(session, globalSettings);
+                        }
                     }
                     state = new LoginState();
                 }
@@ -223,13 +237,16 @@ namespace PoGo.NecroBot.Logic.State
                 {
                     session.EventDispatcher.Send(new ErrorEvent { Message = $"Hashing Servers errors, throttling calls. {e.Message}" });
                     await Delay(1000);
-                    apiCallFailured++;
-                    if (apiCallFailured > 3)
+                    if (manager.AllowMultipleBot())
                     {
-                        apiCallFailured = 0;
-                        TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(30);
+                        apiCallFailured++;
+                        if (apiCallFailured > 3)
+                        {
+                            apiCallFailured = 0;
+                            TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(30);
 
-                        ReInitializeSession(session, globalSettings);
+                            ReInitializeSession(session, globalSettings);
+                        }
                     }
 
                     // Resetting position
@@ -240,19 +257,32 @@ namespace PoGo.NecroBot.Logic.State
                 catch (OperationCanceledException)
                 {
                     session.EventDispatcher.Send(new ErrorEvent {Message = "Current Operation was canceled."});
-                    TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(30);
-                    ReInitializeSession(session, globalSettings);
+                    if (manager.AllowMultipleBot())
+                    {
+                        TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(30);
+                        ReInitializeSession(session, globalSettings);
+                    }
                     state = new LoginState();
                 }
-                catch(PtcLoginException)
+                catch(PtcLoginException ex)
                 {
                     #pragma warning disable 4014
                     SendNotification(session, $"PTC Login failed!!!! {session.Settings.Username}", session.Translation.GetTranslation(TranslationString.PtcLoginFail), true);
                     #pragma warning restore 4014
 
-                    TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(60); //need remove acc
-                    ReInitializeSession(session, globalSettings);
-                    state = new LoginState();
+                    if (manager.AllowMultipleBot())
+                    {
+                        TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(60); //need remove acc
+                        ReInitializeSession(session, globalSettings);
+                        state = new LoginState();
+                    }
+                    else {
+                        session.EventDispatcher.Send(new ErrorEvent { RequireExit = true, Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey) });
+                        session.EventDispatcher.Send(new ErrorEvent { RequireExit = true, Message = session.Translation.GetTranslation(TranslationString.PtcLoginFail)  + $" ({ex.Message})"});
+
+                        Console.ReadKey();
+                        Environment.Exit(1);
+                    }
                 }
                 catch (LoginFailedException)
                 {
@@ -263,9 +293,17 @@ namespace PoGo.NecroBot.Logic.State
                     SendNotification(session, $"Banned!!!! {session.Settings.Username}", session.Translation.GetTranslation(TranslationString.AccountBanned), true);
                     #pragma warning restore 4014
 
-                    TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(24 * 60); //need remove acc
-                    ReInitializeSession(session, globalSettings);
-                    state = new LoginState();
+                    if (manager.AllowMultipleBot())
+                    {
+                        TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(24 * 60); //need remove acc
+                        ReInitializeSession(session, globalSettings);
+                        state = new LoginState();
+                    }
+                    else {
+                        session.EventDispatcher.Send(new ErrorEvent { RequireExit = true, Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey) });
+                        Console.ReadKey();
+                        Environment.Exit(1);
+                    }
                 }
                 catch (MinimumClientVersionException ex)
                 {
@@ -283,7 +321,8 @@ namespace PoGo.NecroBot.Logic.State
                 {
                     session.EventDispatcher.Send(new ErrorEvent() {Message = ex.Message});
 
-                    ReInitializeSession(session, globalSettings);
+                    if (manager.AllowMultipleBot())
+                        ReInitializeSession(session, globalSettings);
                     state = new LoginState();
                 }
 
@@ -316,10 +355,19 @@ namespace PoGo.NecroBot.Logic.State
                         await SendNotification(session, $"Captcha required {session.Settings.Username}", session.Translation.GetTranslation(TranslationString.CaptchaShown), true);
                         session.EventDispatcher.Send(new WarnEvent { Message = session.Translation.GetTranslation(TranslationString.CaptchaShown) });
                         Logger.Debug("Captcha not resolved");
-                        Logger.Debug("Change account");
-                        TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(15);
-                        ReInitializeSession(session, globalSettings);
-                        state = new LoginState();
+                        if (manager.AllowMultipleBot())
+                        {
+                            Logger.Debug("Change account");
+                            TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(15);
+                            ReInitializeSession(session, globalSettings);
+                            state = new LoginState();
+                        }
+                        else
+                        {
+                            session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.ExitNowAfterEnterKey) });
+                            Console.ReadKey();
+                            Environment.Exit(0);
+                        }
                     }
                     else
                     {
