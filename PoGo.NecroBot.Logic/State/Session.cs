@@ -199,9 +199,8 @@ namespace PoGo.NecroBot.Logic.State
 
             var nextBot = manager.GetSwitchableAccount(bot);
 
-            this.Settings.AuthType = nextBot.AuthType;
-            this.Settings.Password = nextBot.Password;
-            this.Settings.Username = nextBot.Username;
+            this.GlobalSettings.Auth.CurrentAuthConfig = nextBot;
+            
             this.Settings.DefaultAltitude = att == 0 ? this.Client.CurrentAltitude : att;
             this.Settings.DefaultLatitude = lat == 0 ? this.Client.CurrentLatitude : lat;
             this.Settings.DefaultLongitude = lng == 0 ? this.Client.CurrentLongitude : lng;

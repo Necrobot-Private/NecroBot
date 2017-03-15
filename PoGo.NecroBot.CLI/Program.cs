@@ -452,8 +452,6 @@ namespace PoGo.NecroBot.CLI
                 _session.EventDispatcher.EventReceived += evt => websocket.Listen(evt, _session);
             }
             
-            var mainAccount = accountManager.Add(settings.Auth.AuthConfig);
-
             var bot = accountManager.GetStartUpAccount();
 
             _session.ReInitSessionWithNextBot(bot);
