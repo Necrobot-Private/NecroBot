@@ -264,9 +264,6 @@
     <Compile Include="Controls\MapMarkers\Cross.xaml.cs">
       <DependentUpon>Cross.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\MapMarkers\ImageMarker.xaml.cs">
-      <DependentUpon>ImageMarker.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\MapMarkers\CustomMarkerDemo.xaml.cs">
       <DependentUpon>CustomMarkerDemo.xaml</DependentUpon>
     </Compile>
@@ -387,10 +384,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\MapMarkers\ImageMarker.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Controls\MapMarkers\CustomMarkerDemo.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -485,6 +478,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="cert.pfx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Config\Translations\ui.pl.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

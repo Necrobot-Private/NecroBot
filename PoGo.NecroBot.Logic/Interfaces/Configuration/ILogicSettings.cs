@@ -222,7 +222,6 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         DataSharingConfig DataSharingConfig { get; }
         MultipleBotConfig MultipleBotConfig { get; }
         List<AuthConfig> Bots { get; }
-        bool AllowMultipleBot { get; }
         CaptchaConfig CaptchaConfig { get; }
         int BulkTransferStogareBuffer { get; }
         int BulkTransferSize { get; }

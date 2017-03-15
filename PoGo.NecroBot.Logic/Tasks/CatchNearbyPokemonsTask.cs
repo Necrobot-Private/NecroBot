@@ -44,8 +44,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             if (session.Stats.CatchThresholdExceeds(session))
             {
-                if (session.LogicSettings.AllowMultipleBot &&
-                    session.LogicSettings.MultipleBotConfig.SwitchOnCatchLimit &&
+                if (session.LogicSettings.MultipleBotConfig.SwitchOnCatchLimit &&
                     TinyIoCContainer.Current.Resolve<MultiAccountManager>().AllowSwitch()
                     )
                 {

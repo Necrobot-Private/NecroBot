@@ -6,7 +6,6 @@ using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Event.Inventory;
 using PoGo.NecroBot.Logic.State;
 using POGOProtos.Inventory;
-using System;
 using System.Threading.Tasks;
 using PoGo.NecroBot.Logic.Model;
 

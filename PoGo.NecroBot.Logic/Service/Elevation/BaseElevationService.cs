@@ -1,5 +1,4 @@
 ﻿using System;
-using Caching;
 using PoGo.NecroBot.Logic.Model.Settings;
 using System.Device.Location;
 
@@ -8,50 +7,19 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
     public abstract class BaseElevationService : IElevationService
     {
         protected GlobalSettings _settings;
-        protected LRUCache<string, double> _cache;
         protected string _apiKey;
 
         public abstract string GetServiceId();
         public abstract double GetElevationFromWebService(double lat, double lng);
 
-        public BaseElevationService(GlobalSettings settings, LRUCache<string, double> cache)
+        public BaseElevationService(GlobalSettings settings)
         {
             _settings = settings;
-            _cache = cache;
         }
-
-        public string GetCacheKey(double lat, double lng)
-        {
-            return Math.Round(lat, 3) + "," + Math.Round(lng, 3);
-        }
-
-        public string GetCacheKey(GeoCoordinate position)
-        {
-            return GetCacheKey(position.Latitude, position.Longitude);
-        }
-
+        
         public double GetElevation(double lat, double lng)
         {
-            string cacheKey = GetCacheKey(lat, lng);
-            double elevation;
-            bool success = _cache.TryGetValue(cacheKey, out elevation);
-            if (!success)
-            {
-                elevation = GetElevationFromWebService(lat, lng);
-                if (elevation == 0 || elevation < -100)
-                {
-                    // Just return the elevation without caching.  Since this is invalid elevation, we want the 
-                    // elevation service to blacklist this service and move to the next one.
-                    return elevation;
-                }
-                else
-                {
-                    _cache.Add(cacheKey, elevation);
-                }
-            }
-
-            // Always return a slightly random elevation.
-            return GetRandomElevation(elevation);
+            return GetElevationFromWebService(lat, lng);
         }
 
         public void UpdateElevation(ref GeoCoordinate position)
@@ -64,7 +32,7 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
             }
         }
 
-        public double GetRandomElevation(double elevation)
+        public static double GetRandomElevation(double elevation)
         {
             // Adds a random elevation to the retrieved one. This was
             // previously set to 5 meters but since it's happening with

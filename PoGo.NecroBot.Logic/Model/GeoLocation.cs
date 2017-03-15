@@ -3,6 +3,7 @@ using Google.Common.Geometry;
 using LiteDB;
 using PoGo.NecroBot.Logic.Utils;
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,7 +11,8 @@ namespace PoGo.NecroBot.Logic.Model
 {
     public class GeoLocation
     {
-        private const string DB_NAME = "Cache\\geolocations.db";
+        private const string CACHE_DIR = "Cache";
+        private const string DB_NAME = CACHE_DIR + "\\geolocations.db";
         private static AsyncLock DB_LOCK = new AsyncLock();
         private static int GEOCODING_MAX_RETRIES = 5;
         private static int GEOLOCATION_PRECISION = 3;
@@ -90,6 +92,11 @@ namespace PoGo.NecroBot.Logic.Model
         {
             using (await DB_LOCK.LockAsync())
             {
+                if (!Directory.Exists(CACHE_DIR))
+                {
+                    Directory.CreateDirectory(CACHE_DIR);
+                }
+
                 using (var db = new LiteDatabase(DB_NAME))
                 {
                     db.GetCollection<GeoLocation>("locations").EnsureIndex(s => s.Id);

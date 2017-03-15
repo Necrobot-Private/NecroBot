@@ -26,7 +26,8 @@ using ProgressBar = PoGo.NecroBot.CLI.Resources.ProgressBar;
 using CommandLine;
 using CommandLine.Text;
 using PokemonGo.RocketAPI;
-using System.Text;
+using System.Threading.Tasks;
+using System.Net.Http;
 
 #endregion using directives
 
@@ -85,6 +86,7 @@ namespace PoGo.NecroBot.CLI
         [STAThread]
         private static void Main(string[] args)
         {
+            Application.EnableVisualStyles();
             RunBotWithParameters(null, args);
         }
 
@@ -94,7 +96,7 @@ namespace PoGo.NecroBot.CLI
             //Setup Logger for API
             APIConfiguration.Logger = new APILogListener();
             
-            Application.EnableVisualStyles();
+            //Application.EnableVisualStyles();
             var strCulture = Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName;
 
             var culture = CultureInfo.CreateSpecificCulture("en");
@@ -245,11 +247,8 @@ namespace PoGo.NecroBot.CLI
 
             if (!_ignoreKillSwitch)
             {
-                if (CheckMKillSwitch())
-                {
+                if (CheckMKillSwitch().Result || CheckKillSwitch().Result)
                     return;
-                }
-                CheckKillSwitch();
             }
 
             var logicSettings = new LogicSettings(settings);
@@ -396,12 +395,6 @@ namespace PoGo.NecroBot.CLI
 
             ProgressBar.Start("NecroBot2 is starting up", 10);
 
-            if (settings.WebsocketsConfig.UseWebsocket)
-            {
-                var websocket = new WebSocketInterface(settings.WebsocketsConfig.WebSocketPort, _session);
-                _session.EventDispatcher.EventReceived += evt => websocket.Listen(evt, _session);
-            }
-
             ProgressBar.Fill(20);
 
             var machine = new StateMachine();
@@ -445,24 +438,20 @@ namespace PoGo.NecroBot.CLI
             //TODO: temporary
             if (settings.Auth.APIConfig.UseLegacyAPI)
             {
-                Logger.Write("The PoGoDev Community Has Updated The Hashing Service To Be Compatible With 0.57.4 So We Have Updated Our Code To Be Compliant. Unfortunately During This Update Niantic Has Also Attempted To Block The Legacy .45 Service Again So At The Moment Only Hashing Service Users Are Able To Login Successfully. Please Be Patient As Always We Will Attempt To Keep The Bot 100% Free But Please Realize We Have Already Done Quite A Few Workarounds To Keep .45 Alive For You Guys.  Even If We Are Able To Get Access Again To The .45 API Again It Is Over 3 Months Old So Is Going To Be More Detectable And Cause Captchas. Please Consider Upgrading To A Paid API Key To Avoid Captchas And You Will  Be Connecting Using Latest Version So Less Detectable So More Safe For You In The End.", LogLevel.Error);
-                /*
-                 * Activate this after expired
-                Logger.Write("Expired - The bot will now close", LogLevel.Error);
+                Logger.Write("The PoGoDev Community Has Updated The Hashing Service To Be Compatible With 0.57.4 So We Have Updated Our Code To Be Compliant. Unfortunately During This Update Niantic Has Also Attempted To Block The Legacy .45 Service Again So At The Moment Only Hashing Service Users Are Able To Login Successfully. Please Be Patient As Always We Will Attempt To Keep The Bot 100% Free But Please Realize We Have Already Done Quite A Few Workarounds To Keep .45 Alive For You Guys.  Even If We Are Able To Get Access Again To The .45 API Again It Is Over 3 Months Old So Is Going To Be More Detectable And Cause Captchas. Please Consider Upgrading To A Paid API Key To Avoid Captchas And You Will  Be Connecting Using Latest Version So Less Detectable So More Safe For You In The End.", LogLevel.Warning);
+                Logger.Write("The bot will now close", LogLevel.Error);
                 Console.ReadLine();
                 Environment.Exit(0);
                 return;
-                */
             }
-
-            settings.Auth.APIConfig.UseLegacyAPI = false;
-            settings.Auth.APIConfig.UsePogoDevAPI = true;
-            byte[] encodedDataAsBytes = Convert.FromBase64String(PoGo.NecroBot.CLI.Properties.Resources.EncrypKeyApi);
-            settings.Auth.APIConfig.AuthAPIKey = Encoding.ASCII.GetString(encodedDataAsBytes);
             //
             
-            var mainAccount = accountManager.Add(settings.Auth.AuthConfig);
-
+            if (settings.WebsocketsConfig.UseWebsocket)
+            {
+                var websocket = new WebSocketInterface(settings.WebsocketsConfig.WebSocketPort, _session);
+                _session.EventDispatcher.EventReceived += evt => websocket.Listen(evt, _session);
+            }
+            
             var bot = accountManager.GetStartUpAccount();
 
             _session.ReInitSessionWithNextBot(bot);
@@ -534,15 +523,19 @@ namespace PoGo.NecroBot.CLI
             throw new NotImplementedException();
         }
 
-        private static bool CheckMKillSwitch()
+        private async static Task<bool> CheckMKillSwitch()
         {
-            using (var wC = new WebClient())
+            using (HttpClient client = new HttpClient())
             {
                 try
                 {
-                    var strResponse1 = WebClientExtensions.DownloadString(wC, StrMasterKillSwitchUri);
+                    var responseContent = await client.GetAsync(StrMasterKillSwitchUri);
+                    if (responseContent.StatusCode != HttpStatusCode.OK)
+                        return true;
 
-                    if (strResponse1 == null)
+                    var strResponse1 = await responseContent.Content.ReadAsStringAsync();
+                    
+                    if (string.IsNullOrEmpty(strResponse1))
                         return true;
 
                     var strSplit1 = strResponse1.Split(';');
@@ -566,26 +559,31 @@ namespace PoGo.NecroBot.CLI
                     }
                     else
                         return false;
+
+
                 }
-                catch (WebException)
+                catch (Exception ex)
                 {
-                    // ignored
+                    Logger.Write(ex.Message, LogLevel.Error);
                 }
             }
-
+            
             return false;
         }
 
-        private static bool CheckKillSwitch()
+        private async static Task<bool> CheckKillSwitch()
         {
-            using (var wC = new WebClient())
+            using (HttpClient client = new HttpClient())
             {
                 try
                 {
-                    var strResponse = WebClientExtensions.DownloadString(wC, StrKillSwitchUri);
+                    var responseContent = await client.GetAsync(StrKillSwitchUri);
+                    if (responseContent.StatusCode != HttpStatusCode.OK)
+                        return true;
 
-                    if (strResponse == null)
-                        return false;
+                    var strResponse = await responseContent.Content.ReadAsStringAsync();
+                    if (string.IsNullOrEmpty(strResponse))
+                        return true;
 
                     var strSplit = strResponse.Split(';');
 
@@ -614,9 +612,9 @@ namespace PoGo.NecroBot.CLI
                     else
                         return false;
                 }
-                catch (WebException)
+                catch (Exception ex)
                 {
-                    // ignored
+                    Logger.Write(ex.Message, LogLevel.Error);
                 }
             }
 

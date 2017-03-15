@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using Caching;
 using Newtonsoft.Json;
 using PoGo.NecroBot.Logic.Exceptions;
 using PoGo.NecroBot.Logic.Model.Settings;
@@ -30,7 +29,7 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
 
     public class GoogleElevationService : BaseElevationService
     {
-        public GoogleElevationService(GlobalSettings settings, LRUCache<string, double> cache) : base(settings, cache)
+        public GoogleElevationService(GlobalSettings settings) : base(settings)
         {
             if (!string.IsNullOrEmpty(settings.GoogleWalkConfig.GoogleElevationAPIKey))
                 _apiKey = settings.GoogleWalkConfig.GoogleElevationAPIKey;

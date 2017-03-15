@@ -11,6 +11,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -59,11 +60,23 @@ namespace PoGo.NecroBot.Logic.Forms
             {
                 await Task.Delay(2000);
 
-                using (WebClient client = new WebClient())
+                using (var client = new HttpClient())
                 {
                     try
                     {
-                        client.DownloadFile(changelog, tempPath);
+                        var responseContent = await client.GetAsync(changelog);
+                        if (responseContent.StatusCode != HttpStatusCode.OK)
+                            return false;
+
+                        var httpStream = await responseContent.Content.ReadAsStreamAsync();
+                        using (var fileStream = File.Create(tempPath))
+                        using (var reader = new StreamReader(httpStream))
+                        {
+                            await httpStream.CopyToAsync(fileStream);
+                            fileStream.Flush();
+                            fileStream.Close();
+                        }
+                        
                         return true;
                     }
                     catch
@@ -88,7 +101,6 @@ namespace PoGo.NecroBot.Logic.Forms
                 }));
 
             });
-            ;
         }
 
         public bool DownloadFile(string url, string dest)

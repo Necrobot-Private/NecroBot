@@ -17,6 +17,24 @@ namespace PoGo.Necrobot.Window.Model
         public double Longitude => fort.Longitude;
         public double Distance { get; set; }
 
+        public string FortName
+        {
+            get
+            {
+                // TODO - Need to store the fort name. For now just avoid binding errors.
+                return "";
+            }
+        }
+
+        public string FortStatusColor
+        {
+            get
+            {
+                // TODO - Need to return the correct status color.
+                return "Red";
+            }
+        }
+
         public string FortIcon
         {
             get

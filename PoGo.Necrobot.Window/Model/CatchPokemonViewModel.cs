@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PoGo.NecroBot.Logic.Event;
+﻿using PoGo.NecroBot.Logic.Event;
 using POGOProtos.Enums;
 using POGOProtos.Inventory;
 
@@ -31,6 +26,8 @@ namespace PoGo.Necrobot.Window.Model
         public PokemonId PokemonId { get; set; }
         public Candy Candy { get; private set; }
 
+        public int Exp { get; set; }
+
         public CatchPokemonViewModel(PokemonCaptureEvent ev)
         {
             this.UUID = ev.EncounterId.ToString();
@@ -48,7 +45,7 @@ namespace PoGo.Necrobot.Window.Model
             this.PokeBalls = ev.Pokeball == POGOProtos.Inventory.Item.ItemId.ItemPokeBall? 1: 0;
             this.UltraBalls = ev.Pokeball == POGOProtos.Inventory.Item.ItemId.ItemUltraBall ? 1 : 0;
             this.GreatBalls = ev.Pokeball == POGOProtos.Inventory.Item.ItemId.ItemGreatBall ? 1 : 0;
-
+            this.Exp = ev.Exp;
         }
     }
 }

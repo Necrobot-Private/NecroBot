@@ -41,6 +41,10 @@ Please visit our website [http://necrobot2.com](http://necrobot2.com) to find so
 
 <br/>
 
+## Third Party Dependencies
+
+NecroBot uses DotNetBrowser http://www.teamdev.com/dotnetbrowser, which is a proprietary software. The use of DotNetBrowser is governed by DotNetBrowser Product Licence Agreement http://www.teamdev.com/jxbrowser-licence-agreement. If you would like to use DotNetBrowser in your development, please contact TeamDev.
+
 ## [Credits](http://pastebin.com/Yh4ynXbv)
 
 ## `Legal Disclaimer`
