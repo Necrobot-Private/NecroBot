@@ -597,12 +597,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Message = session.Translation.GetTranslation(TranslationString.FarmPokestopsNoUsableFound)
                     });
                     mapEmptyCount++;
-                    if (mapEmptyCount == 30 &&
-
+                    if (mapEmptyCount == 30 && 
                         manager.AllowMultipleBot() &&
                         TinyIoCContainer.Current.Resolve<MultiAccountManager>().AllowSwitch())
                     {
-                             throw new ActiveSwitchByRuleException() { MatchedRule = SwitchRules.EmptyMap, ReachedValue = 30 };
+                        throw new ActiveSwitchByRuleException() { MatchedRule = SwitchRules.EmptyMap, ReachedValue = 30 };
                     }
                 }
                 else
