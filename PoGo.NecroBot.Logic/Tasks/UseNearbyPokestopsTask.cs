@@ -598,6 +598,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     });
                     mapEmptyCount++;
                     if (mapEmptyCount == 20 &&
+                        manager.AllowMultipleBot() &&
                         TinyIoCContainer.Current.Resolve<MultiAccountManager>().AllowSwitch())
                     {
                         mapEmptyCount = 0;
