@@ -523,8 +523,6 @@ namespace RocketBot2.Forms
                 _session.EventDispatcher.EventReceived += evt => websocket.Listen(evt, _session);
             }
 
-            var mainAccount = accountManager.Add(settings.Auth.AuthConfig);
-
             ioc.Register<MultiAccountManager>(accountManager);
 
             var bot = accountManager.GetStartUpAccount();
