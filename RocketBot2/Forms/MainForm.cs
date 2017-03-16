@@ -1084,17 +1084,28 @@ namespace RocketBot2.Forms
         {
             SetState(false);
             var _pokemons = new List<ulong>();
+            string poketotransfert = null;
             foreach (var pokemon in pokemons)
             {
                 _pokemons.Add(pokemon.Id);
+                poketotransfert = $"{poketotransfert} [{_session.Translation.GetPokemonTranslation(pokemon.PokemonId)}]";
             }
-            await Task.Run(async () =>
-             {
-                 await TransferPokemonTask.Execute(
-                     _session, _session.CancellationTokenSource.Token, _pokemons
-                 );
-             });
-            await ReloadPokemonList();
+            DialogResult result = MessageBox.Show($"Do you want to tranfert {pokemons.Count()} Pokémons?\n\r {poketotransfert}", $"Tranfert {pokemons.Count()} Pokémons", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            switch (result)
+            {
+                case DialogResult.Yes:
+                    {
+                        await Task.Run(async () =>
+                     {
+                         await TransferPokemonTask.Execute(
+                             _session, _session.CancellationTokenSource.Token, _pokemons
+                         );
+                     });
+
+                        await ReloadPokemonList();
+                    }
+                    break;
+            }
         }
 
         private async void PowerUpPokemon(IEnumerable<PokemonData> pokemons)
@@ -1366,6 +1377,7 @@ namespace RocketBot2.Forms
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            Process.Start("http://www1.mypogosnipers.com");
             // Thread.Sleep(10000);
             Thread mThread = new Thread(delegate ()
             {
