@@ -26,24 +26,24 @@ namespace PoGo.NecroBot.Logic.Tasks
             cancellationToken.ThrowIfCancellationRequested();
             TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
 
-            var currentTotalItems = session.Inventory.GetTotalItemCount();
+            var currentTotalItems = await session.Inventory.GetTotalItemCount();
             if ((session.Profile.PlayerData.MaxItemStorage * session.LogicSettings.RecycleInventoryAtUsagePercentage / 100.0f) > currentTotalItems)
                 return;
 
-            var currentAmountOfPokeballs = session.Inventory.GetItemAmountByType(ItemId.ItemPokeBall);
-            var currentAmountOfGreatballs = session.Inventory.GetItemAmountByType(ItemId.ItemGreatBall);
-            var currentAmountOfUltraballs = session.Inventory.GetItemAmountByType(ItemId.ItemUltraBall);
-            var currentAmountOfMasterballs = session.Inventory.GetItemAmountByType(ItemId.ItemMasterBall);
+            var currentAmountOfPokeballs = await session.Inventory.GetItemAmountByType(ItemId.ItemPokeBall);
+            var currentAmountOfGreatballs = await session.Inventory.GetItemAmountByType(ItemId.ItemGreatBall);
+            var currentAmountOfUltraballs = await session.Inventory.GetItemAmountByType(ItemId.ItemUltraBall);
+            var currentAmountOfMasterballs = await session.Inventory.GetItemAmountByType(ItemId.ItemMasterBall);
 
             if (session.LogicSettings.DetailedCountsBeforeRecycling)
                 Logger.Write(session.Translation.GetTranslation(TranslationString.CurrentPokeballInv,
                     currentAmountOfPokeballs, currentAmountOfGreatballs, currentAmountOfUltraballs,
                     currentAmountOfMasterballs));
 
-            var currentPotions = session.Inventory.GetItemAmountByType(ItemId.ItemPotion);
-            var currentSuperPotions = session.Inventory.GetItemAmountByType(ItemId.ItemSuperPotion);
-            var currentHyperPotions = session.Inventory.GetItemAmountByType(ItemId.ItemHyperPotion);
-            var currentMaxPotions = session.Inventory.GetItemAmountByType(ItemId.ItemMaxPotion);
+            var currentPotions = await session.Inventory.GetItemAmountByType(ItemId.ItemPotion);
+            var currentSuperPotions = await session.Inventory.GetItemAmountByType(ItemId.ItemSuperPotion);
+            var currentHyperPotions = await session.Inventory.GetItemAmountByType(ItemId.ItemHyperPotion);
+            var currentMaxPotions = await session.Inventory.GetItemAmountByType(ItemId.ItemMaxPotion);
 
             var currentAmountOfPotions = currentPotions + currentSuperPotions + currentHyperPotions + currentMaxPotions;
 
@@ -51,8 +51,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                 Logger.Write(session.Translation.GetTranslation(TranslationString.CurrentPotionInv,
                     currentPotions, currentSuperPotions, currentHyperPotions, currentMaxPotions));
 
-            var currentRevives = session.Inventory.GetItemAmountByType(ItemId.ItemRevive);
-            var currentMaxRevives = session.Inventory.GetItemAmountByType(ItemId.ItemMaxRevive);
+            var currentRevives = await session.Inventory.GetItemAmountByType(ItemId.ItemRevive);
+            var currentMaxRevives = await session.Inventory.GetItemAmountByType(ItemId.ItemMaxRevive);
 
             var currentAmountOfRevives = currentRevives + currentMaxRevives;
 
@@ -60,17 +60,17 @@ namespace PoGo.NecroBot.Logic.Tasks
                 Logger.Write(session.Translation.GetTranslation(TranslationString.CurrentReviveInv,
                     currentRevives, currentMaxRevives));
 
-            var currentAmountOfBerries = session.Inventory.GetItemAmountByType(ItemId.ItemRazzBerry) +
-                                         session.Inventory.GetItemAmountByType(ItemId.ItemBlukBerry) +
-                                         session.Inventory.GetItemAmountByType(ItemId.ItemNanabBerry) +
-                                         session.Inventory.GetItemAmountByType(ItemId.ItemWeparBerry) +
-                                         session.Inventory.GetItemAmountByType(ItemId.ItemPinapBerry);
-            var currentAmountOfIncense = session.Inventory.GetItemAmountByType(ItemId.ItemIncenseOrdinary) +
-                                         session.Inventory.GetItemAmountByType(ItemId.ItemIncenseSpicy) +
-                                         session.Inventory.GetItemAmountByType(ItemId.ItemIncenseCool) +
-                                         session.Inventory.GetItemAmountByType(ItemId.ItemIncenseFloral);
-            var currentAmountOfLuckyEggs = session.Inventory.GetItemAmountByType(ItemId.ItemLuckyEgg);
-            var currentAmountOfLures = session.Inventory.GetItemAmountByType(ItemId.ItemTroyDisk);
+            var currentAmountOfBerries = await session.Inventory.GetItemAmountByType(ItemId.ItemRazzBerry) +
+                                         await session.Inventory.GetItemAmountByType(ItemId.ItemBlukBerry) +
+                                         await session.Inventory.GetItemAmountByType(ItemId.ItemNanabBerry) +
+                                         await session.Inventory.GetItemAmountByType(ItemId.ItemWeparBerry) +
+                                         await session.Inventory.GetItemAmountByType(ItemId.ItemPinapBerry);
+            var currentAmountOfIncense = await session.Inventory.GetItemAmountByType(ItemId.ItemIncenseOrdinary) +
+                                         await session.Inventory.GetItemAmountByType(ItemId.ItemIncenseSpicy) +
+                                         await session.Inventory.GetItemAmountByType(ItemId.ItemIncenseCool) +
+                                         await session.Inventory.GetItemAmountByType(ItemId.ItemIncenseFloral);
+            var currentAmountOfLuckyEggs = await session.Inventory.GetItemAmountByType(ItemId.ItemLuckyEgg);
+            var currentAmountOfLures = await session.Inventory.GetItemAmountByType(ItemId.ItemTroyDisk);
 
             if (session.LogicSettings.DetailedCountsBeforeRecycling)
                 Logger.Write(session.Translation.GetTranslation(TranslationString.CurrentMiscItemInv,
@@ -85,11 +85,11 @@ namespace PoGo.NecroBot.Logic.Tasks
             await OptimizedRecycleBerries(session, cancellationToken);
 
             //await session.Inventory.RefreshCachedInventory();
-            currentTotalItems = session.Inventory.GetTotalItemCount();
+            currentTotalItems = await session.Inventory.GetTotalItemCount();
             if ((session.Profile.PlayerData.MaxItemStorage * session.LogicSettings.RecycleInventoryAtUsagePercentage / 100.0f) > currentTotalItems)
                 return;
 
-            var items = session.Inventory.GetItemsToRecycle(session);
+            var items = await session.Inventory.GetItemsToRecycle(session);
 
             foreach (var item in items)
             {
@@ -142,10 +142,10 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static async Task OptimizedRecycleBalls(ISession session, CancellationToken cancellationToken)
         {
-            var pokeBallsCount = session.Inventory.GetItemAmountByType(ItemId.ItemPokeBall);
-            var greatBallsCount = session.Inventory.GetItemAmountByType(ItemId.ItemGreatBall);
-            var ultraBallsCount = session.Inventory.GetItemAmountByType(ItemId.ItemUltraBall);
-            var masterBallsCount = session.Inventory.GetItemAmountByType(ItemId.ItemMasterBall);
+            var pokeBallsCount = await session.Inventory.GetItemAmountByType(ItemId.ItemPokeBall);
+            var greatBallsCount = await session.Inventory.GetItemAmountByType(ItemId.ItemGreatBall);
+            var ultraBallsCount = await session.Inventory.GetItemAmountByType(ItemId.ItemUltraBall);
+            var masterBallsCount = await session.Inventory.GetItemAmountByType(ItemId.ItemMasterBall);
 
             int totalBallsCount = pokeBallsCount + greatBallsCount + ultraBallsCount + masterBallsCount;
 
@@ -196,10 +196,10 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static async Task OptimizedRecyclePotions(ISession session, CancellationToken cancellationToken)
         {
-            var potionCount = session.Inventory.GetItemAmountByType(ItemId.ItemPotion);
-            var superPotionCount = session.Inventory.GetItemAmountByType(ItemId.ItemSuperPotion);
-            var hyperPotionsCount = session.Inventory.GetItemAmountByType(ItemId.ItemHyperPotion);
-            var maxPotionCount = session.Inventory.GetItemAmountByType(ItemId.ItemMaxPotion);
+            var potionCount = await session.Inventory.GetItemAmountByType(ItemId.ItemPotion);
+            var superPotionCount = await session.Inventory.GetItemAmountByType(ItemId.ItemSuperPotion);
+            var hyperPotionsCount = await session.Inventory.GetItemAmountByType(ItemId.ItemHyperPotion);
+            var maxPotionCount = await session.Inventory.GetItemAmountByType(ItemId.ItemMaxPotion);
 
             int totalPotionsCount = potionCount + superPotionCount + hyperPotionsCount + maxPotionCount;
             int random = rnd.Next(-1 * session.LogicSettings.RandomRecycleValue, session.LogicSettings.RandomRecycleValue + 1);
@@ -249,8 +249,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static async Task OptimizedRecycleRevives(ISession session, CancellationToken cancellationToken)
         {
-            var reviveCount = session.Inventory.GetItemAmountByType(ItemId.ItemRevive);
-            var maxReviveCount = session.Inventory.GetItemAmountByType(ItemId.ItemMaxRevive);
+            var reviveCount = await session.Inventory.GetItemAmountByType(ItemId.ItemRevive);
+            var maxReviveCount = await session.Inventory.GetItemAmountByType(ItemId.ItemMaxRevive);
 
             int totalRevivesCount = reviveCount + maxReviveCount;
             int random = rnd.Next(-1 * session.LogicSettings.RandomRecycleValue, session.LogicSettings.RandomRecycleValue + 1);
@@ -289,11 +289,11 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static async Task OptimizedRecycleBerries(ISession session, CancellationToken cancellationToken)
         {
-            var razz = session.Inventory.GetItemAmountByType(ItemId.ItemRazzBerry);
-            var bluk = session.Inventory.GetItemAmountByType(ItemId.ItemBlukBerry);
-            var nanab = session.Inventory.GetItemAmountByType(ItemId.ItemNanabBerry);
-            var pinap = session.Inventory.GetItemAmountByType(ItemId.ItemPinapBerry);
-            var wepar = session.Inventory.GetItemAmountByType(ItemId.ItemWeparBerry);
+            var razz = await session.Inventory.GetItemAmountByType(ItemId.ItemRazzBerry);
+            var bluk = await session.Inventory.GetItemAmountByType(ItemId.ItemBlukBerry);
+            var nanab = await session.Inventory.GetItemAmountByType(ItemId.ItemNanabBerry);
+            var pinap = await session.Inventory.GetItemAmountByType(ItemId.ItemPinapBerry);
+            var wepar = await session.Inventory.GetItemAmountByType(ItemId.ItemWeparBerry);
 
             int totalBerryCount = razz + bluk + nanab + pinap + wepar;
             int random = rnd.Next(-1 * session.LogicSettings.RandomRecycleValue, session.LogicSettings.RandomRecycleValue + 1);

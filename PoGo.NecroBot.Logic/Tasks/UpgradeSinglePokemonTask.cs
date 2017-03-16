@@ -23,7 +23,7 @@ namespace PoGo.NecroBot.Logic.Tasks
     {
         public static async Task<bool> UpgradeSinglePokemon(ISession session, PokemonData pokemon)
         {
-            if (!session.Inventory.CanUpgradePokemon(pokemon))
+            if (!(await session.Inventory.CanUpgradePokemon(pokemon)))
                 return false;
 
             var upgradeResult = await session.Inventory.UpgradePokemon(pokemon.Id);
@@ -31,14 +31,14 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (upgradeResult.Result == UpgradePokemonResponse.Types.Result.Success && upgradeResult.UpgradedPokemon != null)
             {
                 var bestPokemonOfType = (session.LogicSettings.PrioritizeIvOverCp
-                                        ? session.Inventory.GetHighestPokemonOfTypeByIv(upgradeResult
+                                        ? await session.Inventory.GetHighestPokemonOfTypeByIv(upgradeResult
                                             .UpgradedPokemon)
-                                        : session.Inventory.GetHighestPokemonOfTypeByCp(upgradeResult
+                                        : await session.Inventory.GetHighestPokemonOfTypeByCp(upgradeResult
                                             .UpgradedPokemon)) ?? upgradeResult.UpgradedPokemon;
 
                 session.EventDispatcher.Send(new UpgradePokemonEvent()
                 {
-                    Candy = session.Inventory.GetCandyCount(pokemon.PokemonId),
+                    Candy = await session.Inventory.GetCandyCount(pokemon.PokemonId),
                     Pokemon = upgradeResult.UpgradedPokemon,
                     PokemonId = upgradeResult.UpgradedPokemon.PokemonId,
                     Cp = upgradeResult.UpgradedPokemon.Cp,
@@ -68,7 +68,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         if (session.Inventory.GetStarDust() <= session.LogicSettings.GetMinStarDustForLevelUp)
                             return;
 
-                        pokemonToUpgrade = session.Inventory.GetSinglePokemon(pokemonId);
+                        pokemonToUpgrade = await session.Inventory.GetSinglePokemon(pokemonId);
                         if (pokemonToUpgrade == null)
                             return;
 
@@ -100,7 +100,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 finally
                 {
                     // Reload pokemon after upgrade.
-                    var upgradedPokemon = session.Inventory.GetSinglePokemon(pokemonId);
+                    var upgradedPokemon = await session.Inventory.GetSinglePokemon(pokemonId);
                     session.EventDispatcher.Send(new FinishUpgradeEvent()
                     {
                         PokemonId = pokemonId,

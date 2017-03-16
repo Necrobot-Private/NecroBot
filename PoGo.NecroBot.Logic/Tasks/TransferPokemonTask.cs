@@ -23,7 +23,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 if (!await blocker.WaitToRun()) return;
 
-                var all = session.Inventory.GetPokemons();
+                var all = await session.Inventory.GetPokemons();
                 List<PokemonData> pokemonToTransfer = new List<PokemonData>();
                 var pokemons = all.OrderBy(x => x.Cp).ThenBy(n => n.StaminaMax);
 
@@ -43,8 +43,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                 foreach (var pokemon in pokemonToTransfer)
                 {
                     var bestPokemonOfType = (session.LogicSettings.PrioritizeIvOverCp
-                                                ? session.Inventory.GetHighestPokemonOfTypeByIv(pokemon)
-                                                : session.Inventory.GetHighestPokemonOfTypeByCp(pokemon)) ??
+                                                ? await session.Inventory.GetHighestPokemonOfTypeByIv(pokemon)
+                                                : await session.Inventory.GetHighestPokemonOfTypeByCp(pokemon)) ??
                                             pokemon;
 
                     // Broadcast event as everyone would benefit
@@ -56,12 +56,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Cp = pokemon.Cp,
                         BestCp = bestPokemonOfType.Cp,
                         BestPerfection = PokemonInfo.CalculatePokemonPerfection(bestPokemonOfType),
-                        Candy = session.Inventory.GetCandyCount(pokemon.PokemonId)
+                        Candy = await session.Inventory.GetCandyCount(pokemon.PokemonId)
                     };
 
-                    if (session.Inventory.GetCandyFamily(pokemon.PokemonId) != null)
+                    if ((await session.Inventory.GetCandyFamily(pokemon.PokemonId)) != null)
                     {
-                        ev.FamilyId = session.Inventory.GetCandyFamily(pokemon.PokemonId).FamilyId;
+                        ev.FamilyId = (await session.Inventory.GetCandyFamily(pokemon.PokemonId)).FamilyId;
                     }
 
                     session.EventDispatcher.Send(ev);

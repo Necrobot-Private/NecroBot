@@ -26,11 +26,11 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             cancellationToken.ThrowIfCancellationRequested();
             TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
-            var pokemons = session.Inventory.GetPokemons();
+            var pokemons = await session.Inventory.GetPokemons();
 
             if (session.LogicSettings.TransferDuplicatePokemon && session.LogicSettings.RenamePokemonRespectTransferRule)
             {
-                var duplicatePokemons =
+                var duplicatePokemons = await
                     session.Inventory.GetDuplicatePokemonToTransfer(
                         session.LogicSettings.PokemonsNotToTransfer,
                         session.LogicSettings.PokemonEvolveFilters,
@@ -42,7 +42,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             if (session.LogicSettings.TransferWeakPokemon && session.LogicSettings.RenamePokemonRespectTransferRule)
             {
-                var weakPokemons =
+                var weakPokemons = await
                     session.Inventory.GetWeakPokemonToTransfer(
                         session.LogicSettings.PokemonsNotToTransfer,
                         session.LogicSettings.PokemonEvolveFilters,

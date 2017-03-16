@@ -101,6 +101,8 @@ namespace PoGo.Necrobot.Window.Model
         {
             var id = e.PokemonId;
             var model = Get(id);
+            if (model == null)
+                return;
             model.IsUpgrading = false;
             model.PokemonData = e.Pokemon;
         }
@@ -109,6 +111,8 @@ namespace PoGo.Necrobot.Window.Model
         {
             var id = e.Pokemon.Id;
             var model = Get(id);
+            if (model == null)
+                return;
             model.IsUpgrading = false;
             model.PokemonData = e.Pokemon;
         }
@@ -118,6 +122,8 @@ namespace PoGo.Necrobot.Window.Model
             var result = ev.FavoritePokemonResponse.Result == POGOProtos.Networking.Responses.SetFavoritePokemonResponse.Types.Result.Success;
             var id = ev.Pokemon.Id;
             var model = Get(id);
+            if (model == null)
+                return;
             model.IsFavoriting = false;
             model.PokemonData = ev.Pokemon;
         }
@@ -136,7 +142,7 @@ namespace PoGo.Necrobot.Window.Model
             } 
             if (ev.Result == POGOProtos.Networking.Responses.EvolvePokemonResponse.Types.Result.Success)
             {
-                Candy candy = this.Session.Inventory.GetCandyFamily(ev.EvolvedPokemon.PokemonId);
+                Candy candy = this.Session.Inventory.GetCandyFamily(ev.EvolvedPokemon.PokemonId).Result;
                 if (candy != null)
                 {
                     var familyId = candy.FamilyId;

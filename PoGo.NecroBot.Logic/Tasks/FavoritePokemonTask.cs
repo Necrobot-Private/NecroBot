@@ -26,7 +26,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             if (!session.LogicSettings.AutoFavoritePokemon) return;
 
-            var pokemons = session.Inventory.GetPokemons().Where(x=>x.Favorite ==0);
+            var pokemons = (await session.Inventory.GetPokemons()).Where(x=>x.Favorite ==0);
 
             foreach (var pokemon in pokemons)
             {
@@ -59,7 +59,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             //{
                 //if (!await blocker.WaitToRun()) return;
                 
-                var pokemon = session.Inventory.GetPokemons().FirstOrDefault(p => p.Id == pokemonId);
+                var pokemon = (await session.Inventory.GetPokemons()).FirstOrDefault(p => p.Id == pokemonId);
                 if (pokemon != null)
                 {
                     var perfection = Math.Round(PokemonInfo.CalculatePokemonPerfection(pokemon));
@@ -68,7 +68,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     if (response.Result == SetFavoritePokemonResponse.Types.Result.Success)
                     {
                         // Reload pokemon to refresh favorite flag.
-                        pokemon = session.Inventory.GetPokemons().FirstOrDefault(p => p.Id == pokemonId);
+                        pokemon = (await session.Inventory.GetPokemons()).FirstOrDefault(p => p.Id == pokemonId);
 
                         session.EventDispatcher.Send(new FavoriteEvent(pokemon, response));
 

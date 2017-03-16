@@ -52,7 +52,7 @@ namespace PoGo.NecroBot.Logic.State
             }
 
             var autoUpdate = session.LogicSettings.AutoUpdate;
-           var isLatest = IsLatest();
+            var isLatest = await IsLatest();
             if (isLatest)
             {
                 session.EventDispatcher.Send(new UpdateEvent
@@ -148,15 +148,13 @@ namespace PoGo.NecroBot.Logic.State
             }
             await Task.Delay(200);
         }
-
-       
-
-        private static  string DownloadServerVersion()
+        
+        private async static Task<string> DownloadServerVersion()
         {
             using (HttpClient client = new HttpClient())
             {
-                var responseContent = client.GetAsync(VersionUri).Result;
-                return responseContent.Content.ReadAsStringAsync().Result;
+                var responseContent = await client.GetAsync(VersionUri);
+                return await responseContent.Content.ReadAsStringAsync();
             }
         }
 
@@ -166,12 +164,12 @@ namespace PoGo.NecroBot.Logic.State
         }
 
 
-        public static bool IsLatest()
+        public static async Task<bool> IsLatest()
         {
             try
             {
                 var regex = new Regex(@"\[assembly\: AssemblyVersion\(""(\d{1,})\.(\d{1,})\.(\d{1,})\.(\d{1,})""\)\]");
-                var match = regex.Match(DownloadServerVersion());
+                var match = regex.Match(await DownloadServerVersion());
 
                 if (!match.Success)
                     return false;

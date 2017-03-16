@@ -28,7 +28,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (session.Inventory.GetStarDust() <= session.LogicSettings.GetMinStarDustForLevelUp)
                 return;
 
-            IEnumerable<PokemonData> upgradablePokemon = session.Inventory.GetPokemonToUpgrade();
+            IEnumerable<PokemonData> upgradablePokemon = await session.Inventory.GetPokemonToUpgrade();
 
             if (upgradablePokemon.Count() == 0)
                 return;

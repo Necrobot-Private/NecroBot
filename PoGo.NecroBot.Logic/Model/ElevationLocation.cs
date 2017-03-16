@@ -86,7 +86,7 @@ namespace PoGo.NecroBot.Logic.Model
                     {
                         try
                         {
-                            var altitude = service.GetElevation(latitude, longitude);
+                            var altitude = await service.GetElevation(latitude, longitude);
                             if (altitude == 0 || altitude < -100)
                             {
                                 // Invalid altitude

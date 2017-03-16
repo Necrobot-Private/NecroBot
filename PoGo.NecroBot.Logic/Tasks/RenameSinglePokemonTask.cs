@@ -24,7 +24,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             cancellationToken.ThrowIfCancellationRequested();
             TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
-            var pokemon = session.Inventory.GetPokemons().Where(x => x.Id == pokemonId).FirstOrDefault();
+            var pokemon = (await session.Inventory.GetPokemons()).Where(x => x.Id == pokemonId).FirstOrDefault();
 
             if (pokemon == null || pokemon.Nickname == newNickname)
                 return;

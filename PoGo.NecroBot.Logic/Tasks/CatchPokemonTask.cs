@@ -76,7 +76,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             // If the encounter is null nothing will work below, so exit now
             if (encounter == null) return true;
 
-            var totalBalls = session.Inventory.GetItems().Where(x => x.ItemId == ItemId.ItemPokeBall || x.ItemId == ItemId.ItemGreatBall || x.ItemId == ItemId.ItemUltraBall).Sum(x => x.Count);
+            var totalBalls = (await session.Inventory.GetItems()).Where(x => x.ItemId == ItemId.ItemPokeBall || x.ItemId == ItemId.ItemGreatBall || x.ItemId == ItemId.ItemUltraBall).Sum(x => x.Count);
 
             if(session.SaveBallForByPassCatchFlee && totalBalls < BALL_REQUIRED_TO_BYPASS_CATCHFLEE)
             {
@@ -146,7 +146,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 else return true; // No success to work with, exit
 
                 // Check for pokeballs before proceeding
-                var pokeball = GetBestBall(session, encounteredPokemon, probability);
+                var pokeball = await GetBestBall(session, encounteredPokemon, probability);
                 if (pokeball == ItemId.ItemUnknown)
                 {
                     Logger.Write(session.Translation.GetTranslation(TranslationString.ZeroPokeballInv));
@@ -238,7 +238,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                          attemptCounter > session.LogicSettings.MaxPokeballsPerPokemon))
                         break;
 
-                    pokeball = GetBestBall(session, encounteredPokemon, probability);
+                    pokeball = await GetBestBall(session, encounteredPokemon, probability);
                     if (pokeball == ItemId.ItemUnknown)
                     {
                         session.EventDispatcher.Send(new NoPokeballEvent
@@ -348,17 +348,17 @@ namespace PoGo.NecroBot.Logic.Tasks
                             return false;
                         }
                         List<ItemId> ballToByPass = new List<ItemId>();
-                        for (int i = 0; i < session.Inventory.GetItemAmountByType(ItemId.ItemPokeBall)-1; i++)
+                        for (int i = 0; i < await session.Inventory.GetItemAmountByType(ItemId.ItemPokeBall)-1; i++)
                         {
                             ballToByPass.Add(ItemId.ItemPokeBall);
 
                         }
-                        for (int i = 0; i < session.Inventory.GetItemAmountByType(ItemId.ItemGreatBall) - 1; i++)
+                        for (int i = 0; i < await session.Inventory.GetItemAmountByType(ItemId.ItemGreatBall) - 1; i++)
                         {
                             ballToByPass.Add(ItemId.ItemGreatBall);
 
                         }
-                        for (int i = 0; i < session.Inventory.GetItemAmountByType(ItemId.ItemUltraBall) - 1; i++)
+                        for (int i = 0; i < await session.Inventory.GetItemAmountByType(ItemId.ItemUltraBall) - 1; i++)
                         {
                             ballToByPass.Add(ItemId.ItemUltraBall);
 
@@ -426,7 +426,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     if (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess)
                     {
-                        evt.Gender = session.Inventory.GetPokemons().First(x => x.Id == caughtPokemonResponse.CapturedPokemonId).PokemonDisplay.Gender.ToString();
+                        evt.Gender = (await session.Inventory.GetPokemons()).First(x => x.Id == caughtPokemonResponse.CapturedPokemonId).PokemonDisplay.Gender.ToString();
 
                         var totalExp = 0;
                         var totalStarDust = caughtPokemonResponse.CaptureAward.Stardust.Sum();
@@ -443,7 +443,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         evt.Exp = totalExp;
                         evt.Stardust = stardust;
                         evt.UniqueId = caughtPokemonResponse.CapturedPokemonId;
-                        evt.Candy = session.Inventory.GetCandyFamily(pokemon.PokemonId);
+                        evt.Candy = await session.Inventory.GetCandyFamily(pokemon.PokemonId);
                     }
 
                     if (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess ||
@@ -486,7 +486,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     //await session.Inventory.RefreshCachedInventory();
 
-                    evt.BallAmount = session.Inventory.GetItemAmountByType(pokeball);
+                    evt.BallAmount = await session.Inventory.GetItemAmountByType(pokeball);
                     evt.Rarity = PokemonGradeHelper.GetPokemonGrade(evt.Id).ToString();
 
                     session.EventDispatcher.Send(evt);
@@ -713,16 +713,16 @@ namespace PoGo.NecroBot.Logic.Tasks
             return false;
         }
 
-        public static ItemId GetBestBall(ISession session, PokemonData encounteredPokemon,
+        public static async Task<ItemId> GetBestBall(ISession session, PokemonData encounteredPokemon,
             float probability)
         {
             var pokemonCp = encounteredPokemon.Cp;
             var pokemonId = encounteredPokemon.PokemonId;
             var iV = Math.Round(PokemonInfo.CalculatePokemonPerfection(encounteredPokemon), 2);
-            var pokeBallsCount = session.Inventory.GetItemAmountByType(ItemId.ItemPokeBall);
-            var greatBallsCount = session.Inventory.GetItemAmountByType(ItemId.ItemGreatBall);
-            var ultraBallsCount = session.Inventory.GetItemAmountByType(ItemId.ItemUltraBall);
-            var masterBallsCount = session.Inventory.GetItemAmountByType(ItemId.ItemMasterBall);
+            var pokeBallsCount = await session.Inventory.GetItemAmountByType(ItemId.ItemPokeBall);
+            var greatBallsCount = await session.Inventory.GetItemAmountByType(ItemId.ItemGreatBall);
+            var ultraBallsCount = await session.Inventory.GetItemAmountByType(ItemId.ItemUltraBall);
+            var masterBallsCount = await session.Inventory.GetItemAmountByType(ItemId.ItemMasterBall);
 
             if (masterBallsCount > 0 && (
                          session.LogicSettings.UseBallOperator.BoolFunc(
@@ -773,7 +773,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             foreach (var item in itemToUses)
             {
-                var inventoryItems = session.Inventory.GetItems();
+                var inventoryItems = await session.Inventory.GetItems();
 
                 var berries = inventoryItems.Where(p => p.ItemId == item.Key);
                 var berry = berries.FirstOrDefault();

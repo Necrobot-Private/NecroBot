@@ -1,5 +1,6 @@
 ﻿using System;
 using PoGo.NecroBot.Logic.Model.Settings;
+using System.Threading.Tasks;
 
 namespace PoGo.NecroBot.Logic.Service.Elevation
 {
@@ -18,9 +19,12 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
             return "Random Elevation Service (Necrobot Default)";
         }
 
-        public override double GetElevationFromWebService(double lat, double lng)
+        public override async Task<double> GetElevationFromWebService(double lat, double lng)
         {
-            return rand.NextDouble() * (maxElevation - minElevation) + minElevation;
+            return await Task.Run(() =>
+            {
+                return rand.NextDouble() * (maxElevation - minElevation) + minElevation;
+            });
         }
     }
 }

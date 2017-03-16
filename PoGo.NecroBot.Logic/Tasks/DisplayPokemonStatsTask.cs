@@ -22,11 +22,9 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         public static List<ulong> PokemonIdcp = new List<ulong>();
 
-        // jjskuld - Ignore CS1998 warning for now.
-        #pragma warning disable 1998
         public static async Task Execute(ISession session)
         {
-            var highestsPokemonCp =
+            var highestsPokemonCp = await
                 session.Inventory.GetHighestsCp(session.LogicSettings.AmountOfPokemonToDisplayOnStart);
 
             var pokemonPairedWithStatsCp =
@@ -39,15 +37,15 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 PokemonInfo.GetLevel(pokemon),
                                 PokemonInfo.GetPokemonMove1(pokemon),
                                 PokemonInfo.GetPokemonMove2(pokemon),
-                                PokemonInfo.GetCandy(session, pokemon)
+                                PokemonInfo.GetCandy(session, pokemon).Result
                             )
                     )
                     .ToList();
 
-            var highestsPokemonPerfect =
+            var highestsPokemonPerfect = await
                 session.Inventory.GetHighestsPerfect(session.LogicSettings.AmountOfPokemonToDisplayOnStart);
 
-            var pokemonPairedWithStatsIv =
+            var pokemonPairedWithStatsIv = 
                 highestsPokemonPerfect.Select(
                         pokemon =>
                             Tuple.Create(
@@ -57,7 +55,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 PokemonInfo.GetLevel(pokemon),
                                 PokemonInfo.GetPokemonMove1(pokemon),
                                 PokemonInfo.GetPokemonMove2(pokemon),
-                                PokemonInfo.GetCandy(session, pokemon)
+                                PokemonInfo.GetCandy(session, pokemon).Result
                             )
                     )
                     .ToList();
@@ -77,8 +75,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                 });
 
             var allPokemonInBag = session.LogicSettings.PrioritizeIvOverCp
-                ? session.Inventory.GetHighestsPerfect(1000)
-                : session.Inventory.GetHighestsCp(1000);
+                ? await session.Inventory.GetHighestsPerfect(1000)
+                : await session.Inventory.GetHighestsCp(1000);
             if (session.LogicSettings.DumpPokemonStats)
             {
                 const string dumpFileName = "PokeBagStats";
@@ -163,6 +161,5 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
             }
         }
-        #pragma warning restore 1998
     }
 }

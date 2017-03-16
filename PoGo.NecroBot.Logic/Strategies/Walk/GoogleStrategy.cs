@@ -30,7 +30,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
             var currentLocation = new GeoCoordinate(_client.CurrentLatitude, _client.CurrentLongitude, _client.CurrentAltitude);
             var destinaionCoordinate = new GeoCoordinate(targetLocation.Latitude, targetLocation.Longitude);
 
-            var googleWalk = _googleDirectionsService.GetDirections(currentLocation, new List<GeoCoordinate>(), destinaionCoordinate);
+            var googleWalk = await _googleDirectionsService.GetDirections(currentLocation, new List<GeoCoordinate>(), destinaionCoordinate);
 
             if (googleWalk == null)
             {

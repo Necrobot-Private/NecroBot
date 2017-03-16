@@ -170,16 +170,16 @@ namespace PoGo.NecroBot.Logic.Tasks
             return Task.Run(() => Start(session, cancellationToken), cancellationToken);
         }
 
-        public static bool CheckPokeballsToSnipe(int minPokeballs, ISession session,
+        public static async Task<bool> CheckPokeballsToSnipe(int minPokeballs, ISession session,
             CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
 
-            var pokeBallsCount = session.Inventory.GetItemAmountByType(ItemId.ItemPokeBall);
-            pokeBallsCount += session.Inventory.GetItemAmountByType(ItemId.ItemGreatBall);
-            pokeBallsCount += session.Inventory.GetItemAmountByType(ItemId.ItemUltraBall);
-            pokeBallsCount += session.Inventory.GetItemAmountByType(ItemId.ItemMasterBall);
+            var pokeBallsCount = await session.Inventory.GetItemAmountByType(ItemId.ItemPokeBall);
+            pokeBallsCount += await session.Inventory.GetItemAmountByType(ItemId.ItemGreatBall);
+            pokeBallsCount += await session.Inventory.GetItemAmountByType(ItemId.ItemUltraBall);
+            pokeBallsCount += await session.Inventory.GetItemAmountByType(ItemId.ItemMasterBall);
 
             if (pokeBallsCount >= minPokeballs)
                 return true;
@@ -229,7 +229,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             LocsVisited.RemoveAll(q => DateTime.Now > q.TimeStampAdded.AddMinutes(15));
             SnipeLocations.RemoveAll(x => DateTime.Now > x.TimeStampAdded.AddMinutes(15));
 
-            if (CheckPokeballsToSnipe(session.LogicSettings.MinPokeballsToSnipe, session, cancellationToken))
+            if (await CheckPokeballsToSnipe(session.LogicSettings.MinPokeballsToSnipe, session, cancellationToken))
             {
                 var listPokemonToSnipe = new List<PokemonId>();
                 foreach (var item in session.LogicSettings.PokemonSnipeFilters)
@@ -244,7 +244,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     List<PokemonId> pokemonIds;
                     if (session.LogicSettings.SnipePokemonNotInPokedex)
                     {
-                        var pokeDex = session.Inventory.GetPokeDexItems();
+                        var pokeDex = await session.Inventory.GetPokeDexItems();
                         var pokemonOnlyList = listPokemonToSnipe;
                         var capturedPokemon =
                             pokeDex.Where(i => i.InventoryItemData.PokedexEntry.TimesCaptured >= 1)
@@ -287,8 +287,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 });
 
                                 if (
-                                    !CheckPokeballsToSnipe(session.LogicSettings.MinPokeballsWhileSnipe + 1, session,
-                                        cancellationToken))
+                                    !(await CheckPokeballsToSnipe(session.LogicSettings.MinPokeballsWhileSnipe + 1, session,
+                                        cancellationToken)))
                                     return;
                                 if (!CheckSnipeConditions(session)) return;
                                 await
@@ -321,7 +321,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 do
                 {
                     retry--;
-                    LocationUtils.UpdatePlayerLocationWithAltitude(session, new GeoCoordinate(latitude, longitude, 10d), 0); // Set speed to 0 for random speed.
+                    await LocationUtils.UpdatePlayerLocationWithAltitude(session, new GeoCoordinate(latitude, longitude, 10d), 0); // Set speed to 0 for random speed.
                     latitude += 0.00000001;
                     longitude += 0.00000001;
 
@@ -351,7 +351,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             finally
             {
                 //if(!isCaptchaShow)
-                LocationUtils.UpdatePlayerLocationWithAltitude(session,
+                await LocationUtils.UpdatePlayerLocationWithAltitude(session,
                     new GeoCoordinate(currentLatitude, currentLongitude, session.Client.CurrentAltitude), 0); // Set speed to 0 for random speed.
             }
 
@@ -383,11 +383,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                 EncounterResponse encounter;
                 try
                 {
-                    LocationUtils.UpdatePlayerLocationWithAltitude(session,
+                    await LocationUtils.UpdatePlayerLocationWithAltitude(session,
                         new GeoCoordinate(latitude, longitude, session.Client.CurrentAltitude), 0); // Set speed to 0 for random speed.
 
                     encounter =
-                        session.Client.Encounter.EncounterPokemon(pokemon.EncounterId, pokemon.SpawnPointId).Result;
+                        await session.Client.Encounter.EncounterPokemon(pokemon.EncounterId, pokemon.SpawnPointId);
                 }
                 catch (HasherException ex) { throw ex; }
                 catch (CaptchaException ex)
@@ -398,7 +398,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 finally
                 {
                     if (!isCaptchaShow)
-                        LocationUtils.UpdatePlayerLocationWithAltitude(session,
+                        await LocationUtils.UpdatePlayerLocationWithAltitude(session,
                             // Set speed to 0 for random speed.
                             new GeoCoordinate(currentLatitude, currentLongitude, session.Client.CurrentAltitude), 0);
                 }

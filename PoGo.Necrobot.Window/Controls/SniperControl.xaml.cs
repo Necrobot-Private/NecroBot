@@ -36,7 +36,7 @@ namespace PoGo.Necrobot.Window.Controls
         private void SnipeGrid_OnSnipePokemon(Model.SnipePokemonViewModel selected, bool all)
         {
             var data = selected.Ref as EncounteredEvent;
-            Task.Run(() =>
+            Task.Run(async () =>
             {
                 if(all)
                 {
@@ -53,7 +53,7 @@ namespace PoGo.Necrobot.Window.Controls
                 if (!caught)
                 {
                     
-                    MSniperServiceTask.AddSnipeItem(this.Session, new MSniperServiceTask.MSniperInfo2()
+                    await MSniperServiceTask.AddSnipeItem(this.Session, new MSniperServiceTask.MSniperInfo2()
                     {
                         Latitude = data.Latitude,
                         Longitude = data.Longitude,
@@ -78,9 +78,9 @@ namespace PoGo.Necrobot.Window.Controls
         {
             var model = (SnipeListViewModel)DataContext;
             var current = model.ManualSnipe;
-            Task.Run(() =>
+            Task.Run(async () =>
             {
-                MSniperServiceTask.AddSnipeItem(Session, new MSniperServiceTask.MSniperInfo2()
+                await MSniperServiceTask.AddSnipeItem(Session, new MSniperServiceTask.MSniperInfo2()
                 {
                     PokemonId = (short)current.PokemonId,
                     Latitude = current.Latitude,

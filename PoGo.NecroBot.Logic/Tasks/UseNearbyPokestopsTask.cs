@@ -157,7 +157,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 // Always set the fort info in base walk strategy.
 
                 var pokeStopDestination = new FortLocation(pokeStop.Latitude, pokeStop.Longitude,
-                    LocationUtils.getElevation(session.ElevationService, pokeStop.Latitude, pokeStop.Longitude), pokeStop, fortInfo);
+                    await LocationUtils.getElevation(session.ElevationService, pokeStop.Latitude, pokeStop.Longitude), pokeStop, fortInfo);
 
                 await session.Navigation.Move(pokeStopDestination,
                  async () =>
@@ -210,7 +210,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 //TODO : A logic need to be add for handle this  case?
             };
 
-            var deployedPokemons = session.Inventory.GetDeployedPokemons();
+            var deployedPokemons = await session.Inventory.GetDeployedPokemons();
 
             //NOTE : This code is killing perfomance of BOT if GYM is turn on, need to refactor to avoid this hummer call API
 
@@ -247,7 +247,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 forts = forts.Where(p => LocationUtils.CalculateDistanceInMeters(p.Latitude, p.Longitude, session.Client.CurrentLatitude, session.Client.CurrentLongitude) < 40).ToList();
             }
 
-            var reviveCount = session.Inventory.GetItems().Where(w => w.ItemId == POGOProtos.Inventory.Item.ItemId.ItemRevive || w.ItemId == POGOProtos.Inventory.Item.ItemId.ItemMaxRevive).Select(s => s.Count).Sum();
+            var reviveCount = (await session.Inventory.GetItems()).Where(w => w.ItemId == POGOProtos.Inventory.Item.ItemId.ItemRevive || w.ItemId == POGOProtos.Inventory.Item.ItemId.ItemMaxRevive).Select(s => s.Count).Sum();
             if (!session.LogicSettings.GymConfig.Enable
                 || session.LogicSettings.GymConfig.MinRevivePotions > reviveCount
             /*|| session.Inventory.GetPlayerStats().FirstOrDefault().Level <= 5*/
@@ -363,7 +363,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     if (session.LogicSettings.AutomaticallyLevelUpPokemon)
                         await LevelUpPokemonTask.Execute(session, cancellationToken);
 
-                    GetPokeDexCount.Execute(session, cancellationToken);
+                    await GetPokeDexCount.Execute(session, cancellationToken);
                 }
             }
         }
@@ -397,7 +397,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             var distance = LocationUtils.CalculateDistanceInMeters(pokeStop.Latitude, pokeStop.Longitude, session.Client.CurrentLatitude, session.Client.CurrentLongitude);
             if (distance > 30)
             {
-                LocationUtils.UpdatePlayerLocationWithAltitude(session, new GeoCoordinate(pokeStop.Latitude, pokeStop.Longitude), 0);
+                await LocationUtils.UpdatePlayerLocationWithAltitude(session, new GeoCoordinate(pokeStop.Latitude, pokeStop.Longitude), 0);
                 await session.Client.Misc.RandomAPICall();
             }
 
@@ -425,7 +425,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                         latitude += 0.000003;
                         longitude += 0.000005;
-                        LocationUtils.UpdatePlayerLocationWithAltitude(session, new GeoCoordinate(latitude, longitude), 0);
+                        await LocationUtils.UpdatePlayerLocationWithAltitude(session, new GeoCoordinate(latitude, longitude), 0);
                         retry--;
                     }
                 }
@@ -510,7 +510,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                         if (session.SaveBallForByPassCatchFlee)
                         {
-                            var totalBalls = session.Inventory.GetItems().Where(x => x.ItemId == ItemId.ItemPokeBall || x.ItemId == ItemId.ItemGreatBall || x.ItemId == ItemId.ItemUltraBall).Sum(x => x.Count);
+                            var totalBalls = (await session.Inventory.GetItems()).Where(x => x.ItemId == ItemId.ItemPokeBall || x.ItemId == ItemId.ItemGreatBall || x.ItemId == ItemId.ItemUltraBall).Sum(x => x.Count);
                             Logger.Write($"Ball requires for by pass catch flee {totalBalls}/{CatchPokemonTask.BALL_REQUIRED_TO_BYPASS_CATCHFLEE}");
                         }
                         else

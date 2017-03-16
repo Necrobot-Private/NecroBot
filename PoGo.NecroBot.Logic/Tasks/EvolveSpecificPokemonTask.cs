@@ -29,7 +29,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     return;
                 }
                 
-                var all = session.Inventory.GetPokemons();
+                var all = await session.Inventory.GetPokemons();
                 var pokemons = all.OrderByDescending(x => x.Cp).ThenBy(n => n.StaminaMax);
                 var pokemon = pokemons.FirstOrDefault(p => p.Id == pokemonId);
 
@@ -40,7 +40,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }))
                     return;
                 ItemId itemToEvolve = ItemId.ItemUnknown;
-                var pkmSetting = session.Inventory.GetPokemonSetting(pokemon.PokemonId);
+                var pkmSetting = await session.Inventory.GetPokemonSetting(pokemon.PokemonId);
 
                 if (evolveToId != PokemonId.Missingno && pkmSetting != null)
                 {
@@ -48,7 +48,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     if(evolution!= null)
                     {
                         itemToEvolve = evolution.EvolutionItemRequirement;
-                        if(itemToEvolve !=  ItemId.ItemUnknown && session.Inventory.GetItemAmountByType(itemToEvolve) ==0)
+                        if(itemToEvolve !=  ItemId.ItemUnknown && await session.Inventory.GetItemAmountByType(itemToEvolve) ==0)
                         {
                             session.EventDispatcher.Send(new PokemonEvolveEvent
                             {

@@ -40,7 +40,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 session.GymState.moveSettings = await session.Inventory.GetMoveSettings();
             }
 
-            session.GymState.LoadMyPokemons(session);
+            await session.GymState.LoadMyPokemons(session);
 
 
             cancellationToken.ThrowIfCancellationRequested();
@@ -72,7 +72,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     if (player.Team != TeamColor.Neutral)
                     {
-                        var deployedPokemons = session.Inventory.GetDeployedPokemons();
+                        var deployedPokemons = await session.Inventory.GetDeployedPokemons();
                         List<PokemonData> deployedList = new List<PokemonData>(deployedPokemons);
 
                         if (fortDetails.GymState.FortData.OwnedByTeam == player.Team || fortDetails.GymState.FortData.OwnedByTeam == TeamColor.Neutral)
@@ -83,7 +83,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                                 if (response != null && response.Result == FortDeployPokemonResponse.Types.Result.Success)
                                 {
-                                    deployedPokemons = session.Inventory.GetDeployedPokemons();
+                                    deployedPokemons = await session.Inventory.GetDeployedPokemons();
                                     deployedList = new List<PokemonData>(deployedPokemons);
                                 }
                             }
@@ -147,7 +147,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
 
             bool isTraining = (session.Profile.PlayerData.Team == fortDetails.GymState.FortData.OwnedByTeam || (!string.IsNullOrEmpty(session.GymState.capturedGymId) && session.GymState.capturedGymId.Equals(fortDetails.GymState.FortData.Id)));
-            var badassPokemon = CompleteAttackTeam(session, defenders, isTraining);
+            var badassPokemon = await CompleteAttackTeam(session, defenders, isTraining);
             if (badassPokemon == null)
             {
                 Logger.Write("Check gym setting, we cant complete attackers team. Exiting.", LogLevel.Warning, ConsoleColor.Magenta);
@@ -319,7 +319,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             if (availableSlots > 0)
             {
-                var deployed = session.Inventory.GetDeployedPokemons();
+                var deployed = await session.Inventory.GetDeployedPokemons();
                 if (!deployed.Any(a => a.DeployedFortId == fortInfo.FortId))
                 {
                     var pokemon = await GetDeployablePokemon(session);
@@ -402,7 +402,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             return response;
         }
 
-        private static IEnumerable<PokemonData> CompleteAttackTeam(ISession session, IEnumerable<PokemonData> defenders, bool isTraining)
+        private static async Task<IEnumerable<PokemonData>> CompleteAttackTeam(ISession session, IEnumerable<PokemonData> defenders, bool isTraining)
         {
             /*
              *  While i'm trying to make this gym attack i've made an error and complete team with the same one pokemon 6 times. 
@@ -428,7 +428,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     foreach (var defender in defenders)
                     {
-                        var attacker = GetBestAgainst(session, attackers, defender, isTraining);
+                        var attacker = await GetBestAgainst(session, attackers, defender, isTraining);
                         if (attacker != null)
                         {
                             attackers.Add(attacker);
@@ -444,7 +444,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             return attackers;
         }
 
-        private static PokemonData GetBestAgainst(ISession session, List<PokemonData> myTeam, PokemonData defender, bool isTraining)
+        private static async Task<PokemonData> GetBestAgainst(ISession session, List<PokemonData> myTeam, PokemonData defender, bool isTraining)
         {
             TimedLog(string.Format("Checking pokemon for {0} ({1} CP). Already collected team is: {2}", defender.PokemonId, defender.Cp, string.Join(", ", myTeam.Select(s => string.Format("{0} ({1} CP)", s.PokemonId, s.Cp)))));
             session.GymState.AddPokemon(session, defender, false);
@@ -452,7 +452,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             if(session.LogicSettings.GymConfig.Attackers !=null && session.LogicSettings.GymConfig.Attackers.Count > 0)
             {
-                var allPokemons = session.Inventory.GetPokemons();
+                var allPokemons = await session.Inventory.GetPokemons();
                 var configs = isTraining ? session.LogicSettings.GymConfig.Trainers : session.LogicSettings.GymConfig.Attackers;
                 foreach (var def in configs.OrderByDescending(o => o.Priority))
                 {
@@ -639,19 +639,19 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             int healPower = 0;
 
-            if (session.LogicSettings.GymConfig.SaveMaxRevives && session.Inventory.GetItemAmountByType(ItemId.ItemMaxPotion) > 0)
+            if (session.LogicSettings.GymConfig.SaveMaxRevives && await session.Inventory.GetItemAmountByType(ItemId.ItemMaxPotion) > 0)
                 healPower = Int32.MaxValue;
             else
             {
-                var normalPotions = session.Inventory.GetItemAmountByType(ItemId.ItemPotion);
-                var superPotions = session.Inventory.GetItemAmountByType(ItemId.ItemSuperPotion);
-                var hyperPotions = session.Inventory.GetItemAmountByType(ItemId.ItemHyperPotion);
+                var normalPotions = await session.Inventory.GetItemAmountByType(ItemId.ItemPotion);
+                var superPotions = await session.Inventory.GetItemAmountByType(ItemId.ItemSuperPotion);
+                var hyperPotions = await session.Inventory.GetItemAmountByType(ItemId.ItemHyperPotion);
 
                 healPower = normalPotions * 20 + superPotions * 50 + hyperPotions * 200;
             }
 
-            var normalRevives = session.Inventory.GetItemAmountByType(ItemId.ItemRevive);
-            var maxRevives = session.Inventory.GetItemAmountByType(ItemId.ItemMaxRevive);
+            var normalRevives = await session.Inventory.GetItemAmountByType(ItemId.ItemRevive);
+            var maxRevives = await session.Inventory.GetItemAmountByType(ItemId.ItemMaxRevive);
 
             if ((healPower >= pokemon.StaminaMax / 2 || maxRevives == 0) && normalRevives > 0 && pokemon.Stamina <= 0)
             {
@@ -830,10 +830,10 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         public static async Task<bool> HealPokemon(ISession session, PokemonData pokemon)
         {
-            var normalPotions = session.Inventory.GetItemAmountByType(ItemId.ItemPotion);
-            var superPotions = session.Inventory.GetItemAmountByType(ItemId.ItemSuperPotion);
-            var hyperPotions = session.Inventory.GetItemAmountByType(ItemId.ItemHyperPotion);
-            var maxPotions = session.Inventory.GetItemAmountByType(ItemId.ItemMaxPotion);
+            var normalPotions = await session.Inventory.GetItemAmountByType(ItemId.ItemPotion);
+            var superPotions = await session.Inventory.GetItemAmountByType(ItemId.ItemSuperPotion);
+            var hyperPotions = await session.Inventory.GetItemAmountByType(ItemId.ItemHyperPotion);
+            var maxPotions = await session.Inventory.GetItemAmountByType(ItemId.ItemMaxPotion);
 
             var healPower = normalPotions * 20 + superPotions * 50 + hyperPotions * 200;
 
@@ -1370,7 +1370,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             PokemonData pokemon = null;
             List<ulong> excluded = new List<ulong>();
-            var pokemonList = session.Inventory.GetPokemons().ToList();
+            var pokemonList = (await session.Inventory.GetPokemons()).ToList();
             pokemonList.RemoveAll(x => session.LogicSettings.GymConfig.ExcludeForGyms.Contains(x.PokemonId));
 
             if(session.LogicSettings.GymConfig.Defenders!=null && session.LogicSettings.GymConfig.Defenders.Count > 0)

@@ -17,8 +17,6 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
         {
         }
 
-        // jjskuld - Ignore CS1998 warning for now.
-        #pragma warning disable 1998
         public override async Task<bool> OnCommand(ISession session, string cmd, Action<string> callback)
         {
             if (cmd.ToLower() == Command)
@@ -42,22 +40,21 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
                     inventory.GetItemAmountByType(ItemId.ItemMaxRevive));
                 answerTextmessage += "\n";
                 answerTextmessage += session.Translation.GetTranslation(TranslationString.CurrentMiscItemInv,
-                    session.Inventory.GetItemAmountByType(ItemId.ItemRazzBerry) +
-                    session.Inventory.GetItemAmountByType(ItemId.ItemBlukBerry) +
-                    session.Inventory.GetItemAmountByType(ItemId.ItemNanabBerry) +
-                    session.Inventory.GetItemAmountByType(ItemId.ItemWeparBerry) +
-                    session.Inventory.GetItemAmountByType(ItemId.ItemPinapBerry),
-                    session.Inventory.GetItemAmountByType(ItemId.ItemIncenseOrdinary) +
-                    session.Inventory.GetItemAmountByType(ItemId.ItemIncenseSpicy) +
-                    session.Inventory.GetItemAmountByType(ItemId.ItemIncenseCool) +
-                    session.Inventory.GetItemAmountByType(ItemId.ItemIncenseFloral),
-                    session.Inventory.GetItemAmountByType(ItemId.ItemLuckyEgg),
-                    session.Inventory.GetItemAmountByType(ItemId.ItemTroyDisk));
+                    await session.Inventory.GetItemAmountByType(ItemId.ItemRazzBerry) +
+                    await session.Inventory.GetItemAmountByType(ItemId.ItemBlukBerry) +
+                    await session.Inventory.GetItemAmountByType(ItemId.ItemNanabBerry) +
+                    await session.Inventory.GetItemAmountByType(ItemId.ItemWeparBerry) +
+                    await session.Inventory.GetItemAmountByType(ItemId.ItemPinapBerry),
+                    await session.Inventory.GetItemAmountByType(ItemId.ItemIncenseOrdinary) +
+                    await session.Inventory.GetItemAmountByType(ItemId.ItemIncenseSpicy) +
+                    await session.Inventory.GetItemAmountByType(ItemId.ItemIncenseCool) +
+                    await session.Inventory.GetItemAmountByType(ItemId.ItemIncenseFloral),
+                    await session.Inventory.GetItemAmountByType(ItemId.ItemLuckyEgg),
+                    await session.Inventory.GetItemAmountByType(ItemId.ItemTroyDisk));
                 callback(answerTextmessage);
                 return true;
             }
             return false;
         }
-        #pragma warning restore 1998
     }
 }

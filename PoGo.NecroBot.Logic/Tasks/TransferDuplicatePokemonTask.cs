@@ -30,15 +30,15 @@ namespace PoGo.NecroBot.Logic.Tasks
                 int buff = session.LogicSettings.BulkTransferStogareBuffer;
                 //check for bag, if bag is nearly full, then process bulk transfer.
                 var maxStorage = session.Profile.PlayerData.MaxPokemonStorage;
-                var totalPokemon = session.Inventory.GetPokemons();
-                var totalEggs = session.Inventory.GetEggs();
+                var totalPokemon = await session.Inventory.GetPokemons();
+                var totalEggs = await session.Inventory.GetEggs();
                 if ((maxStorage - totalEggs.Count() - buff) > totalPokemon.Count()) return;
             }
 
             if (session.LogicSettings.AutoFavoritePokemon)
                 await FavoritePokemonTask.Execute(session, cancellationToken);
             
-            var duplicatePokemons =
+            var duplicatePokemons = await
                 session.Inventory.GetDuplicatePokemonToTransfer(
                     session.LogicSettings.PokemonsNotToTransfer,
                     session.LogicSettings.PokemonEvolveFilters,

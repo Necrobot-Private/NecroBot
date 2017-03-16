@@ -346,7 +346,7 @@ namespace PoGo.NecroBot.Logic.State
             {
                 //TODO : need get all data at 1 call here to save speed login.
                 session.Profile = await session.Inventory.GetPlayerData();
-                var stats = session.Inventory.GetPlayerStats();
+                var stats = await session.Inventory.GetPlayerStats();
 
                 TinyIoCContainer.Current.Resolve<MultiAccountManager>().Logged(session.Profile, stats);
                 session.EventDispatcher.Send(new ProfileEvent {Profile = session.Profile, Stats = stats});

@@ -31,7 +31,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             //await session.Inventory.RefreshCachedInventory();
 
-            var pokemonToEvolveTask = session.Inventory
+            var pokemonToEvolveTask = await session.Inventory
                 .GetPokemonToEvolve(session.LogicSettings.PokemonEvolveFilters);
             var pokemonToEvolve = pokemonToEvolveTask.Where(p => p != null).ToList();
 
@@ -46,8 +46,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     var luckyEggMin = session.LogicSettings.UseLuckyEggsMinPokemonAmount;
                     var maxStorage = session.Profile.PlayerData.MaxPokemonStorage;
-                    var totalPokemon = session.Inventory.GetPokemons();
-                    var totalEggs = session.Inventory.GetEggs();
+                    var totalPokemon = await session.Inventory.GetPokemons();
+                    var totalEggs = await session.Inventory.GetEggs();
 
                     var pokemonNeededInInventory = (maxStorage - totalEggs.Count()) *
                                                    session.LogicSettings.EvolveKeptPokemonsAtStorageUsagePercentage /
@@ -88,7 +88,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     }
                     else
                     {
-                        if (shouldUseLuckyEgg(session, pokemonToEvolve))
+                        if (await shouldUseLuckyEgg(session, pokemonToEvolve))
                         {
                             await UseLuckyEgg(session);
                         }
@@ -98,7 +98,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 else if (session.LogicSettings.EvolveAllPokemonWithEnoughCandy ||
                          session.LogicSettings.EvolveAllPokemonAboveIv)
                 {
-                    if (shouldUseLuckyEgg(session, pokemonToEvolve))
+                    if (await shouldUseLuckyEgg(session, pokemonToEvolve))
                     {
                         await UseLuckyEgg(session);
                     }
@@ -109,7 +109,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         public static async Task UseLuckyEgg(ISession session)
         {
-            var inventoryContent = session.Inventory.GetItems();
+            var inventoryContent = await session.Inventory.GetItems();
 
             var luckyEgg = inventoryContent.FirstOrDefault(p => p.ItemId == ItemId.ItemLuckyEgg);
             
@@ -133,9 +133,9 @@ namespace PoGo.NecroBot.Logic.Tasks
             DelayingUtils.Delay(session.LogicSettings.DelayBetweenPlayerActions, 0);
         }
 
-        public static ItemId GetRequireEvolveItem(ISession session, PokemonId from, PokemonId to)
+        public static async Task<ItemId> GetRequireEvolveItem(ISession session, PokemonId from, PokemonId to)
         {
-            var settings = session.Inventory.GetPokemonSettings().Result.FirstOrDefault(x => x.PokemonId == from);
+            var settings = (await session.Inventory.GetPokemonSettings()).FirstOrDefault(x => x.PokemonId == from);
             if (settings == null) return ItemId.ItemUnknown;
 
             var branch = settings.EvolutionBranch.FirstOrDefault(x => x.Evolution == to);
@@ -153,7 +153,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     try
                     {
                         // no cancellationToken.ThrowIfCancellationRequested here, otherwise the lucky egg would be wasted.
-                        var evolveResponse = await session.Client.Inventory.EvolvePokemon(pokemon.Id ,filter== null? ItemId.ItemUnknown: GetRequireEvolveItem(session ,pokemon.PokemonId, filter.EvolveToPokemonId));
+                        var evolveResponse = await session.Client.Inventory.EvolvePokemon(pokemon.Id ,filter== null? ItemId.ItemUnknown: await GetRequireEvolveItem(session ,pokemon.PokemonId, filter.EvolveToPokemonId));
                         if (evolveResponse.Result == EvolvePokemonResponse.Types.Result.Success)
                         {
                             session.EventDispatcher.Send(new PokemonEvolveEvent
@@ -178,9 +178,9 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
         }
 
-        private static Boolean shouldUseLuckyEgg(ISession session, List<PokemonData> pokemonToEvolve)
+        private static async Task<bool> shouldUseLuckyEgg(ISession session, List<PokemonData> pokemonToEvolve)
         {
-            var inventoryContent = session.Inventory.GetItems();
+            var inventoryContent = await session.Inventory.GetItems();
 
             var luckyEggs = inventoryContent.Where(p => p.ItemId == ItemId.ItemLuckyEgg);
             var luckyEgg = luckyEggs.FirstOrDefault();
@@ -193,7 +193,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
                 else
                 {
-                    var evolvablePokemon = session.Inventory.GetPokemons();
+                    var evolvablePokemon = await session.Inventory.GetPokemons();
 
                     var deltaPokemonToUseLuckyEgg = session.LogicSettings.UseLuckyEggsMinPokemonAmount -
                                                     pokemonToEvolve.Count;

@@ -139,8 +139,8 @@ namespace PoGo.NecroBot.Logic.Utils
 
                     try
                     {
-                        var resp = wc.PostAsync("https://api.pushbullet.com/v2/pushes", multiPartCont);
-                        var result = await resp.Result.Content.ReadAsStringAsync();
+                        var resp = await wc.PostAsync("https://api.pushbullet.com/v2/pushes", multiPartCont);
+                        var result = await resp.Content.ReadAsStringAsync();
                         isSusccess = true;
                     }
                     catch (Exception ex)
