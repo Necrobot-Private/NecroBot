@@ -61,9 +61,13 @@ namespace PoGo.NecroBot.CLI
         [HelpOption]
         public string GetUsage()
         {
-            return HelpText.AutoBuild(this,
-              (HelpText current) => HelpText.DefaultParsingErrorsHandler(this, current));
-        }
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write(HelpText.AutoBuild(this,
+               (HelpText current) => HelpText.DefaultParsingErrorsHandler(this, current)));
+            Console.ReadKey();
+            Console.ResetColor();
+            Environment.Exit(0);
+            return null;        }
     }
 
 
