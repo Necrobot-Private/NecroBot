@@ -32,7 +32,7 @@ namespace PoGo.Necrobot.Window.Controls
             {
                 case ItemId.ItemLuckyEgg:
                     {
-                        if (MessageBox.Show($"Do you want to use {Item.ItemCount - Item.SelectedValue} {Item.ItemId}", "Use item", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                        if (MessageBox.Show($"Do you want to use {Item.ItemId}", "Use item", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                         {
                             data.Drop(Item);
                             Task.Run(async () => { await UseLuckyEggTask.Execute(Session); });
@@ -41,7 +41,7 @@ namespace PoGo.Necrobot.Window.Controls
                     break;
                 case ItemId.ItemIncenseOrdinary:
                     {
-                        if (MessageBox.Show($"Do you want to use {Item.ItemCount - Item.SelectedValue} {Item.ItemId}", "Use item", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                        if (MessageBox.Show($"Do you want to use {Item.ItemId}", "Use item", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                         {
                             data.Drop(Item);
                             Task.Run(async () => { await UseIncenseTask.Execute(Session); });
