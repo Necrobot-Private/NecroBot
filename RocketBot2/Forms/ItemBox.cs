@@ -3,7 +3,6 @@ using System.Drawing;
 using System.Windows.Forms;
 using POGOProtos.Inventory.Item;
 using RocketBot2.Helpers;
-using POGOProtos.Enums;
 
 namespace RocketBot2.Forms
 {
@@ -11,7 +10,8 @@ namespace RocketBot2.Forms
     {
         public DateTime expires = new DateTime(0);
         public ItemData item_ { get; }
- 
+
+
         public ItemBox(ItemData item)
         {
             InitializeComponent();
