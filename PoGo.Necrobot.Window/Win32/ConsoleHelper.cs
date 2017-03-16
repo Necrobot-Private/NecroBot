@@ -14,20 +14,32 @@ namespace PoGo.Necrobot.Window.Win32
         /// Allocates a new console for current process.
         /// </summary>
         [DllImport("kernel32.dll")]
-        public static extern Boolean AllocConsole();
+        public static extern bool AllocConsole();
 
         /// <summary>
         /// Frees the console.
         /// </summary>
         [DllImport("kernel32.dll")]
-        public static extern Boolean FreeConsole();
+        public static extern bool FreeConsole();
 
         [DllImport("kernel32.dll")]
         static extern IntPtr GetConsoleWindow();
 
+        //const int SW_HIDE = 0;
+        //const int SW_SHOW = 5;
 
-         //const int SW_HIDE = 0;
-         //const int SW_SHOW = 5;
+        [DllImport("user32.dll")]
+        static extern bool EnableMenuItem(IntPtr hMenu, uint uIDEnableItem, uint uEnable);
+
+        [DllImport("user32.dll")]
+        static extern IntPtr GetSystemMenu(IntPtr hWnd, bool bRevert);
+
+        [DllImport("user32.dll")]
+        static extern IntPtr RemoveMenu(IntPtr hMenu, uint nPosition, uint wFlags);
+
+        internal const uint SC_CLOSE = 0xF060;
+        internal const uint MF_GRAYED = 0x00000001;
+        internal const uint MF_BYCOMMAND = 0x00000000;
 
         public static void HideConsoleWindow()
         {
@@ -44,6 +56,10 @@ namespace PoGo.Necrobot.Window.Win32
 
             if (hWnd != IntPtr.Zero)
             {
+                IntPtr hSystemMenu = GetSystemMenu(hWnd, false);
+                EnableMenuItem(hSystemMenu, SC_CLOSE, MF_GRAYED);
+                RemoveMenu(hSystemMenu, SC_CLOSE, MF_BYCOMMAND);
+
                 ShowWindow(hWnd, 5); // 0 = SM_SHOW
             }
         }
