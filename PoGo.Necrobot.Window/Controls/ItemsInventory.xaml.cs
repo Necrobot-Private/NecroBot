@@ -28,18 +28,41 @@ namespace PoGo.Necrobot.Window.Controls
 
             ItemsViewModel Item = data.Get(itemId);
 
-            if(MessageBox.Show($"Do you want to drop {Item.ItemCount - Item.SelectedValue} {Item.ItemId}", "Drop item", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            switch (Item.ItemId)
             {
-                data.Drop(Item);
-                Task.Run(async () =>
-                {
+                case ItemId.ItemLuckyEgg:
+                    {
+                        if (MessageBox.Show($"Do you want to use {Item.ItemId}", "Use item", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                        {
+                            data.Drop(Item);
+                            Task.Run(async () => { await UseLuckyEggTask.Execute(Session); });
+                        }
+                    }
+                    break;
+                case ItemId.ItemIncenseOrdinary:
+                    {
+                        if (MessageBox.Show($"Do you want to use {Item.ItemId}", "Use item", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                        {
+                            data.Drop(Item);
+                            Task.Run(async () => { await UseIncenseTask.Execute(Session); });
+                        }
+                    }
+                    break;
+                default:
+                    {
+                        if (MessageBox.Show($"Do you want to drop {Item.ItemCount - Item.SelectedValue} {Item.ItemId}", "Drop item", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                        {
+                            data.Drop(Item);
+                            Task.Run(async () =>
+                            {
 
-                    await RecycleItemsTask.DropItem(Session, Item.ItemId, Item.ItemCount - Item.SelectedValue);
+                                await RecycleItemsTask.DropItem(Session, Item.ItemId, Item.ItemCount - Item.SelectedValue);
 
-                });
+                            });
+                        }
+                    }
+                    break;
             }
-
         }
-
     }
 }
