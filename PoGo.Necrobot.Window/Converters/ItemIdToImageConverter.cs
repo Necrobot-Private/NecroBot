@@ -29,17 +29,17 @@ namespace PoGo.Necrobot.Window.Converters
             {ItemId.ItemMaxRevive,"http://i.imgur.com/qa2Rqnw.png" } ,
             {ItemId.ItemRazzBerry,"http://i.imgur.com/9lyjJHn.png" } ,
             {ItemId.ItemBlukBerry,"http://i.imgur.com/80WZSnw.png" } ,
-            {ItemId.ItemNanabBerry,"http://www.serebii.net/itemdex/sprites/pgl/nanabberry.png" } ,
-            {ItemId.ItemPinapBerry,"http://www.serebii.net/itemdex/sprites/pgl/pinapberry.png" } ,
+            {ItemId.ItemNanabBerry,"http://www.serebii.net/pokemongo/items/nanabberry.png" } ,
+            {ItemId.ItemPinapBerry,"http://www.serebii.net/pokemongo/items/pinapberry.png" } ,
             {ItemId.ItemWeparBerry,"http://i.imgur.com/DOhPGVh.png" },
             {ItemId.ItemIncenseOrdinary,"http://i.imgur.com/KqdjZTf.png" } ,
             {ItemId.ItemTroyDisk,"http://i.imgur.com/qJedIld.png" } ,
             {ItemId.ItemLuckyEgg,"http://i.imgur.com/fEPh6Eu.png" } ,
-            {ItemId.ItemDragonScale,"http://www.serebii.net/itemdex/sprites/pgl/dragonscale.png" } ,
-            {ItemId.ItemUpGrade,"http://www.serebii.net/itemdex/sprites/pgl/up-grade.png" },
-            {ItemId.ItemKingsRock, "http://www.serebii.net/itemdex/sprites/pgl/king'srock.png" },
-            { ItemId.ItemMetalCoat, "http://www.serebii.net/itemdex/sprites/pgl/metalcoat.png" },
-            {ItemId.ItemSunStone, "http://www.serebii.net/itemdex/sprites/pgl/sunstone.png" }
+            {ItemId.ItemDragonScale,"http://www.serebii.net/pokemongo/items/dragonscale.png" } ,
+            {ItemId.ItemUpGrade,"http://www.serebii.net/pokemongo/items/up-grade.png" },
+            {ItemId.ItemKingsRock, "http://www.serebii.net/pokemongo/items/kingsrock.png" },
+            { ItemId.ItemMetalCoat, "http://www.serebii.net/pokemongo/items/metalcoat.png" },
+            {ItemId.ItemSunStone, "http://www.serebii.net/pokemongo/items/sunstone.png" }
         };
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
