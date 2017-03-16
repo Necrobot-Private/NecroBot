@@ -9,7 +9,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 {
     public class UseIncenseTask
     {
-        public static async Task Execute(Session session)
+        public static async Task Execute(ISession session)
         {
             var response = await session.Client.Inventory.UseIncense(ItemId.ItemIncenseOrdinary);
             switch (response.Result)

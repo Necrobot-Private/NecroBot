@@ -8,7 +8,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 {
     public class UseLuckyEggTask
     {
-        public static async Task Execute(Session session)
+        public static async Task Execute(ISession session)
         {
             var response = await session.Client.Inventory.UseItemXpBoost();
             switch (response.Result)
