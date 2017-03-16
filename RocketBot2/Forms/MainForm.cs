@@ -42,6 +42,7 @@ using System.Diagnostics;
 using PokemonGo.RocketAPI;
 using RocketBot2.Win32;
 using System.Net.Http;
+using RocketBot2.Forms;
 
 #endregion
 
@@ -1514,6 +1515,12 @@ namespace RocketBot2.Forms
                 case DialogResult.No: return false;
             }
             return false;
+        }
+
+        private void btnPokeDex_Click(object sender, EventArgs e)
+        {
+            var _PokeDex = new PokeDex();
+            _PokeDex.Show();
         }
     }
 }
