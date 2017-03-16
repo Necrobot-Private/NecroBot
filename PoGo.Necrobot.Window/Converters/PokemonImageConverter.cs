@@ -14,14 +14,7 @@ namespace PoGo.Necrobot.Window.Converters
         {
             var id = (int)value;
 
-            if (id > 151)
-            {
-
-                return $"https://rankedboost.com/wp-content/plugins/ice/riot/poksimages/pokemons2/{id:000}.png";
-
-            }
-
-            return $"https://rankedboost.com/wp-content/plugins/ice/riot/poksimages/pokemons/{id:000}.png";
+            return $"http://www.serebii.net/pokemongo/pokemon/{id:000}.png";
 
         }
 
