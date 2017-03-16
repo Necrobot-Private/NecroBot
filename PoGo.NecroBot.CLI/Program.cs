@@ -67,11 +67,11 @@ namespace PoGo.NecroBot.CLI
             Console.ReadKey();
             Console.ResetColor();
             Environment.Exit(0);
-            return null;        }
+            return null;
+        }
     }
-
-
-    public class Program
+    
+   public class Program
     {
         private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
         private static string _subPath = "";
