@@ -17,7 +17,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             cancellationToken.ThrowIfCancellationRequested();
             TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
             
-            var currentAmountOfIncense = session.Inventory.GetItemAmountByType(ItemId.ItemIncenseOrdinary);
+            var currentAmountOfIncense = await session.Inventory.GetItemAmountByType(ItemId.ItemIncenseOrdinary).ConfigureAwait(false);
             if (currentAmountOfIncense == 0)
             {
                 Logger.Write(session.Translation.GetTranslation(TranslationString.NoIncenseAvailable));
@@ -28,7 +28,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 Logger.Write(session.Translation.GetTranslation(TranslationString.UseIncenseAmount, currentAmountOfIncense));
             }
 
-            var UseIncense = await session.Inventory.UseIncenseConstantly();
+            var UseIncense = await session.Inventory.UseIncenseConstantly().ConfigureAwait(false);
 
             if (UseIncense.Result == UseIncenseResponse.Types.Result.Success)
             {

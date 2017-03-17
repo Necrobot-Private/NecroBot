@@ -24,7 +24,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
         {
             if (cmd.ToLower() == Command)
             {
-                var pokedex = session.Inventory.GetPokeDexItems();
+                var pokedex = await session.Inventory.GetPokeDexItems().ConfigureAwait(false);
                 var pokedexSort = pokedex.OrderBy(x => x.InventoryItemData.PokedexEntry.PokemonId);
                 var answerTextmessage = GetMsgHead(session, session.Profile.PlayerData.Username) + "\r\n\r\n";
 

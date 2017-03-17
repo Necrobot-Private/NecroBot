@@ -38,7 +38,7 @@ namespace PoGo.NecroBot.Logic.State
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            await CleanupOldFiles();
+            await CleanupOldFiles().ConfigureAwait(false);
 
             if (!session.LogicSettings.CheckForUpdates)
             {
@@ -52,7 +52,7 @@ namespace PoGo.NecroBot.Logic.State
             }
 
             var autoUpdate = session.LogicSettings.AutoUpdate;
-           var isLatest = IsLatest();
+            var isLatest = await IsLatest().ConfigureAwait(false);
             if (isLatest)
             {
                 session.EventDispatcher.Send(new UpdateEvent
@@ -146,17 +146,15 @@ namespace PoGo.NecroBot.Logic.State
                     Logger.Write(e.ToString());
                 }
             }
-            await Task.Delay(200);
+            await Task.Delay(200).ConfigureAwait(false);
         }
-
-       
-
-        private static  string DownloadServerVersion()
+        
+        private async static Task<string> DownloadServerVersion()
         {
             using (HttpClient client = new HttpClient())
             {
-                var responseContent = client.GetAsync(VersionUri).Result;
-                return responseContent.Content.ReadAsStringAsync().Result;
+                var responseContent = await client.GetAsync(VersionUri).ConfigureAwait(false);
+                return await responseContent.Content.ReadAsStringAsync().ConfigureAwait(false);
             }
         }
 
@@ -166,12 +164,12 @@ namespace PoGo.NecroBot.Logic.State
         }
 
 
-        public static bool IsLatest()
+        public static async Task<bool> IsLatest()
         {
             try
             {
                 var regex = new Regex(@"\[assembly\: AssemblyVersion\(""(\d{1,})\.(\d{1,})\.(\d{1,})\.(\d{1,})""\)\]");
-                var match = regex.Match(DownloadServerVersion());
+                var match = regex.Match(await DownloadServerVersion().ConfigureAwait(false));
 
                 if (!match.Success)
                     return false;

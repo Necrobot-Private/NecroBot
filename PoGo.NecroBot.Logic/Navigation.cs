@@ -126,7 +126,7 @@ namespace PoGo.NecroBot.Logic
             // If the stretegies become bigger, create a factory for easy management
 
             //Logging.Logger.Write($"Navigation - Walking speed {customWalkingSpeed}");
-            await WalkStrategy.Walk(targetLocation, functionExecutedWhileWalking, session, cancellationToken, customWalkingSpeed);
+            await WalkStrategy.Walk(targetLocation, functionExecutedWhileWalking, session, cancellationToken, customWalkingSpeed).ConfigureAwait(false);
         }
 
         private void InitializeWalkStrategies(ILogicSettings logicSettings)

@@ -30,8 +30,6 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
         public override string GetDescription(ISession session) =>
             base.GetDescription(session, DefaultCount.ToString());
 
-        // jjskuld - Ignore CS1998 warning for now.
-        #pragma warning disable 1998
         public override async Task<bool> OnCommand(ISession session, string cmd, Action<string> callback)
         {
             var commandMatch = Match(cmd, CommandParseRegex);
@@ -62,8 +60,8 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
 
             // Get 'count' top Pokemon and 'orderBy' -> will never be null
             var topPokemon = string.Equals("iv", orderBy)
-                ? session.Inventory.GetHighestsPerfect(count)
-                : session.Inventory.GetHighestsCp(count);
+                ? await session.Inventory.GetHighestsPerfect(count).ConfigureAwait(false)
+                : await session.Inventory.GetHighestsCp(count).ConfigureAwait(false);
 
             var topPokemonList = topPokemon as IList<PokemonData> ?? topPokemon.ToList();
 
@@ -82,6 +80,5 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
             callback(answerTextmessage);
             return true;
         }
-        #pragma warning restore 1998
     }
 }

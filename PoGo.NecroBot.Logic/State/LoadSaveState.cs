@@ -85,7 +85,7 @@ namespace PoGo.NecroBot.Logic.State
                 }
             }
 
-            await Task.Delay(3000, cancellationToken);
+            await Task.Delay(3000, cancellationToken).ConfigureAwait(false);
             return new CheckTosState();
         }
         private static double lastLat = 0;

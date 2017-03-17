@@ -211,7 +211,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             get
             {
                 return LocationUtils.getElevation(_elevationService, _settings.LocationConfig.DefaultLatitude,
-                    _settings.LocationConfig.DefaultLongitude);
+                    _settings.LocationConfig.DefaultLongitude).Result;
             }
 
             set { }

@@ -887,7 +887,7 @@ namespace TinyIoC
 
                 List<Assembly> assemblies = new List<Assembly>();
 
-				var files = await folder.GetFilesAsync();
+				var files = await folder.GetFilesAsync().ConfigureAwait(false);
 
                 foreach (StorageFile file in files)
                 {

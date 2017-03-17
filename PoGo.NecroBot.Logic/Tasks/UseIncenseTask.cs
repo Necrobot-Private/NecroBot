@@ -11,7 +11,7 @@ namespace PoGo.NecroBot.Logic.Tasks
     {
         public static async Task Execute(ISession session)
         {
-            var response = await session.Client.Inventory.UseIncense(ItemId.ItemIncenseOrdinary);
+            var response = await session.Client.Inventory.UseIncense(ItemId.ItemIncenseOrdinary).ConfigureAwait(false);
             switch (response.Result)
             {
                 case UseIncenseResponse.Types.Result.Success:

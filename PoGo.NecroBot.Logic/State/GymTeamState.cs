@@ -6,6 +6,7 @@ using POGOProtos.Settings.Master;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace PoGo.NecroBot.Logic.State
 {
@@ -71,10 +72,11 @@ namespace PoGo.NecroBot.Logic.State
                 myTeam.Add(new GymPokemon() { attacker = pokemon, hpState = pokemon.StaminaMax });
         }
 
-        public void LoadMyPokemons(ISession session)
+        public async Task LoadMyPokemons(ISession session)
         {
             myPokemons.Clear();
-            foreach (var pokemon in session.Inventory.GetPokemons().Where(w => w.Cp >= session.LogicSettings.GymConfig.MinCpToUseInAttack))
+            var pokemons = await session.Inventory.GetPokemons().ConfigureAwait(false);
+            foreach (var pokemon in pokemons.Where(w => w.Cp >= session.LogicSettings.GymConfig.MinCpToUseInAttack))
             {
                 MyPokemonStat mps = new MyPokemonStat(session, pokemon);
                 myPokemons.Add(mps);
@@ -144,18 +146,13 @@ namespace PoGo.NecroBot.Logic.State
         {
             data = pokemon;
 
-            var pokemonsSetting = session.Inventory.GetPokemonSettings();
-            pokemonsSetting.Wait();
-            mainType = pokemonsSetting.Result.Where(f => f.PokemonId == data.PokemonId).Select(s => s.Type).FirstOrDefault();
-            extraType = pokemonsSetting.Result.Where(f => f.PokemonId == data.PokemonId).Select(s => s.Type2).FirstOrDefault();
+            var pokemonsSetting = session.Inventory.GetPokemonSettings().Result;
+            
+            mainType = pokemonsSetting.Where(f => f.PokemonId == data.PokemonId).Select(s => s.Type).FirstOrDefault();
+            extraType = pokemonsSetting.Where(f => f.PokemonId == data.PokemonId).Select(s => s.Type2).FirstOrDefault();
 
-            var attack = session.Inventory.GetMoveSetting(data.Move1);
-            attack.Wait();
-            this.attack = attack.Result;
-
-            var specialMove = session.Inventory.GetMoveSetting(data.Move2);
-            specialMove.Wait();
-            specialAttack = specialMove.Result;
+            attack = session.Inventory.GetMoveSetting(data.Move1).Result;
+            specialAttack = session.Inventory.GetMoveSetting(data.Move2).Result;
         }
 
         public void Dispose()

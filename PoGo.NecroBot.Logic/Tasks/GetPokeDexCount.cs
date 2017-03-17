@@ -9,13 +9,13 @@ namespace PoGo.NecroBot.Logic.Tasks
 {
     public class GetPokeDexCount
     {
-        public static void Execute(ISession session, CancellationToken cancellationToken)
+        public static async Task Execute(ISession session, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            //await session.Inventory.RefreshCachedInventory();
+            //await session.Inventory.RefreshCachedInventory().ConfigureAwait(false);
 
-            var PokeDex = session.Inventory.GetPokeDexItems();
+            var PokeDex = await session.Inventory.GetPokeDexItems().ConfigureAwait(false);
             var _totalUniqueEncounters = PokeDex.Select(
                 i => new
                 {

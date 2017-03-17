@@ -19,15 +19,15 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             using (var blocker = new BlockableScope(session, BotActions.Upgrade))
             {
-                if (!await blocker.WaitToRun()) return;
+                if (!await blocker.WaitToRun().ConfigureAwait(false)) return;
 
-                var all = session.Inventory.GetPokemons();
+                var all = await session.Inventory.GetPokemons().ConfigureAwait(false);
                 var pokemons = all.OrderByDescending(x => x.Cp).ThenBy(n => n.StaminaMax);
                 var pokemon = pokemons.FirstOrDefault(p => p.Id == pokemonId);
 
                 if (pokemon == null) return;
 
-                var upgradeResult = await session.Inventory.UpgradePokemon(pokemon.Id);
+                var upgradeResult = await session.Inventory.UpgradePokemon(pokemon.Id).ConfigureAwait(false);
                 if (upgradeResult.Result.ToString().ToLower().Contains("success"))
                 {
                     Logger.Write("Pokemon Upgraded:" + session.Translation.GetPokemonTranslation(upgradeResult.UpgradedPokemon.PokemonId) + ":" + upgradeResult.UpgradedPokemon.Cp, LogLevel.LevelUp);

@@ -33,7 +33,7 @@ namespace PoGo.NecroBot.Logic.Utils
             _distanceTraveled += distanceTraveled;
             if (_distanceTraveled > _checkInterval)
             {
-                await UseIncubatorsTask.Execute(_session, cancellationToken);
+                await UseIncubatorsTask.Execute(_session, cancellationToken).ConfigureAwait(false);
                 _distanceTraveled = 0;
             }
         }

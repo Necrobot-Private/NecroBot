@@ -22,11 +22,11 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static async Task Execute(ISession session, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            //await session.Inventory.RefreshCachedInventory();
+            //await session.Inventory.RefreshCachedInventory().ConfigureAwait(false);
 
             if (!session.LogicSettings.AutoFavoritePokemon) return;
 
-            var pokemons = session.Inventory.GetPokemons().Where(x=>x.Favorite ==0);
+            var pokemons = (await session.Inventory.GetPokemons().ConfigureAwait(false)).Where(x=>x.Favorite ==0);
 
             foreach (var pokemon in pokemons)
             {
@@ -39,7 +39,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     pokemon.Cp >= session.LogicSettings.FavoriteMinCp,
                     PokemonInfo.GetLevel(pokemon) >= session.LogicSettings.FavoriteMinLevel))
                 {
-                    var response = await session.Client.Inventory.SetFavoritePokemon(pokemon.Id, true);
+                    var response = await session.Client.Inventory.SetFavoritePokemon(pokemon.Id, true).ConfigureAwait(false);
                     if (response.Result == SetFavoritePokemonResponse.Types.Result.Success)
                     {
                         session.EventDispatcher.Send(new NoticeEvent
@@ -57,18 +57,18 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             //using (var blocker = new BlockableScope(session, BotActions.Favorite))
             //{
-                //if (!await blocker.WaitToRun()) return;
+                //if (!await blocker.WaitToRun().ConfigureAwait(false)) return;
                 
-                var pokemon = session.Inventory.GetPokemons().FirstOrDefault(p => p.Id == pokemonId);
+                var pokemon = (await session.Inventory.GetPokemons().ConfigureAwait(false)).FirstOrDefault(p => p.Id == pokemonId);
                 if (pokemon != null)
                 {
                     var perfection = Math.Round(PokemonInfo.CalculatePokemonPerfection(pokemon));
 
-                    var response = await session.Client.Inventory.SetFavoritePokemon(pokemonId, favorite);
+                    var response = await session.Client.Inventory.SetFavoritePokemon(pokemonId, favorite).ConfigureAwait(false);
                     if (response.Result == SetFavoritePokemonResponse.Types.Result.Success)
                     {
                         // Reload pokemon to refresh favorite flag.
-                        pokemon = session.Inventory.GetPokemons().FirstOrDefault(p => p.Id == pokemonId);
+                        pokemon = (await session.Inventory.GetPokemons().ConfigureAwait(false)).FirstOrDefault(p => p.Id == pokemonId);
 
                         session.EventDispatcher.Send(new FavoriteEvent(pokemon, response));
 

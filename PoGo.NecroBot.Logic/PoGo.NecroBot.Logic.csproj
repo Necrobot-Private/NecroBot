@@ -402,7 +402,6 @@
     <Compile Include="Service\Elevation\RandomElevationService.cs" />
     <Compile Include="Service\GoogleDirectionsService.cs" />
     <Compile Include="Service\Elevation\GoogleElevationService.cs" />
-    <Compile Include="Service\Elevation\MapQuestElevationService.cs" />
     <Compile Include="Service\TelegramCommand\AccountsCommand.cs" />
     <Compile Include="Service\TelegramCommand\CommandLocation.cs" />
     <Compile Include="Service\TelegramCommand\CommandMessage.cs" />

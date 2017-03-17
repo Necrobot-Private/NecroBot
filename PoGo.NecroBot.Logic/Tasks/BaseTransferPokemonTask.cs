@@ -25,12 +25,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                     {
                         TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
                         var batchTransfer = pokemonsToTransfer.Skip(i * session.LogicSettings.BulkTransferSize).Take(session.LogicSettings.BulkTransferSize);
-                        var t = await session.Client.Inventory.TransferPokemons(batchTransfer.Select(x => x.Id).ToList());
+                        var t = await session.Client.Inventory.TransferPokemons(batchTransfer.Select(x => x.Id).ToList()).ConfigureAwait(false);
                         if (t.Result == ReleasePokemonResponse.Types.Result.Success)
                         {
                             foreach (var duplicatePokemon in batchTransfer)
                             {
-                                PrintPokemonInfo(session, duplicatePokemon);
+                                await PrintPokemonInfo(session, duplicatePokemon).ConfigureAwait(false);
                             }
                         }
                         else session.EventDispatcher.Send(new WarnEvent() { Message = session.Translation.GetTranslation(TranslationString.BulkTransferFailed, pokemonsToTransfer.Count()) });
@@ -43,25 +43,25 @@ namespace PoGo.NecroBot.Logic.Tasks
                         TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
                         cancellationToken.ThrowIfCancellationRequested();
 
-                        await session.Client.Inventory.TransferPokemon(pokemon.Id);
+                        await session.Client.Inventory.TransferPokemon(pokemon.Id).ConfigureAwait(false);
 
-                        PrintPokemonInfo(session, pokemon);
+                        await PrintPokemonInfo(session, pokemon).ConfigureAwait(false);
 
                         // Padding the TransferEvent with player-choosen delay before instead of after.
                         // This is to remedy too quick transfers, often happening within a second of the
                         // previous action otherwise
 
-                        await DelayingUtils.DelayAsync(session.LogicSettings.TransferActionDelay, 0, cancellationToken);
+                        await DelayingUtils.DelayAsync(session.LogicSettings.TransferActionDelay, 0, cancellationToken).ConfigureAwait(false);
                     }
                 }
             }
         }
 
-        public static void PrintPokemonInfo(ISession session, PokemonData duplicatePokemon)
+        public static async Task PrintPokemonInfo(ISession session, PokemonData duplicatePokemon)
         {
             var bestPokemonOfType = (session.LogicSettings.PrioritizeIvOverCp
-                                        ? session.Inventory.GetHighestPokemonOfTypeByIv(duplicatePokemon)
-                                        : session.Inventory.GetHighestPokemonOfTypeByCp(duplicatePokemon)) ??
+                                        ? await session.Inventory.GetHighestPokemonOfTypeByIv(duplicatePokemon).ConfigureAwait(false)
+                                        : await session.Inventory.GetHighestPokemonOfTypeByCp(duplicatePokemon).ConfigureAwait(false)) ??
                                     duplicatePokemon;
 
             var ev = new TransferPokemonEvent
@@ -72,12 +72,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                 Cp = duplicatePokemon.Cp,
                 BestCp = bestPokemonOfType.Cp,
                 BestPerfection = PokemonInfo.CalculatePokemonPerfection(bestPokemonOfType),
-                Candy = session.Inventory.GetCandyCount(duplicatePokemon.PokemonId)
+                Candy = await session.Inventory.GetCandyCount(duplicatePokemon.PokemonId).ConfigureAwait(false)
             };
 
-            if (session.Inventory.GetCandyFamily(duplicatePokemon.PokemonId) != null)
+            if (await session.Inventory.GetCandyFamily(duplicatePokemon.PokemonId).ConfigureAwait(false) != null)
             {
-                ev.FamilyId = session.Inventory.GetCandyFamily(duplicatePokemon.PokemonId).FamilyId;
+                ev.FamilyId = (await session.Inventory.GetCandyFamily(duplicatePokemon.PokemonId).ConfigureAwait(false)).FamilyId;
             }
 
             session.EventDispatcher.Send(ev);

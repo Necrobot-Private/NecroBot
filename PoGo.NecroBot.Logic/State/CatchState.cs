@@ -23,7 +23,6 @@ namespace PoGo.NecroBot.Logic.State
 {
     public class CatchState : IState
     {
-        [SuppressMessage("Await.Warning", "CS4014:Await.Warning")]
         public class CatchablePokemon
         {
             public ulong EncounteredId { get; set; }
@@ -72,29 +71,29 @@ namespace PoGo.NecroBot.Logic.State
                 {
                     //await
                     //    LocationUtils.UpdatePlayerLocationWithAltitude(session,
-                    //        new GeoCoordinate(pkm.Latitude, pkm.Longitude, session.Client.CurrentAltitude), 0); // Set speed to 0 for random speed.
+                    //        new GeoCoordinate(pkm.Latitude, pkm.Longitude, session.Client.CurrentAltitude), 0).ConfigureAwait(false); // Set speed to 0 for random speed.
 
                     await session.Navigation.Move(
                         new MapLocation(pkm.Latitude, pkm.Longitude, session.Client.CurrentAltitude),
-                        null, session, cancellationToken);
-                    encounter = await session.Client.Encounter.EncounterPokemon(pkm.EncounteredId, pkm.SpawnId);
+                        null, session, cancellationToken).ConfigureAwait(false);
+                    encounter = await session.Client.Encounter.EncounterPokemon(pkm.EncounteredId, pkm.SpawnId).ConfigureAwait(false);
                 }
                 finally
                 {
                     //await
                     //    LocationUtils.UpdatePlayerLocationWithAltitude(session,
-                    //        new GeoCoordinate(currentLatitude, currentLongitude, session.Client.CurrentAltitude), 0); // Set speed to 0 for random speed.
+                    //        new GeoCoordinate(currentLatitude, currentLongitude, session.Client.CurrentAltitude), 0).ConfigureAwait(false); // Set speed to 0 for random speed.
                 }
                 switch (encounter.Status)
                 {
                     case EncounterResponse.Types.Status.EncounterSuccess:
                         await CatchPokemonTask.Execute(session, cancellationToken, encounter, pkm.ToMapPokemon(),
-                            currentFortData: null, sessionAllowTransfer: true);
+                            currentFortData: null, sessionAllowTransfer: true).ConfigureAwait(false);
                         break;
                     case EncounterResponse.Types.Status.PokemonInventoryFull:
                         if (session.LogicSettings.TransferDuplicatePokemon)
                         {
-                            await TransferDuplicatePokemonTask.Execute(session, cancellationToken);
+                            await TransferDuplicatePokemonTask.Execute(session, cancellationToken).ConfigureAwait(false);
                         }
                         else
                         {
@@ -109,7 +108,7 @@ namespace PoGo.NecroBot.Logic.State
                             session.LogicSettings.UseLuckyEggsWhileEvolving ||
                             session.LogicSettings.KeepPokemonsThatCanEvolve)
                         {
-                            await EvolvePokemonTask.Execute(session, cancellationToken);
+                            await EvolvePokemonTask.Execute(session, cancellationToken).ConfigureAwait(false);
                         }
                         break;
 
@@ -123,9 +122,9 @@ namespace PoGo.NecroBot.Logic.State
                         break;
                 }
                 pkm.Checked = true;
-                await Task.Delay(1000);
+                await Task.Delay(1000).ConfigureAwait(false);
             } while (pkm != null);
-            await Task.Delay(3000);
+            await Task.Delay(3000).ConfigureAwait(false);
             return this;
         }
 

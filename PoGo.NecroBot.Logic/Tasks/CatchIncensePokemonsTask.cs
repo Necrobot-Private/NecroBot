@@ -32,7 +32,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 LogLevel.Debug
             );
 
-            var incensePokemon = await session.Client.Map.GetIncensePokemons();
+            var incensePokemon = await session.Client.Map.GetIncensePokemons().ConfigureAwait(false);
 
             if (incensePokemon.Result == GetIncensePokemonResponse.Types.Result.IncenseEncounterAvailable)
             {
@@ -62,19 +62,19 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     var distance = LocationUtils.CalculateDistanceInMeters(session.Client.CurrentLatitude,
                         session.Client.CurrentLongitude, pokemon.Latitude, pokemon.Longitude);
-                    await Task.Delay(distance > 100 ? 500 : 100, cancellationToken);
+                    await Task.Delay(distance > 100 ? 500 : 100, cancellationToken).ConfigureAwait(false);
 
                     var encounter =
                         await
                             session.Client.Encounter.EncounterIncensePokemon((ulong) pokemon.EncounterId,
-                                pokemon.SpawnPointId);
+                                pokemon.SpawnPointId).ConfigureAwait(false);
 
                     if (encounter.Result == IncenseEncounterResponse.Types.Result.IncenseEncounterSuccess
                         && session.LogicSettings.CatchPokemon)
                     {
-                        //await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon);
+                        //await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon).ConfigureAwait(false);
                         await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon,
-                            currentFortData: null, sessionAllowTransfer: true);
+                            currentFortData: null, sessionAllowTransfer: true).ConfigureAwait(false);
                     }
                     else if (encounter.Result == IncenseEncounterResponse.Types.Result.PokemonInventoryFull)
                     {
@@ -85,15 +85,15 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 Message = session.Translation.GetTranslation(TranslationString.InvFullTransferring)
                             });
                             if (session.LogicSettings.TransferDuplicatePokemon)
-                                await TransferDuplicatePokemonTask.Execute(session, cancellationToken);
+                                await TransferDuplicatePokemonTask.Execute(session, cancellationToken).ConfigureAwait(false);
                             if (session.LogicSettings.TransferWeakPokemon)
-                                await TransferWeakPokemonTask.Execute(session, cancellationToken);
+                                await TransferWeakPokemonTask.Execute(session, cancellationToken).ConfigureAwait(false);
                             if (session.LogicSettings.EvolveAllPokemonAboveIv ||
                                 session.LogicSettings.EvolveAllPokemonWithEnoughCandy ||
                                 session.LogicSettings.UseLuckyEggsWhileEvolving ||
                                 session.LogicSettings.KeepPokemonsThatCanEvolve)
                             {
-                                await EvolvePokemonTask.Execute(session, cancellationToken);
+                                await EvolvePokemonTask.Execute(session, cancellationToken).ConfigureAwait(false);
                             }
                         }
                         else
