@@ -100,21 +100,18 @@ namespace PoGo.NecroBot.Logic
 
         public async Task UpdateInventoryItem(ItemId itemId)
         {
-            await Task.Run(async () =>
+            foreach (var item in await GetCachedInventory())
             {
-                foreach (var item in await GetCachedInventory())
+                if (item.InventoryItemData != null
+                    && item.InventoryItemData.Item != null
+                    && item.InventoryItemData.Item.ItemId == itemId)
                 {
-                    if (item.InventoryItemData != null
-                        && item.InventoryItemData.Item != null
-                        && item.InventoryItemData.Item.ItemId == itemId)
+                    this.ownerSession.EventDispatcher.Send(new InventoryItemUpdateEvent()
                     {
-                        this.ownerSession.EventDispatcher.Send(new InventoryItemUpdateEvent()
-                        {
-                            Item = item.InventoryItemData.Item
-                        });
-                    }
+                        Item = item.InventoryItemData.Item
+                    });
                 }
-            });
+            }
         }
 
         public async Task<LevelUpRewardsResponse> GetLevelUpRewards(Inventory inv)

@@ -19,12 +19,12 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
             return "Random Elevation Service (Necrobot Default)";
         }
 
+// jjskuld - Ignore CS1998 warning for now.
+#pragma warning disable 1998
         public override async Task<double> GetElevationFromWebService(double lat, double lng)
         {
-            return await Task.Run(() =>
-            {
-                return rand.NextDouble() * (maxElevation - minElevation) + minElevation;
-            });
+            return rand.NextDouble() * (maxElevation - minElevation) + minElevation;
         }
+#pragma warning restore 1998
     }
 }
