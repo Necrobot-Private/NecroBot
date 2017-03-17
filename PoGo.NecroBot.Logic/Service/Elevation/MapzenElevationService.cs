@@ -33,11 +33,11 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
                 {
                     string url = $"https://elevation.mapzen.com/height?json=" + "{\"shape\":[{\"lat\":" + lat + ",\"lon\":" + lng + "}]}" + $"&api_key={_apiKey}";
 
-                    var responseContent = await client.GetAsync(url);
+                    var responseContent = await client.GetAsync(url).ConfigureAwait(false);
                     if (responseContent.StatusCode != HttpStatusCode.OK)
                         return 0;
 
-                    var responseFromServer = await responseContent.Content.ReadAsStringAsync();
+                    var responseFromServer = await responseContent.Content.ReadAsStringAsync().ConfigureAwait(false);
                     JObject jsonObj = JObject.Parse(responseFromServer);
 
                     JArray heights = (JArray)jsonObj["height"];

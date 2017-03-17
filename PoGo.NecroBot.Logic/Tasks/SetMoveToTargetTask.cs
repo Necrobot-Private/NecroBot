@@ -52,7 +52,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     };
                 }
                 queue.Enqueue(_targetStop);
-            });
+            }).ConfigureAwait(false);
 
             session.EventDispatcher.Send(new TargetLocationEvent(lat, lng));
         }
@@ -93,7 +93,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     return _targetStop;
                 }
                 return null;
-            });
+            }).ConfigureAwait(false);
         }
     }
 }

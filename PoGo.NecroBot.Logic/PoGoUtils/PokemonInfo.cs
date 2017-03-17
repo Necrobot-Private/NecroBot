@@ -64,7 +64,7 @@ namespace PoGo.NecroBot.Logic.PoGoUtils
 
         public static async Task<int> GetCandy(ISession session, PokemonData pokemon)
         {
-            return await session.Inventory.GetCandyCount(pokemon.PokemonId);
+            return await session.Inventory.GetCandyCount(pokemon.PokemonId).ConfigureAwait(false);
         }
 
         public static int GetPowerUpLevel(PokemonData poke)

@@ -40,12 +40,12 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
                 ? DefaultOrderBy
                 : commandMatch.Groups["orderBy"].Value;
 
-            var allPokemonCount = (await session.Inventory.GetPokemons()).Count();
+            var allPokemonCount = (await session.Inventory.GetPokemons().ConfigureAwait(false)).Count();
 
             // Get all Pokemon and 'orderBy' -> will never be null
             var topPokemon = string.Equals("iv", orderBy)
-                ? await session.Inventory.GetHighestsPerfect(allPokemonCount)
-                : await session.Inventory.GetHighestsCp(allPokemonCount);
+                ? await session.Inventory.GetHighestsPerfect(allPokemonCount).ConfigureAwait(false)
+                : await session.Inventory.GetHighestsCp(allPokemonCount).ConfigureAwait(false);
 
             var topPokemonList = topPokemon as IList<PokemonData> ?? topPokemon.ToList();
 

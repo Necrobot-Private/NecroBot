@@ -415,7 +415,7 @@ namespace PoGo.NecroBot.Logic
         public async Task UpdateCurrentAccountLevel()
         {
             ISession session = TinyIoCContainer.Current.Resolve<ISession>();
-            var playerStats = (await session.Inventory.GetPlayerStats()).FirstOrDefault();
+            var playerStats = (await session.Inventory.GetPlayerStats().ConfigureAwait(false)).FirstOrDefault();
             if (playerStats != null)
             {
                 var currentAccount = GetCurrentAccount();

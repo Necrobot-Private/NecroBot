@@ -10,7 +10,7 @@ namespace PoGo.NecroBot.Logic.Tasks
     {
         public static async Task Execute(ISession session)
         {
-            var response = await session.Client.Inventory.UseItemXpBoost();
+            var response = await session.Client.Inventory.UseItemXpBoost().ConfigureAwait(false);
             switch (response.Result)
             {
                 case UseItemXpBoostResponse.Types.Result.Success:

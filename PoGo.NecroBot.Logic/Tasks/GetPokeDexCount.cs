@@ -13,9 +13,9 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            //await session.Inventory.RefreshCachedInventory();
+            //await session.Inventory.RefreshCachedInventory().ConfigureAwait(false);
 
-            var PokeDex = await session.Inventory.GetPokeDexItems();
+            var PokeDex = await session.Inventory.GetPokeDexItems().ConfigureAwait(false);
             var _totalUniqueEncounters = PokeDex.Select(
                 i => new
                 {

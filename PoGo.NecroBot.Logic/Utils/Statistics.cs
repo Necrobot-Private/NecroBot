@@ -127,7 +127,7 @@ namespace PoGo.NecroBot.Logic.Utils
 
         public async Task<StatsExport> GetCurrentInfo(Inventory inventory)
         {
-            var stats = await inventory.GetPlayerStats();
+            var stats = await inventory.GetPlayerStats().ConfigureAwait(false);
             StatsExport output = null;
             var stat = stats.FirstOrDefault();
             if (stat != null)
@@ -144,7 +144,7 @@ namespace PoGo.NecroBot.Logic.Utils
 
                 if (LevelForRewards == -1 || stat.Level >= LevelForRewards)
                 {
-                    LevelUpRewardsResponse Result = await Execute(inventory);
+                    LevelUpRewardsResponse Result = await Execute(inventory).ConfigureAwait(false);
 
                     if (Result.ToString().ToLower().Contains("awarded_already"))
                         LevelForRewards = stat.Level + 1;
@@ -165,7 +165,7 @@ namespace PoGo.NecroBot.Logic.Utils
                         }
                     }
                 }
-                var Result2 = await Execute(inventory);
+                var Result2 = await Execute(inventory).ConfigureAwait(false);
                 LevelForRewards = stat.Level;
                 if (Result2.ToString().ToLower().Contains("success"))
                 {
@@ -200,13 +200,13 @@ namespace PoGo.NecroBot.Logic.Utils
 
         public async Task<LevelUpRewardsResponse> Execute(ISession ctx)
         {
-            var Result = await ctx.Inventory.GetLevelUpRewards(LevelForRewards);
+            var Result = await ctx.Inventory.GetLevelUpRewards(LevelForRewards).ConfigureAwait(false);
             return Result;
         }
 
         public async Task<LevelUpRewardsResponse> Execute(Inventory inventory)
         {
-            var Result = await inventory.GetLevelUpRewards(inventory);
+            var Result = await inventory.GetLevelUpRewards(inventory).ConfigureAwait(false);
             return Result;
         }
 

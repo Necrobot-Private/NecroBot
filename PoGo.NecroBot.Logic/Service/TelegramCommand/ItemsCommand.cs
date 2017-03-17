@@ -40,17 +40,17 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
                     inventory.GetItemAmountByType(ItemId.ItemMaxRevive));
                 answerTextmessage += "\n";
                 answerTextmessage += session.Translation.GetTranslation(TranslationString.CurrentMiscItemInv,
-                    await session.Inventory.GetItemAmountByType(ItemId.ItemRazzBerry) +
-                    await session.Inventory.GetItemAmountByType(ItemId.ItemBlukBerry) +
-                    await session.Inventory.GetItemAmountByType(ItemId.ItemNanabBerry) +
-                    await session.Inventory.GetItemAmountByType(ItemId.ItemWeparBerry) +
-                    await session.Inventory.GetItemAmountByType(ItemId.ItemPinapBerry),
-                    await session.Inventory.GetItemAmountByType(ItemId.ItemIncenseOrdinary) +
-                    await session.Inventory.GetItemAmountByType(ItemId.ItemIncenseSpicy) +
-                    await session.Inventory.GetItemAmountByType(ItemId.ItemIncenseCool) +
-                    await session.Inventory.GetItemAmountByType(ItemId.ItemIncenseFloral),
-                    await session.Inventory.GetItemAmountByType(ItemId.ItemLuckyEgg),
-                    await session.Inventory.GetItemAmountByType(ItemId.ItemTroyDisk));
+                    await session.Inventory.GetItemAmountByType(ItemId.ItemRazzBerry).ConfigureAwait(false) +
+                    await session.Inventory.GetItemAmountByType(ItemId.ItemBlukBerry).ConfigureAwait(false) +
+                    await session.Inventory.GetItemAmountByType(ItemId.ItemNanabBerry).ConfigureAwait(false) +
+                    await session.Inventory.GetItemAmountByType(ItemId.ItemWeparBerry).ConfigureAwait(false) +
+                    await session.Inventory.GetItemAmountByType(ItemId.ItemPinapBerry).ConfigureAwait(false),
+                    await session.Inventory.GetItemAmountByType(ItemId.ItemIncenseOrdinary).ConfigureAwait(false) +
+                    await session.Inventory.GetItemAmountByType(ItemId.ItemIncenseSpicy).ConfigureAwait(false) +
+                    await session.Inventory.GetItemAmountByType(ItemId.ItemIncenseCool).ConfigureAwait(false) +
+                    await session.Inventory.GetItemAmountByType(ItemId.ItemIncenseFloral).ConfigureAwait(false),
+                    await session.Inventory.GetItemAmountByType(ItemId.ItemLuckyEgg).ConfigureAwait(false),
+                    await session.Inventory.GetItemAmountByType(ItemId.ItemTroyDisk).ConfigureAwait(false));
                 callback(answerTextmessage);
                 return true;
             }

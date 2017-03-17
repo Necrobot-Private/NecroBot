@@ -176,8 +176,8 @@ namespace PoGo.NecroBot.Logic.State
             // ferox wants us to set this manually
             Inventory = new Inventory(this, Client, logicSettings, async () =>
             {
-                var candy = (await this.Inventory.GetPokemonFamilies()).ToList();
-                var pokemonSettings = (await this.Inventory.GetPokemonSettings()).ToList();
+                var candy = (await this.Inventory.GetPokemonFamilies().ConfigureAwait(false)).ToList();
+                var pokemonSettings = (await this.Inventory.GetPokemonSettings().ConfigureAwait(false)).ToList();
                 this.EventDispatcher.Send(new InventoryRefreshedEvent(null, pokemonSettings, candy));
             });
             Navigation = new Navigation(Client, logicSettings);
@@ -256,7 +256,7 @@ namespace PoGo.NecroBot.Logic.State
                 if (botActions.Count == 0) return true;
                 ///implement logic of action dependent
                 waitTimes += 1000;
-                await Task.Delay(1000);
+                await Task.Delay(1000).ConfigureAwait(false);
             }
             return false; //timedout
         }

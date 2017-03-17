@@ -32,13 +32,13 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
 
             if (yoursWalk == null)
             {
-                await RedirectToNextFallbackStrategy(session.LogicSettings, targetLocation, functionExecutedWhileWalking, session, cancellationToken);
+                await RedirectToNextFallbackStrategy(session.LogicSettings, targetLocation, functionExecutedWhileWalking, session, cancellationToken).ConfigureAwait(false);
                 return;
             }
 
             base.OnStartWalking(session, targetLocation, yoursWalk.Distance);
             List<GeoCoordinate> points = yoursWalk.Waypoints;
-            await DoWalk(points, session, functionExecutedWhileWalking, sourceLocation, destinaionCoordinate, cancellationToken, walkSpeed);
+            await DoWalk(points, session, functionExecutedWhileWalking, sourceLocation, destinaionCoordinate, cancellationToken, walkSpeed).ConfigureAwait(false);
         }
 
         private void GetYoursInstance(ISession session)

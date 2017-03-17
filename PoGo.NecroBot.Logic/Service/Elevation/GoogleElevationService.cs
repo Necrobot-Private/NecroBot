@@ -53,11 +53,11 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
                 {
                     string url = $"https://maps.googleapis.com/maps/api/elevation/json?key={_apiKey}&locations={lat},{lng}";
 
-                    var responseContent = await client.GetAsync(url);
+                    var responseContent = await client.GetAsync(url).ConfigureAwait(false);
                     if (responseContent.StatusCode != HttpStatusCode.OK)
                         return 0;
 
-                    var responseFromServer = await responseContent.Content.ReadAsStringAsync();
+                    var responseFromServer = await responseContent.Content.ReadAsStringAsync().ConfigureAwait(false);
                     GoogleResponse googleResponse = JsonConvert.DeserializeObject<GoogleResponse>(responseFromServer);
 
                     if (googleResponse.status == "OK" && googleResponse.results != null &&

@@ -20,7 +20,7 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
         
         public async Task<double> GetElevation(double lat, double lng)
         {
-            return await GetElevationFromWebService(lat, lng);
+            return await GetElevationFromWebService(lat, lng).ConfigureAwait(false);
         }
         
         public static double GetRandomElevation(double elevation)

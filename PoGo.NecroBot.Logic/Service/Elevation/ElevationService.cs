@@ -71,10 +71,10 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
             if (service is RandomElevationService)
             {
                 // Don't hit the database for random elevation service.
-                return await service.GetElevation(lat, lng);
+                return await service.GetElevation(lat, lng).ConfigureAwait(false);
             }
 
-            ElevationLocation elevationLocation = await ElevationLocation.FindOrUpdateInDatabase(lat, lng, service);
+            ElevationLocation elevationLocation = await ElevationLocation.FindOrUpdateInDatabase(lat, lng, service).ConfigureAwait(false);
             if (elevationLocation == null)
             {
                 Logger.Write(
@@ -89,7 +89,7 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
                 );
 
                 // After blacklisting, retry.
-                return await GetElevation(lat, lng);
+                return await GetElevation(lat, lng).ConfigureAwait(false);
             }
 
             return BaseElevationService.GetRandomElevation(elevationLocation.Altitude);

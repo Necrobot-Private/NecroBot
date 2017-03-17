@@ -52,7 +52,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         public static async Task StartFastPokemapAsync(ISession session, CancellationToken cancellationToken)
         {
-            await Task.Delay(0); // Just added to get rid of compiler warning. Remove this if async code is used below.
+            await Task.Delay(0).ConfigureAwait(false); // Just added to get rid of compiler warning. Remove this if async code is used below.
 
             return;
             /*
@@ -61,7 +61,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             while (true)
             {
-                await Task.Delay(30 * 1000);//sleep for 30 sec
+                await Task.Delay(30 * 1000).ConfigureAwait(false);//sleep for 30 sec
 
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
@@ -73,10 +73,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                 double lat = session.Client.CurrentLatitude;
 
                 double lng = session.Client.CurrentLongitude;
-                await OffsetScanFPM(scanOffset, step, lat, lng);
+                await OffsetScanFPM(scanOffset, step, lat, lng).ConfigureAwait(false);
                 if(LocationUtils.CalculateDistanceInMeters(session.Client.CurrentLatitude, session.Client.CurrentLongitude, defaultLatitude, defaultLongitude) >1000)
                 {
-                    await OffsetScanFPM(scanOffset, step, defaultLatitude, defaultLongitude);
+                    await OffsetScanFPM(scanOffset, step, defaultLatitude, defaultLongitude).ConfigureAwait(false);
                 }
                 sw.Stop();
 
@@ -97,7 +97,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         var scanLng = lng + y;
                         string scanurl = $"https://cache.fastpokemap.se/?key=2fe7ce70-90b8-460a-bffb-d7f3b4b74cc2&ts=57c9d27c&compute={GetIP()}&lat={scanLat}&lng={scanLng}";
 
-                        var json = await DownloadContent(scanurl);
+                        var json = await DownloadContent(scanurl).ConfigureAwait(false);
                         var data = JsonConvert.DeserializeObject<List<FastPokemapItem>>(json);
                         List<SnipePokemonInfo> chunk = new List<SnipePokemonInfo>();
                         foreach (var item in data)
@@ -213,8 +213,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 try
                 {
-                    var task = await client.SendAsync(request);
-                    result = await task.Content.ReadAsStringAsync();
+                    var task = await client.SendAsync(request).ConfigureAwait(false);
+                    result = await task.Content.ReadAsStringAsync().ConfigureAwait(false);
                 }
                 catch (Exception)
                 {
@@ -242,7 +242,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 string url = $"https://cache.fastpokemap.se/?key={key}&ts={ts}&lat={lat}&lng={lng}";
 
-                var json = await DownloadContent(url);
+                var json = await DownloadContent(url).ConfigureAwait(false);
                 var data = JsonConvert.DeserializeObject<List<FastPokemapItem>>(json);
                 foreach (var item in data)
                 {

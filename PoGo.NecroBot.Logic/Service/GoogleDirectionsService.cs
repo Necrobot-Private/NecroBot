@@ -52,8 +52,8 @@ namespace PoGo.NecroBot.Logic.Service
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                        HttpResponseMessage responseMessage = await client.GetAsync(url);
-                        var resposta = await responseMessage.Content.ReadAsStringAsync();
+                        HttpResponseMessage responseMessage = await client.GetAsync(url).ConfigureAwait(false);
+                        var resposta = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
                         var google = JsonConvert.DeserializeObject<DirectionsResponse>(resposta);
                         if (google.status.Equals("OVER_QUERY_LIMIT"))
                         {

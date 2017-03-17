@@ -97,7 +97,7 @@ namespace PoGo.NecroBot.Logic.State
                                 session.LogicSettings = new LogicSettings(globalSettings);
                                 Logger.Write(" ##### config.xlsm ##### ", LogLevel.Info);
                             }
-                            await Delay(5000);
+                            await Delay(5000).ConfigureAwait(false);
                         }
                         catch (Exception)
                         {
@@ -113,7 +113,7 @@ namespace PoGo.NecroBot.Logic.State
             {
                 try
                 {
-                    state = await state.Execute(session, session.CancellationTokenSource.Token);
+                    state = await state.Execute(session, session.CancellationTokenSource.Token).ConfigureAwait(false);
 
                     // Exit the bot if both catching and looting has reached its limits
                     if ((UseNearbyPokestopsTask._pokestopLimitReached ||
@@ -128,7 +128,7 @@ namespace PoGo.NecroBot.Logic.State
                         session.CancellationTokenSource.Cancel();
 
                         // A bit rough here; works but can be improved
-                        await Delay(10000);
+                        await Delay(10000).ConfigureAwait(false);
                         state = null;
                         session.CancellationTokenSource.Dispose();
                         Environment.Exit(0);
@@ -219,7 +219,7 @@ namespace PoGo.NecroBot.Logic.State
                 catch (InvalidResponseException e)
                 {
                     session.EventDispatcher.Send(new ErrorEvent { Message = $"Niantic Servers unstable, throttling API Calls. {e.Message}" });
-                    await Delay(1000);
+                    await Delay(1000).ConfigureAwait(false);
                     if (manager.AllowMultipleBot())
                     {
                         apiCallFailured++;
@@ -236,7 +236,7 @@ namespace PoGo.NecroBot.Logic.State
                 catch (SessionInvalidatedException e)
                 {
                     session.EventDispatcher.Send(new ErrorEvent { Message = $"Hashing Servers errors, throttling calls. {e.Message}" });
-                    await Delay(1000);
+                    await Delay(1000).ConfigureAwait(false);
                     if (manager.AllowMultipleBot())
                     {
                         apiCallFailured++;
@@ -331,7 +331,7 @@ namespace PoGo.NecroBot.Logic.State
                     session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.PtcOffline) });
                     session.EventDispatcher.Send(new NoticeEvent { Message = session.Translation.GetTranslation(TranslationString.TryingAgainIn, 15) });
 
-                    await Delay(1000);
+                    await Delay(1000).ConfigureAwait(false);
                     state = _initialState;
                 }
                 catch (GoogleOfflineException)
@@ -339,7 +339,7 @@ namespace PoGo.NecroBot.Logic.State
                     session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.GoogleOffline) });
                     session.EventDispatcher.Send(new NoticeEvent { Message = session.Translation.GetTranslation(TranslationString.TryingAgainIn, 15) });
 
-                    await Delay(15000);
+                    await Delay(15000).ConfigureAwait(false);
                     state = _initialState;
                 }
                 catch (AccessTokenExpiredException)
@@ -349,10 +349,10 @@ namespace PoGo.NecroBot.Logic.State
                 }
                 catch (CaptchaException captchaException)
                 {
-                    var resolved = await CaptchaManager.SolveCaptcha(session, captchaException.Url);
+                    var resolved = await CaptchaManager.SolveCaptcha(session, captchaException.Url).ConfigureAwait(false);
                     if (!resolved)
                     {
-                        await SendNotification(session, $"Captcha required {session.Settings.Username}", session.Translation.GetTranslation(TranslationString.CaptchaShown), true);
+                        await SendNotification(session, $"Captcha required {session.Settings.Username}", session.Translation.GetTranslation(TranslationString.CaptchaShown), true).ConfigureAwait(false);
                         session.EventDispatcher.Send(new WarnEvent { Message = session.Translation.GetTranslation(TranslationString.CaptchaShown) });
                         Logger.Debug("Captcha not resolved");
                         if (manager.AllowMultipleBot())

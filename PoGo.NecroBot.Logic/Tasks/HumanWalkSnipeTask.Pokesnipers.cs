@@ -47,7 +47,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 HttpClient client = new HttpClient();
                 string url = $"http://pokesnipers.com/api/v1/pokemon.json";
 
-                var task = await client.GetStringAsync(url);
+                var task = await client.GetStringAsync(url).ConfigureAwait(false);
 
                 var data = JsonConvert.DeserializeObject<PokesniperWrap>(task);
                 foreach (var item in data.results)

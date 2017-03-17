@@ -15,7 +15,7 @@ namespace PoGo.NecroBot.Logic.Utils
         public static async Task UpdatePlayerLocationWithAltitude(ISession session,
             GeoCoordinate position, float speed)
         {
-            double altitude = await session.ElevationService.GetElevation(position.Latitude, position.Longitude);
+            double altitude = await session.ElevationService.GetElevation(position.Latitude, position.Longitude).ConfigureAwait(false);
 
             session.Client.Player.UpdatePlayerLocation(position.Latitude, position.Longitude, altitude, speed);
         }
@@ -50,7 +50,7 @@ namespace PoGo.NecroBot.Logic.Utils
         public static async Task<double> getElevation(IElevationService elevationService, double lat, double lon)
         {
             if (elevationService != null)
-                return await elevationService.GetElevation(lat, lon);
+                return await elevationService.GetElevation(lat, lon).ConfigureAwait(false);
 
             Random random = new Random();
             double maximum = 11.0f;
@@ -88,7 +88,7 @@ namespace PoGo.NecroBot.Logic.Utils
             return new GeoCoordinate(
                 ToDegrees(targetLatitudeRadians),
                 ToDegrees(targetLongitudeRadians),
-                await getElevation(null, sourceLocation.Latitude, sourceLocation.Longitude)
+                await getElevation(null, sourceLocation.Latitude, sourceLocation.Longitude).ConfigureAwait(false)
             );
         }
 

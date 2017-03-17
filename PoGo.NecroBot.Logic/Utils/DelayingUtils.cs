@@ -38,11 +38,11 @@ namespace PoGo.NecroBot.Logic.Utils
                 var randomMax = (int) (delay * (1 + randomFactor));
                 var randomizedDelay = RandomDevice.Next(randomMin, randomMax);
 
-                await Task.Delay(randomizedDelay, token);
+                await Task.Delay(randomizedDelay, token).ConfigureAwait(false);
             }
             else if (defdelay > 0)
             {
-                await Task.Delay(defdelay, token);
+                await Task.Delay(defdelay, token).ConfigureAwait(false);
             }
         }
     }

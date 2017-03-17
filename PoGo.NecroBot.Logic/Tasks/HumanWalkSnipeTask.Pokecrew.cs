@@ -47,7 +47,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 double offset = _setting.HumanWalkingSnipeSnipingScanOffset; //0.015 
                 string url = $"https://api.pokecrew.com/api/v1/seens?center_latitude={lat}&center_longitude={lng}&live=true&minimal=false&northeast_latitude={lat + offset}&northeast_longitude={lng + offset}&pokemon_id=&southwest_latitude={lat - offset}&southwest_longitude={lng - offset}";
 
-                var task = await client.GetStringAsync(url);
+                var task = await client.GetStringAsync(url).ConfigureAwait(false);
 
                 var data = JsonConvert.DeserializeObject<PokecrewWrap>(task);
                 foreach (var item in data.seens)

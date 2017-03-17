@@ -75,7 +75,8 @@ namespace PoGo.NecroBot.Logic.State
         public async Task LoadMyPokemons(ISession session)
         {
             myPokemons.Clear();
-            foreach (var pokemon in (await session.Inventory.GetPokemons()).Where(w => w.Cp >= session.LogicSettings.GymConfig.MinCpToUseInAttack))
+            var pokemons = await session.Inventory.GetPokemons().ConfigureAwait(false);
+            foreach (var pokemon in pokemons.Where(w => w.Cp >= session.LogicSettings.GymConfig.MinCpToUseInAttack))
             {
                 MyPokemonStat mps = new MyPokemonStat(session, pokemon);
                 myPokemons.Add(mps);

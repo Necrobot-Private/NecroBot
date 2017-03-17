@@ -33,7 +33,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
                     PokemonId = (short) pid,
                     Latitude = Convert.ToDouble(pokemonData[1].Trim()),
                     Longitude = Convert.ToDouble(pokemonData[2].Trim())
-                }, true);
+                }, true).ConfigureAwait(false);
                 callback(GetMsgHead(session, session.Profile.PlayerData.Username) + "\r\n\r\n");
                 return true;
             }

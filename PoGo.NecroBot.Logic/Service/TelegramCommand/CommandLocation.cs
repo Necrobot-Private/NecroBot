@@ -31,7 +31,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
             {
                 try
                 {
-                    await TelegramUtils.SendLocation(geo, telegramMessage.Chat.Id);
+                    await TelegramUtils.SendLocation(geo, telegramMessage.Chat.Id).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
