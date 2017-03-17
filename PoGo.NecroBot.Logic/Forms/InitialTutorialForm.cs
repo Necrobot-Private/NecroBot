@@ -59,11 +59,11 @@ namespace PoGo.NecroBot.Logic.Forms
                         if (avatarRes.Status == SetAvatarResponse.Types.Status.AvatarAlreadySet ||
                             avatarRes.Status == SetAvatarResponse.Types.Status.Success)
                         {
-                            encounterTutorialCompleteResponse = session.Client.Misc
+                            encounterTutorialCompleteResponse = await session.Client.Misc
                                 .MarkTutorialComplete(new RepeatedField<TutorialState>()
                                 {
                                     TutorialState.AvatarSelection
-                                }).Result;
+                                });
 
                             if (encounterTutorialCompleteResponse.Result == EncounterTutorialCompleteResponse.Types.Result.Success)
                             {
@@ -115,11 +115,11 @@ namespace PoGo.NecroBot.Logic.Forms
                     ? PokemonId.Charmander
                     : PokemonId.Squirtle;
 
-            Task.Run(() =>
+            Task.Run(async () =>
                 {
                     if (!tutState.Contains(TutorialState.PokemonCapture))
                     {
-                        encounterTutorialCompleteResponse = session.Client.Encounter.EncounterTutorialComplete(firstPoke).Result;
+                        encounterTutorialCompleteResponse = await session.Client.Encounter.EncounterTutorialComplete(firstPoke);
 
                         if (encounterTutorialCompleteResponse.Result == EncounterTutorialCompleteResponse.Types.Result.Success)
                         {
@@ -155,11 +155,11 @@ namespace PoGo.NecroBot.Logic.Forms
             string errorText = null;
             string warningText = null;
             string infoText = null;
-            Task.Run(() =>
+            Task.Run(async () =>
                 {
                     if (!tutState.Contains(TutorialState.NameSelection))
                     {
-                        res = session.Client.Misc.ClaimCodename(nickname).Result;
+                        res = await session.Client.Misc.ClaimCodename(nickname);
 
                         switch (res.Status)
                         {
@@ -212,19 +212,19 @@ namespace PoGo.NecroBot.Logic.Forms
 
                         if (markTutorialComplete)
                         {
-                            encounterTutorialCompleteResponse = session.Client.Misc.MarkTutorialComplete(new RepeatedField<TutorialState>()
+                            encounterTutorialCompleteResponse = await session.Client.Misc.MarkTutorialComplete(new RepeatedField<TutorialState>()
                             {
                                 TutorialState.NameSelection
-                            }).Result;
+                            });
 
                             if (encounterTutorialCompleteResponse.Result == EncounterTutorialCompleteResponse.Types.Result.Success)
                             {
                                 if (!tutState.Contains(TutorialState.FirstTimeExperienceComplete))
                                 {
-                                    encounterTutorialCompleteResponse = session.Client.Misc.MarkTutorialComplete(new RepeatedField<TutorialState>()
+                                    encounterTutorialCompleteResponse = await session.Client.Misc.MarkTutorialComplete(new RepeatedField<TutorialState>()
                                     {
                                         TutorialState.FirstTimeExperienceComplete , TutorialState.PokemonBerry
-                                    }).Result;
+                                    });
 
                                     if (encounterTutorialCompleteResponse.Result == EncounterTutorialCompleteResponse.Types.Result.Success)
                                     {

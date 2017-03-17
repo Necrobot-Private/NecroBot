@@ -8,14 +8,12 @@ namespace PoGo.NecroBot.Logic.Tasks
 {
     public class InventoryListTask
     {
-        // jjskuld - Ignore CS1998 warning for now.
-        #pragma warning disable 1998
         public static async Task Execute(ISession session)
         {
             // Refresh inventory so that the player stats are fresh
-            //await session.Inventory.RefreshCachedInventory();
+            //await session.Inventory.RefreshCachedInventory().ConfigureAwait(false);
 
-            var inventory = session.Inventory.GetItems();
+            var inventory = await session.Inventory.GetItems().ConfigureAwait(false);
 
             session.EventDispatcher.Send(
                 new InventoryListEvent
@@ -23,8 +21,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     Items = inventory.ToList()
                 });
 
-            DelayingUtils.Delay(session.LogicSettings.DelayBetweenPlayerActions, 0);
+            await DelayingUtils.DelayAsync(session.LogicSettings.DelayBetweenPlayerActions, 0, session.CancellationTokenSource.Token).ConfigureAwait(false);
         }
-        #pragma warning restore 1998
     }
 }

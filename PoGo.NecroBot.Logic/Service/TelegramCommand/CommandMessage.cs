@@ -30,7 +30,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
             {
                 try
                 {
-                    await TelegramUtils.SendMessage(msg, telegramMessage.Chat.Id);
+                    await TelegramUtils.SendMessage(msg, telegramMessage.Chat.Id).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {

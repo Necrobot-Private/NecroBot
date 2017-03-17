@@ -25,7 +25,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 session.Settings.DefaultLatitude, session.Settings.DefaultLongitude,
                 session.Client.CurrentLatitude, session.Client.CurrentLongitude);
 
-            LocationUtils.UpdatePlayerLocationWithAltitude(session, new GeoCoordinate(session.Client.CurrentLatitude, session.Client.CurrentLongitude, session.Client.CurrentAltitude), session.Client.CurrentSpeed);
+            await LocationUtils.UpdatePlayerLocationWithAltitude(session, new GeoCoordinate(session.Client.CurrentLatitude, session.Client.CurrentLongitude, session.Client.CurrentAltitude), session.Client.CurrentSpeed).ConfigureAwait(false);
             // Edge case for when the client somehow ends up outside the defined radius
             if (session.LogicSettings.MaxTravelDistanceInMeters != 0 && checkForMoveBackToDefault &&
                 distanceFromStart > session.LogicSettings.MaxTravelDistanceInMeters)
@@ -39,25 +39,25 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 var defaultLocation = new MapLocation(session.Settings.DefaultLatitude,
                     session.Settings.DefaultLongitude,
-                    LocationUtils.getElevation(session.ElevationService, session.Settings.DefaultLatitude,
-                        session.Settings.DefaultLongitude)
+                    await LocationUtils.getElevation(session.ElevationService, session.Settings.DefaultLatitude,
+                        session.Settings.DefaultLongitude).ConfigureAwait(false)
                 );
 
                 await session.Navigation.Move(defaultLocation,
-                    async () => { await MSniperServiceTask.Execute(session, cancellationToken); },
+                    async () => { await MSniperServiceTask.Execute(session, cancellationToken).ConfigureAwait(false); },
                     session,
-                    cancellationToken);
+                    cancellationToken).ConfigureAwait(false);
 
                 // we have moved this distance, so apply it immediately to the egg walker.
-                await eggWalker.ApplyDistance(distanceFromStart, cancellationToken);
+                await eggWalker.ApplyDistance(distanceFromStart, cancellationToken).ConfigureAwait(false);
             }
             checkForMoveBackToDefault = false;
 
-            await CatchNearbyPokemonsTask.Execute(session, cancellationToken);
+            await CatchNearbyPokemonsTask.Execute(session, cancellationToken).ConfigureAwait(false);
 
             // initialize the variables in UseNearbyPokestopsTask here, as this is a fresh start.
             UseNearbyPokestopsTask.Initialize();
-            await UseNearbyPokestopsTask.Execute(session, cancellationToken);
+            await UseNearbyPokestopsTask.Execute(session, cancellationToken).ConfigureAwait(false);
         }
     }
 }

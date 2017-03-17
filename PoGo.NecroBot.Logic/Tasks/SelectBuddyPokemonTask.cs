@@ -33,7 +33,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 if (session.Profile.PlayerData.BuddyPokemon?.Id > 0)
                 {
-                    var currentBuddy = session.Inventory.GetPokemons().FirstOrDefault(x => x.Id == session.Profile.PlayerData.BuddyPokemon.Id);
+                    var currentBuddy = (await session.Inventory.GetPokemons().ConfigureAwait(false)).FirstOrDefault(x => x.Id == session.Profile.PlayerData.BuddyPokemon.Id);
                     if (currentBuddy.PokemonId == buddyPokemonId)
                     {
                         //dont change same buddy
@@ -41,7 +41,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     }
                 }
 
-                var buddy = session.Inventory.GetPokemons().Where(x => x.PokemonId == buddyPokemonId)
+                var buddy = (await session.Inventory.GetPokemons().ConfigureAwait(false)).Where(x => x.PokemonId == buddyPokemonId)
                 .OrderByDescending(x => PokemonInfo.CalculateCp(x));
 
                 if (session.LogicSettings.PrioritizeIvOverCp)
@@ -58,11 +58,11 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
             if (newBuddy == null)
             {
-                newBuddy = session.Inventory.GetPokemons().FirstOrDefault(x => x.Id == pokemonId);
+                newBuddy = (await session.Inventory.GetPokemons().ConfigureAwait(false)).FirstOrDefault(x => x.Id == pokemonId);
             }
             if (newBuddy == null) return;
 
-            var response = await session.Client.Player.SelectBuddy(newBuddy.Id);
+            var response = await session.Client.Player.SelectBuddy(newBuddy.Id).ConfigureAwait(false);
 
             if (response.Result == SetBuddyPokemonResponse.Types.Result.Success)
             {

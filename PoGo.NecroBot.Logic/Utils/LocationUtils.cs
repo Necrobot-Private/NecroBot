@@ -4,6 +4,7 @@ using System;
 using PoGo.NecroBot.Logic.Service.Elevation;
 using PoGo.NecroBot.Logic.State;
 using System.Device.Location;
+using System.Threading.Tasks;
 
 #endregion
 
@@ -11,10 +12,10 @@ namespace PoGo.NecroBot.Logic.Utils
 {
     public static class LocationUtils
     {
-        public static void UpdatePlayerLocationWithAltitude(ISession session,
+        public static async Task UpdatePlayerLocationWithAltitude(ISession session,
             GeoCoordinate position, float speed)
         {
-            double altitude = session.ElevationService.GetElevation(position.Latitude, position.Longitude);
+            double altitude = await session.ElevationService.GetElevation(position.Latitude, position.Longitude).ConfigureAwait(false);
 
             session.Client.Player.UpdatePlayerLocation(position.Latitude, position.Longitude, altitude, speed);
         }
@@ -46,10 +47,10 @@ namespace PoGo.NecroBot.Logic.Utils
                 destinationLocation.Latitude, destinationLocation.Longitude);
         }
 
-        public static double getElevation(IElevationService elevationService, double lat, double lon)
+        public static async Task<double> getElevation(IElevationService elevationService, double lat, double lon)
         {
             if (elevationService != null)
-                return elevationService.GetElevation(lat, lon);
+                return await elevationService.GetElevation(lat, lon).ConfigureAwait(false);
 
             Random random = new Random();
             double maximum = 11.0f;
@@ -59,7 +60,7 @@ namespace PoGo.NecroBot.Logic.Utils
             return return1;
         }
 
-        public static GeoCoordinate CreateWaypoint(GeoCoordinate sourceLocation,
+        public static async Task<GeoCoordinate> CreateWaypoint(GeoCoordinate sourceLocation,
                 double distanceInMeters, double bearingDegrees)
             //from http://stackoverflow.com/a/17545955
         {
@@ -87,7 +88,7 @@ namespace PoGo.NecroBot.Logic.Utils
             return new GeoCoordinate(
                 ToDegrees(targetLatitudeRadians),
                 ToDegrees(targetLongitudeRadians),
-                getElevation(null, sourceLocation.Latitude, sourceLocation.Longitude)
+                await getElevation(null, sourceLocation.Latitude, sourceLocation.Longitude).ConfigureAwait(false)
             );
         }
 

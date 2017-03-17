@@ -37,7 +37,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 double offset = _setting.HumanWalkingSnipeSnipingScanOffset; //0.015 
                 string url = $"https://www.pokeradar.io/api/v1/submissions?deviceId=1fd29370661111e6b850a13a2bdc4ebf&minLatitude={lat - offset}&maxLatitude={lat + offset}&minLongitude={lng - offset}&maxLongitude={lng + offset}&pokemonId=0";
 
-                var task = await client.GetStringAsync(url);
+                var task = await client.GetStringAsync(url).ConfigureAwait(false);
 
                 var data = JsonConvert.DeserializeObject<PokeradarWrapper>(task);
                 results = data.data.Select(p => Map(p)).ToList();

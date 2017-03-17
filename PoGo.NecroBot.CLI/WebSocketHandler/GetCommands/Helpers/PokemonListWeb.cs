@@ -6,6 +6,7 @@ using POGOProtos.Data;
 using POGOProtos.Inventory;
 using POGOProtos.Settings.Master;
 using PoGo.NecroBot.Logic.State;
+using System.Threading.Tasks;
 
 #endregion
 
@@ -24,6 +25,6 @@ namespace PoGo.NecroBot.CLI.WebSocketHandler.GetCommands.Helpers
 
         public double IvPerfection => PokemonInfo.CalculatePokemonPerfection(Base);
         public double Level => PokemonInfo.GetLevel(Base);
-        public int FamilyCandies => PokemonInfo.GetCandy(_session, Base);
+        public int FamilyCandies => PokemonInfo.GetCandy(_session, Base).Result;
     }
 }

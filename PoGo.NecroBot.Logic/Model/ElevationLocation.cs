@@ -59,12 +59,12 @@ namespace PoGo.NecroBot.Logic.Model
         {
             var cellId = new S2CellId(c);
             var latlng = cellId.ToLatLng();
-            return await FindOrUpdateInDatabase(latlng.LatDegrees, latlng.LngDegrees, service);
+            return await FindOrUpdateInDatabase(latlng.LatDegrees, latlng.LngDegrees, service).ConfigureAwait(false);
         }
 
         public static async Task<ElevationLocation> FindOrUpdateInDatabase(double latitude, double longitude, IElevationService service)
         {
-            using (await DB_LOCK.LockAsync())
+            using (await DB_LOCK.LockAsync().ConfigureAwait(false))
             {
                 if (!Directory.Exists(CACHE_DIR))
                 {
@@ -86,7 +86,7 @@ namespace PoGo.NecroBot.Logic.Model
                     {
                         try
                         {
-                            var altitude = service.GetElevation(latitude, longitude);
+                            var altitude = await service.GetElevation(latitude, longitude).ConfigureAwait(false);
                             if (altitude == 0 || altitude < -100)
                             {
                                 // Invalid altitude
@@ -102,7 +102,7 @@ namespace PoGo.NecroBot.Logic.Model
                         catch (Exception)
                         {
                             // Just ignore exception and retry after delay
-                            await Task.Delay(i * 100);
+                            await Task.Delay(i * 100).ConfigureAwait(false);
                         }
                     }
 

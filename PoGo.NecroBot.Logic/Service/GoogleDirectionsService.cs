@@ -9,6 +9,7 @@ using PoGo.NecroBot.Logic.Model.Google;
 using PoGo.NecroBot.Logic.Model.Google.GoogleObjects;
 using PoGo.NecroBot.Logic.State;
 using System.Device.Location;
+using System.Threading.Tasks;
 
 namespace PoGo.NecroBot.Logic.Service
 {
@@ -25,7 +26,7 @@ namespace PoGo.NecroBot.Logic.Service
             OldResults = new List<GoogleResult>();
         }
 
-        public GoogleWalk GetDirections(GeoCoordinate origin, List<GeoCoordinate> waypoints, GeoCoordinate destino)
+        public async Task<GoogleWalk> GetDirections(GeoCoordinate origin, List<GeoCoordinate> waypoints, GeoCoordinate destino)
         {
             GoogleResult googleResult = null;
             try
@@ -51,9 +52,9 @@ namespace PoGo.NecroBot.Logic.Service
                         client.DefaultRequestHeaders.Accept.Clear();
                         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                        HttpResponseMessage responseMessage = client.GetAsync(url).Result;
-                        var resposta = responseMessage.Content.ReadAsStringAsync();
-                        var google = JsonConvert.DeserializeObject<DirectionsResponse>(resposta.Result);
+                        HttpResponseMessage responseMessage = await client.GetAsync(url).ConfigureAwait(false);
+                        var resposta = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
+                        var google = JsonConvert.DeserializeObject<DirectionsResponse>(resposta);
                         if (google.status.Equals("OVER_QUERY_LIMIT"))
                         {
                             // If we get an error, don't cache empty GoogleResult.  Just return null.

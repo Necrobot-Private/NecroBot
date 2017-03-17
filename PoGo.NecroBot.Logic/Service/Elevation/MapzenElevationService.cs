@@ -3,6 +3,9 @@ using System.IO;
 using System.Net;
 using Newtonsoft.Json.Linq;
 using PoGo.NecroBot.Logic.Model.Settings;
+using System.Threading.Tasks;
+using System.Net.Http;
+using PoGo.NecroBot.Logic.Exceptions;
 
 namespace PoGo.NecroBot.Logic.Service.Elevation
 {
@@ -19,42 +22,37 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
             return "Mapzen Elevation Service";
         }
 
-        public override double GetElevationFromWebService(double lat, double lng)
+        public override async Task<double> GetElevationFromWebService(double lat, double lng)
         {
             if (string.IsNullOrEmpty(_apiKey))
                 return 0;
-
-            try
+            
+            using (HttpClient client = new HttpClient())
             {
-                string url = $"https://elevation.mapzen.com/height?json=" + "{\"shape\":[{\"lat\":" + lat + ",\"lon\":" + lng + "}]}" + $"&api_key={_apiKey}";
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-                request.Credentials = CredentialCache.DefaultCredentials;
-                request.UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.121 Safari/535.2";
-                request.ContentType = "application/json";
-                request.ReadWriteTimeout = 2000;
-                string responseFromServer = "";
-
-                using (WebResponse response = request.GetResponse())
+                try
                 {
-                    using (Stream dataStream = response.GetResponseStream())
-                    using (StreamReader reader = new StreamReader(dataStream))
-                    {
-                        responseFromServer = reader.ReadToEnd();
+                    string url = $"https://elevation.mapzen.com/height?json=" + "{\"shape\":[{\"lat\":" + lat + ",\"lon\":" + lng + "}]}" + $"&api_key={_apiKey}";
 
-                        JObject jsonObj = JObject.Parse(responseFromServer);
+                    var responseContent = await client.GetAsync(url).ConfigureAwait(false);
+                    if (responseContent.StatusCode != HttpStatusCode.OK)
+                        return 0;
 
-                        JArray heights = (JArray) jsonObj["height"];
-                        return (double) heights[0];
+                    var responseFromServer = await responseContent.Content.ReadAsStringAsync().ConfigureAwait(false);
+                    JObject jsonObj = JObject.Parse(responseFromServer);
 
-                        // All error handling is handled inside of the ElevationService.
-                    }
+                    JArray heights = (JArray)jsonObj["height"];
+                    return (double)heights[0];
+                }
+                catch (ActiveSwitchByRuleException ex)
+                {
+                    throw ex;
+                }
+                catch (Exception)
+                {
+                    // If we get here for any reason, then just drop down and return 0. Will cause this elevation service to be blacklisted.
                 }
             }
-            catch (Exception)
-            {
-                // If we get here for any reason, then just drop down and return 0. Will cause this elevation service to be blacklisted.
-            }
-
+             
             return 0;
         }
     }

@@ -37,19 +37,19 @@ namespace PoGo.NecroBot.Logic.Tasks
         // Structure of calling Tasks
 
         // ## From CatchNearbyPokemonTask
-        // await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, currentFortData: null, sessionAllowTransfer:sessionAllowTransfer);
+        // await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, currentFortData: null, sessionAllowTransfer:sessionAllowTransfer).ConfigureAwait(false);
 
         // ## From CatchLurePokemonTask
-        // await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, currentFortData, sessionAllowTransfer: true);
+        // await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, currentFortData, sessionAllowTransfer: true).ConfigureAwait(false);
 
         // ## From CatchIncensePokemonTask
-        // await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, currentFortData: null, sessionAllowTransfer: true);
+        // await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, currentFortData: null, sessionAllowTransfer: true).ConfigureAwait(false);
 
         // ## From SnipePokemonTask
-        // await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, currentFortData: null, sessionAllowTransfer: true);
+        // await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, currentFortData: null, sessionAllowTransfer: true).ConfigureAwait(false);
 
         // ## From MSniperServiceTask
-        // await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, currentFortData: null, sessionAllowTransfer: true);
+        // await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon, currentFortData: null, sessionAllowTransfer: true).ConfigureAwait(false);
 
         private static int CatchFleeContinuouslyCount = 0;
         public static readonly int BALL_REQUIRED_TO_BYPASS_CATCHFLEE = 150;
@@ -76,7 +76,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             // If the encounter is null nothing will work below, so exit now
             if (encounter == null) return true;
 
-            var totalBalls = session.Inventory.GetItems().Where(x => x.ItemId == ItemId.ItemPokeBall || x.ItemId == ItemId.ItemGreatBall || x.ItemId == ItemId.ItemUltraBall).Sum(x => x.Count);
+            var totalBalls = (await session.Inventory.GetItems().ConfigureAwait(false)).Where(x => x.ItemId == ItemId.ItemPokeBall || x.ItemId == ItemId.ItemGreatBall || x.ItemId == ItemId.ItemUltraBall).Sum(x => x.Count);
 
             if(session.SaveBallForByPassCatchFlee && totalBalls < BALL_REQUIRED_TO_BYPASS_CATCHFLEE)
             {
@@ -101,7 +101,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
             using (var block = new BlockableScope(session, BotActions.Catch))
             {
-                if (!await block.WaitToRun()) return true;
+                if (!await block.WaitToRun().ConfigureAwait(false)) return true;
 
                 AmountOfBerries = new Dictionary<ItemId, int>();
 
@@ -146,7 +146,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 else return true; // No success to work with, exit
 
                 // Check for pokeballs before proceeding
-                var pokeball = GetBestBall(session, encounteredPokemon, probability);
+                var pokeball = await GetBestBall(session, encounteredPokemon, probability).ConfigureAwait(false);
                 if (pokeball == ItemId.ItemUnknown)
                 {
                     Logger.Write(session.Translation.GetTranslation(TranslationString.ZeroPokeballInv));
@@ -238,7 +238,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                          attemptCounter > session.LogicSettings.MaxPokeballsPerPokemon))
                         break;
 
-                    pokeball = GetBestBall(session, encounteredPokemon, probability);
+                    pokeball = await GetBestBall(session, encounteredPokemon, probability).ConfigureAwait(false);
                     if (pokeball == ItemId.ItemUnknown)
                     {
                         session.EventDispatcher.Send(new NoPokeballEvent
@@ -262,7 +262,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                             pokemonCp.HasValue ? pokemonCp.Value : 10000,  //unknow CP pokemon, want to use berry
                             encounterEV.Level,
                             probability,
-                            cancellationToken);
+                            cancellationToken).ConfigureAwait(false);
                     }
 
                     bool hitPokemon = true;
@@ -348,17 +348,20 @@ namespace PoGo.NecroBot.Logic.Tasks
                             return false;
                         }
                         List<ItemId> ballToByPass = new List<ItemId>();
-                        for (int i = 0; i < session.Inventory.GetItemAmountByType(ItemId.ItemPokeBall)-1; i++)
+                        var numPokeBalls = await session.Inventory.GetItemAmountByType(ItemId.ItemPokeBall).ConfigureAwait(false);
+                        for (int i = 0; i < numPokeBalls - 1; i++)
                         {
                             ballToByPass.Add(ItemId.ItemPokeBall);
 
                         }
-                        for (int i = 0; i < session.Inventory.GetItemAmountByType(ItemId.ItemGreatBall) - 1; i++)
+                        var numGreatBalls = await session.Inventory.GetItemAmountByType(ItemId.ItemGreatBall).ConfigureAwait(false);
+                        for (int i = 0; i < numGreatBalls - 1; i++)
                         {
                             ballToByPass.Add(ItemId.ItemGreatBall);
 
                         }
-                        for (int i = 0; i < session.Inventory.GetItemAmountByType(ItemId.ItemUltraBall) - 1; i++)
+                        var numUltraBalls = await session.Inventory.GetItemAmountByType(ItemId.ItemUltraBall).ConfigureAwait(false);
+                        for (int i = 0; i < numUltraBalls - 1; i++)
                         {
                             ballToByPass.Add(ItemId.ItemUltraBall);
 
@@ -384,10 +387,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                                     : _encounterId,
                                 encounter is EncounterResponse || encounter is IncenseEncounterResponse
                                     ? pokemon.SpawnPointId
-                                    : currentFortData.Id, ballToByPass[i], 1.0, 1.0, !catchMissed);
-                            await session.Inventory.UpdateInventoryItem(ballToByPass[i]);
+                                    : currentFortData.Id, ballToByPass[i], 1.0, 1.0, !catchMissed).ConfigureAwait(false);
+                            await session.Inventory.UpdateInventoryItem(ballToByPass[i]).ConfigureAwait(false);
 
-                            await Task.Delay(100);
+                            await Task.Delay(100).ConfigureAwait(false);
                             Logger.Write($"CatchFlee By pass : {ballToByPass[i].ToString()} , Attempt {i}, result {caughtPokemonResponse.Status}");
 
                             if (caughtPokemonResponse.Status != CatchPokemonResponse.Types.CatchStatus.CatchMissed)
@@ -408,8 +411,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                                     : _encounterId,
                                 encounter is EncounterResponse || encounter is IncenseEncounterResponse
                                     ? pokemon.SpawnPointId
-                                    : currentFortData.Id, pokeball, normalizedRecticleSize, spinModifier, hitPokemon);
-                        await session.Inventory.UpdateInventoryItem(pokeball);
+                                    : currentFortData.Id, pokeball, normalizedRecticleSize, spinModifier, hitPokemon).ConfigureAwait(false);
+                        await session.Inventory.UpdateInventoryItem(pokeball).ConfigureAwait(false);
                     }
                     
 
@@ -426,7 +429,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     if (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess)
                     {
-                        evt.Gender = session.Inventory.GetPokemons().First(x => x.Id == caughtPokemonResponse.CapturedPokemonId).PokemonDisplay.Gender.ToString();
+                        evt.Gender = (await session.Inventory.GetPokemons().ConfigureAwait(false)).First(x => x.Id == caughtPokemonResponse.CapturedPokemonId).PokemonDisplay.Gender.ToString();
 
                         var totalExp = 0;
                         var totalStarDust = caughtPokemonResponse.CaptureAward.Stardust.Sum();
@@ -443,7 +446,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         evt.Exp = totalExp;
                         evt.Stardust = stardust;
                         evt.UniqueId = caughtPokemonResponse.CapturedPokemonId;
-                        evt.Candy = session.Inventory.GetCandyFamily(pokemon.PokemonId);
+                        evt.Candy = await session.Inventory.GetCandyFamily(pokemon.PokemonId).ConfigureAwait(false);
                     }
 
                     if (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess ||
@@ -484,9 +487,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                     evt.Pokeball = pokeball;
                     evt.Attempt = attemptCounter;
 
-                    //await session.Inventory.RefreshCachedInventory();
+                    //await session.Inventory.RefreshCachedInventory().ConfigureAwait(false);
 
-                    evt.BallAmount = session.Inventory.GetItemAmountByType(pokeball);
+                    evt.BallAmount = await session.Inventory.GetItemAmountByType(pokeball).ConfigureAwait(false);
                     evt.Rarity = PokemonGradeHelper.GetPokemonGrade(evt.Id).ToString();
 
                     session.EventDispatcher.Send(evt);
@@ -573,9 +576,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                     caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess)
                 {
                     if (session.LogicSettings.UseNearActionRandom)
-                        await HumanRandomActionTask.TransferRandom(session, cancellationToken);
+                        await HumanRandomActionTask.TransferRandom(session, cancellationToken).ConfigureAwait(false);
                     else
-                        await TransferDuplicatePokemonTask.Execute(session, cancellationToken);
+                        await TransferDuplicatePokemonTask.Execute(session, cancellationToken).ConfigureAwait(false);
                 }
             }
             return true;
@@ -713,16 +716,16 @@ namespace PoGo.NecroBot.Logic.Tasks
             return false;
         }
 
-        public static ItemId GetBestBall(ISession session, PokemonData encounteredPokemon,
+        public static async Task<ItemId> GetBestBall(ISession session, PokemonData encounteredPokemon,
             float probability)
         {
             var pokemonCp = encounteredPokemon.Cp;
             var pokemonId = encounteredPokemon.PokemonId;
             var iV = Math.Round(PokemonInfo.CalculatePokemonPerfection(encounteredPokemon), 2);
-            var pokeBallsCount = session.Inventory.GetItemAmountByType(ItemId.ItemPokeBall);
-            var greatBallsCount = session.Inventory.GetItemAmountByType(ItemId.ItemGreatBall);
-            var ultraBallsCount = session.Inventory.GetItemAmountByType(ItemId.ItemUltraBall);
-            var masterBallsCount = session.Inventory.GetItemAmountByType(ItemId.ItemMasterBall);
+            var pokeBallsCount = await session.Inventory.GetItemAmountByType(ItemId.ItemPokeBall).ConfigureAwait(false);
+            var greatBallsCount = await session.Inventory.GetItemAmountByType(ItemId.ItemGreatBall).ConfigureAwait(false);
+            var ultraBallsCount = await session.Inventory.GetItemAmountByType(ItemId.ItemUltraBall).ConfigureAwait(false);
+            var masterBallsCount = await session.Inventory.GetItemAmountByType(ItemId.ItemMasterBall).ConfigureAwait(false);
 
             if (masterBallsCount > 0 && (
                          session.LogicSettings.UseBallOperator.BoolFunc(
@@ -773,7 +776,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             foreach (var item in itemToUses)
             {
-                var inventoryItems = session.Inventory.GetItems();
+                var inventoryItems = await session.Inventory.GetItems().ConfigureAwait(false);
 
                 var berries = inventoryItems.Where(p => p.ItemId == item.Key);
                 var berry = berries.FirstOrDefault();
@@ -795,7 +798,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                           probability < filter.CatchProbability,
                           pokemonLv >= filter.UseItemMinLevel)))
                 {
-                    var useCaptureItem = await session.Client.Encounter.UseItemEncounter(encounterId, item.Key, spawnPointId);
+                    var useCaptureItem = await session.Client.Encounter.UseItemEncounter(encounterId, item.Key, spawnPointId).ConfigureAwait(false);
                     //berry.Count -= 1;
                     if (useCaptureItem.Status == UseItemEncounterResponse.Types.Status.Success)
                     {
@@ -805,7 +808,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         }
                         AmountOfBerries[item.Key] = AmountOfBerries[item.Key] + 1;
                         session.EventDispatcher.Send(new UseBerryEvent { BerryType = item.Key, Count = berry.Count - 1 });
-                        await session.Inventory.UpdateInventoryItem(berry.ItemId);
+                        await session.Inventory.UpdateInventoryItem(berry.ItemId).ConfigureAwait(false);
                         break;//cant only use 1 berries at 1
                     }
                     else
@@ -813,7 +816,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Logger.Debug($"Use berries result : {useCaptureItem.Status}");
                     }
                 }
-                await DelayingUtils.DelayAsync(session.LogicSettings.DelayBetweenPlayerActions, 500, cancellationToken);
+                await DelayingUtils.DelayAsync(session.LogicSettings.DelayBetweenPlayerActions, 500, cancellationToken).ConfigureAwait(false);
             }
 
         }

@@ -11,51 +11,50 @@ namespace PoGo.NecroBot.Logic.State
 {
     public class FarmState : IState
     {
-        [SuppressMessage("Await.Warning", "CS4014:Await.Warning")]
         public async Task<IState> Execute(ISession session, CancellationToken cancellationToken)
         {
             if (session.LogicSettings.UseNearActionRandom)
             {
-                await HumanRandomActionTask.Execute(session, cancellationToken);
+                await HumanRandomActionTask.Execute(session, cancellationToken).ConfigureAwait(false);
             }
             else
             {
                 if (session.LogicSettings.UseEggIncubators)
-                    await UseIncubatorsTask.Execute(session, cancellationToken);
+                    await UseIncubatorsTask.Execute(session, cancellationToken).ConfigureAwait(false);
                 if (session.LogicSettings.TransferDuplicatePokemon)
-                    await TransferDuplicatePokemonTask.Execute(session, cancellationToken);
+                    await TransferDuplicatePokemonTask.Execute(session, cancellationToken).ConfigureAwait(false);
                 if (session.LogicSettings.TransferWeakPokemon)
-                    await TransferWeakPokemonTask.Execute(session, cancellationToken);
+                    await TransferWeakPokemonTask.Execute(session, cancellationToken).ConfigureAwait(false);
                 if (session.LogicSettings.EvolveAllPokemonAboveIv ||
                     session.LogicSettings.EvolveAllPokemonWithEnoughCandy ||
                     session.LogicSettings.UseLuckyEggsWhileEvolving ||
                     session.LogicSettings.KeepPokemonsThatCanEvolve)
                 {
-                    await EvolvePokemonTask.Execute(session, cancellationToken);
+                    await EvolvePokemonTask.Execute(session, cancellationToken).ConfigureAwait(false);
                 }
                 if (session.LogicSettings.UseLuckyEggConstantly)
-                    await UseLuckyEggConstantlyTask.Execute(session, cancellationToken);
+                    await UseLuckyEggConstantlyTask.Execute(session, cancellationToken).ConfigureAwait(false);
                 if (session.LogicSettings.UseIncenseConstantly)
-                    await UseIncenseConstantlyTask.Execute(session, cancellationToken);
+                    await UseIncenseConstantlyTask.Execute(session, cancellationToken).ConfigureAwait(false);
 
-                GetPokeDexCount.Execute(session, cancellationToken);
+                await GetPokeDexCount.Execute(session, cancellationToken).ConfigureAwait(false);
 
                 if (session.LogicSettings.RenamePokemon)
-                    await RenamePokemonTask.Execute(session, cancellationToken);
+                    await RenamePokemonTask.Execute(session, cancellationToken).ConfigureAwait(false);
 
-                await RecycleItemsTask.Execute(session, cancellationToken);
+                await RecycleItemsTask.Execute(session, cancellationToken).ConfigureAwait(false);
 
                 if (session.LogicSettings.AutomaticallyLevelUpPokemon)
-                    await LevelUpPokemonTask.Execute(session, cancellationToken);
+                    await LevelUpPokemonTask.Execute(session, cancellationToken).ConfigureAwait(false);
             }
 
-            await SelectBuddyPokemonTask.Execute(session, cancellationToken);
+            await SelectBuddyPokemonTask.Execute(session, cancellationToken).ConfigureAwait(false);
 
 
             if (session.LogicSettings.UseGpxPathing)
-                await FarmPokestopsGpxTask.Execute(session, cancellationToken);
+                await FarmPokestopsGpxTask.Execute(session, cancellationToken).ConfigureAwait(false);
             else
-                await FarmPokestopsTask.Execute(session, cancellationToken);
+                await FarmPokestopsTask.Execute(session, cancellationToken).ConfigureAwait(false);
 
             return this;
         }

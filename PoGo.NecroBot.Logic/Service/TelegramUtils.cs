@@ -25,7 +25,7 @@ namespace PoGo.NecroBot.Logic.Service
 
         public async Task SendLocation(GeoCoordinate geo, Message telegramMessage)
         {
-            await SendLocation(geo, telegramMessage.MessageId);
+            await SendLocation(geo, telegramMessage.MessageId).ConfigureAwait(false);
         }
 
         public async Task SendLocation(GeoCoordinate geo, long chatId)
@@ -34,12 +34,12 @@ namespace PoGo.NecroBot.Logic.Service
             {
                 _session.EventDispatcher.Send(new WarnEvent { Message = String.Format("Could not send location to 'Telegram', because given Chat id was '{0}'", 0) });
             }
-            await _bot.SendLocationAsync(chatId, (float) geo.Latitude, (float) geo.Longitude);
+            await _bot.SendLocationAsync(chatId, (float) geo.Latitude, (float) geo.Longitude).ConfigureAwait(false);
         }
 
         public async Task SendMessage(string message, Message telegramMessage)
         {
-            await SendMessage(message, telegramMessage.MessageId);
+            await SendMessage(message, telegramMessage.MessageId).ConfigureAwait(false);
         }
 
         public async Task SendMessage(string message, long chatId)
@@ -55,7 +55,7 @@ namespace PoGo.NecroBot.Logic.Service
 
             foreach (var msg in Split(message, MaxTelegramMsgLength))
             {
-                await _bot.SendTextMessageAsync(chatId, msg, replyMarkup: new ReplyKeyboardHide());
+                await _bot.SendTextMessageAsync(chatId, msg, replyMarkup: new ReplyKeyboardHide()).ConfigureAwait(false);
             }
         }
 

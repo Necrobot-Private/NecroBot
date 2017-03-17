@@ -56,9 +56,9 @@ namespace PoGo.Necrobot.Window
 
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            Task.Run(() =>
+            Task.Run(async () =>
             {
-                var x = this.session.Inventory.GetPokeDexItems();
+                var x = await this.session.Inventory.GetPokeDexItems();
                 this.Dispatcher.Invoke(() =>
                {
                    dataViewModel.UpdateWith(x);

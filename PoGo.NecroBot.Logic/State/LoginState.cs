@@ -52,7 +52,7 @@ namespace PoGo.NecroBot.Logic.State
             {
                 if (session.Settings.AuthType == AuthType.Google || session.Settings.AuthType == AuthType.Ptc)
                 {
-                    session.Profile = await session.Client.Login.DoLogin();
+                    session.Profile = await session.Client.Login.DoLogin().ConfigureAwait(false);
                     successfullyLoggedIn = true;
                 }
                 else
@@ -74,7 +74,7 @@ namespace PoGo.NecroBot.Logic.State
                     Message = session.Translation.GetTranslation(TranslationString.LoginInvalid)
                 });
 
-                await Task.Delay(2000, cancellationToken);
+                await Task.Delay(2000, cancellationToken).ConfigureAwait(false);
                 throw new LoginFailedException();
             }
             catch (AccessTokenExpiredException)
@@ -106,7 +106,7 @@ namespace PoGo.NecroBot.Logic.State
                 {
                     Message = session.Translation.GetTranslation(TranslationString.AccountNotVerified)
                 });
-                await Task.Delay(2000, cancellationToken);
+                await Task.Delay(2000, cancellationToken).ConfigureAwait(false);
                 throw ex;
             }
             catch(GoogleTwoFactorException e)
@@ -138,7 +138,7 @@ namespace PoGo.NecroBot.Logic.State
                     {
                         Message = session.Translation.GetTranslation(TranslationString.GoogleTwoFactorAuthExplanation)
                     });
-                    await Task.Delay(7000, cancellationToken);
+                    await Task.Delay(7000, cancellationToken).ConfigureAwait(false);
                     try
                     {
                         Process.Start("https://security.google.com/settings/security/apppasswords");
@@ -157,7 +157,7 @@ namespace PoGo.NecroBot.Logic.State
                     RequireExit = true,
                     Message = session.Translation.GetTranslation(TranslationString.GoogleError)
                 });
-                await Task.Delay(2000, cancellationToken);
+                await Task.Delay(2000, cancellationToken).ConfigureAwait(false);
                 Environment.Exit(0);
             }
             catch (ActiveSwitchByRuleException)
@@ -174,7 +174,7 @@ namespace PoGo.NecroBot.Logic.State
                     RequireExit =true,
                     Message = session.Translation.GetTranslation(TranslationString.IPBannedError)
                 });
-                await Task.Delay(2000, cancellationToken);
+                await Task.Delay(2000, cancellationToken).ConfigureAwait(false);
                 Environment.Exit(0);
             }
             catch (MinimumClientVersionException ex)
@@ -201,7 +201,7 @@ namespace PoGo.NecroBot.Logic.State
             catch (Exception e)
             {
                 Logger.Write(e.ToString());
-                await Task.Delay(20000, cancellationToken);
+                await Task.Delay(20000, cancellationToken).ConfigureAwait(false);
                 return this;
             }
             finally
@@ -216,10 +216,10 @@ namespace PoGo.NecroBot.Logic.State
             }
             try
             {
-                await DownloadProfile(session);
+                await DownloadProfile(session).ConfigureAwait(false);
                 if (session.Profile == null)
                 {
-                    await Task.Delay(20000, cancellationToken);
+                    await Task.Delay(20000, cancellationToken).ConfigureAwait(false);
                     Logger.Write(
                         "Due to login failure your player profile could not be retrieved. Press any key to re-try login.",
                         LogLevel.Warning
@@ -345,8 +345,8 @@ namespace PoGo.NecroBot.Logic.State
             try
             {
                 //TODO : need get all data at 1 call here to save speed login.
-                session.Profile = await session.Inventory.GetPlayerData();
-                var stats = session.Inventory.GetPlayerStats();
+                session.Profile = await session.Inventory.GetPlayerData().ConfigureAwait(false);
+                var stats = await session.Inventory.GetPlayerStats().ConfigureAwait(false);
 
                 TinyIoCContainer.Current.Resolve<MultiAccountManager>().Logged(session.Profile, stats);
                 session.EventDispatcher.Send(new ProfileEvent {Profile = session.Profile, Stats = stats});
