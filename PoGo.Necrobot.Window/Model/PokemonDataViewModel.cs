@@ -139,7 +139,7 @@ namespace PoGo.Necrobot.Window.Model
         {
             get
             {
-                return this.Session.Inventory.GetCandyCount(this.PokemonData.PokemonId);
+                return this.Session.Inventory.GetCandyCount(this.PokemonData.PokemonId).Result;
             }
         }
 
@@ -147,7 +147,7 @@ namespace PoGo.Necrobot.Window.Model
         {
             get
             {
-                return this.Session.Inventory.CanUpgradePokemon(this.PokemonData);
+                return this.Session.Inventory.CanUpgradePokemon(this.PokemonData).Result;
             }
         }
 

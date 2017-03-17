@@ -66,7 +66,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 if (session.Cache.Get(currentFortData.LureInfo.EncounterId.ToString()) != null)
                     return; //pokemon been ignore before
 
-                var encounter = await session.Client.Encounter.EncounterLurePokemon(encounterId, fortId);
+                var encounter = await session.Client.Encounter.EncounterLurePokemon(encounterId, fortId).ConfigureAwait(false);
 
                 if (encounter.Result == DiskEncounterResponse.Types.Result.Success &&
                     session.LogicSettings.CatchPokemon)
@@ -86,7 +86,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     // Catch the Pokemon
                     await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon,
-                        currentFortData, sessionAllowTransfer: true);
+                        currentFortData, sessionAllowTransfer: true).ConfigureAwait(false);
                 }
                 else if (encounter.Result == DiskEncounterResponse.Types.Result.PokemonInventoryFull)
                 {
@@ -97,15 +97,15 @@ namespace PoGo.NecroBot.Logic.Tasks
                             Message = session.Translation.GetTranslation(TranslationString.InvFullTransferring)
                         });
                         if (session.LogicSettings.TransferDuplicatePokemon)
-                            await TransferDuplicatePokemonTask.Execute(session, cancellationToken);
+                            await TransferDuplicatePokemonTask.Execute(session, cancellationToken).ConfigureAwait(false);
                         if (session.LogicSettings.TransferWeakPokemon)
-                            await TransferWeakPokemonTask.Execute(session, cancellationToken);
+                            await TransferWeakPokemonTask.Execute(session, cancellationToken).ConfigureAwait(false);
                         if (session.LogicSettings.EvolveAllPokemonAboveIv ||
                             session.LogicSettings.EvolveAllPokemonWithEnoughCandy ||
                             session.LogicSettings.UseLuckyEggsWhileEvolving ||
                             session.LogicSettings.KeepPokemonsThatCanEvolve)
                         {
-                            await EvolvePokemonTask.Execute(session, cancellationToken);
+                            await EvolvePokemonTask.Execute(session, cancellationToken).ConfigureAwait(false);
                         }
                     }
                     else
@@ -131,7 +131,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             // Looking for any lure pokestop neaby
 
-            var mapObjects = await session.Client.Map.GetMapObjects();
+            var mapObjects = await session.Client.Map.GetMapObjects().ConfigureAwait(false);
             var pokeStops = mapObjects.MapCells.SelectMany(i => i.Forts)
                 .Where(
                     i =>
@@ -151,7 +151,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 if (distance < 40 && fort.LureInfo != null)
                 {
                     luredNearBy.Add(fort);
-                    await Execute(session, fort, cancellationToken);
+                    await Execute(session, fort, cancellationToken).ConfigureAwait(false);
                 }
             }
             ;

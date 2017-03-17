@@ -26,28 +26,28 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             cancellationToken.ThrowIfCancellationRequested();
             TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
-            var pokemons = session.Inventory.GetPokemons();
+            var pokemons = await session.Inventory.GetPokemons().ConfigureAwait(false);
 
             if (session.LogicSettings.TransferDuplicatePokemon && session.LogicSettings.RenamePokemonRespectTransferRule)
             {
-                var duplicatePokemons =
+                var duplicatePokemons = await
                     session.Inventory.GetDuplicatePokemonToTransfer(
                         session.LogicSettings.PokemonsNotToTransfer,
                         session.LogicSettings.PokemonEvolveFilters,
                         session.LogicSettings.KeepPokemonsThatCanEvolve,
-                        session.LogicSettings.PrioritizeIvOverCp);
+                        session.LogicSettings.PrioritizeIvOverCp).ConfigureAwait(false);
 
                 pokemons = pokemons.Where(x => !duplicatePokemons.Any(p => p.Id == x.Id));
             }
 
             if (session.LogicSettings.TransferWeakPokemon && session.LogicSettings.RenamePokemonRespectTransferRule)
             {
-                var weakPokemons =
+                var weakPokemons = await
                     session.Inventory.GetWeakPokemonToTransfer(
                         session.LogicSettings.PokemonsNotToTransfer,
                         session.LogicSettings.PokemonEvolveFilters,
                         session.LogicSettings.KeepPokemonsThatCanEvolve,
-                        session.LogicSettings.PrioritizeIvOverCp);
+                        session.LogicSettings.PrioritizeIvOverCp).ConfigureAwait(false);
 
                 pokemons = pokemons.Where(x => !weakPokemons.Any(p => p.Id == x.Id));
             }
@@ -87,7 +87,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                      perfection >= session.LogicSettings.KeepMinIvPercentage) &&
                     newNickname != oldNickname)
                 {
-                    var result = await session.Client.Inventory.NicknamePokemon(pokemon.Id, newNickname);
+                    var result = await session.Client.Inventory.NicknamePokemon(pokemon.Id, newNickname).ConfigureAwait(false);
 
                     if (result.Result == NicknamePokemonResponse.Types.Result.Success)
                     {

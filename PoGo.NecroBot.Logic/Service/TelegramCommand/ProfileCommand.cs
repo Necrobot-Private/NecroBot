@@ -17,19 +17,17 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
         public ProfileCommand(TelegramUtils telegramUtils) : base(telegramUtils)
         {
         }
-
-        // jjskuld - Ignore CS1998 warning for now.
-        #pragma warning disable 1998
+        
         public override async Task<bool> OnCommand(ISession session, string cmd, Action<string> callback)
         {
-            var playerStats = (session.Inventory.GetPlayerStats()).FirstOrDefault();
+            var playerStats = (await session.Inventory.GetPlayerStats().ConfigureAwait(false)).FirstOrDefault();
             if (cmd.ToLower() != Command || playerStats == null)
             {
                 return false;
             }
 
             var answerTextmessage = GetMsgHead(session, session.Profile.PlayerData.Username) + "\r\n\r\n";
-            var pokemonInBag = session.Inventory.GetPokemons().ToList().Count;
+            var pokemonInBag = (await session.Inventory.GetPokemons().ConfigureAwait(false)).ToList().Count;
             answerTextmessage += session.Translation.GetTranslation(
                 TranslationString.TelegramCommandProfileMsgBody,
                 session.Profile.PlayerData.Username,
@@ -52,6 +50,5 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
             callback(answerTextmessage);
             return true;
         }
-        #pragma warning restore 1998
     }
 }

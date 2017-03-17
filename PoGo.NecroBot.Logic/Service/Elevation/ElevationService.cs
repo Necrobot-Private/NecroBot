@@ -4,6 +4,7 @@ using System.Linq;
 using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.Model.Settings;
 using PoGo.NecroBot.Logic.Model;
+using System.Threading.Tasks;
 
 namespace PoGo.NecroBot.Logic.Service.Elevation
 {
@@ -23,8 +24,6 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
                 if (!string.IsNullOrEmpty(settings.MapzenWalkConfig.MapzenElevationApiKey))
                     ElevationServiceQueue.Add(new MapzenElevationService(settings));
             }
-
-            //ElevationServiceQueue.Add(new MapQuestElevationService(settings));
 
             if (_settings.GoogleWalkConfig.UseGoogleWalk)
             {
@@ -65,17 +64,17 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
             return ElevationServiceQueue.First(q => !IsElevationServiceBlacklisted(q.GetType()));
         }
 
-        public double GetElevation(double lat, double lng)
+        public async Task<double> GetElevation(double lat, double lng)
         {
             IElevationService service = GetService();
             
             if (service is RandomElevationService)
             {
                 // Don't hit the database for random elevation service.
-                return service.GetElevation(lat, lng);
+                return await service.GetElevation(lat, lng).ConfigureAwait(false);
             }
 
-            ElevationLocation elevationLocation = ElevationLocation.FindOrUpdateInDatabase(lat, lng, service).Result;
+            ElevationLocation elevationLocation = await ElevationLocation.FindOrUpdateInDatabase(lat, lng, service).ConfigureAwait(false);
             if (elevationLocation == null)
             {
                 Logger.Write(
@@ -90,7 +89,7 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
                 );
 
                 // After blacklisting, retry.
-                return GetElevation(lat, lng);
+                return await GetElevation(lat, lng).ConfigureAwait(false);
             }
 
             return BaseElevationService.GetRandomElevation(elevationLocation.Altitude);

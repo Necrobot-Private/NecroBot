@@ -96,12 +96,12 @@ namespace PoGo.NecroBot.Logic.DataDumper
 
         public static async Task SaveAsExcel(ISession session, string Filename = "")
         {
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
                 
                 var allPokemonInBag = session.LogicSettings.PrioritizeIvOverCp
-                    ? session.Inventory.GetHighestsPerfect(1000)
-                    : session.Inventory.GetHighestsCp(1000);
+                    ? await session.Inventory.GetHighestsPerfect(1000).ConfigureAwait(false)
+                    : await session.Inventory.GetHighestsCp(1000).ConfigureAwait(false);
                 string file = !string.IsNullOrEmpty(Filename)
                     ? Filename
                     : $"config\\{session.Settings.Username}\\allpokemon.xlsx";
@@ -112,7 +112,7 @@ namespace PoGo.NecroBot.Logic.DataDumper
                     var ws = package.Workbook.Worksheets.Add("Pokemons");
                     foreach (var item in allPokemonInBag)
                     {
-                        var settings = session.Inventory.GetPokemonSetting(item.PokemonId);
+                        var settings = await session.Inventory.GetPokemonSetting(item.PokemonId).ConfigureAwait(false);
                         if (rowNum == 1)
                         {
                             ws.Cells[1, 1].Value = "#";
@@ -157,7 +157,7 @@ namespace PoGo.NecroBot.Logic.DataDumper
                     }
                     package.Save();
                 }
-            });
+            }).ConfigureAwait(false);
         }
     }
 }

@@ -23,12 +23,12 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            //await session.Inventory.RefreshCachedInventory();
+            //await session.Inventory.RefreshCachedInventory().ConfigureAwait(false);
 
             if (session.Inventory.GetStarDust() <= session.LogicSettings.GetMinStarDustForLevelUp)
                 return;
 
-            IEnumerable<PokemonData> upgradablePokemon = session.Inventory.GetPokemonToUpgrade();
+            IEnumerable<PokemonData> upgradablePokemon = await session.Inventory.GetPokemonToUpgrade().ConfigureAwait(false);
 
             if (upgradablePokemon.Count() == 0)
                 return;
@@ -48,10 +48,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                         //unnessecsarily check, should remove
                         if (PokemonToLevel.Contains(pokemon.PokemonId))
                         {
-                            bool upgradable = await UpgradeSinglePokemonTask.UpgradeSinglePokemon(session, pokemon);
+                            bool upgradable = await UpgradeSinglePokemonTask.UpgradeSinglePokemon(session, pokemon).ConfigureAwait(false);
                             if (!upgradable || upgradedNumber >= session.LogicSettings.AmountOfTimesToUpgradeLoop)
                                 break;
-                            await Task.Delay(session.LogicSettings.DelayBetweenPokemonUpgrade);
+                            await Task.Delay(session.LogicSettings.DelayBetweenPokemonUpgrade).ConfigureAwait(false);
                             upgradedNumber++;
                         }
                         else
@@ -62,8 +62,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
                 else
                 {
-                    await UpgradeSinglePokemonTask.UpgradeSinglePokemon(session, pokemon);
-                    await Task.Delay(session.LogicSettings.DelayBetweenPlayerActions);
+                    await UpgradeSinglePokemonTask.UpgradeSinglePokemon(session, pokemon).ConfigureAwait(false);
+                    await Task.Delay(session.LogicSettings.DelayBetweenPlayerActions).ConfigureAwait(false);
                 }
             }
         }

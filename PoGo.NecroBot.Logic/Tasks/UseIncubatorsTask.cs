@@ -23,11 +23,11 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static async Task Execute(ISession session, CancellationToken cancellationToken,
             ulong eggId, string incubatorId)
         {
-            var incubators = session.Inventory.GetEggIncubators()
+            var incubators = (await session.Inventory.GetEggIncubators().ConfigureAwait(false))
                 .Where(x => x.UsesRemaining > 0 || x.ItemId == ItemId.ItemIncubatorBasicUnlimited)
                 .FirstOrDefault(x => x.Id == incubatorId);
 
-            var unusedEggs = session.Inventory.GetEggs()
+            var unusedEggs = (await session.Inventory.GetEggs().ConfigureAwait(false))
                 .Where(x => string.IsNullOrEmpty(x.EggIncubatorId))
                 .FirstOrDefault(x => x.Id == eggId);
 
@@ -36,7 +36,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             var rememberedIncubatorsFilePath = Path.Combine(session.LogicSettings.ProfilePath, "temp", "incubators.json");
             var rememberedIncubators = GetRememberedIncubators(rememberedIncubatorsFilePath);
 
-            var response = await session.Client.Inventory.UseItemEggIncubator(incubators.Id, unusedEggs.Id);
+            var response = await session.Client.Inventory.UseItemEggIncubator(incubators.Id, unusedEggs.Id).ConfigureAwait(false);
             var newRememberedIncubators = new List<IncubatorUsage>();
             if (response.Result == UseItemEggIncubatorResponse.Types.Result.Success)
             {
@@ -67,25 +67,25 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             try
             {
-                var playerStats = (session.Inventory.GetPlayerStats()).FirstOrDefault();
+                var playerStats = (await session.Inventory.GetPlayerStats().ConfigureAwait(false)).FirstOrDefault();
                 if (playerStats == null)
                     return;
 
                 var kmWalked = playerStats.KmWalked;
 
-                var incubators = session.Inventory.GetEggIncubators()
+                var incubators = (await session.Inventory.GetEggIncubators().ConfigureAwait(false))
                     .Where(x => x.UsesRemaining > 0 || x.ItemId == ItemId.ItemIncubatorBasicUnlimited)
                     .OrderByDescending(x => x.ItemId == ItemId.ItemIncubatorBasicUnlimited)
                     .ToList();
 
-                var unusedEggs = session.Inventory.GetEggs()
+                var unusedEggs = (await session.Inventory.GetEggs().ConfigureAwait(false))
                     .Where(x => string.IsNullOrEmpty(x.EggIncubatorId))
                     .OrderBy(x => x.EggKmWalkedTarget - x.EggKmWalkedStart)
                     .ToList();
 
                 var rememberedIncubatorsFilePath = Path.Combine(session.LogicSettings.ProfilePath, "temp", "incubators.json");
                 var rememberedIncubators = GetRememberedIncubators(rememberedIncubatorsFilePath);
-                var pokemons = session.Inventory.GetPokemons().ToList();
+                var pokemons = (await session.Inventory.GetPokemons().ConfigureAwait(false)).ToList();
 
                 // Check if eggs in remembered incubator usages have since hatched
                 // (instead of calling session.Client.Inventory.GetHatchedEgg(), which doesn't seem to work properly)
@@ -127,7 +127,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                             && incubator.ItemId != ItemId.ItemIncubatorBasicUnlimited)
                             continue;
 
-                        var response = await session.Client.Inventory.UseItemEggIncubator(incubator.Id, egg.Id);
+                        var response = await session.Client.Inventory.UseItemEggIncubator(incubator.Id, egg.Id).ConfigureAwait(false);
                         unusedEggs.Remove(egg);
 
                         newRememberedIncubators.Add(new IncubatorUsage { IncubatorId = incubator.Id, PokemonId = egg.Id });

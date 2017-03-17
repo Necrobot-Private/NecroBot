@@ -30,7 +30,7 @@ namespace PoGo.NecroBot.Logic.Captcha.Anti_Captcha
                 "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36"
             );
 
-            return await ProcessTask(task1, apiKey);
+            return await ProcessTask(task1, apiKey).ConfigureAwait(false);
         }
 
         private static async Task<string> ProcessTask(AnticaptchaTask task, string apikey)
@@ -46,7 +46,7 @@ namespace PoGo.NecroBot.Logic.Captcha.Anti_Captcha
                     break;
                 }
 
-                await Task.Delay(3000);
+                await Task.Delay(3000).ConfigureAwait(false);
             } while (response != null && response.GetStatus().Equals(AnticaptchaResult.Status.processing));
 
             if (response == null || response.GetSolution() == null)

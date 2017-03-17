@@ -83,9 +83,9 @@ namespace PoGo.Necrobot.Window
 
             var maxPokemonStorage = currentSession.Profile?.PlayerData?.MaxPokemonStorage;
             var maxItemStorage = currentSession.Profile?.PlayerData?.MaxItemStorage;
-            var pokemons = currentSession.Inventory.GetPokemons();
+            var pokemons = currentSession.Inventory.GetPokemons().Result;
 
-            var inventory = currentSession.Inventory.GetCachedInventory();
+            var inventory = currentSession.Inventory.GetCachedInventory().Result;
             datacontext.SnipeList.OnInventoryRefreshed(inventory);
             datacontext.PlayerInfo.OnInventoryRefreshed(inventory);
             datacontext.EggsList.OnInventoryRefreshed(inventory);

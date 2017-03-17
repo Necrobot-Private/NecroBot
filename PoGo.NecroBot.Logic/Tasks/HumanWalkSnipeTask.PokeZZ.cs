@@ -42,7 +42,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         }
                     };
                     client.Open();
-                    await Task.Delay(1000);
+                    await Task.Delay(1000).ConfigureAwait(false);
                     client.Close();
                 }
             }

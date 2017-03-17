@@ -5,6 +5,8 @@ using System.Net;
 using Newtonsoft.Json;
 using PoGo.NecroBot.Logic.Exceptions;
 using PoGo.NecroBot.Logic.Model.Settings;
+using System.Threading.Tasks;
+using System.Net.Http;
 
 namespace PoGo.NecroBot.Logic.Service.Elevation
 {
@@ -40,45 +42,36 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
             return "Google Elevation Service";
         }
 
-        public override double GetElevationFromWebService(double lat, double lng)
+        public override async Task<double> GetElevationFromWebService(double lat, double lng)
         {
             if (string.IsNullOrEmpty(_apiKey))
                 return 0;
 
-            try
+            using (HttpClient client = new HttpClient())
             {
-                string url = $"https://maps.googleapis.com/maps/api/elevation/json?key={_apiKey}&locations={lat},{lng}";
-                HttpWebRequest request = (HttpWebRequest) WebRequest.Create(url);
-                request.Credentials = CredentialCache.DefaultCredentials;
-                request.UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.121 Safari/535.2";
-                request.ContentType = "application/json";
-                request.ReadWriteTimeout = 2000;
-                string responseFromServer = "";
-
-                using (WebResponse response = request.GetResponse())
+                try
                 {
-                    using (Stream dataStream = response.GetResponseStream())
-                    using (StreamReader reader = new StreamReader(dataStream))
-                    {
-                        responseFromServer = reader.ReadToEnd();
-                        GoogleResponse googleResponse = JsonConvert.DeserializeObject<GoogleResponse>(responseFromServer);
+                    string url = $"https://maps.googleapis.com/maps/api/elevation/json?key={_apiKey}&locations={lat},{lng}";
 
-                        if (googleResponse.status == "OK" && googleResponse.results != null &&
-                            0 < googleResponse.results.Count && googleResponse.results[0].elevation > -100)
-                            return googleResponse.results[0].elevation;
+                    var responseContent = await client.GetAsync(url).ConfigureAwait(false);
+                    if (responseContent.StatusCode != HttpStatusCode.OK)
+                        return 0;
 
-                        // All error handling is handled inside of the ElevationService.
-                    }
+                    var responseFromServer = await responseContent.Content.ReadAsStringAsync().ConfigureAwait(false);
+                    GoogleResponse googleResponse = JsonConvert.DeserializeObject<GoogleResponse>(responseFromServer);
+
+                    if (googleResponse.status == "OK" && googleResponse.results != null &&
+                        0 < googleResponse.results.Count && googleResponse.results[0].elevation > -100)
+                    return googleResponse.results[0].elevation;
                 }
-            }
-            catch (ActiveSwitchByRuleException ex)
-            {
-                throw ex;
-            }
-
-            catch (Exception)
-            {
-                // If we get here for any reason, then just drop down and return 0.
+                catch (ActiveSwitchByRuleException ex)
+                {
+                    throw ex;
+                }
+                catch (Exception)
+                {
+                    // If we get here for any reason, then just drop down and return 0. Will cause this elevation service to be blacklisted.
+                }
             }
 
             return 0;

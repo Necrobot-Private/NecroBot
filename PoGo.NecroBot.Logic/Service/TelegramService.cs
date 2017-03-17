@@ -97,15 +97,15 @@ namespace PoGo.NecroBot.Logic.Service
                         _loggedIn = true;
                         _lastLoginTime = DateTime.Now;
                         answerTextmessage += _session.Translation.GetTranslation(TranslationString.LoggedInTelegram);
-                        await telegramUtils.SendMessage(answerTextmessage, message.Chat.Id);
+                        await telegramUtils.SendMessage(answerTextmessage, message.Chat.Id).ConfigureAwait(false);
                         return;
                     }
                     answerTextmessage += _session.Translation.GetTranslation(TranslationString.LoginFailedTelegram);
-                    await telegramUtils.SendMessage(answerTextmessage, message.Chat.Id);
+                    await telegramUtils.SendMessage(answerTextmessage, message.Chat.Id).ConfigureAwait(false);
                     return;
                 }
                 answerTextmessage += _session.Translation.GetTranslation(TranslationString.NotLoggedInTelegram);
-                await telegramUtils.SendMessage(answerTextmessage, message.Chat.Id);
+                await telegramUtils.SendMessage(answerTextmessage, message.Chat.Id).ConfigureAwait(false);
                 return;
             }
             if (_loggedIn)
@@ -114,14 +114,14 @@ namespace PoGo.NecroBot.Logic.Service
                 {
                     _loggedIn = false;
                     answerTextmessage += _session.Translation.GetTranslation(TranslationString.NotLoggedInTelegram);
-                    await telegramUtils.SendMessage(answerTextmessage, message.Chat.Id);
+                    await telegramUtils.SendMessage(answerTextmessage, message.Chat.Id).ConfigureAwait(false);
                     return;
                 }
                 var remainingMins = _lastLoginTime.AddMinutes(5).Subtract(DateTime.Now).Minutes;
                 var remainingSecs = _lastLoginTime.AddMinutes(5).Subtract(DateTime.Now).Seconds;
                 answerTextmessage += _session.Translation.GetTranslation(TranslationString.LoginRemainingTime,
                     remainingMins, remainingSecs);
-                await telegramUtils.SendMessage(answerTextmessage, message.Chat.Id);
+                await telegramUtils.SendMessage(answerTextmessage, message.Chat.Id).ConfigureAwait(false);
                 return;
             }
 
@@ -130,7 +130,7 @@ namespace PoGo.NecroBot.Logic.Service
             {
                 try
                 {
-                    handled = await item.OnCommand(_session, message.Text, message);
+                    handled = await item.OnCommand(_session, message.Text, message).ConfigureAwait(false);
                     if (handled) break;
                 }
                 catch (Exception)
@@ -141,7 +141,7 @@ namespace PoGo.NecroBot.Logic.Service
             if (!handled)
             {
                 HelpCommand helpCMD = new HelpCommand(telegramUtils);
-                await helpCMD.OnCommand(_session, helpCMD.Command, message);
+                await helpCMD.OnCommand(_session, helpCMD.Command, message).ConfigureAwait(false);
             }
         }
 
@@ -149,7 +149,7 @@ namespace PoGo.NecroBot.Logic.Service
         public async Task SendMessage(string message)
         {
             if (string.IsNullOrEmpty(message) || lastChatId == 0) return;
-            await _bot.SendTextMessageAsync(lastChatId, message, replyMarkup: new ReplyKeyboardHide());
+            await _bot.SendTextMessageAsync(lastChatId, message, replyMarkup: new ReplyKeyboardHide()).ConfigureAwait(false);
         }
     }
 }

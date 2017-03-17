@@ -52,7 +52,7 @@ namespace PoGo.NecroBot.Logic.Captcha
 
                 try
                 {
-                    var responseContent = await client.GetAsync(url);
+                    var responseContent = await client.GetAsync(url).ConfigureAwait(false);
                     if (responseContent.StatusCode != HttpStatusCode.OK)
                     {
                         Logger.Write(
@@ -61,7 +61,7 @@ namespace PoGo.NecroBot.Logic.Captcha
                         );
                         return string.Empty;
                     }
-                    var responseJSON = await responseContent.Content.ReadAsStringAsync();
+                    var responseJSON = await responseContent.Content.ReadAsStringAsync().ConfigureAwait(false);
                     var response = JsonConvert.DeserializeObject<APIObjectResponse>(responseJSON);
                     return response.captchasolutions;
                 }

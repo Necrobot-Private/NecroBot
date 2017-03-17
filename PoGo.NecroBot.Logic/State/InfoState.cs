@@ -13,7 +13,7 @@ namespace PoGo.NecroBot.Logic.State
         public async Task<IState> Execute(ISession session, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            await DisplayPokemonStatsTask.Execute(session);
+            await DisplayPokemonStatsTask.Execute(session).ConfigureAwait(false);
 
             return new FarmState();
         }

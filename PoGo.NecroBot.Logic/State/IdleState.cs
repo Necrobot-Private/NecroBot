@@ -14,7 +14,7 @@ namespace PoGo.NecroBot.Logic.State
             {
                 try
                 {
-                    await client.GetStringAsync("http://hashing.pogodev.io/api/hash/versions");
+                    await client.GetStringAsync("http://hashing.pogodev.io/api/hash/versions").ConfigureAwait(false);
                     return true;
                 }
                 catch (Exception)
@@ -39,7 +39,7 @@ namespace PoGo.NecroBot.Logic.State
             bool alive = false;
             while (!alive)
             {
-                alive = await Ping();
+                alive = await Ping().ConfigureAwait(false);
                 lastPing = DateTime.Now;
                 if (!alive)
                 {
@@ -50,7 +50,7 @@ namespace PoGo.NecroBot.Logic.State
                         Message = $"Hash API server down time : {ts.ToString(@"hh\:mm\:ss")}   Last ping: {lastPing.ToString("T")}"
                     });
 
-                    await Task.Delay(5000);
+                    await Task.Delay(5000).ConfigureAwait(false);
                 }
             }
 

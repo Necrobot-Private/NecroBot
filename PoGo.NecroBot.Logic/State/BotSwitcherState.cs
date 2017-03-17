@@ -28,9 +28,9 @@ namespace PoGo.NecroBot.Logic.State
             {
                 session.Client.Player.UpdatePlayerLocation(session.Client.CurrentLatitude,
                     session.Client.CurrentLongitude, session.Client.CurrentAltitude, 10);
-                await Task.Delay(1000, cancellationToken);
-                await CatchNearbyPokemonsTask.Execute(session, cancellationToken, this.pokemonToCatch);
-                await CatchLurePokemonsTask.Execute(session, cancellationToken);
+                await Task.Delay(1000, cancellationToken).ConfigureAwait(false);
+                await CatchNearbyPokemonsTask.Execute(session, cancellationToken, this.pokemonToCatch).ConfigureAwait(false);
+                await CatchLurePokemonsTask.Execute(session, cancellationToken).ConfigureAwait(false);
             }
             else
             {
@@ -44,7 +44,7 @@ namespace PoGo.NecroBot.Logic.State
                     PokemonId =(short) this.encounterData.PokemonId,
                     SpawnPointId = this.encounterData.SpawnPointId,
                     EncounterId = Convert.ToUInt64( this.encounterData.EncounterId)
-                });
+                }).ConfigureAwait(false);
             }
             return new InfoState();
         }

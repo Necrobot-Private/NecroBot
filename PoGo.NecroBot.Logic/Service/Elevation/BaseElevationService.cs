@@ -1,6 +1,7 @@
 ﻿using System;
 using PoGo.NecroBot.Logic.Model.Settings;
 using System.Device.Location;
+using System.Threading.Tasks;
 
 namespace PoGo.NecroBot.Logic.Service.Elevation
 {
@@ -10,28 +11,18 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
         protected string _apiKey;
 
         public abstract string GetServiceId();
-        public abstract double GetElevationFromWebService(double lat, double lng);
+        public abstract Task<double> GetElevationFromWebService(double lat, double lng);
 
         public BaseElevationService(GlobalSettings settings)
         {
             _settings = settings;
         }
         
-        public double GetElevation(double lat, double lng)
+        public async Task<double> GetElevation(double lat, double lng)
         {
-            return GetElevationFromWebService(lat, lng);
+            return await GetElevationFromWebService(lat, lng).ConfigureAwait(false);
         }
-
-        public void UpdateElevation(ref GeoCoordinate position)
-        {
-            double elevation = GetElevation(position.Latitude, position.Longitude);
-            // Only update the position elevation if we got a non-zero elevation.
-            if (elevation != 0)
-            {
-                position.Altitude = elevation;
-            }
-        }
-
+        
         public static double GetRandomElevation(double elevation)
         {
             // Adds a random elevation to the retrieved one. This was
