@@ -1140,6 +1140,8 @@ namespace RocketBot2.Forms
                              _session, _session.CancellationTokenSource.Token, _pokemons
                          );
                      });
+                        if (!checkBoxAutoRefresh.Checked)
+                            await ReloadPokemonList().ConfigureAwait(false);
                     }
                     break;
             }
@@ -1160,6 +1162,8 @@ namespace RocketBot2.Forms
                         break;
                 }
             }
+            if (!checkBoxAutoRefresh.Checked)
+                await ReloadPokemonList().ConfigureAwait(false);
         }
 
         private async void EvolvePokemon(IEnumerable<PokemonData> pokemons)
@@ -1168,6 +1172,8 @@ namespace RocketBot2.Forms
             {
                 await Task.Run(async () => { await Logic.Tasks.EvolveSpecificPokemonTask.Execute(_session, pokemon.Id); });
             }
+            if (!checkBoxAutoRefresh.Checked)
+                await ReloadPokemonList().ConfigureAwait(false);
         }
 
         public async void NicknamePokemon(IEnumerable<PokemonData> pokemons, string nickname)
