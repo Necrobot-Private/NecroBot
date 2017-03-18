@@ -21,13 +21,7 @@ namespace PoGo.Necrobot.Window.Model
         {
             get
             {
-                if ((int)PokemonId > 151)
-                {
-                    //http://www.serebii.net/pokemongo/pokemon/145.png maybe better
-                    return $"https://rankedboost.com/wp-content/plugins/ice/riot/poksimages/pokemons2/{(int)PokemonId:000}.png";
-                }
-
-                return $"https://rankedboost.com/wp-content/plugins/ice/riot/poksimages/pokemons/{(int)PokemonId:000}.png";
+                return $"http://www.serebii.net/pokemongo/pokemon/{(int)PokemonId:000}.png";
             }
         }
 
