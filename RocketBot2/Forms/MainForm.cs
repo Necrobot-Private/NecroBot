@@ -1200,6 +1200,8 @@ namespace RocketBot2.Forms
                     continue;
                 }
                 await Task.Run(async () => { await RenameSinglePokemonTask.Execute(_session, pokemon.Id, nickname, _session.CancellationTokenSource.Token); });
+                if (!checkBoxAutoRefresh.Checked)
+                    await ReloadPokemonList().ConfigureAwait(false);
             }
         }
 
@@ -1263,16 +1265,19 @@ namespace RocketBot2.Forms
                     .SelectMany(aItems => aItems.Item)
                     .ToDictionary(item => item.ItemId, item => new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(item.ExpireMs));
 
-                     flpItems.Controls.Clear();
+                flpItems.Controls.Clear();
 
-                     foreach (var item in items)
-                     {
-                         var box = new ItemBox(item);
-                         if (appliedItems.ContainsKey(item.ItemId))
-                             box.expires = appliedItems[item.ItemId];
+                foreach (var item in items)
+                {
+                    var box = new ItemBox(item);
+                    if (appliedItems.ContainsKey(item.ItemId))
+                    {
+                        box.expires = appliedItems[item.ItemId];
+                        box.Enabled = false;
+                    }
                          box.ItemClick += ItemBox_ItemClick;
-                         flpItems.Controls.Add(box);
-                     }
+                    flpItems.Controls.Add(box);
+                }
 
                 lblInventory.Text =
                         $"Types: {items.Count()} / Total: {_session.Inventory.GetTotalItemCount().Result} / Storage: {_session.Client.Player.PlayerData.MaxItemStorage}";
@@ -1317,6 +1322,8 @@ namespace RocketBot2.Forms
                         }
                         break;
                 }
+                if (!checkBoxAutoRefresh.Checked)
+                    await ReloadPokemonList().ConfigureAwait(false);
             }
         }
 
