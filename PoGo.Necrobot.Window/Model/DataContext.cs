@@ -61,7 +61,7 @@ namespace PoGo.Necrobot.Window.Model
         {
             get
             {
-                return $"   Pokemons ({PokemonList.Pokemons.Count + EggsList.Eggs.Count}/250)   ";
+                return $"   Pokemons ({PokemonList.Pokemons.Count + EggsList.Eggs.Count - 1}/250)   ";
             }
         }
 
