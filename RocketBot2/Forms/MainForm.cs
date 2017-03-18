@@ -985,6 +985,19 @@ namespace RocketBot2.Forms
             ConsoleHelper.HideConsoleWindow();
         }
 
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("http://www1.mypogosnipers.com");
+
+            Thread mThread = new Thread(delegate ()
+            {
+                var infoForm = new InfoForm();
+                infoForm.ShowDialog();
+            });
+            mThread.SetApartmentState(ApartmentState.STA);
+            mThread.Start();
+        }
+
         #endregion EVENTS
 
         #region POKEMON LIST
@@ -1307,19 +1320,6 @@ namespace RocketBot2.Forms
         }
 
         #endregion POKEMON LIST
-
-        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Process.Start("http://www1.mypogosnipers.com");
-
-            Thread mThread = new Thread(delegate ()
-            {
-                var infoForm = new InfoForm();
-                infoForm.ShowDialog();
-            });
-            mThread.SetApartmentState(ApartmentState.STA);
-            mThread.Start();
-        }
 
         //**** Program functions
         private static void EventDispatcher_EventReceived(IEvent evt)
