@@ -43,14 +43,14 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
                     functionExecutedWhileWalking,
                     session,
                     cancellationToken
-                );
+                ).ConfigureAwait(false);
                 return;
             }
 
             base.OnStartWalking(session, targetLocation, mapzenWalk.Distance);
             List<GeoCoordinate> points = mapzenWalk.Waypoints;
             await DoWalk(points, session, functionExecutedWhileWalking, sourceLocation,
-                destinaionCoordinate, cancellationToken, walkSpeed);
+                destinaionCoordinate, cancellationToken, walkSpeed).ConfigureAwait(false);
         }
 
         private void GetMapzenInstance(ISession session)

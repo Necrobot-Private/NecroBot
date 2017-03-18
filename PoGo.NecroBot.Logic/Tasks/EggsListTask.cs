@@ -13,25 +13,23 @@ namespace PoGo.NecroBot.Logic.Tasks
 {
     public class EggsListTask
     {
-        // jjskuld - Ignore CS1998 warning for now.
-        #pragma warning disable 1998
         public static async Task Execute(ISession session)
         {
             // Refresh inventory so that the player stats are fresh
-            //await session.Inventory.RefreshCachedInventory();
+            //await session.Inventory.RefreshCachedInventory().ConfigureAwait(false);
 
-            var playerStats = (session.Inventory.GetPlayerStats()).FirstOrDefault();
+            var playerStats = (await session.Inventory.GetPlayerStats().ConfigureAwait(false)).FirstOrDefault();
             if (playerStats == null)
                 return;
 
             var kmWalked = playerStats.KmWalked;
 
-            var incubators = session.Inventory.GetEggIncubators()
+            var incubators = (await session.Inventory.GetEggIncubators().ConfigureAwait(false))
                 .Where(x => x.UsesRemaining > 0 || x.ItemId == ItemId.ItemIncubatorBasicUnlimited)
                 .OrderByDescending(x => x.ItemId == ItemId.ItemIncubatorBasicUnlimited)
                 .ToList();
 
-            var unusedEggs = session.Inventory.GetEggs()
+            var unusedEggs = (await session.Inventory.GetEggs().ConfigureAwait(false))
                 .Where(x => string.IsNullOrEmpty(x.EggIncubatorId))
                 .OrderBy(x => x.EggKmWalkedTarget - x.EggKmWalkedStart)
                 .ToList();
@@ -44,8 +42,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     UnusedEggs = unusedEggs
                 });
 
-            DelayingUtils.Delay(session.LogicSettings.DelayBetweenPlayerActions, 0);
+            await DelayingUtils.DelayAsync(session.LogicSettings.DelayBetweenPlayerActions, 0, session.CancellationTokenSource.Token).ConfigureAwait(false);
         }
-        #pragma warning restore 1998
     }
 }

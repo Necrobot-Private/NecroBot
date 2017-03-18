@@ -26,7 +26,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
             {
                 var necroBotVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString(4);
                 var necroBotStatistics = session.RuntimeStatistics;
-                var necrobotStats = necroBotStatistics.GetCurrentInfo(session.Inventory);
+                var necrobotStats = await necroBotStatistics.GetCurrentInfo(session.Inventory).ConfigureAwait(false);
 
                 var answerCatchLimit = "diabled";
                 var answerPokestopLimit = "disabled";

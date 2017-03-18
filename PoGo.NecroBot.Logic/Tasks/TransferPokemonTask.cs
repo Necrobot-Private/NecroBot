@@ -21,9 +21,9 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             using (var blocker = new BlockableScope(session, BotActions.Transfer))
             {
-                if (!await blocker.WaitToRun()) return;
+                if (!await blocker.WaitToRun().ConfigureAwait(false)) return;
 
-                var all = session.Inventory.GetPokemons();
+                var all = await session.Inventory.GetPokemons().ConfigureAwait(false);
                 List<PokemonData> pokemonToTransfer = new List<PokemonData>();
                 var pokemons = all.OrderBy(x => x.Cp).ThenBy(n => n.StaminaMax);
 
@@ -35,16 +35,16 @@ namespace PoGo.NecroBot.Logic.Tasks
                     pokemonToTransfer.Add(pokemon);
                 }
 
-                var pokemonSettings = await session.Inventory.GetPokemonSettings();
-                var pokemonFamilies = await session.Inventory.GetPokemonFamilies();
+                var pokemonSettings = await session.Inventory.GetPokemonSettings().ConfigureAwait(false);
+                var pokemonFamilies = await session.Inventory.GetPokemonFamilies().ConfigureAwait(false);
 
-                await session.Client.Inventory.TransferPokemons(pokemonIds);
+                await session.Client.Inventory.TransferPokemons(pokemonIds).ConfigureAwait(false);
 
                 foreach (var pokemon in pokemonToTransfer)
                 {
                     var bestPokemonOfType = (session.LogicSettings.PrioritizeIvOverCp
-                                                ? session.Inventory.GetHighestPokemonOfTypeByIv(pokemon)
-                                                : session.Inventory.GetHighestPokemonOfTypeByCp(pokemon)) ??
+                                                ? await session.Inventory.GetHighestPokemonOfTypeByIv(pokemon).ConfigureAwait(false)
+                                                : await session.Inventory.GetHighestPokemonOfTypeByCp(pokemon).ConfigureAwait(false)) ??
                                             pokemon;
 
                     // Broadcast event as everyone would benefit
@@ -56,18 +56,18 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Cp = pokemon.Cp,
                         BestCp = bestPokemonOfType.Cp,
                         BestPerfection = PokemonInfo.CalculatePokemonPerfection(bestPokemonOfType),
-                        Candy = session.Inventory.GetCandyCount(pokemon.PokemonId)
+                        Candy = await session.Inventory.GetCandyCount(pokemon.PokemonId).ConfigureAwait(false)
                     };
 
-                    if (session.Inventory.GetCandyFamily(pokemon.PokemonId) != null)
+                    if ((await session.Inventory.GetCandyFamily(pokemon.PokemonId).ConfigureAwait(false)) != null)
                     {
-                        ev.FamilyId = session.Inventory.GetCandyFamily(pokemon.PokemonId).FamilyId;
+                        ev.FamilyId = (await session.Inventory.GetCandyFamily(pokemon.PokemonId).ConfigureAwait(false)).FamilyId;
                     }
 
                     session.EventDispatcher.Send(ev);
                 }
 
-                await DelayingUtils.DelayAsync(session.LogicSettings.TransferActionDelay, 0, cancellationToken);
+                await DelayingUtils.DelayAsync(session.LogicSettings.TransferActionDelay, 0, cancellationToken).ConfigureAwait(false);
             }
         }
     }

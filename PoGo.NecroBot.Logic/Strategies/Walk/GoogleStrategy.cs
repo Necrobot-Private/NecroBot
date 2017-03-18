@@ -30,18 +30,18 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
             var currentLocation = new GeoCoordinate(_client.CurrentLatitude, _client.CurrentLongitude, _client.CurrentAltitude);
             var destinaionCoordinate = new GeoCoordinate(targetLocation.Latitude, targetLocation.Longitude);
 
-            var googleWalk = _googleDirectionsService.GetDirections(currentLocation, new List<GeoCoordinate>(), destinaionCoordinate);
+            var googleWalk = await _googleDirectionsService.GetDirections(currentLocation, new List<GeoCoordinate>(), destinaionCoordinate).ConfigureAwait(false);
 
             if (googleWalk == null)
             {
-                await RedirectToNextFallbackStrategy(session.LogicSettings, targetLocation, functionExecutedWhileWalking, session, cancellationToken, walkSpeed);
+                await RedirectToNextFallbackStrategy(session.LogicSettings, targetLocation, functionExecutedWhileWalking, session, cancellationToken, walkSpeed).ConfigureAwait(false);
                 return;
             }
 
             base.OnStartWalking(session, targetLocation, googleWalk.Distance);
 
             List<GeoCoordinate> points = googleWalk.Waypoints;
-            await DoWalk(points, session, functionExecutedWhileWalking, currentLocation, destinaionCoordinate, cancellationToken, walkSpeed);
+            await DoWalk(points, session, functionExecutedWhileWalking, currentLocation, destinaionCoordinate, cancellationToken, walkSpeed).ConfigureAwait(false);
         }
 
         private void GetGoogleInstance(ISession session)

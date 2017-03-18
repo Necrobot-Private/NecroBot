@@ -28,15 +28,15 @@ namespace PoGo.NecroBot.Logic.Tasks
                         // UseEggIncubators).
                         if (session.LogicSettings.UseEggIncubators)
                             if (ActionRandom.Next(1, 10) > 0)
-                                await UseIncubatorsTask.Execute(session, cancellationToken);
+                                await UseIncubatorsTask.Execute(session, cancellationToken).ConfigureAwait(false);
                         break;
                     case 2:
                         if (session.LogicSettings.TransferDuplicatePokemon)
                             if (ActionRandom.Next(1, 10) > 4)
-                                await TransferDuplicatePokemonTask.Execute(session, cancellationToken);
+                                await TransferDuplicatePokemonTask.Execute(session, cancellationToken).ConfigureAwait(false);
                         if (session.LogicSettings.TransferWeakPokemon)
                             if (ActionRandom.Next(1, 10) > 4)
-                                await TransferWeakPokemonTask.Execute(session, cancellationToken);
+                                await TransferWeakPokemonTask.Execute(session, cancellationToken).ConfigureAwait(false);
                         if (ActionRandom.Next(1, 10) > 4)
                         {
                             if (session.LogicSettings.EvolveAllPokemonAboveIv ||
@@ -44,49 +44,49 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 session.LogicSettings.UseLuckyEggsWhileEvolving ||
                                 session.LogicSettings.KeepPokemonsThatCanEvolve)
                             {
-                                await EvolvePokemonTask.Execute(session, cancellationToken);
+                                await EvolvePokemonTask.Execute(session, cancellationToken).ConfigureAwait(false);
                             }
                         }
                         break;
                     case 3:
                         if (session.LogicSettings.UseLuckyEggConstantly)
                             if (ActionRandom.Next(1, 10) > 4)
-                                await UseLuckyEggConstantlyTask.Execute(session, cancellationToken);
+                                await UseLuckyEggConstantlyTask.Execute(session, cancellationToken).ConfigureAwait(false);
                         break;
                     case 4:
                         if (session.LogicSettings.UseIncenseConstantly)
                             if (ActionRandom.Next(1, 10) > 4)
-                                await UseIncenseConstantlyTask.Execute(session, cancellationToken);
+                                await UseIncenseConstantlyTask.Execute(session, cancellationToken).ConfigureAwait(false);
                         break;
                     case 5:
                         if (session.LogicSettings.RenamePokemon)
                             if (ActionRandom.Next(1, 10) > 4)
-                                await RenamePokemonTask.Execute(session, cancellationToken);
+                                await RenamePokemonTask.Execute(session, cancellationToken).ConfigureAwait(false);
                         break;
                     case 6:
                         if (session.LogicSettings.AutoFavoritePokemon)
                             if (ActionRandom.Next(1, 10) > 4)
-                                await FavoritePokemonTask.Execute(session, cancellationToken);
+                                await FavoritePokemonTask.Execute(session, cancellationToken).ConfigureAwait(false);
                         break;
                     case 7:
                         if (ActionRandom.Next(1, 10) > 4)
-                            await RecycleItemsTask.Execute(session, cancellationToken);
+                            await RecycleItemsTask.Execute(session, cancellationToken).ConfigureAwait(false);
                         break;
                     case 8:
                         if (session.LogicSettings.AutomaticallyLevelUpPokemon)
                             if (ActionRandom.Next(1, 10) > 4)
-                                await LevelUpPokemonTask.Execute(session, cancellationToken);
+                                await LevelUpPokemonTask.Execute(session, cancellationToken).ConfigureAwait(false);
                         break;
                 }
             }
 
-            GetPokeDexCount.Execute(session, cancellationToken);
+            await GetPokeDexCount.Execute(session, cancellationToken).ConfigureAwait(false);
         }
 
         public static async Task TransferRandom(ISession session, CancellationToken cancellationToken)
         {
             if (ActionRandom.Next(1, 10) > 4)
-                await TransferDuplicatePokemonTask.Execute(session, cancellationToken);
+                await TransferDuplicatePokemonTask.Execute(session, cancellationToken).ConfigureAwait(false);
         }
     }
 }

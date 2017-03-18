@@ -39,11 +39,11 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
             LocationUtils.CalculateDistanceInMeters(sourceLocation, destinaionCoordinate);
             var nextWaypointBearing = LocationUtils.DegreeBearing(sourceLocation, destinaionCoordinate);
             var nextWaypointDistance = speedInMetersPerSecond;
-            var waypoint = LocationUtils.CreateWaypoint(sourceLocation, nextWaypointDistance, nextWaypointBearing);
+            var waypoint = await LocationUtils.CreateWaypoint(sourceLocation, nextWaypointDistance, nextWaypointBearing).ConfigureAwait(false);
             var requestSendDateTime = DateTime.Now;
             var requestVariantDateTime = DateTime.Now;
 
-            LocationUtils.UpdatePlayerLocationWithAltitude(session, waypoint, (float) speedInMetersPerSecond);
+            await LocationUtils.UpdatePlayerLocationWithAltitude(session, waypoint, (float) speedInMetersPerSecond).ConfigureAwait(false);
 
             double SpeedVariantSec = rw.Next(1000, 10000);
             base.DoUpdatePositionEvent(session, waypoint.Latitude, waypoint.Longitude, walkSpeed, CurrentWalkingSpeed);
@@ -79,15 +79,15 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
                 nextWaypointDistance = Math.Min(currentDistanceToTarget,
                     millisecondsUntilGetUpdatePlayerLocationResponse / 1000 * speedInMetersPerSecond);
                 nextWaypointBearing = LocationUtils.DegreeBearing(sourceLocation, destinaionCoordinate);
-                waypoint = LocationUtils.CreateWaypoint(sourceLocation, nextWaypointDistance, nextWaypointBearing);
+                waypoint = await LocationUtils.CreateWaypoint(sourceLocation, nextWaypointDistance, nextWaypointBearing).ConfigureAwait(false);
 
                 requestSendDateTime = DateTime.Now;
-                LocationUtils.UpdatePlayerLocationWithAltitude(session, waypoint, (float) speedInMetersPerSecond);
+                await LocationUtils.UpdatePlayerLocationWithAltitude(session, waypoint, (float) speedInMetersPerSecond).ConfigureAwait(false);
 
                 base.DoUpdatePositionEvent(session, waypoint.Latitude, waypoint.Longitude, CurrentWalkingSpeed);
 
                 if (functionExecutedWhileWalking != null)
-                    await functionExecutedWhileWalking(); // look for pokemon & hit stops
+                    await functionExecutedWhileWalking().ConfigureAwait(false); // look for pokemon & hit stops
             } while (LocationUtils.CalculateDistanceInMeters(sourceLocation, destinaionCoordinate) >= 2);
         }
 

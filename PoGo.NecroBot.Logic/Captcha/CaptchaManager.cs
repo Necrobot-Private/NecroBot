@@ -34,17 +34,17 @@ namespace PoGo.NecroBot.Logic.Captcha
                 {
                     if (needGetNewCaptcha)
                     {
-                        captchaUrl = await GetNewCaptchaURL(session);
+                        captchaUrl = await GetNewCaptchaURL(session).ConfigureAwait(false);
                     }
 
                     Logger.Write("Auto resolving captcha by using captcha solution service, please wait..........");
                     CaptchaSolutionClient client = new CaptchaSolutionClient(cfg.CaptchaSolutionAPIKey,
                         cfg.CaptchaSolutionsSecretKey, cfg.AutoCaptchaTimeout);
-                    captchaResponse = await client.ResolveCaptcha(POKEMON_GO_GOOGLE_KEY, captchaUrl);
+                    captchaResponse = await client.ResolveCaptcha(POKEMON_GO_GOOGLE_KEY, captchaUrl).ConfigureAwait(false);
                     needGetNewCaptcha = true;
                     if (!string.IsNullOrEmpty(captchaResponse))
                     {
-                        resolved = await Resolve(session, captchaResponse);
+                        resolved = await Resolve(session, captchaResponse).ConfigureAwait(false);
                     }
                 }
 
@@ -56,16 +56,16 @@ namespace PoGo.NecroBot.Logic.Captcha
                 {
                     if (needGetNewCaptcha)
                     {
-                        captchaUrl = await GetNewCaptchaURL(session);
+                        captchaUrl = await GetNewCaptchaURL(session).ConfigureAwait(false);
                     }
                     if (string.IsNullOrEmpty(captchaUrl)) return true;
 
                     Logger.Write("Auto resolving captcha by using 2Captcha service");
-                    captchaResponse = await GetCaptchaResposeBy2Captcha(session, captchaUrl);
+                    captchaResponse = await GetCaptchaResposeBy2Captcha(session, captchaUrl).ConfigureAwait(false);
                     needGetNewCaptcha = true;
                     if (!string.IsNullOrEmpty(captchaResponse))
                     {
-                        resolved = await Resolve(session, captchaResponse);
+                        resolved = await Resolve(session, captchaResponse).ConfigureAwait(false);
                     }
                 }
 
@@ -73,16 +73,16 @@ namespace PoGo.NecroBot.Logic.Captcha
                 {
                     if (needGetNewCaptcha)
                     {
-                        captchaUrl = await GetNewCaptchaURL(session);
+                        captchaUrl = await GetNewCaptchaURL(session).ConfigureAwait(false);
                     }
                     if (string.IsNullOrEmpty(captchaUrl)) return true;
 
                     Logger.Write("Auto resolving captcha by using anti captcha service");
-                    captchaResponse = await GetCaptchaResposeByAntiCaptcha(session, captchaUrl);
+                    captchaResponse = await GetCaptchaResposeByAntiCaptcha(session, captchaUrl).ConfigureAwait(false);
                     needGetNewCaptcha = true;
                     if (!string.IsNullOrEmpty(captchaResponse))
                     {
-                        resolved = await Resolve(session, captchaResponse);
+                        resolved = await Resolve(session, captchaResponse).ConfigureAwait(false);
                     }
 
                 }
@@ -94,7 +94,7 @@ namespace PoGo.NecroBot.Logic.Captcha
             {
                 if (needGetNewCaptcha)
                 {
-                    captchaUrl = await GetNewCaptchaURL(session);
+                    captchaUrl = await GetNewCaptchaURL(session).ConfigureAwait(false);
                 }
 
                 if (session.LogicSettings.CaptchaConfig.PlaySoundOnCaptcha)
@@ -103,11 +103,11 @@ namespace PoGo.NecroBot.Logic.Captcha
                 }
 
                 captchaResponse = GetCaptchaResposeManually(session, captchaUrl);
-                //captchaResponse = await GetCaptchaTokenWithInternalForm(captchaUrl);
+                //captchaResponse = await GetCaptchaTokenWithInternalForm(captchaUrl).ConfigureAwait(false);
 
                 if (!string.IsNullOrEmpty(captchaResponse))
                 {
-                    resolved = await Resolve(session, captchaResponse);
+                    resolved = await Resolve(session, captchaResponse).ConfigureAwait(false);
                 }
             }
 
@@ -137,7 +137,7 @@ namespace PoGo.NecroBot.Logic.Captcha
             {
                 count--;
                 //Thread.Sleep(1000);
-                await Task.Delay(1000);
+                await Task.Delay(1000).ConfigureAwait(false);
             }
 
             return response;
@@ -145,7 +145,7 @@ namespace PoGo.NecroBot.Logic.Captcha
 
         private static async Task<string> GetNewCaptchaURL(ISession session)
         {
-            var res = await session.Client.Player.CheckChallenge();
+            var res = await session.Client.Player.CheckChallenge().ConfigureAwait(false);
             if (res.ShowChallenge)
             {
                 return res.ChallengeUrl;
@@ -158,7 +158,7 @@ namespace PoGo.NecroBot.Logic.Captcha
             if (string.IsNullOrEmpty(captchaRespose)) return false;
             try
             {
-                var verifyChallengeResponse = await session.Client.Player.VerifyChallenge(captchaRespose);
+                var verifyChallengeResponse = await session.Client.Player.VerifyChallenge(captchaRespose).ConfigureAwait(false);
                 if (!verifyChallengeResponse.Success)
                 {
                     Logger.Write($"(CAPTCHA) Failed to resolve captcha, try resolved captcha by official app. ");
@@ -184,7 +184,7 @@ namespace PoGo.NecroBot.Logic.Captcha
                     session.LogicSettings.CaptchaConfig.AntiCaptchaAPIKey,
                     POKEMON_GO_GOOGLE_KEY,
                     session.LogicSettings.CaptchaConfig.ProxyHost,
-                    session.LogicSettings.CaptchaConfig.ProxyPort);
+                    session.LogicSettings.CaptchaConfig.ProxyPort).ConfigureAwait(false);
                 solved = !string.IsNullOrEmpty(result);
             }
             if (solved)
@@ -205,7 +205,7 @@ namespace PoGo.NecroBot.Logic.Captcha
             {
                 TwoCaptchaClient client = new TwoCaptchaClient(session.LogicSettings.CaptchaConfig.TwoCaptchaAPIKey);
 
-                result = await client.SolveRecaptchaV2(POKEMON_GO_GOOGLE_KEY, captchaUrl, string.Empty, ProxyType.HTTP);
+                result = await client.SolveRecaptchaV2(POKEMON_GO_GOOGLE_KEY, captchaUrl, string.Empty, ProxyType.HTTP).ConfigureAwait(false);
                 solved = !string.IsNullOrEmpty(result);
             }
             if (solved)

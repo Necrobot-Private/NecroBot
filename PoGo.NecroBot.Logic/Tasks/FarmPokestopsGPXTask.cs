@@ -80,22 +80,22 @@ namespace PoGo.NecroBot.Logic.Tasks
                         var lng = Convert.ToDouble(trackPoints.ElementAt(curTrkPt).Lon, CultureInfo.InvariantCulture);
 
                         IGeoLocation destination = new GPXPointLocation(lat, lng,
-                            LocationUtils.getElevation(session.ElevationService, lat, lng));
+                            await LocationUtils.getElevation(session.ElevationService, lat, lng).ConfigureAwait(false));
 
                         await session.Navigation.Move(destination,
                             async () =>
                             {
-                                await MSniperServiceTask.Execute(session, cancellationToken);
+                                await MSniperServiceTask.Execute(session, cancellationToken).ConfigureAwait(false);
 
-                                await CatchNearbyPokemonsTask.Execute(session, cancellationToken);
+                                await CatchNearbyPokemonsTask.Execute(session, cancellationToken).ConfigureAwait(false);
                                 //Catch Incense Pokemon
-                                await CatchIncensePokemonsTask.Execute(session, cancellationToken);
-                                await UseNearbyPokestopsTask.Execute(session, cancellationToken);
+                                await CatchIncensePokemonsTask.Execute(session, cancellationToken).ConfigureAwait(false);
+                                await UseNearbyPokestopsTask.Execute(session, cancellationToken).ConfigureAwait(false);
                             },
                             session,
-                            cancellationToken);
+                            cancellationToken).ConfigureAwait(false);
 
-                        await eggWalker.ApplyDistance(distance, cancellationToken);
+                        await eggWalker.ApplyDistance(distance, cancellationToken).ConfigureAwait(false);
 
                         // Return to FarmState/StateMachine if we have reached both user defined limits
                         if ((UseNearbyPokestopsTask._pokestopLimitReached ||

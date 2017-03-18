@@ -260,7 +260,6 @@
     <Compile Include="Controls\MapMarkers\Circle.xaml.cs">
       <DependentUpon>Circle.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\MapMarkers\CircleVisual.cs" />
     <Compile Include="Controls\MapMarkers\Cross.xaml.cs">
       <DependentUpon>Cross.xaml</DependentUpon>
     </Compile>

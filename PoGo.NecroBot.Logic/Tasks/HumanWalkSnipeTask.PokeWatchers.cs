@@ -37,7 +37,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 client.DefaultRequestHeaders.Host = "pokewatchers.com";
                 client.DefaultRequestHeaders.UserAgent.TryParseAdd("Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36");
 
-                var json = await client.GetStringAsync(url);
+                var json = await client.GetStringAsync(url).ConfigureAwait(false);
 
                 var list = JsonConvert.DeserializeObject<List<PokeWatcherItem>>(json);
                 results = list.Select(p => Map(p)).ToList();
@@ -65,7 +65,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     result.Add(snipeItem);
                 }
             }
-            await PostProcessDataFetched(result, false);
+            await PostProcessDataFetched(result, false).ConfigureAwait(false);
         }
 
         private static SnipePokemonInfo Map(PokeWatcherItem result)

@@ -376,7 +376,7 @@ namespace PoGo.NecroBot.CLI
                             Move1 = move1,
                             Move2 = move2,
                             ExpiredTime = data.ExpireTimestamp
-                        });
+                        }).Result;
                         if (added)
                         {
                             session.EventDispatcher.Send(new AutoSnipePokemonAddedEvent(data));
@@ -427,7 +427,7 @@ namespace PoGo.NecroBot.CLI
                     Move1 = move1,
                     ExpiredTime = data.ExpireTimestamp,
                     Move2 = move2
-                }, true);
+                }, true).Wait();
             }
         }
         private static Queue<string> servers = new Queue<string>();

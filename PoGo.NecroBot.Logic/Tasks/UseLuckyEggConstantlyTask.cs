@@ -15,7 +15,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             cancellationToken.ThrowIfCancellationRequested();
             TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
             
-            var currentAmountOfLuckyEggs = session.Inventory.GetItemAmountByType(ItemId.ItemLuckyEgg);
+            var currentAmountOfLuckyEggs = await session.Inventory.GetItemAmountByType(ItemId.ItemLuckyEgg).ConfigureAwait(false);
             if (currentAmountOfLuckyEggs == 0)
             {
                 Logger.Write(session.Translation.GetTranslation(TranslationString.NoEggsAvailable));
@@ -26,7 +26,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 Logger.Write(session.Translation.GetTranslation(TranslationString.UseLuckyEggAmount, currentAmountOfLuckyEggs));
             }
 
-            var UseEgg = await session.Inventory.UseLuckyEggConstantly();
+            var UseEgg = await session.Inventory.UseLuckyEggConstantly().ConfigureAwait(false);
 
             if (UseEgg.Result == UseItemXpBoostResponse.Types.Result.Success)
             {

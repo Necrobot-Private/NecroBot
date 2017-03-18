@@ -412,10 +412,10 @@ namespace PoGo.NecroBot.Logic
         }
 
         // This should be called whenever the inventory is updated (e.g. client.Inventory.OnInventoryUpdated)
-        public void UpdateCurrentAccountLevel()
+        public async Task UpdateCurrentAccountLevel()
         {
             ISession session = TinyIoCContainer.Current.Resolve<ISession>();
-            var playerStats = (session.Inventory.GetPlayerStats()).FirstOrDefault();
+            var playerStats = (await session.Inventory.GetPlayerStats().ConfigureAwait(false)).FirstOrDefault();
             if (playerStats != null)
             {
                 var currentAccount = GetCurrentAccount();

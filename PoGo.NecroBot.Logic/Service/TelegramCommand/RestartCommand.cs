@@ -23,7 +23,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
             if (cmd.ToLower() == Command)
             {
                 callback(GetMsgHead(session, session.Profile.PlayerData.Username) + "\r\n\r\n");
-                await Task.Delay(5000);
+                await Task.Delay(5000).ConfigureAwait(false);
                 var assembly = Assembly.GetEntryAssembly().Location;
                 if (assembly != null)
                 {
