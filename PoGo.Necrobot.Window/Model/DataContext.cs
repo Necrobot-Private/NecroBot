@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -61,7 +61,7 @@ namespace PoGo.Necrobot.Window.Model
         {
             get
             {
-                return $"   Pokemons ({PokemonList.Pokemons.Count}/250)   ";
+                return $"   Pokemons ({PokemonList.Pokemons.Count + EggsList.Eggs.Count - 1}/250)   ";
             }
         }
 
