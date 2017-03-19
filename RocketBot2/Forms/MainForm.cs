@@ -541,6 +541,7 @@ namespace RocketBot2.Forms
                     _item.Click += delegate
                     {                       
                         if (!_botStarted) _session.ReInitSessionWithNextBot(_bot);
+                        accountManager.SwitchAccountTo(_bot);
                     };
 
                     if (_item.Text == bot.Username)
