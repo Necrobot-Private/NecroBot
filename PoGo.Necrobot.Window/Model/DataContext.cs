@@ -39,12 +39,14 @@ namespace PoGo.Necrobot.Window.Model
         }
 
         public int MaxItemStorage { get; set; }
+        public int MaxPokemonStorage { get; set; }
         public DataContext()
         {
             UI = new UIViewModel();
             Map = new MapViewModel();
 
             MaxItemStorage = 350;
+            MaxPokemonStorage = 250;
             ItemsList = new ItemsListViewModel();
             Sidebar = new SidebarViewModel();
             internalPokemons = new List<PokemonData>();
@@ -61,7 +63,12 @@ namespace PoGo.Necrobot.Window.Model
         {
             get
             {
-                return $"   Pokemons ({PokemonList.Pokemons.Count + EggsList.Eggs.Count - 1}/250)   ";
+                var pokemonNum = PokemonList.Pokemons.Count() + EggsList.Eggs.Count();
+                if (pokemonNum > MaxPokemonStorage)
+                {
+                    pokemonNum = MaxPokemonStorage;
+                }
+                return $"   Pokemons ({pokemonNum}/{MaxPokemonStorage})   ";
             }
         }
 
