@@ -102,11 +102,6 @@ namespace PoGo.Necrobot.Window
 
             this.datacontext.PokemonList.Update(pokemons);
             this.datacontext.RaisePropertyChanged("PokemonTabHeader");
-
-            UIUpdateSafe(() =>
-             {
-                 tabPokemons.Header = $"   Pokemons ({this.datacontext.Pokemons.Count}/{maxPokemonStorage})   ";
-             });
         }
 
         public void OnBotEvent(InventoryItemUpdateEvent e)
