@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -132,8 +133,8 @@ namespace PoGo.Necrobot.Window.Model
             if (match != null && match.Groups.Count >= 3)
             {
 
-                var lat = Convert.ToDouble(match.Groups[1].Value);
-                var lng = Convert.ToDouble(match.Groups[3].Value);
+                var lat = Convert.ToDouble(match.Groups[1].Value, CultureInfo.InvariantCulture);
+                var lng = Convert.ToDouble(match.Groups[3].Value, CultureInfo.InvariantCulture);
                 return new Tuple<double, double>(lat, lng);
             }
             return null;
