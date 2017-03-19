@@ -986,8 +986,6 @@ namespace RocketBot2.Forms
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start("http://www1.mypogosnipers.com");
-
             Thread mThread = new Thread(delegate ()
             {
                 var infoForm = new InfoForm();
@@ -995,6 +993,20 @@ namespace RocketBot2.Forms
             });
             mThread.SetApartmentState(ApartmentState.STA);
             mThread.Start();
+        }
+
+        private void accountsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (var _bot in _session.LogicSettings.Bots)
+            {
+                foreach (ToolStripMenuItem en in accountsToolStripMenuItem.DropDownItems)
+                {
+                    if (en.Text == _bot.Username)
+                        en.Enabled = false;
+                    else
+                        en.Enabled = true;
+                }
+            }
         }
 
         #endregion EVENTS
