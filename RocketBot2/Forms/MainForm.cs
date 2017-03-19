@@ -1093,6 +1093,10 @@ namespace RocketBot2.Forms
 
                 if (count != 1) return;
 
+                item = new ToolStripMenuItem { Text = Favorited ? "Un-Favorite" : "Favorite" };
+                item.Click += delegate { FavoritedPokemon(pokemons, Favorited); };
+                cmsPokemonList.Items.Add(item);
+
                 item = new ToolStripMenuItem { Text = @"Rename" };
                 item.Click += delegate
                 {
@@ -1107,10 +1111,7 @@ namespace RocketBot2.Forms
                 };
                 cmsPokemonList.Items.Add(item);
 
-                item = new ToolStripMenuItem { Text = Favorited ? "Un-Favorite" : "Favorite" };
-                item.Click += delegate { FavoritedPokemon(pokemons); };
-                cmsPokemonList.Items.Add(item);
-            };
+         };
         }
 
         private void olvPokemonList_ButtonClick(object sender, CellClickEventArgs e)
@@ -1141,15 +1142,11 @@ namespace RocketBot2.Forms
             }
         }
 
-        private async void FavoritedPokemon(IEnumerable<PokemonData> pokemons)
+        private async void FavoritedPokemon(IEnumerable<PokemonData> pokemons, bool fav)
         {
-            var pok = new ulong();
-            bool fav = new bool();
             foreach (var pokemon in pokemons)
             {
-                pok = pokemon.Id;
-                fav = Convert.ToBoolean(pokemon.Favorite);
-                await Task.Run(async () => { await FavoritePokemonTask.Execute(_session, pok, !fav); });
+                await Task.Run(async () => { await FavoritePokemonTask.Execute(_session, pokemon.Id, !fav); });
             }
             if (!checkBoxAutoRefresh.Checked)
                 await ReloadPokemonList().ConfigureAwait(false);
