@@ -46,7 +46,7 @@ namespace PoGo.Necrobot.Window.Model
             Map = new MapViewModel();
 
             MaxItemStorage = 350;
-	    MaxPokemonStorage = 250;
+            MaxPokemonStorage = 250;
             ItemsList = new ItemsListViewModel();
             Sidebar = new SidebarViewModel();
             internalPokemons = new List<PokemonData>();
