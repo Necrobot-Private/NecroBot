@@ -33,7 +33,7 @@ namespace PoGo.NecroBot.Logic.State
             "https://api.github.com/repos/Necrobot-Private/NecroBot/releases/latest";
 
         public const string RemoteReleaseUrl =
-            "https://dl.bintray.com/necrobot-private/NecroBot2/:"; // Note that this url ends with a colon on purpose.
+            "https://bintray.com/necrobot-private/NecroBot2/download_file?file_path=";
 
         public static Version RemoteVersion;
 
