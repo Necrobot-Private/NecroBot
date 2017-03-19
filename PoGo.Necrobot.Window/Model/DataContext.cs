@@ -62,7 +62,7 @@ namespace PoGo.Necrobot.Window.Model
         public string PokemonTabHeader
         {
            var PokemonNum = PokemonsList.Pokemons.Count + EggsList.Eggs.Count;
-	   if (PokemonNum > 250) {
+           if (PokemonNum > 250) {
 	      PokemonNum = 250;
 	   }
             get
