@@ -476,11 +476,11 @@ namespace PoGo.NecroBot.CLI
             if (_session.LogicSettings.EnableHumanWalkingSnipe &&
                 _session.LogicSettings.HumanWalkingSnipeUseFastPokemap)
             {
-                // jjskuld - Ignore CS4014 warning for now.
-                #pragma warning disable 4014
+              // jjskuld - Ignore CS4014 warning for now.
+                //#pragma warning disable 4014
                 HumanWalkSnipeTask.StartFastPokemapAsync(_session,
-                    _session.CancellationTokenSource.Token); // that need to keep data live
-                #pragma warning restore 4014
+                    _session.CancellationTokenSource.Token).ConfigureAwait(false); // that need to keep data live
+                //#pragma warning restore 4014
             }
 
             if (_session.LogicSettings.UseSnipeLocationServer ||
