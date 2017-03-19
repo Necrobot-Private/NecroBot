@@ -227,7 +227,6 @@
     </Compile>
     <Compile Include="Helpers\DeviceInfoHelper.cs" />
     <Compile Include="Helpers\Options.cs" />
-    <Compile Include="Logic\Tasks\EvolveSpecificPokemonTask.cs" />
     <Compile Include="Logic\Event\GetHumanizeRouteEvent.cs" />
     <Compile Include="Logic\Event\LootPokestopEvent.cs" />
     <Compile Include="Logic\Event\PokemonsEncounterEvent.cs" />
