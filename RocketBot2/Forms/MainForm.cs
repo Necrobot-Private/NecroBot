@@ -539,20 +539,8 @@ namespace RocketBot2.Forms
                     var _item = new ToolStripMenuItem();
                     _item.Text = _bot.Username;
                     _item.Click += delegate
-                    {
-                        foreach (ToolStripMenuItem en in accountsToolStripMenuItem.DropDownItems)
-                        {
-                            if (en.Text == _item.Text)
-                            {
-                                if (!_botStarted)
-                                    _session.ReInitSessionWithNextBot(_bot);
-
-                                _item.Enabled = false;
-                            }
-                            else
-                                en.Enabled = true;
-                        }
-                        accountManager.SwitchAccountTo(_bot);
+                    {                       
+                        if (!_botStarted) _session.ReInitSessionWithNextBot(_bot);
                     };
 
                     if (_item.Text == bot.Username)
@@ -997,15 +985,12 @@ namespace RocketBot2.Forms
 
         private void accountsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            foreach (var _bot in _session.LogicSettings.Bots)
+            foreach (ToolStripMenuItem en in accountsToolStripMenuItem.DropDownItems)
             {
-                foreach (ToolStripMenuItem en in accountsToolStripMenuItem.DropDownItems)
-                {
-                    if (en.Text == _bot.Username)
-                        en.Enabled = false;
-                    else
-                        en.Enabled = true;
-                }
+                if (en.Text == _settings.Auth.CurrentAuthConfig.Username)
+                    en.Enabled = false;
+                else
+                    en.Enabled = true;
             }
         }
 
