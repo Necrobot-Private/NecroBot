@@ -61,9 +61,9 @@ namespace PoGo.Necrobot.Window.Model
         }
         public string PokemonTabHeader
         {
-           var PokemonNum = PokemonsList.Pokemons.Count + EggsList.Eggs.Count;
-           if (PokemonNum > MaxPokemonStorage) {
-	      PokemonNum = MaxPokemonStorage;
+           var pokemonNum = PokemonsList.Pokemons.Count() + EggsList.Eggs.Count();
+           if (pokemonNum > MaxPokemonStorage) {
+	      pokemonNum = MaxPokemonStorage;
 	   }
             get
             {
