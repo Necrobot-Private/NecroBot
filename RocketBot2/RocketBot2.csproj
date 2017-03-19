@@ -201,6 +201,12 @@
     <Compile Include="Forms\AuthAPIForm.Designer.cs">
       <DependentUpon>AuthAPIForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\EvoleToPokemon.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\EvoleToPokemon.Designer.cs">
+      <DependentUpon>EvoleToPokemon.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\InfoForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -451,6 +457,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Forms\AuthAPIForm.resx">
       <DependentUpon>AuthAPIForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\EvoleToPokemon.resx">
+      <DependentUpon>EvoleToPokemon.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\InfoForm.resx">
       <DependentUpon>InfoForm.cs</DependentUpon>
