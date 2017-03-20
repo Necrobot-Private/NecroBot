@@ -138,24 +138,15 @@ namespace PoGo.Necrobot.Window.Controls.MapMarkers
             e.Handled = true;
         }
 
-        private void btnWalkHere_Click(object sender, RoutedEventArgs e)
+        private async void btnWalkHere_Click(object sender, RoutedEventArgs e)
         {
-            Task.Run(async () =>
-            {
-                await SetMoveToTargetTask.Execute(fort.Latitude, fort.Longitude, fort.FortId);
-            });
-            this.Dispatcher.Invoke(() =>
-            {
-                popInfo.IsOpen = false;
-            });
+            await SetMoveToTargetTask.Execute(fort.Latitude, fort.Longitude, fort.FortId);
+            popInfo.IsOpen = false;
         }
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
-            this.Dispatcher.Invoke(() =>
-            {
-                popInfo.IsOpen = false;
-            });
+            popInfo.IsOpen = false;
         }
 
         internal void UpdateDistance(double lat, double lng)

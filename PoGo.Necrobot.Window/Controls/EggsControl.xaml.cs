@@ -18,7 +18,7 @@ namespace PoGo.Necrobot.Window.Controls
             InitializeComponent();
         }
 
-        private void HatchEgg_Click(object sender, RoutedEventArgs e)
+        private async void HatchEgg_Click(object sender, RoutedEventArgs e)
         {
             if (lsIncubators.SelectedItem == null)
             {
@@ -28,11 +28,7 @@ namespace PoGo.Necrobot.Window.Controls
 
             var eggId = (ulong)((Button)sender).CommandParameter;
             var incubator = lsIncubators.SelectedItem as IncubatorViewModel;
-            Task.Run(async () => {
-                await UseIncubatorsTask.Execute(this.Session, this.Session.CancellationTokenSource.Token, eggId, incubator.Id);
-            });
-
-
+            await UseIncubatorsTask.Execute(this.Session, this.Session.CancellationTokenSource.Token, eggId, incubator.Id);
         }
     }
 }
