@@ -130,7 +130,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 if (luckyEgg != null) session.EventDispatcher.Send(new UseLuckyEggEvent { Count = luckyEgg.Count });
                 TinyIoCContainer.Current.Resolve<MultiAccountManager>().DisableSwitchAccountUntil(DateTime.Now.AddMinutes(30));
             }
-            DelayingUtils.Delay(session.LogicSettings.DelayBetweenPlayerActions, 0);
+            await DelayingUtils.DelayAsync(session.LogicSettings.DelayBetweenPlayerActions, 0, session.CancellationTokenSource.Token).ConfigureAwait(false);
         }
 
         public static async Task<ItemId> GetRequireEvolveItem(ISession session, PokemonId from, PokemonId to)
@@ -168,7 +168,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         }
 
                         if (!pokemonToEvolve.Last().Equals(pokemon))
-                            DelayingUtils.Delay(session.LogicSettings.EvolveActionDelay, 0);
+                            await DelayingUtils.DelayAsync(session.LogicSettings.EvolveActionDelay, 0, session.CancellationTokenSource.Token).ConfigureAwait(false);
                     }
                     catch
                     {

@@ -39,7 +39,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         UniqueId = pokemon.Id
                     });
                 }
-                DelayingUtils.Delay(session.LogicSettings.DelayBetweenPlayerActions, 0);
+                await DelayingUtils.DelayAsync(session.LogicSettings.DelayBetweenPlayerActions, 0, session.CancellationTokenSource.Token).ConfigureAwait(false);
             }
         }
     }
