@@ -77,12 +77,8 @@ namespace RocketBot2.Forms
             #region Login Type and info
 
             authTypeCb.Text = _setting.Auth.CurrentAuthConfig.AuthType.ToString();
-            UserLoginBox.Text = _setting.Auth.CurrentAuthConfig.Username; /*_setting.Auth.AuthConfig.AuthType == AuthType.Google
-                ? _setting.Auth.AuthConfig.GoogleUsername
-                : _setting.Auth.AuthConfig.PtcUsername;*/
-            UserPasswordBox.Text = _setting.Auth.CurrentAuthConfig.Password; /*_setting.Auth.AuthConfig.AuthType == AuthType.Google
-                ? _setting.Auth.AuthConfig.GooglePassword
-                : _setting.Auth.AuthConfig.PtcPassword;*/
+            UserLoginBox.Text = _setting.Auth.CurrentAuthConfig.Username; 
+            UserPasswordBox.Text = _setting.Auth.CurrentAuthConfig.Password;
 
             //google api
             if (_setting.GoogleWalkConfig.GoogleAPIKey != null)
@@ -275,8 +271,6 @@ namespace RocketBot2.Forms
             tbMaxTravelDistanceInMeters.Text = _setting.LocationConfig.MaxTravelDistanceInMeters.ToString();
             tbDelayBetweenPlayerActions.Text = _setting.PlayerConfig.DelayBetweenPlayerActions.ToString();
             tbDelayBetweenPokemonCatch.Text = _setting.PokemonConfig.DelayBetweenPokemonCatch.ToString();
-            //TODO:
-            //tbDelayBetweenRecycle.Text = _setting.DelayBetweenRecycle.ToString();
             cbRandomizeRecycle.Checked = _setting.RecycleConfig.RandomizeRecycle;
             tbRandomRecycleValue.Text = _setting.RecycleConfig.RandomRecycleValue.ToString();
             cbEnableHumanizedThrows.Checked = _setting.CustomCatchConfig.EnableHumanizedThrows;
@@ -467,9 +461,9 @@ namespace RocketBot2.Forms
                 {
                     File.Delete(lastPosFile);
                 }
-                _setting.Auth.AuthConfig.AuthType = authTypeCb.Text == @"Google" ? AuthType.Google : AuthType.Ptc;
-                _setting.Auth.AuthConfig.Username = UserLoginBox.Text;
-                _setting.Auth.AuthConfig.Password = UserPasswordBox.Text;
+                _setting.Auth.CurrentAuthConfig.AuthType = authTypeCb.Text == @"Google" ? AuthType.Google : AuthType.Ptc;
+                _setting.Auth.CurrentAuthConfig.Username = UserLoginBox.Text;
+                _setting.Auth.CurrentAuthConfig.Password = UserPasswordBox.Text;
                 _setting.GoogleWalkConfig.GoogleAPIKey = GoogleApiBox.Text == "" ? null : GoogleApiBox.Text;
                 _setting.Auth.ProxyConfig.UseProxy = useProxyCb.Checked == true ? true : false;
                 _setting.Auth.ProxyConfig.UseProxyHost = proxyHostTb.Text == "" ? null : proxyHostTb.Text;
