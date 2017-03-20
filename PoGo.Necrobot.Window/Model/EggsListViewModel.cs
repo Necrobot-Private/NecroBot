@@ -78,8 +78,12 @@ namespace PoGo.Necrobot.Window.Model
             }
         }
 		
-        public void Update(List<EggsData> eggs)
+        public void Update()
         {
+            var eggs = inventory
+                .Select(x => x.InventoryItemData?.PokemonData)
+                .Where(x => x != null && x.IsEgg)
+                .ToList();	
             foreach (var egg in eggs)
             {
                 var existing = this.Eggs.FirstOrDefault(x => x.Id == eggModel.Id);
