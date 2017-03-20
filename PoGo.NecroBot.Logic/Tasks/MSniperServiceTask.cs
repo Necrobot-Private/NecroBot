@@ -58,10 +58,10 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         #region signalr msniper service
 
-        public static void ConnectToService()
+        public static async Task ConnectToService()
         {
             //TODO - remove this line after MSniper.com back to work
-            return;
+            await Task.Delay(0).ConfigureAwait(false);
             /*
             while (true)
             {
@@ -69,7 +69,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     if (!isConnected)
                     {
-                        Thread.Sleep(10000);
+                        await Task.Delay(10000).ConfigureAwait(false);
                         _connection = new HubConnection(_msniperServiceUrl, useDefaultUrl: false);
                         X509Certificate2 sertifika = new X509Certificate2();
                         sertifika.Import(Properties.Resources.msvc);
@@ -100,16 +100,16 @@ namespace PoGo.NecroBot.Logic.Tasks
                 catch (Exception)
                 {
                     //Logger.Write("service: " +e.Message, LogLevel.Error);
-                    Thread.Sleep(500);
+                    await Task.Delay(500).ConfigureAwait(false);
                 }
             }
             */
         }
 
-        private static void Connection_Closed()
+        private static async Task Connection_Closed()
         {
             //Logger.Write("connection closed, trying to reconnect in 10secs", LogLevel.Service);
-            ConnectToService();
+            await ConnectToService().ConfigureAwait(false);
         }
 
         private static void Connection_Received(string obj)
@@ -150,11 +150,11 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
         }
 
-        private static void Connection_Reconnecting()
+        private static async Task Connection_Reconnecting()
         {
             isConnected = false;
             _connection.Stop(); //removing server cache
-            ConnectToService();
+            await ConnectToService().ConfigureAwait(false);
             //Logger.Write("reconnecting", LogLevel.Service);
         }
 

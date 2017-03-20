@@ -56,7 +56,7 @@ namespace PoGo.NecroBot.Logic.State
             var state = initialState;
             var profilePath = Path.Combine(Directory.GetCurrentDirectory(), subPath);
             var profileConfigPath = Path.Combine(profilePath, "config");
-            globalSettings = GlobalSettings.Load(subPath);
+            globalSettings = await GlobalSettings.Load(subPath).ConfigureAwait(false);
 
             FileSystemWatcher configWatcher = new FileSystemWatcher();
             configWatcher.Path = profileConfigPath;
@@ -64,11 +64,11 @@ namespace PoGo.NecroBot.Logic.State
             configWatcher.NotifyFilter = NotifyFilters.LastWrite;
             configWatcher.EnableRaisingEvents = true;
 
-            configWatcher.Changed += (sender, e) =>
+            configWatcher.Changed += async (sender, e) =>
             {
                 if (e.ChangeType == WatcherChangeTypes.Changed)
                 {
-                    globalSettings = GlobalSettings.Load(subPath);
+                    globalSettings = await GlobalSettings.Load(subPath).ConfigureAwait(false);
                     session.LogicSettings = new LogicSettings(globalSettings);
                     // BUG: duplicate boolean negation will take no effect
                     configWatcher.EnableRaisingEvents = !configWatcher.EnableRaisingEvents;

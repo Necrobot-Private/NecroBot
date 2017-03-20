@@ -172,7 +172,7 @@ namespace PoGo.NecroBot.CLI
             if (File.Exists(configFile))
             {
                 // Load the settings from the config file
-                settings = GlobalSettings.Load(_subPath, _enableJsonValidation);
+                settings = GlobalSettings.Load(_subPath, _enableJsonValidation).Result;
                 if (excelConfigAllow)
                 {
                     if (!File.Exists(excelConfigFile))
@@ -500,7 +500,7 @@ namespace PoGo.NecroBot.CLI
                 ServicePointManager.ServerCertificateValidationCallback +=
                     (sender, certificate, chain, sslPolicyErrors) => true;
                 //temporary disable MSniper connection because site under attacking.
-                //MSniperServiceTask.ConnectToService();
+                //MSniperServiceTask.ConnectToService().Wait();
                 //_session.EventDispatcher.EventReceived += evt => MSniperServiceTask.AddToList(evt);
             }
             var trackFile = Path.GetTempPath() + "\\necrobot2.io";
