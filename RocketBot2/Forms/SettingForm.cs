@@ -626,7 +626,7 @@ namespace RocketBot2.Forms
                 #endregion
 
                 _setting.Save(ConfigFilePath);
-                Application.Restart();
+                Close();
 
                 #endregion
             }
