@@ -548,7 +548,7 @@ namespace PoGo.NecroBot.Logic
             }
             catch (NullReferenceException)
             {
-                DelayingUtils.Delay(3000, 3000);
+                await DelayingUtils.DelayAsync(3000, 3000, ownerSession.CancellationTokenSource.Token).ConfigureAwait(false);
                 return await GetPokemonFamilies(++retries).ConfigureAwait(false);
             }
 

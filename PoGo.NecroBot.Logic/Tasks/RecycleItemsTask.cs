@@ -109,7 +109,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 if (session.LogicSettings.VerboseRecycling)
                     session.EventDispatcher.Send(new ItemRecycledEvent { Id = item.ItemId, Count = item.Count });
 
-                DelayingUtils.Delay(session.LogicSettings.RecycleActionDelay, 500);
+                await DelayingUtils.DelayAsync(session.LogicSettings.RecycleActionDelay, 500, session.CancellationTokenSource.Token).ConfigureAwait(false);
             }
             //await session.Inventory.RefreshCachedInventory();
         }
@@ -136,7 +136,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 if (session.LogicSettings.VerboseRecycling)
                     session.EventDispatcher.Send(new ItemRecycledEvent { Id = item, Count = itemsToRecycle });
 
-                DelayingUtils.Delay(session.LogicSettings.RecycleActionDelay, 500);
+                await DelayingUtils.DelayAsync(session.LogicSettings.RecycleActionDelay, 500, session.CancellationTokenSource.Token).ConfigureAwait(false);
             }
         }
 
@@ -360,7 +360,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     if (session.LogicSettings.VerboseRecycling)
                         session.EventDispatcher.Send(new ItemRecycledEvent { Id = item, Count = count });
 
-                    DelayingUtils.Delay(session.LogicSettings.RecycleActionDelay, 500);
+                    await DelayingUtils.DelayAsync(session.LogicSettings.RecycleActionDelay, 500, session.CancellationTokenSource.Token).ConfigureAwait(false);
                 }
             }
         }
