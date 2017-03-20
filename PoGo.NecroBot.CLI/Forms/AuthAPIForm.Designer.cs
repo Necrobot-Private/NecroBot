@@ -33,7 +33,7 @@ namespace PoGo.NecroBot.CLI.Forms
             this.btnOK = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.txtAPIKey = new System.Windows.Forms.TextBox();
-            this.radLegacy = new System.Windows.Forms.RadioButton();
+            //this.radLegacy = new System.Windows.Forms.RadioButton();
             this.lnkBuy = new System.Windows.Forms.LinkLabel();
             this.radHashServer = new System.Windows.Forms.RadioButton();
             this.label2 = new System.Windows.Forms.Label();
@@ -69,6 +69,7 @@ namespace PoGo.NecroBot.CLI.Forms
             // 
             // radLegacy
             // 
+            /*
             this.radLegacy.AutoSize = true;
             this.radLegacy.Location = new System.Drawing.Point(15, 40);
             this.radLegacy.Name = "radLegacy";
@@ -77,6 +78,7 @@ namespace PoGo.NecroBot.CLI.Forms
             this.radLegacy.TabStop = true;
             this.radLegacy.Text = "Legacy 0.45 API - High risk";
             this.radLegacy.UseVisualStyleBackColor = true;
+            */
             // 
             // lnkBuy
             // 
@@ -92,12 +94,14 @@ namespace PoGo.NecroBot.CLI.Forms
             // radHashServer
             // 
             this.radHashServer.AutoSize = true;
-            this.radHashServer.Location = new System.Drawing.Point(15, 74);
+            //this.radHashServer.Location = new System.Drawing.Point(15, 74);
+            this.radHashServer.Location = new System.Drawing.Point(15, 40);
             this.radHashServer.Name = "radHashServer";
             this.radHashServer.Size = new System.Drawing.Size(225, 17);
             this.radHashServer.TabIndex = 5;
             this.radHashServer.TabStop = true;
             this.radHashServer.Text = $"Pogodev hash server api - Latest API {Client.API_VERSION}";
+            this.radHashServer.Checked = true;
             this.radHashServer.UseVisualStyleBackColor = true;
             // 
             // label2
@@ -143,7 +147,7 @@ namespace PoGo.NecroBot.CLI.Forms
             this.Controls.Add(this.label2);
             this.Controls.Add(this.radHashServer);
             this.Controls.Add(this.lnkBuy);
-            this.Controls.Add(this.radLegacy);
+            //this.Controls.Add(this.radLegacy);
             this.Controls.Add(this.txtAPIKey);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnOK);
@@ -162,7 +166,7 @@ namespace PoGo.NecroBot.CLI.Forms
         private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtAPIKey;
-        private System.Windows.Forms.RadioButton radLegacy;
+        //private System.Windows.Forms.RadioButton radLegacy;
         private System.Windows.Forms.LinkLabel lnkBuy;
         private System.Windows.Forms.RadioButton radHashServer;
         private System.Windows.Forms.Label label2;

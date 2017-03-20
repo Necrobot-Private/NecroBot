@@ -13,7 +13,7 @@ namespace PoGo.NecroBot.CLI.Forms
             {
                 return new APIConfig()
                 {
-                    UseLegacyAPI = radLegacy.Checked,
+                    UseLegacyAPI = false /* radLegacy.Checked*/,
                     UsePogoDevAPI = radHashServer.Checked,
                     AuthAPIKey = txtAPIKey.Text.Trim()
                 };
@@ -21,7 +21,7 @@ namespace PoGo.NecroBot.CLI.Forms
             set
             {
                 radHashServer.Checked = value.UsePogoDevAPI;
-                radLegacy.Checked = value.UseLegacyAPI;
+                //radLegacy.Checked = value.UseLegacyAPI;
             }
         }
 
@@ -68,7 +68,7 @@ namespace PoGo.NecroBot.CLI.Forms
                 return;
             }
 
-            if (!radHashServer.Checked && !radLegacy.Checked)
+            if (!radHashServer.Checked /*&& !radLegacy.Checked*/)
             {
                 MessageBox.Show("Please select an API method", "Config error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);

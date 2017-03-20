@@ -331,9 +331,17 @@ namespace PoGo.NecroBot.CLI
                 else if (apiCfg.UseLegacyAPI)
                 {
                     Logger.Write(
+                        "You are running bot with the Legacy API (0.45) which is currently not working due to Niantic's recent changes. \r\nYou will need to purchase a Pogodev API hashing key. \r\nThe Pogodev API key call be purchased at - https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer \r\nPress any key to exit.",
+                        LogLevel.Error
+                    );
+                    Console.ReadKey();
+                    Environment.Exit(0);
+                    /*
+                    Logger.Write(
                         "You bot will start after 15 second, You are running bot with  Legacy API (0.45) it will increase your risk to be banned and trigger captcha. Config captcha in config.json to auto resolve them",
                         LogLevel.Warning
                     );
+                    */
 
 #if RELEASE
                     Thread.Sleep(15000);
