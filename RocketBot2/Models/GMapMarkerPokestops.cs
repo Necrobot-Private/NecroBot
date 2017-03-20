@@ -2,16 +2,13 @@
 using GMap.NET;
 using GMap.NET.WindowsForms;
 using System;
-using System.Runtime.Serialization;
 
 namespace RocketBot2.Models
 {
-    [SerializableAttribute]
+    [Serializable]
 
-    public class GMapMarkerPokestops : GMapMarker  
+    public class GMapMarkerPokestops : GMapMarker
     {
-        //protected extern GMapMarkerPokestops(SerializationInfo info, StreamingContext context);
-
         /// <summary>
         ///     Constructor
         /// </summary>

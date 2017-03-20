@@ -30,7 +30,6 @@ namespace RocketBot2.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            base.Dispose(true);
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.logTextBox = new System.Windows.Forms.RichTextBox();

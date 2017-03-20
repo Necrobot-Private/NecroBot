@@ -5,7 +5,7 @@ using System;
 
 namespace RocketBot2.Models
 {
-    [SerializableAttribute]
+    [Serializable]
 
     public class GMapMarkerTrainer : GMapMarker
     {
