@@ -117,9 +117,7 @@ namespace PoGo.NecroBot.Logic
                 targetLocation.ToGeoCoordinate());
 
             foreach (var item in route)
-            {
                 points.Add(new GeoCoordinate(item.ToArray()[1], item.ToArray()[0]));
-            }
 
             //get points to map
             OnGetHumanizeRouteEvent(points);
