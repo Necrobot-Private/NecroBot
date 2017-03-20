@@ -102,7 +102,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         });
                     }
                     //Delay only if the pokemon was really renamed!
-                    DelayingUtils.Delay(session.LogicSettings.RenamePokemonActionDelay, 500);
+                    await DelayingUtils.DelayAsync(session.LogicSettings.RenamePokemonActionDelay, 500, session.CancellationTokenSource.Token).ConfigureAwait(false);
                 }
             }
         }
