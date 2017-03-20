@@ -86,7 +86,7 @@ namespace PoGo.Necrobot.Window
             var pokemons = currentSession.Inventory.GetPokemons().Result;
 
             var eggs = currentSession.Inventory.GetEggs().Result;
-            this.datacontext.EggsList.Update(eggs);
+            this.datacontext.EggsList.Update();
 
             var inventory = currentSession.Inventory.GetCachedInventory().Result;
             datacontext.SnipeList.OnInventoryRefreshed(inventory);
