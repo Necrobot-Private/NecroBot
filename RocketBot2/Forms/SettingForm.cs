@@ -49,14 +49,14 @@ namespace RocketBot2.Forms
             }
         }
 
+        #region Advanced Setting Init
+
         private void SettingsForm_Load(object sender, EventArgs e)
         {
             var languageList = GetLanguageList();
             var  languageIndex = languageList.IndexOf(_setting.ConsoleConfig.TranslationLanguageCode);
             cbLanguage.DataSource = languageList;
             cbLanguage.SelectedIndex = languageIndex == -1 ? 0 : languageIndex;
-
-            #region Advanced Setting Init
 
             //proxy
             //proxyGb.Visible = _setting.EnableAdvancedSettings;
@@ -288,9 +288,10 @@ namespace RocketBot2.Forms
             tbForceExcellentThrowOverIv.Text = _setting.CustomCatchConfig.ForceExcellentThrowOverIv.ToString(CultureInfo.InvariantCulture);
             tbForceGreatThrowOverCp.Text = _setting.CustomCatchConfig.ForceGreatThrowOverCp.ToString();
             tbForceExcellentThrowOverCp.Text = _setting.CustomCatchConfig.ForceExcellentThrowOverCp.ToString();
+            cbAutoSniper.Checked = _setting.DataSharingConfig.AutoSnipe;
+            cbEnableGyms.Checked = _setting.GymConfig.Enable;
         }
             #endregion
-
 
         #region Help button for API key
 
@@ -466,21 +467,9 @@ namespace RocketBot2.Forms
                 {
                     File.Delete(lastPosFile);
                 }
-                _setting.Auth.CurrentAuthConfig.AuthType = authTypeCb.Text == @"Google" ? AuthType.Google : AuthType.Ptc;
-                /*if (_setting.Auth.AuthConfig.AuthType == AuthType.Google)
-                {*/
-                    _setting.Auth.CurrentAuthConfig.Username = UserLoginBox.Text;
-                    _setting.Auth.CurrentAuthConfig.Password = UserPasswordBox.Text;
-                /*    _setting.Auth.AuthConfig.PtcUsername = null;
-                    _setting.Auth.AuthConfig.PtcPassword = null;
-                }
-                else
-                {
-                    _setting.Auth.AuthConfig.GoogleUsername = null;
-                    _setting.Auth.AuthConfig.GooglePassword = null;
-                    _setting.Auth.AuthConfig.PtcUsername = UserLoginBox.Text;
-                    _setting.Auth.AuthConfig.PtcPassword = UserPasswordBox.Text;
-                }*/
+                _setting.Auth.AuthConfig.AuthType = authTypeCb.Text == @"Google" ? AuthType.Google : AuthType.Ptc;
+                _setting.Auth.AuthConfig.Username = UserLoginBox.Text;
+                _setting.Auth.AuthConfig.Password = UserPasswordBox.Text;
                 _setting.GoogleWalkConfig.GoogleAPIKey = GoogleApiBox.Text == "" ? null : GoogleApiBox.Text;
                 _setting.Auth.ProxyConfig.UseProxy = useProxyCb.Checked == true ? true : false;
                 _setting.Auth.ProxyConfig.UseProxyHost = proxyHostTb.Text == "" ? null : proxyHostTb.Text;
@@ -502,13 +491,13 @@ namespace RocketBot2.Forms
                 _setting.Auth.DeviceConfig.FirmwareTags = FirmwareTagsTb.Text == "" ? null : FirmwareTagsTb.Text;
                 _setting.Auth.DeviceConfig.FirmwareType = FirmwareTypeTb.Text == "" ? null: FirmwareTypeTb.Text;
                 _setting.Auth.DeviceConfig.FirmwareFingerprint = FirmwareFingerprintTb.Text == "" ? null : FirmwareFingerprintTb.Text;
+                _setting.ConsoleConfig.TranslationLanguageCode = cbLanguage.Text;
                 _setting.Auth.Save(AuthFilePath);
                 
                 #endregion
 
                 #region RocketBot2.Form Settings
 
-                _setting.ConsoleConfig.TranslationLanguageCode = cbLanguage.Text;
 
                 #region Location
 
@@ -637,6 +626,8 @@ namespace RocketBot2.Forms
                 _setting.CustomCatchConfig.ForceExcellentThrowOverIv = ConvertStringToDouble(tbForceExcellentThrowOverIv.Text);
                 _setting.CustomCatchConfig.ForceGreatThrowOverCp = ConvertStringToInt(tbForceGreatThrowOverCp.Text);
                 _setting.CustomCatchConfig.ForceExcellentThrowOverCp = ConvertStringToInt(tbForceExcellentThrowOverCp.Text);
+                _setting.GymConfig.Enable = cbEnableGyms.Checked;
+                _setting.DataSharingConfig.AutoSnipe = cbAutoSniper.Checked;
 
                 #endregion
 
