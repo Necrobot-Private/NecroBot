@@ -77,6 +77,15 @@ namespace PoGo.Necrobot.Window.Model
                 this.Eggs.Add(eggModel);
             }
         }
+		
+        public void Update(List<EggsData> eggs)
+        {
+            foreach (var egg in eggs)
+            {
+                var existing = this.Eggs.FirstOrDefault(x => x.Id == eggModel.Id);
+                existing.RaisePropertyChanged("KM");
+            }
+        }
 
         internal void OnEggIncubatorStatus(EggIncubatorStatusEvent e)
         {
