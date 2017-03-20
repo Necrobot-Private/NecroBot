@@ -315,7 +315,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         [NecrobotConfig(Description = "Specify min IV to not transfer pokemon", Position = 49)]
         [DefaultValue(90)]
-        [Range(0, 100)]
+        [Range(0, 101)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 50)]
         public float KeepMinIvPercentage { get; set; }
 
