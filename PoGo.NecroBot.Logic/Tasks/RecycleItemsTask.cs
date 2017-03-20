@@ -360,7 +360,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     if (session.LogicSettings.VerboseRecycling)
                         session.EventDispatcher.Send(new ItemRecycledEvent { Id = item, Count = count });
 
-                    await DelayingUtils.DelayAsync(session.LogicSettings.RecycleActionDelay, 500, session.CancellationTokenSource.Token);
+                    await DelayingUtils.DelayAsync(session.LogicSettings.RecycleActionDelay, 500, session.CancellationTokenSource.Token).ConfigureAwait(false);
                 }
             }
         }
