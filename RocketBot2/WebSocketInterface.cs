@@ -14,7 +14,6 @@ using PoGo.NecroBot.Logic.Tasks;
 using SuperSocket.SocketBase;
 using SuperSocket.SocketBase.Config;
 using SuperSocket.WebSocket;
-using RocketBot2.Forms;
 
 #endregion
 
