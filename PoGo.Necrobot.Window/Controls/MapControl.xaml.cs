@@ -244,13 +244,10 @@ namespace PoGo.Necrobot.Window.Controls
             this.model = DataContext as MapViewModel;
         }
 
-        private void btnWalkHere_Click(object sender, RoutedEventArgs e)
+        private async void btnWalkHere_Click(object sender, RoutedEventArgs e)
         {
-            Task.Run(async () =>
-            {
-                await SetMoveToTargetTask.Execute(model.CurrentLatitude, model.CurrentLongitude);
-            });
-
+            await SetMoveToTargetTask.Execute(model.CurrentLatitude, model.CurrentLongitude);
+            
             popSelect.IsOpen = false;
         }
 
