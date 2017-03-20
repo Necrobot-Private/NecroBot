@@ -1,4 +1,5 @@
 ﻿using RocketBot2.Models;
+using System.ComponentModel;
 using System.Windows.Forms;
 
 namespace RocketBot2.Forms
@@ -10,7 +11,8 @@ namespace RocketBot2.Forms
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        //private System.ComponentModel.IContainer components = null;
+        private Container components;
 
         /// <summary>
         /// Clean up any resources being used.

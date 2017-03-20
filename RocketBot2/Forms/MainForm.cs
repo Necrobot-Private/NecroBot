@@ -53,7 +53,7 @@ namespace RocketBot2.Forms
 {
     [IDisposed]
 
-    public partial class MainForm : System.Windows.Forms.Form
+    public partial class MainForm : System.Windows.Forms.Form 
     {
         public static MainForm Instance;
         public static SynchronizationContext SynchronizationContext;

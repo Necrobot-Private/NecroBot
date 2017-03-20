@@ -5,7 +5,7 @@ using RocketBot2.Forms;
 
 namespace RocketBot2.Models
 {
-    //[IDisposed]
+    [IDisposed]
 
     public class GMapMarkerPokestops : GMapMarker
     {

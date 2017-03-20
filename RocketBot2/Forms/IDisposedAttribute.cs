@@ -6,8 +6,18 @@ namespace RocketBot2.Forms
     {
         // Assume this type has some unmanaged resources.
         private bool disposed = false;
+        private System.ComponentModel.IContainer components = null;
 
         protected virtual void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            Dispose(disposing);
+        }
+
+        /*protected virtual void Dispose(bool disposing)
         {
             if (!disposed)
             {
@@ -23,9 +33,9 @@ namespace RocketBot2.Forms
                     GC.SuppressFinalize(this);
                 }
             }
-        }
+    }*/
 
-        public void Dispose()
+    public void Dispose()
         {
             if (!disposed)
             {
