@@ -2,10 +2,11 @@
 using GMap.NET;
 using GMap.NET.WindowsForms;
 using System;
+using RocketBot2.Forms;
 
 namespace RocketBot2.Models
 {
-    [Serializable]
+    //[IDisposed]
 
     public class GMapMarkerTrainer : GMapMarker
     {

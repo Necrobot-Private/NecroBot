@@ -51,7 +51,7 @@ using POGOProtos.Networking.Responses;
 
 namespace RocketBot2.Forms
 {
-    [Serializable]
+    [IDisposed]
 
     public partial class MainForm : System.Windows.Forms.Form
     {
