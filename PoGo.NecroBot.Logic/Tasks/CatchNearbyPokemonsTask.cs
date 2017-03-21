@@ -16,7 +16,7 @@ using POGOProtos.Map.Pokemon;
 using POGOProtos.Networking.Responses;
 using TinyIoC;
 using System.Collections.Generic;
-using System.Device.Location;
+using GeoCoordinatePortable;
 
 #endregion
 

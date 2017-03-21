@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using PoGo.NecroBot.Logic.Model.Google.GoogleObjects;
-using System.Device.Location;
+using GeoCoordinatePortable;
 
 namespace PoGo.NecroBot.Logic.Model.Google
 {

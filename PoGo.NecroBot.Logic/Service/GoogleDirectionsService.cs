@@ -8,7 +8,7 @@ using PoGo.NecroBot.Logic.Exceptions;
 using PoGo.NecroBot.Logic.Model.Google;
 using PoGo.NecroBot.Logic.Model.Google.GoogleObjects;
 using PoGo.NecroBot.Logic.State;
-using System.Device.Location;
+using GeoCoordinatePortable;
 using System.Threading.Tasks;
 
 namespace PoGo.NecroBot.Logic.Service
