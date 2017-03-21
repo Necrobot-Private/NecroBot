@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Device.Location;
+using GeoCoordinatePortable;
 using System.Threading.Tasks;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.State;
