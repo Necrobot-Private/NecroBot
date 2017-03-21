@@ -29,7 +29,7 @@ using Quobject.Collections.Immutable;
 using Quobject.SocketIoClientDotNet.Client;
 using Socket = Quobject.SocketIoClientDotNet.Client.Socket;
 using PoGo.NecroBot.Logic.Logging;
-using System.Device.Location;
+using GeoCoordinatePortable;
 
 #endregion
 

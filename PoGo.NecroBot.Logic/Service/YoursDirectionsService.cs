@@ -3,7 +3,7 @@ using System.IO;
 using System.Net;
 using PoGo.NecroBot.Logic.Model.Yours;
 using PoGo.NecroBot.Logic.State;
-using System.Device.Location;
+using GeoCoordinatePortable;
 
 namespace PoGo.NecroBot.Logic.Service
 {

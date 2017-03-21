@@ -1,6 +1,6 @@
 ﻿using System;
 using PoGo.NecroBot.Logic.Model.Settings;
-using System.Device.Location;
+using GeoCoordinatePortable;
 using System.Threading.Tasks;
 
 namespace PoGo.NecroBot.Logic.Service.Elevation
