@@ -1413,7 +1413,7 @@
             this.clbIgnore.Location = new System.Drawing.Point(3, 49);
             this.clbIgnore.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.clbIgnore.Name = "clbIgnore";
-            this.clbIgnore.Size = new System.Drawing.Size(416, 70);
+            this.clbIgnore.Size = new System.Drawing.Size(416, 4);
             this.clbIgnore.TabIndex = 0;
             // 
             // tBMaxBerriesToUsePerPokemon
@@ -1475,7 +1475,7 @@
             this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox1.Size = new System.Drawing.Size(412, 458);
+            this.groupBox1.Size = new System.Drawing.Size(412, 462);
             this.groupBox1.TabIndex = 20;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Exclude Transfer";
@@ -1820,7 +1820,7 @@
             this.groupBox4.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox4.Size = new System.Drawing.Size(413, 458);
+            this.groupBox4.Size = new System.Drawing.Size(413, 462);
             this.groupBox4.TabIndex = 5;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Power Up";
@@ -2000,7 +2000,7 @@
             this.groupBox3.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox3.Size = new System.Drawing.Size(412, 465);
+            this.groupBox3.Size = new System.Drawing.Size(412, 469);
             this.groupBox3.TabIndex = 16;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Evolve";
