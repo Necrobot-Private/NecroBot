@@ -91,6 +91,10 @@
     <StartupObject>RocketBot2.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GeoCoordinate.NetStandard1, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\GeoCoordinate.NetStandard1.1.0.0\lib\netstandard1.0\GeoCoordinate.NetStandard1.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp">
       <Private>True</Private>
     </Reference>
@@ -98,7 +102,6 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Device" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Management" />

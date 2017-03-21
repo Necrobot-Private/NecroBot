@@ -1,25 +1,21 @@
 ﻿#region using directives
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+using GeoCoordinatePortable;
+using Newtonsoft.Json.Linq;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Interfaces.Configuration;
 using PoGo.NecroBot.Logic.Model;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Strategies.Walk;
 using PokemonGo.RocketAPI;
-using POGOProtos.Networking.Responses;
-using System.Device.Location;
-using POGOProtos.Map.Fort;
-using PoGo.NecroBot.Logic.Utils;
-using PokemonGo.RocketAPI.Extensions;
-using Newtonsoft.Json.Linq;
-using System.Net;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 
 #endregion
 
@@ -107,7 +103,7 @@ namespace PoGo.NecroBot.Logic
             cancellationToken.ThrowIfCancellationRequested();
             TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
 
-            //add routes to map
+            //add points to map
             var points = new List<GeoCoordinate>();
             var route = Route(session,
                 new GeoCoordinate(
@@ -119,9 +115,9 @@ namespace PoGo.NecroBot.Logic
             foreach (var item in route)
                 points.Add(new GeoCoordinate(item.ToArray()[1], item.ToArray()[0]));
 
-            //get pokeStops to map
+            //get points to map
             OnGetHumanizeRouteEvent(points);
-            //end code add routes
+            //end code add points
 
             // If the stretegies become bigger, create a factory for easy management
 
@@ -192,7 +188,7 @@ namespace PoGo.NecroBot.Logic
             return WalkStrategyQueue.First(q => !IsWalkingStrategyBlacklisted(q.GetType()));
         }
 
-        //functions for routes map
+        //functions for points map
         private List<List<double>> Route(ISession session, GeoCoordinate start, GeoCoordinate dest)
         {
             var result = new List<List<double>>();
@@ -282,6 +278,6 @@ namespace PoGo.NecroBot.Logic
         {
             GetHumanizeRouteEvent?.Invoke(points);
         }
-        //end functions routes map
+        //end functions points map
     }
 }
