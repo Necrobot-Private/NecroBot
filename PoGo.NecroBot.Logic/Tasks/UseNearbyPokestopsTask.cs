@@ -19,7 +19,7 @@ using PoGo.NecroBot.Logic.Model.Settings;
 using TinyIoC;
 using PokemonGo.RocketAPI.Util;
 using POGOProtos.Inventory.Item;
-using System.Device.Location;
+using GeoCoordinatePortable;
 
 #endregion
 

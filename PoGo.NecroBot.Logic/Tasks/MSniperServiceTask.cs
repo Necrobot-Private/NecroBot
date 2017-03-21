@@ -26,7 +26,7 @@ using System.Runtime.Caching;
 using System.Security.Cryptography.X509Certificates;
 using PoGo.NecroBot.Logic.PoGoUtils;
 using POGOProtos.Inventory.Item;
-using System.Device.Location;
+using GeoCoordinatePortable;
 
 namespace PoGo.NecroBot.Logic.Tasks
 {
