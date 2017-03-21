@@ -6,7 +6,7 @@ using PoGo.NecroBot.Logic.Model;
 using PoGo.NecroBot.Logic.Service;
 using PoGo.NecroBot.Logic.State;
 using PokemonGo.RocketAPI;
-using System.Device.Location;
+using GeoCoordinatePortable;
 
 namespace PoGo.NecroBot.Logic.Strategies.Walk
 {

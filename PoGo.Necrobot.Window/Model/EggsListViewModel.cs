@@ -66,11 +66,12 @@ namespace PoGo.Necrobot.Window.Model
         {
             var eggModel = new EggViewModel(egg);
             eggModel.Hatchable = incu == null;
-
+                        
             var existing = this.Eggs.FirstOrDefault(x => x.Id == eggModel.Id);
             if(existing != null )
             {
-                existing.UpdateWith(eggModel);
+                // Do not update, it overwrites OnEggIncubatorStatus Status updates
+                // existing.UpdateWith(eggModel);
             }
             else
             {

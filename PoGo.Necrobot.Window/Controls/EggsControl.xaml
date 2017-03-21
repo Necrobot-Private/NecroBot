@@ -116,13 +116,13 @@
                             </Image.Triggers>-->
                         </Image>
                             <TextBlock HorizontalAlignment="Center" Visibility="{Binding Path=Hatchable, Converter={StaticResource InverseAndVisibleConverter}}">
-                            <TextBlock.Text>
-                                <MultiBinding StringFormat="{}{0:0.00} km /{1} km" Mode="TwoWay">
-                                    <Binding Path="KM"></Binding>
-                                    <Binding Path="TotalKM"></Binding>
-                                </MultiBinding>
-                            </TextBlock.Text>
-                        </TextBlock>
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="{}{0:0.00} km /{1} km" Mode="TwoWay">
+                                        <Binding Path="KM"></Binding>
+                                        <Binding Path="TotalKM"></Binding>
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
                             <Button Click="HatchEgg_Click" Content="{Binding Path=TotalKM }" ContentStringFormat="Hatch {0} km egg"  IsEnabled="{Binding Path=Hatchable}" CommandParameter="{Binding Id}"></Button>
                     </StackPanel>
                 </Border>

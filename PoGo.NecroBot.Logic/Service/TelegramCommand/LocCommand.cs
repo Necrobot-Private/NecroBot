@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Device.Location;
+using GeoCoordinatePortable;
 using System.Threading.Tasks;
 using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.State;
