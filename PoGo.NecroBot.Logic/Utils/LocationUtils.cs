@@ -3,7 +3,7 @@
 using System;
 using PoGo.NecroBot.Logic.Service.Elevation;
 using PoGo.NecroBot.Logic.State;
-using System.Device.Location;
+using GeoCoordinatePortable;
 using System.Threading.Tasks;
 
 #endregion
