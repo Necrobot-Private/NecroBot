@@ -913,10 +913,9 @@ namespace RocketBot2.Forms
 
         #region EVENTS
 
-        private void btnRefresh_Click(object sender, EventArgs e)
+        private async void btnRefresh_Click(object sender, EventArgs e)
         {
-             Task.Run(async () =>
-             await ReloadPokemonList());
+            await ReloadPokemonList().ConfigureAwait(false);
         }
 
         private void startStopBotToolStripMenuItem_Click(object sender, EventArgs e)
