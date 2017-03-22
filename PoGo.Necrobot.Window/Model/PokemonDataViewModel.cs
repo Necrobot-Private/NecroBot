@@ -309,7 +309,7 @@ namespace PoGo.Necrobot.Window.Model
         {
             get
             {
-                return $"http://www.serebii.net/pokemongo/pokemon/{(int)PokemonData.PokemonId:000}.png";
+                return $"http://assets.pokemon.com/assets/cms2/img/pokedex/full/{(int)PokemonData.PokemonId:000}.png";
             }
         }
 
