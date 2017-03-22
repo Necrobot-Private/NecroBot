@@ -8,3 +8,6 @@
 [submodule "PoGo.NecroBot.GUI.Electron"]
 	path = PoGo.NecroBot.GUI.Electron
 	url = https://github.com/Necrobot-Private/NecroBot.GUI.Electron.git
+[submodule "PokeEase"]
+	path = PokeEase
+	url = https://github.com/Necrobot-Private/PokeEase.git
