@@ -276,6 +276,7 @@ namespace RocketBot2.Forms
             tbForceExcellentThrowOverCp.Text = _setting.CustomCatchConfig.ForceExcellentThrowOverCp.ToString();
             cbAutoSniper.Checked = _setting.DataSharingConfig.AutoSnipe;
             cbEnableGyms.Checked = _setting.GymConfig.Enable;
+            tbDataServiceIdentification.Text = _setting.DataSharingConfig.DataServiceIdentification;
         }
             #endregion
 
@@ -614,6 +615,7 @@ namespace RocketBot2.Forms
                 _setting.CustomCatchConfig.ForceExcellentThrowOverCp = ConvertStringToInt(tbForceExcellentThrowOverCp.Text);
                 _setting.GymConfig.Enable = cbEnableGyms.Checked;
                 _setting.DataSharingConfig.AutoSnipe = cbAutoSniper.Checked;
+                _setting.DataSharingConfig.DataServiceIdentification = tbDataServiceIdentification.Text;
 
                 #endregion
 
