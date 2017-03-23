@@ -1301,17 +1301,19 @@ namespace RocketBot2.Forms
                     .SelectMany(aItems => aItems.Item)
                     .ToDictionary(item => item.ItemId, item => new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(item.ExpireMs));
 
-                if (flpItems.Controls.Count > 1) flpItems.Controls.Clear();
 
-                foreach (var item in items)
+                flpItems.Controls.Clear();
+
+                foreach (var item in new List<ItemData>(items))
                 {
                     var box = new ItemBox(item);
+                    box.ItemClick += ItemBox_ItemClick;
+
                     if (appliedItems.ContainsKey(item.ItemId))
                     {
                         box.expires = appliedItems[item.ItemId];
                         box.Enabled = false;
                     }
-                         box.ItemClick += ItemBox_ItemClick;
                     flpItems.Controls.Add(box);
                 }
 
