@@ -172,49 +172,49 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 25)]
         public int MaxPokeballsPerPokemon { get; set; }
 
-        [NecrobotConfig(Description = "Define min CP for use greate ball instead of poke ball", Position = 26)]
+        [NecrobotConfig(Description = "Define min CP for use greate ball instead of PokeBall", Position = 26)]
         [DefaultValue(1000)]
         [Range(0, 9999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 26)]
         public int UseGreatBallAboveCp { get; set; }
 
-        [NecrobotConfig(Description = "Define min CP for use ultra ball instead of greate ball", Position = 27)]
+        [NecrobotConfig(Description = "Define min CP for use Ultra Ball instead of Great Ball", Position = 27)]
         [DefaultValue(1250)]
         [Range(0, 9999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 27)]
         public int UseUltraBallAboveCp { get; set; }
 
-        [NecrobotConfig(Description = "Define min CP for use master ball instead of ultra ball", Position = 28)]
+        [NecrobotConfig(Description = "Define min CP for use master ball instead of Ultra Ball", Position = 28)]
         [DefaultValue(1500)]
         [Range(0, 9999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 28)]
         public int UseMasterBallAboveCp { get; set; }
 
-        [NecrobotConfig(Description = "Define min IV for use greate ball instead of poke ball", Position = 29)]
+        [NecrobotConfig(Description = "Define min IV for use Great Ball instead of PokeBall", Position = 29)]
         [DefaultValue(85.0)]
-        [Range(0, 100)]
+        [Range(0, 101)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 29)]
         public double UseGreatBallAboveIv { get; set; }
 
-        [NecrobotConfig(Description = "Define min CP for use ultra ball instead of greate ball", Position = 30)]
+        [NecrobotConfig(Description = "Define min CP for use ultra ball instead of Great Ball", Position = 30)]
         [DefaultValue(95.0)]
-        [Range(0, 100)]
+        [Range(0, 101)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 30)]
         public double UseUltraBallAboveIv { get; set; }
 
-        [NecrobotConfig(Description = "Define min catch probability for use greate ball instead of pokemon ball", Position = 31)]
+        [NecrobotConfig(Description = "Define min catch probability for use Ultra Ball instead of pokemon ball", Position = 31)]
         [DefaultValue(0.2)]
         [Range(0, 1)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 31)]
         public double UseGreatBallBelowCatchProbability { get; set; }
 
-        [NecrobotConfig(Description = "Define min catch probability for use ultra ball instead of greate ball", Position = 32)]
+        [NecrobotConfig(Description = "Define min catch probability for use Ultra Ball instead of greate ball", Position = 32)]
         [DefaultValue(0.1)]
         [Range(0, 1)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 32)]
         public double UseUltraBallBelowCatchProbability { get; set; }
 
-        [NecrobotConfig(Description = "Define min catch probability for use master ball instead of ultra ball", Position = 33)]
+        [NecrobotConfig(Description = "Define min catch probability for use Master Ball instead of ultra ball", Position = 33)]
         [DefaultValue(0.05)]
         [Range(0, 999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 33)]
