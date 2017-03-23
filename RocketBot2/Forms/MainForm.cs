@@ -886,10 +886,6 @@ namespace RocketBot2.Forms
         public static void BotChange(bool b)
         {
             if (b) Instance.checkBoxAutoRefresh.CheckState = CheckState.Indeterminate;
-            Instance.startStopBotToolStripMenuItem.Text = @"■ Exit RocketBot2";
-            Instance._botStarted = true;
-            Instance.btnRefresh.Enabled = true;
-            Instance.showMoreCheckBox.Enabled = true;
         }
 
         public static void SetSpeedLable(string text)
@@ -901,7 +897,8 @@ namespace RocketBot2.Forms
             }
             Instance.speedLable.Text = text;
             Instance.Navigation_UpdatePositionEvent(_session.Client.CurrentLatitude, _session.Client.CurrentLongitude);
-       }
+            Instance.showMoreCheckBox.Enabled = Instance._botStarted;
+        }
 
         public async void SetStatusText(string text)
         {
@@ -935,7 +932,10 @@ namespace RocketBot2.Forms
                 Environment.Exit(0);
                 return;
             }
-           Task.Run(StartBot);
+            startStopBotToolStripMenuItem.Text = @"■ Exit RocketBot2";
+            _botStarted = true;
+            btnRefresh.Enabled = true;
+            Task.Run(StartBot);
         }
 
         private void todoToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1197,7 +1197,7 @@ namespace RocketBot2.Forms
                 foreach (var to in pok.EvolutionBranchs)
                 {
                     var item = new PictureBox();
-                    item.Image = ResourceHelper.GetImage("Pokemon_" + to.Pokemon.GetHashCode(), item.Height, item.Width);
+                    item.Image = ResourceHelper.ResizeImage(ResourceHelper.GetPokemonImage((int)to.Pokemon), item, true);
                     item.Click += async delegate
                     {
                         await Task.Run(async () => { await EvolveSpecificPokemonTask.Execute(_session, to.OriginPokemonId, to.Pokemon); });
@@ -1205,8 +1205,8 @@ namespace RocketBot2.Forms
                             await ReloadPokemonList().ConfigureAwait(false);
                         form.Close();
                     };
-                    item.MouseLeave += delegate { item.BackColor = Color.Transparent; };
-                    item.MouseEnter += delegate { item.BackColor = Color.LightGreen; };
+                    /*item.MouseLeave += delegate { item.BackColor = Color.Transparent; };
+                    item.MouseEnter += delegate { item.BackColor = Color.LightGreen; };*/
                     form.flpPokemonToEvole.Controls.Add(item);
                 }
                 form.ShowDialog();
@@ -1301,19 +1301,17 @@ namespace RocketBot2.Forms
                     .SelectMany(aItems => aItems.Item)
                     .ToDictionary(item => item.ItemId, item => new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(item.ExpireMs));
 
+                if (flpItems.Controls.Count > 1) flpItems.Controls.Clear();
 
-                flpItems.Controls.Clear();
-
-                foreach (var item in new List<ItemData>(items))
+                foreach (var item in items)
                 {
                     var box = new ItemBox(item);
-                    box.ItemClick += ItemBox_ItemClick;
-
                     if (appliedItems.ContainsKey(item.ItemId))
                     {
                         box.expires = appliedItems[item.ItemId];
                         box.Enabled = false;
                     }
+                         box.ItemClick += ItemBox_ItemClick;
                     flpItems.Controls.Add(box);
                 }
 
