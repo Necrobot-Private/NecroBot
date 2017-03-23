@@ -619,7 +619,7 @@ namespace RocketBot2.Forms
 
                 #endregion
 
-                _setting.Save(ConfigFilePath);
+                _setting.Save(ConfigFilePath, true);
                 Close();
 
                 #endregion
