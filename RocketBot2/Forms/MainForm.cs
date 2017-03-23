@@ -1316,7 +1316,7 @@ namespace RocketBot2.Forms
                     if (appliedItems.ContainsKey(item.ItemId))
                     {
                         box.expires = appliedItems[item.ItemId];
-                        if (!string.IsNullOrEmpty(box.expires))
+                        if (box.lblTime.Visible)
                             box.Enabled = false;
                     }
                          box.ItemClick += ItemBox_ItemClick;
