@@ -26,8 +26,8 @@ namespace PoGo.NecroBot.Logic.Common
         
         [Description("Map & Journey")]
         public string MapTabTitle { get; set; }
-		
-		[Description("Browser")]
+
+	[Description("Browser")]
         public string BrowserTabTitle { get; set; }
 
         [Description("SNIPE")]
