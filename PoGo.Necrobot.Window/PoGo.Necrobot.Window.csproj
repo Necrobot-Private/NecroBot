@@ -100,10 +100,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DotNetBrowser, Version=1.9.0.0, Culture=neutral, PublicKeyToken=b0b5aaca9c95c84e, processorArchitecture=MSIL">
-      <HintPath>..\packages\DotNetBrowser.1.9\lib\DotNetBrowser.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\DotNetBrowser.1.9\lib\DotNetBrowser.dll</HintPath>
     </Reference>
     <Reference Include="DotNetBrowser.Chromium, Version=1.9.0.0, Culture=neutral, PublicKeyToken=b0b5aaca9c95c84e, processorArchitecture=MSIL">
-      <HintPath>..\packages\DotNetBrowser.1.9\lib\DotNetBrowser.Chromium.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\DotNetBrowser.1.9\lib\DotNetBrowser.Chromium.dll</HintPath>
     </Reference>
     <Reference Include="Geocoding, Version=3.6.0.0, Culture=neutral, PublicKeyToken=7c714700b88674c7, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\Geocoding.net.3.6.0\lib\net40\Geocoding.dll</HintPath>

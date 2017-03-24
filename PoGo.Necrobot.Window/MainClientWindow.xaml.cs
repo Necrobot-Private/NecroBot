@@ -56,6 +56,8 @@ namespace PoGo.Necrobot.Window
 			
 			BrowserView webView;
 
+        BrowserView webView;
+        
         public MainClientWindow()
         {
             InitializeComponent();
