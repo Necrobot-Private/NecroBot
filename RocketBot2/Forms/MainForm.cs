@@ -545,7 +545,6 @@ namespace RocketBot2.Forms
                     if (_item.Text == bot.Username)
                     {
                         _session.ReInitSessionWithNextBot(_bot);
-                        _item.Enabled = false;
                     }
                     accountsToolStripMenuItem.DropDownItems.Add(_item);
                 }
@@ -843,6 +842,7 @@ namespace RocketBot2.Forms
 
         #region INTERFACE
 
+        private DateTime lastClearLog = DateTime.Now;
         public static void ColoredConsoleWrite(Color color, string text)
         {
             if (text.Length <= 0)
@@ -852,6 +852,14 @@ namespace RocketBot2.Forms
             {
                 Instance.Invoke(new Action<Color, string>(ColoredConsoleWrite), color, text);
                 return;
+            }
+
+#pragma warning disable CS1690
+            if (Instance.lastClearLog.AddMinutes(20) < DateTime.Now)
+#pragma warning restore CS1690
+            {
+                Instance.logTextBox.Text = string.Empty;
+                Instance.lastClearLog = DateTime.Now;
             }
 
             if (text.Contains("Error with API request type: DownloadRemoteConfigVersion"))
