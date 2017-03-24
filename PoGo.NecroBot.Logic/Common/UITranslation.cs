@@ -30,9 +30,6 @@ namespace PoGo.NecroBot.Logic.Common
 		[Description("Browser")]
         public string BrowserTabTitle { get; set; }
 
-        [Description("Browser")]
-        public string BrowserTabTitle { get; set; }
-
         [Description("SNIPE")]
         public string SnipeText { get; set; }
 
