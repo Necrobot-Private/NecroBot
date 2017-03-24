@@ -133,7 +133,7 @@
                 </StackPanel>
 
             </Button>
-            <Button x:Name="menuConsole" Click="menuConsole_Click">
+            <Button x:Name="menuConsole" Click="MenuConsole_Click">
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="20"
                                Height="20"
@@ -148,7 +148,7 @@
                 </StackPanel>
 
             </Button>
-            <Button Click="menuSetting_Click" Name="menuSetting">
+            <Button Click="MenuSetting_Click" Name="menuSetting">
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="20"
                                Height="20"
@@ -163,7 +163,7 @@
                 </StackPanel>
             </Button>
 
-            <Button Name="btnDonate"  Click="btnDonate_Click" Margin="0,0,0,0">
+            <Button Name="btnDonate"  Click="BtnDonate_Click" Margin="0,0,0,0">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="http://www.northernyouth.ca/wp-content/uploads/2014/11/NYL-Donate-Button.png" Height="30"/>
                 </StackPanel>
@@ -177,7 +177,7 @@
         <GroupBox x:Name="grbPlayerInfo" DockPanel.Dock="Top" Height="120">
             <GroupBox.Header>
                 <DockPanel LastChildFill="True">
-                    <Button Content="Hide" DockPanel.Dock="Right" Name="btnHideInfo" Click="btnHideInfo_Click" />
+                    <Button Content="Hide" DockPanel.Dock="Right" Name="btnHideInfo" Click="BtnHideInfo_Click" />
                     <Label Content="Logging in ..... check console window for detail" Name="lblAccount"
                            Foreground="White" FontWeight="Bold">
                         <!--<Label.Content>
@@ -217,7 +217,7 @@
                     </StackPanel>
                     <StackPanel Margin="10">
                         <TextBlock Name="txtLastError" Text="" TextWrapping="Wrap" FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato" FontSize="16"></TextBlock>
-                        <Button Margin="30,10, 10,30" Click="btnExit_Click" Name="btnExit" Content="{Binding Source=ClickHereExit, Converter={StaticResource I18NConveter}}" FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato Heavy" FontSize="18.667" ></Button>
+                        <Button Margin="30,10, 10,30" Click="BtnExit_Click" Name="btnExit" Content="{Binding Source=ClickHereExit, Converter={StaticResource I18NConveter}}" FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato Heavy" FontSize="18.667" ></Button>
                     </StackPanel>
                 </StackPanel>
 
@@ -227,7 +227,7 @@
         <TabControl TabStripPlacement="Left" HorizontalAlignment="Stretch" 
                     VerticalAlignment="Stretch" 
                     Name="tabMain"
-                    SelectionChanged="tabMain_SelectionChanged" Margin="0,0,0,5"
+                    SelectionChanged="TabMain_SelectionChanged" Margin="0,0,0,5"
                     >
             <TabControl.Resources>
                 <Style TargetType="{x:Type TabItem}">
@@ -268,7 +268,7 @@
 
                                 <DataTemplate>
                                     <StackPanel>
-                                        <Button   Name="btnSwitchAcount" Click="btnSwitchAcount_Click" CommandParameter="{Binding}" Foreground="Green" Background="Transparent"  IsEnabled="{Binding IsRunning, Converter= {StaticResource InverseBooleanConverter}}" Cursor="Hand">
+                                        <Button   Name="btnSwitchAcount" Click="BtnSwitchAcount_Click" CommandParameter="{Binding}" Foreground="Green" Background="Transparent"  IsEnabled="{Binding IsRunning, Converter= {StaticResource InverseBooleanConverter}}" Cursor="Hand">
                                             <TextBlock Margin="5,5,5,5" Text="{Binding Source=Switch, Converter={StaticResource I18NConveter }}">
                                             </TextBlock>
                                         </Button>
@@ -279,6 +279,14 @@
                     </DataGrid.Columns>
 
                 </DataGrid>
+            </TabItem>
+			<TabItem Name="tabBrowser">
+                <TabItem.Header>
+                    <TextBlock Margin="7,5,7,5" Text="{Binding  Source=BrowserTabTitle, Converter={StaticResource ResourceKey=I18NConveter}, FallbackValue=Browser}" FontSize="14"/>
+                </TabItem.Header>
+                <Grid Name="browserLayout">
+                    
+                </Grid>
             </TabItem>
             <TabItem Name="tabMap" >
                 <TabItem.Header>
@@ -320,8 +328,8 @@
                              BorderBrush="Aquamarine" 
                              BorderThickness="1" 
                              ToolTip="{Binding Source=InputCommand, Converter={StaticResource ResourceKey=I18NConveter}}" 
-                             MouseDown="txtCmdInput_MouseDown"
-                             KeyDown="txtCmdInput_KeyDown"
+                             MouseDown="TxtCmdInput_MouseDown"
+                             KeyDown="TxtCmdInput_KeyDown"
                              />
 
                     <RichTextBox
