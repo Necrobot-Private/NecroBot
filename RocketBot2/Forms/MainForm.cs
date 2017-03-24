@@ -790,7 +790,7 @@ namespace RocketBot2.Forms
 
                 if (encounterPokemonsCount > 5 || encounterPokemonsCount == 0)
                 {
-                    Task.Run(InitializePokestopsAndRoute);
+                    Task.Run(InitializePokestopsAndRoute).ConfigureAwait(false);
                     encounterPokemonsCount = 0;
                 }
 
