@@ -484,7 +484,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="app.config" />
     <None Include="cert.pfx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -533,11 +532,11 @@
       <Project>{0739e40d-c589-4aeb-93e5-ee8cd6773c60}</Project>
       <Name>PoGo.NecroBot.Logic</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PoGo.NecroBot.CLI\PoGo.NecroBot.CLI.csproj">
+    <ProjectReference Include="$(SolutionDir)\PoGo.NecroBot.CLI\PoGo.NecroBot.CLI.csproj">
       <Project>{1fea147e-f704-497b-a538-00b053b5f672}</Project>
       <Name>PoGo.NecroBot.CLI</Name>
     </ProjectReference>
-    <ProjectReference Include="..\POGOProtos\POGOProtos.csproj">
+    <ProjectReference Include="$(SolutionDir)\POGOProtos\POGOProtos.csproj">
       <Project>{a03a7bb2-4f0b-467b-84b2-9a76e6aae6fb}</Project>
       <Name>POGOProtos</Name>
     </ProjectReference>
