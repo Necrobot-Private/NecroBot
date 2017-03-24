@@ -485,6 +485,7 @@ namespace RocketBot2
                 session.Translation.GetTranslation(TranslationString.LoggingIn, e.AuthType, e.Username),
                 LogLevel.Info, ConsoleColor.DarkYellow
             );
+            //activate auto refresh
             MainForm.Instance.checkBoxAutoRefresh.CheckState = System.Windows.Forms.CheckState.Indeterminate;
         }
 
