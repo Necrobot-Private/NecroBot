@@ -560,12 +560,9 @@ namespace RocketBot2.Forms
             _excelConfigAllow = excelConfigAllow;
         }
 
-#pragma warning disable 1998
-        private async Task StartBot()
+        private Task StartBot()
         {
-#pragma warning disable 4014
             _machine.AsyncStart(new Logic.State.VersionCheckState(), _session, _subPath, _excelConfigAllow);
-         
             try
             {
                 Console.Clear();
@@ -623,9 +620,8 @@ namespace RocketBot2.Forms
             }
 
             QuitEvent.WaitOne();
-#pragma warning restore 4014
+            return null;
         }
-#pragma warning restore 1998
 
         private Task InitializePokestopsAndRoute()
         {
