@@ -1227,10 +1227,9 @@ namespace RocketBot2.Forms
                 newName.Replace("{IS}", Convert.ToString(pokemon.IndividualStamina));
                 if (nickname.Length > 12)
                 {
-                    Logger.Write($"\"{newName}\" is too long, please choose another name");
+                    Logger.Write($"\"{newName}\" is too long, please choose another name", LogLevel.Error);
                     if (pokemonDatas.Count() == 1)
                     {
-                        SetState(true);
                         return;
                     }
                     continue;
@@ -1244,7 +1243,7 @@ namespace RocketBot2.Forms
         private async Task ReloadPokemonList()
         {
             if (!_botStarted) return;
-            SetState(false);
+            btnRefresh.Enabled = false;
             try
             {
                 if (_session.Client.Download.ItemTemplates == null)
@@ -1304,7 +1303,7 @@ namespace RocketBot2.Forms
                 {
                     flpItems.Controls.Clear();
                 }
-                catch
+                catch (Win32Exception)
                 {
                     //not implanted
                 }
@@ -1327,14 +1326,13 @@ namespace RocketBot2.Forms
             {
                 Logger.Write("Please start the bot or wait until login is finished before loading Pokemon List",
                     LogLevel.Warning);
-                SetState(true);
                 return;
             }
             catch (Exception ex)
             {
                 Logger.Write(ex.ToString(), LogLevel.Error);
             }
-            SetState(true);
+            btnRefresh.Enabled = false;
         }
 
         private async void ItemBox_ItemClick(object sender, EventArgs e)
@@ -1366,11 +1364,6 @@ namespace RocketBot2.Forms
                 if (!checkBoxAutoRefresh.Checked)
                     await ReloadPokemonList().ConfigureAwait(false);
             }
-        }
-
-        private void SetState(bool state)
-        {
-            btnRefresh.Enabled = state;
         }
 
         #endregion POKEMON LIST
