@@ -1314,7 +1314,7 @@ namespace RocketBot2.Forms
                 }
 
                 lblInventory.Text =
-                        $"Types: {items.Count()} / Total: {_session.Inventory.GetTotalItemCount().Result} / Storage: {_session.Client.Player.PlayerData.MaxItemStorage}";
+                        $"Types: {items.Count()} | Total: {_session.Inventory.GetTotalItemCount().Result} | Storage: {_session.Client.Player.PlayerData.MaxItemStorage}";
             }
             catch (ArgumentNullException)
             {
