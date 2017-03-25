@@ -1227,7 +1227,7 @@ namespace RocketBot2.Forms
                 newName.Replace("{IS}", Convert.ToString(pokemon.IndividualStamina));
                 if (nickname.Length > 12)
                 {
-                    Logger.Write($"\"{newName}\" is too long, please choose another name");
+                    Logger.Write($"\"{newName}\" is too long, please choose another name", LogLevel.Error);
                     if (pokemonDatas.Count() == 1)
                     {
                         SetState(true);
