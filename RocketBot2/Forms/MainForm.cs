@@ -1287,7 +1287,7 @@ namespace RocketBot2.Forms
                 var _totalData = PokeDex.Count();
 
                 lblPokemonList.Text = _session.Translation.GetTranslation(TranslationString.AmountPkmSeenCaught, _totalData, _totalCaptures) +
-                    $" | StarDust: {_session.Inventory.GetStarDust()} | Storage: {_session.Client.Player.PlayerData.MaxPokemonStorage} ({pokemons.Count()} Pokémons, {_session.Inventory.GetEggs().Result.Count()} Eggs)";
+                    $" | Storage: {_session.Client.Player.PlayerData.MaxPokemonStorage} ({pokemons.Count()} Pokémons, {_session.Inventory.GetEggs().Result.Count()} Eggs)";
 
                 var items =
                     _session.Inventory.GetItems().Result
@@ -1300,16 +1300,7 @@ namespace RocketBot2.Forms
                     .SelectMany(aItems => aItems.Item)
                     .ToDictionary(item => item.ItemId, item => new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(item.ExpireMs));
 
-                try
-                {
-                    var box = new PictureBox();
-                    flpItems.Controls.Add(box);
-                    flpItems.Controls.Clear();
-                }
-                catch
-                {
-                    //not implanted
-                }
+                flpItems.Controls.Clear();
 
                 foreach (var item in items)
                 {
