@@ -1287,7 +1287,7 @@ namespace RocketBot2.Forms
                 var _totalData = PokeDex.Count();
 
                 lblPokemonList.Text = _session.Translation.GetTranslation(TranslationString.AmountPkmSeenCaught, _totalData, _totalCaptures) +
-                    $" / StarDust {_session.Inventory.GetStarDust()} / Storage: {_session.Client.Player.PlayerData.MaxPokemonStorage} ({pokemons.Count()} Pokémons, {_session.Inventory.GetEggs().Result.Count()} Eggs)";
+                    $" | StarDust: {_session.Inventory.GetStarDust()} | Storage: {_session.Client.Player.PlayerData.MaxPokemonStorage} ({pokemons.Count()} Pokémons, {_session.Inventory.GetEggs().Result.Count()} Eggs)";
 
                 var items =
                     _session.Inventory.GetItems().Result
