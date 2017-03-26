@@ -62,6 +62,7 @@ namespace PoGo.Necrobot.Window.Model
                 return setting.Type.ToString() + ((setting.Type2 != PokemonType.None) ? "," + setting.Type2.ToString() : "");
             }
         }
+        public string Shiny => (pokemonData.PokemonDisplay.Shiny) ? "Yes" : "No";
         public string Sex => pokemonData.PokemonDisplay.Gender.ToString();
         public ulong Id
         {
