@@ -38,19 +38,7 @@ namespace PoGo.NecroBot.Logic.Event
         public long Expires;
         public string CatchTypeText;
         public string Rarity;
-        public string Shiny => (pokemonData.PokemonDisplay.Shiny) ? "Yes" : "No";
+        public string Shiny;
         public string Gender { get; internal set; }
-        private PokemonData pokemonData;
-        public PokemonData PokemonData
-        {
-            get
-            {
-                return pokemonData;
-            }
-            set
-            {
-                pokemonData = value;
-            }
-        }
      }
 }
