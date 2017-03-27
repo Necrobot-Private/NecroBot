@@ -52,4 +52,5 @@ namespace PoGo.NecroBot.Logic.Event
                 pokemonData = value;
             }
         }
+     }
 }
