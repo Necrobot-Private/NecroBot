@@ -624,7 +624,6 @@ namespace RocketBot2.Forms
             }
 
             QuitEvent.WaitOne();
-         //   return null;
             #pragma warning restore 4014
         }
 
@@ -792,7 +791,7 @@ namespace RocketBot2.Forms
 
                 if (encounterPokemonsCount > 5 || encounterPokemonsCount == 0)
                 {
-                    Task.Run(() => InitializePokestopsAndRoute());
+                    Task.Run(InitializePokestopsAndRoute);
                     encounterPokemonsCount = 0;
                 }
 
