@@ -47,65 +47,9 @@ namespace PoGo.NecroBot.Logic.Event
             {
                 return pokemonData;
             }
-
             set
             {
-                PokemonData oldData = pokemonData;
                 pokemonData = value;
-
-                if (oldData != null)
-                {
-                    if (oldData.Id != pokemonData.Id)
-                        RaisePropertyChanged("Id");
-
-                    if (oldData.Nickname != pokemonData.Nickname)
-                        RaisePropertyChanged("PokemonName");
-
-                    if (oldData.Cp != pokemonData.Cp)
-                    {
-                        RaisePropertyChanged("CP");
-                        RaisePropertyChanged("Level");
-                    }
-
-                    if (oldData.Stamina != pokemonData.Stamina)
-                        RaisePropertyChanged("HP");
-
-                    if (oldData.StaminaMax != pokemonData.StaminaMax)
-                        RaisePropertyChanged("MaxHP");
-
-                    if (oldData.Stamina != pokemonData.Stamina || oldData.StaminaMax != pokemonData.StaminaMax)
-                        RaisePropertyChanged("HPDisplay");
-
-                    RaisePropertyChanged("Candy");
-                    RaisePropertyChanged("AllowPowerup");
-                    RaisePropertyChanged("AllowEvolve");
-                    RaisePropertyChanged("AllowTransfer");
-
-                    // RaisePropertyChanged("IV");
-
-                    if (oldData.Favorite != pokemonData.Favorite)
-                        RaisePropertyChanged("Favorited");
-                }
-                else
-                {
-                    RaisePropertyChanged("Id");
-                    RaisePropertyChanged("PokemonName");
-                    RaisePropertyChanged("Candy");
-                    RaisePropertyChanged("AllowPowerup");
-                    RaisePropertyChanged("AllowEvolve");
-                    RaisePropertyChanged("AllowTransfer");
-                    RaisePropertyChanged("IV");
-                    RaisePropertyChanged("CP");
-                    RaisePropertyChanged("HP");
-                    RaisePropertyChanged("MaxHP");
-                    RaisePropertyChanged("HPDisplay");
-                    RaisePropertyChanged("Level");
-                    RaisePropertyChanged("Favorited");
-                    RaisePropertyChanged("Move1");
-                    RaisePropertyChanged("Move2");
-                    RaisePropertyChanged("PokemonIcon");
-                }
             }
-        }        
-    }
+        }
 }
