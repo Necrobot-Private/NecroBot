@@ -1,4 +1,4 @@
-#region using directives
+﻿#region using directives
 
 using System;
 using System.Globalization;
@@ -231,7 +231,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     if (session.LogicSettings.UseHumanlikeDelays)
                     {
-                        DelayingUtils.Delay(session.LogicSettings.BeforeCatchDelay, 0);
+                        await DelayingUtils.DelayAsync(session.LogicSettings.BeforeCatchDelay, 0, session.CancellationTokenSource.Token).ConfigureAwait(false);
                     }
 
                     if ((session.LogicSettings.MaxPokeballsPerPokemon > 0 &&
@@ -248,7 +248,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         });
                         return false;
                     }
-
+                                                                        
                     // Determine whether to use berries or not
                     if (lastThrow != CatchPokemonResponse.Types.CatchStatus.CatchMissed)
                     {
@@ -429,14 +429,15 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     if (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess)
                     {
-                        evt.Gender = (await session.Inventory.GetPokemons().ConfigureAwait(false)).First(x => x.Id == caughtPokemonResponse.CapturedPokemonId).PokemonDisplay.Gender.ToString();
                         if (session.LogicSettings.AutoFavoriteShinyOnCatch = true)
                         {
-                            if (caughtPokemonResponse.CapturedPokemonId).PokemonDisplay.Shiny = true)
+                            if ((caughtPokemonResponse.CapturedPokemonId).PokemonDisplay.Shiny = true)
                             {
                                 await FavoritePokemonTask.Excecute (session, encounteredPokemon.Id, true);
                             }
                         }
+                        evt.Gender = (await session.Inventory.GetPokemons().ConfigureAwait(false)).First(x => x.Id == caughtPokemonResponse.CapturedPokemonId).PokemonDisplay.Gender.ToString();
+
                         var totalExp = 0;
                         var totalStarDust = caughtPokemonResponse.CaptureAward.Stardust.Sum();
                         if (encounteredPokemon != null)
@@ -508,30 +509,30 @@ namespace PoGo.NecroBot.Logic.Tasks
                         switch (caughtPokemonResponse.Status)
                         {
                             case CatchPokemonResponse.Types.CatchStatus.CatchError:
-                                DelayingUtils.Delay(session.LogicSettings.CatchErrorDelay, 0);
+                                await DelayingUtils.DelayAsync(session.LogicSettings.CatchErrorDelay, 0, session.CancellationTokenSource.Token).ConfigureAwait(false);
                                 break;
 
                             case CatchPokemonResponse.Types.CatchStatus.CatchSuccess:
-                                DelayingUtils.Delay(session.LogicSettings.CatchSuccessDelay, 0);
+                                await DelayingUtils.DelayAsync(session.LogicSettings.CatchSuccessDelay, 0, session.CancellationTokenSource.Token).ConfigureAwait(false);
                                 break;
 
                             case CatchPokemonResponse.Types.CatchStatus.CatchEscape:
-                                DelayingUtils.Delay(session.LogicSettings.CatchEscapeDelay, 0);
+                                await DelayingUtils.DelayAsync(session.LogicSettings.CatchEscapeDelay, 0, session.CancellationTokenSource.Token).ConfigureAwait(false);
                                 break;
 
                             case CatchPokemonResponse.Types.CatchStatus.CatchFlee:
-                                DelayingUtils.Delay(session.LogicSettings.CatchFleeDelay, 0);
+                                await DelayingUtils.DelayAsync(session.LogicSettings.CatchFleeDelay, 0, session.CancellationTokenSource.Token).ConfigureAwait(false);
                                 break;
 
                             case CatchPokemonResponse.Types.CatchStatus.CatchMissed:
-                                DelayingUtils.Delay(session.LogicSettings.CatchMissedDelay, 0);
+                                await DelayingUtils.DelayAsync(session.LogicSettings.CatchMissedDelay, 0, session.CancellationTokenSource.Token).ConfigureAwait(false);
                                 break;
 
                             default:
                                 break;
                         }
                     }
-                    else DelayingUtils.Delay(session.LogicSettings.DelayBetweenPlayerActions, 0);
+                    else await DelayingUtils.DelayAsync(session.LogicSettings.DelayBetweenPlayerActions, 0, session.CancellationTokenSource.Token).ConfigureAwait(false);
                 } while (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchMissed ||
                          caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchEscape);
 
