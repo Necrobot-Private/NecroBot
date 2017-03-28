@@ -429,9 +429,9 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     if (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess)
                     {
-                        if (session.LogicSettings.AutoFavoriteShinyOnCatch = true)
+                        if (session.LogicSettings.AutoFavoriteShinyOnCatch)
                         {
-                            if ((caughtPokemonResponse.CapturedPokemonId).PokemonDisplay.Shiny = true)
+                            if ((caughtPokemonResponse.CapturedPokemonId).PokemonDisplay.Shiny)
                             {
                                 await FavoritePokemonTask.Excecute (session, encounteredPokemon.Id, true);
                             }
