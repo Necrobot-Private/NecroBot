@@ -1022,9 +1022,11 @@ namespace RocketBot2.Forms
                     // ReSharper disable once PossibleNullReferenceException
                     .Count(p => p == pok.PokemonId) > 1)
                     e.Item.BackColor = Color.LightGreen;
+                e.Item.BackColor = pok.Favorited ? Color.LightYellow : e.Item.BackColor;
 
                 var text = string.IsNullOrEmpty(pok.Nickname) ? _session.Translation.GetPokemonTranslation(pok.PokemonId) : pok.Nickname;
                 e.Item.Text = pok.Favorited ? $"★ {text}" : text;
+
 
                 foreach (OLVListSubItem sub in e.Item.SubItems)
                 {
