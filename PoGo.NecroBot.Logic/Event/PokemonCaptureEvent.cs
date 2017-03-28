@@ -38,7 +38,7 @@ namespace PoGo.NecroBot.Logic.Event
         public long Expires;
         public string CatchTypeText;
         public string Rarity;
-        public string Shiny {get; internal set;}
+        public string Shiny {get; set;}
         public string Gender { get; internal set; }
      }
 }
