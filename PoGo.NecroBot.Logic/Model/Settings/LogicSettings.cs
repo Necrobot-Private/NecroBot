@@ -171,6 +171,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public string FavoriteOperator => _settings.PokemonConfig.FavoriteOperator.ToString();
 
         public bool AutoFavoritePokemon => _settings.PokemonConfig.AutoFavoritePokemon;
+        public bool AutoFavoriteShinyOnCatch => _settings.PokemonConfig.AutoFavoriteShinyOnCatch;
         public string RenameTemplate => _settings.PokemonConfig.RenameTemplate;
         public int AmountOfPokemonToDisplayOnStart => _settings.ConsoleConfig.AmountOfPokemonToDisplayOnStart;
         public bool DumpPokemonStats => _settings.PokemonConfig.DumpPokemonStats;

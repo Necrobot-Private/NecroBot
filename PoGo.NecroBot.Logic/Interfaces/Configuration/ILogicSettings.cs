@@ -107,6 +107,7 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         int FavoriteMinLevel { get; }
         string FavoriteOperator { get; }
         bool AutoFavoritePokemon { get; }
+        bool AutoFavoriteShinyOnCatch { get; }
         string RenameTemplate { get; }
         int AmountOfPokemonToDisplayOnStart { get; }
         string TranslationLanguageCode { get; }

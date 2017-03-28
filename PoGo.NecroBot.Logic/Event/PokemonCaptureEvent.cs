@@ -4,6 +4,7 @@ using POGOProtos.Enums;
 using POGOProtos.Inventory;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Networking.Responses;
+using POGOProtos.Data;
 
 #endregion
 
@@ -37,7 +38,7 @@ namespace PoGo.NecroBot.Logic.Event
         public long Expires;
         public string CatchTypeText;
         public string Rarity;
-
+        public string Shiny {get; set;}
         public string Gender { get; internal set; }
-    }
+     }
 }
