@@ -436,7 +436,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         {
                             if (evt.Shiny == "Yes")
                             {
-                                await FavoritePokemonTask.Excecute (session, encounteredPokemon.Id, true);
+                                await FavoritePokemonTask.Execute (session, encounteredPokemon.Id, true);
                             }
                         }
                         var totalExp = 0;
