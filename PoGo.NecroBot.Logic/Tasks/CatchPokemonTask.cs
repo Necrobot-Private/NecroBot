@@ -433,7 +433,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         {
                             if ((caughtPokemonResponse.CapturedPokemonId).PokemonDisplay.Shiny)
                             {
-                                await FavoritePokemonTask.Excecute (session, encounteredPokemon.Id, true);
+                                await FavoritePokemonTask.Execute (session, encounteredPokemon.Id, true);
                             }
                         }
                         evt.Gender = (await session.Inventory.GetPokemons().ConfigureAwait(false)).First(x => x.Id == caughtPokemonResponse.CapturedPokemonId).PokemonDisplay.Gender.ToString();
