@@ -294,6 +294,7 @@ namespace PoGo.NecroBot.CLI
                     pokemonCaptureEvent.Longitude.ToString("0.000000"),
                     pokemonCaptureEvent.Move1, pokemonCaptureEvent.Move2, pokemonCaptureEvent.Rarity,
                     pokemonCaptureEvent.CaptureReason,
+                    pokemonCaptureEvent.Shiny,
                     pokemonCaptureEvent.Gender
                 );
                 Logger.Write(message, LogLevel.Caught);
