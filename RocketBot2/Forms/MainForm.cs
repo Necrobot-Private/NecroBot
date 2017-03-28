@@ -868,6 +868,8 @@ namespace RocketBot2.Forms
             Instance.statusLabel.Text = text;
             Console.Title = text;
 
+            SetState(true);
+
             if (checkBoxAutoRefresh.Checked)
                 await ReloadPokemonList().ConfigureAwait(false);
         }
@@ -1248,19 +1250,13 @@ namespace RocketBot2.Forms
             }
         }
 
-        private async Task ReloadPokemonList()
+        private Task ReloadPokemonList()
         {
-            if (!_botStarted)
-            {
-                Logger.Write("Please start the bot or wait until login is finished before loading Pokemon List",
-                    LogLevel.Warning);
-                return;
-            }
             SetState(false);
             try
             {
                 if (_session.Client.Download.ItemTemplates == null)
-                    await _session.Client.Download.GetItemTemplates().ConfigureAwait(false);
+                     _session.Client.Download.GetItemTemplates().ConfigureAwait(false);
 
                 var templates = _session.Client.Download.ItemTemplates.Where(x => x.PokemonSettings != null)
                         .Select(x => x.PokemonSettings)
@@ -1332,14 +1328,13 @@ namespace RocketBot2.Forms
             {
                 Logger.Write("Please start the bot or wait until login is finished before loading Pokemon List",
                     LogLevel.Warning);
-                SetState(true);
-                return;
             }
             catch (Exception ex)
             {
                 Logger.Write(ex.ToString(), LogLevel.Error);
             }
             SetState(true);
+            return Task.CompletedTask;
         }
 
         private async void ItemBox_ItemClick(object sender, EventArgs e)
