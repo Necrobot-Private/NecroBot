@@ -429,8 +429,16 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     if (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess)
                     {
-                        evt.Gender = (await session.Inventory.GetPokemons().ConfigureAwait(false)).First(x => x.Id == caughtPokemonResponse.CapturedPokemonId).PokemonDisplay.Gender.ToString();
 
+                        evt.Shiny = (await session.Inventory.GetPokemons().ConfigureAwait(false)).First(x => x.Id == caughtPokemonResponse.CapturedPokemonId).PokemonDisplay.Shiny ? "Yes" : "No";
+                        evt.Gender = (await session.Inventory.GetPokemons().ConfigureAwait(false)).First(x => x.Id == caughtPokemonResponse.CapturedPokemonId).PokemonDisplay.Gender.ToString();
+                        if (session.LogicSettings.AutoFavoriteShinyOnCatch)
+                        {
+                            if (evt.Shiny == "Yes")
+                            {
+                                await FavoritePokemonTask.Execute (session, encounteredPokemon.Id, true);
+                            }
+                        }
                         var totalExp = 0;
                         var totalStarDust = caughtPokemonResponse.CaptureAward.Stardust.Sum();
                         if (encounteredPokemon != null)
