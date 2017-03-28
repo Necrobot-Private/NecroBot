@@ -131,6 +131,9 @@ namespace PoGo.NecroBot.Logic.Common
         [Description("Do you want to transfer {0} IV:{1:0.00}% Level:{2}")]
         public string TransferConfirmText { get; set; }
 
+        [Description("Shiny")]
+        public string Shiny { get; set; }
+
         [Description("Sex")]
         public string Sex { get; set; }
 
