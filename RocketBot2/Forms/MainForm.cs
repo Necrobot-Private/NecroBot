@@ -868,9 +868,6 @@ namespace RocketBot2.Forms
             Instance.statusLabel.Text = text;
             Console.Title = text;
 
-            //activate auto refresh
-            Instance.btnRefresh.Enabled = !Instance.checkBoxAutoRefresh.Checked;
-
             if (checkBoxAutoRefresh.Checked)
                 await ReloadPokemonList().ConfigureAwait(false);
         }
@@ -989,6 +986,7 @@ namespace RocketBot2.Forms
 
         private void checkBoxAutoRefresh_CheckedChanged(object sender, EventArgs e)
         {
+            if (Instance._botStarted)
             Instance.btnRefresh.Enabled = !Instance.checkBoxAutoRefresh.Checked;
         }
 
@@ -1377,6 +1375,7 @@ namespace RocketBot2.Forms
 
         private void SetState(bool state)
         {
+            if (Instance.checkBoxAutoRefresh.Checked) state = false;
             Instance.btnRefresh.Enabled = state;
         }
 
