@@ -134,25 +134,18 @@ namespace RocketBot2.Helpers
             }
         }
 
-        public static Image GetImage(string name)
+        public static Image GetImage(string name, int pokemonId = 0, bool isShiny = false)
         {
-            var strSplit = name.Split('_');
-            if (strSplit.Length > 1)
+            if (pokemonId > 0)
             {
-                var strStatus = strSplit[0];
-                var id = strSplit[1];
-
-                if (strStatus.ToLower().Contains("pokemon"))
-                {
-                    return GetPokemonImage(Convert.ToInt32(id));  
-                }
+                return GetPokemonImage(pokemonId, isShiny);
             }
             return (Image)Properties.Resources.ResourceManager.GetObject(name);
         }
 
-        public static Image GetImage(string name, int maxHeight, int maxWidth)
+        public static Image GetImage(string name, int pokemonId = 0, bool isShiny = false, int maxHeight = 0, int maxWidth = 0)
         {
-                var image = GetImage(name);
+                var image = GetImage(name, pokemonId, isShiny);
                 var ratioX = (double)maxWidth /  image.Width;
                 var ratioY = (double)maxHeight / image.Height;
                 var ratio = Math.Min(ratioX, ratioY);
@@ -167,8 +160,12 @@ namespace RocketBot2.Helpers
                 return  newImage;
         }
 
-        public static Image GetPokemonImage(int pokemonId)
+        public static Image GetPokemonImage(int pokemonId, bool isShiny = false)
         {
+            if (isShiny)
+            {
+                return LoadPicture($"https://raw.githubusercontent.com/Necrobot-Private/PokemonGO-Assets/master/pokemon-shiny/{(int)pokemonId}.png");
+            }
             return LoadPicture($"http://assets.pokemon.com/assets/cms2/img/pokedex/full/{(int)pokemonId:000}.png");
         }
 
