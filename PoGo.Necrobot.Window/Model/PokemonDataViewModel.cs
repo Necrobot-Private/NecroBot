@@ -310,7 +310,11 @@ namespace PoGo.Necrobot.Window.Model
         {
             get
             {
-                return $"http://assets.pokemon.com/assets/cms2/img/pokedex/full/{(int)PokemonData.PokemonId:000}.png";
+                if (pokemonData.PokemonDisplay.Shiny)
+                {
+                    return $"https://raw.githubusercontent.com/Necrobot-Private/PokemonGO-Assets/master/pokemon-shiny/{(int)PokemonData.PokemonId:000}.png";
+                }
+                return $"https://raw.githubusercontent.com/Necrobot-Private/PokemonGO-Assets/master/pokemon/{(int)PokemonData.PokemonId:000}.png";
             }
         }
 
