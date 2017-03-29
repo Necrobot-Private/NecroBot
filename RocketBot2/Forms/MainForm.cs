@@ -131,7 +131,7 @@ namespace RocketBot2.Forms
             gMapControl1.Overlays.Add(_playerOverlay);
             gMapControl1.Overlays.Add(_playerRouteOverlay);
 
-            _playerMarker = new GMapMarkerTrainer(new PointLatLng(lat, lng), ResourceHelper.GetImage("PlayerLocation", null, null, 50, 50));
+            _playerMarker = new GMapMarkerTrainer(new PointLatLng(lat, lng), ResourceHelper.GetImage("PlayerLocation", 50, 50));
             _playerOverlay.Markers.Add(_playerMarker);
             _playerMarker.Position = new PointLatLng(lat, lng);
             _searchAreaOverlay.Polygons.Clear();
@@ -539,8 +539,7 @@ namespace RocketBot2.Forms
                     {
                         if (!Instance._botStarted)
                             _session.ReInitSessionWithNextBot(_bot);
-                        if (_item.Text == _bot.Username)
-                            accountManager.SwitchAccountTo(_bot);
+                        accountManager.SwitchAccountTo(_bot);
                     };
                     accountsToolStripMenuItem.DropDownItems.Add(_item);
                 }
@@ -660,27 +659,27 @@ namespace RocketBot2.Forms
                     switch (pokeStop.Type)
                     {
                         case FortType.Checkpoint:
-                            fort = ResourceHelper.GetImage("Pokestop", null, null);
+                            fort = ResourceHelper.GetImage("Pokestop");
                             break;
                         case FortType.Gym:
                             switch (pokeStop.OwnedByTeam)
                             {
                                 case POGOProtos.Enums.TeamColor.Neutral:
-                                    fort = ResourceHelper.GetImage("GymVide", null, null);
+                                    fort = ResourceHelper.GetImage("GymVide");
                                     break;
                                 case POGOProtos.Enums.TeamColor.Blue:
-                                    fort = ResourceHelper.GetImage("GymBlue", null, null);
+                                    fort = ResourceHelper.GetImage("GymBlue");
                                     break;
                                 case POGOProtos.Enums.TeamColor.Red:
-                                    fort = ResourceHelper.GetImage("GymRed", null, null);
+                                    fort = ResourceHelper.GetImage("GymRed");
                                     break;
                                 case POGOProtos.Enums.TeamColor.Yellow:
-                                    fort = ResourceHelper.GetImage("GymYellow", null, null);
+                                    fort = ResourceHelper.GetImage("GymYellow");
                                     break;
                             }
                             break;
                         default:
-                            fort = ResourceHelper.GetImage("Pokestop", null, null);
+                            fort = ResourceHelper.GetImage("Pokestop");
                             break;
                     }
                     var pokestopMarker = new GMapMarkerPokestops(pokeStopLoc, fort);
@@ -700,8 +699,8 @@ namespace RocketBot2.Forms
                 _playerOverlay.Markers.Remove(_playerMarker);
                 if (!_currentLatLng.IsEmpty)
                     _playerMarker = _currentLatLng.Lng < latlng.Lng
-                        ? new GMapMarkerTrainer(latlng, ResourceHelper.GetImage("PlayerLocation2", null, null, 50, 50))
-                        : new GMapMarkerTrainer(latlng, ResourceHelper.GetImage("PlayerLocation", null, null, 50, 50));
+                        ? new GMapMarkerTrainer(latlng, ResourceHelper.GetImage("PlayerLocation2", 50, 50))
+                        : new GMapMarkerTrainer(latlng, ResourceHelper.GetImage("PlayerLocation", 50, 50));
                 _playerOverlay.Markers.Add(_playerMarker);
                 if (followTrainerCheckBox.Checked)
                     gMapControl1.Position = latlng;
@@ -765,7 +764,7 @@ namespace RocketBot2.Forms
                         {
                             _pokestopsOverlay.Markers.Remove(marker);
                             var pokestopMarker = new GMapMarkerPokestops(pokeStopLoc,
-                               ResourceHelper.GetImage("Pokestop_looted", null, null));
+                               ResourceHelper.GetImage("Pokestop_looted"));
                             //pokestopMarker.ToolTipMode = MarkerTooltipMode.OnMouseOver;
                             //pokestopMarker.ToolTip = new GMapBaloonToolTip(pokestopMarker);
                             _pokestopsOverlay.Markers.Add(pokestopMarker);
@@ -781,7 +780,7 @@ namespace RocketBot2.Forms
             {
                 foreach (var pokemon in encounterPokemons)
                 {
-                    var pkmImage = ResourceHelper.GetImage(null, null, pokemon, 36, 36);
+                    var pkmImage = ResourceHelper.GetImage("Pokemon_" + pokemon.PokemonId.GetHashCode(), 36, 36);
                     var pointLatLng = new PointLatLng(pokemon.Latitude, pokemon.Longitude);
                     GMapMarker pkmMarker = new GMapMarkerTrainer(pointLatLng, pkmImage);
                     _pokemonsOverlay.Markers.Add(pkmMarker);
@@ -1203,7 +1202,7 @@ namespace RocketBot2.Forms
                 foreach (var to in pok.EvolutionBranchs)
                 {
                     var item = new PictureBox();
-                    item.Image = ResourceHelper.GetImage(null, pokemon, null, item.Height, item.Width);
+                    item.Image = ResourceHelper.GetImage("Pokemon_" + to.Pokemon.GetHashCode(), item.Height, item.Width);
                     item.Click += async delegate
                     {
                         await Task.Run(async () => { await EvolveSpecificPokemonTask.Execute(_session, to.OriginPokemonId, to.Pokemon); });

@@ -187,7 +187,7 @@ namespace RocketBot2.Helpers
         {
             get
             {
-                return ResourceHelper.GetPokemonImage(this.PokemonData);
+                return ResourceHelper.GetPokemonImage((int)this.PokemonData.PokemonId);
             }
         }
                
