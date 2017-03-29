@@ -24,6 +24,7 @@ using TinyIoC;
 using POGOProtos.Enums;
 using System.Collections.Generic;
 using PoGo.NecroBot.Logic;
+using PoGo.NecroBot.Logic.Logging;
 using System.Collections.ObjectModel;
 #endregion
 
@@ -437,6 +438,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                             if (evt.Shiny == "Yes")
                             {
                                 await FavoritePokemonTask.Execute (session, encounteredPokemon.Id, true);
+                                Logger.Write($"Shiny {encounteredPokemon.Id} (Caught) has been auto-favorited.");
                             }
                         }
                         var totalExp = 0;
