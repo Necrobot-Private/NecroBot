@@ -312,9 +312,9 @@ namespace PoGo.Necrobot.Window.Model
             {
                 if (pokemonData.PokemonDisplay.Shiny)
                 {
-                    return $"https://raw.githubusercontent.com/Necrobot-Private/PokemonGO-Assets/master/pokemon-shiny/{(int)PokemonData.PokemonId}.png";
+                    return $"https://raw.githubusercontent.com/Necrobot-Private/PokemonGO-Assets/master/pokemon-shiny/{(int)PokemonData.PokemonId:000}.png";
                 }
-                return $"https://raw.githubusercontent.com/Necrobot-Private/PokemonGO-Assets/master/pokemon/{(int)PokemonData.PokemonId}.png";
+                return $"https://raw.githubusercontent.com/Necrobot-Private/PokemonGO-Assets/master/pokemon/{(int)PokemonData.PokemonId:000}.png";
             }
         }
 
