@@ -283,7 +283,7 @@ namespace RocketBot2.Forms
             var btn = new Button {Size = new Size(25, GoogleApiBox.ClientSize.Height + 2)};
             btn.Location = new Point(GoogleApiBox.ClientSize.Width - btn.Width, -1);
             btn.Cursor = Cursors.Default;
-            btn.Image = ResourceHelper.GetImage("question",0 ,false);
+            btn.Image = ResourceHelper.GetImage("question");
             btn.Click += googleapihep_click;
             GoogleApiBox.Controls.Add(btn);
             // Send EM_SETMARGINS to prevent text from disappearing underneath the button

@@ -134,6 +134,11 @@ namespace RocketBot2.Helpers
             }
         }
 
+        public static Image GetImage(string name)
+        {
+            return GetImage(name, 0, false);
+        }
+
         public static Image GetImage(string name, int pokemonId = 0, bool isShiny = false)
         {
             if (pokemonId > 0)
@@ -164,9 +169,10 @@ namespace RocketBot2.Helpers
         {
             if (isShiny)
             {
-                return LoadPicture($"https://raw.githubusercontent.com/Necrobot-Private/PokemonGO-Assets/master/pokemon-shiny/{(int)pokemonId}.png");
+                return LoadPicture($"https://raw.githubusercontent.com/Necrobot-Private/PokemonGO-Assets/master/pokemon-shiny/{(int)pokemonId:000}.png");
             }
-            return LoadPicture($"http://assets.pokemon.com/assets/cms2/img/pokedex/full/{(int)pokemonId:000}.png");
+            return LoadPicture($"https://raw.githubusercontent.com/Necrobot-Private/PokemonGO-Assets/master/pokemon/{(int)pokemonId:000}.png");
+            //return LoadPicture($"http://assets.pokemon.com/assets/cms2/img/pokedex/full/{(int)pokemonId:000}.png");
         }
 
 #region Image Utilities
