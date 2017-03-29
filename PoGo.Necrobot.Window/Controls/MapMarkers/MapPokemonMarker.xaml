@@ -6,7 +6,7 @@
     <Grid>
         <Button Background="Transparent" BorderThickness="0">
             <Image Name="icon" 
-               Source="{Binding Path=PokemonIcon, FallbackValue=http://www.serebii.net/pokemongo/pokemon/145.png}" 
+               Source="{Binding Path=PokemonIcon, FallbackValue=https://raw.githubusercontent.com/Necrobot-Private/PokemonGO-Assets/master/pokemon/145.png}" 
                VerticalAlignment="Center" 
                HorizontalAlignment="Center" 
                IsHitTestVisible="false" 

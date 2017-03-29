@@ -17,7 +17,7 @@ namespace PoGo.Necrobot.Window.Converters
         {
             var pokemonId = (PokemonId)value;
 
-            return $"http://www.serebii.net/pokemongo/pokemon/{(int)pokemonId:000}.png";
+            return $"https://raw.githubusercontent.com/Necrobot-Private/PokemonGO-Assets/master/pokemon/{(int)pokemonId:000}.png";
 
         }
 
