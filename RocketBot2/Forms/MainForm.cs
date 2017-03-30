@@ -50,6 +50,8 @@ namespace RocketBot2.Forms
 {
     public partial class MainForm : System.Windows.Forms.Form
     {
+        #region INITIALIZE
+
         public static MainForm Instance;
         public static SynchronizationContext SynchronizationContext;
         private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
@@ -111,34 +113,10 @@ namespace RocketBot2.Forms
             ConsoleHelper.HideConsoleWindow();
         }
 
-        private void InitializeMap()
-        {
-            var lat = _session.Client.Settings.DefaultLatitude;
-            var lng = _session.Client.Settings.DefaultLongitude;
-            gMapControl1.MapProvider = GoogleMapProvider.Instance;
-            gMapControl1.Manager.Mode = AccessMode.ServerOnly;
-            GMapProvider.WebProxy = null;
-            gMapControl1.Position = new PointLatLng(lat, lng);
-            gMapControl1.DragButton = MouseButtons.Left;
+        #endregion
 
-            gMapControl1.MinZoom = 2;
-            gMapControl1.MaxZoom = 18;
-            gMapControl1.Zoom = 15;
+        #region ROCKETBOT INIT -> START
 
-            gMapControl1.Overlays.Add(_searchAreaOverlay);
-            gMapControl1.Overlays.Add(_pokestopsOverlay);
-            gMapControl1.Overlays.Add(_pokemonsOverlay);
-            gMapControl1.Overlays.Add(_playerOverlay);
-            gMapControl1.Overlays.Add(_playerRouteOverlay);
-
-            _playerMarker = new GMapMarkerTrainer(new PointLatLng(lat, lng), ResourceHelper.GetImage("PlayerLocation", 0, false, 50, 50));
-            _playerOverlay.Markers.Add(_playerMarker);
-            _playerMarker.Position = new PointLatLng(lat, lng);
-            _searchAreaOverlay.Polygons.Clear();
-            S2GMapDrawer.DrawS2Cells(S2Helper.GetNearbyCellIds(lng, lat), _searchAreaOverlay);
-        }
-
-        #region Bot 
         private void InitializeBot(Action<ISession, StatisticsAggregator> onBotStarted)
         {
             var ioc = TinyIoC.TinyIoCContainer.Current;
@@ -557,7 +535,8 @@ namespace RocketBot2.Forms
             _excelConfigAllow = excelConfigAllow;
         }
 
-        private Task StartBot()
+#pragma warning disable CS1998, CS4014
+        private async Task StartBot()
         {
             _machine.AsyncStart(new Logic.State.VersionCheckState(), _session, _subPath, _excelConfigAllow);
 
@@ -588,7 +567,7 @@ namespace RocketBot2.Forms
 
             if (_session.LogicSettings.DataSharingConfig.EnableSyncData)
             {
-                BotDataSocketClient.StartAsync(_session);
+                 BotDataSocketClient.StartAsync(_session);
                 _session.EventDispatcher.EventReceived += evt => BotDataSocketClient.Listen(evt, _session);
             }
             _settings.CheckProxy(_session.Translation);
@@ -618,12 +597,40 @@ namespace RocketBot2.Forms
             }
 
             QuitEvent.WaitOne();
-            return Task.CompletedTask;
+            //return Task.CompletedTask;
             //return new Task(() => { });
         }
+#pragma warning restore CS1998, CS4014
         #endregion
 
-        #region UPDATEMAP
+        #region GMAP
+
+        private void InitializeMap()
+        {
+            var lat = _session.Client.Settings.DefaultLatitude;
+            var lng = _session.Client.Settings.DefaultLongitude;
+            gMapControl1.MapProvider = GoogleMapProvider.Instance;
+            gMapControl1.Manager.Mode = AccessMode.ServerOnly;
+            GMapProvider.WebProxy = null;
+            gMapControl1.Position = new PointLatLng(lat, lng);
+            gMapControl1.DragButton = MouseButtons.Left;
+
+            gMapControl1.MinZoom = 2;
+            gMapControl1.MaxZoom = 18;
+            gMapControl1.Zoom = 15;
+
+            gMapControl1.Overlays.Add(_searchAreaOverlay);
+            gMapControl1.Overlays.Add(_pokestopsOverlay);
+            gMapControl1.Overlays.Add(_pokemonsOverlay);
+            gMapControl1.Overlays.Add(_playerOverlay);
+            gMapControl1.Overlays.Add(_playerRouteOverlay);
+
+            _playerMarker = new GMapMarkerTrainer(new PointLatLng(lat, lng), ResourceHelper.GetImage("PlayerLocation", 0, false, 50, 50));
+            _playerOverlay.Markers.Add(_playerMarker);
+            _playerMarker.Position = new PointLatLng(lat, lng);
+            _searchAreaOverlay.Polygons.Clear();
+            S2GMapDrawer.DrawS2Cells(S2Helper.GetNearbyCellIds(lng, lat), _searchAreaOverlay);
+        }
 
         private Task InitializePokestopsAndRoute()
         {
@@ -1308,7 +1315,7 @@ namespace RocketBot2.Forms
                     .SelectMany(aItems => aItems.Item)
                     .ToDictionary(item => item.ItemId, item => new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(item.ExpireMs));
 
-                Instance.flpItems.Controls.Clear();
+                flpItemsClean();
 
                 foreach (var item in items)
                 {
@@ -1335,6 +1342,11 @@ namespace RocketBot2.Forms
             }
             Instance.SetState(true);
             return Task.CompletedTask;
+        }
+
+        private static void flpItemsClean()
+        {
+            Instance.flpItems.Controls.Clear();
         }
 
         private async void ItemBox_ItemClick(object sender, EventArgs e)
@@ -1376,7 +1388,8 @@ namespace RocketBot2.Forms
 
         #endregion POKEMON LIST
 
-        //**** Program functions
+        #region PROGRAM CLIENT FUNCTIONS
+
         private static void EventDispatcher_EventReceived(IEvent evt)
         {
             throw new NotImplementedException();
@@ -1516,5 +1529,6 @@ namespace RocketBot2.Forms
             }
             return false;
         }
+        #endregion
     }
 }
