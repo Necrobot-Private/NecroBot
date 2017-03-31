@@ -14,7 +14,6 @@ using PoGo.NecroBot.Logic.Model.Settings;
 using PoGo.NecroBot.Logic.PoGoUtils;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Utils;
-using PokemonGo.RocketAPI.Enums;
 using POGOProtos.Data;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Map.Fort;
@@ -23,9 +22,6 @@ using POGOProtos.Networking.Responses;
 using TinyIoC;
 using POGOProtos.Enums;
 using System.Collections.Generic;
-using PoGo.NecroBot.Logic;
-using PoGo.NecroBot.Logic.Logging;
-using System.Collections.ObjectModel;
 #endregion
 
 namespace PoGo.NecroBot.Logic.Tasks
