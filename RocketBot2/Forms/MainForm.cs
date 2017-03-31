@@ -293,6 +293,8 @@ namespace RocketBot2.Forms
             return Task.CompletedTask;
         }
 
+        private int encounterPokemonsCount;
+
         private void Navigation_UpdatePositionEvent(double lat, double lng)
         {
             var latlng = new PointLatLng(lat, lng);
@@ -326,7 +328,29 @@ namespace RocketBot2.Forms
             }, null);
         }
 
-        private int encounterPokemonsCount;
+        private void UpdateMap(FortData pokestop)
+        {
+            SynchronizationContext.Post(o =>
+            {
+                var pokeStopLoc = new PointLatLng(pokestop.Latitude, pokestop.Longitude);
+                lock (_pokestopsOverlay.Markers)
+                {
+                    for (var i = 0; i < _pokestopsOverlay.Markers.Count; i++)
+                    {
+                        var marker = _pokestopsOverlay.Markers[i];
+                        if (marker.Position == pokeStopLoc)
+                        {
+                            _pokestopsOverlay.Markers.Remove(marker);
+                            var pokestopMarker = new GMapMarkerPokestops(pokeStopLoc,
+                               ResourceHelper.GetImage("Pokestop_looted"));
+                            //pokestopMarker.ToolTipMode = MarkerTooltipMode.OnMouseOver;
+                            //pokestopMarker.ToolTip = new GMapBaloonToolTip(pokestopMarker);
+                            _pokestopsOverlay.Markers.Add(pokestopMarker);
+                        }
+                    }
+                }
+            }, null);
+        }
 
         private void UpdateMap(List<GeoCoordinate> points)
         {
@@ -352,30 +376,6 @@ namespace RocketBot2.Forms
                 _playerRouteOverlay.Routes.Clear();
                 Navigation_UpdatePositionEvent(_session.Client.CurrentLatitude, _session.Client.CurrentLongitude);
                 _playerRouteOverlay.Routes.Add(routes);
-            }, null);
-        }
-
-        private void UpdateMap(FortData pokestop)
-        {
-            SynchronizationContext.Post(o =>
-            {
-                var pokeStopLoc = new PointLatLng(pokestop.Latitude, pokestop.Longitude);
-                lock (_pokestopsOverlay.Markers)
-                {
-                    for (var i = 0; i < _pokestopsOverlay.Markers.Count; i++)
-                    {
-                        var marker = _pokestopsOverlay.Markers[i];
-                        if (marker.Position == pokeStopLoc)
-                        {
-                            _pokestopsOverlay.Markers.Remove(marker);
-                            var pokestopMarker = new GMapMarkerPokestops(pokeStopLoc,
-                               ResourceHelper.GetImage("Pokestop_looted"));
-                            //pokestopMarker.ToolTipMode = MarkerTooltipMode.OnMouseOver;
-                            //pokestopMarker.ToolTip = new GMapBaloonToolTip(pokestopMarker);
-                            _pokestopsOverlay.Markers.Add(pokestopMarker);
-                        }
-                    }
-                }
             }, null);
         }
 
@@ -857,7 +857,7 @@ namespace RocketBot2.Forms
             return Task.CompletedTask;
         }
 
-        private static void flpItemsClean()
+        private void flpItemsClean()
         {
             if (Instance.InvokeRequired)
             {
