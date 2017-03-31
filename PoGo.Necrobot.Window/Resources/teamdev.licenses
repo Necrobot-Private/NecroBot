@@ -1,11 +1,13 @@
 Product: DotNetBrowser
 Version: 1.x
 Licensed to: 
-License type: Evaluation
-License info: Single-user license
-Expiration date: 22-04-2017
-Generation date: 23-03-2017
+License type: Runtime
+License info: Not for development
+Product binding: Bound to type name
+Product binding info: hacieagriitzvivq74jc2vbkcf87q93dnn2kijgapj2obolrdcsrdjypj
+Expiration date: NEVER
+Generation date: 24-03-2017
 Platforms: win32/x86;win32/x64
-Company name: NO COMPANY
-SigB: 4ojaebn5gpguhcn9y2ypa8kd9cl1fckra9iabgow2enf9zt7wcuo1hi1dqlrit7z7yfkpvwijhspb68m
-SigA: xtcjqii2svwz4ki7izaokllo837u4thgzouzjl6ts62dhbudwkrx3jdlxy1ma6siwqmdk0s9j7n7b7zu
+Company name: NecroBot
+SigB: e4f572zc9pp4i7954jzk8an53rz8d540rez8iczmye9tvkevpfclgyd0onl4tc1xh63k17v7fv8mr1c4
+SigA: 9uu3v7jojcw05lt6mzea5sp7zrfhhx3jmkbets6b2f4btj7fc2epv2gyd9nzkd33rl4njrlzfi5mtcd2
