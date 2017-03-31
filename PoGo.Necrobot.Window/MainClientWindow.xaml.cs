@@ -53,24 +53,24 @@ namespace PoGo.Necrobot.Window
                 { LogLevel.Gym,"Magenta" },
                 { LogLevel.Service ,"White" }
             };
-
-        BrowserView webView;
+			
+			BrowserView webView;
         
         public MainClientWindow()
         {
             InitializeComponent();
 
-            datacontext = new Model.DataContext()
+            datacontext = new DataContext()
             {
                 PlayerInfo = new PlayerInfoModel() { Exp = 0 }
             };
 
             this.DataContext = datacontext;
             txtCmdInput.Text = TinyIoCContainer.Current.Resolve<UITranslation>().InputCommand; 
-            InitBrowser();
+			InitBrowser();
         }
-
-        private void InitBrowser()
+		
+		private void InitBrowser()
         {
             webView = new WPFBrowserView(BrowserFactory.Create());
             browserLayout.Children.Add((UIElement)webView.GetComponent());
@@ -78,8 +78,8 @@ namespace PoGo.Necrobot.Window
 
             string path = System.Reflection.Assembly.GetExecutingAssembly().Location;
             
-            string appDir = Path.GetDirectoryName(path);
-            var uri = new Uri(Path.Combine(appDir, @"PokeEase\index.html"));
+            string appDir = System.IO.Path.GetDirectoryName(path);
+            var uri = new Uri(System.IO.Path.Combine(appDir, @"PokeEase\index.html"));
 
             webView.Browser.LoadURL(uri.ToString());
         }
@@ -146,7 +146,7 @@ namespace PoGo.Necrobot.Window
             lblCount.Text = $"Select : {numberSelected}";
         }
         bool isConsoleShowing = false;
-        private void menuConsole_Click(object sender, RoutedEventArgs e)
+        private void MenuConsole_Click(object sender, RoutedEventArgs e)
         {
             var translator = TinyIoCContainer.Current.Resolve<UITranslation>();
 
@@ -165,13 +165,13 @@ namespace PoGo.Necrobot.Window
             isConsoleShowing = !isConsoleShowing;
         }
 
-        private void menuSetting_Click(object sender, RoutedEventArgs e)
+        private void MenuSetting_Click(object sender, RoutedEventArgs e)
         {
-            var configWindow = new SettingsWindow(this, System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "config\\config.json"));
+            var configWindow = new SettingsWindow(this, System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config\\config.json"));
             configWindow.ShowDialog();         
         }
 
-        private void btnHideInfo_Click(object sender, RoutedEventArgs e)
+        private void BtnHideInfo_Click(object sender, RoutedEventArgs e)
         {
             var translator = TinyIoCContainer.Current.Resolve<UITranslation>();
 
@@ -189,8 +189,10 @@ namespace PoGo.Necrobot.Window
 
         private void ChangeThemeTo(string color)
         {
-            ResourceDictionary dict = new ResourceDictionary();
-            dict.Source = new Uri($"pack://application:,,,/MahApps.Metro;component/Styles/Accents/{color}.xaml", UriKind.Absolute);
+            ResourceDictionary dict = new ResourceDictionary()
+            {
+                Source = new Uri($"pack://application:,,,/MahApps.Metro;component/Styles/Accents/{color}.xaml", UriKind.Absolute)
+            };
             var theme = Application.Current.Resources.MergedDictionaries.LastOrDefault();
             Application.Current.Resources.MergedDictionaries.Add(dict);
             Application.Current.Resources.MergedDictionaries.Remove(theme);
@@ -208,7 +210,7 @@ namespace PoGo.Necrobot.Window
             ChangeThemeTo(rad.Content as string);
         }
 
-        private void txtCmdInput_KeyDown(object sender, KeyEventArgs e)
+        private void TxtCmdInput_KeyDown(object sender, KeyEventArgs e)
         {
 
             if(e.Key == Key.Enter)
@@ -218,12 +220,12 @@ namespace PoGo.Necrobot.Window
             }
         }
 
-        private void txtCmdInput_MouseDown(object sender, MouseButtonEventArgs e)
+        private void TxtCmdInput_MouseDown(object sender, MouseButtonEventArgs e)
         {
             txtCmdInput.Text = "";
         }
 
-        private void tabMain_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void TabMain_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems != null && e.AddedItems.Count > 0)
             {
@@ -239,12 +241,12 @@ namespace PoGo.Necrobot.Window
             }
         }
         
-        private void btnDonate_Click(object sender, RoutedEventArgs e)
+        private void BtnDonate_Click(object sender, RoutedEventArgs e)
         {
             Process.Start("http://snipe.necrobot2.com?donate");
         }
 
-        private void btnSwitchAcount_Click(object sender, RoutedEventArgs e)
+        private void BtnSwitchAcount_Click(object sender, RoutedEventArgs e)
         {
             var btn = ((Button)sender);
             var account = (MultiAccountManager.BotAccount)btn.CommandParameter ;
@@ -293,14 +295,14 @@ namespace PoGo.Necrobot.Window
             popHelpArticles.IsOpen = false;
         }
 
-        private void btnExit_Click(object sender, RoutedEventArgs e)
+        private void BtnExit_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
         }
         
         private void MetroWindow_Initialized(object sender, EventArgs e)
         {
-            if(System.Windows.SystemParameters.PrimaryScreenWidth<1366)
+            if(SystemParameters.PrimaryScreenWidth<1366)
             this.WindowState = WindowState.Maximized;
         }
     }

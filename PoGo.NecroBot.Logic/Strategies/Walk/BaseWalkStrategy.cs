@@ -22,7 +22,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
         protected double _minStepLengthInMeters = 1.3d;
         protected bool isCancelled = false;
         protected readonly Random _randWalking = new Random();
-        protected IWalkStrategy _fallbackStrategy;
+        //protected IWalkStrategy _fallbackStrategy;
 
         public event UpdatePositionDelegate UpdatePositionEvent;
 
