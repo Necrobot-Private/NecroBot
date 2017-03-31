@@ -19,6 +19,7 @@ using PoGo.NecroBot.Logic.Logging;
 using PokemonGo.RocketAPI.Extensions;
 using PokemonGo.RocketAPI.Helpers;
 using System.Net.Http;
+using static POGOProtos.Networking.Envelopes.Signature.Types;
 
 #endregion
 
