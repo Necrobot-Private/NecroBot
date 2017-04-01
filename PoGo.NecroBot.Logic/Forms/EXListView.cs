@@ -58,7 +58,7 @@ namespace PoGo.NecroBot.Logic.Forms
         }
         
         private void ScrollMe(int x, int y) {
-            SendMessage((IntPtr)Handle, LVM_SCROLL, x, y);
+            SendMessage(Handle, LVM_SCROLL, x, y);
         }
         
         public EXListView() {
