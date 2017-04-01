@@ -76,7 +76,7 @@ namespace PoGo.Necrobot.Window.Model
         {
             get
             {
-                var additonal = "";
+                var additional = "";
                 if (PokemonData.PokemonId.ToString().Equals("Pikachu") || PokemonData.PokemonId.ToString().Equals("Raichu"))
                 {
                     additional += pokemonData.PokemonDisplay.Costume.ToString();
