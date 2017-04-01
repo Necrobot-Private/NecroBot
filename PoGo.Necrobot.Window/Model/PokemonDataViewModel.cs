@@ -80,8 +80,9 @@ namespace PoGo.Necrobot.Window.Model
                 if (PokemonData.PokemonId.ToString().Equals("Pikachu") || PokemonData.PokemonId.ToString().Equals("Raichu"))
                 {
                     additional += pokemonData.PokemonDisplay.Costume.ToString();
+                    return (PokemonData.PokemonId.ToString() + additional);
                 }
-                return string.IsNullOrEmpty(PokemonData.Nickname) ? (PokemonData.PokemonId.ToString() + additional) : PokemonData.Nickname;
+                return string.IsNullOrEmpty(PokemonData.Nickname) ? PokemonData.PokemonId.ToString() : PokemonData.Nickname;
             }
 
             set
@@ -322,13 +323,12 @@ namespace PoGo.Necrobot.Window.Model
                 }
                 if (pokemonData.PokemonDisplay.Form != POGOProtos.Enums.Form.Unset)
                 {
-                    additional += pokemonData.PokemonDisplay.Form.ToString().Replace("Unown","").Replace("ExclamationPoint","!").Replace("QuestionMark","?");
+                    additional = additional + "-" + pokemonData.PokemonDisplay.Form.ToString().Replace("Unown","").Replace("ExclamationPoint","!").Replace("QuestionMark","?");
                 }
                 if (pokemonData.PokemonDisplay.Shiny)
                 {
-                    additional += "shiny";
+                    additional += "-shiny";
                 }
-                additional = "-" + additional;
                 return $"https://raw.githubusercontent.com/Necrobot-Private/PokemonGO-Assets/master/pokemon/{(int)PokemonData.PokemonId:000}{additional}.png";
             }
         }
