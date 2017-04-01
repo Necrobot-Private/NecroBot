@@ -328,7 +328,8 @@ namespace PoGo.Necrobot.Window.Model
                 {
                     additional += "shiny";
                 }
-                return $"https://raw.githubusercontent.com/Necrobot-Private/PokemonGO-Assets/master/pokemon/{(int)PokemonData.PokemonId:000}-{additional}.png";
+                additional = "-" + additional;
+                return $"https://raw.githubusercontent.com/Necrobot-Private/PokemonGO-Assets/master/pokemon/{(int)PokemonData.PokemonId:000}{additional}.png";
             }
         }
 
