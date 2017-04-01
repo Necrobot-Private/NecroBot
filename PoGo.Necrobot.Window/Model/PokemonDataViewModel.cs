@@ -76,7 +76,12 @@ namespace PoGo.Necrobot.Window.Model
         {
             get
             {
-                return string.IsNullOrEmpty(PokemonData.Nickname) ? PokemonData.PokemonId.ToString() : PokemonData.Nickname;
+                var additonal = "";
+                if (PokemonData.PokemonId.ToString().Equals("Pikachu") || PokemonData.PokemonId.ToString().Equals("Raichu"))
+                {
+                    additional += pokemonData.PokemonDisplay.Costume.ToString();
+                }
+                return string.IsNullOrEmpty(PokemonData.Nickname) ? (PokemonData.PokemonId.ToString() + additional) : PokemonData.Nickname;
             }
 
             set
