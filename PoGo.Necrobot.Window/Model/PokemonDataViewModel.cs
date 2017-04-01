@@ -76,12 +76,6 @@ namespace PoGo.Necrobot.Window.Model
         {
             get
             {
-                var additional = "";
-                if (PokemonData.PokemonId.ToString().Equals("Pikachu") || PokemonData.PokemonId.ToString().Equals("Raichu"))
-                {
-                    additional += pokemonData.PokemonDisplay.Costume.ToString();
-                    return (PokemonData.PokemonId.ToString() + additional);
-                }
                 return string.IsNullOrEmpty(PokemonData.Nickname) ? PokemonData.PokemonId.ToString() : PokemonData.Nickname;
             }
 
@@ -319,7 +313,7 @@ namespace PoGo.Necrobot.Window.Model
                 var additional = "";
                 if (pokemonData.PokemonDisplay.Costume != Costume.Unset)
                 {
-                    additional += pokemonData.PokemonDisplay.Costume.ToString();
+                    additional = additional + "-" + pokemonData.PokemonDisplay.Costume.ToString();
                 }
                 if (pokemonData.PokemonDisplay.Form != POGOProtos.Enums.Form.Unset)
                 {
