@@ -318,7 +318,7 @@ namespace PoGo.Necrobot.Window.Model
                 var additional = "";
                 if (pokemonData.PokemonDisplay.Costume != Costume.Unset)
                 {
-                    additional += pokemon.PokemonDisplay.Costume.ToString();
+                    additional += pokemonData.PokemonDisplay.Costume.ToString();
                 }
                 if (pokemonData.PokemonDisplay.Form != POGOProtos.Enums.Form.Unset)
                 {
@@ -328,7 +328,7 @@ namespace PoGo.Necrobot.Window.Model
                 {
                     additional += "shiny";
                 }
-                return $"https://raw.githubusercontent.com/Necrobot-Private/PokemonGO-Assets/master/pokemon/{(int)PokemonData.PokemonId:000}-{form}.png";
+                return $"https://raw.githubusercontent.com/Necrobot-Private/PokemonGO-Assets/master/pokemon/{(int)PokemonData.PokemonId:000}-{additional}.png";
             }
         }
 
