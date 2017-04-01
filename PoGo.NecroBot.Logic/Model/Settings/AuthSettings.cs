@@ -20,6 +20,7 @@ using PokemonGo.RocketAPI.Extensions;
 using PokemonGo.RocketAPI.Helpers;
 using System.Net.Http;
 using POGOProtos.Networking.Envelopes;
+using static POGOProtos.Networking.Envelopes.Signature.Types;
 
 #endregion
 
