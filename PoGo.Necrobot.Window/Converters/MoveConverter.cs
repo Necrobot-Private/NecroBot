@@ -1,10 +1,7 @@
 ﻿using POGOProtos.Enums;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace PoGo.Necrobot.Window.Converters
@@ -38,8 +35,8 @@ namespace PoGo.Necrobot.Window.Converters
 
                 if(movesStr.Length == 2)
                 {
-                    Enum.TryParse<PokemonMove>(movesStr[0], out move1);
-                    Enum.TryParse<PokemonMove>(movesStr[0], out move2);
+                    Enum.TryParse(movesStr[0], out move1);
+                    Enum.TryParse(movesStr[0], out move2);
 
                     if(move1 != PokemonMove.MoveUnset && move2 != PokemonMove.MoveUnset)
                     {

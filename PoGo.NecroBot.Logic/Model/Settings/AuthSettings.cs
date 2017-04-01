@@ -19,7 +19,7 @@ using PoGo.NecroBot.Logic.Logging;
 using PokemonGo.RocketAPI.Extensions;
 using PokemonGo.RocketAPI.Helpers;
 using System.Net.Http;
-using static POGOProtos.Networking.Envelopes.Signature.Types;
+using POGOProtos.Networking.Envelopes;
 
 #endregion
 
@@ -418,10 +418,12 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                                 // If not found then we need to insert it.
                                 if (foundBot == null)
                                 {
-                                    JObject newBot = new JObject();
-                                    newBot["Username"] = username;
-                                    newBot["Password"] = password;
-                                    newBot["AuthType"] = authType;
+                                    JObject newBot = new JObject
+                                    {
+                                        ["Username"] = username,
+                                        ["Password"] = password,
+                                        ["AuthType"] = authType
+                                    };
                                     ((JArray)settings["Bots"]).Insert(0, newBot);
                                 }
                             }
@@ -464,8 +466,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             // validate Json using JsonSchema
             Logger.Write("Validating auth.json...");
             var jsonObj = JObject.Parse(output);
-            IList<ValidationError> errors;
-            var valid = jsonObj.IsValid(JsonSchema, out errors);
+            var valid = jsonObj.IsValid(JsonSchema, out IList<ValidationError> errors);
             if (valid) return;
             foreach (var error in errors)
             {
@@ -511,7 +512,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                     var responseContent = client.GetAsync("https://api.ipify.org/?format=text").Result;
                     var proxiedIPres = responseContent.Content.ReadAsStringAsync().Result;
 
-                    var proxiedIp = proxiedIPres == null ? "INVALID PROXY" : proxiedIPres;
+                    var proxiedIp = proxiedIPres ?? "INVALID PROXY";
                     Logger.Write(translator.GetTranslation(TranslationString.Proxied, unproxiedIp, proxiedIp),
                         LogLevel.Info, unproxiedIp == proxiedIp ? ConsoleColor.Red : ConsoleColor.Green);
 
@@ -568,7 +569,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             }
         }
 
-        private void SetDevInfoByDeviceInfo(DeviceInfo deviceInfo)
+        private void SetDevInfoByDeviceInfo(Signature.Types.DeviceInfo deviceInfo)
         {
             DeviceConfig.AndroidBoardName = deviceInfo.AndroidBoardName;
             DeviceConfig.AndroidBootloader = deviceInfo.AndroidBootloader;

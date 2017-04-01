@@ -88,7 +88,7 @@
             this.Step1.Size = new System.Drawing.Size(374, 88);
             this.Step1.TabIndex = 0;
             this.Step1.Text = "Select  Gender";
-            this.Step1.Initialize += new System.EventHandler<AeroWizard.WizardPageInitEventArgs>(this.wizardPage1_Initialize);
+            this.Step1.Initialize += new System.EventHandler<AeroWizard.WizardPageInitEventArgs>(this.WizardPage1_Initialize);
             // 
             // rdoFemale
             // 
@@ -123,7 +123,7 @@
             this.SavingGender_Page.Size = new System.Drawing.Size(374, 88);
             this.SavingGender_Page.TabIndex = 3;
             this.SavingGender_Page.Text = "Working in progress";
-            this.SavingGender_Page.Initialize += new System.EventHandler<AeroWizard.WizardPageInitEventArgs>(this.wizardPage4_Initialize);
+            this.SavingGender_Page.Initialize += new System.EventHandler<AeroWizard.WizardPageInitEventArgs>(this.WizardPage4_Initialize);
             // 
             // pictureBox3
             // 
@@ -155,7 +155,7 @@
             this.Step2.Size = new System.Drawing.Size(374, 88);
             this.Step2.TabIndex = 1;
             this.Step2.Text = "First Catch";
-            this.Step2.Initialize += new System.EventHandler<AeroWizard.WizardPageInitEventArgs>(this.wizardPage2_Initialize);
+            this.Step2.Initialize += new System.EventHandler<AeroWizard.WizardPageInitEventArgs>(this.WizardPage2_Initialize);
             // 
             // rdoCharmander
             // 
@@ -199,7 +199,7 @@
             this.Step2_2.Size = new System.Drawing.Size(374, 88);
             this.Step2_2.TabIndex = 2;
             this.Step2_2.Text = "Working in progress";
-            this.Step2_2.Initialize += new System.EventHandler<AeroWizard.WizardPageInitEventArgs>(this.wizardPage3_Initialize);
+            this.Step2_2.Initialize += new System.EventHandler<AeroWizard.WizardPageInitEventArgs>(this.WizardPage3_Initialize);
             // 
             // pictureBox2
             // 
@@ -228,7 +228,7 @@
             this.Step3.Size = new System.Drawing.Size(374, 88);
             this.Step3.TabIndex = 4;
             this.Step3.Text = "Select Nickname";
-            this.Step3.Initialize += new System.EventHandler<AeroWizard.WizardPageInitEventArgs>(this.wizardPage5_Initialize);
+            this.Step3.Initialize += new System.EventHandler<AeroWizard.WizardPageInitEventArgs>(this.WizardPage5_Initialize);
             // 
             // lblNameError
             // 
@@ -268,7 +268,7 @@
             this.Step3_3.Size = new System.Drawing.Size(374, 88);
             this.Step3_3.TabIndex = 5;
             this.Step3_3.Text = "Working ‌ in progress";
-            this.Step3_3.Initialize += new System.EventHandler<AeroWizard.WizardPageInitEventArgs>(this.wizardPage6_Initialize);
+            this.Step3_3.Initialize += new System.EventHandler<AeroWizard.WizardPageInitEventArgs>(this.WizardPage6_Initialize);
             // 
             // pictureBox1
             // 

@@ -167,18 +167,19 @@ namespace PoGo.NecroBot.Logic.Tasks
                     session.Client.CurrentLongitude, latitude, longitude);
                 if (session.LogicSettings.ActivateMSniper)
                 {
-                    var newdata = new MSniperServiceTask.EncounterInfo();
-                    newdata.EncounterId = _encounterId.ToString();
-                    newdata.Iv = Math.Round(pokemonIv, 2);
-                    newdata.Latitude = latitude.ToString("G17", CultureInfo.InvariantCulture);
-                    newdata.Longitude = longitude.ToString("G17", CultureInfo.InvariantCulture);
-                    newdata.PokemonId = (int)(encounteredPokemon?.PokemonId ?? 0);
-                    newdata.PokemonName = encounteredPokemon?.PokemonId.ToString();
-                    newdata.SpawnPointId = _spawnPointId;
-                    newdata.Move1 = PokemonInfo.GetPokemonMove1(encounteredPokemon).ToString();
-                    newdata.Move2 = PokemonInfo.GetPokemonMove2(encounteredPokemon).ToString();
-                    newdata.Expiration = unixTimeStamp;
-
+                    var newdata = new MSniperServiceTask.EncounterInfo()
+                    {
+                        EncounterId = _encounterId.ToString(),
+                        Iv = Math.Round(pokemonIv, 2),
+                        Latitude = latitude.ToString("G17", CultureInfo.InvariantCulture),
+                        Longitude = longitude.ToString("G17", CultureInfo.InvariantCulture),
+                        PokemonId = (int)(encounteredPokemon?.PokemonId ?? 0),
+                        PokemonName = encounteredPokemon?.PokemonId.ToString(),
+                        SpawnPointId = _spawnPointId,
+                        Move1 = PokemonInfo.GetPokemonMove1(encounteredPokemon).ToString(),
+                        Move2 = PokemonInfo.GetPokemonMove2(encounteredPokemon).ToString(),
+                        Expiration = unixTimeStamp
+                    };
                     session.EventDispatcher.Send(newdata);
                 }
 
@@ -245,22 +246,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                         });
                         return false;
                     }
-                                                                        
+
                     // Determine whether to use berries or not
-                    if (lastThrow != CatchPokemonResponse.Types.CatchStatus.CatchMissed)
-                    {
-                        //AmountOfBerries++;
-                        //if (AmountOfBerries <= session.LogicSettings.MaxBerriesToUsePerPokemon)
-                        await UseBerry(session,
-                            encounterEV.PokemonId,
-                            _encounterId,
-                            _spawnPointId,
-                            pokemonIv,
-                            pokemonCp.HasValue ? pokemonCp.Value : 10000,  //unknow CP pokemon, want to use berry
-                            encounterEV.Level,
-                            probability,
-                            cancellationToken).ConfigureAwait(false);
-                    }
+                    await NewMethod(session, probability, _encounterId, _spawnPointId, pokemonCp, pokemonIv, encounterEV, lastThrow, cancellationToken);
 
                     bool hitPokemon = true;
 
@@ -339,7 +327,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     {
                         MSniperServiceTask.BlockSnipe();
 
-                        if( totalBalls <= BALL_REQUIRED_TO_BYPASS_CATCHFLEE)
+                        if (totalBalls <= BALL_REQUIRED_TO_BYPASS_CATCHFLEE)
                         {
                             Logger.Write("You don't enought ball to  by pass catchflee");
                             return false;
@@ -366,9 +354,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                         bool catchMissed = true;
 
                         Random r = new Random();
-                        for (int i = 0; i < ballToByPass.Count -1; i++)
+                        for (int i = 0; i < ballToByPass.Count - 1; i++)
                         {
-                            if(i>130 && r.Next(0,100)<=30)
+                            if (i > 130 && r.Next(0, 100) <= 30)
                             {
                                 catchMissed = false;
                             }
@@ -411,7 +399,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                     : currentFortData.Id, pokeball, normalizedRecticleSize, spinModifier, hitPokemon).ConfigureAwait(false);
                         await session.Inventory.UpdateInventoryItem(pokeball).ConfigureAwait(false);
                     }
-                    
+
 
                     var evt = new PokemonCaptureEvent()
                     {
@@ -433,8 +421,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                         {
                             if (evt.Shiny == "Yes")
                             {
-                                await FavoritePokemonTask.Execute (session, encounteredPokemon.Id, true);
-                                Logger.Write($"Shiny {encounteredPokemon.Id} (Caught) has been auto-favorited.");
+                                await FavoritePokemonTask.Execute(session, encounteredPokemon.Id, true);
+                                Logger.Write($"Shiny Pokemon {encounteredPokemon.Id} has been Caught and auto-favorited.");
                             }
                         }
                         var totalExp = 0;
@@ -590,6 +578,29 @@ namespace PoGo.NecroBot.Logic.Tasks
             return true;
         }
 
+        private static async Task NewMethod(ISession session, float probability, ulong _encounterId, string _spawnPointId, int? pokemonCp, double pokemonIv, EncounteredEvent encounterEV, CatchPokemonResponse.Types.CatchStatus lastThrow, CancellationToken cancellationToken)
+        {
+            if (lastThrow != GetCatchMissed())
+            {
+                //AmountOfBerries++;
+                //if (AmountOfBerries <= session.LogicSettings.MaxBerriesToUsePerPokemon)
+                await UseBerry(session,
+                    encounterEV.PokemonId,
+                    _encounterId,
+                    _spawnPointId,
+                    pokemonIv,
+                    pokemonCp ?? 10000,  //unknown CP pokemon, want to use berry
+                    encounterEV.Level,
+                    probability,
+                    cancellationToken).ConfigureAwait(false);
+            }
+        }
+
+        private static CatchPokemonResponse.Types.CatchStatus GetCatchMissed()
+        {
+            return CatchPokemonResponse.Types.CatchStatus.CatchMissed;
+        }
+
         private static void ExecuteSwitcher(ISession session, EncounteredEvent encounterEV, string cacheKey)
         {
             //if distance is very far. that is snip pokemon
@@ -626,7 +637,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         (PokemonMove)Enum.Parse(typeof(PokemonMove), encounterEV.Move2),
                         encounterEV.Level, true))
                     {
-                        //thow
+                        //throw
                         throw new ActiveSwitchByPokemonException()
                         {
                             EncounterData = encounterEV,

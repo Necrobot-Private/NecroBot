@@ -55,7 +55,7 @@ namespace PoGo.NecroBot.Logic.Service
                         HttpResponseMessage responseMessage = await client.GetAsync(url).ConfigureAwait(false);
                         var resposta = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
                         var google = JsonConvert.DeserializeObject<DirectionsResponse>(resposta);
-                        if (google.status.Equals("OVER_QUERY_LIMIT"))
+                        if (google.Status.Equals("OVER_QUERY_LIMIT"))
                         {
                             // If we get an error, don't cache empty GoogleResult.  Just return null.
                             return null;

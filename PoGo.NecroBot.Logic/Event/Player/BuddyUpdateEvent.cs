@@ -11,7 +11,7 @@ namespace PoGo.NecroBot.Logic.Event.Player
         public BuddyUpdateEvent(BuddyPokemon updatedBuddy, PokemonData pkm)
         {
             Buddy = updatedBuddy;
-            this.Pokemon = pkm;
+            Pokemon = pkm;
         }
     }
 }

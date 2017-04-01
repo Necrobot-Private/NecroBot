@@ -4,7 +4,7 @@
 <br />
 [![Download Latest Version](https://api.bintray.com/packages/necrobot-private/NecroBot2/NecroBot/images/download.svg?version=1.0.0.145) ](https://bintray.com/necrobot-private/NecroBot2/NecroBot/1.0.0.145/link)
 
-<h1>Necrobot2 is now compatible with 0.57.4 API.</h1>
+<h1>Necrobot2 is now compatible with 0.59.2 API.</h1>
 
 <p>
 Necrobot2 itself is free but now you will need to purchase an API key from Bossland in order to run the bot.
@@ -42,7 +42,7 @@ Please visit our website [http://necrobot2.com](http://necrobot2.com) to find so
 
 <br/>
 
-## `Third Party Dependencies`
+## Third Party Dependencies
 
 NecroBot uses DotNetBrowser http://www.teamdev.com/dotnetbrowser, which is a proprietary software. The use of DotNetBrowser is governed by DotNetBrowser Product Licence Agreement http://www.teamdev.com/jxbrowser-licence-agreement. If you would like to use DotNetBrowser in your development, please contact TeamDev.
 

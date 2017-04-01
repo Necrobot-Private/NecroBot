@@ -11,12 +11,12 @@ namespace PoGo.Necrobot.Window.Model
         public int TotalItem { get { return Items.Count; } }
         public ItemsListViewModel()
         {
-            this.Items = new ObservableCollection<ItemsViewModel>();
+            Items = new ObservableCollection<ItemsViewModel>();
         }
 
         public void SyncSelectedValues()
         {
-            foreach (var item in this.Items)
+            foreach (var item in Items)
             {
                 item.SelectedValue = item.ItemCount;
                 item.RaisePropertyChanged("SelectedValue");
@@ -27,10 +27,10 @@ namespace PoGo.Necrobot.Window.Model
         {
             foreach (var item in items)
             {
-                var existing = this.Items.FirstOrDefault(x => x.ItemId == item.ItemId);
+                var existing = Items.FirstOrDefault(x => x.ItemId == item.ItemId);
                 if (existing == null)
                 {
-                    this.Items.Add(new ItemsViewModel()
+                    Items.Add(new ItemsViewModel()
                     {
                         Name = item.ItemId.ToString().Replace("Item", "").Replace("Basic", "").Replace("Unlimited", "(∞)").Replace("Ordinary", "").Replace("TroyDisk", "Lure"),
                         ItemId = item.ItemId,
@@ -58,7 +58,7 @@ namespace PoGo.Necrobot.Window.Model
                     existing.RaisePropertyChanged("AllowDrop");
                 }
             }
-            this.RaisePropertyChanged("TotalItem");
+            RaisePropertyChanged("TotalItem");
         }
 
         internal void Drop(ItemsViewModel item)
@@ -71,7 +71,7 @@ namespace PoGo.Necrobot.Window.Model
 
         internal ItemsViewModel Get(ItemId itemId)
         {
-            return this.Items.FirstOrDefault(x => x.ItemId == itemId);
+            return Items.FirstOrDefault(x => x.ItemId == itemId);
         }
     }
 }

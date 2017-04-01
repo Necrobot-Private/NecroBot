@@ -6,28 +6,28 @@ namespace PoGo.NecroBot.Logic.Model.Yours
 {
     public class RoutingResponse
     {
-        public string type { get; set; }
-        public Crs crs { get; set; }
-        public List<List<double>> coordinates { get; set; }
-        public Properties2 properties { get; set; }
+        public string Type { get; set; }
+        public Crs Crs { get; set; }
+        public List<List<double>> Coordinates { get; set; }
+        public Properties2 Properties { get; set; }
     }
 
     public class Properties
     {
-        public string name { get; set; }
+        public string Name { get; set; }
     }
 
     public class Crs
     {
-        public string type { get; set; }
-        public Properties properties { get; set; }
+        public string Type { get; set; }
+        public Properties Properties { get; set; }
     }
 
     public class Properties2
     {
-        public string distance { get; set; }
-        public string description { get; set; }
-        public string traveltime { get; set; }
+        public string Distance { get; set; }
+        public string Description { get; set; }
+        public string Traveltime { get; set; }
     }
 
     public class YoursWalk
@@ -39,10 +39,10 @@ namespace PoGo.NecroBot.Logic.Model.Yours
         {
             RoutingResponse yoursResponseParsed = JsonConvert.DeserializeObject<RoutingResponse>(yoursResponse);
 
-            Distance = double.Parse(yoursResponseParsed.properties.distance) * 1000;
+            Distance = double.Parse(yoursResponseParsed.Properties.Distance) * 1000;
 
             Waypoints = new List<GeoCoordinate>();
-            foreach (List<double> coordinate in yoursResponseParsed.coordinates)
+            foreach (List<double> coordinate in yoursResponseParsed.Coordinates)
             {
                 Waypoints.Add(new GeoCoordinate(coordinate.ToArray()[1], coordinate.ToArray()[0]));
             }

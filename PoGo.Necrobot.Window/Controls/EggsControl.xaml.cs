@@ -1,7 +1,6 @@
 ﻿using PoGo.Necrobot.Window.Model;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Tasks;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -28,7 +27,7 @@ namespace PoGo.Necrobot.Window.Controls
 
             var eggId = (ulong)((Button)sender).CommandParameter;
             var incubator = lsIncubators.SelectedItem as IncubatorViewModel;
-            await UseIncubatorsTask.Execute(this.Session, this.Session.CancellationTokenSource.Token, eggId, incubator.Id);
+            await UseIncubatorsTask.Execute(Session, Session.CancellationTokenSource.Token, eggId, incubator.Id);
         }
     }
 }

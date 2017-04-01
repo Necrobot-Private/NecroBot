@@ -2,8 +2,8 @@
 {
     public class GeocodedWaypoints
     {
-        public string geocoder_status { get; set; }
-        public string place_id { get; set; }
-        public string[] types { get; set; }
+        public string Geocoder_status { get; set; }
+        public string Place_id { get; set; }
+        public string[] Types { get; set; }
     }
 }

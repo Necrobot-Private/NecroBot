@@ -2,7 +2,7 @@
 {
     public class Bounds
     {
-        public Geo northeast { get; set; }
-        public Geo southwest { get; set; }
+        public Geo Northeast { get; set; }
+        public Geo Southwest { get; set; }
     }
 }

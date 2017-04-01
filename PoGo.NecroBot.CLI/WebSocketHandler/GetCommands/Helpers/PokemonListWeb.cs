@@ -1,12 +1,8 @@
 ﻿#region using directives
 
-using System.Collections.Generic;
 using PoGo.NecroBot.Logic.PoGoUtils;
 using POGOProtos.Data;
-using POGOProtos.Inventory;
-using POGOProtos.Settings.Master;
 using PoGo.NecroBot.Logic.State;
-using System.Threading.Tasks;
 
 #endregion
 

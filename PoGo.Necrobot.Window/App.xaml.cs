@@ -24,7 +24,7 @@ namespace PoGo.Necrobot.Window
         {
             ShutdownMode = ShutdownMode.OnLastWindowClose;
             AppDomain currentDomain = AppDomain.CurrentDomain;
-            currentDomain.UnhandledException += new UnhandledExceptionEventHandler(this.ErrorHandler);
+            currentDomain.UnhandledException += new UnhandledExceptionEventHandler(ErrorHandler);
         }
         
         private void ErrorHandler(object sender, UnhandledExceptionEventArgs e)
@@ -93,7 +93,7 @@ namespace PoGo.Necrobot.Window
         }
         public void OnBotStartedEventHandler(ISession session, StatisticsAggregator stat)
         {
-            this.Dispatcher.Invoke(() =>
+            Dispatcher.Invoke(() =>
             {
                 var main = MainWindow as MainClientWindow;
                 main.OnBotStartedEventHandler(session, stat);

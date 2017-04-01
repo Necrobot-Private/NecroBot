@@ -32,7 +32,7 @@ namespace PoGo.NecroBot.Logic.Utils
             return fileContent;
         }
 
-        private static StringContent addContent(string name, string content)
+        private static StringContent AddContent(string name, string content)
         {
             var fileContent = new StringContent(content);
             fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
@@ -132,9 +132,9 @@ namespace PoGo.NecroBot.Logic.Utils
             {
                 using (var multiPartCont = new MultipartFormDataContent())
                 {
-                    multiPartCont.Add(addContent("type", "note"));
-                    multiPartCont.Add(addContent("title", title));
-                    multiPartCont.Add(addContent("body", body));
+                    multiPartCont.Add(AddContent("type", "note"));
+                    multiPartCont.Add(AddContent("title", title));
+                    multiPartCont.Add(AddContent("body", body));
                     //multiPartCont.Add(AddContent(new FileStream(pathFile, FileMode.Open), name));
 
                     try

@@ -127,11 +127,12 @@ namespace PoGo.NecroBot.Logic.Captcha.Anti_Captcha
                 throw new Exception("Recaptcha Website Key is incorrect!");
             }
 
-            var jObj = new JObject();
-
-            jObj["softId"] = 2;
-            jObj["clientKey"] = clientKey;
-            jObj["task"] = new JObject();
+            var jObj = new JObject
+            {
+                ["softId"] = 2,
+                ["clientKey"] = clientKey,
+                ["task"] = new JObject()
+            };
             jObj["task"]["type"] = type;
             jObj["task"]["websiteURL"] = websiteUrl;
             jObj["task"]["websiteKey"] = websiteKey;
@@ -262,11 +263,12 @@ namespace PoGo.NecroBot.Logic.Captcha.Anti_Captcha
                 // ignored
             }
 
-            var jObj = new JObject();
-
-            jObj["softId"] = 2;
-            jObj["clientKey"] = clientKey;
-            jObj["task"] = new JObject();
+            var jObj = new JObject
+            {
+                ["softId"] = 2,
+                ["clientKey"] = clientKey,
+                ["task"] = new JObject()
+            };
             jObj["task"]["type"] = "ImageToTextTask";
             jObj["task"]["body"] = pathToImageOrBase64Body.Replace("\r", "").Replace("\n", "").Trim();
 
@@ -366,11 +368,11 @@ namespace PoGo.NecroBot.Logic.Captcha.Anti_Captcha
 
         public static AnticaptchaResult GetTaskResult(string host, string clientKey, AnticaptchaTask task)
         {
-            var jObj = new JObject();
-
-            jObj["clientKey"] = clientKey;
-            jObj["taskId"] = task.GetTaskId();
-
+            var jObj = new JObject
+            {
+                ["clientKey"] = clientKey,
+                ["taskId"] = task.GetTaskId()
+            };
             try
             {
                 dynamic resultJson = JsonPostRequest(host, "getTaskResult",

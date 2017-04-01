@@ -1,4 +1,3 @@
-using System;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Collections;
@@ -12,8 +11,8 @@ namespace PoGo.NecroBot.Logic.Forms
         
         public EXComboBox() {
             _highlightbrush = SystemBrushes.Highlight;
-            this.DrawMode = DrawMode.OwnerDrawFixed;
-            this.DrawItem += new DrawItemEventHandler(this_DrawItem);
+            DrawMode = DrawMode.OwnerDrawFixed;
+            DrawItem += new DrawItemEventHandler(This_DrawItem);
         }
         
         public Brush MyHighlightBrush {
@@ -21,13 +20,13 @@ namespace PoGo.NecroBot.Logic.Forms
             set {_highlightbrush = value;}
         }
         
-        private void this_DrawItem(object sender, DrawItemEventArgs e) {
+        private void This_DrawItem(object sender, DrawItemEventArgs e) {
             if (e.Index == -1) return;
             e.DrawBackground();
             if ((e.State & DrawItemState.Selected) != 0) {
                 e.Graphics.FillRectangle(_highlightbrush, e.Bounds);
             }
-            EXItem item = (EXItem) this.Items[e.Index];
+            EXItem item = (EXItem)Items[e.Index];
             Rectangle bounds = e.Bounds;
             int x = bounds.X + 2;
             if (item.GetType() == typeof(EXImageItem)) {
@@ -92,7 +91,7 @@ namespace PoGo.NecroBot.Logic.Forms
             }
             
             public EXImageItem(string text) {
-                this.Text = text;
+                Text = text;
             }
             
             public EXImageItem(Image image) {
@@ -100,19 +99,19 @@ namespace PoGo.NecroBot.Logic.Forms
             }
             
             public EXImageItem(string text, Image image) {
-                this.Text = text;
+                Text = text;
                 _image = image;
             }
             
             public EXImageItem(Image image, string value) {
                 _image = image;
-                this.MyValue = value;
+                MyValue = value;
             }
             
             public EXImageItem(string text, Image image, string value) {
-                this.Text = text;
+                Text = text;
                 _image = image;
-                this.MyValue = value;
+                MyValue = value;
             }
             
             public Image MyImage {
@@ -131,7 +130,7 @@ namespace PoGo.NecroBot.Logic.Forms
             }
             
             public EXMultipleImagesItem(string text) {
-                this.Text = text;
+                Text = text;
             }
             
             public EXMultipleImagesItem(ArrayList images) {
@@ -139,19 +138,19 @@ namespace PoGo.NecroBot.Logic.Forms
             }
             
             public EXMultipleImagesItem(string text, ArrayList images) {
-                this.Text = text;
+                Text = text;
                 _images = images;
             }
             
             public EXMultipleImagesItem(ArrayList images, string value) {
                 _images = images;
-                this.MyValue = value;
+                MyValue = value;
             }
             
             public EXMultipleImagesItem(string text, ArrayList images, string value) {
-                this.Text = text;
+                Text = text;
                 _images = images;
-                this.MyValue = value;
+                MyValue = value;
             }
 
             public ArrayList MyImages {

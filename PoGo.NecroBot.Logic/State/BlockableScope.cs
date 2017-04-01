@@ -23,7 +23,7 @@ namespace PoGo.NecroBot.Logic.State
 
         public void Dispose()
         {
-            this.session.Actions.RemoveAll(x => x == this.action);
+            session.Actions.RemoveAll(x => x == action);
         }
     }
 }

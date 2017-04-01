@@ -143,7 +143,7 @@ namespace PoGo.NecroBot.Logic
             }
             catch (ActiveSwitchByRuleException ex)
             {
-                this._stats.Reset();
+                _stats.Reset();
                 throw ex; //do not stop handle bot switcher account.
             }
             catch

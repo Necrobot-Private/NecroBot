@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using POGOProtos.Enums;
-using System;
 
 namespace PoGo.NecroBot.Logic.Model.Settings
 {

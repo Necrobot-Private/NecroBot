@@ -1,12 +1,8 @@
 ﻿using POGOProtos.Enums;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace PoGo.Necrobot.Window.Model
 {
@@ -28,17 +24,17 @@ namespace PoGo.Necrobot.Window.Model
             set
             {
                 freeInput = value;
-                this.Parse(value);
-                this.RaisePropertyChanged("InputText");
+                Parse(value);
+                RaisePropertyChanged("InputText");
             }
         }
 
         public void Clear()
         {
-            this.Longitude = 0;
-            this.Latitude = 0;
-            this.PokemonId = PokemonId.Missingno;
-            this.InputText = "";
+            Longitude = 0;
+            Latitude = 0;
+            PokemonId = PokemonId.Missingno;
+            InputText = "";
             RaisePropertyChanged("Latitude");
             RaisePropertyChanged("Longitude");
             RaisePropertyChanged("PokemonId");
@@ -52,7 +48,7 @@ namespace PoGo.Necrobot.Window.Model
             var pid = LookPokemonId(content);
             if (pid == PokemonId.Missingno || pid == PokemonId.Mewtwo || pid == PokemonId.Mew) return;
 
-            this.PokemonId = pid;
+            PokemonId = pid;
 
             IV = LookIV(content);
 
@@ -115,8 +111,7 @@ namespace PoGo.Necrobot.Window.Model
                 var match = Regex.Match(content, p);
                 if (match != null && !string.IsNullOrEmpty(match.Value))
                 {
-                    double x = 0;
-                    double.TryParse(match.Groups[1].Value, out x);
+                    double.TryParse(match.Groups[1].Value, out double x);
                     return x;
                 }
             }

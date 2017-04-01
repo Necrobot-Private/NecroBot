@@ -88,7 +88,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     }
                     else
                     {
-                        if (await shouldUseLuckyEgg(session, pokemonToEvolve).ConfigureAwait(false))
+                        if (await ShouldUseLuckyEgg(session, pokemonToEvolve).ConfigureAwait(false))
                         {
                             await UseLuckyEgg(session).ConfigureAwait(false);
                         }
@@ -98,7 +98,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 else if (session.LogicSettings.EvolveAllPokemonWithEnoughCandy ||
                          session.LogicSettings.EvolveAllPokemonAboveIv)
                 {
-                    if (await shouldUseLuckyEgg(session, pokemonToEvolve).ConfigureAwait(false))
+                    if (await ShouldUseLuckyEgg(session, pokemonToEvolve).ConfigureAwait(false))
                     {
                         await UseLuckyEgg(session).ConfigureAwait(false);
                     }
@@ -178,7 +178,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
         }
 
-        private static async Task<bool> shouldUseLuckyEgg(ISession session, List<PokemonData> pokemonToEvolve)
+        private static async Task<bool> ShouldUseLuckyEgg(ISession session, List<PokemonData> pokemonToEvolve)
         {
             var inventoryContent = await session.Inventory.GetItems().ConfigureAwait(false);
 
