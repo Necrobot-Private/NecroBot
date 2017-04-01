@@ -311,9 +311,9 @@ namespace PoGo.Necrobot.Window.Model
             get
             {
                 var form = "";
-                if (pokemon.PokemonDisplay.Form != POGOProtos.Enums.Form.Unset)
+                if (pokemonData.PokemonDisplay.Form != POGOProtos.Enums.Form.Unset)
                 {
-                    form = pokemon.PokemonDisplay.Form.ToString().Replace("Unown","").Replace("ExclamationPoint","!").Replace("QuestionMark","?").ToUpper();
+                    form = pokemonData.PokemonDisplay.Form.ToString().Replace("Unown","").Replace("ExclamationPoint","!").Replace("QuestionMark","?").ToUpper();
                 }
                 if (pokemonData.PokemonDisplay.Shiny)
                 {
