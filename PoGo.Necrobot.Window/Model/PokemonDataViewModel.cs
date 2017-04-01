@@ -311,7 +311,7 @@ namespace PoGo.Necrobot.Window.Model
             get
             {
                 var additional = "";
-                if (pokemon.PokemonDisplay.Costume != Costume.Unset)
+                if (pokemonData.PokemonDisplay.Costume != Costume.Unset)
                 {
                     additional += pokemon.PokemonDisplay.Costume.ToString();
                 }
