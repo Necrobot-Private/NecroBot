@@ -109,7 +109,7 @@ namespace PoGo.NecroBot.CLI
 
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionEventHandler;
 
-            Console.Title = @"NecroBot2";
+            Console.Title = @"NecroBot2 Loading ";
             Console.CancelKeyPress += (sender, eArgs) =>
             {
                 QuitEvent.Set();
