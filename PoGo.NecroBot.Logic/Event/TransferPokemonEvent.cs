@@ -1,7 +1,6 @@
 ﻿#region using directives
 
 using POGOProtos.Enums;
-using POGOProtos.Inventory;
 
 #endregion
 

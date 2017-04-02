@@ -2,12 +2,12 @@
 {
     public class Route
     {
-        public Bounds bounds { get; set; }
-        public string copyrights { get; set; }
-        public Leg[] legs { get; set; }
-        public Polyline overview_polyline { get; set; }
-        public string summary { get; set; }
-        public object[] warnings { get; set; }
-        public object[] waypoint_order { get; set; }
+        public Bounds Bounds { get; set; }
+        public string Copyrights { get; set; }
+        public Leg[] Legs { get; set; }
+        public Polyline Overview_polyline { get; set; }
+        public string Summary { get; set; }
+        public object[] Warnings { get; set; }
+        public object[] Waypoint_order { get; set; }
     }
 }

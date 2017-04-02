@@ -2,8 +2,8 @@
 {
     public class Geometry
     {
-        public Geo location { get; set; }
-        public string location_type { get; set; }
-        public Bounds viewport { get; set; }
+        public Geo Location { get; set; }
+        public string Location_type { get; set; }
+        public Bounds Viewport { get; set; }
     }
 }

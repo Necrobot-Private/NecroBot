@@ -1,12 +1,8 @@
 ﻿#region using directives
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using POGOProtos.Data;
 using POGOProtos.Enums;
-using POGOProtos.Inventory;
-using POGOProtos.Settings.Master;
 using PokemonGo.RocketAPI.Helpers;
 using PoGo.NecroBot.Logic.State;
 using System.Threading.Tasks;

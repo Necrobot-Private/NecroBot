@@ -4,7 +4,7 @@
     {
         public AutoSnipePokemonAddedEvent(EncounteredEvent data)
         {
-            this.EncounteredEvent = data;
+            EncounteredEvent = data;
         }
 
         public EncounteredEvent EncounteredEvent { get; set; }

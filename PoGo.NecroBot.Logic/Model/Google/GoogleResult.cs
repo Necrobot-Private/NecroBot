@@ -23,9 +23,9 @@ namespace PoGo.NecroBot.Logic.Model.Google
         {
             float tempo = 0;
 
-            foreach (var legs in Directions.routes.SelectMany(route => route.legs))
+            foreach (var legs in Directions.Routes.SelectMany(route => route.Legs))
             {
-                tempo += legs.duration.value;
+                tempo += legs.Duration.Value;
             }
             return tempo;
         }
@@ -35,9 +35,9 @@ namespace PoGo.NecroBot.Logic.Model.Google
         {
             float distance = 0;
 
-            foreach (var legs in Directions.routes.SelectMany(route => route.legs))
+            foreach (var legs in Directions.Routes.SelectMany(route => route.Legs))
             {
-                distance += legs.distance.value;
+                distance += legs.Distance.Value;
             }
             return distance;
         }

@@ -4,7 +4,7 @@
     {
         public StatusBarEvent(string s)
         {
-            this.Message = s;
+            Message = s;
         }
 
         public string Message { get; set; }

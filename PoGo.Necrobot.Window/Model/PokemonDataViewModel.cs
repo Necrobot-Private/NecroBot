@@ -27,18 +27,18 @@ namespace PoGo.Necrobot.Window.Model
         private PokemonSettings setting;
         public PokemonDataViewModel(ISession session, PokemonData pokemon)
         {
-            this.Session = session;
-            this.PokemonData = pokemon;
-            this.Displayed = true;
+            Session = session;
+            PokemonData = pokemon;
+            Displayed = true;
             var pkmSettings = session.Inventory.GetPokemonSettings().Result;
             setting = pkmSettings.FirstOrDefault(x => x.PokemonId == pokemon.PokemonId);
 
-            this.EvolutionBranchs = new List<EvolutionToPokemon>();
+            EvolutionBranchs = new List<EvolutionToPokemon>();
 
             //TODO - implement the candy count for enable evolution
             foreach (var item in setting.EvolutionBranch)
             {
-                this.EvolutionBranchs.Add(new EvolutionToPokemon()
+                EvolutionBranchs.Add(new EvolutionToPokemon()
                 {
                     CandyNeed = item.CandyCost,
                     ItemNeed = item.EvolutionItemRequirement,
@@ -53,7 +53,7 @@ namespace PoGo.Necrobot.Window.Model
         public List<EvolutionToPokemon> EvolutionBranchs { get; set; }
         internal void UpdateWith(PokemonData item)
         {
-            this.PokemonData = item;
+            PokemonData = item;
         }
         public string Types
         {
@@ -87,10 +87,10 @@ namespace PoGo.Necrobot.Window.Model
                     Task.Run(async () =>
                     {
                         await RenameSinglePokemonTask.Execute(
-                            this.Session,
+                            Session,
                             PokemonData.Id,
                             value,
-                            this.Session.CancellationTokenSource.Token);
+                            Session.CancellationTokenSource.Token);
                     });
                 }
             }
@@ -132,7 +132,7 @@ namespace PoGo.Necrobot.Window.Model
         {
             get
             {
-                return this.Session.Inventory.GetPokemonSettings().Result.FirstOrDefault(x => x.PokemonId == PokemonId);
+                return Session.Inventory.GetPokemonSettings().Result.FirstOrDefault(x => x.PokemonId == PokemonId);
             }
         }
 
@@ -140,7 +140,7 @@ namespace PoGo.Necrobot.Window.Model
         {
             get
             {
-                return this.Session.Inventory.GetCandyCount(this.PokemonData.PokemonId).Result;
+                return Session.Inventory.GetCandyCount(PokemonData.PokemonId).Result;
             }
         }
 
@@ -148,7 +148,7 @@ namespace PoGo.Necrobot.Window.Model
         {
             get
             {
-                return this.Session.Inventory.CanUpgradePokemon(this.PokemonData).Result;
+                return Session.Inventory.CanUpgradePokemon(PokemonData).Result;
             }
         }
 
@@ -156,7 +156,7 @@ namespace PoGo.Necrobot.Window.Model
         {
             get
             {
-                return this.Session.Inventory.CanEvolvePokemon(this.PokemonData).Result;
+                return Session.Inventory.CanEvolvePokemon(PokemonData).Result;
             }
         }
 
@@ -164,7 +164,7 @@ namespace PoGo.Necrobot.Window.Model
         {
             get
             {
-                return this.Session.Inventory.CanTransferPokemon(this.PokemonData);
+                return Session.Inventory.CanTransferPokemon(PokemonData);
             }
         }
 
@@ -315,9 +315,9 @@ namespace PoGo.Necrobot.Window.Model
                 {
                     additional = additional + "-" + pokemonData.PokemonDisplay.Costume.ToString();
                 }
-                if (pokemonData.PokemonDisplay.Form != POGOProtos.Enums.Form.Unset)
+                if (pokemonData.PokemonDisplay.Form != Form.Unset)
                 {
-                    additional = additional + "-" + pokemonData.PokemonDisplay.Form.ToString().Replace("Unown","").Replace("ExclamationPoint","!").Replace("QuestionMark","?");
+                    additional = additional + "-" + pokemonData.PokemonDisplay.Form.ToString().Replace("Unown", "").Replace("ExclamationPoint", "!").Replace("QuestionMark", "?");
                 }
                 if (pokemonData.PokemonDisplay.Shiny)
                 {

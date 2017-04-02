@@ -19,12 +19,12 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         }
 
         //may need add support for web services/wcf/resful later. for now we use most modern web socket things.
-        [NecrobotConfig(Description = "Data service enpoint ", Position = 2)]
+        [NecrobotConfig(Description = "Data Service Endpoint", Position = 2)]
         [DefaultValue("ws://necrosocket.herokuapp.com/socket.io/?EIO=3&transport=websocket")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
         public string DataRecieverURL { get; set; }
 
-        [NecrobotConfig(Description = "Allow bot auto snipe pokemon whenever has feed send back from server", Position = 3)]
+        [NecrobotConfig(Description = "Allows bot to auto snipe pokemon whenever it has feed sent back from server", Position = 3)]
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public bool AutoSnipe { get; set; }
@@ -39,7 +39,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         public string DataServiceIdentification { get; set; }
 
-        [NecrobotConfig(Description = "The authozied access key to use snipe data", Position = 4)]
+        [NecrobotConfig(Description = "The authorized access key to use snipe data", Position = 4)]
         [DefaultValue("")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public string SnipeDataAccessKey { get;  set; }
@@ -49,7 +49,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public bool EnableFailoverDataServers { get; set; }
 
-        [NecrobotConfig(Description = "List of servers that bot will connect when primary server down or can't connect", Position = 6)]
+        [NecrobotConfig(Description = "List of servers that bot will connect to when primary server is down or can't be connected to", Position = 6)]
         [DefaultValue("ws://s1.mypogosnipers.com/socket.io/?EIO=3&transport=websocket;ws://s2.mypogosnipers.com/socket.io/?EIO=3&transport=websocket")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public string FailoverDataServers { get; set; }

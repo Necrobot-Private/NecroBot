@@ -49,7 +49,7 @@ namespace PoGo.NecroBot.CLI.Forms
             this.btnOK.TabIndex = 0;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
-            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
+            this.btnOK.Click += new System.EventHandler(this.BtnOK_Click);
             // 
             // label1
             // 
@@ -87,7 +87,7 @@ namespace PoGo.NecroBot.CLI.Forms
             this.lnkBuy.TabIndex = 4;
             this.lnkBuy.TabStop = true;
             this.lnkBuy.Text = "Buy";
-            this.lnkBuy.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkBuy_LinkClicked);
+            this.lnkBuy.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LnkBuy_LinkClicked);
             // 
             // radHashServer
             // 

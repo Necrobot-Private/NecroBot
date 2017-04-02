@@ -162,8 +162,8 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 });
             }
 
-            this.Auth.Bots = allAcc.ToList();
-            string json = JsonConvert.SerializeObject(this.Auth, Formatting.Indented,new StringEnumConverter() { CamelCaseText = true });
+            Auth.Bots = allAcc.ToList();
+            string json = JsonConvert.SerializeObject(Auth, Formatting.Indented,new StringEnumConverter() { CamelCaseText = true });
 
             File.WriteAllText("config\\auth.json", json);
             if (File.Exists("accounts.db")) File.Delete("accounts.db");
@@ -1017,8 +1017,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             // validate Json using JsonSchema
             Logger.Write("Validating config.json...");
             var jsonObj = JObject.Parse(output);
-            IList<ValidationError> errors;
-            var valid = jsonObj.IsValid(JsonSchema, out errors);
+            var valid = jsonObj.IsValid(JsonSchema, out IList<ValidationError> errors);
             if (valid) return;
             foreach (var error in errors)
             {
@@ -1061,8 +1060,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 Logger.Write(initialPrompt, LogLevel.Info);
                 var strInput = Console.ReadLine();
 
-                double doubleVal;
-                if (double.TryParse(strInput, out doubleVal))
+                if (double.TryParse(strInput, out double doubleVal))
                 {
                     return doubleVal;
                 }
@@ -1083,8 +1081,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 Logger.Write(initialPrompt, LogLevel.Info);
                 var strInput = Console.ReadLine();
 
-                int intVal;
-                if (int.TryParse(strInput, out intVal))
+                if (int.TryParse(strInput, out int intVal))
                 {
                     return intVal;
                 }

@@ -11,30 +11,30 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         {
         }
 
-        [NecrobotConfig(Description = "Allow bot display list of item to be recycled", Position = 1)]
+        [NecrobotConfig(Description = "Allows bot to display lists of items to be recycled", Position = 1)]
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public bool VerboseRecycling { get; set; }
 
-        [NecrobotConfig(Description = "Specify percentace of inventory full to start clean up", Position = 2)]
+        [NecrobotConfig(Description = "Specify percentage of inventory full to start recycle", Position = 2)]
         [DefaultValue(90)]
         [Range(0, 100)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
         public double RecycleInventoryAtUsagePercentage { get; set; }
 
-        [NecrobotConfig(Description = "Turn on randomize recycle items", Position = 3)]
+        [NecrobotConfig(Description = "Turn on randomizing recycled items", Position = 3)]
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 3)]
         public bool RandomizeRecycle;
 
-        [NecrobotConfig(Description = "Number of randomize items to be recycled", Position = 4)]
+        [NecrobotConfig(Description = "Number of randomized items to be recycled", Position = 4)]
         [DefaultValue(3)]
         [Range(0, 100)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 4)]
         public int RandomRecycleValue { get; set; }
 
         /*Amounts*/
-        [NecrobotConfig(Description = "How many balls (normal, great, ultra) to be kept ", Position = 5)]
+        [NecrobotConfig(Description = "How many pokeballs (normal, great, ultra) to be kept ", Position = 5)]
         [DefaultValue(120)]
         [Range(0, 999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 5)]
@@ -64,7 +64,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 10)]
         public bool UseRecyclePercentsInsteadOfTotals { get; set; }
 
-        [NecrobotConfig(Description = "How many balls (normal, great, ultra) to be kept as a percent of inventory ", Position = 11)]
+        [NecrobotConfig(Description = "How many pokeballs (normal, great, ultra) to be kept as a percent of inventory ", Position = 11)]
         [DefaultValue(35)]
         [Range(0, 100)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 11)]

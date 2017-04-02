@@ -1,9 +1,5 @@
 ﻿using PoGo.NecroBot.Logic.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using PoGo.NecroBot.Logic.State;
 
 namespace PoGo.Necrobot.Window
@@ -12,7 +8,7 @@ namespace PoGo.Necrobot.Window
     {
         public Action<string, LogLevel, string> LogToUI;
 
-        public void lineSelect(int lineChar = 0, int linesUp = 1)
+        public void LineSelect(int lineChar = 0, int linesUp = 1)
         {
         }
 

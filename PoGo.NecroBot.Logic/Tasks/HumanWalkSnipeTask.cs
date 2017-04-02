@@ -215,7 +215,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Rarity = PokemonGradeHelper.GetPokemonGrade(pokemon.PokemonId).ToString()
                     });
                     var snipeTarget = new SnipeLocation(pokemon.Latitude, pokemon.Longitude,
-                        await LocationUtils.getElevation(session.ElevationService, pokemon.Latitude, pokemon.Longitude).ConfigureAwait(false));
+                        await LocationUtils.GetElevation(session.ElevationService, pokemon.Latitude, pokemon.Longitude).ConfigureAwait(false));
 
                     await session.Navigation.Move(
                         snipeTarget,
@@ -285,7 +285,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             var destination = new FortLocation(
                 originalPokestop.Latitude,
                 originalPokestop.Longitude,
-                await LocationUtils.getElevation(
+                await LocationUtils.GetElevation(
                     session.ElevationService,
                     originalPokestop.Latitude,
                     originalPokestop.Longitude
@@ -395,8 +395,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             //Console.WriteLine("#############GetNextSnipeablePokemon");
             foreach (var k in rarePokemons.Where(p => p.Value.ExpiredTime < DateTime.Now).Select(p => p.Key))
             {
-                SnipePokemonInfo toRemove;
-                rarePokemons.TryRemove(k, out toRemove);
+                rarePokemons.TryRemove(k, out SnipePokemonInfo toRemove);
             }
             // Console.WriteLine("#END GetNextSnipeablePokemon");
             foreach (var p in rarePokemons.Select(p => p.Value))

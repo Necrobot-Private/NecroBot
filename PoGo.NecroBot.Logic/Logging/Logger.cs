@@ -73,10 +73,10 @@ namespace PoGo.NecroBot.Logic.Logging
                 logger?.Write(message, level, color);
         }
 
-        public static void lineSelect(int lineChar = 0, int linesUp = 1)
+        public static void LineSelect(int lineChar = 0, int linesUp = 1)
         {
             foreach (var logger in _loggers)
-                logger?.lineSelect(lineChar, linesUp);
+                logger?.LineSelect(lineChar, linesUp);
         }
 
         public static string GetFinalMessage(string message, LogLevel level, ConsoleColor color)

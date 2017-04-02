@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using PoGo.NecroBot.Logic.State;
 using POGOProtos.Inventory.Item;
@@ -20,11 +19,11 @@ namespace PoGo.Necrobot.Window.Controls
 
         public ISession Session { get; internal set; }
 
-        private async void btnDrop_Click(object sender, RoutedEventArgs e)
+        private async void BtnDrop_Click(object sender, RoutedEventArgs e)
         {
             var itemId = (ItemId)((Button)sender).CommandParameter ;
 
-            var data = this.DataContext as ItemsListViewModel;
+            var data = DataContext as ItemsListViewModel;
 
             ItemsViewModel Item = data.Get(itemId);
 

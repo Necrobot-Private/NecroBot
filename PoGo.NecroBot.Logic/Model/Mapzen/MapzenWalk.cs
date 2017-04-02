@@ -7,35 +7,35 @@ namespace PoGo.NecroBot.Logic.Model.Mapzen
 {
     public class Trip
     {
-        public string language { get; set; }
-        public Summary summary { get; set; }
-        public int status { get; set; }
-        public string status_message { get; set; }
-        public string units { get; set; }
-        public List<Legs> legs { get; set; }
-        public List<Location> locations { get; set; }
+        public string Language { get; set; }
+        public Summary Summary { get; set; }
+        public int Status { get; set; }
+        public string Status_message { get; set; }
+        public string Units { get; set; }
+        public List<Legs> Legs { get; set; }
+        public List<Location> Locations { get; set; }
     }
 
     public class Summary
     {
-        public double max_lon { get; set; }
-        public double max_lat { get; set; }
-        public int time { get; set; }
-        public double length { get; set; }
-        public double min_lon { get; set; }
-        public double min_lat { get; set; }
+        public double Max_lon { get; set; }
+        public double Max_lat { get; set; }
+        public int Time { get; set; }
+        public double Length { get; set; }
+        public double Min_lon { get; set; }
+        public double Min_lat { get; set; }
     }
 
     public class Location
     {
-        public double lon { get; set; }
-        public double lat { get; set; }
+        public double Lon { get; set; }
+        public double Lat { get; set; }
     }
 
     public class Legs
     {
-        public string shape { get; set; }
-        public Summary summary { get; set; }
+        public string Shape { get; set; }
+        public Summary Summary { get; set; }
     }
 
     public class MapzenWalk
@@ -45,11 +45,11 @@ namespace PoGo.NecroBot.Logic.Model.Mapzen
 
         public MapzenWalk(string mapzenResponse, GeoCoordinate sourceLocation, GeoCoordinate destLocation)
         {
-            Waypoints = new List<GeoCoordinate>();
-
-            // Add the source
-            Waypoints.Add(sourceLocation);
-
+            Waypoints = new List<GeoCoordinate>
+            {
+                // Add the source
+                sourceLocation
+            };
             JObject jsonObj = JObject.Parse(mapzenResponse);
 
             var trip = jsonObj["trip"];

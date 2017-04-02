@@ -19,71 +19,71 @@ namespace PoGo.NecroBot.Logic.State
 
         private Dictionary<string, CachedGymGetails> _gymDetails { get; set; }
 
-        public List<MyPokemonStat> myPokemons { get; private set; }
+        public List<MyPokemonStat> MyPokemons { get; private set; }
 
-        public List<AnyPokemonStat> otherDefenders { get; private set; }
+        public List<AnyPokemonStat> OtherDefenders { get; private set; }
 
-        public List<GymPokemon> myTeam { get; private set; }
+        public List<GymPokemon> MyTeam { get; private set; }
 
-        public IEnumerable<MoveSettings> moveSettings { get; set; }
+        public IEnumerable<MoveSettings> MoveSettings { get; set; }
 
-        public long timeToDodge { get; set; }
+        public long TimeToDodge { get; set; }
 
-        public long lastWentDodge { get; set; }
+        public long LastWentDodge { get; set; }
 
-        public SwitchPokemonData swithAttacker { get; set; }
+        public SwitchPokemonData SwithAttacker { get; set; }
 
-        public int trainingRound { get; set; }
+        public int TrainingRound { get; set; }
 
-        public string trainingGymId { get; set; }
+        public string TrainingGymId { get; set; }
 
-        public string capturedGymId { get; set; }
+        public string CapturedGymId { get; set; }
 
         public GymTeamState()
         {
-            myTeam = new List<GymPokemon>();
-            myPokemons = new List<MyPokemonStat>();
-            otherDefenders = new List<AnyPokemonStat>();
+            MyTeam = new List<GymPokemon>();
+            MyPokemons = new List<MyPokemonStat>();
+            OtherDefenders = new List<AnyPokemonStat>();
             _gymDetails = new Dictionary<string, CachedGymGetails>();
-            timeToDodge = 0;
-            swithAttacker = null;
+            TimeToDodge = 0;
+            SwithAttacker = null;
         }
 
         public void AddPokemon(ISession session, PokemonData pokemon, bool isMine = true)
         {
-            if (isMine && myPokemons.Any(a => a.data.Id == pokemon.Id))
+            if (isMine && MyPokemons.Any(a => a.Data.Id == pokemon.Id))
                 return;
 
-            if (!isMine && otherDefenders.Any(a => a.data.Id == pokemon.Id))
+            if (!isMine && OtherDefenders.Any(a => a.Data.Id == pokemon.Id))
                 return;
 
             if (isMine)
-                myPokemons.Add(new MyPokemonStat(session, pokemon));
+                MyPokemons.Add(new MyPokemonStat(session, pokemon));
             else
-                otherDefenders.Add(new AnyPokemonStat(session, pokemon));
+                OtherDefenders.Add(new AnyPokemonStat(session, pokemon));
         }
 
         public void AddToTeam(ISession session, PokemonData pokemon)
         {
-            if (!myPokemons.Any(a => a.data.Id == pokemon.Id))
-                myPokemons.Add(new MyPokemonStat(session, pokemon));
+            if (!MyPokemons.Any(a => a.Data.Id == pokemon.Id))
+                MyPokemons.Add(new MyPokemonStat(session, pokemon));
 
-            if (!myTeam.Any(a => a.attacker.Id == pokemon.Id))
-                myTeam.Add(new GymPokemon() { attacker = pokemon, hpState = pokemon.StaminaMax });
+            if (!MyTeam.Any(a => a.Attacker.Id == pokemon.Id))
+                MyTeam.Add(new GymPokemon() { Attacker = pokemon, HpState = pokemon.StaminaMax });
         }
 
         public async Task LoadMyPokemons(ISession session)
         {
-            myPokemons.Clear();
+            MyPokemons.Clear();
             var pokemons = await session.Inventory.GetPokemons().ConfigureAwait(false);
             foreach (var pokemon in pokemons.Where(w => w.Cp >= session.LogicSettings.GymConfig.MinCpToUseInAttack))
             {
                 MyPokemonStat mps = new MyPokemonStat(session, pokemon);
-                myPokemons.Add(mps);
+                MyPokemons.Add(mps);
             }
         }
 
-        public GetGymDetailsResponse getGymDetails(ISession session, FortData fort, bool force = false)
+        public GetGymDetailsResponse GetGymDetails(ISession session, FortData fort, bool force = false)
         {
             CachedGymGetails gymDetails = null;
 
@@ -96,33 +96,33 @@ namespace PoGo.NecroBot.Logic.State
                 force = false;
             }
 
-            if (force || gymDetails.lastCall.AddSeconds(_cacheTime) < DateTime.UtcNow)
+            if (force || gymDetails.LastCall.AddSeconds(_cacheTime) < DateTime.UtcNow)
             {
                 gymDetails.LoadData(session, fort);
                 _gymDetails[fort.Id] = gymDetails;
             }
 
-            return gymDetails.gymDetails;
+            return gymDetails.GymDetails;
         }
 
         public void Dispose()
         {
-            if (myTeam != null)
-                myTeam.Clear();
+            if (MyTeam != null)
+                MyTeam.Clear();
 
-            if (myPokemons != null)
-                myPokemons.Clear();
+            if (MyPokemons != null)
+                MyPokemons.Clear();
 
-            if (otherDefenders != null)
-                otherDefenders.Clear();
+            if (OtherDefenders != null)
+                OtherDefenders.Clear();
         }
     }
 
     public class GymPokemon : IDisposable
     {
-        public PokemonData attacker { get; set; }
+        public PokemonData Attacker { get; set; }
 
-        public int hpState { get; set; }
+        public int HpState { get; set; }
 
         public void Dispose()
         {
@@ -132,27 +132,27 @@ namespace PoGo.NecroBot.Logic.State
 
     public class AnyPokemonStat : IDisposable
     {
-        public PokemonData data { get; set; }
+        public PokemonData Data { get; set; }
 
-        public MoveSettings attack { get; set; }
+        public MoveSettings Attack { get; set; }
 
-        public MoveSettings specialAttack { get; set; }
+        public MoveSettings SpecialAttack { get; set; }
 
-        public POGOProtos.Enums.PokemonType mainType { get; set; }
+        public POGOProtos.Enums.PokemonType MainType { get; set; }
 
-        public POGOProtos.Enums.PokemonType extraType { get; set; }
+        public POGOProtos.Enums.PokemonType ExtraType { get; set; }
 
         public AnyPokemonStat(ISession session, PokemonData pokemon)
         {
-            data = pokemon;
+            Data = pokemon;
 
             var pokemonsSetting = session.Inventory.GetPokemonSettings().Result;
             
-            mainType = pokemonsSetting.Where(f => f.PokemonId == data.PokemonId).Select(s => s.Type).FirstOrDefault();
-            extraType = pokemonsSetting.Where(f => f.PokemonId == data.PokemonId).Select(s => s.Type2).FirstOrDefault();
+            MainType = pokemonsSetting.Where(f => f.PokemonId == Data.PokemonId).Select(s => s.Type).FirstOrDefault();
+            ExtraType = pokemonsSetting.Where(f => f.PokemonId == Data.PokemonId).Select(s => s.Type2).FirstOrDefault();
 
-            attack = session.Inventory.GetMoveSetting(data.Move1).Result;
-            specialAttack = session.Inventory.GetMoveSetting(data.Move2).Result;
+            Attack = session.Inventory.GetMoveSetting(Data.Move1).Result;
+            SpecialAttack = session.Inventory.GetMoveSetting(Data.Move2).Result;
         }
 
         public void Dispose()
@@ -164,11 +164,11 @@ namespace PoGo.NecroBot.Logic.State
     public class MyPokemonStat : AnyPokemonStat
     {
 
-        public Dictionary<POGOProtos.Enums.PokemonType, int> typeFactor { get; private set; }
+        public Dictionary<POGOProtos.Enums.PokemonType, int> TypeFactor { get; private set; }
 
         public MyPokemonStat(ISession session, PokemonData pokemon) : base(session, pokemon)
         {
-            typeFactor = new Dictionary<POGOProtos.Enums.PokemonType, int>();
+            TypeFactor = new Dictionary<POGOProtos.Enums.PokemonType, int>();
 
             foreach (var type in Enum.GetValues(typeof(POGOProtos.Enums.PokemonType)))
             {
@@ -178,27 +178,27 @@ namespace PoGo.NecroBot.Logic.State
 
         private int GetFactorAgainst(POGOProtos.Enums.PokemonType type)
         {
-            if (typeFactor.Keys.Contains(type))
-                return typeFactor[type];
+            if (TypeFactor.Keys.Contains(type))
+                return TypeFactor[type];
 
             int factor = 0;
-            if (UseGymBattleTask.GetBestTypes(type).Any(a => a == attack.PokemonType))
+            if (UseGymBattleTask.GetBestTypes(type).Any(a => a == Attack.PokemonType))
             {
                 factor += 2;
-                if (mainType == attack.PokemonType || extraType == attack.PokemonType)
+                if (MainType == Attack.PokemonType || ExtraType == Attack.PokemonType)
                     factor += 1;
             }
-            if (UseGymBattleTask.GetWorstTypes(type).Any(a => a == attack.PokemonType)) factor -= 2;
+            if (UseGymBattleTask.GetWorstTypes(type).Any(a => a == Attack.PokemonType)) factor -= 2;
 
-            if (UseGymBattleTask.GetBestTypes(type).Any(a => a == specialAttack.PokemonType))
+            if (UseGymBattleTask.GetBestTypes(type).Any(a => a == SpecialAttack.PokemonType))
             {
                 factor += 2;
-                if (mainType == specialAttack.PokemonType || extraType == specialAttack.PokemonType)
+                if (MainType == SpecialAttack.PokemonType || ExtraType == SpecialAttack.PokemonType)
                     factor += 1;
             }
-            if (UseGymBattleTask.GetWorstTypes(type).Any(a => a == specialAttack.PokemonType)) factor -= 2;
+            if (UseGymBattleTask.GetWorstTypes(type).Any(a => a == SpecialAttack.PokemonType)) factor -= 2;
 
-            typeFactor.Add(type, factor);
+            TypeFactor.Add(type, factor);
 
             return factor;
         }
@@ -206,20 +206,20 @@ namespace PoGo.NecroBot.Logic.State
         public int GetFactorAgainst(ISession session, int cp, bool isTraining)
         {
             decimal percent = 0.0M;
-            if (cp > data.Cp)
-                percent = (decimal)data.Cp / (decimal)cp * -100.0M;
+            if (cp > Data.Cp)
+                percent = (decimal)Data.Cp / (decimal)cp * -100.0M;
             else
-                percent = (decimal)cp / (decimal)data.Cp * 100.0M;
+                percent = (decimal)cp / (decimal)Data.Cp * 100.0M;
 
             int factor = (int)((100.0M - Math.Abs(percent)) / 5.0M) * Math.Sign(percent);
 
-            if (isTraining && cp <= data.Cp)
+            if (isTraining && cp <= Data.Cp)
                 factor -= 100;
 
-            if (session.LogicSettings.GymConfig.NotUsedSkills.Any(a => a.Key == data.PokemonId && a.Value == attack.MovementId))
+            if (session.LogicSettings.GymConfig.NotUsedSkills.Any(a => a.Key == Data.PokemonId && a.Value == Attack.MovementId))
                 factor -= 20;
 
-            if (session.LogicSettings.GymConfig.NotUsedSkills.Any(a => a.Key == data.PokemonId && a.Value == specialAttack.MovementId))
+            if (session.LogicSettings.GymConfig.NotUsedSkills.Any(a => a.Key == Data.PokemonId && a.Value == SpecialAttack.MovementId))
                 factor -= 20;
 
             return factor;
@@ -236,34 +236,34 @@ namespace PoGo.NecroBot.Logic.State
 #pragma warning disable 0108
         public void Dispose()
         {
-            if (typeFactor != null)
-                typeFactor.Clear();
+            if (TypeFactor != null)
+                TypeFactor.Clear();
         }
 #pragma warning restore 0108
     }
 
     public class SwitchPokemonData
     {
-        public ulong oldAttacker { get; private set; }
-        public ulong newAttacker { get; private set; }
+        public ulong OldAttacker { get; private set; }
+        public ulong NewAttacker { get; private set; }
 
-        public int attackDuration
+        public int AttackDuration
         {
             get { return 1000; }
         }
 
         public SwitchPokemonData(ulong Old, ulong New)
         {
-            oldAttacker = Old;
-            newAttacker = New;
+            OldAttacker = Old;
+            NewAttacker = New;
         }
     }
 
     public class CachedGymGetails
     {
-        public DateTime lastCall { get; set; }
+        public DateTime LastCall { get; set; }
 
-        public GetGymDetailsResponse gymDetails { get; set; }
+        public GetGymDetailsResponse GymDetails { get; set; }
 
         public CachedGymGetails(ISession session, FortData fort)
         {
@@ -277,8 +277,8 @@ namespace PoGo.NecroBot.Logic.State
             if (task.IsCompleted && task.Result.Result == GetGymDetailsResponse.Types.Result.Success)
             {
                 fort = task.Result.GymState.FortData;
-                gymDetails = task.Result;
-                lastCall = DateTime.UtcNow;
+                GymDetails = task.Result;
+                LastCall = DateTime.UtcNow;
             }
         }
     }

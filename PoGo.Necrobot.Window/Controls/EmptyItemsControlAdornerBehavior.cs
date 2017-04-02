@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.Specialized;
+﻿using System.Collections.Specialized;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Interactivity;
 
 namespace PoGo.Necrobot.Window.Controls
@@ -20,10 +14,10 @@ namespace PoGo.Necrobot.Window.Controls
         {
             base.OnAttached();
 
-            AdornedElement = this.AssociatedObject;
-            this.ItemsControlAdorner = new TemplatedAdorner(AdornedElement, this.DataTemplate, this.Data);
+            AdornedElement = AssociatedObject;
+            ItemsControlAdorner = new TemplatedAdorner(AdornedElement, DataTemplate, Data);
 
-            var collectionViewSource = CollectionViewSource.GetDefaultView(this.AdornedElement.Items);
+            var collectionViewSource = CollectionViewSource.GetDefaultView(AdornedElement.Items);
             if (collectionViewSource != null)
             {
                 collectionViewSource.CollectionChanged += ItemsChanged;
@@ -34,7 +28,7 @@ namespace PoGo.Necrobot.Window.Controls
         {
             base.OnDetaching();
 
-            var collectionViewSource = CollectionViewSource.GetDefaultView(this.AdornedElement.ItemsSource);
+            var collectionViewSource = CollectionViewSource.GetDefaultView(AdornedElement.ItemsSource);
             if (collectionViewSource != null)
             {
                 collectionViewSource.CollectionChanged -= ItemsChanged;
@@ -72,8 +66,8 @@ namespace PoGo.Necrobot.Window.Controls
 
         private void ItemsChanged(object sender, NotifyCollectionChangedEventArgs args)
         {
-            this.ItemsControlAdorner.Visibility =
-                this.AdornedElement.Items.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
+            ItemsControlAdorner.Visibility =
+                AdornedElement.Items.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
         }
 
         #endregion Private Members

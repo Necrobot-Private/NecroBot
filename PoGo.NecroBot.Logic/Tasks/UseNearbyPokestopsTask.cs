@@ -75,17 +75,17 @@ namespace PoGo.NecroBot.Logic.Tasks
                 await UseGymBattleTask.Execute(session, cancellationToken, pokeStop, fortInfo).ConfigureAwait(false);
 
                 if (fortInfo.Type == FortType.Gym &&
-                    (session.GymState.getGymDetails(session, pokeStop).GymState.FortData.OwnedByTeam == session.Profile.PlayerData.Team || session.GymState.capturedGymId.Equals(fortInfo.FortId)) &&
+                    (session.GymState.GetGymDetails(session, pokeStop).GymState.FortData.OwnedByTeam == session.Profile.PlayerData.Team || session.GymState.CapturedGymId.Equals(fortInfo.FortId)) &&
                     session.LogicSettings.GymConfig.Enable &&
                     session.LogicSettings.GymConfig.EnableGymTraining)
                 {
-                    if (string.IsNullOrEmpty(session.GymState.trainingGymId) || !session.GymState.trainingGymId.Equals(fortInfo.FortId))
+                    if (string.IsNullOrEmpty(session.GymState.TrainingGymId) || !session.GymState.TrainingGymId.Equals(fortInfo.FortId))
                     {
-                        session.GymState.trainingGymId = fortInfo.FortId;
-                        session.GymState.trainingRound = 0;
+                        session.GymState.TrainingGymId = fortInfo.FortId;
+                        session.GymState.TrainingRound = 0;
                     }
-                    session.GymState.trainingRound++;
-                    if (session.GymState.trainingRound <= session.LogicSettings.GymConfig.MaxTrainingRoundsOnOneGym)
+                    session.GymState.TrainingRound++;
+                    if (session.GymState.TrainingRound <= session.LogicSettings.GymConfig.MaxTrainingRoundsOnOneGym)
                         continue;
                 }
 
@@ -157,7 +157,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 // Always set the fort info in base walk strategy.
 
                 var pokeStopDestination = new FortLocation(pokeStop.Latitude, pokeStop.Longitude,
-                    await LocationUtils.getElevation(session.ElevationService, pokeStop.Latitude, pokeStop.Longitude).ConfigureAwait(false), pokeStop, fortInfo);
+                    await LocationUtils.GetElevation(session.ElevationService, pokeStop.Latitude, pokeStop.Longitude).ConfigureAwait(false), pokeStop, fortInfo);
 
                 await session.Navigation.Move(pokeStopDestination,
                     async () =>

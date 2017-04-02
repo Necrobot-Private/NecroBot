@@ -2,13 +2,13 @@
 {
     public class Leg
     {
-        public ValueText distance { get; set; }
-        public ValueText duration { get; set; }
-        public string end_address { get; set; }
-        public Geo end_location { get; set; }
-        public string start_address { get; set; }
-        public Geo start_location { get; set; }
-        public Step[] steps { get; set; }
-        public object[] via_waypoint { get; set; }
+        public ValueText Distance { get; set; }
+        public ValueText Duration { get; set; }
+        public string End_address { get; set; }
+        public Geo End_location { get; set; }
+        public string Start_address { get; set; }
+        public Geo Start_location { get; set; }
+        public Step[] Steps { get; set; }
+        public object[] Via_waypoint { get; set; }
     }
 }

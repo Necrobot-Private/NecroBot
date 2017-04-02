@@ -65,7 +65,7 @@ namespace PoGo.NecroBot.Logic
         public Inventory(ISession session, Client client, ILogicSettings logicSettings,
             Action onUpdated = null)
         {
-            this.ownerSession = session;
+            ownerSession = session;
             _client = client;
             _logicSettings = logicSettings;
             // Inventory update will be called everytime GetMapObject is called.
@@ -107,7 +107,7 @@ namespace PoGo.NecroBot.Logic
                     && item.InventoryItemData.Item != null
                     && item.InventoryItemData.Item.ItemId == itemId)
                 {
-                    this.ownerSession.EventDispatcher.Send(new InventoryItemUpdateEvent()
+                    ownerSession.EventDispatcher.Send(new InventoryItemUpdateEvent()
                     {
                         Item = item.InventoryItemData.Item
                     });
@@ -239,7 +239,8 @@ namespace PoGo.NecroBot.Logic
 
             foreach (var pokemonGroupToTransfer in pokemonToTransfer.GroupBy(p => p.PokemonId).ToList())
             {
-                var amountToKeepInStorage = Math.Max(GetApplyFilter<TransferFilter>(session.LogicSettings.PokemonsTransferFilter, pokemonGroupToTransfer.Key).KeepMinDuplicatePokemon, 0);
+               var amountToKeepInStorage = Math.Max(GetApplyFilter<TransferFilter>(session.LogicSettings.PokemonsTransferFilter, pokemonGroupToTransfer.Key).KeepMinDuplicatePokemon, 0);
+
 
                 var inStorage = myPokemon.Count(data => data.PokemonId == pokemonGroupToTransfer.Key);
                 var needToRemove = inStorage - amountToKeepInStorage;
@@ -633,7 +634,7 @@ namespace PoGo.NecroBot.Logic
                 return false;
 
             // Can't transfer buddy pokemon
-            var buddy = this.ownerSession.Profile.PlayerData.BuddyPokemon;
+            var buddy = ownerSession.Profile.PlayerData.BuddyPokemon;
             if (buddy != null && buddy.Id == pokemon.Id)
                 return false;
 
