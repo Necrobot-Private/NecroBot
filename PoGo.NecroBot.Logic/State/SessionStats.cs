@@ -4,7 +4,6 @@ using System.IO;
 using LiteDB;
 using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.Event;
-using PokemonGo.RocketAPI.Enums;
 
 namespace PoGo.NecroBot.Logic.State
 {
@@ -38,12 +37,12 @@ namespace PoGo.NecroBot.Logic.State
             if (!session.LogicSettings.UsePokeStopLimit) return false;
             //if (_pokestopLimitReached || _pokestopTimerReached) return true;
 
-            this.CleanOutExpiredStats();
+            CleanOutExpiredStats();
 
             // Check if user defined max Pokestops reached
             var timeDiff = (DateTime.Now - session.Stats.StartTime);
 
-            if (this.GetNumPokestopsInLast24Hours() >= session.LogicSettings.PokeStopLimit)
+            if (GetNumPokestopsInLast24Hours() >= session.LogicSettings.PokeStopLimit)
             {
                 if (printMessage && lastPrintPokestopMessage.AddSeconds(60) < DateTime.Now)
                 {
@@ -79,7 +78,7 @@ namespace PoGo.NecroBot.Logic.State
         {
             if (!session.LogicSettings.UseCatchLimit) return false;
 
-            this.CleanOutExpiredStats();
+            CleanOutExpiredStats();
 
             var timeDiff = (DateTime.Now - session.Stats.StartTime);
 
@@ -117,7 +116,7 @@ namespace PoGo.NecroBot.Logic.State
         {
             if (!session.LogicSettings.UsePokeStopLimit) return false;
 
-            this.CleanOutExpiredStats();
+            CleanOutExpiredStats();
 
             if (GetNumPokestopsInLast24Hours() >= session.LogicSettings.PokeStopLimitMinutes)
                 return true;

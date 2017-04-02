@@ -43,7 +43,7 @@
     </Control.Resources>
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
-            <Button Click="btnSave_Click" Name="btnSave">
+            <Button Click="BtnSave_Click" Name="btnSave">
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="20"
                    Height="20"

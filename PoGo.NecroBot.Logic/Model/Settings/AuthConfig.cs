@@ -3,12 +3,11 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 using PokemonGo.RocketAPI.Enums;
-using Newtonsoft.Json.Converters;
 
 namespace PoGo.NecroBot.Logic.Model.Settings
 {
     [JsonObject(Title = "Authentication Config",
-         Description = "Set your authentication type (Google or Ptc) and your login informartion.",
+         Description = "Set your Authentication type (Google or Ptc) and your login information.",
          ItemRequired = Required.DisallowNull)]
     public class AuthConfig  :BaseConfig
     {

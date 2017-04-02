@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace PoGo.NecroBot.Logic.Model.Settings
 {
-    [JsonObject(Title = "API Config", Description = "Config your prefered API to use", ItemRequired = Required.DisallowNull)]
+    [JsonObject(Title = "API Config", Description = "Set Preferred API Type to use", ItemRequired = Required.DisallowNull)]
     public class APIConfig : BaseConfig
     {
         public APIConfig() : base()

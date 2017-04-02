@@ -90,7 +90,7 @@
       <HintPath>$(SolutionDir)\packages\CloudFlareUtilities.0.2.1-alpha\lib\portable-net45+win+wpa81+MonoAndroid10+xamarinios10+MonoTouch10\CloudFlareUtilities.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="crypto, Version=1.8.1.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
+    <Reference Include="crypto, Version=1.8.1.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
       <HintPath>$(SolutionDir)\packages\Portable.BouncyCastle.1.8.1.1\lib\netstandard1.3\crypto.dll</HintPath>
     </Reference>
     <Reference Include="EngineIoClientDotNet, Version=0.9.22.0, Culture=neutral, processorArchitecture=MSIL">
@@ -127,7 +127,7 @@
       <HintPath>$(SolutionDir)\packages\Newtonsoft.Json.10.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json.Schema, Version=2.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)\packages\Newtonsoft.Json.Schema.2.0.9\lib\net45\Newtonsoft.Json.Schema.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\Newtonsoft.Json.Schema.2.0.10\lib\net45\Newtonsoft.Json.Schema.dll</HintPath>
     </Reference>
     <Reference Include="S2Geometry, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\S2Geometry.1.0.3\lib\portable-net45+wp8+win8\S2Geometry.dll</HintPath>

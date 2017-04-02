@@ -15,25 +15,25 @@ namespace PoGo.Necrobot.Window.Controls.MapMarkers
       Popup Popup;
       Label Label;
       GMapMarker Marker;
-        MainClientWindow MainWindow;
+      MainClientWindow MainWindow;
 
       public PlayerMarker(MainClientWindow window, GMapMarker marker, string title)
       {
-         this.InitializeComponent();
+            InitializeComponent();
 
-         this.MainWindow = window;
-         this.Marker = marker;
+            MainWindow = window;
+            Marker = marker;
 
          Popup = new Popup();
          Label = new Label();
 
-         this.Loaded += new RoutedEventHandler(CustomMarkerDemo_Loaded);
-         this.SizeChanged += new SizeChangedEventHandler(CustomMarkerDemo_SizeChanged);
-         this.MouseEnter += new MouseEventHandler(MarkerControl_MouseEnter);
-         this.MouseLeave += new MouseEventHandler(MarkerControl_MouseLeave);
-         this.MouseMove += new MouseEventHandler(CustomMarkerDemo_MouseMove);
-         this.MouseLeftButtonUp += new MouseButtonEventHandler(CustomMarkerDemo_MouseLeftButtonUp);
-         this.MouseLeftButtonDown += new MouseButtonEventHandler(CustomMarkerDemo_MouseLeftButtonDown);
+            Loaded += new RoutedEventHandler(CustomMarkerDemo_Loaded);
+            SizeChanged += new SizeChangedEventHandler(CustomMarkerDemo_SizeChanged);
+            MouseEnter += new MouseEventHandler(MarkerControl_MouseEnter);
+            MouseLeave += new MouseEventHandler(MarkerControl_MouseLeave);
+            MouseMove += new MouseEventHandler(CustomMarkerDemo_MouseMove);
+            MouseLeftButtonUp += new MouseButtonEventHandler(CustomMarkerDemo_MouseLeftButtonUp);
+            MouseLeftButtonDown += new MouseButtonEventHandler(CustomMarkerDemo_MouseLeftButtonDown);
 
          Popup.Placement = PlacementMode.Mouse;
          {

@@ -11,12 +11,12 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         {
         }
 
-        [NecrobotConfig(Description = "Allow check for pokestop daily limit - PokeStopLimit per PokeStopLimitMinutes", Position = 1)]
+        [NecrobotConfig(Description = "Allows bot to check for pokestop daily limit - PokeStopLimit per PokeStopLimitMinutes", Position = 1)]
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public bool UsePokeStopLimit { get; set; }
 
-        [NecrobotConfig(Description = "Max number of pokestop bot allowed to farm a day", Position = 2)]
+        [NecrobotConfig(Description = "Max number of pokestops bot is allowed to farm a day", Position = 2)]
         [DefaultValue(1500)]
         [Range(0, 9999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]

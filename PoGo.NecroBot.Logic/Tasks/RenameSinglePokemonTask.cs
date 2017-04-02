@@ -1,17 +1,10 @@
 ﻿#region using directives
 
-using System;
-using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
-using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.Event;
-using PoGo.NecroBot.Logic.PoGoUtils;
 using PoGo.NecroBot.Logic.State;
-using PoGo.NecroBot.Logic.Utils;
 using POGOProtos.Networking.Responses;
-using System.Text.RegularExpressions;
-using PoGo.NecroBot.Logic.Logging;
 using System.Linq;
 
 #endregion

@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Model;
 using PoGo.NecroBot.Logic.State;
-using PoGo.NecroBot.Logic.Utils;
 using POGOProtos.Enums;
 using POGOProtos.Inventory.Item;
 

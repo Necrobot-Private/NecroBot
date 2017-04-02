@@ -39,7 +39,7 @@ namespace PoGo.NecroBot.Logic.Forms
             if (m.Msg == WM_PAINT) {
                 foreach (EmbeddedControl c in _controls) {
                     Rectangle r = c.MySubItem.Bounds;
-                    if (r.Y > 0 && r.Y < this.ClientRectangle.Height) {
+                    if (r.Y > 0 && r.Y < ClientRectangle.Height) {
                         c.MyControl.Visible = true;
                         c.MyControl.Bounds = new Rectangle(r.X + _cpadding, r.Y + _cpadding, r.Width - (2 * _cpadding), r.Height - (2 * _cpadding));
                     } else {
@@ -51,14 +51,14 @@ namespace PoGo.NecroBot.Logic.Forms
                 case WM_HSCROLL:
                 case WM_VSCROLL:
                 case WM_MOUSEWHEEL:
-                    this.Focus();
+                    Focus();
                     break;
             }
             base.WndProc(ref m);
         }
         
         private void ScrollMe(int x, int y) {
-            SendMessage((IntPtr) this.Handle, LVM_SCROLL, x, y);
+            SendMessage(Handle, LVM_SCROLL, x, y);
         }
         
         public EXListView() {
@@ -67,38 +67,40 @@ namespace PoGo.NecroBot.Logic.Forms
             _sortcol = -1;
             _sortcolbrush = SystemBrushes.ControlLight;
             _highlightbrush = SystemBrushes.Highlight;
-            this.OwnerDraw = true;
-            this.FullRowSelect = true;
-            this.View = View.Details;
-            this.MouseDown += new MouseEventHandler(this_MouseDown);
-            this.MouseDoubleClick += new MouseEventHandler(this_MouseDoubleClick);
-            this.DrawColumnHeader += new DrawListViewColumnHeaderEventHandler(this_DrawColumnHeader);
-            this.DrawSubItem += new DrawListViewSubItemEventHandler(this_DrawSubItem);
-            this.MouseMove += new MouseEventHandler(this_MouseMove);
-            this.ColumnClick += new ColumnClickEventHandler(this_ColumnClick);
-            txtbx = new TextBox();
-            txtbx.Visible = false;
-            this.Controls.Add(txtbx);
-            txtbx.Leave += new EventHandler(c_Leave);
-            txtbx.KeyPress += new KeyPressEventHandler(txtbx_KeyPress);
+            OwnerDraw = true;
+            FullRowSelect = true;
+            View = View.Details;
+            MouseDown += new MouseEventHandler(This_MouseDown);
+            MouseDoubleClick += new MouseEventHandler(This_MouseDoubleClick);
+            DrawColumnHeader += new DrawListViewColumnHeaderEventHandler(This_DrawColumnHeader);
+            DrawSubItem += new DrawListViewSubItemEventHandler(This_DrawSubItem);
+            MouseMove += new MouseEventHandler(This_MouseMove);
+            ColumnClick += new ColumnClickEventHandler(This_ColumnClick);
+            txtbx = new TextBox()
+            {
+                Visible = false
+            };
+            Controls.Add(txtbx);
+            txtbx.Leave += new EventHandler(C_Leave);
+            txtbx.KeyPress += new KeyPressEventHandler(Txtbx_KeyPress);
         }
         
         public void AddControlToSubItem(Control control, EXControlListViewSubItem subitem) {
-            this.Controls.Add(control);
+            Controls.Add(control);
             subitem.MyControl = control;
             EmbeddedControl ec;
             ec.MyControl = control;
             ec.MySubItem = subitem;
-            this._controls.Add(ec);
+            _controls.Add(ec);
         }
         
         public void RemoveControlFromSubItem(EXControlListViewSubItem subitem) {
             Control c = subitem.MyControl;
-            for (int i = 0; i < this._controls.Count; i++) {
-                if (((EmbeddedControl) this._controls[i]).MySubItem == subitem) {
-                    this._controls.RemoveAt(i);
+            for (int i = 0; i < _controls.Count; i++) {
+                if (((EmbeddedControl)_controls[i]).MySubItem == subitem) {
+                    _controls.RemoveAt(i);
                     subitem.MyControl = null;
-                    this.Controls.Remove(c);
+                    Controls.Remove(c);
                     c.Dispose();
                     return;
                 }
@@ -120,7 +122,7 @@ namespace PoGo.NecroBot.Logic.Forms
             set {_highlightbrush = value;}
         }
         
-        private void txtbx_KeyPress(object sender, KeyPressEventArgs e) {
+        private void Txtbx_KeyPress(object sender, KeyPressEventArgs e) {
             if (e.KeyChar == (char) Keys.Return) {
                 _clickedsubitem.Text = txtbx.Text;
                 txtbx.Visible = false;
@@ -128,63 +130,63 @@ namespace PoGo.NecroBot.Logic.Forms
             }
         }
         
-        private void c_Leave(object sender, EventArgs e) {
+        private void C_Leave(object sender, EventArgs e) {
             Control c = (Control) sender;
             _clickedsubitem.Text = c.Text;
             c.Visible = false;
             _clickeditem.Tag = null;
         }
         
-        private void this_MouseDown(object sender, MouseEventArgs e) {
-            ListViewHitTestInfo lstvinfo = this.HitTest(e.X, e.Y);
+        private void This_MouseDown(object sender, MouseEventArgs e) {
+            ListViewHitTestInfo lstvinfo = HitTest(e.X, e.Y);
             ListViewItem.ListViewSubItem subitem = lstvinfo.SubItem;
             if (subitem == null) return;
             int subx = subitem.Bounds.Left;
             if (subx < 0) {
-                this.ScrollMe(subx, 0);
+                ScrollMe(subx, 0);
             }
         }
         
-        private void this_MouseDoubleClick(object sender, MouseEventArgs e) {
-            EXListViewItem lstvItem = this.GetItemAt(e.X, e.Y) as EXListViewItem;
+        private void This_MouseDoubleClick(object sender, MouseEventArgs e) {
+            EXListViewItem lstvItem = GetItemAt(e.X, e.Y) as EXListViewItem;
             if (lstvItem == null) return;
             _clickeditem = lstvItem;
             int x = lstvItem.Bounds.Left;
             int i;
-            for (i = 0; i < this.Columns.Count; i++) {
-                x = x + this.Columns[i].Width;
+            for (i = 0; i < Columns.Count; i++) {
+                x = x + Columns[i].Width;
                 if (x > e.X) {
-                    x = x - this.Columns[i].Width;
+                    x = x - Columns[i].Width;
                     _clickedsubitem = lstvItem.SubItems[i];
                     _col = i;
                     break;
                 }
             }
-            if (!(this.Columns[i] is EXColumnHeader)) return;
-            EXColumnHeader col = (EXColumnHeader) this.Columns[i];
+            if (!(Columns[i] is EXColumnHeader)) return;
+            EXColumnHeader col = (EXColumnHeader)Columns[i];
             if (col.GetType() == typeof(EXEditableColumnHeader)) {
                 EXEditableColumnHeader editcol = (EXEditableColumnHeader) col;
                 if (editcol.MyControl != null) {
                     Control c = editcol.MyControl;
                     if (c.Tag != null) {
-                        this.Controls.Add(c);
+                        Controls.Add(c);
                         c.Tag = null;
                         if (c is ComboBox) {
-                            ((ComboBox) c).SelectedValueChanged += new EventHandler(cmbx_SelectedValueChanged);
+                            ((ComboBox) c).SelectedValueChanged += new EventHandler(Cmbx_SelectedValueChanged);
                         }
-                        c.Leave += new EventHandler(c_Leave);
+                        c.Leave += new EventHandler(C_Leave);
                     }
-                    c.Location = new Point(x, this.GetItemRect(this.Items.IndexOf(lstvItem)).Y);
-                    c.Width = this.Columns[i].Width;
-                    if (c.Width > this.Width) c.Width = this.ClientRectangle.Width;
+                    c.Location = new Point(x, GetItemRect(Items.IndexOf(lstvItem)).Y);
+                    c.Width = Columns[i].Width;
+                    if (c.Width > Width) c.Width = ClientRectangle.Width;
                     c.Text = _clickedsubitem.Text;
                     c.Visible = true;
                     c.BringToFront();
                     c.Focus();
                 } else {
-                    txtbx.Location = new Point(x, this.GetItemRect(this.Items.IndexOf(lstvItem)).Y);
-                    txtbx.Width = this.Columns[i].Width;
-                    if (txtbx.Width > this.Width) txtbx.Width = this.ClientRectangle.Width;
+                    txtbx.Location = new Point(x, GetItemRect(Items.IndexOf(lstvItem)).Y);
+                    txtbx.Width = Columns[i].Width;
+                    if (txtbx.Width > Width) txtbx.Width = ClientRectangle.Width;
                     txtbx.Text = _clickedsubitem.Text;
                     txtbx.Visible = true;
                     txtbx.BringToFront();
@@ -199,12 +201,12 @@ namespace PoGo.NecroBot.Logic.Forms
                     } else {
                         boolsubitem.BoolValue = true;
                     }
-                    this.Invalidate(boolsubitem.Bounds);
+                    Invalidate(boolsubitem.Bounds);
                 }
             }
         }
         
-        private void cmbx_SelectedValueChanged(object sender, EventArgs e) {
+        private void Cmbx_SelectedValueChanged(object sender, EventArgs e) {
             if (((Control) sender).Visible == false || _clickedsubitem == null) return;
             if (sender.GetType() == typeof(EXComboBox)) {
                 EXComboBox excmbx = (EXComboBox) sender;
@@ -265,19 +267,19 @@ namespace PoGo.NecroBot.Logic.Forms
             _clickeditem.Tag = null;
         }
         
-        private void this_MouseMove(object sender, MouseEventArgs e) {
-            ListViewItem item = this.GetItemAt(e.X, e.Y);
+        private void This_MouseMove(object sender, MouseEventArgs e) {
+            ListViewItem item = GetItemAt(e.X, e.Y);
             if (item != null && item.Tag == null) {
-                this.Invalidate(item.Bounds);
+                Invalidate(item.Bounds);
                 item.Tag = "t";
             }
         }
         
-        private void this_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e) {
+        private void This_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e) {
             e.DrawDefault = true;
         }
         
-        private void this_DrawSubItem(object sender, DrawListViewSubItemEventArgs e) {
+        private void This_DrawSubItem(object sender, DrawListViewSubItemEventArgs e) {
             e.DrawBackground();
             if (e.ColumnIndex == _sortcol) {
                 e.Graphics.FillRectangle(_sortcolbrush, e.Bounds);
@@ -305,49 +307,49 @@ namespace PoGo.NecroBot.Logic.Forms
             if (subitem == null) {
                 e.DrawDefault = true;
             } else {
-                x = subitem.DoDraw(e, x, this.Columns[e.ColumnIndex] as EXColumnHeader);                
+                x = subitem.DoDraw(e, x, Columns[e.ColumnIndex] as EXColumnHeader);                
                 e.Graphics.DrawString(e.SubItem.Text, e.SubItem.Font, new SolidBrush(e.SubItem.ForeColor), x, fonty);
             }
         }
         
-        private void this_ColumnClick(object sender, ColumnClickEventArgs e) {
-            if (this.Items.Count == 0) return;
-            for (int i = 0; i < this.Columns.Count; i++) {
-                this.Columns[i].ImageKey = null;
+        private void This_ColumnClick(object sender, ColumnClickEventArgs e) {
+            if (Items.Count == 0) return;
+            for (int i = 0; i < Columns.Count; i++) {
+                Columns[i].ImageKey = null;
             }
-            for (int i = 0; i < this.Items.Count; i++) {
-                this.Items[i].Tag = null;
+            for (int i = 0; i < Items.Count; i++) {
+                Items[i].Tag = null;
             }
             if (e.Column != _sortcol) {
                 _sortcol = e.Column;
-                this.Sorting = SortOrder.Ascending;
-                this.Columns[e.Column].ImageKey = "up";
+                Sorting = SortOrder.Ascending;
+                Columns[e.Column].ImageKey = "up";
             } else {
-                if (this.Sorting == SortOrder.Ascending) {
-                    this.Sorting = SortOrder.Descending;
-                    this.Columns[e.Column].ImageKey = "down";
+                if (Sorting == SortOrder.Ascending) {
+                    Sorting = SortOrder.Descending;
+                    Columns[e.Column].ImageKey = "down";
                 } else {
-                    this.Sorting = SortOrder.Ascending;
-                    this.Columns[e.Column].ImageKey = "up";
+                    Sorting = SortOrder.Ascending;
+                    Columns[e.Column].ImageKey = "up";
                 }
             }
             if (_sortcol == 0) {
                 //ListViewItem
-                if (this.Items[0].GetType() == typeof(EXListViewItem)) {
+                if (Items[0].GetType() == typeof(EXListViewItem)) {
                     //sorting on text
-                    this.ListViewItemSorter = new ListViewItemComparerText(e.Column, this.Sorting);
+                    ListViewItemSorter = new ListViewItemComparerText(e.Column, Sorting);
                 } else {
                     //sorting on value
-                    this.ListViewItemSorter = new ListViewItemComparerValue(e.Column, this.Sorting);
+                    ListViewItemSorter = new ListViewItemComparerValue(e.Column, Sorting);
                 }
             } else {
                 //ListViewSubItem
-                if (this.Items[0].SubItems[_sortcol].GetType() == typeof(EXListViewSubItemAB)) {
+                if (Items[0].SubItems[_sortcol].GetType() == typeof(EXListViewSubItemAB)) {
                     //sorting on text
-                    this.ListViewItemSorter = new ListViewSubItemComparerText(e.Column, this.Sorting);
+                    ListViewItemSorter = new ListViewSubItemComparerText(e.Column, Sorting);
                 } else {
                     //sorting on value
-                    this.ListViewItemSorter = new ListViewSubItemComparerValue(e.Column, this.Sorting);
+                    ListViewItemSorter = new ListViewSubItemComparerValue(e.Column, Sorting);
                 }
             }
         }
@@ -517,12 +519,12 @@ namespace PoGo.NecroBot.Logic.Forms
         }
         
         public EXColumnHeader(string text) {
-            this.Text = text;
+            Text = text;
         }
         
         public EXColumnHeader(string text, int width) {
-            this.Text = text;
-            this.Width = width;
+            Text = text;
+            Width = width;
         }
         
     }
@@ -536,23 +538,23 @@ namespace PoGo.NecroBot.Logic.Forms
         }
         
         public EXEditableColumnHeader(string text) {
-            this.Text = text;
+            Text = text;
         }
         
         public EXEditableColumnHeader(string text, int width) {
-            this.Text = text;
-            this.Width = width;
+            Text = text;
+            Width = width;
         }
         
         public EXEditableColumnHeader(string text, Control control) {
-            this.Text = text;
-            this.MyControl = control;
+            Text = text;
+            MyControl = control;
         }
         
         public EXEditableColumnHeader(string text, Control control, int width) {
-            this.Text = text;
-            this.MyControl = control;
-            this.Width = width;
+            Text = text;
+            MyControl = control;
+            Width = width;
         }
         
         public Control MyControl {
@@ -573,36 +575,36 @@ namespace PoGo.NecroBot.Logic.Forms
         private bool _editable;
             
         public EXBoolColumnHeader() {
-            init();
+            Init();
         }
         
         public EXBoolColumnHeader(string text) {
-            init();
-            this.Text = text;
+            Init();
+            Text = text;
         }
         
         public EXBoolColumnHeader(string text, int width) {
-            init();
-            this.Text = text;
-            this.Width = width;
+            Init();
+            Text = text;
+            Width = width;
         }
         
         public EXBoolColumnHeader(string text, Image trueimage, Image falseimage) {
-            init();
-            this.Text = text;
+            Init();
+            Text = text;
             _trueimage = trueimage;
             _falseimage = falseimage;
         }
         
         public EXBoolColumnHeader(string text, Image trueimage, Image falseimage, int width) {
-            init();
-            this.Text = text;
+            Init();
+            Text = text;
             _trueimage = trueimage;
             _falseimage = falseimage;
-            this.Width = width;
+            Width = width;
         }
         
-        private void init() {
+        private void Init() {
             _editable = false;
         }
         
@@ -632,7 +634,7 @@ namespace PoGo.NecroBot.Logic.Forms
         }
         
         public EXListViewSubItemAB(string text) {
-            this.Text = text;
+            Text = text;
         }
         
         public string MyValue {
@@ -652,7 +654,7 @@ namespace PoGo.NecroBot.Logic.Forms
         }
         
         public EXListViewSubItem(string text) {
-            this.Text = text;
+            Text = text;
         }
         
         public override int DoDraw(DrawListViewSubItemEventArgs e, int x, EXColumnHeader ch) {
@@ -689,7 +691,7 @@ namespace PoGo.NecroBot.Logic.Forms
         }
         
         public EXImageListViewSubItem(string text) {
-            this.Text = text;
+            Text = text;
         }
             
         public EXImageListViewSubItem(Image image) {
@@ -698,13 +700,13 @@ namespace PoGo.NecroBot.Logic.Forms
 	
         public EXImageListViewSubItem(Image image, string value) {
             _image = image;
-            this.MyValue = value;
+            MyValue = value;
         }
 	
         public EXImageListViewSubItem(string text, Image image, string value) {
-            this.Text = text;
+            Text = text;
             _image = image;
-            this.MyValue = value;
+            MyValue = value;
         }
         
         public Image MyImage {
@@ -713,8 +715,8 @@ namespace PoGo.NecroBot.Logic.Forms
         }
         
         public override int DoDraw(DrawListViewSubItemEventArgs e, int x, EXColumnHeader ch) {
-            if (this.MyImage != null) {
-                Image img = this.MyImage;
+            if (MyImage != null) {
+                Image img = MyImage;
                 int imgy = e.Bounds.Y + ((int) (e.Bounds.Height / 2)) - ((int) (img.Height / 2));
                 e.Graphics.DrawImage(img, x, imgy, img.Width, img.Height);
                 x += img.Width + 2;
@@ -733,7 +735,7 @@ namespace PoGo.NecroBot.Logic.Forms
         }
         
         public EXMultipleImagesListViewSubItem(string text) {
-            this.Text = text;
+            Text = text;
         }
             
         public EXMultipleImagesListViewSubItem(ArrayList images) {
@@ -742,13 +744,13 @@ namespace PoGo.NecroBot.Logic.Forms
 	
         public EXMultipleImagesListViewSubItem(ArrayList images, string value) {
             _images = images;
-            this.MyValue = value;
+            MyValue = value;
         }
         
         public EXMultipleImagesListViewSubItem(string text, ArrayList images, string value) {
-            this.Text = text;
+            Text = text;
             _images = images;
-            this.MyValue = value;
+            MyValue = value;
         }
         
         public ArrayList MyImages {
@@ -757,9 +759,9 @@ namespace PoGo.NecroBot.Logic.Forms
         }
         
         public override int DoDraw(DrawListViewSubItemEventArgs e, int x, EXColumnHeader ch) {    
-            if (this.MyImages != null && this.MyImages.Count > 0) {
-                for (int i = 0; i < this.MyImages.Count; i++) {
-                    Image img = (Image) this.MyImages[i];
+            if (MyImages != null && MyImages.Count > 0) {
+                for (int i = 0; i < MyImages.Count; i++) {
+                    Image img = (Image)MyImages[i];
                     int imgy = e.Bounds.Y + ((int) (e.Bounds.Height / 2)) - ((int) (img.Height / 2));
                     e.Graphics.DrawImage(img, x, imgy, img.Width, img.Height);
                     x += img.Width + 2;
@@ -780,21 +782,21 @@ namespace PoGo.NecroBot.Logic.Forms
         
         public EXBoolListViewSubItem(bool val) {
             _value = val;
-	        this.MyValue = val.ToString();
+            MyValue = val.ToString();
         }
         
         public bool BoolValue {
             get {return _value;}
             set {
 		        _value = value;
-		        this.MyValue = value.ToString();
+                MyValue = value.ToString();
 	        }
         }
         
         public override int DoDraw(DrawListViewSubItemEventArgs e, int x, EXColumnHeader ch) {    
             EXBoolColumnHeader boolcol = (EXBoolColumnHeader) ch;
             Image boolimg;
-            if (this.BoolValue == true) {
+            if (BoolValue == true) {
                 boolimg = boolcol.TrueImage;
             } else {
                 boolimg = boolcol.FalseImage;
@@ -816,7 +818,7 @@ namespace PoGo.NecroBot.Logic.Forms
         }
         
         public EXListViewItem(string text) {
-            this.Text = text;
+            Text = text;
         }
 	
         public string MyValue {
@@ -835,7 +837,7 @@ namespace PoGo.NecroBot.Logic.Forms
         }
         
         public EXImageListViewItem(string text) {
-            this.Text = text;
+            Text = text;
         }
         
         public EXImageListViewItem(Image image) {
@@ -844,13 +846,13 @@ namespace PoGo.NecroBot.Logic.Forms
 	
         public EXImageListViewItem(string text, Image image) {
             _image = image;
-            this.Text = text;
+            Text = text;
         }
 	
 	    public EXImageListViewItem(string text, Image image, string value) {
-            this.Text = text;
+            Text = text;
             _image = image;
-	        this.MyValue = value;
+            MyValue = value;
         }
         
         public Image MyImage {
@@ -869,7 +871,7 @@ namespace PoGo.NecroBot.Logic.Forms
         }
         
         public EXMultipleImagesListViewItem(string text) {
-            this.Text = text;
+            Text = text;
         }
             
         public EXMultipleImagesListViewItem(ArrayList images) {
@@ -877,14 +879,14 @@ namespace PoGo.NecroBot.Logic.Forms
         }
 	
 	    public EXMultipleImagesListViewItem(string text, ArrayList images) {
-            this.Text = text;
+            Text = text;
             _images = images;
         }
 	
 	    public EXMultipleImagesListViewItem(string text, ArrayList images, string value) {
-            this.Text = text;
+            Text = text;
             _images = images;
-	        this.MyValue = value;
+            MyValue = value;
         }
         
         public ArrayList MyImages {

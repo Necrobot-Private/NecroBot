@@ -30,22 +30,22 @@ namespace PoGo.Necrobot.Window.Model
 
         public CatchPokemonViewModel(PokemonCaptureEvent ev)
         {
-            this.UUID = ev.EncounterId.ToString();
-            this.PokemonId = ev.Id;
-            this.PokemonName = ev.Id.ToString();
-            this.IV = ev.Perfection;
-            this.CP = ev.Cp;
-            this.Candy = ev.Candy;
-            this.Probability = ev.Probability;
-            this.EncounterId = ev.EncounterId;
-            this.CatchType = ev.CatchType;
-            this.Move1 = ev.Move1.ToString();
-            this.Move2 = ev.Move2.ToString();
-            this.CatchStatus = ev.Status.ToString();
-            this.PokeBalls = ev.Pokeball == POGOProtos.Inventory.Item.ItemId.ItemPokeBall? 1: 0;
-            this.UltraBalls = ev.Pokeball == POGOProtos.Inventory.Item.ItemId.ItemUltraBall ? 1 : 0;
-            this.GreatBalls = ev.Pokeball == POGOProtos.Inventory.Item.ItemId.ItemGreatBall ? 1 : 0;
-            this.Exp = ev.Exp;
+            UUID = ev.EncounterId.ToString();
+            PokemonId = ev.Id;
+            PokemonName = ev.Id.ToString();
+            IV = ev.Perfection;
+            CP = ev.Cp;
+            Candy = ev.Candy;
+            Probability = ev.Probability;
+            EncounterId = ev.EncounterId;
+            CatchType = ev.CatchType;
+            Move1 = ev.Move1.ToString();
+            Move2 = ev.Move2.ToString();
+            CatchStatus = ev.Status.ToString();
+            PokeBalls = ev.Pokeball == POGOProtos.Inventory.Item.ItemId.ItemPokeBall? 1: 0;
+            UltraBalls = ev.Pokeball == POGOProtos.Inventory.Item.ItemId.ItemUltraBall ? 1 : 0;
+            GreatBalls = ev.Pokeball == POGOProtos.Inventory.Item.ItemId.ItemGreatBall ? 1 : 0;
+            Exp = ev.Exp;
         }
     }
 }

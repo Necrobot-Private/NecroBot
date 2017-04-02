@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using PoGo.NecroBot.Logic.Event;
 
 namespace PoGo.Necrobot.Window.Model
@@ -15,7 +11,7 @@ namespace PoGo.Necrobot.Window.Model
 
         public MapViewModel()
         {
-            this.NearbyPokemons = new ObservableCollectionExt<MapPokemonViewModel>();
+            NearbyPokemons = new ObservableCollectionExt<MapPokemonViewModel>();
         }
         public ObservableCollectionExt<MapPokemonViewModel> NearbyPokemons { get; set; }
 

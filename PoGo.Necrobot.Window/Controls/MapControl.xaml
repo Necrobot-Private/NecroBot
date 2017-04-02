@@ -27,7 +27,7 @@
                             </MultiBinding>
                         </TextBlock.Text>
                     </TextBlock>
-                    <Button Margin="0,30,0,10" Width="100" Click="btnWalkHere_Click" Content="{Binding Source=WalkHere, Converter={StaticResource I18NConveter}}" ></Button>
+                    <Button Margin="0,30,0,10" Width="100" Click="BtnWalkHere_Click" Content="{Binding Source=WalkHere, Converter={StaticResource I18NConveter}}" ></Button>
                 </StackPanel>
             </Border>
         </Popup>
@@ -39,25 +39,25 @@
                                          VerticalContentAlignment="Stretch" 
                                          HorizontalContentAlignment="Stretch" 
                                          CanDragMap="True" MouseWheelZoomType="MousePositionWithoutCenter" 
-                                         MouseLeftButtonUp="gmap_MouseLeftButtonUp"
+                                         MouseLeftButtonUp="Gmap_MouseLeftButtonUp"
                                          >
             <WindowsPresentation:GMapControl.ContextMenu>
                 <ContextMenu Margin="20,20,20,20">
-                    <MenuItem Header="{Binding Source=ClearMap, Converter={StaticResource I18NConveter}}" Name="mnuClear" Click="mnuClear_Click" >
+                    <MenuItem Header="{Binding Source=ClearMap, Converter={StaticResource I18NConveter}}" Name="mnuClear" Click="MnuClear_Click" >
                         <MenuItem.Icon>
                             <Image Source="https://cdn3.iconfinder.com/data/icons/tango-icon-library/48/edit-clear-32.png" Width="28" Margin="20,5,20,5"></Image>
                         </MenuItem.Icon>
 
                     </MenuItem>
 
-                    <MenuItem Header="{Binding Source=ZoomIn, Converter={StaticResource I18NConveter}}" Name="mnuZoomIn" Click="mnuZoomIn_Click" >
+                    <MenuItem Header="{Binding Source=ZoomIn, Converter={StaticResource I18NConveter}}" Name="mnuZoomIn" Click="MnuZoomIn_Click" >
                         <MenuItem.Icon>
                             <Image Source="https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/zoom_in-32.png" Width="28" Margin="20,5,20,5"></Image>
                         </MenuItem.Icon>
 
                     </MenuItem>
 
-                    <MenuItem Header="{Binding Source=ZoomOut, Converter={StaticResource I18NConveter}}" Name="mnuZoomOut" Click="mnuZoomOut_Click" >
+                    <MenuItem Header="{Binding Source=ZoomOut, Converter={StaticResource I18NConveter}}" Name="mnuZoomOut" Click="MnuZoomOut_Click" >
                         <MenuItem.Icon>
                             <Image Source="https://cdn2.iconfinder.com/data/icons/freecns-cumulus/16/519894-015_ZoomOut-32.png" Width="28" Margin="20,5,20,5"></Image>
                         </MenuItem.Icon>
