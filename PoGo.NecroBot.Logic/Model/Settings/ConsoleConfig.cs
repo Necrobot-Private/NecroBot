@@ -18,12 +18,12 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [DefaultValue("en")]
         [RegularExpression(@"^[a-zA-Z]{2}(-[a-zA-Z]{2})*$")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
-        [NecrobotConfig(SheetName = "ConsoleConfig", Position = 1, Description = "Language transation code")]
+        [NecrobotConfig(SheetName = "ConsoleConfig", Position = 1, Description = "Language Transation code (ex: en = english)")]
         public string TranslationLanguageCode { get; set; }
 
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
-        [NecrobotConfig(Position = 2, Description = "Yes - Will display start up wellcome / No will turn off")]
+        [NecrobotConfig(Position = 2, Description = "If enabled, will display a welcome message on startup")]
         public bool StartupWelcomeDelay { get; set; }
 
         [DefaultValue(2)]
@@ -34,7 +34,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 4)]
-        [NecrobotConfig(Position = 4, Description = "Detailed Counts Before Recycling")]
+        [NecrobotConfig(Position = 4, Description = "Detailed Inventory Count to Display Before Recycling")]
         public bool DetailedCountsBeforeRecycling { get; set; }
     }
 }

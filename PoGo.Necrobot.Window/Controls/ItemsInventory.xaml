@@ -40,7 +40,7 @@
                 <GridViewColumn Header="Action" Width="80">
                     <GridViewColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="{Binding Path=DropText}" IsEnabled="{Binding Path=AllowDrop}" CommandParameter="{Binding Path=ItemId}" Click="btnDrop_Click"/>
+                            <Button Content="{Binding Path=DropText}" IsEnabled="{Binding Path=AllowDrop}" CommandParameter="{Binding Path=ItemId}" Click="BtnDrop_Click"/>
                         </DataTemplate>
                     </GridViewColumn.CellTemplate>
                 </GridViewColumn>

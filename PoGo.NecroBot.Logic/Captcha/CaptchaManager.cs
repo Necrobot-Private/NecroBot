@@ -222,7 +222,7 @@ namespace PoGo.NecroBot.Logic.Captcha
             if (!File.Exists("chromedriver.exe"))
             {
                 Logger.Write(
-                    $"You enable manual captcha resolve but didn't setup properly, please download webdriver.exe put in same folder.",
+                    $"You enable manual captcha resolve but bot didn't setup files properly, please download chromedriver.exe put in same folder.",
                     LogLevel.Error
                 );
                 return null;

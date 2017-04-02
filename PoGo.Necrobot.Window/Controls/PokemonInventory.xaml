@@ -25,7 +25,7 @@
     </Control.Resources>
     <DockPanel LastChildFill="True">
         <DockPanel LastChildFill="True" DockPanel.Dock="Top" Margin="10,1,10,5">
-            <Button  DockPanel.Dock="Right" Name="btnExport" Click="btnExport_Click" Margin="0,0,40,0" >
+            <Button  DockPanel.Dock="Right" Name="btnExport" Click="BtnExport_Click" Margin="0,0,40,0" >
                 <StackPanel Orientation="Horizontal">
                     <Image Width="16" Source="https://cdn1.iconfinder.com/data/icons/application-file-formats/128/microsoft-excel-128.png" Cursor="Hand"/>
                     <TextBlock Text="{Binding Source=Export, Converter={StaticResource I18NConveter}}" Margin="10,0,0,0"></TextBlock>
@@ -34,9 +34,9 @@
             </Button>
             <StackPanel Orientation="Horizontal">
 
-                <Button x:Name="btnTransferAll" Margin="0,0,10,0" Content="Transfer All" Click="btnTransferAll_Click"/>
+                <Button x:Name="btnTransferAll" Margin="0,0,10,0" Content="Transfer All" Click="BtnTransferAll_Click"/>
                 <Button x:Name="btnFavoriteAll" Margin="0,0,10,0" Content="Favorite All"/>
-                <Button x:Name="btnPokedexView" Click="btnPokedexView_Click">
+                <Button x:Name="btnPokedexView" Click="BtnPokedexView_Click">
                     <StackPanel Orientation="Horizontal" >
                         <Image Source="http://allaboutwindowsphone.com/images/appicons/208046.png" Width="20px"></Image>
                         <TextBlock Text="{Binding Source=Pokedex, Converter={StaticResource I18NConveter}}"></TextBlock>
@@ -119,8 +119,8 @@
 
                                     </DockPanel>
                                     <StackPanel Orientation="Horizontal" Margin="0,20" HorizontalAlignment="Center">
-                                        <Button Margin="20,5"  Content="{Binding Source=SearchButton, Converter={StaticResource I18NConveter}}" Name="applyFilter" Click="applyFilter_Click"></Button>
-                                        <Button Margin="20,5"  Content="{Binding Source=SearchSelectAllButton, Converter={StaticResource I18NConveter}}" Name="applySearchSelect" Click="applySearchSelect_Click"></Button>
+                                        <Button Margin="20,5"  Content="{Binding Source=SearchButton, Converter={StaticResource I18NConveter}}" Name="applyFilter" Click="ApplyFilter_Click"></Button>
+                                        <Button Margin="20,5"  Content="{Binding Source=SearchSelectAllButton, Converter={StaticResource I18NConveter}}" Name="applySearchSelect" Click="ApplySearchSelect_Click"></Button>
                                     </StackPanel>
                                 </StackPanel>
                                 <StackPanel Name="footer"></StackPanel>
@@ -139,7 +139,7 @@
               VerticalAlignment="Stretch"
               HorizontalAlignment="Stretch"
               ItemsSource="{Binding Pokemons}"
-                  SelectionChanged="gridData_SelectionChanged"
+                  SelectionChanged="GridData_SelectionChanged"
                   VerticalScrollBarVisibility="Visible"
                     ScrollViewer.CanContentScroll="True"
       ScrollViewer.VerticalScrollBarVisibility="Visible"
@@ -149,12 +149,12 @@
 
             <DataGrid.ContextMenu>
                 <ContextMenu >
-                    <MenuItem Header="{Binding Source=SetBuddy, Converter={StaticResource I18NConveter}}" Click="mnuBuddy_Click">
+                    <MenuItem Header="{Binding Source=SetBuddy, Converter={StaticResource I18NConveter}}" Click="MnuBuddy_Click">
                         <MenuItem.Icon>
                             <Image Source="https://cdn4.iconfinder.com/data/icons/free-retina-icon-set/20/Aim_buddy.png" Width="20" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem  Header="{Binding Source=MenuTransferFilterText, Converter={StaticResource I18NConveter}}" Click="mnuTransferSetting_Click" >
+                    <MenuItem  Header="{Binding Source=MenuTransferFilterText, Converter={StaticResource I18NConveter}}" Click="MnuTransferSetting_Click" >
                         <MenuItem.Icon>
                             <Image Source="https://cdn2.iconfinder.com/data/icons/elysium-icons/24/Transfer_Horizontal.png" Width="20" />
                         </MenuItem.Icon>
@@ -294,7 +294,7 @@
                                                             </MultiBinding>
                                                         </TextBlock.Text>
                                                     </TextBlock>
-                                                    <Button  Click="btnTransfer_Click" CommandParameter="{Binding Id}" HorizontalAlignment="Center" Margin="20,20,20,20"  Content="{Binding Source=TransferConfirmButton, Converter={StaticResource I18NConveter}}" Width="100"></Button>    
+                                                    <Button  Click="BtnTransfer_Click" CommandParameter="{Binding Id}" HorizontalAlignment="Center" Margin="20,20,20,20"  Content="{Binding Source=TransferConfirmButton, Converter={StaticResource I18NConveter}}" Width="100"></Button>    
                                                 </StackPanel>
                                             </StackPanel>
                                         </Border>
@@ -367,7 +367,7 @@
 
                                                             <ListView.ItemTemplate>
                                                                 <DataTemplate>
-                                                                    <Button CommandParameter="{Binding}" Click="btnEvolve_Click" IsEnabled="{Binding AllowEvolve}">
+                                                                    <Button CommandParameter="{Binding}" Click="BtnEvolve_Click" IsEnabled="{Binding AllowEvolve}">
                                                                         <StackPanel Width="120" Margin="2,2,2,2" Orientation="Horizontal">
                                                                             <Image Source="{Binding Path=Pokemon, Converter= {StaticResource PokemonIdToImageConverter}}" Width="25" />
                                                                             <TextBlock Text="{Binding Path=Pokemon}" Margin="5,0,0,0" ></TextBlock>
@@ -424,15 +424,15 @@
                                                 <TextBlock TextWrapping="Wrap" Foreground="Orange" Text="{Binding Source=PowerUpDescription, Converter={StaticResource I18NConveter}}" />
 
                                                 <StackPanel Orientation="Horizontal">
-                                                    <Button Margin="0,20,0,20" Click="btnPowerup_Click"   CommandParameter="{Binding Id}" Content="{Binding Source=NormalPowerup, Converter={StaticResource I18NConveter}}"/>
-                                                    <Button Margin="40,20,0,20" Click="btnMaxPowerUp_Click"    CommandParameter="{Binding Id}" Content="{Binding Source=MaxPowerup, Converter={StaticResource I18NConveter}}"/>
+                                                    <Button Margin="0,20,0,20" Click="BtnPowerup_Click"   CommandParameter="{Binding Id}" Content="{Binding Source=NormalPowerup, Converter={StaticResource I18NConveter}}"/>
+                                                    <Button Margin="40,20,0,20" Click="BtnMaxPowerUp_Click"    CommandParameter="{Binding Id}" Content="{Binding Source=MaxPowerup, Converter={StaticResource I18NConveter}}"/>
                                                 </StackPanel>
                                             </StackPanel>
                                         </Border>
                                     </Grid>
                                 </Popup>
 
-                                <Button Margin="0,0,10,0" Click="btnFavorite_Click" CommandParameter="{Binding Id}">
+                                <Button Margin="0,0,10,0" Click="BtnFavorite_Click" CommandParameter="{Binding Id}">
                                     <Button.Content>
                                         <MultiBinding Converter="{StaticResource ResourceKey=FavoriteTextConverter}">
                                             <Binding Path="IsFavoriting"></Binding>

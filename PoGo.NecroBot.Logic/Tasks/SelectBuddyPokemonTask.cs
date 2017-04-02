@@ -52,7 +52,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 if (newBuddy == null)
                 {
-                    Logger.Write($"You don't have pokemon {session.LogicSettings.DefaultBuddyPokemon} to set as buddy");
+                    Logger.Write($"You don't have the pokemon {session.LogicSettings.DefaultBuddyPokemon} to set as your buddy");
                     return;
                 }
             }

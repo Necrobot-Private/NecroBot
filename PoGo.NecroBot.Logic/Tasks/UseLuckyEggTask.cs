@@ -15,7 +15,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 case UseItemXpBoostResponse.Types.Result.Success:
                     Logger.Write($"Using a Lucky Egg");
-                    Logger.Write($"Lucky Egg valid until: {DateTime.Now.AddMinutes(30)}");
+                    Logger.Write($"Lucky Egg is valid until: {DateTime.Now.AddMinutes(30)}");
                     break;
                 case UseItemXpBoostResponse.Types.Result.ErrorXpBoostAlreadyActive:
                     Logger.Write($"A Lucky Egg is already active!", LogLevel.Warning);
@@ -30,7 +30,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 case UseItemXpBoostResponse.Types.Result.ErrorNoItemsRemaining:
                     break;
                 default:
-                    Logger.Write($"Failed using a Lucky Egg!", LogLevel.Error);
+                    Logger.Write($"Failed to use a Lucky Egg!", LogLevel.Error);
                     break;
             }
         }

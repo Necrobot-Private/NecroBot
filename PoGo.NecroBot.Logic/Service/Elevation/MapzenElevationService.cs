@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Net;
 using Newtonsoft.Json.Linq;
 using PoGo.NecroBot.Logic.Model.Settings;

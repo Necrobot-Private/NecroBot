@@ -4,10 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 using POGOProtos.Enums;
 using System.Linq;
-using System;
 using TinyIoC;
 using PoGo.NecroBot.Logic.State;
-using PoGo.NecroBot.Logic.Utils;
 
 namespace PoGo.NecroBot.Logic.Model.Settings
 {
@@ -16,34 +14,34 @@ namespace PoGo.NecroBot.Logic.Model.Settings
     {
         public SnipeFilter() : base()
         {
-            this.Priority = 5;
+            Priority = 5;
             Moves = new List<List<PokemonMove>>();
-            this.AffectToPokemons = new List<PokemonId>();
+            AffectToPokemons = new List<PokemonId>();
         }
 
         public SnipeFilter(int snipeMinIV, List<List<PokemonMove>> moves = null) : base()
         {
 
-            this.AffectToPokemons = new List<PokemonId>();
-            this.Operator = "or";
-            this.SnipeIV = snipeMinIV;
-            this.Moves = moves;
-            this.VerifiedOnly = false;
-            this.Priority = 5;
+            AffectToPokemons = new List<PokemonId>();
+            Operator = "or";
+            SnipeIV = snipeMinIV;
+            Moves = moves;
+            VerifiedOnly = false;
+            Priority = 5;
         }
 
         [JsonIgnore]
-        [NecrobotConfig(IsPrimaryKey = true,Key = "Enable Snipe", Description = "Enable snipe filter for this, if not set it will apply global setting", Position = 1)]
+        [NecrobotConfig(IsPrimaryKey = true,Key = "Enable Snipe", Description = "Enables bot Snipe filter, if not it will use global setting", Position = 1)]
         [DefaultValue(false)]
         public bool EnableSnipe { get; set; }
 
-        [NecrobotConfig(Key = "Snipe Min IV", Description = "Min Pokemon IV for auto snipe", Position = 2)]
+        [NecrobotConfig(Key = "Snipe Min IV", Description = "Min Pokemon IV for auto sniping", Position = 2)]
         [DefaultValue(90)]
         [Range(0, 101)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public int SnipeIV {get; set;}
 
-        [NecrobotConfig(Key = "Moves", Description = "Defined list of moves that you want snipe", Position = 3)]
+        [NecrobotConfig(Key = "Moves", Description = "Defines list of moves that you want snipe", Position = 3)]
         [DefaultValue(null)]
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
         public List<List<PokemonMove>> Moves { get; set; }
@@ -54,7 +52,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 4)]
         public string Operator { get; set; }
 
-        [NecrobotConfig(Key = "Verified Only", Description = "Only catch pokemon that has been verified", Position = 5)]
+        [NecrobotConfig(Key = "Verified Only", Description = "Only catch pokemon that have been verified", Position = 5)]
         [DefaultValue(false)]
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 5)]
         public bool VerifiedOnly { get; set; }
@@ -65,23 +63,23 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 6)]
         public int Priority { get; set; }
 
-        [NecrobotConfig(Key = "Auto Snipe Candy", Description = "Set number of candy you want bot snipe for this pokemon", Position = 7)]
+        [NecrobotConfig(Key = "Auto Snipe Candy", Description = "Set number of candy you want bot to snipe for this pokemon", Position = 7)]
         [DefaultValue(2000)]
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 7)]
         public int AutoSnipeCandy { get; set; }
 
-        [NecrobotConfig(Key = "Snipe Level", Description = "Min level to snipe , level are using and logic with IV and move and only activate for verify data", Position = 8)]
+        [NecrobotConfig(Key = "Snipe Level", Description = "Min level to snipe, level are using and logic with IV and move and only activate for verify data", Position = 8)]
         [DefaultValue(0)]
         [Range(0,100)]
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 8)]
         public int Level { get; set; }
 
-        [NecrobotConfig(Key = "AllowMultiAccountSnipe", Description = "Allow bot change account to snipe this pokemon", Position = 9)]
+        [NecrobotConfig(Key = "AllowMultiAccountSnipe", Description = "Allows bot to change account to snipe this pokemon", Position = 9)]
         [DefaultValue(false)]
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 9)]
         public bool AllowMultiAccountSnipe { get; set; }
 
-        [NecrobotConfig(Key = "Affect To Pokemon", Description = "Define list pokemon using this filter too", Position = 9)]
+        [NecrobotConfig(Key = "Affect To Pokemon", Description = "Defines list of pokemon using this filter too", Position = 9)]
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 9)]
         public List<PokemonId> AffectToPokemons { get; set; }
         internal static Dictionary<PokemonId, SnipeFilter> SniperFilterDefault()

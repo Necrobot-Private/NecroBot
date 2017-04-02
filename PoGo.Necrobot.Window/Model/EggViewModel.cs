@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using POGOProtos.Data;
 
 namespace PoGo.Necrobot.Window.Model
@@ -25,19 +21,19 @@ namespace PoGo.Necrobot.Window.Model
         public double KM { get; set; }
 
         public bool Hatchable { get; set; }
-        public string Icon => icons[this.TotalKM];
+        public string Icon => icons[TotalKM];
         public EggViewModel() { }
         public EggViewModel(PokemonData egg)
         {
-            this.Id = egg.Id;
+            Id = egg.Id;
             TotalKM = egg.EggKmWalkedTarget;
             KM = egg.EggKmWalkedStart;
             this.egg = egg;
         }
         public void UpdateWith(EggViewModel e)
         {
-            this.KM = e.KM;
-            this.RaisePropertyChanged("KM");
+            KM = e.KM;
+            RaisePropertyChanged("KM");
         }
     }
 }

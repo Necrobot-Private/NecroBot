@@ -19,11 +19,9 @@ using PoGo.NecroBot.Logic.Service.Elevation;
 using PoGo.NecroBot.Logic.Tasks;
 using PoGo.NecroBot.Logic.Utils;
 using PokemonGo.RocketAPI;
-using PokemonGo.RocketAPI.Enums;
 using PokemonGo.RocketAPI.Extensions;
 using POGOProtos.Map.Fort;
 using POGOProtos.Networking.Responses;
-using static PoGo.NecroBot.Logic.Utils.PushNotificationClient;
 using TinyIoC;
 
 #endregion
@@ -77,33 +75,33 @@ namespace PoGo.NecroBot.Logic.State
 
         public List<BotActions> Actions
         {
-            get { return this.botActions; }
+            get { return botActions; }
         }
 
         public Session(GlobalSettings globalSettings, ISettings settings, ILogicSettings logicSettings,
             IElevationService elevationService, ITranslation translation)
         {
-            this.GlobalSettings = globalSettings;
-            this.CancellationTokenSource = new CancellationTokenSource();
-            this.Forts = new List<FortData>();
-            this.VisibleForts = new List<FortData>();
-            this.Cache = new MemoryCache("Necrobot2");
-            this.accounts = new List<AuthConfig>();
-            this.EventDispatcher = new EventDispatcher();
-            this.LogicSettings = logicSettings;
-            this.RuntimeStatistics = new Statistics();
+            GlobalSettings = globalSettings;
+            CancellationTokenSource = new CancellationTokenSource();
+            Forts = new List<FortData>();
+            VisibleForts = new List<FortData>();
+            Cache = new MemoryCache("Necrobot2");
+            accounts = new List<AuthConfig>();
+            EventDispatcher = new EventDispatcher();
+            LogicSettings = logicSettings;
+            RuntimeStatistics = new Statistics();
 
-            this.ElevationService = elevationService;
+            ElevationService = elevationService;
 
-            this.Settings = settings;
+            Settings = settings;
 
-            this.Translation = translation;
-            this.Reset(settings, LogicSettings);
-            this.Stats = new SessionStats(this);
-            this.accounts.AddRange(logicSettings.Bots);
-            if (!this.accounts.Any(x => x.AuthType == settings.AuthType && x.Username == settings.Username))
+            Translation = translation;
+            Reset(settings, LogicSettings);
+            Stats = new SessionStats(this);
+            accounts.AddRange(logicSettings.Bots);
+            if (!accounts.Any(x => x.AuthType == settings.AuthType && x.Username == settings.Username))
             {
-                this.accounts.Add(new AuthConfig()
+                accounts.Add(new AuthConfig()
                 {
                     AuthType = settings.AuthType,
                     Password = settings.Password,
@@ -116,7 +114,7 @@ namespace PoGo.NecroBot.Logic.State
                 foreach (var item in lines)
                 {
                     var arr = item.Split(';');
-                    var acc = this.accounts.FirstOrDefault(p => p.Username == arr[0]);
+                    var acc = accounts.FirstOrDefault(p => p.Username == arr[0]);
                     if (acc != null)
                     {
                         acc.RuntimeTotal = Convert.ToDouble(arr[1]);
@@ -156,7 +154,7 @@ namespace PoGo.NecroBot.Logic.State
 
         public List<AuthConfig> Accounts
         {
-            get { return this.accounts; }
+            get { return accounts; }
         }
 
         public DateTime CatchBlockTime { get; set; }
@@ -165,9 +163,9 @@ namespace PoGo.NecroBot.Logic.State
 
         public void Reset(ISettings settings, ILogicSettings logicSettings)
         {
-            this.KnownLatitudeBeforeSnipe = 0; 
-            this.KnownLongitudeBeforeSnipe = 0;
-            if(this.GlobalSettings.Auth.DeviceConfig.UseRandomDeviceId)
+            KnownLatitudeBeforeSnipe = 0;
+            KnownLongitudeBeforeSnipe = 0;
+            if(GlobalSettings.Auth.DeviceConfig.UseRandomDeviceId)
             {
                 settings.DeviceId = DeviceConfig.GetDeviceId(settings.Username);
                 Logger.Debug($"Username : {Settings.Username} , Device ID :{Settings.DeviceId}");
@@ -176,13 +174,13 @@ namespace PoGo.NecroBot.Logic.State
             // ferox wants us to set this manually
             Inventory = new Inventory(this, Client, logicSettings, async () =>
             {
-                var candy = (await this.Inventory.GetPokemonFamilies().ConfigureAwait(false)).ToList();
-                var pokemonSettings = (await this.Inventory.GetPokemonSettings().ConfigureAwait(false)).ToList();
-                this.EventDispatcher.Send(new InventoryRefreshedEvent(null, pokemonSettings, candy));
+                var candy = (await Inventory.GetPokemonFamilies().ConfigureAwait(false)).ToList();
+                var pokemonSettings = (await Inventory.GetPokemonSettings().ConfigureAwait(false)).ToList();
+                EventDispatcher.Send(new InventoryRefreshedEvent(null, pokemonSettings, candy));
             });
             Navigation = new Navigation(Client, logicSettings);
             Navigation.WalkStrategy.UpdatePositionEvent +=
-                (session, lat, lng,s) => this.EventDispatcher.Send(new UpdatePositionEvent {Latitude = lat, Longitude = lng, Speed = s});
+                (session, lat, lng,s) => EventDispatcher.Send(new UpdatePositionEvent {Latitude = lat, Longitude = lng, Speed = s});
 
             Navigation.WalkStrategy.UpdatePositionEvent += LoadSaveState.SaveLocationToDisk;
         }
@@ -190,30 +188,30 @@ namespace PoGo.NecroBot.Logic.State
         //TODO : Need add BotManager to manage all feature related to multibot, 
         public bool ReInitSessionWithNextBot(MultiAccountManager.BotAccount bot = null, double lat = 0, double lng = 0, double att = 0)
         {
-            this.CatchBlockTime = DateTime.Now; //remove any block
+            CatchBlockTime = DateTime.Now; //remove any block
             MSniperServiceTask.BlockSnipe();
-            this.VisibleForts.Clear();
-            this.Forts.Clear();
+            VisibleForts.Clear();
+            Forts.Clear();
 
             var manager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
 
             var nextBot = manager.GetSwitchableAccount(bot);
 
-            this.GlobalSettings.Auth.CurrentAuthConfig = nextBot;
-            
-            this.Settings.DefaultAltitude = att == 0 ? this.Client.CurrentAltitude : att;
-            this.Settings.DefaultLatitude = lat == 0 ? this.Client.CurrentLatitude : lat;
-            this.Settings.DefaultLongitude = lng == 0 ? this.Client.CurrentLongitude : lng;
-            this.Stats = new SessionStats(this);
-            this.Reset(this.Settings, this.LogicSettings);
-            //CancellationTokenSource.Cancel();
-            this.CancellationTokenSource = new CancellationTokenSource();
+            GlobalSettings.Auth.CurrentAuthConfig = nextBot;
 
-            this.EventDispatcher.Send(new BotSwitchedEvent(nextBot)
+            Settings.DefaultAltitude = att == 0 ? Client.CurrentAltitude : att;
+            Settings.DefaultLatitude = lat == 0 ? Client.CurrentLatitude : lat;
+            Settings.DefaultLongitude = lng == 0 ? Client.CurrentLongitude : lng;
+            Stats = new SessionStats(this);
+            Reset(Settings, LogicSettings);
+            //CancellationTokenSource.Cancel();
+            CancellationTokenSource = new CancellationTokenSource();
+
+            EventDispatcher.Send(new BotSwitchedEvent(nextBot)
             {
             });
 
-            if (this.LogicSettings.MultipleBotConfig.DisplayList)
+            if (LogicSettings.MultipleBotConfig.DisplayList)
             {
                 manager.DumpAccountList();
             }
@@ -222,29 +220,29 @@ namespace PoGo.NecroBot.Logic.State
 
         public void AddForts(List<FortData> data)
         {
-            data.RemoveAll(x => LocationUtils.CalculateDistanceInMeters(x.Latitude, x.Longitude, this.Settings.DefaultLatitude, this.Settings.DefaultLongitude) > 10000);
+            data.RemoveAll(x => LocationUtils.CalculateDistanceInMeters(x.Latitude, x.Longitude, Settings.DefaultLatitude, Settings.DefaultLongitude) > 10000);
 
-            this.Forts.RemoveAll(p => data.Any(x => x.Id == p.Id && x.Type == FortType.Checkpoint));
-            this.Forts.AddRange(data.Where(x => x.Type == FortType.Checkpoint));
+            Forts.RemoveAll(p => data.Any(x => x.Id == p.Id && x.Type == FortType.Checkpoint));
+            Forts.AddRange(data.Where(x => x.Type == FortType.Checkpoint));
             foreach (var item in data.Where(p => p.Type == FortType.Gym))
             {
-                var exist = this.Forts.FirstOrDefault(x => x.Id == item.Id);
+                var exist = Forts.FirstOrDefault(x => x.Id == item.Id);
                 if (exist != null && exist.CooldownCompleteTimestampMs > DateTime.UtcNow.ToUnixTime())
                 {
                     continue;
                 }
                 else
                 {
-                    this.Forts.RemoveAll(x => x.Id == item.Id);
-                    this.Forts.Add(item);
+                    Forts.RemoveAll(x => x.Id == item.Id);
+                    Forts.Add(item);
                 }
             }
         }
 
         public void AddVisibleForts(List<FortData> mapObjects)
         {
-            var notexist = mapObjects.Where(p => !this.VisibleForts.Any(x => x.Id == p.Id));
-            this.VisibleForts.AddRange(notexist);
+            var notexist = mapObjects.Where(p => !VisibleForts.Any(x => x.Id == p.Id));
+            VisibleForts.AddRange(notexist);
         }
 
         public async Task<bool> WaitUntilActionAccept(BotActions action, int timeout = 30000)

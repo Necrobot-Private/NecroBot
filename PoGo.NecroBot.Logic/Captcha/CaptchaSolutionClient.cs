@@ -23,9 +23,9 @@ namespace PoGo.NecroBot.Logic.Captcha
 
         public CaptchaSolutionClient(string key, string secret, int timeout = 120)
         {
-            this.APIKey = key;
-            this.APISecret = secret;
-            this.Timeout = timeout;
+            APIKey = key;
+            APISecret = secret;
+            Timeout = timeout;
         }
 
         public async Task<string> ResolveCaptcha(string googleSiteKey, string captchaUrl)
@@ -40,7 +40,7 @@ namespace PoGo.NecroBot.Logic.Captcha
                 return string.Empty;
             }
 
-            string contentstring = $"p=nocaptcha&googlekey={googleSiteKey}&pageurl={captchaUrl}&key={this.APIKey}&secret={this.APISecret}&out=json";
+            string contentstring = $"p=nocaptcha&googlekey={googleSiteKey}&pageurl={captchaUrl}&key={APIKey}&secret={APISecret}&out=json";
 
             //HttpContent content = new StringContent(contentstring);
             //content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/x-www-form-urlencoded");
@@ -48,7 +48,7 @@ namespace PoGo.NecroBot.Logic.Captcha
             var url = $"{API_ENDPOINT}{contentstring}";
             using (HttpClient client = new HttpClient())
             {
-                client.Timeout = TimeSpan.FromSeconds(this.Timeout);
+                client.Timeout = TimeSpan.FromSeconds(Timeout);
 
                 try
                 {

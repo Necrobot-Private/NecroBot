@@ -4,10 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PoGo.NecroBot.Logic.Common
 {
@@ -24,10 +21,10 @@ namespace PoGo.NecroBot.Logic.Common
         [Description("Accounts")]
         public string AccountSetting { get; set; }
         
-        [Description("Map & Journey")]
+        [Description("Map")]
         public string MapTabTitle { get; set; }
 
-	[Description("Browser")]
+        [Description("Hub")]
         public string BrowserTabTitle { get; set; }
 
         [Description("SNIPE")]
@@ -289,7 +286,7 @@ namespace PoGo.NecroBot.Logic.Common
         {
             languageCode = language;
 
-            this.translationFile = string.Format(translationFile, language);
+            translationFile = string.Format(translationFile, language);
 
             Load();
         }
@@ -310,20 +307,20 @@ namespace PoGo.NecroBot.Logic.Common
 
         public void Save()
         {
-            var type = this.GetType();
+            var type = GetType();
             foreach (var item in type.GetProperties())
             {
                 if (translations.ContainsKey(item.Name)) continue;
                 translations.Add(item.Name, item.GetValue(this).ToString());
             }
 
-            File.WriteAllText(this.translationFile, JsonConvert.SerializeObject(translations, Formatting.Indented));
+            File.WriteAllText(translationFile, JsonConvert.SerializeObject(translations, Formatting.Indented));
         }
         public void Load()
         {
-            var type = this.GetType();
+            var type = GetType();
 
-            var props = this.GetType().GetProperties();
+            var props = GetType().GetProperties();
 
             foreach (var pi in props)
             {

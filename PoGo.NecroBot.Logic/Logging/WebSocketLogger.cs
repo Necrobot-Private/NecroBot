@@ -78,7 +78,7 @@ namespace PoGo.NecroBot.Logic.Logging
             }
         }
 
-        public void lineSelect(int lineChar = 0, int linesUp = 1)
+        public void LineSelect(int lineChar = 0, int linesUp = 1)
         {
             // No line select for file logger.
         }

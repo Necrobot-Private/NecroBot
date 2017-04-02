@@ -23,8 +23,8 @@ namespace PoGo.NecroBot.Logic.Exceptions
 
         public ActiveSwitchByRuleException(SwitchRules rule, double value)
         {
-            this.MatchedRule = rule;
-            this.ReachedValue = value;
+            MatchedRule = rule;
+            ReachedValue = value;
         }
 
         public SwitchRules MatchedRule { get; set; }

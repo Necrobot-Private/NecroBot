@@ -15,7 +15,7 @@
                       ResizeMode="CanResizeWithGrip"
                       WindowTransitionsEnabled="False"
                       WindowStartupLocation="CenterScreen" 
-                      Loaded="MetroWindow_Loaded" Initialized="MetroWindow_Initialized">
+                      Loaded="MetroWindow_Loaded" Initialized="MetroWindow_Initialized" Closing="MetroWindow_Closing">
     <Controls:MetroWindow.TitleTemplate>
         <DataTemplate>
             <TextBlock x:Name="TitleText"
@@ -280,12 +280,12 @@
 
                 </DataGrid>
             </TabItem>
-	    <TabItem Name="tabBrowser">
+            <TabItem Name="tabBrowser">
                 <TabItem.Header>
                     <TextBlock Margin="7,5,7,5" Text="{Binding  Source=BrowserTabTitle, Converter={StaticResource ResourceKey=I18NConveter}, FallbackValue=Browser}" FontSize="14"/>
                 </TabItem.Header>
                 <Grid Name="browserLayout">
-                    
+
                 </Grid>
             </TabItem>
             <TabItem Name="tabMap" >

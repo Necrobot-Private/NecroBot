@@ -14,17 +14,17 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         [DefaultValue(CURRENT_SCHEMA_VERSION)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
-        [NecrobotConfig(Description = "Allow bot automatically checking for latest version, it will display message on console.", Position = 1)]
+        [NecrobotConfig(Description = "Allows bot to automatically check for latest version, and it will display message on console if an update is available.", Position = 1)]
         public int SchemaVersion { get; set; }
 
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
-        [NecrobotConfig(Description = "Allow bot automatically update latest version", Position = 2)]
+        [NecrobotConfig(Description = "Allows bot to automatically update to latest version", Position = 2)]
         public bool CheckForUpdates { get; set; }
 
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 3)]
-        [NecrobotConfig(Description = "Transfer existing config when bot update", Position = 3)]
+        [NecrobotConfig(Description = "Transfer existing config when bot updates", Position = 3)]
         public bool AutoUpdate { get; set; }
     }
 }

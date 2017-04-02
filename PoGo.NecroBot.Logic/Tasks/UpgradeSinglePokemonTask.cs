@@ -1,8 +1,6 @@
 ﻿#region using directives
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Event.Inventory;
@@ -11,9 +9,7 @@ using PoGo.NecroBot.Logic.PoGoUtils;
 using PoGo.NecroBot.Logic.State;
 using PokemonGo.RocketAPI.Exceptions;
 using POGOProtos.Data;
-using POGOProtos.Inventory;
 using POGOProtos.Networking.Responses;
-using POGOProtos.Settings.Master;
 
 #endregion
 

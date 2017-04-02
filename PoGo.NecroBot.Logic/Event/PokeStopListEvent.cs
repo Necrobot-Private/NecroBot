@@ -20,7 +20,7 @@ namespace PoGo.NecroBot.Logic.Event
 
         public PokeStopListEvent(List<FortData> forts, List<NearbyPokemon> nearbyPokemons) : this(forts)
         {
-            this.NearbyPokemons = nearbyPokemons;
+            NearbyPokemons = nearbyPokemons;
         }
     }
 }

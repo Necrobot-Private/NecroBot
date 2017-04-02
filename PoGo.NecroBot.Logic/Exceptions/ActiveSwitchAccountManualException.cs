@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PoGo.NecroBot.Logic.Exceptions
 {
@@ -12,7 +8,7 @@ namespace PoGo.NecroBot.Logic.Exceptions
 
         public ActiveSwitchAccountManualException(MultiAccountManager.BotAccount requestedAccount)
         {
-            this.RequestedAccount = requestedAccount;
+            RequestedAccount = requestedAccount;
         }
     }
 }

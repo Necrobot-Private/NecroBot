@@ -8,7 +8,7 @@ namespace PoGo.NecroBot.Logic.Event.Snipe
 
         public SnipePokemonStarted(MSniperServiceTask.MSniperInfo2 location)
         {
-            this.Pokemon = location;
+            Pokemon = location;
         }
     }
 }

@@ -2,9 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -46,8 +43,7 @@ namespace PoGo.Necrobot.Window.Controls
 
         private static void OnOverlayContentChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            Overlay overlay = d as Overlay;
-            if (overlay != null)
+            if (d is Overlay overlay)
             {
                 if (overlay.IsOverlayContentVisible)
                 {
@@ -59,8 +55,7 @@ namespace PoGo.Necrobot.Window.Controls
 
         private static void OnIsOverlayContentVisibleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            Overlay overlay = d as Overlay;
-            if (overlay != null)
+            if (d is Overlay overlay)
             {
                 if ((bool)e.NewValue)
                 {
@@ -112,14 +107,14 @@ namespace PoGo.Necrobot.Window.Controls
 
             public void Add()
             {
-                base.AddLogicalChild(m_element);
-                base.AddVisualChild(m_element);
+                AddLogicalChild(m_element);
+                AddVisualChild(m_element);
             }
 
             public void Remove()
             {
-                base.RemoveLogicalChild(m_element);
-                base.RemoveVisualChild(m_element);
+                RemoveLogicalChild(m_element);
+                RemoveVisualChild(m_element);
             }
 
             protected override Size MeasureOverride(Size constraint)
@@ -155,8 +150,10 @@ namespace PoGo.Necrobot.Window.Controls
                 {
                     if (m_logicalChildren == null)
                     {
-                        m_logicalChildren = new List<UIElement>();
-                        m_logicalChildren.Add(m_element);
+                        m_logicalChildren = new List<UIElement>
+                        {
+                            m_element
+                        };
                     }
 
                     return m_logicalChildren.GetEnumerator();

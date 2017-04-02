@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -38,7 +37,7 @@ namespace PoGo.NecroBot.Logic.State
             {
                 return new MapPokemon()
                 {
-                    EncounterId = this.EncounteredId,
+                    EncounterId = EncounteredId,
                     Latitude = Latitude,
                     Longitude = Longitude,
                     SpawnPointId = SpawnId,

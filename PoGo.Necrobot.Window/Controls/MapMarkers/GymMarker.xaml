@@ -76,7 +76,7 @@
                         </Grid>
                     </DockPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Button Margin="15,10,0,10" Width="100" Click="btnWalkHere_Click" Content="{Binding Source=WalkToHere, Converter={StaticResource I18NConveter}}" >
+                        <Button Margin="15,10,0,10" Width="100" Click="BtnWalkHere_Click" Content="{Binding Source=WalkToHere, Converter={StaticResource I18NConveter}}" >
                             <Button.Triggers>
                                 <EventTrigger RoutedEvent="Button.Click">
                                     <EventTrigger.Actions>
@@ -92,7 +92,7 @@
                             </Button.Triggers>
                             
                         </Button>
-                        <Button Margin="15,10,0,10" Width="100" Click="btnClose_Click" Content="{Binding Source=Close, Converter={StaticResource I18NConveter}}">
+                        <Button Margin="15,10,0,10" Width="100" Click="BtnClose_Click" Content="{Binding Source=Close, Converter={StaticResource I18NConveter}}">
                             <Button.Triggers>
                                 <EventTrigger RoutedEvent="Button.Click">
                                     <EventTrigger.Actions>

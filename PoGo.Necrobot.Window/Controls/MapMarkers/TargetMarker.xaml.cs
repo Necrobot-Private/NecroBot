@@ -16,21 +16,21 @@ namespace PoGo.Necrobot.Window.Controls.MapMarkers
 
         public TargetMarker(MainClientWindow window, GMapMarker marker, Popup popup)
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
-            this.MainWindow = window;
-            this.Marker = marker;
+            MainWindow = window;
+            Marker = marker;
 
             Popup = popup;
 
-            this.Unloaded += new RoutedEventHandler(CustomMarkerDemo_Unloaded);
-            this.Loaded += new RoutedEventHandler(CustomMarkerDemo_Loaded);
-            this.SizeChanged += new SizeChangedEventHandler(CustomMarkerDemo_SizeChanged);
-            this.MouseEnter += new MouseEventHandler(MarkerControl_MouseEnter);
-            this.MouseLeave += new MouseEventHandler(MarkerControl_MouseLeave);
-            this.MouseMove += new MouseEventHandler(CustomMarkerDemo_MouseMove);
-            this.MouseLeftButtonUp += new MouseButtonEventHandler(CustomMarkerDemo_MouseLeftButtonUp);
-            this.MouseLeftButtonDown += new MouseButtonEventHandler(CustomMarkerDemo_MouseLeftButtonDown);
+            Unloaded += new RoutedEventHandler(CustomMarkerDemo_Unloaded);
+            Loaded += new RoutedEventHandler(CustomMarkerDemo_Loaded);
+            SizeChanged += new SizeChangedEventHandler(CustomMarkerDemo_SizeChanged);
+            MouseEnter += new MouseEventHandler(MarkerControl_MouseEnter);
+            MouseLeave += new MouseEventHandler(MarkerControl_MouseLeave);
+            MouseMove += new MouseEventHandler(CustomMarkerDemo_MouseMove);
+            MouseLeftButtonUp += new MouseButtonEventHandler(CustomMarkerDemo_MouseLeftButtonUp);
+            MouseLeftButtonDown += new MouseButtonEventHandler(CustomMarkerDemo_MouseLeftButtonDown);
 
             Popup.Placement = PlacementMode.Mouse;
         }
@@ -108,7 +108,7 @@ namespace PoGo.Necrobot.Window.Controls.MapMarkers
             Mouse.Capture(null);
         }
 
-        private void icon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void Icon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
 
         }
