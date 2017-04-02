@@ -239,6 +239,7 @@ namespace PoGo.NecroBot.Logic
 
             foreach (var pokemonGroupToTransfer in pokemonToTransfer.GroupBy(p => p.PokemonId).ToList())
             {
+
                 var amountToKeepInStorage = Math.Max(GetApplyFilter(session.LogicSettings.PokemonsTransferFilter, pokemonGroupToTransfer.Key).KeepMinDuplicatePokemon, 0);
 
                 var inStorage = myPokemon.Count(data => data.PokemonId == pokemonGroupToTransfer.Key);
