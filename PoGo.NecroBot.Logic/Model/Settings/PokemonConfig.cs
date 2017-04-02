@@ -29,7 +29,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public bool CatchPokemon { get; set; }
 
-        [NecrobotConfig(Description = "Delay time between 2 time catch pokemon ", Position = 2)]
+        [NecrobotConfig(Description = "Delay time between time catching pokemon", Position = 2)]
         [DefaultValue(2000)]
         [Range(0, 99999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
@@ -47,35 +47,35 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 4)]
         public int CatchPokemonLimit { get; set; }
 
-        [NecrobotConfig(Description = "Catch duration apply for catch limit & number", Position = 5)]
+        [NecrobotConfig(Description = "Catch duration applied for catch limit & number", Position = 5)]
         [DefaultValue(60 * 22 + 30)]
         [Range(0, 9999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 5)]
         public int CatchPokemonLimitMinutes { get; set; }
 
         /*Incense*/
-        [NecrobotConfig(Description = "Allows bot to use Incense ", Position = 6)]
+        [NecrobotConfig(Description = "Allows bot to use Incense", Position = 6)]
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 6)]
         public bool UseIncenseConstantly;
 
         /*Egg*/
-        [NecrobotConfig(Description = "Allows bot to put egg in Incubator for hatching", Position = 7)]
+        [NecrobotConfig(Description = "Allows bot to put an egg in an Incubator for hatching", Position = 7)]
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 7)]
         public bool UseEggIncubators { get; set; }
 
-        [NecrobotConfig(Description = "Turn this on for bot to only put 10km egg into a non-infinity incubator", Position = 8)]
+        [NecrobotConfig(Description = "When Enabled, bot will only put 10km egg into a non-infinity incubator", Position = 8)]
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 8)]
         public bool UseLimitedEggIncubators { get; set; }
 
-        [NecrobotConfig(Description = "Turn On to allow this bot to always use lucky egg when they are available in bag", Position = 9)]
+        [NecrobotConfig(Description = "When Enabled, bot will always use a lucky egg when they are available in bag", Position = 9)]
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 9)]
         public bool UseLuckyEggConstantly;
 
-        [NecrobotConfig(Description = "Number of Pokemon ready for evolve that can use lucky egg", Position = 10)]
+        [NecrobotConfig(Description = "Number of Pokemon ready for evolve that can and are able to use lucky egg", Position = 10)]
         [DefaultValue(30)]
         [Range(0, 999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 10)]
@@ -159,7 +159,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public float FavoriteMinIvPercentage { get; set; }
 
 
-        [NecrobotConfig(Description = "Allos bot to auto favorite pokemon after catch", Position = 24)]
+        [NecrobotConfig(Description = "Allows bot to auto favorite pokemon after catch", Position = 24)]
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 24)]
         public bool AutoFavoritePokemon;
@@ -188,7 +188,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 28)]
         public int UseUltraBallAboveCp { get; set; }
 
-        [NecrobotConfig(Description = "Min CP for using master ball instead of Ultra Ball", Position = 29)]
+        [NecrobotConfig(Description = "Min CP for using Master Ball instead of Ultra Ball", Position = 29)]
         [DefaultValue(1500)]
         [Range(0, 9999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 29)]
@@ -230,17 +230,17 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 35)]
         public bool AutomaticallyLevelUpPokemon;
 
-        [NecrobotConfig(Description = "Only allow bot to upgrade favorited pokemon", Position = 36)]
+        [NecrobotConfig(Description = "Only allow the bot to upgrade favorited pokemon", Position = 36)]
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 36)]
         public bool OnlyUpgradeFavorites { get; set; }
 
-        [NecrobotConfig(Description = "Use level up on list pokemon", Position = 37)]
+        [NecrobotConfig(Description = "Use level up on this list of pokemon", Position = 37)]
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 37)]
         public bool UseLevelUpList { get; set; }
 
-        [NecrobotConfig(Description = "Number of times to upgrade one Pokemon", Position = 38)]
+        [NecrobotConfig(Description = "Number of times to upgrade a Pokemon", Position = 38)]
         [DefaultValue(5)]
         [Range(0, 99)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 38)]
@@ -432,7 +432,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         public Operator FavoriteOperator { get; set; }
 
-        [NecrobotConfig(Description = "If this is enabled, bot will only rename pokemon not meeting transfer settings, otherwise, the bot will rename all pokemon in bag", Position = 72)]
+        [NecrobotConfig(Description = "If Enabled, bot will only rename pokemon not meeting transfer settings, otherwise, the bot will rename all pokemon in bag", Position = 72)]
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 72)]
 
@@ -453,12 +453,12 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 75)]
         public string EvolveOperator { get; set; }
 
-        [NecrobotConfig(Description = "Set Min IV  for bot to evolve", Position = 76)]
+        [NecrobotConfig(Description = "Set Min IV for bot to evolve", Position = 76)]
         [DefaultValue(100)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 76)]
         [Range(0,101)]
         public double EvolveMinIV { get; set; }
-        [NecrobotConfig(Description = "Set Min CP  for bot to evolve", Position = 77)]
+        [NecrobotConfig(Description = "Set Min CP for bot to evolve", Position = 77)]
         [DefaultValue(2000)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 77)]
         [Range(0,5000)]

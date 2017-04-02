@@ -7,7 +7,7 @@ using PokemonGo.RocketAPI.Enums;
 namespace PoGo.NecroBot.Logic.Model.Settings
 {
     [JsonObject(Title = "Authentication Config",
-         Description = "Set your authentication type (Google or Ptc) and your login informartion.",
+         Description = "Set your Authentication type (Google or Ptc) and your login information.",
          ItemRequired = Required.DisallowNull)]
     public class AuthConfig  :BaseConfig
     {

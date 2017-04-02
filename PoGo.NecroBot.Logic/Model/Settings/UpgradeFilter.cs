@@ -46,7 +46,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         }
 
         [JsonIgnore]
-        [NecrobotConfig(IsPrimaryKey = true, Key = "Allow Upgrade", Position = 1, Description = "TRUE is allow custom filter for level up")]
+        [NecrobotConfig(IsPrimaryKey = true, Key = "Allow Upgrade", Position = 1, Description = "If enabled, will allow custom filter for level up")]
         public bool AllowTransfer { get; set; }
 
         [NecrobotConfig(Key = "Min Level To Upgrade", Position = 2, Description ="Min Level to upgrade")]
@@ -73,7 +73,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 4)]
         public string UpgradePokemonMinimumStatsOperator { get; set; }
 
-        [NecrobotConfig(Key = "Only Farovite", Position = 6, Description = "If true, Bot only upgrade pokemon that favorite only, it will ignore all those condition check.")]
+        [NecrobotConfig(Key = "Only Farovite", Position = 6, Description = "If Enabled, Bot will only upgrade pokemon that are favorited only, and it will ignore all those condition check.")]
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 5)]
         public bool OnlyUpgradeFavorites { get; set; }
@@ -82,7 +82,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 6)]
         public List<List<PokemonMove>> Moves { get; set; } = new List<List<PokemonMove>>();
 
-        [NecrobotConfig(Key = "Affect To Pokemons", Position = 7, Description = "Define list pokemon that this upgrade filter also be applied to")]
+        [NecrobotConfig(Key = "Affect To Pokemons", Position = 7, Description = "Define list of pokemon that this upgrade filter will also be applied to")]
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 6)]
 
         public List<PokemonId> AffectToPokemons { get; set; }

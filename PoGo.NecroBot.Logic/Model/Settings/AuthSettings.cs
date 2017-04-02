@@ -183,11 +183,11 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                     {
                         var jsonObj = JObject.Parse(input);
 
-                        // Migrate before validation.
+                        // Migrate before Validating.
                         MigrateSettings(schemaVersion, jsonObj, configFile, schemaFile);
 
-                        // validate Json using JsonSchema
-                        Logger.Write("Validating auth.json...");
+                        // Validate Json using JsonSchema
+                        Logger.Write("Validating Auth.json...");
                         IList<ValidationError> errors = null;
                         bool valid;
                         try
@@ -220,7 +220,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                                 }
                             }
 
-                            Logger.Write("Fix auth.json and restart NecroBot or press a key to ignore and continue...",
+                            Logger.Write("Fix your auth.json and restart NecroBot or press any key to ignore and continue...",
                                 LogLevel.Warning);
                             Console.ReadKey();
                         }
@@ -476,7 +476,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                     error.Message, LogLevel.Error);
             }
             Logger.Write(
-                "Fix auth.json and restart NecroBot or press a key to ignore and continue...",
+                "Fix auth.json and restart NecroBot or press any key to ignore and continue...",
                 LogLevel.Warning
             );
             Console.ReadKey();
@@ -565,7 +565,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             else
             {
                 throw new ArgumentException(
-                    "Invalid device info package! Check your auth.config file and make sure a valid DevicePackageName is set. For simple use set it to 'random'. If you have a custom device, then set it to 'custom'.");
+                    "Invalid Device Info package! Check Auth.json file and make sure a valid Device Package Name is set. For simple use set it to 'random'. If you have a custom device, then set it to 'custom'.");
             }
         }
 
