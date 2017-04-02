@@ -26,6 +26,7 @@ namespace PoGo.NecroBot.CLI.Resources
         {
             try
             {
+                Console.Title = Console.Title + ".";
                 // Window width has be be larger than what Console.CursorLeft is set to
                 // or System.ArgumentOutOfRangeException is thrown.
                 if (Console.WindowWidth < 50 + _leftOffset)
@@ -62,7 +63,10 @@ namespace PoGo.NecroBot.CLI.Resources
                 Console.Write(amt + @"%");
 
                 if (amt == Total)
+                {
+                    Console.Title = Console.Title + $" {amt}%";
                     Console.Write(Environment.NewLine);
+                }
             }
             catch (IOException)
             {

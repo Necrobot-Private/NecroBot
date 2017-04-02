@@ -310,11 +310,20 @@ namespace PoGo.Necrobot.Window.Model
         {
             get
             {
+                var additional = "";
+                if (pokemonData.PokemonDisplay.Costume != Costume.Unset)
+                {
+                    additional = additional + "-" + pokemonData.PokemonDisplay.Costume.ToString();
+                }
+                if (pokemonData.PokemonDisplay.Form != POGOProtos.Enums.Form.Unset)
+                {
+                    additional = additional + "-" + pokemonData.PokemonDisplay.Form.ToString().Replace("Unown","").Replace("ExclamationPoint","!").Replace("QuestionMark","?");
+                }
                 if (pokemonData.PokemonDisplay.Shiny)
                 {
-                    return $"https://raw.githubusercontent.com/Necrobot-Private/PokemonGO-Assets/master/pokemon-shiny/{(int)PokemonData.PokemonId:000}.png";
+                    additional += "-shiny";
                 }
-                return $"https://raw.githubusercontent.com/Necrobot-Private/PokemonGO-Assets/master/pokemon/{(int)PokemonData.PokemonId:000}.png";
+                return $"https://raw.githubusercontent.com/Necrobot-Private/PokemonGO-Assets/master/pokemon/{(int)PokemonData.PokemonId:000}{additional}.png";
             }
         }
 
