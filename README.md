@@ -4,7 +4,7 @@
 <br />
 [![Download Latest Version](https://api.bintray.com/packages/necrobot-private/NecroBot2/NecroBot/images/download.svg?version=1.0.0.145) ](https://bintray.com/necrobot-private/NecroBot2/NecroBot/1.0.0.145/link)
 
-<h1>Necrobot2 is now compatible with 0.57.4 API.</h1>
+<h1>Necrobot2 is now compatible with 0.59.1 API.</h1>
 
 <p>
 Necrobot2 itself is free but now you will need to purchase an API key from Bossland in order to run the bot.
