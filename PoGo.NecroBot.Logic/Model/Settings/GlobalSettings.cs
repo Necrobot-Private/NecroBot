@@ -21,6 +21,7 @@ using PokemonGo.RocketAPI.Enums;
 using PokemonGo.RocketAPI.Extensions;
 using POGOProtos.Enums;
 using POGOProtos.Inventory.Item;
+using System.Threading.Tasks;
 
 #endregion
 
@@ -312,7 +313,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         //    }
         //}
 
-        public static GlobalSettings Load(string path, bool validate = false)
+        public static async Task<GlobalSettings> Load(string path, bool validate = false)
         {
             GlobalSettings settings;
 
@@ -363,7 +364,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                                 Logger.Write("configFile: " + exception.Message, LogLevel.Error);
                             }
                             count++;
-                            Thread.Sleep(1000);
+                            await Task.Delay(1000).ConfigureAwait(false);
                         }
                     }
 
