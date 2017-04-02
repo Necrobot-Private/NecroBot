@@ -47,7 +47,7 @@ namespace PoGo.NecroBot.Logic.State
                     var ts = DateTime.Now - start;
                     session.EventDispatcher.Send(new ErrorEvent()
                     {
-                        Message = $"Hash API server down time : {ts.ToString(@"hh\:mm\:ss")}   Last ping: {lastPing.ToString("T")}"
+                        Message = $"Hash API server down time : {ts.ToString(@"hh\:mm\:ss")}   Last Ping: {lastPing.ToString("T")}"
                     });
 
                     await Task.Delay(5000).ConfigureAwait(false);

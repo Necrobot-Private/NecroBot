@@ -1,5 +1,4 @@
 using System;
-using Google.Protobuf;
 using PoGo.NecroBot.Logic.Service.Elevation;
 using PoGo.NecroBot.Logic.Utils;
 using PokemonGo.RocketAPI;
@@ -210,7 +209,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         {
             get
             {
-                return LocationUtils.getElevation(_elevationService, _settings.LocationConfig.DefaultLatitude,
+                return LocationUtils.GetElevation(_elevationService, _settings.LocationConfig.DefaultLatitude,
                     _settings.LocationConfig.DefaultLongitude).Result;
             }
 

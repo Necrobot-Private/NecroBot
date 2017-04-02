@@ -3,10 +3,6 @@ using PoGo.NecroBot.Logic.Event.UI;
 using PoGo.NecroBot.Logic.State;
 using PokemonGo.RocketAPI.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TinyIoC;
 
 namespace PoGo.NecroBot.Logic.Logging

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
@@ -21,7 +16,7 @@ namespace PoGo.Necrobot.Window.Controls
                 UIElement adornedElement,
                 DataTemplate contentDataTemplate, object content) : base(adornedElement)
         {
-            this.ContentPresenter =
+            ContentPresenter =
                     new ContentPresenter
                     {
                         ContentTemplate = contentDataTemplate,
@@ -29,7 +24,7 @@ namespace PoGo.Necrobot.Window.Controls
                         DataContext = content
                     };
 
-            var adornerLayer = AdornerLayer.GetAdornerLayer(this.AdornedElement);
+            var adornerLayer = AdornerLayer.GetAdornerLayer(AdornedElement);
             adornerLayer.Add(this);
         }
 
@@ -44,12 +39,12 @@ namespace PoGo.Necrobot.Window.Controls
 
         protected override Visual GetVisualChild(int index)
         {
-            return this.ContentPresenter;
+            return ContentPresenter;
         }
 
         protected override Size MeasureOverride(Size constraint)
         {
-            return this.AdornedElement.RenderSize;
+            return AdornedElement.RenderSize;
         }
 
         protected override Size ArrangeOverride(Size finalSize)

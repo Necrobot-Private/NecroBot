@@ -9,7 +9,7 @@ namespace PoGo.NecroBot.Logic.Event.Inventory
 
         public FavoriteEvent(PokemonData pkm, SetFavoritePokemonResponse res)
         {
-            this.Pokemon = pkm;
+            Pokemon = pkm;
             FavoritePokemonResponse = res;
         }
 

@@ -53,9 +53,9 @@ namespace PoGo.Necrobot.Window
                 { LogLevel.Gym,"Magenta" },
                 { LogLevel.Service ,"White" }
             };
-			
-			BrowserView webView;
-        
+
+        BrowserView webView;
+
         public MainClientWindow()
         {
             InitializeComponent();
@@ -65,25 +65,25 @@ namespace PoGo.Necrobot.Window
                 PlayerInfo = new PlayerInfoModel() { Exp = 0 }
             };
 
-            this.DataContext = datacontext;
-            txtCmdInput.Text = TinyIoCContainer.Current.Resolve<UITranslation>().InputCommand; 
-			InitBrowser();
+            DataContext = datacontext;
+            txtCmdInput.Text = TinyIoCContainer.Current.Resolve<UITranslation>().InputCommand;
+            InitBrowser();
         }
-		
-		private void InitBrowser()
+
+        private void InitBrowser()
         {
             webView = new WPFBrowserView(BrowserFactory.Create());
             browserLayout.Children.Add((UIElement)webView.GetComponent());
 
 
             string path = System.Reflection.Assembly.GetExecutingAssembly().Location;
-            
-            string appDir = System.IO.Path.GetDirectoryName(path);
-            var uri = new Uri(System.IO.Path.Combine(appDir, @"PokeEase\index.html"));
+
+            string appDir = Path.GetDirectoryName(path);
+            var uri = new Uri(Path.Combine(appDir, @"PokeEase\index.html"));
 
             webView.Browser.LoadURL(uri.ToString());
         }
-           
+
         private void Grid_Loaded(object sender, RoutedEventArgs e)
         {
 
@@ -118,18 +118,18 @@ namespace PoGo.Necrobot.Window
 
         public void OnBotStartedEventHandler(ISession session, StatisticsAggregator stat)
         {
-            this.currentSession = session;
+            currentSession = session;
 
             session.EventDispatcher.EventReceived += HandleBotEvent;
             stat.GetCurrent().DirtyEvent += OnPlayerStatisticChanged;
-            this.currentSession = session;
-            this.botMap.Session = session;
-            this.playerStats = stat;
-            this.ctrPokemonInventory.Session = session;
-            this.ctrlItemControl.Session = session;
-            this.ctrlSniper.Session = session;
-            this.ctrlEggsControl.Session = session;
-            this.datacontext.PokemonList.Session = session;
+            currentSession = session;
+            botMap.Session = session;
+            playerStats = stat;
+            ctrPokemonInventory.Session = session;
+            ctrlItemControl.Session = session;
+            ctrlSniper.Session = session;
+            ctrlEggsControl.Session = session;
+            datacontext.PokemonList.Session = session;
             botMap.SetDefaultPosition(session.Settings.DefaultLatitude, session.Settings.DefaultLongitude);
             var accountManager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
             gridAccounts.ItemsSource = accountManager.Accounts;
@@ -137,8 +137,8 @@ namespace PoGo.Necrobot.Window
 
         private void OnPlayerStatisticChanged()
         {
-            var stat = this.playerStats.GetCurrent();
-            this.datacontext.PlayerInfo.DirtyEventHandle(stat);
+            var stat = playerStats.GetCurrent();
+            datacontext.PlayerInfo.DirtyEventHandle(stat);
         }
         private void PokemonInventory_OnPokemonItemSelected(PokemonDataViewModel selected)
         {
@@ -167,7 +167,7 @@ namespace PoGo.Necrobot.Window
 
         private void MenuSetting_Click(object sender, RoutedEventArgs e)
         {
-            var configWindow = new SettingsWindow(this, System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config\\config.json"));
+            var configWindow = new SettingsWindow(this, System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "config\\config.json"));
             configWindow.ShowDialog();         
         }
 
@@ -272,7 +272,7 @@ namespace PoGo.Necrobot.Window
                     var feed = SyndicationFeed.Load(XmlReader.Create(new StringReader(xml)));
                     lastTimeLoadHelp = DateTime.Now;
 
-                    this.Dispatcher.Invoke(() =>
+                    Dispatcher.Invoke(() =>
                     {
                         lsvHelps.ItemsSource = feed.Items.OrderByDescending(x => x.PublishDate);
                     });
@@ -303,7 +303,12 @@ namespace PoGo.Necrobot.Window
         private void MetroWindow_Initialized(object sender, EventArgs e)
         {
             if(SystemParameters.PrimaryScreenWidth<1366)
-            this.WindowState = WindowState.Maximized;
+                WindowState = WindowState.Maximized;
+        }
+
+        private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Process.GetCurrentProcess().Kill();
         }
     }
 }

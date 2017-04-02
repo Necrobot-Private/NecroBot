@@ -41,7 +41,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
             }
             else
             {
-                message = message + "Multiple bot is disabled. please use /profile for current account details";
+                message = message + "Multiple bots are disabled. please use /profile for current account details";
             }
             callback(message);
             return true;

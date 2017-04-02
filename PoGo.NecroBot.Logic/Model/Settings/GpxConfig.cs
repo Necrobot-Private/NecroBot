@@ -13,7 +13,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
-        [NecrobotConfig(Description = "If this option turn on, bot will walk using the predifined path in GpxFile", Position = 1)]
+        [NecrobotConfig(Description = "If this option is turned on, the bot will walk using the predifined path in GpxFile", Position = 1)]
         public bool UseGpxPathing { get; set; }
 
         [DefaultValue("GPXPath.GPX")]

@@ -22,12 +22,12 @@ namespace PoGo.NecroBot.Logic.Model
         public FortLocation(double lat, double lng, double alt, FortData fortData,
             FortDetailsResponse fortInfo) : base(lat, lng, alt)
         {
-            this.FortData = fortData;
+            FortData = fortData;
 
             if (fortInfo != null)
             {
-                this.FortInfo = fortInfo;
-                this.Name = fortInfo.Name;
+                FortInfo = fortInfo;
+                Name = fortInfo.Name;
             }
         }
     }
@@ -58,14 +58,14 @@ namespace PoGo.NecroBot.Logic.Model
 
         public MapLocation(double lat, double lng, double alt)
         {
-            this.Latitude = lat;
-            this.Longitude = lng;
-            this.Altitude = alt;
+            Latitude = lat;
+            Longitude = lng;
+            Altitude = alt;
         }
 
         public GeoCoordinate ToGeoCoordinate()
         {
-            return new GeoCoordinate(this.Latitude, this.Longitude, this.Altitude);
+            return new GeoCoordinate(Latitude, Longitude, Altitude);
         }
     }
 }

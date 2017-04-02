@@ -8,16 +8,10 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using TinyIoC;
 
 namespace PoGo.Necrobot.Window
@@ -35,15 +29,15 @@ namespace PoGo.Necrobot.Window
         Action<PokemonId, IPokemonFilter> onSaveFilter;
         public FilterSetting(PokemonId pokemonId, IPokemonFilter filter, string filterName, Action<PokemonId, IPokemonFilter> onSave)
         {
-            this.data = filter;
+            data = filter;
             translator = TinyIoCContainer.Current.Resolve<UITranslation>();
 
-            this.Title = string.Format(translator.TransferFilterFormTitle, pokemonId.ToString());
+            Title = string.Format(translator.TransferFilterFormTitle, pokemonId.ToString());
 
-            this.PokemonId = pokemonId;
-            this.FilterName = filterName;
-            this.onSaveFilter = onSave;
-            this.DataContext = data;
+            PokemonId = pokemonId;
+            FilterName = filterName;
+            onSaveFilter = onSave;
+            DataContext = data;
             InitializeComponent();
             pnlFilters.Children.Add(BuildObjectForm(filter));
             DisplayListPokemons(filter.AffectToPokemons);
@@ -51,18 +45,18 @@ namespace PoGo.Necrobot.Window
 
         private void DisplayListPokemons(List<PokemonId> affectToPokemons)
         {
-            this.pokemonList = new ObservableCollectionExt<AffectPokemonViewModel>();
+            pokemonList = new ObservableCollectionExt<AffectPokemonViewModel>();
 
             foreach (var item in Enum.GetValues(typeof(PokemonId)))
             {
                 if ((PokemonId)item == PokemonId.Missingno) continue;
-                this.pokemonList.Add(new AffectPokemonViewModel()
+                pokemonList.Add(new AffectPokemonViewModel()
                 {
                     Pokemon = (PokemonId)item,
                     Selected = affectToPokemons != null && affectToPokemons.Contains((PokemonId)item)
                 });
             }
-            this.lslAllPokemons.ItemsSource = this.pokemonList;
+            lslAllPokemons.ItemsSource = pokemonList;
         }
 
         public UIElement BuildObjectForm(IPokemonFilter source)
@@ -107,12 +101,13 @@ namespace PoGo.Necrobot.Window
 
         private UIElement GetInputControl(PropertyInfo item, object source)
         {
-            Binding binding = new Binding();
-            binding.Source = source;  // view model?
-            binding.Path = new PropertyPath(item.Name);
-            binding.Mode = BindingMode.TwoWay;
-            binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
-
+            Binding binding = new Binding()
+            {
+                Source = source,  // view model?
+                Path = new PropertyPath(item.Name),
+                Mode = BindingMode.TwoWay,
+                UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+            };
             var enumDataTypeAtt = item.GetCustomAttribute<EnumDataTypeAttribute>(true);
             if (enumDataTypeAtt != null)
             {
@@ -182,11 +177,11 @@ namespace PoGo.Necrobot.Window
             return new TextBox();
         }
 
-        private void btnSave_Click(object sender, RoutedEventArgs e)
+        private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
-            data.AffectToPokemons = this.pokemonList.Where(x => x.Selected).Select(x => x.Pokemon).ToList();
-            this.onSaveFilter(PokemonId, data);
-            this.Close();
+            data.AffectToPokemons = pokemonList.Where(x => x.Selected).Select(x => x.Pokemon).ToList();
+            onSaveFilter(PokemonId, data);
+            Close();
 
         }
 
@@ -200,13 +195,13 @@ namespace PoGo.Necrobot.Window
 
         private void PokemonSelected_Click(object sender, RoutedEventArgs e)
         {
-            data.AffectToPokemons = this.pokemonList.Where(x => x.Selected).Select(x => x.Pokemon).ToList();
+            data.AffectToPokemons = pokemonList.Where(x => x.Selected).Select(x => x.Pokemon).ToList();
         }
 
         private void MetroWindow_Initialized(object sender, EventArgs e)
         {
-            if (System.Windows.SystemParameters.PrimaryScreenWidth < 1366)
-                this.WindowState = WindowState.Maximized;
+            if (SystemParameters.PrimaryScreenWidth < 1366)
+                WindowState = WindowState.Maximized;
         }
     }
 }

@@ -45,11 +45,11 @@ namespace PoGo.NecroBot.Logic.Model.Mapzen
 
         public MapzenWalk(string mapzenResponse, GeoCoordinate sourceLocation, GeoCoordinate destLocation)
         {
-            Waypoints = new List<GeoCoordinate>();
-
-            // Add the source
-            Waypoints.Add(sourceLocation);
-
+            Waypoints = new List<GeoCoordinate>
+            {
+                // Add the source
+                sourceLocation
+            };
             JObject jsonObj = JObject.Parse(mapzenResponse);
 
             var trip = jsonObj["trip"];

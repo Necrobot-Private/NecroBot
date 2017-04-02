@@ -24,7 +24,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.Always, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public ItemId Key { get; set; }
 
-        [NecrobotConfig(Description = "Item quality to keep")]
+        [NecrobotConfig(Description = "Item Amount to keep")]
         [DefaultValue(0)]
         [Range(0, 999)]
         [JsonProperty(Required = Required.Always, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]

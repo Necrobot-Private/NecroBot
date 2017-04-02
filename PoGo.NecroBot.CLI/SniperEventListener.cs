@@ -20,7 +20,7 @@ namespace PoGo.NecroBot.CLI
                 pokemonCaptureEvent.Longitude, pokemonCaptureEvent.Id);
         }
 
-               public static void HandleEvent(EncounteredEvent ev, ISession session)
+        public static void HandleEvent(EncounteredEvent ev, ISession session)
         {
             if (!ev.IsRecievedFromSocket) return;
 

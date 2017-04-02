@@ -98,8 +98,8 @@
             this.wizardControl1.TabIndex = 0;
             this.wizardControl1.Text = "Initial first time config";
             this.wizardControl1.Title = "Initial first time config";
-            this.wizardControl1.Cancelling += new System.ComponentModel.CancelEventHandler(this.wizardControl1_Cancelling);
-            this.wizardControl1.Finished += new System.EventHandler(this.wizardControl1_Finished);
+            this.wizardControl1.Cancelling += new System.ComponentModel.CancelEventHandler(this.WizardControl1_Cancelling);
+            this.wizardControl1.Finished += new System.EventHandler(this.WizardControl1_Finished);
             // 
             // SelectLanguagePage
             // 
@@ -142,7 +142,7 @@
             this.AccountPage.Size = new System.Drawing.Size(502, 190);
             this.AccountPage.TabIndex = 1;
             this.AccountPage.Text = "Account setup";
-            this.AccountPage.Commit += new System.EventHandler<AeroWizard.WizardPageConfirmEventArgs>(this.wizardPage2_Commit);
+            this.AccountPage.Commit += new System.EventHandler<AeroWizard.WizardPageConfirmEventArgs>(this.WizardPage2_Commit);
             // 
             // txtPassword
             // 
@@ -208,7 +208,7 @@
             this.LocationPage.TabIndex = 3;
             this.LocationPage.Text = "Start location";
             this.LocationPage.Commit += new System.EventHandler<AeroWizard.WizardPageConfirmEventArgs>(this.LocationPage_Commit);
-            this.LocationPage.Click += new System.EventHandler(this.wizardPage4_Click);
+            this.LocationPage.Click += new System.EventHandler(this.WizardPage4_Click);
             // 
             // txtLng
             // 
@@ -322,7 +322,7 @@
             this.chkAllowVariant.TabIndex = 18;
             this.chkAllowVariant.Text = "Allow walk speed variant";
             this.chkAllowVariant.UseVisualStyleBackColor = true;
-            this.chkAllowVariant.Click += new System.EventHandler(this.chkAllowVariant_Click);
+            this.chkAllowVariant.Click += new System.EventHandler(this.ChkAllowVariant_Click);
             // 
             // txtVariant
             // 
@@ -396,7 +396,7 @@
             this.chkAllowWebsocket.TabIndex = 0;
             this.chkAllowWebsocket.Text = "Allow websocket (use for Web GUI)";
             this.chkAllowWebsocket.UseVisualStyleBackColor = true;
-            this.chkAllowWebsocket.Click += new System.EventHandler(this.checkBox1_Click);
+            this.chkAllowWebsocket.Click += new System.EventHandler(this.CheckBox1_Click);
             // 
             // PageFinish
             // 
@@ -419,7 +419,7 @@
             this.button1.TabIndex = 0;
             this.button1.Text = "START BOT";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
             // SnipePage
             // 
@@ -451,7 +451,7 @@
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "These are very basic initial snipe config, please make sure you read \"Auto Snipe " +
     "Config\" to fully customize your snipe setting";
-            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabel1_LinkClicked);
             // 
             // label11
             // 

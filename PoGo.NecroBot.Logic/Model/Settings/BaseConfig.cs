@@ -13,7 +13,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         {
             try
             {
-                PropertyInfo[] props = this.GetType().GetProperties();
+                PropertyInfo[] props = GetType().GetProperties();
                 foreach (PropertyInfo prop in props)
                 {
                     var d = prop.GetCustomAttribute<DefaultValueAttribute>();
