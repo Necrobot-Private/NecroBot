@@ -59,7 +59,7 @@ namespace PoGo.NecroBot.Logic.Utils
             {
                 var config = session.LogicSettings.MultipleBotConfig;
 
-                if (config.PokestopSwitch > 0 && config.PokestopSwitch <= this.TotalPokestops)
+                if (config.PokestopSwitch > 0 && config.PokestopSwitch <= TotalPokestops)
                 {
                     session.CancellationTokenSource.Cancel();
 
@@ -67,29 +67,29 @@ namespace PoGo.NecroBot.Logic.Utils
                     throw new ActiveSwitchByRuleException()
                     {
                         MatchedRule = SwitchRules.Pokestop,
-                        ReachedValue = this.TotalPokestops
+                        ReachedValue = TotalPokestops
                     };
                 }
 
-                if (config.PokemonSwitch > 0 && config.PokemonSwitch <= this.TotalPokemons)
+                if (config.PokemonSwitch > 0 && config.PokemonSwitch <= TotalPokemons)
                 {
                     session.CancellationTokenSource.Cancel();
                     //Activate switcher by pokestop
                     throw new ActiveSwitchByRuleException()
                     {
                         MatchedRule = SwitchRules.Pokemon,
-                        ReachedValue = this.TotalPokemons
+                        ReachedValue = TotalPokemons
                     };
                 }
 
-                if (config.EXPSwitch > 0 && config.EXPSwitch <= this.TotalExperience)
+                if (config.EXPSwitch > 0 && config.EXPSwitch <= TotalExperience)
                 {
                     session.CancellationTokenSource.Cancel();
                     //Activate switcher by pokestop
                     throw new ActiveSwitchByRuleException()
                     {
                         MatchedRule = SwitchRules.EXP,
-                        ReachedValue = this.TotalExperience
+                        ReachedValue = TotalExperience
                     };
                 }
 
@@ -187,15 +187,15 @@ namespace PoGo.NecroBot.Logic.Utils
 
         internal void Reset()
         {
-            this.TotalExperience = 0;
-            this.TotalItemsRemoved = 0;
-            this.TotalPokemons = 0;
-            this.TotalPokemonEvolved = 0;
-            this.TotalPokestops = 0;
-            this.TotalStardust = 0;
-            this.TotalPokemonTransferred = 0;
-            this._initSessionDateTime = DateTime.Now;
-            this._exportStats = new StatsExport();
+            TotalExperience = 0;
+            TotalItemsRemoved = 0;
+            TotalPokemons = 0;
+            TotalPokemonEvolved = 0;
+            TotalPokestops = 0;
+            TotalStardust = 0;
+            TotalPokemonTransferred = 0;
+            _initSessionDateTime = DateTime.Now;
+            _exportStats = new StatsExport();
         }
 
         public async Task<LevelUpRewardsResponse> Execute(ISession ctx)

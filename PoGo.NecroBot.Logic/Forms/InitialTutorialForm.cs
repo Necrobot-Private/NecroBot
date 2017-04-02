@@ -26,16 +26,16 @@ namespace PoGo.NecroBot.Logic.Forms
         public InitialTutorialForm(CheckTosState s, RepeatedField<TutorialState> tutState, ISession session)
         {
             InitializeComponent();
-            this.state = s;
+            state = s;
             this.tutState = tutState;
             this.session = session;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Button1_Click(object sender, EventArgs e)
         {
         }
 
-        private void wizardPage4_Initialize(object sender, WizardPageInitEventArgs e)
+        private void WizardPage4_Initialize(object sender, WizardPageInitEventArgs e)
         {
             Task.Run(async () =>
                 {
@@ -72,7 +72,7 @@ namespace PoGo.NecroBot.Logic.Forms
                                     Message = $"Selected your avatar, now you are {gender}!"
                                 });
 
-                                this.Invoke(new Action(() =>
+                                Invoke(new Action(() =>
                                 {
                                     wizardControl1.NextPage();
                                 }), null);
@@ -81,7 +81,7 @@ namespace PoGo.NecroBot.Logic.Forms
                             }
                         }
 
-                        this.Invoke(new Action(() =>
+                        Invoke(new Action(() =>
                         {
                             lblNameError.Text = "Error selecting avatar gender!";
                             lblNameError.Visible = true;
@@ -107,7 +107,7 @@ namespace PoGo.NecroBot.Logic.Forms
                 message.Result = (IntPtr) HTCAPTION;
         }
 
-        private void wizardPage3_Initialize(object sender, WizardPageInitEventArgs e)
+        private void WizardPage3_Initialize(object sender, WizardPageInitEventArgs e)
         {
             PokemonId firstPoke = rdoBulbasaur.Checked
                 ? PokemonId.Bulbasaur
@@ -128,14 +128,14 @@ namespace PoGo.NecroBot.Logic.Forms
                                 Message = $"Caught Tutorial pokemon! it's {firstPoke}!"
                             });
 
-                            this.Invoke(new Action(() =>
+                            Invoke(new Action(() =>
                             {
                                 wizardControl1.NextPage();
                             }), null);
                         }
                         else
                         {
-                            this.Invoke(new Action(() =>
+                            Invoke(new Action(() =>
                             {
                                 lblNameError.Text = "Error catching tutorial pokemon.";
                                 lblNameError.Visible = true;
@@ -146,7 +146,7 @@ namespace PoGo.NecroBot.Logic.Forms
                 });
         }
 
-        private void wizardPage6_Initialize(object sender, WizardPageInitEventArgs e)
+        private void WizardPage6_Initialize(object sender, WizardPageInitEventArgs e)
         {
             string nickname = txtNick.Text;
             ClaimCodenameResponse res = null;
@@ -233,10 +233,10 @@ namespace PoGo.NecroBot.Logic.Forms
                                             Message = "First time experience complete, looks like i just spinned an virtual pokestop :P"
                                         });
 
-                                        this.Invoke(new Action(() =>
+                                        Invoke(new Action(() =>
                                         {
-                                            this.DialogResult = DialogResult.OK;
-                                            this.Close();
+                                            DialogResult = DialogResult.OK;
+                                            Close();
                                         }));
 
                                         return;
@@ -245,7 +245,7 @@ namespace PoGo.NecroBot.Logic.Forms
                             }
                         }
 
-                        this.Invoke(new Action(() =>
+                        Invoke(new Action(() =>
                         {
                             lblNameError.Text = errorText;
                             lblNameError.Visible = true;
@@ -255,7 +255,7 @@ namespace PoGo.NecroBot.Logic.Forms
                 });
         }
 
-        private void wizardPage1_Initialize(object sender, WizardPageInitEventArgs e)
+        private void WizardPage1_Initialize(object sender, WizardPageInitEventArgs e)
         {
             if (tutState.Contains(TutorialState.AvatarSelection))
             {
@@ -263,7 +263,7 @@ namespace PoGo.NecroBot.Logic.Forms
             }
         }
 
-        private void wizardPage2_Initialize(object sender, WizardPageInitEventArgs e)
+        private void WizardPage2_Initialize(object sender, WizardPageInitEventArgs e)
         {
             if (tutState.Contains(TutorialState.PokemonCapture))
             {
@@ -271,12 +271,12 @@ namespace PoGo.NecroBot.Logic.Forms
             }
         }
 
-        private void wizardPage5_Initialize(object sender, WizardPageInitEventArgs e)
+        private void WizardPage5_Initialize(object sender, WizardPageInitEventArgs e)
         {
             if (tutState.Contains(TutorialState.NameSelection))
             {
-                this.DialogResult = DialogResult.OK;
-                this.Close();
+                DialogResult = DialogResult.OK;
+                Close();
             }
         }
     }

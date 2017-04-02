@@ -14,7 +14,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
     {
         public EvolveFilter()  :base()
         {
-            this.AffectToPokemons = new List<PokemonId>();
+            AffectToPokemons = new List<PokemonId>();
             Moves = new List<List<PokemonMove>>();
             EnableEvolve = true;
             Operator = "or";
@@ -23,16 +23,16 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         public EvolveFilter(double evolveIV, double evolveLV, double minCP, bool favorited = false,string evoOperator = "and", string evolveTo = "", List<List<PokemonMove>> moves = null, int minCandiesBeforeEvolve = 0)
         {
-            this.Moves = new List<List<PokemonMove>>();
-            if (moves != null) this.Moves = moves;
+            Moves = new List<List<PokemonMove>>();
+            if (moves != null) Moves = moves;
             EnableEvolve = true;
-            this.MinIV = evolveIV;
-            this.MinLV = evolveLV;
-            this.EvolveTo = evolveTo;
-            this.MinCP = minCP;
-            this.Operator = evoOperator;
-            this.FavoritedOnly = favorited;
-            this.MinCandiesBeforeEvolve = minCandiesBeforeEvolve;
+            MinIV = evolveIV;
+            MinLV = evolveLV;
+            EvolveTo = evolveTo;
+            MinCP = minCP;
+            Operator = evoOperator;
+            FavoritedOnly = favorited;
+            MinCandiesBeforeEvolve = minCandiesBeforeEvolve;
         }
 
         [NecrobotConfig(IsPrimaryKey = true, Key = "Enable Envolve", Description = "Allow bot auto evolve this pokemon", Position = 1)]
@@ -85,7 +85,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             {
                 PokemonId id = PokemonId.Missingno;
 
-                if (Enum.TryParse<PokemonId>(this.EvolveTo, out id))
+                if (Enum.TryParse<PokemonId>(EvolveTo, out id))
                 {
                     return id;
                 }

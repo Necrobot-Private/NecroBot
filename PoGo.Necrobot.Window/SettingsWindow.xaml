@@ -1,6 +1,6 @@
 ﻿<Controls:MetroWindow x:Class="PoGo.Necrobot.Window.SettingsWindow"
                       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-	              xmlns:Behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
+	                  xmlns:Behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
                       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
@@ -28,7 +28,7 @@
         <Controls:WindowCommands>
             
             <Button Content="settings" Visibility="Hidden" />
-            <Button Click="btnSave_click" Name="btnSave">
+            <Button Click="BtnSave_click" Name="btnSave">
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="20"
                    Height="20"

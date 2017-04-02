@@ -9,8 +9,8 @@ namespace PoGo.NecroBot.Logic.Event.Player
 
         public LoginEvent(AuthType authType, string v)
         {
-            this.AuthType = authType;
-            this.Username = v;
+            AuthType = authType;
+            Username = v;
         }
     }
 }

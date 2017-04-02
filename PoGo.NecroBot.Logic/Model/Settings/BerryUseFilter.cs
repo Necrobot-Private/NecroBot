@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 using POGOProtos.Enums;
 using POGOProtos.Inventory.Item;
-using PoGo.NecroBot.Logic.Common;
 
 namespace PoGo.NecroBot.Logic.Model.Settings
 {
@@ -13,19 +12,19 @@ namespace PoGo.NecroBot.Logic.Model.Settings
     {
         public ItemUseFilter()
         {
-            this.Pokemons = new List<PokemonId>();
+            Pokemons = new List<PokemonId>();
         }
 
         public ItemUseFilter(int minIV, int minLV, int minCP, List<PokemonId> pokemons, string op = "or", double catchChange=0.3, int maxUse=10)
         {
-            this.UseItemMinIV = minIV;
-            this.CatchProbability = catchChange;
-            this.UseItemMinLevel = minLV;
-            this.UseItemMinCP = minCP;
-            this.Pokemons = pokemons;
-            this.Operator = op;
-            this.MaxItemsUsePerPokemon = maxUse;
-            this.UseIfExceedBagRecycleFilter = true;
+            UseItemMinIV = minIV;
+            CatchProbability = catchChange;
+            UseItemMinLevel = minLV;
+            UseItemMinCP = minCP;
+            Pokemons = pokemons;
+            Operator = op;
+            MaxItemsUsePerPokemon = maxUse;
+            UseIfExceedBagRecycleFilter = true;
         }
                          
         [NecrobotConfig(Key = "Min IV", Description = "Min IV to use this item", Position = 2)]

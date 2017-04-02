@@ -2,8 +2,8 @@
 {
     public class Address_Components
     {
-        public string long_name { get; set; }
-        public string short_name { get; set; }
-        public string[] types { get; set; }
+        public string Long_name { get; set; }
+        public string Short_name { get; set; }
+        public string[] Types { get; set; }
     }
 }

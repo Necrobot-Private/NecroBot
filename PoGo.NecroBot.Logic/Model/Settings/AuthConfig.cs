@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 using PokemonGo.RocketAPI.Enums;
-using Newtonsoft.Json.Converters;
 
 namespace PoGo.NecroBot.Logic.Model.Settings
 {

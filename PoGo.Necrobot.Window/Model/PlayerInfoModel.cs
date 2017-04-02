@@ -5,8 +5,6 @@ using System.Linq;
 using PoGo.NecroBot.Logic.Event;
 using POGOProtos.Networking.Responses;
 using POGOProtos.Inventory;
-using TinyIoC;
-using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.Utils;
 
 namespace PoGo.Necrobot.Window.Model
@@ -137,72 +135,72 @@ namespace PoGo.Necrobot.Window.Model
                 LevelExp = playerStats.NextLevelXp;
             }
 
-            this.playerProfile = profile.Profile;
+            playerProfile = profile.Profile;
         }
 
         public void OnInventoryRefreshed(IEnumerable<InventoryItem> inventory)
         {
-            if (this.playerProfile == null || this.playerProfile.PlayerData.BuddyPokemon == null || this.playerProfile.PlayerData.BuddyPokemon.Id == 0) return;
+            if (playerProfile == null || playerProfile.PlayerData.BuddyPokemon == null || playerProfile.PlayerData.BuddyPokemon.Id == 0) return;
 
-            var buddyData = this.playerProfile.PlayerData.BuddyPokemon;
+            var buddyData = playerProfile.PlayerData.BuddyPokemon;
 
             if (buddyData == null) return;
              
             var buddy = inventory
                 .Select(x => x.InventoryItemData?.PokemonData)
-                .Where(x => x != null && x.Id == this.playerProfile.PlayerData.BuddyPokemon.Id)
+                .Where(x => x != null && x.Id == playerProfile.PlayerData.BuddyPokemon.Id)
                 .FirstOrDefault();
 
             if (buddy == null) return;
 
-            this.BuddyPokemonId = buddy.PokemonId;
-            this.BuddyCurrentKM = buddyData.LastKmAwarded;
-            this.BuddyTotalKM = buddy.BuddyTotalKmWalked;
+            BuddyPokemonId = buddy.PokemonId;
+            BuddyCurrentKM = buddyData.LastKmAwarded;
+            BuddyTotalKM = buddy.BuddyTotalKmWalked;
 
-            this.RaisePropertyChanged("BuddyPokemonId");
-            this.RaisePropertyChanged("BuddyCurrentKM");
-            this.RaisePropertyChanged("BuddyTotalKM");
+            RaisePropertyChanged("BuddyPokemonId");
+            RaisePropertyChanged("BuddyCurrentKM");
+            RaisePropertyChanged("BuddyTotalKM");
         }
 
         internal void DirtyEventHandle(Statistics stat)
         {
-            this.Runtime = stat.FormatRuntime();
-            this.EXPPerHour = (int)(stat.TotalExperience / stat.GetRuntime());
-            this.PKMPerHour = (int)(stat.TotalPokemons / stat.GetRuntime());
-            this.TimeToLevelUp = $"{stat.StatsExport.HoursUntilLvl:00}h :{stat.StatsExport.MinutesUntilLevel:00}m";
-            this.Level = stat.StatsExport.Level;
-            this.Stardust = stat.TotalStardust;
-            this.Exp = stat.StatsExport.CurrentXp - stat.StatsExport.PreviousXp;
-            this.LevelExp = stat.StatsExport.LevelupXp - stat.StatsExport.PreviousXp;
-            this.PokemonTransfered = stat.TotalPokemonTransferred;
-            this.RaisePropertyChanged("TotalPokemonTransferred;");
-            this.RaisePropertyChanged("Runtime");
-            this.RaisePropertyChanged("EXPPerHour");
-            this.RaisePropertyChanged("PKMPerHour");
-            this.RaisePropertyChanged("TimeToLevelUp");
-            this.RaisePropertyChanged("Level");
-            this.RaisePropertyChanged("Stardust");
-            this.RaisePropertyChanged("Exp");
-            this.RaisePropertyChanged("LevelExp");
+            Runtime = stat.FormatRuntime();
+            EXPPerHour = (int)(stat.TotalExperience / stat.GetRuntime());
+            PKMPerHour = (int)(stat.TotalPokemons / stat.GetRuntime());
+            TimeToLevelUp = $"{stat.StatsExport.HoursUntilLvl:00}h :{stat.StatsExport.MinutesUntilLevel:00}m";
+            Level = stat.StatsExport.Level;
+            Stardust = stat.TotalStardust;
+            Exp = stat.StatsExport.CurrentXp - stat.StatsExport.PreviousXp;
+            LevelExp = stat.StatsExport.LevelupXp - stat.StatsExport.PreviousXp;
+            PokemonTransfered = stat.TotalPokemonTransferred;
+            RaisePropertyChanged("TotalPokemonTransferred;");
+            RaisePropertyChanged("Runtime");
+            RaisePropertyChanged("EXPPerHour");
+            RaisePropertyChanged("PKMPerHour");
+            RaisePropertyChanged("TimeToLevelUp");
+            RaisePropertyChanged("Level");
+            RaisePropertyChanged("Stardust");
+            RaisePropertyChanged("Exp");
+            RaisePropertyChanged("LevelExp");
 
         }
 
         internal void UpdatePokestopLimit(PokestopLimitUpdate ev)
         {
-            this.PokestopLimit = $"{ev.Value}/{ev.Limit}";
-            this.RaisePropertyChanged("PokestopLimit");
+            PokestopLimit = $"{ev.Value}/{ev.Limit}";
+            RaisePropertyChanged("PokestopLimit");
         }
 
         internal void UpdateCatchLimit(CatchLimitUpdate ev)
         {
-            this.CatchLimit = $"{ev.Value}/{ev.Limit}";
-            this.RaisePropertyChanged("CatchLimit");
+            CatchLimit = $"{ev.Value}/{ev.Limit}";
+            RaisePropertyChanged("CatchLimit");
         }
 
         public void UpdateSpeed(double speed)
         {
-            this.WalkSpeed = speed;
-            this.RaisePropertyChanged("WalkSpeed");
+            WalkSpeed = speed;
+            RaisePropertyChanged("WalkSpeed");
 
         }
     }

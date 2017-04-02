@@ -6,15 +6,15 @@ namespace PoGo.NecroBot.Logic.Model.Google.GoogleObjects
 {
     public class Polyline
     {
-        public string points { get; set; }
+        public string Points { get; set; }
 
         public List<GeoCoordinate> DecodePoly()
         {
             var poly = new List<GeoCoordinate>();
-            if (string.IsNullOrEmpty(points))
+            if (string.IsNullOrEmpty(Points))
                 throw new ArgumentNullException("polyline");
 
-            char[] polylineChars = points.ToCharArray();
+            char[] polylineChars = Points.ToCharArray();
             int index = 0;
 
             int currentLat = 0;

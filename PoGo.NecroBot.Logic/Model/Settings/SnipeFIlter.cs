@@ -4,10 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 using POGOProtos.Enums;
 using System.Linq;
-using System;
 using TinyIoC;
 using PoGo.NecroBot.Logic.State;
-using PoGo.NecroBot.Logic.Utils;
 
 namespace PoGo.NecroBot.Logic.Model.Settings
 {
@@ -16,20 +14,20 @@ namespace PoGo.NecroBot.Logic.Model.Settings
     {
         public SnipeFilter() : base()
         {
-            this.Priority = 5;
+            Priority = 5;
             Moves = new List<List<PokemonMove>>();
-            this.AffectToPokemons = new List<PokemonId>();
+            AffectToPokemons = new List<PokemonId>();
         }
 
         public SnipeFilter(int snipeMinIV, List<List<PokemonMove>> moves = null) : base()
         {
 
-            this.AffectToPokemons = new List<PokemonId>();
-            this.Operator = "or";
-            this.SnipeIV = snipeMinIV;
-            this.Moves = moves;
-            this.VerifiedOnly = false;
-            this.Priority = 5;
+            AffectToPokemons = new List<PokemonId>();
+            Operator = "or";
+            SnipeIV = snipeMinIV;
+            Moves = moves;
+            VerifiedOnly = false;
+            Priority = 5;
         }
 
         [JsonIgnore]

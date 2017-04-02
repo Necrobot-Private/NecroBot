@@ -6,7 +6,7 @@
 
         public BotSwitchedEvent(MultiAccountManager.BotAccount nextBot)
         {
-            this.Account = nextBot;
+            Account = nextBot;
         }
     }
 }

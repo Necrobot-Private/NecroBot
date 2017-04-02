@@ -2,13 +2,13 @@
 {
     public class Step
     {
-        public ValueText distance { get; set; }
-        public ValueText duration { get; set; }
-        public Geo end_location { get; set; }
-        public string html_instructions { get; set; }
-        public Polyline polyline { get; set; }
-        public Geo start_location { get; set; }
-        public string travel_mode { get; set; }
-        public string maneuver { get; set; }
+        public ValueText Distance { get; set; }
+        public ValueText Duration { get; set; }
+        public Geo End_location { get; set; }
+        public string Html_instructions { get; set; }
+        public Polyline Polyline { get; set; }
+        public Geo Start_location { get; set; }
+        public string Travel_mode { get; set; }
+        public string Maneuver { get; set; }
     }
 }

@@ -221,7 +221,7 @@ namespace PoGo.NecroBot.Logic.State
                 {
                     await Task.Delay(20000, cancellationToken).ConfigureAwait(false);
                     Logger.Write(
-                        "Due to login failure your player profile could not be retrieved. Press any key to re-try login.",
+                        "Due to login failure your player profile could not be retrieved. Press any key to retry login.",
                         LogLevel.Warning
                     );
                     Console.ReadKey();
@@ -261,7 +261,7 @@ namespace PoGo.NecroBot.Logic.State
                     {
 
                         session.EventDispatcher.Send(new ErrorEvent() { RequireExit = true, Message = session.Translation.GetTranslation(TranslationString.TotalRecyclePercentGreaterThan100) });
-                        Logger.Write("Press any key to exit, then fix your configuration and run the bot again.", LogLevel.Warning);
+                        Logger.Write("Press any key to exit, then fix your config and run the bot again.", LogLevel.Warning);
 
                         Console.ReadKey();
                         Environment.Exit(1);
@@ -286,7 +286,7 @@ namespace PoGo.NecroBot.Logic.State
                     {
                         session.EventDispatcher.Send(new ErrorEvent() { RequireExit = true, Message = session.Translation.GetTranslation(TranslationString.MaxItemsCombinedOverMaxItemStorage, maxTheoreticalItems, session.Profile.PlayerData.MaxItemStorage) });
 
-                        Logger.Write("Press any key to exit, then fix your configuration and run the bot again.", LogLevel.Warning);
+                        Logger.Write("Press any key to exit, then fix your config and run the bot again.", LogLevel.Warning);
                         Console.ReadKey();
                         Environment.Exit(1);
                     }
@@ -317,9 +317,9 @@ namespace PoGo.NecroBot.Logic.State
             {
                 Profile = session.Profile
             });
-            if (this.pokemonToCatch != PokemonId.Missingno)
+            if (pokemonToCatch != PokemonId.Missingno)
             {
-                return new BotSwitcherState(this.pokemonToCatch, this.encounterData);
+                return new BotSwitcherState(pokemonToCatch, encounterData);
             }
             return new LoadSaveState();
         }

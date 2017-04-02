@@ -2,20 +2,15 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
-using CloudFlareUtilities;
 using Newtonsoft.Json;
 using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.Event;
-using PoGo.NecroBot.Logic.Exceptions;
 using PoGo.NecroBot.Logic.Model.Settings;
 using PoGo.NecroBot.Logic.PoGoUtils;
 using PoGo.NecroBot.Logic.State;
@@ -26,8 +21,6 @@ using POGOProtos.Inventory.Item;
 using POGOProtos.Map.Pokemon;
 using POGOProtos.Networking.Responses;
 using Quobject.Collections.Immutable;
-using Quobject.SocketIoClientDotNet.Client;
-using Socket = Quobject.SocketIoClientDotNet.Client.Socket;
 using PoGo.NecroBot.Logic.Logging;
 using GeoCoordinatePortable;
 
@@ -55,23 +48,23 @@ namespace PoGo.NecroBot.Logic.Tasks
     {
         public PokemonLocation(double lat, double lon)
         {
-            latitude = lat;
-            longitude = lon;
+            Latitude = lat;
+            Longitude = lon;
         }
 
         public long Id { get; set; }
-        public double expires { get; set; }
-        public double latitude { get; set; }
-        public double longitude { get; set; }
-        public int pokemon_id { get; set; }
-        public PokemonId pokemon_name { get; set; }
+        public double Expires { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public int Pokemon_id { get; set; }
+        public PokemonId Pokemon_name { get; set; }
 
         [JsonIgnore]
         public DateTime TimeStampAdded { get; set; } = DateTime.Now;
 
         public bool Equals(PokemonLocation obj)
         {
-            return Math.Abs(latitude - obj.latitude) < 0.0001 && Math.Abs(longitude - obj.longitude) < 0.0001;
+            return Math.Abs(Latitude - obj.Latitude) < 0.0001 && Math.Abs(Longitude - obj.Longitude) < 0.0001;
         }
 
         public override bool Equals(object obj) // contains calls this here
@@ -82,7 +75,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 return false;
             }
 
-            return Math.Abs(latitude - p.latitude) < 0.0001 && Math.Abs(longitude - p.longitude) < 0.0001;
+            return Math.Abs(Latitude - p.Latitude) < 0.0001 && Math.Abs(Longitude - p.Longitude) < 0.0001;
         }
 
         public override int GetHashCode()
@@ -92,16 +85,16 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         public override string ToString()
         {
-            return latitude.ToString("0.00000000000") + ", " + longitude.ToString("0.00000000000");
+            return Latitude.ToString("0.00000000000") + ", " + Longitude.ToString("0.00000000000");
         }
     }
 
     public class PokemonLocationPokezz
     {
-        public double time { get; set; }
-        public double lat { get; set; }
-        public double lng { get; set; }
-        public string iv { get; set; }
+        public double Time { get; set; }
+        public double Lat { get; set; }
+        public double Lng { get; set; }
+        public string Iv { get; set; }
 
         public double _iv
         {
@@ -109,7 +102,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 try
                 {
-                    return Convert.ToDouble(iv, CultureInfo.InvariantCulture);
+                    return Convert.ToDouble(Iv, CultureInfo.InvariantCulture);
                 }
                 catch
                 {
@@ -118,31 +111,31 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
         }
 
-        public PokemonId name { get; set; }
-        public bool verified { get; set; }
+        public PokemonId Name { get; set; }
+        public bool Verified { get; set; }
     }
 
     public class PokemonLocationPokesnipers
     {
-        public int id { get; set; }
-        public double iv { get; set; }
-        public PokemonId name { get; set; }
-        public string until { get; set; }
-        public string coords { get; set; }
+        public int Id { get; set; }
+        public double Iv { get; set; }
+        public PokemonId Name { get; set; }
+        public string Until { get; set; }
+        public string Coords { get; set; }
     }
 
     public class PokemonLocationPokewatchers
     {
-        public PokemonId pokemon { get; set; }
-        public double timeadded { get; set; }
-        public double timeend { get; set; }
-        public string cords { get; set; }
+        public PokemonId Pokemon { get; set; }
+        public double Timeadded { get; set; }
+        public double Timeend { get; set; }
+        public string Cords { get; set; }
     }
 
     public class ScanResult
     {
         public string Status { get; set; }
-        public List<PokemonLocation> pokemons { get; set; }
+        public List<PokemonLocation> Pokemons { get; set; }
     }
 
     public class ScanResultPokesnipers
@@ -150,13 +143,13 @@ namespace PoGo.NecroBot.Logic.Tasks
         public string Status { get; set; }
 
         [JsonProperty("results")]
-        public List<PokemonLocationPokesnipers> pokemons { get; set; }
+        public List<PokemonLocationPokesnipers> Pokemons { get; set; }
     }
 
     public class ScanResultPokewatchers
     {
         public string Status { get; set; }
-        public List<PokemonLocationPokewatchers> pokemons { get; set; }
+        public List<PokemonLocationPokewatchers> Pokemons { get; set; }
     }
 
     public static class SnipePokemonTask
@@ -500,7 +493,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         {
                             session.EventDispatcher.Send(new ErrorEvent
                             {
-                                Message = "The connection to the sniping location server was lost."
+                                Message = "The connection to the sniping location server has been lost."
                             });
                         }
                     }

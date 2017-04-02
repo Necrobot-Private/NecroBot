@@ -13,20 +13,22 @@ namespace PoGo.NecroBot.Logic.Model.Google
 
         public GoogleWalk(GoogleResult googleResult)
         {
-            if (googleResult.Directions.routes == null)
+            if (googleResult.Directions.Routes == null)
                 throw new ArgumentException("Invalid google route.");
 
-            var route = googleResult.Directions.routes.First();
+            var route = googleResult.Directions.Routes.First();
 
             Distance = googleResult.GetDistance();
 
-            Waypoints = new List<GeoCoordinate>();
-            // In some cases, player are inside build
-            Waypoints.Add(googleResult.Origin);
+            Waypoints = new List<GeoCoordinate>
+            {
+                // In some cases, player are inside build
+                googleResult.Origin,
 
-            Waypoints.Add(new GeoCoordinate(route.legs.First().start_location.lat, route.legs.First().start_location.lng));
-            Waypoints.AddRange(route.overview_polyline.DecodePoly());
-            Waypoints.Add(new GeoCoordinate(route.legs.Last().end_location.lat, route.legs.Last().end_location.lng));
+                new GeoCoordinate(route.Legs.First().Start_location.Lat, route.Legs.First().Start_location.Lng)
+            };
+            Waypoints.AddRange(route.Overview_polyline.DecodePoly());
+            Waypoints.Add(new GeoCoordinate(route.Legs.Last().End_location.Lat, route.Legs.Last().End_location.Lng));
 
             // In some cases, player need to get inside a  build
             Waypoints.Add(googleResult.Destiny);

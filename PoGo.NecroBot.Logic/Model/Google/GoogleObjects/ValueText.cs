@@ -2,7 +2,7 @@
 {
     public class ValueText
     {
-        public string text { get; set; }
-        public int value { get; set; }
+        public string Text { get; set; }
+        public int Value { get; set; }
     }
 }

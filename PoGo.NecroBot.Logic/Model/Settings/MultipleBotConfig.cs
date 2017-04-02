@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 using PoGo.NecroBot.Logic.Interfaces.Configuration;
 using POGOProtos.Enums;
-using TinyIoC;
-using PoGo.NecroBot.Logic.State;
 
 namespace PoGo.NecroBot.Logic.Model.Settings
 {
@@ -50,19 +47,19 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         public BotSwitchPokemonFilter()
         {
-            this.Moves = new List<List<PokemonMove>>();
-            this.AffectToPokemons = new List<PokemonId>();
+            Moves = new List<List<PokemonMove>>();
+            AffectToPokemons = new List<PokemonId>();
         }
 
         public BotSwitchPokemonFilter(int iv, int lv, int remain)
         {
-            this.AffectToPokemons = new List<PokemonId>();
+            AffectToPokemons = new List<PokemonId>();
 
-            this.Operator = "or";
-            this.Moves = new List<List<PokemonMove>>();
-            this.IV = iv;
-            this.LV = lv;
-            this.RemainTimes = remain;
+            Operator = "or";
+            Moves = new List<List<PokemonMove>>();
+            IV = iv;
+            LV = lv;
+            RemainTimes = remain;
         }
 
         public static Dictionary<PokemonId, BotSwitchPokemonFilter> Default()

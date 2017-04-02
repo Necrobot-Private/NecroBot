@@ -2,9 +2,9 @@
 {
     public class Element
     {
-        public ValueText distance { get; set; }
-        public ValueText duration { get; set; }
-        public ValueText duration_in_traffic { get; set; }
-        public string status { get; set; }
+        public ValueText Distance { get; set; }
+        public ValueText Duration { get; set; }
+        public ValueText Duration_in_traffic { get; set; }
+        public string Status { get; set; }
     }
 }

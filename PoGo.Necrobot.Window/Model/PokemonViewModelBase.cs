@@ -1,11 +1,5 @@
 ﻿using PoGo.NecroBot.Logic.Common;
-using PoGo.NecroBot.Logic.Model;
 using POGOProtos.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PoGo.Necrobot.Window.Model
 {
@@ -13,7 +7,7 @@ namespace PoGo.Necrobot.Window.Model
     {
         
         public PokemonId PokemonId { get; set; }
-        public string PokemonName => this.PokemonId.ToString();
+        public string PokemonName => PokemonId.ToString();
         
         public string PokemonRarityColor => PokemonGradeHelper.GetGradeColor(PokemonId);
 

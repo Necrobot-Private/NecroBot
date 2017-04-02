@@ -1,12 +1,5 @@
 ﻿using PoGo.NecroBot.Logic.Common;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace PoGo.NecroBot.Logic.Forms
@@ -19,18 +12,18 @@ namespace PoGo.NecroBot.Logic.Forms
             InitializeComponent();
         }
 
-        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        private void ListView1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }
 
         private void SelectAccountForm_Load(object sender, EventArgs e)
         {
-            this.BringToFront();
+            BringToFront();
 
-            this.WindowState = FormWindowState.Minimized;
-            this.Show();
-            this.WindowState = FormWindowState.Normal;
+            WindowState = FormWindowState.Minimized;
+            Show();
+            WindowState = FormWindowState.Normal;
 
             lvAcc.BeginUpdate();
             var accManager = TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>();
@@ -44,10 +37,12 @@ namespace PoGo.NecroBot.Logic.Forms
                 EXControlListViewSubItem cs = new EXControlListViewSubItem()
                 {
                 };
-                Button b = new Button();
-                b.Text = "START";
-                b.Height = 55;
-                b.Click += selectBot_Click;
+                Button b = new Button()
+                {
+                    Text = "START",
+                    Height = 55
+                };
+                b.Click += SelectBot_Click;
                 b.Tag = item;
                 lvItem.SubItems.Add(cs);
                 lvAcc.AddControlToSubItem(b, cs);
@@ -57,16 +52,16 @@ namespace PoGo.NecroBot.Logic.Forms
             lvAcc.EndUpdate();
         }
 
-        private void selectBot_Click(object sender, EventArgs e)
+        private void SelectBot_Click(object sender, EventArgs e)
         {
             SelectedAccount  = (MultiAccountManager.BotAccount)((Button)sender).Tag;
-            this.Close();
+            Close();
         }
 
         private void SelectAccountForm_FormClosing(object sender, FormClosingEventArgs e)
         {
 
-            if(this.SelectedAccount == null)
+            if(SelectedAccount == null)
             {
             var manager = TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>();
 
@@ -76,17 +71,17 @@ namespace PoGo.NecroBot.Logic.Forms
         }
 
         int countdown = 31;
-        private void timer1_Tick(object sender, EventArgs e)
+        private void Timer1_Tick(object sender, EventArgs e)
         {
             countdown--;
             var translator = TinyIoC.TinyIoCContainer.Current.Resolve<ITranslation>();
-            this.label1.Text = translator.GetTranslation(TranslationString.MultiAccountAutoSelect, countdown);
-            if (countdown <= 0) this.Close();
+            label1.Text = translator.GetTranslation(TranslationString.MultiAccountAutoSelect, countdown);
+            if (countdown <= 0) Close();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Btnclose_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
     }
 }
