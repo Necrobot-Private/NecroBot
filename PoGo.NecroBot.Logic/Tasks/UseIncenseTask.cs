@@ -15,7 +15,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             switch (response.Result)
             {
                 case UseIncenseResponse.Types.Result.Success:
-                    Logger.Write($"Incense valid until: {DateTime.Now.AddMinutes(30)}");
+                    Logger.Write($"Incense is Valid until: {DateTime.Now.AddMinutes(30)}");
                     break;
                 case UseIncenseResponse.Types.Result.IncenseAlreadyActive:
                     Logger.Write($"An incense is already active!", LogLevel.Warning);
@@ -28,7 +28,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 case UseIncenseResponse.Types.Result.NoneInInventory:
                     break;
                 default:
-                    Logger.Write($"Failed using an incense!", LogLevel.Error);
+                    Logger.Write($"Failed to use an incense!", LogLevel.Error);
                     break;
             }
         }

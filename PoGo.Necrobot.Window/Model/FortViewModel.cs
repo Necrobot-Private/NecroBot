@@ -60,16 +60,16 @@ namespace PoGo.Necrobot.Window.Model
 
         public FortViewModel(FortData data)
         {
-            this.Session = TinyIoCContainer.Current.Resolve<ISession>();
-            this.fort = data;
+            Session = TinyIoCContainer.Current.Resolve<ISession>();
+            fort = data;
             
-            UpdateDistance(this.Session.Client.CurrentLatitude, this.Session.Client.CurrentLongitude);
+            UpdateDistance(Session.Client.CurrentLatitude, Session.Client.CurrentLongitude);
         }
 
         public void UpdateFortData(FortData newFort)
         {
-            var originalFort = this.fort;
-            this.fort = newFort;
+            var originalFort = fort;
+            fort = newFort;
 
             RaisePropertyChanged("FortIcon");
         }
@@ -81,7 +81,7 @@ namespace PoGo.Necrobot.Window.Model
 
         internal void UpdateDistance(double lat, double lng)
         {
-            this.Distance = LocationUtils.CalculateDistanceInMeters(lat, lng, Latitude, Longitude);
+            Distance = LocationUtils.CalculateDistanceInMeters(lat, lng, Latitude, Longitude);
             RaisePropertyChanged("Distance");
 
         }

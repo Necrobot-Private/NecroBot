@@ -2,20 +2,15 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
-using CloudFlareUtilities;
 using Newtonsoft.Json;
 using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.Event;
-using PoGo.NecroBot.Logic.Exceptions;
 using PoGo.NecroBot.Logic.Model.Settings;
 using PoGo.NecroBot.Logic.PoGoUtils;
 using PoGo.NecroBot.Logic.State;
@@ -26,8 +21,6 @@ using POGOProtos.Inventory.Item;
 using POGOProtos.Map.Pokemon;
 using POGOProtos.Networking.Responses;
 using Quobject.Collections.Immutable;
-using Quobject.SocketIoClientDotNet.Client;
-using Socket = Quobject.SocketIoClientDotNet.Client.Socket;
 using PoGo.NecroBot.Logic.Logging;
 using GeoCoordinatePortable;
 
@@ -500,7 +493,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         {
                             session.EventDispatcher.Send(new ErrorEvent
                             {
-                                Message = "The connection to the sniping location server was lost."
+                                Message = "The connection to the sniping location server has been lost."
                             });
                         }
                     }

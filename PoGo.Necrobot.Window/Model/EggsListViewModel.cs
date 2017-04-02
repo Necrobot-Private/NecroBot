@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using POGOProtos.Networking.Responses;
 using POGOProtos.Data;
 using POGOProtos.Inventory;
 using PoGo.NecroBot.Logic.Event;
@@ -17,8 +13,8 @@ namespace PoGo.Necrobot.Window.Model
         public ObservableCollection<IncubatorViewModel> Incubators { get; set; }
         public EggsListViewModel()
         {
-            this.Eggs = new ObservableCollection<EggViewModel>();
-            this.Incubators = new ObservableCollection<IncubatorViewModel>();
+            Eggs = new ObservableCollection<EggViewModel>();
+            Incubators = new ObservableCollection<IncubatorViewModel>();
         }
 
         internal void OnInventoryRefreshed(IEnumerable<InventoryItem> inventory)
@@ -40,7 +36,7 @@ namespace PoGo.Necrobot.Window.Model
 
             foreach (var egg in eggs)
             {
-                var incu = this.Incubators.FirstOrDefault(x => x.PokemonId == egg.Id);
+                var incu = Incubators.FirstOrDefault(x => x.PokemonId == egg.Id);
 
                 AddOrUpdate(egg, incu);
             }
@@ -51,14 +47,14 @@ namespace PoGo.Necrobot.Window.Model
         private void AddOrUpdateIncubator(EggIncubator incu)
         {
             var incuModel = new IncubatorViewModel(incu);
-            var existing = this.Incubators.FirstOrDefault(x => x.Id == incu.Id);
+            var existing = Incubators.FirstOrDefault(x => x.Id == incu.Id);
             if (existing != null)
             {
                 existing.UpdateWith(incuModel);
             }
             else
             {
-                this.Incubators.Add(incuModel);
+                Incubators.Add(incuModel);
             }
         }
 
@@ -67,7 +63,7 @@ namespace PoGo.Necrobot.Window.Model
             var eggModel = new EggViewModel(egg);
             eggModel.Hatchable = incu == null;
                         
-            var existing = this.Eggs.FirstOrDefault(x => x.Id == eggModel.Id);
+            var existing = Eggs.FirstOrDefault(x => x.Id == eggModel.Id);
             if(existing != null )
             {
                 // Do not update, it overwrites OnEggIncubatorStatus Status updates
@@ -75,14 +71,14 @@ namespace PoGo.Necrobot.Window.Model
             }
             else
             {
-                this.Eggs.Add(eggModel);
+                Eggs.Add(eggModel);
             }
         }
 
         internal void OnEggIncubatorStatus(EggIncubatorStatusEvent e)
         {
-            var egg = this.Eggs.FirstOrDefault(t => t.Id == e.PokemonId);
-            var incu = this.Incubators.FirstOrDefault(t => t.Id == e.IncubatorId);
+            var egg = Eggs.FirstOrDefault(t => t.Id == e.PokemonId);
+            var incu = Incubators.FirstOrDefault(t => t.Id == e.IncubatorId);
 
             if (egg == null) return;
 

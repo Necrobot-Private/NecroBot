@@ -1,5 +1,4 @@
 ﻿using PoGo.NecroBot.Logic.Logging;
-using System;
 using System.Threading.Tasks;
 
 namespace PoGo.NecroBot.Logic.Captcha.Anti_Captcha

@@ -1,10 +1,5 @@
 ﻿using PoGo.NecroBot.Logic.State;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PoGo.Necrobot.Window.Model
 {
@@ -15,8 +10,7 @@ namespace PoGo.Necrobot.Window.Model
         public ISession Session { get; set; }
         public void RaisePropertyChanged(string propertyName)
         {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

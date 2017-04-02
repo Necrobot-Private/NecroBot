@@ -1,12 +1,11 @@
 ﻿using System.Windows.Controls;
-using GMap.NET;
 
 namespace PoGo.Necrobot.Window.Controls
 {
-   /// <summary>
-   /// Interaction logic for TrolleyTooltip.xaml
-   /// </summary>
-   public partial class TrolleyTooltip : UserControl
+    /// <summary>
+    /// Interaction logic for TrolleyTooltip.xaml
+    /// </summary>
+    public partial class TrolleyTooltip : UserControl
    {
       public TrolleyTooltip()
       {

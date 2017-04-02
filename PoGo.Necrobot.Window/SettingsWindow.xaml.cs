@@ -2,22 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Reflection;
 using System.ComponentModel.DataAnnotations;
 using POGOProtos.Enums;
-using PoGo.NecroBot.Logic;
-using PoGo.Necrobot.Window;
 using PoGo.NecroBot.Logic.Model.Settings;
 using PoGo.Necrobot.Window.Converters;
 using System.Collections.ObjectModel;
@@ -38,12 +29,12 @@ namespace PoGo.Necrobot.Window
         public SettingsWindow(MetroWindow parent, string filename)
         {
             main = parent;
-            this.Settings = GlobalSettings.Load(filename);
-            BackwardCompitableUpdate(this.Settings);
-            this.fileName = filename;
+            Settings = GlobalSettings.Load(filename);
+            BackwardCompitableUpdate(Settings);
+            fileName = filename;
             InitializeComponent();
             InitForm();
-            this.WindowState = WindowState.Maximized;
+            WindowState = WindowState.Maximized;
         }
         private static void BackwardCompitableUpdate(GlobalSettings setting)
         {
@@ -72,7 +63,7 @@ namespace PoGo.Necrobot.Window
         {
             InitializeComponent();
             InitForm();
-            this.WindowState = WindowState.Maximized;
+            WindowState = WindowState.Maximized;
         }
 
         Dictionary<FieldInfo, object> map = new Dictionary<FieldInfo, object>();
@@ -242,29 +233,37 @@ namespace PoGo.Necrobot.Window
         private DataGridTemplateColumn BuildComboMoves()
         {
             // Create The Column
-            DataGridTemplateColumn accountColumn = new DataGridTemplateColumn();
-            accountColumn.Header = "Moves";
-
-            Binding bind = new Binding("Moves");
-            bind.Mode = BindingMode.OneWay;
+            DataGridTemplateColumn accountColumn = new DataGridTemplateColumn()
+            {
+                Header = "Moves"
+            };
+            Binding bind = new Binding("Moves")
+            {
+                Mode = BindingMode.OneWay
+            };
 
             // Create the TextBlock
             FrameworkElementFactory textFactory = new FrameworkElementFactory(typeof(TextBlock));
             textFactory.SetBinding(TextBlock.TextProperty, bind);
-            DataTemplate textTemplate = new DataTemplate();
-            textTemplate.VisualTree = textFactory;
+            DataTemplate textTemplate = new DataTemplate()
+            {
+                VisualTree = textFactory
+            };
 
             // Create the ComboBox
-            Binding comboBind = new Binding("Move");
-            comboBind.Mode = BindingMode.OneWay;
-
+            Binding comboBind = new Binding("Move")
+            {
+                Mode = BindingMode.OneWay
+            };
             FrameworkElementFactory comboFactory = new FrameworkElementFactory(typeof(ComboBox));
             comboFactory.SetValue(ComboBox.IsTextSearchEnabledProperty, true);
            // comboFactory.SetValue(ComboBox.ItemsSourceProperty, this.Accounts);
             comboFactory.SetBinding(ComboBox.SelectedItemProperty, comboBind);
 
-            DataTemplate comboTemplate = new DataTemplate();
-            comboTemplate.VisualTree = comboFactory;
+            DataTemplate comboTemplate = new DataTemplate()
+            {
+                VisualTree = comboFactory
+            };
 
             // Set the Templates to the Column
             accountColumn.CellTemplate = textTemplate;
@@ -344,12 +343,13 @@ namespace PoGo.Necrobot.Window
 
         private UIElement GetInputControl(PropertyInfo item, object source)
         {
-            Binding binding = new Binding();
-            binding.Source = source;  // view model?
-            binding.Path = new PropertyPath(item.Name);
-            binding.Mode = BindingMode.TwoWay;
-            binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
-
+            Binding binding = new Binding()
+            {
+                Source = source,  // view model?
+                Path = new PropertyPath(item.Name),
+                Mode = BindingMode.TwoWay,
+                UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+            };
             var enumDataTypeAtt = item.GetCustomAttribute<EnumDataTypeAttribute>(true);
             if (enumDataTypeAtt != null)
             {
@@ -436,7 +436,7 @@ namespace PoGo.Necrobot.Window
         public void InitForm()
         {
             translator = TinyIoCContainer.Current.Resolve<UITranslation>();
-            this.DataContext = Settings;
+            DataContext = Settings;
             foreach (var item in Settings.GetType().GetFields())
             {
                 var att = item.GetCustomAttributes<NecrobotConfigAttribute>(true).FirstOrDefault();
@@ -452,7 +452,7 @@ namespace PoGo.Necrobot.Window
             }
         }
 
-        private void btnSave_click(object sender, RoutedEventArgs e)
+        private void BtnSave_click(object sender, RoutedEventArgs e)
         {
             foreach (var item in Settings.GetType().GetFields())
             {
@@ -467,7 +467,7 @@ namespace PoGo.Necrobot.Window
                         Type keyType = type.GetGenericArguments()[0];
                         Type valueType = type.GetGenericArguments()[1];
 
-                        var t = typeof(Window.ObservablePairCollection<,>);
+                        var t = typeof(ObservablePairCollection<,>);
                         var genericType = t.MakeGenericType(keyType, valueType);
                         var method = genericType.GetMethod("GetDictionary");
                         var dict = method.Invoke(obj, null);
@@ -475,13 +475,13 @@ namespace PoGo.Necrobot.Window
                     }
                 }
             }
-            //code to back compitable.
-            var backCombitable = ConvertToBackwardCompitable(this.Settings);
+            //code to back compatable.
+            var backCombitable = ConvertToBackwardCompitable(Settings);
             if (!string.IsNullOrEmpty(fileName))  {
                 if (MessageBox.Show("Do you want to overwrite file : ", "Save config", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
                 {
                     Settings.Save(fileName);
-                    this.Close();
+                    Close();
 
                 }
             }

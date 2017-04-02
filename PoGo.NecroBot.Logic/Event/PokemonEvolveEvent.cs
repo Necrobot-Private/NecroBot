@@ -2,9 +2,7 @@
 
 using POGOProtos.Data;
 using POGOProtos.Enums;
-using POGOProtos.Inventory;
 using POGOProtos.Networking.Responses;
-using POGOProtos.Settings.Master;
 
 #endregion
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using PoGo.NecroBot.Logic.Event;
-using PoGo.NecroBot.Logic.Model.Settings;
 using POGOProtos.Enums;
 
 namespace PoGo.NecroBot.Logic.Exceptions

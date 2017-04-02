@@ -65,7 +65,7 @@ namespace PoGo.NecroBot.Logic
         public Inventory(ISession session, Client client, ILogicSettings logicSettings,
             Action onUpdated = null)
         {
-            this.ownerSession = session;
+            ownerSession = session;
             _client = client;
             _logicSettings = logicSettings;
             // Inventory update will be called everytime GetMapObject is called.
@@ -107,7 +107,7 @@ namespace PoGo.NecroBot.Logic
                     && item.InventoryItemData.Item != null
                     && item.InventoryItemData.Item.ItemId == itemId)
                 {
-                    this.ownerSession.EventDispatcher.Send(new InventoryItemUpdateEvent()
+                    ownerSession.EventDispatcher.Send(new InventoryItemUpdateEvent()
                     {
                         Item = item.InventoryItemData.Item
                     });
@@ -633,7 +633,7 @@ namespace PoGo.NecroBot.Logic
                 return false;
 
             // Can't transfer buddy pokemon
-            var buddy = this.ownerSession.Profile.PlayerData.BuddyPokemon;
+            var buddy = ownerSession.Profile.PlayerData.BuddyPokemon;
             if (buddy != null && buddy.Id == pokemon.Id)
                 return false;
 

@@ -23,18 +23,18 @@ namespace PoGo.Necrobot.Window.Model
 
         public AddManualSnipeCoordViewModel ManualSnipe { get; set; }
 
-        public int TotalOtherList => this.OtherList.Count;
+        public int TotalOtherList => OtherList.Count;
 
         public ObservableCollectionExt<SnipePokemonViewModel> SnipeQueueItems { get; set; }
 
         public SnipeListViewModel()
         {
             ManualSnipe = new AddManualSnipeCoordViewModel() { Latitude = 123 };
-            this.RareList = new ObservableCollectionExt<SnipePokemonViewModel>();
-            this.OtherList = new ObservableCollectionExt<SnipePokemonViewModel>();
-            this.SnipeQueueItems = new ObservableCollectionExt<SnipePokemonViewModel>();
-            this.PokedexSnipeItems = new ObservableCollectionExt<SnipePokemonViewModel>();
-            this.IV100List = new ObservableCollectionExt<Model.SnipePokemonViewModel>();
+            RareList = new ObservableCollectionExt<SnipePokemonViewModel>();
+            OtherList = new ObservableCollectionExt<SnipePokemonViewModel>();
+            SnipeQueueItems = new ObservableCollectionExt<SnipePokemonViewModel>();
+            PokedexSnipeItems = new ObservableCollectionExt<SnipePokemonViewModel>();
+            IV100List = new ObservableCollectionExt<Model.SnipePokemonViewModel>();
 
 #pragma warning disable 4014 // added to get rid of compiler warning. Remove this if async code is used below.
             //RefreshList();
@@ -44,10 +44,10 @@ namespace PoGo.Necrobot.Window.Model
         {
             while (true)
             {
-                Refresh("PokedexSnipeItems", this.PokedexSnipeItems);
-                Refresh("IV100List", this.IV100List);
-                Refresh("SnipeQueueItems", this.SnipeQueueItems);
-                Refresh("OtherList", this.OtherList);
+                Refresh("PokedexSnipeItems", PokedexSnipeItems);
+                Refresh("IV100List", IV100List);
+                Refresh("SnipeQueueItems", SnipeQueueItems);
+                Refresh("OtherList", OtherList);
                 await Task.Delay(3000);
             }
         }
@@ -111,23 +111,23 @@ namespace PoGo.Necrobot.Window.Model
 
         private void RemoveFromSnipeQueue(string uniqueIdentifier)
         {
-            var find = this.SnipeQueueItems.FirstOrDefault(x => x.UniqueId == uniqueIdentifier);
+            var find = SnipeQueueItems.FirstOrDefault(x => x.UniqueId == uniqueIdentifier);
 
             if (find != null)
             {
-                this.SnipeQueueItems.Remove(find);
+                SnipeQueueItems.Remove(find);
             }
         }
 
         private void HandlePokedex(SnipePokemonViewModel model)
         {
-            this.PokedexSnipeItems.RemoveAll(x => ShouldRemove(x, model));
+            PokedexSnipeItems.RemoveAll(x => ShouldRemove(x, model));
 
             if (pokedex != null && !pokedex.Any(p => p.PokemonId == model.PokemonId))
             {
-                this.PokedexSnipeItems.Insert(0, model);
+                PokedexSnipeItems.Insert(0, model);
             }
-            Refresh("PokedexSnipeItems", this.PokedexSnipeItems);
+            Refresh("PokedexSnipeItems", PokedexSnipeItems);
 
         }
 
@@ -164,12 +164,12 @@ namespace PoGo.Necrobot.Window.Model
         }
         private void HandleOthers(SnipePokemonViewModel model)
         {
-            this.OtherList.RemoveAll(x => ShouldRemove(x, model));
+            OtherList.RemoveAll(x => ShouldRemove(x, model));
 
-            this.OtherList.Insert(0, model);
+            OtherList.Insert(0, model);
 
-            this.RaisePropertyChanged("TotalOtherList");
-            this.Refresh("OtherList", this.OtherList);
+            RaisePropertyChanged("TotalOtherList");
+            Refresh("OtherList", OtherList);
 
         }
         private List<PokedexEntry> pokedex;
@@ -184,39 +184,41 @@ namespace PoGo.Necrobot.Window.Model
                              .ToList();
 
             // Remove pokedex items from pokemon snipe list.
-            this.PokedexSnipeItems.RemoveAll(x => pokedex.Any(p => p.PokemonId == x.PokemonId));
+            PokedexSnipeItems.RemoveAll(x => pokedex.Any(p => p.PokemonId == x.PokemonId));
             RaisePropertyChanged("PokedexSnipeItems");
         }
 
         private void HandleRarePokemon(SnipePokemonViewModel model)
         {
-            this.RareList.RemoveAll(x => ShouldRemove(x, model));
-            this.RareList.Insert(0, model);
-            this.Refresh("RareList", this.RareList);
+            RareList.RemoveAll(x => ShouldRemove(x, model));
+            RareList.Insert(0, model);
+            Refresh("RareList", RareList);
 
         }
 
         private void Handle100IV(SnipePokemonViewModel e)
         {
-            this.IV100List.RemoveAll(x => ShouldRemove(x, e));
-            this.IV100List.Insert(0, e);
-            this.Refresh("IV100List", this.IV100List);
+            IV100List.RemoveAll(x => ShouldRemove(x, e));
+            IV100List.Insert(0, e);
+            Refresh("IV100List", IV100List);
         }
 
         internal void OnSnipeItemQueue(EncounteredEvent encounteredEvent)
         {
             if (!encounteredEvent.IsRecievedFromSocket) return;
 
-            var model = new SnipePokemonViewModel(encounteredEvent);
-            model.AllowSnipe = false;
+            var model = new SnipePokemonViewModel(encounteredEvent)
+            {
+                AllowSnipe = false
+            };
             HandleSnippingList(model);
 
         }
 
         private void HandleSnippingList(SnipePokemonViewModel model)
         {
-            this.SnipeQueueItems.Insert(0, model);
-            this.Refresh("SnipeQueueItems", this.SnipeQueueItems);
+            SnipeQueueItems.Insert(0, model);
+            Refresh("SnipeQueueItems", SnipeQueueItems);
         }
     }
 }

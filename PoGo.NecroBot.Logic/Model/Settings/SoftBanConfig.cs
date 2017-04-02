@@ -12,7 +12,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
-        [NecrobotConfig(Description = "Allow bot resolve softban automatically", Position = 1)]
+        [NecrobotConfig(Description = "Allows bot to resolve softbans automatically", Position = 1)]
         public bool FastSoftBanBypass { get; set; }
 
         [DefaultValue(1)]

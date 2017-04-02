@@ -93,8 +93,10 @@ namespace PoGo.NecroBot.Logic.Model
                                 return null;
                             }
 
-                            elevationLocation = new ElevationLocation(latitude, longitude);
-                            elevationLocation.Altitude = altitude;
+                            elevationLocation = new ElevationLocation(latitude, longitude)
+                            {
+                                Altitude = altitude
+                            };
                             locationsCollection.Insert(elevationLocation);
 
                             return elevationLocation;

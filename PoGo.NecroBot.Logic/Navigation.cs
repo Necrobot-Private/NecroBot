@@ -11,7 +11,6 @@ using PoGo.NecroBot.Logic.Model;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Strategies.Walk;
 using PokemonGo.RocketAPI;
-using POGOProtos.Networking.Responses;
 
 #endregion
 
