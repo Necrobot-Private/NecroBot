@@ -1,6 +1,5 @@
 ﻿#region using directives
 
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -29,15 +28,15 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         public UpgradeFilter(): base()
         {
-            this.Moves = new List<List<PokemonMove>>();
-            this.AffectToPokemons = new List<PokemonId>();
+            Moves = new List<List<PokemonMove>>();
+            AffectToPokemons = new List<PokemonId>();
         }
 
         public UpgradeFilter(double minLevel, double upgradePokemonCpMinimum, double upgradePokemonIvMinimum,
             string upgradePokemonMinimumStatsOperator, bool onlyUpgradeFavorites)
         {
-            this.AffectToPokemons = new List<PokemonId>();
-            this.Moves = new List<List<PokemonMove>>();
+            AffectToPokemons = new List<PokemonId>();
+            Moves = new List<List<PokemonMove>>();
             UpgradePokemonLvlMinimum = minLevel;
             UpgradePokemonCpMinimum = upgradePokemonCpMinimum;
             UpgradePokemonIvMinimum = upgradePokemonIvMinimum;

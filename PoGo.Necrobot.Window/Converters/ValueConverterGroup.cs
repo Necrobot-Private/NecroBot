@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace PoGo.Necrobot.Window.Converters
 {
-//    <c:ValueConverterGroup x:Key="InvertAndVisibilitate">
-//   <c:BooleanInverterConverter/>
-//   <c:BooleanToVisibilityConverter/>
-//</c:ValueConverterGroup>
+    //    <c:ValueConverterGroup x:Key="InvertAndVisibilitate">
+    //   <c:BooleanInverterConverter/>
+    //   <c:BooleanToVisibilityConverter/>
+    //</c:ValueConverterGroup>
 
     public class ValueConverterGroup : List<IValueConverter>, IValueConverter
     {

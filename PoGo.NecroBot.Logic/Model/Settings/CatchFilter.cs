@@ -19,11 +19,11 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public CatchFilter(int minIV, int minLV, int minCP, string op = "or", List<List<PokemonMove>> moves = null)
         {
             EnableCatchFilter = true;
-            this.MinIV = minIV;
-            this.Moves = moves == null ? new List<List<PokemonMove>>() : moves;
-            this.MinLV = minLV;
-            this.MinCP = MinCP;
-            this.Operator = op;
+            MinIV = minIV;
+            Moves = moves == null ? new List<List<PokemonMove>>() : moves;
+            MinLV = minLV;
+            MinCP = MinCP;
+            Operator = op;
         }
 
         [NecrobotConfig(IsPrimaryKey = true, Key = "Enable Catch filter", Description = "Allow bot check for filter for catch this pokemon", Position = 1)]

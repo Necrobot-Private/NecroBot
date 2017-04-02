@@ -22,8 +22,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 if (string.IsNullOrEmpty(session.LogicSettings.DefaultBuddyPokemon))
                     return;
 
-                PokemonId buddyPokemonId;
-                bool success = Enum.TryParse(session.LogicSettings.DefaultBuddyPokemon, out buddyPokemonId);
+                bool success = Enum.TryParse(session.LogicSettings.DefaultBuddyPokemon, out PokemonId buddyPokemonId);
                 if (!success)
                 {
                     // Invalid buddy pokemon type
@@ -52,7 +51,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 if (newBuddy == null)
                 {
-                    Logger.Write($"You don't have pokemon {session.LogicSettings.DefaultBuddyPokemon} to set as buddy");
+                    Logger.Write($"You don't have the pokemon {session.LogicSettings.DefaultBuddyPokemon} to set as your buddy");
                     return;
                 }
             }

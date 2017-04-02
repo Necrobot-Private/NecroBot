@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PoGo.NecroBot.Logic.Tasks;
+﻿using PoGo.NecroBot.Logic.Tasks;
 
 namespace PoGo.NecroBot.Logic.Event.Snipe
 {
@@ -22,13 +17,13 @@ namespace PoGo.NecroBot.Logic.Event.Snipe
         public bool IsRemoteEvent { get; set; }
         public SnipePokemonUpdateEvent(string encounterId, bool isRemoteEvent = false)
         {
-            this.EncounterId = encounterId;
-            this.IsRemoteEvent = IsRemoteEvent;
+            EncounterId = encounterId;
+            IsRemoteEvent = IsRemoteEvent;
         }
 
         public SnipePokemonUpdateEvent(string encounterId, bool isRemoteEvent = false, MSniperServiceTask.MSniperInfo2 find = null) : this(encounterId, isRemoteEvent)
         {
-            this.Data = find;
+            Data = find;
         }
     }
 }

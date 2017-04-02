@@ -162,8 +162,8 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 });
             }
 
-            this.Auth.Bots = allAcc.ToList();
-            string json = JsonConvert.SerializeObject(this.Auth, Formatting.Indented,new StringEnumConverter() { CamelCaseText = true });
+            Auth.Bots = allAcc.ToList();
+            string json = JsonConvert.SerializeObject(Auth, Formatting.Indented,new StringEnumConverter() { CamelCaseText = true });
 
             File.WriteAllText("config\\auth.json", json);
             if (File.Exists("accounts.db")) File.Delete("accounts.db");

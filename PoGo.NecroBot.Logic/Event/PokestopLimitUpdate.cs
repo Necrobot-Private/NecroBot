@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PoGo.NecroBot.Logic.Event
+﻿namespace PoGo.NecroBot.Logic.Event
 {
     public class PokestopLimitUpdate : IEvent
     {
@@ -13,8 +7,8 @@ namespace PoGo.NecroBot.Logic.Event
 
         public PokestopLimitUpdate(int v, int pokeStopLimit)
         {
-            this.Value = v;
-            this.Limit = pokeStopLimit;
+            Value = v;
+            Limit = pokeStopLimit;
         }
     }
 
@@ -25,8 +19,8 @@ namespace PoGo.NecroBot.Logic.Event
 
         public CatchLimitUpdate(int v, int catchLimit)
         {
-            this.Value = v;
-            this.Limit = catchLimit;
+            Value = v;
+            Limit = catchLimit;
         }
 
     }

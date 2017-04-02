@@ -1,9 +1,5 @@
-﻿ using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PoGo.Necrobot.Window.Model
 {
@@ -20,26 +16,26 @@ namespace PoGo.Necrobot.Window.Model
         }
         public void AddItem(SidebarItemViewModel item)              
         {
-                this.HistoryItems.Add(item);
+            HistoryItems.Add(item);
         }
 
         public void AddOrUpdate(PokestopItemViewModel item)
         {
-            var existingItem = this.HistoryItems.FirstOrDefault(x => x.UUID == item.UUID);
+            var existingItem = HistoryItems.FirstOrDefault(x => x.UUID == item.UUID);
 
             if (existingItem == null)
             {
-                this.HistoryItems.Insert(0,item);
+                HistoryItems.Insert(0,item);
             }
             Trim();
         }
         public void AddOrUpdate(CatchPokemonViewModel item)
         {
-            var existingItem = this.HistoryItems.FirstOrDefault(x => x.UUID == item.UUID);
+            var existingItem = HistoryItems.FirstOrDefault(x => x.UUID == item.UUID);
 
             if (existingItem == null)
             {
-                this.HistoryItems.Insert(0, item);
+                HistoryItems.Insert(0, item);
                 Trim();
             }
             else
@@ -63,9 +59,9 @@ namespace PoGo.Necrobot.Window.Model
 
         private void Trim()
         {
-            if(this.HistoryItems.Count > 15)
+            if(HistoryItems.Count > 15)
             {
-                this.HistoryItems.RemoveAt(this.HistoryItems.Count - 1);
+                HistoryItems.RemoveAt(HistoryItems.Count - 1);
             }
         }
     }

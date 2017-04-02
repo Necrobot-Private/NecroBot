@@ -47,7 +47,7 @@ namespace PoGo.NecroBot.Logic.Utils
                 destinationLocation.Latitude, destinationLocation.Longitude);
         }
 
-        public static async Task<double> getElevation(IElevationService elevationService, double lat, double lon)
+        public static async Task<double> GetElevation(IElevationService elevationService, double lat, double lon)
         {
             if (elevationService != null)
                 return await elevationService.GetElevation(lat, lon).ConfigureAwait(false);
@@ -88,7 +88,7 @@ namespace PoGo.NecroBot.Logic.Utils
             return new GeoCoordinate(
                 ToDegrees(targetLatitudeRadians),
                 ToDegrees(targetLongitudeRadians),
-                await getElevation(null, sourceLocation.Latitude, sourceLocation.Longitude).ConfigureAwait(false)
+                await GetElevation(null, sourceLocation.Latitude, sourceLocation.Longitude).ConfigureAwait(false)
             );
         }
 

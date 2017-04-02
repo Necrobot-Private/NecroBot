@@ -2,8 +2,8 @@
 {
     public class DirectionsResponse
     {
-        public GeocodedWaypoints[] geocoded_waypoints { get; set; }
-        public Route[] routes { get; set; }
-        public string status { get; set; }
+        public GeocodedWaypoints[] Geocoded_waypoints { get; set; }
+        public Route[] Routes { get; set; }
+        public string Status { get; set; }
     }
 }

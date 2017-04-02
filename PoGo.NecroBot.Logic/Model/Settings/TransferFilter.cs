@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -20,11 +19,11 @@ namespace PoGo.NecroBot.Logic.Model.Settings
     {
         public TransferFilter()
         {
-            this.AffectToPokemons = new List<PokemonId>();
-            this.MovesOperator = "and";
-            this.KeepMinOperator = Operator.or.ToString();
-            this.Moves = new List<List<PokemonMove>>();
-            this.DeprecatedMoves = new List<PokemonMove>();
+            AffectToPokemons = new List<PokemonId>();
+            MovesOperator = "and";
+            KeepMinOperator = Operator.or.ToString();
+            Moves = new List<List<PokemonMove>>();
+            DeprecatedMoves = new List<PokemonMove>();
         }
 
         public TransferFilter(int keepMinCp, int keepMinLvl, bool useKeepMinLvl, float keepMinIvPercentage,
@@ -32,7 +31,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             List<List<PokemonMove>> moves = null, List<PokemonMove> deprecatedMoves = null, string movesOperator = "or",
             bool catchOnlyPokemonMeetTransferCriteria = false)
         {
-            this.AffectToPokemons = new List<PokemonId>();
+            AffectToPokemons = new List<PokemonId>();
             DoNotTransfer = false;
             AllowTransfer = true;
             KeepMinCp = keepMinCp;

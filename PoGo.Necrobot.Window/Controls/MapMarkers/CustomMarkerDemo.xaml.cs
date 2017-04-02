@@ -4,14 +4,13 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using GMap.NET.WindowsPresentation;
-using System.Diagnostics;
 
 namespace PoGo.Necrobot.Window.Controls.MapMarkers
 {
-   /// <summary>
-   /// Interaction logic for CustomMarkerDemo.xaml
-   /// </summary>
-   public partial class CustomMarkerDemo
+    /// <summary>
+    /// Interaction logic for CustomMarkerDemo.xaml
+    /// </summary>
+    public partial class CustomMarkerDemo
    {
       Popup Popup;
       Label Label;
@@ -20,22 +19,22 @@ namespace PoGo.Necrobot.Window.Controls.MapMarkers
 
       public CustomMarkerDemo(MainClientWindow window, GMapMarker marker, string title)
       {
-         this.InitializeComponent();
+            InitializeComponent();
 
-         this.MainWindow = window;
-         this.Marker = marker;
+            MainWindow = window;
+            Marker = marker;
 
          Popup = new Popup();
          Label = new Label();
 
-         this.Unloaded += new RoutedEventHandler(CustomMarkerDemo_Unloaded);
-         this.Loaded += new RoutedEventHandler(CustomMarkerDemo_Loaded);
-         this.SizeChanged += new SizeChangedEventHandler(CustomMarkerDemo_SizeChanged);
-         this.MouseEnter += new MouseEventHandler(MarkerControl_MouseEnter);
-         this.MouseLeave += new MouseEventHandler(MarkerControl_MouseLeave);
-         this.MouseMove += new MouseEventHandler(CustomMarkerDemo_MouseMove);
-         this.MouseLeftButtonUp += new MouseButtonEventHandler(CustomMarkerDemo_MouseLeftButtonUp);
-         this.MouseLeftButtonDown += new MouseButtonEventHandler(CustomMarkerDemo_MouseLeftButtonDown);
+            Unloaded += new RoutedEventHandler(CustomMarkerDemo_Unloaded);
+            Loaded += new RoutedEventHandler(CustomMarkerDemo_Loaded);
+            SizeChanged += new SizeChangedEventHandler(CustomMarkerDemo_SizeChanged);
+            MouseEnter += new MouseEventHandler(MarkerControl_MouseEnter);
+            MouseLeave += new MouseEventHandler(MarkerControl_MouseLeave);
+            MouseMove += new MouseEventHandler(CustomMarkerDemo_MouseMove);
+            MouseLeftButtonUp += new MouseButtonEventHandler(CustomMarkerDemo_MouseLeftButtonUp);
+            MouseLeftButtonDown += new MouseButtonEventHandler(CustomMarkerDemo_MouseLeftButtonDown);
 
          Popup.Placement = PlacementMode.Mouse;
          {

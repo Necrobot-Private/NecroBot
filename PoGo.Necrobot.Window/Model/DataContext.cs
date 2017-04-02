@@ -1,12 +1,7 @@
-using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using POGOProtos.Data;
 using System.Collections.ObjectModel;
-using PoGo.NecroBot.Logic.Common;
 
 namespace PoGo.Necrobot.Window.Model
 {
@@ -32,7 +27,7 @@ namespace PoGo.Necrobot.Window.Model
             }
             set
             {
-                this.internalPokemons = value;
+                internalPokemons = value;
                 RaisePropertyChanged("Pokemons");
                 RaisePropertyChanged("PokemonTabHeader");
             }
@@ -53,7 +48,7 @@ namespace PoGo.Necrobot.Window.Model
             SnipeList = new SnipeListViewModel();
             EggsList = new EggsListViewModel();
 
-            PokemonList = new PokemonListViewModel(this.Session)
+            PokemonList = new PokemonListViewModel(Session)
             {
                 Pokemons = new ObservableCollection<PokemonDataViewModel>()
             };
@@ -74,12 +69,12 @@ namespace PoGo.Necrobot.Window.Model
 
         internal void Reset()
         {
-            this.PokemonList.Pokemons.Clear();
-            this.ItemsList.Items.Clear();
-            this.EggsList.Eggs.Clear();
-            this.EggsList.Incubators.Clear();
+            PokemonList.Pokemons.Clear();
+            ItemsList.Items.Clear();
+            EggsList.Eggs.Clear();
+            EggsList.Incubators.Clear();
 
-            this.ItemsList.RaisePropertyChanged("TotalItem");
+            ItemsList.RaisePropertyChanged("TotalItem");
         }
 
         public string ItemsTabHeader

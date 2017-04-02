@@ -1,9 +1,4 @@
-﻿using POGOProtos.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 using POGOProtos.Map.Fort;
 using POGOProtos.Map.Pokemon;
 
@@ -17,19 +12,19 @@ namespace PoGo.Necrobot.Window.Model
         public MapPokemonViewModel(NearbyPokemon item, FortData fort)
         {
             this.item = item;
-            
-            this.PokemonId = item.PokemonId;
+
+            PokemonId = item.PokemonId;
 
             if (fort != null)
             {
                 this.fort = fort;
-                this.Latitude = fort.Latitude;
-                this.Longitude = fort.Longitude;
+                Latitude = fort.Latitude;
+                Longitude = fort.Longitude;
             }
 
-            this.EncounterId = item.EncounterId;
-            this.Distance = item.DistanceInMeters;
-            this.FortId = item.FortId;
+            EncounterId = item.EncounterId;
+            Distance = item.DistanceInMeters;
+            FortId = item.FortId;
         }
         public double Latitude{ get; set; }
         public double Longitude { get; set; }

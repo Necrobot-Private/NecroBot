@@ -29,9 +29,9 @@ namespace PoGo.NecroBot.Logic
             public BotAccount() { }
             public BotAccount(AuthConfig item)
             {
-                this.AuthType = item.AuthType;
-                this.Password = item.Password;
-                this.Username = item.Username;
+                AuthType = item.AuthType;
+                Password = item.Password;
+                Username = item.Username;
             }
                         
             // AutoId will be automatically incremented.
@@ -65,15 +65,14 @@ namespace PoGo.NecroBot.Logic
 
             public void RaisePropertyChanged(string propertyName)
             {
-                PropertyChangedEventHandler handler = PropertyChanged;
-                if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
             }
 
             public string GetRuntime()
             {
-                int day = (int)this.RuntimeTotal / 1440;
-                int hour = (int)(this.RuntimeTotal - (day * 1400)) / 60;
-                int min = (int)(this.RuntimeTotal - (day * 1400) - hour * 60);
+                int day = (int)RuntimeTotal / 1440;
+                int hour = (int)(RuntimeTotal - (day * 1400)) / 60;
+                int min = (int)(RuntimeTotal - (day * 1400) - hour * 60);
                 return $"{day:00}:{hour:00}:{min:00}:00";
             }
         }
@@ -90,7 +89,7 @@ namespace PoGo.NecroBot.Logic
         public BotAccount GetCurrentAccount()
         {
             var session = TinyIoCContainer.Current.Resolve<ISession>();
-            var currentAccount = this.Accounts.FirstOrDefault(
+            var currentAccount = Accounts.FirstOrDefault(
                 x => x.AuthType == session.Settings.AuthType && x.Username == session.Settings.Username);
             return currentAccount;
         }
@@ -112,9 +111,9 @@ namespace PoGo.NecroBot.Logic
             {
                 var accountdb = db.GetCollection<BotAccount>("accounts");
 
-                this.Accounts = accountdb.FindAll().ToList();
+                Accounts = accountdb.FindAll().ToList();
 
-                foreach (var item in this.Accounts)
+                foreach (var item in Accounts)
                 {
                     item.IsRunning = false;
                 }
@@ -202,7 +201,7 @@ namespace PoGo.NecroBot.Logic
                 // Add new accounts and update existing accounts.
                 foreach (var item in accounts)
                 {
-                    var existing = this.Accounts.FirstOrDefault(x => x.Username == item.Username && x.AuthType == item.AuthType);
+                    var existing = Accounts.FirstOrDefault(x => x.Username == item.Username && x.AuthType == item.AuthType);
 
                     if (existing == null)
                     {
@@ -210,7 +209,7 @@ namespace PoGo.NecroBot.Logic
                         {
                             BotAccount newAcc = new BotAccount(item);
                             accountdb.Insert(newAcc);
-                            this.Accounts.Add(newAcc);
+                            Accounts.Add(newAcc);
                         }
                         catch(Exception)
                         {
@@ -228,7 +227,7 @@ namespace PoGo.NecroBot.Logic
 
                 // Remove accounts that are not in the auth.json but in the database.
                 List<BotAccount> accountsToRemove = new List<BotAccount>();
-                foreach (var item in this.Accounts)
+                foreach (var item in Accounts)
                 {
                     var existing = accounts.FirstOrDefault(x => x.Username == item.Username && x.AuthType == item.AuthType);
                     if (existing == null)
@@ -239,7 +238,7 @@ namespace PoGo.NecroBot.Logic
 
                 foreach (var item in accountsToRemove)
                 {
-                    this.Accounts.Remove(item);
+                    Accounts.Remove(item);
                     accountdb.Delete(item.Id);
                 }
             }
@@ -247,12 +246,12 @@ namespace PoGo.NecroBot.Logic
 
         internal BotAccount GetMinRuntime(bool ignoreBlockCheck = false)
         {
-            return this.Accounts.OrderBy(x => x.RuntimeTotal).Where(x => !ignoreBlockCheck || x.ReleaseBlockTime < DateTime.Now).FirstOrDefault();
+            return Accounts.OrderBy(x => x.RuntimeTotal).Where(x => !ignoreBlockCheck || x.ReleaseBlockTime < DateTime.Now).FirstOrDefault();
         }
 
         public bool AllowMultipleBot()
         {
-            return this.Accounts.Count > 1;
+            return Accounts.Count > 1;
         }
 
         public BotAccount GetStartUpAccount()
@@ -310,7 +309,7 @@ namespace PoGo.NecroBot.Logic
                 Logging.Logger.Write($"Switching to {runningAccount.Username}...");
 
                 string body = "";
-                foreach (var item in this.Accounts)
+                foreach (var item in Accounts)
                 {
                     int day = (int)item.RuntimeTotal / 1440;
                     int hour = (int)(item.RuntimeTotal - (day * 1400)) / 60;
@@ -324,11 +323,11 @@ namespace PoGo.NecroBot.Logic
             }
             else {
 
-                this.Accounts = this.Accounts.OrderByDescending(p => p.RuntimeTotal).ToList();
-                var first = this.Accounts.First();
+                Accounts = Accounts.OrderByDescending(p => p.RuntimeTotal).ToList();
+                var first = Accounts.First();
                 if (first.RuntimeTotal >= 100000)
                 {
-                    first.RuntimeTotal = this.Accounts.Min(p => p.RuntimeTotal);
+                    first.RuntimeTotal = Accounts.Min(p => p.RuntimeTotal);
                 }
 
                 runningAccount = Accounts.LastOrDefault(p => p != currentAccount && p.ReleaseBlockTime < DateTime.Now);
@@ -337,7 +336,7 @@ namespace PoGo.NecroBot.Logic
                     Logging.Logger.Write($"Switching to {runningAccount.Username}...");
 
                     string body = "";
-                    foreach (var item in this.Accounts)
+                    foreach (var item in Accounts)
                     {
                         int day = (int)item.RuntimeTotal / 1440;
                         int hour = (int)(item.RuntimeTotal - (day * 1400)) / 60;
@@ -364,7 +363,7 @@ namespace PoGo.NecroBot.Logic
                 }
             }
             //overkill
-            foreach (var item in this.Accounts)
+            foreach (var item in Accounts)
             {
                 item.IsRunning = false;
                 UpdateDatabase(item);
@@ -380,16 +379,16 @@ namespace PoGo.NecroBot.Logic
         private bool switchAccountRequest = false;
         public void SwitchAccountTo(BotAccount account)
         {
-            this.requestedAccount = account;
-            this.switchAccountRequest = true;
+            requestedAccount = account;
+            switchAccountRequest = true;
         }
 
         public void ThrowIfSwitchAccountRequested()
         {
-            if (switchAccountRequest && this.requestedAccount != null && !this.requestedAccount.IsRunning)
+            if (switchAccountRequest && requestedAccount != null && !requestedAccount.IsRunning)
             {
                 switchAccountRequest = false;
-                throw new ActiveSwitchAccountManualException(this.requestedAccount);
+                throw new ActiveSwitchAccountManualException(requestedAccount);
             }
         }
 
@@ -432,7 +431,7 @@ namespace PoGo.NecroBot.Logic
 
         public void DumpAccountList()
         {
-            foreach (var item in this.Accounts)
+            foreach (var item in Accounts)
             {
                 if (item.Level > 0)
                     Logging.Logger.Write($"{item.Username} (Level: {item.Level})\t\t\tRuntime : {item.GetRuntime()}");
@@ -446,7 +445,7 @@ namespace PoGo.NecroBot.Logic
             ISession session = TinyIoCContainer.Current.Resolve<ISession>();
 
             //set current 
-            foreach (var bot in this.Accounts.OrderByDescending(p => p.RuntimeTotal))
+            foreach (var bot in Accounts.OrderByDescending(p => p.RuntimeTotal))
             {
                 if (bot.ReleaseBlockTime > DateTime.Now) continue;
                 var key = bot.Username;
@@ -463,9 +462,9 @@ namespace PoGo.NecroBot.Logic
 
         internal void Logged(GetPlayerResponse playerResponse, IEnumerable<PlayerStats> playerStats)
         {
-            this.runningAccount.LoggedTime = DateTime.Now;
-            this.runningAccount.Level = playerStats.FirstOrDefault().Level;
-            UpdateDatabase(this.runningAccount);
+            runningAccount.LoggedTime = DateTime.Now;
+            runningAccount.Level = playerStats.FirstOrDefault().Level;
+            UpdateDatabase(runningAccount);
         }
 
         internal void DirtyEventHandle(Statistics stat)

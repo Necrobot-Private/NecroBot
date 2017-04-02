@@ -74,10 +74,9 @@ namespace PoGo.NecroBot.Logic.Logging
                     Color = Logger.GetHexColor(Console.ForegroundColor)
                 });
 
-                LogEvent logEventToSend;
                 using (StreamWriter sw = File.AppendText(logPath))
                 {
-                    while (_messageQueue.TryDequeue(out logEventToSend))
+                    while (_messageQueue.TryDequeue(out LogEvent logEventToSend))
                     {
                         sw.WriteLine(finalMessage);
                     }
@@ -85,7 +84,7 @@ namespace PoGo.NecroBot.Logic.Logging
             }
         }
 
-        public void lineSelect(int lineChar = 0, int linesUp = 1)
+        public void LineSelect(int lineChar = 0, int linesUp = 1)
         {
             // No line select for file logger.
         }

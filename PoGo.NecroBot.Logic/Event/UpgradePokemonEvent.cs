@@ -2,7 +2,6 @@
 
 using POGOProtos.Data;
 using POGOProtos.Enums;
-using POGOProtos.Inventory;
 
 #endregion
 

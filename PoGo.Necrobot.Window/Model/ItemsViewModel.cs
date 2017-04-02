@@ -1,13 +1,8 @@
 ﻿using POGOProtos.Inventory.Item;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PoGo.Necrobot.Window.Model
 {
-     public class ItemsViewModel  :ViewModelBase
+    public class ItemsViewModel  :ViewModelBase
     {
         public ItemId ItemId { get; set; }
 

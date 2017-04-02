@@ -1,16 +1,9 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using System.Windows.Media;
 using GMap.NET.WindowsPresentation;
-using System.Diagnostics;
 using PoGo.Necrobot.Window.Model;
-using System.Threading.Tasks;
 using PoGo.NecroBot.Logic.Tasks;
-using PoGo.NecroBot.Logic.State;
 using POGOProtos.Map.Fort;
-using System;
 
 namespace PoGo.Necrobot.Window.Controls.MapMarkers
 {
@@ -29,30 +22,30 @@ namespace PoGo.Necrobot.Window.Controls.MapMarkers
         }
         public FortMarker(MainClientWindow window, GMapMarker marker)
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
-            this.MainWindow = window;
-            this.Marker = marker;
+            MainWindow = window;
+            Marker = marker;
 
-            this.Unloaded += new RoutedEventHandler(CustomMarkerDemo_Unloaded);
-            this.Loaded += new RoutedEventHandler(CustomMarkerDemo_Loaded);
-            this.SizeChanged += new SizeChangedEventHandler(CustomMarkerDemo_SizeChanged);
-            this.MouseEnter += new MouseEventHandler(MarkerControl_MouseEnter);
-            this.MouseLeave += new MouseEventHandler(MarkerControl_MouseLeave);
-            this.MouseMove += new MouseEventHandler(CustomMarkerDemo_MouseMove);
-            this.MouseLeftButtonUp += new MouseButtonEventHandler(CustomMarkerDemo_MouseLeftButtonUp);
-            this.MouseLeftButtonDown += new MouseButtonEventHandler(CustomMarkerDemo_MouseLeftButtonDown);
+            Unloaded += new RoutedEventHandler(CustomMarkerDemo_Unloaded);
+            Loaded += new RoutedEventHandler(CustomMarkerDemo_Loaded);
+            SizeChanged += new SizeChangedEventHandler(CustomMarkerDemo_SizeChanged);
+            MouseEnter += new MouseEventHandler(MarkerControl_MouseEnter);
+            MouseLeave += new MouseEventHandler(MarkerControl_MouseLeave);
+            MouseMove += new MouseEventHandler(CustomMarkerDemo_MouseMove);
+            MouseLeftButtonUp += new MouseButtonEventHandler(CustomMarkerDemo_MouseLeftButtonUp);
+            MouseLeftButtonDown += new MouseButtonEventHandler(CustomMarkerDemo_MouseLeftButtonDown);
         }
 
         public FortMarker(MainClientWindow window, GMapMarker marker, FortData item) : this(window, marker)
         {
-            this.fort = new FortViewModel(item);
-            this.DataContext = this.fort;
+            fort = new FortViewModel(item);
+            DataContext = fort;
         }
 
         public void UpdateFortData(FortData item)
         {
-            this.fort.UpdateFortData(item);
+            fort.UpdateFortData(item);
         }
 
         void CustomMarkerDemo_Loaded(object sender, RoutedEventArgs e)
@@ -127,7 +120,7 @@ namespace PoGo.Necrobot.Window.Controls.MapMarkers
             Mouse.Capture(null);
         }
 
-        private void icon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void Icon_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             popInfo.IsOpen = true;
 
@@ -138,13 +131,13 @@ namespace PoGo.Necrobot.Window.Controls.MapMarkers
             e.Handled = true;
         }
 
-        private async void btnWalkHere_Click(object sender, RoutedEventArgs e)
+        private async void BtnWalkHere_Click(object sender, RoutedEventArgs e)
         {
             await SetMoveToTargetTask.Execute(fort.Latitude, fort.Longitude, fort.FortId);
             popInfo.IsOpen = false;
         }
 
-        private void btnClose_Click(object sender, RoutedEventArgs e)
+        private void BtnClose_Click(object sender, RoutedEventArgs e)
         {
             popInfo.IsOpen = false;
         }

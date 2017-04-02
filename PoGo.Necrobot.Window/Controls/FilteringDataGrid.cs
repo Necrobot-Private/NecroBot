@@ -1,12 +1,8 @@
 ﻿using Microsoft.Windows.Controls.Primitives;
-using POGOProtos.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -184,8 +180,7 @@ namespace PoGo.Necrobot.Window.Controls
             //we've reached the end of the tree
             if (parentObject == null) return null;
             //check if the parent matches the type we're looking for
-            T parent = parentObject as T;
-            if (parent != null)
+            if (parentObject is T parent)
             {
                 return parent;
             }
@@ -206,13 +201,12 @@ namespace PoGo.Necrobot.Window.Controls
         public static DependencyObject GetParentObject(DependencyObject child)
         {
             if (child == null) return null;
-            ContentElement contentElement = child as ContentElement;
-            if (contentElement != null)
+            if (child is ContentElement contentElement)
             {
                 DependencyObject parent = ContentOperations.GetParent(contentElement);
                 if (parent != null) return parent;
                 FrameworkContentElement fce = contentElement as FrameworkContentElement;
-                return fce != null ? fce.Parent : null;
+                return fce?.Parent;
             }
             // If it's not a ContentElement, rely on VisualTreeHelper
             return VisualTreeHelper.GetParent(child);

@@ -15,9 +15,9 @@ namespace PoGo.Necrobot.Window.Model
     {
         public PokemonViewFilter() : base()
         {
-            this.MaxCP = 5000;
-            this.MaxLevel = 50;
-            this.MaxIV = 100;
+            MaxCP = 5000;
+            MaxLevel = 50;
+            MaxIV = 100;
         }
 
         public string Name { get; set; }
@@ -48,7 +48,7 @@ namespace PoGo.Necrobot.Window.Model
         public PokemonListViewModel(ISession session)
         {
             Filter = new PokemonViewFilter();
-            this.Session = Session;
+            Session = Session;
         }
         
         public ObservableCollection<PokemonDataViewModel> Pokemons { get; set; }
@@ -67,7 +67,7 @@ namespace PoGo.Necrobot.Window.Model
                 }
                 else
                 {
-                    var pokemonDataViewModel = new PokemonDataViewModel(this.Session, item);
+                    var pokemonDataViewModel = new PokemonDataViewModel(Session, item);
                     pokemonDataViewModel.Displayed = Filter.Check(pokemonDataViewModel);
 
                     Pokemons.Add(pokemonDataViewModel);
@@ -130,7 +130,7 @@ namespace PoGo.Necrobot.Window.Model
 
         private PokemonDataViewModel Get(ulong id)
         {
-            return this.Pokemons.FirstOrDefault(x => x.Id == id);
+            return Pokemons.FirstOrDefault(x => x.Id == id);
         }
 
         internal void OnEvolved(PokemonEvolveEvent ev)
@@ -142,11 +142,11 @@ namespace PoGo.Necrobot.Window.Model
             } 
             if (ev.Result == POGOProtos.Networking.Responses.EvolvePokemonResponse.Types.Result.Success)
             {
-                Candy candy = this.Session.Inventory.GetCandyFamily(ev.EvolvedPokemon.PokemonId).Result;
+                Candy candy = Session.Inventory.GetCandyFamily(ev.EvolvedPokemon.PokemonId).Result;
                 if (candy != null)
                 {
                     var familyId = candy.FamilyId;
-                    foreach (var item in this.Pokemons.Where(p => p.FamilyId == familyId))
+                    foreach (var item in Pokemons.Where(p => p.FamilyId == familyId))
                     {
                         item.RaisePropertyChanged("Candy");
                     }
@@ -178,10 +178,10 @@ namespace PoGo.Necrobot.Window.Model
 
         internal void Remove(ulong id)
         {
-            var pkm = this.Pokemons.FirstOrDefault(x => x.Id == id);
+            var pkm = Pokemons.FirstOrDefault(x => x.Id == id);
 
             if (pkm != null)
-                this.Pokemons.Remove(pkm);
+                Pokemons.Remove(pkm);
         }
 
         internal void OnRename(RenamePokemonEvent e)
@@ -193,8 +193,8 @@ namespace PoGo.Necrobot.Window.Model
 
         internal void OnTransfer(TransferPokemonEvent e)
         {
-            this.Remove(e.Id);
-            foreach (var item in this.Pokemons.Where(p => p.FamilyId == e.FamilyId))
+            Remove(e.Id);
+            foreach (var item in Pokemons.Where(p => p.FamilyId == e.FamilyId))
             {
                 item.RaisePropertyChanged("Candy");
             }
@@ -235,9 +235,9 @@ namespace PoGo.Necrobot.Window.Model
 
         internal void ApplyFilter(bool select = false)
         {
-            foreach (var item in this.Pokemons)
+            foreach (var item in Pokemons)
             {
-                item.Displayed = this.Filter.Check(item);
+                item.Displayed = Filter.Check(item);
                 item.RaisePropertyChanged("Displayed");
                 if(select && item.Displayed)
                 {

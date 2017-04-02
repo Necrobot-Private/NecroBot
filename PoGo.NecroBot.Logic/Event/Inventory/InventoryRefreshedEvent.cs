@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using POGOProtos.Data.Player;
 using POGOProtos.Inventory;
-using POGOProtos.Networking.Responses;
 using POGOProtos.Settings.Master;
 
 namespace PoGo.NecroBot.Logic.Event.Inventory
@@ -16,16 +15,16 @@ namespace PoGo.NecroBot.Logic.Event.Inventory
 
         public InventoryRefreshedEvent(List<PokemonSettings> settings, List<Candy> candy)
         {
-            this.Candies = candy;
-            this.PokemonSettings = settings;
+            Candies = candy;
+            PokemonSettings = settings;
         }
 
         public InventoryRefreshedEvent(IEnumerable<PlayerStats> playerStats,
             List<PokemonSettings> pokemonSettings, List<Candy> candy)
         {
-            this.PlayerStats = playerStats;
-            this.PokemonSettings = pokemonSettings;
-            this.Candies = candy;
+            PlayerStats = playerStats;
+            PokemonSettings = pokemonSettings;
+            Candies = candy;
         }
     }
 }

@@ -26,7 +26,7 @@
     <Grid>
 
         <Button x:Name="btnNew" Content="Start New" HorizontalAlignment="Left" Margin="90,70,0,0" VerticalAlignment="Top" Width="165" Height="85"/>
-        <Button x:Name="btnOpen" Content="Open Exists" HorizontalAlignment="Left" Margin="345,70,0,0" VerticalAlignment="Top" Width="175" Height="85" Click="btnOpen_Click"/>
+        <Button x:Name="btnOpen" Content="Open Existing" HorizontalAlignment="Left" Margin="345,70,0,0" VerticalAlignment="Top" Width="175" Height="85" Click="BtnOpen_Click"/>
  
     </Grid>
     
