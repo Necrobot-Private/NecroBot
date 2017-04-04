@@ -584,12 +584,11 @@ namespace RocketBot2.Forms
                     e.Cancel = true;
                 }
 
-                var item = new ToolStripMenuItem();
-                var separator = new ToolStripSeparator();
+                ToolStripMenuItem item;
 
                 if (AllowTransfer)
                 {
-                    item.Text = $"Transfer {count} Pokémons";
+                    item = new ToolStripMenuItem(Text = $"Transfer {count} Pokémons");
                     item.Click += delegate { TransferPokemon(pokemons); };
                     cmsPokemonList.Items.Add(item);
                 }
@@ -598,7 +597,7 @@ namespace RocketBot2.Forms
 
                 if (AllowEvolve)
                 {
-                    item = new ToolStripMenuItem { Text = $"Evolve" };
+                    item = new ToolStripMenuItem(Text = $"Evolve");
                     item.Click += delegate {
                         EvolvePokemon(pokemon.PokemonData);
                     };
@@ -607,16 +606,16 @@ namespace RocketBot2.Forms
 
                 if (AllowPowerup)
                 {
-                    item = new ToolStripMenuItem { Text = $"PowerUp" };
+                    item = new ToolStripMenuItem(Text = $"PowerUp");
                     item.Click += delegate { PowerUpPokemon(pokemons); };
                     cmsPokemonList.Items.Add(item);
                 }
 
-                item = new ToolStripMenuItem { Text = Favorited ? "Un-Favorite" : "Favorite" };
+                item = new ToolStripMenuItem(Text = Favorited ? "Un-Favorite" : "Favorite");
                 item.Click += delegate { FavoritedPokemon(pokemons, Favorited); };
                 cmsPokemonList.Items.Add(item);
 
-                item = new ToolStripMenuItem { Text = @"Rename" };
+                item = new ToolStripMenuItem(Text = @"Rename");
                 item.Click += delegate
                 {
                     using (var form = count == 1 ? new NicknamePokemonForm(pokemon) : new NicknamePokemonForm())
@@ -629,15 +628,15 @@ namespace RocketBot2.Forms
                 };
                 cmsPokemonList.Items.Add(item);
 
-                cmsPokemonList.Items.Add(separator);
+                cmsPokemonList.Items.Add(new ToolStripSeparator());
 
-                item = new ToolStripMenuItem { Text = @"Set Buddy" };
+                item = new ToolStripMenuItem(Text = @"Set Buddy");
                 item.Click += delegate { SetBuddy_Click(pokemon); };
                 cmsPokemonList.Items.Add(item);
 
-                cmsPokemonList.Items.Add(separator);
+                cmsPokemonList.Items.Add(new ToolStripSeparator());
 
-                item = new ToolStripMenuItem { Text = @"Properties" };
+                item = new ToolStripMenuItem(Text = @"Properties");
                 item.Click += delegate
                 {
                     PokemonProperties(pokemon);
@@ -652,6 +651,8 @@ namespace RocketBot2.Forms
                 _session,
                 _session.CancellationTokenSource.Token,
                 pokemonObject.Id);
+            if (!checkBoxAutoRefresh.Checked)
+                await ReloadPokemonList().ConfigureAwait(false);
         }
 
         private void PokemonProperties(PokemonObject pokemonObject)

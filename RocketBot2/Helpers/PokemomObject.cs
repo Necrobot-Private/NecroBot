@@ -67,7 +67,7 @@ namespace RocketBot2.Helpers
             var pkmSettings = session.Inventory.GetPokemonSettings().Result;
             settings = pkmSettings.FirstOrDefault(x => x.PokemonId == pokemonData.PokemonId);
         }
-
+ 
         public ulong Id
         {
             get { return PokemonData.Id; }
@@ -118,9 +118,19 @@ namespace RocketBot2.Helpers
             get { return Session.Translation.GetPokemonMovesetTranslation(PokemonData.Move1); }
         }
 
+        public float HeightM
+        {
+            get { return (float)Math.Round(PokemonData.HeightM,2); }
+        }
+
         public string Move2
         {
             get { return Session.Translation.GetPokemonMovesetTranslation(PokemonData.Move2); }
+        }
+
+        public float WeightKg
+        {
+            get { return (float)Math.Round(PokemonData.WeightKg,2); }
         }
 
         public int Candy
