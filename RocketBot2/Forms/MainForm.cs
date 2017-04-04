@@ -9,6 +9,7 @@ using PoGo.NecroBot.Logic;
 using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Logging;
+using PoGo.NecroBot.Logic.Model;
 using PoGo.NecroBot.Logic.Model.Settings;
 using PoGo.NecroBot.Logic.PoGoUtils;
 using PoGo.NecroBot.Logic.Service;
@@ -89,7 +90,7 @@ namespace RocketBot2.Forms
             Instance = this;
             args = _args;
             AppDomain currentDomain = AppDomain.CurrentDomain;
-            currentDomain.UnhandledException += new UnhandledExceptionEventHandler(this.ErrorHandler);
+            currentDomain.UnhandledException += new UnhandledExceptionEventHandler(ErrorHandler);
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -571,6 +572,7 @@ namespace RocketBot2.Forms
                 cmsPokemonList.Items.Clear();
 
                 var pokemons = olvPokemonList.SelectedObjects.Cast<PokemonObject>().Select(o => o.PokemonData).ToList();
+                var pokemon = olvPokemonList.SelectedObjects.Cast<PokemonObject>().Select(o => o).First();
                 var AllowEvolve = olvPokemonList.SelectedObjects.Cast<PokemonObject>().Select(o => o).All(o => o.AllowEvolve);
                 var AllowTransfer = olvPokemonList.SelectedObjects.Cast<PokemonObject>().Select(o => o).All(o => o.AllowTransfer);
                 var AllowPowerup = olvPokemonList.SelectedObjects.Cast<PokemonObject>().Select(o => o).All(o => o.AllowPowerup);
@@ -598,7 +600,6 @@ namespace RocketBot2.Forms
                 {
                     item = new ToolStripMenuItem { Text = $"Evolve" };
                     item.Click += delegate {
-                        var pokemon = olvPokemonList.SelectedObjects.Cast<PokemonObject>().Select(o => o).First();
                         EvolvePokemon(pokemon.PokemonData);
                     };
                     cmsPokemonList.Items.Add(item);
@@ -618,8 +619,7 @@ namespace RocketBot2.Forms
                 item = new ToolStripMenuItem { Text = @"Rename" };
                 item.Click += delegate
                 {
-                    var pokemonObject = olvPokemonList.SelectedObjects.Cast<PokemonObject>().Select(o => o).First();
-                    using (var form = count == 1 ? new NicknamePokemonForm(pokemonObject) : new NicknamePokemonForm())
+                    using (var form = count == 1 ? new NicknamePokemonForm(pokemon) : new NicknamePokemonForm())
                     {
                         if (form.ShowDialog() == DialogResult.OK)
                         {
@@ -630,15 +630,28 @@ namespace RocketBot2.Forms
                 cmsPokemonList.Items.Add(item);
 
                 cmsPokemonList.Items.Add(separator);
+
+                item = new ToolStripMenuItem { Text = @"Set Buddy" };
+                item.Click += delegate { SetBuddy_Click(pokemon); };
+                cmsPokemonList.Items.Add(item);
+
+                cmsPokemonList.Items.Add(separator);
+
                 item = new ToolStripMenuItem { Text = @"Properties" };
                 item.Click += delegate
                 {
-                    var pokemonObject = olvPokemonList.SelectedObjects.Cast<PokemonObject>().Select(o => o).First();
-                    PokemonProperties(pokemonObject);
+                    PokemonProperties(pokemon);
                 };
-
                 cmsPokemonList.Items.Add(item);
             };
+        }
+
+        private async void SetBuddy_Click(PokemonObject pokemonObject)
+        {
+            await SelectBuddyPokemonTask.Execute(
+                _session,
+                _session.CancellationTokenSource.Token,
+                pokemonObject.Id);
         }
 
         private void PokemonProperties(PokemonObject pokemonObject)

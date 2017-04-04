@@ -62,7 +62,7 @@
             // 
             // btnClose
             // 
-            this.btnClose.Location = new System.Drawing.Point(328, 678);
+            this.btnClose.Location = new System.Drawing.Point(348, 658);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(103, 39);
             this.btnClose.TabIndex = 1;
@@ -75,11 +75,12 @@
             this.lbName.AutoSize = true;
             this.lbName.Font = new System.Drawing.Font("Segoe UI", 18F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbName.ForeColor = System.Drawing.Color.Black;
-            this.lbName.Location = new System.Drawing.Point(179, 9);
+            this.lbName.Location = new System.Drawing.Point(164, 9);
             this.lbName.Name = "lbName";
             this.lbName.Size = new System.Drawing.Size(103, 41);
             this.lbName.TabIndex = 2;
             this.lbName.Text = "Name";
+            this.lbName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lbTypes
             // 
@@ -152,7 +153,7 @@
             this.lbCp.AutoSize = true;
             this.lbCp.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbCp.ForeColor = System.Drawing.Color.DarkCyan;
-            this.lbCp.Location = new System.Drawing.Point(155, 447);
+            this.lbCp.Location = new System.Drawing.Point(166, 447);
             this.lbCp.Name = "lbCp";
             this.lbCp.Size = new System.Drawing.Size(97, 28);
             this.lbCp.TabIndex = 9;
@@ -184,8 +185,8 @@
             // 
             this.lbCaughtloc.AutoSize = true;
             this.lbCaughtloc.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbCaughtloc.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lbCaughtloc.Location = new System.Drawing.Point(22, 572);
+            this.lbCaughtloc.ForeColor = System.Drawing.Color.DarkBlue;
+            this.lbCaughtloc.Location = new System.Drawing.Point(22, 567);
             this.lbCaughtloc.Name = "lbCaughtloc";
             this.lbCaughtloc.Size = new System.Drawing.Size(372, 28);
             this.lbCaughtloc.TabIndex = 12;
@@ -195,12 +196,12 @@
             // 
             this.lbCountry.AutoSize = true;
             this.lbCountry.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbCountry.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lbCountry.Location = new System.Drawing.Point(22, 652);
+            this.lbCountry.ForeColor = System.Drawing.Color.CornflowerBlue;
+            this.lbCountry.Location = new System.Drawing.Point(22, 595);
             this.lbCountry.Name = "lbCountry";
-            this.lbCountry.Size = new System.Drawing.Size(166, 28);
+            this.lbCountry.Size = new System.Drawing.Size(346, 28);
             this.lbCountry.TabIndex = 13;
-            this.lbCountry.Text = "Country: xxxxxxx";
+            this.lbCountry.Text = "Country: xxxxxxxxxxxxxxxxxxxxxxxxx";
             // 
             // lbStamina
             // 
@@ -218,7 +219,7 @@
             this.lbAtk.AutoSize = true;
             this.lbAtk.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbAtk.ForeColor = System.Drawing.Color.Green;
-            this.lbAtk.Location = new System.Drawing.Point(155, 490);
+            this.lbAtk.Location = new System.Drawing.Point(166, 490);
             this.lbAtk.Name = "lbAtk";
             this.lbAtk.Size = new System.Drawing.Size(101, 28);
             this.lbAtk.TabIndex = 15;
@@ -239,7 +240,7 @@
             // 
             this.lbCandy.AutoSize = true;
             this.lbCandy.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbCandy.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lbCandy.ForeColor = System.Drawing.Color.DarkOrchid;
             this.lbCandy.Location = new System.Drawing.Point(22, 529);
             this.lbCandy.Name = "lbCandy";
             this.lbCandy.Size = new System.Drawing.Size(149, 28);
@@ -250,8 +251,8 @@
             // 
             this.lbCaughtTime.AutoSize = true;
             this.lbCaughtTime.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbCaughtTime.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lbCaughtTime.Location = new System.Drawing.Point(22, 613);
+            this.lbCaughtTime.ForeColor = System.Drawing.Color.Green;
+            this.lbCaughtTime.Location = new System.Drawing.Point(22, 623);
             this.lbCaughtTime.Name = "lbCaughtTime";
             this.lbCaughtTime.Size = new System.Drawing.Size(348, 28);
             this.lbCaughtTime.TabIndex = 18;
@@ -261,7 +262,7 @@
             // 
             this.lbCantoEvo.AutoSize = true;
             this.lbCantoEvo.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbCantoEvo.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lbCantoEvo.ForeColor = System.Drawing.Color.DarkOrchid;
             this.lbCantoEvo.Location = new System.Drawing.Point(223, 529);
             this.lbCantoEvo.Name = "lbCantoEvo";
             this.lbCantoEvo.Size = new System.Drawing.Size(198, 28);
@@ -272,7 +273,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(458, 729);
+            this.ClientSize = new System.Drawing.Size(458, 704);
             this.Controls.Add(this.lbCantoEvo);
             this.Controls.Add(this.lbCaughtTime);
             this.Controls.Add(this.lbCandy);
