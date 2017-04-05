@@ -345,82 +345,88 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 55)]
         public bool PrioritizeIvOverCp { get; set; }
 
-        [NecrobotConfig(Description = "Number of duplicated pokemon to keep", Position = 56)]
+        [NecrobotConfig(Description = "Min number of duplicated pokemon to keep", Position = 56)]
         [DefaultValue(1)]
         [Range(0, 999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 56)]
         public int KeepMinDuplicatePokemon { get; set; }
 
-        /*NotCatch*/
-        [NecrobotConfig(Description = "Use the list pokemon not catch filter", Position = 57)]
-        [DefaultValue(true)]
+        [NecrobotConfig(Description = "Max number of duplicated pokemon to keep", Position = 57)]
+        [DefaultValue(1000)]
+        [Range(0, 100000)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 57)]
+        public int KeepMaxDuplicatePokemon { get; set; }
+
+        /*NotCatch*/
+        [NecrobotConfig(Description = "Use the list pokemon not catch filter", Position = 58)]
+        [DefaultValue(true)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 58)]
         public bool UsePokemonToNotCatchFilter { get; set; }
 
-        [NecrobotConfig(Description = "Use the Pokemon To Catch Local List", Position = 58)]
+        [NecrobotConfig(Description = "Use the Pokemon To Catch Local List", Position = 59)]
         [DefaultValue(false)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 58)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 59)]
         public bool UsePokemonToCatchLocallyListOnly { get; set; }
 
         /*Dump Stats*/
-        [NecrobotConfig(Description = "Allows bot to dump list pokemon to csv file", Position = 59)]
+        [NecrobotConfig(Description = "Allows bot to dump list pokemon to csv file", Position = 60)]
         [DefaultValue(false)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 59)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 60)]
         public bool DumpPokemonStats;
 
         [DefaultValue(10000)]
-        [NecrobotConfig(Description = "Delay time between pokemon upgrades", Position = 60)]
+        [NecrobotConfig(Description = "Delay time between pokemon upgrades", Position = 61)]
         [Range(0, 99999)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 60)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 61)]
         public int DelayBetweenPokemonUpgrade { get; set; }
 
         [DefaultValue(5)]
-        [NecrobotConfig(Description = "Temporarily disable catching pokemon for certain minutes if bot runs out of balls", Position = 61)]
+        [NecrobotConfig(Description = "Temporarily disable catching pokemon for certain minutes if bot runs out of balls", Position = 62)]
         [Range(0, 120)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 61)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 62)]
         public int OutOfBallCatchBlockTime { get; set; }
 
         [DefaultValue(50)]
-        [NecrobotConfig(Description = "Number of balls you want to save for snipe or manual play - it means if total balls is less than this value, catch pokemon will be deactivated", Position = 62)]
+        [NecrobotConfig(Description = "Number of balls you want to save for snipe or manual play - it means if total balls is less than this value, catch pokemon will be deactivated", Position = 63)]
         [Range(0, 999)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 62)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 63)]
         public int PokeballToKeepForSnipe { get; set; }
 
         [DefaultValue(true)]
-        [NecrobotConfig(Description = "Transfer multiple pokemon at once - this will increase bot speed and reduce api call", Position = 63)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 63)]
+        [NecrobotConfig(Description = "Transfer multiple pokemon at once - this will increase bot speed and reduce api call", Position = 64)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 64)]
         public bool UseBulkTransferPokemon { get; set; }
 
         [DefaultValue(10)]
-        [NecrobotConfig(Description = "Bot will transfer pokemons only when MaxStogare < pokemon + buffer", Position = 64)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 64)]
+        [NecrobotConfig(Description = "Bot will transfer pokemons only when MaxStogare < pokemon + buffer", Position = 65)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 65)]
         public int BulkTransferStogareBuffer { get; set; }
 
         [DefaultValue(100)]
-        [NecrobotConfig(Description = "Maximun number of pokemon in a transfer", Position = 65)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 65)]
+        [NecrobotConfig(Description = "Maximun number of pokemon in a transfer", Position = 66)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 66)]
         [Range(1,100)]
         public int BulkTransferSize { get; set; }
 
         [DefaultValue(Operator.or)]
-        [NecrobotConfig(Description = "Use ball operator between IV and CP ", Position = 66)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 66)]
+        [NecrobotConfig(Description = "Use ball operator between IV and CP ", Position = 67)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 67)]
         public Operator UseBallOperator  { get; set; }
 
 
         /*Favorite CP*/
-        [NecrobotConfig(Description = "Set min CP for auto favoriting pokemon", Position = 67)]
+        [NecrobotConfig(Description = "Set min CP for auto favoriting pokemon", Position = 68)]
         [DefaultValue(0)]
         [Range(0, 9999)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 67)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 68)]
         public float FavoriteMinCp { get; set; }
 
-        [NecrobotConfig(Description = "Set Buddy pokemon", Position = 68)]
+        [NecrobotConfig(Description = "Set Buddy pokemon", Position = 69)]
         [DefaultValue("")]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 68)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 69)]
         public string DefaultBuddyPokemon { get; set; }
 
-        [NecrobotConfig(Description = "Min level to use favoriting", Position = 69)]
+        [NecrobotConfig(Description = "Min level to use favoriting", Position = 70)]
         [DefaultValue(0)]
         [Range(0,100)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 70)]
@@ -429,13 +435,11 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [NecrobotConfig(Description = "The logic operator to check compbo IV, CP, Level to favorite pokemon", Position = 71)]
         [DefaultValue(Operator.and)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 71)]
-
         public Operator FavoriteOperator { get; set; }
 
         [NecrobotConfig(Description = "If Enabled, bot will only rename pokemon not meeting transfer settings, otherwise, the bot will rename all pokemon in bag", Position = 72)]
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 72)]
-
         public  bool RenamePokemonRespectTransferRule { get;  set; }
 
         [NecrobotConfig(Description = "Minimum pokemon level to upgrade", Position = 73)]
