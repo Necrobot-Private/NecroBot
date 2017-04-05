@@ -33,12 +33,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                 session.Inventory.GetWeakPokemonToTransfer(
                     session.LogicSettings.PokemonsNotToTransfer,
                     session.LogicSettings.PokemonEvolveFilters,
-                    session.LogicSettings.KeepPokemonsThatCanEvolve,
-                    session.LogicSettings.PrioritizeIvOverCp).ConfigureAwait(false);
+                    session.LogicSettings.KeepPokemonsThatCanEvolve).ConfigureAwait(false);
 
-            var orderedPokemon = weakPokemon.OrderBy(poke => poke.Cp);
-
-            await Execute(session, orderedPokemon, cancellationToken).ConfigureAwait(false);
+            await Execute(session, weakPokemon, cancellationToken).ConfigureAwait(false);
 
             // Evolve after transfer.
             await EvolvePokemonTask.Execute(session, cancellationToken).ConfigureAwait(false);

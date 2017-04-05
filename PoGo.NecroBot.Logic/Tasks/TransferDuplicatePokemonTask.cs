@@ -36,9 +36,14 @@ namespace PoGo.NecroBot.Logic.Tasks
                     session.LogicSettings.KeepPokemonsThatCanEvolve,
                     session.LogicSettings.PrioritizeIvOverCp).ConfigureAwait(false);
             
-            var orderedPokemon = duplicatePokemons.OrderBy(poke => poke.Cp);
+            await Execute(session, duplicatePokemons, cancellationToken).ConfigureAwait(false);
 
-            await Execute(session, orderedPokemon, cancellationToken).ConfigureAwait(false);
+            var maxPokemonsToTransfer = await
+               session.Inventory.GetMaxPokemonToTransfer(
+                   session.LogicSettings.PokemonsNotToTransfer,
+                   session.LogicSettings.PrioritizeIvOverCp).ConfigureAwait(false);
+
+            await Execute(session, maxPokemonsToTransfer, cancellationToken).ConfigureAwait(false);
 
             // Evolve after transfer
             await EvolvePokemonTask.Execute(session, cancellationToken).ConfigureAwait(false);

@@ -84,6 +84,7 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         int SnipeLocationServerPort { get; }
         bool UseSnipeLocationServer { get; }
         int KeepMinDuplicatePokemon { get; }
+        int KeepMaxDuplicatePokemon { get; }
         bool PrioritizeIvOverCp { get; }
         int AmountOfTimesToUpgradeLoop { get; }
         int GetMinStarDustForLevelUp { get; }

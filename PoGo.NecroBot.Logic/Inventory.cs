@@ -140,7 +140,7 @@ namespace PoGo.NecroBot.Logic
 
         public async Task<IEnumerable<PokemonData>> GetWeakPokemonToTransfer(
             IEnumerable<PokemonId> pokemonsNotToTransfer, Dictionary<PokemonId, EvolveFilter> pokemonEvolveFilters,
-            bool keepPokemonsThatCanEvolve = false, bool prioritizeIVoverCp = false
+            bool keepPokemonsThatCanEvolve = false
         )
         {
             var session = TinyIoCContainer.Current.Resolve<ISession>();
@@ -272,6 +272,50 @@ namespace PoGo.NecroBot.Logic
                         .OrderBy(x => x.Cp)
                         .ThenBy(PokemonInfo.CalculatePokemonPerfection)
                         .Take(canBeRemoved));
+                }
+            }
+            
+            return results;
+        }
+
+        public async Task<IEnumerable<PokemonData>> GetMaxPokemonToTransfer(
+            IEnumerable<PokemonId> pokemonsNotToTransfer, bool prioritizeIVoverCp = false)
+        {
+            var session = TinyIoCContainer.Current.Resolve<ISession>();
+            var myPokemon = await GetPokemons().ConfigureAwait(false);
+
+            var transferrablePokemon = myPokemon.Where(p => !pokemonsNotToTransfer.Contains(p.PokemonId) && CanTransferPokemon(p));
+            
+            var results = new List<PokemonData>();
+
+            foreach (var pokemonGroupToTransfer in transferrablePokemon.GroupBy(p => p.PokemonId).ToList())
+            {
+                var amountToKeepInStorage = GetApplyFilter<TransferFilter>(session.LogicSettings.PokemonsTransferFilter, pokemonGroupToTransfer.Key).KeepMaxDuplicatePokemon;
+
+                if (amountToKeepInStorage < 0)
+                    continue;
+
+                var inStorage = pokemonGroupToTransfer.Count();
+                if (amountToKeepInStorage >= inStorage)
+                    continue;
+
+                var needToRemove = inStorage - amountToKeepInStorage;
+                
+                Logger.Write($"Max duplicate {pokemonGroupToTransfer.Key} is {amountToKeepInStorage}. {needToRemove} out of {inStorage} {pokemonGroupToTransfer.Key} need to be transferred.", Logic.Logging.LogLevel.Info);
+
+                if (prioritizeIVoverCp)
+                {
+                    results.AddRange(pokemonGroupToTransfer
+                        .OrderBy(PokemonInfo.CalculatePokemonPerfection)
+                        .ThenBy(n => n.Cp)
+                        .Take(needToRemove));
+                }
+                else
+                {
+                    results.AddRange(pokemonGroupToTransfer
+                        .OrderBy(x => x.Cp)
+                        .ThenBy(PokemonInfo.CalculatePokemonPerfection)
+                        .Take(needToRemove));
                 }
             }
             
