@@ -301,7 +301,7 @@ namespace PoGo.NecroBot.Logic
 
                 var needToRemove = inStorage - amountToKeepInStorage;
                 
-                Logger.Write($"Max duplicate {pokemonGroupToTransfer.Key} is {amountToKeepInStorage}. Number of {pokemonGroupToTransfer.Key} to be transferred: {needToRemove}", Logic.Logging.LogLevel.Info);
+                Logger.Write($"Max duplicate {pokemonGroupToTransfer.Key} is {amountToKeepInStorage}. {needToRemove} out of {inStorage} {pokemonGroupToTransfer.Key} need to be transferred.", Logic.Logging.LogLevel.Info);
 
                 if (prioritizeIVoverCp)
                 {
