@@ -45,7 +45,7 @@ namespace PoGo.NecroBot.Logic.Utils
 
         public void Dirty(Inventory inventory, ISession session)
         {
-            _exportStats = GetCurrentInfo(inventory).Result;
+            _exportStats = GetCurrentInfo(session, inventory).Result;
             TotalStardust = inventory.GetStarDust();
             TinyIoCContainer.Current.Resolve<MultiAccountManager>().DirtyEventHandle(this);
             DirtyEvent?.Invoke();
@@ -125,7 +125,7 @@ namespace PoGo.NecroBot.Logic.Utils
             return (DateTime.Now - _initSessionDateTime).ToString(@"dd\.hh\:mm\:ss");
         }
 
-        public async Task<StatsExport> GetCurrentInfo(Inventory inventory)
+        public async Task<StatsExport> GetCurrentInfo(ISession session, Inventory inventory)
         {
             var stats = await inventory.GetPlayerStats().ConfigureAwait(false);
             StatsExport output = null;
@@ -141,37 +141,38 @@ namespace PoGo.NecroBot.Logic.Utils
                     hours = Math.Truncate(TimeSpan.FromHours(time).TotalHours);
                     minutes = TimeSpan.FromHours(time).Minutes;
                 }
-
+                
                 if (LevelForRewards == -1 || stat.Level >= LevelForRewards)
                 {
-                    LevelUpRewardsResponse Result = await Execute(inventory).ConfigureAwait(false);
-
-                    if (Result.ToString().ToLower().Contains("awarded_already"))
-                        LevelForRewards = stat.Level + 1;
-
-                    if (Result.ToString().ToLower().Contains("success"))
+                    if (session.LogicSettings.SkipCollectingLevelUpRewards)
                     {
-                        Logger.Write("Leveled up: " + stat.Level, LogLevel.Info);
+                        Logger.Write("Current level: " + stat.Level + ". Skipped collecting level up rewards.", LogLevel.Info);
+                    }
+                    else
+                    {
+                        LevelUpRewardsResponse Result = await GetLevelUpRewards(session).ConfigureAwait(false);
 
-                        RepeatedField<ItemAward> items = Result.ItemsAwarded;
+                        if (Result.ToString().ToLower().Contains("awarded_already"))
+                            LevelForRewards = stat.Level + 1;
 
-                        if (items.Any<ItemAward>())
+                        if (Result.ToString().ToLower().Contains("success"))
                         {
-                            Logger.Write("- Received Items -", LogLevel.Info);
-                            foreach (ItemAward item in items)
+                            Logger.Write("Leveled up: " + stat.Level, LogLevel.Info);
+
+                            RepeatedField<ItemAward> items = Result.ItemsAwarded;
+
+                            if (items.Any<ItemAward>())
                             {
-                                Logger.Write($"[ITEM] {item.ItemId} x {item.ItemCount} ", LogLevel.Info);
+                                Logger.Write("- Received Items -", LogLevel.Info);
+                                foreach (ItemAward item in items)
+                                {
+                                    Logger.Write($"[ITEM] {item.ItemId} x {item.ItemCount} ", LogLevel.Info);
+                                }
                             }
                         }
                     }
                 }
-                var Result2 = await Execute(inventory).ConfigureAwait(false);
-                LevelForRewards = stat.Level;
-                if (Result2.ToString().ToLower().Contains("success"))
-                {
-                    string[] tokens = Result2.ToString().Split(new[] {"itemId"}, StringSplitOptions.None);
-                    Logger.Write("Items Awarded:" + Result2.ItemsAwarded.ToString());
-                }
+
                 output = new StatsExport
                 {
                     Level = stat.Level,
@@ -198,18 +199,11 @@ namespace PoGo.NecroBot.Logic.Utils
             _exportStats = new StatsExport();
         }
 
-        public async Task<LevelUpRewardsResponse> Execute(ISession ctx)
+        public async Task<LevelUpRewardsResponse> GetLevelUpRewards(ISession ctx)
         {
-            var Result = await ctx.Inventory.GetLevelUpRewards(LevelForRewards).ConfigureAwait(false);
-            return Result;
+            return await ctx.Inventory.GetLevelUpRewards(LevelForRewards).ConfigureAwait(false);
         }
-
-        public async Task<LevelUpRewardsResponse> Execute(Inventory inventory)
-        {
-            var Result = await inventory.GetLevelUpRewards(inventory).ConfigureAwait(false);
-            return Result;
-        }
-
+        
         public double GetRuntime()
         {
             return (DateTime.Now - _initSessionDateTime).TotalSeconds / 3600;
