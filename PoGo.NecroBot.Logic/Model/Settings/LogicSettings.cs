@@ -153,6 +153,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool UsePokemonToCatchLocallyListOnly => _settings.PokemonConfig.UsePokemonToCatchLocallyListOnly;
         public CatchSettings PokemonToCatchLocally => _settings.PokemonToCatchLocally;
         public int KeepMinDuplicatePokemon => _settings.PokemonConfig.KeepMinDuplicatePokemon;
+        public int KeepMaxDuplicatePokemon => _settings.PokemonConfig.KeepMaxDuplicatePokemon;
         public bool PrioritizeIvOverCp => _settings.PokemonConfig.PrioritizeIvOverCp;
         public int MaxTravelDistanceInMeters => GenRandom(_settings.LocationConfig.MaxTravelDistanceInMeters);
         public bool StartFromLastPosition => _settings.LocationConfig.StartFromLastPosition;

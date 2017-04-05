@@ -41,8 +41,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     session.Inventory.GetWeakPokemonToTransfer(
                         session.LogicSettings.PokemonsNotToTransfer,
                         session.LogicSettings.PokemonEvolveFilters,
-                        session.LogicSettings.KeepPokemonsThatCanEvolve,
-                        session.LogicSettings.PrioritizeIvOverCp).ConfigureAwait(false);
+                        session.LogicSettings.KeepPokemonsThatCanEvolve).ConfigureAwait(false);
 
                 pokemons = pokemons.Where(x => !weakPokemons.Any(p => p.Id == x.Id));
             }

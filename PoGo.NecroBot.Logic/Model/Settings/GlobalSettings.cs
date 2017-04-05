@@ -682,6 +682,20 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                         // But this time we are going to remove PokemonsToEvolve.
                         settings.Remove("PokemonsToEvolve");
                         break;
+
+                    case 22:
+                        if (settings["PokemonsTransferFilter"] != null && settings["PokemonsTransferFilter"] != null)
+                        {
+                            foreach (var x in settings["PokemonsTransferFilter"])
+                            {
+                                var key = ((JProperty)(x)).Name;
+                                var filter = ((JProperty)(x)).Value;
+
+                                if (filter["KeepMaxDuplicatePokemon"] == null)
+                                    filter["KeepMaxDuplicatePokemon"] = 1000;
+                            }
+                        }
+                        break;
                 }
             }
         }
