@@ -55,5 +55,15 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 8)]
         public bool AutoFinishTutorial { get;  set; }
+
+        [NecrobotConfig(Description = "Skip first time experience tutorial", Position = 9)]
+        [DefaultValue(false)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 9)]
+        public bool SkipFirstTimeTutorial { get; set; }
+
+        [NecrobotConfig(Description = "Skip collecting level up rewards", Position = 10)]
+        [DefaultValue(false)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 10)]
+        public bool SkipCollectingLevelUpRewards { get; set; }
     }
 }

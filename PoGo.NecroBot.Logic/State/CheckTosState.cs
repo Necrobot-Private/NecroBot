@@ -94,6 +94,17 @@ namespace PoGo.NecroBot.Logic.State
                     });
                 }
             }
+
+            if (session.LogicSettings.SkipFirstTimeTutorial)
+            {
+                session.EventDispatcher.Send(new NoticeEvent()
+                {
+                    Message = "Skipping the first time tutorial."
+                });
+
+                return new InfoState();
+            }
+
             if (!session.LogicSettings.AutoFinishTutorial)
             {
                 InitialTutorialForm form = new InitialTutorialForm(this, tutState, session);
