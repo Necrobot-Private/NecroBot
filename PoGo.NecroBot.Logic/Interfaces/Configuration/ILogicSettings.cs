@@ -235,6 +235,8 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         GUIConfig UIConfig { get; }
         string DefaultBuddyPokemon { get; }
         bool AutoFinishTutorial { get;  }
+        bool SkipFirstTimeTutorial { get; }
+        bool SkipCollectingLevelUpRewards { get; }
         Dictionary<ItemId, ItemUseFilter> ItemUseFilters { get; }
         double UpgradePokemonLvlMinimum { get; }
         bool EvolveFavoritedOnly { get; }

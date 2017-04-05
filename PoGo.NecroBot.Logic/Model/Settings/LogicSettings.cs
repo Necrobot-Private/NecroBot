@@ -116,6 +116,8 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool UseBulkTransferPokemon => _settings.PokemonConfig.UseBulkTransferPokemon;
         public string DefaultBuddyPokemon => _settings.PokemonConfig.DefaultBuddyPokemon;
         public bool AutoFinishTutorial => _settings.PlayerConfig.AutoFinishTutorial;
+        public bool SkipFirstTimeTutorial => _settings.PlayerConfig.SkipFirstTimeTutorial;
+        public bool SkipCollectingLevelUpRewards => _settings.PlayerConfig.SkipCollectingLevelUpRewards;
         public int BulkTransferSize => _settings.PokemonConfig.BulkTransferSize;
         public int BulkTransferStogareBuffer => _settings.PokemonConfig.BulkTransferStogareBuffer;
 
