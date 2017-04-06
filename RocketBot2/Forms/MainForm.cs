@@ -112,7 +112,7 @@ namespace RocketBot2.Forms
 
         #region INTERFACE
 
-        private DateTime lastClearLog = DateTime.Now;
+        private DateTime LastClearLog = DateTime.Now;
 
         public static void ColoredConsoleWrite(Color color, string text)
         {
@@ -126,11 +126,11 @@ namespace RocketBot2.Forms
             }
 
             #pragma warning disable CS1690
-            if (Instance.lastClearLog.AddMinutes(20) < DateTime.Now)
+            if (Instance.LastClearLog.AddMinutes(20) < DateTime.Now)
             #pragma warning restore CS1690
             {
                 Instance.logTextBox.Text = string.Empty;
-                Instance.lastClearLog = DateTime.Now;
+                Instance.LastClearLog = DateTime.Now;
             }
 
             if (text.Contains("Error with API request type: DownloadRemoteConfigVersion"))
@@ -810,13 +810,13 @@ namespace RocketBot2.Forms
             }
         }
 
-        private Task ReloadPokemonList()
+        private async Task ReloadPokemonList()
         {
             Instance.SetState(false);
             try
             {
                 if (_session.Client.Download.ItemTemplates == null)
-                     _session.Client.Download.GetItemTemplates().ConfigureAwait(false);
+                    await _session.Client.Download.GetItemTemplates().ConfigureAwait(false);
 
                 var templates = _session.Client.Download.ItemTemplates.Where(x => x.PokemonSettings != null)
                         .Select(x => x.PokemonSettings)
@@ -868,18 +868,7 @@ namespace RocketBot2.Forms
                     .SelectMany(aItems => aItems.Item)
                     .ToDictionary(item => item.ItemId, item => new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(item.ExpireMs));
 
-                FlpItemsClean();
-
-                foreach (var item in items)
-                {
-                    var box = new ItemBox(item);
-                    if (appliedItems.ContainsKey(item.ItemId))
-                    {
-                        box.expires = appliedItems[item.ItemId];
-                    }
-                    box.ItemClick += ItemBox_ItemClick;
-                    Instance.flpItems.Controls.Add(box);
-                }
+                FlpItemsClean(items, appliedItems);
 
                 Instance.lblInventory.Text =
                         $"Types: {items.Count()} | Total: {_session.Inventory.GetTotalItemCount().Result} | Storage: {_session.Client.Player.PlayerData.MaxItemStorage}";
@@ -894,27 +883,32 @@ namespace RocketBot2.Forms
                 Logger.Write(ex.ToString(), LogLevel.Error);
             }
             Instance.SetState(true);
-            return Task.CompletedTask;
         }
 
-        private void FlpItemsClean()
+        private static void FlpItemsClean(IOrderedEnumerable<ItemData> items, Dictionary<ItemId, DateTime> appliedItems)
         {
-            if (Instance.InvokeRequired)
-            {
-                Instance.Invoke(new Action(FlpItemsClean));
-                return;
-            }
             List<Control> listControls = new List<Control>();
 
-            foreach (Control control in flpItems.Controls)
+            foreach (Control control in Instance.flpItems.Controls)
             {
                 listControls.Add(control);
             }
 
             foreach (Control control in listControls)
             {
-                flpItems.Controls.Remove(control);
+                Instance.flpItems.Controls.Remove(control);
                 control.Dispose();
+            }
+
+            foreach (var item in items)
+            {
+                var box = new ItemBox(item);
+                if (appliedItems.ContainsKey(item.ItemId))
+                {
+                    box.expires = appliedItems[item.ItemId];
+                }
+                box.ItemClick += Instance.ItemBox_ItemClick;
+                Instance.flpItems.Controls.Add(box);
             }
         }
 
