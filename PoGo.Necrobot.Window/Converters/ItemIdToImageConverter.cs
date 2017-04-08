@@ -1,6 +1,5 @@
-using POGOProtos.Inventory.Item;
+﻿using POGOProtos.Inventory.Item;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Windows.Data;
 
@@ -10,8 +9,8 @@ namespace PoGo.Necrobot.Window.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            ItemId itemId = (ItemId)Enum.Parse(typeof(ItemId), value);
-            return $"https://raw.githubusercontent.com/Necrobot-Private/PokemonGO-Assets/master/items-icons/{(int)itemId.ItemId}.png";
+            ItemId itemId = (ItemId)Enum.Parse(typeof(ItemId), value.ToString());
+            return $"https://raw.githubusercontent.com/Necrobot-Private/PokemonGO-Assets/master/items-icons/{(int)itemId}.png";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
