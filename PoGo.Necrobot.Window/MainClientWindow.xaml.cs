@@ -94,6 +94,10 @@ namespace PoGo.Necrobot.Window
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             LoadHelpArticleAsync();
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            if (datacontext.PlayerInfo.Level == 35)
+            {
+                
+            }
         }
         private DateTime lastClearLog = DateTime.Now;
         public void LogToConsoleTab(string message, LogLevel level, string color)
@@ -167,7 +171,7 @@ namespace PoGo.Necrobot.Window
 
         private void MenuSetting_Click(object sender, RoutedEventArgs e)
         {
-            var configWindow = new SettingsWindow(this, System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "config\\config.json"));
+            var configWindow = new SettingsWindow(this, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config\\config.json"));
             configWindow.ShowDialog();         
         }
 
@@ -249,7 +253,7 @@ namespace PoGo.Necrobot.Window
         private void BtnSwitchAcount_Click(object sender, RoutedEventArgs e)
         {
             var btn = ((Button)sender);
-            var account = (MultiAccountManager.BotAccount)btn.CommandParameter ;
+            var account = (MultiAccountManager.BotAccount)btn.CommandParameter;
 
             var manager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
 
