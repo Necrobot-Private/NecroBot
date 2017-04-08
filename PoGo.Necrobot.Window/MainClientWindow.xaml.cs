@@ -22,7 +22,6 @@ using System.IO;
 using System.Net.Http;
 using DotNetBrowser;
 using DotNetBrowser.WPF;
-using PoGo.NecroBot.Logic.Forms;
 
 namespace PoGo.Necrobot.Window
 {
@@ -56,6 +55,7 @@ namespace PoGo.Necrobot.Window
             };
 
         BrowserView webView;
+        bool BrowserToggled = true;
 
         public MainClientWindow()
         {
@@ -315,6 +315,23 @@ namespace PoGo.Necrobot.Window
         private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Process.GetCurrentProcess().Kill();
+        }
+
+        private void BrowserToggle_Click(object sender, RoutedEventArgs e)
+        {
+            if (BrowserToggled)
+            {
+                if (tabBrowser.IsSelected)
+                    tabConsole.IsSelected = true;
+
+                tabBrowser.IsEnabled = false;
+                BrowserToggled = false;
+            }
+            else if (!BrowserToggled)
+            {
+                tabBrowser.IsEnabled = true;
+                BrowserToggled = true;
+            }
         }
     }
 }
