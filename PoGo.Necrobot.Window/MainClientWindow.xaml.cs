@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
+using PoGo.Necrobot.Window.Properties;
 using PoGo.NecroBot.Logic.State;
 using PoGo.Necrobot.Window.Win32;
 using PoGo.Necrobot.Window.Model;
@@ -73,7 +74,10 @@ namespace PoGo.Necrobot.Window
 
             DataContext = datacontext;
             txtCmdInput.Text = TinyIoCContainer.Current.Resolve<UITranslation>().InputCommand;
-            InitBrowser();
+            if (Settings.Default.BrowserToggled)
+            {
+                InitBrowser();
+            }
         }
 
         private void InitBrowser()
@@ -309,7 +313,6 @@ namespace PoGo.Necrobot.Window
         private void BtnExit_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
-            Process.GetCurrentProcess().Kill();
         }
         
         private void MetroWindow_Initialized(object sender, EventArgs e)
@@ -320,18 +323,29 @@ namespace PoGo.Necrobot.Window
 
         private void BrowserToggle_Click(object sender, RoutedEventArgs e)
         {
-            if (BrowserToggled)
+            if (Settings.Default.BrowserToggled)
             {
                 if (tabBrowser.IsSelected)
                     tabConsole.IsSelected = true;
 
                 tabBrowser.IsEnabled = false;
-                BrowserToggled = false;
+                Settings.Default.BrowserToggled = false;
+                Settings.Default.Save();
+
+                MessageBoxResult msgbox = MessageBox.Show("Would you Like to Restart the to kill browser tasks and free up extra cpu?","Free Up CPU from Browser",MessageBoxButton.YesNo,MessageBoxImage.Question);
+                if (msgbox == MessageBoxResult.Yes)
+                {
+                    Process.Start(Application.ResourceAssembly.Location);
+                    Application.Current.Shutdown();
+                }
+                else
+                { }
             }
-            else if (!BrowserToggled)
+            else if (!Settings.Default.BrowserToggled)
             {
                 tabBrowser.IsEnabled = true;
-                BrowserToggled = true;
+                Settings.Default.BrowserToggled = true;
+                Settings.Default.Save();
             }
         }
         public void ReInitializeSession(ISession session, GlobalSettings globalSettings, BotAccount requestedAccount = null)
@@ -344,6 +358,11 @@ namespace PoGo.Necrobot.Window
             {
                 session.ReInitSessionWithNextBot(); //current location
             }
+        }
+
+        private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Process.GetCurrentProcess().Kill();
         }
     }
 }

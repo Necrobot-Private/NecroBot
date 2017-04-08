@@ -15,7 +15,7 @@
                       ResizeMode="CanResizeWithGrip"
                       WindowTransitionsEnabled="False"
                       WindowStartupLocation="CenterScreen" 
-                      Loaded="MetroWindow_Loaded" Initialized="MetroWindow_Initialized">
+                      Loaded="MetroWindow_Loaded" Initialized="MetroWindow_Initialized" Closing="MetroWindow_Closing">
     <Controls:MetroWindow.TitleTemplate>
         <DataTemplate>
             <TextBlock x:Name="TitleText"
