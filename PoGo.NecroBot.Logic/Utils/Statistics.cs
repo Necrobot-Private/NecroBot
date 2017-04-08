@@ -144,6 +144,9 @@ namespace PoGo.NecroBot.Logic.Utils
                 
                 if (LevelForRewards == -1 || stat.Level >= LevelForRewards)
                 {
+                    if (stat.Level + 1 > LevelForRewards)
+                        LevelForRewards = stat.Level + 1;
+
                     if (session.LogicSettings.SkipCollectingLevelUpRewards)
                     {
                         Logger.Write("Current level: " + stat.Level + ". Skipped collecting level up rewards.", LogLevel.Info);
@@ -151,9 +154,6 @@ namespace PoGo.NecroBot.Logic.Utils
                     else
                     {
                         LevelUpRewardsResponse Result = await GetLevelUpRewards(session).ConfigureAwait(false);
-
-                        if (Result.ToString().ToLower().Contains("awarded_already"))
-                            LevelForRewards = stat.Level + 1;
 
                         if (Result.ToString().ToLower().Contains("success"))
                         {
