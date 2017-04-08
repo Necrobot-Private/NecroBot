@@ -13,8 +13,7 @@ namespace PoGo.Necrobot.Window.Model
         {
             var session = TinyIoCContainer.Current.Resolve<ISession>();
             UniqueId = e.EncounterId;
-            ulong encounterid = 0;
-            ulong.TryParse(e.EncounterId, out encounterid);
+            ulong.TryParse(e.EncounterId, out ulong encounterid);
             Ref = e;
             AllowSnipe = true;
             PokemonId = e.PokemonId;
