@@ -22,6 +22,7 @@ using System.IO;
 using System.Net.Http;
 using DotNetBrowser;
 using DotNetBrowser.WPF;
+using PoGo.NecroBot.Logic.Forms;
 
 namespace PoGo.Necrobot.Window
 {
@@ -94,9 +95,10 @@ namespace PoGo.Necrobot.Window
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             LoadHelpArticleAsync();
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            if (datacontext.PlayerInfo.Level == 35)
+            if (datacontext.PlayerInfo.Level == 35) // Temporary Solution
             {
-                
+                MessageBox.Show("Please Select an Account not on this Level to prevent a ban from being too high");
+                tabAccounts.IsSelected = true;
             }
         }
         private DateTime lastClearLog = DateTime.Now;
