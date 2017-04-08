@@ -69,8 +69,7 @@ namespace PoGo.NecroBot.Logic.Logging
             {
                 if (!isBuffering)
                 {
-                    LogEvent logEventToSend;
-                    while (_messageQueue.TryDequeue(out logEventToSend))
+                    while (_messageQueue.TryDequeue(out LogEvent logEventToSend))
                     {
                         _session?.EventDispatcher?.Send(logEventToSend);
                     }
