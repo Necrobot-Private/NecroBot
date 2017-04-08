@@ -13,7 +13,7 @@ namespace PoGo.NecroBot.Logic.Captcha
 
         public class APIObjectResponse
         {
-            public string captchasolutions { get; set; }
+            public string Captchasolutions { get; set; }
         }
 
         public string APIKey { get; set; }
@@ -63,11 +63,11 @@ namespace PoGo.NecroBot.Logic.Captcha
                     }
                     var responseJSON = await responseContent.Content.ReadAsStringAsync().ConfigureAwait(false);
                     var response = JsonConvert.DeserializeObject<APIObjectResponse>(responseJSON);
-                    return response.captchasolutions;
+                    return response.Captchasolutions;
                 }
                 catch (Exception)
                 {
-                    Logger.Write($"(CAPTCHA) - Error occurred when solve captcha with Captcha Solutions");
+                    Logger.Write($"(CAPTCHA) - An Error has occurred when solving captcha with Captcha Solutions");
                 }
             }
             return string.Empty;
