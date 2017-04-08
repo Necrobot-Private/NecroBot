@@ -257,7 +257,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                             _encounterId,
                             _spawnPointId,
                             pokemonIv,
-                            pokemonCp.HasValue ? pokemonCp.Value : 10000,  //unknow CP pokemon, want to use berry
+                            pokemonCp ?? 10000,  //unknown CP pokemon, want to use berry
                             encounterEV.Level,
                             probability,
                             cancellationToken).ConfigureAwait(false);
