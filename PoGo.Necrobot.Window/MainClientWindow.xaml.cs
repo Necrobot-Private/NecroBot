@@ -10,7 +10,6 @@ using System.Windows.Input;
 using PoGo.NecroBot.Logic.State;
 using PoGo.Necrobot.Window.Win32;
 using PoGo.Necrobot.Window.Model;
-using PoGo.NecroBot.Logic;
 using PoGo.NecroBot.Logic.Logging;
 using System.Diagnostics;
 using TinyIoC;
@@ -22,6 +21,9 @@ using System.IO;
 using System.Net.Http;
 using DotNetBrowser;
 using DotNetBrowser.WPF;
+using PoGo.NecroBot.Logic;
+using PoGo.NecroBot.Logic.Model.Settings;
+using static PoGo.NecroBot.Logic.MultiAccountManager;
 
 namespace PoGo.Necrobot.Window
 {
@@ -56,6 +58,9 @@ namespace PoGo.Necrobot.Window
 
         BrowserView webView;
         bool BrowserToggled = true;
+        ISession session;
+        GlobalSettings globalSettings;
+        BotAccount requestedAccount;
 
         public MainClientWindow()
         {
@@ -97,8 +102,8 @@ namespace PoGo.Necrobot.Window
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             if (datacontext.PlayerInfo.Level == 35) // Temporary Solution
             {
-                MessageBox.Show("Please Select an Account not on this Level to prevent a ban from being too high");
-                tabAccounts.IsSelected = true;
+                TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(90);
+                ReInitializeSession(session, globalSettings,requestedAccount = null);
             }
         }
         private DateTime lastClearLog = DateTime.Now;
@@ -327,6 +332,17 @@ namespace PoGo.Necrobot.Window
             {
                 tabBrowser.IsEnabled = true;
                 BrowserToggled = true;
+            }
+        }
+        public void ReInitializeSession(ISession session, GlobalSettings globalSettings, BotAccount requestedAccount = null)
+        {
+            if (session.LogicSettings.MultipleBotConfig.StartFromDefaultLocation)
+            {
+                session.ReInitSessionWithNextBot(requestedAccount, globalSettings.LocationConfig.DefaultLatitude, globalSettings.LocationConfig.DefaultLongitude, session.Client.CurrentAltitude);
+            }
+            else
+            {
+                session.ReInitSessionWithNextBot(); //current location
             }
         }
     }
