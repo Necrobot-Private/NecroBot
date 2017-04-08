@@ -44,7 +44,7 @@ namespace PoGo.Necrobot.Window.Converters
             if (resources.ContainsKey(itemId))
                 return resources[itemId];
 
-            return "https://raw.githubusercontent.com/Necrobot-Private/PokemonGO-Assets/master/items-icons/501.png";
+            return $"https://raw.githubusercontent.com/Necrobot-Private/PokemonGO-Assets/master/items-icons/{itemId}.png";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
