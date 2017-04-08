@@ -58,10 +58,6 @@ namespace PoGo.Necrobot.Window
             };
 
         BrowserView webView;
-        bool BrowserToggled = true;
-        ISession session;
-        GlobalSettings globalSettings;
-        BotAccount requestedAccount;
 
         public MainClientWindow()
         {
@@ -104,10 +100,9 @@ namespace PoGo.Necrobot.Window
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             LoadHelpArticleAsync();
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            if (datacontext.PlayerInfo.Level == 35) // Temporary Solution
+            if (datacontext.PlayerInfo.Level == 35) // Warn Player on Reaching this Level
             {
-                TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(90);
-                ReInitializeSession(session, globalSettings,requestedAccount = null);
+                NecroBot.Logic.Logging.Logger.Write($"You have reached Level {datacontext.PlayerInfo.Level} and it is recommended to Switch Accounts",LogLevel.Warning);
             }
         }
         private DateTime lastClearLog = DateTime.Now;
