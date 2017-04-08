@@ -304,17 +304,13 @@ namespace PoGo.Necrobot.Window
         private void BtnExit_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
+            Process.GetCurrentProcess().Kill();
         }
         
         private void MetroWindow_Initialized(object sender, EventArgs e)
         {
             if(SystemParameters.PrimaryScreenWidth<1366)
                 WindowState = WindowState.Maximized;
-        }
-
-        private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            Process.GetCurrentProcess().Kill();
         }
 
         private void BrowserToggle_Click(object sender, RoutedEventArgs e)
