@@ -55,6 +55,7 @@ namespace PoGo.Necrobot.Window
             };
 
         BrowserView webView;
+        bool BrowserToggled = true;
 
         public MainClientWindow()
         {
@@ -94,6 +95,11 @@ namespace PoGo.Necrobot.Window
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             LoadHelpArticleAsync();
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            if (datacontext.PlayerInfo.Level == 35) // Temporary Solution
+            {
+                MessageBox.Show("Please Select an Account not on this Level to prevent a ban from being too high");
+                tabAccounts.IsSelected = true;
+            }
         }
         private DateTime lastClearLog = DateTime.Now;
         public void LogToConsoleTab(string message, LogLevel level, string color)
@@ -167,7 +173,7 @@ namespace PoGo.Necrobot.Window
 
         private void MenuSetting_Click(object sender, RoutedEventArgs e)
         {
-            var configWindow = new SettingsWindow(this, System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "config\\config.json"));
+            var configWindow = new SettingsWindow(this, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config\\config.json"));
             configWindow.ShowDialog();         
         }
 
@@ -249,7 +255,7 @@ namespace PoGo.Necrobot.Window
         private void BtnSwitchAcount_Click(object sender, RoutedEventArgs e)
         {
             var btn = ((Button)sender);
-            var account = (MultiAccountManager.BotAccount)btn.CommandParameter ;
+            var account = (MultiAccountManager.BotAccount)btn.CommandParameter;
 
             var manager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
 
@@ -309,6 +315,23 @@ namespace PoGo.Necrobot.Window
         private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Process.GetCurrentProcess().Kill();
+        }
+
+        private void BrowserToggle_Click(object sender, RoutedEventArgs e)
+        {
+            if (BrowserToggled)
+            {
+                if (tabBrowser.IsSelected)
+                    tabConsole.IsSelected = true;
+
+                tabBrowser.IsEnabled = false;
+                BrowserToggled = false;
+            }
+            else if (!BrowserToggled)
+            {
+                tabBrowser.IsEnabled = true;
+                BrowserToggled = true;
+            }
         }
     }
 }

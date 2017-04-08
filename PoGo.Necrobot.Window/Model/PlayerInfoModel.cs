@@ -114,7 +114,6 @@ namespace PoGo.Necrobot.Window.Model
             {
                 level = value;
                 RaisePropertyChanged("Level");
-
             }
         }
 

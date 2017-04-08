@@ -131,8 +131,8 @@
                     </Popup>
 
                 </StackPanel>
-
             </Button>
+            <Button x:Name="BrowserToggle" Content="Toggle Browser" Click="BrowserToggle_Click" FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato Medium" />
             <Button x:Name="menuConsole" Click="MenuConsole_Click">
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="20"
@@ -315,7 +315,7 @@
                 <local:SniperControl x:Name="ctrlSniper" DataContext="{Binding Path=SnipeList}" />
             </TabItem>
 
-            <TabItem  IsSelected="True">
+            <TabItem x:Name="tabConsole" IsSelected="True">
                 <TabItem.Header>
                     <TextBlock FontSize="14" Text="{Binding Source=ConsoleTabTitle, Converter={StaticResource ResourceKey=I18NConveter}, FallbackValue=Console}"/>
                 </TabItem.Header>
