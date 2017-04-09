@@ -141,7 +141,9 @@ namespace PoGo.NecroBot.Logic.State
                 return;
             }
 
-            using (var db = new LiteDatabase(GetDBPath(username)))
+            var dbPath = GetDBPath(username);
+            LiteEngine.Upgrade(dbPath, null, true);
+            using (var db = new LiteDatabase(dbPath))
             {
                 db.GetCollection<PokeStopTimestamp>(POKESTOP_STATS_COLLECTION).EnsureIndex(s => s.Timestamp);
                 db.GetCollection<PokemonTimestamp>(POKEMON_STATS_COLLECTION).EnsureIndex(s => s.Timestamp);
