@@ -60,9 +60,10 @@ namespace PoGo.Necrobot.Window.Model
 
         public void AddOrUpdate(PokemonData egg, IncubatorViewModel incu = null)
         {
-            var eggModel = new EggViewModel(egg);
-            eggModel.Hatchable = incu == null;
-                        
+            var eggModel = new EggViewModel(egg)
+            {
+                Hatchable = incu == null
+            };
             var existing = Eggs.FirstOrDefault(x => x.Id == eggModel.Id);
             if(existing != null )
             {

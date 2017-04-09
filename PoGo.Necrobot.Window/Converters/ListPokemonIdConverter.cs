@@ -30,7 +30,7 @@ namespace PoGo.Necrobot.Window.Converters
             foreach (var pname in arr)
             {
                 PokemonId pi = PokemonId.Missingno;
-                if (Enum.TryParse<PokemonId>(pname, true, out pi))
+                if (Enum.TryParse(pname, true, out pi))
                 {
                     list.Add(pi);
                 }
