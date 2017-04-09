@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using Newtonsoft.Json;
 using PoGo.NecroBot.Logic.Exceptions;
@@ -12,21 +11,21 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
 {
     public class GoogleResponse
     {
-        public string status { get; set; }
-        public List<GoogleElevationResults> results { get; set; }
+        public string Status { get; set; }
+        public List<GoogleElevationResults> Results { get; set; }
     }
 
     public class GoogleElevationResults
     {
-        public double elevation { get; set; }
-        public double resolution { get; set; }
-        public GoogleLocation location { get; set; }
+        public double Elevation { get; set; }
+        public double Resolution { get; set; }
+        public GoogleLocation Location { get; set; }
     }
 
     public class GoogleLocation
     {
-        public double lat { get; set; }
-        public double lng { get; set; }
+        public double Lat { get; set; }
+        public double Lng { get; set; }
     }
 
     public class GoogleElevationService : BaseElevationService
@@ -60,9 +59,9 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
                     var responseFromServer = await responseContent.Content.ReadAsStringAsync().ConfigureAwait(false);
                     GoogleResponse googleResponse = JsonConvert.DeserializeObject<GoogleResponse>(responseFromServer);
 
-                    if (googleResponse.status == "OK" && googleResponse.results != null &&
-                        0 < googleResponse.results.Count && googleResponse.results[0].elevation > -100)
-                    return googleResponse.results[0].elevation;
+                    if (googleResponse.Status == "OK" && googleResponse.Results != null &&
+                        0 < googleResponse.Results.Count && googleResponse.Results[0].Elevation > -100)
+                    return googleResponse.Results[0].Elevation;
                 }
                 catch (ActiveSwitchByRuleException ex)
                 {

@@ -10,9 +10,8 @@ namespace PoGo.Necrobot.Window.Converters
         public object Convert(object value, Type targetType,
             object parameter, System.Globalization.CultureInfo culture)
         {
-            if (value is BitmapSource)
+            if (value is BitmapSource orgBmp)
             {
-                BitmapSource orgBmp = (BitmapSource)value;
                 if (orgBmp.Format == PixelFormats.Bgra32)
                 {
                     byte[] orgPixels = new byte[orgBmp.PixelHeight *

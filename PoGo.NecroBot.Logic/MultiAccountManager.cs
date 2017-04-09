@@ -256,7 +256,7 @@ namespace PoGo.NecroBot.Logic
 
         public BotAccount GetStartUpAccount()
         {
-            ISession session = TinyIoC.TinyIoCContainer.Current.Resolve<ISession>();
+            ISession session = TinyIoCContainer.Current.Resolve<ISession>();
 
             if (!AllowMultipleBot())
             {
