@@ -86,11 +86,11 @@
     },
     {
       "Key": "gym",
-      "Value": "Gym"
+      "Value": "道場"
     },
     {
       "Key": "pokestop",
-      "Value": "Pokestop"
+      "Value": "補給站"
     },
     {
       "Key": "eventFortTargeted",
@@ -1894,7 +1894,7 @@
     },
     {
       "Key": "absorb",
-      "Value": "Absorb"
+      "Value": "吸取"
     },
     {
       "Key": "gigaDrain",
@@ -2155,6 +2155,10 @@
     {
       "Key": "fireFangFast",
       "Value": "炎牙"
+    },
+    {
+      "Key": "CloseCombat",
+      "Value": "肉搏戰"
     },
     {
       "Key": "rockSmashFast",
