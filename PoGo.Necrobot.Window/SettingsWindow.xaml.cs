@@ -256,8 +256,8 @@ namespace PoGo.Necrobot.Window
                 Mode = BindingMode.OneWay
             };
             FrameworkElementFactory comboFactory = new FrameworkElementFactory(typeof(ComboBox));
-            comboFactory.SetValue(ComboBox.IsTextSearchEnabledProperty, true);
-           // comboFactory.SetValue(ComboBox.ItemsSourceProperty, this.Accounts);
+            comboFactory.SetValue(ItemsControl.IsTextSearchEnabledProperty, true);
+            // comboFactory.SetValue(ComboBox.ItemsSourceProperty, this.Accounts);
             comboFactory.SetBinding(ComboBox.SelectedItemProperty, comboBind);
 
             DataTemplate comboTemplate = new DataTemplate()
@@ -365,7 +365,7 @@ namespace PoGo.Necrobot.Window
                 {
                     ddrop.Items.Add(v.ToString());
                 }
-                BindingOperations.SetBinding(ddrop, ComboBox.SelectedValueProperty, binding);
+                BindingOperations.SetBinding(ddrop, System.Windows.Controls.Primitives.Selector.SelectedValueProperty, binding);
                 return ddrop;
             }
 
@@ -383,7 +383,7 @@ namespace PoGo.Necrobot.Window
             if (item.PropertyType == typeof(bool))
             {
                 var checkbox = new CheckBox();
-                BindingOperations.SetBinding(checkbox, CheckBox.IsCheckedProperty, binding);
+                BindingOperations.SetBinding(checkbox, System.Windows.Controls.Primitives.ToggleButton.IsCheckedProperty, binding);
                 return checkbox;
             }
 
@@ -478,11 +478,10 @@ namespace PoGo.Necrobot.Window
             //code to back compatable.
             var backCombitable = ConvertToBackwardCompitable(Settings);
             if (!string.IsNullOrEmpty(fileName))  {
-                if (MessageBox.Show("Do you want to overwrite file : ", "Save config", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
+                if (MessageBox.Show($"Do you want to overwrite file : {fileName}", "Save Config", MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
                 {
                     Settings.Save(fileName);
                     Close();
-
                 }
             }
 
@@ -491,7 +490,7 @@ namespace PoGo.Necrobot.Window
         private void MetroWindow_Closed(object sender, EventArgs e)
         {
             main.Visibility =  Visibility.Visible;
-           // this.Owner.Visibility = Visibility.Visible;
+            // this.Owner.Visibility = Visibility.Visible;
         }
     }
 }
