@@ -245,7 +245,7 @@
                     <Setter Property="Padding" Value="3" />
                 </Style>
             </TabControl.Resources>
-            <TabItem FontSize="14" Name="tabAccounts">
+            <TabItem Name="tabAccounts">
                 <TabItem.Header>
                     <Image x:Name="accountsIMG" Source="Resources/accountsIMG.png" Width="32" RenderTransformOrigin="0.5,0.5" >
                         <Image.RenderTransform>
@@ -337,9 +337,9 @@
 
                 </Grid>
             </TabItem>
-            <TabItem >
+            <TabItem x:Name="tabSniper">
                 <TabItem.Header>
-                    <TextBlock  FontSize="14" Margin="7,5,7,5" Text="{Binding  Source=SniperTabTitle, Converter={StaticResource ResourceKey=I18NConveter}, FallbackValue=MAPS}"/>
+                    <Image x:Name="sniperIMG" Source="Resources/sniperImage.png" Width="32" />
                 </TabItem.Header>
 
                 <local:SniperControl x:Name="ctrlSniper" DataContext="{Binding Path=SnipeList}" />
@@ -347,7 +347,16 @@
 
             <TabItem x:Name="tabConsole" IsSelected="True">
                 <TabItem.Header>
-                    <TextBlock FontSize="14" Text="{Binding Source=ConsoleTabTitle, Converter={StaticResource ResourceKey=I18NConveter}, FallbackValue=Console}"/>
+                    <Image x:Name="consoleImage" Source="Resources/consoleImage.png" Width="32" RenderTransformOrigin="0.5,0.5" >
+                        <Image.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="90.801"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Image.RenderTransform>
+                    </Image>
                 </TabItem.Header>
                 <DockPanel LastChildFill="True">
                     <TextBox HorizontalAlignment="Stretch" 
