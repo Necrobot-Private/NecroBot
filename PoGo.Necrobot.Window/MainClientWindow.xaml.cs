@@ -100,10 +100,11 @@ namespace PoGo.Necrobot.Window
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             LoadHelpArticleAsync();
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            if (datacontext.PlayerInfo.Level == 35) // Warn Player on Reaching this Level
+            if (datacontext.PlayerInfo.Level == 35) // Warn Player on Reaching this Level -- NEEDS CONFIG SETTING
             {
                 NecroBot.Logic.Logging.Logger.Write($"You have reached Level {datacontext.PlayerInfo.Level} and it is recommended to Switch Accounts",LogLevel.Warning);
             }
+            ChangeThemeTo(Settings.Default.Theme);
         }
         private DateTime lastClearLog = DateTime.Now;
         public void LogToConsoleTab(string message, LogLevel level, string color)
@@ -218,6 +219,8 @@ namespace PoGo.Necrobot.Window
         {
             var rad = sender as RadioButton;
             ChangeThemeTo(rad.Content as string);
+            Settings.Default.Theme = rad.Content as string;
+            Settings.Default.Save();
         }
 
         private void TxtCmdInput_KeyDown(object sender, KeyEventArgs e)
