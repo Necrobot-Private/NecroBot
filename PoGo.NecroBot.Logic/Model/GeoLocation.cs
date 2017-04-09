@@ -97,6 +97,7 @@ namespace PoGo.NecroBot.Logic.Model
                     Directory.CreateDirectory(CACHE_DIR);
                 }
 
+                LiteEngine.Upgrade(DB_NAME, null, true);
                 using (var db = new LiteDatabase(DB_NAME))
                 {
                     db.GetCollection<GeoLocation>("locations").EnsureIndex(s => s.Id);

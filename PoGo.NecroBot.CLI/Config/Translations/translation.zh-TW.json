@@ -1609,6 +1609,10 @@
       "Value": "空氣砍"
     },
     {
+      "Key": "AirSlashFast",
+      "Value": "空氣砍"
+    },
+    {
       "Key": "heatWave",
       "Value": "熱風"
     },
@@ -2013,6 +2017,14 @@
       "Value": "龍之吐息"
     },
     {
+      "Key": "dragonTailFast",
+      "Value": "龍尾"
+    },
+    {
+      "Key": "Outrage",
+      "Value": "逆鱗"
+    },
+    {
       "Key": "thunderShockFast",
       "Value": "電擊"
     },
@@ -2158,7 +2170,23 @@
     },
     {
       "Key": "CloseCombat",
-      "Value": "肉搏戰"
+      "Value": "近身戰"
+    },
+    {
+      "Key": "Crunch",
+      "Value": "咬碎"
+    },
+    {
+      "Key": "CounterFast",
+      "Value": "反擊"
+    },
+    {
+      "Key": "NightShade",
+      "Value": "黑夜魔影"
+    },
+    {
+      "Key": "AuroraBeam",
+      "Value": "極光束"
     },
     {
       "Key": "rockSmashFast",
