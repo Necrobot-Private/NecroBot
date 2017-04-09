@@ -245,7 +245,19 @@
                     <Setter Property="Padding" Value="3" />
                 </Style>
             </TabControl.Resources>
-            <TabItem FontSize="14" Name="tabAccounts" Header="{Binding Source=AccountSetting , Converter={StaticResource I18NConveter}}">
+            <TabItem FontSize="14" Name="tabAccounts">
+                <TabItem.Header>
+                    <Image x:Name="accountsIMG" Source="Resources/accountsIMG.png" Width="32" RenderTransformOrigin="0.5,0.5" >
+                        <Image.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="90.43"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Image.RenderTransform>
+                    </Image>
+                </TabItem.Header>
                 <DataGrid Name="gridAccounts" AutoGenerateColumns="False" CanUserDeleteRows="False" CanUserAddRows="False">
                     <DataGrid.Columns>
                         <DataGridTextColumn Binding="{Binding AuthType}" Header="AuthType"></DataGridTextColumn>
@@ -282,15 +294,33 @@
             </TabItem>
             <TabItem Name="tabBrowser">
                 <TabItem.Header>
-                    <TextBlock Margin="7,5,7,5" Text="{Binding  Source=BrowserTabTitle, Converter={StaticResource ResourceKey=I18NConveter}, FallbackValue=Browser}" FontSize="14"/>
+                    <Image x:Name="browserIMG" Source="Resources/hubImage.png" Width="32" RenderTransformOrigin="0.5,0.5" >
+                        <Image.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="89.363"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Image.RenderTransform>
+                    </Image>
                 </TabItem.Header>
                 <Grid Name="browserLayout">
 
                 </Grid>
             </TabItem>
-            <TabItem Name="tabMap" >
+            <TabItem Name="tabMap">
                 <TabItem.Header>
-                    <TextBlock Margin="7,5,7,5" Text="{Binding  Source=MapTabTitle, Converter={StaticResource ResourceKey=I18NConveter}, FallbackValue=MAPS}" FontSize="14"/>
+                    <Image x:Name="mapImage" Source="Resources/mapImage.png" Width="32" RenderTransformOrigin="0.5,0.5" >
+                        <Image.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="89.934"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Image.RenderTransform>
+                    </Image>
                 </TabItem.Header>
                 <Grid>
                     <Grid.ColumnDefinitions>
