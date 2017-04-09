@@ -111,8 +111,7 @@ namespace PoGo.Necrobot.Window.Model
                 var match = Regex.Match(content, p);
                 if (match != null && !string.IsNullOrEmpty(match.Value))
                 {
-                    double x = 0;
-                    double.TryParse(match.Groups[1].Value, out x);
+                    double.TryParse(match.Groups[1].Value, out double x);
                     return x;
                 }
             }

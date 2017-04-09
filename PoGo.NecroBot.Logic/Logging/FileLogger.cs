@@ -74,10 +74,9 @@ namespace PoGo.NecroBot.Logic.Logging
                     Color = Logger.GetHexColor(Console.ForegroundColor)
                 });
 
-                LogEvent logEventToSend;
                 using (StreamWriter sw = File.AppendText(logPath))
                 {
-                    while (_messageQueue.TryDequeue(out logEventToSend))
+                    while (_messageQueue.TryDequeue(out LogEvent logEventToSend))
                     {
                         sw.WriteLine(finalMessage);
                     }

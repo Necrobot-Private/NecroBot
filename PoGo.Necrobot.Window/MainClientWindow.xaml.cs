@@ -7,10 +7,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
+using PoGo.Necrobot.Window.Properties;
 using PoGo.NecroBot.Logic.State;
 using PoGo.Necrobot.Window.Win32;
 using PoGo.Necrobot.Window.Model;
-using PoGo.NecroBot.Logic;
 using PoGo.NecroBot.Logic.Logging;
 using System.Diagnostics;
 using TinyIoC;
@@ -22,6 +22,9 @@ using System.IO;
 using System.Net.Http;
 using DotNetBrowser;
 using DotNetBrowser.WPF;
+using PoGo.NecroBot.Logic;
+using PoGo.NecroBot.Logic.Model.Settings;
+using static PoGo.NecroBot.Logic.MultiAccountManager;
 
 namespace PoGo.Necrobot.Window
 {
@@ -67,7 +70,10 @@ namespace PoGo.Necrobot.Window
 
             DataContext = datacontext;
             txtCmdInput.Text = TinyIoCContainer.Current.Resolve<UITranslation>().InputCommand;
-            InitBrowser();
+            if (Settings.Default.BrowserToggled)
+            {
+                InitBrowser();
+            }
         }
 
         private void InitBrowser()
@@ -94,6 +100,10 @@ namespace PoGo.Necrobot.Window
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             LoadHelpArticleAsync();
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            if (datacontext.PlayerInfo.Level == 35) // Warn Player on Reaching this Level
+            {
+                NecroBot.Logic.Logging.Logger.Write($"You have reached Level {datacontext.PlayerInfo.Level} and it is recommended to Switch Accounts",LogLevel.Warning);
+            }
         }
         private DateTime lastClearLog = DateTime.Now;
         public void LogToConsoleTab(string message, LogLevel level, string color)
@@ -167,7 +177,7 @@ namespace PoGo.Necrobot.Window
 
         private void MenuSetting_Click(object sender, RoutedEventArgs e)
         {
-            var configWindow = new SettingsWindow(this, System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "config\\config.json"));
+            var configWindow = new SettingsWindow(this, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config\\config.json"));
             configWindow.ShowDialog();         
         }
 
@@ -249,7 +259,7 @@ namespace PoGo.Necrobot.Window
         private void BtnSwitchAcount_Click(object sender, RoutedEventArgs e)
         {
             var btn = ((Button)sender);
-            var account = (MultiAccountManager.BotAccount)btn.CommandParameter ;
+            var account = (MultiAccountManager.BotAccount)btn.CommandParameter;
 
             var manager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
 
@@ -304,6 +314,45 @@ namespace PoGo.Necrobot.Window
         {
             if(SystemParameters.PrimaryScreenWidth<1366)
                 WindowState = WindowState.Maximized;
+        }
+
+        private void BrowserToggle_Click(object sender, RoutedEventArgs e)
+        {
+            if (Settings.Default.BrowserToggled)
+            {
+                if (tabBrowser.IsSelected)
+                    tabConsole.IsSelected = true;
+
+                tabBrowser.IsEnabled = false;
+                Settings.Default.BrowserToggled = false;
+                Settings.Default.Save();
+
+                MessageBoxResult msgbox = MessageBox.Show("Would you Like to Restart the to kill browser tasks and free up extra cpu?","Free Up CPU from Browser",MessageBoxButton.YesNo,MessageBoxImage.Question);
+                if (msgbox == MessageBoxResult.Yes)
+                {
+                    Process.Start(Application.ResourceAssembly.Location);
+                    Application.Current.Shutdown();
+                }
+                else
+                { }
+            }
+            else if (!Settings.Default.BrowserToggled)
+            {
+                tabBrowser.IsEnabled = true;
+                Settings.Default.BrowserToggled = true;
+                Settings.Default.Save();
+            }
+        }
+        public void ReInitializeSession(ISession session, GlobalSettings globalSettings, BotAccount requestedAccount = null)
+        {
+            if (session.LogicSettings.MultipleBotConfig.StartFromDefaultLocation)
+            {
+                session.ReInitSessionWithNextBot(requestedAccount, globalSettings.LocationConfig.DefaultLatitude, globalSettings.LocationConfig.DefaultLongitude, session.Client.CurrentAltitude);
+            }
+            else
+            {
+                session.ReInitSessionWithNextBot(); //current location
+            }
         }
 
         private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)

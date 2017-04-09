@@ -64,6 +64,7 @@ namespace PoGo.NecroBot.CLI.Forms
             // 
             this.txtAPIKey.Location = new System.Drawing.Point(12, 115);
             this.txtAPIKey.Name = "txtAPIKey";
+            this.txtAPIKey.Text = "8C5A5T8B9P3A6L1S4K1A";
             this.txtAPIKey.Size = new System.Drawing.Size(228, 20);
             this.txtAPIKey.TabIndex = 2;
             // 
@@ -97,7 +98,7 @@ namespace PoGo.NecroBot.CLI.Forms
             this.radHashServer.Size = new System.Drawing.Size(225, 17);
             this.radHashServer.TabIndex = 5;
             this.radHashServer.TabStop = true;
-            this.radHashServer.Text = $"PogoDev Hash Server API - Latest API {Client.API_VERSION}";
+            this.radHashServer.Text = "PogoDev Hash Server API - Latest API " + Client.API_VERSION;
             this.radHashServer.UseVisualStyleBackColor = true;
             // 
             // label2
