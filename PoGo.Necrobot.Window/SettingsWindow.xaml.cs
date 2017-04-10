@@ -8,6 +8,7 @@ using System.Windows.Data;
 using System.Windows.Media;
 using System.Reflection;
 using System.ComponentModel.DataAnnotations;
+using System.Windows.Controls.Primitives;
 using POGOProtos.Enums;
 using PoGo.NecroBot.Logic.Model.Settings;
 using PoGo.Necrobot.Window.Converters;
@@ -365,7 +366,7 @@ namespace PoGo.Necrobot.Window
                 {
                     ddrop.Items.Add(v.ToString());
                 }
-                BindingOperations.SetBinding(ddrop, System.Windows.Controls.Primitives.Selector.SelectedValueProperty, binding);
+                BindingOperations.SetBinding(ddrop, Selector.SelectedValueProperty, binding);
                 return ddrop;
             }
 
@@ -383,7 +384,7 @@ namespace PoGo.Necrobot.Window
             if (item.PropertyType == typeof(bool))
             {
                 var checkbox = new CheckBox();
-                BindingOperations.SetBinding(checkbox, System.Windows.Controls.Primitives.ToggleButton.IsCheckedProperty, binding);
+                BindingOperations.SetBinding(checkbox, ToggleButton.IsCheckedProperty, binding);
                 return checkbox;
             }
 
