@@ -32,7 +32,7 @@ namespace PoGo.NecroBot.CLI
                 ev.Expires,
                 ev.IV,
                 session
-            );
+            ).ConfigureAwait(false);
         }
 
         public static void HandleEvent(IEvent evt, ISession session)
