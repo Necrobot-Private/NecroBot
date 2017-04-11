@@ -491,7 +491,6 @@ namespace PoGo.Necrobot.Window
         private void MetroWindow_Closed(object sender, EventArgs e)
         {
             main.Visibility =  Visibility.Visible;
-            // this.Owner.Visibility = Visibility.Visible;
         }
     }
 }
