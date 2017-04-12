@@ -49,6 +49,10 @@
                             <Image  Source="https://raw.githubusercontent.com/Necrobot-Private/PokemonGO-Assets/master/items-icons/3.png" Width="25"></Image>
                             <TextBlock Margin="3,5,0,0" Text="{Binding Path=UltraBalls, StringFormat={}x{0}}"></TextBlock>
                         </StackPanel>
+                        <StackPanel  Visibility="{Binding Path=MasterBalls, Converter={ StaticResource CollapseWhenGreateThenZeroConverter}}" Orientation="Horizontal">
+                            <Image  Source="https://raw.githubusercontent.com/Necrobot-Private/PokemonGO-Assets/master/items-icons/4.png" Width="25"></Image>
+                            <TextBlock Margin="3,5,0,0" Text="{Binding Path=MasterBalls, StringFormat={}x{0}}"></TextBlock>
+                        </StackPanel>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Visibility="{Binding Exp, Converter={ StaticResource CollapseWhenGreateThenZeroConverter}}">
