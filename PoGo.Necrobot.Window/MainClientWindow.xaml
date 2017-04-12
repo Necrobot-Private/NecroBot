@@ -311,7 +311,7 @@
             </TabItem>
             <TabItem Name="tabMap">
                 <TabItem.Header>
-                    <Image x:Name="mapImage" Source="Resources/mapImage.png" Width="32" RenderTransformOrigin="0.5,0.5" >
+                    <Image x:Name="mapImage" Source="Resources/mapImage.png" Width="32" RenderTransformOrigin="0.5,0.5" Height="32" >
                         <Image.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform/>
