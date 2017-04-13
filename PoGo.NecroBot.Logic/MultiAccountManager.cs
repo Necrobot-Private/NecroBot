@@ -70,17 +70,18 @@ namespace PoGo.NecroBot.Logic
 
             public string GetRuntime()
             {
-                int day = (int)RuntimeTotal / 1440;
-                int hour = (int)(RuntimeTotal - (day * 1400)) / 60;
-                int min = (int)(RuntimeTotal - (day * 1400) - hour * 60);
-                return $"{day:00}:{hour:00}:{min:00}:00";
+                var seconds = (int)((double)RuntimeTotal * 60);
+                var duration = new TimeSpan(0, 0, seconds);
+
+                return duration.ToString(@"dd\:hh\:mm\:ss");
             }
         }
-        public List<BotAccount> Accounts { get; set; }
+		public List<BotAccount> Accounts { get; set; }
         public object Settings { get; private set; }
-
-        public MultiAccountManager(List<AuthConfig> accounts)
+        private GlobalSettings _globalSettings { get; set; }
+        public MultiAccountManager(GlobalSettings globalSettings, List<AuthConfig> accounts)
         {
+            _globalSettings = globalSettings;
             MigrateDatabase();
             LoadDataFromDB();
             SyncDatabase(accounts);
@@ -88,10 +89,45 @@ namespace PoGo.NecroBot.Logic
 
         public BotAccount GetCurrentAccount()
         {
+            return Accounts.FirstOrDefault(x => x.IsRunning == true);
+        }
+
+        public void SwitchAccounts(BotAccount newAccount)
+        {
+            if (newAccount == null)
+                return;
+            
+            var runningAccount = GetCurrentAccount();
+            if (runningAccount != null)
+            {
+                runningAccount.IsRunning = false;
+                var now = DateTime.Now;
+                runningAccount.RuntimeTotal += (now - runningAccount.LastRuntimeUpdatedAt).TotalMinutes;
+                runningAccount.LastRuntimeUpdatedAt = now;
+                UpdateDatabase(runningAccount);
+            }
+
+            newAccount.IsRunning = true;
+            newAccount.LoggedTime = DateTime.Now;
+            newAccount.LastRuntimeUpdatedAt = newAccount.LoggedTime;
+            UpdateDatabase(newAccount);
+
+            // Update current auth config with new account.
+            _globalSettings.Auth.CurrentAuthConfig = newAccount;
+
+            string body = "";
+            foreach (var item in Accounts)
+            {
+                body = body + $"{item.Username}     {item.GetRuntime()}\r\n";
+            }
+
             var session = TinyIoCContainer.Current.Resolve<ISession>();
-            var currentAccount = Accounts.FirstOrDefault(
-                x => x.AuthType == session.Settings.AuthType && x.Username == session.Settings.Username);
-            return currentAccount;
+
+            Logging.Logger.Write($"Account changed to {newAccount.Username}.");
+
+#pragma warning disable 4014 // added to get rid of compiler warning. Remove this if async code is used below.
+            SendNotification(session, $"Account changed to {newAccount.Username}", body);
+#pragma warning restore 4014
         }
 
         public void BlockCurrentBot(int expired = 60)
@@ -111,12 +147,16 @@ namespace PoGo.NecroBot.Logic
             using (var db = new LiteDatabase(ACCOUNT_DB_NAME))
             {
                 var accountdb = db.GetCollection<BotAccount>("accounts");
+                accountdb.EnsureIndex(x => x.Username, true);
+                accountdb.EnsureIndex(x => x.IsRunning, false);
 
-                Accounts = accountdb.FindAll().ToList();
-
+				Accounts = accountdb.FindAll().ToList();
+				
                 foreach (var item in Accounts)
                 {
                     item.IsRunning = false;
+                    item.RuntimeTotal = 0;
+                    UpdateDatabase(item);
                 }
             }
         }
@@ -152,39 +192,7 @@ namespace PoGo.NecroBot.Logic
                     case 19:
                         // Just delete the accounts.db so it gets regenerated from scratch.
                         File.Delete("accounts.db");
-                        /*
-                        using (var db = new LiteDatabase(ACCOUNT_DB_NAME))
-                        {
-                            var accountdb = db.GetCollection<BotAccount>("accounts");
-                            var accounts = accountdb.FindAll().ToList();
-
-                            foreach (var item in accounts)
-                            {
-                                if (item.AuthType == PokemonGo.RocketAPI.Enums.AuthType.Google)
-                                {
-                                    if (!string.IsNullOrEmpty(item.GoogleUsername))
-                                        item.Username = item.GoogleUsername;
-                                    if (!string.IsNullOrEmpty(item.GooglePassword))
-                                        item.Password = item.GooglePassword;
-                                }
-                                else
-                                {
-                                    if (!string.IsNullOrEmpty(item.PtcUsername))
-                                        item.Username = item.PtcUsername;
-
-                                    if (!string.IsNullOrEmpty(item.PtcPassword))
-                                        item.Password = item.PtcPassword;
-                                }
-
-                                item.GoogleUsername = null;
-                                item.GooglePassword = null;
-                                item.PtcUsername = null;
-                                item.PtcPassword = null;
-
-                                UpdateDatabase(item);
-                            }
-                        }
-                        */
+                        
                         break;
                 }
             }
@@ -222,7 +230,7 @@ namespace PoGo.NecroBot.Logic
                         // Update credentials in database using values from json.
                         existing.Username = item.Username;
                         existing.Password = item.Password;
-                        accountdb.Update(existing);
+                        UpdateDatabase(existing);
                     }
                 }
 
@@ -258,14 +266,15 @@ namespace PoGo.NecroBot.Logic
         public BotAccount GetStartUpAccount()
         {
             ISession session = TinyIoCContainer.Current.Resolve<ISession>();
+            BotAccount startupAccount;
 
             if (!AllowMultipleBot())
             {
-                runningAccount = Accounts.Last();
+                startupAccount = Accounts.Last();
             }
             else
             {
-                runningAccount = GetMinRuntime(true);
+                startupAccount = GetMinRuntime(true);
             }
 
             if (AllowMultipleBot()
@@ -273,10 +282,9 @@ namespace PoGo.NecroBot.Logic
             {
                 SelectAccountForm f = new SelectAccountForm();
                 f.ShowDialog();
-                runningAccount  = f.SelectedAccount;
+                startupAccount = f.SelectedAccount;
             }
-            runningAccount.LoggedTime = DateTime.Now;
-            return runningAccount;
+            return startupAccount;
         }
 
         private DateTime disableSwitchTime = DateTime.MinValue;
@@ -290,91 +298,39 @@ namespace PoGo.NecroBot.Logic
             return disableSwitchTime < DateTime.Now;
         }
 
-        public BotAccount GetSwitchableAccount(BotAccount bot = null)
+        public BotAccount GetSwitchableAccount(BotAccount bot = null, bool pauseIfNoSwitchableAccount = true)
         {
             ISession session = TinyIoCContainer.Current.Resolve<ISession>();
             var currentAccount = GetCurrentAccount();
-            
-            if (currentAccount != null)
-            {
-                Logic.Logging.Logger.Debug($"Current account {currentAccount.Username}");
-                currentAccount.IsRunning = false;
-                currentAccount.RuntimeTotal += (DateTime.Now - currentAccount.LoggedTime).TotalMinutes;
-                
-                UpdateDatabase(currentAccount);
-            }
 
+            // If the bot to switch to is the same as the current bot then just return.
+            if (bot == currentAccount)
+                return bot;
+            
             if (bot != null)
+                return bot;
+
+            using (var db = new LiteDatabase(ACCOUNT_DB_NAME))
             {
-                runningAccount = bot;
-                Logging.Logger.Write($"Switching to {runningAccount.Username}...");
+                var accountdb = db.GetCollection<BotAccount>("accounts");
+                
+                var runnableAccount = Accounts.OrderByDescending(p => p.RuntimeTotal).LastOrDefault(p => p != currentAccount && p.ReleaseBlockTime < DateTime.Now);
 
-                string body = "";
-                foreach (var item in Accounts)
-                {
-                    int day = (int)item.RuntimeTotal / 1440;
-                    int hour = (int)(item.RuntimeTotal - (day * 1400)) / 60;
-                    int min = (int)(item.RuntimeTotal - (day * 1400) - hour * 60);
-                    body = body + $"{item.GoogleUsername}{item.PtcUsername}     {item.GetRuntime()}\r\n";
-                }
+                if (runnableAccount != null)
+                    return runnableAccount;
 
+                if (!pauseIfNoSwitchableAccount)
+                    return null;
+
+                // If we got here all accounts blocked so pause and retry.
+                var pauseTime = session.LogicSettings.MultipleBotConfig.OnLimitPauseTimes;
 #pragma warning disable 4014 // added to get rid of compiler warning. Remove this if async code is used below.
-                SendNotification(session, $"Account changed to {runningAccount.Username}", body);
-#pragma warning restore 4014
-            }
-            else {
-
-                Accounts = Accounts.OrderByDescending(p => p.RuntimeTotal).ToList();
-                var first = Accounts.First();
-                if (first.RuntimeTotal >= 100000)
-                {
-                    first.RuntimeTotal = Accounts.Min(p => p.RuntimeTotal);
-                }
-
-                runningAccount = Accounts.LastOrDefault(p => p != currentAccount && p.ReleaseBlockTime < DateTime.Now);
-                if (runningAccount != null)
-                {
-                    Logging.Logger.Write($"Switching to {runningAccount.Username}...");
-
-                    string body = "";
-                    foreach (var item in Accounts)
-                    {
-                        int day = (int)item.RuntimeTotal / 1440;
-                        int hour = (int)(item.RuntimeTotal - (day * 1400)) / 60;
-                        int min = (int)(item.RuntimeTotal - (day * 1400) - hour * 60);
-                        body = body + $"{item.GoogleUsername}{item.PtcUsername}     {item.GetRuntime()}\r\n";
-                    }
-
-#pragma warning disable 4014 // added to get rid of compiler warning. Remove this if async code is used below.
-                    SendNotification(session, $"Account changed to {runningAccount.Username}", body);
-#pragma warning restore 4014
-                    //DumpAccountList();
-
-                }
-                else
-                {
-
-                    var pauseTime = session.LogicSettings.MultipleBotConfig.OnLimitPauseTimes;
-#pragma warning disable 4014 // added to get rid of compiler warning. Remove this if async code is used below.
-                    SendNotification(session, "All accounts are being blocked", $"None of yours account available to switch, bot will sleep for {pauseTime} mins until next acount available to run", true);
+                SendNotification(session, "All accounts are blocked.", $"None of your accounts are available to switch to, so bot will sleep for {pauseTime} minutes until next account is available to run.", true);
 #pragma warning restore 4014
 
-                    Task.Delay(pauseTime * 60 * 1000).Wait();
-                    return GetSwitchableAccount();
-                }
+                Task.Delay(pauseTime * 60 * 1000).Wait();
+                return GetSwitchableAccount();
             }
-            //overkill
-            foreach (var item in Accounts)
-            {
-                item.IsRunning = false;
-                UpdateDatabase(item);
-            }
-            runningAccount.IsRunning = true;
-            runningAccount.LoggedTime = DateTime.Now;
-            
-            UpdateDatabase(runningAccount);
-
-            return runningAccount;
         }
 
         private bool switchAccountRequest = false;
@@ -394,7 +350,6 @@ namespace PoGo.NecroBot.Logic
         }
 
         private BotAccount requestedAccount = null;
-        private BotAccount runningAccount;
         public void UpdateDatabase(BotAccount current)
         {
             current.RaisePropertyChanged("Nickname");
@@ -403,6 +358,12 @@ namespace PoGo.NecroBot.Logic
             current.RaisePropertyChanged("Level");
             current.RaisePropertyChanged("LastLogin");
             current.RaisePropertyChanged("LastLoginTimestamp");
+            current.RaisePropertyChanged("Level");
+            current.RaisePropertyChanged("Stardust");
+            current.RaisePropertyChanged("CurrentXp");
+            current.RaisePropertyChanged("NextLevelXp");
+            current.RaisePropertyChanged("PrevLevelXp");
+            current.RaisePropertyChanged("ExperienceInfo");
 
             using (var db = new LiteDatabase(ACCOUNT_DB_NAME))
             {
@@ -410,26 +371,7 @@ namespace PoGo.NecroBot.Logic
                 accountdb.Update(current);
             }
         }
-
-        // This should be called whenever the inventory is updated (e.g. client.Inventory.OnInventoryUpdated)
-        public async Task UpdateCurrentAccountLevel()
-        {
-            ISession session = TinyIoCContainer.Current.Resolve<ISession>();
-            var playerStats = (await session.Inventory.GetPlayerStats().ConfigureAwait(false)).FirstOrDefault();
-            if (playerStats != null)
-            {
-                var currentAccount = GetCurrentAccount();
-                if (currentAccount != null)
-                {
-                    if (currentAccount.Level != playerStats.Level)
-                    {
-                        currentAccount.Level = playerStats.Level;
-                        UpdateDatabase(currentAccount);
-                    }
-                }
-            }
-        }
-
+        
         public void DumpAccountList()
         {
             foreach (var item in Accounts)
@@ -446,28 +388,20 @@ namespace PoGo.NecroBot.Logic
             ISession session = TinyIoCContainer.Current.Resolve<ISession>();
 
             //set current 
-            foreach (var bot in Accounts.OrderByDescending(p => p.RuntimeTotal))
+            BotAccount switchableAccount = GetSwitchableAccount(null, false); // Don't pause if no switchable account is available.
+            if (switchableAccount != null)
             {
-                if (bot.ReleaseBlockTime > DateTime.Now) continue;
-                var key = bot.Username;
-                key += encounterId;
+                var key = switchableAccount.Username + encounterId;
                 if (session.Cache.GetCacheItem(key) == null)
                 {
                     // Don't edit the running account until we actually switch.  Just return the pending account.
-                    return bot;
+                    return switchableAccount;
                 }
             }
-
+            
             return null;
         }
-
-        internal void Logged(GetPlayerResponse playerResponse, IEnumerable<PlayerStats> playerStats)
-        {
-            runningAccount.LoggedTime = DateTime.Now;
-            runningAccount.Level = playerStats.FirstOrDefault().Level;
-            UpdateDatabase(runningAccount);
-        }
-
+        
         internal void DirtyEventHandle(Statistics stat)
         {
             var account = GetCurrentAccount();
@@ -479,13 +413,11 @@ namespace PoGo.NecroBot.Logic
             account.CurrentXp = stat.StatsExport.CurrentXp;
             account.NextLevelXp = stat.StatsExport.LevelupXp;
             account.PrevLevelXp = stat.StatsExport.PreviousXp;
-            
-            account.RaisePropertyChanged("Level");
-            account.RaisePropertyChanged("Stardust");
-            account.RaisePropertyChanged("CurrentXp");
-            account.RaisePropertyChanged("NextLevelXp");
-            account.RaisePropertyChanged("PrevLevelXp");
-            account.RaisePropertyChanged("ExperienceInfo");
+            var now = DateTime.Now;
+            account.RuntimeTotal += (now - account.LastRuntimeUpdatedAt).TotalMinutes;
+            account.LastRuntimeUpdatedAt = now;
+
+            UpdateDatabase(account);
         }
     }
 }

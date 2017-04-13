@@ -69,14 +69,10 @@ namespace PoGo.NecroBot.Logic
             _client = client;
             _logicSettings = logicSettings;
             // Inventory update will be called everytime GetMapObject is called.
-            client.Inventory.OnInventoryUpdated += async () =>
+            client.Inventory.OnInventoryUpdated += () =>
             {
                 if (onUpdated != null && _player != null)
                 {
-                    var accManager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
-                    if (accManager != null)
-                        await accManager.UpdateCurrentAccountLevel().ConfigureAwait(false);
-
                     onUpdated();
                 }
             };

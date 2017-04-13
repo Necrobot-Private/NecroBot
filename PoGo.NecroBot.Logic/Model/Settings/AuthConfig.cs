@@ -58,8 +58,12 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Ignore, Order = 7)]
         public string PtcPassword { get; set; }
 
+        // Total runtime since client started
         [JsonIgnore]
         public double RuntimeTotal { get; set; }
+        
+        [JsonIgnore]
+        public DateTime LastRuntimeUpdatedAt { get; set; }
 
         [JsonIgnore]
         public DateTime ReleaseBlockTime { get; set; }
