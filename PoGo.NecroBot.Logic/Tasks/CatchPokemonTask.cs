@@ -342,7 +342,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                         if (totalBalls <= BALL_REQUIRED_TO_BYPASS_CATCHFLEE)
                         {
-                            Logger.Write("You don't enought ball to  by pass catchflee");
+                            Logger.Write("You don't have enough balls to bypass catchflee");
                             return false;
                         }
                         List<ItemId> ballToByPass = new List<ItemId>();
@@ -430,14 +430,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                         evt.Shiny = (await session.Inventory.GetPokemons().ConfigureAwait(false)).First(x => x.Id == caughtPokemonResponse.CapturedPokemonId).PokemonDisplay.Shiny ? "Yes" : "No";
                         evt.Gender = (await session.Inventory.GetPokemons().ConfigureAwait(false)).First(x => x.Id == caughtPokemonResponse.CapturedPokemonId).PokemonDisplay.Gender.ToString();
-                        if (session.LogicSettings.AutoFavoriteShinyOnCatch)
-                        {
-                            if (evt.Shiny == "Yes")
-                            {
-                                await FavoritePokemonTask.Execute(session, encounteredPokemon.Id, true);
-                                Logger.Write($"Shiny Pokemon {encounteredPokemon.Id} has been Caught and auto-favorited.");
-                            }
-                        }
+                        
                         var totalExp = 0;
                         var totalStarDust = caughtPokemonResponse.CaptureAward.Stardust.Sum();
                         if (encounteredPokemon != null)
@@ -454,6 +447,15 @@ namespace PoGo.NecroBot.Logic.Tasks
                         evt.Stardust = stardust;
                         evt.UniqueId = caughtPokemonResponse.CapturedPokemonId;
                         evt.Candy = await session.Inventory.GetCandyFamily(pokemon.PokemonId).ConfigureAwait(false);
+
+                        if (session.LogicSettings.AutoFavoriteShinyOnCatch)
+                        {
+                            if (evt.Shiny == "Yes")
+                            {
+                                await FavoritePokemonTask.Execute(session, encounteredPokemon.Id, true);
+                                Logger.Write($"Shiny Pokemon {encounteredPokemon.Id} has been Caught and auto-favorited.");
+                            }
+                        }
                     }
 
                     if (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess ||
