@@ -155,10 +155,8 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 allAcc.Add(new AuthConfig()
                 {
                     AuthType = isGoogle ? AuthType.Google : AuthType.Ptc,
-                    GoogleUsername = isGoogle ? string.Format(template, i) : null,
-                    GooglePassword = isGoogle ? password : null,
-                    PtcUsername = !isGoogle ? string.Format(template, i) : null,
-                    PtcPassword = !isGoogle ? password : null,
+                    Username = string.Format(template, i),
+                    Password = password
                 });
             }
 

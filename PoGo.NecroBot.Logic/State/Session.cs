@@ -196,8 +196,8 @@ namespace PoGo.NecroBot.Logic.State
             var manager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
 
             var nextBot = manager.GetSwitchableAccount(bot);
-
-            GlobalSettings.Auth.CurrentAuthConfig = nextBot;
+            if (nextBot != null)
+                manager.SwitchAccounts(nextBot);
 
             Settings.DefaultAltitude = att == 0 ? Client.CurrentAltitude : att;
             Settings.DefaultLatitude = lat == 0 ? Client.CurrentLatitude : lat;
