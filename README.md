@@ -2,7 +2,7 @@
 [![Github All Releases](https://img.shields.io/github/downloads/Necrobot-Private/NecroBot/total.svg?maxAge=258)](https://github.com/Necrobot-Private/NecroBot/releases)
 [![GitHub license](https://img.shields.io/badge/license-AGPL-blue.svg)](https://raw.githubusercontent.com/Necrobot-Private/NecroBot/master/LICENSE.md)
 <br />
-[![Download Latest Version](https://api.bintray.com/packages/necrobot-private/NecroBot2/NecroBot/images/download.svg?version=1.0.0.153) ](https://bintray.com/necrobot-private/NecroBot2/NecroBot/1.0.0.153/link)
+[![Download Latest Version](https://api.bintray.com/packages/necrobot-private/NecroBot2/NecroBot/images/download.svg?version=1.0.0.154) ](https://github.com/Necrobot-Private/NecroBot/releases/tag/v1.0.0.154)
 
 <h1>Necrobot2 is now compatible with 0.61.0 API.</h1>
 

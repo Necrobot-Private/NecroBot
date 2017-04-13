@@ -6,16 +6,15 @@ namespace PoGo.Necrobot.Window.Converters
 {
     public class DurationTextConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object minutes, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null)
+            if (minutes == null)
                 return null;
 
-            var duration = (double)value;
-            int day = (int)duration / 1440;
-            int hour = (int)(duration - (day * 1400)) / 60;
-            int min = (int)(duration - (day * 1400) - hour * 60);
-            return $"{day:00}:{hour:00}:{min:00}:00";
+            var seconds = (int)((double)minutes * 60);
+            var duration = new TimeSpan(0, 0, seconds);
+
+            return duration.ToString(@"dd\:hh\:mm\:ss");
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
