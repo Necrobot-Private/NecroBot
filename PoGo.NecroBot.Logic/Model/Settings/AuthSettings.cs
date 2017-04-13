@@ -35,10 +35,6 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonIgnore]
         private string _filePath;
 
-        // Deprecated and will be removed in future release.
-        [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Ignore, Order = 1)]
-        public AuthConfig AuthConfig = null;
-
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Ignore, Order = 1)]
         public List<AuthConfig> Bots = new List<AuthConfig>();
 
