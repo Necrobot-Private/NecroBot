@@ -754,7 +754,7 @@ namespace PoGo.NecroBot.Logic.Common
                 new KeyValuePair<TranslationString, string>(TranslationString.Only10kmEggs,
                     "Player below level 20, saving this 10 km Egg for later"),
                 new KeyValuePair<TranslationString, string>(TranslationString.AutoSnipeDisabled,
-                    "Your are out of ball because snipe so fast, you can reduce snipe speed by update MinIVForAutoSnipe or SnipePokemonFilters, Auto snipe will be disable in {0} mins"),
+                    "Your are out of PokeBalls because of sniping pretty fast, you can reduce sniping speed by updating MinIVForAutoSnipe or SnipePokemonFilters, Auto snipe will be disabled in {0} mins"),
                 new KeyValuePair<TranslationString, string>(TranslationString.SniperCount, "Sniper count {0}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.SnipeExceeds,
                     "Sniper needs to take a rest before your account is banned"),
