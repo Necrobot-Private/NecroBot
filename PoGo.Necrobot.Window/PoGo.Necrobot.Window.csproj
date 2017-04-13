@@ -564,6 +564,11 @@
     <None Include="Resources\ajax-loader.gif" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\consoleImage.png" />
+    <Resource Include="Resources\sniperImage.png" />
+    <Resource Include="Resources\accountsIMG.png" />
+    <Resource Include="Resources\hubImage.png" />
+    <Resource Include="Resources\mapImage.png" />
     <EmbeddedResource Include="Resources\teamdev.licenses" />
     <Resource Include="Resources\Fonts\Lato\SIL Open Font License.txt" />
     <Resource Include="Controls\MapMarkers\images\location.png" />
