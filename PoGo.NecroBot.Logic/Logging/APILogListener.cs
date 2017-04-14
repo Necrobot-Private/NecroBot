@@ -12,13 +12,14 @@ namespace PoGo.NecroBot.Logic.Logging
         DateTime lastVerboseLog = DateTime.Now;
         public void HashStatusUpdate(HashInfo info)
         {
+            DateTime expired = Convert.ToDateTime(info.Expired);
             ISession session = TinyIoCContainer.Current.Resolve<ISession>();
             if (session.Settings.DisplayVerboseLog && lastVerboseLog< DateTime.Now.AddSeconds(-60))
             {
                 lastVerboseLog = DateTime.Now;
-                Logger.Write($"(HASH SERVER) Key[{info.MaskedAPIKey}] Last 1 minute  {info.Last60MinAPICalles} request/min , AVG: {info.Last60MinAPIAvgTime:0.00} ms/request , Fastest : {info.Fastest}, Slowest: {info.Slowest}, Available {info.HealthyRate:0.00%}", LogLevel.Info, ConsoleColor.White);
+                Logger.Write($"(HASH SERVER) Key[{info.MaskedAPIKey}] Last Minute:  {info.Last60MinAPICalles} RPM , AVG: {info.Last60MinAPIAvgTime:0.00} MS, Fastest: {info.Fastest}, Slowest: {info.Slowest}, Available: {info.HealthyRate:0.00%}, Expires: {expired.ToString("MM/dd/yyyy")} @ {expired.ToString("HH:mm:ss tt")}", LogLevel.Info, ConsoleColor.White);
             }
-            session.EventDispatcher.Send(new StatusBarEvent($"[{info.MaskedAPIKey}] - {info.Last60MinAPICalles} request/min , AVG: {info.Last60MinAPIAvgTime:0.00} ms/request , Fastest : {info.Fastest}, Slowest: {info.Slowest}, Available {info.HealthyRate:0.00%}"));
+            session.EventDispatcher.Send(new StatusBarEvent($"[{info.MaskedAPIKey}] - {info.Last60MinAPICalles} RPM, AVG: {info.Last60MinAPIAvgTime:0.00} MS, Fastest: {info.Fastest}, Slowest: {info.Slowest}, Available {info.HealthyRate:0.00%}, Expires: {expired.ToString("MM/dd/yyyy")} @ {expired.ToString("HH:mm:ss tt")}"));
         }
 
         public void LogCritical(string message, dynamic data)

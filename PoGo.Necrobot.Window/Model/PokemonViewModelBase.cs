@@ -15,7 +15,7 @@ namespace PoGo.Necrobot.Window.Model
         {
             get
             {
-                return $"https://raw.githubusercontent.com/Necrobot-Private/PokemonGO-Assets/master/pokemon/{(int)PokemonId:000}.png";
+                return $"https://raw.githubusercontent.com/Necrobot-Private/PokemonGO-Assets/master/pokemon/{(int)PokemonId}.png";
             }
         }
 
