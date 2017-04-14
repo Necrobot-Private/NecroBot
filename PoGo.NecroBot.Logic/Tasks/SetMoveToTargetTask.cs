@@ -63,7 +63,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 Latitude = data.Latitude,
                 Longitude = data.Longitude,
-                Name = "Your selected location"
+                Name = "Your selected location",
+                Type = FortType.Checkpoint
             };
         }
 
