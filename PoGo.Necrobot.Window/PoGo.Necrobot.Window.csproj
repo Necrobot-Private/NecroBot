@@ -566,19 +566,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\teamdev.licenses" />
     <Resource Include="Resources\Fonts\Lato\SIL Open Font License.txt" />
-    <Resource Include="Controls\MapMarkers\images\location.png" />
-    <Resource Include="Controls\MapMarkers\images\Lured.png" />
-    <Resource Include="Controls\MapMarkers\images\Normal.png" />
-    <Resource Include="Controls\MapMarkers\images\Visited.png" />
-    <Resource Include="Controls\MapMarkers\images\VisitedLure.png" />
-    <Resource Include="Controls\MapMarkers\images\team-Instinct.png" />
-    <Resource Include="Controls\MapMarkers\images\team-mystic.png" />
-    <Resource Include="Controls\MapMarkers\images\team-unoccupied.png" />
-    <Resource Include="Controls\MapMarkers\images\team-valor.png" />
-    <Resource Include="Controls\MapMarkers\images\gym-instinct.png" />
-    <Resource Include="Controls\MapMarkers\images\gym-mystic.png" />
-    <Resource Include="Controls\MapMarkers\images\gym-unoccupied.png" />
-    <Resource Include="Controls\MapMarkers\images\gym-valor.png" />
     <Content Include="Effects\GrayscaleEffect.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
