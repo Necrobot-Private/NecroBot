@@ -70,9 +70,16 @@ namespace PoGo.Necrobot.Window
 
             DataContext = datacontext;
             txtCmdInput.Text = TinyIoCContainer.Current.Resolve<UITranslation>().InputCommand;
+            var translator = TinyIoCContainer.Current.Resolve<UITranslation>();
+
             if (Settings.Default.BrowserToggled)
             {
                 InitBrowser();
+                browserMenuText.Text = translator.DisableHub;
+            }
+            else if (!Settings.Default.BrowserToggled)
+            {
+                browserMenuText.Text = translator.EnableHub;
             }
         }
 
@@ -170,7 +177,6 @@ namespace PoGo.Necrobot.Window
             {
                 consoleMenuText.Text = translator.HideConsole;
                 ConsoleHelper.ShowConsoleWindow();
-
             }
 
             isConsoleShowing = !isConsoleShowing;
@@ -321,16 +327,19 @@ namespace PoGo.Necrobot.Window
 
         private void BrowserToggle_Click(object sender, RoutedEventArgs e)
         {
+            var translator = TinyIoCContainer.Current.Resolve<UITranslation>();
+
             if (Settings.Default.BrowserToggled)
             {
                 if (tabBrowser.IsSelected)
                     tabConsole.IsSelected = true;
 
                 tabBrowser.IsEnabled = false;
+                browserMenuText.Text = translator.EnableHub;
                 Settings.Default.BrowserToggled = false;
                 Settings.Default.Save();
 
-                MessageBoxResult msgbox = MessageBox.Show("Would you Like to Restart the to kill browser tasks and free up extra cpu?","Free Up CPU from Browser",MessageBoxButton.YesNo,MessageBoxImage.Question);
+                MessageBoxResult msgbox = MessageBox.Show("Would you Like to Restart to kill unneccesary browser tasks and free up extra cpu?","Free Up CPU",MessageBoxButton.YesNo,MessageBoxImage.Question);
                 if (msgbox == MessageBoxResult.Yes)
                 {
                     Process.Start(Application.ResourceAssembly.Location);
@@ -342,6 +351,7 @@ namespace PoGo.Necrobot.Window
             else if (!Settings.Default.BrowserToggled)
             {
                 tabBrowser.IsEnabled = true;
+                browserMenuText.Text = translator.DisableHub;
                 Settings.Default.BrowserToggled = true;
                 Settings.Default.Save();
             }

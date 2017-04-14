@@ -38,17 +38,20 @@
 
                     <StackPanel  Orientation="Horizontal">
                         <StackPanel  Visibility="{Binding PokeBalls, Converter={ StaticResource CollapseWhenGreateThenZeroConverter}}" Orientation="Horizontal">
-                            <Image  Source="https://raw.githubusercontent.com/Superviral/Pokemon-GO-App-Assets-and-Images/master/App%20Converted%20Images/pokeball_store.png" Width="25"></Image>
+                            <Image  Source="https://raw.githubusercontent.com/Necrobot-Private/PokemonGO-Assets/master/items/1.png" Width="25"></Image>
                             <TextBlock Margin="3,5,0,0" Text="{Binding PokeBalls, StringFormat={}x{0}}"></TextBlock>
                         </StackPanel>
                         <StackPanel  Visibility="{Binding   Path=GreatBalls, Converter={ StaticResource CollapseWhenGreateThenZeroConverter}}" Orientation="Horizontal">
-                            <Image  Source="http://i.imgur.com/ZP3DlMs.png" Width="25"></Image>
+                            <Image  Source="https://raw.githubusercontent.com/Necrobot-Private/PokemonGO-Assets/master/items/2.png" Width="25"></Image>
                             <TextBlock Margin="3,5,0,0" Text="{Binding GreatBalls, StringFormat={}x{0}}"></TextBlock>
                         </StackPanel>
                         <StackPanel  Visibility="{Binding Path=UltraBalls, Converter={ StaticResource CollapseWhenGreateThenZeroConverter}}" Orientation="Horizontal">
-
-                            <Image  Source="http://i.imgur.com/nGsWvcR.png" Width="25"></Image>
+                            <Image  Source="https://raw.githubusercontent.com/Necrobot-Private/PokemonGO-Assets/master/items/3.png" Width="25"></Image>
                             <TextBlock Margin="3,5,0,0" Text="{Binding Path=UltraBalls, StringFormat={}x{0}}"></TextBlock>
+                        </StackPanel>
+                        <StackPanel  Visibility="{Binding Path=MasterBalls, Converter={ StaticResource CollapseWhenGreateThenZeroConverter}}" Orientation="Horizontal">
+                            <Image  Source="https://raw.githubusercontent.com/Necrobot-Private/PokemonGO-Assets/master/items/4.png" Width="25"></Image>
+                            <TextBlock Margin="3,5,0,0" Text="{Binding Path=MasterBalls, StringFormat={}x{0}}"></TextBlock>
                         </StackPanel>
                     </StackPanel>
 

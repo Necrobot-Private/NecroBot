@@ -17,9 +17,9 @@ namespace PoGo.Necrobot.Window.Model
         public int CP { get; set; }
 
         public int PokeBalls { get; set; }
-
         public int GreatBalls { get; set; }
         public int UltraBalls { get; set; }
+        public int MasterBalls { get; set; }
         public double Probability { get;  set; }
         public string Move1 { get;  set; }
         public string Move2 { get;  set; }
