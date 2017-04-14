@@ -132,7 +132,13 @@
 
                 </StackPanel>
             </Button>
-            <Button x:Name="BrowserToggle" Content="Toggle Browser" Click="BrowserToggle_Click" FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato Medium" />
+            <Button x:Name="BrowserToggle" Click="BrowserToggle_Click">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Margin="4 0 0 0" Name="browserMenuText"
+                               VerticalAlignment="Center"
+                               Text="{Binding Source=EnableHub, Converter={StaticResource ResourceKey=I18NConveter}}" />
+                </StackPanel>
+            </Button>
             <Button x:Name="menuConsole" Click="MenuConsole_Click">
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="20"
