@@ -150,7 +150,7 @@ namespace PoGo.NecroBot.Logic
                 accountdb.EnsureIndex(x => x.Username, true);
                 accountdb.EnsureIndex(x => x.IsRunning, false);
 
-				Accounts = accountdb.FindAll().ToList();
+				Accounts = accountdb.FindAll().OrderBy(p => p.Id).ToList();
 				
                 foreach (var item in Accounts)
                 {
@@ -314,7 +314,7 @@ namespace PoGo.NecroBot.Logic
             {
                 var accountdb = db.GetCollection<BotAccount>("accounts");
                 
-                var runnableAccount = Accounts.OrderByDescending(p => p.RuntimeTotal).LastOrDefault(p => p != currentAccount && p.ReleaseBlockTime < DateTime.Now);
+                var runnableAccount = Accounts.OrderByDescending(p => p.RuntimeTotal).ThenBy(p => p.Id).LastOrDefault(p => p != currentAccount && p.ReleaseBlockTime < DateTime.Now);
 
                 if (runnableAccount != null)
                     return runnableAccount;
