@@ -70,9 +70,16 @@ namespace PoGo.Necrobot.Window
 
             DataContext = datacontext;
             txtCmdInput.Text = TinyIoCContainer.Current.Resolve<UITranslation>().InputCommand;
+            var translator = TinyIoCContainer.Current.Resolve<UITranslation>();
+
             if (Settings.Default.BrowserToggled)
             {
                 InitBrowser();
+                browserMenuText.Text = translator.DisableHub;
+            }
+            else if (!Settings.Default.BrowserToggled)
+            {
+                browserMenuText.Text = translator.EnableHub;
             }
         }
 
@@ -328,7 +335,7 @@ namespace PoGo.Necrobot.Window
                     tabConsole.IsSelected = true;
 
                 tabBrowser.IsEnabled = false;
-                browserMenuText.Text = translator.DisableHub;
+                browserMenuText.Text = translator.EnableHub;
                 Settings.Default.BrowserToggled = false;
                 Settings.Default.Save();
 
@@ -344,7 +351,7 @@ namespace PoGo.Necrobot.Window
             else if (!Settings.Default.BrowserToggled)
             {
                 tabBrowser.IsEnabled = true;
-                browserMenuText.Text = translator.EnableHub;
+                browserMenuText.Text = translator.DisableHub;
                 Settings.Default.BrowserToggled = true;
                 Settings.Default.Save();
             }

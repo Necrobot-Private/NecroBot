@@ -136,7 +136,7 @@
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Margin="4 0 0 0" Name="browserMenuText"
                                VerticalAlignment="Center"
-                               Text="{Binding Source=EnableHub, Converter={StaticResource ResourceKey=I18NConveter}}" />
+                               Text="{Binding Source=DisableHub, Converter={StaticResource ResourceKey=I18NConveter}}" />
                 </StackPanel>
             </Button>
             <Button x:Name="menuConsole" Click="MenuConsole_Click">
