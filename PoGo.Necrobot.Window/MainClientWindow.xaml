@@ -132,7 +132,13 @@
 
                 </StackPanel>
             </Button>
-            <Button x:Name="BrowserToggle" Content="Toggle Browser" Click="BrowserToggle_Click" FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato Medium" />
+            <Button x:Name="BrowserToggle" Click="BrowserToggle_Click">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Margin="4 0 0 0" Name="browserMenuText"
+                               VerticalAlignment="Center"
+                               Text="{Binding Source=DisableHub, Converter={StaticResource ResourceKey=I18NConveter}}" />
+                </StackPanel>
+            </Button>
             <Button x:Name="menuConsole" Click="MenuConsole_Click">
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="20"
@@ -294,7 +300,7 @@
             </TabItem>
             <TabItem Name="tabBrowser">
                 <TabItem.Header>
-                    <Image x:Name="browserIMG" Source="Resources/hubImage.png" Width="32" RenderTransformOrigin="0.5,0.5" >
+                    <Image x:Name="browserIMG" Source="Resources/hubImage.png" Width="32" RenderTransformOrigin="0.5,0.5" Height="32" >
                         <Image.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform/>
@@ -339,7 +345,7 @@
             </TabItem>
             <TabItem x:Name="tabSniper">
                 <TabItem.Header>
-                    <Image x:Name="sniperIMG" Source="Resources/sniperImage.png" Width="32" />
+                    <Image x:Name="sniperIMG" Source="Resources/sniperImage.png" Width="32" Height="32" />
                 </TabItem.Header>
 
                 <local:SniperControl x:Name="ctrlSniper" DataContext="{Binding Path=SnipeList}" />
@@ -347,12 +353,12 @@
 
             <TabItem x:Name="tabConsole" IsSelected="True">
                 <TabItem.Header>
-                    <Image x:Name="consoleImage" Source="Resources/consoleImage.png" Width="32" RenderTransformOrigin="0.5,0.5" >
+                    <Image x:Name="consoleImage" Source="Resources/consoleImage.png" Width="32" RenderTransformOrigin="0.5,0.5" Height="32" >
                         <Image.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform/>
                                 <SkewTransform/>
-                                <RotateTransform Angle="90.801"/>
+                                <RotateTransform Angle="89.811"/>
                                 <TranslateTransform/>
                             </TransformGroup>
                         </Image.RenderTransform>
