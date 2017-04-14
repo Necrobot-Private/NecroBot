@@ -60,11 +60,11 @@ namespace PoGo.NecroBot.Logic.Common
         [Description("Hide Console")]
         public string HideConsole { get; set; }
 		
-		[Description("Enable Hub")]
-		public string EnableHub { get; set; }
+        [Description("Enable Hub")]
+        public string EnableHub { get; set; }
 		
-		[Description("Disable Hub")]
-		public string DisableHub { get; set; }
+        [Description("Disable Hub")]
+        public string DisableHub { get; set; }
 
         [Description("Setting")]
         public string MenuSetting { get; set; }
@@ -227,8 +227,8 @@ namespace PoGo.NecroBot.Logic.Common
         [Description("Level")]
         public string Level { get; set; }
 		
-		[Description("Experience")]
-		public string ExperienceInfo { get; set; }
+        [Description("Experience")]
+        public string ExperienceInfo { get; set; }
 
         [Description("Caught at")]
         public string CaughtTime { get; set; }
