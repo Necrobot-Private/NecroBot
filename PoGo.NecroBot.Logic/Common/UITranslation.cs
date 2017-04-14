@@ -226,6 +226,9 @@ namespace PoGo.NecroBot.Logic.Common
 
         [Description("Level")]
         public string Level { get; set; }
+		
+		[Description("Experience")]
+        public string ExperienceInfo { get; set; }
 
         [Description("Caught at")]
         public string CaughtTime { get; set; }
