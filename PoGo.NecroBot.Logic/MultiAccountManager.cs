@@ -150,7 +150,7 @@ namespace PoGo.NecroBot.Logic
                 accountdb.EnsureIndex(x => x.Username, true);
                 accountdb.EnsureIndex(x => x.IsRunning, false);
 
-				Accounts = accountdb.FindAll().ToList();
+				Accounts = accountdb.FindAll().OrderBy(p => p.Id).ToList();
 				
                 foreach (var item in Accounts)
                 {
