@@ -43,16 +43,16 @@ namespace PoGo.Necrobot.Window.Model
                 if (fort.LureInfo != null)
                 {
                     if (fort.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime())
-                        fortIcon = "images/Lured.png";
+                        fortIcon = "https://raw.githubusercontent.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/Lured.png";
                     else
-                        fortIcon = "images/VisitedLure.png";
+                        fortIcon = "https://raw.githubusercontent.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/VisitedLure.png";
                 }
                 else
                 {
                     if (fort.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime())
-                        fortIcon = "images/Normal.png";
+                        fortIcon = "https://raw.githubusercontent.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/Normal.png";
                     else
-                        fortIcon = "images/Visited.png";
+                        fortIcon = "https://raw.githubusercontent.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/Visited.png";
                 }
                 return fortIcon;
             }

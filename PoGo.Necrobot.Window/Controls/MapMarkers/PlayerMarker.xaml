@@ -3,5 +3,5 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	x:Class="PoGo.Necrobot.Window.Controls.MapMarkers.PlayerMarker"
 	Height="40" Width="40" Opacity="10">
-		<Image Name="icon" Source="images/location.png" VerticalAlignment="Center" HorizontalAlignment="Center" />
+		<Image Name="icon" Source="https://raw.githubusercontent.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/location.png" VerticalAlignment="Center" HorizontalAlignment="Center" />
 </UserControl>
