@@ -253,12 +253,12 @@
             </TabControl.Resources>
             <TabItem Name="tabAccounts">
                 <TabItem.Header>
-                    <Image x:Name="accountsIMG" Source="Resources/accountsIMG.png" Width="32" RenderTransformOrigin="0.5,0.5" >
+                    <Image x:Name="accountsIMG" Source="Resources/AccountsImage.png" Width="32" RenderTransformOrigin="0.5,0.5" >
                         <Image.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform/>
                                 <SkewTransform/>
-                                <RotateTransform Angle="90.43"/>
+                                <RotateTransform Angle="90.00"/>
                                 <TranslateTransform/>
                             </TransformGroup>
                         </Image.RenderTransform>
@@ -300,12 +300,12 @@
             </TabItem>
             <TabItem Name="tabBrowser">
                 <TabItem.Header>
-                    <Image x:Name="browserIMG" Source="Resources/hubImage.png" Width="32" RenderTransformOrigin="0.5,0.5" Height="32" >
+                    <Image x:Name="browserIMG" Source="Resources/HubImage.png" Width="32" RenderTransformOrigin="0.5,0.5" Height="32" >
                         <Image.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform/>
                                 <SkewTransform/>
-                                <RotateTransform Angle="89.363"/>
+                                <RotateTransform Angle="90.000"/>
                                 <TranslateTransform/>
                             </TransformGroup>
                         </Image.RenderTransform>
@@ -317,12 +317,12 @@
             </TabItem>
             <TabItem Name="tabMap">
                 <TabItem.Header>
-                    <Image x:Name="mapImage" Source="Resources/mapImage.png" Width="32" RenderTransformOrigin="0.5,0.5" Height="32" >
+                    <Image x:Name="mapIMG" Source="Resources/MapImage.png" Width="32" RenderTransformOrigin="0.5,0.5" Height="32" >
                         <Image.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform/>
                                 <SkewTransform/>
-                                <RotateTransform Angle="89.934"/>
+                                <RotateTransform Angle="90.000"/>
                                 <TranslateTransform/>
                             </TransformGroup>
                         </Image.RenderTransform>
@@ -345,7 +345,7 @@
             </TabItem>
             <TabItem x:Name="tabSniper">
                 <TabItem.Header>
-                    <Image x:Name="sniperIMG" Source="Resources/sniperImage.png" Width="32" Height="32" />
+                    <Image x:Name="sniperIMG" Source="Resources/SniperImage.png" Width="32" Height="32" />
                 </TabItem.Header>
 
                 <local:SniperControl x:Name="ctrlSniper" DataContext="{Binding Path=SnipeList}" />
@@ -353,12 +353,12 @@
 
             <TabItem x:Name="tabConsole" IsSelected="True">
                 <TabItem.Header>
-                    <Image x:Name="consoleImage" Source="Resources/consoleImage.png" Width="32" RenderTransformOrigin="0.5,0.5" Height="32" >
+                    <Image x:Name="consoleIMG" Source="Resources/ConsoleImage.png" Width="32" RenderTransformOrigin="0.5,0.5" Height="32" >
                         <Image.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform/>
                                 <SkewTransform/>
-                                <RotateTransform Angle="89.811"/>
+                                <RotateTransform Angle="90.000"/>
                                 <TranslateTransform/>
                             </TransformGroup>
                         </Image.RenderTransform>
@@ -399,14 +399,50 @@
 
             </TabItem>
 
-            <TabItem FontSize="14" Header="{Binding Path= PokemonTabHeader, FallbackValue=Pokemon}" Name="tabPokemons">
+            <TabItem Name="tabPokemons">
+                <TabItem.Header>
+                    <Image x:Name="pokemonIMG" Source="Resources/PokemonImage.png" Width="32" Height="32" RenderTransformOrigin="0.5,0.5" >
+                        <Image.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="90.000"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Image.RenderTransform>
+                    </Image>
+                </TabItem.Header>
                 <local:PokemonInventory x:Name="ctrPokemonInventory" DataContext="{Binding Path=PokemonList}"
                                         OnPokemonItemSelected="PokemonInventory_OnPokemonItemSelected" />
             </TabItem>
-            <TabItem FontSize="14" Name="tabItems" Header="{Binding Path=ItemsTabHeader, FallbackValue=Pokemon}">
+            <TabItem Name="tabItems">
+                <TabItem.Header>
+                    <Image x:Name="itemsIMG" Source="Resources/ItemsImage.png" Width="32" RenderTransformOrigin="0.5,0.5" >
+                        <Image.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="90.000"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Image.RenderTransform>
+                    </Image>
+                </TabItem.Header>
                 <local:ItemsInventory DataContext="{Binding Path=ItemsList}" x:Name="ctrlItemControl" />
             </TabItem>
-            <TabItem FontSize="14" Name="tabEggs" Header="{Binding Source=EggTabHeader , Converter={StaticResource I18NConveter}}">
+            <TabItem Name="tabEggs">
+                <TabItem.Header>
+                    <Image x:Name="eggsIMG" Source="Resources/EggsImage.png" Width="32" Height="32" RenderTransformOrigin="0.5,0.5" >
+                        <Image.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="90.000"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Image.RenderTransform>
+                    </Image>
+                </TabItem.Header>
                 <local:EggsControl DataContext="{Binding Path=EggsList}" x:Name="ctrlEggsControl" />
             </TabItem>
         </TabControl>

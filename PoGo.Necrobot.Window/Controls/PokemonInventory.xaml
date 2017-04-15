@@ -211,7 +211,9 @@
 
                 <!--<DataGridCheckBoxColumn Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" Header="Selected"/>-->
                 <DataGridTextColumn Binding="{Binding PokemonName}" Header="{Binding Source=PokemonName, Converter={StaticResource I18NConveter}}" MinWidth="90" />
-                <DataGridTextColumn Binding="{Binding Shiny}" Header="{Binding Source=Shiny, Converter={StaticResource I18NConveter}}" MinWidth="50" />              
+                <DataGridTextColumn Binding="{Binding Shiny}" Header="{Binding Source=Shiny, Converter={StaticResource I18NConveter}}" MinWidth="50" />
+                <DataGridTextColumn Binding="{Binding Form}" Header="{Binding Source=Form, Converter={StaticResource I18NConveter}}" MinWidth="50" />
+                <DataGridTextColumn Binding="{Binding Costume}" Header="{Binding Source=Costume, Converter={StaticResource I18NConveter}}" MinWidth="50" />
                 <DataGridTextColumn Binding="{Binding Sex}" Header="{Binding Source=Sex, Converter={StaticResource I18NConveter}}" MinWidth="50" />
                 <DataGridTextColumn Binding="{Binding IV, StringFormat=\{0:0.00\}}" Header="{Binding Source=IV, Converter={StaticResource I18NConveter}}" MinWidth="44" IsReadOnly="True"/>
                 <DataGridTextColumn Binding="{Binding Level, StringFormat=\{0\}}" Header="{Binding Source=Level, Converter={StaticResource I18NConveter}}" MinWidth="20" IsReadOnly="True"/>

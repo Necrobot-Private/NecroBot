@@ -63,7 +63,9 @@ namespace PoGo.Necrobot.Window.Model
             }
         }
         public string Shiny => pokemonData.PokemonDisplay.Shiny ? "Yes" : "No";
-        public string Sex => pokemonData.PokemonDisplay.Gender.ToString();
+        public string Form => pokemonData.PokemonDisplay.Form.ToString().Replace("Unown", "").Replace("Unset", "Normal");
+        public string Costume => pokemonData.PokemonDisplay.Costume.ToString().Replace("Unset", "Regular");
+        public string Sex => pokemonData.PokemonDisplay.Gender.ToString().Replace("Less", "Genderless");
         public ulong Id
         {
             get
@@ -311,19 +313,10 @@ namespace PoGo.Necrobot.Window.Model
             get
             {
                 var additional = "";
-                if (pokemonData.PokemonDisplay.Costume != Costume.Unset)
-                {
-                    additional = additional + "-" + pokemonData.PokemonDisplay.Costume.ToString();
-                }
-                if (pokemonData.PokemonDisplay.Form != Form.Unset)
-                {
-                    additional = additional + "-" + pokemonData.PokemonDisplay.Form.ToString().Replace("Unown", "").Replace("ExclamationPoint", "!").Replace("QuestionMark", "?");
-                }
-                if (pokemonData.PokemonDisplay.Shiny)
-                {
-                    additional += "-shiny";
-                }
-                return $"https://raw.githubusercontent.com/Necrobot-Private/PokemonGO-Assets/master/pokemon/{(int)PokemonData.PokemonId:000}{additional}.png";
+                additional = additional + ("-" + pokemonData.PokemonDisplay.Costume.ToString()).Replace("-Unset", "");
+                additional = additional + ("-" + pokemonData.PokemonDisplay.Form.ToString().Replace("Unown", "").Replace("-ExclamationPoint", "-!").Replace("-QuestionMark", "-?")).Replace("-Unset", "");
+                additional += pokemonData.PokemonDisplay.Shiny ? "-shiny": "";
+                return $"https://raw.githubusercontent.com/Necrobot-Private/PokemonGO-Assets/master/pokemon/{(int)PokemonData.PokemonId}{additional}.png";
             }
         }
 
