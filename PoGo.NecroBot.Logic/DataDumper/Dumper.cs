@@ -98,7 +98,6 @@ namespace PoGo.NecroBot.Logic.DataDumper
         {
             await Task.Run(async () =>
             {
-                
                 var allPokemonInBag = session.LogicSettings.PrioritizeIvOverCp
                     ? await session.Inventory.GetHighestsPerfect(1000).ConfigureAwait(false)
                     : await session.Inventory.GetHighestsCp(1000).ConfigureAwait(false);
@@ -154,10 +153,10 @@ namespace PoGo.NecroBot.Logic.DataDumper
                         ws.Cells[rowNum + 1, 14].Value = item.Move1.ToString();
                         ws.Cells[rowNum + 1, 15].Value = item.Move2.ToString();
                         ws.Cells[rowNum + 1, 16].Value = $"{settings.Type.ToString()},{settings.Type2.ToString()}";
-                        ws.Cells[rowNum + 1, 17].Value = $"{item.Shiny ? "Yes" : "No"}";
-                        ws.Cells[rowNum + 1, 18].Value = $"{item.Form.ToString().Replace("Unown", "").Replace("Unset", "Normal")}";
-                        ws.Cells[rowNum + 1, 19].Value = $"{item.Costume.ToString().Replace("Unset", "Regular")}";
-                        ws.Cells[rowNum + 1, 20].Value = $"{item.PokemonDisplay.Gender.ToString().Replace("Less", "Genderless")}";
+                        ws.Cells[rowNum + 1, 17].Value = $"{(item.PokemonDisplay.Shiny ? "Yes" : "No")}";
+                        ws.Cells[rowNum + 1, 18].Value = $"{(item.PokemonDisplay.Form.ToString().Replace("Unown", "").Replace("Unset", "Normal"))}";
+                        ws.Cells[rowNum + 1, 19].Value = $"{(item.PokemonDisplay.Costume.ToString().Replace("Unset", "Regular"))}";
+                        ws.Cells[rowNum + 1, 20].Value = $"{(item.PokemonDisplay.Gender.ToString().Replace("Less", "Genderless"))}";
                         rowNum++;
                     }
                     package.Save();
