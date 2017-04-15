@@ -121,6 +121,12 @@ namespace PoGo.NecroBot.Logic.Common
         [Description("Shiny")]
         public string Shiny { get; set; }
 
+        [Description("Form")]
+        public string Form { get; set; }
+
+        [Description("Costume")]
+        public string Costume { get; set; }
+
         [Description("Sex")]
         public string Sex { get; set; }
 
