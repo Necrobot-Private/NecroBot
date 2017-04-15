@@ -63,7 +63,7 @@ namespace PoGo.Necrobot.Window.Model
             }
         }
         public string Shiny => pokemonData.PokemonDisplay.Shiny ? "Yes" : "No";
-        public string Form => pokemonData.PokemonDisplay.Form.ToString().Replace("Unset", "Regular");
+        public string Form => pokemonData.PokemonDisplay.Form.ToString().Replace("Unset", "Normal");
         public string Costume => pokemonData.PokemonDisplay.Costume.ToString().Replace("Unset", "Regular");
         public string Sex => pokemonData.PokemonDisplay.Gender.ToString().Replace("Less", "Genderless");
         public ulong Id
