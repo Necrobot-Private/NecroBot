@@ -118,7 +118,31 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="accountsImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\accountsimage.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="ajax_loader" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ajax-loader.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="consoleImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\consoleImage.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EggsImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\EggsImage.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="hubImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\hubImage.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ItemsImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ItemsImage.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mapImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\mapimage.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="PokemonImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PokemonImage.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="sniperImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\sniperImage.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

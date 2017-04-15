@@ -17,15 +17,8 @@ namespace PoGo.NecroBot.Logic.Common
         [Description("CLICK HERE TO EXIT")]
         public string ClickHereExit { get; set; }
 
-
         [Description("Accounts")]
         public string AccountSetting { get; set; }
-        
-        [Description("Map")]
-        public string MapTabTitle { get; set; }
-
-        [Description("Hub")]
-        public string BrowserTabTitle { get; set; }
 
         [Description("SNIPE")]
         public string SnipeText { get; set; }
@@ -33,23 +26,11 @@ namespace PoGo.NecroBot.Logic.Common
         [Description("ALL BOT SNIPE")]
         public string SnipeAllBotText { get; set; }
 
-        [Description("Helps")]
+        [Description("Help")]
         public string Help { get; set; }
-
-        [Description("Sniper")]
-        public string SniperTabTitle { get; set; }
         
         [Description("Bot switching account... ")]
         public string AccountSwitching { get; set; }
-
-        [Description("Eggs")]
-        public string EggTabHeader { get; set; }
-
-        [Description("Console")]
-        public string ConsoleTabTitle { get; set; }
-
-        [Description("Pokemon [{0}/{1}]")]
-        public string PokemonTabTitle { get; set; }
 
         [Description("Show Console")]
         public string ShowConsole { get; set; }
@@ -59,8 +40,14 @@ namespace PoGo.NecroBot.Logic.Common
 
         [Description("Hide Console")]
         public string HideConsole { get; set; }
+		
+        [Description("Enable Hub")]
+        public string EnableHub { get; set; }
+		
+        [Description("Disable Hub")]
+        public string DisableHub { get; set; }
 
-        [Description("Setting")]
+        [Description("Settings")]
         public string MenuSetting { get; set; }
 
         [Description("Theme")]
@@ -226,6 +213,9 @@ namespace PoGo.NecroBot.Logic.Common
 
         [Description("Level")]
         public string Level { get; set; }
+		
+        [Description("Experience")]
+        public string ExperienceInfo { get; set; }
 
         [Description("Caught at")]
         public string CaughtTime { get; set; }
