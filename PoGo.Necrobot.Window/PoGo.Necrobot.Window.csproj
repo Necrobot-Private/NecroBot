@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -631,11 +631,14 @@
     <None Include="Resources\ajax-loader.gif" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\consoleImage.png" />
-    <Resource Include="Resources\sniperImage.png" />
-    <Resource Include="Resources\accountsIMG.png" />
-    <Resource Include="Resources\hubImage.png" />
-    <Resource Include="Resources\mapImage.png" />
+    <Resource Include="Resources\AccountsImage.png" />
+    <Resource Include="Resources\SniperImage.png" />
+    <Resource Include="Resources\PokemonImage.png" />
+    <Resource Include="Resources\MapImage.png" />
+    <Resource Include="Resources\ItemsImage.png" />
+    <Resource Include="Resources\HubImage.png" />
+    <Resource Include="Resources\EggsImage.png" />
+    <Resource Include="Resources\ConsoleImage.png" />
     <EmbeddedResource Include="Resources\teamdev.licenses" />
     <Resource Include="Resources\Fonts\Lato\SIL Open Font License.txt" />
     <Content Include="Effects\GrayscaleEffect.dll" />
