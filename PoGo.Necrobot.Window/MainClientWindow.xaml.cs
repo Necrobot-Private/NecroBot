@@ -340,6 +340,7 @@ namespace PoGo.Necrobot.Window
                 Settings.Default.BrowserToggled = false;
                 Settings.Default.Save();
 
+                webView.Browser.Dispose();
                 webView.Dispose();
             }
             else if (!Settings.Default.BrowserToggled)
