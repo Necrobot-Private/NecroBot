@@ -11,22 +11,22 @@
         <c:I18NConveter x:Key="I18NConveter"></c:I18NConveter>
         <c:I18NMultiConveter x:Key="I18NMultiConveter"></c:I18NMultiConveter>
     </Control.Resources>
-    
+
     <DockPanel LastChildFill="True">
         <StackPanel DockPanel.Dock="Left" Width="75" Orientation="Vertical">
             <Image  Name="image" Width="45"  Source="{Binding Path=BuddyPokemonId, FallbackValue=https://img.pokemondb.net/artwork/garchomp.jpg, Converter={StaticResource PokemonIdToImageConverter}}">
-                </Image>
-            
-                <TextBlock TextAlignment="Center">
-                    <TextBlock.Text>
-                         <MultiBinding  StringFormat="{}{0:0.00}/{1:0.00}" FallbackValue="xxx/xxx">
-                            <Binding Path="BuddyTotalKM"></Binding>
-                            <Binding Path="BuddyCurrentKM"></Binding>
-                        </MultiBinding>
-                    </TextBlock.Text>
-                </TextBlock>
+            </Image>
+
+            <TextBlock TextAlignment="Center">
+                <TextBlock.Text>
+                    <MultiBinding  StringFormat="{}{0:0.00}/{1:0.00}" FallbackValue="xxx/xxx">
+                        <Binding Path="BuddyTotalKM"></Binding>
+                        <Binding Path="BuddyCurrentKM"></Binding>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
         </StackPanel>
-        
+
         <Grid Margin="10,0,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*"></ColumnDefinition>
@@ -100,7 +100,8 @@
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
-            
+            <TextBlock Grid.Column="1" Grid.Row="2"  HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding Path=PokemonTabHeader, FallbackValue=Pokemon: 0/0, StringFormat=Pokemon: {0}/{1}, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Grid.Column="2" Grid.Row="2"  HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Text="{Binding Path=ItemsTabHeader, FallbackValue=Items: 0/0, StringFormat=Items: {0}/{1}, UpdateSourceTrigger=PropertyChanged}"/>
 
         </Grid>
     </DockPanel>
