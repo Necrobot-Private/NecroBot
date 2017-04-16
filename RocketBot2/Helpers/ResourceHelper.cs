@@ -50,7 +50,7 @@ namespace RocketBot2.Helpers
             return (Image)Properties.Resources.ResourceManager.GetObject("question");
         }
 
-        public static Image GetImageSize(Image image, int maxHeight, int maxWidth)
+        public static Image SetImageSize(Image image, int maxHeight, int maxWidth)
         {
             var ratioX = (double)maxWidth / image.Width;
             var ratioY = (double)maxHeight / image.Height;
@@ -72,7 +72,7 @@ namespace RocketBot2.Helpers
             var additional = "";
             if (pokemon.PokemonDisplay.Costume != Costume.Unset) additional = "_" + pokemon.PokemonDisplay.Costume.ToString();
             if (pokemon.PokemonDisplay.Form != POGOProtos.Enums.Form.Unset) additional = "_" + pokemon.PokemonDisplay.Form.ToString().Replace("Unown", "").Replace("-ExclamationPoint", "_ex").Replace("-QuestionMark", "_qst");
-            if (pokemon.PokemonDisplay.Shiny) additional = pokemon.PokemonDisplay.Shiny ? "_shiny" : "";
+            if (pokemon.PokemonDisplay.Shiny) additional = "_shiny";
 
             var image = (Image)Resources.PokemonDB.ResourceManager.GetObject($"_{(int)pokemon.PokemonId:000}{additional}");
             if (image != null) return image;
@@ -83,9 +83,9 @@ namespace RocketBot2.Helpers
         public static Image GetPokemonImage(MapPokemon pokemon)
         {
             var additional = "";
-            if (pokemon.PokemonDisplay.Costume != Costume.Unset) additional = "_" + pokemon.PokemonDisplay.Costume.ToString();
+            /*if (pokemon.PokemonDisplay.Costume != Costume.Unset) additional = "_" + pokemon.PokemonDisplay.Costume.ToString();
             if (pokemon.PokemonDisplay.Form != POGOProtos.Enums.Form.Unset) additional = "_" + pokemon.PokemonDisplay.Form.ToString().Replace("Unown", "").Replace("-ExclamationPoint", "_ex").Replace("-QuestionMark", "_qst");
-            if (pokemon.PokemonDisplay.Shiny) additional = pokemon.PokemonDisplay.Shiny ? "_shiny" : "";
+            if (pokemon.PokemonDisplay.Shiny) additional = "_shiny";*/
 
             var image = (Image)Resources.PokemonDB.ResourceManager.GetObject($"_{(int)pokemon.PokemonId:000}{additional}");
             if (image != null) return image;
@@ -98,9 +98,17 @@ namespace RocketBot2.Helpers
             var additional = "";
             if (pokemon.PokemonDisplay.Costume != Costume.Unset) additional = "_" + pokemon.PokemonDisplay.Costume.ToString();
             if (pokemon.PokemonDisplay.Form != POGOProtos.Enums.Form.Unset) additional = "_" + pokemon.PokemonDisplay.Form.ToString().Replace("Unown", "").Replace("-ExclamationPoint", "_ex").Replace("-QuestionMark", "_qst");
-            if (pokemon.PokemonDisplay.Shiny) additional = pokemon.PokemonDisplay.Shiny ? "_shiny" : "";
+            if (pokemon.PokemonDisplay.Shiny) additional = "_shiny";
 
             var image = (Image)Resources.PokemonDB.ResourceManager.GetObject($"_{ToPokemonId:000}{additional}");
+            if (image != null) return image;
+            return (Image)Properties.Resources.ResourceManager.GetObject("question");
+            //return LoadPicture($"http://assets.pokemon.com/assets/cms2/img/pokedex/full/{(int)pokemonId:000}.png");
+        }
+
+        public static Image GetPokemonImageById(int PokemonId)
+        {
+            var image = (Image)Resources.PokemonDB.ResourceManager.GetObject($"_{PokemonId:000}");
             if (image != null) return image;
             return (Image)Properties.Resources.ResourceManager.GetObject("question");
             //return LoadPicture($"http://assets.pokemon.com/assets/cms2/img/pokedex/full/{(int)pokemonId:000}.png");
