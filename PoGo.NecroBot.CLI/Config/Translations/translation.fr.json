@@ -2462,11 +2462,11 @@
     },
     {
       "Key": "PowderSnowFast",
-	  "Value": "PowderSnow"
+	  "Value": "Poudreuse"
     },
     {
       "Key": "CloseCombat",
-	  "Value": "CloseCombat"
+	  "Value": "Close Combat"
     },
     {
       "Key": "DynamicPunch",
@@ -2474,11 +2474,11 @@
     },
     {
       "Key": "FocusBlast",
-	  "Value": "FocusBlast"
+	  "Value": "Exploforce"
     },
     {
       "Key": "AuroraBeam",
-	  "Value": "AuroraBeam"
+	  "Value": "Onde Boréale"
     },
     {
       "Key": "ChargeBeamFast",
@@ -2490,15 +2490,15 @@
     },
     {
       "Key": "WildCharge",
-	  "Value": "WildCharge"
+	  "Value": "Éclair Fou"
     },
     {
       "Key": "ZapCannon",
-	  "Value": "ZapCannon"
+	  "Value": "Élecanon"
     },
     {
       "Key": "DragonTailFast",
-	  "Value": "Draco Queue"
+	  "Value": "Draco-Queue"
     },
     {
       "Key": "Avalanche",
@@ -2506,23 +2506,23 @@
     },
     {
       "Key": "AirSlashFast",
-	  "Value": "AirSlash"
+	  "Value": "Lame d'Air"
     },
     {
       "Key": "BraveBird",
-	  "Value": "BraveBird"
+	  "Value": "Rapace"
     },
     {
       "Key": "SkyAttack",
-	  "Value": "SkyAttack"
+	  "Value": "Piqué"
     },
     {
       "Key": "SandTomb",
-	  "Value": "SandTomb"
+	  "Value": "Tourbi-Sable"
     },
     {
       "Key": "RockBlast",
-	  "Value": "RockBlast"
+	  "Value": "Boule Roc"
     },
     {
       "Key": "InfestationFast",
@@ -2530,7 +2530,7 @@
     },
     {
       "Key": "StruggleBugFast",
-	  "Value": "StruggleBug"
+	  "Value": "Survinsecte"
     },
     {
       "Key": "SilverWind",
@@ -2546,11 +2546,11 @@
     },
     {
       "Key": "NightShade",
-	  "Value": "NightShade"
+	  "Value": "Ombre Nocturne"
     },
     {
       "Key": "IronTailFast",
-	  "Value": "IronTail"
+	  "Value": "Queue de Fer"
     },
     {
       "Key": "GyroBall",
@@ -2562,7 +2562,7 @@
     },
     {
       "Key": "FireSpinFast",
-	  "Value": "Roue de Feu"
+	  "Value": "Danse Flamme"
     },
     {
       "Key": "Overheat",
@@ -2574,11 +2574,11 @@
     },
     {
       "Key": "GrassKnot",
-	  "Value": "GrassKnot"
+	  "Value": "Nœud Herbe"
     },
     {
       "Key": "EnergyBall",
-	  "Value": "EnergyBall"
+	  "Value": "Éco-Sphère"
     },
     {
       "Key": "ExtrasensoryFast",
@@ -2586,11 +2586,11 @@
     },
     {
       "Key": "Futuresight",
-	  "Value": "Futuresight"
+	  "Value": "Prescience"
     },
     {
       "Key": "MirrorCoat",
-	  "Value": "MirrorCoat"
+	  "Value": "Voile Miroir"
     },
     {
       "Key": "Outrage",
@@ -2606,11 +2606,11 @@
     },
     {
       "Key": "FoulPlay",
-	  "Value": "FoulPlay"
+	  "Value": "Tricherie"
     },
     {
       "Key": "HiddenPowerFast",
-	  "Value": "Puissance Caché"
+	  "Value": "Puissance Cachée"
 	}
   ]
 }
