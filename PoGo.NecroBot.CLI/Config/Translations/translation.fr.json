@@ -2454,15 +2454,15 @@
     },
 	{
       "Key": "TransformFast",
-	  "Value": "TransformFast"
+	  "Value": "Morphing"
     },
     {
       "Key": "CounterFast",
-	  "Value": "CounterFast"
+	  "Value": "Riposte"
     },
     {
       "Key": "PowderSnowFast",
-	  "Value": "PowderSnowFast"
+	  "Value": "PowderSnow"
     },
     {
       "Key": "CloseCombat",
@@ -2470,7 +2470,7 @@
     },
     {
       "Key": "DynamicPunch",
-	  "Value": "DynamicPunch"
+	  "Value": "Dynamopoing"
     },
     {
       "Key": "FocusBlast",
@@ -2486,7 +2486,7 @@
     },
     {
       "Key": "VoltSwitchFast",
-	  "Value": "VoltSwitchFast"
+	  "Value": "Change Éclair"
     },
     {
       "Key": "WildCharge",
@@ -2506,11 +2506,11 @@
     },
     {
       "Key": "AirSlashFast",
-	  "Value": "AirSlashFast"
+	  "Value": "AirSlash"
     },
     {
       "Key": "BraveBird",
-	  "Value": "Brave Bird"
+	  "Value": "BraveBird"
     },
     {
       "Key": "SkyAttack",
@@ -2526,11 +2526,11 @@
     },
     {
       "Key": "InfestationFast",
-	  "Value": "InfestationFast"
+	  "Value": "Harcèlement"
     },
     {
       "Key": "StruggleBugFast",
-	  "Value": "StruggleBugFast"
+	  "Value": "StruggleBug"
     },
     {
       "Key": "SilverWind",
@@ -2538,11 +2538,11 @@
     },
     {
       "Key": "AstonishFast",
-	  "Value": "AstonishFast"
+	  "Value": "Étonnement"
     },
     {
       "Key": "HexFast",
-	  "Value": "HexFast"
+	  "Value": "Châtiment"
     },
     {
       "Key": "NightShade",
@@ -2550,11 +2550,11 @@
     },
     {
       "Key": "IronTailFast",
-	  "Value": "IronTailFast"
+	  "Value": "IronTail"
     },
     {
       "Key": "GyroBall",
-	  "Value": "GyroBall"
+	  "Value": "Gyroballe"
     },
     {
       "Key": "HeavySlam",
@@ -2562,7 +2562,7 @@
     },
     {
       "Key": "FireSpinFast",
-	  "Value": "FireSpinFast"
+	  "Value": "FireSpin"
     },
     {
       "Key": "Overheat",
@@ -2582,7 +2582,7 @@
     },
     {
       "Key": "ExtrasensoryFast",
-	  "Value": "ExtrasensoryFast"
+	  "Value": "Extrasenseur"
     },
     {
       "Key": "Futuresight",
@@ -2598,11 +2598,11 @@
     },
     {
       "Key": "SnarlFast",
-	  "Value": "SnarlFast"
+	  "Value": "Aboiement"
     },
     {
       "Key": "Crunch",
-	  "Value": "Machouille" 
+	  "Value": "Mâchouille" 
     },
     {
       "Key": "FoulPlay",
