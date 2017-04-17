@@ -2470,7 +2470,7 @@
     },
     {
       "Key": "DynamicPunch",
-	  "Value": "DynamoPoing"
+	  "Value": "Dynamopoing"
     },
     {
       "Key": "FocusBlast",
@@ -2534,7 +2534,7 @@
     },
     {
       "Key": "SilverWind",
-	  "Value": "SilverWind"
+	  "Value": "Vent Argenté"
     },
     {
       "Key": "AstonishFast",
@@ -2562,7 +2562,7 @@
     },
     {
       "Key": "FireSpinFast",
-	  "Value": "FireSpin"
+	  "Value": "Roue de Feu"
     },
     {
       "Key": "Overheat",
