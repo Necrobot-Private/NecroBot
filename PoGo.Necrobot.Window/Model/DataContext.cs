@@ -68,19 +68,6 @@ namespace PoGo.Necrobot.Window.Model
                 return $"{pokemonNum}/{MaxPokemonStorage}";
             }
         }
-        
-        public string EggsTabHeader
-        {
-            get
-            {
-                int eggNum = EggsList.Eggs.Count();
-                if (eggNum > MaxEggsStorage)
-                {
-                    eggNum = MaxEggsStorage;
-                }
-                return $"{eggNum}/{MaxEggsStorage}";
-            }
-        }
 
         internal void Reset()
         {
