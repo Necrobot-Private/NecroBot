@@ -49,7 +49,7 @@ namespace PoGo.Necrobot.Window.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1366")]
         public double Width {
             get {
                 return ((double)(this["Width"]));
@@ -61,7 +61,7 @@ namespace PoGo.Necrobot.Window.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("768")]
         public double Height {
             get {
                 return ((double)(this["Height"]));
