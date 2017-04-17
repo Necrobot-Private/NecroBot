@@ -2466,11 +2466,11 @@
     },
     {
       "Key": "CloseCombat",
-	  "Value": "Close combat"
+	  "Value": "CloseCombat"
     },
     {
       "Key": "DynamicPunch",
-	  "Value": "Dynamopoing"
+	  "Value": "DynamoPoing"
     },
     {
       "Key": "FocusBlast",
@@ -2478,7 +2478,7 @@
     },
     {
       "Key": "AuroraBeam",
-	  "Value": "Aurora Beam"
+	  "Value": "AuroraBeam"
     },
     {
       "Key": "ChargeBeamFast",
@@ -2566,7 +2566,7 @@
     },
     {
       "Key": "Overheat",
-	  "Value": "Surchauffer"
+	  "Value": "Surchauffe"
     },
     {
       "Key": "BulletSeedFast",
