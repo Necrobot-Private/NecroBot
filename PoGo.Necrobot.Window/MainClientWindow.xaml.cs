@@ -25,6 +25,7 @@ using DotNetBrowser.WPF;
 using PoGo.NecroBot.Logic;
 using PoGo.NecroBot.Logic.Model.Settings;
 using static PoGo.NecroBot.Logic.MultiAccountManager;
+using System.Windows.Media.Imaging;
 
 namespace PoGo.Necrobot.Window
 {
@@ -80,6 +81,7 @@ namespace PoGo.Necrobot.Window
             else if (!Settings.Default.BrowserToggled)
             {
                 browserMenuText.Text = translator.EnableHub;
+                tabBrowser.IsEnabled = false;
             }
         }
 
@@ -107,6 +109,9 @@ namespace PoGo.Necrobot.Window
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             LoadHelpArticleAsync();
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            Width = Settings.Default.Width;
+            Height = Settings.Default.Height;
+
             if (datacontext.PlayerInfo.Level == 35) // Warn Player on Reaching this Level -- NEEDS CONFIG SETTING
             {
                 NecroBot.Logic.Logging.Logger.Write($"You have reached Level {datacontext.PlayerInfo.Level} and it is recommended to Switch Accounts",LogLevel.Warning);
@@ -214,6 +219,15 @@ namespace PoGo.Necrobot.Window
             Application.Current.Resources.MergedDictionaries.Add(dict);
             Application.Current.Resources.MergedDictionaries.Remove(theme);
 
+            accountsIMG.Source = new BitmapImage(new Uri($"Resources/AccountsIMG_{color}.png"));
+            browserIMG.Source = new BitmapImage(new Uri($"Resources/HubIMG_{color}.png"));
+            mapIMG.Source = new BitmapImage(new Uri($"Resources/MapIMG_{color}.png"));
+            sniperIMG.Source = new BitmapImage(new Uri($"Resources/SniperIMG_{color}.png"));
+            consoleIMG.Source = new BitmapImage(new Uri($"Resources/ConsoleIMG_{color}.png"));
+            pokemonIMG.Source = new BitmapImage(new Uri($"Resources/PokemonIMG_{color}.png"));
+            itemsIMG.Source = new BitmapImage(new Uri($"Resources/ItemsIMG_{color}.png"));
+            eggsIMG.Source = new BitmapImage(new Uri($"Resources/EggsIMG_{color}.png"));
+
         }
 
         private void Theme_Selected(object sender, RoutedEventArgs e)
@@ -268,7 +282,7 @@ namespace PoGo.Necrobot.Window
         private void BtnSwitchAcount_Click(object sender, RoutedEventArgs e)
         {
             var btn = ((Button)sender);
-            var account = (MultiAccountManager.BotAccount)btn.CommandParameter;
+            var account = (BotAccount)btn.CommandParameter;
 
             var manager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
 
@@ -339,18 +353,13 @@ namespace PoGo.Necrobot.Window
                 Settings.Default.BrowserToggled = false;
                 Settings.Default.Save();
 
-                MessageBoxResult msgbox = MessageBox.Show("Would you Like to Restart to kill unneccesary browser tasks and free up extra cpu?","Free Up CPU",MessageBoxButton.YesNo,MessageBoxImage.Question);
-                if (msgbox == MessageBoxResult.Yes)
-                {
-                    Process.Start(Application.ResourceAssembly.Location);
-                    Application.Current.Shutdown();
-                }
-                else
-                { }
+                webView.Browser.Dispose();
+                webView.Dispose();
             }
             else if (!Settings.Default.BrowserToggled)
             {
                 tabBrowser.IsEnabled = true;
+                InitBrowser();
                 browserMenuText.Text = translator.DisableHub;
                 Settings.Default.BrowserToggled = true;
                 Settings.Default.Save();
@@ -370,6 +379,9 @@ namespace PoGo.Necrobot.Window
 
         private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            Settings.Default.Width = Width;
+            Settings.Default.Height = Height;
+            Settings.Default.Save();
             Process.GetCurrentProcess().Kill();
         }
     }
