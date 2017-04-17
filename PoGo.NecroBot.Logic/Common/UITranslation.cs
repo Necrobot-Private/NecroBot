@@ -32,9 +32,6 @@ namespace PoGo.NecroBot.Logic.Common
         [Description("Bot Switching Account... ")]
         public string AccountSwitching { get; set; }
 
-        [Description("Pokemon: [{0}/{1}]")]
-        public string PokemonTabTitle { get; set; }
-
         [Description("Show Console")]
         public string ShowConsole { get; set; }
 
