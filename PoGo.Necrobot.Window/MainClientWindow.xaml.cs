@@ -228,6 +228,61 @@ namespace PoGo.Necrobot.Window
             itemsIMG.Source = new BitmapImage(new Uri($"Resources/ItemsIMG_{color}.png"));
             eggsIMG.Source = new BitmapImage(new Uri($"Resources/EggsIMG_{color}.png"));
 
+            if (color == "Cobalt" || color == "Cyan") // Use Blue Icons
+            {
+                accountsIMG.Source = new BitmapImage(new Uri("Resources/AccountsIMG_Blue.png"));
+                browserIMG.Source = new BitmapImage(new Uri("Resources/HubIMG_Blue.png"));
+                mapIMG.Source = new BitmapImage(new Uri("Resources/MapIMG_Blue.png"));
+                sniperIMG.Source = new BitmapImage(new Uri("Resources/SniperIMG_Blue.png"));
+                consoleIMG.Source = new BitmapImage(new Uri("Resources/ConsoleIMG_Blue.png"));
+                pokemonIMG.Source = new BitmapImage(new Uri("Resources/PokemonIMG_Blue.png"));
+                itemsIMG.Source = new BitmapImage(new Uri("Resources/ItemsIMG_Blue.png"));
+                eggsIMG.Source = new BitmapImage(new Uri("Resources/EggsIMG_Blue.png"));
+            }
+            else if (color == "Crimson") // Use Red Icons
+            {
+                accountsIMG.Source = new BitmapImage(new Uri("Resources/AccountsIMG_Red.png"));
+                browserIMG.Source = new BitmapImage(new Uri("Resources/HubIMG_Red.png"));
+                mapIMG.Source = new BitmapImage(new Uri("Resources/MapIMG_Red.png"));
+                sniperIMG.Source = new BitmapImage(new Uri("Resources/SniperIMG_Red.png"));
+                consoleIMG.Source = new BitmapImage(new Uri("Resources/ConsoleIMG_Red.png"));
+                pokemonIMG.Source = new BitmapImage(new Uri("Resources/PokemonIMG_Red.png"));
+                itemsIMG.Source = new BitmapImage(new Uri("Resources/ItemsIMG_Red.png"));
+                eggsIMG.Source = new BitmapImage(new Uri("Resources/EggsIMG_Red.png"));
+            }
+            else if (color == "Emerald" || color == "Lime") // Use Green Icons
+            {
+                accountsIMG.Source = new BitmapImage(new Uri("Resources/AccountsIMG_Green.png"));
+                browserIMG.Source = new BitmapImage(new Uri("Resources/HubIMG_Green.png"));
+                mapIMG.Source = new BitmapImage(new Uri("Resources/MapIMG_Green.png"));
+                sniperIMG.Source = new BitmapImage(new Uri("Resources/SniperIMG_Green.png"));
+                consoleIMG.Source = new BitmapImage(new Uri("Resources/ConsoleIMG_Green.png"));
+                itemsIMG.Source = new BitmapImage(new Uri("Resources/ItemsIMG_Green.png"));
+                eggsIMG.Source = new BitmapImage(new Uri("Resources/EggsIMG_Green.png"));
+            }
+            else if (color == "Purple") // Use Indigo Icons
+            {
+                accountsIMG.Source = new BitmapImage(new Uri("Resources/AccountsIMG_Indigo.png"));
+                browserIMG.Source = new BitmapImage(new Uri("Resources/HubIMG_Indigo.png"));
+                mapIMG.Source = new BitmapImage(new Uri("Resources/MapIMG_Indigo.png"));
+                sniperIMG.Source = new BitmapImage(new Uri("Resources/SniperIMG_Indigo.png"));
+                consoleIMG.Source = new BitmapImage(new Uri("Resources/ConsoleIMG_Indigo.png"));
+                pokemonIMG.Source = new BitmapImage(new Uri("Resources/PokemonIMG_Indigo.png"));
+                itemsIMG.Source = new BitmapImage(new Uri("Resources/ItemsIMG_Indigo.png"));
+                eggsIMG.Source = new BitmapImage(new Uri("Resources/EggsIMG_Indigo.png"));
+            }
+            else if (color =="Pink") // Use Violet Icons
+            {
+                accountsIMG.Source = new BitmapImage(new Uri("Resources/AccountsIMG_Violet.png"));
+                browserIMG.Source = new BitmapImage(new Uri("Resources/HubIMG_Violet.png"));
+                mapIMG.Source = new BitmapImage(new Uri("Resources/MapIMG_Violet.png"));
+                sniperIMG.Source = new BitmapImage(new Uri("Resources/SniperIMG_Violet.png"));
+                consoleIMG.Source = new BitmapImage(new Uri("Resources/ConsoleIMG_Violet.png"));
+                pokemonIMG.Source = new BitmapImage(new Uri("Resources/PokemonIMG_Violet.png"));
+                itemsIMG.Source = new BitmapImage(new Uri("Resources/ItemsIMG_Violet.png"));
+                eggsIMG.Source = new BitmapImage(new Uri("Resources/EggsIMG_Violet.png"));
+            }
+
         }
 
         private void Theme_Selected(object sender, RoutedEventArgs e)
