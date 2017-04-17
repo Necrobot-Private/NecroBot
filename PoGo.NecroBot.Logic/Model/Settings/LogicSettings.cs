@@ -75,6 +75,8 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public int PokeStopLimit => GenRandom(_settings.PokeStopConfig.PokeStopLimit);
         public int PokeStopLimitMinutes => GenRandom(_settings.PokeStopConfig.PokeStopLimitMinutes);
         public int SnipeCountLimit => GenRandom(_settings.SnipeConfig.SnipeCountLimit);
+        public bool EnableLevelLimit => _settings.ConsoleConfig.EnableLevelLimit;
+        public int LevelLimit => _settings.ConsoleConfig.LevelLimit;
         public int SnipeRestSeconds => GenRandom(_settings.SnipeConfig.SnipeRestSeconds);
         public bool TransferWeakPokemon => _settings.PokemonConfig.TransferWeakPokemon;
         public bool DisableHumanWalking => _settings.LocationConfig.DisableHumanWalking;

@@ -25,6 +25,7 @@ using DotNetBrowser.WPF;
 using PoGo.NecroBot.Logic;
 using PoGo.NecroBot.Logic.Model.Settings;
 using static PoGo.NecroBot.Logic.MultiAccountManager;
+using System.Windows.Media.Imaging;
 
 namespace PoGo.Necrobot.Window
 {
@@ -108,6 +109,9 @@ namespace PoGo.Necrobot.Window
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             LoadHelpArticleAsync();
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            Width = Settings.Default.Width;
+            Height = Settings.Default.Height;
+
             if (datacontext.PlayerInfo.Level == 35) // Warn Player on Reaching this Level -- NEEDS CONFIG SETTING
             {
                 NecroBot.Logic.Logging.Logger.Write($"You have reached Level {datacontext.PlayerInfo.Level} and it is recommended to Switch Accounts",LogLevel.Warning);
@@ -214,6 +218,15 @@ namespace PoGo.Necrobot.Window
             var theme = Application.Current.Resources.MergedDictionaries.LastOrDefault();
             Application.Current.Resources.MergedDictionaries.Add(dict);
             Application.Current.Resources.MergedDictionaries.Remove(theme);
+
+            accountsIMG.Source = new BitmapImage(new Uri($"Resources/AccountsIMG_{color}.png"));
+            browserIMG.Source = new BitmapImage(new Uri($"Resources/HubIMG_{color}.png"));
+            mapIMG.Source = new BitmapImage(new Uri($"Resources/MapIMG_{color}.png"));
+            sniperIMG.Source = new BitmapImage(new Uri($"Resources/SniperIMG_{color}.png"));
+            consoleIMG.Source = new BitmapImage(new Uri($"Resources/ConsoleIMG_{color}.png"));
+            pokemonIMG.Source = new BitmapImage(new Uri($"Resources/PokemonIMG_{color}.png"));
+            itemsIMG.Source = new BitmapImage(new Uri($"Resources/ItemsIMG_{color}.png"));
+            eggsIMG.Source = new BitmapImage(new Uri($"Resources/EggsIMG_{color}.png"));
 
         }
 
@@ -366,6 +379,9 @@ namespace PoGo.Necrobot.Window
 
         private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            Settings.Default.Width = Width;
+            Settings.Default.Height = Height;
+            Settings.Default.Save();
             Process.GetCurrentProcess().Kill();
         }
     }
