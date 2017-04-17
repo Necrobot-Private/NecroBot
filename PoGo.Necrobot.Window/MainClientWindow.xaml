@@ -446,7 +446,6 @@
                             </TransformGroup>
                         </StackPanel.RenderTransform>
                         <Image x:Name="eggsIMG" Source="Resources/EggsImage.png" Width="64" Height="64"/>
-                        <TextBlock FontSize="12" HorizontalAlignment="Center" Text="{Binding Path= EggsTabHeader, FallbackValue=Eggs}"/>
                     </StackPanel>
                 </TabItem.Header>
                 <local:EggsControl DataContext="{Binding Path=EggsList}" x:Name="ctrlEggsControl" />

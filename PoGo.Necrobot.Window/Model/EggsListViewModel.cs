@@ -42,35 +42,9 @@ namespace PoGo.Necrobot.Window.Model
             }
         }
 
-        internal void Update(IEnumerable<EggViewModel> eggs)
-        {
-            foreach (var item in eggs)
-            {
-                var existing = Eggs.FirstOrDefault(x => x.Id == item.Id);
 
-                if (existing != null)
-                {
-                    existing.Displayed = Filter.Check(existing);
-                    existing.UpdateWith(item);
-
-                }
-                else
-                {
-                    var pokemonDataViewModel = new PokemonDataViewModel(Session, item);
-                    pokemonDataViewModel.Displayed = Filter.Check(pokemonDataViewModel);
-
-                    Pokemons.Add(pokemonDataViewModel);
-                    Task.Run(async () =>
-                    {
-                        GeoLocation geoLocation = await GeoLocation.FindOrUpdateInDatabase(pokemonDataViewModel.PokemonData.CapturedCellId);
-                        if (geoLocation != null)
-                            pokemonDataViewModel.GeoLocation = geoLocation;
-                    });
-                }
-            }
-
-            private void AddOrUpdateIncubator(EggIncubator incu)
-        {
+         private void AddOrUpdateIncubator(EggIncubator incu)
+         {
             var incuModel = new IncubatorViewModel(incu);
             var existing = Incubators.FirstOrDefault(x => x.Id == incu.Id);
             if (existing != null)
@@ -81,7 +55,7 @@ namespace PoGo.Necrobot.Window.Model
             {
                 Incubators.Add(incuModel);
             }
-        }
+         }
 
         public void AddOrUpdate(PokemonData egg, IncubatorViewModel incu = null)
         {
