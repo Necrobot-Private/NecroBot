@@ -64,7 +64,7 @@ namespace PoGo.NecroBot.Logic.Common
 
         [Description("Zoom In")]
         public string ZoomIn { get; set; }
-
+        
         [Description("Zoom Out")]
         public string ZoomOut { get; set; }
 
