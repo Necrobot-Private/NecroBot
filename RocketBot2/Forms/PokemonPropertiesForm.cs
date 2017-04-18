@@ -1,15 +1,7 @@
 ﻿using PoGo.NecroBot.Logic.Common;
-using PoGo.NecroBot.Logic.Model;
 using PoGo.NecroBot.Logic.State;
 using RocketBot2.Helpers;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace RocketBot2.Forms
