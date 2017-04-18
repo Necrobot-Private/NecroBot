@@ -399,9 +399,9 @@
 
             </TabItem>
 
-            <TabItem Name="tabPokemons" Width="85" Height="85">
+            <TabItem Name="tabPokemons" Width="80" Height="80">
                 <TabItem.Header>
-                    <StackPanel Orientation="Vertical" RenderTransformOrigin="0.5,0.5">
+                    <StackPanel Orientation="Vertical" RenderTransformOrigin="0.5,0.5" Width="80">
                         <StackPanel.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform/>
@@ -410,16 +410,16 @@
                                 <TranslateTransform/>
                             </TransformGroup>
                         </StackPanel.RenderTransform>
-                        <Image x:Name="pokemonIMG" Source="Resources/PokemonImage.png" Width="64" Height="64"/>
+                        <Image x:Name="pokemonIMG" Source="Resources/PokemonImage.png" Width="48" Height="48"/>
                         <TextBlock FontSize="12" HorizontalAlignment="Center" Text="{Binding Path= PokemonTabHeader, FallbackValue=Pokemon}"/>
                     </StackPanel>
                 </TabItem.Header>
                 <local:PokemonInventory x:Name="ctrPokemonInventory" DataContext="{Binding Path=PokemonList}"
                                         OnPokemonItemSelected="PokemonInventory_OnPokemonItemSelected" />
             </TabItem>
-            <TabItem Name="tabItems" Width="85" Height="85">
+            <TabItem Name="tabItems" Width="80" Height="80">
                 <TabItem.Header>
-                    <StackPanel Orientation="Vertical" RenderTransformOrigin="0.5,0.5">
+                    <StackPanel Orientation="Vertical" RenderTransformOrigin="0.5,0.5" Width="80">
                         <StackPanel.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform/>
@@ -428,15 +428,15 @@
                                 <TranslateTransform/>
                             </TransformGroup>
                         </StackPanel.RenderTransform>
-                        <Image x:Name="itemsIMG" Source="Resources/ItemsImage.png" Width="64" Height="64"/>
+                        <Image x:Name="itemsIMG" Source="Resources/ItemsImage.png" Width="48" Height="48"/>
                         <TextBlock FontSize="12" HorizontalAlignment="Center" Text="{Binding Path= ItemsTabHeader, FallbackValue=Items}"/>
                     </StackPanel>
                 </TabItem.Header>
                 <local:ItemsInventory DataContext="{Binding Path=ItemsList}" x:Name="ctrlItemControl" />
             </TabItem>
-            <TabItem Name="tabEggs" Width="85" Height="85">
+            <TabItem Name="tabEggs" Width="80" Height="80">
                 <TabItem.Header>
-                    <StackPanel Orientation="Vertical" RenderTransformOrigin="0.5,0.5">
+                    <StackPanel Orientation="Vertical" RenderTransformOrigin="0.5,0.5" Width="80">
                         <StackPanel.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform/>
@@ -445,7 +445,7 @@
                                 <TranslateTransform/>
                             </TransformGroup>
                         </StackPanel.RenderTransform>
-                        <Image x:Name="eggsIMG" Source="Resources/EggsImage.png" Width="64" Height="64"/>
+                        <Image x:Name="eggsIMG" Source="Resources/EggsImage.png" Width="60" Height="60"/>
                     </StackPanel>
                 </TabItem.Header>
                 <local:EggsControl DataContext="{Binding Path=EggsList}" x:Name="ctrlEggsControl" />
