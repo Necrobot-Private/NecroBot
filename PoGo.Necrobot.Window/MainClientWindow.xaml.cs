@@ -26,6 +26,7 @@ using PoGo.NecroBot.Logic;
 using PoGo.NecroBot.Logic.Model.Settings;
 using static PoGo.NecroBot.Logic.MultiAccountManager;
 using System.Windows.Media.Imaging;
+using PoGo.NecroBot.Logic.Event;
 
 namespace PoGo.Necrobot.Window
 {
@@ -112,12 +113,16 @@ namespace PoGo.Necrobot.Window
             Width = Settings.Default.Width;
             Height = Settings.Default.Height;
 
-            if (datacontext.PlayerInfo.Level == 35) // Warn Player on Reaching this Level -- NEEDS CONFIG SETTING
+            if (datacontext.PlayerInfo.Level == currentSession.LogicSettings.LevelLimit) // Warn Player on Reaching this Level
             {
-                NecroBot.Logic.Logging.Logger.Write($"You have reached Level {datacontext.PlayerInfo.Level} and it is recommended to Switch Accounts",LogLevel.Warning);
+                currentSession.EventDispatcher.Send(new ErrorEvent
+                {
+                    Message = currentSession.Translation.GetTranslation(TranslationString.LevelLimitReached)
+                });
             }
             ChangeThemeTo(Settings.Default.Theme);
         }
+
         private DateTime lastClearLog = DateTime.Now;
         public void LogToConsoleTab(string message, LogLevel level, string color)
         { 
