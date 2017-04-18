@@ -631,6 +631,70 @@
     <None Include="Resources\ajax-loader.gif" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\SniperIMG_Red.png" />
+    <Resource Include="Resources\SniperIMG_Orange.png" />
+    <Resource Include="Resources\SniperIMG_Indigo.png" />
+    <Resource Include="Resources\SniperIMG_Green.png" />
+    <Resource Include="Resources\SniperIMG_Brown.png" />
+    <Resource Include="Resources\SniperIMG_Blue.png" />
+    <Resource Include="Resources\SniperIMG_Yellow.png" />
+    <Resource Include="Resources\SniperIMG_Violet.png" />
+    <Resource Include="Resources\PokemonIMG_Red.png" />
+    <Resource Include="Resources\PokemonIMG_Orange.png" />
+    <Resource Include="Resources\PokemonIMG_Indigo.png" />
+    <Resource Include="Resources\PokemonIMG_Green.png" />
+    <Resource Include="Resources\PokemonIMG_Brown.png" />
+    <Resource Include="Resources\PokemonIMG_Blue.png" />
+    <Resource Include="Resources\PokemonIMG_Yellow.png" />
+    <Resource Include="Resources\PokemonIMG_Violet.png" />
+    <Resource Include="Resources\MapIMG_Red.png" />
+    <Resource Include="Resources\MapIMG_Orange.png" />
+    <Resource Include="Resources\MapIMG_Indigo.png" />
+    <Resource Include="Resources\MapIMG_Green.png" />
+    <Resource Include="Resources\MapIMG_Brown.png" />
+    <Resource Include="Resources\MapIMG_Blue.png" />
+    <Resource Include="Resources\MapIMG_Yellow.png" />
+    <Resource Include="Resources\MapIMG_Violet.png" />
+    <Resource Include="Resources\ItemsIMG_Red.png" />
+    <Resource Include="Resources\ItemsIMG_Orange.png" />
+    <Resource Include="Resources\ItemsIMG_Indigo.png" />
+    <Resource Include="Resources\ItemsIMG_Green.png" />
+    <Resource Include="Resources\ItemsIMG_Brown.png" />
+    <Resource Include="Resources\ItemsIMG_Blue.png" />
+    <Resource Include="Resources\ItemsIMG_Yellow.png" />
+    <Resource Include="Resources\ItemsIMG_Violet.png" />
+    <Resource Include="Resources\HubIMG_Red.png" />
+    <Resource Include="Resources\HubIMG_Orange.png" />
+    <Resource Include="Resources\HubIMG_Indigo.png" />
+    <Resource Include="Resources\HubIMG_Green.png" />
+    <Resource Include="Resources\HubIMG_Brown.png" />
+    <Resource Include="Resources\HubIMG_Blue.png" />
+    <Resource Include="Resources\HubIMG_Yellow.png" />
+    <Resource Include="Resources\HubIMG_Violet.png" />
+    <Resource Include="Resources\EggsIMG_Red.png" />
+    <Resource Include="Resources\EggsIMG_Orange.png" />
+    <Resource Include="Resources\EggsIMG_Indigo.png" />
+    <Resource Include="Resources\EggsIMG_Green.png" />
+    <Resource Include="Resources\EggsIMG_Brown.png" />
+    <Resource Include="Resources\EggsIMG_Blue.png" />
+    <Resource Include="Resources\EggsIMG_Yellow.png" />
+    <Resource Include="Resources\EggsIMG_Violet.png" />
+    <Resource Include="Resources\ConsoleIMG_Red.png" />
+    <Resource Include="Resources\ConsoleIMG_Orange.png" />
+    <Resource Include="Resources\ConsoleIMG_Indigo.png" />
+    <Resource Include="Resources\ConsoleIMG_Green.png" />
+    <Resource Include="Resources\ConsoleIMG_Brown.png" />
+    <Resource Include="Resources\ConsoleIMG_Blue.png" />
+    <Resource Include="Resources\ConsoleIMG_Yellow.png" />
+    <Resource Include="Resources\ConsoleIMG_Violet.png" />
+    <Resource Include="Resources\AccountsIMG_Red.png" />
+    <Resource Include="Resources\AccountsIMG_Orange.png" />
+    <Resource Include="Resources\AccountsIMG_Indigo.png" />
+    <Resource Include="Resources\AccountsIMG_Green.png" />
+    <Resource Include="Resources\AccountsIMG_Brown.png" />
+    <Resource Include="Resources\AccountsIMG_Blue.png" />
+    <Resource Include="Resources\AccountsIMG_Yellow.png" />
+    <Resource Include="Resources\AccountsIMG_Violet.png" />
     <Resource Include="Resources\AccountsImage.png" />
     <Resource Include="Resources\SniperImage.png" />
     <Resource Include="Resources\PokemonImage.png" />
@@ -665,9 +729,7 @@
       <Using xmlns="http://schemas.microsoft.com/developer/msbuild/2003" Namespace="System.Xml.Linq" />
       <Code xmlns="http://schemas.microsoft.com/developer/msbuild/2003" Type="Fragment" Language="cs"><![CDATA[
 var config = XElement.Load(Config.ItemSpec).Elements("Costura").FirstOrDefault();
-
 if (config == null) return true;
-
 var excludedAssemblies = new List<string>();
 var attribute = config.Attribute("ExcludeAssemblies");
 if (attribute != null)
@@ -677,9 +739,7 @@ var element = config.Element("ExcludeAssemblies");
 if (element != null)
     foreach (var item in element.Value.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()).Where(x => x != string.Empty))
         excludedAssemblies.Add(item);
-
 var filesToCleanup = Files.Select(f => f.ItemSpec).Where(f => !excludedAssemblies.Contains(Path.GetFileNameWithoutExtension(f), StringComparer.InvariantCultureIgnoreCase));
-
 foreach (var item in filesToCleanup)
   File.Delete(item);
 ]]></Code>

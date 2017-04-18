@@ -25,6 +25,8 @@ using DotNetBrowser.WPF;
 using PoGo.NecroBot.Logic;
 using PoGo.NecroBot.Logic.Model.Settings;
 using static PoGo.NecroBot.Logic.MultiAccountManager;
+using System.Windows.Media.Imaging;
+using PoGo.NecroBot.Logic.Event;
 
 namespace PoGo.Necrobot.Window
 {
@@ -80,6 +82,7 @@ namespace PoGo.Necrobot.Window
             else if (!Settings.Default.BrowserToggled)
             {
                 browserMenuText.Text = translator.EnableHub;
+                tabBrowser.IsEnabled = false;
             }
         }
 
@@ -107,12 +110,19 @@ namespace PoGo.Necrobot.Window
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             LoadHelpArticleAsync();
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            if (datacontext.PlayerInfo.Level == 35) // Warn Player on Reaching this Level -- NEEDS CONFIG SETTING
+            Width = Settings.Default.Width;
+            Height = Settings.Default.Height;
+
+            if (datacontext.PlayerInfo.Level == currentSession.LogicSettings.LevelLimit) // Warn Player on Reaching this Level
             {
-                NecroBot.Logic.Logging.Logger.Write($"You have reached Level {datacontext.PlayerInfo.Level} and it is recommended to Switch Accounts",LogLevel.Warning);
+                currentSession.EventDispatcher.Send(new ErrorEvent
+                {
+                    Message = currentSession.Translation.GetTranslation(TranslationString.LevelLimitReached)
+                });
             }
             ChangeThemeTo(Settings.Default.Theme);
         }
+
         private DateTime lastClearLog = DateTime.Now;
         public void LogToConsoleTab(string message, LogLevel level, string color)
         { 
@@ -214,6 +224,71 @@ namespace PoGo.Necrobot.Window
             Application.Current.Resources.MergedDictionaries.Add(dict);
             Application.Current.Resources.MergedDictionaries.Remove(theme);
 
+            /* THE CODE BELOW IS BUGGED - NEEDS CRUCIAL FIX!
+            accountsIMG.Source = new BitmapImage(new Uri($"Resources/AccountsIMG_{color}.png"));
+            browserIMG.Source = new BitmapImage(new Uri($"Resources/HubIMG_{color}.png"));
+            mapIMG.Source = new BitmapImage(new Uri($"Resources/MapIMG_{color}.png"));
+            sniperIMG.Source = new BitmapImage(new Uri($"Resources/SniperIMG_{color}.png"));
+            consoleIMG.Source = new BitmapImage(new Uri($"Resources/ConsoleIMG_{color}.png"));
+            pokemonIMG.Source = new BitmapImage(new Uri($"Resources/PokemonIMG_{color}.png"));
+            itemsIMG.Source = new BitmapImage(new Uri($"Resources/ItemsIMG_{color}.png"));
+            eggsIMG.Source = new BitmapImage(new Uri($"Resources/EggsIMG_{color}.png"));
+
+            if (color == "Cobalt" || color == "Cyan") // Use Blue Icons
+            {
+                accountsIMG.Source = new BitmapImage(new Uri("Resources/AccountsIMG_Blue.png"));
+                browserIMG.Source = new BitmapImage(new Uri("Resources/HubIMG_Blue.png"));
+                mapIMG.Source = new BitmapImage(new Uri("Resources/MapIMG_Blue.png"));
+                sniperIMG.Source = new BitmapImage(new Uri("Resources/SniperIMG_Blue.png"));
+                consoleIMG.Source = new BitmapImage(new Uri("Resources/ConsoleIMG_Blue.png"));
+                pokemonIMG.Source = new BitmapImage(new Uri("Resources/PokemonIMG_Blue.png"));
+                itemsIMG.Source = new BitmapImage(new Uri("Resources/ItemsIMG_Blue.png"));
+                eggsIMG.Source = new BitmapImage(new Uri("Resources/EggsIMG_Blue.png"));
+            }
+            else if (color == "Crimson") // Use Red Icons
+            {
+                accountsIMG.Source = new BitmapImage(new Uri("Resources/AccountsIMG_Red.png"));
+                browserIMG.Source = new BitmapImage(new Uri("Resources/HubIMG_Red.png"));
+                mapIMG.Source = new BitmapImage(new Uri("Resources/MapIMG_Red.png"));
+                sniperIMG.Source = new BitmapImage(new Uri("Resources/SniperIMG_Red.png"));
+                consoleIMG.Source = new BitmapImage(new Uri("Resources/ConsoleIMG_Red.png"));
+                pokemonIMG.Source = new BitmapImage(new Uri("Resources/PokemonIMG_Red.png"));
+                itemsIMG.Source = new BitmapImage(new Uri("Resources/ItemsIMG_Red.png"));
+                eggsIMG.Source = new BitmapImage(new Uri("Resources/EggsIMG_Red.png"));
+            }
+            else if (color == "Emerald" || color == "Lime") // Use Green Icons
+            {
+                accountsIMG.Source = new BitmapImage(new Uri("Resources/AccountsIMG_Green.png"));
+                browserIMG.Source = new BitmapImage(new Uri("Resources/HubIMG_Green.png"));
+                mapIMG.Source = new BitmapImage(new Uri("Resources/MapIMG_Green.png"));
+                sniperIMG.Source = new BitmapImage(new Uri("Resources/SniperIMG_Green.png"));
+                consoleIMG.Source = new BitmapImage(new Uri("Resources/ConsoleIMG_Green.png"));
+                itemsIMG.Source = new BitmapImage(new Uri("Resources/ItemsIMG_Green.png"));
+                eggsIMG.Source = new BitmapImage(new Uri("Resources/EggsIMG_Green.png"));
+            }
+            else if (color == "Purple") // Use Indigo Icons
+            {
+                accountsIMG.Source = new BitmapImage(new Uri("Resources/AccountsIMG_Indigo.png"));
+                browserIMG.Source = new BitmapImage(new Uri("Resources/HubIMG_Indigo.png"));
+                mapIMG.Source = new BitmapImage(new Uri("Resources/MapIMG_Indigo.png"));
+                sniperIMG.Source = new BitmapImage(new Uri("Resources/SniperIMG_Indigo.png"));
+                consoleIMG.Source = new BitmapImage(new Uri("Resources/ConsoleIMG_Indigo.png"));
+                pokemonIMG.Source = new BitmapImage(new Uri("Resources/PokemonIMG_Indigo.png"));
+                itemsIMG.Source = new BitmapImage(new Uri("Resources/ItemsIMG_Indigo.png"));
+                eggsIMG.Source = new BitmapImage(new Uri("Resources/EggsIMG_Indigo.png"));
+            }
+            else if (color =="Pink") // Use Violet Icons
+            {
+                accountsIMG.Source = new BitmapImage(new Uri("Resources/AccountsIMG_Violet.png"));
+                browserIMG.Source = new BitmapImage(new Uri("Resources/HubIMG_Violet.png"));
+                mapIMG.Source = new BitmapImage(new Uri("Resources/MapIMG_Violet.png"));
+                sniperIMG.Source = new BitmapImage(new Uri("Resources/SniperIMG_Violet.png"));
+                consoleIMG.Source = new BitmapImage(new Uri("Resources/ConsoleIMG_Violet.png"));
+                pokemonIMG.Source = new BitmapImage(new Uri("Resources/PokemonIMG_Violet.png"));
+                itemsIMG.Source = new BitmapImage(new Uri("Resources/ItemsIMG_Violet.png"));
+                eggsIMG.Source = new BitmapImage(new Uri("Resources/EggsIMG_Violet.png"));
+            }*/
+
         }
 
         private void Theme_Selected(object sender, RoutedEventArgs e)
@@ -268,7 +343,7 @@ namespace PoGo.Necrobot.Window
         private void BtnSwitchAcount_Click(object sender, RoutedEventArgs e)
         {
             var btn = ((Button)sender);
-            var account = (MultiAccountManager.BotAccount)btn.CommandParameter;
+            var account = (BotAccount)btn.CommandParameter;
 
             var manager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
 
@@ -339,18 +414,13 @@ namespace PoGo.Necrobot.Window
                 Settings.Default.BrowserToggled = false;
                 Settings.Default.Save();
 
-                MessageBoxResult msgbox = MessageBox.Show("Would you Like to Restart to kill unneccesary browser tasks and free up extra cpu?","Free Up CPU",MessageBoxButton.YesNo,MessageBoxImage.Question);
-                if (msgbox == MessageBoxResult.Yes)
-                {
-                    Process.Start(Application.ResourceAssembly.Location);
-                    Application.Current.Shutdown();
-                }
-                else
-                { }
+                webView.Browser.Dispose();
+                webView.Dispose();
             }
             else if (!Settings.Default.BrowserToggled)
             {
                 tabBrowser.IsEnabled = true;
+                InitBrowser();
                 browserMenuText.Text = translator.DisableHub;
                 Settings.Default.BrowserToggled = true;
                 Settings.Default.Save();
@@ -370,6 +440,9 @@ namespace PoGo.Necrobot.Window
 
         private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            Settings.Default.Width = Width;
+            Settings.Default.Height = Height;
+            Settings.Default.Save();
             Process.GetCurrentProcess().Kill();
         }
     }
