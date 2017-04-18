@@ -692,7 +692,9 @@
     <Resource Include="Resources\AccountsIMG_Indigo.png" />
     <Resource Include="Resources\AccountsIMG_Green.png" />
     <Resource Include="Resources\AccountsIMG_Brown.png" />
-    <Resource Include="Resources\AccountsIMG_Blue.png" />
+    <Content Include="Tabs\AccountsIMG_Blue.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Resource Include="Resources\AccountsIMG_Yellow.png" />
     <Resource Include="Resources\AccountsIMG_Violet.png" />
     <Resource Include="Resources\AccountsImage.png" />

@@ -73,16 +73,6 @@ namespace PoGo.Necrobot.Window.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap AccountsIMG_Blue {
-            get {
-                object obj = ResourceManager.GetObject("AccountsIMG_Blue", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap AccountsIMG_Brown {
             get {
                 object obj = ResourceManager.GetObject("AccountsIMG_Brown", resourceCulture);

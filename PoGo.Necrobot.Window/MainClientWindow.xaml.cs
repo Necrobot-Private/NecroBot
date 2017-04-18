@@ -27,6 +27,7 @@ using PoGo.NecroBot.Logic.Model.Settings;
 using static PoGo.NecroBot.Logic.MultiAccountManager;
 using System.Windows.Media.Imaging;
 using PoGo.NecroBot.Logic.Event;
+using System.Reflection;
 
 namespace PoGo.Necrobot.Window
 {
@@ -224,17 +225,18 @@ namespace PoGo.Necrobot.Window
             Application.Current.Resources.MergedDictionaries.Add(dict);
             Application.Current.Resources.MergedDictionaries.Remove(theme);
 
-            /* THE CODE BELOW IS BUGGED - NEEDS CRUCIAL FIX!
-            accountsIMG.Source = new BitmapImage(new Uri($"Resources/AccountsIMG_{color}.png"));
-            browserIMG.Source = new BitmapImage(new Uri($"Resources/HubIMG_{color}.png"));
-            mapIMG.Source = new BitmapImage(new Uri($"Resources/MapIMG_{color}.png"));
-            sniperIMG.Source = new BitmapImage(new Uri($"Resources/SniperIMG_{color}.png"));
-            consoleIMG.Source = new BitmapImage(new Uri($"Resources/ConsoleIMG_{color}.png"));
-            pokemonIMG.Source = new BitmapImage(new Uri($"Resources/PokemonIMG_{color}.png"));
-            itemsIMG.Source = new BitmapImage(new Uri($"Resources/ItemsIMG_{color}.png"));
-            eggsIMG.Source = new BitmapImage(new Uri($"Resources/EggsIMG_{color}.png"));
+            // THE CODE BELOW IS BUGGED - NEEDS CRUCIAL FIX!
 
-            if (color == "Cobalt" || color == "Cyan") // Use Blue Icons
+            accountsIMG.Source = new BitmapImage(new Uri(@"pack://application:,,,/Tabs/AccountsIMG_Blue.png", UriKind.Absolute));
+            //browserIMG.Source = new BitmapImage(new Uri($"Resources/HubIMG_{color}.png"));
+            //mapIMG.Source = new BitmapImage(new Uri($"Resources/MapIMG_{color}.png"));
+            //sniperIMG.Source = new BitmapImage(new Uri($"Resources/SniperIMG_{color}.png"));
+            //consoleIMG.Source = new BitmapImage(new Uri($"Resources/ConsoleIMG_{color}.png"));
+            //pokemonIMG.Source = new BitmapImage(new Uri($"Resources/PokemonIMG_{color}.png"));
+            //itemsIMG.Source = new BitmapImage(new Uri($"Resources/ItemsIMG_{color}.png"));
+            //eggsIMG.Source = new BitmapImage(new Uri($"Resources/EggsIMG_{color}.png"));
+
+            /*if (color == "Cobalt" || color == "Cyan") // Use Blue Icons
             {
                 accountsIMG.Source = new BitmapImage(new Uri("Resources/AccountsIMG_Blue.png"));
                 browserIMG.Source = new BitmapImage(new Uri("Resources/HubIMG_Blue.png"));
