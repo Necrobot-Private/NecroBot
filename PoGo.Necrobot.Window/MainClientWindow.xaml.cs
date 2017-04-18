@@ -84,7 +84,6 @@ namespace PoGo.Necrobot.Window
 
         private void InitBrowser()
         {
-
             string path = System.Reflection.Assembly.GetExecutingAssembly().Location;
 
             string appDir = Path.GetDirectoryName(path);
