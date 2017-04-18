@@ -48,7 +48,7 @@ namespace RocketBot2.Forms
             lbHeight.Text = $"Height {pokemon.HeightM}m";
         }
 
-        private void btnClose_Click(object sender, EventArgs e)
+        private void BtnClose_Click(object sender, EventArgs e)
         {
             Close();
         }
