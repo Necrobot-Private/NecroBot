@@ -219,6 +219,7 @@ namespace PoGo.Necrobot.Window
             Application.Current.Resources.MergedDictionaries.Add(dict);
             Application.Current.Resources.MergedDictionaries.Remove(theme);
 
+            /* THE CODE BELOW IS BUGGED - NEEDS CRUCIAL FIX!
             accountsIMG.Source = new BitmapImage(new Uri($"Resources/AccountsIMG_{color}.png"));
             browserIMG.Source = new BitmapImage(new Uri($"Resources/HubIMG_{color}.png"));
             mapIMG.Source = new BitmapImage(new Uri($"Resources/MapIMG_{color}.png"));
@@ -281,7 +282,7 @@ namespace PoGo.Necrobot.Window
                 pokemonIMG.Source = new BitmapImage(new Uri("Resources/PokemonIMG_Violet.png"));
                 itemsIMG.Source = new BitmapImage(new Uri("Resources/ItemsIMG_Violet.png"));
                 eggsIMG.Source = new BitmapImage(new Uri("Resources/EggsIMG_Violet.png"));
-            }
+            }*/
 
         }
 
