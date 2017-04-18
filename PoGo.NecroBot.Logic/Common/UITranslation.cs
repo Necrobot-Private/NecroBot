@@ -52,7 +52,10 @@ namespace PoGo.NecroBot.Logic.Common
 
         [Description("Theme")]
         public string Theme { get; set; }
-        
+
+        [Description("Scheme")]
+        public string Scheme { get; set; }
+
         [Description("Enter your Command")]
         public string InputCommand { get; set; }
 

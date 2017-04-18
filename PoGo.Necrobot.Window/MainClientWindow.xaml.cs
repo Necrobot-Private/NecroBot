@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
+//using System.Windows.Media;
 using PoGo.Necrobot.Window.Properties;
 using PoGo.NecroBot.Logic.State;
 using PoGo.Necrobot.Window.Win32;
@@ -20,8 +21,6 @@ using System.Net;
 using System.Xml;
 using System.IO;
 using System.Net.Http;
-using DotNetBrowser;
-using DotNetBrowser.WPF;
 using PoGo.NecroBot.Logic;
 using PoGo.NecroBot.Logic.Model.Settings;
 using static PoGo.NecroBot.Logic.MultiAccountManager;
@@ -109,6 +108,7 @@ namespace PoGo.Necrobot.Window
                 NecroBot.Logic.Logging.Logger.Write($"You have reached Level {datacontext.PlayerInfo.Level} and it is recommended to Switch Accounts",LogLevel.Warning);
             }
             ChangeThemeTo(Settings.Default.Theme);
+            ChangeSchemeTo(Settings.Default.Scheme);
         }
         private DateTime lastClearLog = DateTime.Now;
         public void LogToConsoleTab(string message, LogLevel level, string color)
@@ -201,16 +201,49 @@ namespace PoGo.Necrobot.Window
             }
         }
 
-        private void ChangeThemeTo(string color)
+        private void ChangeThemeTo(string Theme)
         {
             ResourceDictionary dict = new ResourceDictionary()
             {
-                Source = new Uri($"pack://application:,,,/MahApps.Metro;component/Styles/Accents/{color}.xaml", UriKind.Absolute)
+                Source = new Uri($"pack://application:,,,/MahApps.Metro;component/Styles/Accents/{Theme}.xaml", UriKind.Absolute)
             };
             var theme = Application.Current.Resources.MergedDictionaries.LastOrDefault();
             Application.Current.Resources.MergedDictionaries.Add(dict);
             Application.Current.Resources.MergedDictionaries.Remove(theme);
 
+        }
+        private void ChangeSchemeTo(string Scheme)
+        {
+            ResourceDictionary dict = new ResourceDictionary()
+            {
+                Source = new Uri($"pack://application:,,,/MahApps.Metro;component/Styles/Accents/{Scheme}.xaml", UriKind.Absolute)
+            };
+            var scheme = Application.Current.Resources.MergedDictionaries.LastOrDefault();
+            Application.Current.Resources.MergedDictionaries.Add(dict);
+            Application.Current.Resources.MergedDictionaries.Remove(scheme);
+
+            /*if (Settings.Default.Scheme == "BaseLight")
+            {
+                tabAccounts.Background = Brushes.Gray;
+                tabBrowser.Background = Brushes.Gray;
+                tabConsole.Background = Brushes.Gray;
+                tabEggs.Background = Brushes.Gray;
+                tabItems.Background = Brushes.Gray;
+                tabPokemons.Background = Brushes.Gray;
+                tabMap.Background = Brushes.Gray;
+                tabSniper.Background = Brushes.Gray;
+            }
+            else if (Settings.Default.Scheme == "BaseDark")
+            {
+                tabAccounts.Background = Brushes.Black;
+                tabBrowser.Background = Brushes.Black;
+                tabConsole.Background = Brushes.Black;
+                tabEggs.Background = Brushes.Black;
+                tabItems.Background = Brushes.Black;
+                tabPokemons.Background = Brushes.Black;
+                tabMap.Background = Brushes.Black;
+                tabSniper.Background = Brushes.Black;
+            }*/
         }
 
         private void Theme_Selected(object sender, RoutedEventArgs e)
@@ -218,11 +251,33 @@ namespace PoGo.Necrobot.Window
             Popup1.IsOpen = !Popup1.IsOpen;
         }
 
+        private void Scheme_Selected(object sender, RoutedEventArgs e)
+        {
+            Popup2.IsOpen = !Popup2.IsOpen;
+        }
+
         private void OnTheme_Checked(object sender, RoutedEventArgs e)
         {
             var rad = sender as RadioButton;
             ChangeThemeTo(rad.Content as string);
             Settings.Default.Theme = rad.Content as string;
+            Settings.Default.Save();
+        }
+
+        private void OnScheme_Checked(object sender, RoutedEventArgs e)
+        {
+            var rad = sender as RadioButton;
+            var Scheme = rad.Content as string;
+            if (Scheme == "Light")
+            {
+                ChangeSchemeTo("BaseLight");
+                Settings.Default.Scheme = "BaseLight";
+            }
+            if (Scheme == "Dark")
+            {
+                ChangeSchemeTo("BaseDark");
+                Settings.Default.Scheme = "BaseDark";
+            }
             Settings.Default.Save();
         }
 
