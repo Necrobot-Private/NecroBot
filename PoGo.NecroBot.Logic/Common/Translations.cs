@@ -319,7 +319,8 @@ namespace PoGo.NecroBot.Logic.Common
         TelegramCommandProfileMsgBody,
         TelegramCommandStatusMsgBody,
         MultiAccountAutoSelect,
-        PtcLoginFail
+        PtcLoginFail,
+        LevelLimitReached
     }
 
     public class Translation : ITranslation
@@ -769,6 +770,8 @@ namespace PoGo.NecroBot.Logic.Common
                 new KeyValuePair<TranslationString, string>(TranslationString.PokestopLimitReached,
                     "You have reached your set maximum number of Pokestops per 24 Hours. Looting of Pokestops disabled until the limits expire."),
                 new KeyValuePair<TranslationString, string>(TranslationString.PokestopTimerReached,
+                    "You have Reached your Level Limit, Please Choose Another Account"),
+                new KeyValuePair<TranslationString, string>(TranslationString.LevelLimitReached,
                     "You have reached your set maximum running time to loot Pokestops per 24 Hours. Looting of Pokestops disabled until the limits expire."),
                 new KeyValuePair<TranslationString, string>(TranslationString.ExitDueToLimitsReached,
                     "We have reached both the user defined max Pokestops/max duration and caught max Pokemons/max duration. Time to take a break. Exiting."),

@@ -23,7 +23,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
-        [NecrobotConfig(Position = 2, Description = "If enabled, will display a welcome message on startup")]
+        [NecrobotConfig(Position = 2, Description = "If enabled, bot will display a welcome message on startup")]
         public bool StartupWelcomeDelay { get; set; }
 
         [DefaultValue(2)]
@@ -32,9 +32,20 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [NecrobotConfig(Position = 3, Description = "Amount Of Pokemon To Display On Start")]
         public int AmountOfPokemonToDisplayOnStart { get; set; }
 
-        [DefaultValue(true)]
+        [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 4)]
-        [NecrobotConfig(Position = 4, Description = "Detailed Inventory Count to Display Before Recycling")]
+        [NecrobotConfig(Position = 4, Description = "If Enabled, Bot will display a Message on hitting the level limit")]
+        public bool EnableLevelLimit { get; set; }
+
+        [DefaultValue(35)]
+        [Range(0, 40)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 5)]
+        [NecrobotConfig(Position = 5, Description = "Have the Bot warn you if Reached this Level")]
+        public int LevelLimit { get; set; }
+
+        [DefaultValue(true)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 6)]
+        [NecrobotConfig(Position = 6, Description = "Detailed Inventory Count to Display Before Recycling")]
         public bool DetailedCountsBeforeRecycling { get; set; }
     }
 }

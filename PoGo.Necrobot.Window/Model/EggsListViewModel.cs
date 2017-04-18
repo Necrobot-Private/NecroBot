@@ -40,12 +40,11 @@ namespace PoGo.Necrobot.Window.Model
 
                 AddOrUpdate(egg, incu);
             }
-
-            
         }
 
-        private void AddOrUpdateIncubator(EggIncubator incu)
-        {
+
+         private void AddOrUpdateIncubator(EggIncubator incu)
+         {
             var incuModel = new IncubatorViewModel(incu);
             var existing = Incubators.FirstOrDefault(x => x.Id == incu.Id);
             if (existing != null)
@@ -56,7 +55,7 @@ namespace PoGo.Necrobot.Window.Model
             {
                 Incubators.Add(incuModel);
             }
-        }
+         }
 
         public void AddOrUpdate(PokemonData egg, IncubatorViewModel incu = null)
         {

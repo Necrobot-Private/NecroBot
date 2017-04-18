@@ -200,10 +200,10 @@
             <local:PlayerInfo DataContext="{Binding Path=PlayerInfo}" Margin="10,0,-2,1" />
         </GroupBox>
         <StatusBar DockPanel.Dock="Bottom">
-            <StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Right">
                 <TextBlock Name="lblStatus" />
             </StatusBarItem>
-            <StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Right">
                 <TextBlock Name="lblCount" />
             </StatusBarItem>
         </StatusBar>
@@ -253,7 +253,7 @@
             </TabControl.Resources>
             <TabItem Name="tabAccounts">
                 <TabItem.Header>
-                    <Image x:Name="accountsIMG" Source="Resources/AccountsImage.png" Width="32" RenderTransformOrigin="0.5,0.5" >
+                    <Image x:Name="accountsIMG" Source="Resources/AccountsImage.png" Width="64" RenderTransformOrigin="0.5,0.5" >
                         <Image.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform/>
@@ -300,7 +300,7 @@
             </TabItem>
             <TabItem Name="tabBrowser">
                 <TabItem.Header>
-                    <Image x:Name="browserIMG" Source="Resources/HubImage.png" Width="32" RenderTransformOrigin="0.5,0.5" Height="32" >
+                    <Image x:Name="browserIMG" Source="Resources/HubImage.png" Width="64" RenderTransformOrigin="0.5,0.5" Height="64" >
                         <Image.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform/>
@@ -317,7 +317,7 @@
             </TabItem>
             <TabItem Name="tabMap">
                 <TabItem.Header>
-                    <Image x:Name="mapIMG" Source="Resources/MapImage.png" Width="32" RenderTransformOrigin="0.5,0.5" Height="32" >
+                    <Image x:Name="mapIMG" Source="Resources/MapImage.png" Width="64" RenderTransformOrigin="0.5,0.5" Height="64" >
                         <Image.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform/>
@@ -345,7 +345,7 @@
             </TabItem>
             <TabItem x:Name="tabSniper">
                 <TabItem.Header>
-                    <Image x:Name="sniperIMG" Source="Resources/SniperImage.png" Width="32" Height="32" />
+                    <Image x:Name="sniperIMG" Source="Resources/SniperImage.png" Width="64" Height="64" />
                 </TabItem.Header>
 
                 <local:SniperControl x:Name="ctrlSniper" DataContext="{Binding Path=SnipeList}" />
@@ -353,7 +353,7 @@
 
             <TabItem x:Name="tabConsole" IsSelected="True">
                 <TabItem.Header>
-                    <Image x:Name="consoleIMG" Source="Resources/ConsoleImage.png" Width="32" RenderTransformOrigin="0.5,0.5" Height="32" >
+                    <Image x:Name="consoleIMG" Source="Resources/ConsoleImage.png" Width="64" RenderTransformOrigin="0.5,0.5" Height="64" >
                         <Image.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform/>
@@ -399,49 +399,54 @@
 
             </TabItem>
 
-            <TabItem Name="tabPokemons">
+            <TabItem Name="tabPokemons" Width="80" Height="80">
                 <TabItem.Header>
-                    <Image x:Name="pokemonIMG" Source="Resources/PokemonImage.png" Width="32" Height="32" RenderTransformOrigin="0.5,0.5" >
-                        <Image.RenderTransform>
+                    <StackPanel Orientation="Vertical" RenderTransformOrigin="0.5,0.5" Width="80">
+                        <StackPanel.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform/>
                                 <SkewTransform/>
-                                <RotateTransform Angle="90.000"/>
+                                <RotateTransform Angle="90"/>
                                 <TranslateTransform/>
                             </TransformGroup>
-                        </Image.RenderTransform>
-                    </Image>
+                        </StackPanel.RenderTransform>
+                        <Image x:Name="pokemonIMG" Source="Resources/PokemonImage.png" Width="48" Height="48"/>
+                        <TextBlock FontSize="12" HorizontalAlignment="Center" Text="{Binding Path= PokemonTabHeader, FallbackValue=Pokemon}"/>
+                    </StackPanel>
                 </TabItem.Header>
                 <local:PokemonInventory x:Name="ctrPokemonInventory" DataContext="{Binding Path=PokemonList}"
                                         OnPokemonItemSelected="PokemonInventory_OnPokemonItemSelected" />
             </TabItem>
-            <TabItem Name="tabItems">
+            <TabItem Name="tabItems" Width="80" Height="80">
                 <TabItem.Header>
-                    <Image x:Name="itemsIMG" Source="Resources/ItemsImage.png" Width="32" RenderTransformOrigin="0.5,0.5" >
-                        <Image.RenderTransform>
+                    <StackPanel Orientation="Vertical" RenderTransformOrigin="0.5,0.5" Width="80">
+                        <StackPanel.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform/>
                                 <SkewTransform/>
-                                <RotateTransform Angle="90.000"/>
+                                <RotateTransform Angle="90"/>
                                 <TranslateTransform/>
                             </TransformGroup>
-                        </Image.RenderTransform>
-                    </Image>
+                        </StackPanel.RenderTransform>
+                        <Image x:Name="itemsIMG" Source="Resources/ItemsImage.png" Width="48" Height="48"/>
+                        <TextBlock FontSize="12" HorizontalAlignment="Center" Text="{Binding Path= ItemsTabHeader, FallbackValue=Items}"/>
+                    </StackPanel>
                 </TabItem.Header>
                 <local:ItemsInventory DataContext="{Binding Path=ItemsList}" x:Name="ctrlItemControl" />
             </TabItem>
-            <TabItem Name="tabEggs">
+            <TabItem Name="tabEggs" Width="80" Height="80">
                 <TabItem.Header>
-                    <Image x:Name="eggsIMG" Source="Resources/EggsImage.png" Width="32" Height="32" RenderTransformOrigin="0.5,0.5" >
-                        <Image.RenderTransform>
+                    <StackPanel Orientation="Vertical" RenderTransformOrigin="0.5,0.5" Width="80">
+                        <StackPanel.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform/>
                                 <SkewTransform/>
-                                <RotateTransform Angle="90.000"/>
+                                <RotateTransform Angle="90"/>
                                 <TranslateTransform/>
                             </TransformGroup>
-                        </Image.RenderTransform>
-                    </Image>
+                        </StackPanel.RenderTransform>
+                        <Image x:Name="eggsIMG" Source="Resources/EggsImage.png" Width="60" Height="60"/>
+                    </StackPanel>
                 </TabItem.Header>
                 <local:EggsControl DataContext="{Binding Path=EggsList}" x:Name="ctrlEggsControl" />
             </TabItem>
