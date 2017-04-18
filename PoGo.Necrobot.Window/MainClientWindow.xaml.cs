@@ -80,6 +80,7 @@ namespace PoGo.Necrobot.Window
             else if (!Settings.Default.BrowserToggled)
             {
                 browserMenuText.Text = translator.EnableHub;
+                tabBrowser.IsEnabled = false;
             }
         }
 
@@ -268,7 +269,7 @@ namespace PoGo.Necrobot.Window
         private void BtnSwitchAcount_Click(object sender, RoutedEventArgs e)
         {
             var btn = ((Button)sender);
-            var account = (MultiAccountManager.BotAccount)btn.CommandParameter;
+            var account = (BotAccount)btn.CommandParameter;
 
             var manager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
 
@@ -339,18 +340,13 @@ namespace PoGo.Necrobot.Window
                 Settings.Default.BrowserToggled = false;
                 Settings.Default.Save();
 
-                MessageBoxResult msgbox = MessageBox.Show("Would you Like to Restart to kill unneccesary browser tasks and free up extra cpu?","Free Up CPU",MessageBoxButton.YesNo,MessageBoxImage.Question);
-                if (msgbox == MessageBoxResult.Yes)
-                {
-                    Process.Start(Application.ResourceAssembly.Location);
-                    Application.Current.Shutdown();
-                }
-                else
-                { }
+                webView.Browser.Dispose();
+                webView.Dispose();
             }
             else if (!Settings.Default.BrowserToggled)
             {
                 tabBrowser.IsEnabled = true;
+                InitBrowser();
                 browserMenuText.Text = translator.DisableHub;
                 Settings.Default.BrowserToggled = true;
                 Settings.Default.Save();
