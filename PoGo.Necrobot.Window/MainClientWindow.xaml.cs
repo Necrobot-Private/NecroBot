@@ -35,26 +35,26 @@ namespace PoGo.Necrobot.Window
     {
         private static Dictionary<LogLevel, string> ConsoleColors = new Dictionary<LogLevel, string>()
             {
-                { LogLevel.Error, "Red" },
-                { LogLevel.Caught, "Green" },
-                { LogLevel.Info, "DarkCyan" } ,
-                { LogLevel.Warning, "DarkYellow" } ,
-                { LogLevel.Pokestop,"Cyan" }  ,
-                { LogLevel.Farming,"Magenta" },
-                { LogLevel.Sniper,"White" },
-                { LogLevel.Recycling,"DarkMagenta" },
-                { LogLevel.Flee,"DarkYellow" },
-                { LogLevel.Transfer,"DarkGreen" },
-                { LogLevel.Evolve,"DarkGreen" },
-                { LogLevel.Berry,"DarkYellow" },
-                { LogLevel.Egg,"DarkYellow" },
-                { LogLevel.Debug,"Gray" },
-                { LogLevel.Update,"White" },
-                { LogLevel.New,"Green" },
-                { LogLevel.SoftBan,"Red" },
-                { LogLevel.LevelUp,"Magenta" },
-                { LogLevel.Gym,"Magenta" },
-                { LogLevel.Service ,"White" }
+                { LogLevel.Error, "#dc322f" },
+                { LogLevel.Caught, "#859900" },
+                { LogLevel.Info, "#268bd2" } ,
+                { LogLevel.Warning, "#b58900" } ,
+                { LogLevel.Pokestop, "#2aa198" }  ,
+                { LogLevel.Farming, "#d33682" },
+                { LogLevel.Sniper, "#93a1a1" },
+                { LogLevel.Recycling, "#cb4b16" },
+                { LogLevel.Flee, "#b58900" },
+                { LogLevel.Transfer, "#586e75" },
+                { LogLevel.Evolve, "#586e75" },
+                { LogLevel.Berry, "#b58900" },
+                { LogLevel.Egg, "#b58900" },
+                { LogLevel.Debug, "#2aa198" },
+                { LogLevel.Update, "#fdf6e3" },
+                { LogLevel.New, "#859900" },
+                { LogLevel.SoftBan, "#dc322f" },
+                { LogLevel.LevelUp, "#d33682" },
+                { LogLevel.Gym, "#d33682" },
+                { LogLevel.Service , "#fdf6e3" }
             };
 
         BrowserView webView;
