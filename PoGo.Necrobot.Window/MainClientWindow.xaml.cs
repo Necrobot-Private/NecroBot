@@ -57,8 +57,6 @@ namespace PoGo.Necrobot.Window
                 { LogLevel.Service , "#fdf6e3" }
             };
 
-        BrowserView webView;
-
         public MainClientWindow()
         {
             InitializeComponent();
@@ -85,16 +83,13 @@ namespace PoGo.Necrobot.Window
 
         private void InitBrowser()
         {
-            webView = new WPFBrowserView(BrowserFactory.Create());
-            browserLayout.Children.Add((UIElement)webView.GetComponent());
-
 
             string path = System.Reflection.Assembly.GetExecutingAssembly().Location;
 
             string appDir = Path.GetDirectoryName(path);
             var uri = new Uri(Path.Combine(appDir, @"PokeEase\index.html"));
 
-            webView.Browser.LoadURL(uri.ToString());
+            webView.URL = uri.ToString();
         }
 
         private void Grid_Loaded(object sender, RoutedEventArgs e)
