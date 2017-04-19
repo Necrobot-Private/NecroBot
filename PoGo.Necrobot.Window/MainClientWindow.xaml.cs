@@ -77,6 +77,7 @@ namespace PoGo.Necrobot.Window
             else if (!Settings.Default.BrowserToggled)
             {
                 browserMenuText.Text = translator.EnableHub;
+                tabBrowser.IsEnabled = false;
             }
         }
 
@@ -100,16 +101,18 @@ namespace PoGo.Necrobot.Window
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             LoadHelpArticleAsync();
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            Width = Settings.Default.Width;
+            Height = Settings.Default.Height;
             if (datacontext.PlayerInfo.Level == 35) // Warn Player on Reaching this Level -- NEEDS CONFIG SETTING
             {
-                Logger.Write($"You have reached Level {datacontext.PlayerInfo.Level} and it is recommended to Switch Accounts",LogLevel.Warning);
+                Logger.Write($"You have reached Level {datacontext.PlayerInfo.Level} and it is recommended to Switch Accounts", LogLevel.Warning);
             }
             ChangeThemeTo(Settings.Default.Theme);
             ChangeSchemeTo(Settings.Default.Scheme);
         }
         private DateTime lastClearLog = DateTime.Now;
         public void LogToConsoleTab(string message, LogLevel level, string color)
-        { 
+        {
             if (string.IsNullOrEmpty(color) || color == "Black")
                 color = ConsoleColors[level];
 
@@ -164,7 +167,7 @@ namespace PoGo.Necrobot.Window
 
             if (isConsoleShowing)
             {
-                consoleMenuText.Text = translator.ShowConsole; 
+                consoleMenuText.Text = translator.ShowConsole;
                 ConsoleHelper.HideConsoleWindow();
             }
             else
@@ -179,7 +182,7 @@ namespace PoGo.Necrobot.Window
         private void MenuSetting_Click(object sender, RoutedEventArgs e)
         {
             var configWindow = new SettingsWindow(this, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config\\config.json"));
-            configWindow.ShowDialog();         
+            configWindow.ShowDialog();
         }
 
         private void BtnHideInfo_Click(object sender, RoutedEventArgs e)
@@ -286,7 +289,7 @@ namespace PoGo.Necrobot.Window
         private void TxtCmdInput_KeyDown(object sender, KeyEventArgs e)
         {
 
-            if(e.Key == Key.Enter)
+            if (e.Key == Key.Enter)
             {
                 NecroBot.Logic.Logging.Logger.Write(txtCmdInput.Text, LogLevel.Info, ConsoleColor.White);
                 txtCmdInput.Text = "";
@@ -313,7 +316,7 @@ namespace PoGo.Necrobot.Window
                 }
             }
         }
-        
+
         private void BtnDonate_Click(object sender, RoutedEventArgs e)
         {
             Process.Start("http://snipe.necrobot2.com?donate");
@@ -322,7 +325,7 @@ namespace PoGo.Necrobot.Window
         private void BtnSwitchAcount_Click(object sender, RoutedEventArgs e)
         {
             var btn = ((Button)sender);
-            var account = (MultiAccountManager.BotAccount)btn.CommandParameter;
+            var account = (BotAccount)btn.CommandParameter;
 
             var manager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
 
@@ -341,7 +344,7 @@ namespace PoGo.Necrobot.Window
                         return;
 
                     var xml = await responseContent.Content.ReadAsStringAsync();
-                    
+
                     var feed = SyndicationFeed.Load(XmlReader.Create(new StringReader(xml)));
                     lastTimeLoadHelp = DateTime.Now;
 
@@ -363,7 +366,7 @@ namespace PoGo.Necrobot.Window
         private void Hyperlink_Click(object sender, RoutedEventArgs e)
         {
             var hlink = sender as Hyperlink;
-            
+
             Process.Start(hlink.NavigateUri.ToString());
             popHelpArticles.IsOpen = false;
         }
@@ -372,10 +375,10 @@ namespace PoGo.Necrobot.Window
         {
             Application.Current.Shutdown();
         }
-        
+
         private void MetroWindow_Initialized(object sender, EventArgs e)
         {
-            if(SystemParameters.PrimaryScreenWidth<1366)
+            if (SystemParameters.PrimaryScreenWidth < 1366)
                 WindowState = WindowState.Maximized;
         }
 
@@ -390,22 +393,16 @@ namespace PoGo.Necrobot.Window
 
                 tabBrowser.IsEnabled = false;
                 browserMenuText.Text = translator.EnableHub;
+                webView.Browser.Dispose();
+                webView.Dispose();
                 Settings.Default.BrowserToggled = false;
                 Settings.Default.Save();
-
-                MessageBoxResult msgbox = MessageBox.Show("Would you Like to Restart to kill unneccesary browser tasks and free up extra cpu?","Free Up CPU",MessageBoxButton.YesNo,MessageBoxImage.Question);
-                if (msgbox == MessageBoxResult.Yes)
-                {
-                    Process.Start(Application.ResourceAssembly.Location);
-                    Application.Current.Shutdown();
-                }
-                else
-                { }
             }
             else if (!Settings.Default.BrowserToggled)
             {
                 tabBrowser.IsEnabled = true;
                 browserMenuText.Text = translator.DisableHub;
+                InitBrowser();
                 Settings.Default.BrowserToggled = true;
                 Settings.Default.Save();
             }
