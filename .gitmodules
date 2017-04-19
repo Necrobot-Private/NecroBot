@@ -11,7 +11,10 @@
 [submodule "PokeEase"]
 	path = PokeEase
 	url = https://github.com/Necrobot-Private/PokeEase.git
-[submodule "PokemonGO-Assets"]
+[submodule "PokemonGO-Assets-RocketBot"]
 	path = RocketBot2/Resources/PokemonGO-Assets
 	url = https://github.com/TheUnnamedOrganisation/PokemonGO-Assets.git
 	branch = master
+[submodule "PokemonGO-Assets"]
+	path = PokemonGO-Assets
+	url = https://github.com/Necrobot-Private/PokemonGO-Assets.git
