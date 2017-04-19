@@ -79,6 +79,7 @@ namespace PoGo.Necrobot.Window
                 browserMenuText.Text = translator.EnableHub;
                 tabBrowser.IsEnabled = false;
             }
+            ConsoleWindow();
         }
 
         private void InitBrowser()
@@ -160,23 +161,10 @@ namespace PoGo.Necrobot.Window
             var numberSelected = datacontext.PokemonList.Pokemons.Count(x => x.IsSelected);
             lblCount.Text = $"Select : {numberSelected}";
         }
-        bool isConsoleShowing = false;
+        //bool isConsoleShowing = Settings.Default.ConsoleToggled;
         private void MenuConsole_Click(object sender, RoutedEventArgs e)
         {
-            var translator = TinyIoCContainer.Current.Resolve<UITranslation>();
-
-            if (isConsoleShowing)
-            {
-                consoleMenuText.Text = translator.ShowConsole;
-                ConsoleHelper.HideConsoleWindow();
-            }
-            else
-            {
-                consoleMenuText.Text = translator.HideConsole;
-                ConsoleHelper.ShowConsoleWindow();
-            }
-
-            isConsoleShowing = !isConsoleShowing;
+            ConsoleWindow();
         }
 
         private void MenuSetting_Click(object sender, RoutedEventArgs e)
@@ -291,7 +279,7 @@ namespace PoGo.Necrobot.Window
 
             if (e.Key == Key.Enter)
             {
-                NecroBot.Logic.Logging.Logger.Write(txtCmdInput.Text, LogLevel.Info, ConsoleColor.White);
+                Logger.Write(txtCmdInput.Text, LogLevel.Info, ConsoleColor.White);
                 txtCmdInput.Text = "";
             }
         }
@@ -417,6 +405,26 @@ namespace PoGo.Necrobot.Window
             {
                 session.ReInitSessionWithNextBot(); //current location
             }
+        }
+
+        public void ConsoleWindow()
+        {
+            var translator = TinyIoCContainer.Current.Resolve<UITranslation>();
+
+            if (Settings.Default.ConsoleToggled)
+            {
+                consoleMenuText.Text = translator.ShowConsole;
+                ConsoleHelper.HideConsoleWindow();
+                Settings.Default.ConsoleToggled = true;
+            }
+            if (!Settings.Default.ConsoleToggled)
+            {
+                consoleMenuText.Text = translator.HideConsole;
+                ConsoleHelper.ShowConsoleWindow();
+                Settings.Default.ConsoleToggled = false;
+            }
+            Settings.Default.ConsoleToggled = !Settings.Default.ConsoleToggled;
+            Settings.Default.Save();
         }
 
         private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)

@@ -141,7 +141,7 @@
                     <Style TargetType="{x:Type TextBlock}">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding Recommend}" Value="True">
-                                <Setter Property="Background" Value="LightGreen"/>
+                                <Setter Property="Background" Value="DarkGreen"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -153,7 +153,7 @@
                     <Style TargetType="{x:Type TextBlock}">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding Recommend}" Value="True">
-                                <Setter Property="Background" Value="LightGreen"/>
+                                <Setter Property="Background" Value="DarkGreen"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
