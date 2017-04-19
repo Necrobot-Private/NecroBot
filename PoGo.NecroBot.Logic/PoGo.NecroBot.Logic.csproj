@@ -250,6 +250,7 @@
     <Compile Include="Event\FortTargetEvent.cs" />
     <Compile Include="Event\FortFailedEvent.cs" />
     <Compile Include="Event\FortUsedEvent.cs" />
+    <Compile Include="Event\GetHumanizeRouteEvent.cs" />
     <Compile Include="Event\Gym\GymBattleStarted.cs" />
     <Compile Include="Event\Gym\GymDeployEvent.cs" />
     <Compile Include="Event\Gym\GymDetailInfoEvent.cs" />
@@ -268,11 +269,13 @@
     <Compile Include="Event\ItemRecycledEvent.cs" />
     <Compile Include="Event\KillSwitchEvent.cs" />
     <Compile Include="Event\LogEvent.cs" />
+    <Compile Include="Event\LootPokestopEvent.cs" />
     <Compile Include="Event\NoPokeballEvent.cs" />
     <Compile Include="Event\Player\BuddyUpdateEvent.cs" />
     <Compile Include="Event\Player\LoggedEvent.cs" />
     <Compile Include="Event\Player\LoginEvent.cs" />
     <Compile Include="Event\Player\TargetLocationEvent.cs" />
+    <Compile Include="Event\PokemonsEncounterEvent.cs" />
     <Compile Include="Event\PokestopLimitUpdate.cs" />
     <Compile Include="Event\SnipePokemonFoundEvent.cs" />
     <Compile Include="Event\SnipeEvent.cs" />
@@ -556,6 +559,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Utils\PushNotificationClient.cs" />
+    <Compile Include="Utils\RouteOptimizeUtil.cs" />
     <Compile Include="Utils\Statistics.cs" />
     <Compile Include="Utils\StringUtils.cs" />
     <Compile Include="Utils\WebUtils.cs" />
@@ -582,11 +586,11 @@
     <None Include="Resources\msvc.cer" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="$(SolutionDir)\FeroxRev\PokemonGo.RocketAPI.csproj">
+    <ProjectReference Include="..\FeroxRev\PokemonGo.RocketAPI.csproj">
       <Project>{05d2da44-1b8e-4cf7-94ed-4d52451cd095}</Project>
       <Name>PokemonGo.RocketAPI</Name>
     </ProjectReference>
-    <ProjectReference Include="$(SolutionDir)\POGOProtos\POGOProtos.csproj">
+    <ProjectReference Include="..\POGOProtos\POGOProtos.csproj">
       <Project>{a03a7bb2-4f0b-467b-84b2-9a76e6aae6fb}</Project>
       <Name>POGOProtos</Name>
     </ProjectReference>
