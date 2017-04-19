@@ -24,6 +24,7 @@ using System.Net.Http;
 using PoGo.NecroBot.Logic;
 using PoGo.NecroBot.Logic.Model.Settings;
 using static PoGo.NecroBot.Logic.MultiAccountManager;
+using MahApps.Metro;
 
 namespace PoGo.Necrobot.Window
 {
@@ -189,56 +190,6 @@ namespace PoGo.Necrobot.Window
             }
         }
 
-        private void ChangeThemeTo(string Theme)
-        {
-            ResourceDictionary dict = new ResourceDictionary()
-            {
-                Source = new Uri($"pack://application:,,,/MahApps.Metro;component/Styles/Accents/{Theme}.xaml", UriKind.Absolute)
-            };
-            var theme = Application.Current.Resources.MergedDictionaries.LastOrDefault();
-            Application.Current.Resources.MergedDictionaries.Add(dict);
-            Application.Current.Resources.MergedDictionaries.Remove(theme);
-
-            if (Settings.Default.Scheme != "BaseLight") // If Not Equivalent to Default
-            {
-                ChangeSchemeTo_KeepTheme(Settings.Default.Scheme);
-            }
-        }
-
-        private void ChangeThemeTo_KeepScheme(string Theme)
-        {
-            ResourceDictionary dict = new ResourceDictionary()
-            {
-                Source = new Uri($"pack://application:,,,/MahApps.Metro;component/Styles/Accents/{Theme}.xaml", UriKind.Absolute)
-            };
-            Application.Current.Resources.MergedDictionaries.Add(dict);
-        }
-
-        private void ChangeSchemeTo(string Scheme)
-        {
-            ResourceDictionary dict = new ResourceDictionary()
-            {
-                Source = new Uri($"pack://application:,,,/MahApps.Metro;component/Styles/Accents/{Scheme}.xaml", UriKind.Absolute)
-            };
-            var scheme = Application.Current.Resources.MergedDictionaries.LastOrDefault();
-            Application.Current.Resources.MergedDictionaries.Add(dict);
-            Application.Current.Resources.MergedDictionaries.Remove(scheme);
-
-            if (Settings.Default.Theme != "Blue") // If not Equivalent to Default
-            {
-                ChangeThemeTo_KeepScheme(Settings.Default.Theme);
-            }
-        }
-
-        private void ChangeSchemeTo_KeepTheme(string Scheme)
-        {
-            ResourceDictionary dict = new ResourceDictionary()
-            {
-                Source = new Uri($"pack://application:,,,/MahApps.Metro;component/Styles/Accents/{Scheme}.xaml", UriKind.Absolute)
-            };
-            Application.Current.Resources.MergedDictionaries.Add(dict);
-        }
-
         private void Theme_Selected(object sender, RoutedEventArgs e)
         {
             Popup1.IsOpen = !Popup1.IsOpen;
@@ -252,7 +203,7 @@ namespace PoGo.Necrobot.Window
         private void OnTheme_Checked(object sender, RoutedEventArgs e)
         {
             var rad = sender as RadioButton;
-            ChangeThemeTo(rad.Content as string);
+            ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(rad.Content as string), ThemeManager.GetAppTheme(Settings.Default.Scheme));
             Settings.Default.Theme = rad.Content as string;
             Settings.Default.Save();
         }
@@ -260,17 +211,9 @@ namespace PoGo.Necrobot.Window
         private void OnScheme_Checked(object sender, RoutedEventArgs e)
         {
             var rad = sender as RadioButton;
-            var Scheme = rad.Content as string;
-            if (Scheme == "Light")
-            {
-                ChangeSchemeTo("BaseLight");
-                Settings.Default.Scheme = "BaseLight";
-            }
-            if (Scheme == "Dark")
-            {
-                ChangeSchemeTo("BaseDark");
-                Settings.Default.Scheme = "BaseDark";
-            }
+            var Scheme = "Base" + rad.Content as string;
+            ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(Settings.Default.Theme), ThemeManager.GetAppTheme(Settings.Default.Scheme));
+            Settings.Default.Scheme = Scheme;
             Settings.Default.Save();
         }
 
