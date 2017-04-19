@@ -69,7 +69,7 @@ namespace RocketBot2.Forms
             this.txtAPIKey.Name = "txtAPIKey";
             this.txtAPIKey.Size = new System.Drawing.Size(303, 27);
             this.txtAPIKey.TabIndex = 2;
-            this.txtAPIKey.Text = "8C5A5T8B9P3A6L1S4K1A";
+            this.txtAPIKey.Text = "1V9I9R1Z9M5J8L5R1W8N";
             // 
             // radLegacy
             // 
