@@ -37,7 +37,7 @@ namespace PoGo.Necrobot.Window.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Blue")]
         public string Theme {
             get {
                 return ((string)(this["Theme"]));
@@ -68,6 +68,14 @@ namespace PoGo.Necrobot.Window.Properties {
             }
             set {
                 this["Height"] = value;
+
+        [global::System.Configuration.DefaultSettingValueAttribute("BaseLight")]
+        public string Scheme {
+            get {
+                return ((string)(this["Scheme"]));
+            }
+            set {
+                this["Scheme"] = value;
             }
         }
     }
