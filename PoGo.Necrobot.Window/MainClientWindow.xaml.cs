@@ -250,6 +250,39 @@ namespace PoGo.Necrobot.Window
             };
             Application.Current.Resources.MergedDictionaries.Add(dict);
         }
+        private void ChangeSchemeTo(string Scheme)
+        {
+            ResourceDictionary dict = new ResourceDictionary()
+            {
+                Source = new Uri($"pack://application:,,,/MahApps.Metro;component/Styles/Accents/{Scheme}.xaml", UriKind.Absolute)
+            };
+            var scheme = Application.Current.Resources.MergedDictionaries.LastOrDefault();
+            Application.Current.Resources.MergedDictionaries.Add(dict);
+            Application.Current.Resources.MergedDictionaries.Remove(scheme);
+
+            /*if (Settings.Default.Scheme == "BaseLight")
+            {
+                tabAccounts.Background = Brushes.Gray;
+                tabBrowser.Background = Brushes.Gray;
+                tabConsole.Background = Brushes.Gray;
+                tabEggs.Background = Brushes.Gray;
+                tabItems.Background = Brushes.Gray;
+                tabPokemons.Background = Brushes.Gray;
+                tabMap.Background = Brushes.Gray;
+                tabSniper.Background = Brushes.Gray;
+            }
+            else if (Settings.Default.Scheme == "BaseDark")
+            {
+                tabAccounts.Background = Brushes.Black;
+                tabBrowser.Background = Brushes.Black;
+                tabConsole.Background = Brushes.Black;
+                tabEggs.Background = Brushes.Black;
+                tabItems.Background = Brushes.Black;
+                tabPokemons.Background = Brushes.Black;
+                tabMap.Background = Brushes.Black;
+                tabSniper.Background = Brushes.Black;
+            }*/
+        }
 
         private void Theme_Selected(object sender, RoutedEventArgs e)
         {
