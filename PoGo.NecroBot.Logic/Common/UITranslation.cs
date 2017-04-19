@@ -150,6 +150,7 @@ namespace PoGo.NecroBot.Logic.Common
 
         [Description("Evolve Pokemon")]
         public string EvolvePopupCaption { get; set; }
+
         [Description("Search & Filters")]
         public string FilterAndSearch { get; set; }
 
