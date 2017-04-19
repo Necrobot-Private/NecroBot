@@ -57,8 +57,7 @@ namespace PoGo.Necrobot.Window.Properties {
             set {
                 this["Scheme"] = value;
             }
-        }
-        
+        }        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1366")]
