@@ -20,5 +20,8 @@
     <Setting Name="ConsoleToggled" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="ConsoleText" Type="System.String" Scope="User">
+      <Value Profile="(Default)">StateHere Console</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

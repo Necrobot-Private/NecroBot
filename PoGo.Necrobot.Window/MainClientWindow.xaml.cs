@@ -69,7 +69,7 @@ namespace PoGo.Necrobot.Window
             DataContext = datacontext;
             txtCmdInput.Text = TinyIoCContainer.Current.Resolve<UITranslation>().InputCommand;
             var translator = TinyIoCContainer.Current.Resolve<UITranslation>();
-
+            //=============DotNetBrowser Saving=============\\
             if (Settings.Default.BrowserToggled)
             {
                 InitBrowser();
@@ -80,7 +80,10 @@ namespace PoGo.Necrobot.Window
                 browserMenuText.Text = translator.EnableHub;
                 tabBrowser.IsEnabled = false;
             }
-            ConsoleWindow();
+
+            Width = Settings.Default.Width;
+            Height = Settings.Default.Height;
+            ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(Settings.Default.Theme), ThemeManager.GetAppTheme(Settings.Default.Scheme));
         }
 
         private void InitBrowser()
@@ -103,15 +106,11 @@ namespace PoGo.Necrobot.Window
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             LoadHelpArticleAsync();
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            Width = Settings.Default.Width;
-            Height = Settings.Default.Height;
-            ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(Settings.Default.Theme), ThemeManager.GetAppTheme(Settings.Default.Scheme));
 
-            if (datacontext.PlayerInfo.Level == 35) // Warn Player on Reaching this Level -- NEEDS CONFIG SETTING
-            {
-                Logger.Write($"You have reached Level {datacontext.PlayerInfo.Level} and it is recommended to Switch Accounts", LogLevel.Warning);
-            }
+            //=============Console Saving=============\\
+            ConsoleWindow();
         }
+
         private DateTime lastClearLog = DateTime.Now;
         public void LogToConsoleTab(string message, LogLevel level, string color)
         {
@@ -354,17 +353,17 @@ namespace PoGo.Necrobot.Window
         {
             var translator = TinyIoCContainer.Current.Resolve<UITranslation>();
 
-            if (Settings.Default.ConsoleToggled)
-            {
-                consoleMenuText.Text = translator.ShowConsole;
-                ConsoleHelper.HideConsoleWindow();
-                Settings.Default.ConsoleToggled = true;
-            }
-            if (!Settings.Default.ConsoleToggled)
+            if (Settings.Default.ConsoleToggled == true) // If you do not want Console to Show
             {
                 consoleMenuText.Text = translator.HideConsole;
                 ConsoleHelper.ShowConsoleWindow();
-                Settings.Default.ConsoleToggled = false;
+                Settings.Default.ConsoleText = "Hide Console";
+            }
+            if (Settings.Default.ConsoleToggled == false) // If you do want Console to Show
+            {
+                consoleMenuText.Text = translator.ShowConsole;
+                ConsoleHelper.HideConsoleWindow();
+                Settings.Default.ConsoleText = "Show Console";
             }
             Settings.Default.ConsoleToggled = !Settings.Default.ConsoleToggled;
             Settings.Default.Save();

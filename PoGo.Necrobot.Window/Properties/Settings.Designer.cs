@@ -94,5 +94,17 @@ namespace PoGo.Necrobot.Window.Properties {
                 this["ConsoleToggled"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("StateHere Console")]
+        public string ConsoleText {
+            get {
+                return ((string)(this["ConsoleText"]));
+            }
+            set {
+                this["ConsoleText"] = value;
+            }
+        }
     }
 }
