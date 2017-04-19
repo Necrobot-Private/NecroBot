@@ -179,13 +179,13 @@ namespace PoGo.NecroBot.Logic.Logging
             switch (color)
             {
                 case ConsoleColor.Black:
-                    return "#000000";
+                    return "#002b36";
 
                 case ConsoleColor.Blue:
-                    return "#0000FF";
+                    return "#268bd2";
 
                 case ConsoleColor.Cyan:
-                    return "#00FFFF";
+                    return "#2aa198";
 
                 case ConsoleColor.DarkBlue:
                     return "#000080";
@@ -194,7 +194,7 @@ namespace PoGo.NecroBot.Logic.Logging
                     return "#008B8B";
 
                 case ConsoleColor.DarkGray:
-                    return "#808080";
+                    return "#586e75";
 
                 case ConsoleColor.DarkGreen:
                     return "#008000";
@@ -209,26 +209,26 @@ namespace PoGo.NecroBot.Logic.Logging
                     return "#808000";
 
                 case ConsoleColor.Gray:
-                    return "#C0C0C0";
+                    return "#93a1a1";
 
                 case ConsoleColor.Green:
-                    return "#00FF00";
+                    return "#859900";
 
                 case ConsoleColor.Magenta:
-                    return "#FF00FF";
+                    return "#d33682";
 
                 case ConsoleColor.Red:
-                    return "#FF0000";
+                    return "#dc322f";
 
                 case ConsoleColor.White:
-                    return "#FFFFFF";
+                    return "#fdf6e3";
 
                 case ConsoleColor.Yellow:
-                    return "#FFFF00";
+                    return "#b58900";
 
                 default:
                     // Grey
-                    return "#C0C0C0";
+                    return "#93a1a1";
             }
         }
     }

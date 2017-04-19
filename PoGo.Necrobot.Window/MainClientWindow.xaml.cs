@@ -105,7 +105,7 @@ namespace PoGo.Necrobot.Window
             Height = Settings.Default.Height;
             if (datacontext.PlayerInfo.Level == 35) // Warn Player on Reaching this Level -- NEEDS CONFIG SETTING
             {
-                NecroBot.Logic.Logging.Logger.Write($"You have reached Level {datacontext.PlayerInfo.Level} and it is recommended to Switch Accounts",LogLevel.Warning);
+                Logger.Write($"You have reached Level {datacontext.PlayerInfo.Level} and it is recommended to Switch Accounts",LogLevel.Warning);
             }
             ChangeThemeTo(Settings.Default.Theme);
             ChangeSchemeTo(Settings.Default.Scheme);
@@ -211,6 +211,44 @@ namespace PoGo.Necrobot.Window
             Application.Current.Resources.MergedDictionaries.Add(dict);
             Application.Current.Resources.MergedDictionaries.Remove(theme);
 
+            if (Settings.Default.Scheme != "BaseLight") // If Not Equivalent to Default
+            {
+                ChangeSchemeTo_KeepTheme(Settings.Default.Scheme);
+            }
+        }
+
+        private void ChangeThemeTo_KeepScheme(string Theme)
+        {
+            ResourceDictionary dict = new ResourceDictionary()
+            {
+                Source = new Uri($"pack://application:,,,/MahApps.Metro;component/Styles/Accents/{Theme}.xaml", UriKind.Absolute)
+            };
+            Application.Current.Resources.MergedDictionaries.Add(dict);
+        }
+
+        private void ChangeSchemeTo(string Scheme)
+        {
+            ResourceDictionary dict = new ResourceDictionary()
+            {
+                Source = new Uri($"pack://application:,,,/MahApps.Metro;component/Styles/Accents/{Scheme}.xaml", UriKind.Absolute)
+            };
+            var scheme = Application.Current.Resources.MergedDictionaries.LastOrDefault();
+            Application.Current.Resources.MergedDictionaries.Add(dict);
+            Application.Current.Resources.MergedDictionaries.Remove(scheme);
+
+            if (Settings.Default.Theme != "Blue") // If not Equivalent to Default
+            {
+                ChangeThemeTo_KeepScheme(Settings.Default.Theme);
+            }
+        }
+
+        private void ChangeSchemeTo_KeepTheme(string Scheme)
+        {
+            ResourceDictionary dict = new ResourceDictionary()
+            {
+                Source = new Uri($"pack://application:,,,/MahApps.Metro;component/Styles/Accents/{Scheme}.xaml", UriKind.Absolute)
+            };
+            Application.Current.Resources.MergedDictionaries.Add(dict);
         }
         private void ChangeSchemeTo(string Scheme)
         {
