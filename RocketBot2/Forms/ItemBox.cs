@@ -18,7 +18,7 @@ namespace RocketBot2.Forms
             item.UpdateWith(item);
             pb.Image = item.Icon;
             lbl.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            lbl.Text = $"{item.KM / 1000:0.0}/{item.TotalKM:0}";
+            lbl.Text = $"{item.KM / 1000:0.0} / {item.TotalKM}";
             lblTime.Parent = pb;
             /*
             Item_ = item;
@@ -37,7 +37,7 @@ namespace RocketBot2.Forms
             item.UpdateWith(item);
             pb.Image = item.Icon;
             lbl.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            lbl.Text =  $"{item.KM / 1000:0.0}/{item.TotalKM:0}";
+            lbl.Text =  $"{item.KM / 1000:0.0} / {item.TotalKM / 1000:0}";
             lblTime.Parent = pb;
             /*
             Item_ = item;
