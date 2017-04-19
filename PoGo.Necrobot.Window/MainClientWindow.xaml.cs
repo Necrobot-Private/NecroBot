@@ -105,12 +105,12 @@ namespace PoGo.Necrobot.Window
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             Width = Settings.Default.Width;
             Height = Settings.Default.Height;
+            ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(Settings.Default.Theme), ThemeManager.GetAppTheme(Settings.Default.Scheme));
+
             if (datacontext.PlayerInfo.Level == 35) // Warn Player on Reaching this Level -- NEEDS CONFIG SETTING
             {
                 Logger.Write($"You have reached Level {datacontext.PlayerInfo.Level} and it is recommended to Switch Accounts", LogLevel.Warning);
             }
-            ChangeThemeTo(Settings.Default.Theme);
-            ChangeSchemeTo(Settings.Default.Scheme);
         }
         private DateTime lastClearLog = DateTime.Now;
         public void LogToConsoleTab(string message, LogLevel level, string color)
@@ -212,7 +212,7 @@ namespace PoGo.Necrobot.Window
         {
             var rad = sender as RadioButton;
             var Scheme = "Base" + rad.Content as string;
-            ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(Settings.Default.Theme), ThemeManager.GetAppTheme(Settings.Default.Scheme));
+            ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(Settings.Default.Theme), ThemeManager.GetAppTheme(Scheme));
             Settings.Default.Scheme = Scheme;
             Settings.Default.Save();
         }
