@@ -1,4 +1,4 @@
-echo off
+@echo off
 if exists "C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE" goto VS2015_Community
 if exists "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community" goto VS2017_Community
 
