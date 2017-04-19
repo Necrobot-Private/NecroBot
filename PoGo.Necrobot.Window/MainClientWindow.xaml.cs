@@ -192,7 +192,7 @@ namespace PoGo.Necrobot.Window
             if (grbPlayerInfo.Height == 35)
             {
                 btnHideInfo.Content = translator.Hide;
-                grbPlayerInfo.Height = 135;
+                grbPlayerInfo.Height = 120;
             }
             else
             {
