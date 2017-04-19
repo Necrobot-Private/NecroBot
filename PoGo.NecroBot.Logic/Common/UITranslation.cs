@@ -52,8 +52,11 @@ namespace PoGo.NecroBot.Logic.Common
 
         [Description("Theme")]
         public string Theme { get; set; }
-        
-        [Description("Enter your command")]
+
+        [Description("Scheme")]
+        public string Scheme { get; set; }
+
+        [Description("Enter your Command")]
         public string InputCommand { get; set; }
 
         #endregion
@@ -61,11 +64,11 @@ namespace PoGo.NecroBot.Logic.Common
 
         [Description("Zoom In")]
         public string ZoomIn { get; set; }
-
-        [Description("ZoomOut")]
+        
+        [Description("Zoom Out")]
         public string ZoomOut { get; set; }
 
-        [Description("Clear map")]
+        [Description("Clear Map")]
         public string ClearMap { get; set; }
         
         [Description("Walk Here")]
@@ -77,7 +80,7 @@ namespace PoGo.NecroBot.Logic.Common
         [Description("100% IV")]
         public string TabSnipeIV100 { get; set; }
 
-        [Description("Rare pokemon")]
+        [Description("Rare Pokemon")]
         public string TabSnipeRarePokemon { get; set; }
 
         [Description("Others")]
@@ -142,12 +145,12 @@ namespace PoGo.NecroBot.Logic.Common
         [Description("Snipe Upgrade Setting")]
         public string MenuUpgradeFilterText { get; set; }
 
-
         [Description("This pokemon can be evolve to below pokemon , please select the branch you want to evolve to")]
         public string EvolveConfirm { get; set; }
 
         [Description("Evolve Pokemon")]
         public string EvolvePopupCaption { get; set; }
+
         [Description("Search & Filters")]
         public string FilterAndSearch { get; set; }
 
@@ -238,22 +241,19 @@ namespace PoGo.NecroBot.Logic.Common
         [Description("Longitude")]
         public string Longitude { get; set; }
 
-
         [Description("Distance")]
         public string Distance { get; set; }
-
 
         [Description("Close")]
         public string Close { get; set; }
 
-
-        [Description("WalkHere")]
+        [Description("Walk Here")]
         public string WalkToHere { get; set; }
 
         [Description("CP")]
         public string GymDefenderCP { get; set; }
 
-        [Description("Gym Point")]
+        [Description("Gym Points")]
         public string GymPoints { get; set; }
 
         [Description("Pokestops: {0}")]
@@ -267,10 +267,13 @@ namespace PoGo.NecroBot.Logic.Common
         
         [Description("Transfered: {0}")]
         public string PokemonTransfered { get; set; }
+
         [Description("HIDE")]
         public string Hide { get; set; }
+	
         [Description("SHOW")]
         public string Show { get; set; }
+	
         [Description("Transfer filter - {0}")]
         public string TransferFilterFormTitle { get; set; }
         #endregion
