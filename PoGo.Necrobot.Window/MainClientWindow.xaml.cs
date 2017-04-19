@@ -242,14 +242,6 @@ namespace PoGo.Necrobot.Window
             }
         }
 
-        private void ChangeSchemeTo_KeepTheme(string Scheme)
-        {
-            ResourceDictionary dict = new ResourceDictionary()
-            {
-                Source = new Uri($"pack://application:,,,/MahApps.Metro;component/Styles/Accents/{Scheme}.xaml", UriKind.Absolute)
-            };
-            Application.Current.Resources.MergedDictionaries.Add(dict);
-        }
         private void ChangeSchemeTo(string Scheme)
         {
             ResourceDictionary dict = new ResourceDictionary()
