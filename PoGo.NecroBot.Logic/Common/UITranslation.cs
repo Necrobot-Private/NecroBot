@@ -145,12 +145,12 @@ namespace PoGo.NecroBot.Logic.Common
         [Description("Snipe Upgrade Setting")]
         public string MenuUpgradeFilterText { get; set; }
 
-
         [Description("This pokemon can be evolve to below pokemon , please select the branch you want to evolve to")]
         public string EvolveConfirm { get; set; }
 
         [Description("Evolve Pokemon")]
         public string EvolvePopupCaption { get; set; }
+
         [Description("Search & Filters")]
         public string FilterAndSearch { get; set; }
 
@@ -267,10 +267,13 @@ namespace PoGo.NecroBot.Logic.Common
         
         [Description("Transfered: {0}")]
         public string PokemonTransfered { get; set; }
+
         [Description("HIDE")]
         public string Hide { get; set; }
+	
         [Description("SHOW")]
         public string Show { get; set; }
+	
         [Description("Transfer filter - {0}")]
         public string TransferFilterFormTitle { get; set; }
         #endregion
