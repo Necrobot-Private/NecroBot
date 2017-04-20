@@ -364,9 +364,6 @@
     <Compile Include="Controls\MapMarkers\CustomMarkerRed.xaml.cs">
       <DependentUpon>CustomMarkerRed.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\MapMarkers\Test.xaml.cs">
-      <DependentUpon>Test.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\PlayerInfo.xaml.cs">
       <DependentUpon>PlayerInfo.xaml</DependentUpon>
     </Compile>
@@ -484,10 +481,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\MapMarkers\CustomMarkerRed.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\MapMarkers\Test.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
