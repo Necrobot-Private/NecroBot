@@ -198,10 +198,10 @@
             <local:PlayerInfo DataContext="{Binding Path=PlayerInfo}" Margin="10,0,-2,1" />
         </GroupBox>
         <StatusBar DockPanel.Dock="Bottom">
-            <StatusBarItem HorizontalAlignment="Right">
+            <StatusBarItem>
                 <TextBlock Name="lblStatus" />
             </StatusBarItem>
-            <StatusBarItem HorizontalAlignment="Right">
+            <StatusBarItem>
                 <TextBlock Name="lblCount" />
             </StatusBarItem>
         </StatusBar>
