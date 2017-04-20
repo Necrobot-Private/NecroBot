@@ -1,5 +1,4 @@
-﻿using MahApps.Metro.Controls;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,7 +6,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
-//using System.Windows.Media;
+using MahApps.Metro;
+using MahApps.Metro.Controls;
 using PoGo.Necrobot.Window.Properties;
 using PoGo.NecroBot.Logic.State;
 using PoGo.Necrobot.Window.Win32;
@@ -69,6 +69,7 @@ namespace PoGo.Necrobot.Window
             txtCmdInput.Text = TinyIoCContainer.Current.Resolve<UITranslation>().InputCommand;
             var translator = TinyIoCContainer.Current.Resolve<UITranslation>();
 
+            //=============DotNetBrowser Saving=============\\
             if (Settings.Default.BrowserToggled)
             {
                 InitBrowser();
@@ -77,7 +78,11 @@ namespace PoGo.Necrobot.Window
             else if (!Settings.Default.BrowserToggled)
             {
                 browserMenuText.Text = translator.EnableHub;
+                tabBrowser.IsEnabled = false;
             }
+
+            Width = Settings.Default.Width;
+            Height = Settings.Default.Height;
         }
 
         private void InitBrowser()
@@ -100,16 +105,16 @@ namespace PoGo.Necrobot.Window
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             LoadHelpArticleAsync();
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            if (datacontext.PlayerInfo.Level == 35) // Warn Player on Reaching this Level -- NEEDS CONFIG SETTING
-            {
-                Logger.Write($"You have reached Level {datacontext.PlayerInfo.Level} and it is recommended to Switch Accounts",LogLevel.Warning);
-            }
-            ChangeThemeTo(Settings.Default.Theme);
-            ChangeSchemeTo(Settings.Default.Scheme);
+
+            //=============Console Saving=============\\
+            ConsoleWindow();
+            //==============Theme Saving===============\\
+            SyncTheme();
         }
+
         private DateTime lastClearLog = DateTime.Now;
         public void LogToConsoleTab(string message, LogLevel level, string color)
-        { 
+        {
             if (string.IsNullOrEmpty(color) || color == "Black")
                 color = ConsoleColors[level];
 
@@ -157,29 +162,16 @@ namespace PoGo.Necrobot.Window
             var numberSelected = datacontext.PokemonList.Pokemons.Count(x => x.IsSelected);
             lblCount.Text = $"Select : {numberSelected}";
         }
-        bool isConsoleShowing = false;
+
         private void MenuConsole_Click(object sender, RoutedEventArgs e)
         {
-            var translator = TinyIoCContainer.Current.Resolve<UITranslation>();
-
-            if (isConsoleShowing)
-            {
-                consoleMenuText.Text = translator.ShowConsole; 
-                ConsoleHelper.HideConsoleWindow();
-            }
-            else
-            {
-                consoleMenuText.Text = translator.HideConsole;
-                ConsoleHelper.ShowConsoleWindow();
-            }
-
-            isConsoleShowing = !isConsoleShowing;
+            ConsoleWindow();
         }
 
         private void MenuSetting_Click(object sender, RoutedEventArgs e)
         {
             var configWindow = new SettingsWindow(this, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config\\config.json"));
-            configWindow.ShowDialog();         
+            configWindow.ShowDialog();
         }
 
         private void BtnHideInfo_Click(object sender, RoutedEventArgs e)
@@ -189,63 +181,13 @@ namespace PoGo.Necrobot.Window
             if (grbPlayerInfo.Height == 35)
             {
                 btnHideInfo.Content = translator.Hide;
-                grbPlayerInfo.Height = 135;
+                grbPlayerInfo.Height = 120;
             }
             else
             {
                 grbPlayerInfo.Height = 35;
                 btnHideInfo.Content = translator.Show;
             }
-        }
-
-        private void ChangeThemeTo(string Theme)
-        {
-            ResourceDictionary dict = new ResourceDictionary()
-            {
-                Source = new Uri($"pack://application:,,,/MahApps.Metro;component/Styles/Accents/{Theme}.xaml", UriKind.Absolute)
-            };
-            var theme = Application.Current.Resources.MergedDictionaries.LastOrDefault();
-            Application.Current.Resources.MergedDictionaries.Add(dict);
-            Application.Current.Resources.MergedDictionaries.Remove(theme);
-
-            if (Settings.Default.Scheme != "BaseLight") // If Not Equivalent to Default
-            {
-                ChangeSchemeTo_KeepTheme(Settings.Default.Scheme);
-            }
-        }
-
-        private void ChangeThemeTo_KeepScheme(string Theme)
-        {
-            ResourceDictionary dict = new ResourceDictionary()
-            {
-                Source = new Uri($"pack://application:,,,/MahApps.Metro;component/Styles/Accents/{Theme}.xaml", UriKind.Absolute)
-            };
-            Application.Current.Resources.MergedDictionaries.Add(dict);
-        }
-
-        private void ChangeSchemeTo(string Scheme)
-        {
-            ResourceDictionary dict = new ResourceDictionary()
-            {
-                Source = new Uri($"pack://application:,,,/MahApps.Metro;component/Styles/Accents/{Scheme}.xaml", UriKind.Absolute)
-            };
-            var scheme = Application.Current.Resources.MergedDictionaries.LastOrDefault();
-            Application.Current.Resources.MergedDictionaries.Add(dict);
-            Application.Current.Resources.MergedDictionaries.Remove(scheme);
-
-            if (Settings.Default.Theme != "Blue") // If not Equivalent to Default
-            {
-                ChangeThemeTo_KeepScheme(Settings.Default.Theme);
-            }
-        }
-
-        private void ChangeSchemeTo_KeepTheme(string Scheme)
-        {
-            ResourceDictionary dict = new ResourceDictionary()
-            {
-                Source = new Uri($"pack://application:,,,/MahApps.Metro;component/Styles/Accents/{Scheme}.xaml", UriKind.Absolute)
-            };
-            Application.Current.Resources.MergedDictionaries.Add(dict);
         }
 
         private void Theme_Selected(object sender, RoutedEventArgs e)
@@ -258,37 +200,37 @@ namespace PoGo.Necrobot.Window
             Popup2.IsOpen = !Popup2.IsOpen;
         }
 
+        public void SyncTheme()
+        {
+            Tuple<AppTheme, Accent> appstyle = ThemeManager.DetectAppStyle(Application.Current);
+            ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(Settings.Default.Theme), ThemeManager.GetAppTheme(Settings.Default.Scheme));
+        }
+
         private void OnTheme_Checked(object sender, RoutedEventArgs e)
         {
             var rad = sender as RadioButton;
-            ChangeThemeTo(rad.Content as string);
-            Settings.Default.Theme = rad.Content as string;
+            Tuple<AppTheme, Accent> appstyle = ThemeManager.DetectAppStyle(Application.Current);
+            ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(rad.Content.ToString()), ThemeManager.GetAppTheme(Settings.Default.Scheme));
+            Settings.Default.Theme = rad.Content.ToString();
             Settings.Default.Save();
         }
 
         private void OnScheme_Checked(object sender, RoutedEventArgs e)
         {
             var rad = sender as RadioButton;
-            var Scheme = rad.Content as string;
-            if (Scheme == "Light")
-            {
-                ChangeSchemeTo("BaseLight");
-                Settings.Default.Scheme = "BaseLight";
-            }
-            if (Scheme == "Dark")
-            {
-                ChangeSchemeTo("BaseDark");
-                Settings.Default.Scheme = "BaseDark";
-            }
+            var Scheme = "Base" + rad.Content.ToString();
+            Tuple<AppTheme, Accent> appstyle = ThemeManager.DetectAppStyle(Application.Current);
+            ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(Settings.Default.Theme), ThemeManager.GetAppTheme(Scheme));
+            Settings.Default.Scheme = Scheme;
             Settings.Default.Save();
         }
 
         private void TxtCmdInput_KeyDown(object sender, KeyEventArgs e)
         {
 
-            if(e.Key == Key.Enter)
+            if (e.Key == Key.Enter)
             {
-                NecroBot.Logic.Logging.Logger.Write(txtCmdInput.Text, LogLevel.Info, ConsoleColor.White);
+                Logger.Write(txtCmdInput.Text, LogLevel.Info, ConsoleColor.White);
                 txtCmdInput.Text = "";
             }
         }
@@ -313,7 +255,7 @@ namespace PoGo.Necrobot.Window
                 }
             }
         }
-        
+
         private void BtnDonate_Click(object sender, RoutedEventArgs e)
         {
             Process.Start("http://snipe.necrobot2.com?donate");
@@ -322,7 +264,7 @@ namespace PoGo.Necrobot.Window
         private void BtnSwitchAcount_Click(object sender, RoutedEventArgs e)
         {
             var btn = ((Button)sender);
-            var account = (MultiAccountManager.BotAccount)btn.CommandParameter;
+            var account = (BotAccount)btn.CommandParameter;
 
             var manager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
 
@@ -341,7 +283,7 @@ namespace PoGo.Necrobot.Window
                         return;
 
                     var xml = await responseContent.Content.ReadAsStringAsync();
-                    
+
                     var feed = SyndicationFeed.Load(XmlReader.Create(new StringReader(xml)));
                     lastTimeLoadHelp = DateTime.Now;
 
@@ -363,7 +305,7 @@ namespace PoGo.Necrobot.Window
         private void Hyperlink_Click(object sender, RoutedEventArgs e)
         {
             var hlink = sender as Hyperlink;
-            
+
             Process.Start(hlink.NavigateUri.ToString());
             popHelpArticles.IsOpen = false;
         }
@@ -372,10 +314,10 @@ namespace PoGo.Necrobot.Window
         {
             Application.Current.Shutdown();
         }
-        
+
         private void MetroWindow_Initialized(object sender, EventArgs e)
         {
-            if(SystemParameters.PrimaryScreenWidth<1366)
+            if (SystemParameters.PrimaryScreenWidth < 1366)
                 WindowState = WindowState.Maximized;
         }
 
@@ -390,22 +332,16 @@ namespace PoGo.Necrobot.Window
 
                 tabBrowser.IsEnabled = false;
                 browserMenuText.Text = translator.EnableHub;
+                webView.Browser.Dispose();
+                webView.Dispose();
                 Settings.Default.BrowserToggled = false;
                 Settings.Default.Save();
-
-                MessageBoxResult msgbox = MessageBox.Show("Would you Like to Restart to kill unneccesary browser tasks and free up extra cpu?","Free Up CPU",MessageBoxButton.YesNo,MessageBoxImage.Question);
-                if (msgbox == MessageBoxResult.Yes)
-                {
-                    Process.Start(Application.ResourceAssembly.Location);
-                    Application.Current.Shutdown();
-                }
-                else
-                { }
             }
             else if (!Settings.Default.BrowserToggled)
             {
                 tabBrowser.IsEnabled = true;
                 browserMenuText.Text = translator.DisableHub;
+                InitBrowser();
                 Settings.Default.BrowserToggled = true;
                 Settings.Default.Save();
             }
@@ -420,6 +356,26 @@ namespace PoGo.Necrobot.Window
             {
                 session.ReInitSessionWithNextBot(); //current location
             }
+        }
+
+        public void ConsoleWindow()
+        {
+            var translator = TinyIoCContainer.Current.Resolve<UITranslation>();
+
+            if (Settings.Default.ConsoleToggled == true)
+            {
+                consoleMenuText.Text = translator.HideConsole;
+                ConsoleHelper.ShowConsoleWindow();
+                Settings.Default.ConsoleText = "Hide Console";
+            }
+            if (Settings.Default.ConsoleToggled == false)
+            {
+                consoleMenuText.Text = translator.ShowConsole;
+                ConsoleHelper.HideConsoleWindow();
+                Settings.Default.ConsoleText = "Show Console";
+            }
+            Settings.Default.ConsoleToggled = !Settings.Default.ConsoleToggled;
+            Settings.Default.Save();
         }
 
         private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
