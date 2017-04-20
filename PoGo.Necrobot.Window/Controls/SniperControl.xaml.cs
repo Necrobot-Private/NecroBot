@@ -2,6 +2,7 @@
 using PoGo.NecroBot.CLI;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Event.Snipe;
+using PoGo.NecroBot.Logic.Service;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Tasks;
 using POGOProtos.Enums;
