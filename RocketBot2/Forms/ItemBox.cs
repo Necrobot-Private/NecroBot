@@ -17,11 +17,11 @@ namespace RocketBot2.Forms
         {
             InitializeComponent();
             isEggs = true;
-            //item.UpdateWith(item);
+            lbl.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             pb.Image = item.Icon;
-            lbl.Text = $"{item.TotalKM}Km";
+            lblTime.Text = $"{item.TotalKM:0.0}Km";
             lblTime.Visible = true;
-            lblTime.Text = $"{item.KM / 1000:0.0}Km";
+            lbl.Text = $"{item.KM:0.0}Km";
             lblTime.Parent = pb;
             /*
             Item_ = item;
@@ -38,11 +38,11 @@ namespace RocketBot2.Forms
         {
             InitializeComponent();
             isEggs = true;
-            //item.UpdateWith(item);
+            lbl.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             pb.Image = item.Icon(item.IsUnlimited);
-            lbl.Text = $"{item.TotalKM - item.KM:0}Km";
+            lblTime.Text = $"{item.TotalKM - item.KM:0.0}Km";
             lblTime.Visible = true;
-            lblTime.Text = $"{item.KM / 1000:0.00}Km";
+            lbl.Text = $"{item.KM / 1000:0.0}Km";
             lblTime.Parent = pb;
             /*
             Item_ = item;
