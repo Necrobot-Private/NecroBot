@@ -35,12 +35,14 @@ namespace RocketBot2.Forms
 
         public void AddControls(EggsListViewModel eggsListViewModel)
         {
+            if (eggsListViewModel.Eggs.Count < 0) return;
             foreach ( var item in eggsListViewModel.Eggs)
             {
                 var pic = new ItemBox(item);
                 flpEggs.Controls.Add(pic);
             }
 
+            if (eggsListViewModel.Incubators.Count < 0) return;
             foreach (var item in eggsListViewModel.Incubators)
             {
                 var pic = new ItemBox(item);
