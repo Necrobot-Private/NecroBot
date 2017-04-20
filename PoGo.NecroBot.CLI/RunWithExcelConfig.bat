@@ -1,2 +1,2 @@
-﻿echo off
+﻿@echo off
 Necrobot2.exe -provider excel
