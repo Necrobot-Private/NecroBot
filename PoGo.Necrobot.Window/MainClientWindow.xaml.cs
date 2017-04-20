@@ -1,5 +1,4 @@
-﻿using MahApps.Metro.Controls;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,7 +6,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
-//using System.Windows.Media;
+using MahApps.Metro;
+using MahApps.Metro.Controls;
 using PoGo.Necrobot.Window.Properties;
 using PoGo.NecroBot.Logic.State;
 using PoGo.Necrobot.Window.Win32;
@@ -24,7 +24,6 @@ using System.Net.Http;
 using PoGo.NecroBot.Logic;
 using PoGo.NecroBot.Logic.Model.Settings;
 using static PoGo.NecroBot.Logic.MultiAccountManager;
-using MahApps.Metro;
 
 namespace PoGo.Necrobot.Window
 {
@@ -69,6 +68,7 @@ namespace PoGo.Necrobot.Window
             DataContext = datacontext;
             txtCmdInput.Text = TinyIoCContainer.Current.Resolve<UITranslation>().InputCommand;
             var translator = TinyIoCContainer.Current.Resolve<UITranslation>();
+
             //=============DotNetBrowser Saving=============\\
             if (Settings.Default.BrowserToggled)
             {
@@ -83,7 +83,6 @@ namespace PoGo.Necrobot.Window
 
             Width = Settings.Default.Width;
             Height = Settings.Default.Height;
-            ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(Settings.Default.Theme), ThemeManager.GetAppTheme(Settings.Default.Scheme));
         }
 
         private void InitBrowser()
@@ -109,6 +108,8 @@ namespace PoGo.Necrobot.Window
 
             //=============Console Saving=============\\
             ConsoleWindow();
+            //==============Theme Saving===============\\
+            SyncTheme();
         }
 
         private DateTime lastClearLog = DateTime.Now;
@@ -161,7 +162,7 @@ namespace PoGo.Necrobot.Window
             var numberSelected = datacontext.PokemonList.Pokemons.Count(x => x.IsSelected);
             lblCount.Text = $"Select : {numberSelected}";
         }
-        //bool isConsoleShowing = Settings.Default.ConsoleToggled;
+
         private void MenuConsole_Click(object sender, RoutedEventArgs e)
         {
             ConsoleWindow();
@@ -199,18 +200,26 @@ namespace PoGo.Necrobot.Window
             Popup2.IsOpen = !Popup2.IsOpen;
         }
 
+        public void SyncTheme()
+        {
+            Tuple<AppTheme, Accent> appstyle = ThemeManager.DetectAppStyle(Application.Current);
+            ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(Settings.Default.Theme), ThemeManager.GetAppTheme(Settings.Default.Scheme));
+        }
+
         private void OnTheme_Checked(object sender, RoutedEventArgs e)
         {
             var rad = sender as RadioButton;
-            ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(rad.Content as string), ThemeManager.GetAppTheme(Settings.Default.Scheme));
-            Settings.Default.Theme = rad.Content as string;
+            Tuple<AppTheme, Accent> appstyle = ThemeManager.DetectAppStyle(Application.Current);
+            ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(rad.Content.ToString()), ThemeManager.GetAppTheme(Settings.Default.Scheme));
+            Settings.Default.Theme = rad.Content.ToString();
             Settings.Default.Save();
         }
 
         private void OnScheme_Checked(object sender, RoutedEventArgs e)
         {
             var rad = sender as RadioButton;
-            var Scheme = "Base" + rad.Content as string;
+            var Scheme = "Base" + rad.Content.ToString();
+            Tuple<AppTheme, Accent> appstyle = ThemeManager.DetectAppStyle(Application.Current);
             ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(Settings.Default.Theme), ThemeManager.GetAppTheme(Scheme));
             Settings.Default.Scheme = Scheme;
             Settings.Default.Save();
@@ -353,13 +362,13 @@ namespace PoGo.Necrobot.Window
         {
             var translator = TinyIoCContainer.Current.Resolve<UITranslation>();
 
-            if (Settings.Default.ConsoleToggled == true) // If you do not want Console to Show
+            if (Settings.Default.ConsoleToggled == true)
             {
                 consoleMenuText.Text = translator.HideConsole;
                 ConsoleHelper.ShowConsoleWindow();
                 Settings.Default.ConsoleText = "Hide Console";
             }
-            if (Settings.Default.ConsoleToggled == false) // If you do want Console to Show
+            if (Settings.Default.ConsoleToggled == false)
             {
                 consoleMenuText.Text = translator.ShowConsole;
                 ConsoleHelper.HideConsoleWindow();
