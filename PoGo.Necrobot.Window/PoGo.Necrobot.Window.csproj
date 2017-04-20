@@ -662,6 +662,7 @@
     <Resource Include="Resources\ConsoleImage.png" />
     <EmbeddedResource Include="Resources\teamdev.licenses" />
     <Resource Include="Resources\Fonts\Lato\SIL Open Font License.txt" />
+    <Resource Include="Controls\MapMarkers\pokestop.png" />
     <Content Include="Effects\GrayscaleEffect.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
