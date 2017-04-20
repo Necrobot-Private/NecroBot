@@ -132,7 +132,7 @@
             </Button>
             <Button x:Name="BrowserToggle" Click="BrowserToggle_Click">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Margin="4 0 0 0" Name="browserMenuText"
+                    <TextBlock Margin="4 0 0 0" x:Name="browserMenuText"
                                VerticalAlignment="Center"
                                Text="{Binding Source=DisableHub, Converter={StaticResource ResourceKey=I18NConveter}}" />
                 </StackPanel>
