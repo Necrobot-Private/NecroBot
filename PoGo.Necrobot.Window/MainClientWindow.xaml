@@ -83,8 +83,8 @@
                     <Popup Margin="10,10,0,13" Name="Popup1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="320" Height="280" IsOpen="False" AllowsTransparency="True">
                         <Grid Background="White">
                             <WrapPanel Background="White" Margin="20,20,20,20">
-                                <RadioButton GroupName="Theme" Foreground="Red" Content="Red"   Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5" ></RadioButton>
-                                <RadioButton GroupName="Theme" Foreground="Blue" Content="Blue"   Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5" IsChecked="True"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="Red" Content="Red" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5" ></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="Blue" Content="Blue" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5" IsChecked="True"></RadioButton>
                                 <RadioButton GroupName="Theme" Foreground="Brown" Content="Brown" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
                                 <RadioButton GroupName="Theme" Foreground="#0047ab"  Content="Cobalt" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
                                 <RadioButton GroupName="Theme" Foreground="Crimson" Content="Crimson" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
@@ -97,14 +97,15 @@
                                 <RadioButton GroupName="Theme" Foreground="#b784a7" Content="Mauve" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
                                 <RadioButton GroupName="Theme" Foreground="Olive" Content="Olive" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5" ></RadioButton>
                                 <RadioButton GroupName="Theme" Foreground="Orange" Content="Orange" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
-                                <RadioButton GroupName="Theme" Foreground="Pink" Content="Pink" Checked="OnTheme_Checked" Width="90"  Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="Pink" Content="Pink" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
                                 <RadioButton GroupName="Theme" Foreground="Purple"  Content="Purple" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
-                                <RadioButton GroupName="Theme" Foreground="Sienna" Content="Sienna" Checked="OnTheme_Checked" Width="90"  Margin="0,5,0,5"></RadioButton>
-                                <RadioButton GroupName="Theme" Foreground="#e0dfdb" Content="Steel" Checked="OnTheme_Checked" Width="90"  Margin="0,5,0,5"></RadioButton>
-                                <RadioButton GroupName="Theme" Foreground="#483C32" Content="Taupe" Checked="OnTheme_Checked" Width="90"  Margin="0,5,0,5"></RadioButton>
-                                <RadioButton GroupName="Theme" Foreground="Teal" Content="Teal" Checked="OnTheme_Checked" Width="90"  Margin="0,5,0,5"></RadioButton>
-                                <RadioButton GroupName="Theme" Foreground="Violet" Content="Violet" Checked="OnTheme_Checked" Width="90"  Margin="0,5,0,5"></RadioButton>
-                                <RadioButton GroupName="Theme" Foreground="Yellow" Content="Yellow" Checked="OnTheme_Checked" Width="90"  Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="Sienna" Content="Sienna" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="#e0dfdb" Content="Steel" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="#483C32" Content="Taupe" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="Teal" Content="Teal" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="Violet" Content="Violet" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="Yellow" Content="Yellow" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
+                                <RadioButton GroupName="Theme" Foreground="#FFC200" Content="Amber" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
                             </WrapPanel>
                         </Grid>
                     </Popup>

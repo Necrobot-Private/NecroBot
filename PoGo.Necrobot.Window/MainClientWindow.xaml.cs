@@ -59,6 +59,7 @@ namespace PoGo.Necrobot.Window
         public MainClientWindow()
         {
             InitializeComponent();
+            Sync();
 
             datacontext = new DataContext()
             {
@@ -67,19 +68,6 @@ namespace PoGo.Necrobot.Window
 
             DataContext = datacontext;
             txtCmdInput.Text = TinyIoCContainer.Current.Resolve<UITranslation>().InputCommand;
-            var translator = TinyIoCContainer.Current.Resolve<UITranslation>();
-
-            //=============DotNetBrowser Saving=============\\
-            if (Settings.Default.BrowserToggled)
-            {
-                InitBrowser();
-                browserMenuText.Text = translator.DisableHub;
-            }
-            else if (!Settings.Default.BrowserToggled)
-            {
-                browserMenuText.Text = translator.EnableHub;
-                tabBrowser.IsEnabled = false;
-            }
 
             Width = Settings.Default.Width;
             Height = Settings.Default.Height;
@@ -95,21 +83,54 @@ namespace PoGo.Necrobot.Window
             webView.URL = uri.ToString();
         }
 
-        private void Grid_Loaded(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            var Accent = Settings.Default.Theme;
+            var Theme = Settings.Default.Scheme;
+            Tuple<AppTheme, Accent> appstyle = ThemeManager.DetectAppStyle(Application.Current);
+            ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(Accent), ThemeManager.GetAppTheme(Theme));
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             LoadHelpArticleAsync();
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
             //=============Console Saving=============\\
             ConsoleWindow();
-            //==============Theme Saving===============\\
-            SyncTheme();
+        }
+
+        public void Sync()
+        {
+            var translator = TinyIoCContainer.Current.Resolve<UITranslation>();
+            //=============DotNetBrowser Saving=============\\
+            if (Settings.Default.BrowserToggled)
+            {
+                InitBrowser();
+                browserMenuText.Text = translator.DisableHub;
+            }
+            else if (!Settings.Default.BrowserToggled)
+            {
+                browserMenuText.Text = translator.EnableHub;
+                tabBrowser.IsEnabled = false;
+            }
+        }
+
+        public void ConsoleWindow()
+        {
+            var translator = TinyIoCContainer.Current.Resolve<UITranslation>();
+
+            if (Settings.Default.ConsoleToggled == true)
+            {
+                consoleMenuText.Text = translator.HideConsole;
+                ConsoleHelper.ShowConsoleWindow();
+                Settings.Default.ConsoleText = "Hide Console";
+            }
+            if (Settings.Default.ConsoleToggled == false)
+            {
+                consoleMenuText.Text = translator.ShowConsole;
+                ConsoleHelper.HideConsoleWindow();
+                Settings.Default.ConsoleText = "Show Console";
+            }
+            Settings.Default.ConsoleToggled = !Settings.Default.ConsoleToggled;
+            Settings.Default.Save();
         }
 
         private DateTime lastClearLog = DateTime.Now;
@@ -200,16 +221,10 @@ namespace PoGo.Necrobot.Window
             Popup2.IsOpen = !Popup2.IsOpen;
         }
 
-        public void SyncTheme()
-        {
-            Tuple<AppTheme, Accent> appstyle = ThemeManager.DetectAppStyle(Application.Current);
-            ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(Settings.Default.Theme), ThemeManager.GetAppTheme(Settings.Default.Scheme));
-        }
-
         private void OnTheme_Checked(object sender, RoutedEventArgs e)
         {
             var rad = sender as RadioButton;
-            Tuple<AppTheme, Accent> appstyle = ThemeManager.DetectAppStyle(Application.Current);
+            Tuple<AppTheme, Accent> ThemeStyle = ThemeManager.DetectAppStyle(Application.Current);
             ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(rad.Content.ToString()), ThemeManager.GetAppTheme(Settings.Default.Scheme));
             Settings.Default.Theme = rad.Content.ToString();
             Settings.Default.Save();
@@ -219,7 +234,7 @@ namespace PoGo.Necrobot.Window
         {
             var rad = sender as RadioButton;
             var Scheme = "Base" + rad.Content.ToString();
-            Tuple<AppTheme, Accent> appstyle = ThemeManager.DetectAppStyle(Application.Current);
+            Tuple<AppTheme, Accent> SchemeStyle = ThemeManager.DetectAppStyle(Application.Current);
             ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(Settings.Default.Theme), ThemeManager.GetAppTheme(Scheme));
             Settings.Default.Scheme = Scheme;
             Settings.Default.Save();
@@ -356,26 +371,6 @@ namespace PoGo.Necrobot.Window
             {
                 session.ReInitSessionWithNextBot(); //current location
             }
-        }
-
-        public void ConsoleWindow()
-        {
-            var translator = TinyIoCContainer.Current.Resolve<UITranslation>();
-
-            if (Settings.Default.ConsoleToggled == true)
-            {
-                consoleMenuText.Text = translator.HideConsole;
-                ConsoleHelper.ShowConsoleWindow();
-                Settings.Default.ConsoleText = "Hide Console";
-            }
-            if (Settings.Default.ConsoleToggled == false)
-            {
-                consoleMenuText.Text = translator.ShowConsole;
-                ConsoleHelper.HideConsoleWindow();
-                Settings.Default.ConsoleText = "Show Console";
-            }
-            Settings.Default.ConsoleToggled = !Settings.Default.ConsoleToggled;
-            Settings.Default.Save();
         }
 
         private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)

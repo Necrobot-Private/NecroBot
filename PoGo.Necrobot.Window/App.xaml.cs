@@ -12,7 +12,6 @@ using PoGo.Necrobot.Window.Properties;
 using System.IO;
 using PoGo.NecroBot.Logic.Common;
 using TinyIoC;
-using MahApps.Metro;
 
 namespace PoGo.Necrobot.Window
 {
@@ -37,8 +36,6 @@ namespace PoGo.Necrobot.Window
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            Tuple<AppTheme, Accent> theme = ThemeManager.DetectAppStyle(Current);
-            ThemeManager.ChangeAppStyle(Current, ThemeManager.GetAccent(Settings.Default.Theme), ThemeManager.GetAppTheme(Settings.Default.Scheme));
             base.OnStartup(e);
         }
 
@@ -108,9 +105,6 @@ namespace PoGo.Necrobot.Window
             }
             Settings.Default.ConsoleToggled = !Settings.Default.ConsoleToggled;
             Settings.Default.Save();
-
-            Tuple<AppTheme, Accent> theme = ThemeManager.DetectAppStyle(Current);
-            ThemeManager.ChangeAppStyle(Current, ThemeManager.GetAccent(Settings.Default.Theme), ThemeManager.GetAppTheme(Settings.Default.Scheme));
 
             MainWindow.Show();
         }
