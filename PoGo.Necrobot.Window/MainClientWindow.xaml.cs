@@ -24,6 +24,8 @@ using System.Net.Http;
 using PoGo.NecroBot.Logic;
 using PoGo.NecroBot.Logic.Model.Settings;
 using static PoGo.NecroBot.Logic.MultiAccountManager;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace PoGo.Necrobot.Window
 {
@@ -85,10 +87,78 @@ namespace PoGo.Necrobot.Window
 
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            var Accent = Settings.Default.Theme;
-            var Theme = Settings.Default.Scheme;
-            Tuple<AppTheme, Accent> appstyle = ThemeManager.DetectAppStyle(Application.Current);
-            ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(Accent), ThemeManager.GetAppTheme(Theme));
+            //Upgrade Settings, if Any
+            Settings.Default.Upgrade();
+
+            // Populate ComboBox's w/ Available Themes & Schemes
+            Scheme.ItemsSource = new List<string> { "Light", "Dark" };
+            Theme.ItemsSource = new List<string> { "Red", "Green", "Blue", "Purple", "Orange", "Lime", "Emerald", "Teal", "Cyan", "Cobalt", "Indigo", "Violet", "Pink", "Magenta", "Crimson", "Amber", "Yellow", "Brown", "Olive", "Steel", "Mauve", "Taupe", "Sienna" };
+            var LightColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE5E5E5"));
+            var DarkColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#252525"));
+
+            //=============THEME & SCHEME STARTUP CONFIGURATION=============\\
+            if (Settings.Default.Theme == "")
+            {
+                Settings.Default.Theme = "Blue";
+                Settings.Default.Save();
+                Settings.Default.Reload();
+            }
+            else if (Settings.Default.Scheme == "")
+            {
+                Settings.Default.Scheme = "Light";
+                Settings.Default.SchemeValue = "BaseLight";
+                Settings.Default.Save();
+                Settings.Default.Reload();
+            }
+            if (Settings.Default.Scheme == "Light")
+            {
+                tabAccounts.Background = LightColor;
+                tabBrowser.Background = LightColor;
+                tabMap.Background = LightColor;
+                tabSniper.Background = LightColor;
+                tabConsole.Background = LightColor;
+                tabPokemons.Background = LightColor;
+                tabItems.Background = LightColor;
+                tabEggs.Background = LightColor;
+                tabPokemons.Foreground = Brushes.Black;
+                tabItems.Foreground = Brushes.Black;
+            }
+            else if (Settings.Default.Scheme == "Dark")
+            {
+                tabAccounts.Background = DarkColor;
+                tabBrowser.Background = DarkColor;
+                tabMap.Background = DarkColor;
+                tabSniper.Background = DarkColor;
+                tabConsole.Background = DarkColor;
+                tabPokemons.Background = DarkColor;
+                tabItems.Background = DarkColor;
+                tabEggs.Background = DarkColor;
+                tabPokemons.Foreground = Brushes.White;
+                tabItems.Foreground = Brushes.White;
+            }
+            var AccountsBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Accounts/AccountsIMG_{Settings.Default.Theme}.png"));
+            var ConsoleBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Console/ConsoleIMG_{Settings.Default.Theme}.png"));
+            var EggsBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Eggs/EggsIMG_{Settings.Default.Theme}.png"));
+            var HubBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Hub/HubIMG_{Settings.Default.Theme}.png"));
+            var ItemsBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Items/ItemsIMG_{Settings.Default.Theme}.png"));
+            var MapBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Map/MapIMG_{Settings.Default.Theme}.png"));
+            var PokemonBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Pokemon/PokemonIMG_{Settings.Default.Theme}.png"));
+            var SniperBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Sniper/SniperIMG_{Settings.Default.Theme}.png"));
+            accountsIMG.Source = AccountsBitmap;
+            consoleIMG.Source = ConsoleBitmap;
+            eggsIMG.Source = EggsBitmap;
+            browserIMG.Source = HubBitmap;
+            itemsIMG.Source = ItemsBitmap;
+            mapIMG.Source = MapBitmap;
+            pokemonIMG.Source = PokemonBitmap;
+            sniperIMG.Source = SniperBitmap;
+            var SchemeValue = "Base" + Settings.Default.Scheme;
+            Theme.SelectedValue = Settings.Default.Theme;
+            Scheme.SelectedValue = Settings.Default.Scheme;
+            Settings.Default.Save();
+
+            ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(Settings.Default.Theme), ThemeManager.GetAppTheme(Settings.Default.SchemeValue));
+
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             LoadHelpArticleAsync();
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
@@ -211,33 +281,163 @@ namespace PoGo.Necrobot.Window
             }
         }
 
-        private void Theme_Selected(object sender, RoutedEventArgs e)
+        private void Theme_SelectionChanged(object sender, RoutedEventArgs e)
         {
-            Popup1.IsOpen = !Popup1.IsOpen;
-        }
+            string Selection = Convert.ToString(Theme.SelectedValue);
 
-        private void Scheme_Selected(object sender, RoutedEventArgs e)
-        {
-            Popup2.IsOpen = !Popup2.IsOpen;
-        }
-
-        private void OnTheme_Checked(object sender, RoutedEventArgs e)
-        {
-            var rad = sender as RadioButton;
-            Tuple<AppTheme, Accent> ThemeStyle = ThemeManager.DetectAppStyle(Application.Current);
-            ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(rad.Content.ToString()), ThemeManager.GetAppTheme(Settings.Default.Scheme));
-            Settings.Default.Theme = rad.Content.ToString();
+            if (Selection == "Red")
+            {
+                Settings.Default.Theme = "Red";
+            }
+            if (Selection == "Green")
+            {
+                Settings.Default.Theme = "Green";
+            }
+            if (Selection == "Blue")
+            {
+                Settings.Default.Theme = "Blue";
+            }
+            if (Selection == "Purple")
+            {
+                Settings.Default.Theme = "Purple";
+            }
+            if (Selection == "Orange")
+            {
+                Settings.Default.Theme = "Orange";
+            }
+            if (Selection == "Lime")
+            {
+                Settings.Default.Theme = "Lime";
+            }
+            if (Selection == "Emerald")
+            {
+                Settings.Default.Theme = "Emerald";
+            }
+            if (Selection == "Teal")
+            {
+                Settings.Default.Theme = "Teal";
+            }
+            if (Selection == "Cyan")
+            {
+                Settings.Default.Theme = "Cyan";
+            }
+            if (Selection == "Cobalt")
+            {
+                Settings.Default.Theme = "Cobalt";
+            }
+            if (Selection == "Indigo")
+            {
+                Settings.Default.Theme = "Indigo";
+            }
+            if (Selection == "Violet")
+            {
+                Settings.Default.Theme = "Violet";
+            }
+            if (Selection == "Pink")
+            {
+                Settings.Default.Theme = "Pink";
+            }
+            if (Selection == "Magenta")
+            {
+                Settings.Default.Theme = "Magenta";
+            }
+            if (Selection == "Crimson")
+            {
+                Settings.Default.Theme = "Crimson";
+            }
+            if (Selection == "Amber")
+            {
+                Settings.Default.Theme = "Amber";
+            }
+            if (Selection == "Yellow")
+            {
+                Settings.Default.Theme = "Yellow";
+            }
+            if (Selection == "Brown")
+            {
+                Settings.Default.Theme = "Brown";
+            }
+            if (Selection == "Olive")
+            {
+                Settings.Default.Theme = "Olive";
+            }
+            if (Selection == "Steel")
+            {
+                Settings.Default.Theme = "Steel";
+            }
+            if (Selection == "Mauve")
+            {
+                Settings.Default.Theme = "Mauve";
+            }
+            if (Selection == "Taupe")
+            {
+                Settings.Default.Theme = "Taupe";
+            }
+            if (Selection == "Sienna")
+            {
+                Settings.Default.Theme = "Sienna";
+            }
             Settings.Default.Save();
+            var AccountsBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Accounts/AccountsIMG_{Settings.Default.Theme}.png"));
+            var ConsoleBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Console/ConsoleIMG_{Settings.Default.Theme}.png"));
+            var EggsBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Eggs/EggsIMG_{Settings.Default.Theme}.png"));
+            var HubBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Hub/HubIMG_{Settings.Default.Theme}.png"));
+            var ItemsBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Items/ItemsIMG_{Settings.Default.Theme}.png"));
+            var MapBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Map/MapIMG_{Settings.Default.Theme}.png"));
+            var PokemonBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Pokemon/PokemonIMG_{Settings.Default.Theme}.png"));
+            var SniperBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Sniper/SniperIMG_{Settings.Default.Theme}.png"));
+            accountsIMG.Source = AccountsBitmap;
+            consoleIMG.Source = ConsoleBitmap;
+            eggsIMG.Source = EggsBitmap;
+            browserIMG.Source = HubBitmap;
+            itemsIMG.Source = ItemsBitmap;
+            mapIMG.Source = MapBitmap;
+            pokemonIMG.Source = PokemonBitmap;
+            sniperIMG.Source = SniperBitmap;
+            ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(Settings.Default.Theme), ThemeManager.GetAppTheme(Settings.Default.SchemeValue));
         }
 
-        private void OnScheme_Checked(object sender, RoutedEventArgs e)
+        private void Scheme_SelectionChanged(object sender, RoutedEventArgs e)
         {
-            var rad = sender as RadioButton;
-            var Scheme = "Base" + rad.Content.ToString();
-            Tuple<AppTheme, Accent> SchemeStyle = ThemeManager.DetectAppStyle(Application.Current);
-            ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(Settings.Default.Theme), ThemeManager.GetAppTheme(Scheme));
-            Settings.Default.Scheme = Scheme;
-            Settings.Default.Save();
+            string Selection = Convert.ToString(Scheme.SelectedValue);
+            var LightColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE5E5E5"));
+            var DarkColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#252525"));
+
+            if (Selection == "Light")
+            {
+                Settings.Default.Scheme = "Light";
+                Settings.Default.SchemeValue = "BaseLight";
+                Settings.Default.Save();
+
+                tabAccounts.Background = LightColor;
+                tabBrowser.Background = LightColor;
+                tabMap.Background = LightColor;
+                tabSniper.Background = LightColor;
+                tabConsole.Background = LightColor;
+                tabPokemons.Background = LightColor;
+                tabItems.Background = LightColor;
+                tabEggs.Background = LightColor;
+                tabPokemons.Foreground = Brushes.Black;
+                tabItems.Foreground = Brushes.Black;
+            }
+            else if (Selection == "Dark")
+            {
+                Settings.Default.Scheme = "Dark";
+                Settings.Default.SchemeValue = "BaseDark";
+                Settings.Default.Save();
+
+                tabAccounts.Background = DarkColor;
+                tabBrowser.Background = DarkColor;
+                tabMap.Background = DarkColor;
+                tabSniper.Background = DarkColor;
+                tabConsole.Background = DarkColor;
+                tabPokemons.Background = DarkColor;
+                tabItems.Background = DarkColor;
+                tabEggs.Background = DarkColor;
+                tabPokemons.Foreground = Brushes.White;
+                tabItems.Foreground = Brushes.White;
+            }
+            ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(Settings.Default.Theme), ThemeManager.GetAppTheme(Settings.Default.SchemeValue));
         }
 
         private void TxtCmdInput_KeyDown(object sender, KeyEventArgs e)
@@ -293,7 +493,7 @@ namespace PoGo.Necrobot.Window
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    var responseContent = await client.GetAsync("http://necrobot2.com/feed.xml");
+                    var responseContent = await client.GetAsync("https://github.com/Necrobot-Private/NecroBot/releases.atom");
                     if (responseContent.StatusCode != HttpStatusCode.OK)
                         return;
 

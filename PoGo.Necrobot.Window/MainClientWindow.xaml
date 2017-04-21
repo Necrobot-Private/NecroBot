@@ -69,68 +69,8 @@
                     </Popup>
                 </StackPanel>
             </Button>
-
-            <Button Click="Theme_Selected">
-                <StackPanel Orientation="Horizontal">
-                    <Rectangle Width="20"
-                               Height="20"
-                               Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
-                        <Rectangle.OpacityMask>
-                            <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_social_delicious}" />
-                        </Rectangle.OpacityMask>
-                    </Rectangle>
-                    <TextBlock Margin="4 0 0 0" VerticalAlignment="Center" Text="{Binding Source=Theme, Converter={StaticResource ResourceKey=I18NConveter}}" />
-                    <Popup Margin="10,10,0,13" Name="Popup1" HorizontalAlignment="Left" VerticalAlignment="Top" Width="320" Height="280" IsOpen="False" AllowsTransparency="True">
-                        <Grid Background="White">
-                            <WrapPanel Background="White" Margin="20,20,20,20">
-                                <RadioButton GroupName="Theme" Foreground="Red" Content="Red" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5" ></RadioButton>
-                                <RadioButton GroupName="Theme" Foreground="Blue" Content="Blue" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5" IsChecked="True"></RadioButton>
-                                <RadioButton GroupName="Theme" Foreground="Brown" Content="Brown" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
-                                <RadioButton GroupName="Theme" Foreground="#0047ab"  Content="Cobalt" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
-                                <RadioButton GroupName="Theme" Foreground="Crimson" Content="Crimson" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
-                                <RadioButton GroupName="Theme" Foreground="Cyan" Content="Cyan" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
-                                <RadioButton GroupName="Theme" Foreground="DarkGreen" Content="Emerald" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
-                                <RadioButton GroupName="Theme" Foreground="Green" Content="Green" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
-                                <RadioButton GroupName="Theme" Foreground="Indigo" Content="Indigo" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5" ></RadioButton>
-                                <RadioButton GroupName="Theme" Foreground="Lime" Content="Lime" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
-                                <RadioButton GroupName="Theme" Foreground="Magenta" Content="Magenta" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5" ></RadioButton>
-                                <RadioButton GroupName="Theme" Foreground="#b784a7" Content="Mauve" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
-                                <RadioButton GroupName="Theme" Foreground="Olive" Content="Olive" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5" ></RadioButton>
-                                <RadioButton GroupName="Theme" Foreground="Orange" Content="Orange" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
-                                <RadioButton GroupName="Theme" Foreground="Pink" Content="Pink" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
-                                <RadioButton GroupName="Theme" Foreground="Purple"  Content="Purple" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
-                                <RadioButton GroupName="Theme" Foreground="Sienna" Content="Sienna" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
-                                <RadioButton GroupName="Theme" Foreground="#e0dfdb" Content="Steel" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
-                                <RadioButton GroupName="Theme" Foreground="#483C32" Content="Taupe" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
-                                <RadioButton GroupName="Theme" Foreground="Teal" Content="Teal" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
-                                <RadioButton GroupName="Theme" Foreground="Violet" Content="Violet" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
-                                <RadioButton GroupName="Theme" Foreground="Yellow" Content="Yellow" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
-                                <RadioButton GroupName="Theme" Foreground="#FFC200" Content="Amber" Checked="OnTheme_Checked" Width="90" Margin="0,5,0,5"></RadioButton>
-                            </WrapPanel>
-                        </Grid>
-                    </Popup>
-                </StackPanel>
-            </Button>
-            <Button Click="Scheme_Selected">
-                <StackPanel Orientation="Horizontal">
-                    <Rectangle Width="20"
-                               Height="20"
-                               Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
-                        <Rectangle.OpacityMask>
-                            <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_social_delicious}" />
-                        </Rectangle.OpacityMask>
-                    </Rectangle>
-                    <TextBlock Margin="4 0 0 0" VerticalAlignment="Center" Text="{Binding Source=Scheme, Converter={StaticResource ResourceKey=I18NConveter}}" />
-                    <Popup Margin="10,10,0,13" Name="Popup2" HorizontalAlignment="Left" VerticalAlignment="Top" Width="320" Height="280" IsOpen="False" AllowsTransparency="True">
-                        <Grid Background="White">
-                            <WrapPanel Background="White" Margin="20,20,20,20">
-                                <RadioButton GroupName="Scheme" Foreground="Gray" Content="Light" Checked="OnScheme_Checked" Width="90" Margin="0,5,0,5" IsChecked="True"></RadioButton>
-                                <RadioButton GroupName="Scheme" Foreground="Black" Content="Dark" Checked="OnScheme_Checked" Width="90" Margin="0,5,0,5" ></RadioButton>
-                            </WrapPanel>
-                        </Grid>
-                    </Popup>
-                </StackPanel>
-            </Button>
+            <ComboBox x:Name="Theme" IsEditable="True" IsReadOnly="True" SelectionChanged="Theme_SelectionChanged" Background="{x:Null}" BorderBrush="{x:Null}" Width="120" ToolTip="Set Theme" />
+            <ComboBox x:Name="Scheme" IsEditable="True" IsReadOnly="True" SelectionChanged="Scheme_SelectionChanged" Background="{x:Null}" BorderBrush="{x:Null}" Width="120" ToolTip="Set Scheme" />
             <Button x:Name="BrowserToggle" Click="BrowserToggle_Click">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Margin="4 0 0 0" x:Name="browserMenuText"
@@ -252,7 +192,7 @@
             </TabControl.Resources>
             <TabItem Name="tabAccounts" Width="80" Height="80">
                 <TabItem.Header>
-                    <Image x:Name="accountsIMG" Source="Resources/AccountsImage.png" Width="60" RenderTransformOrigin="0.5,0.5" Height="60" >
+                    <Image x:Name="accountsIMG" Source="Resources/Accounts/AccountsImage.png" Width="60" RenderTransformOrigin="0.5,0.5" Height="60" >
                         <Image.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform/>
@@ -299,7 +239,7 @@
             </TabItem>
             <TabItem Name="tabBrowser">
                 <TabItem.Header>
-                    <Image x:Name="browserIMG" Source="Resources/HubImage.png" Width="60" RenderTransformOrigin="0.5,0.5" Height="60" >
+                    <Image x:Name="browserIMG" Source="Resources/Hub/HubImage.png" Width="60" RenderTransformOrigin="0.5,0.5" Height="60" >
                         <Image.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform/>
@@ -316,7 +256,7 @@
             </TabItem>
             <TabItem Name="tabMap">
                 <TabItem.Header>
-                    <Image x:Name="mapIMG" Source="Resources/MapImage.png" Width="60" RenderTransformOrigin="0.5,0.5" Height="60" >
+                    <Image x:Name="mapIMG" Source="Resources/Map/MapImage.png" Width="60" RenderTransformOrigin="0.5,0.5" Height="60" >
                         <Image.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform/>
@@ -344,7 +284,7 @@
             </TabItem>
             <TabItem x:Name="tabSniper">
                 <TabItem.Header>
-                    <Image x:Name="sniperIMG" Source="Resources/SniperImage.png" Width="60" Height="60" />
+                    <Image x:Name="sniperIMG" Source="Resources/Sniper/SniperImage.png" Width="60" Height="60" />
                 </TabItem.Header>
 
                 <local:SniperControl x:Name="ctrlSniper" DataContext="{Binding Path=SnipeList}" />
@@ -352,7 +292,7 @@
 
             <TabItem x:Name="tabConsole" IsSelected="True">
                 <TabItem.Header>
-                    <Image x:Name="consoleIMG" Source="Resources/ConsoleImage.png" Width="60" RenderTransformOrigin="0.5,0.5" Height="60" >
+                    <Image x:Name="consoleIMG" Source="Resources/Console/ConsoleImage.png" Width="60" RenderTransformOrigin="0.5,0.5" Height="60" >
                         <Image.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform/>
@@ -409,7 +349,7 @@
                                 <TranslateTransform/>
                             </TransformGroup>
                         </StackPanel.RenderTransform>
-                        <Image x:Name="pokemonIMG" Source="Resources/PokemonImage.png" Width="48" Height="48"/>
+                        <Image x:Name="pokemonIMG" Source="Resources/Pokemon/PokemonImage.png" Width="48" Height="48"/>
                         <TextBlock FontSize="12" HorizontalAlignment="Center" Text="{Binding Path= PokemonTabHeader, FallbackValue=Pokemon}"/>
                     </StackPanel>
                 </TabItem.Header>
@@ -427,7 +367,7 @@
                                 <TranslateTransform/>
                             </TransformGroup>
                         </StackPanel.RenderTransform>
-                        <Image x:Name="itemsIMG" Source="Resources/ItemsImage.png" Width="48" Height="48"/>
+                        <Image x:Name="itemsIMG" Source="Resources/Items/ItemsImage.png" Width="48" Height="48"/>
                         <TextBlock FontSize="12" HorizontalAlignment="Center" Text="{Binding Path= ItemsTabHeader, FallbackValue=Items}"/>
                     </StackPanel>
                 </TabItem.Header>
@@ -444,7 +384,7 @@
                                 <TranslateTransform/>
                             </TransformGroup>
                         </StackPanel.RenderTransform>
-                        <Image x:Name="eggsIMG" Source="Resources/EggsImage.png" Width="60" Height="60"/>
+                        <Image x:Name="eggsIMG" Source="Resources/Eggs/EggsImage.png" Width="60" Height="60"/>
                     </StackPanel>
                 </TabItem.Header>
                 <local:EggsControl DataContext="{Binding Path=EggsList}" x:Name="ctrlEggsControl" />

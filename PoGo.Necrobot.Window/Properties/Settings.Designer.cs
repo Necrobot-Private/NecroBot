@@ -49,7 +49,7 @@ namespace PoGo.Necrobot.Window.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("BaseLight")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Light")]
         public string Scheme {
             get {
                 return ((string)(this["Scheme"]));
@@ -104,6 +104,18 @@ namespace PoGo.Necrobot.Window.Properties {
             }
             set {
                 this["ConsoleText"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("BaseLight")]
+        public string SchemeValue {
+            get {
+                return ((string)(this["SchemeValue"]));
+            }
+            set {
+                this["SchemeValue"] = value;
             }
         }
     }
