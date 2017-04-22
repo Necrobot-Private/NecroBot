@@ -12,11 +12,11 @@
                       Width="1366"
                       MinWidth="1024"
                       BorderThickness="0"
-                      GlowBrush="Black"
+                      GlowBrush="DodgerBlue"
                       ResizeMode="CanResizeWithGrip"
                       WindowTransitionsEnabled="False"
                       WindowStartupLocation="CenterScreen" 
-                      Loaded="MetroWindow_Loaded" Initialized="MetroWindow_Initialized" Closing="MetroWindow_Closing">
+                      Loaded="MetroWindow_Loaded" Initialized="MetroWindow_Initialized" Closing="MetroWindow_Closing" AllowsTransparency="True">
     <Controls:MetroWindow.TitleTemplate>
         <DataTemplate>
             <TextBlock x:Name="TitleText"
@@ -117,7 +117,6 @@
 
         </Controls:WindowCommands>
     </Controls:MetroWindow.RightWindowCommands>
-
     <DockPanel LastChildFill="True">
         <GroupBox x:Name="grbPlayerInfo" DockPanel.Dock="Top" Height="120">
             <GroupBox.Header>
@@ -125,14 +124,6 @@
                     <Button Content="Hide" DockPanel.Dock="Right" Name="btnHideInfo" Click="BtnHideInfo_Click" />
                     <Label Content="Logging in ..... check console window for detail" Name="lblAccount"
                            Foreground="White" FontWeight="Bold">
-                        <!--<Label.Content>
-                            <MultiBinding StringFormat="{}{0} as : {1}">
-                                <Binding Path="UI.PlayerStatus"></Binding>
-                                <Binding Path="UI.PlayerName"></Binding>
-                            </MultiBinding>
-
-                        </Label.Content>-->
-
                     </Label>
                 </DockPanel>
             </GroupBox.Header>
@@ -153,7 +144,6 @@
                 </StackPanel>
             </Border>
         </Popup>
-
         <Popup Name="popError" Placement="Center" IsOpen="False" Width="400" Height="auto" >
             <Border BorderBrush="Red" Background="WhiteSmoke" BorderThickness="2">
                 <StackPanel>
@@ -165,15 +155,9 @@
                         <Button Margin="30,10, 10,30" Click="BtnExit_Click" Name="btnExit" Content="{Binding Source=ClickHereExit, Converter={StaticResource I18NConveter}}" FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato Heavy" FontSize="18.667" ></Button>
                     </StackPanel>
                 </StackPanel>
-
             </Border>
         </Popup>
-
-        <TabControl TabStripPlacement="Left" HorizontalAlignment="Stretch" 
-                    VerticalAlignment="Stretch" 
-                    Name="tabMain"
-                    SelectionChanged="TabMain_SelectionChanged" Margin="0,0,0,5"
-                    >
+        <TabControl TabStripPlacement="Left" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Name="tabMain" SelectionChanged="TabMain_SelectionChanged" Margin="0,0,0,5">
             <TabControl.Resources>
                 <Style TargetType="{x:Type TabItem}">
                     <Setter Property="HeaderTemplate">
@@ -222,19 +206,16 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                             <DataGridTemplateColumn.CellTemplate>
-
                                 <DataTemplate>
                                     <StackPanel>
-                                        <Button   Name="btnSwitchAcount" Click="BtnSwitchAcount_Click" CommandParameter="{Binding}" Foreground="Green" Background="Transparent"  IsEnabled="{Binding IsRunning, Converter= {StaticResource InverseBooleanConverter}}" Cursor="Hand">
-                                            <TextBlock Margin="5,5,5,5" Text="{Binding Source=Switch, Converter={StaticResource I18NConveter }}">
-                                            </TextBlock>
+                                        <Button Name="btnSwitchAcount" Click="BtnSwitchAcount_Click" CommandParameter="{Binding}" Foreground="Green" Background="Transparent"  IsEnabled="{Binding IsRunning, Converter= {StaticResource InverseBooleanConverter}}" Cursor="Hand">
+                                            <TextBlock Margin="5,5,5,5" Text="{Binding Source=Switch, Converter={StaticResource I18NConveter }}"></TextBlock>
                                         </Button>
                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
-
                 </DataGrid>
             </TabItem>
             <TabItem Name="tabBrowser">
@@ -251,7 +232,7 @@
                     </Image>
                 </TabItem.Header>
                 <Grid Name="browserLayout">
-                    <wpf:WPFBrowserView x:Name="webView" BrowserType="LIGHTWEIGHT"/>
+                    <wpf:WPFBrowserView x:Name="webView" BrowserType="HEAVYWEIGHT"/>
                 </Grid>
             </TabItem>
             <TabItem Name="tabMap">
@@ -274,22 +255,16 @@
                         <ColumnDefinition Width="auto" />
                     </Grid.ColumnDefinitions>
                     <local:MapControl x:Name="botMap" Grid.Column="0" DataContext="{Binding Path=Map}" />
-
                     <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
-                    <local:SidebarControl Visibility="Visible" DataContext="{Binding Path=Sidebar}"
-                                          x:Name="sidebarControl" Grid.Column="2" HorizontalAlignment="Stretch"
-                                          VerticalAlignment="Stretch" MinWidth="200" />
-
+                    <local:SidebarControl Visibility="Visible" DataContext="{Binding Path=Sidebar}" x:Name="sidebarControl" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinWidth="200" />
                 </Grid>
             </TabItem>
             <TabItem x:Name="tabSniper">
                 <TabItem.Header>
                     <Image x:Name="sniperIMG" Source="Resources/Sniper/SniperImage.png" Width="60" Height="60" />
                 </TabItem.Header>
-
                 <local:SniperControl x:Name="ctrlSniper" DataContext="{Binding Path=SnipeList}" />
             </TabItem>
-
             <TabItem x:Name="tabConsole" IsSelected="True">
                 <TabItem.Header>
                     <Image x:Name="consoleIMG" Source="Resources/Console/ConsoleImage.png" Width="60" RenderTransformOrigin="0.5,0.5" Height="60" >
@@ -304,30 +279,8 @@
                     </Image>
                 </TabItem.Header>
                 <DockPanel LastChildFill="True">
-                    <TextBox HorizontalAlignment="Stretch" 
-                             Name="txtCmdInput" 
-                             Background="#002b36" 
-                             DockPanel.Dock="Top"
-                             Foreground="#fdf6e3" 
-                             BorderBrush="Aquamarine" 
-                             BorderThickness="1" 
-                             ToolTip="{Binding Source=InputCommand, Converter={StaticResource ResourceKey=I18NConveter}}" 
-                             MouseDown="TxtCmdInput_MouseDown"
-                             KeyDown="TxtCmdInput_KeyDown"
-                             />
-
-                    <RichTextBox
-                    ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                    ScrollViewer.VerticalScrollBarVisibility="Auto"
-                    ScrollViewer.CanContentScroll="True"
-                    DockPanel.Dock="Top"
-                    x:Name="consoleLog"
-                    HorizontalAlignment="Stretch"
-                    Background="#002b36"
-                    VerticalAlignment="Stretch"
-                    FontSize="15" 
-                    IsReadOnly="True" 
-                    FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato Light">
+                    <TextBox HorizontalAlignment="Stretch" Name="txtCmdInput" Background="#002b36" DockPanel.Dock="Top" Foreground="#fdf6e3"  BorderBrush="Aquamarine" BorderThickness="1" ToolTip="{Binding Source=InputCommand, Converter={StaticResource ResourceKey=I18NConveter}}" MouseDown="TxtCmdInput_MouseDown" KeyDown="TxtCmdInput_KeyDown" />
+                    <RichTextBox ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" DockPanel.Dock="Top" x:Name="consoleLog" HorizontalAlignment="Stretch" Background="#002b36" VerticalAlignment="Stretch" FontSize="15" IsReadOnly="True" FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato Light">
                         <FlowDocument>
                             <Paragraph LineHeight="25">
                                 <Run Text="" />
@@ -335,9 +288,7 @@
                         </FlowDocument>
                     </RichTextBox>
                 </DockPanel>
-
             </TabItem>
-
             <TabItem Name="tabPokemons" Width="80" Height="80">
                 <TabItem.Header>
                     <StackPanel Orientation="Vertical" RenderTransformOrigin="0.5,0.5" Width="80">
@@ -353,8 +304,7 @@
                         <TextBlock FontSize="12" HorizontalAlignment="Center" Text="{Binding Path= PokemonTabHeader, FallbackValue=Pokemon}"/>
                     </StackPanel>
                 </TabItem.Header>
-                <local:PokemonInventory x:Name="ctrPokemonInventory" DataContext="{Binding Path=PokemonList}"
-                                        OnPokemonItemSelected="PokemonInventory_OnPokemonItemSelected" />
+                <local:PokemonInventory x:Name="ctrPokemonInventory" DataContext="{Binding Path=PokemonList}" OnPokemonItemSelected="PokemonInventory_OnPokemonItemSelected" />
             </TabItem>
             <TabItem Name="tabItems" Width="80" Height="80">
                 <TabItem.Header>
@@ -390,8 +340,5 @@
                 <local:EggsControl DataContext="{Binding Path=EggsList}" x:Name="ctrlEggsControl" />
             </TabItem>
         </TabControl>
-
     </DockPanel>
-
-
 </Controls:MetroWindow>
