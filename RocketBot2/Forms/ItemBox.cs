@@ -12,21 +12,36 @@ namespace RocketBot2.Forms
     {
         public DateTime expires = new DateTime(0);
         public ItemData Item_ { get; }
-        public bool isEggs = false;
+        public bool DisableTimer = false;
         public static ISession Session;
         public Incubators incubator;
+        public Eggs egg;
+
+        public ItemBox(int see, int cath, Image pic)
+        {
+            InitializeComponent();
+            DisableTimer = true;
+            lbl.Font = new System.Drawing.Font("Segoe UI", 7.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            lblTime.Font = new System.Drawing.Font("Segoe UI", 7.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            pb.Image = pic;
+            lblTime.Text = $"See: {see}";
+            lblTime.Visible = true;
+            lbl.Text = $"Catch: {cath}";
+            lblTime.Parent = pb;
+        }
 
         public ItemBox(Eggs item, ISession session)
         {
             InitializeComponent();
             Session = session;
-            isEggs = true;
+            DisableTimer = true;
             lbl.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             pb.Image = item.Icon;
             lblTime.Text = $"{item.TotalKM:0.0}Km";
             lblTime.Visible = true;
             lbl.Text = $"{item.KM:0.0}Km";
             lblTime.Parent = pb;
+            egg = item;
             
             foreach (Control control in Controls)
             {
@@ -39,26 +54,31 @@ namespace RocketBot2.Forms
         public ItemBox(Incubators item)
         {
             InitializeComponent();
-            isEggs = true;
+            DisableTimer = true;
             lbl.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             pb.Image = item.Icon(item.IsUnlimited);
             lblTime.Text = $"{item.TotalKM - item.KM:0.0}Km";
             lblTime.Visible = true;
             lbl.Text = $"{item.TotalKM / 1000:0.0}Km";
             lblTime.Parent = pb;
+            incubator = item;
  
             foreach (Control control in Controls)
             {
                 control.MouseEnter += ChildMouseEnter;
                 control.MouseLeave += ChildMouseLeave;
-                //control.MouseClick += SetIncubator_Click;
+                control.MouseClick += SetIncubator_Click;
             }
         }
 
         private void SetIncubator_Click(object sender, MouseEventArgs e)
         {
-            var incu = (Incubators)(sender);
-            if (!incu.InUse) incubator = incu;
+            if (incubator.InUse)
+            {
+                MessageBox.Show("Incubator in use choice an other", "Incubator Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+            ((ItemBox)sender).BackColor = Color.LightGreen;
         }
 
         private async void HatchEgg_Click(object sender, MouseEventArgs e)
@@ -68,8 +88,7 @@ namespace RocketBot2.Forms
                 MessageBox.Show("Please select an incubator to hatch eggs", "Hatch Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-            var eggs = (Eggs)(sender);
-            await UseIncubatorsTask.Execute(Session, Session.CancellationTokenSource.Token, eggs.Id, incubator.Id);
+            await UseIncubatorsTask.Execute(Session, Session.CancellationTokenSource.Token, egg.Id, incubator.Id);
             EggsForm.ActiveForm.Close();
         }
 
@@ -138,7 +157,7 @@ namespace RocketBot2.Forms
 
         private void Tmr_Tick(object sender, EventArgs e)
         {
-            if (isEggs) return;
+            if (DisableTimer) return;
             var time = expires - DateTime.UtcNow;
             if (expires.Ticks == 0 || time.TotalSeconds < 0)
             {
