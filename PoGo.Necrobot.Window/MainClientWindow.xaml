@@ -174,7 +174,7 @@
                     <Setter Property="Padding" Value="3" />
                 </Style>
             </TabControl.Resources>
-            <TabItem Name="tabAccounts" Width="80" Height="80">
+            <TabItem Name="tabAccounts">
                 <TabItem.Header>
                     <Image x:Name="accountsIMG" Source="Resources/Accounts/AccountsImage.png" Width="60" RenderTransformOrigin="0.5,0.5" Height="60" >
                         <Image.RenderTransform>
