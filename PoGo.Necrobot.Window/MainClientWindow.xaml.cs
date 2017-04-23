@@ -417,6 +417,10 @@ namespace PoGo.Necrobot.Window
                 tabPokemons.Background = LightColor;
                 tabItems.Background = LightColor;
                 tabEggs.Background = LightColor;
+                if (tabPokemons.IsMouseOver)
+                    tabPokemons.Foreground = Brushes.White;
+                if (tabItems.IsMouseOver)
+                    tabItems.Foreground = Brushes.White;
                 tabPokemons.Foreground = Brushes.Black;
                 tabItems.Foreground = Brushes.Black;
             }
