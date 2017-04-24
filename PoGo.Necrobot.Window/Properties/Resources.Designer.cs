@@ -73,6 +73,16 @@ namespace PoGo.Necrobot.Window.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap AccountsIMG_Amber {
+            get {
+                object obj = ResourceManager.GetObject("AccountsIMG_Amber", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap AccountsIMG_Blue {
             get {
                 object obj = ResourceManager.GetObject("AccountsIMG_Blue", resourceCulture);
@@ -86,6 +96,46 @@ namespace PoGo.Necrobot.Window.Properties {
         internal static System.Drawing.Bitmap AccountsIMG_Brown {
             get {
                 object obj = ResourceManager.GetObject("AccountsIMG_Brown", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap AccountsIMG_Cobalt {
+            get {
+                object obj = ResourceManager.GetObject("AccountsIMG_Cobalt", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap AccountsIMG_Crimson {
+            get {
+                object obj = ResourceManager.GetObject("AccountsIMG_Crimson", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap AccountsIMG_Cyan {
+            get {
+                object obj = ResourceManager.GetObject("AccountsIMG_Cyan", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap AccountsIMG_Emerald {
+            get {
+                object obj = ResourceManager.GetObject("AccountsIMG_Emerald", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -113,6 +163,46 @@ namespace PoGo.Necrobot.Window.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap AccountsIMG_Lime {
+            get {
+                object obj = ResourceManager.GetObject("AccountsIMG_Lime", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap AccountsIMG_Magenta {
+            get {
+                object obj = ResourceManager.GetObject("AccountsIMG_Magenta", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap AccountsIMG_Mauve {
+            get {
+                object obj = ResourceManager.GetObject("AccountsIMG_Mauve", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap AccountsIMG_Olive {
+            get {
+                object obj = ResourceManager.GetObject("AccountsIMG_Olive", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap AccountsIMG_Orange {
             get {
                 object obj = ResourceManager.GetObject("AccountsIMG_Orange", resourceCulture);
@@ -123,9 +213,69 @@ namespace PoGo.Necrobot.Window.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap AccountsIMG_Pink {
+            get {
+                object obj = ResourceManager.GetObject("AccountsIMG_Pink", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap AccountsIMG_Purple {
+            get {
+                object obj = ResourceManager.GetObject("AccountsIMG_Purple", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap AccountsIMG_Red {
             get {
                 object obj = ResourceManager.GetObject("AccountsIMG_Red", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap AccountsIMG_Sienna {
+            get {
+                object obj = ResourceManager.GetObject("AccountsIMG_Sienna", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap AccountsIMG_Steel {
+            get {
+                object obj = ResourceManager.GetObject("AccountsIMG_Steel", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap AccountsIMG_Taupe {
+            get {
+                object obj = ResourceManager.GetObject("AccountsIMG_Taupe", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap AccountsIMG_Teal {
+            get {
+                object obj = ResourceManager.GetObject("AccountsIMG_Teal", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -173,6 +323,16 @@ namespace PoGo.Necrobot.Window.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ConsoleIMG_Amber {
+            get {
+                object obj = ResourceManager.GetObject("ConsoleIMG_Amber", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ConsoleIMG_Blue {
             get {
                 object obj = ResourceManager.GetObject("ConsoleIMG_Blue", resourceCulture);
@@ -186,6 +346,46 @@ namespace PoGo.Necrobot.Window.Properties {
         internal static System.Drawing.Bitmap ConsoleIMG_Brown {
             get {
                 object obj = ResourceManager.GetObject("ConsoleIMG_Brown", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ConsoleIMG_Cobalt {
+            get {
+                object obj = ResourceManager.GetObject("ConsoleIMG_Cobalt", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ConsoleIMG_Crimson {
+            get {
+                object obj = ResourceManager.GetObject("ConsoleIMG_Crimson", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ConsoleIMG_Cyan {
+            get {
+                object obj = ResourceManager.GetObject("ConsoleIMG_Cyan", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ConsoleIMG_Emerald {
+            get {
+                object obj = ResourceManager.GetObject("ConsoleIMG_Emerald", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -213,6 +413,46 @@ namespace PoGo.Necrobot.Window.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ConsoleIMG_Lime {
+            get {
+                object obj = ResourceManager.GetObject("ConsoleIMG_Lime", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ConsoleIMG_Magenta {
+            get {
+                object obj = ResourceManager.GetObject("ConsoleIMG_Magenta", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ConsoleIMG_Mauve {
+            get {
+                object obj = ResourceManager.GetObject("ConsoleIMG_Mauve", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ConsoleIMG_Olive {
+            get {
+                object obj = ResourceManager.GetObject("ConsoleIMG_Olive", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ConsoleIMG_Orange {
             get {
                 object obj = ResourceManager.GetObject("ConsoleIMG_Orange", resourceCulture);
@@ -223,9 +463,69 @@ namespace PoGo.Necrobot.Window.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ConsoleIMG_Pink {
+            get {
+                object obj = ResourceManager.GetObject("ConsoleIMG_Pink", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ConsoleIMG_Purple {
+            get {
+                object obj = ResourceManager.GetObject("ConsoleIMG_Purple", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ConsoleIMG_Red {
             get {
                 object obj = ResourceManager.GetObject("ConsoleIMG_Red", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ConsoleIMG_Sienna {
+            get {
+                object obj = ResourceManager.GetObject("ConsoleIMG_Sienna", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ConsoleIMG_Steel {
+            get {
+                object obj = ResourceManager.GetObject("ConsoleIMG_Steel", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ConsoleIMG_Taupe {
+            get {
+                object obj = ResourceManager.GetObject("ConsoleIMG_Taupe", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ConsoleIMG_Teal {
+            get {
+                object obj = ResourceManager.GetObject("ConsoleIMG_Teal", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -263,6 +563,16 @@ namespace PoGo.Necrobot.Window.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap EggsIMG_Amber {
+            get {
+                object obj = ResourceManager.GetObject("EggsIMG_Amber", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap EggsIMG_Blue {
             get {
                 object obj = ResourceManager.GetObject("EggsIMG_Blue", resourceCulture);
@@ -276,6 +586,46 @@ namespace PoGo.Necrobot.Window.Properties {
         internal static System.Drawing.Bitmap EggsIMG_Brown {
             get {
                 object obj = ResourceManager.GetObject("EggsIMG_Brown", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap EggsIMG_Cobalt {
+            get {
+                object obj = ResourceManager.GetObject("EggsIMG_Cobalt", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap EggsIMG_Crimson {
+            get {
+                object obj = ResourceManager.GetObject("EggsIMG_Crimson", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap EggsIMG_Cyan {
+            get {
+                object obj = ResourceManager.GetObject("EggsIMG_Cyan", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap EggsIMG_Emerald {
+            get {
+                object obj = ResourceManager.GetObject("EggsIMG_Emerald", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -303,6 +653,46 @@ namespace PoGo.Necrobot.Window.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap EggsIMG_Lime {
+            get {
+                object obj = ResourceManager.GetObject("EggsIMG_Lime", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap EggsIMG_Magenta {
+            get {
+                object obj = ResourceManager.GetObject("EggsIMG_Magenta", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap EggsIMG_Mauve {
+            get {
+                object obj = ResourceManager.GetObject("EggsIMG_Mauve", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap EggsIMG_Olive {
+            get {
+                object obj = ResourceManager.GetObject("EggsIMG_Olive", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap EggsIMG_Orange {
             get {
                 object obj = ResourceManager.GetObject("EggsIMG_Orange", resourceCulture);
@@ -313,9 +703,69 @@ namespace PoGo.Necrobot.Window.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap EggsIMG_Pink {
+            get {
+                object obj = ResourceManager.GetObject("EggsIMG_Pink", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap EggsIMG_Purple {
+            get {
+                object obj = ResourceManager.GetObject("EggsIMG_Purple", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap EggsIMG_Red {
             get {
                 object obj = ResourceManager.GetObject("EggsIMG_Red", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap EggsIMG_Sienna {
+            get {
+                object obj = ResourceManager.GetObject("EggsIMG_Sienna", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap EggsIMG_Steel {
+            get {
+                object obj = ResourceManager.GetObject("EggsIMG_Steel", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap EggsIMG_Taupe {
+            get {
+                object obj = ResourceManager.GetObject("EggsIMG_Taupe", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap EggsIMG_Teal {
+            get {
+                object obj = ResourceManager.GetObject("EggsIMG_Teal", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -353,6 +803,16 @@ namespace PoGo.Necrobot.Window.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap HubIMG_Amber {
+            get {
+                object obj = ResourceManager.GetObject("HubIMG_Amber", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap HubIMG_Blue {
             get {
                 object obj = ResourceManager.GetObject("HubIMG_Blue", resourceCulture);
@@ -366,6 +826,46 @@ namespace PoGo.Necrobot.Window.Properties {
         internal static System.Drawing.Bitmap HubIMG_Brown {
             get {
                 object obj = ResourceManager.GetObject("HubIMG_Brown", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap HubIMG_Cobalt {
+            get {
+                object obj = ResourceManager.GetObject("HubIMG_Cobalt", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap HubIMG_Crimson {
+            get {
+                object obj = ResourceManager.GetObject("HubIMG_Crimson", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap HubIMG_Cyan {
+            get {
+                object obj = ResourceManager.GetObject("HubIMG_Cyan", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap HubIMG_Emerald {
+            get {
+                object obj = ResourceManager.GetObject("HubIMG_Emerald", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -393,6 +893,46 @@ namespace PoGo.Necrobot.Window.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap HubIMG_Lime {
+            get {
+                object obj = ResourceManager.GetObject("HubIMG_Lime", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap HubIMG_Magenta {
+            get {
+                object obj = ResourceManager.GetObject("HubIMG_Magenta", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap HubIMG_Mauve {
+            get {
+                object obj = ResourceManager.GetObject("HubIMG_Mauve", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap HubIMG_Olive {
+            get {
+                object obj = ResourceManager.GetObject("HubIMG_Olive", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap HubIMG_Orange {
             get {
                 object obj = ResourceManager.GetObject("HubIMG_Orange", resourceCulture);
@@ -403,9 +943,69 @@ namespace PoGo.Necrobot.Window.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap HubIMG_Pink {
+            get {
+                object obj = ResourceManager.GetObject("HubIMG_Pink", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap HubIMG_Purple {
+            get {
+                object obj = ResourceManager.GetObject("HubIMG_Purple", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap HubIMG_Red {
             get {
                 object obj = ResourceManager.GetObject("HubIMG_Red", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap HubIMG_Sienna {
+            get {
+                object obj = ResourceManager.GetObject("HubIMG_Sienna", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap HubIMG_Steel {
+            get {
+                object obj = ResourceManager.GetObject("HubIMG_Steel", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap HubIMG_Taupe {
+            get {
+                object obj = ResourceManager.GetObject("HubIMG_Taupe", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap HubIMG_Teal {
+            get {
+                object obj = ResourceManager.GetObject("HubIMG_Teal", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -443,6 +1043,16 @@ namespace PoGo.Necrobot.Window.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ItemsIMG_Amber {
+            get {
+                object obj = ResourceManager.GetObject("ItemsIMG_Amber", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ItemsIMG_Blue {
             get {
                 object obj = ResourceManager.GetObject("ItemsIMG_Blue", resourceCulture);
@@ -456,6 +1066,46 @@ namespace PoGo.Necrobot.Window.Properties {
         internal static System.Drawing.Bitmap ItemsIMG_Brown {
             get {
                 object obj = ResourceManager.GetObject("ItemsIMG_Brown", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ItemsIMG_Cobalt {
+            get {
+                object obj = ResourceManager.GetObject("ItemsIMG_Cobalt", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ItemsIMG_Crimson {
+            get {
+                object obj = ResourceManager.GetObject("ItemsIMG_Crimson", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ItemsIMG_Cyan {
+            get {
+                object obj = ResourceManager.GetObject("ItemsIMG_Cyan", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ItemsIMG_Emerald {
+            get {
+                object obj = ResourceManager.GetObject("ItemsIMG_Emerald", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -483,6 +1133,46 @@ namespace PoGo.Necrobot.Window.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ItemsIMG_Lime {
+            get {
+                object obj = ResourceManager.GetObject("ItemsIMG_Lime", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ItemsIMG_Magenta {
+            get {
+                object obj = ResourceManager.GetObject("ItemsIMG_Magenta", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ItemsIMG_Mauve {
+            get {
+                object obj = ResourceManager.GetObject("ItemsIMG_Mauve", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ItemsIMG_Olive {
+            get {
+                object obj = ResourceManager.GetObject("ItemsIMG_Olive", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ItemsIMG_Orange {
             get {
                 object obj = ResourceManager.GetObject("ItemsIMG_Orange", resourceCulture);
@@ -493,9 +1183,69 @@ namespace PoGo.Necrobot.Window.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ItemsIMG_Pink {
+            get {
+                object obj = ResourceManager.GetObject("ItemsIMG_Pink", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ItemsIMG_Purple {
+            get {
+                object obj = ResourceManager.GetObject("ItemsIMG_Purple", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ItemsIMG_Red {
             get {
                 object obj = ResourceManager.GetObject("ItemsIMG_Red", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ItemsIMG_Sienna {
+            get {
+                object obj = ResourceManager.GetObject("ItemsIMG_Sienna", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ItemsIMG_Steel {
+            get {
+                object obj = ResourceManager.GetObject("ItemsIMG_Steel", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ItemsIMG_Taupe {
+            get {
+                object obj = ResourceManager.GetObject("ItemsIMG_Taupe", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ItemsIMG_Teal {
+            get {
+                object obj = ResourceManager.GetObject("ItemsIMG_Teal", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -533,6 +1283,16 @@ namespace PoGo.Necrobot.Window.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap MapIMG_Amber {
+            get {
+                object obj = ResourceManager.GetObject("MapIMG_Amber", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap MapIMG_Blue {
             get {
                 object obj = ResourceManager.GetObject("MapIMG_Blue", resourceCulture);
@@ -546,6 +1306,46 @@ namespace PoGo.Necrobot.Window.Properties {
         internal static System.Drawing.Bitmap MapIMG_Brown {
             get {
                 object obj = ResourceManager.GetObject("MapIMG_Brown", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap MapIMG_Cobalt {
+            get {
+                object obj = ResourceManager.GetObject("MapIMG_Cobalt", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap MapIMG_Crimson {
+            get {
+                object obj = ResourceManager.GetObject("MapIMG_Crimson", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap MapIMG_Cyan {
+            get {
+                object obj = ResourceManager.GetObject("MapIMG_Cyan", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap MapIMG_Emerald {
+            get {
+                object obj = ResourceManager.GetObject("MapIMG_Emerald", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -573,6 +1373,46 @@ namespace PoGo.Necrobot.Window.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap MapIMG_Lime {
+            get {
+                object obj = ResourceManager.GetObject("MapIMG_Lime", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap MapIMG_Magenta {
+            get {
+                object obj = ResourceManager.GetObject("MapIMG_Magenta", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap MapIMG_Mauve {
+            get {
+                object obj = ResourceManager.GetObject("MapIMG_Mauve", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap MapIMG_Olive {
+            get {
+                object obj = ResourceManager.GetObject("MapIMG_Olive", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap MapIMG_Orange {
             get {
                 object obj = ResourceManager.GetObject("MapIMG_Orange", resourceCulture);
@@ -583,9 +1423,69 @@ namespace PoGo.Necrobot.Window.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap MapIMG_Pink {
+            get {
+                object obj = ResourceManager.GetObject("MapIMG_Pink", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap MapIMG_Purple {
+            get {
+                object obj = ResourceManager.GetObject("MapIMG_Purple", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap MapIMG_Red {
             get {
                 object obj = ResourceManager.GetObject("MapIMG_Red", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap MapIMG_Sienna {
+            get {
+                object obj = ResourceManager.GetObject("MapIMG_Sienna", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap MapIMG_Steel {
+            get {
+                object obj = ResourceManager.GetObject("MapIMG_Steel", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap MapIMG_Taupe {
+            get {
+                object obj = ResourceManager.GetObject("MapIMG_Taupe", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap MapIMG_Teal {
+            get {
+                object obj = ResourceManager.GetObject("MapIMG_Teal", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -623,6 +1523,16 @@ namespace PoGo.Necrobot.Window.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap PokemonIMG_Amber {
+            get {
+                object obj = ResourceManager.GetObject("PokemonIMG_Amber", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap PokemonIMG_Blue {
             get {
                 object obj = ResourceManager.GetObject("PokemonIMG_Blue", resourceCulture);
@@ -636,6 +1546,46 @@ namespace PoGo.Necrobot.Window.Properties {
         internal static System.Drawing.Bitmap PokemonIMG_Brown {
             get {
                 object obj = ResourceManager.GetObject("PokemonIMG_Brown", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PokemonIMG_Cobalt {
+            get {
+                object obj = ResourceManager.GetObject("PokemonIMG_Cobalt", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PokemonIMG_Crimson {
+            get {
+                object obj = ResourceManager.GetObject("PokemonIMG_Crimson", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PokemonIMG_Cyan {
+            get {
+                object obj = ResourceManager.GetObject("PokemonIMG_Cyan", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PokemonIMG_Emerald {
+            get {
+                object obj = ResourceManager.GetObject("PokemonIMG_Emerald", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -663,6 +1613,46 @@ namespace PoGo.Necrobot.Window.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap PokemonIMG_Lime {
+            get {
+                object obj = ResourceManager.GetObject("PokemonIMG_Lime", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PokemonIMG_Magenta {
+            get {
+                object obj = ResourceManager.GetObject("PokemonIMG_Magenta", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PokemonIMG_Mauve {
+            get {
+                object obj = ResourceManager.GetObject("PokemonIMG_Mauve", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PokemonIMG_Olive {
+            get {
+                object obj = ResourceManager.GetObject("PokemonIMG_Olive", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap PokemonIMG_Orange {
             get {
                 object obj = ResourceManager.GetObject("PokemonIMG_Orange", resourceCulture);
@@ -673,9 +1663,69 @@ namespace PoGo.Necrobot.Window.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap PokemonIMG_Pink {
+            get {
+                object obj = ResourceManager.GetObject("PokemonIMG_Pink", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PokemonIMG_Purple {
+            get {
+                object obj = ResourceManager.GetObject("PokemonIMG_Purple", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap PokemonIMG_Red {
             get {
                 object obj = ResourceManager.GetObject("PokemonIMG_Red", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PokemonIMG_Sienna {
+            get {
+                object obj = ResourceManager.GetObject("PokemonIMG_Sienna", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PokemonIMG_Steel {
+            get {
+                object obj = ResourceManager.GetObject("PokemonIMG_Steel", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PokemonIMG_Taupe {
+            get {
+                object obj = ResourceManager.GetObject("PokemonIMG_Taupe", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PokemonIMG_Teal {
+            get {
+                object obj = ResourceManager.GetObject("PokemonIMG_Teal", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -713,6 +1763,16 @@ namespace PoGo.Necrobot.Window.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap SniperIMG_Amber {
+            get {
+                object obj = ResourceManager.GetObject("SniperIMG_Amber", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap SniperIMG_Blue {
             get {
                 object obj = ResourceManager.GetObject("SniperIMG_Blue", resourceCulture);
@@ -726,6 +1786,46 @@ namespace PoGo.Necrobot.Window.Properties {
         internal static System.Drawing.Bitmap SniperIMG_Brown {
             get {
                 object obj = ResourceManager.GetObject("SniperIMG_Brown", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SniperIMG_Cobalt {
+            get {
+                object obj = ResourceManager.GetObject("SniperIMG_Cobalt", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SniperIMG_Crimson {
+            get {
+                object obj = ResourceManager.GetObject("SniperIMG_Crimson", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SniperIMG_Cyan {
+            get {
+                object obj = ResourceManager.GetObject("SniperIMG_Cyan", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SniperIMG_Emerald {
+            get {
+                object obj = ResourceManager.GetObject("SniperIMG_Emerald", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -753,6 +1853,46 @@ namespace PoGo.Necrobot.Window.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap SniperIMG_Lime {
+            get {
+                object obj = ResourceManager.GetObject("SniperIMG_Lime", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SniperIMG_Magenta {
+            get {
+                object obj = ResourceManager.GetObject("SniperIMG_Magenta", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SniperIMG_Mauve {
+            get {
+                object obj = ResourceManager.GetObject("SniperIMG_Mauve", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SniperIMG_Olive {
+            get {
+                object obj = ResourceManager.GetObject("SniperIMG_Olive", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap SniperIMG_Orange {
             get {
                 object obj = ResourceManager.GetObject("SniperIMG_Orange", resourceCulture);
@@ -763,9 +1903,69 @@ namespace PoGo.Necrobot.Window.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap SniperIMG_Pink {
+            get {
+                object obj = ResourceManager.GetObject("SniperIMG_Pink", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SniperIMG_Purple {
+            get {
+                object obj = ResourceManager.GetObject("SniperIMG_Purple", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap SniperIMG_Red {
             get {
                 object obj = ResourceManager.GetObject("SniperIMG_Red", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SniperIMG_Sienna {
+            get {
+                object obj = ResourceManager.GetObject("SniperIMG_Sienna", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SniperIMG_Steel {
+            get {
+                object obj = ResourceManager.GetObject("SniperIMG_Steel", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SniperIMG_Taupe {
+            get {
+                object obj = ResourceManager.GetObject("SniperIMG_Taupe", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SniperIMG_Teal {
+            get {
+                object obj = ResourceManager.GetObject("SniperIMG_Teal", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

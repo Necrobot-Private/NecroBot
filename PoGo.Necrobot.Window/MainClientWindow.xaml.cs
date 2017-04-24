@@ -26,6 +26,7 @@ using PoGo.NecroBot.Logic.Model.Settings;
 using static PoGo.NecroBot.Logic.MultiAccountManager;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Timers;
 
 namespace PoGo.Necrobot.Window
 {
@@ -34,6 +35,7 @@ namespace PoGo.Necrobot.Window
     /// </summary>
     public partial class MainClientWindow : MetroWindow
     {
+        Timer timer = new Timer();
         private static Dictionary<LogLevel, string> ConsoleColors = new Dictionary<LogLevel, string>()
             {
                 { LogLevel.Error, "#dc322f" },
@@ -89,6 +91,11 @@ namespace PoGo.Necrobot.Window
         {
             //Upgrade Settings, if Any
             Settings.Default.Upgrade();
+
+            // Timer Timing
+            timer.Start();
+            timer.Interval = 1;
+            timer.Elapsed += TimerTick;
 
             // Populate ComboBox's w/ Available Themes & Schemes
             Scheme.ItemsSource = new List<string> { "Light", "Dark" };
@@ -167,6 +174,21 @@ namespace PoGo.Necrobot.Window
             ConsoleWindow();
         }
 
+        private void TimerTick(object sender, ElapsedEventArgs e)
+        {
+            Application.Current.Dispatcher.Invoke(delegate
+            {
+                if (tabPokemons.IsMouseOver | tabPokemons.IsSelected | Settings.Default.Scheme == "Light")
+                tabPokemons.Foreground = Brushes.Black;
+            else if (!tabPokemons.IsMouseOver | !tabPokemons.IsSelected | Settings.Default.Scheme == "Dark")
+                tabPokemons.Foreground = Brushes.White;
+            if (tabItems.IsMouseOver | tabItems.IsSelected | Settings.Default.Scheme == "Light")
+                tabItems.Foreground = Brushes.Black;
+            else if (!tabItems.IsMouseOver | !tabItems.IsSelected | Settings.Default.Scheme == "Dark")
+                tabItems.Foreground = Brushes.White;
+            });
+        }
+
         public void Sync()
         {
             var translator = TinyIoCContainer.Current.Resolve<UITranslation>();
@@ -219,7 +241,6 @@ namespace PoGo.Necrobot.Window
                 if (string.IsNullOrEmpty(color) || color == "Black") color = "white";
 
                 consoleLog.AppendText(message + "\r", color);
-
                 consoleLog.ScrollToEnd();
             }));
         }
@@ -284,100 +305,55 @@ namespace PoGo.Necrobot.Window
         private void Theme_SelectionChanged(object sender, RoutedEventArgs e)
         {
             string Selection = Convert.ToString(Theme.SelectedValue);
-
             if (Selection == "Red")
-            {
                 Settings.Default.Theme = "Red";
-            }
             if (Selection == "Green")
-            {
                 Settings.Default.Theme = "Green";
-            }
             if (Selection == "Blue")
-            {
                 Settings.Default.Theme = "Blue";
-            }
             if (Selection == "Purple")
-            {
                 Settings.Default.Theme = "Purple";
-            }
             if (Selection == "Orange")
-            {
                 Settings.Default.Theme = "Orange";
-            }
             if (Selection == "Lime")
-            {
                 Settings.Default.Theme = "Lime";
-            }
             if (Selection == "Emerald")
-            {
                 Settings.Default.Theme = "Emerald";
-            }
             if (Selection == "Teal")
-            {
                 Settings.Default.Theme = "Teal";
-            }
             if (Selection == "Cyan")
-            {
                 Settings.Default.Theme = "Cyan";
-            }
             if (Selection == "Cobalt")
-            {
                 Settings.Default.Theme = "Cobalt";
-            }
             if (Selection == "Indigo")
-            {
                 Settings.Default.Theme = "Indigo";
-            }
             if (Selection == "Violet")
-            {
                 Settings.Default.Theme = "Violet";
-            }
             if (Selection == "Pink")
-            {
                 Settings.Default.Theme = "Pink";
-            }
             if (Selection == "Magenta")
-            {
                 Settings.Default.Theme = "Magenta";
-            }
             if (Selection == "Crimson")
-            {
                 Settings.Default.Theme = "Crimson";
-            }
             if (Selection == "Amber")
-            {
                 Settings.Default.Theme = "Amber";
-            }
             if (Selection == "Yellow")
-            {
                 Settings.Default.Theme = "Yellow";
-            }
             if (Selection == "Brown")
-            {
                 Settings.Default.Theme = "Brown";
-            }
             if (Selection == "Olive")
-            {
                 Settings.Default.Theme = "Olive";
-            }
             if (Selection == "Steel")
-            {
                 Settings.Default.Theme = "Steel";
-            }
             if (Selection == "Mauve")
-            {
                 Settings.Default.Theme = "Mauve";
-            }
             if (Selection == "Taupe")
-            {
                 Settings.Default.Theme = "Taupe";
-            }
             if (Selection == "Sienna")
-            {
                 Settings.Default.Theme = "Sienna";
-            }
             Settings.Default.Save();
+            tabPokemons.Foreground = Brushes.Black;
+            tabItems.Foreground = Brushes.Black;
             var AccountsBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Accounts/AccountsIMG_{Settings.Default.Theme}.png"));
             var ConsoleBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Console/ConsoleIMG_{Settings.Default.Theme}.png"));
             var EggsBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Eggs/EggsIMG_{Settings.Default.Theme}.png"));
@@ -407,7 +383,6 @@ namespace PoGo.Necrobot.Window
             {
                 Settings.Default.Scheme = "Light";
                 Settings.Default.SchemeValue = "BaseLight";
-                Settings.Default.Save();
 
                 tabAccounts.Background = LightColor;
                 tabBrowser.Background = LightColor;
@@ -417,21 +392,11 @@ namespace PoGo.Necrobot.Window
                 tabPokemons.Background = LightColor;
                 tabItems.Background = LightColor;
                 tabEggs.Background = LightColor;
-                if (tabPokemons.IsMouseOver)
-                    tabPokemons.Foreground = Brushes.White;
-                else
-                    tabPokemons.Foreground = Brushes.Black;
-
-                if (tabItems.IsMouseOver)
-                    tabItems.Foreground = Brushes.White;
-                else
-                    tabItems.Foreground = Brushes.Black;
             }
             else if (Selection == "Dark")
             {
                 Settings.Default.Scheme = "Dark";
                 Settings.Default.SchemeValue = "BaseDark";
-                Settings.Default.Save();
 
                 tabAccounts.Background = DarkColor;
                 tabBrowser.Background = DarkColor;
@@ -441,15 +406,13 @@ namespace PoGo.Necrobot.Window
                 tabPokemons.Background = DarkColor;
                 tabItems.Background = DarkColor;
                 tabEggs.Background = DarkColor;
-                tabPokemons.Foreground = Brushes.White;
-                tabItems.Foreground = Brushes.White;
             }
+            Settings.Default.Save();
             ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(Settings.Default.Theme), ThemeManager.GetAppTheme(Settings.Default.SchemeValue));
         }
 
         private void TxtCmdInput_KeyDown(object sender, KeyEventArgs e)
         {
-
             if (e.Key == Key.Enter)
             {
                 Logger.Write(txtCmdInput.Text, LogLevel.Info, ConsoleColor.White);
@@ -487,7 +450,6 @@ namespace PoGo.Necrobot.Window
         {
             var btn = ((Button)sender);
             var account = (BotAccount)btn.CommandParameter;
-
             var manager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
 
             manager.SwitchAccountTo(account);
@@ -557,7 +519,6 @@ namespace PoGo.Necrobot.Window
                 webView.Browser.Dispose();
                 webView.Dispose();
                 Settings.Default.BrowserToggled = false;
-                Settings.Default.Save();
             }
             else if (!Settings.Default.BrowserToggled)
             {
@@ -565,19 +526,15 @@ namespace PoGo.Necrobot.Window
                 browserMenuText.Text = translator.DisableHub;
                 InitBrowser();
                 Settings.Default.BrowserToggled = true;
-                Settings.Default.Save();
             }
+            Settings.Default.Save();
         }
         public void ReInitializeSession(ISession session, GlobalSettings globalSettings, BotAccount requestedAccount = null)
         {
             if (session.LogicSettings.MultipleBotConfig.StartFromDefaultLocation)
-            {
                 session.ReInitSessionWithNextBot(requestedAccount, globalSettings.LocationConfig.DefaultLatitude, globalSettings.LocationConfig.DefaultLongitude, session.Client.CurrentAltitude);
-            }
             else
-            {
                 session.ReInitSessionWithNextBot(); //current location
-            }
         }
 
         private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
