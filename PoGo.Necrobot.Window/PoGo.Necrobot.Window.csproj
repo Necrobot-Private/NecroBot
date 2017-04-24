@@ -622,7 +622,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="FodyWeavers.xml" />
+    <Resource Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Controls\MapMarkers\bigMarkerGreen.png" />
