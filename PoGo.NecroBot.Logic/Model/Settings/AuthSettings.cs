@@ -238,7 +238,12 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                     {
                         var randomAppleDeviceInfo = DeviceInfoHelper.GetRandomIosDevice();
                         SetDevInfoByDeviceInfo(randomAppleDeviceInfo);
-
+                        // Clearing Android variables, as they come back "" instead of null
+                        DeviceConfig.AndroidBoardName = null;
+                        DeviceConfig.AndroidBootloader = null;
+                        DeviceConfig.DeviceModelIdentifier = null;
+                        DeviceConfig.FirmwareTags = null;
+                        DeviceConfig.FirmwareFingerprint = null;
                         // After generating iOS settings, automatically set the package name to "custom", so that we don't regenerate settings every time we start.
                         DeviceConfig.DevicePackageName = "custom";
                     }
