@@ -5,6 +5,11 @@ using POGOProtos.Inventory.Item;
 using RocketBot2.Helpers;
 using PoGo.NecroBot.Logic.Tasks;
 using PoGo.NecroBot.Logic.State;
+using System.Globalization;
+using POGOProtos.Inventory;
+using System.Threading.Tasks;
+using PoGo.NecroBot.Logic.Event;
+using System.Linq;
 
 namespace RocketBot2.Forms
 {
@@ -14,8 +19,10 @@ namespace RocketBot2.Forms
         public ItemData Item_ { get; }
         public bool DisableTimer = false;
         public static ISession Session;
-        public Incubators incubator;
-        public Eggs egg;
+        public Incubators Incubator { get; set; }
+        public Eggs egg { get; set; }
+        public float kmWalked;
+        public Control Box { get; set; }
 
         public ItemBox(int see, int cath, Image pic)
         {
@@ -37,9 +44,9 @@ namespace RocketBot2.Forms
             DisableTimer = true;
             lbl.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             pb.Image = item.Icon;
-            lblTime.Text = $"{item.TotalKM:0.0}Km";
+            lblTime.Text = String.Format(CultureInfo.InvariantCulture, "{0:0.0}Km", item.TotalKM);
             lblTime.Visible = true;
-            lbl.Text = $"{item.KM:0.0}Km";
+            lbl.Text = String.Format(CultureInfo.InvariantCulture, "{0:0.0}Km", item.KM);
             lblTime.Parent = pb;
             egg = item;
             
@@ -51,44 +58,52 @@ namespace RocketBot2.Forms
             }
         }
 
+        public async Task GetPlayerStats()
+        {
+            var playerStats = (await Session.Inventory.GetPlayerStats().ConfigureAwait(false)).FirstOrDefault();
+            kmWalked = playerStats.KmWalked;
+        }
+
         public ItemBox(Incubators item)
         {
             InitializeComponent();
             DisableTimer = true;
             lbl.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            GetPlayerStats().ConfigureAwait(false);
             pb.Image = item.Icon(item.IsUnlimited);
-            lblTime.Text = $"{item.TotalKM - item.KM:0.0}Km";
+            lblTime.Text = String.Format(CultureInfo.InvariantCulture, "{0:0.0}Km", item.TotalKM - item.KM);
             lblTime.Visible = true;
-            lbl.Text = $"{item.TotalKM / 1000:0.0}Km";
+            lbl.Text = String.Format(CultureInfo.InvariantCulture,"{0:0.0}Km", kmWalked - item.KM);
             lblTime.Parent = pb;
-            incubator = item;
+            Incubator = item;
  
             foreach (Control control in Controls)
             {
                 control.MouseEnter += ChildMouseEnter;
                 control.MouseLeave += ChildMouseLeave;
                 control.MouseClick += SetIncubator_Click;
+                Box = control;
             }
         }
 
         private void SetIncubator_Click(object sender, MouseEventArgs e)
         {
-            if (incubator.InUse)
+            if (Incubator.InUse)
             {
                 MessageBox.Show("Incubator in use choice an other", "Incubator Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-            ((ItemBox)sender).BackColor = Color.LightGreen;
+             Box.BackColor = Color.LightGreen;
         }
 
         private async void HatchEgg_Click(object sender, MouseEventArgs e)
         {
-            if (incubator == null)
+            if (Incubator == null)
             {
                 MessageBox.Show("Please select an incubator to hatch eggs", "Hatch Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
-            await UseIncubatorsTask.Execute(Session, Session.CancellationTokenSource.Token, egg.Id, incubator.Id);
+            await UseIncubatorsTask.Execute(Session, Session.CancellationTokenSource.Token, egg.Id, Incubator.Id);
             EggsForm.ActiveForm.Close();
         }
 
