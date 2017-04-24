@@ -85,7 +85,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             {
                 PokemonId id = PokemonId.Missingno;
 
-                if (Enum.TryParse<PokemonId>(EvolveTo, out id))
+                if (Enum.TryParse(EvolveTo, out id))
                 {
                     return id;
                 }
