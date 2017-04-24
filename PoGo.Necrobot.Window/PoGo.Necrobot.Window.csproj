@@ -124,8 +124,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Effects\GrayscaleEffect.dll</HintPath>
     </Reference>
-    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="MahApps.Metro, Version=1.5.0.23, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\MahApps.Metro.1.5.0\lib\net45\MahApps.Metro.dll</HintPath>
@@ -622,7 +622,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="FodyWeavers.xml" />
+    <None Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Controls\MapMarkers\bigMarkerGreen.png" />
@@ -849,7 +849,7 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('$(SolutionDir)\packages\Fody.1.29.4\build\dotnet\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\packages\Fody.1.29.4\build\dotnet\Fody.targets'))" />
+    <Error Condition="!Exists('$(SolutionDir)\packages\Fody.2.0.2\build\netstandard1.4\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\packages\Fody.2.0.2\build\netstandard1.4\Fody.targets'))" />
     <Error Condition="!Exists('$(SolutionDir)\packages\Selenium.WebDriver.ChromeDriver.2.29.0\build\Selenium.WebDriver.ChromeDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\packages\Selenium.WebDriver.ChromeDriver.2.29.0\build\Selenium.WebDriver.ChromeDriver.targets'))" />
   </Target>
   <UsingTask TaskName="CosturaCleanup" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll" TaskFactory="CodeTaskFactory">
@@ -895,6 +895,7 @@ del *.config
 xcopy /y /f /e "$(SolutionDir)\PokeEase\Public" "$(TargetDir)\PokeEase\"</PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\packages\Selenium.WebDriver.ChromeDriver.2.29.0\build\Selenium.WebDriver.ChromeDriver.targets" Condition="Exists('$(SolutionDir)\packages\Selenium.WebDriver.ChromeDriver.2.29.0\build\Selenium.WebDriver.ChromeDriver.targets')" />
+  <Import Project="$(SolutionDir)\packages\Fody.2.0.2\build\netstandard1.4\Fody.targets" Condition="Exists('$(SolutionDir)\packages\Fody.2.0.2\build\netstandard1.4\Fody.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
