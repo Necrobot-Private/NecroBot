@@ -117,9 +117,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="Resources\Ico.ico" />
-    <Content Include="FodyWeavers.xml">
-      <SubType>Designer</SubType>
-    </Content>
+    <Content Include="FodyWeavers.xml" />
     <None Include="cert.pfx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -142,16 +140,16 @@
       <HintPath>$(SolutionDir)\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil, Version=0.10.0.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)\packages\FodyCecil.2.0.3\lib\net40\Mono.Cecil.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\FodyCecil.2.0.4\lib\net40\Mono.Cecil.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil.Mdb, Version=0.10.0.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)\packages\FodyCecil.2.0.3\lib\net40\Mono.Cecil.Mdb.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\FodyCecil.2.0.4\lib\net40\Mono.Cecil.Mdb.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil.Pdb, Version=0.10.0.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)\packages\FodyCecil.2.0.3\lib\net40\Mono.Cecil.Pdb.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\FodyCecil.2.0.4\lib\net40\Mono.Cecil.Pdb.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil.Rocks, Version=0.10.0.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)\packages\FodyCecil.2.0.3\lib\net40\Mono.Cecil.Rocks.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\FodyCecil.2.0.4\lib\net40\Mono.Cecil.Rocks.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -335,15 +333,15 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FeroxRev\PokemonGo.RocketAPI.csproj">
+    <ProjectReference Include="$(SolutionDir)\FeroxRev\PokemonGo.RocketAPI.csproj">
       <Project>{05d2da44-1b8e-4cf7-94ed-4d52451cd095}</Project>
       <Name>PokemonGo.RocketAPI</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PoGo.NecroBot.Logic\PoGo.NecroBot.Logic.csproj">
+    <ProjectReference Include="$(SolutionDir)\PoGo.NecroBot.Logic\PoGo.NecroBot.Logic.csproj">
       <Project>{0739E40D-C589-4AEB-93E5-EE8CD6773C60}</Project>
       <Name>PoGo.NecroBot.Logic</Name>
     </ProjectReference>
-    <ProjectReference Include="..\POGOProtos\POGOProtos.csproj">
+    <ProjectReference Include="$(SolutionDir)\POGOProtos\POGOProtos.csproj">
       <Project>{a03a7bb2-4f0b-467b-84b2-9a76e6aae6fb}</Project>
       <Name>POGOProtos</Name>
     </ProjectReference>
@@ -397,7 +395,8 @@ del *.config</PostBuildEvent>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\packages\Selenium.WebDriver.ChromeDriver.2.29.0\build\Selenium.WebDriver.ChromeDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\packages\Selenium.WebDriver.ChromeDriver.2.29.0\build\Selenium.WebDriver.ChromeDriver.targets'))" />
-    <Error Condition="!Exists('$(SolutionDir)\packages\Fody.2.0.3\build\netstandard1.4\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\packages\Fody.2.0.3\build\netstandard1.4\Fody.targets'))" />
+    <Error Condition="!Exists('$(SolutionDir)\packages\Fody.2.0.4\build\netstandard1.4\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\packages\Fody.2.0.4\build\netstandard1.4\Fody.targets'))" />
+    <Error Condition="!Exists('$(SolutionDir)\packages\Costura.Fody.1.4.0\build\Costura.Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\packages\Costura.Fody.1.4.0\build\Costura.Fody.targets'))" />
   </Target>
   <UsingTask TaskName="CosturaCleanup" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll" TaskFactory="CodeTaskFactory">
     <ParameterGroup>
@@ -436,7 +435,8 @@ foreach (var item in filesToCleanup)
     <CosturaCleanup Config="FodyWeavers.xml" Files="@(ReferenceCopyLocalPaths->'$(OutDir)%(DestinationSubDirectory)%(Filename)%(Extension)')" />
   </Target>
   <Import Project="$(SolutionDir)\packages\Selenium.WebDriver.ChromeDriver.2.29.0\build\Selenium.WebDriver.ChromeDriver.targets" Condition="Exists('$(SolutionDir)\packages\Selenium.WebDriver.ChromeDriver.2.29.0\build\Selenium.WebDriver.ChromeDriver.targets')" />
-  <Import Project="$(SolutionDir)\packages\Fody.2.0.3\build\netstandard1.4\Fody.targets" Condition="Exists('$(SolutionDir)\packages\Fody.2.0.3\build\netstandard1.4\Fody.targets')" />
+  <Import Project="$(SolutionDir)\packages\Fody.2.0.4\build\netstandard1.4\Fody.targets" Condition="Exists('$(SolutionDir)\packages\Fody.2.0.4\build\netstandard1.4\Fody.targets')" />
+  <Import Project="$(SolutionDir)\packages\Costura.Fody.1.4.0\build\Costura.Fody.targets" Condition="Exists('$(SolutionDir)\packages\Costura.Fody.1.4.0\build\Costura.Fody.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
