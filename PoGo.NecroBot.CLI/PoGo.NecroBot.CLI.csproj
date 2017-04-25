@@ -117,7 +117,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="Resources\Ico.ico" />
-    <Content Include="FodyWeavers.xml" />
+    <None Include="FodyWeavers.xml" />
     <None Include="cert.pfx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
