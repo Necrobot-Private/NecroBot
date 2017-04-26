@@ -42,7 +42,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool UseCatchLimit { get; set; }
 
         [NecrobotConfig(Description = "Number of pokemon allowed for catch duration", Position = 4)]
-        [DefaultValue(700)]
+        [DefaultValue(500)]
         [Range(0, 9999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 4)]
         public int CatchPokemonLimit { get; set; }
