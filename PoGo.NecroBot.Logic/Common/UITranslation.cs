@@ -29,7 +29,7 @@ namespace PoGo.NecroBot.Logic.Common
         [Description("Help")]
         public string Help { get; set; }
         
-        [Description("Bot switching account... ")]
+        [Description("Bot Switching Account... ")]
         public string AccountSwitching { get; set; }
 
         [Description("Show Console")]
@@ -270,10 +270,10 @@ namespace PoGo.NecroBot.Logic.Common
 
         [Description("HIDE")]
         public string Hide { get; set; }
-	
+
         [Description("SHOW")]
         public string Show { get; set; }
-	
+
         [Description("Transfer filter - {0}")]
         public string TransferFilterFormTitle { get; set; }
         #endregion

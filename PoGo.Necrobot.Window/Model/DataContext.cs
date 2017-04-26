@@ -63,7 +63,7 @@ namespace PoGo.Necrobot.Window.Model
                 {
                     pokemonNum = MaxPokemonStorage;
                 }
-                return $"   Pokemons ({pokemonNum}/{MaxPokemonStorage})   ";
+                return $"{pokemonNum}/{MaxPokemonStorage}";
             }
         }
 
@@ -81,8 +81,7 @@ namespace PoGo.Necrobot.Window.Model
         {
             get
             {
-                return $"   Items ({ ItemsList.Items.Sum(x=>x.ItemCount)}/{MaxItemStorage})   ";
-
+                return $"{ItemsList.Items.Sum(x=>x.ItemCount)}/{MaxItemStorage}";
             }
         }
 
