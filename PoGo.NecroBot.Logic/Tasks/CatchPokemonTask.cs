@@ -455,7 +455,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                             if (evt.Shiny == "Yes")
                             {
                                 await FavoritePokemonTask.Execute(session, encounteredPokemon.Id, true);
-                                Logger.Write($"Shiny Pokemon {encounteredPokemon.Id} has been Caught and auto-favorited.");
+                                Logger.Write($"You've caught a Shiny Pokemon ({encounteredPokemon.Nickname}) and it has been Favorited.");
                             }
                         }
                     }
