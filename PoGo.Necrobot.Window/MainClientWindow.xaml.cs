@@ -1,5 +1,4 @@
-﻿using MahApps.Metro.Controls;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,7 +6,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
-//using System.Windows.Media;
+using MahApps.Metro;
+using MahApps.Metro.Controls;
 using PoGo.Necrobot.Window.Properties;
 using PoGo.NecroBot.Logic.State;
 using PoGo.Necrobot.Window.Win32;
@@ -24,6 +24,9 @@ using System.Net.Http;
 using PoGo.NecroBot.Logic;
 using PoGo.NecroBot.Logic.Model.Settings;
 using static PoGo.NecroBot.Logic.MultiAccountManager;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Timers;
 
 namespace PoGo.Necrobot.Window
 {
@@ -32,6 +35,7 @@ namespace PoGo.Necrobot.Window
     /// </summary>
     public partial class MainClientWindow : MetroWindow
     {
+        Timer timer = new Timer();
         private static Dictionary<LogLevel, string> ConsoleColors = new Dictionary<LogLevel, string>()
             {
                 { LogLevel.Error, "#dc322f" },
@@ -59,6 +63,7 @@ namespace PoGo.Necrobot.Window
         public MainClientWindow()
         {
             InitializeComponent();
+            Sync();
 
             datacontext = new DataContext()
             {
@@ -67,17 +72,9 @@ namespace PoGo.Necrobot.Window
 
             DataContext = datacontext;
             txtCmdInput.Text = TinyIoCContainer.Current.Resolve<UITranslation>().InputCommand;
-            var translator = TinyIoCContainer.Current.Resolve<UITranslation>();
 
-            if (Settings.Default.BrowserToggled)
-            {
-                InitBrowser();
-                browserMenuText.Text = translator.DisableHub;
-            }
-            else if (!Settings.Default.BrowserToggled)
-            {
-                browserMenuText.Text = translator.EnableHub;
-            }
+            Width = Settings.Default.Width;
+            Height = Settings.Default.Height;
         }
 
         private void InitBrowser()
@@ -90,26 +87,147 @@ namespace PoGo.Necrobot.Window
             webView.URL = uri.ToString();
         }
 
-        private void Grid_Loaded(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            //Upgrade Settings, if Any
+            Settings.Default.Upgrade();
+
+            // Timer Timing
+            timer.Start();
+            timer.Interval = 1;
+            timer.Elapsed += TimerTick;
+
+            // Populate ComboBox's w/ Available Themes & Schemes
+            Scheme.ItemsSource = new List<string> { "Light", "Dark" };
+            Theme.ItemsSource = new List<string> { "Red", "Green", "Blue", "Purple", "Orange", "Lime", "Emerald", "Teal", "Cyan", "Cobalt", "Indigo", "Violet", "Pink", "Magenta", "Crimson", "Amber", "Yellow", "Brown", "Olive", "Steel", "Mauve", "Taupe", "Sienna" };
+            var LightColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE5E5E5"));
+            var DarkColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#252525"));
+
+            //=============THEME & SCHEME STARTUP CONFIGURATION=============\\
+            if (Settings.Default.Theme == "")
+            {
+                Settings.Default.Theme = "Blue";
+                Settings.Default.Save();
+                Settings.Default.Reload();
+            }
+            else if (Settings.Default.Scheme == "")
+            {
+                Settings.Default.Scheme = "Light";
+                Settings.Default.SchemeValue = "BaseLight";
+                Settings.Default.Save();
+                Settings.Default.Reload();
+            }
+            if (Settings.Default.Scheme == "Light")
+            {
+                tabAccounts.Background = LightColor;
+                tabBrowser.Background = LightColor;
+                tabMap.Background = LightColor;
+                tabSniper.Background = LightColor;
+                tabConsole.Background = LightColor;
+                tabPokemons.Background = LightColor;
+                tabItems.Background = LightColor;
+                tabEggs.Background = LightColor;
+                tabPokemons.Foreground = Brushes.Black;
+                tabItems.Foreground = Brushes.Black;
+            }
+            else if (Settings.Default.Scheme == "Dark")
+            {
+                tabAccounts.Background = DarkColor;
+                tabBrowser.Background = DarkColor;
+                tabMap.Background = DarkColor;
+                tabSniper.Background = DarkColor;
+                tabConsole.Background = DarkColor;
+                tabPokemons.Background = DarkColor;
+                tabItems.Background = DarkColor;
+                tabEggs.Background = DarkColor;
+                tabPokemons.Foreground = Brushes.White;
+                tabItems.Foreground = Brushes.White;
+            }
+            var AccountsBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Accounts/AccountsIMG_{Settings.Default.Theme}.png"));
+            var ConsoleBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Console/ConsoleIMG_{Settings.Default.Theme}.png"));
+            var EggsBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Eggs/EggsIMG_{Settings.Default.Theme}.png"));
+            var HubBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Hub/HubIMG_{Settings.Default.Theme}.png"));
+            var ItemsBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Items/ItemsIMG_{Settings.Default.Theme}.png"));
+            var MapBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Map/MapIMG_{Settings.Default.Theme}.png"));
+            var PokemonBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Pokemon/PokemonIMG_{Settings.Default.Theme}.png"));
+            var SniperBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Sniper/SniperIMG_{Settings.Default.Theme}.png"));
+            accountsIMG.Source = AccountsBitmap;
+            consoleIMG.Source = ConsoleBitmap;
+            eggsIMG.Source = EggsBitmap;
+            browserIMG.Source = HubBitmap;
+            itemsIMG.Source = ItemsBitmap;
+            mapIMG.Source = MapBitmap;
+            pokemonIMG.Source = PokemonBitmap;
+            sniperIMG.Source = SniperBitmap;
+            var SchemeValue = "Base" + Settings.Default.Scheme;
+            Theme.SelectedValue = Settings.Default.Theme;
+            Scheme.SelectedValue = Settings.Default.Scheme;
+            Settings.Default.Save();
+
+            ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(Settings.Default.Theme), ThemeManager.GetAppTheme(Settings.Default.SchemeValue));
+
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             LoadHelpArticleAsync();
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            if (datacontext.PlayerInfo.Level == 35) // Warn Player on Reaching this Level -- NEEDS CONFIG SETTING
-            {
-                Logger.Write($"You have reached Level {datacontext.PlayerInfo.Level} and it is recommended to Switch Accounts",LogLevel.Warning);
-            }
-            ChangeThemeTo(Settings.Default.Theme);
-            ChangeSchemeTo(Settings.Default.Scheme);
+
+            //=============Console Saving=============\\
+            ConsoleWindow();
         }
+
+        private void TimerTick(object sender, ElapsedEventArgs e)
+        {
+            Application.Current.Dispatcher.Invoke(delegate
+            {
+                if (tabPokemons.IsMouseOver | tabPokemons.IsSelected | Settings.Default.Scheme == "Light")
+                tabPokemons.Foreground = Brushes.Black;
+            else if (!tabPokemons.IsMouseOver | !tabPokemons.IsSelected | Settings.Default.Scheme == "Dark")
+                tabPokemons.Foreground = Brushes.White;
+            if (tabItems.IsMouseOver | tabItems.IsSelected | Settings.Default.Scheme == "Light")
+                tabItems.Foreground = Brushes.Black;
+            else if (!tabItems.IsMouseOver | !tabItems.IsSelected | Settings.Default.Scheme == "Dark")
+                tabItems.Foreground = Brushes.White;
+            });
+        }
+
+        public void Sync()
+        {
+            var translator = TinyIoCContainer.Current.Resolve<UITranslation>();
+            //=============DotNetBrowser Saving=============\\
+            if (Settings.Default.BrowserToggled)
+            {
+                InitBrowser();
+                browserMenuText.Text = translator.DisableHub;
+            }
+            else if (!Settings.Default.BrowserToggled)
+            {
+                browserMenuText.Text = translator.EnableHub;
+                tabBrowser.IsEnabled = false;
+            }
+        }
+
+        public void ConsoleWindow()
+        {
+            var translator = TinyIoCContainer.Current.Resolve<UITranslation>();
+
+            if (Settings.Default.ConsoleToggled == true)
+            {
+                consoleMenuText.Text = translator.HideConsole;
+                ConsoleHelper.ShowConsoleWindow();
+                Settings.Default.ConsoleText = "Hide Console";
+            }
+            if (Settings.Default.ConsoleToggled == false)
+            {
+                consoleMenuText.Text = translator.ShowConsole;
+                ConsoleHelper.HideConsoleWindow();
+                Settings.Default.ConsoleText = "Show Console";
+            }
+            Settings.Default.ConsoleToggled = !Settings.Default.ConsoleToggled;
+            Settings.Default.Save();
+        }
+
         private DateTime lastClearLog = DateTime.Now;
         public void LogToConsoleTab(string message, LogLevel level, string color)
-        { 
+        {
             if (string.IsNullOrEmpty(color) || color == "Black")
                 color = ConsoleColors[level];
 
@@ -123,7 +241,6 @@ namespace PoGo.Necrobot.Window
                 if (string.IsNullOrEmpty(color) || color == "Black") color = "white";
 
                 consoleLog.AppendText(message + "\r", color);
-
                 consoleLog.ScrollToEnd();
             }));
         }
@@ -157,29 +274,16 @@ namespace PoGo.Necrobot.Window
             var numberSelected = datacontext.PokemonList.Pokemons.Count(x => x.IsSelected);
             lblCount.Text = $"Select : {numberSelected}";
         }
-        bool isConsoleShowing = false;
+
         private void MenuConsole_Click(object sender, RoutedEventArgs e)
         {
-            var translator = TinyIoCContainer.Current.Resolve<UITranslation>();
-
-            if (isConsoleShowing)
-            {
-                consoleMenuText.Text = translator.ShowConsole; 
-                ConsoleHelper.HideConsoleWindow();
-            }
-            else
-            {
-                consoleMenuText.Text = translator.HideConsole;
-                ConsoleHelper.ShowConsoleWindow();
-            }
-
-            isConsoleShowing = !isConsoleShowing;
+            ConsoleWindow();
         }
 
         private void MenuSetting_Click(object sender, RoutedEventArgs e)
         {
             var configWindow = new SettingsWindow(this, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config\\config.json"));
-            configWindow.ShowDialog();         
+            configWindow.ShowDialog();
         }
 
         private void BtnHideInfo_Click(object sender, RoutedEventArgs e)
@@ -189,7 +293,7 @@ namespace PoGo.Necrobot.Window
             if (grbPlayerInfo.Height == 35)
             {
                 btnHideInfo.Content = translator.Hide;
-                grbPlayerInfo.Height = 135;
+                grbPlayerInfo.Height = 120;
             }
             else
             {
@@ -198,97 +302,120 @@ namespace PoGo.Necrobot.Window
             }
         }
 
-        private void ChangeThemeTo(string Theme)
+        private void Theme_SelectionChanged(object sender, RoutedEventArgs e)
         {
-            ResourceDictionary dict = new ResourceDictionary()
-            {
-                Source = new Uri($"pack://application:,,,/MahApps.Metro;component/Styles/Accents/{Theme}.xaml", UriKind.Absolute)
-            };
-            var theme = Application.Current.Resources.MergedDictionaries.LastOrDefault();
-            Application.Current.Resources.MergedDictionaries.Add(dict);
-            Application.Current.Resources.MergedDictionaries.Remove(theme);
-
-            if (Settings.Default.Scheme != "BaseLight") // If Not Equivalent to Default
-            {
-                ChangeSchemeTo_KeepTheme(Settings.Default.Scheme);
-            }
-        }
-
-        private void ChangeThemeTo_KeepScheme(string Theme)
-        {
-            ResourceDictionary dict = new ResourceDictionary()
-            {
-                Source = new Uri($"pack://application:,,,/MahApps.Metro;component/Styles/Accents/{Theme}.xaml", UriKind.Absolute)
-            };
-            Application.Current.Resources.MergedDictionaries.Add(dict);
-        }
-
-        private void ChangeSchemeTo(string Scheme)
-        {
-            ResourceDictionary dict = new ResourceDictionary()
-            {
-                Source = new Uri($"pack://application:,,,/MahApps.Metro;component/Styles/Accents/{Scheme}.xaml", UriKind.Absolute)
-            };
-            var scheme = Application.Current.Resources.MergedDictionaries.LastOrDefault();
-            Application.Current.Resources.MergedDictionaries.Add(dict);
-            Application.Current.Resources.MergedDictionaries.Remove(scheme);
-
-            if (Settings.Default.Theme != "Blue") // If not Equivalent to Default
-            {
-                ChangeThemeTo_KeepScheme(Settings.Default.Theme);
-            }
-        }
-
-        private void ChangeSchemeTo_KeepTheme(string Scheme)
-        {
-            ResourceDictionary dict = new ResourceDictionary()
-            {
-                Source = new Uri($"pack://application:,,,/MahApps.Metro;component/Styles/Accents/{Scheme}.xaml", UriKind.Absolute)
-            };
-            Application.Current.Resources.MergedDictionaries.Add(dict);
-        }
-
-        private void Theme_Selected(object sender, RoutedEventArgs e)
-        {
-            Popup1.IsOpen = !Popup1.IsOpen;
-        }
-
-        private void Scheme_Selected(object sender, RoutedEventArgs e)
-        {
-            Popup2.IsOpen = !Popup2.IsOpen;
-        }
-
-        private void OnTheme_Checked(object sender, RoutedEventArgs e)
-        {
-            var rad = sender as RadioButton;
-            ChangeThemeTo(rad.Content as string);
-            Settings.Default.Theme = rad.Content as string;
+            string Selection = Convert.ToString(Theme.SelectedValue);
+            if (Selection == "Red")
+                Settings.Default.Theme = "Red";
+            if (Selection == "Green")
+                Settings.Default.Theme = "Green";
+            if (Selection == "Blue")
+                Settings.Default.Theme = "Blue";
+            if (Selection == "Purple")
+                Settings.Default.Theme = "Purple";
+            if (Selection == "Orange")
+                Settings.Default.Theme = "Orange";
+            if (Selection == "Lime")
+                Settings.Default.Theme = "Lime";
+            if (Selection == "Emerald")
+                Settings.Default.Theme = "Emerald";
+            if (Selection == "Teal")
+                Settings.Default.Theme = "Teal";
+            if (Selection == "Cyan")
+                Settings.Default.Theme = "Cyan";
+            if (Selection == "Cobalt")
+                Settings.Default.Theme = "Cobalt";
+            if (Selection == "Indigo")
+                Settings.Default.Theme = "Indigo";
+            if (Selection == "Violet")
+                Settings.Default.Theme = "Violet";
+            if (Selection == "Pink")
+                Settings.Default.Theme = "Pink";
+            if (Selection == "Magenta")
+                Settings.Default.Theme = "Magenta";
+            if (Selection == "Crimson")
+                Settings.Default.Theme = "Crimson";
+            if (Selection == "Amber")
+                Settings.Default.Theme = "Amber";
+            if (Selection == "Yellow")
+                Settings.Default.Theme = "Yellow";
+            if (Selection == "Brown")
+                Settings.Default.Theme = "Brown";
+            if (Selection == "Olive")
+                Settings.Default.Theme = "Olive";
+            if (Selection == "Steel")
+                Settings.Default.Theme = "Steel";
+            if (Selection == "Mauve")
+                Settings.Default.Theme = "Mauve";
+            if (Selection == "Taupe")
+                Settings.Default.Theme = "Taupe";
+            if (Selection == "Sienna")
+                Settings.Default.Theme = "Sienna";
             Settings.Default.Save();
+            tabPokemons.Foreground = Brushes.Black;
+            tabItems.Foreground = Brushes.Black;
+            var AccountsBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Accounts/AccountsIMG_{Settings.Default.Theme}.png"));
+            var ConsoleBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Console/ConsoleIMG_{Settings.Default.Theme}.png"));
+            var EggsBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Eggs/EggsIMG_{Settings.Default.Theme}.png"));
+            var HubBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Hub/HubIMG_{Settings.Default.Theme}.png"));
+            var ItemsBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Items/ItemsIMG_{Settings.Default.Theme}.png"));
+            var MapBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Map/MapIMG_{Settings.Default.Theme}.png"));
+            var PokemonBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Pokemon/PokemonIMG_{Settings.Default.Theme}.png"));
+            var SniperBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Sniper/SniperIMG_{Settings.Default.Theme}.png"));
+            accountsIMG.Source = AccountsBitmap;
+            consoleIMG.Source = ConsoleBitmap;
+            eggsIMG.Source = EggsBitmap;
+            browserIMG.Source = HubBitmap;
+            itemsIMG.Source = ItemsBitmap;
+            mapIMG.Source = MapBitmap;
+            pokemonIMG.Source = PokemonBitmap;
+            sniperIMG.Source = SniperBitmap;
+            ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(Settings.Default.Theme), ThemeManager.GetAppTheme(Settings.Default.SchemeValue));
         }
 
-        private void OnScheme_Checked(object sender, RoutedEventArgs e)
+        private void Scheme_SelectionChanged(object sender, RoutedEventArgs e)
         {
-            var rad = sender as RadioButton;
-            var Scheme = rad.Content as string;
-            if (Scheme == "Light")
+            string Selection = Convert.ToString(Scheme.SelectedValue);
+            var LightColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE5E5E5"));
+            var DarkColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#252525"));
+
+            if (Selection == "Light")
             {
-                ChangeSchemeTo("BaseLight");
-                Settings.Default.Scheme = "BaseLight";
+                Settings.Default.Scheme = "Light";
+                Settings.Default.SchemeValue = "BaseLight";
+
+                tabAccounts.Background = LightColor;
+                tabBrowser.Background = LightColor;
+                tabMap.Background = LightColor;
+                tabSniper.Background = LightColor;
+                tabConsole.Background = LightColor;
+                tabPokemons.Background = LightColor;
+                tabItems.Background = LightColor;
+                tabEggs.Background = LightColor;
             }
-            if (Scheme == "Dark")
+            else if (Selection == "Dark")
             {
-                ChangeSchemeTo("BaseDark");
-                Settings.Default.Scheme = "BaseDark";
+                Settings.Default.Scheme = "Dark";
+                Settings.Default.SchemeValue = "BaseDark";
+
+                tabAccounts.Background = DarkColor;
+                tabBrowser.Background = DarkColor;
+                tabMap.Background = DarkColor;
+                tabSniper.Background = DarkColor;
+                tabConsole.Background = DarkColor;
+                tabPokemons.Background = DarkColor;
+                tabItems.Background = DarkColor;
+                tabEggs.Background = DarkColor;
             }
             Settings.Default.Save();
+            ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(Settings.Default.Theme), ThemeManager.GetAppTheme(Settings.Default.SchemeValue));
         }
 
         private void TxtCmdInput_KeyDown(object sender, KeyEventArgs e)
         {
-
-            if(e.Key == Key.Enter)
+            if (e.Key == Key.Enter)
             {
-                NecroBot.Logic.Logging.Logger.Write(txtCmdInput.Text, LogLevel.Info, ConsoleColor.White);
+                Logger.Write(txtCmdInput.Text, LogLevel.Info, ConsoleColor.White);
                 txtCmdInput.Text = "";
             }
         }
@@ -313,7 +440,7 @@ namespace PoGo.Necrobot.Window
                 }
             }
         }
-        
+
         private void BtnDonate_Click(object sender, RoutedEventArgs e)
         {
             Process.Start("http://snipe.necrobot2.com?donate");
@@ -322,8 +449,7 @@ namespace PoGo.Necrobot.Window
         private void BtnSwitchAcount_Click(object sender, RoutedEventArgs e)
         {
             var btn = ((Button)sender);
-            var account = (MultiAccountManager.BotAccount)btn.CommandParameter;
-
+            var account = (BotAccount)btn.CommandParameter;
             var manager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
 
             manager.SwitchAccountTo(account);
@@ -336,12 +462,12 @@ namespace PoGo.Necrobot.Window
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    var responseContent = await client.GetAsync("http://necrobot2.com/feed.xml");
+                    var responseContent = await client.GetAsync("https://github.com/Necrobot-Private/NecroBot/releases.atom");
                     if (responseContent.StatusCode != HttpStatusCode.OK)
                         return;
 
                     var xml = await responseContent.Content.ReadAsStringAsync();
-                    
+
                     var feed = SyndicationFeed.Load(XmlReader.Create(new StringReader(xml)));
                     lastTimeLoadHelp = DateTime.Now;
 
@@ -363,7 +489,7 @@ namespace PoGo.Necrobot.Window
         private void Hyperlink_Click(object sender, RoutedEventArgs e)
         {
             var hlink = sender as Hyperlink;
-            
+
             Process.Start(hlink.NavigateUri.ToString());
             popHelpArticles.IsOpen = false;
         }
@@ -372,10 +498,10 @@ namespace PoGo.Necrobot.Window
         {
             Application.Current.Shutdown();
         }
-        
+
         private void MetroWindow_Initialized(object sender, EventArgs e)
         {
-            if(SystemParameters.PrimaryScreenWidth<1366)
+            if (SystemParameters.PrimaryScreenWidth < 1366)
                 WindowState = WindowState.Maximized;
         }
 
@@ -390,36 +516,25 @@ namespace PoGo.Necrobot.Window
 
                 tabBrowser.IsEnabled = false;
                 browserMenuText.Text = translator.EnableHub;
+                webView.Browser.Dispose();
+                webView.Dispose();
                 Settings.Default.BrowserToggled = false;
-                Settings.Default.Save();
-
-                MessageBoxResult msgbox = MessageBox.Show("Would you Like to Restart to kill unneccesary browser tasks and free up extra cpu?","Free Up CPU",MessageBoxButton.YesNo,MessageBoxImage.Question);
-                if (msgbox == MessageBoxResult.Yes)
-                {
-                    Process.Start(Application.ResourceAssembly.Location);
-                    Application.Current.Shutdown();
-                }
-                else
-                { }
             }
             else if (!Settings.Default.BrowserToggled)
             {
                 tabBrowser.IsEnabled = true;
                 browserMenuText.Text = translator.DisableHub;
+                InitBrowser();
                 Settings.Default.BrowserToggled = true;
-                Settings.Default.Save();
             }
+            Settings.Default.Save();
         }
         public void ReInitializeSession(ISession session, GlobalSettings globalSettings, BotAccount requestedAccount = null)
         {
             if (session.LogicSettings.MultipleBotConfig.StartFromDefaultLocation)
-            {
                 session.ReInitSessionWithNextBot(requestedAccount, globalSettings.LocationConfig.DefaultLatitude, globalSettings.LocationConfig.DefaultLongitude, session.Client.CurrentAltitude);
-            }
             else
-            {
                 session.ReInitSessionWithNextBot(); //current location
-            }
         }
 
         private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)

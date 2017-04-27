@@ -87,44 +87,11 @@
             </Setter>
         </Style>
     </Control.Resources>
-
     <DataGrid ItemsSource="{Binding Mode=OneWay}" 
               AutoGenerateColumns="false" 
               GridLinesVisibility="None"
               IsReadOnly="True"
               behaviors:DataGridBehavior.DisplayRowNumber="True">
-        
-        <!--
-        <DataGrid.Resources>
-            <Style TargetType="DataGridCell">
-                <Style.Triggers>
-                    <Trigger Property="IsSelected" Value="True">
-                        <Setter Property="Background" Value="#1F71F4" />
-                        <Setter Property="BorderThickness" Value="0" />
-                    </Trigger>
-                   
-                    
-                </Style.Triggers>
-            </Style>
-        </DataGrid.Resources>
-        <DataGrid.RowStyle>
-            <Style TargetType="DataGridCell">
-                <Style.Triggers>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" Value="#5191f7" />
-                        <Setter Property="BorderThickness" Value="0" />
-                    </Trigger>
-                    
-                    <DataTrigger Binding="{Binding Recommend}" Value="True">
-                        <Setter Property="Foreground" Value="Green"></Setter>
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding Recommend}" Value="False">
-                        <Setter Property="Foreground" Value="Black"></Setter>
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-        </DataGrid.RowStyle>
-        -->
         <DataGrid.Columns>
             <DataGridTextColumn Binding="{Binding Path=Id}" Header="#" IsReadOnly="True"/>
             <DataGridTemplateColumn Header="#">
@@ -141,24 +108,22 @@
                     <Style TargetType="{x:Type TextBlock}">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding Recommend}" Value="True">
-                                <Setter Property="Background" Value="LightGreen"/>
+                                <Setter Property="Background" Value="Green"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </DataGridTextColumn.ElementStyle>
-
             </DataGridTextColumn>
             <DataGridTextColumn Binding="{Binding Path=IV, StringFormat={}{0:0.00}}" Header="{Binding Source=IV, Converter= {StaticResource I18NConveter}}" IsReadOnly="True" MinWidth="60">
                 <DataGridTextColumn.ElementStyle>
                     <Style TargetType="{x:Type TextBlock}">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding Recommend}" Value="True">
-                                <Setter Property="Background" Value="LightGreen"/>
+                                <Setter Property="Background" Value="Green"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </DataGridTextColumn.ElementStyle>
-
             </DataGridTextColumn>
             <DataGridTextColumn Binding="{Binding Path=Level}" Header="{Binding Source=Level, Converter= {StaticResource I18NConveter}}" IsReadOnly="True"/>
             <DataGridTextColumn Binding="{Binding Path=Latitude}" Header="{Binding Source=Latitude, Converter= {StaticResource I18NConveter}}" IsReadOnly="True"/>
@@ -172,9 +137,7 @@
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
                             <Button IsEnabled="{Binding Path=AllowSnipe}" Content="{Binding Source=SnipeText, Converter= {StaticResource I18NConveter}}" CommandParameter="{Binding Ref}" Click="Snipe_Click"/>
-
                             <Button Margin="10,0,0,0" IsEnabled="{Binding Path=AllowSnipe}" Content="{Binding Source=SnipeAllBotText, Converter= {StaticResource I18NConveter}}" CommandParameter="{Binding Ref}" Click="SnipeAll_Click"/>
-                            
                         </StackPanel>
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>
