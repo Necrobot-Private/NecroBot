@@ -374,17 +374,18 @@ namespace PoGo.NecroBot.Logic.Forms
                 
                 string xstr = ((ListViewItem) x).SubItems[_col].Text;
                 string ystr = ((ListViewItem) y).SubItems[_col].Text;
-                
-                decimal dec_x;
-                decimal dec_y;
-                DateTime dat_x;
-                DateTime dat_y;
-                
-                if (Decimal.TryParse(xstr, out dec_x) && Decimal.TryParse(ystr, out dec_y)) {
+
+
+                if (Decimal.TryParse(xstr, out decimal dec_x) && Decimal.TryParse(ystr, out decimal dec_y))
+                {
                     returnVal = Decimal.Compare(dec_x, dec_y);
-                } else if (DateTime.TryParse(xstr, out dat_x) && DateTime.TryParse(ystr, out dat_y)) {
+                }
+                else if (DateTime.TryParse(xstr, out DateTime dat_x) && DateTime.TryParse(ystr, out DateTime dat_y))
+                {
                     returnVal = DateTime.Compare(dat_x, dat_y);
-                } else {
+                }
+                else
+                {
                     returnVal = String.Compare(xstr, ystr);
                 }
                 if (_order == SortOrder.Descending) returnVal *= -1;
@@ -413,17 +414,18 @@ namespace PoGo.NecroBot.Logic.Forms
                 
                 string xstr = ((EXListViewSubItemAB) ((ListViewItem) x).SubItems[_col]).MyValue;
                 string ystr = ((EXListViewSubItemAB) ((ListViewItem) y).SubItems[_col]).MyValue;
-                
-                decimal dec_x;
-                decimal dec_y;
-                DateTime dat_x;
-                DateTime dat_y;
-                
-                if (Decimal.TryParse(xstr, out dec_x) && Decimal.TryParse(ystr, out dec_y)) {
+
+
+                if (Decimal.TryParse(xstr, out decimal dec_x) && Decimal.TryParse(ystr, out decimal dec_y))
+                {
                     returnVal = Decimal.Compare(dec_x, dec_y);
-                } else if (DateTime.TryParse(xstr, out dat_x) && DateTime.TryParse(ystr, out dat_y)) {
+                }
+                else if (DateTime.TryParse(xstr, out DateTime dat_x) && DateTime.TryParse(ystr, out DateTime dat_y))
+                {
                     returnVal = DateTime.Compare(dat_x, dat_y);
-                } else {
+                }
+                else
+                {
                     returnVal = String.Compare(xstr, ystr);
                 }
                 if (_order == SortOrder.Descending) returnVal *= -1;
@@ -452,17 +454,18 @@ namespace PoGo.NecroBot.Logic.Forms
                 
                 string xstr = ((ListViewItem) x).Text;
                 string ystr = ((ListViewItem) y).Text;
-                
-                decimal dec_x;
-                decimal dec_y;
-                DateTime dat_x;
-                DateTime dat_y;
-                
-                if (Decimal.TryParse(xstr, out dec_x) && Decimal.TryParse(ystr, out dec_y)) {
+
+
+                if (Decimal.TryParse(xstr, out decimal dec_x) && Decimal.TryParse(ystr, out decimal dec_y))
+                {
                     returnVal = Decimal.Compare(dec_x, dec_y);
-                } else if (DateTime.TryParse(xstr, out dat_x) && DateTime.TryParse(ystr, out dat_y)) {
+                }
+                else if (DateTime.TryParse(xstr, out DateTime dat_x) && DateTime.TryParse(ystr, out DateTime dat_y))
+                {
                     returnVal = DateTime.Compare(dat_x, dat_y);
-                } else {
+                }
+                else
+                {
                     returnVal = String.Compare(xstr, ystr);
                 }
                 if (_order == SortOrder.Descending) returnVal *= -1;
@@ -491,17 +494,18 @@ namespace PoGo.NecroBot.Logic.Forms
                 
                 string xstr = ((EXListViewItem) x).MyValue;
                 string ystr = ((EXListViewItem) y).MyValue;
-                
-                decimal dec_x;
-                decimal dec_y;
-                DateTime dat_x;
-                DateTime dat_y;
-                
-                if (Decimal.TryParse(xstr, out dec_x) && Decimal.TryParse(ystr, out dec_y)) {
+
+
+                if (Decimal.TryParse(xstr, out decimal dec_x) && Decimal.TryParse(ystr, out decimal dec_y))
+                {
                     returnVal = Decimal.Compare(dec_x, dec_y);
-                } else if (DateTime.TryParse(xstr, out dat_x) && DateTime.TryParse(ystr, out dat_y)) {
+                }
+                else if (DateTime.TryParse(xstr, out DateTime dat_x) && DateTime.TryParse(ystr, out DateTime dat_y))
+                {
                     returnVal = DateTime.Compare(dat_x, dat_y);
-                } else {
+                }
+                else
+                {
                     returnVal = String.Compare(xstr, ystr);
                 }
                 if (_order == SortOrder.Descending) returnVal *= -1;
