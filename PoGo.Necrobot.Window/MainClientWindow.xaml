@@ -261,7 +261,7 @@
             </TabItem>
             <TabItem x:Name="tabSniper">
                 <TabItem.Header>
-                    <Image x:Name="sniperIMG" Source="Resources/Sniper/SniperImage.png" Width="60" Height="60" />
+                    <Image x:Name="sniperIMG" Source="Resources/Sniper/SniperImage.png" Width="60" RenderTransformOrigin="0.5,0.5" Height="60" />
                 </TabItem.Header>
                 <local:SniperControl x:Name="ctrlSniper" DataContext="{Binding Path=SnipeList}" />
             </TabItem>
