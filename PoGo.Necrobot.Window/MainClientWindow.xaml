@@ -310,7 +310,7 @@
                     </Image>
                 </TabItem.Header>
                 <Grid Name="browserLayout">
-                    <wpf:WPFBrowserView x:Name="webView" BrowserType="LIGHTWEIGHT"/>
+                    <wpf:WPFBrowserView x:Name="webView" BrowserType="HEAVYWEIGHT"/>
                 </Grid>
             </TabItem>
             <TabItem Name="tabMap">
