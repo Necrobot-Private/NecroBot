@@ -242,7 +242,7 @@ namespace RocketBot2.Forms
             
             foreach (var poke in _settings.PokemonEvolveFilter)
             {
-                clbEvolve.SetItemChecked(clbEvolve.FindStringExact(poke.ToString()), true);
+                clbEvolve.SetItemChecked(clbEvolve.FindStringExact(poke.Key.ToString()), true);
             }
             
             #endregion
