@@ -17,7 +17,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool UsePokeStopLimit { get; set; }
 
         [NecrobotConfig(Description = "Max number of pokestops bot is allowed to farm a day", Position = 2)]
-        [DefaultValue(1500)]
+        [DefaultValue(700)]
         [Range(0, 9999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
         public int PokeStopLimit {get; set; }
