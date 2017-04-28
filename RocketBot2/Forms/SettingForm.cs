@@ -239,13 +239,12 @@ namespace RocketBot2.Forms
                 _settings.PokemonConfig.EvolveKeptPokemonsAtStorageUsagePercentage.ToString(CultureInfo.InvariantCulture);
             cbUseLuckyEggsWhileEvolving.Checked = _settings.PokemonConfig.UseLuckyEggsWhileEvolving;
             tbUseLuckyEggsMinPokemonAmount.Text = _settings.PokemonConfig.UseLuckyEggsMinPokemonAmount.ToString();
-            //TODO:
-            /*
+            
             foreach (var poke in _settings.PokemonEvolveFilter)
             {
                 clbEvolve.SetItemChecked(clbEvolve.FindStringExact(poke.ToString()), true);
             }
-            */
+            
             #endregion
 
             #endregion
