@@ -64,7 +64,7 @@ namespace PoGo.NecroBot.CLI.Forms
             // 
             this.txtAPIKey.Location = new System.Drawing.Point(12, 115);
             this.txtAPIKey.Name = "txtAPIKey";
-            this.txtAPIKey.Text = "8C5A5T8B9P3A6L1S4K1A";
+            this.txtAPIKey.Text = "";
             this.txtAPIKey.Size = new System.Drawing.Size(228, 20);
             this.txtAPIKey.TabIndex = 2;
             // 

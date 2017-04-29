@@ -20,7 +20,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         //may need add support for web services/wcf/resful later. for now we use most modern web socket things.
         [NecrobotConfig(Description = "Data Service Endpoint", Position = 2)]
-        [DefaultValue("ws://necrosocket.herokuapp.com/socket.io/?EIO=3&transport=websocket")]
+        [DefaultValue("ws://www.mypogosnipers.com/socket.io/?EIO=3&transport=websocket")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
         public string DataRecieverURL { get; set; }
 
@@ -50,7 +50,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool EnableFailoverDataServers { get; set; }
 
         [NecrobotConfig(Description = "List of servers that bot will connect to when primary server is down or can't be connected to", Position = 6)]
-        [DefaultValue("ws://s1.mypogosnipers.com/socket.io/?EIO=3&transport=websocket;ws://s2.mypogosnipers.com/socket.io/?EIO=3&transport=websocket")]
+        [DefaultValue("ws://s1.mypogosnipers.com/socket.io/?EIO=3&transport=websocket;ws://s2.mypogosnipers.com/socket.io/?EIO=3&transport=websocket;ws://necrosocket.herokuapp.com/socket.io/?EIO=3&transport=websocket")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public string FailoverDataServers { get; set; }
 

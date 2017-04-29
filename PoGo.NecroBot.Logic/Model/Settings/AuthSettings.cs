@@ -420,10 +420,12 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                                 // If not found then we need to insert it.
                                 if (foundBot == null)
                                 {
-                                    JObject newBot = new JObject();
-                                    newBot["Username"] = username;
-                                    newBot["Password"] = password;
-                                    newBot["AuthType"] = authType;
+                                    JObject newBot = new JObject
+                                    {
+                                        ["Username"] = username,
+                                        ["Password"] = password,
+                                        ["AuthType"] = authType
+                                    };
                                     ((JArray)settings["Bots"]).Insert(0, newBot);
                                 }
                             }

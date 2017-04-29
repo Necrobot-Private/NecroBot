@@ -117,7 +117,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="Resources\Ico.ico" />
-    <Content Include="FodyWeavers.xml" />
+    <None Include="FodyWeavers.xml" />
     <None Include="cert.pfx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -144,27 +144,18 @@
     </Reference>
     <Reference Include="SuperSocket.Common, Version=1.6.6.1, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\SuperSocket.1.6.6.1\lib\net45\SuperSocket.Common.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="SuperSocket.Facility, Version=1.6.6.1, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\SuperSocket.1.6.6.1\lib\net45\SuperSocket.Facility.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="SuperSocket.SocketBase, Version=1.6.6.1, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\SuperSocket.1.6.6.1\lib\net45\SuperSocket.SocketBase.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="SuperSocket.SocketEngine, Version=1.6.6.1, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\SuperSocket.Engine.1.6.6.1\lib\net45\SuperSocket.SocketEngine.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="SuperSocket.SocketService, Version=1.6.6.1, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\SuperSocket.Engine.1.6.6.1\lib\net45\SuperSocket.SocketService.exe</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="SuperSocket.WebSocket, Version=1.6.6.1, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)\packages\SuperSocket.WebSocket.1.6.6.1\lib\net45\SuperSocket.WebSocket.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System">
       <Private>True</Private>
@@ -190,19 +181,14 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="WebDriver, Version=3.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)\packages\Selenium.WebDriver.3.3.0\lib\net40\WebDriver.dll</HintPath>
+    <Reference Include="WebDriver, Version=3.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Selenium.WebDriver.3.4.0\lib\net40\WebDriver.dll</HintPath>
     </Reference>
-    <Reference Include="WebDriver.Support, Version=3.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)\packages\Selenium.Support.3.3.0\lib\net40\WebDriver.Support.dll</HintPath>
-    </Reference>
-    <Reference Include="websocket-sharp, Version=1.0.2.59611, Culture=neutral, PublicKeyToken=5660b08a1845a91e, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)\packages\WebSocketSharp.1.0.3-rc11\lib\websocket-sharp.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="WebDriver.Support, Version=3.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Selenium.Support.3.4.0\lib\net40\WebDriver.Support.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BotDataSocketClient.cs" />
     <Compile Include="CommandLineUtility\Arguments.cs" />
     <Compile Include="Forms\AuthAPIForm.cs">
       <SubType>Form</SubType>
@@ -235,48 +221,6 @@
     <Compile Include="Resources\ProgressBar.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WebSocketHandler\ActionCommands\FastpokemapHandler.cs" />
-    <Compile Include="WebSocketHandler\ActionCommands\SetTrainerNicknameHandler.cs" />
-    <Compile Include="WebSocketHandler\ActionCommands\UpgradePokemonHandler.cs" />
-    <Compile Include="WebSocketHandler\ActionCommands\SetMoveToTargetHandler.cs" />
-    <Compile Include="WebSocketHandler\ActionCommands\SetConfigHandler.cs" />
-    <Compile Include="WebSocketHandler\ActionCommands\HumanSnipeRemovePokemonHandler.cs" />
-    <Compile Include="WebSocketHandler\ActionCommands\HumanSnipePriorityPokemonHandler.cs" />
-    <Compile Include="WebSocketHandler\ActionCommands\FavoritePokemonHandler.cs" />
-    <Compile Include="WebSocketHandler\ActionCommands\DropItemHandler.cs" />
-    <Compile Include="WebSocketHandler\ActionCommands\LevelUpPokemonHandler.cs" />
-    <Compile Include="WebSocketHandler\GetCommands\Events\ConfigResponce.cs" />
-    <Compile Include="WebSocketHandler\GetCommands\Events\SnipeListResponce.cs" />
-    <Compile Include="WebSocketHandler\GetCommands\Events\WebResponce.cs" />
-    <Compile Include="WebSocketHandler\GetCommands\Events\EggListResponce.cs" />
-    <Compile Include="WebSocketHandler\GetCommands\Events\ItemListResponce.cs" />
-    <Compile Include="WebSocketHandler\GetCommands\Events\TrainerProfileResponce.cs" />
-    <Compile Include="WebSocketHandler\GetCommands\GetEggListHandler.cs" />
-    <Compile Include="WebSocketHandler\GetCommands\GetPokemonSnipeListHandler.cs" />
-    <Compile Include="WebSocketHandler\GetCommands\GetItemsListHandler.cs" />
-    <Compile Include="WebSocketHandler\GetCommands\GetPokemonSettingsHandler.cs" />
-    <Compile Include="WebSocketHandler\GetCommands\GetTrainerProfileHandler.cs" />
-    <Compile Include="WebSocketHandler\GetCommands\Helpers\ConfigWeb.cs" />
-    <Compile Include="WebSocketHandler\GetCommands\Helpers\TrainerProfileWeb.cs" />
-    <Compile Include="WebSocketHandler\GetCommands\Tasks\GetConfigTask.cs" />
-    <Compile Include="WebSocketHandler\GetCommands\Tasks\GetPokemonSnipeListTask.cs" />
-    <Compile Include="WebSocketHandler\GetCommands\Tasks\GetPokemonSettingsTask.cs" />
-    <Compile Include="WebSocketHandler\GetCommands\Tasks\GetTrainerProfileTask.cs" />
-    <Compile Include="WebSocketHandler\ActionCommands\EvolvePokemonHandler.cs" />
-    <Compile Include="WebSocketHandler\ActionCommands\TransferPokemonHandler.cs" />
-    <Compile Include="WebSocketHandler\GetCommands\Helpers\EggListWeb.cs" />
-    <Compile Include="WebSocketHandler\GetCommands\Tasks\GetEggListTask.cs" />
-    <Compile Include="WebSocketHandler\GetCommands\Tasks\GetItemListTask.cs" />
-    <Compile Include="WebSocketHandler\EncodingHelper.cs" />
-    <Compile Include="WebSocketHandler\GetCommands\GetConfigHandler.cs" />
-    <Compile Include="WebSocketHandler\IWebSocketResponce.cs" />
-    <Compile Include="WebSocketHandler\IWebSocketRequestHandler.cs" />
-    <Compile Include="WebSocketHandler\GetCommands\Events\PokemonListResponce.cs" />
-    <Compile Include="WebSocketHandler\GetCommands\Helpers\PokemonListWeb.cs" />
-    <Compile Include="WebSocketHandler\GetCommands\GetPokemonListHandler.cs" />
-    <Compile Include="WebSocketHandler\GetCommands\Tasks\GetPokemonListTask.cs" />
-    <Compile Include="WebSocketHandler\WebSocketEventManager.cs" />
-    <Compile Include="WebSocketInterface.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -377,15 +321,15 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FeroxRev\PokemonGo.RocketAPI.csproj">
+    <ProjectReference Include="$(SolutionDir)\FeroxRev\PokemonGo.RocketAPI.csproj">
       <Project>{05d2da44-1b8e-4cf7-94ed-4d52451cd095}</Project>
       <Name>PokemonGo.RocketAPI</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PoGo.NecroBot.Logic\PoGo.NecroBot.Logic.csproj">
+    <ProjectReference Include="$(SolutionDir)\PoGo.NecroBot.Logic\PoGo.NecroBot.Logic.csproj">
       <Project>{0739E40D-C589-4AEB-93E5-EE8CD6773C60}</Project>
       <Name>PoGo.NecroBot.Logic</Name>
     </ProjectReference>
-    <ProjectReference Include="..\POGOProtos\POGOProtos.csproj">
+    <ProjectReference Include="$(SolutionDir)\POGOProtos\POGOProtos.csproj">
       <Project>{a03a7bb2-4f0b-467b-84b2-9a76e6aae6fb}</Project>
       <Name>POGOProtos</Name>
     </ProjectReference>
@@ -420,12 +364,12 @@
   <ItemGroup>
     <PublishFile Include="NecroBot2.exe.config">
       <Visible>False</Visible>
+      <PublishState>Auto</PublishState>
+      <IncludeHash>False</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Auto</PublishState>
-      <IncludeHash>False</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
   </ItemGroup>
@@ -438,10 +382,9 @@ del *.config</PostBuildEvent>
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('$(SolutionDir)\packages\Fody.1.29.4\build\dotnet\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\packages\Fody.1.29.4\build\dotnet\Fody.targets'))" />
     <Error Condition="!Exists('$(SolutionDir)\packages\Selenium.WebDriver.ChromeDriver.2.29.0\build\Selenium.WebDriver.ChromeDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\packages\Selenium.WebDriver.ChromeDriver.2.29.0\build\Selenium.WebDriver.ChromeDriver.targets'))" />
+    <Error Condition="!Exists('$(SolutionDir)\packages\Fody.2.0.6\build\netstandard1.4\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\packages\Fody.2.0.6\build\netstandard1.4\Fody.targets'))" />
   </Target>
-  <Import Project="$(SolutionDir)\packages\Fody.1.29.4\build\dotnet\Fody.targets" Condition="Exists('$(SolutionDir)\packages\Fody.1.29.4\build\dotnet\Fody.targets')" />
   <UsingTask TaskName="CosturaCleanup" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll" TaskFactory="CodeTaskFactory">
     <ParameterGroup>
       <Config Output="false" Required="true" ParameterType="Microsoft.Build.Framework.ITaskItem" />
@@ -479,6 +422,7 @@ foreach (var item in filesToCleanup)
     <CosturaCleanup Config="FodyWeavers.xml" Files="@(ReferenceCopyLocalPaths->'$(OutDir)%(DestinationSubDirectory)%(Filename)%(Extension)')" />
   </Target>
   <Import Project="$(SolutionDir)\packages\Selenium.WebDriver.ChromeDriver.2.29.0\build\Selenium.WebDriver.ChromeDriver.targets" Condition="Exists('$(SolutionDir)\packages\Selenium.WebDriver.ChromeDriver.2.29.0\build\Selenium.WebDriver.ChromeDriver.targets')" />
+  <Import Project="$(SolutionDir)\packages\Fody.2.0.6\build\netstandard1.4\Fody.targets" Condition="Exists('$(SolutionDir)\packages\Fody.2.0.6\build\netstandard1.4\Fody.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

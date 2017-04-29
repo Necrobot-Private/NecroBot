@@ -682,7 +682,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                         break;
 
                     case 22:
-                        if (settings["PokemonsTransferFilter"] != null && settings["PokemonsTransferFilter"] != null)
+                        if (settings["PokemonsTransferFilter"] != null)
                         {
                             foreach (var x in settings["PokemonsTransferFilter"])
                             {
@@ -692,6 +692,19 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                                 if (filter["KeepMaxDuplicatePokemon"] == null)
                                     filter["KeepMaxDuplicatePokemon"] = 1000;
                             }
+                        }
+                        break;
+
+                    case 23:
+                        if (settings["PokeStopConfig"] != null)
+                        {
+                            settings["PokeStopConfig"]["PokeStopLimit"] = 700;
+                            Logger.Write($"PokeStopLimit changed to {settings["PokeStopConfig"]["PokeStopLimit"]}", LogLevel.Info);
+                        }
+                        if (settings["PokemonConfig"] != null)
+                        {
+                            settings["PokemonConfig"]["CatchPokemonLimit"] = 500;
+                            Logger.Write($"CatchPokemonLimit changed to {settings["PokemonConfig"]["CatchPokemonLimit"]}", LogLevel.Info);
                         }
                         break;
                 }
