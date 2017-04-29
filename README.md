@@ -2,7 +2,7 @@
 [![Github All Releases](https://img.shields.io/github/downloads/Necrobot-Private/NecroBot/total.svg?maxAge=258)](https://github.com/Necrobot-Private/NecroBot/releases)
 [![GitHub license](https://img.shields.io/badge/license-AGPL-blue.svg)](https://raw.githubusercontent.com/Necrobot-Private/NecroBot/master/LICENSE.md)
 <br />
-[![Download Latest Version](https://img.shields.io/badge/Download-1.0.056-yellowgreen.svg) ](https://github.com/Necrobot-Private/NecroBot/releases/tag/v1.0.0.156)
+[![Download Latest Version](https://img.shields.io/badge/Download-1.0.059-yellowgreen.svg) ](https://github.com/Necrobot-Private/NecroBot/releases/tag/v1.0.0.159)
 
 <h1>Necrobot2 is now compatible with 0.61.0 API.</h1>
 
