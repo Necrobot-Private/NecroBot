@@ -48,7 +48,8 @@
     <PlatformTarget>x64</PlatformTarget>
     <OutputPath>bin\x64\Release\</OutputPath>
     <Optimize>true</Optimize>
-    <DebugType>None</DebugType>
+    <DebugType>pdbonly</DebugType>
+	<DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Ico.ico</ApplicationIcon>
