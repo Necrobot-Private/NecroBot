@@ -174,7 +174,7 @@
                     <Setter Property="Padding" Value="3" />
                 </Style>
             </TabControl.Resources>
-            <TabItem Name="tabAccounts">
+            <TabItem Name="tabAccounts" Width="80" Height="70">
                 <TabItem.Header>
                     <Image x:Name="accountsIMG" Source="Resources/Accounts/AccountsImage.png" Width="60" RenderTransformOrigin="0.5,0.5" Height="60" >
                         <Image.RenderTransform>
@@ -218,7 +218,7 @@
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>
-            <TabItem Name="tabBrowser">
+            <TabItem Name="tabBrowser" Width="80" Height="70">
                 <TabItem.Header>
                     <Image x:Name="browserIMG" Source="Resources/Hub/HubImage.png" Width="60" RenderTransformOrigin="0.5,0.5" Height="60" >
                         <Image.RenderTransform>
@@ -235,7 +235,7 @@
                     <wpf:WPFBrowserView x:Name="webView" BrowserType="HEAVYWEIGHT"/>
                 </Grid>
             </TabItem>
-            <TabItem Name="tabMap">
+            <TabItem Name="tabMap" Width="80" Height="70">
                 <TabItem.Header>
                     <Image x:Name="mapIMG" Source="Resources/Map/MapImage.png" Width="60" RenderTransformOrigin="0.5,0.5" Height="60" >
                         <Image.RenderTransform>
@@ -259,13 +259,13 @@
                     <local:SidebarControl Visibility="Visible" DataContext="{Binding Path=Sidebar}" x:Name="sidebarControl" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinWidth="200" />
                 </Grid>
             </TabItem>
-            <TabItem x:Name="tabSniper">
+            <TabItem x:Name="tabSniper" Width="80" Height="70">
                 <TabItem.Header>
                     <Image x:Name="sniperIMG" Source="Resources/Sniper/SniperImage.png" Width="60" RenderTransformOrigin="0.5,0.5" Height="60" />
                 </TabItem.Header>
                 <local:SniperControl x:Name="ctrlSniper" DataContext="{Binding Path=SnipeList}" />
             </TabItem>
-            <TabItem x:Name="tabConsole" IsSelected="True">
+            <TabItem x:Name="tabConsole" IsSelected="True" Width="80" Height="70">
                 <TabItem.Header>
                     <Image x:Name="consoleIMG" Source="Resources/Console/ConsoleImage.png" Width="60" RenderTransformOrigin="0.5,0.5" Height="60" >
                         <Image.RenderTransform>
@@ -323,9 +323,9 @@
                 </TabItem.Header>
                 <local:ItemsInventory DataContext="{Binding Path=ItemsList}" x:Name="ctrlItemControl" />
             </TabItem>
-            <TabItem Name="tabEggs" Width="80" Height="80">
+            <TabItem Name="tabEggs" Width="80" Height="70">
                 <TabItem.Header>
-                    <StackPanel Orientation="Vertical" RenderTransformOrigin="0.5,0.5" Width="80">
+                    <StackPanel Orientation="Vertical" RenderTransformOrigin="0.5,0.5">
                         <StackPanel.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform/>
