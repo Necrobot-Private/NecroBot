@@ -35,6 +35,9 @@ namespace PoGo.NecroBot.Logic.Common
         [Description("Show Console")]
         public string ShowConsole { get; set; }
 
+        [Description("Reset Layout")]
+        public string ResetLayout { get; set; }
+
         [Description("Switch")]
         public string Switch { get; set; }
 

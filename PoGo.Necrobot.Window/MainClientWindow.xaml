@@ -71,6 +71,13 @@
             </Button>
             <ComboBox x:Name="Theme" IsEditable="True" IsReadOnly="True" SelectionChanged="Theme_SelectionChanged" Background="{x:Null}" BorderBrush="{x:Null}" Width="120" ToolTip="Set Theme" />
             <ComboBox x:Name="Scheme" IsEditable="True" IsReadOnly="True" SelectionChanged="Scheme_SelectionChanged" Background="{x:Null}" BorderBrush="{x:Null}" Width="120" ToolTip="Set Scheme" />
+            <Button x:Name="DefaultReset" Click="DefaultReset_Click">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Margin="4 0 0 0" x:Name="defaultResetText"
+                               VerticalAlignment="Center"
+                               Text="{Binding Source=ResetLayout, Converter={StaticResource ResourceKey=I18NConveter}}" />
+                </StackPanel>
+            </Button>
             <Button x:Name="BrowserToggle" Click="BrowserToggle_Click">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Margin="4 0 0 0" x:Name="browserMenuText"
