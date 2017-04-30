@@ -23,6 +23,7 @@ using System.Net.Http;
 using PoGo.NecroBot.Logic;
 using PoGo.NecroBot.Logic.Model.Settings;
 using static PoGo.NecroBot.Logic.MultiAccountManager;
+using System.Windows.Media;
 
 namespace PoGo.Necrobot.Window
 {
@@ -31,29 +32,56 @@ namespace PoGo.Necrobot.Window
     /// </summary>
     public partial class MainClientWindow : MetroWindow
     {
-        private static Dictionary<LogLevel, string> ConsoleColors = new Dictionary<LogLevel, string>()
+        private static Dictionary<LogLevel, string> DefaultConsoleColors = new Dictionary<LogLevel, string>()
             {
-                { LogLevel.Error, "#dc322f" },
-                { LogLevel.Caught, "#859900" },
-                { LogLevel.Info, "#268bd2" } ,
-                { LogLevel.Warning, "#b58900" } ,
-                { LogLevel.Pokestop, "#2aa198" }  ,
-                { LogLevel.Farming, "#d33682" },
-                { LogLevel.Sniper, "#93a1a1" },
-                { LogLevel.Recycling, "#cb4b16" },
-                { LogLevel.Flee, "#b58900" },
-                { LogLevel.Transfer, "#586e75" },
-                { LogLevel.Evolve, "#586e75" },
-                { LogLevel.Berry, "#b58900" },
-                { LogLevel.Egg, "#b58900" },
-                { LogLevel.Debug, "#2aa198" },
-                { LogLevel.Update, "#fdf6e3" },
-                { LogLevel.New, "#859900" },
-                { LogLevel.SoftBan, "#dc322f" },
-                { LogLevel.LevelUp, "#d33682" },
-                { LogLevel.Gym, "#d33682" },
-                { LogLevel.Service , "#fdf6e3" }
+                { LogLevel.Error, "Red" },
+                { LogLevel.Caught, "Green" },
+                { LogLevel.Info, "DarkCyan" } ,
+                { LogLevel.Warning, "DarkYellow" } ,
+                { LogLevel.Pokestop, "Cyan" }  ,
+                { LogLevel.Farming, "Magenta" },
+                { LogLevel.Sniper, "White" },
+                { LogLevel.Recycling, "DarkMagenta" },
+                { LogLevel.Flee, "DarkYellow" },
+                { LogLevel.Transfer, "DarkGreen" },
+                { LogLevel.Evolve, "DarkGreen" },
+                { LogLevel.Berry, "DarkYellow" },
+                { LogLevel.Egg, "DarkYellow" },
+                { LogLevel.Debug, "Gray" },
+                { LogLevel.Update, "White" },
+                { LogLevel.New, "Green" },
+                { LogLevel.SoftBan, "Red" },
+                { LogLevel.LevelUp, "Magenta" },
+                { LogLevel.Gym, "Magenta" },
+                { LogLevel.Service , "White" }
             };
+        private static Dictionary<LogLevel, string> SolarizedConsoleColors = new Dictionary<LogLevel, string>()
+        {
+                { LogLevel.Error, "#DC322F" },
+                { LogLevel.Caught, "#859900" },
+                { LogLevel.Info, "#CB4B16" } ,
+                { LogLevel.Warning, "#B58900" } ,
+                { LogLevel.Pokestop, "#2AA198" }  ,
+                { LogLevel.Farming, "#D33682" },
+                { LogLevel.Sniper, "#657b83" },
+                { LogLevel.Recycling, "#6C71C4" },
+                { LogLevel.Flee, "#B58900" },
+                { LogLevel.Transfer, "#268BD2" },
+                { LogLevel.Evolve, "#268BD2" },
+                { LogLevel.Berry, "##B58900" },
+                { LogLevel.Egg, "#B58900" },
+                { LogLevel.Debug, "#93A1A1" },
+                { LogLevel.Update, "#657b83" },
+                { LogLevel.New, "#859900" },
+                { LogLevel.SoftBan, "#DC322F" },
+                { LogLevel.LevelUp, "#D33682" },
+                { LogLevel.Gym, "#D33682" },
+                { LogLevel.Service , "#657b83" }
+        };
+
+        private static SolidColorBrush DarkSolarizedBackground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#002B36"));
+        private static SolidColorBrush LightSolarizedBackground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FDF6E3"));
+        private static SolidColorBrush ConsoleWhite = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#657b83"));
 
         public MainClientWindow()
         {
@@ -101,12 +129,22 @@ namespace PoGo.Necrobot.Window
             }
             ChangeThemeTo(Settings.Default.Theme);
             ChangeSchemeTo(Settings.Default.Scheme);
+            ConsoleThemer.ItemsSource = new List<string> { "Default", "Low Contrast (Dark)", "Low Contrast (Light)" };
+            ConsoleThemer.SelectedValue = Settings.Default.ConsoleTheme;
+            ConsoleTheming();
         }
         private DateTime lastClearLog = DateTime.Now;
         public void LogToConsoleTab(string message, LogLevel level, string color)
-        { 
-            if (string.IsNullOrEmpty(color) || color == "Black")
-                color = ConsoleColors[level];
+        {
+            if (string.IsNullOrEmpty(color) || color == "Black" & Settings.Default.ConsoleTheme != "Default")
+            {
+                if (string.IsNullOrEmpty(color) || color == "Black" & Settings.Default.ConsoleTheme == "Low Contrast (Dark)" || Settings.Default.ConsoleTheme == "Low Contrast (Light)")
+                {
+                    color = SolarizedConsoleColors[level];
+                }
+            }
+            else
+                color = DefaultConsoleColors[level];
 
             consoleLog.Dispatcher.BeginInvoke(new Action(() =>
             {
@@ -308,7 +346,7 @@ namespace PoGo.Necrobot.Window
                 }
             }
         }
-        
+
         private void BtnDonate_Click(object sender, RoutedEventArgs e)
         {
             Process.Start("http://snipe.necrobot2.com?donate");
@@ -336,7 +374,7 @@ namespace PoGo.Necrobot.Window
                         return;
 
                     var xml = await responseContent.Content.ReadAsStringAsync();
-                    
+
                     var feed = SyndicationFeed.Load(XmlReader.Create(new StringReader(xml)));
                     lastTimeLoadHelp = DateTime.Now;
 
@@ -358,7 +396,7 @@ namespace PoGo.Necrobot.Window
         private void Hyperlink_Click(object sender, RoutedEventArgs e)
         {
             var hlink = sender as Hyperlink;
-            
+
             Process.Start(hlink.NavigateUri.ToString());
             popHelpArticles.IsOpen = false;
         }
@@ -367,7 +405,7 @@ namespace PoGo.Necrobot.Window
         {
             Application.Current.Shutdown();
         }
-        
+
         private void MetroWindow_Initialized(object sender, EventArgs e)
         {
             if(SystemParameters.PrimaryScreenWidth<1366)
@@ -413,6 +451,54 @@ namespace PoGo.Necrobot.Window
         private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Process.GetCurrentProcess().Kill();
+        }
+
+        private void ConsoleThemer_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string selectedTheme = (string)ConsoleThemer.SelectedValue;
+            if (selectedTheme != "Default")
+            {
+                if (selectedTheme == "Low Contrast (Dark)")
+                {
+                    Settings.Default.ConsoleTheme = "Low Contrast (Dark)";
+                }
+                if (selectedTheme == "Low Contrast (Light)")
+                {
+                    Settings.Default.ConsoleTheme = "Low Contrast (Light)";
+                }
+            }
+            else
+            {
+                Settings.Default.ConsoleTheme = "Default";
+            }
+            ConsoleTheming();
+            Console.Clear();
+        }
+        private void ConsoleTheming()
+        {
+
+            if (Settings.Default.ConsoleTheme != "Default")
+            {
+                if (Settings.Default.ConsoleTheme == "Low Contrast (Dark)")
+                {
+                    txtCmdInput.Background = DarkSolarizedBackground;
+                    txtCmdInput.Foreground = ConsoleWhite;
+                    consoleLog.Background = DarkSolarizedBackground;
+                }
+                if (Settings.Default.ConsoleTheme == "Low Contrast (Light)")
+                {
+                    txtCmdInput.Background = LightSolarizedBackground;
+                    txtCmdInput.Foreground = ConsoleWhite;
+                    consoleLog.Background = LightSolarizedBackground;
+                }
+            }
+            else
+            {
+                txtCmdInput.Background = Brushes.Black;
+                txtCmdInput.Foreground = Brushes.White;
+                consoleLog.Background = Brushes.Black;
+            }
+            Settings.Default.Save();
         }
     }
 }
