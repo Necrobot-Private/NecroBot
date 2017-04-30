@@ -36,13 +36,13 @@ namespace PoGo.Necrobot.Window
     public partial class MainClientWindow : MetroWindow
     {
         Timer timer = new Timer();
-        private static Dictionary<LogLevel, string> ConsoleColors = new Dictionary<LogLevel, string>()
-            {
+        private static Dictionary<LogLevel, string> ConsoleColors_Dark = new Dictionary<LogLevel, string>()
+        {
                 { LogLevel.Error, "#dc322f" },
                 { LogLevel.Caught, "#859900" },
-                { LogLevel.Info, "#268bd2" } ,
-                { LogLevel.Warning, "#b58900" } ,
-                { LogLevel.Pokestop, "#2aa198" }  ,
+                { LogLevel.Info, "#268bd2" },
+                { LogLevel.Warning, "#b58900" },
+                { LogLevel.Pokestop, "#2aa198" },
                 { LogLevel.Farming, "#d33682" },
                 { LogLevel.Sniper, "#93a1a1" },
                 { LogLevel.Recycling, "#cb4b16" },
@@ -58,7 +58,31 @@ namespace PoGo.Necrobot.Window
                 { LogLevel.LevelUp, "#d33682" },
                 { LogLevel.Gym, "#d33682" },
                 { LogLevel.Service , "#fdf6e3" }
-            };
+        };
+
+        private static Dictionary<LogLevel, string> ConsoleColors_Light = new Dictionary<LogLevel, string>()
+        {
+                { LogLevel.Error, "Red" },
+                { LogLevel.Caught, "Green" },
+                { LogLevel.Info, "DarkCyan" },
+                { LogLevel.Warning, "DarkYellow" },
+                { LogLevel.Pokestop, "Cyan" },
+                { LogLevel.Farming, "Magenta" },
+                { LogLevel.Sniper, "White" },
+                { LogLevel.Recycling, "DarkMagenta" },
+                { LogLevel.Flee, "DarkYellow" },
+                { LogLevel.Transfer, "DarkGreen" },
+                { LogLevel.Evolve, "DarkGreen" },
+                { LogLevel.Berry, "DarkYellow" },
+                { LogLevel.Egg, "DarkYellow" },
+                { LogLevel.Debug, "Gray" },
+                { LogLevel.Update, "White" },
+                { LogLevel.New, "Green" },
+                { LogLevel.SoftBan, "Red" },
+                { LogLevel.LevelUp, "Magenta" },
+                { LogLevel.Gym, "Magenta" },
+                { LogLevel.Service , "White" }
+        };
 
         public MainClientWindow()
         {
@@ -102,6 +126,8 @@ namespace PoGo.Necrobot.Window
             Theme.ItemsSource = new List<string> { "Red", "Green", "Blue", "Purple", "Orange", "Lime", "Emerald", "Teal", "Cyan", "Cobalt", "Indigo", "Violet", "Pink", "Magenta", "Crimson", "Amber", "Yellow", "Brown", "Olive", "Steel", "Mauve", "Taupe", "Sienna" };
             var LightColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE5E5E5"));
             var DarkColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#252525"));
+            var LightConsole = Brushes.Black;
+            var DarkConsole = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#002B36"));
 
             //=============THEME & SCHEME STARTUP CONFIGURATION=============\\
             if (Settings.Default.Theme == "")
@@ -129,6 +155,9 @@ namespace PoGo.Necrobot.Window
                 tabEggs.Background = LightColor;
                 tabPokemons.Foreground = Brushes.Black;
                 tabItems.Foreground = Brushes.Black;
+
+                txtCmdInput.Background = LightConsole;
+                consoleLog.Background = LightConsole;
             }
             else if (Settings.Default.Scheme == "Dark")
             {
@@ -142,6 +171,9 @@ namespace PoGo.Necrobot.Window
                 tabEggs.Background = DarkColor;
                 tabPokemons.Foreground = Brushes.White;
                 tabItems.Foreground = Brushes.White;
+
+                txtCmdInput.Background = DarkConsole;
+                consoleLog.Background = DarkConsole;
             }
             var AccountsBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Accounts/AccountsIMG_{Settings.Default.Theme}.png"));
             var ConsoleBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Console/ConsoleIMG_{Settings.Default.Theme}.png"));
@@ -178,7 +210,7 @@ namespace PoGo.Necrobot.Window
         {
             Application.Current.Dispatcher.Invoke(delegate
             {
-                if (tabPokemons.IsMouseOver | tabPokemons.IsSelected | Settings.Default.Scheme == "Light")
+            if (tabPokemons.IsMouseOver | tabPokemons.IsSelected | Settings.Default.Scheme == "Light")
                 tabPokemons.Foreground = Brushes.Black;
             else if (!tabPokemons.IsMouseOver | !tabPokemons.IsSelected | Settings.Default.Scheme == "Dark")
                 tabPokemons.Foreground = Brushes.White;
@@ -228,10 +260,12 @@ namespace PoGo.Necrobot.Window
         private DateTime lastClearLog = DateTime.Now;
         public void LogToConsoleTab(string message, LogLevel level, string color)
         {
-            if (string.IsNullOrEmpty(color) || color == "Black")
-                color = ConsoleColors[level];
+            if (string.IsNullOrEmpty(color) || color == "Black" & Settings.Default.Scheme == "Light")
+                color = ConsoleColors_Light[level];
+            else if (string.IsNullOrEmpty(color) || color == "Black" & Settings.Default.Scheme == "Dark")
+                color = ConsoleColors_Dark[level];
 
-            consoleLog.Dispatcher.BeginInvoke(new Action(() =>
+                consoleLog.Dispatcher.BeginInvoke(new Action(() =>
             {
                 if (lastClearLog.AddMinutes(15) < DateTime.Now)
                 {
@@ -378,6 +412,8 @@ namespace PoGo.Necrobot.Window
             string Selection = Convert.ToString(Scheme.SelectedValue);
             var LightColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE5E5E5"));
             var DarkColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#252525"));
+            var LightConsole = Brushes.Black;
+            var DarkConsole = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#002B36"));
 
             if (Selection == "Light")
             {
@@ -392,6 +428,9 @@ namespace PoGo.Necrobot.Window
                 tabPokemons.Background = LightColor;
                 tabItems.Background = LightColor;
                 tabEggs.Background = LightColor;
+
+                txtCmdInput.Background = LightConsole;
+                consoleLog.Background = LightConsole;
             }
             else if (Selection == "Dark")
             {
@@ -406,6 +445,9 @@ namespace PoGo.Necrobot.Window
                 tabPokemons.Background = DarkColor;
                 tabItems.Background = DarkColor;
                 tabEggs.Background = DarkColor;
+
+                txtCmdInput.Background = DarkConsole;
+                consoleLog.Background = DarkConsole;
             }
             Settings.Default.Save();
             ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(Settings.Default.Theme), ThemeManager.GetAppTheme(Settings.Default.SchemeValue));
