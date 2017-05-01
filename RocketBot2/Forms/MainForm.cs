@@ -1216,7 +1216,28 @@ namespace RocketBot2.Forms
                         Console.ReadKey();
                         Environment.Exit(0);
                     }
-                    //TODO - test api call to valida auth key
+                    HttpClient client = new HttpClient();
+                    client.DefaultRequestHeaders.Add("X-AuthToken", apiCfg.AuthAPIKey);
+                    HttpResponseMessage response = client.PostAsync("https://pokehash.buddyauth.com/api/v131_0/hash", null).Result;
+                    try
+                    {
+                        string AuthKey = response.Headers.GetValues("X-AuthToken").FirstOrDefault();
+                        string MaxRequestCount = response.Headers.GetValues("X-MaxRequestCount").FirstOrDefault();
+                        DateTime AuthTokenExpiration = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(Convert.ToDouble(response.Headers.GetValues("X-AuthTokenExpiration").FirstOrDefault()));
+                        TimeSpan Expiration = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(Convert.ToDouble(response.Headers.GetValues("X-AuthTokenExpiration").FirstOrDefault())) - DateTime.UtcNow;
+                        string Result = string.Format("Key: {0}\r\nRPM: {1}\r\nExpiration Date: {2}/{3}/{4}", AuthKey, MaxRequestCount, AuthTokenExpiration.Day, AuthTokenExpiration.Month, AuthTokenExpiration.Year);
+                        Logger.Write(Result, LogLevel.Info);
+                        AuthKey = null;
+                        MaxRequestCount = null;
+                        Expiration = new TimeSpan();
+                        Result = null;
+                    }
+                    catch
+                    {
+                        Logger.Write("The HashKey is invalid or has expired, please press any key to exit and correct you auth.json, \r\n The Pogodev API key can be purchased at - https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer", LogLevel.Error);
+                        Console.ReadKey();
+                        Environment.Exit(0);
+                    }
                 }
                 else if (apiCfg.UseLegacyAPI)
                 {
