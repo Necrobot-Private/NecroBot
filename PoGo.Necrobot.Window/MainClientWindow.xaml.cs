@@ -36,31 +36,31 @@ namespace PoGo.Necrobot.Window
     public partial class MainClientWindow : MetroWindow
     {
         Timer timer = new Timer();
-        private static Dictionary<LogLevel, string> ConsoleColors_Dark = new Dictionary<LogLevel, string>()
+        private static Dictionary<LogLevel, string> ConsoleColors_Solarized = new Dictionary<LogLevel, string>()
         {
-                { LogLevel.Error, "#dc322f" },
+                { LogLevel.Error, "#DC322F" },
                 { LogLevel.Caught, "#859900" },
-                { LogLevel.Info, "#268bd2" },
-                { LogLevel.Warning, "#b58900" },
-                { LogLevel.Pokestop, "#2aa198" },
-                { LogLevel.Farming, "#d33682" },
-                { LogLevel.Sniper, "#93a1a1" },
-                { LogLevel.Recycling, "#cb4b16" },
-                { LogLevel.Flee, "#b58900" },
-                { LogLevel.Transfer, "#586e75" },
-                { LogLevel.Evolve, "#586e75" },
-                { LogLevel.Berry, "#b58900" },
-                { LogLevel.Egg, "#b58900" },
-                { LogLevel.Debug, "#2aa198" },
-                { LogLevel.Update, "#fdf6e3" },
+                { LogLevel.Info, "#CB4B16" } ,
+                { LogLevel.Warning, "#B58900" } ,
+                { LogLevel.Pokestop, "#2AA198" }  ,
+                { LogLevel.Farming, "#D33682" },
+                { LogLevel.Sniper, "#657b83" },
+                { LogLevel.Recycling, "#6C71C4" },
+                { LogLevel.Flee, "#B58900" },
+                { LogLevel.Transfer, "#268BD2" },
+                { LogLevel.Evolve, "#268BD2" },
+                { LogLevel.Berry, "##B58900" },
+                { LogLevel.Egg, "#B58900" },
+                { LogLevel.Debug, "#93A1A1" },
+                { LogLevel.Update, "#657b83" },
                 { LogLevel.New, "#859900" },
-                { LogLevel.SoftBan, "#dc322f" },
-                { LogLevel.LevelUp, "#d33682" },
-                { LogLevel.Gym, "#d33682" },
-                { LogLevel.Service , "#fdf6e3" }
+                { LogLevel.SoftBan, "#DC322F" },
+                { LogLevel.LevelUp, "#D33682" },
+                { LogLevel.Gym, "#D33682" },
+                { LogLevel.Service , "#657b83" }
         };
 
-        private static Dictionary<LogLevel, string> ConsoleColors_Light = new Dictionary<LogLevel, string>()
+        private static Dictionary<LogLevel, string> ConsoleColors_Default = new Dictionary<LogLevel, string>()
         {
                 { LogLevel.Error, "Red" },
                 { LogLevel.Caught, "Green" },
@@ -97,8 +97,8 @@ namespace PoGo.Necrobot.Window
             DataContext = datacontext;
             txtCmdInput.Text = TinyIoCContainer.Current.Resolve<UITranslation>().InputCommand;
 
-            Width = Settings.Default.Width;
-            Height = Settings.Default.Height;
+            // Width = Settings.Default.Width; - TODO: Make This Work Properly
+            // Height = Settings.Default.Height; - ^^
         }
 
         private void InitBrowser()
@@ -124,79 +124,34 @@ namespace PoGo.Necrobot.Window
             // Populate ComboBox's w/ Available Themes & Schemes
             Scheme.ItemsSource = new List<string> { "Light", "Dark" };
             Theme.ItemsSource = new List<string> { "Red", "Green", "Blue", "Purple", "Orange", "Lime", "Emerald", "Teal", "Cyan", "Cobalt", "Indigo", "Violet", "Pink", "Magenta", "Crimson", "Amber", "Yellow", "Brown", "Olive", "Steel", "Mauve", "Taupe", "Sienna" };
-            var LightColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE5E5E5"));
-            var DarkColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#252525"));
-            var LightConsole = Brushes.Black;
-            var DarkConsole = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#002B36"));
+            var LightTabColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE5E5E5"));
+            var DarkTabColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#252525"));
+            var LightConsoleBackground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FDF6E3"));
+            var DarkConsoleBackground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#002B36"));
+            var ConsoleWhite = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#657B83"));
 
             //=============THEME & SCHEME STARTUP CONFIGURATION=============\\
-            if (Settings.Default.Theme == "")
+            if (Settings.Default.Theme == "" || Settings.Default.ResetLayout == true)
             {
                 Settings.Default.Theme = "Blue";
                 Settings.Default.Save();
                 Settings.Default.Reload();
             }
-            else if (Settings.Default.Scheme == "")
+            else if (Settings.Default.Scheme == "" || Settings.Default.ResetLayout == true)
             {
                 Settings.Default.Scheme = "Light";
                 Settings.Default.SchemeValue = "BaseLight";
                 Settings.Default.Save();
                 Settings.Default.Reload();
             }
-            if (Settings.Default.Scheme == "Light")
-            {
-                tabAccounts.Background = LightColor;
-                tabBrowser.Background = LightColor;
-                tabMap.Background = LightColor;
-                tabSniper.Background = LightColor;
-                tabConsole.Background = LightColor;
-                tabPokemons.Background = LightColor;
-                tabItems.Background = LightColor;
-                tabEggs.Background = LightColor;
-                tabPokemons.Foreground = Brushes.Black;
-                tabItems.Foreground = Brushes.Black;
-
-                txtCmdInput.Background = LightConsole;
-                consoleLog.Background = LightConsole;
-            }
-            else if (Settings.Default.Scheme == "Dark")
-            {
-                tabAccounts.Background = DarkColor;
-                tabBrowser.Background = DarkColor;
-                tabMap.Background = DarkColor;
-                tabSniper.Background = DarkColor;
-                tabConsole.Background = DarkColor;
-                tabPokemons.Background = DarkColor;
-                tabItems.Background = DarkColor;
-                tabEggs.Background = DarkColor;
-                tabPokemons.Foreground = Brushes.White;
-                tabItems.Foreground = Brushes.White;
-
-                txtCmdInput.Background = DarkConsole;
-                consoleLog.Background = DarkConsole;
-            }
-            var AccountsBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Accounts/AccountsIMG_{Settings.Default.Theme}.png"));
-            var ConsoleBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Console/ConsoleIMG_{Settings.Default.Theme}.png"));
-            var EggsBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Eggs/EggsIMG_{Settings.Default.Theme}.png"));
-            var HubBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Hub/HubIMG_{Settings.Default.Theme}.png"));
-            var ItemsBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Items/ItemsIMG_{Settings.Default.Theme}.png"));
-            var MapBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Map/MapIMG_{Settings.Default.Theme}.png"));
-            var PokemonBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Pokemon/PokemonIMG_{Settings.Default.Theme}.png"));
-            var SniperBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Sniper/SniperIMG_{Settings.Default.Theme}.png"));
-            accountsIMG.Source = AccountsBitmap;
-            consoleIMG.Source = ConsoleBitmap;
-            eggsIMG.Source = EggsBitmap;
-            browserIMG.Source = HubBitmap;
-            itemsIMG.Source = ItemsBitmap;
-            mapIMG.Source = MapBitmap;
-            pokemonIMG.Source = PokemonBitmap;
-            sniperIMG.Source = SniperBitmap;
+            
             var SchemeValue = "Base" + Settings.Default.Scheme;
             Theme.SelectedValue = Settings.Default.Theme;
             Scheme.SelectedValue = Settings.Default.Scheme;
             Settings.Default.Save();
 
-            ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(Settings.Default.Theme), ThemeManager.GetAppTheme(Settings.Default.SchemeValue));
+            ChangeThemeTo(Settings.Default.Theme);
+            ChangeSchemeTo(Settings.Default.Scheme);
 
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             LoadHelpArticleAsync();
@@ -208,16 +163,21 @@ namespace PoGo.Necrobot.Window
 
         private void TimerTick(object sender, ElapsedEventArgs e)
         {
+            var Theme = Settings.Default.Theme;
+            var Scheme = Settings.Default.Scheme;
             Application.Current.Dispatcher.Invoke(delegate
             {
-            if (tabPokemons.IsMouseOver | tabPokemons.IsSelected | Settings.Default.Scheme == "Light")
-                tabPokemons.Foreground = Brushes.Black;
-            else if (!tabPokemons.IsMouseOver | !tabPokemons.IsSelected | Settings.Default.Scheme == "Dark")
-                tabPokemons.Foreground = Brushes.White;
-            if (tabItems.IsMouseOver | tabItems.IsSelected | Settings.Default.Scheme == "Light")
-                tabItems.Foreground = Brushes.Black;
-            else if (!tabItems.IsMouseOver | !tabItems.IsSelected | Settings.Default.Scheme == "Dark")
-                tabItems.Foreground = Brushes.White;
+                if (tabPokemons.IsMouseOver | tabPokemons.IsSelected | Settings.Default.Scheme == "Light")
+                    tabPokemons.Foreground = Brushes.Black;
+                else if (!tabPokemons.IsMouseOver | !tabPokemons.IsSelected | Settings.Default.Scheme == "Dark")
+                    tabPokemons.Foreground = Brushes.White;
+                if (tabItems.IsMouseOver | tabItems.IsSelected | Settings.Default.Scheme == "Light")
+                    tabItems.Foreground = Brushes.Black;
+                else if (!tabItems.IsMouseOver | !tabItems.IsSelected | Settings.Default.Scheme == "Dark")
+                    tabItems.Foreground = Brushes.White;
+                if (Theme != Settings.Default.Theme & Settings.Default.ResetLayout == true)
+                    Settings.Default.ResetLayout = false;
+                Settings.Default.Save();
             });
         }
 
@@ -225,48 +185,67 @@ namespace PoGo.Necrobot.Window
         {
             var translator = TinyIoCContainer.Current.Resolve<UITranslation>();
             //=============DotNetBrowser Saving=============\\
-            if (Settings.Default.BrowserToggled)
+            if (!Settings.Default.BrowserToggled)
             {
-                InitBrowser();
-                browserMenuText.Text = translator.DisableHub;
-            }
-            else if (!Settings.Default.BrowserToggled)
-            {
-                browserMenuText.Text = translator.EnableHub;
+                if (tabBrowser.IsSelected)
+                    tabConsole.IsSelected = true;
+
                 tabBrowser.IsEnabled = false;
+                browserMenuText.Text = translator.EnableHub;
+                webView.Browser.Dispose();
+                webView.Dispose();
             }
-        }
-
-        public void ConsoleWindow()
-        {
-            var translator = TinyIoCContainer.Current.Resolve<UITranslation>();
-
-            if (Settings.Default.ConsoleToggled == true)
+            else if (Settings.Default.BrowserToggled)
+            {
+                tabBrowser.IsEnabled = true;
+                browserMenuText.Text = translator.DisableHub;
+                InitBrowser();
+            }
+            //===============Console Saving===================\\
+            if (Settings.Default.ConsoleToggled)
             {
                 consoleMenuText.Text = translator.HideConsole;
                 ConsoleHelper.ShowConsoleWindow();
                 Settings.Default.ConsoleText = "Hide Console";
             }
-            if (Settings.Default.ConsoleToggled == false)
+            if (!Settings.Default.ConsoleToggled)
             {
                 consoleMenuText.Text = translator.ShowConsole;
                 ConsoleHelper.HideConsoleWindow();
                 Settings.Default.ConsoleText = "Show Console";
             }
+            //======Reset Defaults======\\
+            if (Settings.Default.ResetLayout)
+            {
+                Theme.SelectedValue = "Blue";
+                Scheme.SelectedValue = "Light";
+                ChangeThemeTo("Blue");
+                ChangeSchemeTo("Light");
+                DefaultReset.IsEnabled = false;
+            }
+            else if (!Settings.Default.ResetLayout)
+                DefaultReset.IsEnabled = true;
+
+            Settings.Default.Save();
+        }
+
+        public void ConsoleWindow()
+        {
             Settings.Default.ConsoleToggled = !Settings.Default.ConsoleToggled;
             Settings.Default.Save();
+            Sync();
         }
 
         private DateTime lastClearLog = DateTime.Now;
         public void LogToConsoleTab(string message, LogLevel level, string color)
         {
-            if (string.IsNullOrEmpty(color) || color == "Black" & Settings.Default.Scheme == "Light")
-                color = ConsoleColors_Light[level];
-            else if (string.IsNullOrEmpty(color) || color == "Black" & Settings.Default.Scheme == "Dark")
-                color = ConsoleColors_Dark[level];
+            if (string.IsNullOrEmpty(color) || color == "Black")
+                color = ConsoleColors_Solarized[level];
+            else if (string.IsNullOrEmpty(color) || color == "Black" & Settings.Default.ResetLayout == true) // TODO
+                color = ConsoleColors_Default[level];
 
                 consoleLog.Dispatcher.BeginInvoke(new Action(() =>
-            {
+                {
                 if (lastClearLog.AddMinutes(15) < DateTime.Now)
                 {
                     consoleLog.Document.Blocks.Clear();
@@ -276,7 +255,7 @@ namespace PoGo.Necrobot.Window
 
                 consoleLog.AppendText(message + "\r", color);
                 consoleLog.ScrollToEnd();
-            }));
+                }));
         }
 
         public void OnBotStartedEventHandler(ISession session, StatisticsAggregator stat)
@@ -338,56 +317,63 @@ namespace PoGo.Necrobot.Window
 
         private void Theme_SelectionChanged(object sender, RoutedEventArgs e)
         {
-            string Selection = Convert.ToString(Theme.SelectedValue);
-            if (Selection == "Red")
+            ChangeThemeTo(Convert.ToString(Theme.SelectedValue));
+        }
+
+        private void Scheme_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            ChangeSchemeTo(Convert.ToString(Scheme.SelectedValue));
+        }
+
+        private void ChangeThemeTo(string Theme)
+        {
+            if (Theme == "Red")
                 Settings.Default.Theme = "Red";
-            if (Selection == "Green")
+            if (Theme == "Green")
                 Settings.Default.Theme = "Green";
-            if (Selection == "Blue")
+            if (Theme == "Blue")
                 Settings.Default.Theme = "Blue";
-            if (Selection == "Purple")
+            if (Theme == "Purple")
                 Settings.Default.Theme = "Purple";
-            if (Selection == "Orange")
+            if (Theme == "Orange")
                 Settings.Default.Theme = "Orange";
-            if (Selection == "Lime")
+            if (Theme == "Lime")
                 Settings.Default.Theme = "Lime";
-            if (Selection == "Emerald")
+            if (Theme == "Emerald")
                 Settings.Default.Theme = "Emerald";
-            if (Selection == "Teal")
+            if (Theme == "Teal")
                 Settings.Default.Theme = "Teal";
-            if (Selection == "Cyan")
+            if (Theme == "Cyan")
                 Settings.Default.Theme = "Cyan";
-            if (Selection == "Cobalt")
+            if (Theme == "Cobalt")
                 Settings.Default.Theme = "Cobalt";
-            if (Selection == "Indigo")
+            if (Theme == "Indigo")
                 Settings.Default.Theme = "Indigo";
-            if (Selection == "Violet")
+            if (Theme == "Violet")
                 Settings.Default.Theme = "Violet";
-            if (Selection == "Pink")
+            if (Theme == "Pink")
                 Settings.Default.Theme = "Pink";
-            if (Selection == "Magenta")
+            if (Theme == "Magenta")
                 Settings.Default.Theme = "Magenta";
-            if (Selection == "Crimson")
+            if (Theme == "Crimson")
                 Settings.Default.Theme = "Crimson";
-            if (Selection == "Amber")
+            if (Theme == "Amber")
                 Settings.Default.Theme = "Amber";
-            if (Selection == "Yellow")
+            if (Theme == "Yellow")
                 Settings.Default.Theme = "Yellow";
-            if (Selection == "Brown")
+            if (Theme == "Brown")
                 Settings.Default.Theme = "Brown";
-            if (Selection == "Olive")
+            if (Theme == "Olive")
                 Settings.Default.Theme = "Olive";
-            if (Selection == "Steel")
+            if (Theme == "Steel")
                 Settings.Default.Theme = "Steel";
-            if (Selection == "Mauve")
+            if (Theme == "Mauve")
                 Settings.Default.Theme = "Mauve";
-            if (Selection == "Taupe")
+            if (Theme == "Taupe")
                 Settings.Default.Theme = "Taupe";
-            if (Selection == "Sienna")
+            if (Theme == "Sienna")
                 Settings.Default.Theme = "Sienna";
             Settings.Default.Save();
-            tabPokemons.Foreground = Brushes.Black;
-            tabItems.Foreground = Brushes.Black;
             var AccountsBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Accounts/AccountsIMG_{Settings.Default.Theme}.png"));
             var ConsoleBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Console/ConsoleIMG_{Settings.Default.Theme}.png"));
             var EggsBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Eggs/EggsIMG_{Settings.Default.Theme}.png"));
@@ -404,53 +390,66 @@ namespace PoGo.Necrobot.Window
             mapIMG.Source = MapBitmap;
             pokemonIMG.Source = PokemonBitmap;
             sniperIMG.Source = SniperBitmap;
+
             ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(Settings.Default.Theme), ThemeManager.GetAppTheme(Settings.Default.SchemeValue));
+            if (Settings.Default.ResetLayout == true)
+            {
+                ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent("Blue"), ThemeManager.GetAppTheme("BaseLight"));
+                Settings.Default.ResetLayout = false;
+            }
+            Settings.Default.Save();
+            Sync();
         }
 
-        private void Scheme_SelectionChanged(object sender, RoutedEventArgs e)
+        private void ChangeSchemeTo(string Scheme)
         {
-            string Selection = Convert.ToString(Scheme.SelectedValue);
-            var LightColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE5E5E5"));
-            var DarkColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#252525"));
-            var LightConsole = Brushes.Black;
-            var DarkConsole = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#002B36"));
+            var LightTabColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE5E5E5"));
+            var DarkTabColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#252525"));
+            var LightConsoleBackground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FDF6E3"));
+            var DarkConsoleBackground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#002B36"));
+            var ConsoleWhite = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#657B83"));
 
-            if (Selection == "Light")
+            if (Scheme == "Light")
             {
                 Settings.Default.Scheme = "Light";
                 Settings.Default.SchemeValue = "BaseLight";
 
-                tabAccounts.Background = LightColor;
-                tabBrowser.Background = LightColor;
-                tabMap.Background = LightColor;
-                tabSniper.Background = LightColor;
-                tabConsole.Background = LightColor;
-                tabPokemons.Background = LightColor;
-                tabItems.Background = LightColor;
-                tabEggs.Background = LightColor;
+                tabAccounts.Background = LightTabColor;
+                tabBrowser.Background = LightTabColor;
+                tabMap.Background = LightTabColor;
+                tabSniper.Background = LightTabColor;
+                tabConsole.Background = LightTabColor;
+                tabPokemons.Background = LightTabColor;
+                tabItems.Background = LightTabColor;
+                tabEggs.Background = LightTabColor;
 
-                txtCmdInput.Background = LightConsole;
-                consoleLog.Background = LightConsole;
+                txtCmdInput.Background = LightConsoleBackground;
+                txtCmdInput.Foreground = ConsoleWhite;
+                consoleLog.Background = LightConsoleBackground;
             }
-            else if (Selection == "Dark")
+            else if (Scheme == "Dark")
             {
                 Settings.Default.Scheme = "Dark";
                 Settings.Default.SchemeValue = "BaseDark";
 
-                tabAccounts.Background = DarkColor;
-                tabBrowser.Background = DarkColor;
-                tabMap.Background = DarkColor;
-                tabSniper.Background = DarkColor;
-                tabConsole.Background = DarkColor;
-                tabPokemons.Background = DarkColor;
-                tabItems.Background = DarkColor;
-                tabEggs.Background = DarkColor;
+                tabAccounts.Background = DarkTabColor;
+                tabBrowser.Background = DarkTabColor;
+                tabMap.Background = DarkTabColor;
+                tabSniper.Background = DarkTabColor;
+                tabConsole.Background = DarkTabColor;
+                tabPokemons.Background = DarkTabColor;
+                tabItems.Background = DarkTabColor;
+                tabEggs.Background = DarkTabColor;
 
-                txtCmdInput.Background = DarkConsole;
-                consoleLog.Background = DarkConsole;
+                txtCmdInput.Background = DarkConsoleBackground;
+                txtCmdInput.Foreground = ConsoleWhite;
+                consoleLog.Background = DarkConsoleBackground;
             }
-            Settings.Default.Save();
+
             ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(Settings.Default.Theme), ThemeManager.GetAppTheme(Settings.Default.SchemeValue));
+            Settings.Default.ResetLayout = false;
+            Settings.Default.Save();
+            Sync();
         }
 
         private void TxtCmdInput_KeyDown(object sender, KeyEventArgs e)
@@ -549,27 +548,9 @@ namespace PoGo.Necrobot.Window
 
         private void BrowserToggle_Click(object sender, RoutedEventArgs e)
         {
-            var translator = TinyIoCContainer.Current.Resolve<UITranslation>();
-
-            if (Settings.Default.BrowserToggled)
-            {
-                if (tabBrowser.IsSelected)
-                    tabConsole.IsSelected = true;
-
-                tabBrowser.IsEnabled = false;
-                browserMenuText.Text = translator.EnableHub;
-                webView.Browser.Dispose();
-                webView.Dispose();
-                Settings.Default.BrowserToggled = false;
-            }
-            else if (!Settings.Default.BrowserToggled)
-            {
-                tabBrowser.IsEnabled = true;
-                browserMenuText.Text = translator.DisableHub;
-                InitBrowser();
-                Settings.Default.BrowserToggled = true;
-            }
+            Settings.Default.BrowserToggled = !Settings.Default.BrowserToggled;
             Settings.Default.Save();
+            Sync();
         }
         public void ReInitializeSession(ISession session, GlobalSettings globalSettings, BotAccount requestedAccount = null)
         {
@@ -582,6 +563,13 @@ namespace PoGo.Necrobot.Window
         private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Process.GetCurrentProcess().Kill();
+        }
+
+        private void DefaultReset_Click(object sender, RoutedEventArgs e)
+        {
+            Settings.Default.ResetLayout = !Settings.Default.ResetLayout;
+            Settings.Default.Save();
+            Sync();
         }
     }
 }

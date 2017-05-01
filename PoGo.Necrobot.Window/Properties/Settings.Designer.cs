@@ -118,5 +118,17 @@ namespace PoGo.Necrobot.Window.Properties {
                 this["SchemeValue"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ResetLayout {
+            get {
+                return ((bool)(this["ResetLayout"]));
+            }
+            set {
+                this["ResetLayout"] = value;
+            }
+        }
     }
 }
