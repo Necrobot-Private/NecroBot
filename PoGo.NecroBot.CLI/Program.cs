@@ -37,20 +37,20 @@ namespace PoGo.NecroBot.CLI
           HelpText = "Init account")]
         public bool Init { get; set; }
 
-        [Option('t', "template", DefaultValue = "", Required = false , HelpText = "Prints all messages to standard output.")]
+        [Option('t', "template", DefaultValue = "", Required = false, HelpText = "Prints all messages to standard output.")]
         public string Template { get; set; }
 
         [Option('p', "password", DefaultValue = "", Required = false, HelpText = "pasword")]
         public string Password { get; set; }
 
-        [Option('g', "google", DefaultValue = false, Required = false,HelpText = "is google account")]
-        public bool IsGoogle{ get; set; }
+        [Option('g', "google", DefaultValue = false, Required = false, HelpText = "is google account")]
+        public bool IsGoogle { get; set; }
 
-        [Option('s', "start", DefaultValue = 1,HelpText = "Start account", Required = false)]
+        [Option('s', "start", DefaultValue = 1, HelpText = "Start account", Required = false)]
         public int Start { get; set; }
 
 
-        [Option('e', "end", DefaultValue = 10, HelpText = "End account",Required = false)]
+        [Option('e', "end", DefaultValue = 10, HelpText = "End account", Required = false)]
         public int End { get; set; }
 
         [ParserState]
@@ -68,8 +68,8 @@ namespace PoGo.NecroBot.CLI
             return null;
         }
     }
-    
-   public class Program
+
+    public class Program
     {
         private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
         private static string _subPath = "";
@@ -97,7 +97,7 @@ namespace PoGo.NecroBot.CLI
             var ioc = TinyIoC.TinyIoCContainer.Current;
             //Setup Logger for API
             APIConfiguration.Logger = new APILogListener();
-            
+
             //Application.EnableVisualStyles();
             var strCulture = Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName;
 
@@ -320,11 +320,32 @@ namespace PoGo.NecroBot.CLI
                             "You have selected PogoDev API but you have not provided an API Key, please press any key to exit and correct you auth.json, \r\n The Pogodev API key can be purchased at - https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer",
                             LogLevel.Error
                         );
-                        
+
                         Console.ReadKey();
                         Environment.Exit(0);
                     }
-                    //TODO - test api call to valida auth key
+                    HttpClient client = new HttpClient();
+                    client.DefaultRequestHeaders.Add("X-AuthToken", apiCfg.AuthAPIKey);
+                    HttpResponseMessage response = client.PostAsync("https://pokehash.buddyauth.com/api/v131_0/hash", null).Result;
+                    try
+                    {
+                        string AuthKey = response.Headers.GetValues("X-AuthToken").FirstOrDefault();
+                        string MaxRequestCount = response.Headers.GetValues("X-MaxRequestCount").FirstOrDefault();
+                        DateTime AuthTokenExpiration = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(Convert.ToDouble(response.Headers.GetValues("X-AuthTokenExpiration").FirstOrDefault()));
+                        TimeSpan Expiration = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(Convert.ToDouble(response.Headers.GetValues("X-AuthTokenExpiration").FirstOrDefault())) - DateTime.UtcNow;
+                        string Result = string.Format("Key: {0}\r\nRPM: {1}\r\nExpiration Date: {2}/{3}/{4}", AuthKey, MaxRequestCount, AuthTokenExpiration.Day, AuthTokenExpiration.Month, AuthTokenExpiration.Year);
+                        Logger.Write(Result, LogLevel.Info);
+                        AuthKey = null;
+                        MaxRequestCount = null;
+                        Expiration = new TimeSpan();
+                        Result = null;
+                    }
+                    catch
+                    {
+                        Logger.Write("The HashKey is invalid or has expired, please press any key to exit and correct you auth.json, \r\n The Pogodev API key can be purchased at - https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer", LogLevel.Error);
+                        Console.ReadKey();
+                        Environment.Exit(0);
+                    }
                 }
                 else if (apiCfg.UseLegacyAPI)
                 {
@@ -436,7 +457,7 @@ namespace PoGo.NecroBot.CLI
             _session.Navigation.WalkStrategy.UpdatePositionEvent += LoadSaveState.SaveLocationToDisk;
 
             ProgressBar.Fill(100);
-            
+
             //TODO: temporary
             if (settings.Auth.APIConfig.UseLegacyAPI)
             {
@@ -447,13 +468,13 @@ namespace PoGo.NecroBot.CLI
                 return;
             }
             //
-            
+
             if (settings.WebsocketsConfig.UseWebsocket)
             {
                 var websocket = new WebSocketInterface(settings.WebsocketsConfig.WebSocketPort, _session);
                 _session.EventDispatcher.EventReceived += evt => websocket.Listen(evt, _session);
             }
-            
+
             var bot = accountManager.GetStartUpAccount();
 
             _session.ReInitSessionWithNextBot(bot);
@@ -474,7 +495,7 @@ namespace PoGo.NecroBot.CLI
             if (_session.LogicSettings.EnableHumanWalkingSnipe &&
                 _session.LogicSettings.HumanWalkingSnipeUseFastPokemap)
             {
-              // jjskuld - Ignore CS4014 warning for now.
+                // jjskuld - Ignore CS4014 warning for now.
                 //#pragma warning disable 4014
                 HumanWalkSnipeTask.StartFastPokemapAsync(_session,
                     _session.CancellationTokenSource.Token).ConfigureAwait(false); // that need to keep data live
@@ -525,7 +546,7 @@ namespace PoGo.NecroBot.CLI
             throw new NotImplementedException();
         }
 
-        private  static bool CheckMKillSwitch()
+        private static bool CheckMKillSwitch()
         {
             using (HttpClient client = new HttpClient())
             {
@@ -536,7 +557,7 @@ namespace PoGo.NecroBot.CLI
                         return true;
 
                     var strResponse1 = responseContent.Content.ReadAsStringAsync().Result;
-                    
+
                     if (string.IsNullOrEmpty(strResponse1))
                         return true;
 
@@ -569,11 +590,11 @@ namespace PoGo.NecroBot.CLI
                     Logger.Write(ex.Message, LogLevel.Error);
                 }
             }
-            
+
             return false;
         }
 
-        private  static bool CheckKillSwitch()
+        private static bool CheckKillSwitch()
         {
             using (HttpClient client = new HttpClient())
             {
