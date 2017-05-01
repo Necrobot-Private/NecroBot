@@ -213,19 +213,10 @@ namespace PoGo.NecroBot.Logic
                 var parseObject = JObject.Parse(strResponse);
                 result = Points(parseObject["routes"][0]["overview_polyline"]["points"].ToString(), 1e5);
             }
-            catch (WebException e)
+            catch
             {
-                session.EventDispatcher.Send(new WarnEvent
-                {
-                    Message = $"Web Exception: {e.Message}"
-                });
-            }
-            catch (NullReferenceException e)
-            {
-                session.EventDispatcher.Send(new WarnEvent
-                {
-                    Message = $"Routing Error: {e.Message}"
-                });
+                Logging.Logger.Write("You have exceeded your daily request quota for this API or the provided API key is expired/invalid or not API actived.", Logging.LogLevel.Error, ConsoleColor.Red);
+                return result;
             }
 
             return result;
