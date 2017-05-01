@@ -109,9 +109,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
                 cancellationToken.ThrowIfCancellationRequested();
                 TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
-                string pokemonUniqueKey = $"{pokemon.EncounterId}";
-
-                if (session.Cache.GetCacheItem(pokemonUniqueKey) != null)
+                
+                if (session.Cache.GetCacheItem(CatchPokemonTask.GetEncounterCacheKey(pokemon.EncounterId)) != null)
                 {
                     continue; //this pokemon has been skipped because not meet with catch criteria before.
                 }

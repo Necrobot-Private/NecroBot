@@ -4,6 +4,7 @@ using PoGo.NecroBot.Logic.Forms;
 using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.Model.Settings;
 using PoGo.NecroBot.Logic.State;
+using PoGo.NecroBot.Logic.Tasks;
 using PoGo.NecroBot.Logic.Utils;
 using POGOProtos.Data.Player;
 using POGOProtos.Networking.Responses;
@@ -391,8 +392,7 @@ namespace PoGo.NecroBot.Logic
             BotAccount switchableAccount = GetSwitchableAccount(null, false); // Don't pause if no switchable account is available.
             if (switchableAccount != null)
             {
-                var key = switchableAccount.Username + encounterId;
-                if (session.Cache.GetCacheItem(key) == null)
+                if (session.Cache.GetCacheItem(CatchPokemonTask.GetUsernameEncounterCacheKey(switchableAccount.Username, encounterId)) == null)
                 {
                     // Don't edit the running account until we actually switch.  Just return the pending account.
                     return switchableAccount;

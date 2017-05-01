@@ -495,7 +495,7 @@ namespace PoGo.NecroBot.CLI
             if (_session.LogicSettings.EnableHumanWalkingSnipe &&
                 _session.LogicSettings.HumanWalkingSnipeUseFastPokemap)
             {
-              // jjskuld - Ignore CS4014 warning for now.
+                // jjskuld - Ignore CS4014 warning for now.
                 //#pragma warning disable 4014
                 HumanWalkSnipeTask.StartFastPokemapAsync(_session,
                     _session.CancellationTokenSource.Token).ConfigureAwait(false); // that need to keep data live
@@ -522,6 +522,13 @@ namespace PoGo.NecroBot.CLI
                 //MSniperServiceTask.ConnectToService();
                 //_session.EventDispatcher.EventReceived += evt => MSniperServiceTask.AddToList(evt);
             }
+
+            // jjskuld - Don't await the analytics service since it starts a worker thread that never returns.
+#pragma warning disable 4014
+            _session.AnalyticsService.StartAsync(_session, _session.CancellationTokenSource.Token);
+#pragma warning restore 4014
+            _session.EventDispatcher.EventReceived += evt => AnalyticsService.Listen(evt, _session);
+
             var trackFile = Path.GetTempPath() + "\\necrobot2.io";
 
             if (!File.Exists(trackFile) || File.GetLastWriteTime(trackFile) < DateTime.Now.AddDays(-1))

@@ -98,6 +98,9 @@ namespace PoGo.NecroBot.Logic.State
             Translation = translation;
             Reset(settings, LogicSettings);
             Stats = new SessionStats(this);
+
+            AnalyticsService = new AnalyticsService();
+            
             accounts.AddRange(logicSettings.Bots);
             if (!accounts.Any(x => x.AuthType == settings.AuthType && x.Username == settings.Username))
             {
@@ -149,6 +152,7 @@ namespace PoGo.NecroBot.Logic.State
         public SessionStats Stats { get; set; }
 
         public IElevationService ElevationService { get; set; }
+        public AnalyticsService AnalyticsService { get; set; }
         public CancellationTokenSource CancellationTokenSource { get; set; }
         public MemoryCache Cache { get; set; }
 
