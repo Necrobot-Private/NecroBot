@@ -25,19 +25,7 @@ namespace PoGo.Necrobot.Window.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool BrowserToggled {
-            get {
-                return ((bool)(this["BrowserToggled"]));
-            }
-            set {
-                this["BrowserToggled"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Blue")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Red")]
         public string Theme {
             get {
                 return ((string)(this["Theme"]));
@@ -49,13 +37,25 @@ namespace PoGo.Necrobot.Window.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Light")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Dark")]
         public string Scheme {
             get {
                 return ((string)(this["Scheme"]));
             }
             set {
                 this["Scheme"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("BaseDark")]
+        public string SchemeValue {
+            get {
+                return ((string)(this["SchemeValue"]));
+            }
+            set {
+                this["SchemeValue"] = value;
             }
         }
         
@@ -86,6 +86,30 @@ namespace PoGo.Necrobot.Window.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ResetLayout {
+            get {
+                return ((bool)(this["ResetLayout"]));
+            }
+            set {
+                this["ResetLayout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool BrowserToggled {
+            get {
+                return ((bool)(this["BrowserToggled"]));
+            }
+            set {
+                this["BrowserToggled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool ConsoleToggled {
             get {
                 return ((bool)(this["ConsoleToggled"]));
@@ -104,30 +128,6 @@ namespace PoGo.Necrobot.Window.Properties {
             }
             set {
                 this["ConsoleText"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("BaseLight")]
-        public string SchemeValue {
-            get {
-                return ((string)(this["SchemeValue"]));
-            }
-            set {
-                this["SchemeValue"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool ResetLayout {
-            get {
-                return ((bool)(this["ResetLayout"]));
-            }
-            set {
-                this["ResetLayout"] = value;
             }
         }
     }
