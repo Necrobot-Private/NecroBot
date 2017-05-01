@@ -133,14 +133,14 @@ namespace PoGo.Necrobot.Window
             //=============THEME & SCHEME STARTUP CONFIGURATION=============\\
             if (Settings.Default.Theme == "" || Settings.Default.ResetLayout == true)
             {
-                Settings.Default.Theme = "Blue";
+                Settings.Default.Theme = "Red";
                 Settings.Default.Save();
                 Settings.Default.Reload();
             }
             else if (Settings.Default.Scheme == "" || Settings.Default.ResetLayout == true)
             {
-                Settings.Default.Scheme = "Light";
-                Settings.Default.SchemeValue = "BaseLight";
+                Settings.Default.Scheme = "Dark";
+                Settings.Default.SchemeValue = "BaseDark";
                 Settings.Default.Save();
                 Settings.Default.Reload();
             }
@@ -217,10 +217,10 @@ namespace PoGo.Necrobot.Window
             //======Reset Defaults======\\
             if (Settings.Default.ResetLayout)
             {
-                Theme.SelectedValue = "Blue";
-                Scheme.SelectedValue = "Light";
-                ChangeThemeTo("Blue");
-                ChangeSchemeTo("Light");
+                Theme.SelectedValue = "Red";
+                Scheme.SelectedValue = "Dark";
+                ChangeThemeTo("Red");
+                ChangeSchemeTo("Dark");
                 DefaultReset.IsEnabled = false;
             }
             else if (!Settings.Default.ResetLayout)
