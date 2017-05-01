@@ -8,6 +8,7 @@ using PoGo.Necrobot.Window.Win32;
 using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic;
 using PoGo.NecroBot.Logic.Model.Settings;
+using PoGo.Necrobot.Window.Properties;
 using System.IO;
 using PoGo.NecroBot.Logic.Common;
 using TinyIoC;
@@ -62,7 +63,7 @@ namespace PoGo.Necrobot.Window
                 }
                 catch(Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Config error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(ex.Message, "Config Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     Shutdown();
                 }
             }
@@ -73,22 +74,38 @@ namespace PoGo.Necrobot.Window
             }
 
             var uiTranslation = new UITranslation(languageCode);
-            TinyIoCContainer.Current.Register<UITranslation>(uiTranslation);
+            TinyIoCContainer.Current.Register(uiTranslation);
 
             MainWindow = new MainClientWindow();
 
 
             ConsoleHelper.AllocConsole();
-            UILogger logger = new UILogger();
-            logger.LogToUI = ((MainClientWindow) MainWindow).LogToConsoleTab;
-
+            UILogger logger = new UILogger()
+            {
+                LogToUI = ((MainClientWindow)MainWindow).LogToConsoleTab
+            };
             Logger.AddLogger(logger, string.Empty);
 
             Task.Run(() =>
             {
                 NecroBot.CLI.Program.RunBotWithParameters(OnBotStartedEventHandler, new string[] { });
             });
-            ConsoleHelper.HideConsoleWindow();
+
+            if (Settings.Default.ConsoleToggled == true)
+            {
+                ConsoleHelper.ShowConsoleWindow();
+                Settings.Default.ConsoleText = "Hide Console";
+                Settings.Default.Save();
+            }
+            else if (Settings.Default.ConsoleToggled == false)
+            {
+                ConsoleHelper.HideConsoleWindow();
+                Settings.Default.ConsoleText = "Show Console";
+                Settings.Default.Save();
+            }
+            Settings.Default.ConsoleToggled = !Settings.Default.ConsoleToggled;
+            Settings.Default.Save();
+
             MainWindow.Show();
         }
         public void OnBotStartedEventHandler(ISession session, StatisticsAggregator stat)

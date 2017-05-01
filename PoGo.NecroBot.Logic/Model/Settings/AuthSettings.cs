@@ -238,12 +238,14 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                     {
                         var randomAppleDeviceInfo = DeviceInfoHelper.GetRandomIosDevice();
                         SetDevInfoByDeviceInfo(randomAppleDeviceInfo);
-                        // Clearing Android variables, as they come back "" instead of null
+
+                        // Clearing Android Variables, as they would otherwise come back as "" instead of null
                         DeviceConfig.AndroidBoardName = null;
                         DeviceConfig.AndroidBootloader = null;
                         DeviceConfig.DeviceModelIdentifier = null;
                         DeviceConfig.FirmwareTags = null;
                         DeviceConfig.FirmwareFingerprint = null;
+
                         // After generating iOS settings, automatically set the package name to "custom", so that we don't regenerate settings every time we start.
                         DeviceConfig.DevicePackageName = "custom";
                     }
@@ -468,8 +470,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             // validate Json using JsonSchema
             Logger.Write("Validating auth.json...");
             var jsonObj = JObject.Parse(output);
-            IList<ValidationError> errors;
-            var valid = jsonObj.IsValid(JsonSchema, out errors);
+            var valid = jsonObj.IsValid(JsonSchema, out IList<ValidationError> errors);
             if (valid) return;
             foreach (var error in errors)
             {

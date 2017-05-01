@@ -82,7 +82,6 @@ namespace PoGo.Necrobot.Window.Model
             get
             {
                 return $"{ItemsList.Items.Sum(x=>x.ItemCount)}/{MaxItemStorage}";
-
             }
         }
 
