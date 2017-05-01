@@ -326,6 +326,7 @@ namespace PoGo.NecroBot.CLI
                     }
                     HttpClient client = new HttpClient();
                     client.DefaultRequestHeaders.Add("X-AuthToken", apiCfg.AuthAPIKey);
+                    var maskedKey = apiCfg.AuthAPIKey.Substring(0, 4) + "".PadLeft(apiCfg.AuthAPIKey.Length - 8, 'X') + apiCfg.AuthAPIKey.Substring(apiCfg.AuthAPIKey.Length - 4, 4);
                     HttpResponseMessage response = client.PostAsync("https://pokehash.buddyauth.com/api/v131_0/hash", null).Result;
                     try
                     {
@@ -333,8 +334,8 @@ namespace PoGo.NecroBot.CLI
                         string MaxRequestCount = response.Headers.GetValues("X-MaxRequestCount").FirstOrDefault();
                         DateTime AuthTokenExpiration = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(Convert.ToDouble(response.Headers.GetValues("X-AuthTokenExpiration").FirstOrDefault()));
                         TimeSpan Expiration = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(Convert.ToDouble(response.Headers.GetValues("X-AuthTokenExpiration").FirstOrDefault())) - DateTime.UtcNow;
-                        string Result = string.Format("Key: {0}\r\nRPM: {1}\r\nExpiration Date: {2}/{3}/{4}", AuthKey, MaxRequestCount, AuthTokenExpiration.Day, AuthTokenExpiration.Month, AuthTokenExpiration.Year);
-                        Logger.Write(Result, LogLevel.Info);
+                        string Result = string.Format("Key: {0} RPM: {1} Expiration Date: {2}/{3}/{4}", maskedKey, MaxRequestCount, AuthTokenExpiration.Day, AuthTokenExpiration.Month, AuthTokenExpiration.Year);
+                        Logger.Write(Result, LogLevel.Update);
                         AuthKey = null;
                         MaxRequestCount = null;
                         Expiration = new TimeSpan();
