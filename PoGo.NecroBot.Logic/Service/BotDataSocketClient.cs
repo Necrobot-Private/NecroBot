@@ -18,6 +18,8 @@ using Logger = PoGo.NecroBot.Logic.Logging.Logger;
 using System.Runtime.Caching;
 using System.Reflection;
 using TinyIoC;
+using static PoGo.NecroBot.Logic.Service.AnalyticsService;
+using Pogo;
 
 namespace PoGo.NecroBot.Logic.Service
 {
@@ -73,11 +75,73 @@ namespace PoGo.NecroBot.Logic.Service
         public static void HandleEvent(IEvent evt, ISession session)
         {
         }
+
         public static void HandleEvent(SnipeFailedEvent e, ISession sesion)
         {
             lock (clientData)
             {
                 clientData.SnipeFailedPokemons.Add(e);
+            }
+        }
+
+        public static void HandleEvent(AnalyticsEvent e, ISession session)
+        {
+            Pokemon data = e.Data as Pokemon;
+            switch (e.EventType)
+            {
+                case 1:
+                    if (ulong.TryParse(data.EncounterId, out ulong encounterId))
+                    {
+                        var encounteredEvent = new EncounteredEvent
+                        {
+                            PokemonId = (PokemonId)data.PokemonId,
+                            Latitude = data.Latitude,
+                            Longitude = data.Longitude,
+                            IV = data.Iv,
+                            Level = data.Level,
+                            Expires = new DateTime(1970, 1, 1, 0, 0, 0).AddMilliseconds(data.ExpiredTime),
+                            ExpireTimestamp = data.ExpiredTime,
+                            SpawnPointId = data.SpawnPointId,
+                            EncounterId = data.EncounterId,
+                            Move1 = data.Move1,
+                            Move2 = data.Move2,
+                            IsRecievedFromSocket = true
+                        };
+
+                        session.EventDispatcher.Send(encounteredEvent);
+                        if (session.LogicSettings.DataSharingConfig.AutoSnipe)
+                        {
+                            var move1 = PokemonMove.MoveUnset;
+                            var move2 = PokemonMove.MoveUnset;
+                            Enum.TryParse(encounteredEvent.Move1, true, out move1);
+                            Enum.TryParse(encounteredEvent.Move2, true, out move2);
+
+                            var added = MSniperServiceTask.AddSnipeItem(session, new MSniperServiceTask.MSniperInfo2()
+                            {
+                                UniqueIdentifier = data.EncounterId,
+                                Latitude = data.Latitude,
+                                Longitude = data.Longitude,
+                                EncounterId = encounterId,
+                                SpawnPointId = data.SpawnPointId,
+                                PokemonId = (short)data.PokemonId,
+                                Level = data.Level,
+                                Iv = data.Iv,
+                                Move1 = move1,
+                                Move2 = move2,
+                                ExpiredTime = data.ExpiredTime
+                            }).Result;
+
+                            if (added)
+                            {
+                                session.EventDispatcher.Send(new AutoSnipePokemonAddedEvent(encounteredEvent));
+                            }
+                        }
+                    }
+                    break;
+
+                case 2:
+                    MSniperServiceTask.RemoveExpiredSnipeData(session, data.EncounterId);
+                    break;
             }
         }
 
@@ -300,10 +364,8 @@ namespace PoGo.NecroBot.Logic.Service
         public static bool CheckIfPokemonBeenCaught(double lat, double lng, PokemonId id, ulong encounterId,
             ISession session)
         {
-            string uniqueCacheKey =
-                $"{session.Settings.Username}{Math.Round(lat, 6)}{id}{Math.Round(lng, 6)}";
-            if (session.Cache.Get(uniqueCacheKey) != null) return true;
-            if (encounterId > 0 && session.Cache[encounterId.ToString()] != null) return true;
+            if (session.Cache.Get(CatchPokemonTask.GetUsernameGeoLocationCacheKey(session.Settings.Username, id, lat, lng)) != null) return true;
+            if (encounterId > 0 && session.Cache[CatchPokemonTask.GetEncounterCacheKey(encounterId)] != null) return true;
 
             return false;
         }

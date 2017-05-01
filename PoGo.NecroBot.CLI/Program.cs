@@ -326,6 +326,7 @@ namespace PoGo.NecroBot.CLI
                     }
                     HttpClient client = new HttpClient();
                     client.DefaultRequestHeaders.Add("X-AuthToken", apiCfg.AuthAPIKey);
+                    var maskedKey = apiCfg.AuthAPIKey.Substring(0, 4) + "".PadLeft(apiCfg.AuthAPIKey.Length - 8, 'X') + apiCfg.AuthAPIKey.Substring(apiCfg.AuthAPIKey.Length - 4, 4);
                     HttpResponseMessage response = client.PostAsync("https://pokehash.buddyauth.com/api/v131_0/hash", null).Result;
                     try
                     {
@@ -333,8 +334,8 @@ namespace PoGo.NecroBot.CLI
                         string MaxRequestCount = response.Headers.GetValues("X-MaxRequestCount").FirstOrDefault();
                         DateTime AuthTokenExpiration = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(Convert.ToDouble(response.Headers.GetValues("X-AuthTokenExpiration").FirstOrDefault()));
                         TimeSpan Expiration = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(Convert.ToDouble(response.Headers.GetValues("X-AuthTokenExpiration").FirstOrDefault())) - DateTime.UtcNow;
-                        string Result = string.Format("Key: {0}\r\nRPM: {1}\r\nExpiration Date: {2}/{3}/{4}", AuthKey, MaxRequestCount, AuthTokenExpiration.Day, AuthTokenExpiration.Month, AuthTokenExpiration.Year);
-                        Logger.Write(Result, LogLevel.Info);
+                        string Result = string.Format("Key: {0} RPM: {1} Expiration Date: {2}/{3}/{4}", maskedKey, MaxRequestCount, AuthTokenExpiration.Day, AuthTokenExpiration.Month, AuthTokenExpiration.Year);
+                        Logger.Write(Result, LogLevel.Info, ConsoleColor.Green);
                         AuthKey = null;
                         MaxRequestCount = null;
                         Expiration = new TimeSpan();
@@ -495,7 +496,7 @@ namespace PoGo.NecroBot.CLI
             if (_session.LogicSettings.EnableHumanWalkingSnipe &&
                 _session.LogicSettings.HumanWalkingSnipeUseFastPokemap)
             {
-              // jjskuld - Ignore CS4014 warning for now.
+                // jjskuld - Ignore CS4014 warning for now.
                 //#pragma warning disable 4014
                 HumanWalkSnipeTask.StartFastPokemapAsync(_session,
                     _session.CancellationTokenSource.Token).ConfigureAwait(false); // that need to keep data live
@@ -522,6 +523,13 @@ namespace PoGo.NecroBot.CLI
                 //MSniperServiceTask.ConnectToService();
                 //_session.EventDispatcher.EventReceived += evt => MSniperServiceTask.AddToList(evt);
             }
+
+            // jjskuld - Don't await the analytics service since it starts a worker thread that never returns.
+#pragma warning disable 4014
+            _session.AnalyticsService.StartAsync(_session, _session.CancellationTokenSource.Token);
+#pragma warning restore 4014
+            _session.EventDispatcher.EventReceived += evt => AnalyticsService.Listen(evt, _session);
+
             var trackFile = Path.GetTempPath() + "\\necrobot2.io";
 
             if (!File.Exists(trackFile) || File.GetLastWriteTime(trackFile) < DateTime.Now.AddDays(-1))
