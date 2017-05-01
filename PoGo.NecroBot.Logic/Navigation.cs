@@ -105,19 +105,18 @@ namespace PoGo.NecroBot.Logic
             TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
 
             //add points to map
-            var points = new List<GeoCoordinate>();
-            var route = Route(session,
-                new GeoCoordinate(
-                    _client.CurrentLatitude,
-                    _client.CurrentLongitude,
-                    _client.CurrentAltitude),
-                targetLocation.ToGeoCoordinate());
+            if (targetLocation != null)
+            {
+                var points = new List<GeoCoordinate>();
+                var startLocation = new GeoCoordinate( _client.CurrentLatitude, _client.CurrentLongitude, _client.CurrentAltitude);
+                var route = Route(session, startLocation, targetLocation.ToGeoCoordinate());
 
-            foreach (var item in route)
-                points.Add(new GeoCoordinate(item.ToArray()[1], item.ToArray()[0]));
+                foreach (var item in route)
+                    points.Add(new GeoCoordinate(item.ToArray()[1], item.ToArray()[0]));
 
-            //get points to map
-            OnGetHumanizeRouteEvent(points);
+                //get points to map
+                OnGetHumanizeRouteEvent(points);
+            }
             //end code add points
 
             // If the stretegies become bigger, create a factory for easy management
