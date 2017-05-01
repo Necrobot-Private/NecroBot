@@ -63,7 +63,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             else
             {
                 var encounterId = currentFortData.LureInfo.EncounterId;
-                if (session.Cache.Get(currentFortData.LureInfo.EncounterId.ToString()) != null)
+                if (session.Cache.Get(CatchPokemonTask.GetEncounterCacheKey(currentFortData.LureInfo.EncounterId)) != null)
                     return; //pokemon been ignore before
 
                 var encounter = await session.Client.Encounter.EncounterLurePokemon(encounterId, fortId).ConfigureAwait(false);

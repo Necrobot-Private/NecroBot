@@ -374,9 +374,10 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
         }
 
-        public static async Task<bool> SnipeUnverifiedPokemon(ISession session, IEnumerable<PokemonId> pokemonIds, double latitude,
-       double longitude, CancellationToken cancellationToken)
+        public static async Task<bool> SnipeUnverifiedPokemon(ISession session, MSniperInfo2 sniperInfo, CancellationToken cancellationToken)
         {
+            var latitude = sniperInfo.Latitude;
+            var longitude = sniperInfo.Longitude;
             var currentLatitude = session.Client.CurrentLatitude;
             var currentLongitude = session.Client.CurrentLongitude;
 
@@ -384,7 +385,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             session.EventDispatcher.Send(new SnipeModeEvent { Active = true });
 
-            List<MapPokemon> catchablePokemon;
+            MapPokemon catchablePokemon;
             int retry = 3;
 
             bool isCaptchaShow = false;
@@ -405,10 +406,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                     var mapObjects = await session.Client.Map.GetMapObjects(true, false).ConfigureAwait(false);
                     catchablePokemon =
                         mapObjects.MapCells.SelectMany(q => q.CatchablePokemons)
-                            .Where(q => pokemonIds.Contains(q.PokemonId))
+                            .Where(q => sniperInfo.PokemonId == (short)q.PokemonId)
                             .OrderByDescending(pokemon => PokemonInfo.CalculateMaxCp(pokemon.PokemonId))
-                            .ToList();
-                } while (catchablePokemon.Count == 0 && retry > 0);
+                            .FirstOrDefault();
+                } while (catchablePokemon != null && retry > 0);
             }
             catch (HasherException ex) { throw ex; }
             catch (CaptchaException ex)
@@ -426,7 +427,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     new GeoCoordinate(currentLatitude, currentLongitude, session.Client.CurrentAltitude), 0).ConfigureAwait(false); // Set speed to 0 for random speed.
             }
 
-            if (catchablePokemon.Count == 0)
+            if (catchablePokemon == null)
             {
                 session.EventDispatcher.Send(new SnipeEvent
                 {
@@ -437,23 +438,24 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     Latitude = latitude,
                     Longitude = longitude,
-                    PokemonId = pokemonIds.FirstOrDefault()
+                    PokemonId = (PokemonId)sniperInfo.PokemonId,
+                    EncounterId = sniperInfo.EncounterId
                 });
 
                 return false;
             }
 
             isCaptchaShow = false;
-            foreach (var pokemon in catchablePokemon)
+            if (catchablePokemon != null)
             {
                 EncounterResponse encounter;
                 try
                 {
                     await LocationUtils.UpdatePlayerLocationWithAltitude(session,
-                        new GeoCoordinate(pokemon.Latitude, pokemon.Longitude, session.Client.CurrentAltitude), 0).ConfigureAwait(false); // Set speed to 0 for random speed.
+                        new GeoCoordinate(catchablePokemon.Latitude, catchablePokemon.Longitude, session.Client.CurrentAltitude), 0).ConfigureAwait(false); // Set speed to 0 for random speed.
 
                     encounter =
-                        await session.Client.Encounter.EncounterPokemon(pokemon.EncounterId, pokemon.SpawnPointId).ConfigureAwait(false);
+                        await session.Client.Encounter.EncounterPokemon(catchablePokemon.EncounterId, catchablePokemon.SpawnPointId).ConfigureAwait(false);
                 }
                 catch (HasherException ex) { throw ex; }
                 catch (CaptchaException ex)
@@ -477,7 +479,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                             Latitude = currentLatitude,
                             Longitude = currentLongitude
                         });
-                        catchedPokemon = await CatchPokemonTask.Execute(session, cancellationToken, encounter, pokemon,
+                        catchedPokemon = await CatchPokemonTask.Execute(session, cancellationToken, encounter, catchablePokemon,
                             currentFortData: null, sessionAllowTransfer: true).ConfigureAwait(false);
                         break;
 
@@ -505,8 +507,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         break;
                 }
 
-                if (!Equals(catchablePokemon.ElementAtOrDefault(catchablePokemon.Count - 1), pokemon))
-                    await Task.Delay(session.LogicSettings.DelayBetweenPokemonCatch, cancellationToken).ConfigureAwait(false);
+                await Task.Delay(session.LogicSettings.DelayBetweenPokemonCatch, cancellationToken).ConfigureAwait(false);
             }
 
             if (catchedPokemon)
@@ -674,7 +675,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
             if (OutOffBallBlock > DateTime.Now ||
                 autoSnipePokemons.Exists(x => x.EncounterId == item.EncounterId && item.EncounterId > 0) ||
-                (item.EncounterId > 0 && session.Cache[item.EncounterId.ToString()] != null)) return false;
+                (item.EncounterId > 0 && session.Cache[CatchPokemonTask.GetEncounterCacheKey(item.EncounterId)] != null)) return false;
 
             item.Iv = Math.Round(item.Iv, 2);
             if (session.LogicSettings.SnipePokemonNotInPokedex)
@@ -738,18 +739,12 @@ namespace PoGo.NecroBot.Logic.Tasks
             return false;
         }
 
-        public static async Task<bool> CatchWithSnipe(ISession session, MSniperInfo2 encounterId,
+        public static async Task<bool> CatchWithSnipe(ISession session, MSniperInfo2 sniperInfo,
             CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
-            return await SnipeUnverifiedPokemon(
-                session,
-                new List<PokemonId>() { (PokemonId)encounterId.PokemonId },
-                encounterId.Latitude,
-                encounterId.Longitude,
-                cancellationToken
-            ).ConfigureAwait(false);
+            return await SnipeUnverifiedPokemon(session, sniperInfo, cancellationToken).ConfigureAwait(false);
         }
 
         private static int snipeFailedCount = 0;
@@ -869,7 +864,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     }
                     session.EventDispatcher.Send(new SnipePokemonStarted(location));
 
-                    if (location.EncounterId > 0 && session.Cache[location.EncounterId.ToString()] != null) continue;
+                    if (location.EncounterId > 0 && session.Cache[CatchPokemonTask.GetEncounterCacheKey(location.EncounterId)] != null) continue;
 
                     if (!(await CheckPokeballsToSnipe(session.LogicSettings.MinPokeballsWhileSnipe + 1, session, cancellationToken).ConfigureAwait(false)))
                     {
@@ -885,11 +880,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                     if (location.AddedTime.AddSeconds(SNIPE_SAFE_TIME) < DateTime.Now) continue;
 
                     //If bot already catch the same pokemon, and very close this location.
-                    string uniqueCacheKey = $"{session.Settings.Username}{Math.Round(location.Latitude, 6)}{location.PokemonId}{Math.Round(location.Longitude, 6)}";
+                    if (session.Cache.Get(CatchPokemonTask.GetUsernameGeoLocationCacheKey(session.Settings.Username, (PokemonId)location.PokemonId, location.Latitude, location.Longitude)) != null) continue;
 
-                    if (session.Cache.Get(uniqueCacheKey) != null) continue;
-
-                    session.Cache.Add(location.EncounterId.ToString(), true, DateTime.Now.AddMinutes(15));
+                    session.Cache.Add(CatchPokemonTask.GetEncounterCacheKey(location.EncounterId), true, DateTime.Now.AddMinutes(15));
 
                     cancellationToken.ThrowIfCancellationRequested();
                     TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
