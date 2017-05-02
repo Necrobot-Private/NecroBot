@@ -52,7 +52,7 @@ namespace PoGo.Necrobot.Window
                 { LogLevel.Berry, "##B58900" },
                 { LogLevel.Egg, "#B58900" },
                 { LogLevel.Debug, "#93A1A1" },
-                { LogLevel.Update, "#657b83" },
+                { LogLevel.Update, "#657B83" },
                 { LogLevel.New, "#859900" },
                 { LogLevel.SoftBan, "#DC322F" },
                 { LogLevel.LevelUp, "#D33682" },
@@ -239,13 +239,18 @@ namespace PoGo.Necrobot.Window
         private DateTime lastClearLog = DateTime.Now;
         public void LogToConsoleTab(string message, LogLevel level, string color)
         {
-            if (string.IsNullOrEmpty(color) || color == "Black")
+            if (Settings.Default.ResetLayout == false)
+            {
                 color = ConsoleColors_Solarized[level];
-            else if (string.IsNullOrEmpty(color) || color == "Black" & Settings.Default.ResetLayout == true) // TODO
+            }
+            else
+            {
+                // TODO
                 color = ConsoleColors_Default[level];
+            }
 
-                consoleLog.Dispatcher.BeginInvoke(new Action(() =>
-                {
+            consoleLog.Dispatcher.BeginInvoke(new Action(() =>
+            {
                 if (lastClearLog.AddMinutes(15) < DateTime.Now)
                 {
                     consoleLog.Document.Blocks.Clear();
@@ -255,7 +260,7 @@ namespace PoGo.Necrobot.Window
 
                 consoleLog.AppendText(message + "\r", color);
                 consoleLog.ScrollToEnd();
-                }));
+            }));
         }
 
         public void OnBotStartedEventHandler(ISession session, StatisticsAggregator stat)
