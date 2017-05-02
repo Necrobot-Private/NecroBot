@@ -87,7 +87,6 @@ namespace PoGo.Necrobot.Window
         public MainClientWindow()
         {
             InitializeComponent();
-            Sync();
 
             datacontext = new DataContext()
             {
@@ -97,8 +96,12 @@ namespace PoGo.Necrobot.Window
             DataContext = datacontext;
             txtCmdInput.Text = TinyIoCContainer.Current.Resolve<UITranslation>().InputCommand;
 
-            // Width = Settings.Default.Width; - TODO: Make This Work Properly
-            // Height = Settings.Default.Height; - ^^
+            Application.Current.MainWindow.Width = Settings.Default.Width;
+            Application.Current.MainWindow.Height = Settings.Default.Height;
+
+            BrowserSync();
+            ConsoleSync();
+            ResetSync();
         }
 
         private void InitBrowser()
@@ -130,7 +133,7 @@ namespace PoGo.Necrobot.Window
             var DarkConsoleBackground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#002B36"));
             var ConsoleWhite = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#657B83"));
 
-            //=============THEME & SCHEME STARTUP CONFIGURATION=============\\
+            //=============STARTUP CONFIGURATION=============\\
             if (Settings.Default.Theme == "" || Settings.Default.ResetLayout == true)
             {
                 Settings.Default.Theme = "Red";
@@ -145,7 +148,6 @@ namespace PoGo.Necrobot.Window
                 Settings.Default.Reload();
             }
             
-            var SchemeValue = "Base" + Settings.Default.Scheme;
             Theme.SelectedValue = Settings.Default.Theme;
             Scheme.SelectedValue = Settings.Default.Scheme;
             Settings.Default.Save();
@@ -156,9 +158,6 @@ namespace PoGo.Necrobot.Window
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             LoadHelpArticleAsync();
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-
-            //=============Console Saving=============\\
-            ConsoleWindow();
         }
 
         private void TimerTick(object sender, ElapsedEventArgs e)
@@ -181,11 +180,10 @@ namespace PoGo.Necrobot.Window
             });
         }
 
-        public void Sync()
+        public void BrowserSync()
         {
             var translator = TinyIoCContainer.Current.Resolve<UITranslation>();
-            //=============DotNetBrowser Saving=============\\
-            if (!Settings.Default.BrowserToggled)
+            if (Settings.Default.BrowserToggled == false)
             {
                 if (tabBrowser.IsSelected)
                     tabConsole.IsSelected = true;
@@ -195,27 +193,35 @@ namespace PoGo.Necrobot.Window
                 webView.Browser.Dispose();
                 webView.Dispose();
             }
-            else if (Settings.Default.BrowserToggled)
+            else if (Settings.Default.BrowserToggled == true)
             {
                 tabBrowser.IsEnabled = true;
                 browserMenuText.Text = translator.DisableHub;
                 InitBrowser();
             }
-            //===============Console Saving===================\\
-            if (Settings.Default.ConsoleToggled)
+            Settings.Default.Save();
+        }
+
+        public void ConsoleSync()
+        {
+            var translator = TinyIoCContainer.Current.Resolve<UITranslation>();
+            if (Settings.Default.ConsoleToggled == true)
             {
                 consoleMenuText.Text = translator.HideConsole;
                 ConsoleHelper.ShowConsoleWindow();
                 Settings.Default.ConsoleText = "Hide Console";
             }
-            if (!Settings.Default.ConsoleToggled)
+            if (Settings.Default.ConsoleToggled == false)
             {
                 consoleMenuText.Text = translator.ShowConsole;
                 ConsoleHelper.HideConsoleWindow();
                 Settings.Default.ConsoleText = "Show Console";
             }
-            //======Reset Defaults======\\
-            if (Settings.Default.ResetLayout)
+        }
+
+        public void ResetSync()
+        {
+            if (Settings.Default.ResetLayout == true)
             {
                 Theme.SelectedValue = "Red";
                 Scheme.SelectedValue = "Dark";
@@ -223,17 +229,10 @@ namespace PoGo.Necrobot.Window
                 ChangeSchemeTo("Dark");
                 DefaultReset.IsEnabled = false;
             }
-            else if (!Settings.Default.ResetLayout)
+            else if (Settings.Default.ResetLayout == false & Settings.Default.Theme == "Red" & Settings.Default.Scheme == "Dark")
+                DefaultReset.IsEnabled = false;
+            else if (Settings.Default.ResetLayout == false)
                 DefaultReset.IsEnabled = true;
-
-            Settings.Default.Save();
-        }
-
-        public void ConsoleWindow()
-        {
-            Settings.Default.ConsoleToggled = !Settings.Default.ConsoleToggled;
-            Settings.Default.Save();
-            Sync();
         }
 
         private DateTime lastClearLog = DateTime.Now;
@@ -295,7 +294,13 @@ namespace PoGo.Necrobot.Window
 
         private void MenuConsole_Click(object sender, RoutedEventArgs e)
         {
-            ConsoleWindow();
+            if (Settings.Default.ConsoleToggled == true)
+                Settings.Default.ConsoleToggled = false;
+            else if (Settings.Default.ConsoleToggled == false)
+                Settings.Default.ConsoleToggled = true;
+            Settings.Default.Save();
+            Settings.Default.Reload();
+            ConsoleSync();
         }
 
         private void MenuSetting_Click(object sender, RoutedEventArgs e)
@@ -399,11 +404,11 @@ namespace PoGo.Necrobot.Window
             ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(Settings.Default.Theme), ThemeManager.GetAppTheme(Settings.Default.SchemeValue));
             if (Settings.Default.ResetLayout == true)
             {
-                ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent("Blue"), ThemeManager.GetAppTheme("BaseLight"));
+                ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent("Red"), ThemeManager.GetAppTheme("BaseDark"));
                 Settings.Default.ResetLayout = false;
             }
             Settings.Default.Save();
-            Sync();
+            ResetSync();
         }
 
         private void ChangeSchemeTo(string Scheme)
@@ -454,7 +459,7 @@ namespace PoGo.Necrobot.Window
             ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(Settings.Default.Theme), ThemeManager.GetAppTheme(Settings.Default.SchemeValue));
             Settings.Default.ResetLayout = false;
             Settings.Default.Save();
-            Sync();
+            ResetSync();
         }
 
         private void TxtCmdInput_KeyDown(object sender, KeyEventArgs e)
@@ -553,9 +558,12 @@ namespace PoGo.Necrobot.Window
 
         private void BrowserToggle_Click(object sender, RoutedEventArgs e)
         {
-            Settings.Default.BrowserToggled = !Settings.Default.BrowserToggled;
+            if (Settings.Default.BrowserToggled == true)
+                Settings.Default.BrowserToggled = false;
+            else if (Settings.Default.BrowserToggled == false)
+                Settings.Default.BrowserToggled = true;
             Settings.Default.Save();
-            Sync();
+            BrowserSync();
         }
         public void ReInitializeSession(ISession session, GlobalSettings globalSettings, BotAccount requestedAccount = null)
         {
@@ -567,14 +575,21 @@ namespace PoGo.Necrobot.Window
 
         private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            Application.Current.MainWindow.Height = Settings.Default.Height;
+            Application.Current.MainWindow.Width = Settings.Default.Width;
+            Settings.Default.Save();
             Process.GetCurrentProcess().Kill();
         }
 
         private void DefaultReset_Click(object sender, RoutedEventArgs e)
         {
-            Settings.Default.ResetLayout = !Settings.Default.ResetLayout;
+            if (Settings.Default.ResetLayout == true)
+                Settings.Default.ResetLayout = false;
+            else if (Settings.Default.ResetLayout == false)
+                Settings.Default.ResetLayout = true;
             Settings.Default.Save();
-            Sync();
+            Settings.Default.Reload();
+            ResetSync();
         }
     }
 }
