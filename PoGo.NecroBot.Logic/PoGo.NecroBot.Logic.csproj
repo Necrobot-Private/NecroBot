@@ -119,9 +119,9 @@
     <Reference Include="Google.Apis, Version=1.25.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\Google.Apis.1.25.0\lib\net45\Google.Apis.dll</HintPath>
     </Reference>
-    <Reference Include="Google.Apis.Analytics.v3, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Google.Apis.Analytics.v3, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(SolutionDir)\packages\Google.Apis.Analytics.v3.1.0.0\lib\net45\Google.Apis.Analytics.v3.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\Google.Apis.Analytics.v3.1.0.1\lib\net45\Google.Apis.Analytics.v3.dll</HintPath>
     </Reference>
     <Reference Include="Google.Apis.Auth, Version=1.25.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\Google.Apis.Auth.1.25.0\lib\net45\Google.Apis.Auth.dll</HintPath>
