@@ -84,7 +84,7 @@ namespace PoGo.NecroBot.Logic.Service
             }
         }
 
-        public static void HandleEvent(AnalyticsEvent e, ISession session)
+        public static async Task HandleEvent(AnalyticsEvent e, ISession session)
         {
             Pokemon data = e.Data as Pokemon;
             switch (e.EventType)
@@ -116,7 +116,7 @@ namespace PoGo.NecroBot.Logic.Service
                             Enum.TryParse(encounteredEvent.Move1, true, out move1);
                             Enum.TryParse(encounteredEvent.Move2, true, out move2);
 
-                            var added = MSniperServiceTask.AddSnipeItem(session, new MSniperServiceTask.MSniperInfo2()
+                            var added = await MSniperServiceTask.AddSnipeItem(session, new MSniperServiceTask.MSniperInfo2()
                             {
                                 UniqueIdentifier = data.EncounterId,
                                 Latitude = data.Latitude,
@@ -129,7 +129,7 @@ namespace PoGo.NecroBot.Logic.Service
                                 Move1 = move1,
                                 Move2 = move2,
                                 ExpiredTime = data.ExpiredTime
-                            }).Result;
+                            }).ConfigureAwait(false);
 
                             if (added)
                             {
