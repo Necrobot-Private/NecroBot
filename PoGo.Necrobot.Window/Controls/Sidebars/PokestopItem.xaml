@@ -10,7 +10,7 @@
         <Border BorderBrush="GreenYellow" BorderThickness="1,1,1,1" VerticalAlignment="Stretch">
 
             <DockPanel HorizontalAlignment="Stretch" LastChildFill="True">
-                <Image Source="https://ih1.redbubble.net/image.235489512.1726/ap,550x550,12x12,1,transparent,t.png" Width="45"></Image>
+                <Image Source="/NecroBot2.Win;component/Controls/MapMarkers/pokestop.png" Width="45"></Image>
                 <StackPanel>
                     <StackPanel>
                         <TextBlock Text="{Binding Path=Name}"></TextBlock>

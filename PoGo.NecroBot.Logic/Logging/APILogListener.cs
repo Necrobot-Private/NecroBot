@@ -42,5 +42,15 @@ namespace PoGo.NecroBot.Logic.Logging
             var session = TinyIoCContainer.Current.Resolve<ISession>();
             session.EventDispatcher.Send(new InfoEvent() { Message = message });
         }
+        
+        public void LogFlaggedInit(string message)
+        {
+            Logger.Write(message, LogLevel.Warning);
+        }
+
+        public void LogErrorInit(string message)
+        {
+            Logger.Write(message, LogLevel.Error);
+        }
     }
 }

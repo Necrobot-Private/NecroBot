@@ -49,7 +49,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 //add delegate function
                 OnPokemonEncounterEvent(new List<MapPokemon> { pokemon });
 
-                if (session.Cache.Get(incensePokemon.EncounterId.ToString()) != null)
+                if (session.Cache.Get(CatchPokemonTask.GetEncounterCacheKey(incensePokemon.EncounterId)) != null)
                     return; //pokemon been ignore before
 
                 if ((session.LogicSettings.UsePokemonToCatchLocallyListOnly && !session.LogicSettings.PokemonToCatchLocally.Pokemon.Contains(pokemon.PokemonId))

@@ -25,6 +25,78 @@ namespace PoGo.Necrobot.Window.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Red")]
+        public string Theme {
+            get {
+                return ((string)(this["Theme"]));
+            }
+            set {
+                this["Theme"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Dark")]
+        public string Scheme {
+            get {
+                return ((string)(this["Scheme"]));
+            }
+            set {
+                this["Scheme"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("BaseDark")]
+        public string SchemeValue {
+            get {
+                return ((string)(this["SchemeValue"]));
+            }
+            set {
+                this["SchemeValue"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1366")]
+        public double Width {
+            get {
+                return ((double)(this["Width"]));
+            }
+            set {
+                this["Width"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("768")]
+        public double Height {
+            get {
+                return ((double)(this["Height"]));
+            }
+            set {
+                this["Height"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ResetLayout {
+            get {
+                return ((bool)(this["ResetLayout"]));
+            }
+            set {
+                this["ResetLayout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool BrowserToggled {
             get {
@@ -37,25 +109,25 @@ namespace PoGo.Necrobot.Window.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Blue")]
-        public string Theme {
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ConsoleToggled {
             get {
-                return ((string)(this["Theme"]));
+                return ((bool)(this["ConsoleToggled"]));
             }
             set {
-                this["Theme"] = value;
+                this["ConsoleToggled"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("BaseLight")]
-        public string Scheme {
+        [global::System.Configuration.DefaultSettingValueAttribute("StateHere Console")]
+        public string ConsoleText {
             get {
-                return ((string)(this["Scheme"]));
+                return ((string)(this["ConsoleText"]));
             }
             set {
-                this["Scheme"] = value;
+                this["ConsoleText"] = value;
             }
         }
         [global::System.Configuration.UserScopedSettingAttribute()]
