@@ -29,21 +29,25 @@ namespace PoGo.NecroBot.Logic.Service
 
         public async Task StartAsync(Session session, CancellationToken cancellationToken)
         {
-            await Task.Delay(10000, cancellationToken).ConfigureAwait(false);
+            await Task.Delay(25000, cancellationToken).ConfigureAwait(false);
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            service.OnData += (eventType, eventData) =>
+            var initialized = await service.Init().ConfigureAwait(false);
+            if (initialized)
             {
-                var analyticsEvent = new AnalyticsEvent { EventType = eventType, Data = eventData };
-                session.EventDispatcher.Send(analyticsEvent);
-            };
+                service.OnData += (eventType, eventData) =>
+                {
+                    var analyticsEvent = new AnalyticsEvent { EventType = eventType, Data = eventData };
+                    session.EventDispatcher.Send(analyticsEvent);
+                };
 
-            while (true)
-            {
-                var request = service.Data.Ga.Get(service, clientData);
-                await request.ExecuteRequest(cancellationToken).ConfigureAwait(false);
-                await Task.Delay(POLLING_INTERVAL).ConfigureAwait(false);
+                while (true)
+                {
+                    var request = service.Data.Ga.Get(service, clientData);
+                    await request.ExecuteRequest(cancellationToken).ConfigureAwait(false);
+                    await Task.Delay(POLLING_INTERVAL).ConfigureAwait(false);
+                }
             }
         }
         
@@ -66,7 +70,8 @@ namespace PoGo.NecroBot.Logic.Service
 
         public static void HandleEvent(SnipeFailedEvent e, ISession sesion)
         {
-            clientData.Removes.Enqueue(e.ToPokemon());
+            if (e.EncounterId > 0)
+                clientData.Removes.Enqueue(e.ToPokemon());
         }
 
         private static void HandleEvent(EncounteredEvent e, ISession session)
