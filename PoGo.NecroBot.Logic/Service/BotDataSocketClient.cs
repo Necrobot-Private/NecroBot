@@ -222,7 +222,7 @@ namespace PoGo.NecroBot.Logic.Service
             while (true && !termintated)
             {
                 var socketURL = servers.Dequeue();
-                Logger.Write($"Connecting to {socketURL} ....");
+                // Logger.Write($"Connecting to {socketURL} ....");
                 await ConnectToServer(session, socketURL, encryptKey);
                 servers.Enqueue(socketURL);
             }
@@ -253,11 +253,13 @@ namespace PoGo.NecroBot.Logic.Service
                     {
                         if (retries == 3)
                         {
-                            //failed to make connection to server  times contiuing, temporary stop for 10 mins.
+                            //failed to make connection to server  times continuing, temporary stop for 10 mins.
+                            /*
                             session.EventDispatcher.Send(new WarnEvent()
                             {
                                 Message = $"Couldn't establish the connection to necrobot socket server : {socketURL}"
                             });
+                            */
                             if (session.LogicSettings.DataSharingConfig.EnableFailoverDataServers && servers.Count > 1)
                             {
                                 break;
@@ -293,11 +295,12 @@ namespace PoGo.NecroBot.Logic.Service
                     }
                     catch (IOException)
                     {
+                        /*
                         session.EventDispatcher.Send(new WarnEvent
                         {
                             Message = "Disconnected from necrobot socket. New connection will be established when service becomes available..."
                         });
-
+                        */
                     }
                     catch (Exception)
                     {
@@ -468,7 +471,7 @@ namespace PoGo.NecroBot.Logic.Service
                     session);
                 if (caught)
                 {
-                    Logger.Write("[SNIPE IGNORED] - Your snipe pokemon has already been cautgh by bot",
+                    Logger.Write("[SNIPE IGNORED] - Your snipe pokemon has already been caught by bot",
                         Logic.Logging.LogLevel.Sniper);
                     return;
                 }
