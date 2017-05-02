@@ -288,9 +288,12 @@ namespace PoGo.NecroBot.Logic.Service
                                 var actualMessage = JsonConvert.SerializeObject(message);
                                 ws.Send($"42[\"client-update\",{actualMessage}]");
                             }
-
+                            else
+                            {
+                                var pingMessage = JsonConvert.SerializeObject(new { Ping = DateTime.Now });
+                                ws.Send($"42[\"ping-server\",{pingMessage}");
+                            }
                             await Task.Delay(POLLING_INTERVAL);
-                            ws.Ping();
                         }
                     }
                     catch (IOException)
@@ -337,9 +340,6 @@ namespace PoGo.NecroBot.Logic.Service
             var match = Regex.Match(message, "42\\[\"server-message\",(.*)]");
             if (match != null && !string.IsNullOrEmpty(match.Groups[1].Value))
             {
-                if (message.Contains("The connection has been denied")) {
-                    termintated = true;
-                }
                 var messag = match.Groups[1].Value;
                 if (message.Contains("The connection has been denied") && lastWarningMessage > DateTime.Now.AddMinutes(-5)) return;
                 lastWarningMessage = DateTime.Now;
