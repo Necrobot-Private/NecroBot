@@ -130,5 +130,16 @@ namespace PoGo.Necrobot.Window.Properties {
                 this["ConsoleText"] = value;
             }
         }
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Default")]
+        public string ConsoleTheme {
+            get {
+                return ((string)(this["ConsoleTheme"]));
+            }
+            set {
+                this["ConsoleTheme"] = value;
+            }
+        }
     }
 }

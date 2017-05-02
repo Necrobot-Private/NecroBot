@@ -29,5 +29,8 @@
     <Setting Name="ConsoleText" Type="System.String" Scope="User">
       <Value Profile="(Default)">StateHere Console</Value>
     </Setting>
+    <Setting Name="ConsoleTheme" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Default</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
