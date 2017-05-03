@@ -305,8 +305,16 @@ namespace PoGo.Necrobot.Window
 
         private void MenuSetting_Click(object sender, RoutedEventArgs e)
         {
-            var configWindow = new SettingsWindow(this, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config\\config.json"));
-            configWindow.ShowDialog();
+            var ConfigPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config\\config.json");
+            try
+            {
+                var configWindow = new SettingsWindow(this, ConfigPath);
+                configWindow.ShowDialog();
+            }
+            catch
+            {
+                MessageBox.Show($"{ConfigPath} couldn't be found or is Invalid", "Settings Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void BtnHideInfo_Click(object sender, RoutedEventArgs e)
