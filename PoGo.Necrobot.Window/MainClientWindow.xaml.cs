@@ -27,6 +27,7 @@ using static PoGo.NecroBot.Logic.MultiAccountManager;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Timers;
+using PoGo.NecroBot.Logic.Model;
 
 namespace PoGo.Necrobot.Window
 {

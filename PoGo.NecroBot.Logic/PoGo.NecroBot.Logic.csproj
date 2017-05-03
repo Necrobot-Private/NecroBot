@@ -446,9 +446,11 @@
     <Compile Include="Logging\FileLogger.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="Logging\LoggingStrings.cs" />
-    <Compile Include="Model\Accounts.cs" />
+    <Compile Include="Model\Account.cs" />
+    <Compile Include="Model\BotAccount.cs" />
     <Compile Include="Model\BotActions.cs" />
     <Compile Include="Exceptions\ActiveSwitchByPokemonException.cs" />
+    <Compile Include="Model\DatabaseConfigContext.cs" />
     <Compile Include="Model\ElevationLocation.cs" />
     <Compile Include="Model\GeoLocation.cs" />
     <Compile Include="Model\Google\GoogleObjects\Address_Components.cs" />

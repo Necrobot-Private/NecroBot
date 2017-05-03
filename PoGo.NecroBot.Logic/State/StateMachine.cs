@@ -16,6 +16,7 @@ using static System.Threading.Tasks.Task;
 using static PoGo.NecroBot.Logic.Utils.PushNotificationClient;
 using TinyIoC;
 using static PoGo.NecroBot.Logic.MultiAccountManager;
+using PoGo.NecroBot.Logic.Model;
 
 #endregion
 

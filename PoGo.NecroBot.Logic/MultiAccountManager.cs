@@ -2,16 +2,14 @@
 using PoGo.NecroBot.Logic.Exceptions;
 using PoGo.NecroBot.Logic.Forms;
 using PoGo.NecroBot.Logic.Logging;
+using PoGo.NecroBot.Logic.Model;
 using PoGo.NecroBot.Logic.Model.Settings;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Tasks;
 using PoGo.NecroBot.Logic.Utils;
-using POGOProtos.Data.Player;
-using POGOProtos.Networking.Responses;
 using PokemonGo.RocketAPI.Extensions;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,60 +21,7 @@ namespace PoGo.NecroBot.Logic
     public class MultiAccountManager
     {
         private const string ACCOUNT_DB_NAME = "accounts.db";
-
-        public class BotAccount : AuthConfig , INotifyPropertyChanged
-        {
-            public bool IsRunning { get; set; }
-            public BotAccount() { }
-            public BotAccount(AuthConfig item)
-            {
-                AuthType = item.AuthType;
-                Password = item.Password;
-                Username = item.Username;
-            }
-                        
-            // AutoId will be automatically incremented.
-            public int Id { get; set; }
-            public string Nickname { get; set; }
-            public DateTime LoggedTime { get; set; }
-            public int Level { get; set; }
-            public string LastLogin { get; set; }
-            public long LastLoginTimestamp { get; set; }
-            public int Stardust { get; set; }
-            public long CurrentXp { get; set; }
-            public long PrevLevelXp { get; set; }
-            public long NextLevelXp { get; set; }
-
-            [BsonIgnore]
-            public string ExperienceInfo
-            {
-                get
-                {
-                    int percentComplete = 0;
-                    double xp = CurrentXp - PrevLevelXp;
-                    double levelXp = NextLevelXp - PrevLevelXp;
-
-                    if (levelXp > 0)
-                        percentComplete = (int)Math.Floor(xp / levelXp * 100);
-                    return $"{xp}/{levelXp} ({percentComplete}%)";
-                }
-            }
-
-            public event PropertyChangedEventHandler PropertyChanged;
-
-            public void RaisePropertyChanged(string propertyName)
-            {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            }
-
-            public string GetRuntime()
-            {
-                var seconds = (int)((double)RuntimeTotal * 60);
-                var duration = new TimeSpan(0, 0, seconds);
-
-                return duration.ToString(@"dd\:hh\:mm\:ss");
-            }
-        }
+        
 		public List<BotAccount> Accounts { get; set; }
         public object Settings { get; private set; }
         private GlobalSettings _globalSettings { get; set; }

@@ -1,4 +1,5 @@
 ﻿using PoGo.NecroBot.Logic.Common;
+using PoGo.NecroBot.Logic.Model;
 using System;
 using System.Windows.Forms;
 
@@ -6,7 +7,7 @@ namespace PoGo.NecroBot.Logic.Forms
 {
     public partial class SelectAccountForm : Form
     {
-        public MultiAccountManager.BotAccount SelectedAccount { get; set; }
+        public BotAccount SelectedAccount { get; set; }
         public SelectAccountForm()
         {
             InitializeComponent();
@@ -54,7 +55,7 @@ namespace PoGo.NecroBot.Logic.Forms
 
         private void SelectBot_Click(object sender, EventArgs e)
         {
-            SelectedAccount  = (MultiAccountManager.BotAccount)((Button)sender).Tag;
+            SelectedAccount  = (BotAccount)((Button)sender).Tag;
             Close();
         }
 
