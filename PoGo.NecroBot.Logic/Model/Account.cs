@@ -1,5 +1,7 @@
-﻿using System;
+﻿using PoGo.NecroBot.Logic.Model.Settings;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -25,5 +27,58 @@ namespace PoGo.NecroBot.Logic.Model
         public long? CurrentXp { get; set; }
         public long? PrevLevelXp { get; set; }
         public long? NextLevelXp { get; set; }
+        public long? IsRunning { get; set; }
+    }
+
+    public partial class Account : INotifyPropertyChanged
+    {
+        public Account()
+        {
+
+        }
+
+        public Account(AuthConfig item)
+        {
+            AuthType = (long)item.AuthType;
+            Password = item.Password;
+            Username = item.Username;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void RaisePropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public string GetRuntime()
+        {
+            if (RuntimeTotal.HasValue)
+            {
+                var seconds = (int)(RuntimeTotal.Value * 60);
+                var duration = new TimeSpan(0, 0, seconds);
+
+                return duration.ToString(@"dd\:hh\:mm\:ss");
+            }
+
+            return null;
+        }
+
+        public string ExperienceInfo
+        {
+            get
+            {
+                if (!CurrentXp.HasValue || !PrevLevelXp.HasValue || !NextLevelXp.HasValue)
+                    return null;
+
+                int percentComplete = 0;
+                double xp = CurrentXp.Value - PrevLevelXp.Value;
+                double levelXp = NextLevelXp.Value - PrevLevelXp.Value;
+
+                if (levelXp > 0)
+                    percentComplete = (int)Math.Floor(xp / levelXp * 100);
+                return $"{xp}/{levelXp} ({percentComplete}%)";
+            }
+        }
     }
 }

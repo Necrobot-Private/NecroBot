@@ -5,9 +5,9 @@ namespace PoGo.NecroBot.Logic.Exceptions
 {
     public class ActiveSwitchAccountManualException : Exception
     {
-        public BotAccount RequestedAccount;
+        public Account RequestedAccount;
 
-        public ActiveSwitchAccountManualException(BotAccount requestedAccount)
+        public ActiveSwitchAccountManualException(Account requestedAccount)
         {
             RequestedAccount = requestedAccount;
         }

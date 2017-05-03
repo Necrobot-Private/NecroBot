@@ -4,9 +4,9 @@ namespace PoGo.NecroBot.Logic.Event
 {
     public class BotSwitchedEvent : IEvent
     {
-        private BotAccount Account;
+        private Account Account;
 
-        public BotSwitchedEvent(BotAccount nextBot)
+        public BotSwitchedEvent(Account nextBot)
         {
             Account = nextBot;
         }

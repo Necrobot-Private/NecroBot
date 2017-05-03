@@ -1392,9 +1392,9 @@ namespace RocketBot2.Forms
 
             var bot = accountManager.GetStartUpAccount();
 
-            if (accountManager.Accounts.Count > 1)
+            if (accountManager.GetAccountsReadOnly().Count > 1)
             {
-                foreach (var _bot in accountManager.Accounts)
+                foreach (var _bot in accountManager.GetAccountsReadOnly())
                 {
                     var _item = new ToolStripMenuItem()
                     {

@@ -36,7 +36,7 @@ namespace PoGo.NecroBot.Logic.State
             _initialState = state;
         }
 
-        public void ReInitializeSession(ISession session, GlobalSettings globalSettings, BotAccount requestedAccount = null)
+        public void ReInitializeSession(ISession session, GlobalSettings globalSettings, Account requestedAccount = null)
         {
             if (session.LogicSettings.MultipleBotConfig.StartFromDefaultLocation)
             {

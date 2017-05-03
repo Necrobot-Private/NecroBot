@@ -6,7 +6,7 @@ namespace PoGo.NecroBot.Logic.Model
 {
     public partial class DatabaseConfigContext : DbContext
     {
-        public virtual DbSet<Account> Accounts { get; set; }
+        public virtual DbSet<Account> Account { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
