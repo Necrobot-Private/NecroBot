@@ -118,6 +118,38 @@
             // LanguagesList
             // 
             this.LanguagesList.FormattingEnabled = true;
+            this.LanguagesList.Items.AddRange(new object[] {
+            "en",
+            "ca",
+            "cs",
+            "da",
+            "de",
+            "el",
+            "es",
+            "et",
+            "fr",
+            "hu",
+            "id",
+            "it",
+            "ja-JP",
+            "kh",
+            "lt",
+            "nl-NL",
+            "nn-NO",
+            "pl",
+            "pt-BR",
+            "pt-PT",
+            "ro",
+            "ru-RU",
+            "sv",
+            "th",
+            "tr",
+            "uk-UA",
+            "vi",
+            "zh-CN",
+            "zh-CN_pp",
+            "zh-HK",
+            "zh-TW"});
             this.LanguagesList.Location = new System.Drawing.Point(295, 21);
             this.LanguagesList.Name = "LanguagesList";
             this.LanguagesList.Size = new System.Drawing.Size(132, 28);
@@ -144,7 +176,7 @@
             this.AccountPage.Name = "AccountPage";
             this.AccountPage.Size = new System.Drawing.Size(685, 249);
             this.AccountPage.TabIndex = 1;
-            this.AccountPage.Text = "Account setup";
+            this.AccountPage.Text = "Account Setup";
             this.AccountPage.Commit += new System.EventHandler<AeroWizard.WizardPageConfirmEventArgs>(this.WizardPage2_Commit);
             // 
             // txtPassword
@@ -215,7 +247,7 @@
             this.LocationPage.Name = "LocationPage";
             this.LocationPage.Size = new System.Drawing.Size(685, 249);
             this.LocationPage.TabIndex = 3;
-            this.LocationPage.Text = "Start location";
+            this.LocationPage.Text = "Starting Location";
             this.LocationPage.Commit += new System.EventHandler<AeroWizard.WizardPageConfirmEventArgs>(this.LocationPage_Commit);
             this.LocationPage.Click += new System.EventHandler(this.WizardPage4_Click);
             // 
@@ -270,7 +302,7 @@
             this.WalkinSpeedPage.Name = "WalkinSpeedPage";
             this.WalkinSpeedPage.Size = new System.Drawing.Size(685, 249);
             this.WalkinSpeedPage.TabIndex = 4;
-            this.WalkinSpeedPage.Text = "Walking setting";
+            this.WalkinSpeedPage.Text = "Walk Settings";
             this.WalkinSpeedPage.Commit += new System.EventHandler<AeroWizard.WizardPageConfirmEventArgs>(this.WalkinSpeedPage_Commit);
             this.WalkinSpeedPage.Click += new System.EventHandler(this.WalkinSpeedPage_Click);
             // 
@@ -390,7 +422,7 @@
             this.WebSocketPage.NextPage = this.SnipePage;
             this.WebSocketPage.Size = new System.Drawing.Size(685, 249);
             this.WebSocketPage.TabIndex = 2;
-            this.WebSocketPage.Text = "Websocket";
+            this.WebSocketPage.Text = "WebSocket Settings";
             this.WebSocketPage.Commit += new System.EventHandler<AeroWizard.WizardPageConfirmEventArgs>(this.WebSocketPage_Commit);
             this.WebSocketPage.Click += new System.EventHandler(this.WebSocketPage_Click);
             // 
@@ -437,7 +469,7 @@
             this.SnipePage.NextPage = this.PageFinish;
             this.SnipePage.Size = new System.Drawing.Size(685, 249);
             this.SnipePage.TabIndex = 5;
-            this.SnipePage.Text = "Snipe setting";
+            this.SnipePage.Text = "Snipe Settings";
             this.SnipePage.Commit += new System.EventHandler<AeroWizard.WizardPageConfirmEventArgs>(this.SnipePage_Commit);
             this.SnipePage.Initialize += new System.EventHandler<AeroWizard.WizardPageInitEventArgs>(this.SnipePage_Initialize);
             // 
