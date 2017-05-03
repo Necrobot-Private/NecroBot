@@ -64,22 +64,18 @@ namespace PoGo.NecroBot.CLI.Forms
         {
             if (radHashServer.Checked && string.IsNullOrEmpty(txtAPIKey.Text))
             {
-                MessageBox.Show("Please enter API Key", "Missing API key", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Please enter a valid API Key", "Missing API Key", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             if (!radHashServer.Checked && !radLegacy.Checked)
             {
-                MessageBox.Show("Please select an API method", "Config error",
+                MessageBox.Show("Please select an API method", "Config Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             DialogResult = DialogResult.OK;
             Close();
-        }
-
-        private void AuthAPIForm_Load(object sender, EventArgs e)
-        {
         }
     }
 }

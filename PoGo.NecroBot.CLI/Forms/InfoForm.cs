@@ -14,13 +14,10 @@ namespace PoGo.NecroBot.CLI.Forms
 
         private void InfoForm_Load(object sender, EventArgs e)
         {
-            Text = "Necrobot 2 - "
-                        + FileVersionInfo
-                            .GetVersionInfo(Assembly.GetExecutingAssembly().Location)
-                            .ProductVersion;
+            Text = $"Necrobot 2 - {Assembly.GetExecutingAssembly().GetName().Version}";
         }
 
-        private void PictureBox2_Click(object sender, EventArgs e)
+        private void DonateLogo_Click(object sender, EventArgs e)
         {
             Process.Start("http://www.mypogosnipers.com/?donate");
         }
@@ -40,9 +37,9 @@ namespace PoGo.NecroBot.CLI.Forms
             }
         }
 
-        private void PictureBox1_Click(object sender, EventArgs e)
+        private void NecroLogo_Click(object sender, EventArgs e)
         {
-            Process.Start("https://github.com/Necrobot-Private/NecroBot/releases");
+            Process.Start("https://github.com/Necrobot-Private/NecroBot");
         }
     }
 }
