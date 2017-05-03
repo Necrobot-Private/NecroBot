@@ -9,6 +9,7 @@ using PoGo.NecroBot.Logic.Service.Elevation;
 using PoGo.NecroBot.Logic.State;
 using PokemonGo.RocketAPI.Enums;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace PoGo.NecroBot.CLI.Forms
 {
@@ -34,7 +35,7 @@ namespace PoGo.NecroBot.CLI.Forms
             IElevationService elevationService, string configFile) : this(_session)
         {
             Session = _session;
-            txtLanguage.Text = Session.LogicSettings.TranslationLanguageCode;
+            LanguagesList.SelectedItem = Session.LogicSettings.TranslationLanguageCode;
             txtLat.Text = settings.LocationConfig.DefaultLatitude.ToString();
             txtLng.Text = settings.LocationConfig.DefaultLongitude.ToString();
             this.settings = settings;
@@ -92,13 +93,10 @@ namespace PoGo.NecroBot.CLI.Forms
 
         private void SelectLanguagePage_Click(object sender, EventArgs e)
         {
-            Session = new Session(settings,
-                new ClientSettings(settings, elevationService),
-                new LogicSettings(settings),
-                elevationService
-            );
-
-            settings.ConsoleConfig.TranslationLanguageCode = txtLanguage.Text;
+            Session = new Session(settings, new ClientSettings(settings, elevationService), new LogicSettings(settings), elevationService);
+            List<string> LanguageList = new List<string> { "en", "ca", "cs", "da", "de", "el", "es", "et", "fr", "hu", "id", "it", "ja-JP", "kh", "lt", "nl-NL", "nn-NO", "pl", "pt-BR", "pt-PT", "ro", "ru-RU", "sv", "th", "tr", "uk-UA", "vi", "zh-CN", "zh-CN_pp", "zh-HK", "zh-TW" };
+            LanguagesList.Items.Add(LanguageList);
+            settings.ConsoleConfig.TranslationLanguageCode = (string)LanguagesList.SelectedItem;
         }
 
         private void WizardControl1_Cancelling(object sender, CancelEventArgs e)
@@ -162,7 +160,5 @@ namespace PoGo.NecroBot.CLI.Forms
             settings.SnipeConfig.SnipePokemonNotInPokedex = chkSnipeDex.Checked;
 
         }
-
-      
     }
 }
