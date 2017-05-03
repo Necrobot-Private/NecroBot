@@ -215,7 +215,7 @@ namespace PoGo.NecroBot.Logic
             }
             catch
             {
-                Logging.Logger.Write("You have exceeded your daily request quota for this API or the provided API key is expired/invalid or not API actived.", Logging.LogLevel.Error, ConsoleColor.Red);
+                Logging.Logger.Write("You have exceeded your daily request quota for this Google API key or the provided Google API key is expired/invalid or not Google API actived.", Logging.LogLevel.Error, ConsoleColor.Red);
                 return result;
             }
 
