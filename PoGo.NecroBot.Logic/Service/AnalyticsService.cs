@@ -36,10 +36,10 @@ namespace PoGo.NecroBot.Logic.Service
             var initialized = await service.Init().ConfigureAwait(false);
             if (initialized)
             {
-                service.OnData += (eventType, eventData) =>
+                service.OnData += async (eventType, eventData) =>
                 {
                     var analyticsEvent = new AnalyticsEvent { EventType = eventType, Data = eventData };
-                    session.EventDispatcher.Send(analyticsEvent);
+                    await BotDataSocketClient.HandleEvent(analyticsEvent, session).ConfigureAwait(false);
                 };
 
                 while (true)
