@@ -100,7 +100,7 @@
                     <RichTextBox  TextChanged="RichTextBox_TextChanged" Name="rtbFreeText" >
                         <FlowDocument>
                             <Paragraph>
-                                <Run Text="{Binding Path=ManualSnipe.FreeInput, Mode=TwoWay}" />
+                                <Run Text="{Binding Path=ManualSnipe.InputText, Mode=TwoWay}" />
                             </Paragraph>
                         </FlowDocument>
                     </RichTextBox>
