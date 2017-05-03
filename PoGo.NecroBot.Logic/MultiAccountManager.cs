@@ -187,7 +187,7 @@ namespace PoGo.NecroBot.Logic
                     foreach (var liteDbAccount in liteDbAccounts.FindAll())
                     {
                         Account newAccount = new Account();
-                        newAccount.AuthType = (long)liteDbAccount.AuthType;
+                        newAccount.AuthType = liteDbAccount.AuthType;
                         newAccount.Username = liteDbAccount.Username;
                         newAccount.Password = liteDbAccount.Password;
                         newAccount.RuntimeTotal = liteDbAccount.RuntimeTotal;
@@ -220,7 +220,7 @@ namespace PoGo.NecroBot.Logic
                 // Add new accounts and update existing accounts.
                 foreach (var item in accounts)
                 {
-                    var existing = db.Account.FirstOrDefault(x => x.Username == item.Username && x.AuthType == (long)item.AuthType);
+                    var existing = db.Account.FirstOrDefault(x => x.Username == item.Username && x.AuthType == item.AuthType);
 
                     if (existing == null)
                     {
@@ -248,7 +248,7 @@ namespace PoGo.NecroBot.Logic
                 List<Account> accountsToRemove = new List<Account>();
                 foreach (var item in db.Account)
                 {
-                    var existing = accounts.FirstOrDefault(x => x.Username == item.Username && (long)x.AuthType == item.AuthType);
+                    var existing = accounts.FirstOrDefault(x => x.Username == item.Username && x.AuthType == item.AuthType);
                     if (existing == null)
                     {
                         accountsToRemove.Add(item);

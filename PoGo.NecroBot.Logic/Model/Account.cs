@@ -1,16 +1,15 @@
 ﻿using PoGo.NecroBot.Logic.Model.Settings;
+using PokemonGo.RocketAPI.Enums;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PoGo.NecroBot.Logic.Model
 {
     public partial class Account
     {
         public long Id { get; set; }
-        public long AuthType { get; set; }
+        public AuthType AuthType { get; set; }
         [Required]
         public string Username { get; set; }
         [Required]
@@ -39,7 +38,7 @@ namespace PoGo.NecroBot.Logic.Model
 
         public Account(AuthConfig item)
         {
-            AuthType = (long)item.AuthType;
+            AuthType = item.AuthType;
             Password = item.Password;
             Username = item.Username;
         }
