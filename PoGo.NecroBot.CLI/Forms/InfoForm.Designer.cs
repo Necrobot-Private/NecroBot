@@ -30,180 +30,171 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InfoForm));
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
-            this.linkLabel2 = new System.Windows.Forms.LinkLabel();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.linkLabel3 = new System.Windows.Forms.LinkLabel();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.linkLabel4 = new System.Windows.Forms.LinkLabel();
-            this.linkLabel5 = new System.Windows.Forms.LinkLabel();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
+            this.NecroLogo = new System.Windows.Forms.PictureBox();
+            this.SupportLabel = new System.Windows.Forms.Label();
+            this.DownloadLabel = new System.Windows.Forms.Label();
+            this.lnkDownload = new System.Windows.Forms.LinkLabel();
+            this.lnkSupport = new System.Windows.Forms.LinkLabel();
+            this.DonateLogo = new System.Windows.Forms.PictureBox();
+            this.lnkWiki = new System.Windows.Forms.LinkLabel();
+            this.WikiLabel = new System.Windows.Forms.Label();
+            this.Description = new System.Windows.Forms.Label();
+            this.SnipeLink2 = new System.Windows.Forms.LinkLabel();
+            this.SnipeLink1 = new System.Windows.Forms.LinkLabel();
             this.label7 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.label8 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.label1 = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.NecroLogo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DonateLogo)).BeginInit();
             this.SuspendLayout();
             // 
-            // pictureBox1
+            // NecroLogo
             // 
-            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBox1.Image = global::PoGo.NecroBot.CLI.Properties.Resources.necro_logo;
-            this.pictureBox1.Location = new System.Drawing.Point(14, 9);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(223, 86);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
-            this.pictureBox1.Click += new System.EventHandler(this.PictureBox1_Click);
+            this.NecroLogo.BackgroundImage = global::PoGo.NecroBot.CLI.Properties.Resources.necro_logo;
+            this.NecroLogo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.NecroLogo.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.NecroLogo.Location = new System.Drawing.Point(21, 16);
+            this.NecroLogo.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.NecroLogo.Name = "NecroLogo";
+            this.NecroLogo.Size = new System.Drawing.Size(312, 128);
+            this.NecroLogo.TabIndex = 0;
+            this.NecroLogo.TabStop = false;
+            this.NecroLogo.Click += new System.EventHandler(this.NecroLogo_Click);
             // 
-            // label1
+            // SupportLabel
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(261, 47);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(62, 16);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Support";
+            this.SupportLabel.AutoSize = true;
+            this.SupportLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            this.SupportLabel.Location = new System.Drawing.Point(341, 83);
+            this.SupportLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.SupportLabel.Name = "SupportLabel";
+            this.SupportLabel.Size = new System.Drawing.Size(75, 23);
+            this.SupportLabel.TabIndex = 1;
+            this.SupportLabel.Text = "Support:";
             // 
-            // label2
+            // DownloadLabel
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(261, 9);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(77, 16);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "Download";
+            this.DownloadLabel.AutoSize = true;
+            this.DownloadLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            this.DownloadLabel.Location = new System.Drawing.Point(341, 16);
+            this.DownloadLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.DownloadLabel.Name = "DownloadLabel";
+            this.DownloadLabel.Size = new System.Drawing.Size(91, 23);
+            this.DownloadLabel.TabIndex = 2;
+            this.DownloadLabel.Text = "Download:";
             // 
-            // linkLabel1
+            // lnkDownload
             // 
-            this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkLabel1.Location = new System.Drawing.Point(342, 9);
-            this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(134, 16);
-            this.linkLabel1.TabIndex = 3;
-            this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "http://alturl.com/f6o6q";
-            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.Link_click);
+            this.lnkDownload.AutoSize = true;
+            this.lnkDownload.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            this.lnkDownload.Location = new System.Drawing.Point(455, 16);
+            this.lnkDownload.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lnkDownload.Name = "lnkDownload";
+            this.lnkDownload.Size = new System.Drawing.Size(168, 23);
+            this.lnkDownload.TabIndex = 3;
+            this.lnkDownload.TabStop = true;
+            this.lnkDownload.Text = "http://bit.ly/2d9iCgU";
+            this.lnkDownload.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.Link_click);
             // 
-            // linkLabel2
+            // lnkSupport
             // 
-            this.linkLabel2.AutoSize = true;
-            this.linkLabel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkLabel2.Location = new System.Drawing.Point(342, 47);
-            this.linkLabel2.Name = "linkLabel2";
-            this.linkLabel2.Size = new System.Drawing.Size(180, 16);
-            this.linkLabel2.TabIndex = 4;
-            this.linkLabel2.TabStop = true;
-            this.linkLabel2.Text = "https://discord.gg/7FWyWVp";
-            this.linkLabel2.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.Link_click);
+            this.lnkSupport.AutoSize = true;
+            this.lnkSupport.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            this.lnkSupport.Location = new System.Drawing.Point(455, 83);
+            this.lnkSupport.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lnkSupport.Name = "lnkSupport";
+            this.lnkSupport.Size = new System.Drawing.Size(166, 23);
+            this.lnkSupport.TabIndex = 4;
+            this.lnkSupport.TabStop = true;
+            this.lnkSupport.Text = "http://bit.ly/2p6k856";
+            this.lnkSupport.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.Link_click);
             // 
-            // pictureBox2
+            // DonateLogo
             // 
-            this.pictureBox2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox2.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBox2.Image = global::PoGo.NecroBot.CLI.Properties.Resources.PayPalDonateNow;
-            this.pictureBox2.Location = new System.Drawing.Point(14, 101);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(223, 98);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox2.TabIndex = 5;
-            this.pictureBox2.TabStop = false;
-            this.pictureBox2.Click += new System.EventHandler(this.PictureBox2_Click);
+            this.DonateLogo.BackgroundImage = global::PoGo.NecroBot.CLI.Properties.Resources.PayPalDonateNow;
+            this.DonateLogo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.DonateLogo.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.DonateLogo.Location = new System.Drawing.Point(21, 160);
+            this.DonateLogo.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.DonateLogo.Name = "DonateLogo";
+            this.DonateLogo.Size = new System.Drawing.Size(312, 143);
+            this.DonateLogo.TabIndex = 5;
+            this.DonateLogo.TabStop = false;
+            this.DonateLogo.Click += new System.EventHandler(this.DonateLogo_Click);
             // 
-            // linkLabel3
+            // lnkWiki
             // 
-            this.linkLabel3.AutoSize = true;
-            this.linkLabel3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkLabel3.Location = new System.Drawing.Point(344, 28);
-            this.linkLabel3.Name = "linkLabel3";
-            this.linkLabel3.Size = new System.Drawing.Size(144, 16);
-            this.linkLabel3.TabIndex = 7;
-            this.linkLabel3.TabStop = true;
-            this.linkLabel3.Text = "http://alturl.com/gw6mg";
-            this.linkLabel3.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.Link_click);
+            this.lnkWiki.AutoSize = true;
+            this.lnkWiki.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            this.lnkWiki.Location = new System.Drawing.Point(455, 49);
+            this.lnkWiki.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lnkWiki.Name = "lnkWiki";
+            this.lnkWiki.Size = new System.Drawing.Size(168, 23);
+            this.lnkWiki.TabIndex = 7;
+            this.lnkWiki.TabStop = true;
+            this.lnkWiki.Text = "http://bit.ly/2pDyGKl";
+            this.lnkWiki.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.Link_click);
             // 
-            // label3
+            // WikiLabel
             // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(261, 28);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(38, 16);
-            this.label3.TabIndex = 6;
-            this.label3.Text = "Wiki";
+            this.WikiLabel.AutoSize = true;
+            this.WikiLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            this.WikiLabel.Location = new System.Drawing.Point(341, 49);
+            this.WikiLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.WikiLabel.Name = "WikiLabel";
+            this.WikiLabel.Size = new System.Drawing.Size(46, 23);
+            this.WikiLabel.TabIndex = 6;
+            this.WikiLabel.Text = "Wiki:";
             // 
-            // label4
+            // Description
             // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.ForeColor = System.Drawing.Color.DarkRed;
-            this.label4.Location = new System.Drawing.Point(261, 69);
-            this.label4.MaximumSize = new System.Drawing.Size(250, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(250, 162);
-            this.label4.TabIndex = 8;
-            this.label4.Text = resources.GetString("label4.Text");
+            this.Description.AutoSize = true;
+            this.Description.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.Description.ForeColor = System.Drawing.Color.DarkRed;
+            this.Description.Location = new System.Drawing.Point(341, 160);
+            this.Description.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.Description.MaximumSize = new System.Drawing.Size(375, 0);
+            this.Description.Name = "Description";
+            this.Description.Size = new System.Drawing.Size(367, 161);
+            this.Description.TabIndex = 8;
+            this.Description.Text = resources.GetString("Description.Text");
             // 
-            // linkLabel4
+            // SnipeLink2
             // 
-            this.linkLabel4.AutoSize = true;
-            this.linkLabel4.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkLabel4.Location = new System.Drawing.Point(261, 254);
-            this.linkLabel4.Name = "linkLabel4";
-            this.linkLabel4.Size = new System.Drawing.Size(149, 18);
-            this.linkLabel4.TabIndex = 9;
-            this.linkLabel4.TabStop = true;
-            this.linkLabel4.Text = "http://msniper.com";
+            this.SnipeLink2.AutoSize = true;
+            this.SnipeLink2.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.SnipeLink2.Location = new System.Drawing.Point(17, 343);
+            this.SnipeLink2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.SnipeLink2.Name = "SnipeLink2";
+            this.SnipeLink2.Size = new System.Drawing.Size(158, 23);
+            this.SnipeLink2.TabIndex = 9;
+            this.SnipeLink2.TabStop = true;
+            this.SnipeLink2.Text = "http://msniper.com";
             // 
-            // linkLabel5
+            // SnipeLink1
             // 
-            this.linkLabel5.AutoSize = true;
-            this.linkLabel5.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkLabel5.Location = new System.Drawing.Point(261, 231);
-            this.linkLabel5.Name = "linkLabel5";
-            this.linkLabel5.Size = new System.Drawing.Size(204, 18);
-            this.linkLabel5.TabIndex = 10;
-            this.linkLabel5.TabStop = true;
-            this.linkLabel5.Text = "http://mypogosnipers.com";
-            this.linkLabel5.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.Link_click);
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(14, 221);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(62, 13);
-            this.label5.TabIndex = 11;
-            this.label5.Text = "Credited To";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(17, 242);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(135, 13);
-            this.label6.TabIndex = 12;
-            this.label6.Text = "Samuraitruong (Khoai Map)";
+            this.SnipeLink1.AutoSize = true;
+            this.SnipeLink1.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.SnipeLink1.Location = new System.Drawing.Point(17, 309);
+            this.SnipeLink1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.SnipeLink1.Name = "SnipeLink1";
+            this.SnipeLink1.Size = new System.Drawing.Size(213, 23);
+            this.SnipeLink1.TabIndex = 10;
+            this.SnipeLink1.TabStop = true;
+            this.SnipeLink1.Text = "http://mypogosnipers.com";
+            this.SnipeLink1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.Link_click);
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(325, 289);
+            this.label7.Font = new System.Drawing.Font("Segoe UI", 8F);
+            this.label7.Location = new System.Drawing.Point(514, 352);
+            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(186, 13);
+            this.label7.Size = new System.Drawing.Size(235, 19);
             this.label7.TabIndex = 13;
-            this.label7.Text = "Thanks all for you help, Happy botting";
+            this.label7.Text = "Thanks for your help, Happy Botting!";
             // 
             // timer1
             // 
@@ -211,53 +202,59 @@
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
             // 
-            // label8
+            // linkLabel1
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(18, 261);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(35, 13);
-            this.label8.TabIndex = 14;
-            this.label8.Text = "jjskuld";
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            this.linkLabel1.Location = new System.Drawing.Point(455, 119);
+            this.linkLabel1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(162, 23);
+            this.linkLabel1.TabIndex = 15;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "http://bit.ly/2puJfB1";
             // 
-            // label9
+            // label1
             // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(18, 283);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(105, 13);
-            this.label9.TabIndex = 15;
-            this.label9.Text = "Necrobot Community";
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 9.75F);
+            this.label1.Location = new System.Drawing.Point(341, 119);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(110, 23);
+            this.label1.TabIndex = 14;
+            this.label1.Text = "Contributors:";
             // 
             // InfoForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 23F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(527, 311);
-            this.Controls.Add(this.label9);
-            this.Controls.Add(this.label8);
-            this.Controls.Add(this.label7);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.linkLabel5);
-            this.Controls.Add(this.linkLabel4);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.linkLabel3);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.pictureBox2);
-            this.Controls.Add(this.linkLabel2);
+            this.ClientSize = new System.Drawing.Size(762, 380);
             this.Controls.Add(this.linkLabel1);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.SnipeLink1);
+            this.Controls.Add(this.SnipeLink2);
+            this.Controls.Add(this.Description);
+            this.Controls.Add(this.lnkWiki);
+            this.Controls.Add(this.WikiLabel);
+            this.Controls.Add(this.DonateLogo);
+            this.Controls.Add(this.lnkSupport);
+            this.Controls.Add(this.lnkDownload);
+            this.Controls.Add(this.DownloadLabel);
+            this.Controls.Add(this.SupportLabel);
+            this.Controls.Add(this.NecroLogo);
+            this.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.Name = "InfoForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "About Necrobot2";
             this.TopMost = true;
             this.Load += new System.EventHandler(this.InfoForm_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NecroLogo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DonateLogo)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -265,22 +262,20 @@
 
         #endregion
 
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.LinkLabel linkLabel1;
-        private System.Windows.Forms.LinkLabel linkLabel2;
-        private System.Windows.Forms.PictureBox pictureBox2;
-        private System.Windows.Forms.LinkLabel linkLabel3;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.LinkLabel linkLabel4;
-        private System.Windows.Forms.LinkLabel linkLabel5;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.PictureBox NecroLogo;
+        private System.Windows.Forms.Label SupportLabel;
+        private System.Windows.Forms.Label DownloadLabel;
+        private System.Windows.Forms.LinkLabel lnkDownload;
+        private System.Windows.Forms.LinkLabel lnkSupport;
+        private System.Windows.Forms.PictureBox DonateLogo;
+        private System.Windows.Forms.LinkLabel lnkWiki;
+        private System.Windows.Forms.Label WikiLabel;
+        private System.Windows.Forms.Label Description;
+        private System.Windows.Forms.LinkLabel SnipeLink2;
+        private System.Windows.Forms.LinkLabel SnipeLink1;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Timer timer1;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.Label label1;
     }
 }

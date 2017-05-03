@@ -49,19 +49,10 @@ namespace PoGo.Necrobot.Window.Model
                 x.Caught = entry.TimesCaptured;
                 x.Seen = entry.TimesEncountered;
                 x.Opacity = (entry.TimesCaptured > 0 ? 1.0:0.0);
-
-                if(entry.TimesCaptured > 0)
-                {
-                    x.TimelineDuration = "24:00:00";
-                }
-                else
-                {
-                    x.TimelineDuration = "0:0:4";
-                }
+                
                 x.RaisePropertyChanged("Caught");
                 x.RaisePropertyChanged("Seen");
                 x.RaisePropertyChanged("Opacity");
-                x.RaisePropertyChanged("TimelineDuration");
             }
         }
     }
