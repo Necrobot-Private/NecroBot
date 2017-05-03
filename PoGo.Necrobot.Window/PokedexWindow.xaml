@@ -59,7 +59,7 @@
                                 <EventTrigger RoutedEvent="Mouse.MouseLeave">
                                     <BeginStoryboard>
                                         <Storyboard>
-                                            <DoubleAnimation To="{Binding Opacity}"  Duration="{Binding TimelineDuration}" AccelerationRatio="0.10" DecelerationRatio="0.25" Storyboard.TargetName="grayscaleEffect" Storyboard.TargetProperty="(effect:GrayscaleEffect.DesaturationFactor)" />
+                                            <DoubleAnimation To="{Binding Opacity}"  Duration="0:0:4" AccelerationRatio="0.10" DecelerationRatio="0.25" Storyboard.TargetName="grayscaleEffect" Storyboard.TargetProperty="(effect:GrayscaleEffect.DesaturationFactor)" />
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </EventTrigger>
