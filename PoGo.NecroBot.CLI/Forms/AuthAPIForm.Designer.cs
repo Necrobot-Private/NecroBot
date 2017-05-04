@@ -47,7 +47,7 @@ namespace PoGo.NecroBot.CLI.Forms
             this.btnOK.Location = new System.Drawing.Point(71, 295);
             this.btnOK.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(88, 30);
+            this.btnOK.Size = new System.Drawing.Size(90, 30);
             this.btnOK.TabIndex = 0;
             this.btnOK.Text = "OK";
             this.btnOK.UseVisualStyleBackColor = true;
@@ -60,7 +60,7 @@ namespace PoGo.NecroBot.CLI.Forms
             this.label1.Location = new System.Drawing.Point(14, 12);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(72, 19);
+            this.label1.Size = new System.Drawing.Size(70, 20);
             this.label1.TabIndex = 1;
             this.label1.Text = "Select API:";
             // 
@@ -70,7 +70,7 @@ namespace PoGo.NecroBot.CLI.Forms
             this.txtAPIKey.Location = new System.Drawing.Point(14, 151);
             this.txtAPIKey.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtAPIKey.Name = "txtAPIKey";
-            this.txtAPIKey.Size = new System.Drawing.Size(266, 25);
+            this.txtAPIKey.Size = new System.Drawing.Size(265, 25);
             this.txtAPIKey.TabIndex = 2;
             // 
             // radLegacy
@@ -81,7 +81,7 @@ namespace PoGo.NecroBot.CLI.Forms
             this.radLegacy.Location = new System.Drawing.Point(18, 52);
             this.radLegacy.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.radLegacy.Name = "radLegacy";
-            this.radLegacy.Size = new System.Drawing.Size(199, 23);
+            this.radLegacy.Size = new System.Drawing.Size(200, 25);
             this.radLegacy.TabIndex = 3;
             this.radLegacy.TabStop = true;
             this.radLegacy.Text = "Legacy 0.45 API - High Risk";
@@ -94,7 +94,7 @@ namespace PoGo.NecroBot.CLI.Forms
             this.lnkBuy.Location = new System.Drawing.Point(287, 154);
             this.lnkBuy.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lnkBuy.Name = "lnkBuy";
-            this.lnkBuy.Size = new System.Drawing.Size(32, 19);
+            this.lnkBuy.Size = new System.Drawing.Size(30, 20);
             this.lnkBuy.TabIndex = 4;
             this.lnkBuy.TabStop = true;
             this.lnkBuy.Text = "Buy";
@@ -107,7 +107,8 @@ namespace PoGo.NecroBot.CLI.Forms
             this.radHashServer.Location = new System.Drawing.Point(18, 87);
             this.radHashServer.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.radHashServer.Name = "radHashServer";
-            this.radHashServer.Size = new System.Drawing.Size(197, 23);
+            this.radHashServer.Checked = true;
+            this.radHashServer.Size = new System.Drawing.Size(200, 25);
             this.radHashServer.TabIndex = 5;
             this.radHashServer.TabStop = true;
             this.radHashServer.Text = "PogoDev Hash - API v" + Client.API_VERSION;
@@ -120,7 +121,7 @@ namespace PoGo.NecroBot.CLI.Forms
             this.label2.Location = new System.Drawing.Point(14, 123);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(59, 19);
+            this.label2.Size = new System.Drawing.Size(60, 20);
             this.label2.TabIndex = 6;
             this.label2.Text = "API Key:";
             // 
@@ -132,11 +133,9 @@ namespace PoGo.NecroBot.CLI.Forms
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.MaximumSize = new System.Drawing.Size(315, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(294, 76);
+            this.label3.Size = new System.Drawing.Size(295, 75);
             this.label3.TabIndex = 7;
-            this.label3.Text = "We don\'t provide keys, you will have to buy it from Pogodev. RPM = Requests per m" +
-    "inute, it depends on how fast your config setup is. 150RPM will be sufficient fo" +
-    "r 2-3 normal bots.";
+            this.label3.Text = "We don\'t provide keys, you will have to buy it from PogoDev. RPM = Requests per minute, it depends on how fast your config setup is. 150RPM will be sufficient for 2-3 normal bots.";
             // 
             // btnCancel
             // 
@@ -145,7 +144,7 @@ namespace PoGo.NecroBot.CLI.Forms
             this.btnCancel.Location = new System.Drawing.Point(165, 295);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(88, 30);
+            this.btnCancel.Size = new System.Drawing.Size(90, 30);
             this.btnCancel.TabIndex = 8;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
