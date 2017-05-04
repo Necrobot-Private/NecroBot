@@ -275,6 +275,7 @@ namespace PoGo.Necrobot.Window
             stat.GetCurrent().DirtyEvent += OnPlayerStatisticChanged;
             currentSession = session;
             botMap.Session = session;
+            botMap.GetStyle();
             playerStats = stat;
             ctrPokemonInventory.Session = session;
             ctrlItemControl.Session = session;
@@ -360,7 +361,7 @@ namespace PoGo.Necrobot.Window
             if (MapMode == "Satellite")
                 Settings.Default.MapMode = "Satellite";
             Settings.Default.Save();
-            botMap.InitMap();
+            botMap.GetStyle();
             ResetSync();
         }
 
