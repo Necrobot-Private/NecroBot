@@ -25,6 +25,12 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
         //protected IWalkStrategy _fallbackStrategy;
 
         public event UpdatePositionDelegate UpdatePositionEvent;
+        public event GetRouteDelegate GetRouteEvent;
+
+        protected virtual void OnGetRouteEvent(List<GeoCoordinate> points)
+        {
+            GetRouteEvent?.Invoke(points);
+        }
 
         public abstract Task Walk(IGeoLocation targetLocation, Func<Task> functionExecutedWhileWalking, ISession session, CancellationToken cancellationToken, double walkSpeed = 0.0);
 
@@ -123,13 +129,14 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
             {
                 points.Remove(tooNearPoint);
             }
-            if (points.Any()
-            ) //check if first waypoint is the current location (this is what google returns), in such case remove it!
+            if (points.Any()) //check if first waypoint is the current location (this is what google returns), in such case remove it!
             {
                 var firstStep = points.First();
                 if (firstStep == currentLocation)
                     points.Remove(points.First());
             }
+
+            OnGetRouteEvent(points);
 
             var walkedPointsList = new List<GeoCoordinate>();
             foreach (var nextStep in points)
