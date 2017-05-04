@@ -61,6 +61,18 @@ namespace PoGo.Necrobot.Window.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Normal")]
+        public string MapMode {
+            get {
+                return ((string)(this["MapMode"]));
+            }
+            set {
+                this["MapMode"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1366")]
         public double Width {
             get {
@@ -128,6 +140,18 @@ namespace PoGo.Necrobot.Window.Properties {
             }
             set {
                 this["ConsoleText"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("16")]
+        public double MapZoom {
+            get {
+                return ((double)(this["MapZoom"]));
+            }
+            set {
+                this["MapZoom"] = value;
             }
         }
     }

@@ -1349,9 +1349,9 @@ namespace RocketBot2.Forms
                 (session, lat, lng, speed) => _session.EventDispatcher.Send(new UpdatePositionEvent { Latitude = lat, Longitude = lng, Speed = speed });
             _session.Navigation.WalkStrategy.UpdatePositionEvent += LoadSaveState.SaveLocationToDisk;
 
-            Navigation.GetHumanizeRouteEvent +=
-                (points) => _session.EventDispatcher.Send(new GetHumanizeRouteEvent { Points = points });
-            Navigation.GetHumanizeRouteEvent += UpdateMap;
+            _session.Navigation.WalkStrategy.GetRouteEvent +=
+                (points) => _session.EventDispatcher.Send(new GetRouteEvent { Points = points });
+            _session.Navigation.WalkStrategy.GetRouteEvent += UpdateMap;
 
             UseNearbyPokestopsTask.LootPokestopEvent +=
                 pokestop => _session.EventDispatcher.Send(new LootPokestopEvent { Pokestop = pokestop });

@@ -127,6 +127,7 @@ namespace PoGo.Necrobot.Window
             // Populate ComboBox's w/ Available Themes & Schemes
             Scheme.ItemsSource = new List<string> { "Light", "Dark" };
             Theme.ItemsSource = new List<string> { "Red", "Green", "Blue", "Purple", "Orange", "Lime", "Emerald", "Teal", "Cyan", "Cobalt", "Indigo", "Violet", "Pink", "Magenta", "Crimson", "Amber", "Yellow", "Brown", "Olive", "Steel", "Mauve", "Taupe", "Sienna" };
+            MapMode.ItemsSource = new List<string> { "Normal", "Satellite" };
             var LightTabColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE5E5E5"));
             var DarkTabColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#252525"));
             var LightConsoleBackground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FDF6E3"));
@@ -150,10 +151,12 @@ namespace PoGo.Necrobot.Window
             
             Theme.SelectedValue = Settings.Default.Theme;
             Scheme.SelectedValue = Settings.Default.Scheme;
+            MapMode.SelectedValue = Settings.Default.MapMode;
             Settings.Default.Save();
 
             ChangeThemeTo(Settings.Default.Theme);
             ChangeSchemeTo(Settings.Default.Scheme);
+            ChangeMapModeTo(Settings.Default.MapMode);
 
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             LoadHelpArticleAsync();
@@ -225,11 +228,13 @@ namespace PoGo.Necrobot.Window
             {
                 Theme.SelectedValue = "Red";
                 Scheme.SelectedValue = "Dark";
+                MapMode.SelectedValue = "Normal";
                 ChangeThemeTo("Red");
                 ChangeSchemeTo("Dark");
+                ChangeMapModeTo("Normal");
                 DefaultReset.IsEnabled = false;
             }
-            else if (Settings.Default.ResetLayout == false & Settings.Default.Theme == "Red" & Settings.Default.Scheme == "Dark")
+            else if (Settings.Default.ResetLayout == false & Settings.Default.Theme == "Red" & Settings.Default.Scheme == "Dark" & Settings.Default.MapMode == "Normal")
                 DefaultReset.IsEnabled = false;
             else if (Settings.Default.ResetLayout == false)
                 DefaultReset.IsEnabled = true;
@@ -270,6 +275,7 @@ namespace PoGo.Necrobot.Window
             stat.GetCurrent().DirtyEvent += OnPlayerStatisticChanged;
             currentSession = session;
             botMap.Session = session;
+            botMap.GetStyle();
             playerStats = stat;
             ctrPokemonInventory.Session = session;
             ctrlItemControl.Session = session;
@@ -305,8 +311,16 @@ namespace PoGo.Necrobot.Window
 
         private void MenuSetting_Click(object sender, RoutedEventArgs e)
         {
-            var configWindow = new SettingsWindow(this, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config\\config.json"));
-            configWindow.ShowDialog();
+            var ConfigPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config\\config.json");
+            try
+            {
+                var configWindow = new SettingsWindow(this, ConfigPath);
+                configWindow.ShowDialog();
+            }
+            catch
+            {
+                MessageBox.Show($"{ConfigPath} couldn't be found or is Invalid", "Settings Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void BtnHideInfo_Click(object sender, RoutedEventArgs e)
@@ -333,6 +347,22 @@ namespace PoGo.Necrobot.Window
         private void Scheme_SelectionChanged(object sender, RoutedEventArgs e)
         {
             ChangeSchemeTo(Convert.ToString(Scheme.SelectedValue));
+        }
+
+        private void MapMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ChangeMapModeTo(Convert.ToString(MapMode.SelectedValue));
+        }
+
+        private void ChangeMapModeTo(string MapMode)
+        {
+            if (MapMode == "Normal")
+                Settings.Default.MapMode = "Normal";
+            if (MapMode == "Satellite")
+                Settings.Default.MapMode = "Satellite";
+            Settings.Default.Save();
+            botMap.GetStyle();
+            ResetSync();
         }
 
         private void ChangeThemeTo(string Theme)

@@ -23,9 +23,7 @@ using System.Threading.Tasks;
 namespace PoGo.NecroBot.Logic
 {
     public delegate void UpdatePositionDelegate(ISession session, double lat, double lng, double speed);
-
-    //add delegate
-    public delegate void GetHumanizeRouteDelegate(List<GeoCoordinate> points);
+    public delegate void GetRouteDelegate(List<GeoCoordinate> points);
 
     public class Navigation
     {
@@ -94,8 +92,6 @@ namespace PoGo.NecroBot.Logic
             return currentSpeed;
         }
 
-        private object ensureOneWalkEvent = new object();
-
         public async Task Move(IGeoLocation targetLocation,
             Func<Task> functionExecutedWhileWalking,
             ISession session,
@@ -103,22 +99,7 @@ namespace PoGo.NecroBot.Logic
         {
             cancellationToken.ThrowIfCancellationRequested();
             TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
-
-            //add points to map
-            if (targetLocation != null)
-            {
-                var points = new List<GeoCoordinate>();
-                var startLocation = new GeoCoordinate( _client.CurrentLatitude, _client.CurrentLongitude, _client.CurrentAltitude);
-                var route = Route(session, startLocation, targetLocation.ToGeoCoordinate());
-
-                foreach (var item in route)
-                    points.Add(new GeoCoordinate(item.ToArray()[1], item.ToArray()[0]));
-
-                //get points to map
-                OnGetHumanizeRouteEvent(points);
-            }
-            //end code add points
-
+            
             // If the stretegies become bigger, create a factory for easy management
 
             //Logging.Logger.Write($"Navigation - Walking speed {customWalkingSpeed}");
@@ -187,88 +168,5 @@ namespace PoGo.NecroBot.Logic
         {
             return WalkStrategyQueue.First(q => !IsWalkingStrategyBlacklisted(q.GetType()));
         }
-
-        //functions for points map
-        private List<List<double>> Route(ISession session, GeoCoordinate start, GeoCoordinate dest)
-        {
-            var result = new List<List<double>>();
-
-            try
-            {
-                var web = WebRequest.Create(
-                    $"https://maps.googleapis.com/maps/api/directions/json?origin={start.Latitude},{start.Longitude}&destination={dest.Latitude},{dest.Longitude}&mode=walking&units=metric&key={session.LogicSettings.GoogleApiKey}");
-                web.Credentials = CredentialCache.DefaultCredentials;
-
-                string strResponse;
-                using (var response = web.GetResponse())
-                {
-                    using (var stream = response.GetResponseStream())
-                    {
-                        Debug.Assert(stream != null, "stream != null");
-                        using (var reader = new StreamReader(stream))
-                            strResponse = reader.ReadToEnd();
-                    }
-                }
-
-                var parseObject = JObject.Parse(strResponse);
-                result = Points(parseObject["routes"][0]["overview_polyline"]["points"].ToString(), 1e5);
-            }
-            catch
-            {
-                Logging.Logger.Write("You have exceeded your daily request quota for this Google API key or the provided Google API key is expired/invalid or not Google API actived.", Logging.LogLevel.Error, ConsoleColor.Red);
-                return result;
-            }
-
-            return result;
-        }
-
-        public static List<List<double>> Points(string overview, double precision)
-        {
-            if (string.IsNullOrEmpty(overview))
-                throw new ArgumentNullException("Points");
-
-            var polyline = false;
-            int index = 0, lat = 0, lng = 0;
-            var polylineChars = overview.ToCharArray();
-            var result = new List<List<double>>();
-
-            while (index < polylineChars.Length)
-            {
-                int sum = 0, shifter = 0, nextBits;
-                var coordinates = new List<double>();
-
-                do
-                {
-                    nextBits = polylineChars[index++] - 63;
-                    sum |= (nextBits & 0x1f) << shifter;
-                    shifter += 5;
-                } while (nextBits >= 0x20 && index < polylineChars.Length);
-
-                if (index >= polylineChars.Length && (!polyline || nextBits >= 0x20))
-                    break;
-
-                if (!polyline)
-                    lat += (sum & 1) == 1 ? ~(sum >> 1) : sum >> 1;
-                else
-                {
-                    lng += (sum & 1) == 1 ? ~(sum >> 1) : sum >> 1;
-                    coordinates.Add(lng / precision);
-                    coordinates.Add(lat / precision);
-                    result.Add(coordinates);
-                }
-
-                polyline = !polyline;
-            }
-
-            return result;
-        }
-
-        public static event GetHumanizeRouteDelegate GetHumanizeRouteEvent;
-
-        protected virtual void OnGetHumanizeRouteEvent(List<GeoCoordinate> points)
-        {
-            GetHumanizeRouteEvent?.Invoke(points);
-        }
-        //end functions points map
     }
 }
