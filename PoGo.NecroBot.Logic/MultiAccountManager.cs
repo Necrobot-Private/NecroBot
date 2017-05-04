@@ -136,34 +136,32 @@ namespace PoGo.NecroBot.Logic
 
             int schemaVersion = AuthSettings.SchemaVersionBeforeMigration;
 
-            if (!File.Exists("accounts.db"))
-                return;
-            
             // Backup old config file.
             long ts = DateTime.UtcNow.ToUnixTime(); // Add timestamp to avoid file conflicts
-            if (File.Exists("accounts.db"))
+            if (File.Exists(ACCOUNT_DB_NAME))
             {
                 string backupPath = $"accounts-{schemaVersion}-{ts}.backup.db";
-                Logging.Logger.Write($"Backing up accounts.db to: {backupPath}", LogLevel.Info);
+                Logging.Logger.Write($"Backing up {ACCOUNT_DB_NAME} to: {backupPath}", LogLevel.Info);
             
-                File.Copy("accounts.db", backupPath);
+                File.Copy(ACCOUNT_DB_NAME, backupPath);
             }
             // Add future schema migrations below.
             int version;
             for (version = schemaVersion; version < UpdateConfig.CURRENT_SCHEMA_VERSION; version++) 
             {
-                Logging.Logger.Write($"Migrating accounts.db from schema version {version} to {version + 1}", LogLevel.Info);
+                Logging.Logger.Write($"Migrating {ACCOUNT_DB_NAME} from schema version {version} to {version + 1}", LogLevel.Info);
                 switch (version)
                 {
                     case 19:
                         // Just delete the accounts.db so it gets regenerated from scratch.
-                        File.Delete("accounts.db");
+                        File.Delete(ACCOUNT_DB_NAME);
                         
                         break;
 
                     case 24:
-                        //File.Delete("accounts.db");
+                        // Make a copy of the databse.
                         MigrateLiteDbToSqLite();
+                        File.Delete(ACCOUNT_DB_NAME);
                         break;
                 }
             }
@@ -223,7 +221,7 @@ namespace PoGo.NecroBot.Logic
                     }
                     catch(Exception)
                     {
-                        Logic.Logging.Logger.Write("Error while saving data into accounts.db, please delete account.db and restart bot to have it fully work in order");
+                        Logic.Logging.Logger.Write($"Error while saving data into {ACCOUNT_DB_NAME}, please delete {ACCOUNT_DB_NAME} and restart bot to have it fully work in order");
                     }
                 }
                 else
@@ -255,7 +253,10 @@ namespace PoGo.NecroBot.Logic
 
         internal Account GetMinRuntime(bool ignoreBlockCheck = false)
         {
-            return Accounts.OrderBy(x => x.RuntimeTotal).Where(x => !ignoreBlockCheck || (x.ReleaseBlockTime.HasValue && x.ReleaseBlockTime.Value < DateTime.Now.ToUnixTime())).FirstOrDefault();
+            if (ignoreBlockCheck)
+                return Accounts.OrderBy(x => x.RuntimeTotal.HasValue ? x.RuntimeTotal.Value : 0).ThenBy(x => x.Id).FirstOrDefault();
+            else
+                return Accounts.OrderBy(x => x.RuntimeTotal.HasValue ? x.RuntimeTotal.Value : 0).ThenBy(x => x.Id).Where(x => x.ReleaseBlockTime.HasValue && x.ReleaseBlockTime.Value < DateTime.Now.ToUnixTime()).FirstOrDefault();
         }
 
         public bool AllowMultipleBot()
