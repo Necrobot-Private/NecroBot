@@ -3,7 +3,7 @@ using GeoCoordinatePortable;
 
 namespace PoGo.NecroBot.Logic.Event
 {
-    public class GetHumanizeRouteEvent : IEvent
+    public class GetRouteEvent : IEvent
     {
         public List<GeoCoordinate> Points;
     }
