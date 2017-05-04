@@ -130,5 +130,17 @@ namespace PoGo.Necrobot.Window.Properties {
                 this["ConsoleText"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Normal")]
+        public string MapMode {
+            get {
+                return ((string)(this["MapMode"]));
+            }
+            set {
+                this["MapMode"] = value;
+            }
+        }
     }
 }
