@@ -15,6 +15,7 @@ using POGOProtos.Map.Fort;
 using PoGo.NecroBot.Logic.Event;
 using POGOProtos.Map.Pokemon;
 using PoGo.NecroBot.Logic.Utils;
+using PoGo.Necrobot.Window.Properties;
 
 namespace PoGo.Necrobot.Window.Controls
 {
@@ -61,7 +62,10 @@ namespace PoGo.Necrobot.Window.Controls
         public void InitMap()
         {
             gmap.DragButton = MouseButton.Left;
-            gmap.MapProvider = GoogleMapProvider.Instance;
+            if (Settings.Default.MapMode == "Normal")
+                gmap.MapProvider = GoogleMapProvider.Instance;
+            else if (Settings.Default.MapMode == "Satellite")
+                gmap.MapProvider = GoogleSatelliteMapProvider.Instance;
             GMaps.Instance.Mode = AccessMode.ServerAndCache;
             //gmap.SetPositionByKeywords("Melbourne, 3000");
             gmap.Position = new PointLatLng(54.6961334816182, 25.2985095977783);

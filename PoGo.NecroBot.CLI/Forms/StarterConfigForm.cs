@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Windows.Forms;
 using AeroWizard;
@@ -35,7 +35,7 @@ namespace PoGo.NecroBot.CLI.Forms
             IElevationService elevationService, string configFile) : this(_session)
         {
             Session = _session;
-            LanguagesList.SelectedItem = Session.LogicSettings.TranslationLanguageCode;
+            LanguagesList.SelectedValue = Session.LogicSettings.TranslationLanguageCode;
             txtLat.Text = settings.LocationConfig.DefaultLatitude.ToString();
             txtLng.Text = settings.LocationConfig.DefaultLongitude.ToString();
             this.settings = settings;
@@ -94,9 +94,8 @@ namespace PoGo.NecroBot.CLI.Forms
         private void SelectLanguagePage_Click(object sender, EventArgs e)
         {
             Session = new Session(settings, new ClientSettings(settings, elevationService), new LogicSettings(settings), elevationService);
-            List<string> LanguageList = new List<string> { "en", "ca", "cs", "da", "de", "el", "es", "et", "fr", "hu", "id", "it", "ja-JP", "kh", "lt", "nl-NL", "nn-NO", "pl", "pt-BR", "pt-PT", "ro", "ru-RU", "sv", "th", "tr", "uk-UA", "vi", "zh-CN", "zh-CN_pp", "zh-HK", "zh-TW" };
-            LanguagesList.Items.Add(LanguageList);
-            settings.ConsoleConfig.TranslationLanguageCode = (string)LanguagesList.SelectedItem;
+            settings.ConsoleConfig.TranslationLanguageCode = Convert.ToString(LanguagesList.SelectedValue);
+            //MessageBox.Show(Convert.ToString(LanguagesList.SelectedValue)); - DEBUG
         }
 
         private void WizardControl1_Cancelling(object sender, CancelEventArgs e)

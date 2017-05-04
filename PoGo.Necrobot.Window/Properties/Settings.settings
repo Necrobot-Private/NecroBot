@@ -1,4 +1,4 @@
-﻿<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='utf-8'?>
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="PoGo.Necrobot.Window.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
@@ -10,6 +10,9 @@
     </Setting>
     <Setting Name="SchemeValue" Type="System.String" Scope="User">
       <Value Profile="(Default)">BaseDark</Value>
+    </Setting>
+    <Setting Name="MapMode" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Normal</Value>
     </Setting>
     <Setting Name="Width" Type="System.Double" Scope="User">
       <Value Profile="(Default)">1366</Value>
