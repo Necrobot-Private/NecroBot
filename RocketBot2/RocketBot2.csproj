@@ -947,29 +947,6 @@
       <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="Resources\PokemonGO-Assets\.git\config" />
-    <None Include="Resources\PokemonGO-Assets\.git\description" />
-    <None Include="Resources\PokemonGO-Assets\.git\HEAD" />
-    <None Include="Resources\PokemonGO-Assets\.git\hooks\applypatch-msg.sample" />
-    <None Include="Resources\PokemonGO-Assets\.git\hooks\commit-msg.sample" />
-    <None Include="Resources\PokemonGO-Assets\.git\hooks\post-update.sample" />
-    <None Include="Resources\PokemonGO-Assets\.git\hooks\pre-applypatch.sample" />
-    <None Include="Resources\PokemonGO-Assets\.git\hooks\pre-commit.sample" />
-    <None Include="Resources\PokemonGO-Assets\.git\hooks\pre-push.sample" />
-    <None Include="Resources\PokemonGO-Assets\.git\hooks\pre-rebase.sample" />
-    <None Include="Resources\PokemonGO-Assets\.git\hooks\pre-receive.sample" />
-    <None Include="Resources\PokemonGO-Assets\.git\hooks\prepare-commit-msg.sample" />
-    <None Include="Resources\PokemonGO-Assets\.git\hooks\update.sample" />
-    <None Include="Resources\PokemonGO-Assets\.git\index" />
-    <None Include="Resources\PokemonGO-Assets\.git\info\exclude" />
-    <None Include="Resources\PokemonGO-Assets\.git\logs\HEAD" />
-    <None Include="Resources\PokemonGO-Assets\.git\logs\refs\heads\master" />
-    <None Include="Resources\PokemonGO-Assets\.git\logs\refs\remotes\origin\HEAD" />
-    <None Include="Resources\PokemonGO-Assets\.git\objects\pack\pack-018ba25a781cabc0110685eeabb2359958b69abe.idx" />
-    <None Include="Resources\PokemonGO-Assets\.git\objects\pack\pack-018ba25a781cabc0110685eeabb2359958b69abe.pack" />
-    <None Include="Resources\PokemonGO-Assets\.git\packed-refs" />
-    <None Include="Resources\PokemonGO-Assets\.git\refs\heads\master" />
-    <None Include="Resources\PokemonGO-Assets\.git\refs\remotes\origin\HEAD" />
     <None Include="Resources\PokemonGO-Assets\README.md" />
     <None Include="RunWithExcelConfig.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -1078,10 +1055,6 @@
       <Project>{0739e40d-c589-4aeb-93e5-ee8cd6773c60}</Project>
       <Name>PoGo.NecroBot.Logic</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\PokemonGO-Assets\.git\objects\info\" />
-    <Folder Include="Resources\PokemonGO-Assets\.git\refs\tags\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
