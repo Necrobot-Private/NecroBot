@@ -39,11 +39,6 @@ namespace PoGo.Necrobot.Window
         }
         private static void BackwardCompitableUpdate(GlobalSettings setting)
         {
-            //foreach (var item in setting.PokemonsTransferFilter)
-            //{
-            //    setting.PokemonsTransferFilter[item].AllowTransfer = true;
-            //    item.Value.AllowTransfer = true;
-            //}
             foreach (var item in setting.PokemonsNotToTransfer)
             {
                 if (setting.PokemonsTransferFilter.ContainsKey(item))
@@ -149,9 +144,7 @@ namespace PoGo.Necrobot.Window
 
             var binding = new Binding($"Value.{item.Name}")
             {
-                Mode = BindingMode.TwoWay,
-                
-                // Converter = new   ObservableCollectionConverter()
+                Mode = BindingMode.TwoWay
             };
             string header = $"{att.Key}";
             var enumDataTypeAtt = item.GetCustomAttribute<EnumDataTypeAttribute>(true);
@@ -443,7 +436,7 @@ namespace PoGo.Necrobot.Window
                 var att = item.GetCustomAttributes<NecrobotConfigAttribute>(true).FirstOrDefault();
                 if (att != null)
                 {
-                    string resKey = $"Setting.{item.Name}";// + (string.IsNullOrEmpty(att.SheetName) ? item.Name : att.SheetName);
+                    string resKey = $"Setting.{item.Name}";
 
                     string name = string.IsNullOrEmpty(att.Key) ? item.Name : att.Key;
                     var tabItem = new TabItem() { Content = BuildForm(item, item.GetValue(Settings), att), FontSize = 11, Header = translator.GetTranslation(resKey) };

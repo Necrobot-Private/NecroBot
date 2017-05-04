@@ -15,6 +15,7 @@ using POGOProtos.Map.Fort;
 using PoGo.NecroBot.Logic.Event;
 using POGOProtos.Map.Pokemon;
 using PoGo.NecroBot.Logic.Utils;
+using PoGo.Necrobot.Window.Properties;
 
 namespace PoGo.Necrobot.Window.Controls
 {
@@ -54,18 +55,26 @@ namespace PoGo.Necrobot.Window.Controls
             Dispatcher.Invoke(() =>
             {
                 gmap.Position = new PointLatLng(lat, lng);
-                gmap.Zoom = 16;
+                gmap.Zoom = Settings.Default.MapZoom;
             });
+        }
+
+        public void GetStyle()
+        {
+            if (Settings.Default.MapMode == "Normal")
+                gmap.MapProvider = GoogleMapProvider.Instance;
+            else if (Settings.Default.MapMode == "Satellite")
+                gmap.MapProvider = GoogleSatelliteMapProvider.Instance;
+            gmap.Zoom = Settings.Default.MapZoom;
         }
 
         public void InitMap()
         {
+            GetStyle();
             gmap.DragButton = MouseButton.Left;
-            gmap.MapProvider = GoogleMapProvider.Instance;
             GMaps.Instance.Mode = AccessMode.ServerAndCache;
             //gmap.SetPositionByKeywords("Melbourne, 3000");
             gmap.Position = new PointLatLng(54.6961334816182, 25.2985095977783);
-            gmap.Zoom = 16;
             gmap.ShowCenter = false;
 
             var m = new GMapMarker(gmap.Position);
@@ -281,6 +290,8 @@ namespace PoGo.Necrobot.Window.Controls
             if (gmap.Zoom <= gmap.MinZoom) return;
 
             gmap.Zoom--;
+            Settings.Default.MapZoom = gmap.Zoom;
+            Settings.Default.Save();
         }
 
         private void MnuZoomIn_Click(object sender, RoutedEventArgs e)
@@ -288,6 +299,8 @@ namespace PoGo.Necrobot.Window.Controls
             if (gmap.Zoom >= gmap.MaxZoom) return;
 
             gmap.Zoom++;
+            Settings.Default.MapZoom = gmap.Zoom;
+            Settings.Default.Save();
         }
     }
 }
