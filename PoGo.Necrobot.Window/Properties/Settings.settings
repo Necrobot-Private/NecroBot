@@ -14,6 +14,9 @@
     <Setting Name="MapMode" Type="System.String" Scope="User">
       <Value Profile="(Default)">Normal</Value>
     </Setting>
+	<Setting Name="MapZoom" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">16</Value>
+    </Setting>
     <Setting Name="Width" Type="System.Double" Scope="User">
       <Value Profile="(Default)">1366</Value>
     </Setting>
@@ -31,9 +34,6 @@
     </Setting>
     <Setting Name="ConsoleText" Type="System.String" Scope="User">
       <Value Profile="(Default)">StateHere Console</Value>
-    </Setting>
-    <Setting Name="MapZoom" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">16</Value>
     </Setting>
   </Settings>
 </SettingsFile>
