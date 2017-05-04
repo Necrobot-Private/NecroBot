@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using System.IO;
 
 namespace PoGo.NecroBot.Logic.Model
 {
@@ -8,10 +9,18 @@ namespace PoGo.NecroBot.Logic.Model
     {
         public virtual DbSet<Account> Account { get; set; }
 
+        public DatabaseConfigContext()
+        {
+            Database.EnsureCreated();
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-            optionsBuilder.UseSqlite(@"data source=C:\Users\Joe\Dev\NecroBot\PoGo.NecroBot.Logic\Resources\config.db");
+            var profilePath = Path.Combine(Directory.GetCurrentDirectory());
+            var profileConfigPath = Path.Combine(profilePath, "config");
+            var dbFile = Path.Combine(profileConfigPath, "config.db");
+
+            optionsBuilder.UseSqlite($"data source={dbFile}");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
