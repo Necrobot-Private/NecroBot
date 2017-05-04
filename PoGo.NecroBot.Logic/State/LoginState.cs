@@ -207,15 +207,12 @@ namespace PoGo.NecroBot.Logic.State
             }
             finally
             {
-                using (var db = new DatabaseConfigContext())
+                var currentAccount = accountManager?.GetCurrentAccount();
+                if (currentAccount != null)
                 {
-                    var currentAccount = accountManager?.GetCurrentAccount(db);
-                    if (currentAccount != null)
-                    {
-                        currentAccount.LastLogin = successfullyLoggedIn ? "Success" : "Failure";
-                        currentAccount.LastLoginTimestamp = TimeUtil.GetCurrentTimestampInMilliseconds();
-                        accountManager.UpdateDatabase(db, currentAccount);
-                    }
+                    currentAccount.LastLogin = successfullyLoggedIn ? "Success" : "Failure";
+                    currentAccount.LastLoginTimestamp = TimeUtil.GetCurrentTimestampInMilliseconds();
+                    accountManager.UpdateDatabase(currentAccount);
                 }
             }
             try
@@ -233,30 +230,27 @@ namespace PoGo.NecroBot.Logic.State
                 else
                 {
                     if (successfullyLoggedIn)
-                    {
-                        using (var db = new DatabaseConfigContext())
+                {
+                        var currentAccount = accountManager?.GetCurrentAccount();
+                        if (currentAccount != null)
                         {
-                            var currentAccount = accountManager?.GetCurrentAccount(db);
-                            if (currentAccount != null)
+                            if (session.Profile.Banned)
                             {
-                                if (session.Profile.Banned)
+                                currentAccount.LastLogin = "Banned";
+                                accountManager.UpdateDatabase(currentAccount);
+                            }
+                            else
+                            {
+                                if (session.Profile.Warn)
                                 {
-                                    currentAccount.LastLogin = "Banned";
-                                    accountManager.UpdateDatabase(db, currentAccount);
+                                    currentAccount.LastLogin = "Warned";
+                                    accountManager.UpdateDatabase(currentAccount);
                                 }
-                                else
-                                {
-                                    if (session.Profile.Warn)
-                                    {
-                                        currentAccount.LastLogin = "Warned";
-                                        accountManager.UpdateDatabase(db, currentAccount);
-                                    }
 
-                                    if (currentAccount.Nickname != session.Profile.PlayerData.Username)
-                                    {
-                                        currentAccount.Nickname = session.Profile.PlayerData.Username;
-                                        accountManager.UpdateDatabase(db, currentAccount);
-                                    }
+                                if (currentAccount.Nickname != session.Profile.PlayerData.Username)
+                                {
+                                    currentAccount.Nickname = session.Profile.PlayerData.Username;
+                                    accountManager.UpdateDatabase(currentAccount);
                                 }
                             }
                         }

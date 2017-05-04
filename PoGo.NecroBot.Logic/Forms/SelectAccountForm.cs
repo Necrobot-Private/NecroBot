@@ -67,11 +67,7 @@ namespace PoGo.NecroBot.Logic.Forms
             if (SelectedAccount == null)
             {
                 var manager = TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>();
-
-                using (var db = new DatabaseConfigContext())
-                {
-                    SelectedAccount = manager.GetMinRuntime(db);
-                }
+                SelectedAccount = manager.GetMinRuntime();
                 SelectedAccount.LoggedTime = DateTime.Now.ToUnixTime();
             }
         }

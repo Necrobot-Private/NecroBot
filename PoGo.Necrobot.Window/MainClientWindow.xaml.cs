@@ -291,7 +291,7 @@ namespace PoGo.Necrobot.Window
             datacontext.PokemonList.Session = session;
             botMap.SetDefaultPosition(session.Settings.DefaultLatitude, session.Settings.DefaultLongitude);
             var accountManager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
-            gridAccounts.ItemsSource = accountManager.GetBindableAccounts();
+            gridAccounts.ItemsSource = accountManager.Accounts;
         }
 
         private void OnPlayerStatisticChanged()
