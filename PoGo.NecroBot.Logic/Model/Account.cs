@@ -1,6 +1,7 @@
 ﻿using PoGo.NecroBot.Logic.Model.Settings;
 using PokemonGo.RocketAPI.Enums;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -27,13 +28,16 @@ namespace PoGo.NecroBot.Logic.Model
         public long? PrevLevelXp { get; set; }
         public long? NextLevelXp { get; set; }
         public long? IsRunning { get; set; }
+        public ICollection<PokemonTimestamp> PokemonTimestamp { get; set; }
+        public ICollection<PokestopTimestamp> PokestopTimestamp { get; set; }
     }
 
     public partial class Account : INotifyPropertyChanged
     {
         public Account()
         {
-
+            PokemonTimestamp = new HashSet<PokemonTimestamp>();
+            PokestopTimestamp = new HashSet<PokestopTimestamp>();
         }
 
         public Account(AuthConfig item)

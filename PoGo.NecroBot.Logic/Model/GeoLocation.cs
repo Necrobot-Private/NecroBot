@@ -1,9 +1,6 @@
 ﻿using Geocoding.Google;
 using Google.Common.Geometry;
-using LiteDB;
-using PoGo.NecroBot.Logic.Utils;
 using System;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,14 +8,10 @@ namespace PoGo.NecroBot.Logic.Model
 {
     public class GeoLocation
     {
-        private const string CACHE_DIR = "Cache";
-        private const string DB_NAME = CACHE_DIR + "\\geolocations.db";
-        private static AsyncLock DB_LOCK = new AsyncLock();
         private static int GEOCODING_MAX_RETRIES = 5;
         private static int GEOLOCATION_PRECISION = 3;
-
-        [BsonIndex]
-        public string Id { get; set; }
+        
+        public long Id { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public string Country { get; set; }
@@ -47,8 +40,6 @@ namespace PoGo.NecroBot.Logic.Model
         {
             Latitude = Math.Round(latitude, GEOLOCATION_PRECISION);
             Longitude = Math.Round(longitude, GEOLOCATION_PRECISION);
-
-            Id = GetIdTokenFromLatLng(latitude, longitude);
         }
 
         public async Task ReverseGeocode()
@@ -90,51 +81,42 @@ namespace PoGo.NecroBot.Logic.Model
 
         public static async Task<GeoLocation> FindOrUpdateInDatabase(double latitude, double longitude)
         {
-            using (await DB_LOCK.LockAsync().ConfigureAwait(false))
+            using (var db = new GeoLocationConfigContext())
             {
-                if (!Directory.Exists(CACHE_DIR))
-                {
-                    Directory.CreateDirectory(CACHE_DIR);
-                }
+                latitude = Math.Round(latitude, GEOLOCATION_PRECISION);
+                longitude = Math.Round(longitude, GEOLOCATION_PRECISION);
 
-                LiteEngine.Upgrade(DB_NAME, null, true);
-                using (var db = new LiteDatabase(DB_NAME))
-                {
-                    db.GetCollection<GeoLocation>("locations").EnsureIndex(s => s.Id);
+                var geoLocation = db.GeoLocation.Where(x => x.Latitude == latitude && x.Longitude == longitude).FirstOrDefault();
 
-                    var locationsCollection = db.GetCollection<GeoLocation>("locations");
-                    var id = GetIdTokenFromLatLng(latitude, longitude);
-                    var geoLocation = locationsCollection.FindOne(x => x.Id == id);
-
-                    if (geoLocation != null)
-                        return geoLocation;
-
-                    geoLocation = new GeoLocation(latitude, longitude);
-
-                    for (var i = 0; i < GEOCODING_MAX_RETRIES; i++)
-                    {
-                        try
-                        {
-                            await geoLocation.ReverseGeocode().ConfigureAwait(false);
-                            break;
-                        }
-                        catch (Exception)
-                        {
-                            if (i == GEOCODING_MAX_RETRIES - 1)
-                                return null;
-
-                            // Just ignore exception and retry after delay
-                            await Task.Delay(i * 100).ConfigureAwait(false);
-                        }
-                    }
-
-                    // Before we store it to the database, ensure it must at least have country field set.
-                    if (string.IsNullOrEmpty(geoLocation.Country))
-                        return null;
-
-                    locationsCollection.Insert(geoLocation);
+                if (geoLocation != null)
                     return geoLocation;
+
+                geoLocation = new GeoLocation(latitude, longitude);
+                
+                for (var i = 0; i < GEOCODING_MAX_RETRIES; i++)
+                {
+                    try
+                    {
+                        await geoLocation.ReverseGeocode().ConfigureAwait(false);
+                        break;
+                    }
+                    catch (Exception)
+                    {
+                        if (i == GEOCODING_MAX_RETRIES - 1)
+                            return null;
+
+                        // Just ignore exception and retry after delay
+                        await Task.Delay(i * 100).ConfigureAwait(false);
+                    }
                 }
+
+                // Before we store it to the database, ensure it must at least have country field set.
+                if (string.IsNullOrEmpty(geoLocation.Country))
+                    return null;
+
+                db.GeoLocation.Add(geoLocation);
+                await db.SaveChangesAsync().ConfigureAwait(false);
+                return geoLocation;
             }
         }
 

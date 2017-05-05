@@ -34,7 +34,7 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
             var manager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
             if (manager.AllowMultipleBot())
             {
-                using (var db = new DatabaseConfigContext())
+                using (var db = new AccountConfigContext())
                 {
                     foreach (var item in db.Account)
                     {

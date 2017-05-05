@@ -36,7 +36,7 @@ namespace PoGo.Necrobot.Window
     /// </summary>
     public partial class MainClientWindow : MetroWindow
     {
-        private DatabaseConfigContext _context = new DatabaseConfigContext();
+        private AccountConfigContext _context = new AccountConfigContext();
 
         Timer timer = new Timer();
         private static Dictionary<LogLevel, string> ConsoleColors_Solarized = new Dictionary<LogLevel, string>()

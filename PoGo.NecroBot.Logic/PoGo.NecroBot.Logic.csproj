@@ -447,10 +447,12 @@
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="Logging\LoggingStrings.cs" />
     <Compile Include="Model\Account.cs" />
+    <Compile Include="Model\GeoLocationConfigContext.cs" />
+    <Compile Include="Model\ElevationConfigContext.cs" />
     <Compile Include="Model\BotAccount.cs" />
     <Compile Include="Model\BotActions.cs" />
     <Compile Include="Exceptions\ActiveSwitchByPokemonException.cs" />
-    <Compile Include="Model\DatabaseConfigContext.cs" />
+    <Compile Include="Model\AccountConfigContext.cs" />
     <Compile Include="Model\ElevationLocation.cs" />
     <Compile Include="Model\GeoLocation.cs" />
     <Compile Include="Model\Google\GoogleObjects\Address_Components.cs" />
@@ -474,6 +476,8 @@
     <Compile Include="Model\Google\GoogleWalk.cs" />
     <Compile Include="Model\IGeoLocation.cs" />
     <Compile Include="Model\PokemonGrade.cs" />
+    <Compile Include="Model\PokemonTimestamp.cs" />
+    <Compile Include="Model\PokestopTimestamp.cs" />
     <Compile Include="Model\Settings\AuthConfig.cs" />
     <Compile Include="Model\Settings\AuthSettings.cs" />
     <Compile Include="Model\Settings\BaseConfig.cs" />

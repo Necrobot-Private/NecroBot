@@ -28,7 +28,7 @@ namespace PoGo.NecroBot.Logic.Forms
             WindowState = FormWindowState.Normal;
 
             lvAcc.BeginUpdate();
-            using (var db = new DatabaseConfigContext())
+            using (var db = new AccountConfigContext())
             {
                 foreach (var item in db.Account)
                 {

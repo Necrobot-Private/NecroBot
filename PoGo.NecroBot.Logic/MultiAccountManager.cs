@@ -24,7 +24,7 @@ namespace PoGo.NecroBot.Logic
 {
     public class MultiAccountManager
     {
-        private DatabaseConfigContext _context = new DatabaseConfigContext();
+        private AccountConfigContext _context = new AccountConfigContext();
         private const string ACCOUNT_DB_NAME = "accounts.db";
 
         public object Settings { get; private set; }
@@ -59,7 +59,8 @@ namespace PoGo.NecroBot.Logic
 
         public Account GetCurrentAccount()
         {
-            return Accounts.FirstOrDefault(a => a.IsRunning.HasValue && a.IsRunning.Value == 1);
+            var session = TinyIoCContainer.Current.Resolve<ISession>();
+            return Accounts.FirstOrDefault(a => session.Settings.Username == a.Username && session.Settings.AuthType == a.AuthType);
         }
         
         public void SwitchAccounts(Account newAccount)
@@ -129,8 +130,6 @@ namespace PoGo.NecroBot.Logic
 
         private void MigrateDatabase()
         {
-            var session = TinyIoCContainer.Current.Resolve<ISession>();
-
             if (AuthSettings.SchemaVersionBeforeMigration == UpdateConfig.CURRENT_SCHEMA_VERSION)
                 return;
 
@@ -254,9 +253,9 @@ namespace PoGo.NecroBot.Logic
         internal Account GetMinRuntime(bool ignoreBlockCheck = false)
         {
             if (ignoreBlockCheck)
-                return Accounts.OrderBy(x => x.RuntimeTotal.HasValue ? x.RuntimeTotal.Value : 0).ThenBy(x => x.Id).FirstOrDefault();
+                return Accounts.OrderBy(x => x != null && x.RuntimeTotal.HasValue ? x.RuntimeTotal.Value : 0).ThenBy(x => x != null ? x.Id : 0).FirstOrDefault();
             else
-                return Accounts.OrderBy(x => x.RuntimeTotal.HasValue ? x.RuntimeTotal.Value : 0).ThenBy(x => x.Id).Where(x => x.ReleaseBlockTime.HasValue && x.ReleaseBlockTime.Value < DateTime.Now.ToUnixTime()).FirstOrDefault();
+                return Accounts.OrderBy(x => x != null && x.RuntimeTotal.HasValue ? x.RuntimeTotal.Value : 0).ThenBy(x => x != null ? x.Id : 0).Where(x => x != null && x.ReleaseBlockTime.HasValue && x.ReleaseBlockTime.Value < DateTime.Now.ToUnixTime()).FirstOrDefault();
         }
 
         public bool AllowMultipleBot()

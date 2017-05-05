@@ -1,15 +1,13 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 using System.IO;
 
 namespace PoGo.NecroBot.Logic.Model
 {
-    public partial class DatabaseConfigContext : DbContext
+    public partial class ElevationConfigContext : DbContext
     {
-        public virtual DbSet<Account> Account { get; set; }
+        public virtual DbSet<ElevationLocation> ElevationLocation { get; set; }
 
-        public DatabaseConfigContext()
+        public ElevationConfigContext()
         {
             Database.EnsureCreated();
         }
@@ -17,8 +15,8 @@ namespace PoGo.NecroBot.Logic.Model
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             var profilePath = Path.Combine(Directory.GetCurrentDirectory());
-            var profileConfigPath = Path.Combine(profilePath, "config");
-            var dbFile = Path.Combine(profileConfigPath, "config.db");
+            var profileConfigPath = Path.Combine(profilePath, "Cache");
+            var dbFile = Path.Combine(profileConfigPath, "elevations.db");
 
             optionsBuilder.UseSqlite($"data source={dbFile}");
         }

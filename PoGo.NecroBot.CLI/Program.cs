@@ -381,7 +381,7 @@ namespace PoGo.NecroBot.CLI
 
             MultiAccountManager accountManager = new MultiAccountManager(settings, logicSettings.Bots);
             ioc.Register(accountManager);
-
+            
             if (boolNeedsSetup)
             {
                 StarterConfigForm configForm = new StarterConfigForm(_session, settings, elevationService, configFile);
