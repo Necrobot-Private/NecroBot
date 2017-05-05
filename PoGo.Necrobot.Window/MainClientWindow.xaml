@@ -194,36 +194,87 @@
                         </Image.RenderTransform>
                     </Image>
                 </TabItem.Header>
-                <DataGrid Name="gridAccounts" AutoGenerateColumns="False" CanUserDeleteRows="False" CanUserAddRows="False">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Binding="{Binding AuthType}" Header="AuthType"></DataGridTextColumn>
-                        <DataGridTextColumn Binding="{Binding Username}" Header="Username"></DataGridTextColumn>
-                        <DataGridTextColumn Binding="{Binding Password}" Header="Password"></DataGridTextColumn>
-                        <DataGridTextColumn Binding="{Binding Nickname}" Header="Nickname"></DataGridTextColumn>
-                        <DataGridTextColumn Binding="{Binding Level}" Header="Level"></DataGridTextColumn>
-                        <DataGridTextColumn Binding="{Binding ExperienceInfo}" Header="ExperienceInfo"></DataGridTextColumn>
-                        <DataGridTextColumn Binding="{Binding Stardust}" Header="Stardust"></DataGridTextColumn>
-                        <DataGridTextColumn Binding="{Binding LastLogin}" Header="Login"></DataGridTextColumn>
-                        <DataGridTextColumn Binding="{Binding LastLoginTimestamp, Converter={StaticResource TimestampToDateTimeConverter }}" Header="Login Time"></DataGridTextColumn>
-                        <DataGridTextColumn Binding="{Binding RuntimeTotal, Converter={StaticResource DurationTextConverter} }" Header="Runtime"></DataGridTextColumn>
-                        <DataGridTemplateColumn Header="">
-                            <DataGridTemplateColumn.CellEditingTemplate>
-                                <DataTemplate>
-
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellEditingTemplate>
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <StackPanel>
-                                        <Button Name="btnSwitchAcount" Click="BtnSwitchAcount_Click" CommandParameter="{Binding}" Foreground="Green" Background="Transparent"  IsEnabled="{Binding IsRunning, Converter= {StaticResource InverseBooleanConverter}}" Cursor="Hand">
-                                            <TextBlock Margin="5,5,5,5" Text="{Binding Source=Switch, Converter={StaticResource I18NConveter }}"></TextBlock>
-                                        </Button>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
+                <StackPanel>
+                    <DockPanel>
+                        <StackPanel DockPanel.Dock="Right" Margin="0,0,0,20">
+                            <Button Click="btnImportCSV_Click" Name="btnImportCSV" BorderThickness="1,1,1,1">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="https://cdn4.iconfinder.com/data/icons/mayssam/512/add_user-64.png" Width="20"/>
+                                    <TextBlock Margin="10,3,10,3" Text="{Binding Source=CSVImport, Converter={StaticResource I18NConveter}}"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                        <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" Margin="0,5,0,5">
+                            <TextBlock Margin="10,0,0,10" Text="{Binding Source=AccountType, Converter={StaticResource I18NConveter}}"/>
+                            <ComboBox Width="90" Margin="10,0,0,10" SelectedValue="{Binding AddAccount.AuthType}">
+                                <ComboBoxItem>Google</ComboBoxItem>
+                                <ComboBoxItem>Ptc</ComboBoxItem>
+                            </ComboBox>
+                            <TextBlock Margin="10,0,0,10" Text="{Binding Source=Username, Converter={StaticResource I18NConveter}}"/>
+                            <TextBox Width="100" Margin="10,0,0,10" Text="{Binding Path=AddAccount.Username}"/>
+                            <TextBlock Margin="10,0,0,10" Text="{Binding Source=Password, Converter={StaticResource I18NConveter}}"/>
+                            <TextBox Width="100" Margin="10,0,0,10" Text="{Binding Path=AddAccount.Password}"/>
+                            <Button Click="AddAccount_Click" Margin="10,0,0,10" Height="25"
+                      Content="{Binding Source=AddAccount, Converter={StaticResource I18NConveter}}"/>
+                        </StackPanel>
+                    </DockPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                        <TextBlock Margin="10,0,0,10" Text="{Binding Source=AccountType, Converter={StaticResource I18NConveter}}"/>
+                        <ComboBox Width="90" Margin="10,0,0,10" SelectedValue="{Binding AddAccount.AuthType}">
+                            <ComboBoxItem>Google</ComboBoxItem>
+                            <ComboBoxItem>Ptc</ComboBoxItem>
+                        </ComboBox>
+                        <TextBlock Margin="10,0,0,10"
+                       Text="{Binding Source=UsernameTemplate, Converter={StaticResource I18NConveter}}"/>
+                        <TextBox Width="100" Margin="10,0,0,10" Text="{Binding Path=AddAccount.UsernameTemplate}"/>
+                        <TextBlock Margin="10,0,0,10" Text="{Binding Source=Password, Converter={StaticResource I18NConveter}}"/>
+                        <TextBox Width="100" Margin="10,0,0,10" Text="{Binding Path=AddAccount.Password}"/>
+                        <TextBlock Margin="10,0,0,10" Text="{Binding Source=AccountStart, Converter={StaticResource I18NConveter}}"/>
+                        <TextBox Width="100" Margin="10,0,0,10" Text="{Binding Path=AddAccount.AccountStart}"/>
+                        <TextBlock Margin="10,0,0,10" Text="{Binding Source=AccountEnd, Converter={StaticResource I18NConveter}}"/>
+                        <TextBox Width="100" Margin="10,0,0,10" Text="{Binding Path=AddAccount.AccountEnd}"/>
+                        <Button Click="AddBulkAccount_Click" Margin="10,0,0,10" Height="25"
+                    Content="{Binding Source=AddBulkAccount, Converter={StaticResource I18NConveter}}"/>
+                    </StackPanel>
+                    <DataGrid Name="gridAccounts" AutoGenerateColumns="false" CanUserDeleteRows="false" CanUserAddRows="false">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="AuthType" Binding="{Binding AuthType}"/>
+                            <DataGridTextColumn Header="Username" Binding="{Binding Username}"/>
+                            <DataGridTextColumn Header="Password" Binding="{Binding Password}"/>
+                            <DataGridTextColumn Header="Nickname" Binding="{Binding Nickname}"/>
+                            <DataGridTextColumn Header="Level" Binding="{Binding Level}"/>
+                            <DataGridTextColumn Header="ExperienceInfo" Binding="{Binding ExperienceInfo}"/>
+                            <DataGridTextColumn Header="Stardust" Binding="{Binding Stardust}"/>
+                            <DataGridTextColumn Header="Login" Binding="{Binding LastLogin}"/>
+                            <DataGridTextColumn Header="Status" Binding="{Binding Status}"/>
+                            <DataGridTextColumn Header="Login Time"
+                                  Binding="{Binding LastLoginTimestamp, Converter={StaticResource TimestampToDateTimeConverter}}"/>
+                            <DataGridTextColumn Header="Runtime" Binding="{Binding RuntimeTotal, Converter={StaticResource DurationTextConverter}}"/>
+                            <DataGridTemplateColumn Header="" Width="200">
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate/>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Name="btnSwitchAcount" Foreground="Green" Background="Transparent" Cursor="Hand"
+                                            CommandParameter="{Binding}"
+                              IsEnabled="{Binding IsRunning, Converter={StaticResource InverseBooleanConverter}}"
+                              Visibility="{Binding AccountSwitchable, Converter={StaticResource VisibleIfTrueConverter}}">
+                                                <TextBlock Margin="5,3,3,5" Text="{Binding Source=Switch, Converter={StaticResource I18NConveter}}"/>
+                                            </Button>
+                                            <Button Name="btnRemoveAcount" Foreground="Green" Background="Transparent" Cursor="Hand"
+                              CommandParameter="{Binding}"
+                              IsEnabled="{Binding IsRunning, Converter={StaticResource InverseBooleanConverter}}">
+                                                <TextBlock Margin="10,3,3,10" Text="{Binding Source=RemoveAccount, Converter={StaticResource I18NConveter}}"/>
+                                            </Button>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
             </TabItem>
             <TabItem Name="tabBrowser" Width="80" Height="70">
                 <TabItem.Header>

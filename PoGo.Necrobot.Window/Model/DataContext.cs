@@ -7,18 +7,26 @@ namespace PoGo.Necrobot.Window.Model
 {
     public class DataContext : ViewModelBase
     {
+        public AddAccountViewModel AddAccount { get; set; }
+
         public UIViewModel UI { get; set; }
+
         public PlayerInfoModel PlayerInfo { get; set; }
+
         public List<PokemonData> internalPokemons;
 
         public PokemonListViewModel PokemonList { get; set; }
+
         public SidebarViewModel Sidebar { get; set; }
 
         public SnipeListViewModel SnipeList { get; set; }
+
         public ItemsListViewModel ItemsList { get; set; }
+
         public EggsListViewModel EggsList { get; set; }
 
         public MapViewModel Map { get; set; }
+
         public List<PokemonData> Pokemons
         {
             get
@@ -38,9 +46,9 @@ namespace PoGo.Necrobot.Window.Model
         public int MaxEggStorage { get; set; }
         public DataContext()
         {
+            AddAccount = new AddAccountViewModel();
             UI = new UIViewModel();
             Map = new MapViewModel();
-
             MaxItemStorage = 0;
             MaxPokemonStorage = 0;
             MaxEggStorage = 0;

@@ -1,4 +1,7 @@
-﻿using System;
+﻿using MahApps.Metro;
+using MahApps.Metro.Controls;
+using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -6,8 +9,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
-using MahApps.Metro;
-using MahApps.Metro.Controls;
 using PoGo.Necrobot.Window.Properties;
 using PoGo.NecroBot.Logic.State;
 using PoGo.Necrobot.Window.Win32;
@@ -601,6 +602,38 @@ namespace PoGo.Necrobot.Window
         {
             if (SystemParameters.PrimaryScreenWidth < 1366)
                 WindowState = WindowState.Maximized;
+        }
+
+        private void btnRemoveAcount_Click(object sender, RoutedEventArgs e)
+        {
+            ((MultiAccountManager)TinyIoCContainer.get_Current().Resolve<MultiAccountManager>()).RemoveAccount((BotAccount)(sender as Button).CommandParameter);
+        }
+
+        private void AddAccount_Click(object sender, RoutedEventArgs e)
+        {
+            ((MultiAccountManager)TinyIoCContainer.get_Current().Resolve<MultiAccountManager>()).AddNewAccount(this.datacontext.AddAccount.AuthType, this.datacontext.AddAccount.Username, this.datacontext.AddAccount.Password);
+        }
+
+        private void AddBulkAccount_Click(object sender, RoutedEventArgs e)
+        {
+            ((MultiAccountManager)TinyIoCContainer.get_Current().Resolve<MultiAccountManager>()).AddBulkAccounts(this.datacontext.AddAccount.AuthType, this.datacontext.AddAccount.UsernameTemplate, this.datacontext.AddAccount.Password, this.datacontext.AddAccount.AccountStart, this.datacontext.AddAccount.AccountEnd);
+        }
+
+        private void btnImportCSV_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            string str = "Csv file (*.csv)|*.csv";
+            openFileDialog1.Filter = str;
+            OpenFileDialog openFileDialog2 = openFileDialog1;
+            MultiAccountManager multiAccountManager = (MultiAccountManager)TinyIoCContainer.get_Current().Resolve<MultiAccountManager>();
+            if (!openFileDialog2.ShowDialog().Value)
+                return;
+            foreach (string readAllLine in System.IO.File.ReadAllLines(openFileDialog2.FileName))
+            {
+                string[] strArray = readAllLine.Split(";,".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                if (strArray.Length >= 3)
+                    multiAccountManager.AddNewAccount(strArray[0], strArray[1], strArray[2]);
+            }
         }
 
         private void BrowserToggle_Click(object sender, RoutedEventArgs e)
