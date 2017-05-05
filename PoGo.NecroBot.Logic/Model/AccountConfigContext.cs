@@ -26,6 +26,14 @@ namespace PoGo.NecroBot.Logic.Model
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<PokemonTimestamp>()
+                .HasOne(p => p.Account)
+                .WithMany(b => b.PokemonTimestamp)
+                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<PokestopTimestamp>()
+                .HasOne(p => p.Account)
+                .WithMany(b => b.PokestopTimestamp)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
