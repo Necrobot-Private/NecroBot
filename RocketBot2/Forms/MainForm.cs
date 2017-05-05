@@ -334,6 +334,15 @@ namespace RocketBot2.Forms
 
         private void UpdateMap(FortData pokestop)
         {
+            //TODO: Temporay load pokestops
+            if (encounterPokemonsCount > 5 || encounterPokemonsCount == 0)
+            {
+                Task.Run(InitializePokestopsAndRoute);
+                encounterPokemonsCount = 0;
+            }
+            encounterPokemonsCount++;
+            //
+
             SynchronizationContext.Post(o =>
             {
                 var pokeStopLoc = new PointLatLng(pokestop.Latitude, pokestop.Longitude);
@@ -374,13 +383,14 @@ namespace RocketBot2.Forms
                     Stroke = new Pen(Color.FromArgb(128, 0, 179, 253), 4) { DashStyle = DashStyle.Dash }
                 };
                 _playerRouteOverlay.Routes.Add(routes);
-
+                /*/TODO: Deplaced temporary
                 if (encounterPokemonsCount > 5 || encounterPokemonsCount == 0)
                 {
                     Task.Run(InitializePokestopsAndRoute);
                     encounterPokemonsCount = 0;
                 }
                 encounterPokemonsCount++;
+                /*/
                 Navigation_UpdatePositionEvent(_session.Client.CurrentLatitude, _session.Client.CurrentLongitude);
             }, null);
         }
