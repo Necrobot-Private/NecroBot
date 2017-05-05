@@ -177,6 +177,10 @@ namespace PoGo.Necrobot.Window
                     tabItems.Foreground = Brushes.Black;
                 else if (!tabItems.IsMouseOver | !tabItems.IsSelected | Settings.Default.Scheme == "Dark")
                     tabItems.Foreground = Brushes.White;
+                if (tabEggs.IsMouseOver | tabEggs.IsSelected | Settings.Default.Scheme == "Light")
+                    tabEggs.Foreground = Brushes.Black;
+                else if (!tabEggs.IsMouseOver | !tabEggs.IsSelected | Settings.Default.Scheme == "Dark")
+                    tabEggs.Foreground = Brushes.White;
                 if (Theme != Settings.Default.Theme & Settings.Default.ResetLayout == true)
                     Settings.Default.ResetLayout = false;
                 Settings.Default.Save();
