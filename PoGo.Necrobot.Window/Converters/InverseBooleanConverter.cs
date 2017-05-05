@@ -13,6 +13,14 @@ namespace PoGo.Necrobot.Window.Converters
         {
             //if (targetType != typeof(bool))
             //    throw new InvalidOperationException("The target must be a boolean");
+            if (value == null)
+                return true;
+
+            if (value is int)
+                return ((int)value) == 1 ? false : true;
+
+            if (value is Int64)
+                return ((Int64)value) == 1 ? false : true;
 
             return !(bool)value;
         }

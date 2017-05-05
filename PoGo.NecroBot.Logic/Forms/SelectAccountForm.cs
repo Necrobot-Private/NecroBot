@@ -1,4 +1,6 @@
 ﻿using PoGo.NecroBot.Logic.Common;
+using PoGo.NecroBot.Logic.Model;
+using PokemonGo.RocketAPI.Extensions;
 using System;
 using System.Windows.Forms;
 
@@ -6,7 +8,7 @@ namespace PoGo.NecroBot.Logic.Forms
 {
     public partial class SelectAccountForm : Form
     {
-        public MultiAccountManager.BotAccount SelectedAccount { get; set; }
+        public Account SelectedAccount { get; set; }
         public SelectAccountForm()
         {
             InitializeComponent();
@@ -26,47 +28,47 @@ namespace PoGo.NecroBot.Logic.Forms
             WindowState = FormWindowState.Normal;
 
             lvAcc.BeginUpdate();
-            var accManager = TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>();
-            foreach (var item in accManager.Accounts)
+            using (var db = new AccountConfigContext())
             {
-                EXListViewItem lvItem = new EXListViewItem(item.AuthType.ToString());
-                lvItem.SubItems.Add( new EXControlListViewSubItem() { Text = item.Username });
-                lvItem.SubItems.Add(new EXControlListViewSubItem() { Text = item.GetRuntime() });
-                lvItem.SubItems.Add(new EXControlListViewSubItem() { Text = "" });
-
-                EXControlListViewSubItem cs = new EXControlListViewSubItem()
+                foreach (var item in db.Account)
                 {
-                };
-                Button b = new Button()
-                {
-                    Text = "START",
-                    Height = 55
-                };
-                b.Click += SelectBot_Click;
-                b.Tag = item;
-                lvItem.SubItems.Add(cs);
-                lvAcc.AddControlToSubItem(b, cs);
-                lvAcc.Items.Add(lvItem);
+                    EXListViewItem lvItem = new EXListViewItem(item.AuthType.ToString());
+                    lvItem.SubItems.Add(new EXControlListViewSubItem() { Text = item.Username });
+                    lvItem.SubItems.Add(new EXControlListViewSubItem() { Text = item.GetRuntime() });
+                    lvItem.SubItems.Add(new EXControlListViewSubItem() { Text = "" });
 
+                    EXControlListViewSubItem cs = new EXControlListViewSubItem()
+                    {
+                    };
+                    Button b = new Button()
+                    {
+                        Text = "START",
+                        Height = 55
+                    };
+                    b.Click += SelectBot_Click;
+                    b.Tag = item;
+                    lvItem.SubItems.Add(cs);
+                    lvAcc.AddControlToSubItem(b, cs);
+                    lvAcc.Items.Add(lvItem);
+
+                }
             }
             lvAcc.EndUpdate();
         }
 
         private void SelectBot_Click(object sender, EventArgs e)
         {
-            SelectedAccount  = (MultiAccountManager.BotAccount)((Button)sender).Tag;
+            SelectedAccount  = (Account)((Button)sender).Tag;
             Close();
         }
 
         private void SelectAccountForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-
-            if(SelectedAccount == null)
+            if (SelectedAccount == null)
             {
-            var manager = TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>();
-
+                var manager = TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>();
                 SelectedAccount = manager.GetMinRuntime();
-                SelectedAccount.LoggedTime = DateTime.Now;
+                SelectedAccount.LoggedTime = DateTime.Now.ToUnixTime();
             }
         }
 

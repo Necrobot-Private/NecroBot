@@ -27,6 +27,7 @@ using static PoGo.NecroBot.Logic.MultiAccountManager;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Timers;
+using PoGo.NecroBot.Logic.Model;
 
 namespace PoGo.Necrobot.Window
 {
@@ -35,6 +36,8 @@ namespace PoGo.Necrobot.Window
     /// </summary>
     public partial class MainClientWindow : MetroWindow
     {
+        private AccountConfigContext _context = new AccountConfigContext();
+
         Timer timer = new Timer();
         private static Dictionary<LogLevel, string> ConsoleColors_Solarized = new Dictionary<LogLevel, string>()
         {
@@ -534,7 +537,7 @@ namespace PoGo.Necrobot.Window
         private void BtnSwitchAcount_Click(object sender, RoutedEventArgs e)
         {
             var btn = ((Button)sender);
-            var account = (BotAccount)btn.CommandParameter;
+            var account = (Account)btn.CommandParameter;
             var manager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
 
             manager.SwitchAccountTo(account);
@@ -599,7 +602,7 @@ namespace PoGo.Necrobot.Window
             Settings.Default.Save();
             BrowserSync();
         }
-        public void ReInitializeSession(ISession session, GlobalSettings globalSettings, BotAccount requestedAccount = null)
+        public void ReInitializeSession(ISession session, GlobalSettings globalSettings, Account requestedAccount = null)
         {
             if (session.LogicSettings.MultipleBotConfig.StartFromDefaultLocation)
                 session.ReInitSessionWithNextBot(requestedAccount, globalSettings.LocationConfig.DefaultLatitude, globalSettings.LocationConfig.DefaultLongitude, session.Client.CurrentAltitude);

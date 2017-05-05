@@ -15,6 +15,7 @@ using PokemonGo.RocketAPI.Exceptions;
 using POGOProtos.Enums;
 using TinyIoC;
 using PokemonGo.RocketAPI.Util;
+using PoGo.NecroBot.Logic.Model;
 
 #endregion
 
@@ -229,7 +230,7 @@ namespace PoGo.NecroBot.Logic.State
                 else
                 {
                     if (successfullyLoggedIn)
-                    {
+                {
                         var currentAccount = accountManager?.GetCurrentAccount();
                         if (currentAccount != null)
                         {
@@ -240,6 +241,12 @@ namespace PoGo.NecroBot.Logic.State
                             }
                             else
                             {
+                                if (session.Profile.Warn)
+                                {
+                                    currentAccount.LastLogin = "Warned";
+                                    accountManager.UpdateDatabase(currentAccount);
+                                }
+
                                 if (currentAccount.Nickname != session.Profile.PlayerData.Username)
                                 {
                                     currentAccount.Nickname = session.Profile.PlayerData.Username;

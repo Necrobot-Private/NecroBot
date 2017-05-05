@@ -16,6 +16,7 @@ using static System.Threading.Tasks.Task;
 using static PoGo.NecroBot.Logic.Utils.PushNotificationClient;
 using TinyIoC;
 using static PoGo.NecroBot.Logic.MultiAccountManager;
+using PoGo.NecroBot.Logic.Model;
 
 #endregion
 
@@ -35,7 +36,7 @@ namespace PoGo.NecroBot.Logic.State
             _initialState = state;
         }
 
-        public void ReInitializeSession(ISession session, GlobalSettings globalSettings, BotAccount requestedAccount = null)
+        public void ReInitializeSession(ISession session, GlobalSettings globalSettings, Account requestedAccount = null)
         {
             if (session.LogicSettings.MultipleBotConfig.StartFromDefaultLocation)
             {
