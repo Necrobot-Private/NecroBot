@@ -9,6 +9,10 @@ namespace PoGo.NecroBot.Logic.Model
 
         public GeoLocationConfigContext()
         {
+            var profilePath = Path.Combine(Directory.GetCurrentDirectory());
+            var profileConfigPath = Path.Combine(profilePath, "Cache");
+            if (!Directory.Exists(profileConfigPath))
+                Directory.CreateDirectory(profileConfigPath);
             Database.EnsureCreated();
         }
 
