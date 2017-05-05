@@ -120,7 +120,7 @@ namespace PoGo.NecroBot.Logic
         {
             _context.Account.Load();
 
-            foreach (var item in Accounts.OrderBy(p => p != null ? p.Id : 0))
+            foreach (var item in _context.Account.OrderBy(p => p != null ? p.Id : 0))
             {
                 item.IsRunning = 0;
                 item.RuntimeTotal = 0;
@@ -207,7 +207,7 @@ namespace PoGo.NecroBot.Logic
             // Add new accounts and update existing accounts.
             foreach (var authConfig in authConfigs)
             {
-                var existing = Accounts.FirstOrDefault(x => x.Username == authConfig.Username && x.AuthType == authConfig.AuthType);
+                var existing = _context.Account.FirstOrDefault(x => x.Username == authConfig.Username && x.AuthType == authConfig.AuthType);
 
                 if (existing == null)
                 {
@@ -233,7 +233,7 @@ namespace PoGo.NecroBot.Logic
 
             // Remove accounts that are not in the auth.json but in the database.
             List<Account> accountsToRemove = new List<Account>();
-            foreach (var item in Accounts)
+            foreach (var item in _context.Account)
             {
                 var existing = authConfigs.FirstOrDefault(x => x.Username == item.Username && x.AuthType == item.AuthType);
                 if (existing == null)
@@ -259,7 +259,7 @@ namespace PoGo.NecroBot.Logic
 
         public bool AllowMultipleBot()
         {
-            return Accounts.Count > 1;
+            return _context.Account.Count() > 1;
         }
 
         public Account GetStartUpAccount()
