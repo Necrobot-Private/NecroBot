@@ -13,7 +13,10 @@ namespace PoGo.NecroBot.Logic.Model
             var profileConfigPath = Path.Combine(profilePath, "Cache");
             if (!Directory.Exists(profileConfigPath))
                 Directory.CreateDirectory(profileConfigPath);
-            Database.EnsureCreated();
+
+            var dbFile = Path.Combine(profileConfigPath, "geolocation.db");
+            if (!File.Exists(dbFile))
+                Database.EnsureCreated();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
