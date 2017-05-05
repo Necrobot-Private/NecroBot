@@ -120,7 +120,7 @@ namespace PoGo.NecroBot.Logic
         {
             _context.Account.Load();
 
-            foreach (var item in Accounts.OrderBy(p => p.Id))
+            foreach (var item in Accounts.OrderBy(p => p != null ? p.Id : 0))
             {
                 item.IsRunning = 0;
                 item.RuntimeTotal = 0;
@@ -158,7 +158,6 @@ namespace PoGo.NecroBot.Logic
                         break;
 
                     case 24:
-                        // Make a copy of the databse.
                         MigrateLiteDbToSqLite();
                         File.Delete(ACCOUNT_DB_NAME);
                         break;
