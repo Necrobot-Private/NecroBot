@@ -23,11 +23,12 @@ using System.IO;
 using System.Net.Http;
 using PoGo.NecroBot.Logic;
 using PoGo.NecroBot.Logic.Model.Settings;
-using static PoGo.NecroBot.Logic.MultiAccountManager;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Timers;
 using PoGo.NecroBot.Logic.Model;
+using DotNetBrowser;
+using DotNetBrowser.WPF;
 
 namespace PoGo.Necrobot.Window
 {
@@ -37,6 +38,7 @@ namespace PoGo.Necrobot.Window
     public partial class MainClientWindow : MetroWindow
     {
         private AccountConfigContext _context = new AccountConfigContext();
+        BrowserView webView;
 
         Timer timer = new Timer();
         private static Dictionary<LogLevel, string> ConsoleColors_Solarized = new Dictionary<LogLevel, string>()
@@ -114,7 +116,11 @@ namespace PoGo.Necrobot.Window
             string appDir = Path.GetDirectoryName(path);
             var uri = new Uri(Path.Combine(appDir, @"PokeEase\index.html"));
 
-            webView.URL = uri.ToString();
+            var browser = BrowserFactory.Create(BrowserType.HEAVYWEIGHT);
+            webView = new WPFBrowserView(browser);
+            browserLayout.Children.Add((UIElement)webView.GetComponent());
+
+            webView.Browser.LoadURL(uri.ToString());
         }
 
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
@@ -200,8 +206,12 @@ namespace PoGo.Necrobot.Window
 
                 tabBrowser.IsEnabled = false;
                 browserMenuText.Text = translator.EnableHub;
-                webView.Browser.Dispose();
-                webView.Dispose();
+                if (webView != null)
+                {
+                    if (webView.Browser != null)
+                        webView.Browser.Dispose();
+                    webView.Dispose();
+                }
             }
             else if (Settings.Default.BrowserToggled == true)
             {
@@ -503,7 +513,7 @@ namespace PoGo.Necrobot.Window
         {
             if (e.Key == Key.Enter)
             {
-                Logger.Write(txtCmdInput.Text, LogLevel.Info, ConsoleColor.White);
+                PoGo.NecroBot.Logic.Logging.Logger.Write(txtCmdInput.Text, LogLevel.Info, ConsoleColor.White);
                 txtCmdInput.Text = "";
             }
         }
