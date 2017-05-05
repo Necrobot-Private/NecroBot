@@ -900,6 +900,8 @@
     <EmbeddedResource Include="Resources\teamdev.licenses" />
     <Resource Include="Resources\Fonts\Lato\SIL Open Font License.txt" />
     <Resource Include="Controls\MapMarkers\pokestop.png" />
+    <EmbeddedResource Include="costura32\sqlite3.dll" />
+    <EmbeddedResource Include="costura64\sqlite3.dll" />
     <Content Include="Effects\GrayscaleEffect.dll" />
   </ItemGroup>
   <ItemGroup />
@@ -950,7 +952,11 @@ foreach (var item in filesToCleanup)
   <PropertyGroup>
     <PostBuildEvent>cd "$(TargetDir)"
 del *.config
-xcopy /y /f /e "$(SolutionDir)\PokeEase\Public" "$(TargetDir)\PokeEase\"</PostBuildEvent>
+xcopy /y /f /e "$(SolutionDir)\PokeEase\Public" "$(TargetDir)\PokeEase\"
+del /s /q x86
+rmdir /s /q x86
+del /s /q x64
+rmdir /s /q x64</PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\packages\Selenium.WebDriver.ChromeDriver.2.29.0\build\Selenium.WebDriver.ChromeDriver.targets" Condition="Exists('$(SolutionDir)\packages\Selenium.WebDriver.ChromeDriver.2.29.0\build\Selenium.WebDriver.ChromeDriver.targets')" />
   <Import Project="$(SolutionDir)\packages\Fody.2.0.7\build\netstandard1.4\Fody.targets" Condition="Exists('$(SolutionDir)\packages\Fody.2.0.7\build\netstandard1.4\Fody.targets')" />
