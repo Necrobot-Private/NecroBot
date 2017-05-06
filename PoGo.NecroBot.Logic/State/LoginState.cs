@@ -212,7 +212,7 @@ namespace PoGo.NecroBot.Logic.State
                 {
                     currentAccount.LastLogin = successfullyLoggedIn ? "Success" : "Failure";
                     currentAccount.LastLoginTimestamp = TimeUtil.GetCurrentTimestampInMilliseconds();
-                    accountManager.UpdateDatabase(currentAccount);
+                    accountManager.UpdateLocalAccount(currentAccount);
                 }
             }
             try
@@ -237,20 +237,20 @@ namespace PoGo.NecroBot.Logic.State
                             if (session.Profile.Banned)
                             {
                                 currentAccount.LastLogin = "Banned";
-                                accountManager.UpdateDatabase(currentAccount);
+                                accountManager.UpdateLocalAccount(currentAccount);
                             }
                             else
                             {
                                 if (session.Profile.Warn)
                                 {
                                     currentAccount.LastLogin = "Warned";
-                                    accountManager.UpdateDatabase(currentAccount);
+                                    accountManager.UpdateLocalAccount(currentAccount);
                                 }
 
                                 if (currentAccount.Nickname != session.Profile.PlayerData.Username)
                                 {
                                     currentAccount.Nickname = session.Profile.PlayerData.Username;
-                                    accountManager.UpdateDatabase(currentAccount);
+                                    accountManager.UpdateLocalAccount(currentAccount);
                                 }
                             }
                         }
