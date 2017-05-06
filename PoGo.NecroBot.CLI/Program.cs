@@ -216,7 +216,7 @@ namespace PoGo.NecroBot.CLI
             }
 
             var options = new Options();
-            if (CommandLine.Parser.Default.ParseArguments(args, options))
+            if (Parser.Default.ParseArguments(args, options))
             {
                 // Values are available here
                 if (options.Init)
