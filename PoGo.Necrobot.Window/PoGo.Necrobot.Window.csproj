@@ -383,6 +383,7 @@
     <Compile Include="FilterSetting.xaml.cs">
       <DependentUpon>FilterSetting.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Model\AddAccountViewModel.cs" />
     <Compile Include="Model\AddManualSnipeCoordViewModel.cs" />
     <Compile Include="Model\AffectPokemonViewModel.cs" />
     <Compile Include="Model\EggsListViewModel.cs" />
