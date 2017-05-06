@@ -167,32 +167,13 @@
         <TabControl TabStripPlacement="Left" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalAlignment="Stretch" Name="tabMain" SelectionChanged="TabMain_SelectionChanged" Margin="0,0,0,5">
             <TabControl.Resources>
                 <Style TargetType="{x:Type TabItem}">
-                    <Setter Property="HeaderTemplate">
-                        <Setter.Value>
-                            <DataTemplate>
-                                <ContentPresenter Content="{TemplateBinding Content}">
-                                    <ContentPresenter.LayoutTransform>
-                                        <RotateTransform Angle="270" />
-                                    </ContentPresenter.LayoutTransform>
-                                </ContentPresenter>
-                            </DataTemplate>
-                        </Setter.Value>
-                    </Setter>
                     <Setter Property="Padding" Value="3" />
                 </Style>
             </TabControl.Resources>
             <TabItem Name="tabAccounts" Width="80" Height="70">
                 <TabItem.Header>
-                    <Image x:Name="accountsIMG" Source="Resources/Accounts/AccountsImage.png" Width="60" RenderTransformOrigin="0.5,0.5" Height="60" >
-                        <Image.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform/>
-                                <SkewTransform/>
-                                <RotateTransform Angle="90.00"/>
-                                <TranslateTransform/>
-                            </TransformGroup>
-                        </Image.RenderTransform>
-                    </Image>
+                    <Image x:Name="accountsIMG" Source="Resources/Accounts/AccountsImage.png" Width="60" RenderTransformOrigin="0.5,0.5" Height="60" />
+
                 </TabItem.Header>
                 <DataGrid Name="gridAccounts" AutoGenerateColumns="False" CanUserDeleteRows="False" CanUserAddRows="False">
                     <DataGrid.Columns>
@@ -227,32 +208,14 @@
             </TabItem>
             <TabItem Name="tabBrowser" Width="80" Height="70">
                 <TabItem.Header>
-                    <Image x:Name="browserIMG" Source="Resources/Hub/HubImage.png" Width="60" RenderTransformOrigin="0.5,0.5" Height="60" >
-                        <Image.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform/>
-                                <SkewTransform/>
-                                <RotateTransform Angle="90.000"/>
-                                <TranslateTransform/>
-                            </TransformGroup>
-                        </Image.RenderTransform>
-                    </Image>
+                    <Image x:Name="browserIMG" Source="Resources/Hub/HubImage.png" Width="60" RenderTransformOrigin="0.5,0.5" Height="60" />
                 </TabItem.Header>
                 <Grid Name="browserLayout">
                 </Grid>
             </TabItem>
             <TabItem Name="tabMap" Width="80" Height="70">
                 <TabItem.Header>
-                    <Image x:Name="mapIMG" Source="Resources/Map/MapImage.png" Width="60" RenderTransformOrigin="0.5,0.5" Height="60" >
-                        <Image.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform/>
-                                <SkewTransform/>
-                                <RotateTransform Angle="90.000"/>
-                                <TranslateTransform/>
-                            </TransformGroup>
-                        </Image.RenderTransform>
-                    </Image>
+                    <Image x:Name="mapIMG" Source="Resources/Map/MapImage.png" Width="60" RenderTransformOrigin="0.5,0.5" Height="60" />
                 </TabItem.Header>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -273,16 +236,7 @@
             </TabItem>
             <TabItem x:Name="tabConsole" IsSelected="True" Width="80" Height="70">
                 <TabItem.Header>
-                    <Image x:Name="consoleIMG" Source="Resources/Console/ConsoleImage.png" Width="60" RenderTransformOrigin="0.5,0.5" Height="60" >
-                        <Image.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform/>
-                                <SkewTransform/>
-                                <RotateTransform Angle="90.000"/>
-                                <TranslateTransform/>
-                            </TransformGroup>
-                        </Image.RenderTransform>
-                    </Image>
+                    <Image x:Name="consoleIMG" Source="Resources/Console/ConsoleImage.png" Width="60" RenderTransformOrigin="0.5,0.5" Height="60" />
                 </TabItem.Header>
                 <DockPanel LastChildFill="True">
                     <TextBox HorizontalAlignment="Stretch" x:Name="txtCmdInput" Background="#002B36" DockPanel.Dock="Top" Foreground="#FDF6E3"  BorderBrush="Aquamarine" BorderThickness="1" ToolTip="{Binding Source=InputCommand, Converter={StaticResource ResourceKey=I18NConveter}}" MouseDown="TxtCmdInput_MouseDown" KeyDown="TxtCmdInput_KeyDown" />
@@ -298,14 +252,6 @@
             <TabItem Name="tabPokemons" Width="80" Height="70">
                 <TabItem.Header>
                     <StackPanel Orientation="Vertical" RenderTransformOrigin="0.5,0.5" Width="80" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <StackPanel.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform/>
-                                <SkewTransform/>
-                                <RotateTransform Angle="90"/>
-                                <TranslateTransform/>
-                            </TransformGroup>
-                        </StackPanel.RenderTransform>
                         <Image x:Name="pokemonIMG" Source="Resources/Pokemon/PokemonImage.png" Width="48" Height="48"/>
                         <TextBlock FontSize="12" HorizontalAlignment="Center" Text="{Binding Path= PokemonTabHeader, FallbackValue=Pokemon}"/>
                     </StackPanel>
@@ -315,14 +261,6 @@
             <TabItem Name="tabItems" Width="80" Height="70">
                 <TabItem.Header>
                     <StackPanel Orientation="Vertical" RenderTransformOrigin="0.5,0.5" Width="80" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <StackPanel.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform/>
-                                <SkewTransform/>
-                                <RotateTransform Angle="90"/>
-                                <TranslateTransform/>
-                            </TransformGroup>
-                        </StackPanel.RenderTransform>
                         <Image x:Name="itemsIMG" Source="Resources/Items/ItemsImage.png" Width="48" Height="48"/>
                         <TextBlock FontSize="12" HorizontalAlignment="Center" Text="{Binding Path= ItemsTabHeader, FallbackValue=Items}"/>
                     </StackPanel>
@@ -332,14 +270,6 @@
             <TabItem Name="tabEggs" Width="80" Height="70">
                 <TabItem.Header>
                     <StackPanel Orientation="Vertical" RenderTransformOrigin="0.5,0.5" Width="80" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <StackPanel.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform/>
-                                <SkewTransform/>
-                                <RotateTransform Angle="90"/>
-                                <TranslateTransform/>
-                            </TransformGroup>
-                        </StackPanel.RenderTransform>
                         <Image x:Name="eggsIMG" Source="Resources/Eggs/EggsImage.png" Width="48" Height="48"/>
                         <TextBlock FontSize="12" HorizontalAlignment="Center" Text="{Binding Path= EggsTabHeader, FallbackValue=Eggs}"/>
                     </StackPanel>
