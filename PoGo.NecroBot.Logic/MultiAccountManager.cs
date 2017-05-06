@@ -1,5 +1,4 @@
 ﻿using LiteDB;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using PoGo.NecroBot.Logic.Exceptions;
 using PoGo.NecroBot.Logic.Forms;
@@ -33,7 +32,6 @@ namespace PoGo.NecroBot.Logic
         {
             _globalSettings = globalSettings;
             MigrateDatabase();
-            LoadDataFromDB();
             SyncDatabase(accounts);
         }
 
@@ -42,25 +40,42 @@ namespace PoGo.NecroBot.Logic
         {
             get
             {
-                if (_localAccounts == null)
-                    _localAccounts = _context.Account.Local;
+                if (_localAccounts != null)
+                    return _localAccounts;
 
+                if (_context.Account.Count() > 0)
+                {
+                    foreach (var item in _context.Account.OrderBy(p => p.Id))
+                    {
+                        item.IsRunning = 0;
+                        item.LastRuntimeUpdatedAt = null;
+                        item.RuntimeTotal = 0;
+                    }
+                    _context.SaveChanges();
+                }
+
+                _localAccounts = _context.Account.Local;
                 return _localAccounts;
             }
+        }
+
+        public AccountConfigContext GetDbContext()
+        {
+            return _context;
         }
 
         public List<Account> AccountsReadOnly
         {
             get
             {
-                return Accounts.ToList();
+                return _context.Account.ToList();
             }
         }
 
         public Account GetCurrentAccount()
         {
             var session = TinyIoCContainer.Current.Resolve<ISession>();
-            return Accounts.FirstOrDefault(a => session.Settings.Username == a.Username && session.Settings.AuthType == a.AuthType);
+            return _context.Account.FirstOrDefault(a => session.Settings.Username == a.Username && session.Settings.AuthType == a.AuthType);
         }
         
         public void SwitchAccounts(Account newAccount)
@@ -77,13 +92,13 @@ namespace PoGo.NecroBot.Logic
                 if (runningAccount.LastRuntimeUpdatedAt.HasValue)
                     runningAccount.RuntimeTotal += (now - TimeUtil.GetDateTimeFromMilliseconds(runningAccount.LastRuntimeUpdatedAt.Value)).TotalMinutes;
                 runningAccount.LastRuntimeUpdatedAt = now.ToUnixTime();
-                UpdateDatabase(runningAccount);
+                UpdateLocalAccount(runningAccount);
             }
 
             newAccount.IsRunning = 1;
             newAccount.LoggedTime = DateTime.Now.ToUnixTime();
             newAccount.LastRuntimeUpdatedAt = newAccount.LoggedTime;
-            UpdateDatabase(newAccount);
+            UpdateLocalAccount(newAccount);
 
             // Update current auth config with new account.
             _globalSettings.Auth.CurrentAuthConfig.AuthType = (AuthType)newAccount.AuthType;
@@ -112,19 +127,20 @@ namespace PoGo.NecroBot.Logic
             if (currentAccount != null)
             {
                 currentAccount.ReleaseBlockTime = DateTime.Now.AddMinutes(expired).ToUnixTime();
-                UpdateDatabase(currentAccount);
+                UpdateLocalAccount(currentAccount);
             }
         }
 
         private void LoadDataFromDB()
         {
-            _context.Account.Load();
-
-            foreach (var item in _context.Account.OrderBy(p => p != null ? p.Id : 0))
+            if (_context.Account.Count() > 0)
             {
-                item.IsRunning = 0;
-                item.RuntimeTotal = 0;
-                UpdateDatabase(item);
+                foreach (var item in _context.Account.OrderBy(p => p.Id))
+                {
+                    item.IsRunning = 0;
+                    item.RuntimeTotal = 0;
+                    UpdateLocalAccount(item);
+                }
             }
         }
 
@@ -159,7 +175,7 @@ namespace PoGo.NecroBot.Logic
 
                     case 24:
                         MigrateLiteDbToSqLite();
-                        File.Delete(ACCOUNT_DB_NAME);
+                        //File.Delete(ACCOUNT_DB_NAME);
                         break;
                 }
             }
@@ -193,7 +209,7 @@ namespace PoGo.NecroBot.Logic
                     newAccount.CurrentXp = liteDbAccount.CurrentXp;
                     newAccount.NextLevelXp = liteDbAccount.NextLevelXp;
                     newAccount.PrevLevelXp = liteDbAccount.PrevLevelXp;
-                    Accounts.Add(newAccount);
+                    _context.Account.Add(newAccount);
                     _context.SaveChanges();
                 }
             }
@@ -214,7 +230,7 @@ namespace PoGo.NecroBot.Logic
                     try
                     {
                         Account newAcc = new Account(authConfig);
-                        Accounts.Add(newAcc);
+                        _context.Account.Add(newAcc);
                         _context.SaveChanges();
                     }
                     catch(Exception)
@@ -227,10 +243,10 @@ namespace PoGo.NecroBot.Logic
                     // Update credentials in database using values from json.
                     existing.Username = authConfig.Username;
                     existing.Password = authConfig.Password;
-                    UpdateDatabase(existing);
+                    _context.SaveChanges();
                 }
             }
-
+            
             // Remove accounts that are not in the auth.json but in the database.
             List<Account> accountsToRemove = new List<Account>();
             foreach (var item in _context.Account)
@@ -244,17 +260,20 @@ namespace PoGo.NecroBot.Logic
 
             foreach (var item in accountsToRemove)
             {
-                Accounts.Remove(item);
-                _context.SaveChanges();
+                _context.Account.Remove(item);
             }
+            _context.SaveChanges();
         }
 
         internal Account GetMinRuntime(bool ignoreBlockCheck = false)
         {
+            if (_context.Account.Count() == 0)
+                return null;
+
             if (ignoreBlockCheck)
-                return Accounts.OrderBy(x => x != null && x.RuntimeTotal.HasValue ? x.RuntimeTotal.Value : 0).ThenBy(x => x != null ? x.Id : 0).FirstOrDefault();
+                return _context.Account.OrderBy(x => x.RuntimeTotal.HasValue ? x.RuntimeTotal.Value : 0).ThenBy(x => x != null ? x.Id : 0).FirstOrDefault();
             else
-                return Accounts.OrderBy(x => x != null && x.RuntimeTotal.HasValue ? x.RuntimeTotal.Value : 0).ThenBy(x => x != null ? x.Id : 0).Where(x => x != null && x.ReleaseBlockTime.HasValue && x.ReleaseBlockTime.Value < DateTime.Now.ToUnixTime()).FirstOrDefault();
+                return _context.Account.OrderBy(x => x.RuntimeTotal.HasValue ? x.RuntimeTotal.Value : 0).ThenBy(x => x != null ? x.Id : 0).Where(x => x != null && x.ReleaseBlockTime.HasValue && x.ReleaseBlockTime.Value < DateTime.Now.ToUnixTime()).FirstOrDefault();
         }
 
         public bool AllowMultipleBot()
@@ -269,7 +288,7 @@ namespace PoGo.NecroBot.Logic
             
             if (!AllowMultipleBot())
             {
-                startupAccount = Accounts.Last();
+                startupAccount = _context.Account.Last();
             }
             else
             {
@@ -300,7 +319,7 @@ namespace PoGo.NecroBot.Logic
         public Account GetSwitchableAccount(Account bot = null, bool pauseIfNoSwitchableAccount = true)
         {
             ISession session = TinyIoCContainer.Current.Resolve<ISession>();
-            
+
             var currentAccount = GetCurrentAccount();
 
             // If the bot to switch to is the same as the current bot then just return.
@@ -310,10 +329,13 @@ namespace PoGo.NecroBot.Logic
             if (bot != null)
                 return bot;
 
-            var runnableAccount = Accounts.OrderByDescending(p => p.RuntimeTotal).ThenBy(p => p.Id).LastOrDefault(p => p != currentAccount && (!p.ReleaseBlockTime.HasValue || p.ReleaseBlockTime.HasValue && p.ReleaseBlockTime.Value < DateTime.Now.ToUnixTime()));
+            if (_context.Account.Count() > 0)
+            { 
+                var runnableAccount = _context.Account.OrderByDescending(p => p.RuntimeTotal).ThenBy(p => p.Id).LastOrDefault(p => p != currentAccount && (!p.ReleaseBlockTime.HasValue || p.ReleaseBlockTime.HasValue && p.ReleaseBlockTime.Value < DateTime.Now.ToUnixTime()));
 
-            if (runnableAccount != null)
-                return runnableAccount;
+                if (runnableAccount != null)
+                    return runnableAccount;
+            }
 
             if (!pauseIfNoSwitchableAccount)
                 return null;
@@ -345,22 +367,39 @@ namespace PoGo.NecroBot.Logic
         }
 
         private Account requestedAccount = null;
-        public void UpdateDatabase(Account current)
+        public void UpdateLocalAccount(Account current, bool save = true)
         {
-            current.RaisePropertyChanged("Nickname");
-            current.RaisePropertyChanged("RuntimeTotal");
-            current.RaisePropertyChanged("IsRunning");
-            current.RaisePropertyChanged("Level");
-            current.RaisePropertyChanged("LastLogin");
-            current.RaisePropertyChanged("LastLoginTimestamp");
-            current.RaisePropertyChanged("Level");
-            current.RaisePropertyChanged("Stardust");
-            current.RaisePropertyChanged("CurrentXp");
-            current.RaisePropertyChanged("NextLevelXp");
-            current.RaisePropertyChanged("PrevLevelXp");
-            current.RaisePropertyChanged("ExperienceInfo");
+            var localAccount = Accounts.Where(a => a.Id == current.Id).FirstOrDefault();
+            if (localAccount != null)
+            {
+                localAccount.Nickname = current.Nickname;
+                localAccount.RaisePropertyChanged("Nickname");
+                localAccount.RuntimeTotal = current.RuntimeTotal;
+                localAccount.RaisePropertyChanged("RuntimeTotal");
+                localAccount.IsRunning = current.IsRunning;
+                localAccount.RaisePropertyChanged("IsRunning");
+                localAccount.Level = current.Level;
+                localAccount.RaisePropertyChanged("Level");
+                localAccount.LastLogin = current.LastLogin;
+                localAccount.RaisePropertyChanged("LastLogin");
+                localAccount.LastLoginTimestamp = current.LastLoginTimestamp;
+                localAccount.RaisePropertyChanged("LastLoginTimestamp");
+                localAccount.Level = current.Level;
+                localAccount.RaisePropertyChanged("Level");
+                localAccount.Stardust = current.Stardust;
+                localAccount.RaisePropertyChanged("Stardust");
+                localAccount.CurrentXp = current.CurrentXp;
+                localAccount.RaisePropertyChanged("CurrentXp");
+                localAccount.NextLevelXp = current.NextLevelXp;
+                localAccount.RaisePropertyChanged("NextLevelXp");
+                localAccount.PrevLevelXp = current.PrevLevelXp;
+                localAccount.RaisePropertyChanged("PrevLevelXp");
+                
+                localAccount.RaisePropertyChanged("ExperienceInfo");
 
-            _context.SaveChanges();
+                if (save)
+                    _context.SaveChanges();
+            }
         }
         
         public void DumpAccountList()
@@ -408,7 +447,7 @@ namespace PoGo.NecroBot.Logic
                 account.RuntimeTotal += (now - TimeUtil.GetDateTimeFromMilliseconds(account.LastRuntimeUpdatedAt.Value)).TotalMinutes;
             account.LastRuntimeUpdatedAt = now.ToUnixTime();
 
-            UpdateDatabase(account);
+            UpdateLocalAccount(account);
         }
     }
 }
