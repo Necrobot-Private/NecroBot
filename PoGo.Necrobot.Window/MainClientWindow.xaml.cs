@@ -116,7 +116,7 @@ namespace PoGo.Necrobot.Window
                 string path = System.Reflection.Assembly.GetExecutingAssembly().Location;
                 string appDir = Path.GetDirectoryName(path);
                 var uri = new Uri(Path.Combine(appDir, @"PokeEase\index.html"));
-                var browser = BrowserFactory.Create(BrowserType.HEAVYWEIGHT);
+                var browser = BrowserFactory.Create(BrowserType.LIGHTWEIGHT);
 
                 webView = new WPFBrowserView(browser);
                 browserLayout.Children.Add((UIElement)webView.GetComponent());
