@@ -124,8 +124,8 @@ namespace PoGo.NecroBot.Logic
             {
                 item.IsRunning = 0;
                 item.RuntimeTotal = 0;
-                UpdateDatabase(item);
             }
+            _context.SaveChanges();
         }
 
         private void MigrateDatabase()
