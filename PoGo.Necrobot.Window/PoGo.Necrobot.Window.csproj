@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -208,7 +208,7 @@
       <HintPath>$(SolutionDir)\packages\System.AppContext.4.3.0\lib\net46\System.AppContext.dll</HintPath>
     </Reference>
     <Reference Include="System.Collections.Immutable, Version=1.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)\packages\System.Collections.Immutable.1.3.0\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\System.Collections.Immutable.1.3.1\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
@@ -228,8 +228,8 @@
     <Reference Include="System.Globalization.Calendars, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\System.Globalization.Calendars.4.3.0\lib\net46\System.Globalization.Calendars.dll</HintPath>
     </Reference>
-    <Reference Include="System.Interactive.Async, Version=3.0.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)\packages\System.Interactive.Async.3.0.0\lib\net45\System.Interactive.Async.dll</HintPath>
+    <Reference Include="System.Interactive.Async, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\System.Interactive.Async.3.1.1\lib\net46\System.Interactive.Async.dll</HintPath>
     </Reference>
     <Reference Include="System.IO, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\System.IO.4.3.0\lib\net462\System.IO.dll</HintPath>
@@ -900,6 +900,8 @@
     <EmbeddedResource Include="Resources\teamdev.licenses" />
     <Resource Include="Resources\Fonts\Lato\SIL Open Font License.txt" />
     <Resource Include="Controls\MapMarkers\pokestop.png" />
+    <EmbeddedResource Include="costura32\sqlite3.dll" />
+    <EmbeddedResource Include="costura64\sqlite3.dll" />
     <Content Include="Effects\GrayscaleEffect.dll" />
   </ItemGroup>
   <ItemGroup />
@@ -950,7 +952,11 @@ foreach (var item in filesToCleanup)
   <PropertyGroup>
     <PostBuildEvent>cd "$(TargetDir)"
 del *.config
-xcopy /y /f /e "$(SolutionDir)\PokeEase\Public" "$(TargetDir)\PokeEase\"</PostBuildEvent>
+xcopy /y /f /e "$(SolutionDir)\PokeEase\Public" "$(TargetDir)\PokeEase\"
+del /s /q x86
+rmdir /s /q x86
+del /s /q x64
+rmdir /s /q x64</PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\packages\Selenium.WebDriver.ChromeDriver.2.29.0\build\Selenium.WebDriver.ChromeDriver.targets" Condition="Exists('$(SolutionDir)\packages\Selenium.WebDriver.ChromeDriver.2.29.0\build\Selenium.WebDriver.ChromeDriver.targets')" />
   <Import Project="$(SolutionDir)\packages\Fody.2.0.7\build\netstandard1.4\Fody.targets" Condition="Exists('$(SolutionDir)\packages\Fody.2.0.7\build\netstandard1.4\Fody.targets')" />

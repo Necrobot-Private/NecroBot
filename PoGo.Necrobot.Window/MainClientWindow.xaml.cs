@@ -112,16 +112,24 @@ namespace PoGo.Necrobot.Window
 
         private void InitBrowser()
         {
-            string path = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            try
+            {
+                string path = System.Reflection.Assembly.GetExecutingAssembly().Location;
+                string appDir = Path.GetDirectoryName(path);
+                var uri = new Uri(Path.Combine(appDir, @"PokeEase\index.html"));
+                var browser = BrowserFactory.Create(BrowserType.HEAVYWEIGHT);
 
-            string appDir = Path.GetDirectoryName(path);
-            var uri = new Uri(Path.Combine(appDir, @"PokeEase\index.html"));
-
-            var browser = BrowserFactory.Create(BrowserType.HEAVYWEIGHT);
-            webView = new WPFBrowserView(browser);
-            browserLayout.Children.Add((UIElement)webView.GetComponent());
-
-            webView.Browser.LoadURL(uri.ToString());
+                webView = new WPFBrowserView(browser);
+                browserLayout.Children.Add((UIElement)webView.GetComponent());
+                webView.Browser.LoadURL(uri.ToString());
+            }
+            catch
+            {
+                NecroBot.Logic.Logging.Logger.Write("DotNetBrowser has encountered an issue, and has been shut down to prevent a crash", LogLevel.Warning);
+                Settings.Default.BrowserToggled = false;
+                Settings.Default.Save();
+                BrowserSync();
+            }
         }
 
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
