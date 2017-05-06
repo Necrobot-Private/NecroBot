@@ -3,7 +3,6 @@ using System.IO;
 using LiteDB;
 using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.Event;
-using PoGo.NecroBot.Logic.Model;
 using System.Linq;
 
 namespace PoGo.NecroBot.Logic.State
@@ -152,84 +151,71 @@ namespace PoGo.NecroBot.Logic.State
         public void AddPokestopTimestamp(Int64 ts)
         {
             SessionStats.LoadLegacyData(ownerSession);
-            using (var db = new AccountConfigContext())
+            var manager = TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>();
+            var db = manager.GetDbContext();
+            var existing = db.PokestopTimestamp.Where(t => t.Timestamp == ts).FirstOrDefault();
+            if (existing == null)
             {
-                var existing = db.PokestopTimestamp.Where(t => t.Timestamp == ts).FirstOrDefault();
-                if (existing == null)
-                {
-                    var manager = TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>();
-                    var currentAccount = manager.GetCurrentAccount();
+                var currentAccount = manager.GetCurrentAccount();
 
-                    var stat = new Model.PokestopTimestamp
-                    {
-                        Timestamp = ts,
-                        Account = manager.GetCurrentAccount()
-                    };
-                    currentAccount.PokestopTimestamp.Add(stat);
-                    db.SaveChanges();
-                }
+                var stat = new Model.PokestopTimestamp
+                {
+                    Timestamp = ts,
+                    Account = manager.GetCurrentAccount()
+                };
+                db.PokestopTimestamp.Add(stat);
+                db.SaveChanges();
             }
         }
 
         public void AddPokemonTimestamp(Int64 ts)
         {
             SessionStats.LoadLegacyData(ownerSession);
-            using (var db = new AccountConfigContext())
+            var manager = TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>();
+            var db = manager.GetDbContext();
+            var existing = db.PokemonTimestamp.Where(t => t.Timestamp == ts).FirstOrDefault();
+            if (existing == null)
             {
-                var existing = db.PokemonTimestamp.Where(t => t.Timestamp == ts).FirstOrDefault();
-                if (existing == null)
-                {
-                    var manager = TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>();
-                    var currentAccount = manager.GetCurrentAccount();
+                var currentAccount = manager.GetCurrentAccount();
 
-                    var stat = new Model.PokemonTimestamp
-                    {
-                        Timestamp = ts,
-                        Account = manager.GetCurrentAccount()
-                    };
-                    currentAccount.PokemonTimestamp.Add(stat);
-                    db.SaveChanges();
-                }
+                var stat = new Model.PokemonTimestamp
+                {
+                    Timestamp = ts,
+                    Account = manager.GetCurrentAccount()
+                };
+                db.PokemonTimestamp.Add(stat);
+                db.SaveChanges();
             }
         }
 
         public void CleanOutExpiredStats()
         {
             SessionStats.LoadLegacyData(ownerSession);
-            using (var db = new AccountConfigContext())
-            {
-                var manager = TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>();
-                
-                long TSminus24h = DateTime.Now.AddHours(-24).Ticks;
-                var pokestopTimestampsToDelete = db.PokestopTimestamp.Where(t => t.Account == manager.GetCurrentAccount() && t.Timestamp < TSminus24h);
-                db.PokestopTimestamp.RemoveRange(pokestopTimestampsToDelete);
+            var manager = TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>();
+            var db = manager.GetDbContext();
+            long TSminus24h = DateTime.Now.AddHours(-24).Ticks;
+            var pokestopTimestampsToDelete = db.PokestopTimestamp.Where(t => t.Account == manager.GetCurrentAccount() && t.Timestamp < TSminus24h);
+            db.PokestopTimestamp.RemoveRange(pokestopTimestampsToDelete);
 
-                var pokemonTimestampsToDelete = db.PokemonTimestamp.Where(t => t.Account == manager.GetCurrentAccount() && t.Timestamp < TSminus24h);
-                db.PokemonTimestamp.RemoveRange(pokemonTimestampsToDelete);
-                db.SaveChanges();
-            }
+            var pokemonTimestampsToDelete = db.PokemonTimestamp.Where(t => t.Account == manager.GetCurrentAccount() && t.Timestamp < TSminus24h);
+            db.PokemonTimestamp.RemoveRange(pokemonTimestampsToDelete);
+            db.SaveChanges();
         }
 
         public int GetNumPokestopsInLast24Hours()
         {
-            using (var db = new AccountConfigContext())
-            {
-                var manager = TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>();
-
-                var TSminus24h = DateTime.Now.AddHours(-24).Ticks;
-                return db.PokestopTimestamp.Count(s => manager.GetCurrentAccount() == s.Account && s.Timestamp >= TSminus24h);
-            }
+            var manager = TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>();
+            var db = manager.GetDbContext();
+            var TSminus24h = DateTime.Now.AddHours(-24).Ticks;
+            return db.PokestopTimestamp.Count(s => manager.GetCurrentAccount() == s.Account && s.Timestamp >= TSminus24h);
         }
 
         public int GetNumPokemonsInLast24Hours()
         {
-            using (var db = new AccountConfigContext())
-            {
-                var manager = TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>();
-
-                var TSminus24h = DateTime.Now.AddHours(-24).Ticks;
-                return db.PokemonTimestamp.Count(s => manager.GetCurrentAccount() == s.Account && s.Timestamp >= TSminus24h);
-            }
+            var manager = TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>();
+            var db = manager.GetDbContext();
+            var TSminus24h = DateTime.Now.AddHours(-24).Ticks;
+            return db.PokemonTimestamp.Count(s => manager.GetCurrentAccount() == s.Account && s.Timestamp >= TSminus24h);
         }
 
         public static void LoadLegacyData(ISession session)
@@ -240,25 +226,28 @@ namespace PoGo.NecroBot.Logic.State
             using (var liteDb = new LiteDatabase(GetDBPath(session, GetUsername(session))))
             {
                 var manager = TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>();
+                var db = manager.GetDbContext();
                 var currentAccount = manager.GetCurrentAccount();
 
                 var pokestopTimestamps = liteDb.GetCollection<PokeStopTimestamp>(POKESTOP_STATS_COLLECTION).FindAll();
                 foreach (var ts in pokestopTimestamps)
                 {
-                    currentAccount.PokestopTimestamp.Add(new Model.PokestopTimestamp
+                    db.PokestopTimestamp.Add(new Model.PokestopTimestamp
                     {
-                        Timestamp = ts.Timestamp
+                        Timestamp = ts.Timestamp,
+                        Account = currentAccount
                     });
                 }
                 var pokemonTimestamps = liteDb.GetCollection<PokemonTimestamp>(POKEMON_STATS_COLLECTION).FindAll();
                 foreach (var ts in pokemonTimestamps)
                 {
-                    currentAccount.PokemonTimestamp.Add(new Model.PokemonTimestamp
+                    db.PokemonTimestamp.Add(new Model.PokemonTimestamp
                     {
-                        Timestamp = ts.Timestamp
+                        Timestamp = ts.Timestamp,
+                        Account = currentAccount
                     });
                 }
-                manager.UpdateDatabase(currentAccount);
+                db.SaveChanges();
             }
             File.Delete(GetDBPath(session, GetUsername(session)));
         }
