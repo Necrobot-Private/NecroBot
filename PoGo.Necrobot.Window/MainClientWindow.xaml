@@ -170,10 +170,9 @@
                     <Setter Property="HorizontalAlignment" Value="Center" />
                 </Style>
             </TabControl.Resources>
-            <TabItem Name="tabAccounts" Width="80" Height="70">
+            <TabItem Name="tabAccounts" Width="80" Height="70" Cursor="Hand">
                 <TabItem.Header>
-                    <Image x:Name="accountsIMG" Source="Resources/Accounts/AccountsImage.png" Width="60" RenderTransformOrigin="0.5,0.5" Height="60" />
-
+                    <Image x:Name="accountsIMG" Source="Resources/Accounts/AccountsImage.png" Width="70" Height="65" />
                 </TabItem.Header>
                 <DataGrid Name="gridAccounts" AutoGenerateColumns="False" CanUserDeleteRows="False" CanUserAddRows="False">
                     <DataGrid.Columns>
@@ -206,16 +205,16 @@
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>
-            <TabItem Name="tabBrowser" Width="80" Height="70">
+            <TabItem Name="tabBrowser" Width="80" Height="70" Cursor="Hand">
                 <TabItem.Header>
-                    <Image x:Name="browserIMG" Source="Resources/Hub/HubImage.png" Width="60" RenderTransformOrigin="0.5,0.5" Height="60" />
+                    <Image x:Name="browserIMG" Source="Resources/Hub/HubImage.png" Width="70" Height="65" />
                 </TabItem.Header>
                 <Grid Name="browserLayout">
                 </Grid>
             </TabItem>
-            <TabItem Name="tabMap" Width="80" Height="70">
+            <TabItem Name="tabMap" Width="80" Height="70" Cursor="Hand">
                 <TabItem.Header>
-                    <Image x:Name="mapIMG" Source="Resources/Map/MapImage.png" Width="60" RenderTransformOrigin="0.5,0.5" Height="60" />
+                    <Image x:Name="mapIMG" Source="Resources/Map/MapImage.png" Width="70" Height="65" />
                 </TabItem.Header>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -228,15 +227,15 @@
                     <local:SidebarControl Visibility="Visible" DataContext="{Binding Path=Sidebar}" x:Name="sidebarControl" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinWidth="200" />
                 </Grid>
             </TabItem>
-            <TabItem x:Name="tabSniper" Width="80" Height="70">
+            <TabItem x:Name="tabSniper" Width="80" Height="70" Cursor="Hand">
                 <TabItem.Header>
-                    <Image x:Name="sniperIMG" Source="Resources/Sniper/SniperImage.png" Width="60" RenderTransformOrigin="0.5,0.5" Height="60" />
+                    <Image x:Name="sniperIMG" Source="Resources/Sniper/SniperImage.png" Width="70" Height="65" />
                 </TabItem.Header>
                 <local:SniperControl x:Name="ctrlSniper" DataContext="{Binding Path=SnipeList}" />
             </TabItem>
-            <TabItem x:Name="tabConsole" IsSelected="True" Width="80" Height="70">
+            <TabItem x:Name="tabConsole" IsSelected="True" Width="80" Height="70" Cursor="Hand">
                 <TabItem.Header>
-                    <Image x:Name="consoleIMG" Source="Resources/Console/ConsoleImage.png" Width="60" RenderTransformOrigin="0.5,0.5" Height="60" />
+                    <Image x:Name="consoleIMG" Source="Resources/Console/ConsoleImage.png" Width="65" Height="65" />
                 </TabItem.Header>
                 <DockPanel LastChildFill="True">
                     <TextBox HorizontalAlignment="Stretch" x:Name="txtCmdInput" Background="#002B36" DockPanel.Dock="Top" Foreground="#FDF6E3"  BorderBrush="Aquamarine" BorderThickness="1" ToolTip="{Binding Source=InputCommand, Converter={StaticResource ResourceKey=I18NConveter}}" MouseDown="TxtCmdInput_MouseDown" KeyDown="TxtCmdInput_KeyDown" />
@@ -249,19 +248,19 @@
                     </RichTextBox>
                 </DockPanel>
             </TabItem>
-            <TabItem Name="tabPokemons" Width="80" Height="70">
+            <TabItem Name="tabPokemons" Width="80" Height="70" Cursor="Hand">
                 <TabItem.Header>
-                    <StackPanel Orientation="Vertical" RenderTransformOrigin="0.5,0.5" Width="80" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Image x:Name="pokemonIMG" Source="Resources/Pokemon/PokemonImage.png" Width="48" Height="48"/>
+                    <StackPanel Orientation="Vertical" Width="80" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Image x:Name="pokemonIMG" Source="Resources/Pokemon/PokemonImage.png" Width="50" Height="50"/>
                         <TextBlock FontSize="12" HorizontalAlignment="Center" Text="{Binding Path= PokemonTabHeader, FallbackValue=Pokemon}"/>
                     </StackPanel>
                 </TabItem.Header>
                 <local:PokemonInventory x:Name="ctrPokemonInventory" DataContext="{Binding Path=PokemonList}" OnPokemonItemSelected="PokemonInventory_OnPokemonItemSelected" />
             </TabItem>
-            <TabItem Name="tabItems" Width="80" Height="70">
+            <TabItem Name="tabItems" Width="80" Height="70" Cursor="Hand">
                 <TabItem.Header>
-                    <StackPanel Orientation="Vertical" RenderTransformOrigin="0.5,0.5" Width="80" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Image x:Name="itemsIMG" Source="Resources/Items/ItemsImage.png" Width="48" Height="48"/>
+                    <StackPanel Orientation="Vertical" Width="80" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Image x:Name="itemsIMG" Source="Resources/Items/ItemsImage.png" Width="50" Height="50"/>
                         <TextBlock FontSize="12" HorizontalAlignment="Center" Text="{Binding Path= ItemsTabHeader, FallbackValue=Items}"/>
                     </StackPanel>
                 </TabItem.Header>
@@ -269,8 +268,8 @@
             </TabItem>
             <TabItem Name="tabEggs" Width="80" Height="70">
                 <TabItem.Header>
-                    <StackPanel Orientation="Vertical" RenderTransformOrigin="0.5,0.5" Width="80" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Image x:Name="eggsIMG" Source="Resources/Eggs/EggsImage.png" Width="48" Height="48"/>
+                    <StackPanel Orientation="Vertical" Width="80" HorizontalAlignment="Center" VerticalAlignment="Center" Cursor="Hand">
+                        <Image x:Name="eggsIMG" Source="Resources/Eggs/EggsImage.png" Width="50" Height="50"/>
                         <TextBlock FontSize="12" HorizontalAlignment="Center" Text="{Binding Path= EggsTabHeader, FallbackValue=Eggs}"/>
                     </StackPanel>
                 </TabItem.Header>
