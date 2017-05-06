@@ -22,7 +22,7 @@
                        Text="Necrobot 2 - Window GUI"
                        TextTrimming="CharacterEllipsis"
                        VerticalAlignment="Center"
-                       Margin="7, 0, 0, 0"
+                       Margin="0, 0, 0, 0"
                        FontWeight="Normal"
                        FontFamily="pack://application:,,,/Resources/#Lato-light"/>
         </DataTemplate>
@@ -48,8 +48,8 @@
                             <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_book_perspective_help}" />
                         </Rectangle.OpacityMask>
                     </Rectangle>
-                    <TextBlock Margin="4 0 0 0" VerticalAlignment="Center" Text="{Binding Source=Help, Converter={StaticResource ResourceKey=I18NConveter}}" />
-                    <Popup Margin="10,10,0,13" Name="popHelpArticles" HorizontalAlignment="Left" VerticalAlignment="Top" StaysOpen="False" Width="420" Height="580" IsOpen="False" AllowsTransparency="True">
+                    <TextBlock Margin="0 0 0 0" VerticalAlignment="Center" Text="{Binding Source=Help, Converter={StaticResource ResourceKey=I18NConveter}}" />
+                    <Popup Margin="10,10,10,10" Name="popHelpArticles" HorizontalAlignment="Left" VerticalAlignment="Top" StaysOpen="False" Width="420" Height="580" IsOpen="False" AllowsTransparency="True">
                         <Grid Background="WhiteSmoke">
                             <ListView Name="lsvHelps" Margin="20">
                                 <ListView.ItemTemplate>
@@ -73,14 +73,14 @@
             <ComboBox x:Name="MapMode" IsEditable="True" IsReadOnly="True" SelectionChanged="MapMode_SelectionChanged" Background="{x:Null}" BorderBrush="{x:Null}" Width="120" ToolTip="Set Map Mode" />
             <Button x:Name="DefaultReset" Click="DefaultReset_Click">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Margin="4 0 0 0" x:Name="defaultResetText"
+                    <TextBlock Margin="0 0 0 0" x:Name="defaultResetText"
                                VerticalAlignment="Center"
                                Text="{Binding Source=ResetLayout, Converter={StaticResource ResourceKey=I18NConveter}}" />
                 </StackPanel>
             </Button>
             <Button x:Name="BrowserToggle" Click="BrowserToggle_Click">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Margin="4 0 0 0" x:Name="browserMenuText"
+                    <TextBlock Margin="0 0 0 0" x:Name="browserMenuText"
                                VerticalAlignment="Center"
                                Text="{Binding Source=DisableHub, Converter={StaticResource ResourceKey=I18NConveter}}" />
                 </StackPanel>
@@ -94,7 +94,7 @@
                             <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_console}" />
                         </Rectangle.OpacityMask>
                     </Rectangle>
-                    <TextBlock Margin="4 0 0 0" Name="consoleMenuText"
+                    <TextBlock Margin="0 0 0 0" Name="consoleMenuText"
                                VerticalAlignment="Center"
                                Text="{Binding Source=ShowConsole, Converter={StaticResource ResourceKey=I18NConveter}}" />
                 </StackPanel>
@@ -109,7 +109,7 @@
                             <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_settings}" />
                         </Rectangle.OpacityMask>
                     </Rectangle>
-                    <TextBlock Margin="4 0 0 0"
+                    <TextBlock Margin="0 0 0 0"
                                VerticalAlignment="Center"
                                Text="{Binding Source=MenuSetting, Converter={StaticResource I18NConveter}}" />
                 </StackPanel>
@@ -125,25 +125,6 @@
         </Controls:WindowCommands>
     </Controls:MetroWindow.RightWindowCommands>
     <DockPanel LastChildFill="True">
-        <GroupBox x:Name="grbPlayerInfo" DockPanel.Dock="Top" Height="120">
-            <GroupBox.Header>
-                <DockPanel LastChildFill="True">
-                    <Button Content="Hide" DockPanel.Dock="Right" Name="btnHideInfo" Click="BtnHideInfo_Click" />
-                    <Label Content="Logging in ..... check console window for detail" Name="lblAccount"
-                           Foreground="White" FontWeight="Bold">
-                    </Label>
-                </DockPanel>
-            </GroupBox.Header>
-            <local:PlayerInfo DataContext="{Binding Path=PlayerInfo}" Margin="10,0,-2,1" />
-        </GroupBox>
-        <StatusBar DockPanel.Dock="Bottom">
-            <StatusBarItem>
-                <TextBlock Name="lblStatus" />
-            </StatusBarItem>
-            <StatusBarItem>
-                <TextBlock Name="lblCount" />
-            </StatusBarItem>
-        </StatusBar>
         <Popup Name="popSwithAccount" Placement="Center" IsOpen="False" Width="300" Height="90" >
             <Border BorderBrush="Coral" Background="Black" BorderThickness="4">
                 <StackPanel Margin="30,30,30,30">
@@ -155,44 +136,44 @@
             <Border BorderBrush="Red" Background="WhiteSmoke" BorderThickness="2">
                 <StackPanel>
                     <StackPanel Background="Red">
-                        <TextBlock  Text="{Binding Source=ErrorPopupTitle, Converter={StaticResource I18NConveter}}" Margin="15,5,5,5" FontSize="18.667" FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato Heavy" Foreground="White"></TextBlock>
+                        <TextBlock  Text="{Binding Source=ErrorPopupTitle, Converter={StaticResource I18NConveter}}" Margin="5,5,5,5" FontSize="18.667" FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato Heavy" Foreground="White"></TextBlock>
                     </StackPanel>
                     <StackPanel Margin="10">
                         <TextBlock Name="txtLastError" Text="" TextWrapping="Wrap" FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato" FontSize="16"></TextBlock>
-                        <Button Margin="30,10, 10,30" Click="BtnExit_Click" Name="btnExit" Content="{Binding Source=ClickHereExit, Converter={StaticResource I18NConveter}}" FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato Heavy" FontSize="18.667" ></Button>
+                        <Button Margin="10,10,10,10" Click="BtnExit_Click" Name="btnExit" Content="{Binding Source=ClickHereExit, Converter={StaticResource I18NConveter}}" FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato Heavy" FontSize="18.667" ></Button>
                     </StackPanel>
                 </StackPanel>
             </Border>
         </Popup>
-        <TabControl TabStripPlacement="Left" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalAlignment="Stretch" Name="tabMain" SelectionChanged="TabMain_SelectionChanged" Margin="0,0,0,5">
+        <GroupBox x:Name="grbPlayerInfo" DockPanel.Dock="Top" Height="120" Margin="2">
+            <GroupBox.Header>
+                <DockPanel LastChildFill="True">
+                    <Button Content="Hide" DockPanel.Dock="Right" Name="btnHideInfo" Click="BtnHideInfo_Click" />
+                    <Label Content="Logging in ..... check console window for detail" Name="lblAccount"
+                            Foreground="White" FontWeight="Bold">
+                    </Label>
+                </DockPanel>
+            </GroupBox.Header>
+            <local:PlayerInfo DataContext="{Binding Path=PlayerInfo}" />
+        </GroupBox>
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock Name="lblStatus" />
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock Name="lblCount" />
+            </StatusBarItem>
+        </StatusBar>
+        <TabControl TabStripPlacement="Bottom" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalAlignment="Stretch" Name="tabMain" SelectionChanged="TabMain_SelectionChanged" Margin="0,0,0,0">
             <TabControl.Resources>
-                <Style TargetType="{x:Type TabItem}">
-                    <Setter Property="HeaderTemplate">
-                        <Setter.Value>
-                            <DataTemplate>
-                                <ContentPresenter Content="{TemplateBinding Content}">
-                                    <ContentPresenter.LayoutTransform>
-                                        <RotateTransform Angle="270" />
-                                    </ContentPresenter.LayoutTransform>
-                                </ContentPresenter>
-                            </DataTemplate>
-                        </Setter.Value>
-                    </Setter>
-                    <Setter Property="Padding" Value="3" />
+                <Style TargetType="{x:Type TabPanel}">
+                    <Setter Property="HorizontalAlignment" Value="Center" />
                 </Style>
             </TabControl.Resources>
             <TabItem Name="tabAccounts" Width="80" Height="70">
                 <TabItem.Header>
-                    <Image x:Name="accountsIMG" Source="Resources/Accounts/AccountsImage.png" Width="60" RenderTransformOrigin="0.5,0.5" Height="60" >
-                        <Image.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform/>
-                                <SkewTransform/>
-                                <RotateTransform Angle="90.00"/>
-                                <TranslateTransform/>
-                            </TransformGroup>
-                        </Image.RenderTransform>
-                    </Image>
+                    <Image x:Name="accountsIMG" Source="Resources/Accounts/AccountsImage.png" Width="60" RenderTransformOrigin="0.5,0.5" Height="60" />
+
                 </TabItem.Header>
                 <StackPanel>
                     <DockPanel>
@@ -278,32 +259,14 @@
             </TabItem>
             <TabItem Name="tabBrowser" Width="80" Height="70">
                 <TabItem.Header>
-                    <Image x:Name="browserIMG" Source="Resources/Hub/HubImage.png" Width="60" RenderTransformOrigin="0.5,0.5" Height="60" >
-                        <Image.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform/>
-                                <SkewTransform/>
-                                <RotateTransform Angle="90.000"/>
-                                <TranslateTransform/>
-                            </TransformGroup>
-                        </Image.RenderTransform>
-                    </Image>
+                    <Image x:Name="browserIMG" Source="Resources/Hub/HubImage.png" Width="60" RenderTransformOrigin="0.5,0.5" Height="60" />
                 </TabItem.Header>
                 <Grid Name="browserLayout">
                 </Grid>
             </TabItem>
             <TabItem Name="tabMap" Width="80" Height="70">
                 <TabItem.Header>
-                    <Image x:Name="mapIMG" Source="Resources/Map/MapImage.png" Width="60" RenderTransformOrigin="0.5,0.5" Height="60" >
-                        <Image.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform/>
-                                <SkewTransform/>
-                                <RotateTransform Angle="90.000"/>
-                                <TranslateTransform/>
-                            </TransformGroup>
-                        </Image.RenderTransform>
-                    </Image>
+                    <Image x:Name="mapIMG" Source="Resources/Map/MapImage.png" Width="60" RenderTransformOrigin="0.5,0.5" Height="60" />
                 </TabItem.Header>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -324,16 +287,7 @@
             </TabItem>
             <TabItem x:Name="tabConsole" IsSelected="True" Width="80" Height="70">
                 <TabItem.Header>
-                    <Image x:Name="consoleIMG" Source="Resources/Console/ConsoleImage.png" Width="60" RenderTransformOrigin="0.5,0.5" Height="60" >
-                        <Image.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform/>
-                                <SkewTransform/>
-                                <RotateTransform Angle="90.000"/>
-                                <TranslateTransform/>
-                            </TransformGroup>
-                        </Image.RenderTransform>
-                    </Image>
+                    <Image x:Name="consoleIMG" Source="Resources/Console/ConsoleImage.png" Width="60" RenderTransformOrigin="0.5,0.5" Height="60" />
                 </TabItem.Header>
                 <DockPanel LastChildFill="True">
                     <TextBox HorizontalAlignment="Stretch" x:Name="txtCmdInput" Background="#002B36" DockPanel.Dock="Top" Foreground="#FDF6E3"  BorderBrush="Aquamarine" BorderThickness="1" ToolTip="{Binding Source=InputCommand, Converter={StaticResource ResourceKey=I18NConveter}}" MouseDown="TxtCmdInput_MouseDown" KeyDown="TxtCmdInput_KeyDown" />
@@ -349,14 +303,6 @@
             <TabItem Name="tabPokemons" Width="80" Height="70">
                 <TabItem.Header>
                     <StackPanel Orientation="Vertical" RenderTransformOrigin="0.5,0.5" Width="80" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <StackPanel.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform/>
-                                <SkewTransform/>
-                                <RotateTransform Angle="90"/>
-                                <TranslateTransform/>
-                            </TransformGroup>
-                        </StackPanel.RenderTransform>
                         <Image x:Name="pokemonIMG" Source="Resources/Pokemon/PokemonImage.png" Width="48" Height="48"/>
                         <TextBlock FontSize="12" HorizontalAlignment="Center" Text="{Binding Path= PokemonTabHeader, FallbackValue=Pokemon}"/>
                     </StackPanel>
@@ -366,14 +312,6 @@
             <TabItem Name="tabItems" Width="80" Height="70">
                 <TabItem.Header>
                     <StackPanel Orientation="Vertical" RenderTransformOrigin="0.5,0.5" Width="80" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <StackPanel.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform/>
-                                <SkewTransform/>
-                                <RotateTransform Angle="90"/>
-                                <TranslateTransform/>
-                            </TransformGroup>
-                        </StackPanel.RenderTransform>
                         <Image x:Name="itemsIMG" Source="Resources/Items/ItemsImage.png" Width="48" Height="48"/>
                         <TextBlock FontSize="12" HorizontalAlignment="Center" Text="{Binding Path= ItemsTabHeader, FallbackValue=Items}"/>
                     </StackPanel>
@@ -383,14 +321,6 @@
             <TabItem Name="tabEggs" Width="80" Height="70">
                 <TabItem.Header>
                     <StackPanel Orientation="Vertical" RenderTransformOrigin="0.5,0.5" Width="80" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <StackPanel.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform/>
-                                <SkewTransform/>
-                                <RotateTransform Angle="90"/>
-                                <TranslateTransform/>
-                            </TransformGroup>
-                        </StackPanel.RenderTransform>
                         <Image x:Name="eggsIMG" Source="Resources/Eggs/EggsImage.png" Width="48" Height="48"/>
                         <TextBlock FontSize="12" HorizontalAlignment="Center" Text="{Binding Path= EggsTabHeader, FallbackValue=Eggs}"/>
                     </StackPanel>
