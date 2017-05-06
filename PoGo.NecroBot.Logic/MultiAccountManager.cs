@@ -49,6 +49,11 @@ namespace PoGo.NecroBot.Logic
             }
         }
 
+        public AccountConfigContext GetDbContext()
+        {
+            return _context;
+        }
+
         public List<Account> AccountsReadOnly
         {
             get
@@ -159,7 +164,7 @@ namespace PoGo.NecroBot.Logic
 
                     case 24:
                         MigrateLiteDbToSqLite();
-                        File.Delete(ACCOUNT_DB_NAME);
+                        //File.Delete(ACCOUNT_DB_NAME);
                         break;
                 }
             }
