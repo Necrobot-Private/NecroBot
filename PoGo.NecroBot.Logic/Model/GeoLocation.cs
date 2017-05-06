@@ -1,5 +1,6 @@
 ﻿using Geocoding.Google;
 using Google.Common.Geometry;
+using PokemonGo.RocketAPI.Extensions;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ namespace PoGo.NecroBot.Logic.Model
     {
         private static int GEOCODING_MAX_RETRIES = 5;
         private static int GEOLOCATION_PRECISION = 3;
+        private static long BlacklistTimestamp = DateTime.UtcNow.ToUnixTime();
         
         public long Id { get; set; }
         public double Latitude { get; set; }
@@ -81,6 +83,9 @@ namespace PoGo.NecroBot.Logic.Model
 
         public static async Task<GeoLocation> FindOrUpdateInDatabase(double latitude, double longitude)
         {
+            if (BlacklistTimestamp > DateTime.UtcNow.ToUnixTime())
+                return null;
+
             using (var db = new GeoLocationConfigContext())
             {
                 latitude = Math.Round(latitude, GEOLOCATION_PRECISION);
@@ -100,10 +105,24 @@ namespace PoGo.NecroBot.Logic.Model
                         await geoLocation.ReverseGeocode().ConfigureAwait(false);
                         break;
                     }
+                    catch (GoogleGeocodingException e)
+                    {
+                        if (e.Status == GoogleStatus.OverQueryLimit)
+                        {
+                            BlackList();
+                            return null;
+                        }
+
+                        // Just ignore exception and retry after delay
+                        await Task.Delay(i * 100).ConfigureAwait(false);
+                    }
                     catch (Exception)
                     {
                         if (i == GEOCODING_MAX_RETRIES - 1)
+                        {
+                            BlackList();
                             return null;
+                        }
 
                         // Just ignore exception and retry after delay
                         await Task.Delay(i * 100).ConfigureAwait(false);
@@ -118,6 +137,13 @@ namespace PoGo.NecroBot.Logic.Model
                 await db.SaveChangesAsync().ConfigureAwait(false);
                 return geoLocation;
             }
+        }
+
+        private static void BlackList()
+        {
+            var now = DateTime.UtcNow.ToUnixTime();
+            if (BlacklistTimestamp < now)
+                BlacklistTimestamp = now + 60 * 1000 * 60; // 1 hour blacklist
         }
 
         public override string ToString()
