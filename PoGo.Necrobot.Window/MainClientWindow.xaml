@@ -181,9 +181,9 @@
                         <DataGridTextColumn Binding="{Binding Password}" Header="Password"></DataGridTextColumn>
                         <DataGridTextColumn Binding="{Binding Nickname}" Header="Nickname"></DataGridTextColumn>
                         <DataGridTextColumn Binding="{Binding Level}" Header="Level"></DataGridTextColumn>
-                        <DataGridTextColumn Binding="{Binding ExperienceInfo}" Header="ExperienceInfo"></DataGridTextColumn>
+                        <DataGridTextColumn Binding="{Binding ExperienceInfo}" Header="Experience"></DataGridTextColumn>
                         <DataGridTextColumn Binding="{Binding Stardust}" Header="Stardust"></DataGridTextColumn>
-                        <DataGridTextColumn Binding="{Binding LastLogin}" Header="Login"></DataGridTextColumn>
+                        <DataGridTextColumn Binding="{Binding LastLogin}" Header="Login Status"></DataGridTextColumn>
                         <DataGridTextColumn Binding="{Binding LastLoginTimestamp, Converter={StaticResource TimestampToDateTimeConverter }}" Header="Login Time"></DataGridTextColumn>
                         <DataGridTextColumn Binding="{Binding RuntimeTotal, Converter={StaticResource DurationTextConverter} }" Header="Runtime"></DataGridTextColumn>
                         <DataGridTemplateColumn Header="">
