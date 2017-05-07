@@ -147,7 +147,7 @@ namespace PoGo.NecroBot.Logic.Forms
 
         public void StartDownload()
         {
-            Session.EventDispatcher.Send(new StatusBarEvent($"Auto Update v{LatestVersion}, Downloadin from {DownloadLink}"));
+            Session.EventDispatcher.Send(new StatusBarEvent($"Auto Update v{LatestVersion}, Downloading from {DownloadLink}"));
             Logger.Write(DownloadLink, LogLevel.Info);
             DownloadFile(DownloadLink, Destination);
 
