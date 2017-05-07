@@ -29,6 +29,7 @@ using System.Timers;
 using PoGo.NecroBot.Logic.Model;
 using DotNetBrowser;
 using DotNetBrowser.WPF;
+using PokemonGo.RocketAPI.Extensions;
 
 namespace PoGo.Necrobot.Window
 {
@@ -115,6 +116,14 @@ namespace PoGo.Necrobot.Window
             {
                 string path = System.Reflection.Assembly.GetExecutingAssembly().Location;
                 string appDir = Path.GetDirectoryName(path);
+#if DEBUG
+                LoggerProvider.Instance.LoggingEnabled = true;
+                LoggerProvider.Instance.FileLoggingEnabled = true;
+                string logsDir = Path.Combine(appDir, "Logs");
+                if (!Directory.Exists(logsDir))
+                    Directory.CreateDirectory(logsDir);
+                LoggerProvider.Instance.OutputFile = Path.Combine(logsDir, $"DotNetBrowser-{DateTime.UtcNow.ToUnixTime()}.log");
+#endif
                 var uri = new Uri(Path.Combine(appDir, @"PokeEase\index.html"));
                 var browser = BrowserFactory.Create(BrowserType.LIGHTWEIGHT);
 
