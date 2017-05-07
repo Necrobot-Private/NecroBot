@@ -17,10 +17,10 @@ using PoGo.NecroBot.Logic.Event.Snipe;
 
 #endregion
 
-namespace PoGo.NecroBot.CLI
+namespace PoGo.NecroBot.Logic.Service
 {
     [SuppressMessage("ReSharper", "UnusedParameter.Local")]
-    internal class ConsoleEventListener
+    public class ConsoleEventListener
     {
         private static void HandleEvent(ProfileEvent profileEvent, ISession session)
         {
@@ -682,7 +682,7 @@ namespace PoGo.NecroBot.CLI
         {
         }
 
-        internal void Listen(IEvent evt, ISession session)
+        public void Listen(IEvent evt, ISession session)
         {
             dynamic eve = evt;
 

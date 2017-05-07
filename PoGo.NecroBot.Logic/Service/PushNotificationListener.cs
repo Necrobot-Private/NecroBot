@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 #endregion
 
-namespace RocketBot2
+namespace PoGo.NecroBot.Logic.Service
 {
     [SuppressMessage("ReSharper", "UnusedParameter.Local")]
     internal class PushNotificationListener

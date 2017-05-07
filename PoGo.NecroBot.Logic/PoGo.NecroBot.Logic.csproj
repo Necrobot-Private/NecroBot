@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(SolutionDir)\packages\SQLite.3.13.0\build\net45\SQLite.props" Condition="Exists('$(SolutionDir)\packages\SQLite.3.13.0\build\net45\SQLite.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -540,6 +540,9 @@
     </Compile>
     <Compile Include="Service\AnalyticsService.cs" />
     <Compile Include="Service\BotDataSocketClient.cs" />
+    <Compile Include="Service\ConsoleEventListener.cs" />
+    <Compile Include="Service\PushNotificationListener.cs" />
+    <Compile Include="Service\SniperEventListener.cs" />
     <Compile Include="Service\TelegramCommand\ICommand.cs" />
     <Compile Include="Service\TelegramCommand\LocCommand.cs" />
     <Compile Include="Service\TelegramUtils.cs" />
