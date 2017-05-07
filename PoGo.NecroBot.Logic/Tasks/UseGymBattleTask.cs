@@ -31,9 +31,9 @@ namespace PoGo.NecroBot.Logic.Tasks
         private static readonly bool _logTimings = false;
         private static readonly DateTime UnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-        public static async Task Execute(ISession session, CancellationToken cancellationToken, FortData gym, FortDetailsResponse fortInfo)
+        public static async Task<bool> Execute(ISession session, CancellationToken cancellationToken, FortData gym, FortDetailsResponse fortInfo)
         {
-            if (!session.LogicSettings.GymConfig.Enable || gym.Type != FortType.Gym) return;
+            if (!session.LogicSettings.GymConfig.Enable || gym.Type != FortType.Gym) return false;
 
             if (session.GymState.MoveSettings == null)
             {
@@ -97,13 +97,13 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 }
                                 session.GymState.TrainingRound++;
                                 if (session.GymState.TrainingRound <= session.LogicSettings.GymConfig.MaxTrainingRoundsOnOneGym)
-                                    await StartGymAttackLogic(session, fortInfo, fortDetails, gym, cancellationToken).ConfigureAwait(false);
+                                    return await StartGymAttackLogic(session, fortInfo, fortDetails, gym, cancellationToken).ConfigureAwait(false);
                             }
                         }
                         else
                         {
                             if (CanAttackGym(session, gym, deployedList))
-                                await StartGymAttackLogic(session, fortInfo, fortDetails, gym, cancellationToken).ConfigureAwait(false);
+                                return await StartGymAttackLogic(session, fortInfo, fortDetails, gym, cancellationToken).ConfigureAwait(false);
                         }
                     }
                 }
@@ -116,34 +116,36 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 Logger.Write($"Ignoring Gym : {fortInfo?.Name} - ", LogLevel.Gym, ConsoleColor.Cyan);
             }
+
+            return false;
         }
 
-        private static async Task StartGymAttackLogic(ISession session, FortDetailsResponse fortInfo, GetGymDetailsResponse fortDetails, FortData gym, CancellationToken cancellationToken)
+        private static async Task<bool> StartGymAttackLogic(ISession session, FortDetailsResponse fortInfo, GetGymDetailsResponse fortDetails, FortData gym, CancellationToken cancellationToken)
         {
             var defenders = fortDetails.GymState.Memberships.Select(x => x.PokemonData).ToList();
 
-            if (defenders.Count < 1)
-                return;
+            if (defenders.Count == 0)
+                return true;
 
             if (session.Profile.PlayerData.Team != gym.OwnedByTeam)
             {
                 if (session.LogicSettings.GymConfig.MaxGymLevelToAttack < GetGymLevel(gym.GymPoints))
                 {
                     Logger.Write($"This gym level is {GetGymLevel(gym.GymPoints)} > {session.LogicSettings.GymConfig.MaxGymLevelToAttack} in your config. Bot walk away...", LogLevel.Gym, ConsoleColor.Red);
-                    return;
+                    return false;
                 }
 
                 if (session.LogicSettings.GymConfig.MaxDefendersToAttack < defenders.Count)
                 {
-                    Logger.Write($"This gym has {defenders.Count} defender(s)  > {session.LogicSettings.GymConfig.MaxDefendersToAttack} in your config. Bot walk away...", LogLevel.Gym, ConsoleColor.Red);
-                    return;
+                    Logger.Write($"This gym has {defenders.Count} defender(s) > {session.LogicSettings.GymConfig.MaxDefendersToAttack} in your config. Bot walk away...", LogLevel.Gym, ConsoleColor.Red);
+                    return false;
                 }
             }
 
             if (fortDetails.GymState.FortData.IsInBattle)
             {
                 Logger.Write("This gym is under attack now, we will skip it");
-                return;
+                return false;
             }
 
             bool isTraining = (session.Profile.PlayerData.Team == fortDetails.GymState.FortData.OwnedByTeam || (!string.IsNullOrEmpty(session.GymState.CapturedGymId) && session.GymState.CapturedGymId.Equals(fortDetails.GymState.FortData.Id)));
@@ -151,11 +153,10 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (badassPokemon == null)
             {
                 Logger.Write("Check gym setting, we can't compete against attackers team. Exiting.", LogLevel.Warning, ConsoleColor.Magenta);
-                return;
+                return false;
             }
             var pokemonDatas = badassPokemon as PokemonData[] ?? badassPokemon.ToArray();
-            if (defenders.Count == 0) return;
-
+            
             Logger.Write("Starting battle with : " + string.Join(", ", defenders.Select(x => x.PokemonId.ToString())));
 
             foreach (var pokemon in pokemonDatas)
@@ -165,8 +166,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 if (pokemon.Stamina <= 0)
                 {
-                    Logger.Write("You are out of revive potions! Can't resurect attacker", LogLevel.Gym, ConsoleColor.Magenta);
-                    return;
+                    Logger.Write("You are out of revive potions! Can't resurrect attacker", LogLevel.Gym, ConsoleColor.Magenta);
+                    return false;
                 }
 
                 if (pokemon.Stamina < pokemon.StaminaMax)
@@ -305,6 +306,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             if (_startBattleCounter <= 0)
                 _startBattleCounter = 3;
+
+            return true;
         }
 
         private static async Task<FortDeployPokemonResponse> DeployPokemonToGym(ISession session, FortDetailsResponse fortInfo, GetGymDetailsResponse fortDetails, CancellationToken cancellationToken)
