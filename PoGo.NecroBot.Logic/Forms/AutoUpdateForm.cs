@@ -90,7 +90,7 @@ namespace PoGo.NecroBot.Logic.Forms
                     }
                     else
                     {
-                        richTextBox1.Text = "No change logs....";
+                        richTextBox1.Text = "No Changelog Detected....";
                     }
                 }));
 
@@ -147,7 +147,7 @@ namespace PoGo.NecroBot.Logic.Forms
 
         public void StartDownload()
         {
-            Session.EventDispatcher.Send(new StatusBarEvent($"Auto update v{LatestVersion}, downloading.. .{DownloadLink}"));
+            Session.EventDispatcher.Send(new StatusBarEvent($"Auto Update v{LatestVersion}, Downloading from {DownloadLink}"));
             Logger.Write(DownloadLink, LogLevel.Info);
             DownloadFile(DownloadLink, Destination);
 
