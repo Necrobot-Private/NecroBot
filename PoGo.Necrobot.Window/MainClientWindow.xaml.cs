@@ -186,19 +186,7 @@ namespace PoGo.Necrobot.Window
             var Scheme = Settings.Default.Scheme;
             Application.Current.Dispatcher.Invoke(delegate
             {
-                if (tabPokemons.IsMouseOver | tabPokemons.IsSelected | Settings.Default.Scheme == "Light")
-                    tabPokemons.Foreground = Brushes.Black;
-                else if (!tabPokemons.IsMouseOver | !tabPokemons.IsSelected | Settings.Default.Scheme == "Dark")
-                    tabPokemons.Foreground = Brushes.White;
-                if (tabItems.IsMouseOver | tabItems.IsSelected | Settings.Default.Scheme == "Light")
-                    tabItems.Foreground = Brushes.Black;
-                else if (!tabItems.IsMouseOver | !tabItems.IsSelected | Settings.Default.Scheme == "Dark")
-                    tabItems.Foreground = Brushes.White;
-                if (tabEggs.IsMouseOver | tabEggs.IsSelected | Settings.Default.Scheme == "Light")
-                    tabEggs.Foreground = Brushes.Black;
-                else if (!tabEggs.IsMouseOver | !tabEggs.IsSelected | Settings.Default.Scheme == "Dark")
-                    tabEggs.Foreground = Brushes.White;
-                if (Theme != Settings.Default.Theme & Settings.Default.ResetLayout == true)
+                if (Theme != Settings.Default.Theme | Scheme != Settings.Default.Scheme & Settings.Default.ResetLayout == true)
                     Settings.Default.ResetLayout = false;
                 Settings.Default.Save();
             });
