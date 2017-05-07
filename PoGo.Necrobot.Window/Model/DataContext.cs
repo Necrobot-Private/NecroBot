@@ -73,12 +73,9 @@ namespace PoGo.Necrobot.Window.Model
         {
             get
             {
-                var EggNum = EggsList.Eggs.Count();
-                /*if (EggNum > MaxEggStorage)
-                {
-                    EggNum = MaxEggStorage;
-                }*/
-                return $"{EggsList.Eggs.Count()}/{MaxEggStorage}";
+                var numIncubatorsInUse = EggsList.Incubators.Count(i => i.InUse);
+
+                return $"{numIncubatorsInUse}/{EggsList.Eggs.Count()}";
             }
         }
 
