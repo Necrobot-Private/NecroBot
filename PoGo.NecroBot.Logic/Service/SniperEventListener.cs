@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 #endregion
 
-namespace RocketBot2
+namespace PoGo.NecroBot.Logic.Service
 {
     [SuppressMessage("ReSharper", "UnusedParameter.Local")]
-    internal class SniperEventListener
+    public class SniperEventListener
     {
         private static void HandleEvent(PokemonCaptureEvent pokemonCaptureEvent, ISession session)
         {
@@ -39,7 +39,7 @@ namespace RocketBot2
         {
         }
 
-        internal void Listen(IEvent evt, ISession session)
+        public void Listen(IEvent evt, ISession session)
         {
             dynamic eve = evt;
 

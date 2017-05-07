@@ -341,9 +341,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="PushNotificationListener.cs" />
-    <Compile Include="SniperEventListener.cs" />
-    <Compile Include="ConsoleEventListener.cs" />
     <Compile Include="ConsoleLogger.cs" />
     <Compile Include="Resources\ProgressBar.cs" />
     <Compile Include="Program.cs" />

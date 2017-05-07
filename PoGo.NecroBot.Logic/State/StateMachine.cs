@@ -13,9 +13,7 @@ using PoGo.NecroBot.Logic.Tasks;
 using PoGo.NecroBot.Logic.Utils;
 using PokemonGo.RocketAPI.Exceptions;
 using static System.Threading.Tasks.Task;
-using static PoGo.NecroBot.Logic.Utils.PushNotificationClient;
 using TinyIoC;
-using static PoGo.NecroBot.Logic.MultiAccountManager;
 using PoGo.NecroBot.Logic.Model;
 
 #endregion
@@ -200,9 +198,9 @@ namespace PoGo.NecroBot.Logic.State
                             // TODO - await is legal here! USE it or use pragma to suppress compilerwarning and write a comment why it is not used
                             // TODO: Attention - do not touch (add pragma) when you do not know what you are doing ;)
                             // jjskuld - Ignore CS4014 warning for now.
-                            #pragma warning disable 4014
-                            SendNotification(session, $"{se.MatchedRule} - {session.Settings.Username}", "This bot has reach limit, it will be blocked for 60 mins for safety.", true);
-                            #pragma warning restore 4014
+#pragma warning disable 4014
+                            PushNotificationClient.SendNotification(session, $"{se.MatchedRule} - {session.Settings.Username}", "This bot has reach limit, it will be blocked for 60 mins for safety.", true);
+#pragma warning restore 4014
                             session.EventDispatcher.Send(new WarnEvent() { Message = $"You reach limited. bot will sleep for {session.LogicSettings.MultipleBotConfig.OnLimitPauseTimes} min" });
 
                             TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(session.LogicSettings.MultipleBotConfig.OnLimitPauseTimes);
@@ -268,9 +266,9 @@ namespace PoGo.NecroBot.Logic.State
                 }
                 catch(PtcLoginException ex)
                 {
-                    #pragma warning disable 4014
-                    SendNotification(session, $"PTC Login failed!!!! {session.Settings.Username}", session.Translation.GetTranslation(TranslationString.PtcLoginFail), true);
-                    #pragma warning restore 4014
+#pragma warning disable 4014
+                    PushNotificationClient.SendNotification(session, $"PTC Login failed!!!! {session.Settings.Username}", session.Translation.GetTranslation(TranslationString.PtcLoginFail), true);
+#pragma warning restore 4014
 
                     if (manager.AllowMultipleBot())
                     {
@@ -291,9 +289,9 @@ namespace PoGo.NecroBot.Logic.State
                     // TODO - await is legal here! USE it or use pragma to suppress compilerwarning and write a comment why it is not used
                     // TODO: Attention - do not touch (add pragma) when you do not know what you are doing ;)
                     // jjskuld - Ignore CS4014 warning for now.
-                    #pragma warning disable 4014
-                    SendNotification(session, $"Banned!!!! {session.Settings.Username}", session.Translation.GetTranslation(TranslationString.AccountBanned), true);
-                    #pragma warning restore 4014
+#pragma warning disable 4014
+                    PushNotificationClient.SendNotification(session, $"Banned!!!! {session.Settings.Username}", session.Translation.GetTranslation(TranslationString.AccountBanned), true);
+#pragma warning restore 4014
 
                     if (manager.AllowMultipleBot())
                     {
@@ -354,7 +352,9 @@ namespace PoGo.NecroBot.Logic.State
                     var resolved = await CaptchaManager.SolveCaptcha(session, captchaException.Url).ConfigureAwait(false);
                     if (!resolved)
                     {
-                        await SendNotification(session, $"Captcha required {session.Settings.Username}", session.Translation.GetTranslation(TranslationString.CaptchaShown), true).ConfigureAwait(false);
+#pragma warning disable 4014
+                        PushNotificationClient.SendNotification(session, $"Captcha required {session.Settings.Username}", session.Translation.GetTranslation(TranslationString.CaptchaShown), true);
+#pragma warning restore 4014
                         session.EventDispatcher.Send(new WarnEvent { Message = session.Translation.GetTranslation(TranslationString.CaptchaShown) });
                         Logger.Debug("Captcha not resolved");
                         if (manager.AllowMultipleBot())

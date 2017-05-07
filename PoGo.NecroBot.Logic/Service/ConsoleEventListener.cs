@@ -17,11 +17,14 @@ using PoGo.NecroBot.Logic.Event.Snipe;
 
 #endregion
 
-namespace PoGo.NecroBot.CLI
+namespace PoGo.NecroBot.Logic.Service
 {
     [SuppressMessage("ReSharper", "UnusedParameter.Local")]
-    internal class ConsoleEventListener
+    public class ConsoleEventListener
     {
+        public delegate void HumanWalkEventDelegate(HumanWalkingEvent e);
+        public static event HumanWalkEventDelegate HumanWalkEvent;
+
         private static void HandleEvent(ProfileEvent profileEvent, ISession session)
         {
             Logger.Write(session.Translation.GetTranslation(TranslationString.EventProfileLogin,
@@ -507,6 +510,8 @@ namespace PoGo.NecroBot.CLI
                     LogLevel.Info,
                     ConsoleColor.DarkCyan
                 );
+
+            HumanWalkEvent?.Invoke(humanWalkingEvent);
         }
 
         private static void HandleEvent(KillSwitchEvent killSwitchEvent, ISession session)
@@ -682,7 +687,7 @@ namespace PoGo.NecroBot.CLI
         {
         }
 
-        internal void Listen(IEvent evt, ISession session)
+        public void Listen(IEvent evt, ISession session)
         {
             dynamic eve = evt;
 
