@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -141,8 +141,8 @@
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="MahApps.Metro, Version=1.5.0.23, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)\packages\MahApps.Metro.1.5.0\lib\net45\MahApps.Metro.dll</HintPath>
+    <Reference Include="MahApps.Metro, Version=1.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\MahApps.Metro.1.6.0-alpha001\lib\net45\MahApps.Metro.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.EntityFrameworkCore, Version=1.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\Microsoft.EntityFrameworkCore.1.1.1\lib\net451\Microsoft.EntityFrameworkCore.dll</HintPath>
@@ -171,9 +171,23 @@
     <Reference Include="Microsoft.Extensions.Primitives, Version=1.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\Microsoft.Extensions.Primitives.1.1.0\lib\netstandard1.0\Microsoft.Extensions.Primitives.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.10.0, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)\packages\Microsoft.VisualStudio.Shell.Immutable.10.0.10.0.30319\lib\net40\Microsoft.VisualStudio.Shell.Immutable.10.0.dll</HintPath>
+    <Reference Include="Microsoft.VisualStudio.CoreUtility, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Microsoft.VisualStudio.CoreUtility.15.0.26201\lib\net45\Microsoft.VisualStudio.CoreUtility.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.OLE.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>$(SolutionDir)\packages\Microsoft.VisualStudio.OLE.Interop.7.10.6070\lib\Microsoft.VisualStudio.OLE.Interop.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Framework, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Microsoft.VisualStudio.Shell.Framework.15.0.26201\lib\net45\Microsoft.VisualStudio.Shell.Framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.10.0, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Microsoft.VisualStudio.Shell.Immutable.10.0.15.0.25413-Preview5\lib\net40\Microsoft.VisualStudio.Shell.Immutable.10.0.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Utilities, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Microsoft.VisualStudio.Utilities.15.0.26201\lib\net45\Microsoft.VisualStudio.Utilities.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Win32.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
@@ -181,8 +195,8 @@
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Remotion.Linq, Version=2.1.0.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)\packages\Remotion.Linq.2.1.1\lib\net45\Remotion.Linq.dll</HintPath>
+    <Reference Include="Remotion.Linq, Version=2.2.0.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Remotion.Linq.2.2.0-alpha-002\lib\net45\Remotion.Linq.dll</HintPath>
     </Reference>
     <Reference Include="S2Geometry, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\S2Geometry.1.0.3\lib\portable-net45+wp8+win8\S2Geometry.dll</HintPath>
@@ -218,8 +232,8 @@
       <HintPath>$(SolutionDir)\packages\System.Console.4.3.0\lib\net46\System.Console.dll</HintPath>
     </Reference>
     <Reference Include="System.Data" />
-    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)\packages\System.Diagnostics.DiagnosticSource.4.3.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\System.Diagnostics.DiagnosticSource.4.4.0-preview1-25214-03\lib\net461\System.Diagnostics.DiagnosticSource.dll</HintPath>
     </Reference>
     <Reference Include="System.Diagnostics.Tracing, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\System.Diagnostics.Tracing.4.3.0\lib\net462\System.Diagnostics.Tracing.dll</HintPath>
@@ -291,7 +305,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)\packages\MahApps.Metro.1.5.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\MahApps.Metro.1.6.0-alpha001\lib\net45\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Xml" />
