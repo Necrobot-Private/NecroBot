@@ -73,7 +73,7 @@
                             </Button.Triggers>
                             
                         </Button>
-                        <Separator Width="20" Background="Transparent"/>
+                        <Separator Width="31" Background="Transparent"/>
                         <Button Margin="0,10,0,10" Width="100" Click="BtnClose_Click" Content="Close" Foreground="Red">
                             <Button.Triggers>
                                 <EventTrigger RoutedEvent="Button.Click">
