@@ -30,7 +30,7 @@
 
         <Popup Name="popInfo" IsOpen="False" StaysOpen="True"
                PlacementTarget="{Binding ElementName=icon}">
-            <Border Background="WhiteSmoke" BorderBrush="{Binding Path=PokemonRarityColor}" BorderThickness="1,3,1,5">
+            <Border Background="GhostWhite" BorderBrush="{Binding Path=PokemonRarityColor}" BorderThickness="1,3,1,5">
                 <StackPanel>
                     <DockPanel Margin="10" Width="250">
                         <StackPanel DockPanel.Dock="Left">
