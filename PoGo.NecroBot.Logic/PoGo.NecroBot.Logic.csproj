@@ -621,6 +621,7 @@
     <Compile Include="State\CatchState.cs" />
     <Compile Include="State\GymTeamState.cs" />
     <Compile Include="State\IdleState.cs" />
+    <Compile Include="State\PauseState.cs" />
     <Compile Include="State\SessionStats.cs" />
     <Compile Include="Strategies\Walk\BaseWalkStrategy.cs" />
     <Compile Include="Strategies\Walk\FlyStrategy.cs" />
