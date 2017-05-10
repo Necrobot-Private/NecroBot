@@ -4,7 +4,7 @@ namespace PoGo.NecroBot.Logic.Exceptions
 {
     public class PauseStateException : Exception
     {
-        public bool IsRunning;
+        public static bool IsRunning;
 
         public PauseStateException(bool isRunning)
         {

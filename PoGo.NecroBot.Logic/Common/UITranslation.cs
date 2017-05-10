@@ -17,6 +17,12 @@ namespace PoGo.NecroBot.Logic.Common
         [Description("CLICK HERE TO EXIT")]
         public string ClickHereExit { get; set; }
 
+        [Description("Start Bot")]
+        public string IsRunning { get; set; }
+
+        [Description("Pause Bot")]
+        public string IsNotRunning { get; set; }
+
         [Description("Accounts")]
         public string AccountSetting { get; set; }
 

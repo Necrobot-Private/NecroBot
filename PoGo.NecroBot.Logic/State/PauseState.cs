@@ -23,7 +23,7 @@ namespace PoGo.NecroBot.Logic.State
 {
     public class PauseState : IState
     {
-        public bool IsRunning;
+        public static bool IsRunning;
 
         public async Task<IState> Execute(ISession session, CancellationToken cancellationToken)
         {
@@ -35,12 +35,12 @@ namespace PoGo.NecroBot.Logic.State
                 Logger.Write("Starting Bot...");
                 return new VersionCheckState();
             }
-            else if (!IsRunning)
+            while (!IsRunning)
             {
                 Logger.Write("The Bot is Currently Paused, Click 'Play Bot' to Resume", LogLevel.Info);
-                Environment.Exit(0);
+                await Task.Delay(1000).ConfigureAwait(false);
             }
-            return null;
+            return new VersionCheckState();
         }
     }
 }
