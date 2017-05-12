@@ -142,11 +142,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
             }
 
-            if (fortDetails.GymState.FortData.IsInBattle)
+            /*if (fortDetails.GymState.FortData.IsInBattle)
             {
                 Logger.Write("This gym is under attack now, we will skip it");
                 return false;
-            }
+            }*/
 
             bool isTraining = (session.Profile.PlayerData.Team == fortDetails.GymState.FortData.OwnedByTeam || (!string.IsNullOrEmpty(session.GymState.CapturedGymId) && session.GymState.CapturedGymId.Equals(fortDetails.GymState.FortData.Id)));
             var badassPokemon = await CompleteAttackTeam(session, defenders, isTraining).ConfigureAwait(false);
