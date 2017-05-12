@@ -64,7 +64,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             var nearbyPokemons = await GetNearbyPokemons(session).ConfigureAwait(false);
 
-            Logger.Write($"There are {nearbyPokemons.Count()} pokemon nearby.");
+            Logger.Write($"There are {nearbyPokemons.Count()} pokemon nearby.", LogLevel.Debug);
 
             if (nearbyPokemons == null) return;
 
@@ -101,8 +101,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                     }
                 }
             }
-
-            Logger.Write($"Catching {nearbyPokemons.Count()} pokemon nearby.");
+            
+            if (0 < pokemons.Count)
+                Logger.Write($"Catching {pokemons.Count} pokemon nearby.", LogLevel.Info);
 
             foreach (var pokemon in pokemons)
             {
