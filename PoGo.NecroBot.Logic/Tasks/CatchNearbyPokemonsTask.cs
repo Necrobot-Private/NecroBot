@@ -63,7 +63,11 @@ namespace PoGo.NecroBot.Logic.Tasks
             Logger.Write(session.Translation.GetTranslation(TranslationString.LookingForPokemon), LogLevel.Debug);
 
             var nearbyPokemons = await GetNearbyPokemons(session).ConfigureAwait(false);
+
+            Logger.Write($"There are {nearbyPokemons.Count()} pokemon nearby.");
+
             if (nearbyPokemons == null) return;
+
             var priorityPokemon = nearbyPokemons.Where(p => p.PokemonId == priority).FirstOrDefault();
             var pokemons = nearbyPokemons.Where(p => p.PokemonId != priority).ToList();
 
@@ -98,15 +102,20 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
             }
 
+            Logger.Write($"Catching {nearbyPokemons.Count()} pokemon nearby.");
+
             foreach (var pokemon in pokemons)
             {
                 await MSniperServiceTask.Execute(session, cancellationToken).ConfigureAwait(false);
                 
+                /*
                 if (LocationUtils.CalculateDistanceInMeters(pokemon.Latitude, pokemon.Longitude, session.Client.CurrentLatitude, session.Client.CurrentLongitude) > session.Client.GlobalSettings.MapSettings.EncounterRangeMeters)
                 {
                     Logger.Debug($"THIS POKEMON IS TOO FAR, {pokemon.Latitude}, {pokemon.Longitude}");
                     continue;
                 }
+                */
+
                 cancellationToken.ThrowIfCancellationRequested();
                 TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
                 
@@ -144,9 +153,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                     continue;
                 }
 
+                /*
                 var distance = LocationUtils.CalculateDistanceInMeters(session.Client.CurrentLatitude,
                     session.Client.CurrentLongitude, pokemon.Latitude, pokemon.Longitude);
                 await Task.Delay(distance > 100 ? 500 : 100, cancellationToken).ConfigureAwait(false);
+                */
 
                 //to avoid duplicated encounter when snipe priority pokemon
 
@@ -219,7 +230,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             session.EventDispatcher.Send(new PokeStopListEvent(forts, nearbyPokemons));
 
             var pokemons = mapObjects.MapCells.SelectMany(i => i.CatchablePokemons)
-                .Where(pokemon=>LocationUtils.CalculateDistanceInMeters(pokemon.Latitude, pokemon.Longitude, session.Client.CurrentLatitude, session.Client.CurrentLongitude) <= session.Client.GlobalSettings.MapSettings.EncounterRangeMeters)
+                .Where(pokemon=>LocationUtils.CalculateDistanceInMeters(pokemon.Latitude, pokemon.Longitude, session.Client.CurrentLatitude, session.Client.CurrentLongitude) <= session.Client.GlobalSettings.MapSettings.EncounterRangeMeters * 3)
                 .OrderBy(
                     i =>
                         LocationUtils.CalculateDistanceInMeters(session.Client.CurrentLatitude,
