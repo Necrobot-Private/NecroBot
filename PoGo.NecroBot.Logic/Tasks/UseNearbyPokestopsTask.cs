@@ -178,14 +178,14 @@ namespace PoGo.NecroBot.Logic.Tasks
             await MSniperServiceTask.Execute(session, cancellationToken).ConfigureAwait(false);
 
             //to avoid api call when walking.
-            if (lastCatch < DateTime.Now.AddSeconds(-2))
-            {
+            //if (lastCatch < DateTime.Now.AddSeconds(-2))
+            //{
                 // Catch normal map Pokemon
                 await CatchNearbyPokemonsTask.Execute(session, cancellationToken).ConfigureAwait(false);
                 //Catch Incense Pokemon
                 await CatchIncensePokemonsTask.Execute(session, cancellationToken).ConfigureAwait(false);
                 lastCatch = DateTime.Now;
-            }
+            //}
 
             if (!session.LogicSettings.UseGpxPathing)
             {
