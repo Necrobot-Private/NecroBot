@@ -55,7 +55,7 @@ namespace PoGo.Necrobot.Window
                 { LogLevel.Flee, "#B58900" },
                 { LogLevel.Transfer, "#268BD2" },
                 { LogLevel.Evolve, "#268BD2" },
-                { LogLevel.Berry, "##B58900" },
+                { LogLevel.Berry, "#B58900" },
                 { LogLevel.Egg, "#B58900" },
                 { LogLevel.Debug, "#93A1A1" },
                 { LogLevel.Update, "#657B83" },
