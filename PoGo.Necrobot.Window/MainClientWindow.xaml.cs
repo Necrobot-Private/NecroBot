@@ -106,7 +106,6 @@ namespace PoGo.Necrobot.Window
             Application.Current.MainWindow.Height = Settings.Default.Height;
 
             BrowserSync();
-            ConsoleSync();
             ResetSync();
         }
 
@@ -226,24 +225,7 @@ namespace PoGo.Necrobot.Window
             }
             Settings.Default.Save();
         }
-
-        public void ConsoleSync()
-        {
-            var translator = TinyIoCContainer.Current.Resolve<UITranslation>();
-            if (Settings.Default.ConsoleToggled == true)
-            {
-                consoleMenuText.Text = translator.HideConsole;
-                ConsoleHelper.ShowConsoleWindow();
-                Settings.Default.ConsoleText = "Hide Console";
-            }
-            if (Settings.Default.ConsoleToggled == false)
-            {
-                consoleMenuText.Text = translator.ShowConsole;
-                ConsoleHelper.HideConsoleWindow();
-                Settings.Default.ConsoleText = "Show Console";
-            }
-        }
-
+        
         public void ResetSync()
         {
             if (Settings.Default.ResetLayout == true)
@@ -319,18 +301,7 @@ namespace PoGo.Necrobot.Window
             var numberSelected = datacontext.PokemonList.Pokemons.Count(x => x.IsSelected);
             lblCount.Text = $"Select : {numberSelected}";
         }
-
-        private void MenuConsole_Click(object sender, RoutedEventArgs e)
-        {
-            if (Settings.Default.ConsoleToggled == true)
-                Settings.Default.ConsoleToggled = false;
-            else if (Settings.Default.ConsoleToggled == false)
-                Settings.Default.ConsoleToggled = true;
-            Settings.Default.Save();
-            Settings.Default.Reload();
-            ConsoleSync();
-        }
-
+        
         private void MenuSetting_Click(object sender, RoutedEventArgs e)
         {
             var ConfigPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config\\config.json");
