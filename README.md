@@ -16,7 +16,7 @@ See https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer for pricing 
     <img alt="Logo" src="http://image.prntscr.com/image/b238b63b4f044813a91f772241be8d45.jpg" width="450">
 </a>
 
-<iframe src="https://discordapp.com/widget?id=220703917871333376&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0"></iframe>
+[![Stories in Ready](https://discordapp.com/api/guilds/220703917871333376/widget.png?style=banner3&time-)](https://discord.gg/7FWyWVp)
 
 <strong><em> The contents of this repo are a proof of concept and are for educational use only </em></strong>
 
