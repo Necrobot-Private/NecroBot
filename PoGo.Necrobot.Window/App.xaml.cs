@@ -78,8 +78,6 @@ namespace PoGo.Necrobot.Window
 
             MainWindow = new MainClientWindow();
 
-
-            ConsoleHelper.AllocConsole();
             UILogger logger = new UILogger()
             {
                 LogToUI = ((MainClientWindow)MainWindow).LogToConsoleTab
@@ -88,22 +86,9 @@ namespace PoGo.Necrobot.Window
 
             Task.Run(() =>
             {
-                NecroBot.CLI.Program.RunBotWithParameters(OnBotStartedEventHandler, new string[] { });
+                NecroBot.CLI.Program.RunBotWithParameters(OnBotStartedEventHandler, false, new string[] { });
             });
 
-            if (Settings.Default.ConsoleToggled == true)
-            {
-                ConsoleHelper.ShowConsoleWindow();
-                Settings.Default.ConsoleText = "Hide Console";
-                Settings.Default.Save();
-            }
-            else if (Settings.Default.ConsoleToggled == false)
-            {
-                ConsoleHelper.HideConsoleWindow();
-                Settings.Default.ConsoleText = "Show Console";
-                Settings.Default.Save();
-            }
-            Settings.Default.ConsoleToggled = !Settings.Default.ConsoleToggled;
             Settings.Default.Save();
 
             MainWindow.Show();

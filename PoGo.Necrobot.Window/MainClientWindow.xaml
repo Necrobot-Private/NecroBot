@@ -78,16 +78,6 @@
                     <TextBlock Margin="4 0 0 0" x:Name="browserMenuText" VerticalAlignment="Center" Text="{Binding Source=DisableHub, Converter={StaticResource ResourceKey=I18NConveter}}" />
                 </StackPanel>
             </Button>
-            <Button x:Name="menuConsole" Click="MenuConsole_Click">
-                <StackPanel Orientation="Horizontal">
-                    <Rectangle Width="20" Height="20" Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
-                        <Rectangle.OpacityMask>
-                            <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_console}" />
-                        </Rectangle.OpacityMask>
-                    </Rectangle>
-                    <TextBlock Margin="4 0 0 0" Name="consoleMenuText" VerticalAlignment="Center" Text="{Binding Source=ShowConsole, Converter={StaticResource ResourceKey=I18NConveter}}" />
-                </StackPanel>
-            </Button>
             <Button Click="MenuSetting_Click" Name="menuSetting">
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="20" Height="20" Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
