@@ -643,5 +643,10 @@ namespace PoGo.Necrobot.Window
             Settings.Default.Reload();
             ResetSync();
         }
+
+        private void RunToggle_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

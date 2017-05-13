@@ -405,6 +405,7 @@
     <Compile Include="Event\EggIncubatorStatusEvent.cs" />
     <Compile Include="Exceptions\ActiveSwitchAccountManualException.cs" />
     <Compile Include="Exceptions\ActiveSwitchByRuleException.cs" />
+    <Compile Include="Exceptions\PauseStateException.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Forms\AutoUpdateForm.cs">
       <SubType>Form</SubType>
@@ -621,6 +622,7 @@
     <Compile Include="State\CatchState.cs" />
     <Compile Include="State\GymTeamState.cs" />
     <Compile Include="State\IdleState.cs" />
+    <Compile Include="State\PauseState.cs" />
     <Compile Include="State\SessionStats.cs" />
     <Compile Include="Strategies\Walk\BaseWalkStrategy.cs" />
     <Compile Include="Strategies\Walk\FlyStrategy.cs" />

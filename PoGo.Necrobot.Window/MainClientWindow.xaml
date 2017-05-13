@@ -38,6 +38,11 @@
     </Control.Resources>
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
+            <Button x:Name="RunToggle" Click="RunToggle_Click">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Margin="4 0 0 0" x:Name="runToggleText" VerticalAlignment="Center" Text="{Binding Source=IsNotRunning, Converter={StaticResource ResourceKey=I18NConveter}}" />
+                </StackPanel>
+            </Button>
             <Button Click="Help_Click">
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="20" Height="20" Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
