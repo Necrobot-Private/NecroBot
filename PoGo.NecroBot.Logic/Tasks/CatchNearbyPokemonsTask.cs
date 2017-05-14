@@ -103,7 +103,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
             
             if (0 < pokemons.Count)
-                Logger.Write($"Catching {pokemons.Count} pokemon nearby.", LogLevel.Info);
+                Logger.Write($"Catching {pokemons.Count} Pokemon Nearby...", LogLevel.Info);
 
             foreach (var pokemon in pokemons)
             {
