@@ -42,53 +42,36 @@ namespace PoGo.Necrobot.Window
         BrowserView webView;
 
         Timer timer = new Timer();
-        private static Dictionary<LogLevel, string> ConsoleColors_Solarized = new Dictionary<LogLevel, string>()
+
+        private static Dictionary<LogLevel, Tuple<string, string>> ConsoleColors = new Dictionary<LogLevel, Tuple<string, string>>()
         {
-                { LogLevel.Error, "#DC322F" },
-                { LogLevel.Caught, "#859900" },
-                { LogLevel.Info, "#CB4B16" } ,
-                { LogLevel.Warning, "#B58900" } ,
-                { LogLevel.Pokestop, "#2AA198" }  ,
-                { LogLevel.Farming, "#D33682" },
-                { LogLevel.Sniper, "#657b83" },
-                { LogLevel.Recycling, "#6C71C4" },
-                { LogLevel.Flee, "#B58900" },
-                { LogLevel.Transfer, "#268BD2" },
-                { LogLevel.Evolve, "#268BD2" },
-                { LogLevel.Berry, "#B58900" },
-                { LogLevel.Egg, "#B58900" },
-                { LogLevel.Debug, "#93A1A1" },
-                { LogLevel.Update, "#657B83" },
-                { LogLevel.New, "#859900" },
-                { LogLevel.SoftBan, "#DC322F" },
-                { LogLevel.LevelUp, "#D33682" },
-                { LogLevel.Gym, "#D33682" },
-                { LogLevel.Service , "#657b83" }
+            // Console Colors <Default, Solarized>
+                { LogLevel.Error, new Tuple<string, string>("Red", "#DC322F") },
+                { LogLevel.Caught, new Tuple<string, string>("Green", "#859900") },
+                { LogLevel.Info, new Tuple<string, string>("DarkCyan", "#CB4B16") },
+                { LogLevel.Warning, new Tuple<string, string>("DarkYellow", "#B58900") },
+                { LogLevel.Pokestop, new Tuple<string, string>("Cyan", "#2AA198") },
+                { LogLevel.Farming, new Tuple<string, string>("Magenta", "#D33682") },
+                { LogLevel.Sniper, new Tuple<string, string>("White", "#657b83") },
+                { LogLevel.Recycling, new Tuple<string, string>("DarkMagenta", "#6C71C4") },
+                { LogLevel.Flee, new Tuple<string, string>("DarkYellow", "#B58900") },
+                { LogLevel.Transfer, new Tuple<string, string>("DarkGreen", "#268BD2") },
+                { LogLevel.Evolve, new Tuple<string, string>("DarkGreen", "#268BD2") },
+                { LogLevel.Berry, new Tuple<string, string>("DarkYellow", "#B58900") },
+                { LogLevel.Egg, new Tuple<string, string>("DarkYellow", "#B58900") },
+                { LogLevel.Debug, new Tuple<string, string>("Gray", "#93A1A1") },
+                { LogLevel.Update, new Tuple<string, string>("White", "#657B83") },
+                { LogLevel.New, new Tuple<string, string>("Green", "#859900") },
+                { LogLevel.SoftBan, new Tuple<string, string>("Red", "#DC322F") },
+                { LogLevel.LevelUp, new Tuple<string, string>("Magenta", "#D33682") },
+                { LogLevel.Gym, new Tuple<string, string>("Magenta", "#D33682") },
+                { LogLevel.Service , new Tuple<string, string>("White", "#657b83") }
         };
 
-        private static Dictionary<LogLevel, string> ConsoleColors_Default = new Dictionary<LogLevel, string>()
-        {
-                { LogLevel.Error, "Red" },
-                { LogLevel.Caught, "Green" },
-                { LogLevel.Info, "DarkCyan" },
-                { LogLevel.Warning, "DarkYellow" },
-                { LogLevel.Pokestop, "Cyan" },
-                { LogLevel.Farming, "Magenta" },
-                { LogLevel.Sniper, "White" },
-                { LogLevel.Recycling, "DarkMagenta" },
-                { LogLevel.Flee, "DarkYellow" },
-                { LogLevel.Transfer, "DarkGreen" },
-                { LogLevel.Evolve, "DarkGreen" },
-                { LogLevel.Berry, "DarkYellow" },
-                { LogLevel.Egg, "DarkYellow" },
-                { LogLevel.Debug, "Gray" },
-                { LogLevel.Update, "White" },
-                { LogLevel.New, "Green" },
-                { LogLevel.SoftBan, "Red" },
-                { LogLevel.LevelUp, "Magenta" },
-                { LogLevel.Gym, "Magenta" },
-                { LogLevel.Service , "White" }
-        };
+        //These are here, for now, but will be rolled into a different/combined ThemeColors object (theme name, 20 LogLevel colors, these 3)
+        private static SolidColorBrush DarkSolarizedBackground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#002B36"));
+        private static SolidColorBrush LightSolarizedBackground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FDF6E3"));
+        private static SolidColorBrush SolarizedConsoleWhite = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#657b83"));
 
         public MainClientWindow()
         {
@@ -153,11 +136,9 @@ namespace PoGo.Necrobot.Window
             Scheme.ItemsSource = new List<string> { "Light", "Dark" };
             Theme.ItemsSource = new List<string> { "Red", "Green", "Blue", "Purple", "Orange", "Lime", "Emerald", "Teal", "Cyan", "Cobalt", "Indigo", "Violet", "Pink", "Magenta", "Crimson", "Amber", "Yellow", "Brown", "Olive", "Steel", "Mauve", "Taupe", "Sienna" };
             MapMode.ItemsSource = new List<string> { "Normal", "Satellite" };
+            ConsoleThemer.ItemsSource = new List<string> { "Default", "Low Contrast (Dark)", "Low Contrast (Light)" };																													  
             var LightTabColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE5E5E5"));
             var DarkTabColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#252525"));
-            var LightConsoleBackground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FDF6E3"));
-            var DarkConsoleBackground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#002B36"));
-            var ConsoleWhite = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#657B83"));
 
             //=============STARTUP CONFIGURATION=============\\
             if (Settings.Default.Theme == "" || Settings.Default.ResetLayout == true)
@@ -177,7 +158,9 @@ namespace PoGo.Necrobot.Window
             Theme.SelectedValue = Settings.Default.Theme;
             Scheme.SelectedValue = Settings.Default.Scheme;
             MapMode.SelectedValue = Settings.Default.MapMode;
+            ConsoleThemer.SelectedValue = Settings.Default.ConsoleTheme;																		
             Settings.Default.Save();
+            ConsoleTheming();							 
 
             ChangeThemeTo(Settings.Default.Theme);
             ChangeSchemeTo(Settings.Default.Scheme);
@@ -247,15 +230,15 @@ namespace PoGo.Necrobot.Window
         private DateTime lastClearLog = DateTime.Now;
         public void LogToConsoleTab(string message, LogLevel level, string color)
         {
-            if (Settings.Default.ResetLayout == false)
+            if (Settings.Default.ConsoleTheme != "Default")
             {
-                color = ConsoleColors_Solarized[level];
+                if (Settings.Default.ConsoleTheme == "Low Contrast (Dark)" || Settings.Default.ConsoleTheme == "Low Contrast (Light)")
+                {
+                    color = ConsoleColors[level].Item2;
+                }
             }
             else
-            {
-                // TODO
-                color = ConsoleColors_Default[level];
-            }
+                color = ConsoleColors[level].Item1;
 
             consoleLog.Dispatcher.BeginInvoke(new Action(() =>
             {
@@ -340,6 +323,59 @@ namespace PoGo.Necrobot.Window
         private void Scheme_SelectionChanged(object sender, RoutedEventArgs e)
         {
             ChangeSchemeTo(Convert.ToString(Scheme.SelectedValue));
+        }
+
+        private void ConsoleThemer_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string selectedTheme = (string)ConsoleThemer.SelectedValue;
+            if (selectedTheme != "Default")
+            {
+                if (selectedTheme == "Low Contrast (Dark)")
+                {
+                    Settings.Default.ConsoleTheme = "Low Contrast (Dark)";
+                }
+                if (selectedTheme == "Low Contrast (Light)")
+                {
+                    Settings.Default.ConsoleTheme = "Low Contrast (Light)";
+                }
+            }
+            else
+            {
+                Settings.Default.ConsoleTheme = "Default";
+            }
+            Settings.Default.Save();
+            ConsoleTheming();
+        }
+        private void ConsoleTheming()
+        {
+
+            if (Settings.Default.ConsoleTheme != "Default")
+            {
+                if (Settings.Default.ConsoleTheme == "Low Contrast (Dark)")
+                {
+                    txtCmdInput.Background = DarkSolarizedBackground;
+                    txtCmdInput.Foreground = SolarizedConsoleWhite;
+                    consoleLog.Background = DarkSolarizedBackground;
+                    ConsoleThemer.Background = DarkSolarizedBackground;
+                    ConsoleThemer.Foreground = SolarizedConsoleWhite;
+                }
+                if (Settings.Default.ConsoleTheme == "Low Contrast (Light)")
+                {
+                    txtCmdInput.Background = LightSolarizedBackground;
+                    txtCmdInput.Foreground = SolarizedConsoleWhite;
+                    consoleLog.Background = LightSolarizedBackground;
+                    ConsoleThemer.Background = LightSolarizedBackground;
+                    ConsoleThemer.Foreground = SolarizedConsoleWhite;
+                }
+            }
+            else
+            {
+                txtCmdInput.Background = Brushes.Black;
+                txtCmdInput.Foreground = Brushes.White;
+                consoleLog.Background = Brushes.Black;
+                ConsoleThemer.Background = Brushes.Black;
+                ConsoleThemer.Foreground = Brushes.White;
+            }
         }
 
         private void MapMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -438,9 +474,6 @@ namespace PoGo.Necrobot.Window
         {
             var LightTabColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE5E5E5"));
             var DarkTabColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#252525"));
-            var LightConsoleBackground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FDF6E3"));
-            var DarkConsoleBackground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#002B36"));
-            var ConsoleWhite = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#657B83"));
 
             if (Scheme == "Light")
             {
@@ -455,10 +488,6 @@ namespace PoGo.Necrobot.Window
                 tabPokemons.Background = LightTabColor;
                 tabItems.Background = LightTabColor;
                 tabEggs.Background = LightTabColor;
-
-                txtCmdInput.Background = LightConsoleBackground;
-                txtCmdInput.Foreground = ConsoleWhite;
-                consoleLog.Background = LightConsoleBackground;
             }
             else if (Scheme == "Dark")
             {
@@ -473,10 +502,6 @@ namespace PoGo.Necrobot.Window
                 tabPokemons.Background = DarkTabColor;
                 tabItems.Background = DarkTabColor;
                 tabEggs.Background = DarkTabColor;
-
-                txtCmdInput.Background = DarkConsoleBackground;
-                txtCmdInput.Foreground = ConsoleWhite;
-                consoleLog.Background = DarkConsoleBackground;
             }
 
             ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(Settings.Default.Theme), ThemeManager.GetAppTheme(Settings.Default.SchemeValue));
