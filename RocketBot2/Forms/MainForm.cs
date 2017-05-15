@@ -74,11 +74,12 @@ namespace RocketBot2.Forms
 
         private static GMapMarker _playerMarker;
         private readonly List<PointLatLng> _playerLocations = new List<PointLatLng>();
-        private readonly GMapOverlay _playerOverlay = new GMapOverlay("players");
-        private readonly GMapOverlay _playerRouteOverlay = new GMapOverlay("playerroutes");
-        private readonly GMapOverlay _pokemonsOverlay = new GMapOverlay("pokemons");
-        private readonly GMapOverlay _pokestopsOverlay = new GMapOverlay("pokestops");
-        private readonly GMapOverlay _searchAreaOverlay = new GMapOverlay("areas");
+        // layers
+        internal readonly GMapOverlay _playerOverlay = new GMapOverlay("players");
+        internal readonly GMapOverlay _playerRouteOverlay = new GMapOverlay("playerroutes");
+        internal readonly GMapOverlay _pokemonsOverlay = new GMapOverlay("pokemons");
+        internal readonly GMapOverlay _pokestopsOverlay = new GMapOverlay("pokestops");
+        internal readonly GMapOverlay _searchAreaOverlay = new GMapOverlay("areas");
 
         public static Session _session;
 
@@ -423,7 +424,26 @@ namespace RocketBot2.Forms
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            GMapControl1.Dispose();
+            //TODO: Kills the application
+            try
+            {
+                _playerOverlay.Dispose();
+                GC.SuppressFinalize(_playerOverlay);
+                _playerRouteOverlay.Dispose();
+                GC.SuppressFinalize(_playerRouteOverlay);
+                _pokemonsOverlay.Dispose();
+                GC.SuppressFinalize(_pokemonsOverlay);
+                _pokestopsOverlay.Dispose();
+                GC.SuppressFinalize(_pokestopsOverlay);
+                _searchAreaOverlay.Dispose();
+                GC.SuppressFinalize(_searchAreaOverlay);
+                GMapControl1.Dispose();
+                GC.SuppressFinalize(GMapControl1);
+            }
+            catch
+            {
+                Thread.CurrentThread.Abort(this);
+            }
         }
 
         private void PokeEaseToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1231,12 +1251,12 @@ namespace RocketBot2.Forms
                         Console.ReadKey();
                         Environment.Exit(0);
                     }
-                    HttpClient client = new HttpClient();
-                    client.DefaultRequestHeaders.Add("X-AuthToken", apiCfg.AuthAPIKey);
-                    var maskedKey = apiCfg.AuthAPIKey.Substring(0, 4) + "".PadLeft(apiCfg.AuthAPIKey.Length - 8, 'X') + apiCfg.AuthAPIKey.Substring(apiCfg.AuthAPIKey.Length - 4, 4);
-                    HttpResponseMessage response = client.PostAsync("https://pokehash.buddyauth.com/api/v131_0/hash", null).Result;
                     try
                     {
+                        HttpClient client = new HttpClient();
+                        client.DefaultRequestHeaders.Add("X-AuthToken", apiCfg.AuthAPIKey);
+                        var maskedKey = apiCfg.AuthAPIKey.Substring(0, 4) + "".PadLeft(apiCfg.AuthAPIKey.Length - 8, 'X') + apiCfg.AuthAPIKey.Substring(apiCfg.AuthAPIKey.Length - 4, 4);
+                        HttpResponseMessage response = client.PostAsync("https://pokehash.buddyauth.com/api/v131_0/hash", null).Result;
                         string AuthKey = response.Headers.GetValues("X-AuthToken").FirstOrDefault();
                         string MaxRequestCount = response.Headers.GetValues("X-MaxRequestCount").FirstOrDefault();
                         DateTime AuthTokenExpiration = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(Convert.ToDouble(response.Headers.GetValues("X-AuthTokenExpiration").FirstOrDefault()));
