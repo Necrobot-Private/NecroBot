@@ -55,7 +55,7 @@ namespace PoGo.NecroBot.Logic.Service
 
             foreach (var msg in Split(message, MaxTelegramMsgLength))
             {
-                await _bot.SendTextMessageAsync(chatId, msg, replyMarkup: new ReplyKeyboardHide()).ConfigureAwait(false);
+                await _bot.SendTextMessageAsync(chatId, msg, replyMarkup: new ReplyKeyboardRemove()).ConfigureAwait(false);
             }
         }
 
