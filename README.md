@@ -2,7 +2,7 @@
 [![Github All Releases](https://img.shields.io/github/downloads/Necrobot-Private/NecroBot/total.svg?maxAge=258)](https://github.com/Necrobot-Private/NecroBot/releases)
 [![GitHub license](https://img.shields.io/badge/license-AGPL-blue.svg)](https://raw.githubusercontent.com/Necrobot-Private/NecroBot/master/LICENSE.md)
 
-<h1>Necrobot2 is now compatible with 0.61.0 API.</h1>
+<h1>Necrobot2 is now compatible with 0.63.1 API.</h1>
 
 <p>
 Necrobot2 itself is free but now you will need to purchase an API key from Bossland in order to run the bot.
