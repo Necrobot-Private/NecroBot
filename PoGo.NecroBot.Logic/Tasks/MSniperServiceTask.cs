@@ -25,6 +25,7 @@ using System.Runtime.Caching;
 using PoGo.NecroBot.Logic.PoGoUtils;
 using POGOProtos.Inventory.Item;
 using GeoCoordinatePortable;
+using PoGo.NecroBot.Logic.Model;
 
 namespace PoGo.NecroBot.Logic.Tasks
 {
@@ -374,12 +375,35 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
         }
 
+        private static async Task ActionsWhenTravelToSnipeTarget(ISession session, CancellationToken cancellationToken,
+            IGeoLocation pokemon, bool allowCatchPokemon, bool allowSpinPokeStop)
+        {
+            var distance = LocationUtils.CalculateDistanceInMeters(
+                pokemon.Latitude,
+                pokemon.Longitude,
+                session.Client.CurrentLatitude,
+                session.Client.CurrentLongitude
+            );
+
+            if (allowCatchPokemon && distance > 50.0)
+            {
+                // Catch normal map Pokemon
+                await CatchNearbyPokemonsTask.Execute(session, cancellationToken, sessionAllowTransfer: false).ConfigureAwait(false);
+            }
+            if (allowSpinPokeStop)
+            {
+                //looking for neaby pokestop. spin it
+                await UseNearbyPokestopsTask.SpinPokestopNearBy(session, cancellationToken, null).ConfigureAwait(false);
+            }
+        }
+
         public static async Task<bool> SnipeUnverifiedPokemon(ISession session, MSniperInfo2 sniperInfo, CancellationToken cancellationToken)
         {
             var latitude = sniperInfo.Latitude;
             var longitude = sniperInfo.Longitude;
-            var currentLatitude = session.Client.CurrentLatitude;
-            var currentLongitude = session.Client.CurrentLongitude;
+            
+            var originalLatitude = session.Client.CurrentLatitude;
+            var originalLongitude = session.Client.CurrentLongitude;
 
             var catchedPokemon = false;
 
@@ -388,137 +412,180 @@ namespace PoGo.NecroBot.Logic.Tasks
             MapPokemon catchablePokemon;
             int retry = 3;
 
-            bool isCaptchaShow = false;
+            bool useWalk = session.LogicSettings.EnableHumanWalkingSnipe;
+
             try
             {
-                do
+                var distance = LocationUtils.CalculateDistanceInMeters(new GeoCoordinate(session.Client.CurrentLatitude, session.Client.CurrentLongitude), new GeoCoordinate(latitude, longitude));
+                
+                if (useWalk)
                 {
-                    retry--;
+                    Logger.Write($"Walking to snipe target. Distance: {distance}", LogLevel.Info);
+
+                    await session.Navigation.Move(
+                            new MapLocation(latitude, longitude, 0),
+                            async () =>
+                            {
+                                cancellationToken.ThrowIfCancellationRequested();
+                                await ActionsWhenTravelToSnipeTarget(session, cancellationToken, new MapLocation(latitude, longitude, 0), session.LogicSettings.HumanWalkingSnipeCatchPokemonWhileWalking, session.LogicSettings.HumanWalkingSnipeSpinWhileWalking).ConfigureAwait(false);
+                            },
+                            session,
+                            cancellationToken,
+                            session.LogicSettings.HumanWalkingSnipeAllowSpeedUp ? session.LogicSettings.HumanWalkingSnipeMaxSpeedUpSpeed : 200
+                        ).ConfigureAwait(false);
+                }
+                else
+                {
+                    Logger.Write($"Jumping to snipe target. Distance: {distance}", LogLevel.Info);
+
                     await LocationUtils.UpdatePlayerLocationWithAltitude(session, new GeoCoordinate(latitude, longitude, 10d), 0).ConfigureAwait(false); // Set speed to 0 for random speed.
-                    latitude += 0.00000001;
-                    longitude += 0.00000001;
 
                     session.EventDispatcher.Send(new UpdatePositionEvent
                     {
-                        Longitude = longitude,
-                        Latitude = latitude
+                        Latitude = latitude,
+                        Longitude = longitude
                     });
-                    var mapObjects = await session.Client.Map.GetMapObjects(true, false).ConfigureAwait(false);
-                    catchablePokemon =
-                        mapObjects.MapCells.SelectMany(q => q.CatchablePokemons)
-                            .Where(q => sniperInfo.PokemonId == (short)q.PokemonId)
-                            .OrderByDescending(pokemon => PokemonInfo.CalculateMaxCp(pokemon.PokemonId))
-                            .FirstOrDefault();
-                } while (catchablePokemon != null && retry > 0);
-            }
-            catch (HasherException ex) { throw ex; }
-            catch (CaptchaException ex)
-            {
-                throw ex;
-            }
-            catch (Exception e)
-            {
-                Logger.Write($"Error: {e.Message}", LogLevel.Error);
-                throw e;
-            }
-            finally
-            {
-                await LocationUtils.UpdatePlayerLocationWithAltitude(session,
-                    new GeoCoordinate(currentLatitude, currentLongitude, session.Client.CurrentAltitude), 0).ConfigureAwait(false); // Set speed to 0 for random speed.
-            }
+                }
 
-            if (catchablePokemon == null)
-            {
-                session.EventDispatcher.Send(new SnipeEvent
-                {
-                    Message = session.Translation.GetTranslation(TranslationString.NoPokemonToSnipe),
-                });
-
-                session.EventDispatcher.Send(new SnipeFailedEvent
-                {
-                    Latitude = latitude,
-                    Longitude = longitude,
-                    PokemonId = (PokemonId)sniperInfo.PokemonId,
-                    EncounterId = sniperInfo.EncounterId
-                });
-
-                return false;
-            }
-
-            isCaptchaShow = false;
-            if (catchablePokemon != null)
-            {
-                EncounterResponse encounter;
                 try
                 {
-                    await LocationUtils.UpdatePlayerLocationWithAltitude(session,
-                        new GeoCoordinate(catchablePokemon.Latitude, catchablePokemon.Longitude, session.Client.CurrentAltitude), 0).ConfigureAwait(false); // Set speed to 0 for random speed.
+                    do
+                    {
+                        retry--;
 
-                    encounter =
-                        await session.Client.Encounter.EncounterPokemon(catchablePokemon.EncounterId, catchablePokemon.SpawnPointId).ConfigureAwait(false);
+                        var mapObjects = await session.Client.Map.GetMapObjects(true, false).ConfigureAwait(false);
+
+                        catchablePokemon =
+                            mapObjects.MapCells.SelectMany(q => q.CatchablePokemons)
+                                .Where(q => sniperInfo.PokemonId == (short)q.PokemonId)
+                                .OrderByDescending(pokemon => PokemonInfo.CalculateMaxCp(pokemon.PokemonId))
+                                .FirstOrDefault();
+                    } while (catchablePokemon == null && retry > 0);
                 }
                 catch (HasherException ex) { throw ex; }
                 catch (CaptchaException ex)
                 {
-                    isCaptchaShow = true;
                     throw ex;
                 }
-                finally
+                catch (Exception e)
                 {
-                    if (!isCaptchaShow)
-                        await LocationUtils.UpdatePlayerLocationWithAltitude(session,
-                            // Set speed to 0 for random speed.
-                            new GeoCoordinate(currentLatitude, currentLongitude, session.Client.CurrentAltitude), 0).ConfigureAwait(false);
+                    Logger.Write($"Error: {e.Message}", LogLevel.Error);
+                    throw e;
                 }
 
-                switch (encounter.Status)
+                if (catchablePokemon == null)
                 {
-                    case EncounterResponse.Types.Status.EncounterSuccess:
-                        session.EventDispatcher.Send(new UpdatePositionEvent
-                        {
-                            Latitude = currentLatitude,
-                            Longitude = currentLongitude
-                        });
-                        catchedPokemon = await CatchPokemonTask.Execute(session, cancellationToken, encounter, catchablePokemon,
-                            currentFortData: null, sessionAllowTransfer: true).ConfigureAwait(false);
-                        break;
+                    session.EventDispatcher.Send(new SnipeEvent
+                    {
+                        Message = session.Translation.GetTranslation(TranslationString.NoPokemonToSnipe),
+                    });
 
-                    case EncounterResponse.Types.Status.PokemonInventoryFull:
-                        if (session.LogicSettings.TransferDuplicatePokemon)
-                        {
-                            await TransferDuplicatePokemonTask.Execute(session, cancellationToken).ConfigureAwait(false);
-                        }
-                        else
-                        {
+                    session.EventDispatcher.Send(new SnipeFailedEvent
+                    {
+                        Latitude = latitude,
+                        Longitude = longitude,
+                        PokemonId = (PokemonId)sniperInfo.PokemonId,
+                        EncounterId = sniperInfo.EncounterId
+                    });
+
+                    return false;
+                }
+
+                if (catchablePokemon != null)
+                {
+                    EncounterResponse encounter;
+                    try
+                    {
+                        await LocationUtils.UpdatePlayerLocationWithAltitude(session,
+                            new GeoCoordinate(catchablePokemon.Latitude, catchablePokemon.Longitude, session.Client.CurrentAltitude), 0).ConfigureAwait(false); // Set speed to 0 for random speed.
+
+                        encounter =
+                            await session.Client.Encounter.EncounterPokemon(catchablePokemon.EncounterId, catchablePokemon.SpawnPointId).ConfigureAwait(false);
+                    }
+                    catch (HasherException ex) { throw ex; }
+                    catch (CaptchaException ex)
+                    {
+                        throw ex;
+                    }
+
+                    switch (encounter.Status)
+                    {
+                        case EncounterResponse.Types.Status.EncounterSuccess:
+                            catchedPokemon = await CatchPokemonTask.Execute(session, cancellationToken, encounter, catchablePokemon,
+                                currentFortData: null, sessionAllowTransfer: true).ConfigureAwait(false);
+                            break;
+
+                        case EncounterResponse.Types.Status.PokemonInventoryFull:
+                            if (session.LogicSettings.TransferDuplicatePokemon)
+                            {
+                                await TransferDuplicatePokemonTask.Execute(session, cancellationToken).ConfigureAwait(false);
+                            }
+                            else
+                            {
+                                session.EventDispatcher.Send(new WarnEvent
+                                {
+                                    Message = session.Translation.GetTranslation(TranslationString.InvFullTransferManually)
+                                });
+                            }
+                            return false;
+
+                        default:
                             session.EventDispatcher.Send(new WarnEvent
                             {
-                                Message = session.Translation.GetTranslation(TranslationString.InvFullTransferManually)
+                                Message =
+                                    session.Translation.GetTranslation(
+                                        TranslationString.EncounterProblem, encounter.Status)
                             });
-                        }
-                        return false;
+                            break;
+                    }
 
-                    default:
-                        session.EventDispatcher.Send(new WarnEvent
-                        {
-                            Message =
-                                session.Translation.GetTranslation(
-                                    TranslationString.EncounterProblem, encounter.Status)
-                        });
-                        break;
+                    await Task.Delay(session.LogicSettings.DelayBetweenPokemonCatch, cancellationToken).ConfigureAwait(false);
                 }
 
-                await Task.Delay(session.LogicSettings.DelayBetweenPokemonCatch, cancellationToken).ConfigureAwait(false);
+                if (catchedPokemon)
+                {
+                    session.Stats.SnipeCount++;
+                }
+                session.EventDispatcher.Send(new SnipeModeEvent { Active = false });
+                return true;
             }
-
-            if (catchedPokemon)
+            finally
             {
-                session.Stats.SnipeCount++;
+                if (useWalk)
+                {
+                    Logger.Write($"Walking back to original location.", LogLevel.Info);
+
+                    await session.Navigation.Move(
+                        new MapLocation(originalLatitude, originalLongitude, 0),
+                        async () =>
+                        {
+                            cancellationToken.ThrowIfCancellationRequested();
+                            await ActionsWhenTravelToSnipeTarget(session, cancellationToken, new MapLocation(latitude, longitude, 0), session.LogicSettings.HumanWalkingSnipeCatchPokemonWhileWalking, session.LogicSettings.HumanWalkingSnipeSpinWhileWalking).ConfigureAwait(false);
+                        },
+                        session,
+                        cancellationToken,
+                        session.LogicSettings.HumanWalkingSnipeAllowSpeedUp ? session.LogicSettings.HumanWalkingSnipeMaxSpeedUpSpeed : 200
+                    ).ConfigureAwait(false);
+                }
+                else
+                {
+                    Logger.Write($"Jumping back to original location.", LogLevel.Info);
+
+                    await LocationUtils.UpdatePlayerLocationWithAltitude(session, new GeoCoordinate(originalLatitude, originalLongitude), 0).ConfigureAwait(false); // Set speed to 0 for random speed.
+
+                    session.EventDispatcher.Send(new UpdatePositionEvent
+                    {
+                        Latitude = originalLatitude,
+                        Longitude = originalLongitude
+                    });
+
+                    await session.Client.Map.GetMapObjects(true).ConfigureAwait(false);
+                }
             }
-            session.EventDispatcher.Send(new SnipeModeEvent { Active = false });
-            return true;
-            //await Task.Delay(session.LogicSettings.DelayBetweenPlayerActions, cancellationToken).ConfigureAwait(false);
         }
 
+        // CatchFromService no longer works.
+        /*
         public static async Task<bool> CatchFromService(ISession session,
             CancellationToken cancellationToken, MSniperInfo2 encounterId)
         {
@@ -604,6 +671,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 session, cancellationToken, encounter, pokemon, currentFortData: null, sessionAllowTransfer: true
             ).ConfigureAwait(false);
         }
+        */
 
         public static List<EncounterInfo> FindNew(List<EncounterInfo> received)
         {
@@ -895,12 +963,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                     });
 
                     session.Stats.IsSnipping = true;
-                    var result = (location.IsVerified())
-                        ? await CatchFromService(session, cancellationToken, location).ConfigureAwait(false)
-                        : await CatchWithSnipe(session, location, cancellationToken).ConfigureAwait(false);
-
-                    await LocationUtils.UpdatePlayerLocationWithAltitude(session, new GeoCoordinate(originalLatitude, originalLongitude), 0).ConfigureAwait(false);
-
+                    var result = await CatchWithSnipe(session, location, cancellationToken).ConfigureAwait(false);
+                    
                     if (result)
                     {
                         snipeFailedCount = 0;

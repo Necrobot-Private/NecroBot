@@ -20,6 +20,8 @@ using System.Reflection;
 using TinyIoC;
 using static PoGo.NecroBot.Logic.Service.AnalyticsService;
 using Pogo;
+using PoGo.NecroBot.Logic.Utils;
+using GeoCoordinatePortable;
 
 namespace PoGo.NecroBot.Logic.Service
 {
@@ -87,6 +89,11 @@ namespace PoGo.NecroBot.Logic.Service
         public static async Task HandleEvent(AnalyticsEvent e, ISession session)
         {
             Pokemon data = e.Data as Pokemon;
+            var distance = LocationUtils.CalculateDistanceInMeters(new GeoCoordinate(session.Client.CurrentLatitude, session.Client.CurrentLongitude), new GeoCoordinate(data.Latitude, data.Longitude));
+            var maxDistance = session.LogicSettings.EnableHumanWalkingSnipe ? (session.LogicSettings.HumanWalkingSnipeMaxDistance > 0 ? session.LogicSettings.HumanWalkingSnipeMaxDistance : 1500) : 10000;
+            if (distance > maxDistance)
+                return;
+            
             switch (e.EventType)
             {
                 case 1:
@@ -407,6 +414,11 @@ namespace PoGo.NecroBot.Logic.Service
                 {
                     return;
                 };
+
+                var distance = LocationUtils.CalculateDistanceInMeters(new GeoCoordinate(session.Client.CurrentLatitude, session.Client.CurrentLongitude), new GeoCoordinate(data.Latitude, data.Longitude));
+                var maxDistance = session.LogicSettings.EnableHumanWalkingSnipe ? (session.LogicSettings.HumanWalkingSnipeMaxDistance > 0 ? session.LogicSettings.HumanWalkingSnipeMaxDistance : 1500) : 10000;
+                if (distance > maxDistance)
+                    return;
 
                 ulong.TryParse(data.EncounterId, out ulong encounterid);
                 if (encounterid > 0 && cache.Get(encounterid.ToString()) == null)
