@@ -89,11 +89,10 @@ namespace PoGo.NecroBot.CLI
         private static void Main(string[] args)
         {
             Application.EnableVisualStyles();
-            
-            RunBotWithParameters(null, true, args);
+            RunBotWithParameters(null, args);
         }
 
-        public static void RunBotWithParameters(Action<ISession, StatisticsAggregator> onBotStarted, bool enableConsole, string[] args)
+        public static void RunBotWithParameters(Action<ISession, StatisticsAggregator> onBotStarted, string[] args)
         {
             var ioc = TinyIoC.TinyIoCContainer.Current;
             //Setup Logger for API
@@ -108,15 +107,12 @@ namespace PoGo.NecroBot.CLI
 
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionEventHandler;
 
-            if (enableConsole)
+            Console.Title = @"NecroBot2 Loading";
+            Console.CancelKeyPress += (sender, eArgs) =>
             {
-                Console.Title = @"NecroBot2 Loading";
-                Console.CancelKeyPress += (sender, eArgs) =>
-                {
-                    QuitEvent.Set();
-                    eArgs.Cancel = true;
-                };
-            }
+                QuitEvent.Set();
+                eArgs.Cancel = true;
+            };
 
             // Command line parsing
             var commandLine = new Arguments(args);
@@ -158,8 +154,8 @@ namespace PoGo.NecroBot.CLI
                 excelConfigAllow = true;
             }
 
-            if (enableConsole)
-                Logger.AddLogger(new ConsoleLogger(LogLevel.Service), _subPath);
+            //
+            Logger.AddLogger(new ConsoleLogger(LogLevel.Service), _subPath);
             Logger.AddLogger(new FileLogger(LogLevel.Service), _subPath);
             Logger.AddLogger(new WebSocketLogger(LogLevel.Service), _subPath);
 
