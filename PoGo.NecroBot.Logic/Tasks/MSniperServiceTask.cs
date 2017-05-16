@@ -25,6 +25,7 @@ using System.Runtime.Caching;
 using PoGo.NecroBot.Logic.PoGoUtils;
 using POGOProtos.Inventory.Item;
 using GeoCoordinatePortable;
+using PoGo.NecroBot.Logic.Model;
 
 namespace PoGo.NecroBot.Logic.Tasks
 {
@@ -374,10 +375,33 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
         }
 
-        public static async Task<bool> SnipeUnverifiedPokemon(ISession session, MSniperInfo2 sniperInfo, CancellationToken cancellationToken)
+        private static async Task ActionsWhenTravelToSnipeTarget(ISession session, CancellationToken cancellationToken,
+            IGeoLocation pokemon, bool allowCatchPokemon, bool allowSpinPokeStop)
+        {
+            var distance = LocationUtils.CalculateDistanceInMeters(
+                pokemon.Latitude,
+                pokemon.Longitude,
+                session.Client.CurrentLatitude,
+                session.Client.CurrentLongitude
+            );
+
+            if (allowCatchPokemon && distance > 50.0)
+            {
+                // Catch normal map Pokemon
+                await CatchNearbyPokemonsTask.Execute(session, cancellationToken, sessionAllowTransfer: false).ConfigureAwait(false);
+            }
+            if (allowSpinPokeStop)
+            {
+                //looking for neaby pokestop. spin it
+                await UseNearbyPokestopsTask.SpinPokestopNearBy(session, cancellationToken, null).ConfigureAwait(false);
+            }
+        }
+
+        public static async Task<bool> SnipeUnverifiedPokemon(ISession session, MSniperInfo2 sniperInfo, CancellationToken cancellationToken, bool useWalk = true)
         {
             var latitude = sniperInfo.Latitude;
             var longitude = sniperInfo.Longitude;
+            
             var originalLatitude = session.Client.CurrentLatitude;
             var originalLongitude = session.Client.CurrentLongitude;
 
@@ -390,13 +414,36 @@ namespace PoGo.NecroBot.Logic.Tasks
             
             try
             {
-                await LocationUtils.UpdatePlayerLocationWithAltitude(session, new GeoCoordinate(latitude, longitude, 10d), 0).ConfigureAwait(false); // Set speed to 0 for random speed.
-
-                session.EventDispatcher.Send(new UpdatePositionEvent
+                var distance = LocationUtils.CalculateDistanceInMeters(new GeoCoordinate(session.Client.CurrentLatitude, session.Client.CurrentLongitude), new GeoCoordinate(latitude, longitude));
+                
+                if (useWalk)
                 {
-                    Latitude = latitude,
-                    Longitude = longitude
-                });
+                    Logger.Write($"Walking to snipe target. Distance: {distance}", LogLevel.Info);
+
+                    await session.Navigation.Move(
+                            new MapLocation(latitude, longitude, 0),
+                            async () =>
+                            {
+                                cancellationToken.ThrowIfCancellationRequested();
+                                await ActionsWhenTravelToSnipeTarget(session, cancellationToken, new MapLocation(latitude, longitude, 0), false, false).ConfigureAwait(false);
+                            },
+                            session,
+                            cancellationToken,
+                            200
+                        ).ConfigureAwait(false);
+                }
+                else
+                {
+                    Logger.Write($"Jumping to snipe target. Distance: {distance}", LogLevel.Info);
+
+                    await LocationUtils.UpdatePlayerLocationWithAltitude(session, new GeoCoordinate(latitude, longitude, 10d), 0).ConfigureAwait(false); // Set speed to 0 for random speed.
+
+                    session.EventDispatcher.Send(new UpdatePositionEvent
+                    {
+                        Latitude = latitude,
+                        Longitude = longitude
+                    });
+                }
 
                 try
                 {
@@ -502,15 +549,36 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
             finally
             {
-                await LocationUtils.UpdatePlayerLocationWithAltitude(session, new GeoCoordinate(originalLatitude, originalLongitude), 0).ConfigureAwait(false); // Set speed to 0 for random speed.
-
-                session.EventDispatcher.Send(new UpdatePositionEvent
+                if (useWalk)
                 {
-                    Latitude = originalLatitude,
-                    Longitude = originalLongitude
-                });
+                    Logger.Write($"Walking back to original location.", LogLevel.Info);
 
-                await session.Client.Map.GetMapObjects(true).ConfigureAwait(false);
+                    await session.Navigation.Move(
+                        new MapLocation(originalLatitude, originalLongitude, 0),
+                        async () =>
+                        {
+                            cancellationToken.ThrowIfCancellationRequested();
+                            await ActionsWhenTravelToSnipeTarget(session, cancellationToken, new MapLocation(latitude, longitude, 0), false, false).ConfigureAwait(false);
+                        },
+                        session,
+                        cancellationToken,
+                        200
+                    ).ConfigureAwait(false);
+                }
+                else
+                {
+                    Logger.Write($"Jumping back to original location.", LogLevel.Info);
+
+                    await LocationUtils.UpdatePlayerLocationWithAltitude(session, new GeoCoordinate(originalLatitude, originalLongitude), 0).ConfigureAwait(false); // Set speed to 0 for random speed.
+
+                    session.EventDispatcher.Send(new UpdatePositionEvent
+                    {
+                        Latitude = originalLatitude,
+                        Longitude = originalLongitude
+                    });
+
+                    await session.Client.Map.GetMapObjects(true).ConfigureAwait(false);
+                }
             }
         }
 
