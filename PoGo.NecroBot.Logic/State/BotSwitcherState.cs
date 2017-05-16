@@ -35,7 +35,7 @@ namespace PoGo.NecroBot.Logic.State
             else
             {
                 //snipe pokemon 
-                await MSniperServiceTask.CatchFromService(session, session.CancellationTokenSource.Token, new MSniperServiceTask.MSniperInfo2()
+                await MSniperServiceTask.CatchWithSnipe(session, new MSniperServiceTask.MSniperInfo2()
                 {
                     AddedTime = DateTime.Now,
                     Latitude = encounterData.Latitude, 
@@ -44,7 +44,7 @@ namespace PoGo.NecroBot.Logic.State
                     PokemonId =(short)encounterData.PokemonId,
                     SpawnPointId = encounterData.SpawnPointId,
                     EncounterId = Convert.ToUInt64(encounterData.EncounterId)
-                }).ConfigureAwait(false);
+                }, session.CancellationTokenSource.Token).ConfigureAwait(false);
             }
             return new InfoState();
         }
