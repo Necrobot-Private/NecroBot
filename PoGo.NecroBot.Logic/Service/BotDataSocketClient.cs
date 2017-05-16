@@ -90,7 +90,8 @@ namespace PoGo.NecroBot.Logic.Service
         {
             Pokemon data = e.Data as Pokemon;
             var distance = LocationUtils.CalculateDistanceInMeters(new GeoCoordinate(session.Client.CurrentLatitude, session.Client.CurrentLongitude), new GeoCoordinate(data.Latitude, data.Longitude));
-            if (distance > 100000)
+            var maxDistance = session.LogicSettings.EnableHumanWalkingSnipe ? (session.LogicSettings.HumanWalkingSnipeMaxDistance > 0 ? session.LogicSettings.HumanWalkingSnipeMaxDistance : 1500) : 10000;
+            if (distance > maxDistance)
                 return;
             
             switch (e.EventType)
@@ -415,7 +416,8 @@ namespace PoGo.NecroBot.Logic.Service
                 };
 
                 var distance = LocationUtils.CalculateDistanceInMeters(new GeoCoordinate(session.Client.CurrentLatitude, session.Client.CurrentLongitude), new GeoCoordinate(data.Latitude, data.Longitude));
-                if (distance > 100000)
+                var maxDistance = session.LogicSettings.EnableHumanWalkingSnipe ? (session.LogicSettings.HumanWalkingSnipeMaxDistance > 0 ? session.LogicSettings.HumanWalkingSnipeMaxDistance : 1500) : 10000;
+                if (distance > maxDistance)
                     return;
 
                 ulong.TryParse(data.EncounterId, out ulong encounterid);

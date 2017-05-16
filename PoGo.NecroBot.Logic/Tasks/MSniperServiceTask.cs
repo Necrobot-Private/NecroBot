@@ -397,7 +397,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
         }
 
-        public static async Task<bool> SnipeUnverifiedPokemon(ISession session, MSniperInfo2 sniperInfo, CancellationToken cancellationToken, bool useWalk = true)
+        public static async Task<bool> SnipeUnverifiedPokemon(ISession session, MSniperInfo2 sniperInfo, CancellationToken cancellationToken)
         {
             var latitude = sniperInfo.Latitude;
             var longitude = sniperInfo.Longitude;
@@ -411,7 +411,9 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             MapPokemon catchablePokemon;
             int retry = 3;
-            
+
+            bool useWalk = session.LogicSettings.EnableHumanWalkingSnipe;
+
             try
             {
                 var distance = LocationUtils.CalculateDistanceInMeters(new GeoCoordinate(session.Client.CurrentLatitude, session.Client.CurrentLongitude), new GeoCoordinate(latitude, longitude));
@@ -425,11 +427,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                             async () =>
                             {
                                 cancellationToken.ThrowIfCancellationRequested();
-                                await ActionsWhenTravelToSnipeTarget(session, cancellationToken, new MapLocation(latitude, longitude, 0), false, false).ConfigureAwait(false);
+                                await ActionsWhenTravelToSnipeTarget(session, cancellationToken, new MapLocation(latitude, longitude, 0), session.LogicSettings.HumanWalkingSnipeCatchPokemonWhileWalking, session.LogicSettings.HumanWalkingSnipeSpinWhileWalking).ConfigureAwait(false);
                             },
                             session,
                             cancellationToken,
-                            200
+                            session.LogicSettings.HumanWalkingSnipeAllowSpeedUp ? session.LogicSettings.HumanWalkingSnipeMaxSpeedUpSpeed : 200
                         ).ConfigureAwait(false);
                 }
                 else
@@ -558,11 +560,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                         async () =>
                         {
                             cancellationToken.ThrowIfCancellationRequested();
-                            await ActionsWhenTravelToSnipeTarget(session, cancellationToken, new MapLocation(latitude, longitude, 0), false, false).ConfigureAwait(false);
+                            await ActionsWhenTravelToSnipeTarget(session, cancellationToken, new MapLocation(latitude, longitude, 0), session.LogicSettings.HumanWalkingSnipeCatchPokemonWhileWalking, session.LogicSettings.HumanWalkingSnipeSpinWhileWalking).ConfigureAwait(false);
                         },
                         session,
                         cancellationToken,
-                        200
+                        session.LogicSettings.HumanWalkingSnipeAllowSpeedUp ? session.LogicSettings.HumanWalkingSnipeMaxSpeedUpSpeed : 200
                     ).ConfigureAwait(false);
                 }
                 else
