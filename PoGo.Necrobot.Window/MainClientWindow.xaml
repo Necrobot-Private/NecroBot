@@ -23,8 +23,8 @@
                        TextTrimming="CharacterEllipsis"
                        VerticalAlignment="Center"
                        Margin="4, 0, 0, 0"
-                       FontWeight="Normal"
-                       FontFamily="pack://application:,,,/Resources/#Lato-light"/>
+                       FontWeight="Light"
+                       FontFamily="pack://application:,,,/Resources/Fonts/#Lato"/>
         </DataTemplate>
     </Controls:MetroWindow.TitleTemplate>
     <Control.Resources>
@@ -33,7 +33,7 @@
         <c:TimestampToDateTimeConverter x:Key="TimestampToDateTimeConverter"/>
         <c:DurationTextConverter x:Key="DurationTextConverter"/>
         <Style x:Key="LatoFont">
-            <Setter Property="TextElement.FontFamily" Value="pack://application:,,,/Resources/#Lato-light" />
+            <Setter Property="TextElement.FontFamily" Value="pack://application:,,,/Resources/Fonts/#Lato" />
         </Style>
     </Control.Resources>
     <Controls:MetroWindow.RightWindowCommands>
@@ -52,7 +52,7 @@
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <TextBlock FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato Medium">
+                                            <TextBlock FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium">
                                                 <Hyperlink NavigateUri="{Binding Id}" Click="Hyperlink_Click" CommandParameter="{Binding}">
                                                     <TextBlock Text="{Binding Path=Title.Text}"></TextBlock>
                                                 </Hyperlink>
@@ -117,11 +117,11 @@
             <Border BorderBrush="Red" Background="WhiteSmoke" BorderThickness="2">
                 <StackPanel>
                     <StackPanel Background="Red">
-                        <TextBlock Text="{Binding Source=ErrorPopupTitle, Converter={StaticResource I18NConveter}}" Margin="5,5,5,5" FontSize="18.667" FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato Heavy" Foreground="White"></TextBlock>
+                        <TextBlock Text="{Binding Source=ErrorPopupTitle, Converter={StaticResource I18NConveter}}" Margin="5,5,5,5" FontSize="18" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Heavy" Foreground="White"></TextBlock>
                     </StackPanel>
                     <StackPanel Margin="10">
-                        <TextBlock Name="txtLastError" Text="" TextWrapping="Wrap" FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato" FontSize="16"></TextBlock>
-                        <Button Margin="10,10,10,10" Click="BtnExit_Click" Name="btnExit" Content="{Binding Source=ClickHereExit, Converter={StaticResource I18NConveter}}" FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato Heavy" FontSize="18.667" ></Button>
+                        <TextBlock Name="txtLastError" Text="" TextWrapping="Wrap" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontSize="16"></TextBlock>
+                        <Button Margin="10,10,10,10" Click="BtnExit_Click" Name="btnExit" Content="{Binding Source=ClickHereExit, Converter={StaticResource I18NConveter}}" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Heavy" FontSize="18" ></Button>
                     </StackPanel>
                 </StackPanel>
             </Border>
@@ -224,7 +224,7 @@
                   <GridSplitter Grid.Column="1" />
                   <ComboBox x:Name="ConsoleThemer" Grid.Column="2" IsEditable="False" IsReadOnly="True" SelectionChanged="ConsoleThemer_SelectionChanged" BorderBrush="#FFCCCCCC" ToolTip="Set Console Colors" />
                 </Grid>
-                <RichTextBox ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" DockPanel.Dock="Bottom" x:Name="consoleLog" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontSize="15" IsReadOnly="True" FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato Light">
+                    <RichTextBox ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" DockPanel.Dock="Bottom" x:Name="consoleLog" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontSize="15" IsReadOnly="True" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Light">
                   <FlowDocument>
                     <Paragraph LineHeight="25">
                       <Run Text="" />
