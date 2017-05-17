@@ -85,8 +85,8 @@ namespace PoGo.Necrobot.Window
             DataContext = datacontext;
             txtCmdInput.Text = TinyIoCContainer.Current.Resolve<UITranslation>().InputCommand;
 
-            Application.Current.MainWindow.Width = Settings.Default.Width;
-            Application.Current.MainWindow.Height = Settings.Default.Height;
+            Width = Settings.Default.Width;
+            Height = Settings.Default.Height;
 
             BrowserSync();
             ConsoleSync();
@@ -631,8 +631,8 @@ namespace PoGo.Necrobot.Window
 
         private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Application.Current.MainWindow.Height = Settings.Default.Height;
-            Application.Current.MainWindow.Width = Settings.Default.Width;
+            Settings.Default.Height = Height;
+            Settings.Default.Width = Width;
             Settings.Default.Save();
             Process.GetCurrentProcess().Kill();
         }
