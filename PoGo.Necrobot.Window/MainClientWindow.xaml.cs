@@ -28,7 +28,6 @@ using System.Timers;
 using PoGo.NecroBot.Logic.Model;
 using DotNetBrowser;
 using DotNetBrowser.WPF;
-using PokemonGo.RocketAPI.Extensions;
 using PoGo.Necrobot.Window.Win32;
 
 namespace PoGo.Necrobot.Window
@@ -45,23 +44,23 @@ namespace PoGo.Necrobot.Window
         private static Dictionary<LogLevel, Tuple<string, string, string>> ConsoleColors = new Dictionary<LogLevel, Tuple<string, string, string>>()
         {
             // Console Colors <Default, Solarized_Dark, Solarized_Light>
-                { LogLevel.Error, new Tuple<string, string, string>("Pink", "#FF1E8E", "") },
-                { LogLevel.Caught, new Tuple<string, string, string>("Green", "#83FF08", "") },
-                { LogLevel.Info, new Tuple<string, string, string>("Green", "#83FF08", "") },
-                { LogLevel.Warning, new Tuple<string, string, string>("Orange", "#FF8308", "") },
+                { LogLevel.Error, new Tuple<string, string, string>("Pink", "#FF1E8E", "#EC008C") },
+                { LogLevel.Caught, new Tuple<string, string, string>("Green", "#83FF08", "#03353E") },
+                { LogLevel.Info, new Tuple<string, string, string>("Orange", "#FF8308", "#FF6600") },
+                { LogLevel.Warning, new Tuple<string, string, string>("Orange", "#FF8308", "#FF6600") },
                 { LogLevel.Pokestop, new Tuple<string, string, string>("Cyan", "#B4E1FD", "") },
-                { LogLevel.Farming, new Tuple<string, string, string>("Green", "#83FF08", "") },
+                { LogLevel.Farming, new Tuple<string, string, string>("Green", "#83FF08", "#03353E") },
                 { LogLevel.Sniper, new Tuple<string, string, string>("Grey", "#B6B6B6", "") },
                 { LogLevel.Recycling, new Tuple<string, string, string>("Grey", "#B6B6B6", "") },
-                { LogLevel.Flee, new Tuple<string, string, string>("Purple", "#8308FF", "") },
+                { LogLevel.Flee, new Tuple<string, string, string>("Grey", "#B6B6B6", "") },
                 { LogLevel.Transfer, new Tuple<string, string, string>("Grey", "#B6B6B6", "") },
                 { LogLevel.Evolve, new Tuple<string, string, string>("Cyan", "#B4E1FD", "") },
-                { LogLevel.Berry, new Tuple<string, string, string>("Orange", "#FF8308", "") },
+                { LogLevel.Berry, new Tuple<string, string, string>("Orange", "#FF8308", "#FF6600") },
                 { LogLevel.Egg, new Tuple<string, string, string>("Cyan", "#B4E1FD", "") },
                 { LogLevel.Debug, new Tuple<string, string, string>("Grey", "#B6B6B6", "") },
                 { LogLevel.Update, new Tuple<string, string, string>("Blue", "#0883FF", "") },
                 { LogLevel.New, new Tuple<string, string, string>("Blue", "#0883FF", "") },
-                { LogLevel.SoftBan, new Tuple<string, string, string>("Pink", "#FF1E8E", "") },
+                { LogLevel.SoftBan, new Tuple<string, string, string>("Pink", "#FF1E8E", "#EC008C") },
                 { LogLevel.LevelUp, new Tuple<string, string, string>("Blue", "#0883FF", "") },
                 { LogLevel.Gym, new Tuple<string, string, string>("Purple", "#8308FF", "") },
                 { LogLevel.Service , new Tuple<string, string, string>("Grey", "#B6B6B6", "") }
@@ -254,7 +253,8 @@ namespace PoGo.Necrobot.Window
                     consoleLog.Document.Blocks.Clear();
                     lastClearLog = DateTime.Now;
                 }
-                if (string.IsNullOrEmpty(color) || color == "Black") color = "white";
+                if (string.IsNullOrEmpty(color) && Settings.Default.ConsoleTheme == "Low Contrast (Light)") color = "Black";
+                if (string.IsNullOrEmpty(color) && Settings.Default.ConsoleTheme == "Low Contrast (Dark)") color = "White";
 
                 consoleLog.AppendText(message + "\r", color);
                 consoleLog.ScrollToEnd();
