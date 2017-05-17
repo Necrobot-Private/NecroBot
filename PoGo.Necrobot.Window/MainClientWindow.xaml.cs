@@ -240,15 +240,15 @@ namespace PoGo.Necrobot.Window
         private DateTime lastClearLog = DateTime.Now;
         public void LogToConsoleTab(string message, LogLevel level, string color)
         {
-            if (Settings.Default.ConsoleTheme == "Low Contrast (Light)")
-                color = ConsoleColors[level].Item3;
-            if (Settings.Default.ConsoleTheme == "Low Contrast (Dark)")
-                color = ConsoleColors[level].Item2;
-            else if (Settings.Default.ConsoleTheme == "Default" || Settings.Default.ResetLayout == true)
-                color = ConsoleColors[level].Item1;
-
             consoleLog.Dispatcher.BeginInvoke(new Action(() =>
             {
+                if (Settings.Default.ConsoleTheme == "Low Contrast (Light)")
+                    color = ConsoleColors[level].Item3;
+                if (Settings.Default.ConsoleTheme == "Low Contrast (Dark)")
+                    color = ConsoleColors[level].Item2;
+                else if (Settings.Default.ConsoleTheme == "Default" || Settings.Default.ResetLayout == true)
+                    color = ConsoleColors[level].Item1;
+
                 if (lastClearLog.AddMinutes(15) < DateTime.Now)
                 {
                     consoleLog.Document.Blocks.Clear();
