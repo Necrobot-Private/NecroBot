@@ -468,6 +468,9 @@ namespace PoGo.Necrobot.Window
                 ConsoleThemer.Background = DarkSolarizedBackground;
                 ConsoleThemer.Foreground = SolarizedConsoleWhite;
             }
+            // Reset the Console Blocks to prevent any Mixups
+            consoleLog.Document.Blocks.Clear();
+            lastClearLog = DateTime.Now;
             Settings.Default.Save();
             ResetSync();
         }
