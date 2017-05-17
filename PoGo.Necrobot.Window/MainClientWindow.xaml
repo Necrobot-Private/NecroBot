@@ -10,6 +10,7 @@
                       Height="768"
                       Width="1366"
                       MinWidth="1024"
+                      MinHeight="576"
                       BorderThickness="0"
                       GlowBrush="DodgerBlue"
                       ResizeMode="CanResizeWithGrip"
