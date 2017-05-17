@@ -477,7 +477,7 @@ namespace PoGo.Necrobot.Window
             consoleLog.Document.Blocks.Clear();
             lastClearLog = DateTime.Now;
             // Add Log to Say Scheme has Changed
-            NecroBot.Logic.Logging.Logger.Write($"Console Layout is now '{Settings.Default.ConsoleTheme}");
+            NecroBot.Logic.Logging.Logger.Write($"Console Layout is now '{Settings.Default.ConsoleTheme}'", LogLevel.Update);
             Settings.Default.Save();
             ResetSync();
         }
