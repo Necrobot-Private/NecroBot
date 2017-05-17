@@ -1,4 +1,4 @@
-﻿#region using directives
+#region using directives
 
 #region using directives
 
@@ -55,7 +55,7 @@ namespace PoGo.NecroBot.Logic.Utils
         public void OnStatisticChanged(ISession session)
         {
             var manager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
-            if (MultipleBotConfig.IsMultiBotActive(session.LogicSettings, manager) &&  manager.AllowSwitch())
+            if (MultipleBotConfig.IsMultiBotActive(session.LogicSettings, manager) && manager.AllowSwitch())
             {
                 var config = session.LogicSettings.MultipleBotConfig;
 
@@ -141,7 +141,7 @@ namespace PoGo.NecroBot.Logic.Utils
                     hours = Math.Truncate(TimeSpan.FromHours(time).TotalHours);
                     minutes = TimeSpan.FromHours(time).Minutes;
                 }
-                
+
                 if (LevelForRewards == -1 || stat.Level >= LevelForRewards)
                 {
                     if (session.LogicSettings.SkipCollectingLevelUpRewards)
@@ -203,7 +203,7 @@ namespace PoGo.NecroBot.Logic.Utils
         {
             return await ctx.Inventory.GetLevelUpRewards(LevelForRewards).ConfigureAwait(false);
         }
-        
+
         public double GetRuntime()
         {
             return (DateTime.Now - _initSessionDateTime).TotalSeconds / 3600;

@@ -228,7 +228,7 @@ namespace PoGo.NecroBot.Logic
             {
                 throw e;
             }
-            
+
             var results = new List<PokemonData>();
 
             var pokemonToEvolve = await GetPokemonToEvolve(pokemonEvolveFilters).ConfigureAwait(false);
@@ -270,7 +270,7 @@ namespace PoGo.NecroBot.Logic
                         .Take(canBeRemoved));
                 }
             }
-            
+
             return results;
         }
 
@@ -281,7 +281,7 @@ namespace PoGo.NecroBot.Logic
             var myPokemon = await GetPokemons().ConfigureAwait(false);
 
             var transferrablePokemon = myPokemon.Where(p => !pokemonsNotToTransfer.Contains(p.PokemonId) && CanTransferPokemon(p));
-            
+
             var results = new List<PokemonData>();
 
             foreach (var pokemonGroupToTransfer in transferrablePokemon.GroupBy(p => p.PokemonId).ToList())
@@ -296,7 +296,7 @@ namespace PoGo.NecroBot.Logic
                     continue;
 
                 var needToRemove = inStorage - amountToKeepInStorage;
-                
+
                 Logger.Write($"Max duplicate {pokemonGroupToTransfer.Key} is {amountToKeepInStorage}. {needToRemove} out of {inStorage} {pokemonGroupToTransfer.Key} need to be transferred.", Logic.Logging.LogLevel.Info);
 
                 if (prioritizeIVoverCp)
@@ -314,7 +314,7 @@ namespace PoGo.NecroBot.Logic
                         .Take(needToRemove));
                 }
             }
-            
+
             return results;
         }
 
@@ -683,7 +683,7 @@ namespace PoGo.NecroBot.Logic
 
             return true;
         }
-        
+
         public int GetCandyToEvolve(PokemonSettings settings, EvolveFilter appliedFilter = null)
         {
             EvolutionBranch branch;
@@ -713,9 +713,9 @@ namespace PoGo.NecroBot.Logic
             var settings = pokemonSettings.SingleOrDefault(x => x.PokemonId == pokemon.PokemonId);
 
             // Can't evolve pokemon that are not evolvable.
-            if (settings.EvolutionIds.Count == 0 && settings.EvolutionBranch.Count ==0)
+            if (settings.EvolutionIds.Count == 0 && settings.EvolutionBranch.Count == 0)
                 return false;
-            
+
             int familyCandy = await GetCandyCount(pokemon.PokemonId).ConfigureAwait(false);
 
             if (checkEvolveFilterRequirements)
@@ -761,10 +761,12 @@ namespace PoGo.NecroBot.Logic
                 // Check requirements for all branches, if we meet the requirements for any of them then we return true.
                 foreach (var branch in settings.EvolutionBranch)
                 {
+                    var itemCount = (await GetItems().ConfigureAwait(false)).Count(x => x.ItemId == branch.EvolutionItemRequirement);
+                    var Candies2Evolve = branch.CandyCost; // GetCandyToEvolve(settings);
+                    var Evolutions = familyCandy / Candies2Evolve;
+
                     if (branch.EvolutionItemRequirement != ItemId.ItemUnknown)
                     {
-                        var itemCount = (await GetItems().ConfigureAwait(false)).Count(x => x.ItemId == branch.EvolutionItemRequirement);
-
                         if (itemCount == 0)
                             continue;  // Cannot evolve so check next branch
                     }
@@ -810,7 +812,7 @@ namespace PoGo.NecroBot.Logic
                 PokemonId pokemonId = g.Key;
 
                 var orderedGroup = g.OrderByDescending(p => p.Cp);
-                
+
                 //if (!filters.ContainsKey(pokemon.PokemonId)) continue;
                 var filter = filters[pokemonId];
 
@@ -822,7 +824,7 @@ namespace PoGo.NecroBot.Logic
 
                 if (candyNeed == -1)
                     continue; // If we were unable to determine which branch to use, then skip this pokemon.
-                
+
                 // Calculate the number of evolutions possible (taking into account +1 candy for evolve and +1 candy for transfer)
                 EvolutionCalculations evolutionInfo = CalculatePokemonEvolution(pokemonLeft, candiesLeft, candyNeed, 1);
 
@@ -917,7 +919,7 @@ namespace PoGo.NecroBot.Logic
             return upgradePokemon;
         }
 
-       
+
 
         public async Task<UpgradePokemonResponse> UpgradePokemon(ulong pokemonid)
         {

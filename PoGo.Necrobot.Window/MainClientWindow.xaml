@@ -1,4 +1,4 @@
-﻿<Controls:MetroWindow x:Class="PoGo.Necrobot.Window.MainClientWindow"
+<Controls:MetroWindow x:Class="PoGo.Necrobot.Window.MainClientWindow"
                       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                       xmlns:Behaviours="clr-namespace:MahApps.Metro.Behaviours;assembly=MahApps.Metro"
                       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -149,9 +149,9 @@
                     <Setter Property="HorizontalAlignment" Value="Center" />
                 </Style>
             </TabControl.Resources>
-            <TabItem Name="tabAccounts" Width="80" Height="70" Cursor="Hand">
+            <TabItem Name="tabAccounts" Width="60" Height="50" Cursor="Hand">
                 <TabItem.Header>
-                    <Image x:Name="accountsIMG" Source="Resources/Accounts/AccountsImage.png" Width="70" Height="65" />
+                    <Image x:Name="accountsIMG" Source="Resources/Accounts/AccountsImage.png" Width="50" Height="45" Stretch="UniformToFill" />
                 </TabItem.Header>
                 <DataGrid Name="gridAccounts" AutoGenerateColumns="False" CanUserDeleteRows="False" CanUserAddRows="False">
                     <DataGrid.Columns>
@@ -182,15 +182,15 @@
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>
-            <TabItem Name="tabBrowser" Width="80" Height="70" Cursor="Hand">
+            <TabItem Name="tabBrowser" Width="60" Height="50" Cursor="Hand">
                 <TabItem.Header>
-                    <Image x:Name="browserIMG" Source="Resources/Hub/HubImage.png" Width="70" Height="65" />
+                    <Image x:Name="browserIMG" Source="Resources/Hub/HubImage.png" Width="50" Height="46" />
                 </TabItem.Header>
                 <Grid Name="browserLayout" />
             </TabItem>
-            <TabItem Name="tabMap" Width="80" Height="70" Cursor="Hand">
+            <TabItem Name="tabMap" Width="60" Height="50" Cursor="Hand">
                 <TabItem.Header>
-                    <Image x:Name="mapIMG" Source="Resources/Map/MapImage.png" Width="70" Height="65" />
+                    <Image x:Name="mapIMG" Source="Resources/Map/MapImage.png" Width="50" Height="45" />
                 </TabItem.Header>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -203,58 +203,58 @@
                     <local:SidebarControl Visibility="Visible" DataContext="{Binding Path=Sidebar}" x:Name="sidebarControl" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinWidth="200" />
                 </Grid>
             </TabItem>
-            <TabItem x:Name="tabSniper" Width="80" Height="70" Cursor="Hand">
+            <TabItem x:Name="tabSniper" Width="60" Height="50" Cursor="Hand">
                 <TabItem.Header>
-                    <Image x:Name="sniperIMG" Source="Resources/Sniper/SniperImage.png" Width="70" Height="65" />
+                    <Image x:Name="sniperIMG" Source="Resources/Sniper/SniperImage.png" Width="50" Height="45" />
                 </TabItem.Header>
                 <local:SniperControl x:Name="ctrlSniper" DataContext="{Binding Path=SnipeList}" />
             </TabItem>
-            <TabItem x:Name="tabConsole" IsSelected="True" Width="80" Height="70" Cursor="Hand">
+            <TabItem x:Name="tabConsole" IsSelected="True" Width="60" Height="50" Cursor="Hand">
                 <TabItem.Header>
-                    <Image x:Name="consoleIMG" Source="Resources/Console/ConsoleImage.png" Width="65" Height="65" />
+                    <Image x:Name="consoleIMG" Source="Resources/Console/ConsoleImage.png" Width="45" Height="45" />
                 </TabItem.Header>
-              <DockPanel LastChildFill="True" x:Name="ConsolePanel">
-                <Grid DockPanel.Dock="Top">
-                  <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="1" />
-                    <ColumnDefinition Width="150" />
-                  </Grid.ColumnDefinitions>
-                  <TextBox x:Name="txtCmdInput" Grid.Column="0" ToolTip="{Binding Source=InputCommand, Converter={StaticResource ResourceKey=I18NConveter}}" MouseDown="TxtCmdInput_MouseDown" KeyDown="TxtCmdInput_KeyDown" />
-                  <GridSplitter Grid.Column="1" />
-                  <ComboBox x:Name="ConsoleThemer" Grid.Column="2" IsEditable="False" IsReadOnly="True" SelectionChanged="ConsoleThemer_SelectionChanged" BorderBrush="{x:Null}" ToolTip="Set Console Colors" />
-                </Grid>
-                <RichTextBox ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" DockPanel.Dock="Bottom" x:Name="consoleLog" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontSize="15" IsReadOnly="True" FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato Light">
-                  <FlowDocument>
-                    <Paragraph LineHeight="25">
-                      <Run Text="" />
-                    </Paragraph>
-                  </FlowDocument>
-                </RichTextBox>
-              </DockPanel>
+                <DockPanel LastChildFill="True" x:Name="ConsolePanel">
+                    <Grid DockPanel.Dock="Top">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="1" />
+                            <ColumnDefinition Width="150" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="txtCmdInput" Grid.Column="0" ToolTip="{Binding Source=InputCommand, Converter={StaticResource ResourceKey=I18NConveter}}" MouseDown="TxtCmdInput_MouseDown" KeyDown="TxtCmdInput_KeyDown" />
+                        <GridSplitter Grid.Column="1" />
+                        <ComboBox x:Name="ConsoleThemer" Grid.Column="2" IsEditable="False" IsReadOnly="True" SelectionChanged="ConsoleThemer_SelectionChanged" BorderBrush="{x:Null}" ToolTip="Set Console Colors" />
+                    </Grid>
+                    <RichTextBox ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" DockPanel.Dock="Bottom" x:Name="consoleLog" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontSize="15" IsReadOnly="True" FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato Light">
+                        <FlowDocument>
+                            <Paragraph LineHeight="25">
+                                <Run Text="" />
+                            </Paragraph>
+                        </FlowDocument>
+                    </RichTextBox>
+                </DockPanel>
             </TabItem>
-            <TabItem Name="tabPokemons" Width="80" Height="70" Cursor="Hand">
+            <TabItem Name="tabPokemons" Width="60" Height="50" Cursor="Hand">
                 <TabItem.Header>
-                    <StackPanel Orientation="Vertical" RenderTransformOrigin="0.5,0.5" Width="80" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Image x:Name="pokemonIMG" Source="Resources/Pokemon/PokemonImage.png" Width="50" Height="50" />
+                    <StackPanel Orientation="Vertical" RenderTransformOrigin="0.5,0.5" Width="60" HorizontalAlignment="Center" VerticalAlignment="Center" Height="45">
+                        <Image x:Name="pokemonIMG" Source="Resources/Pokemon/PokemonImage.png" Width="30" Height="30" />
                         <TextBlock FontSize="12" HorizontalAlignment="Center" Text="{Binding Path= PokemonTabHeader, FallbackValue=Pokemon}"/>
                     </StackPanel>
                 </TabItem.Header>
                 <local:PokemonInventory x:Name="ctrPokemonInventory" DataContext="{Binding Path=PokemonList}" OnPokemonItemSelected="PokemonInventory_OnPokemonItemSelected" />
             </TabItem>
-            <TabItem Name="tabItems" Width="80" Height="70" Cursor="Hand">
+            <TabItem Name="tabItems" Width="60" Height="50" Cursor="Hand">
                 <TabItem.Header>
-                    <StackPanel Orientation="Vertical" RenderTransformOrigin="0.5,0.5" Width="80" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Image x:Name="itemsIMG" Source="Resources/Items/ItemsImage.png" Width="50" Height="50" />
+                    <StackPanel Orientation="Vertical" RenderTransformOrigin="0.5,0.5" Width="60" HorizontalAlignment="Center" VerticalAlignment="Center" Height="45">
+                        <Image x:Name="itemsIMG" Source="Resources/Items/ItemsImage.png" Width="30" Height="30" />
                         <TextBlock FontSize="12" HorizontalAlignment="Center" Text="{Binding Path= ItemsTabHeader, FallbackValue=Items}"/>
                     </StackPanel>
                 </TabItem.Header>
                 <local:ItemsInventory DataContext="{Binding Path=ItemsList}" x:Name="ctrlItemControl" />
             </TabItem>
-            <TabItem Name="tabEggs" Width="80" Height="70" Cursor="Hand">
+            <TabItem Name="tabEggs" Width="60" Height="50" Cursor="Hand">
                 <TabItem.Header>
-                    <StackPanel Orientation="Vertical" RenderTransformOrigin="0.5,0.5" Width="80" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Image x:Name="eggsIMG" Source="Resources/Eggs/EggsImage.png" Width="50" Height="50" />
+                    <StackPanel Orientation="Vertical" RenderTransformOrigin="0.5,0.5" Width="60" HorizontalAlignment="Center" VerticalAlignment="Center" Height="45">
+                        <Image x:Name="eggsIMG" Source="Resources/Eggs/EggsImage.png" Width="30" Height="30" />
                         <TextBlock FontSize="12" HorizontalAlignment="Center" Text="{Binding Path= EggsTabHeader, FallbackValue=Eggs}"/>
                     </StackPanel>
                 </TabItem.Header>

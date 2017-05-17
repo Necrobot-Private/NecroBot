@@ -1,4 +1,4 @@
-﻿#region using directives
+#region using directives
 
 using System;
 using System.Threading.Tasks;
@@ -10,6 +10,7 @@ using PoGo.NecroBot.Logic.State;
 using PokemonGo.RocketAPI.Exceptions;
 using POGOProtos.Data;
 using POGOProtos.Networking.Responses;
+using PokemonGo.RocketAPI.Helpers;
 
 #endregion
 
@@ -32,6 +33,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                                         : await session.Inventory.GetHighestPokemonOfTypeByCp(upgradeResult
                                             .UpgradedPokemon).ConfigureAwait(false)) ?? upgradeResult.UpgradedPokemon;
 
+                var stardust = -PokemonCpUtils.GetStardustCostsForPowerup(upgradeResult.UpgradedPokemon.CpMultiplier); //+ upgradeResult.UpgradedPokemon.AdditionalCpMultiplier);
+                var totalStarDust = session.Inventory.UpdateStarDust(stardust);
+
                 session.EventDispatcher.Send(new UpgradePokemonEvent()
                 {
                     Candy = await session.Inventory.GetCandyCount(pokemon.PokemonId).ConfigureAwait(false),
@@ -41,12 +45,13 @@ namespace PoGo.NecroBot.Logic.Tasks
                     Id = upgradeResult.UpgradedPokemon.Id,
                     BestCp = bestPokemonOfType.Cp,
                     BestPerfection = PokemonInfo.CalculatePokemonPerfection(bestPokemonOfType),
-                    Perfection = PokemonInfo.CalculatePokemonPerfection(upgradeResult.UpgradedPokemon)
+                    Perfection = PokemonInfo.CalculatePokemonPerfection(upgradeResult.UpgradedPokemon),
+                    USD = stardust,
                 });
 
                 return true;
             }
-            return false;            
+            return false;
         }
 
         public static async Task Execute(ISession session, ulong pokemonId, bool isMax = false, int numUpgrades = -1)

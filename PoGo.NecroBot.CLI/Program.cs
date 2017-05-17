@@ -33,24 +33,22 @@ namespace PoGo.NecroBot.CLI
 {
     class Options
     {
-        [Option('i', "init", Required = false,
-          HelpText = "Init account")]
+        [Option('i', "init", Required = false, HelpText = "Init account")]
         public bool Init { get; set; }
 
-        [Option('t', "template", DefaultValue = "", Required = false , HelpText = "Prints all messages to standard output.")]
+        [Option('t', "template", DefaultValue = "", Required = false, HelpText = "Prints all messages to standard output.")]
         public string Template { get; set; }
 
-        [Option('p', "password", DefaultValue = "", Required = false, HelpText = "pasword")]
+        [Option('p', "password", DefaultValue = "", Required = false, HelpText = "Password")]
         public string Password { get; set; }
 
-        [Option('g', "google", DefaultValue = false, Required = false,HelpText = "is google account")]
-        public bool IsGoogle{ get; set; }
+        [Option('g', "google", DefaultValue = false, Required = false, HelpText = "is google account")]
+        public bool IsGoogle { get; set; }
 
-        [Option('s', "start", DefaultValue = 1,HelpText = "Start account", Required = false)]
+        [Option('s', "start", DefaultValue = 1, HelpText = "Start account", Required = false)]
         public int Start { get; set; }
 
-
-        [Option('e', "end", DefaultValue = 10, HelpText = "End account",Required = false)]
+        [Option('e', "end", DefaultValue = 10, HelpText = "End account", Required = false)]
         public int End { get; set; }
 
         [ParserState]
@@ -68,8 +66,8 @@ namespace PoGo.NecroBot.CLI
             return null;
         }
     }
-    
-   public class Program
+
+    public class Program
     {
         private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
         private static string _subPath = "";
@@ -89,6 +87,7 @@ namespace PoGo.NecroBot.CLI
         private static void Main(string[] args)
         {
             Application.EnableVisualStyles();
+
             RunBotWithParameters(null, args);
         }
 
@@ -381,7 +380,7 @@ namespace PoGo.NecroBot.CLI
 
             MultiAccountManager accountManager = new MultiAccountManager(settings, logicSettings.Bots);
             ioc.Register(accountManager);
-            
+
             if (boolNeedsSetup)
             {
                 StarterConfigForm configForm = new StarterConfigForm(_session, settings, elevationService, configFile);
@@ -555,7 +554,7 @@ namespace PoGo.NecroBot.CLI
             throw new NotImplementedException();
         }
 
-        private  static bool CheckMKillSwitch()
+        private static bool CheckMKillSwitch()
         {
             using (HttpClient client = new HttpClient())
             {
@@ -599,11 +598,11 @@ namespace PoGo.NecroBot.CLI
                     Logger.Write(ex.Message, LogLevel.Error);
                 }
             }
-            
+
             return false;
         }
 
-        private  static bool CheckKillSwitch()
+        private static bool CheckKillSwitch()
         {
             using (HttpClient client = new HttpClient())
             {

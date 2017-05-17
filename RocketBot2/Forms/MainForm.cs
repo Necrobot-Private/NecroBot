@@ -310,8 +310,8 @@ namespace RocketBot2.Forms
                 _playerOverlay.Markers.Remove(_playerMarker);
                 if (!_currentLatLng.IsEmpty)
                     _playerMarker = _currentLatLng.Lng < latlng.Lng
-                        ? new GMapMarkerTrainer(latlng, ResourceHelper.GetImage("PlayerLocation2", null, null, 50, 50))
-                        : new GMapMarkerTrainer(latlng, ResourceHelper.GetImage("PlayerLocation", null, null, 50, 50));
+                        ? new GMapMarkerTrainer(latlng, ResourceHelper.GetImage("PlayerLocation2", null, null, 25, 25))
+                        : new GMapMarkerTrainer(latlng, ResourceHelper.GetImage("PlayerLocation", null, null, 25, 25));
                 _playerOverlay.Markers.Add(_playerMarker);
                 if (followTrainerCheckBox.Checked)
                     GMapControl1.Position = latlng;
@@ -327,7 +327,7 @@ namespace RocketBot2.Forms
                 _playerOverlay.Routes.Clear();
                 var route = new GMapRoute(_playerLocations, "step")
                 {
-                    Stroke = new Pen(Color.FromArgb(175, 175, 175), 2) { DashStyle = DashStyle.Dot }
+                    Stroke = new Pen(Color.FromArgb(0, 174, 0), 3) { DashStyle = DashStyle.Solid }
                 };
                 _playerOverlay.Routes.Add(route);
             }, null);
@@ -402,7 +402,7 @@ namespace RocketBot2.Forms
             {
                 foreach (var pokemon in encounterPokemons)
                 {
-                    var pkmImage = ResourceHelper.GetImage(null, null, pokemon, 36, 36);
+                    var pkmImage = ResourceHelper.GetImage(null, null, pokemon, 18, 18);
                     var pointLatLng = new PointLatLng(pokemon.Latitude, pokemon.Longitude);
                     GMapMarker pkmMarker = new GMapMarkerTrainer(pointLatLng, pkmImage);
                     _pokemonsOverlay.Markers.Add(pkmMarker);

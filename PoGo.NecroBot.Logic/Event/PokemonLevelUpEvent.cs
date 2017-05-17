@@ -11,5 +11,7 @@ namespace PoGo.NecroBot.Logic.Event
         public int Cp;
         public PokemonId Id;
         public ulong UniqueId;
+        public int PCandies;
+        public int PSD;
     }
 }
