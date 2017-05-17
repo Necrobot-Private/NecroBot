@@ -28,6 +28,7 @@ using System.Timers;
 using PoGo.NecroBot.Logic.Model;
 using DotNetBrowser;
 using DotNetBrowser.WPF;
+using PokemonGo.RocketAPI.Extensions;
 using PoGo.Necrobot.Window.Win32;
 
 namespace PoGo.Necrobot.Window
