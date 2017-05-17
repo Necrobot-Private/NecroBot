@@ -42,29 +42,29 @@ namespace PoGo.Necrobot.Window
         BrowserView webView;
 
         Timer timer = new Timer();
-        private static Dictionary<LogLevel, Tuple<string, string>> ConsoleColors = new Dictionary<LogLevel, Tuple<string, string>>()
+        private static Dictionary<LogLevel, Tuple<string, string, string>> ConsoleColors = new Dictionary<LogLevel, Tuple<string, string, string>>()
         {
-            // Console Colors <Default, Solarized>
-                { LogLevel.Error, new Tuple<string, string>("Red", "#DC322F") },
-                { LogLevel.Caught, new Tuple<string, string>("Green", "#859900") },
-                { LogLevel.Info, new Tuple<string, string>("DarkCyan", "#CB4B16") },
-                { LogLevel.Warning, new Tuple<string, string>("DarkYellow", "#B58900") },
-                { LogLevel.Pokestop, new Tuple<string, string>("Cyan", "#2AA198") },
-                { LogLevel.Farming, new Tuple<string, string>("Magenta", "#D33682") },
-                { LogLevel.Sniper, new Tuple<string, string>("White", "#657b83") },
-                { LogLevel.Recycling, new Tuple<string, string>("DarkMagenta", "#6C71C4") },
-                { LogLevel.Flee, new Tuple<string, string>("DarkYellow", "#B58900") },
-                { LogLevel.Transfer, new Tuple<string, string>("DarkGreen", "#268BD2") },
-                { LogLevel.Evolve, new Tuple<string, string>("DarkGreen", "#268BD2") },
-                { LogLevel.Berry, new Tuple<string, string>("DarkYellow", "#B58900") },
-                { LogLevel.Egg, new Tuple<string, string>("DarkYellow", "#B58900") },
-                { LogLevel.Debug, new Tuple<string, string>("Gray", "#93A1A1") },
-                { LogLevel.Update, new Tuple<string, string>("White", "#657B83") },
-                { LogLevel.New, new Tuple<string, string>("Green", "#859900") },
-                { LogLevel.SoftBan, new Tuple<string, string>("Red", "#DC322F") },
-                { LogLevel.LevelUp, new Tuple<string, string>("Magenta", "#D33682") },
-                { LogLevel.Gym, new Tuple<string, string>("Magenta", "#D33682") },
-                { LogLevel.Service , new Tuple<string, string>("White", "#657b83") }
+            // Console Colors <Default, Solarized_Dark, Solarized_Light>
+                { LogLevel.Error, new Tuple<string, string, string>("Pink", "#FF1E8E", "") },
+                { LogLevel.Caught, new Tuple<string, string, string>("Green", "#83FF08", "") },
+                { LogLevel.Info, new Tuple<string, string, string>("Green", "#83FF08", "") },
+                { LogLevel.Warning, new Tuple<string, string, string>("Orange", "#FF8308", "") },
+                { LogLevel.Pokestop, new Tuple<string, string, string>("Cyan", "#B4E1FD", "") },
+                { LogLevel.Farming, new Tuple<string, string, string>("Green", "#83FF08", "") },
+                { LogLevel.Sniper, new Tuple<string, string, string>("Grey", "#B6B6B6", "") },
+                { LogLevel.Recycling, new Tuple<string, string, string>("Grey", "#B6B6B6", "") },
+                { LogLevel.Flee, new Tuple<string, string, string>("Purple", "#8308FF", "") },
+                { LogLevel.Transfer, new Tuple<string, string, string>("Grey", "#B6B6B6", "") },
+                { LogLevel.Evolve, new Tuple<string, string, string>("Cyan", "#B4E1FD", "") },
+                { LogLevel.Berry, new Tuple<string, string, string>("Orange", "#FF8308", "") },
+                { LogLevel.Egg, new Tuple<string, string, string>("Cyan", "#B4E1FD", "") },
+                { LogLevel.Debug, new Tuple<string, string, string>("Grey", "#B6B6B6", "") },
+                { LogLevel.Update, new Tuple<string, string, string>("Blue", "#0883FF", "") },
+                { LogLevel.New, new Tuple<string, string, string>("Blue", "#0883FF", "") },
+                { LogLevel.SoftBan, new Tuple<string, string, string>("Pink", "#FF1E8E", "") },
+                { LogLevel.LevelUp, new Tuple<string, string, string>("Blue", "#0883FF", "") },
+                { LogLevel.Gym, new Tuple<string, string, string>("Purple", "#8308FF", "") },
+                { LogLevel.Service , new Tuple<string, string, string>("Grey", "#B6B6B6", "") }
         };
 
         private static SolidColorBrush DarkSolarizedBackground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#002B36"));
@@ -214,6 +214,7 @@ namespace PoGo.Necrobot.Window
                 ConsoleHelper.HideConsoleWindow();
                 Settings.Default.ConsoleText = "Show Console";
             }
+            Settings.Default.Save();
         }
 
         public void ResetSync()
@@ -239,7 +240,9 @@ namespace PoGo.Necrobot.Window
         private DateTime lastClearLog = DateTime.Now;
         public void LogToConsoleTab(string message, LogLevel level, string color)
         {
-            if (Settings.Default.ConsoleTheme != "Default")
+            if (Settings.Default.ConsoleTheme == "Low Contrast (Light)")
+                color = ConsoleColors[level].Item3;
+            if (Settings.Default.ConsoleTheme == "Low Contrast (Dark)")
                 color = ConsoleColors[level].Item2;
             else if (Settings.Default.ConsoleTheme == "Default" || Settings.Default.ResetLayout == true)
                 color = ConsoleColors[level].Item1;
@@ -296,7 +299,6 @@ namespace PoGo.Necrobot.Window
             else if (Settings.Default.ConsoleToggled == false)
                 Settings.Default.ConsoleToggled = true;
             Settings.Default.Save();
-            Settings.Default.Reload();
             ConsoleSync();
         }
 

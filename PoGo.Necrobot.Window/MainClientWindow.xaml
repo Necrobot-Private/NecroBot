@@ -222,7 +222,7 @@
                   </Grid.ColumnDefinitions>
                   <TextBox x:Name="txtCmdInput" Grid.Column="0" ToolTip="{Binding Source=InputCommand, Converter={StaticResource ResourceKey=I18NConveter}}" MouseDown="TxtCmdInput_MouseDown" KeyDown="TxtCmdInput_KeyDown" />
                   <GridSplitter Grid.Column="1" />
-                  <ComboBox x:Name="ConsoleThemer" Grid.Column="2" IsEditable="False" IsReadOnly="True" SelectionChanged="ConsoleThemer_SelectionChanged" BorderBrush="{x:Null}" ToolTip="Set Console Colors" />
+                  <ComboBox x:Name="ConsoleThemer" Grid.Column="2" IsEditable="False" IsReadOnly="True" SelectionChanged="ConsoleThemer_SelectionChanged" BorderBrush="#FFCCCCCC" ToolTip="Set Console Colors" />
                 </Grid>
                 <RichTextBox ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" DockPanel.Dock="Bottom" x:Name="consoleLog" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontSize="15" IsReadOnly="True" FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato Light">
                   <FlowDocument>
