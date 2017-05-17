@@ -1,4 +1,4 @@
-﻿﻿﻿#region using directives
+﻿#region using directives
 
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -10,9 +10,9 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 
 [assembly: AssemblyTitle("NecroBot-Private for Pokémon GO")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("A Pokemon GO Bot")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("NecroBot-Private")]
 [assembly: AssemblyProduct("PoGo.NecroBot.CLI")]
 [assembly: AssemblyCopyright("Copyright NecroBot-Private Team © 2017")]
 [assembly: AssemblyTrademark("")]
@@ -40,7 +40,7 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion1("1.0.0.134")]
 
 
-[assembly: AssemblyVersion("1.0.0.160")]
+[assembly: AssemblyVersion("1.0.0.171")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-[assembly: AssemblyInformationalVersion("v1.0.0.160")]
+[assembly: AssemblyInformationalVersion("v1.0.0.171")]
 

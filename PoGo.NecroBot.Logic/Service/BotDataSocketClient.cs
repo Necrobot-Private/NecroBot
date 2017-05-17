@@ -18,6 +18,10 @@ using Logger = PoGo.NecroBot.Logic.Logging.Logger;
 using System.Runtime.Caching;
 using System.Reflection;
 using TinyIoC;
+using static PoGo.NecroBot.Logic.Service.AnalyticsService;
+using Pogo;
+using PoGo.NecroBot.Logic.Utils;
+using GeoCoordinatePortable;
 
 namespace PoGo.NecroBot.Logic.Service
 {
@@ -73,11 +77,78 @@ namespace PoGo.NecroBot.Logic.Service
         public static void HandleEvent(IEvent evt, ISession session)
         {
         }
+
         public static void HandleEvent(SnipeFailedEvent e, ISession sesion)
         {
             lock (clientData)
             {
                 clientData.SnipeFailedPokemons.Add(e);
+            }
+        }
+
+        public static async Task HandleEvent(AnalyticsEvent e, ISession session)
+        {
+            Pokemon data = e.Data as Pokemon;
+            var distance = LocationUtils.CalculateDistanceInMeters(new GeoCoordinate(session.Client.CurrentLatitude, session.Client.CurrentLongitude), new GeoCoordinate(data.Latitude, data.Longitude));
+            var maxDistance = session.LogicSettings.EnableHumanWalkingSnipe ? (session.LogicSettings.HumanWalkingSnipeMaxDistance > 0 ? session.LogicSettings.HumanWalkingSnipeMaxDistance : 1500) : 10000;
+            if (distance > maxDistance)
+                return;
+            
+            switch (e.EventType)
+            {
+                case 1:
+                    if (ulong.TryParse(data.EncounterId, out ulong encounterId))
+                    {
+                        var encounteredEvent = new EncounteredEvent
+                        {
+                            PokemonId = (PokemonId)data.PokemonId,
+                            Latitude = data.Latitude,
+                            Longitude = data.Longitude,
+                            IV = data.Iv,
+                            Level = data.Level,
+                            Expires = new DateTime(1970, 1, 1, 0, 0, 0).AddMilliseconds(data.ExpiredTime),
+                            ExpireTimestamp = data.ExpiredTime,
+                            SpawnPointId = data.SpawnPointId,
+                            EncounterId = data.EncounterId,
+                            Move1 = data.Move1,
+                            Move2 = data.Move2,
+                            IsRecievedFromSocket = true
+                        };
+
+                        session.EventDispatcher.Send(encounteredEvent);
+                        if (session.LogicSettings.DataSharingConfig.AutoSnipe)
+                        {
+                            var move1 = PokemonMove.MoveUnset;
+                            var move2 = PokemonMove.MoveUnset;
+                            Enum.TryParse(encounteredEvent.Move1, true, out move1);
+                            Enum.TryParse(encounteredEvent.Move2, true, out move2);
+
+                            var added = await MSniperServiceTask.AddSnipeItem(session, new MSniperServiceTask.MSniperInfo2()
+                            {
+                                UniqueIdentifier = data.EncounterId,
+                                Latitude = data.Latitude,
+                                Longitude = data.Longitude,
+                                EncounterId = encounterId,
+                                SpawnPointId = data.SpawnPointId,
+                                PokemonId = (short)data.PokemonId,
+                                Level = data.Level,
+                                Iv = data.Iv,
+                                Move1 = move1,
+                                Move2 = move2,
+                                ExpiredTime = data.ExpiredTime
+                            }).ConfigureAwait(false);
+
+                            if (added)
+                            {
+                                session.EventDispatcher.Send(new AutoSnipePokemonAddedEvent(encounteredEvent));
+                            }
+                        }
+                    }
+                    break;
+
+                case 2:
+                    MSniperServiceTask.RemoveExpiredSnipeData(session, data.EncounterId);
+                    break;
             }
         }
 
@@ -158,7 +229,7 @@ namespace PoGo.NecroBot.Logic.Service
             while (true && !termintated)
             {
                 var socketURL = servers.Dequeue();
-                Logger.Write($"Connecting to {socketURL} ....");
+                // Logger.Write($"Connecting to {socketURL} ....");
                 await ConnectToServer(session, socketURL, encryptKey);
                 servers.Enqueue(socketURL);
             }
@@ -189,11 +260,13 @@ namespace PoGo.NecroBot.Logic.Service
                     {
                         if (retries == 3)
                         {
-                            //failed to make connection to server  times contiuing, temporary stop for 10 mins.
+                            //failed to make connection to server  times continuing, temporary stop for 10 mins.
+                            /*
                             session.EventDispatcher.Send(new WarnEvent()
                             {
                                 Message = $"Couldn't establish the connection to necrobot socket server : {socketURL}"
                             });
+                            */
                             if (session.LogicSettings.DataSharingConfig.EnableFailoverDataServers && servers.Count > 1)
                             {
                                 break;
@@ -222,18 +295,22 @@ namespace PoGo.NecroBot.Logic.Service
                                 var actualMessage = JsonConvert.SerializeObject(message);
                                 ws.Send($"42[\"client-update\",{actualMessage}]");
                             }
-
+                            else
+                            {
+                                var pingMessage = JsonConvert.SerializeObject(new { Ping = DateTime.Now });
+                                ws.Send($"42[\"ping-server\",{pingMessage}");
+                            }
                             await Task.Delay(POLLING_INTERVAL);
-                            ws.Ping();
                         }
                     }
                     catch (IOException)
                     {
+                        /*
                         session.EventDispatcher.Send(new WarnEvent
                         {
                             Message = "Disconnected from necrobot socket. New connection will be established when service becomes available..."
                         });
-
+                        */
                     }
                     catch (Exception)
                     {
@@ -270,9 +347,6 @@ namespace PoGo.NecroBot.Logic.Service
             var match = Regex.Match(message, "42\\[\"server-message\",(.*)]");
             if (match != null && !string.IsNullOrEmpty(match.Groups[1].Value))
             {
-                if (message.Contains("The connection has been denied")) {
-                    termintated = true;
-                }
                 var messag = match.Groups[1].Value;
                 if (message.Contains("The connection has been denied") && lastWarningMessage > DateTime.Now.AddMinutes(-5)) return;
                 lastWarningMessage = DateTime.Now;
@@ -300,10 +374,8 @@ namespace PoGo.NecroBot.Logic.Service
         public static bool CheckIfPokemonBeenCaught(double lat, double lng, PokemonId id, ulong encounterId,
             ISession session)
         {
-            string uniqueCacheKey =
-                $"{session.Settings.Username}{Math.Round(lat, 6)}{id}{Math.Round(lng, 6)}";
-            if (session.Cache.Get(uniqueCacheKey) != null) return true;
-            if (encounterId > 0 && session.Cache[encounterId.ToString()] != null) return true;
+            if (session.Cache.Get(CatchPokemonTask.GetUsernameGeoLocationCacheKey(session.Settings.Username, id, lat, lng)) != null) return true;
+            if (encounterId > 0 && session.Cache[CatchPokemonTask.GetEncounterCacheKey(encounterId)] != null) return true;
 
             return false;
         }
@@ -342,6 +414,11 @@ namespace PoGo.NecroBot.Logic.Service
                 {
                     return;
                 };
+
+                var distance = LocationUtils.CalculateDistanceInMeters(new GeoCoordinate(session.Client.CurrentLatitude, session.Client.CurrentLongitude), new GeoCoordinate(data.Latitude, data.Longitude));
+                var maxDistance = session.LogicSettings.EnableHumanWalkingSnipe ? (session.LogicSettings.HumanWalkingSnipeMaxDistance > 0 ? session.LogicSettings.HumanWalkingSnipeMaxDistance : 1500) : 10000;
+                if (distance > maxDistance)
+                    return;
 
                 ulong.TryParse(data.EncounterId, out ulong encounterid);
                 if (encounterid > 0 && cache.Get(encounterid.ToString()) == null)
@@ -406,7 +483,7 @@ namespace PoGo.NecroBot.Logic.Service
                     session);
                 if (caught)
                 {
-                    Logger.Write("[SNIPE IGNORED] - Your snipe pokemon has already been cautgh by bot",
+                    Logger.Write("[SNIPE IGNORED] - Your snipe pokemon has already been caught by bot",
                         Logic.Logging.LogLevel.Sniper);
                     return;
                 }

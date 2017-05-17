@@ -43,7 +43,7 @@ namespace PoGo.NecroBot.Logic.State
         IElevationService ElevationService { get; set; }
         List<FortData> Forts { get; set; }
         List<FortData> VisibleForts { get; set; }
-        bool ReInitSessionWithNextBot(MultiAccountManager.BotAccount authConfig = null, double lat = 0, double lng = 0, double att = 0);
+        bool ReInitSessionWithNextBot(Account authConfig = null, double lat = 0, double lng = 0, double att = 0);
         void AddForts(List<FortData> mapObjects);
         void AddVisibleForts(List<FortData> mapObjects);
         Task<bool> WaitUntilActionAccept(BotActions action, int timeout = 30000);
@@ -98,6 +98,9 @@ namespace PoGo.NecroBot.Logic.State
             Translation = translation;
             Reset(settings, LogicSettings);
             Stats = new SessionStats(this);
+
+            AnalyticsService = new AnalyticsService();
+            
             accounts.AddRange(logicSettings.Bots);
             if (!accounts.Any(x => x.AuthType == settings.AuthType && x.Username == settings.Username))
             {
@@ -149,6 +152,7 @@ namespace PoGo.NecroBot.Logic.State
         public SessionStats Stats { get; set; }
 
         public IElevationService ElevationService { get; set; }
+        public AnalyticsService AnalyticsService { get; set; }
         public CancellationTokenSource CancellationTokenSource { get; set; }
         public MemoryCache Cache { get; set; }
 
@@ -186,7 +190,7 @@ namespace PoGo.NecroBot.Logic.State
         }
 
         //TODO : Need add BotManager to manage all feature related to multibot, 
-        public bool ReInitSessionWithNextBot(MultiAccountManager.BotAccount bot = null, double lat = 0, double lng = 0, double att = 0)
+        public bool ReInitSessionWithNextBot(Account bot = null, double lat = 0, double lng = 0, double att = 0)
         {
             CatchBlockTime = DateTime.Now; //remove any block
             MSniperServiceTask.BlockSnipe();

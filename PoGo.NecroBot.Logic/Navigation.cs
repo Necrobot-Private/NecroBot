@@ -1,22 +1,29 @@
 ﻿#region using directives
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+using GeoCoordinatePortable;
+using Newtonsoft.Json.Linq;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Interfaces.Configuration;
 using PoGo.NecroBot.Logic.Model;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Strategies.Walk;
 using PokemonGo.RocketAPI;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
+
 
 #endregion
 
 namespace PoGo.NecroBot.Logic
 {
     public delegate void UpdatePositionDelegate(ISession session, double lat, double lng, double speed);
+    public delegate void GetRouteDelegate(List<GeoCoordinate> points);
 
     public class Navigation
     {
@@ -85,8 +92,6 @@ namespace PoGo.NecroBot.Logic
             return currentSpeed;
         }
 
-        private object ensureOneWalkEvent = new object();
-
         public async Task Move(IGeoLocation targetLocation,
             Func<Task> functionExecutedWhileWalking,
             ISession session,
@@ -94,6 +99,7 @@ namespace PoGo.NecroBot.Logic
         {
             cancellationToken.ThrowIfCancellationRequested();
             TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
+            
             // If the stretegies become bigger, create a factory for easy management
 
             //Logging.Logger.Write($"Navigation - Walking speed {customWalkingSpeed}");

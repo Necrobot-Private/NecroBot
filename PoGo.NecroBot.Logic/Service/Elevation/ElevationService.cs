@@ -10,6 +10,7 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
 {
     public class ElevationService : IElevationService
     {
+        private ElevationConfigContext _context = new ElevationConfigContext();
         private GlobalSettings _settings;
         
         private List<IElevationService> ElevationServiceQueue = new List<IElevationService>();
@@ -74,7 +75,7 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
                 return await service.GetElevation(lat, lng).ConfigureAwait(false);
             }
 
-            ElevationLocation elevationLocation = await ElevationLocation.FindOrUpdateInDatabase(lat, lng, service).ConfigureAwait(false);
+            ElevationLocation elevationLocation = await ElevationLocation.FindOrUpdateInDatabase(_context, lat, lng, service).ConfigureAwait(false);
             if (elevationLocation == null)
             {
                 Logger.Write(

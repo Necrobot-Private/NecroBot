@@ -31,6 +31,32 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static Dictionary<ItemId, int> AmountOfBerries;
         private static Random Random => new Random((int)DateTime.Now.Ticks);
 
+        public static string GetEncounterCacheKey(string encounterId)
+        {
+            return encounterId;
+        }
+
+        public static string GetEncounterCacheKey(ulong encounterId)
+        {
+            return GetEncounterCacheKey(encounterId.ToString());
+        }
+
+        public static string GetUsernameEncounterCacheKey(string username, string encounterId)
+        {
+            return username + encounterId;
+        }
+
+        public static string GetUsernameEncounterCacheKey(string username, ulong encounterId)
+        {
+            return GetUsernameEncounterCacheKey(username, encounterId.ToString());
+        }
+
+        public static string GetUsernameGeoLocationCacheKey(string username, PokemonId pokemonId, double latitude, double longitude)
+        {
+            return $"{username}{pokemonId}{Math.Round(latitude, 6)}{Math.Round(longitude, 6)}";
+        }
+
+
         // Structure of calling Tasks
 
         // ## From CatchNearbyPokemonTask
@@ -201,8 +227,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 };
 
                 //add catch to avoid snipe duplicate
-                string uniqueCacheKey =
-                    $"{session.Settings.Username}{Math.Round(encounterEV.Latitude, 6)}{(int)encounterEV.PokemonId}{Math.Round(encounterEV.Longitude, 6)}";
+                string uniqueCacheKey = CatchPokemonTask.GetUsernameGeoLocationCacheKey(session.Settings.Username, encounterEV.PokemonId, encounterEV.Latitude, encounterEV.Longitude);
                 session.Cache.Add(uniqueCacheKey, encounterEV, DateTime.Now.AddMinutes(30));
 
                 session.EventDispatcher.Send(encounterEV);
@@ -214,7 +239,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Message = session.Translation.GetTranslation(TranslationString.PokemonSkipped,
                             encounteredPokemon.PokemonId)
                     });
-                    session.Cache.Add(_encounterId.ToString(), encounteredPokemon, expiredDate);
+                    session.Cache.Add(CatchPokemonTask.GetEncounterCacheKey(_encounterId), encounteredPokemon, expiredDate);
                     Logger.Write(
                         $"Filter catch not met. {encounteredPokemon.PokemonId.ToString()} IV {pokemonIv} lv {lv} {pokemonCp} move1 {PokemonInfo.GetPokemonMove1(encounteredPokemon)} move 2 {PokemonInfo.GetPokemonMove2(encounteredPokemon)}");
                     return true;
@@ -578,7 +603,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 session.Actions.RemoveAll(x => x == BotActions.Catch);
 
                 if (MultipleBotConfig.IsMultiBotActive(session.LogicSettings, manager))
-                    ExecuteSwitcher(session, encounterEV, uniqueCacheKey);
+                    ExecuteSwitcher(session, encounterEV);
 
                 if (session.LogicSettings.TransferDuplicatePokemonOnCapture &&
                     session.LogicSettings.TransferDuplicatePokemon &&
@@ -595,15 +620,11 @@ namespace PoGo.NecroBot.Logic.Tasks
             return true;
         }
 
-        private static void ExecuteSwitcher(ISession session, EncounteredEvent encounterEV, string cacheKey)
+        private static void ExecuteSwitcher(ISession session, EncounteredEvent encounterEV)
         {
             //if distance is very far. that is snip pokemon
             var accountManager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
-
-            var curentkey = session.Settings.Username;
-
-            curentkey += encounterEV.EncounterId;
-            session.Cache.Add(curentkey, encounterEV, DateTime.Now.AddMinutes(15));
+            session.Cache.Add(CatchPokemonTask.GetUsernameEncounterCacheKey(session.Settings.Username, encounterEV.EncounterId), encounterEV, DateTime.Now.AddMinutes(15));
 
             var evalNextBot = accountManager.FindAvailableAccountForPokemonSwitch(encounterEV.EncounterId);
             if (evalNextBot == null)

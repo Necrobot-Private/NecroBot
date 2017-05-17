@@ -72,9 +72,10 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 await DoActionAtPokeStop(session, cancellationToken, pokeStop, fortInfo).ConfigureAwait(false);
 
-                await UseGymBattleTask.Execute(session, cancellationToken, pokeStop, fortInfo).ConfigureAwait(false);
+                bool gymAttackSucceeded = await UseGymBattleTask.Execute(session, cancellationToken, pokeStop, fortInfo).ConfigureAwait(false);
 
-                if (fortInfo.Type == FortType.Gym &&
+                if (gymAttackSucceeded &&
+                    fortInfo.Type == FortType.Gym &&
                     (session.GymState.GetGymDetails(session, pokeStop).GymState.FortData.OwnedByTeam == session.Profile.PlayerData.Team || session.GymState.CapturedGymId.Equals(fortInfo.FortId)) &&
                     session.LogicSettings.GymConfig.Enable &&
                     session.LogicSettings.GymConfig.EnableGymTraining)
@@ -177,14 +178,14 @@ namespace PoGo.NecroBot.Logic.Tasks
             await MSniperServiceTask.Execute(session, cancellationToken).ConfigureAwait(false);
 
             //to avoid api call when walking.
-            if (lastCatch < DateTime.Now.AddSeconds(-2))
-            {
+            //if (lastCatch < DateTime.Now.AddSeconds(-2))
+            //{
                 // Catch normal map Pokemon
                 await CatchNearbyPokemonsTask.Execute(session, cancellationToken).ConfigureAwait(false);
                 //Catch Incense Pokemon
                 await CatchIncensePokemonsTask.Execute(session, cancellationToken).ConfigureAwait(false);
                 lastCatch = DateTime.Now;
-            }
+            //}
 
             if (!session.LogicSettings.UseGpxPathing)
             {

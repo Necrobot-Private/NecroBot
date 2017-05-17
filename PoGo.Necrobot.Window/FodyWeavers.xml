@@ -1,4 +1,11 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Weavers>
-  <Costura ExcludeAssemblies="ChromeDriver|NecroBot2"/>
+  <Costura ExcludeAssemblies="ChromeDriver|NecroBot2" IncludeDebugSymbols="false">
+    <Unmanaged32Assemblies>
+      sqlite3
+    </Unmanaged32Assemblies>
+    <Unmanaged64Assemblies>
+      sqlite3
+    </Unmanaged64Assemblies>
+  </Costura>
 </Weavers>

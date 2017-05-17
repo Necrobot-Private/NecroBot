@@ -18,20 +18,45 @@
 // register the TinyMessenger messenger/event aggregator
 //#define TINYMESSENGER
 
+// Uncomment this line if you want to internalize this library
+//#define TINYIOC_INTERNAL
+
+// Uncomment this line if you want to target PCL.
+//#define PORTABLE
+
 // Preprocessor directives for enabling/disabling functionality
 // depending on platform features. If the platform has an appropriate
 // #DEFINE then these should be set automatically below.
-#define EXPRESSIONS                         // Platform supports System.Linq.Expressions
+#define EXPRESSIONS
+
+// Platform supports System.Linq.Expressions
 #define COMPILED_EXPRESSIONS                // Platform supports compiling expressions
 #define APPDOMAIN_GETASSEMBLIES             // Platform supports getting all assemblies from the AppDomain object
 #define UNBOUND_GENERICS_GETCONSTRUCTORS    // Platform supports GetConstructors on unbound generic types
 #define GETPARAMETERS_OPEN_GENERICS         // Platform supports GetParameters on open generics
 #define RESOLVE_OPEN_GENERICS               // Platform supports resolving open generics
 #define READER_WRITER_LOCK_SLIM             // Platform supports ReaderWriterLockSlim
+#define SERIALIZABLE                        // Platform supports SerializableAttribute/SerializationInfo/StreamingContext
 
-//// NETFX_CORE
-//#if NETFX_CORE
-//#endif
+#if PORTABLE
+#undef APPDOMAIN_GETASSEMBLIES
+#undef COMPILED_EXPRESSIONS
+#undef READER_WRITER_LOCK_SLIM
+#undef SERIALIZABLE
+#endif
+
+#if NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_2
+#undef COMPILED_EXPRESSIONS
+#undef READER_WRITER_LOCK_SLIM
+#endif
+
+#if NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_2
+#undef APPDOMAIN_GETASSEMBLIES
+#endif
+
+#if NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_2 || NETSTANDARD1_3 || NETSTANDARD1_4 || NETSTANDARD1_5 || NETSTANDARD1_6
+#undef SERIALIZABLE
+#endif
 
 // CompactFramework / Windows Phone 7
 // By default does not support System.Linq.Expressions.
@@ -65,10 +90,15 @@
 #endif
 
 #endregion
+#if SERIALIZABLE
+using System.Runtime.Serialization;
+#endif
+
 namespace TinyIoC
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Linq;
     using System.Reflection;
 
@@ -105,10 +135,8 @@ namespace TinyIoC
 
                 try
                 {
-                    TValue current;
-                    if (_Dictionary.TryGetValue(key, out current))
+                    if (_Dictionary.TryGetValue(key, out TValue current))
                     {
-
                         if (current is IDisposable disposable)
                             disposable.Dispose();
                     }
@@ -209,7 +237,7 @@ namespace TinyIoC
     internal
 #else
     public
-#endif 
+#endif
     class SafeDictionary<TKey, TValue> : IDisposable
     {
         private readonly object _Padlock = new object();
@@ -266,7 +294,7 @@ namespace TinyIoC
                 return _Dictionary.Keys;
             }
         }
-        #region IDisposable Members
+    #region IDisposable Members
 
         public void Dispose()
         {
@@ -285,7 +313,7 @@ namespace TinyIoC
             GC.SuppressFinalize(this);
         }
 
-        #endregion
+    #endregion
     }
 #endif
     #endregion
@@ -304,7 +332,11 @@ namespace TinyIoC
 
             try
             {
+#if PORTABLE || NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_2
+                assemblies = assembly.ExportedTypes.ToArray();
+#else
                 assemblies = assembly.GetTypes();
+#endif
             }
             catch (System.IO.FileNotFoundException)
             {
@@ -324,6 +356,32 @@ namespace TinyIoC
         }
     }
 
+#if PORTABLE || NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_2
+    [Flags]
+    public enum BindingFlags {
+        Default = 0,
+        IgnoreCase = 1,
+        DeclaredOnly = 2,
+        Instance = 4,
+        Static = 8,
+        Public = 16,
+        NonPublic = 32,
+        FlattenHierarchy = 64,
+        InvokeMethod = 256,
+        CreateInstance = 512,
+        GetField = 1024,
+        SetField = 2048,
+        GetProperty = 4096,
+        SetProperty = 8192,
+        PutDispProperty = 16384,
+        ExactBinding = 65536,
+        PutRefDispProperty = 32768,
+        SuppressChangeType = 131072,
+        OptionalParamBinding = 262144,
+        IgnoreReturn = 16777216
+    }
+#endif
+
 #if TINYIOC_INTERNAL
     internal
 #else
@@ -338,34 +396,139 @@ namespace TinyIoC
             _genericMethodCache = new SafeDictionary<GenericMethodCacheKey, MethodInfo>();
         }
 
-//#if NETFX_CORE
-//		/// <summary>
-//		/// Gets a generic method from a type given the method name, generic types and parameter types
-//		/// </summary>
-//		/// <param name="sourceType">Source type</param>
-//		/// <param name="methodName">Name of the method</param>
-//		/// <param name="genericTypes">Generic types to use to make the method generic</param>
-//		/// <param name="parameterTypes">Method parameters</param>
-//		/// <returns>MethodInfo or null if no matches found</returns>
-//		/// <exception cref="System.Reflection.AmbiguousMatchException"/>
-//		/// <exception cref="System.ArgumentException"/>
-//		public static MethodInfo GetGenericMethod(this Type sourceType, string methodName, Type[] genericTypes, Type[] parameterTypes)
-//		{
-//			MethodInfo method;
-//			var cacheKey = new GenericMethodCacheKey(sourceType, methodName, genericTypes, parameterTypes);
+#if PORTABLE || NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_2
+        private static BindingFlags DefaultFlags = BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance;
+        
+        public static ConstructorInfo[] GetConstructors(this Type type)
+        {
+            return type.GetConstructors(DefaultFlags);
+        }
 
-//			// Shouldn't need any additional locking
-//			// we don't care if we do the method info generation
-//			// more than once before it gets cached.
-//			if (!_genericMethodCache.TryGetValue(cacheKey, out method))
-//			{
-//				method = GetMethod(sourceType, methodName, genericTypes, parameterTypes);
-//				_genericMethodCache[cacheKey] = method;
-//			}
+        public static ConstructorInfo[] GetConstructors(this Type type, BindingFlags bindingFlags)
+        {
+            return type.GetConstructors(bindingFlags, null);
+        }
 
-//			return method;
-//		}
-//#else
+        private static ConstructorInfo[] GetConstructors(this Type type, BindingFlags bindingFlags, IList<Type> parameterTypes)
+        {
+            return type.GetTypeInfo().DeclaredConstructors.Where(
+                c =>
+                {
+                    if (!TestAccessibility(c, bindingFlags))
+                    {
+                        return false;
+                    }
+
+                    if (parameterTypes != null && !c.GetParameters().Select(p => p.ParameterType).SequenceEqual(parameterTypes))
+                    {
+                        return false;
+                    }
+
+                    return true;
+                }).ToArray();
+        }
+
+        public static MethodInfo GetGetMethod(this PropertyInfo propertyInfo) {
+            return propertyInfo.GetGetMethod(false);
+        }
+
+        public static MethodInfo GetGetMethod(this PropertyInfo propertyInfo, bool nonPublic) {
+            MethodInfo getMethod = propertyInfo.GetMethod;
+            if (getMethod != null && (getMethod.IsPublic || nonPublic)) {
+                return getMethod;
+            }
+
+            return null;
+        }
+        
+        public static MethodInfo GetSetMethod(this PropertyInfo propertyInfo) {
+            return propertyInfo.GetSetMethod(false);
+        }
+        
+        public static MethodInfo GetSetMethod(this PropertyInfo propertyInfo, bool nonPublic) {
+            MethodInfo setMethod = propertyInfo.SetMethod;
+            if (setMethod != null && (setMethod.IsPublic || nonPublic)) {
+                return setMethod;
+            }
+
+            return null;
+        }
+
+        public static Type[] GetGenericArguments(this Type type) 
+        {
+            return type.GetTypeInfo().GenericTypeArguments;
+        }
+        
+        public static IEnumerable<PropertyInfo> GetProperties(this Type type) 
+        {
+            TypeInfo t = type.GetTypeInfo();
+            IList<PropertyInfo> properties = new List<PropertyInfo>();
+            while (t != null)
+            {
+                foreach (PropertyInfo member in t.DeclaredProperties)
+                {
+                    if (!properties.Any(p => p.Name == member.Name))
+                    {
+                        properties.Add(member);
+                    }
+                }
+                t = (t.BaseType != null) ? t.BaseType.GetTypeInfo() : null;
+            }
+
+            return properties;
+        }
+
+        public static IEnumerable<Type> GetInterfaces(this Type type) 
+        {
+            return type.GetTypeInfo().ImplementedInterfaces;
+        }
+        
+        public static MethodInfo GetMethod(this Type type, string name, IList<Type> parameterTypes) 
+        {
+            return type.GetMethod(name, DefaultFlags, null, parameterTypes, null);
+        }
+
+        public static MethodInfo GetMethod(this Type type, string name, BindingFlags bindingFlags, object placeHolder1, IList<Type> parameterTypes, object placeHolder2)
+        {
+            return type.GetTypeInfo().DeclaredMethods.Where(
+                m =>
+                {
+                    if (name != null && m.Name != name)
+                    {
+                        return false;
+                    }
+
+                    if (!TestAccessibility(m, bindingFlags))
+                    {
+                        return false;
+                    }
+
+                    return m.GetParameters().Select(p => p.ParameterType).SequenceEqual(parameterTypes);
+                }).SingleOrDefault();
+        }
+
+        public static IEnumerable<MethodInfo> GetMethods(this Type type, BindingFlags bindingFlags) 
+        {
+            return type.GetTypeInfo().DeclaredMethods;
+        }
+
+        public static bool IsAssignableFrom(this Type type, Type c) 
+        {
+            return type.GetTypeInfo().IsAssignableFrom(c.GetTypeInfo());
+        }
+
+        private static bool TestAccessibility(MethodBase member, BindingFlags bindingFlags)
+        {
+            bool visibility = (member.IsPublic && bindingFlags.HasFlag(BindingFlags.Public)) ||
+                              (!member.IsPublic && bindingFlags.HasFlag(BindingFlags.NonPublic));
+
+            bool instance = (member.IsStatic && bindingFlags.HasFlag(BindingFlags.Static)) ||
+                            (!member.IsStatic && bindingFlags.HasFlag(BindingFlags.Instance));
+
+            return visibility && instance;
+        }
+#endif
+
         /// <summary>
         /// Gets a generic method from a type given the method name, binding flags, generic types and parameter types
         /// </summary>
@@ -375,17 +538,16 @@ namespace TinyIoC
         /// <param name="genericTypes">Generic types to use to make the method generic</param>
         /// <param name="parameterTypes">Method parameters</param>
         /// <returns>MethodInfo or null if no matches found</returns>
-        /// <exception cref="System.Reflection.AmbiguousMatchException"/>
-        /// <exception cref="System.ArgumentException"/>
+        /// <exception cref="AmbiguousMatchException"/>
+        /// <exception cref="ArgumentException"/>
         public static MethodInfo GetGenericMethod(this Type sourceType, BindingFlags bindingFlags, string methodName, Type[] genericTypes, Type[] parameterTypes)
         {
-            MethodInfo method;
             var cacheKey = new GenericMethodCacheKey(sourceType, methodName, genericTypes, parameterTypes);
 
             // Shouldn't need any additional locking
             // we don't care if we do the method info generation
             // more than once before it gets cached.
-            if (!_genericMethodCache.TryGetValue(cacheKey, out method))
+            if (!_genericMethodCache.TryGetValue(cacheKey, out MethodInfo method))
             {
                 method = GetMethod(sourceType, bindingFlags, methodName, genericTypes, parameterTypes);
                 _genericMethodCache[cacheKey] = method;
@@ -393,7 +555,7 @@ namespace TinyIoC
 
             return method;
         }
-//#endif
+        //#endif
 
 #if NETFX_CORE
         private static MethodInfo GetMethod(Type sourceType, BindingFlags flags, string methodName, Type[] genericTypes, Type[] parameterTypes)
@@ -527,9 +689,9 @@ namespace TinyIoC
             }
         }
 
-	}
+    }
 
-	// @mbrit - 2012-05-22 - shim for ForEach call on List<T>...
+    // @mbrit - 2012-05-22 - shim for ForEach call on List<T>...
 #if NETFX_CORE
 	internal static class ListExtender
 	{
@@ -544,6 +706,9 @@ namespace TinyIoC
     #endregion
 
     #region TinyIoC Exception Types
+#if SERIALIZABLE
+    [Serializable]
+#endif
 #if TINYIOC_INTERNAL
     internal
 #else
@@ -562,8 +727,16 @@ namespace TinyIoC
             : base(String.Format(ERROR_TEXT, type.FullName), innerException)
         {
         }
+#if SERIALIZABLE
+        protected TinyIoCResolutionException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+        }
+#endif
     }
-
+#if SERIALIZABLE
+    [Serializable]
+#endif
 #if TINYIOC_INTERNAL
     internal
 #else
@@ -582,8 +755,16 @@ namespace TinyIoC
             : base(String.Format(REGISTER_ERROR_TEXT, type.FullName, factory), innerException)
         {
         }
+#if SERIALIZABLE
+        protected TinyIoCRegistrationTypeException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+        }
+#endif
     }
-
+#if SERIALIZABLE
+    [Serializable]
+#endif
 #if TINYIOC_INTERNAL
     internal
 #else
@@ -613,8 +794,16 @@ namespace TinyIoC
             : base(String.Format(GENERIC_CONSTRAINT_ERROR_TEXT, registerType.FullName, implementationType.FullName), innerException)
         {
         }
+#if SERIALIZABLE
+        protected TinyIoCRegistrationException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+        }
+#endif
     }
-
+#if SERIALIZABLE
+    [Serializable]
+#endif
 #if TINYIOC_INTERNAL
     internal
 #else
@@ -633,8 +822,16 @@ namespace TinyIoC
             : base(String.Format(ERROR_TEXT, type.FullName), innerException)
         {
         }
+#if SERIALIZABLE
+        protected TinyIoCWeakReferenceException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+        }
+#endif
     }
-
+#if SERIALIZABLE
+    [Serializable]
+#endif
 #if TINYIOC_INTERNAL
     internal
 #else
@@ -663,8 +860,16 @@ namespace TinyIoC
             : base(message)
         {
         }
+#if SERIALIZABLE
+        protected TinyIoCConstructorResolutionException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+        }
+#endif
     }
-
+#if SERIALIZABLE
+    [Serializable]
+#endif
 #if TINYIOC_INTERNAL
     internal
 #else
@@ -683,6 +888,12 @@ namespace TinyIoC
             : base(String.Format(ERROR_TEXT, registerType, GetTypesString(types)), innerException)
         {
         }
+#if SERIALIZABLE
+        protected TinyIoCAutoRegistrationException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+        }
+#endif
 
         private static string GetTypesString(IEnumerable<Type> types)
         {
@@ -885,7 +1096,7 @@ namespace TinyIoC
 
                 List<Assembly> assemblies = new List<Assembly>();
 
-				var files = await folder.GetFilesAsync().ConfigureAwait(false);
+				var files = await folder.GetFilesAsync();
 
                 foreach (StorageFile file in files)
                 {
@@ -929,7 +1140,7 @@ namespace TinyIoC
             /// Make registration a singleton (single instance) if possible
             /// </summary>
             /// <returns>RegisterOptions</returns>
-            /// <exception cref="TinyIoCInstantiationTypeException"></exception>
+            /// <exception cref="TinyIoCRegistrationException"></exception>
             public RegisterOptions AsSingleton()
             {
                 var currentFactory = _Container.GetCurrentFactory(_Registration);
@@ -944,7 +1155,7 @@ namespace TinyIoC
             /// Make registration multi-instance if possible
             /// </summary>
             /// <returns>RegisterOptions</returns>
-            /// <exception cref="TinyIoCInstantiationTypeException"></exception>
+            /// <exception cref="TinyIoCRegistrationException"></exception>
             public RegisterOptions AsMultiInstance()
             {
                 var currentFactory = _Container.GetCurrentFactory(_Registration);
@@ -959,7 +1170,7 @@ namespace TinyIoC
             /// Make registration hold a weak reference if possible
             /// </summary>
             /// <returns>RegisterOptions</returns>
-            /// <exception cref="TinyIoCInstantiationTypeException"></exception>
+            /// <exception cref="TinyIoCRegistrationException"></exception>
             public RegisterOptions WithWeakReference()
             {
                 var currentFactory = _Container.GetCurrentFactory(_Registration);
@@ -974,7 +1185,7 @@ namespace TinyIoC
             /// Make registration hold a strong reference if possible
             /// </summary>
             /// <returns>RegisterOptions</returns>
-            /// <exception cref="TinyIoCInstantiationTypeException"></exception>
+            /// <exception cref="TinyIoCRegistrationException"></exception>
             public RegisterOptions WithStrongReference()
             {
                 var currentFactory = _Container.GetCurrentFactory(_Registration);
@@ -1026,7 +1237,7 @@ namespace TinyIoC
                 if (lifetimeProvider == null)
                     throw new ArgumentNullException("lifetimeProvider", "lifetimeProvider is null.");
 
-                if (String.IsNullOrEmpty(errorString))
+                if (string.IsNullOrEmpty(errorString))
                     throw new ArgumentException("errorString is null or empty.", "errorString");
 
                 var currentFactory = instance._Container.GetCurrentFactory(instance._Registration);
@@ -1058,7 +1269,7 @@ namespace TinyIoC
             /// Make registration a singleton (single instance) if possible
             /// </summary>
             /// <returns>RegisterOptions</returns>
-            /// <exception cref="TinyIoCInstantiationTypeException"></exception>
+            /// <exception cref="TinyIoCRegistrationException"></exception>
             public MultiRegisterOptions AsSingleton()
             {
                 _RegisterOptions = ExecuteOnAllRegisterOptions(ro => ro.AsSingleton());
@@ -1069,7 +1280,7 @@ namespace TinyIoC
             /// Make registration multi-instance if possible
             /// </summary>
             /// <returns>MultiRegisterOptions</returns>
-            /// <exception cref="TinyIoCInstantiationTypeException"></exception>
+            /// <exception cref="TinyIoCRegistrationException"></exception>
             public MultiRegisterOptions AsMultiInstance()
             {
                 _RegisterOptions = ExecuteOnAllRegisterOptions(ro => ro.AsMultiInstance());
@@ -1096,7 +1307,7 @@ namespace TinyIoC
                 if (lifetimeProvider == null)
                     throw new ArgumentNullException("lifetimeProvider", "lifetimeProvider is null.");
 
-                if (String.IsNullOrEmpty(errorString))
+                if (string.IsNullOrEmpty(errorString))
                     throw new ArgumentException("errorString is null or empty.", "errorString");
 
                 instance._RegisterOptions = instance.ExecuteOnAllRegisterOptions(ro => RegisterOptions.ToCustomLifetimeManager(ro, lifetimeProvider, errorString));
@@ -1138,7 +1349,7 @@ namespace TinyIoC
 #if APPDOMAIN_GETASSEMBLIES
             AutoRegisterInternal(AppDomain.CurrentDomain.GetAssemblies().Where(a => !IsIgnoredAssembly(a)), DuplicateImplementationActions.RegisterSingle, null);
 #else
-            AutoRegisterInternal(new Assembly[] {this.GetType().Assembly()}, true, null);
+            AutoRegisterInternal(new Assembly[] { this.GetType().Assembly() }, DuplicateImplementationActions.RegisterSingle, null);
 #endif
         }
 
@@ -1155,7 +1366,7 @@ namespace TinyIoC
 #if APPDOMAIN_GETASSEMBLIES
             AutoRegisterInternal(AppDomain.CurrentDomain.GetAssemblies().Where(a => !IsIgnoredAssembly(a)), DuplicateImplementationActions.RegisterSingle, registrationPredicate);
 #else
-            AutoRegisterInternal(new Assembly[] { this.GetType().Assembly()}, true, registrationPredicate);
+            AutoRegisterInternal(new Assembly[] { this.GetType().Assembly() }, DuplicateImplementationActions.RegisterSingle, registrationPredicate);
 #endif
         }
 
@@ -1169,7 +1380,7 @@ namespace TinyIoC
 #if APPDOMAIN_GETASSEMBLIES
             AutoRegisterInternal(AppDomain.CurrentDomain.GetAssemblies().Where(a => !IsIgnoredAssembly(a)), duplicateAction, null);
 #else
-            AutoRegisterInternal(new Assembly[] { this.GetType().Assembly() }, ignoreDuplicateImplementations, null);
+            AutoRegisterInternal(new Assembly[] { this.GetType().Assembly() }, duplicateAction, null);
 #endif
         }
 
@@ -1185,11 +1396,11 @@ namespace TinyIoC
 #if APPDOMAIN_GETASSEMBLIES
             AutoRegisterInternal(AppDomain.CurrentDomain.GetAssemblies().Where(a => !IsIgnoredAssembly(a)), duplicateAction, registrationPredicate);
 #else
-            AutoRegisterInternal(new Assembly[] { this.GetType().Assembly() }, ignoreDuplicateImplementations, registrationPredicate);
+            AutoRegisterInternal(new Assembly[] { this.GetType().Assembly() }, duplicateAction, registrationPredicate);
 #endif
         }
 
-		/// <summary>
+        /// <summary>
         /// Attempt to automatically register all non-generic classes and interfaces in the specified assemblies
         /// 
         /// If more than one class implements an interface then only one implementation will be registered
@@ -1269,7 +1480,7 @@ namespace TinyIoC
         /// <returns>RegisterOptions for fluent API</returns>
         public RegisterOptions Register(Type registerType, Type registerImplementation)
         {
-            return RegisterInternal(registerType, string.Empty, GetDefaultObjectFactory(registerType, registerImplementation));
+            return this.RegisterInternal(registerType, string.Empty, GetDefaultObjectFactory(registerType, registerImplementation));
         }
 
         /// <summary>
@@ -1281,7 +1492,7 @@ namespace TinyIoC
         /// <returns>RegisterOptions for fluent API</returns>
         public RegisterOptions Register(Type registerType, Type registerImplementation, string name)
         {
-            return RegisterInternal(registerType, name, GetDefaultObjectFactory(registerType, registerImplementation));
+            return this.RegisterInternal(registerType, name, GetDefaultObjectFactory(registerType, registerImplementation));
         }
 
         /// <summary>
@@ -1358,24 +1569,24 @@ namespace TinyIoC
         /// <summary>
         /// Creates/replaces a container class registration with default options.
         /// </summary>
-        /// <typeparam name="RegisterImplementation">Type to register</typeparam>
+        /// <typeparam name="RegisterType">Type to register</typeparam>
         /// <returns>RegisterOptions for fluent API</returns>
         public RegisterOptions Register<RegisterType>()
             where RegisterType : class
         {
-            return Register(typeof(RegisterType));
+            return this.Register(typeof(RegisterType));
         }
 
         /// <summary>
         /// Creates/replaces a named container class registration with default options.
         /// </summary>
-        /// <typeparam name="RegisterImplementation">Type to register</typeparam>
+        /// <typeparam name="RegisterType">Type to register</typeparam>
         /// <param name="name">Name of registration</param>
         /// <returns>RegisterOptions for fluent API</returns>
         public RegisterOptions Register<RegisterType>(string name)
             where RegisterType : class
         {
-            return Register(typeof(RegisterType), name);
+            return this.Register(typeof(RegisterType), name);
         }
 
         /// <summary>
@@ -1388,7 +1599,7 @@ namespace TinyIoC
             where RegisterType : class
             where RegisterImplementation : class, RegisterType
         {
-            return Register(typeof(RegisterType), typeof(RegisterImplementation));
+            return this.Register(typeof(RegisterType), typeof(RegisterImplementation));
         }
 
         /// <summary>
@@ -1402,7 +1613,7 @@ namespace TinyIoC
             where RegisterType : class
             where RegisterImplementation : class, RegisterType
         {
-            return Register(typeof(RegisterType), typeof(RegisterImplementation), name);
+            return this.Register(typeof(RegisterType), typeof(RegisterImplementation), name);
         }
 
         /// <summary>
@@ -1414,7 +1625,7 @@ namespace TinyIoC
         public RegisterOptions Register<RegisterType>(RegisterType instance)
            where RegisterType : class
         {
-            return Register(typeof(RegisterType), instance);
+            return this.Register(typeof(RegisterType), instance);
         }
 
         /// <summary>
@@ -1427,7 +1638,7 @@ namespace TinyIoC
         public RegisterOptions Register<RegisterType>(RegisterType instance, string name)
             where RegisterType : class
         {
-            return Register(typeof(RegisterType), instance, name);
+            return this.Register(typeof(RegisterType), instance, name);
         }
 
         /// <summary>
@@ -1441,7 +1652,7 @@ namespace TinyIoC
             where RegisterType : class
             where RegisterImplementation : class, RegisterType
         {
-            return Register(typeof(RegisterType), typeof(RegisterImplementation), instance);
+            return this.Register(typeof(RegisterType), typeof(RegisterImplementation), instance);
         }
 
         /// <summary>
@@ -1456,7 +1667,7 @@ namespace TinyIoC
             where RegisterType : class
             where RegisterImplementation : class, RegisterType
         {
-            return Register(typeof(RegisterType), typeof(RegisterImplementation), instance, name);
+            return this.Register(typeof(RegisterType), typeof(RegisterImplementation), instance, name);
         }
 
         /// <summary>
@@ -1473,7 +1684,7 @@ namespace TinyIoC
                 throw new ArgumentNullException("factory");
             }
 
-            return Register(typeof(RegisterType), (c, o) => factory(c, o));
+            return this.Register(typeof(RegisterType), (c, o) => factory(c, o));
         }
 
         /// <summary>
@@ -1491,7 +1702,7 @@ namespace TinyIoC
                 throw new ArgumentNullException("factory");
             }
 
-            return Register(typeof(RegisterType), (c, o) => factory(c, o), name);
+            return this.Register(typeof(RegisterType), (c, o) => factory(c, o), name);
         }
 
         /// <summary>
@@ -1521,20 +1732,20 @@ namespace TinyIoC
                 throw new ArgumentNullException("types", "types is null.");
 
             foreach (var type in implementationTypes)
-//#if NETFX_CORE
-//				if (!registrationType.GetTypeInfo().IsAssignableFrom(type.GetTypeInfo()))
-//#else
+                //#if NETFX_CORE
+                //				if (!registrationType.GetTypeInfo().IsAssignableFrom(type.GetTypeInfo()))
+                //#else
                 if (!registrationType.IsAssignableFrom(type))
-//#endif
-					throw new ArgumentException(String.Format("types: The type {0} is not assignable from {1}", registrationType.FullName, type.FullName));
+                    //#endif
+                    throw new ArgumentException(String.Format("types: The type {0} is not assignable from {1}", registrationType.FullName, type.FullName));
 
             if (implementationTypes.Count() != implementationTypes.Distinct().Count())
             {
                 var queryForDuplicatedTypes = from i in implementationTypes
                                               group i by i
                                                   into j
-                                                  where j.Count() > 1
-                                                  select j.Key.FullName;
+                                              where j.Count() > 1
+                                              select j.Key.FullName;
 
                 var fullNamesOfDuplicatedTypes = string.Join(",\n", queryForDuplicatedTypes.ToArray());
                 var multipleRegMessage = string.Format("types: The same implementation type cannot be specified multiple times for {0}\n\n{1}", registrationType.FullName, fullNamesOfDuplicatedTypes);
@@ -1550,6 +1761,54 @@ namespace TinyIoC
 
             return new MultiRegisterOptions(registerOptions);
         }
+        #endregion
+
+        #region Unregistration
+
+        /// <summary>
+        /// Remove a container class registration.
+        /// </summary>
+        /// <typeparam name="RegisterType">Type to unregister</typeparam>
+        /// <returns>true if the registration is successfully found and removed; otherwise, false.</returns>
+        public bool Unregister<RegisterType>()
+        {
+            return Unregister(typeof(RegisterType), string.Empty);
+        }
+
+        /// <summary>
+        /// Remove a named container class registration.
+        /// </summary>
+        /// <typeparam name="RegisterType">Type to unregister</typeparam>
+        /// <param name="name">Name of registration</param>
+        /// <returns>true if the registration is successfully found and removed; otherwise, false.</returns>
+        public bool Unregister<RegisterType>(string name)
+        {
+            return Unregister(typeof(RegisterType), name);
+        }
+
+        /// <summary>
+        /// Remove a container class registration.
+        /// </summary>
+        /// <param name="registerType">Type to unregister</param>
+        /// <returns>true if the registration is successfully found and removed; otherwise, false.</returns>
+        public bool Unregister(Type registerType)
+        {
+            return Unregister(registerType, string.Empty);
+        }
+
+        /// <summary>
+        /// Remove a named container class registration.
+        /// </summary>
+        /// <param name="registerType">Type to unregister</param>
+        /// <param name="name">Name of registration</param>
+        /// <returns>true if the registration is successfully found and removed; otherwise, false.</returns>
+        public bool Unregister(Type registerType, string name)
+        {
+            var typeRegistration = new TypeRegistration(registerType, name);
+
+            return RemoveRegistration(typeRegistration);
+        }
+
         #endregion
 
         #region Resolution
@@ -2414,7 +2673,7 @@ namespace TinyIoC
         /// <returns>IEnumerable</returns>
         public IEnumerable<object> ResolveAll(Type resolveType)
         {
-            return ResolveAll(resolveType, false);
+            return ResolveAll(resolveType, true);
         }
 
         /// <summary>
@@ -2426,7 +2685,7 @@ namespace TinyIoC
         public IEnumerable<ResolveType> ResolveAll<ResolveType>(bool includeUnnamed)
             where ResolveType : class
         {
-            return ResolveAll(typeof(ResolveType), includeUnnamed).Cast<ResolveType>();
+            return this.ResolveAll(typeof(ResolveType), includeUnnamed).Cast<ResolveType>();
         }
 
         /// <summary>
@@ -2519,7 +2778,7 @@ namespace TinyIoC
             {
                 get
                 {
-                    throw new TinyIoCRegistrationException(GetType(), "singleton");
+                    throw new TinyIoCRegistrationException(this.GetType(), "singleton");
                 }
             }
 
@@ -2527,7 +2786,7 @@ namespace TinyIoC
             {
                 get
                 {
-                    throw new TinyIoCRegistrationException(GetType(), "multi-instance");
+                    throw new TinyIoCRegistrationException(this.GetType(), "multi-instance");
                 }
             }
 
@@ -2535,7 +2794,7 @@ namespace TinyIoC
             {
                 get
                 {
-                    throw new TinyIoCRegistrationException(GetType(), "strong reference");
+                    throw new TinyIoCRegistrationException(this.GetType(), "strong reference");
                 }
             }
 
@@ -2543,13 +2802,13 @@ namespace TinyIoC
             {
                 get
                 {
-                    throw new TinyIoCRegistrationException(GetType(), "weak reference");
+                    throw new TinyIoCRegistrationException(this.GetType(), "weak reference");
                 }
             }
 
             public virtual ObjectFactoryBase GetCustomObjectLifetimeVariant(ITinyIoCObjectLifetimeProvider lifetimeProvider, string errorString)
             {
-                throw new TinyIoCRegistrationException(GetType(), errorString);
+                throw new TinyIoCRegistrationException(this.GetType(), errorString);
             }
 
             public virtual void SetConstructor(ConstructorInfo constructor)
@@ -2570,17 +2829,17 @@ namespace TinyIoC
         {
             private readonly Type registerType;
             private readonly Type registerImplementation;
-            public override Type CreatesType { get { return registerImplementation; } }
+            public override Type CreatesType { get { return this.registerImplementation; } }
 
             public MultiInstanceFactory(Type registerType, Type registerImplementation)
             {
-//#if NETFX_CORE
-//				if (registerImplementation.GetTypeInfo().IsAbstract() || registerImplementation.GetTypeInfo().IsInterface())
-//					throw new TinyIoCRegistrationTypeException(registerImplementation, "MultiInstanceFactory");
-//#else
+                //#if NETFX_CORE
+                //				if (registerImplementation.GetTypeInfo().IsAbstract() || registerImplementation.GetTypeInfo().IsInterface())
+                //					throw new TinyIoCRegistrationTypeException(registerImplementation, "MultiInstanceFactory");
+                //#else
                 if (registerImplementation.IsAbstract() || registerImplementation.IsInterface())
                     throw new TinyIoCRegistrationTypeException(registerImplementation, "MultiInstanceFactory");
-//#endif
+                //#endif
                 if (!IsValidAssignment(registerType, registerImplementation))
                     throw new TinyIoCRegistrationTypeException(registerImplementation, "MultiInstanceFactory");
 
@@ -2592,11 +2851,11 @@ namespace TinyIoC
             {
                 try
                 {
-                    return container.ConstructType(requestedType, registerImplementation, Constructor, parameters, options);
+                    return container.ConstructType(requestedType, this.registerImplementation, Constructor, parameters, options);
                 }
                 catch (TinyIoCResolutionException ex)
                 {
-                    throw new TinyIoCResolutionException(registerType, ex);
+                    throw new TinyIoCResolutionException(this.registerType, ex);
                 }
             }
 
@@ -2604,13 +2863,13 @@ namespace TinyIoC
             {
                 get
                 {
-                    return new SingletonFactory(registerType, registerImplementation);
+                    return new SingletonFactory(this.registerType, this.registerImplementation);
                 }
             }
 
             public override ObjectFactoryBase GetCustomObjectLifetimeVariant(ITinyIoCObjectLifetimeProvider lifetimeProvider, string errorString)
             {
-                return new CustomObjectLifetimeFactory(registerType, registerImplementation, lifetimeProvider, errorString);
+                return new CustomObjectLifetimeFactory(this.registerType, this.registerImplementation, lifetimeProvider, errorString);
             }
 
             public override ObjectFactoryBase MultiInstanceVariant
@@ -2633,7 +2892,7 @@ namespace TinyIoC
 
             public override bool AssumeConstruction { get { return true; } }
 
-            public override Type CreatesType { get { return registerType; } }
+            public override Type CreatesType { get { return this.registerType; } }
 
             public override object GetObject(Type requestedType, TinyIoCContainer container, NamedParameterOverloads parameters, ResolveOptions options)
             {
@@ -2643,11 +2902,11 @@ namespace TinyIoC
                 }
                 catch (Exception ex)
                 {
-                    throw new TinyIoCResolutionException(registerType, ex);
+                    throw new TinyIoCResolutionException(this.registerType, ex);
                 }
             }
 
-            public DelegateFactory( Type registerType, Func<TinyIoCContainer, NamedParameterOverloads, object> factory)
+            public DelegateFactory(Type registerType, Func<TinyIoCContainer, NamedParameterOverloads, object> factory)
             {
                 _factory = factory ?? throw new ArgumentNullException("factory");
 
@@ -2658,7 +2917,7 @@ namespace TinyIoC
             {
                 get
                 {
-                    return new WeakDelegateFactory(registerType, _factory);
+                    return new WeakDelegateFactory(this.registerType, _factory);
                 }
             }
 
@@ -2688,14 +2947,14 @@ namespace TinyIoC
 
             public override bool AssumeConstruction { get { return true; } }
 
-            public override Type CreatesType { get { return registerType; } }
+            public override Type CreatesType { get { return this.registerType; } }
 
             public override object GetObject(Type requestedType, TinyIoCContainer container, NamedParameterOverloads parameters, ResolveOptions options)
             {
                 var factory = _factory.Target as Func<TinyIoCContainer, NamedParameterOverloads, object>;
 
                 if (factory == null)
-                    throw new TinyIoCWeakReferenceException(registerType);
+                    throw new TinyIoCWeakReferenceException(this.registerType);
 
                 try
                 {
@@ -2703,7 +2962,7 @@ namespace TinyIoC
                 }
                 catch (Exception ex)
                 {
-                    throw new TinyIoCResolutionException(registerType, ex);
+                    throw new TinyIoCResolutionException(this.registerType, ex);
                 }
             }
 
@@ -2724,9 +2983,9 @@ namespace TinyIoC
                     var factory = _factory.Target as Func<TinyIoCContainer, NamedParameterOverloads, object>;
 
                     if (factory == null)
-                        throw new TinyIoCWeakReferenceException(registerType);
+                        throw new TinyIoCWeakReferenceException(this.registerType);
 
-                    return new DelegateFactory(registerType, factory);
+                    return new DelegateFactory(this.registerType, factory);
                 }
             }
 
@@ -2767,7 +3026,7 @@ namespace TinyIoC
 
             public override Type CreatesType
             {
-                get { return registerImplementation; }
+                get { return this.registerImplementation; }
             }
 
             public override object GetObject(Type requestedType, TinyIoCContainer container, NamedParameterOverloads parameters, ResolveOptions options)
@@ -2777,14 +3036,14 @@ namespace TinyIoC
 
             public override ObjectFactoryBase MultiInstanceVariant
             {
-                get { return new MultiInstanceFactory(registerType, registerImplementation); }
+                get { return new MultiInstanceFactory(this.registerType, this.registerImplementation); }
             }
 
             public override ObjectFactoryBase WeakReferenceVariant
             {
                 get
                 {
-                    return new WeakInstanceFactory(registerType, registerImplementation, _instance);
+                    return new WeakInstanceFactory(this.registerType, this.registerImplementation, this._instance);
                 }
             }
 
@@ -2803,7 +3062,6 @@ namespace TinyIoC
 
             public void Dispose()
             {
-
                 if (_instance is IDisposable disposable)
                     disposable.Dispose();
             }
@@ -2832,7 +3090,7 @@ namespace TinyIoC
 
             public override Type CreatesType
             {
-                get { return registerImplementation; }
+                get { return this.registerImplementation; }
             }
 
             public override object GetObject(Type requestedType, TinyIoCContainer container, NamedParameterOverloads parameters, ResolveOptions options)
@@ -2840,7 +3098,7 @@ namespace TinyIoC
                 var instance = _instance.Target;
 
                 if (instance == null)
-                    throw new TinyIoCWeakReferenceException(registerType);
+                    throw new TinyIoCWeakReferenceException(this.registerType);
 
                 return instance;
             }
@@ -2849,7 +3107,7 @@ namespace TinyIoC
             {
                 get
                 {
-                    return new MultiInstanceFactory(registerType, registerImplementation);
+                    return new MultiInstanceFactory(this.registerType, this.registerImplementation);
                 }
             }
 
@@ -2868,9 +3126,9 @@ namespace TinyIoC
                     var instance = _instance.Target;
 
                     if (instance == null)
-                        throw new TinyIoCWeakReferenceException(registerType);
+                        throw new TinyIoCWeakReferenceException(this.registerType);
 
-                    return new InstanceFactory(registerType, registerImplementation, instance);
+                    return new InstanceFactory(this.registerType, this.registerImplementation, instance);
                 }
             }
 
@@ -2881,7 +3139,6 @@ namespace TinyIoC
 
             public void Dispose()
             {
-
                 if (_instance.Target is IDisposable disposable)
                     disposable.Dispose();
             }
@@ -2899,11 +3156,11 @@ namespace TinyIoC
 
             public SingletonFactory(Type registerType, Type registerImplementation)
             {
-//#if NETFX_CORE
-//				if (registerImplementation.GetTypeInfo().IsAbstract() || registerImplementation.GetTypeInfo().IsInterface())
-//#else
+                //#if NETFX_CORE
+                //				if (registerImplementation.GetTypeInfo().IsAbstract() || registerImplementation.GetTypeInfo().IsInterface())
+                //#else
                 if (registerImplementation.IsAbstract() || registerImplementation.IsInterface())
-//#endif
+                    //#endif
                     throw new TinyIoCRegistrationTypeException(registerImplementation, "SingletonFactory");
 
                 if (!IsValidAssignment(registerType, registerImplementation))
@@ -2915,7 +3172,7 @@ namespace TinyIoC
 
             public override Type CreatesType
             {
-                get { return registerImplementation; }
+                get { return this.registerImplementation; }
             }
 
             public override object GetObject(Type requestedType, TinyIoCContainer container, NamedParameterOverloads parameters, ResolveOptions options)
@@ -2925,7 +3182,7 @@ namespace TinyIoC
 
                 lock (SingletonLock)
                     if (_Current == null)
-                        _Current = container.ConstructType(requestedType, registerImplementation, Constructor, options);
+                        _Current = container.ConstructType(requestedType, this.registerImplementation, Constructor, options);
 
                 return _Current;
             }
@@ -2940,14 +3197,14 @@ namespace TinyIoC
 
             public override ObjectFactoryBase GetCustomObjectLifetimeVariant(ITinyIoCObjectLifetimeProvider lifetimeProvider, string errorString)
             {
-                return new CustomObjectLifetimeFactory(registerType, registerImplementation, lifetimeProvider, errorString);
+                return new CustomObjectLifetimeFactory(this.registerType, this.registerImplementation, lifetimeProvider, errorString);
             }
 
             public override ObjectFactoryBase MultiInstanceVariant
             {
                 get
                 {
-                    return new MultiInstanceFactory(registerType, registerImplementation);
+                    return new MultiInstanceFactory(this.registerType, this.registerImplementation);
                 }
             }
 
@@ -2962,9 +3219,8 @@ namespace TinyIoC
 
             public void Dispose()
             {
-                if (_Current == null) 
+                if (_Current == null)
                     return;
-
 
                 if (_Current is IDisposable disposable)
                     disposable.Dispose();
@@ -2986,11 +3242,11 @@ namespace TinyIoC
                 if (!IsValidAssignment(registerType, registerImplementation))
                     throw new TinyIoCRegistrationTypeException(registerImplementation, "SingletonFactory");
 
-//#if NETFX_CORE
-//				if (registerImplementation.GetTypeInfo().IsAbstract() || registerImplementation.GetTypeInfo().IsInterface())
-//#else
+                //#if NETFX_CORE
+                //				if (registerImplementation.GetTypeInfo().IsAbstract() || registerImplementation.GetTypeInfo().IsInterface())
+                //#else
                 if (registerImplementation.IsAbstract() || registerImplementation.IsInterface())
-//#endif
+                    //#endif
                     throw new TinyIoCRegistrationTypeException(registerImplementation, errorMessage);
 
                 this.registerType = registerType;
@@ -3000,7 +3256,7 @@ namespace TinyIoC
 
             public override Type CreatesType
             {
-                get { return registerImplementation; }
+                get { return this.registerImplementation; }
             }
 
             public override object GetObject(Type requestedType, TinyIoCContainer container, NamedParameterOverloads parameters, ResolveOptions options)
@@ -3012,7 +3268,7 @@ namespace TinyIoC
                     current = _LifetimeProvider.GetObject();
                     if (current == null)
                     {
-                        current = container.ConstructType(requestedType, registerImplementation, Constructor, options);
+                        current = container.ConstructType(requestedType, this.registerImplementation, Constructor, options);
                         _LifetimeProvider.SetObject(current);
                     }
                 }
@@ -3025,7 +3281,7 @@ namespace TinyIoC
                 get
                 {
                     _LifetimeProvider.ReleaseObject();
-                    return new SingletonFactory(registerType, registerImplementation);
+                    return new SingletonFactory(this.registerType, this.registerImplementation);
                 }
             }
 
@@ -3034,14 +3290,14 @@ namespace TinyIoC
                 get
                 {
                     _LifetimeProvider.ReleaseObject();
-                    return new MultiInstanceFactory(registerType, registerImplementation);
+                    return new MultiInstanceFactory(this.registerType, this.registerImplementation);
                 }
             }
 
             public override ObjectFactoryBase GetCustomObjectLifetimeVariant(ITinyIoCObjectLifetimeProvider lifetimeProvider, string errorString)
             {
                 _LifetimeProvider.ReleaseObject();
-                return new CustomObjectLifetimeFactory(registerType, registerImplementation, lifetimeProvider, errorString);
+                return new CustomObjectLifetimeFactory(this.registerType, this.registerImplementation, lifetimeProvider, errorString);
             }
 
             public override ObjectFactoryBase GetFactoryForChildContainer(Type type, TinyIoCContainer parent, TinyIoCContainer child)
@@ -3122,7 +3378,7 @@ namespace TinyIoC
             }
         }
         private readonly SafeDictionary<TypeRegistration, ObjectFactoryBase> _RegisteredTypes;
-#if USE_OBJECT_CONSTRUCTOR 
+#if USE_OBJECT_CONSTRUCTOR
         private delegate object ObjectConstructor(params object[] parameters);
         private static readonly SafeDictionary<ConstructorInfo, ObjectConstructor> _ObjectConstructorCache = new SafeDictionary<ConstructorInfo, ObjectConstructor>();
 #endif
@@ -3153,7 +3409,7 @@ namespace TinyIoC
                 var types = assemblies.SelectMany(a => a.SafeGetTypes()).Where(t => !IsIgnoredType(t, registrationPredicate)).ToList();
 
                 var concreteTypes = types
-                    .Where(type => type.IsClass() && (type.IsAbstract() == false) && (type != GetType() && (type.DeclaringType != GetType()) && (!type.IsGenericTypeDefinition())))
+                    .Where(type => type.IsClass() && (type.IsAbstract() == false) && (type != this.GetType() && (type.DeclaringType != this.GetType()) && (!type.IsGenericTypeDefinition())))
                     .ToList();
 
                 foreach (var type in concreteTypes)
@@ -3162,14 +3418,18 @@ namespace TinyIoC
                     {
                         RegisterInternal(type, string.Empty, GetDefaultObjectFactory(type, type));
                     }
+#if PORTABLE || NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_2 || NETSTANDARD1_3 || NETSTANDARD1_4 || NETSTANDARD1_5 || NETSTANDARD1_6
+                    catch (MemberAccessException)
+#else
                     catch (MethodAccessException)
+#endif
                     {
                         // Ignore methods we can't access - added for Silverlight
                     }
                 }
 
                 var abstractInterfaceTypes = from type in types
-                                             where ((type.IsInterface() || type.IsAbstract()) && (type.DeclaringType != GetType()) && (!type.IsGenericTypeDefinition()))
+                                             where ((type.IsInterface() || type.IsAbstract()) && (type.DeclaringType != this.GetType()) && (!type.IsGenericTypeDefinition()))
                                              select type;
 
                 foreach (var type in abstractInterfaceTypes)
@@ -3188,7 +3448,7 @@ namespace TinyIoC
                         {
                             RegisterMultiple(type, implementations);
                         }
-                    }   
+                    }
 
                     var firstImplementation = implementations.FirstOrDefault();
                     if (firstImplementation != null)
@@ -3197,7 +3457,11 @@ namespace TinyIoC
                         {
                             RegisterInternal(type, string.Empty, GetDefaultObjectFactory(type, firstImplementation));
                         }
+#if PORTABLE || NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_2 || NETSTANDARD1_3 || NETSTANDARD1_4 || NETSTANDARD1_5 || NETSTANDARD1_6
+                        catch (MemberAccessException)
+#else
                         catch (MethodAccessException)
+#endif
                         {
                             // Ignore methods we can't access - added for Silverlight
                         }
@@ -3218,6 +3482,7 @@ namespace TinyIoC
                 asm => asm.FullName.StartsWith("mscorlib,", StringComparison.Ordinal),
                 asm => asm.FullName.StartsWith("CR_VSTest", StringComparison.Ordinal),
                 asm => asm.FullName.StartsWith("DevExpress.CodeRush", StringComparison.Ordinal),
+                asm => asm.FullName.StartsWith("xunit.", StringComparison.Ordinal),
             };
 
             foreach (var check in ignoreChecks)
@@ -3245,7 +3510,7 @@ namespace TinyIoC
 
             if (registrationPredicate != null)
             {
-                ignoreChecks.Add(t => !registrationPredicate(t));    
+                ignoreChecks.Add(t => !registrationPredicate(t));
             }
 
             foreach (var check in ignoreChecks)
@@ -3270,8 +3535,8 @@ namespace TinyIoC
 
         private ObjectFactoryBase GetCurrentFactory(TypeRegistration registration)
         {
-            ObjectFactoryBase current = null;
-            _RegisteredTypes.TryGetValue(registration, out current);
+
+            _RegisteredTypes.TryGetValue(registration, out ObjectFactoryBase current);
 
             return current;
         }
@@ -3290,18 +3555,18 @@ namespace TinyIoC
             return new RegisterOptions(this, typeRegistration);
         }
 
-        private void RemoveRegistration(TypeRegistration typeRegistration)
+        private bool RemoveRegistration(TypeRegistration typeRegistration)
         {
-            _RegisteredTypes.Remove(typeRegistration);
+            return _RegisteredTypes.Remove(typeRegistration);
         }
 
         private ObjectFactoryBase GetDefaultObjectFactory(Type registerType, Type registerImplementation)
         {
-//#if NETFX_CORE
-//			if (registerType.GetTypeInfo().IsInterface() || registerType.GetTypeInfo().IsAbstract())
-//#else
+            //#if NETFX_CORE
+            //			if (registerType.GetTypeInfo().IsInterface() || registerType.GetTypeInfo().IsAbstract())
+            //#else
             if (registerType.IsInterface() || registerType.IsAbstract())
-//#endif
+                //#endif
                 return new SingletonFactory(registerType, registerImplementation);
 
             return new MultiInstanceFactory(registerType, registerImplementation);
@@ -3315,8 +3580,7 @@ namespace TinyIoC
             Type checkType = registration.Type;
             string name = registration.Name;
 
-            ObjectFactoryBase factory;
-            if (_RegisteredTypes.TryGetValue(new TypeRegistration(checkType, name), out factory))
+            if (_RegisteredTypes.TryGetValue(new TypeRegistration(checkType, name), out ObjectFactoryBase factory))
             {
                 if (factory.AssumeConstruction)
                     return true;
@@ -3328,7 +3592,7 @@ namespace TinyIoC
             }
 
 #if RESOLVE_OPEN_GENERICS
-            if (checkType.IsInterface && checkType.IsGenericType)
+            if (checkType.IsInterface() && checkType.IsGenericType())
             {
                 // if the type is registered as an open generic, then see if the open generic is registered
                 if (_RegisteredTypes.TryGetValue(new TypeRegistration(checkType.GetGenericTypeDefinition(), name), out factory))
@@ -3346,11 +3610,11 @@ namespace TinyIoC
 
             // Fail if requesting named resolution and settings set to fail if unresolved
             // Or bubble up if we have a parent
-            if (!String.IsNullOrEmpty(name) && options.NamedResolutionFailureAction == NamedResolutionFailureActions.Fail)
+            if (!string.IsNullOrEmpty(name) && options.NamedResolutionFailureAction == NamedResolutionFailureActions.Fail)
                 return (_Parent != null) ? _Parent.CanResolveInternal(registration, parameters, options) : false;
 
             // Attemped unnamed fallback container resolution if relevant and requested
-            if (!String.IsNullOrEmpty(name) && options.NamedResolutionFailureAction == NamedResolutionFailureActions.AttemptUnnamedResolution)
+            if (!string.IsNullOrEmpty(name) && options.NamedResolutionFailureAction == NamedResolutionFailureActions.AttemptUnnamedResolution)
             {
                 if (_RegisteredTypes.TryGetValue(new TypeRegistration(checkType), out factory))
                 {
@@ -3406,19 +3670,19 @@ namespace TinyIoC
                 return true;
 
             // 2 parameter func with string as first parameter (name)
-//#if NETFX_CORE
-//			if ((genericType == typeof(Func<,>) && type.GetTypeInfo().GenericTypeArguments[0] == typeof(string)))
-//#else
+            //#if NETFX_CORE
+            //			if ((genericType == typeof(Func<,>) && type.GetTypeInfo().GenericTypeArguments[0] == typeof(string)))
+            //#else
             if ((genericType == typeof(Func<,>) && type.GetGenericArguments()[0] == typeof(string)))
-//#endif
+                //#endif
                 return true;
 
             // 3 parameter func with string as first parameter (name) and IDictionary<string, object> as second (parameters)
-//#if NETFX_CORE
-//			if ((genericType == typeof(Func<,,>) && type.GetTypeInfo().GenericTypeArguments[0] == typeof(string) && type.GetTypeInfo().GenericTypeArguments[1] == typeof(IDictionary<String, object>)))
-//#else
+            //#if NETFX_CORE
+            //			if ((genericType == typeof(Func<,,>) && type.GetTypeInfo().GenericTypeArguments[0] == typeof(string) && type.GetTypeInfo().GenericTypeArguments[1] == typeof(IDictionary<String, object>)))
+            //#else
             if ((genericType == typeof(Func<,,>) && type.GetGenericArguments()[0] == typeof(string) && type.GetGenericArguments()[1] == typeof(IDictionary<String, object>)))
-//#endif
+                //#endif
                 return true;
 
             return false;
@@ -3430,6 +3694,19 @@ namespace TinyIoC
                 return null;
 
             ObjectFactoryBase factory;
+
+            if (registration.Type.IsGenericType())
+            {
+                var openTypeRegistration = new TypeRegistration(registration.Type.GetGenericTypeDefinition(), registration.Name);
+
+                if (_Parent._RegisteredTypes.TryGetValue(openTypeRegistration, out factory))
+                {
+                    return factory.GetFactoryForChildContainer(openTypeRegistration.Type, _Parent, this);
+                }
+
+                return _Parent.GetParentObjectFactory(registration);
+            }
+
             if (_Parent._RegisteredTypes.TryGetValue(registration, out factory))
             {
                 return factory.GetFactoryForChildContainer(registration.Type, _Parent, this);
@@ -3440,10 +3717,8 @@ namespace TinyIoC
 
         private object ResolveInternal(TypeRegistration registration, NamedParameterOverloads parameters, ResolveOptions options)
         {
-            ObjectFactoryBase factory;
-
             // Attempt container resolution
-            if (_RegisteredTypes.TryGetValue(registration, out factory))
+            if (_RegisteredTypes.TryGetValue(registration, out ObjectFactoryBase factory))
             {
                 try
                 {
@@ -3503,11 +3778,11 @@ namespace TinyIoC
             }
 
             // Fail if requesting named resolution and settings set to fail if unresolved
-            if (!String.IsNullOrEmpty(registration.Name) && options.NamedResolutionFailureAction == NamedResolutionFailureActions.Fail)
+            if (!string.IsNullOrEmpty(registration.Name) && options.NamedResolutionFailureAction == NamedResolutionFailureActions.Fail)
                 throw new TinyIoCResolutionException(registration.Type);
 
             // Attemped unnamed fallback container resolution if relevant and requested
-            if (!String.IsNullOrEmpty(registration.Name) && options.NamedResolutionFailureAction == NamedResolutionFailureActions.AttemptUnnamedResolution)
+            if (!string.IsNullOrEmpty(registration.Name) && options.NamedResolutionFailureAction == NamedResolutionFailureActions.AttemptUnnamedResolution)
             {
                 if (_RegisteredTypes.TryGetValue(new TypeRegistration(registration.Type, string.Empty), out factory))
                 {
@@ -3552,22 +3827,22 @@ namespace TinyIoC
                 return null;
 
             Type genericType = type.GetGenericTypeDefinition();
-//#if NETFX_CORE
-//			Type[] genericArguments = type.GetTypeInfo().GenericTypeArguments.ToArray();
-//#else
+            //#if NETFX_CORE
+            //			Type[] genericArguments = type.GetTypeInfo().GenericTypeArguments.ToArray();
+            //#else
             Type[] genericArguments = type.GetGenericArguments();
-//#endif
+            //#endif
 
             // Just a func
             if (genericType == typeof(Func<>))
             {
                 Type returnType = genericArguments[0];
 
-//#if NETFX_CORE
-//				MethodInfo resolveMethod = typeof(TinyIoCContainer).GetTypeInfo().GetDeclaredMethods("Resolve").First(mi => !mi.GetParameters().Any());
-//#else
+                //#if NETFX_CORE
+                //				MethodInfo resolveMethod = typeof(TinyIoCContainer).GetTypeInfo().GetDeclaredMethods("Resolve").First(mi => !mi.GetParameters().Any());
+                //#else
                 MethodInfo resolveMethod = typeof(TinyIoCContainer).GetMethod("Resolve", new Type[] { });
-//#endif
+                //#endif
                 resolveMethod = resolveMethod.MakeGenericMethod(returnType);
 
                 var resolveCall = Expression.Call(Expression.Constant(this), resolveMethod);
@@ -3582,11 +3857,11 @@ namespace TinyIoC
             {
                 Type returnType = genericArguments[1];
 
-//#if NETFX_CORE
-//				MethodInfo resolveMethod = typeof(TinyIoCContainer).GetTypeInfo().GetDeclaredMethods("Resolve").First(mi => mi.GetParameters().Length == 1 && mi.GetParameters()[0].GetType() == typeof(String));
-//#else
+                //#if NETFX_CORE
+                //				MethodInfo resolveMethod = typeof(TinyIoCContainer).GetTypeInfo().GetDeclaredMethods("Resolve").First(mi => mi.GetParameters().Length == 1 && mi.GetParameters()[0].GetType() == typeof(String));
+                //#else
                 MethodInfo resolveMethod = typeof(TinyIoCContainer).GetMethod("Resolve", new Type[] { typeof(String) });
-//#endif
+                //#endif
                 resolveMethod = resolveMethod.MakeGenericMethod(returnType);
 
                 ParameterExpression[] resolveParameters = new ParameterExpression[] { Expression.Parameter(typeof(String), "name") };
@@ -3598,22 +3873,22 @@ namespace TinyIoC
             }
 
             // 3 parameter func with string as first parameter (name) and IDictionary<string, object> as second (parameters)
-//#if NETFX_CORE
-//			if ((genericType == typeof(Func<,,>) && type.GenericTypeArguments[0] == typeof(string) && type.GenericTypeArguments[1] == typeof(IDictionary<string, object>)))
-//#else
+            //#if NETFX_CORE
+            //			if ((genericType == typeof(Func<,,>) && type.GenericTypeArguments[0] == typeof(string) && type.GenericTypeArguments[1] == typeof(IDictionary<string, object>)))
+            //#else
             if ((genericType == typeof(Func<,,>) && type.GetGenericArguments()[0] == typeof(string) && type.GetGenericArguments()[1] == typeof(IDictionary<string, object>)))
-//#endif
+            //#endif
             {
                 Type returnType = genericArguments[2];
 
                 var name = Expression.Parameter(typeof(string), "name");
                 var parameters = Expression.Parameter(typeof(IDictionary<string, object>), "parameters");
 
-//#if NETFX_CORE
-//				MethodInfo resolveMethod = typeof(TinyIoCContainer).GetTypeInfo().GetDeclaredMethods("Resolve").First(mi => mi.GetParameters().Length == 2 && mi.GetParameters()[0].GetType() == typeof(String) && mi.GetParameters()[1].GetType() == typeof(NamedParameterOverloads));
-//#else
+                //#if NETFX_CORE
+                //				MethodInfo resolveMethod = typeof(TinyIoCContainer).GetTypeInfo().GetDeclaredMethods("Resolve").First(mi => mi.GetParameters().Length == 2 && mi.GetParameters()[0].GetType() == typeof(String) && mi.GetParameters()[1].GetType() == typeof(NamedParameterOverloads));
+                //#else
                 MethodInfo resolveMethod = typeof(TinyIoCContainer).GetMethod("Resolve", new Type[] { typeof(String), typeof(NamedParameterOverloads) });
-//#endif
+                //#endif
                 resolveMethod = resolveMethod.MakeGenericMethod(returnType);
 
                 var resolveCall = Expression.Call(Expression.Constant(this), resolveMethod, name, Expression.Call(typeof(NamedParameterOverloads), "FromIDictionary", null, parameters));
@@ -3628,11 +3903,11 @@ namespace TinyIoC
 #endif
         private object GetIEnumerableRequest(Type type)
         {
-//#if NETFX_CORE
-//			var genericResolveAllMethod = this.GetType().GetGenericMethod("ResolveAll", type.GenericTypeArguments, new[] { typeof(bool) });
-//#else
-            var genericResolveAllMethod = GetType().GetGenericMethod(BindingFlags.Public | BindingFlags.Instance, "ResolveAll", type.GetGenericArguments(), new[] { typeof(bool) });
-//#endif
+            //#if NETFX_CORE
+            //			var genericResolveAllMethod = this.GetType().GetGenericMethod("ResolveAll", type.GenericTypeArguments, new[] { typeof(bool) });
+            //#else
+            var genericResolveAllMethod = this.GetType().GetGenericMethod(BindingFlags.Public | BindingFlags.Instance, "ResolveAll", type.GetGenericArguments(), new[] { typeof(bool) });
+            //#endif
 
             return genericResolveAllMethod.Invoke(this, new object[] { false });
         }
@@ -3644,16 +3919,19 @@ namespace TinyIoC
 
             foreach (var parameter in ctor.GetParameters())
             {
+                if (parameter.IsOptional)
+                    return true;
+
                 if (string.IsNullOrEmpty(parameter.Name))
                     return false;
 
                 var isParameterOverload = parameters.ContainsKey(parameter.Name);
 
-//#if NETFX_CORE                
-//				if (parameter.ParameterType.GetTypeInfo().IsPrimitive && !isParameterOverload)
-//#else
+                //#if NETFX_CORE                
+                //				if (parameter.ParameterType.GetTypeInfo().IsPrimitive && !isParameterOverload)
+                //#else
                 if (parameter.ParameterType.IsPrimitive() && !isParameterOverload)
-//#endif
+                    //#endif
                     return false;
 
                 if (!isParameterOverload && !CanResolveInternal(new TypeRegistration(parameter.ParameterType), NamedParameterOverloads.Default, options))
@@ -3668,20 +3946,20 @@ namespace TinyIoC
             if (parameters == null)
                 throw new ArgumentNullException("parameters");
 
-//#if NETFX_CORE
-//			if (type.GetTypeInfo().IsValueType)
-//#else
+            //#if NETFX_CORE
+            //			if (type.GetTypeInfo().IsValueType)
+            //#else
             if (type.IsValueType())
-//#endif
+                //#endif
                 return null;
 
             // Get constructors in reverse order based on the number of parameters
             // i.e. be as "greedy" as possible so we satify the most amount of dependencies possible
-            var ctors = GetTypeConstructors(type);
+            var ctors = this.GetTypeConstructors(type);
 
             foreach (var ctor in ctors)
             {
-                if (CanConstruct(ctor, parameters, options))
+                if (this.CanConstruct(ctor, parameters, options))
                     return ctor;
             }
 
@@ -3690,11 +3968,11 @@ namespace TinyIoC
 
         private IEnumerable<ConstructorInfo> GetTypeConstructors(Type type)
         {
-//#if NETFX_CORE
-//			return type.GetTypeInfo().DeclaredConstructors.OrderByDescending(ctor => ctor.GetParameters().Count());
-//#else
+            //#if NETFX_CORE
+            //			return type.GetTypeInfo().DeclaredConstructors.OrderByDescending(ctor => ctor.GetParameters().Count());
+            //#else
             return type.GetConstructors().OrderByDescending(ctor => ctor.GetParameters().Count());
-//#endif
+            //#endif
         }
 
         private object ConstructType(Type requestedType, Type implementationType, ResolveOptions options)
@@ -3712,6 +3990,8 @@ namespace TinyIoC
             return ConstructType(requestedType, implementationType, null, parameters, options);
         }
 
+        private static readonly SafeDictionary<Type, object> _DefaultValues = new SafeDictionary<Type, object>();
+
         private object ConstructType(Type requestedType, Type implementationType, ConstructorInfo constructor, NamedParameterOverloads parameters, ResolveOptions options)
         {
             var typeToConstruct = implementationType;
@@ -3721,7 +4001,7 @@ namespace TinyIoC
             {
                 if (requestedType == null || !requestedType.IsGenericType() || !requestedType.GetGenericArguments().Any())
                     throw new TinyIoCResolutionException(typeToConstruct);
-                 
+
                 typeToConstruct = typeToConstruct.MakeGenericType(requestedType.GetGenericArguments());
             }
 #endif
@@ -3746,12 +4026,35 @@ namespace TinyIoC
 
                 try
                 {
-                    args[parameterIndex] = parameters.ContainsKey(currentParam.Name) ? 
-                                            parameters[currentParam.Name] : 
-                                            ResolveInternal(
-                                                new TypeRegistration(currentParam.ParameterType), 
-                                                NamedParameterOverloads.Default, 
-                                                options);
+                    if (parameters.TryGetValue(currentParam.Name, out object parameterValue))
+                        args[parameterIndex] = parameterValue;
+                    else
+                    {
+                        if (currentParam.IsOptional && (currentParam.ParameterType == typeof(string) || currentParam.ParameterType.IsValueType()))
+                        {
+                            try
+                            {
+                                args[parameterIndex] = currentParam.DefaultValue;
+                            }
+                            catch
+                            {
+                                // The currentParam.DefaultValue is not always valid, e.g. with default(DateTime), we get a 'SystemFormatException'- possibly due to culture differences.
+                                // If so, Activator.CreateInstance(Type) *should* always work.
+                                if (!_DefaultValues.TryGetValue(currentParam.ParameterType, out object defaultValue))
+                                {
+                                    // Potentially creating 'defaultValue' twice in multi-threaded writes isn't a problem; all instances arae equivalent and it'll only happen once,
+                                    // so even if Activator.CreateInstance(Type) were unpleasantly slow, it wouldn't really matter.
+                                    defaultValue = Activator.CreateInstance(currentParam.ParameterType);
+                                    _DefaultValues[currentParam.ParameterType] = defaultValue;
+                                }
+                                args[parameterIndex] = defaultValue;
+                            }
+                        }
+                        else
+                        {
+                            args[parameterIndex] = ResolveInternal(new TypeRegistration(currentParam.ParameterType), NamedParameterOverloads.Default, options);
+                        }
+                    }
                 }
                 catch (TinyIoCResolutionException ex)
                 {
@@ -3781,11 +4084,10 @@ namespace TinyIoC
             }
         }
 
-#if USE_OBJECT_CONSTRUCTOR 
+#if USE_OBJECT_CONSTRUCTOR
         private static ObjectConstructor CreateObjectConstructionDelegateWithCache(ConstructorInfo constructor)
         {
-            ObjectConstructor objectConstructor;
-            if (_ObjectConstructorCache.TryGetValue(constructor, out objectConstructor))
+            if (_ObjectConstructorCache.TryGetValue(constructor, out ObjectConstructor objectConstructor))
                 return objectConstructor;
 
             // We could lock the cache here, but there's no real side
@@ -3816,15 +4118,15 @@ namespace TinyIoC
 
         private void BuildUpInternal(object input, ResolveOptions resolveOptions)
         {
-//#if NETFX_CORE
-//			var properties = from property in input.GetType().GetTypeInfo().DeclaredProperties
-//							 where (property.GetMethod != null) && (property.SetMethod != null) && !property.PropertyType.GetTypeInfo().IsValueType
-//							 select property;
-//#else
+            //#if NETFX_CORE
+            //			var properties = from property in input.GetType().GetTypeInfo().DeclaredProperties
+            //							 where (property.GetMethod != null) && (property.SetMethod != null) && !property.PropertyType.GetTypeInfo().IsValueType
+            //							 select property;
+            //#else
             var properties = from property in input.GetType().GetProperties()
                              where (property.GetGetMethod() != null) && (property.GetSetMethod() != null) && !property.PropertyType.IsValueType()
                              select property;
-//#endif
+            //#endif
 
             foreach (var property in properties)
             {
@@ -3854,38 +4156,16 @@ namespace TinyIoC
 
         private IEnumerable<object> ResolveAllInternal(Type resolveType, bool includeUnnamed)
         {
-            var registrations = _RegisteredTypes.Keys.Where(tr => tr.Type == resolveType).Concat(GetParentRegistrationsForType(resolveType));
+            var registrations = _RegisteredTypes.Keys.Where(tr => tr.Type == resolveType).Concat(GetParentRegistrationsForType(resolveType)).Distinct();
 
             if (!includeUnnamed)
                 registrations = registrations.Where(tr => tr.Name != string.Empty);
 
-            return registrations.Select(registration => ResolveInternal(registration, NamedParameterOverloads.Default, ResolveOptions.Default));
+            return registrations.Select(registration => this.ResolveInternal(registration, NamedParameterOverloads.Default, ResolveOptions.Default));
         }
 
         private static bool IsValidAssignment(Type registerType, Type registerImplementation)
         {
-//#if NETFX_CORE
-//			var registerTypeDef = registerType.GetTypeInfo();
-//			var registerImplementationDef = registerImplementation.GetTypeInfo();
-
-//			if (!registerTypeDef.IsGenericTypeDefinition)
-//			{
-//				if (!registerTypeDef.IsAssignableFrom(registerImplementationDef))
-//					return false;
-//			}
-//			else
-//			{
-//				if (registerTypeDef.IsInterface())
-//				{
-//					if (!registerImplementationDef.ImplementedInterfaces.Any(t => t.GetTypeInfo().Name == registerTypeDef.Name))
-//						return false;
-//				}
-//				else if (registerTypeDef.IsAbstract() && registerImplementationDef.BaseType() != registerType)
-//				{
-//					return false;
-//				}
-//			}
-//#else
             if (!registerType.IsGenericTypeDefinition())
             {
                 if (!registerType.IsAssignableFrom(registerImplementation))
@@ -3895,15 +4175,20 @@ namespace TinyIoC
             {
                 if (registerType.IsInterface())
                 {
+#if (PORTABLE || NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_2 || NETSTANDARD1_3 || NETSTANDARD1_4 || NETSTANDARD1_5 || NETSTANDARD1_6)
+                    if (!registerImplementation.GetInterfaces().Any(t => t.Name == registerType.Name))
+                        return false;
+#else
                     if (!registerImplementation.FindInterfaces((t, o) => t.Name == registerType.Name, null).Any())
                         return false;
+#endif
                 }
                 else if (registerType.IsAbstract() && registerImplementation.BaseType() != registerType)
                 {
                     return false;
                 }
             }
-//#endif
+            //#endif
             return true;
         }
 
@@ -3926,17 +4211,62 @@ namespace TinyIoC
         #endregion
     }
 
-}
+#if PORTABLE || NETSTANDARD1_0 || NETSTANDARD1_1 || NETSTANDARD1_2 || NETSTANDARD1_3 || NETSTANDARD1_4 || NETSTANDARD1_5 || NETSTANDARD1_6
+    static class ReverseTypeExtender
+    {
+        public static bool IsClass(this Type type)
+        {
+            return type.GetTypeInfo().IsClass;
+        }
 
-// reverse shim for WinRT SR changes...
-#if !NETFX_CORE
-namespace System.Reflection
-{
-#if TINYIOC_INTERNAL
-    internal
-#else
-    public
+        public static bool IsAbstract(this Type type)
+        {
+            return type.GetTypeInfo().IsAbstract;
+        }
+
+        public static bool IsInterface(this Type type)
+        {
+            return type.GetTypeInfo().IsInterface;
+        }
+
+        public static bool IsPrimitive(this Type type)
+        {
+            return type.GetTypeInfo().IsPrimitive;
+        }
+
+        public static bool IsValueType(this Type type)
+        {
+            return type.GetTypeInfo().IsValueType;
+        }
+
+        public static bool IsGenericType(this Type type)
+        {
+            return type.GetTypeInfo().IsGenericType;
+        }
+
+        public static bool IsGenericParameter(this Type type)
+        {
+            return type.IsGenericParameter;
+        }
+
+        public static bool IsGenericTypeDefinition(this Type type)
+        {
+            return type.GetTypeInfo().IsGenericTypeDefinition;
+        }
+
+        public static Type BaseType(this Type type)
+        {
+            return type.GetTypeInfo().BaseType;
+        }
+
+        public static Assembly Assembly(this Type type)
+        {
+            return type.GetTypeInfo().Assembly;
+        }
+    }
 #endif
+    // reverse shim for WinRT SR changes...
+#if (!NETFX_CORE && !PORTABLE && !NETSTANDARD1_0 && !NETSTANDARD1_1 && !NETSTANDARD1_2 && !NETSTANDARD1_3 && !NETSTANDARD1_4 && !NETSTANDARD1_5 && !NETSTANDARD1_6)
     static class ReverseTypeExtender
     {
         public static bool IsClass(this Type type)
@@ -3989,5 +4319,5 @@ namespace System.Reflection
             return type.Assembly;
         }
     }
-}
 #endif
+}

@@ -15,6 +15,7 @@ using PokemonGo.RocketAPI.Exceptions;
 using POGOProtos.Enums;
 using TinyIoC;
 using PokemonGo.RocketAPI.Util;
+using PoGo.NecroBot.Logic.Model;
 
 #endregion
 
@@ -211,7 +212,7 @@ namespace PoGo.NecroBot.Logic.State
                 {
                     currentAccount.LastLogin = successfullyLoggedIn ? "Success" : "Failure";
                     currentAccount.LastLoginTimestamp = TimeUtil.GetCurrentTimestampInMilliseconds();
-                    accountManager.UpdateDatabase(currentAccount);
+                    accountManager.UpdateLocalAccount(currentAccount);
                 }
             }
             try
@@ -229,21 +230,27 @@ namespace PoGo.NecroBot.Logic.State
                 else
                 {
                     if (successfullyLoggedIn)
-                    {
+                {
                         var currentAccount = accountManager?.GetCurrentAccount();
                         if (currentAccount != null)
                         {
                             if (session.Profile.Banned)
                             {
                                 currentAccount.LastLogin = "Banned";
-                                accountManager.UpdateDatabase(currentAccount);
+                                accountManager.UpdateLocalAccount(currentAccount);
                             }
                             else
                             {
+                                if (session.Profile.Warn)
+                                {
+                                    currentAccount.LastLogin = "Warned";
+                                    accountManager.UpdateLocalAccount(currentAccount);
+                                }
+
                                 if (currentAccount.Nickname != session.Profile.PlayerData.Username)
                                 {
                                     currentAccount.Nickname = session.Profile.PlayerData.Username;
-                                    accountManager.UpdateDatabase(currentAccount);
+                                    accountManager.UpdateLocalAccount(currentAccount);
                                 }
                             }
                         }

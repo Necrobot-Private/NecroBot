@@ -1,10 +1,8 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/g1dtrcdnjjbxugw6?svg=true)](https://ci.appveyor.com/project/jjskuld/necrobot/branch/master)
 [![Github All Releases](https://img.shields.io/github/downloads/Necrobot-Private/NecroBot/total.svg?maxAge=258)](https://github.com/Necrobot-Private/NecroBot/releases)
 [![GitHub license](https://img.shields.io/badge/license-AGPL-blue.svg)](https://raw.githubusercontent.com/Necrobot-Private/NecroBot/master/LICENSE.md)
-<br />
-[![Download Latest Version](https://img.shields.io/badge/Download-1.0.056-yellowgreen.svg) ](https://github.com/Necrobot-Private/NecroBot/releases/tag/v1.0.0.156)
 
-<h1>Necrobot2 is now compatible with 0.61.0 API.</h1>
+<h1>Necrobot2 is now compatible with 0.63.1 API.</h1>
 
 <p>
 Necrobot2 itself is free but now you will need to purchase an API key from Bossland in order to run the bot.

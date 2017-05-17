@@ -255,4 +255,4 @@ paket-files/
 
 node_modules
 PoGo.NecroBot.GUI.Electron/dist
-
+!packages/Google.Api*
