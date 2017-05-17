@@ -249,13 +249,17 @@ namespace PoGo.Necrobot.Window
                 else if (Settings.Default.ConsoleTheme == "Default" || Settings.Default.ResetLayout == true)
                     color = ConsoleColors[level].Item1;
 
+                if (string.IsNullOrEmpty(color))
+                {
+                    NecroBot.Logic.Logging.Logger.Write($"No Color Detected for LogLevel ({level}) on this Scheme...", LogLevel.Error);
+                    return;
+                }
+
                 if (lastClearLog.AddMinutes(15) < DateTime.Now)
                 {
                     consoleLog.Document.Blocks.Clear();
                     lastClearLog = DateTime.Now;
                 }
-                if (string.IsNullOrEmpty(color) && Settings.Default.ConsoleTheme == "Low Contrast (Light)") color = "Black";
-                if (string.IsNullOrEmpty(color) && Settings.Default.ConsoleTheme == "Low Contrast (Dark)") color = "White";
 
                 consoleLog.AppendText(message + "\r", color);
                 consoleLog.ScrollToEnd();
@@ -469,9 +473,11 @@ namespace PoGo.Necrobot.Window
                 ConsoleThemer.Background = DarkSolarizedBackground;
                 ConsoleThemer.Foreground = SolarizedConsoleWhite;
             }
-            // Reset the Console Blocks to prevent any Mixups
+            // Reset the Console Blocks to prevent any mixups
             consoleLog.Document.Blocks.Clear();
             lastClearLog = DateTime.Now;
+            // Add Log to Say Scheme has Changed
+            NecroBot.Logic.Logging.Logger.Write($"Console Layout is now '{Settings.Default.ConsoleTheme}");
             Settings.Default.Save();
             ResetSync();
         }

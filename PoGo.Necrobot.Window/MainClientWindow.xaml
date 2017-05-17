@@ -224,7 +224,7 @@
                   <GridSplitter Grid.Column="1" />
                   <ComboBox x:Name="ConsoleThemer" Grid.Column="2" IsEditable="False" IsReadOnly="True" SelectionChanged="ConsoleThemer_SelectionChanged" BorderBrush="#FFCCCCCC" ToolTip="Set Console Colors" />
                 </Grid>
-                    <RichTextBox ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" DockPanel.Dock="Bottom" x:Name="consoleLog" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontSize="15" IsReadOnly="True" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Light">
+                <RichTextBox ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" DockPanel.Dock="Bottom" x:Name="consoleLog" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontSize="15" IsReadOnly="True" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Light">
                   <FlowDocument>
                     <Paragraph LineHeight="25">
                       <Run Text="" />
