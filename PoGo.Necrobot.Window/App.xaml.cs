@@ -89,6 +89,11 @@ namespace PoGo.Necrobot.Window
             {
                 NecroBot.CLI.Program.RunBotWithParameters(OnBotStartedEventHandler, new string[] { });
             });
+
+            if (Settings.Default.ConsoleToggled == true)
+                ConsoleHelper.ShowConsoleWindow();
+            if (Settings.Default.ConsoleToggled == false)
+                ConsoleHelper.HideConsoleWindow();
             
             MainWindow.Show();
         }
