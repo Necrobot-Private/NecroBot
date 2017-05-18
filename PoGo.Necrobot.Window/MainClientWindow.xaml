@@ -6,10 +6,11 @@
                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                       xmlns:local="clr-namespace:PoGo.Necrobot.Window.Controls"
                       xmlns:c="clr-namespace:PoGo.Necrobot.Window.Converters"
-                      Title="Necrobot 2 - Window GUI"
+                      Title="Necrobot 2 - Windows GUI"
                       Height="768"
                       Width="1366"
                       MinWidth="1024"
+                      MinHeight="576"
                       BorderThickness="0"
                       GlowBrush="DodgerBlue"
                       ResizeMode="CanResizeWithGrip"
@@ -19,12 +20,12 @@
     <Controls:MetroWindow.TitleTemplate>
         <DataTemplate>
             <TextBlock x:Name="TitleText"
-                       Text="Necrobot 2 - Window GUI"
+                       Text="Necrobot 2 - Windows GUI"
                        TextTrimming="CharacterEllipsis"
                        VerticalAlignment="Center"
                        Margin="4, 0, 0, 0"
-                       FontWeight="Normal"
-                       FontFamily="pack://application:,,,/Resources/#Lato-light"/>
+                       FontWeight="Medium"
+                       FontFamily="pack://application:,,,/Resources/Fonts/#Lato"/>
         </DataTemplate>
     </Controls:MetroWindow.TitleTemplate>
     <Control.Resources>
@@ -33,7 +34,7 @@
         <c:TimestampToDateTimeConverter x:Key="TimestampToDateTimeConverter"/>
         <c:DurationTextConverter x:Key="DurationTextConverter"/>
         <Style x:Key="LatoFont">
-            <Setter Property="TextElement.FontFamily" Value="pack://application:,,,/Resources/#Lato-light" />
+            <Setter Property="TextElement.FontFamily" Value="pack://application:,,,/Resources/Fonts/#Lato" />
         </Style>
     </Control.Resources>
     <Controls:MetroWindow.RightWindowCommands>
@@ -45,14 +46,14 @@
                             <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_book_perspective_help}" />
                         </Rectangle.OpacityMask>
                     </Rectangle>
-                    <TextBlock Margin="4 0 0 0" VerticalAlignment="Center" Text="{Binding Source=Help, Converter={StaticResource ResourceKey=I18NConveter}}" />
+                    <TextBlock Margin="4 0 0 0" VerticalAlignment="Center" Text="{Binding Source=Help, Converter={StaticResource ResourceKey=I18NConveter}}" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium" />
                     <Popup Margin="10,10,10,10" Name="popHelpArticles" HorizontalAlignment="Left" VerticalAlignment="Top" StaysOpen="False" Width="420" Height="580" IsOpen="False" AllowsTransparency="True">
                         <Grid Background="WhiteSmoke">
                             <ListView Name="lsvHelps" Margin="20">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <TextBlock FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato Medium">
+                                            <TextBlock FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium">
                                                 <Hyperlink NavigateUri="{Binding Id}" Click="Hyperlink_Click" CommandParameter="{Binding}">
                                                     <TextBlock Text="{Binding Path=Title.Text}"></TextBlock>
                                                 </Hyperlink>
@@ -65,17 +66,17 @@
                     </Popup>
                 </StackPanel>
             </Button>
-            <ComboBox x:Name="Theme" IsEditable="True" IsReadOnly="True" SelectionChanged="Theme_SelectionChanged" Background="{x:Null}" BorderBrush="{x:Null}" Width="120" ToolTip="Set Theme" />
-            <ComboBox x:Name="Scheme" IsEditable="True" IsReadOnly="True" SelectionChanged="Scheme_SelectionChanged" Background="{x:Null}" BorderBrush="{x:Null}" Width="120" ToolTip="Set Scheme" />
-            <ComboBox x:Name="MapMode" IsEditable="True" IsReadOnly="True" SelectionChanged="MapMode_SelectionChanged" Background="{x:Null}" BorderBrush="{x:Null}" Width="120" ToolTip="Set Map Mode" />
+            <ComboBox x:Name="Theme" IsEditable="True" IsReadOnly="True" SelectionChanged="Theme_SelectionChanged" Background="{x:Null}" Foreground="#FFF1F1F1" BorderBrush="{x:Null}" Width="120" ToolTip="Set Theme" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium" VerticalContentAlignment="Center" />
+            <ComboBox x:Name="Scheme" IsEditable="True" IsReadOnly="True" SelectionChanged="Scheme_SelectionChanged" Background="{x:Null}" Foreground="#FFF1F1F1" BorderBrush="{x:Null}" Width="120" ToolTip="Set Scheme" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium" VerticalContentAlignment="Center" />
+            <ComboBox x:Name="MapMode" IsEditable="True" IsReadOnly="True" SelectionChanged="MapMode_SelectionChanged" Background="{x:Null}" Foreground="#FFF1F1F1" BorderBrush="{x:Null}" Width="120" ToolTip="Set Map Mode" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium" VerticalContentAlignment="Center" />
             <Button x:Name="DefaultReset" Click="DefaultReset_Click">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Margin="4 0 0 0" x:Name="defaultResetText" VerticalAlignment="Center" Text="{Binding Source=ResetLayout, Converter={StaticResource ResourceKey=I18NConveter}}" />
+                    <TextBlock Margin="4 0 0 0" x:Name="defaultResetText" VerticalAlignment="Center" Text="{Binding Source=ResetLayout, Converter={StaticResource ResourceKey=I18NConveter}}" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium" />
                 </StackPanel>
             </Button>
             <Button x:Name="BrowserToggle" Click="BrowserToggle_Click">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Margin="4 0 0 0" x:Name="browserMenuText" VerticalAlignment="Center" Text="{Binding Source=DisableHub, Converter={StaticResource ResourceKey=I18NConveter}}" />
+                    <TextBlock Margin="4 0 0 0" x:Name="browserMenuText" VerticalAlignment="Center" Text="{Binding Source=DisableHub, Converter={StaticResource ResourceKey=I18NConveter}}" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium" />
                 </StackPanel>
             </Button>
             <Button x:Name="menuConsole" Click="MenuConsole_Click">
@@ -85,7 +86,7 @@
                             <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_console}" />
                         </Rectangle.OpacityMask>
                     </Rectangle>
-                    <TextBlock Margin="4 0 0 0" Name="consoleMenuText" VerticalAlignment="Center" Text="{Binding Source=ShowConsole, Converter={StaticResource ResourceKey=I18NConveter}}" />
+                    <TextBlock Margin="4 0 0 0" Name="consoleMenuText" VerticalAlignment="Center" Text="{Binding Source=ShowConsole, Converter={StaticResource ResourceKey=I18NConveter}}" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium" />
                 </StackPanel>
             </Button>
             <Button Click="MenuSetting_Click" Name="menuSetting">
@@ -95,7 +96,7 @@
                             <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_settings}" />
                         </Rectangle.OpacityMask>
                     </Rectangle>
-                    <TextBlock Margin="4 0 0 0" VerticalAlignment="Center" Text="{Binding Source=MenuSetting, Converter={StaticResource I18NConveter}}" />
+                    <TextBlock Margin="4 0 0 0" VerticalAlignment="Center" Text="{Binding Source=MenuSetting, Converter={StaticResource I18NConveter}}" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium" />
                 </StackPanel>
             </Button>
             <Button Name="btnDonate" Click="BtnDonate_Click" Margin="0,0,0,0">
@@ -117,11 +118,11 @@
             <Border BorderBrush="Red" Background="WhiteSmoke" BorderThickness="2">
                 <StackPanel>
                     <StackPanel Background="Red">
-                        <TextBlock Text="{Binding Source=ErrorPopupTitle, Converter={StaticResource I18NConveter}}" Margin="5,5,5,5" FontSize="18.667" FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato Heavy" Foreground="White"></TextBlock>
+                        <TextBlock Text="{Binding Source=ErrorPopupTitle, Converter={StaticResource I18NConveter}}" Margin="5,5,5,5" FontSize="18" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Heavy" Foreground="White"></TextBlock>
                     </StackPanel>
                     <StackPanel Margin="10">
-                        <TextBlock Name="txtLastError" Text="" TextWrapping="Wrap" FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato" FontSize="16"></TextBlock>
-                        <Button Margin="10,10,10,10" Click="BtnExit_Click" Name="btnExit" Content="{Binding Source=ClickHereExit, Converter={StaticResource I18NConveter}}" FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato Heavy" FontSize="18.667" ></Button>
+                        <TextBlock Name="txtLastError" Text="" TextWrapping="Wrap" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontSize="16"></TextBlock>
+                        <Button Margin="10,10,10,10" Click="BtnExit_Click" Name="btnExit" Content="{Binding Source=ClickHereExit, Converter={StaticResource I18NConveter}}" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Heavy" FontSize="18" ></Button>
                     </StackPanel>
                 </StackPanel>
             </Border>
@@ -130,17 +131,17 @@
             <GroupBox.Header>
                 <DockPanel LastChildFill="True">
                     <Button Content="Hide" DockPanel.Dock="Right" Name="btnHideInfo" Click="BtnHideInfo_Click" />
-                    <Label Content="Logging in ..... check console window for details" Name="lblAccount" Foreground="White" FontWeight="Bold" />
+                    <Label Content="Logging in (Check Console Tab/Window for Details)" Name="lblAccount" Foreground="White" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Bold" />
                 </DockPanel>
             </GroupBox.Header>
             <local:PlayerInfo DataContext="{Binding Path=PlayerInfo}" />
         </GroupBox>
         <StatusBar DockPanel.Dock="Bottom">
             <StatusBarItem>
-                <TextBlock Name="lblStatus" />
+                <TextBlock Name="lblStatus" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium" />
             </StatusBarItem>
             <StatusBarItem>
-                <TextBlock Name="lblCount" />
+                <TextBlock Name="lblCount" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium" />
             </StatusBarItem>
         </StatusBar>
         <TabControl TabStripPlacement="Bottom" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalAlignment="Stretch" Name="tabMain" SelectionChanged="TabMain_SelectionChanged" Margin="0,0,0,0">
@@ -149,22 +150,22 @@
                     <Setter Property="HorizontalAlignment" Value="Center" />
                 </Style>
             </TabControl.Resources>
-            <TabItem Name="tabAccounts" Width="80" Height="70" Cursor="Hand">
+            <TabItem Name="tabAccounts" Width="80" Height="70" Cursor="Hand" Background="{x:Null}">
                 <TabItem.Header>
                     <Image x:Name="accountsIMG" Source="Resources/Accounts/AccountsImage.png" Width="70" Height="65" />
                 </TabItem.Header>
-                <DataGrid Name="gridAccounts" AutoGenerateColumns="False" CanUserDeleteRows="False" CanUserAddRows="False">
+                <DataGrid Name="gridAccounts" AutoGenerateColumns="False" CanUserDeleteRows="False" CanUserAddRows="False" FontFamily="pack://application:,,,/Resources/Fonts/#Lato">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Binding="{Binding AuthType}" Header="AuthType"></DataGridTextColumn>
-                        <DataGridTextColumn Binding="{Binding Username}" Header="Username"></DataGridTextColumn>
-                        <DataGridTextColumn Binding="{Binding Password}" Header="Password"></DataGridTextColumn>
-                        <DataGridTextColumn Binding="{Binding Nickname}" Header="Nickname"></DataGridTextColumn>
-                        <DataGridTextColumn Binding="{Binding Level}" Header="Level"></DataGridTextColumn>
-                        <DataGridTextColumn Binding="{Binding ExperienceInfo}" Header="Experience"></DataGridTextColumn>
-                        <DataGridTextColumn Binding="{Binding Stardust}" Header="Stardust"></DataGridTextColumn>
-                        <DataGridTextColumn Binding="{Binding LastLogin}" Header="Login Status"></DataGridTextColumn>
-                        <DataGridTextColumn Binding="{Binding LastLoginTimestamp, Converter={StaticResource TimestampToDateTimeConverter }}" Header="Login Time"></DataGridTextColumn>
-                        <DataGridTextColumn Binding="{Binding RuntimeTotal, Converter={StaticResource DurationTextConverter} }" Header="Runtime"></DataGridTextColumn>
+                        <DataGridTextColumn Binding="{Binding AuthType}" Header="AuthType" FontWeight="Medium"></DataGridTextColumn>
+                        <DataGridTextColumn Binding="{Binding Username}" Header="Username" FontWeight="Medium"></DataGridTextColumn>
+                        <DataGridTextColumn Binding="{Binding Password}" Header="Password" FontWeight="Medium"></DataGridTextColumn>
+                        <DataGridTextColumn Binding="{Binding Nickname}" Header="Nickname" FontWeight="Medium"></DataGridTextColumn>
+                        <DataGridTextColumn Binding="{Binding Level}" Header="Level" FontWeight="Medium"></DataGridTextColumn>
+                        <DataGridTextColumn Binding="{Binding ExperienceInfo}" Header="Experience" FontWeight="Medium"></DataGridTextColumn>
+                        <DataGridTextColumn Binding="{Binding Stardust}" Header="Stardust" FontWeight="Medium"></DataGridTextColumn>
+                        <DataGridTextColumn Binding="{Binding LastLogin}" Header="Login Status" FontWeight="Medium"></DataGridTextColumn>
+                        <DataGridTextColumn Binding="{Binding LastLoginTimestamp, Converter={StaticResource TimestampToDateTimeConverter}}" Header="Login Time" FontWeight="Medium"></DataGridTextColumn>
+                        <DataGridTextColumn Binding="{Binding RuntimeTotal, Converter={StaticResource DurationTextConverter}}" Header="Runtime" FontWeight="Medium"></DataGridTextColumn>
                         <DataGridTemplateColumn Header="">
                             <DataGridTemplateColumn.CellEditingTemplate>
                                 <DataTemplate />
@@ -173,7 +174,7 @@
                                 <DataTemplate>
                                     <StackPanel>
                                         <Button Name="btnSwitchAcount" Click="BtnSwitchAcount_Click" CommandParameter="{Binding}" Foreground="Green" Background="Transparent"  IsEnabled="{Binding IsRunning, Converter= {StaticResource InverseBooleanConverter}}" Cursor="Hand">
-                                            <TextBlock Margin="5,5,5,5" Text="{Binding Source=Switch, Converter={StaticResource I18NConveter }}"></TextBlock>
+                                            <TextBlock Margin="5,5,5,5" Text="{Binding Source=Switch, Converter={StaticResource I18NConveter }}" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium"></TextBlock>
                                         </Button>
                                     </StackPanel>
                                 </DataTemplate>
@@ -182,13 +183,13 @@
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>
-            <TabItem Name="tabBrowser" Width="80" Height="70" Cursor="Hand">
+            <TabItem Name="tabBrowser" Width="80" Height="70" Cursor="Hand" Background="{x:Null}">
                 <TabItem.Header>
                     <Image x:Name="browserIMG" Source="Resources/Hub/HubImage.png" Width="70" Height="65" />
                 </TabItem.Header>
                 <Grid Name="browserLayout" />
             </TabItem>
-            <TabItem Name="tabMap" Width="80" Height="70" Cursor="Hand">
+            <TabItem Name="tabMap" Width="80" Height="70" Cursor="Hand" Background="{x:Null}">
                 <TabItem.Header>
                     <Image x:Name="mapIMG" Source="Resources/Map/MapImage.png" Width="70" Height="65" />
                 </TabItem.Header>
@@ -198,18 +199,18 @@
                         <ColumnDefinition Width="5" />
                         <ColumnDefinition Width="auto" />
                     </Grid.ColumnDefinitions>
-                    <local:MapControl x:Name="botMap" Grid.Column="0" DataContext="{Binding Path=Map}" />
+                    <local:MapControl x:Name="botMap" Grid.Column="0" DataContext="{Binding Path=Map}" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium" />
                     <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
-                    <local:SidebarControl Visibility="Visible" DataContext="{Binding Path=Sidebar}" x:Name="sidebarControl" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinWidth="200" />
+                    <local:SidebarControl Visibility="Visible" DataContext="{Binding Path=Sidebar}" x:Name="sidebarControl" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinWidth="200" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium" />
                 </Grid>
             </TabItem>
-            <TabItem x:Name="tabSniper" Width="80" Height="70" Cursor="Hand">
+            <TabItem x:Name="tabSniper" Width="80" Height="70" Cursor="Hand" Background="{x:Null}">
                 <TabItem.Header>
                     <Image x:Name="sniperIMG" Source="Resources/Sniper/SniperImage.png" Width="70" Height="65" />
                 </TabItem.Header>
-                <local:SniperControl x:Name="ctrlSniper" DataContext="{Binding Path=SnipeList}" />
+                <local:SniperControl x:Name="ctrlSniper" DataContext="{Binding Path=SnipeList}" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" />
             </TabItem>
-            <TabItem x:Name="tabConsole" IsSelected="True" Width="80" Height="70" Cursor="Hand">
+            <TabItem x:Name="tabConsole" IsSelected="True" Width="80" Height="70" Cursor="Hand" Background="{x:Null}">
                 <TabItem.Header>
                     <Image x:Name="consoleIMG" Source="Resources/Console/ConsoleImage.png" Width="65" Height="65" />
                 </TabItem.Header>
@@ -220,11 +221,11 @@
                     <ColumnDefinition Width="1" />
                     <ColumnDefinition Width="150" />
                   </Grid.ColumnDefinitions>
-                  <TextBox x:Name="txtCmdInput" Grid.Column="0" ToolTip="{Binding Source=InputCommand, Converter={StaticResource ResourceKey=I18NConveter}}" MouseDown="TxtCmdInput_MouseDown" KeyDown="TxtCmdInput_KeyDown" />
+                        <TextBox x:Name="txtCmdInput" Grid.Column="0" ToolTip="{Binding Source=InputCommand, Converter={StaticResource ResourceKey=I18NConveter}}" MouseDown="TxtCmdInput_MouseDown" KeyDown="TxtCmdInput_KeyDown" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium" />
                   <GridSplitter Grid.Column="1" />
-                  <ComboBox x:Name="ConsoleThemer" Grid.Column="2" IsEditable="False" IsReadOnly="True" SelectionChanged="ConsoleThemer_SelectionChanged" BorderBrush="#FFCCCCCC" ToolTip="Set Console Colors" />
+                        <ComboBox x:Name="ConsoleThemer" Grid.Column="2" IsEditable="False" IsReadOnly="True" SelectionChanged="ConsoleThemer_SelectionChanged" BorderBrush="#FFCCCCCC" ToolTip="Set Console Colors" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium" />
                 </Grid>
-                <RichTextBox ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" DockPanel.Dock="Bottom" x:Name="consoleLog" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontSize="15" IsReadOnly="True" FontFamily="/NecroBot2.Win;component/Resources/Fonts/Lato/#Lato Light">
+                <RichTextBox ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" DockPanel.Dock="Bottom" x:Name="consoleLog" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontSize="15" IsReadOnly="True" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Light">
                   <FlowDocument>
                     <Paragraph LineHeight="25">
                       <Run Text="" />
@@ -233,32 +234,32 @@
                 </RichTextBox>
               </DockPanel>
             </TabItem>
-            <TabItem Name="tabPokemons" Width="80" Height="70" Cursor="Hand">
+            <TabItem Name="tabPokemons" Width="80" Height="70" Cursor="Hand" Background="{x:Null}">
                 <TabItem.Header>
                     <StackPanel Orientation="Vertical" RenderTransformOrigin="0.5,0.5" Width="80" HorizontalAlignment="Center" VerticalAlignment="Center">
                         <Image x:Name="pokemonIMG" Source="Resources/Pokemon/PokemonImage.png" Width="50" Height="50" />
-                        <TextBlock FontSize="12" HorizontalAlignment="Center" Text="{Binding Path= PokemonTabHeader, FallbackValue=Pokemon}"/>
+                        <TextBlock FontSize="12" HorizontalAlignment="Center" Text="{Binding Path= PokemonTabHeader, FallbackValue=Pokemon}" FontFamily="pack://application:,,,/Resources/Fonts/#Lato"/>
                     </StackPanel>
                 </TabItem.Header>
-                <local:PokemonInventory x:Name="ctrPokemonInventory" DataContext="{Binding Path=PokemonList}" OnPokemonItemSelected="PokemonInventory_OnPokemonItemSelected" />
+                <local:PokemonInventory x:Name="ctrPokemonInventory" DataContext="{Binding Path=PokemonList}" OnPokemonItemSelected="PokemonInventory_OnPokemonItemSelected" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" />
             </TabItem>
-            <TabItem Name="tabItems" Width="80" Height="70" Cursor="Hand">
+            <TabItem Name="tabItems" Width="80" Height="70" Cursor="Hand" Background="{x:Null}">
                 <TabItem.Header>
                     <StackPanel Orientation="Vertical" RenderTransformOrigin="0.5,0.5" Width="80" HorizontalAlignment="Center" VerticalAlignment="Center">
                         <Image x:Name="itemsIMG" Source="Resources/Items/ItemsImage.png" Width="50" Height="50" />
-                        <TextBlock FontSize="12" HorizontalAlignment="Center" Text="{Binding Path= ItemsTabHeader, FallbackValue=Items}"/>
+                        <TextBlock FontSize="12" HorizontalAlignment="Center" Text="{Binding Path= ItemsTabHeader, FallbackValue=Items}" FontFamily="pack://application:,,,/Resources/Fonts/#Lato"/>
                     </StackPanel>
                 </TabItem.Header>
-                <local:ItemsInventory DataContext="{Binding Path=ItemsList}" x:Name="ctrlItemControl" />
+                <local:ItemsInventory DataContext="{Binding Path=ItemsList}" x:Name="ctrlItemControl" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" />
             </TabItem>
-            <TabItem Name="tabEggs" Width="80" Height="70" Cursor="Hand">
+            <TabItem Name="tabEggs" Width="80" Height="70" Cursor="Hand" Background="{x:Null}">
                 <TabItem.Header>
                     <StackPanel Orientation="Vertical" RenderTransformOrigin="0.5,0.5" Width="80" HorizontalAlignment="Center" VerticalAlignment="Center">
                         <Image x:Name="eggsIMG" Source="Resources/Eggs/EggsImage.png" Width="50" Height="50" />
-                        <TextBlock FontSize="12" HorizontalAlignment="Center" Text="{Binding Path= EggsTabHeader, FallbackValue=Eggs}"/>
+                        <TextBlock FontSize="12" HorizontalAlignment="Center" Text="{Binding Path= EggsTabHeader, FallbackValue=Eggs}" FontFamily="pack://application:,,,/Resources/Fonts/#Lato"/>
                     </StackPanel>
                 </TabItem.Header>
-                <local:EggsControl DataContext="{Binding Path=EggsList}" x:Name="ctrlEggsControl" />
+                <local:EggsControl DataContext="{Binding Path=EggsList}" x:Name="ctrlEggsControl" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" />
             </TabItem>
         </TabControl>
     </DockPanel>
