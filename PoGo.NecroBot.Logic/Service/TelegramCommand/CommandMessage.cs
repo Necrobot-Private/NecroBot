@@ -30,12 +30,12 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
             {
                 try
                 {
-                    await TelegramUtils.SendMessage(msg, telegramMessage.Chat.Id).ConfigureAwait(false);
+                    await TelegramUtils.SendMessage(msg, telegramMessage.MigrateFromChatId).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
                     session.EventDispatcher.Send(new ErrorEvent {Message = ex.Message});
-                    session.EventDispatcher.Send(new ErrorEvent {Message = "Unkown Telegram Error occured. "});
+                    session.EventDispatcher.Send(new ErrorEvent {Message = "Unknown Telegram Error Occured..."});
                 }
             };
             return OnCommand(session, cmd, callback);
