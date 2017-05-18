@@ -69,9 +69,9 @@ namespace PoGo.Necrobot.Window
 
         private static SolidColorBrush DarkSolarizedBackground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#002B36"));
         private static SolidColorBrush LightSolarizedBackground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FDF6E3"));
-        private static SolidColorBrush SolarizedConsoleWhite = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#657b83"));
-        private static SolidColorBrush LightTabColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE5E5E5"));
-        private static SolidColorBrush DarkTabColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#252525"));
+        private static SolidColorBrush SolarizedConsoleWhite = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#657B83"));
+        private static SolidColorBrush LightForeground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFF1F1F1"));
+        private static SolidColorBrush DarkForeground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#000000"));
 
         public MainClientWindow()
         {
@@ -138,8 +138,6 @@ namespace PoGo.Necrobot.Window
             Theme.ItemsSource = new List<string> { "Red", "Green", "Blue", "Purple", "Orange", "Lime", "Emerald", "Teal", "Cyan", "Cobalt", "Indigo", "Violet", "Pink", "Magenta", "Crimson", "Amber", "Yellow", "Brown", "Olive", "Steel", "Mauve", "Taupe", "Sienna" };
             MapMode.ItemsSource = new List<string> { "Normal", "Satellite" };
             ConsoleThemer.ItemsSource = new List<string> { "Default", "Low Contrast (Light)", "Low Contrast (Dark)" };
-            var LightTabColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE5E5E5"));
-            var DarkTabColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#252525"));
 
             //=============STARTUP CONFIGURATION=============\\
             if (Settings.Default.ConsoleTheme == "" || Settings.Default.Theme == "" || Settings.Default.Scheme == "" || Settings.Default.SchemeValue == "")
@@ -163,12 +161,24 @@ namespace PoGo.Necrobot.Window
 
         private void TimerTick(object sender, ElapsedEventArgs e)
         {
-            var Theme = Settings.Default.Theme;
-            var Scheme = Settings.Default.Scheme;
+            var ThemeValue = Settings.Default.Theme;
+            var SchemeValue = Settings.Default.Scheme;
             Application.Current.Dispatcher.Invoke(delegate
             {
-                if (Theme != Settings.Default.Theme | Scheme != Settings.Default.Scheme & Settings.Default.ResetLayout == true)
+                if (ThemeValue != Settings.Default.Theme | SchemeValue != Settings.Default.Scheme & Settings.Default.ResetLayout == true)
                     Settings.Default.ResetLayout = false;
+                if (ThemeValue == "Yellow")
+                {
+                    Theme.Foreground = DarkForeground;
+                    Scheme.Foreground = DarkForeground;
+                    MapMode.Foreground = DarkForeground;
+                }
+                else
+                {
+                    Theme.Foreground = LightForeground;
+                    Scheme.Foreground = LightForeground;
+                    MapMode.Foreground = LightForeground;
+                }
                 Settings.Default.Save();
             });
         }
@@ -488,29 +498,11 @@ namespace PoGo.Necrobot.Window
             {
                 Settings.Default.Scheme = "Light";
                 Settings.Default.SchemeValue = "BaseLight";
-
-                tabAccounts.Background = LightTabColor;
-                tabBrowser.Background = LightTabColor;
-                tabMap.Background = LightTabColor;
-                tabSniper.Background = LightTabColor;
-                tabConsole.Background = LightTabColor;
-                tabPokemons.Background = LightTabColor;
-                tabItems.Background = LightTabColor;
-                tabEggs.Background = LightTabColor;
             }
             else if (Scheme == "Dark")
             {
                 Settings.Default.Scheme = "Dark";
                 Settings.Default.SchemeValue = "BaseDark";
-
-                tabAccounts.Background = DarkTabColor;
-                tabBrowser.Background = DarkTabColor;
-                tabMap.Background = DarkTabColor;
-                tabSniper.Background = DarkTabColor;
-                tabConsole.Background = DarkTabColor;
-                tabPokemons.Background = DarkTabColor;
-                tabItems.Background = DarkTabColor;
-                tabEggs.Background = DarkTabColor;
             }
 
             ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(Settings.Default.Theme), ThemeManager.GetAppTheme(Settings.Default.SchemeValue));
