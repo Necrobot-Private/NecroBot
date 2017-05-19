@@ -107,19 +107,6 @@
         </Controls:WindowCommands>
     </Controls:MetroWindow.RightWindowCommands>
     <DockPanel LastChildFill="True">
-        <Popup Name="popError" Placement="Center" IsOpen="False" Width="400" Height="auto" >
-            <Border BorderBrush="Red" Background="WhiteSmoke" BorderThickness="2">
-                <StackPanel>
-                    <StackPanel Background="Red">
-                        <TextBlock Text="{Binding Source=ErrorPopupTitle, Converter={StaticResource I18NConveter}}" Margin="5,5,5,5" FontSize="18" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Heavy" Foreground="White"></TextBlock>
-                    </StackPanel>
-                    <StackPanel Margin="10">
-                        <TextBlock Name="txtLastError" Text="" TextWrapping="Wrap" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontSize="16"></TextBlock>
-                        <Button Margin="10,10,10,10" Click="BtnExit_Click" Name="btnExit" Content="{Binding Source=ClickHereExit, Converter={StaticResource I18NConveter}}" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Heavy" FontSize="18" ></Button>
-                    </StackPanel>
-                </StackPanel>
-            </Border>
-        </Popup>
         <GroupBox x:Name="grbPlayerInfo" DockPanel.Dock="Top" Height="120" Margin="2">
             <GroupBox.Header>
                 <DockPanel LastChildFill="True">
