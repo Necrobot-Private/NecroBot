@@ -401,8 +401,7 @@ namespace RocketBot2.Forms
             // 
             // btnRefresh
             // 
-            this.btnRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnRefresh.AutoSize = true;
             this.btnRefresh.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.btnRefresh.Location = new System.Drawing.Point(617, 745);
@@ -427,8 +426,8 @@ namespace RocketBot2.Forms
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.btnPokeDex);
             this.splitContainer1.Panel2.Controls.Add(this.btnRefresh);
+            this.splitContainer1.Panel2.Controls.Add(this.btnPokeDex);
             this.splitContainer1.Panel2.Controls.Add(this.checkBoxAutoRefresh);
             this.splitContainer1.Panel2.Controls.Add(this.lblInventory);
             this.splitContainer1.Panel2.Controls.Add(this.flpItems);
@@ -707,3 +706,4 @@ namespace RocketBot2.Forms
         private CheckBox GMAPSatellite;
     }
 }
+

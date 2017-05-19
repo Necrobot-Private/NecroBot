@@ -437,10 +437,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                             //Trying to make bot only select pokemon that are more than 75% of full CP to battle. Still needs some work(The Wizard1328)
                             //if (attacker.Cp >= attacker.Cp * 0.75)
                             //{
-                                attackers.Add(attacker);
-                                session.GymState.AddToTeam(session, attacker);
-                                if (attackers.Count == 6)
-                                    break;
+                            attackers.Add(attacker);
+                            session.GymState.AddToTeam(session, attacker);
+                            if (attackers.Count == 6)
+                                break;
                             //}
                         }
                         else return null;

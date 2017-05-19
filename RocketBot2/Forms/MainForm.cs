@@ -444,7 +444,7 @@ namespace RocketBot2.Forms
                 // kills
                 Thread.CurrentThread.Abort(this);
             }
-                catch (ThreadAbortException)
+            catch (ThreadAbortException)
             {
                 return;
                 //not implanted
