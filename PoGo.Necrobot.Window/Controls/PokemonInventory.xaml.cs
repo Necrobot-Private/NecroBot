@@ -42,6 +42,7 @@ namespace PoGo.Necrobot.Window.Controls
             }
 
             UpdateTransferAllButtonState();
+            // UpdateEvolveAllButtonState(); TO-DO: Make Evolve All from <Task> Bool to just Bool
 
             OnPokemonItemSelected?.Invoke(null);
         }
@@ -51,10 +52,19 @@ namespace PoGo.Necrobot.Window.Controls
             var data = DataContext as PokemonListViewModel;
             var count = data.Pokemons.Count(x => x.IsSelected && Session.Inventory.CanTransferPokemon(x.PokemonData));
             //TODO : Thought it will better to use binding.
-            btnTransferAll.Content = $"Transfer all ({count})";
+            btnTransferAll.Content = $"Transfer All ({count})";
             btnTransferAll.IsEnabled = count > 0;
         }
-
+        /*
+        private void UpdateEvolveAllButtonState()
+        {
+            var data = DataContext as PokemonListViewModel;
+            var count = data.Pokemons.Count(x => x.IsSelected && Session.Inventory.CanEvolvePokemon(x.PokemonData));
+            //TODO : Thought it will better to use binding.
+            btnEvolveAll.Content = $"Evolve All ({count})";
+            btnEvolveAll.IsEnabled = count > 0;
+        }
+        */
         private async void BtnTransfer_Click(object sender, RoutedEventArgs e)
         {
             var model = DataContext as PokemonListViewModel;
@@ -62,8 +72,6 @@ namespace PoGo.Necrobot.Window.Controls
             ulong pokemonId = (ulong) ((Button) sender).CommandParameter;
             model.Transfer(pokemonId);
             var button = sender as Button;
-            //button.Content = "Transfering...";
-            //button.IsEnabled = false;
 
             await TransferPokemonTask.Execute(
                 Session, Session.CancellationTokenSource.Token, new List<ulong> {pokemonId}
@@ -79,12 +87,17 @@ namespace PoGo.Necrobot.Window.Controls
                 .ToList();
             if (pokemonToTransfer.Count > 0)
             {
-                data.Transfer(pokemonToTransfer);
-                if (MessageBox.Show("Do you want to transfer all selected pokemon", "Bulk transfer", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                MessageBoxResult TransferMSG = MessageBox.Show("Do you want to transfer all selected pokemon", "Bulk Transfer", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (TransferMSG == MessageBoxResult.Yes)
                 {
+                    data.Transfer(pokemonToTransfer);
                     await TransferPokemonTask.Execute(
                         Session, Session.CancellationTokenSource.Token, pokemonToTransfer
                     );
+                }
+                else if (TransferMSG == MessageBoxResult.No)
+                {
+                    // Nothing is Transferred...
                 }
             }
             else
@@ -92,7 +105,35 @@ namespace PoGo.Necrobot.Window.Controls
                 // There are no transferrable pokemon selected.
             }
         }
-
+        /*
+        private async void BtnEvolveAll_ClickAsync(object sender, RoutedEventArgs e)
+        {
+            var data = DataContext as PokemonListViewModel;
+            var pokemonToEvolve = data.Pokemons
+                .Where(x => x.IsSelected && !x.IsEvolving && Session.Inventory.CanEvolvePokemon(x.PokemonData))
+                .Select(x => x.Id)
+                .ToList();
+            if (pokemonToEvolve.Count > 0)
+            {
+                MessageBoxResult EvolveMSG = MessageBox.Show("Do you want to evolve all selected pokemon", "Bulk Evolve", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (EvolveMSG == MessageBoxResult.Yes)
+                {
+                    data.Evolve(pokemonToEvolve);
+                    await EvolvePokemonTask.Execute(
+                        Session, Session.CancellationTokenSource.Token, pokemonToEvolve
+                    );
+                }
+                else if (EvolveMSG == MessageBoxResult.No)
+                {
+                    // Nothing is Transferred...
+                }
+            }
+            else
+            {
+                // There are no evolvable pokemon selected.
+            }
+        }
+        */
         private async void BtnEvolve_Click(object sender, RoutedEventArgs e)
         {
             var model = DataContext as PokemonListViewModel;
@@ -206,11 +247,11 @@ namespace PoGo.Necrobot.Window.Controls
             //Find the placementTarget
             var item = (DataGrid)contextMenu.PlacementTarget;
             var selectItem = (PokemonDataViewModel)item.SelectedCells[0].Item;
-            var filter = TinyIoCContainer.Current.Resolve<ISession>().LogicSettings.PokemonsTransferFilter.GetFilter<TransferFilter>(selectItem.PokemonId);
+            var filter = TinyIoCContainer.Current.Resolve<ISession>().LogicSettings.PokemonsTransferFilter.GetFilter(selectItem.PokemonId);
             var setting = new FilterSetting(selectItem.PokemonId, filter, "PokemonsTransferFilter", (id, f)=> {
 
                 var globalSettings = GlobalSettings.Load("", false);
-                FilterUtil.UpdateFilterSetting<TransferFilter>(globalSettings,globalSettings.PokemonsTransferFilter, id, (TransferFilter)f);
+                FilterUtil.UpdateFilterSetting(globalSettings,globalSettings.PokemonsTransferFilter, id, (TransferFilter)f);
                 
             });
             setting.ShowDialog();
@@ -226,11 +267,11 @@ namespace PoGo.Necrobot.Window.Controls
             //Find the placementTarget
             var item = (DataGrid)contextMenu.PlacementTarget;
             var selectItem = (PokemonDataViewModel)item.SelectedCells[0].Item;
-            var filter = TinyIoCContainer.Current.Resolve<ISession>().LogicSettings.PokemonEvolveFilters.GetFilter<EvolveFilter>(selectItem.PokemonId);
+            var filter = TinyIoCContainer.Current.Resolve<ISession>().LogicSettings.PokemonEvolveFilters.GetFilter(selectItem.PokemonId);
             var setting = new FilterSetting(selectItem.PokemonId, filter, "PokemonEvolveFilter", (id, f) => {
 
                 var globalSettings = GlobalSettings.Load("", false);
-                FilterUtil.UpdateFilterSetting<EvolveFilter>(globalSettings, globalSettings.PokemonEvolveFilter, id, (EvolveFilter)f);
+                FilterUtil.UpdateFilterSetting(globalSettings, globalSettings.PokemonEvolveFilter, id, (EvolveFilter)f);
 
             });
             setting.ShowDialog();
@@ -247,11 +288,11 @@ namespace PoGo.Necrobot.Window.Controls
             //Find the placementTarget
             var item = (DataGrid)contextMenu.PlacementTarget;
             var selectItem = (PokemonDataViewModel)item.SelectedCells[0].Item;
-            var filter = TinyIoCContainer.Current.Resolve<ISession>().LogicSettings.PokemonUpgradeFilters.GetFilter<UpgradeFilter>(selectItem.PokemonId);
+            var filter = TinyIoCContainer.Current.Resolve<ISession>().LogicSettings.PokemonUpgradeFilters.GetFilter(selectItem.PokemonId);
             var setting = new FilterSetting(selectItem.PokemonId, filter, "PokemonUpgradeFilters", (id, f) => {
 
                 var globalSettings = GlobalSettings.Load("", false);
-                FilterUtil.UpdateFilterSetting<UpgradeFilter>(globalSettings, globalSettings.PokemonUpgradeFilters, id, (UpgradeFilter)f);
+                FilterUtil.UpdateFilterSetting(globalSettings, globalSettings.PokemonUpgradeFilters, id, (UpgradeFilter)f);
 
             });
             setting.ShowDialog();
@@ -267,11 +308,11 @@ namespace PoGo.Necrobot.Window.Controls
             //Find the placementTarget
             var item = (DataGrid)contextMenu.PlacementTarget;
             var selectItem = (PokemonDataViewModel)item.SelectedCells[0].Item;
-            var filter = TinyIoCContainer.Current.Resolve<ISession>().LogicSettings.PokemonSnipeFilters.GetFilter<SnipeFilter>(selectItem.PokemonId);
+            var filter = TinyIoCContainer.Current.Resolve<ISession>().LogicSettings.PokemonSnipeFilters.GetFilter(selectItem.PokemonId);
             var setting = new FilterSetting(selectItem.PokemonId, filter, "SnipePokemonFilter", (id, f) => {
 
                 var globalSettings = GlobalSettings.Load("", false);
-                FilterUtil.UpdateFilterSetting<SnipeFilter>(globalSettings, globalSettings.SnipePokemonFilter, id, (SnipeFilter)f);
+                FilterUtil.UpdateFilterSetting(globalSettings, globalSettings.SnipePokemonFilter, id, (SnipeFilter)f);
 
             });
             setting.ShowDialog();
@@ -281,6 +322,11 @@ namespace PoGo.Necrobot.Window.Controls
         private void UserControl_Initialized(object sender, System.EventArgs e)
         {
 
+        }
+
+        private void BtnFavoriteAll_Click(object sender, RoutedEventArgs e)
+        {
+            // To-Do: Add Abillity to Favorite Multiple Pokemon
         }
 
         //ICommand transferPokemonCommand;
