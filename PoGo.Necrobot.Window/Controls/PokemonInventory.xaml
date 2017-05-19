@@ -34,8 +34,8 @@
             </Button>
             <StackPanel Orientation="Horizontal">
                 <Button x:Name="btnTransferAll" Margin="0,0,10,0" Content="Transfer All" Click="BtnTransferAll_Click"/>
-                <Button x:Name="btnEvolveAll" Margin="0,0,10,0" Content="Evolve All" IsEnabled="False" Click="BtnEvolveAll_Click"/>
-                <Button x:Name="btnFavoriteAll" Margin="0,0,10,0" Content="Favorite All" IsEnabled="False" Click="BtnFavoriteAll_Click"/>
+                <Button x:Name="btnEvolveAll" Margin="0,0,10,0" Content="Evolve All" IsEnabled="False"/>
+                <Button x:Name="btnFavoriteAll" Margin="0,0,10,0" Content="Favorite All" IsEnabled="False"/>
                 <Button x:Name="btnPokedexView" Click="BtnPokedexView_Click">
                     <StackPanel Orientation="Horizontal" >
                         <Image Source="http://allaboutwindowsphone.com/images/appicons/208046.png" Width="20px"></Image>
