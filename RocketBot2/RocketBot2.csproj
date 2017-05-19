@@ -1082,7 +1082,7 @@ foreach (var item in filesToCleanup)
   </Target>
   <PropertyGroup>
     <PostBuildEvent>cd "$(TargetDir)"
-copy /y /b RocketBot2.exe "$(SolutionDir)\PoGo.Necrobot.Window\$(OutDir)\RocketBot2.exe" /b
+REM copy /y /b RocketBot2.exe "$(SolutionDir)\PoGo.Necrobot.Window\$(OutDir)\RocketBot2.exe" /b
 del *.config
 del /s /q x86
 rmdir /s /q x86
