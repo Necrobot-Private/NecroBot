@@ -107,13 +107,6 @@
         </Controls:WindowCommands>
     </Controls:MetroWindow.RightWindowCommands>
     <DockPanel LastChildFill="True">
-        <Popup Name="popSwithAccount" Placement="Center" IsOpen="False" Width="300" Height="90" >
-            <Border BorderBrush="Coral" Background="Black" BorderThickness="4">
-                <StackPanel Margin="30,30,30,30">
-                    <TextBlock Name="txtMessage" Text="{Binding Source=AccountSwitching, Converter={StaticResource ResourceKey=I18NConveter}}" Foreground="Red" FontStretch="UltraExpanded" FontStyle="Italic" FontWeight="UltraBold" TextAlignment="Center" TextWrapping="Wrap" FontSize="16" FontFamily="Century Gothic"></TextBlock>
-                </StackPanel>
-            </Border>
-        </Popup>
         <Popup Name="popError" Placement="Center" IsOpen="False" Width="400" Height="auto" >
             <Border BorderBrush="Red" Background="WhiteSmoke" BorderThickness="2">
                 <StackPanel>

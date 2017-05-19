@@ -35,10 +35,11 @@ namespace PoGo.Necrobot.Window
         }
         public void OnBotEvent(BotSwitchedEvent ex)
         {
-            //this.botMap.Reset();
-            datacontext.Reset();
-            popSwithAccount.IsOpen = true;
-            //show popup...
+            Dispatcher.Invoke(() =>
+            {
+                datacontext.Reset();
+                lblAccount.Content = "Switching Account...";
+            });
         }
         public void OnBotEvent(FinishUpgradeEvent e)
         {
@@ -61,10 +62,8 @@ namespace PoGo.Necrobot.Window
             Dispatcher.Invoke(() =>
             {
                 datacontext.Reset();
-
                 lblAccount.Content = currentSession.Translation.GetTranslation(NecroBot.Logic.Common.TranslationString.LoggingIn, ev.AuthType, ev.Username);
             });
-
         }
         public void OnBotEvent(SnipePokemonStarted ex)
         {
@@ -122,9 +121,7 @@ namespace PoGo.Necrobot.Window
 
             Dispatcher.Invoke(() =>
             {
-                popSwithAccount.IsOpen = false;
                 lblAccount.Content = $"{datacontext.UI.PlayerStatus} as : {datacontext.UI.PlayerName}";
-
             });
         }
         public void OnBotEvent(ProfileEvent profile)
@@ -184,7 +181,6 @@ namespace PoGo.Necrobot.Window
         {
             if(ev.RequireExit)
             {
-                popSwithAccount.IsOpen = false;
                 txtLastError.Text = ev.Message;
                 popError.IsOpen = true;
             }
