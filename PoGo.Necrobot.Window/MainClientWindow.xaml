@@ -218,7 +218,7 @@
                 <TabItem.Header>
                     <StackPanel Orientation="Vertical" RenderTransformOrigin="0.5,0.5" Width="80" HorizontalAlignment="Center" VerticalAlignment="Center">
                         <Image x:Name="pokemonIMG" Source="Resources/Pokemon/PokemonImage.png" Width="50" Height="50" />
-                        <TextBlock FontSize="12" HorizontalAlignment="Center" Text="{Binding Path= PokemonTabHeader, FallbackValue=Pokemon}" FontFamily="pack://application:,,,/Resources/Fonts/#Lato"/>
+                        <TextBlock FontSize="12" HorizontalAlignment="Center" Text="{Binding Path= PokemonTabHeader, FallbackValue=Pokemon}" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium"/>
                     </StackPanel>
                 </TabItem.Header>
                 <local:PokemonInventory x:Name="ctrPokemonInventory" DataContext="{Binding Path=PokemonList}" OnPokemonItemSelected="PokemonInventory_OnPokemonItemSelected" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" />
@@ -227,7 +227,7 @@
                 <TabItem.Header>
                     <StackPanel Orientation="Vertical" RenderTransformOrigin="0.5,0.5" Width="80" HorizontalAlignment="Center" VerticalAlignment="Center">
                         <Image x:Name="itemsIMG" Source="Resources/Items/ItemsImage.png" Width="50" Height="50" />
-                        <TextBlock FontSize="12" HorizontalAlignment="Center" Text="{Binding Path= ItemsTabHeader, FallbackValue=Items}" FontFamily="pack://application:,,,/Resources/Fonts/#Lato"/>
+                        <TextBlock FontSize="12" HorizontalAlignment="Center" Text="{Binding Path= ItemsTabHeader, FallbackValue=Items}" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium"/>
                     </StackPanel>
                 </TabItem.Header>
                 <local:ItemsInventory DataContext="{Binding Path=ItemsList}" x:Name="ctrlItemControl" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" />
@@ -236,7 +236,7 @@
                 <TabItem.Header>
                     <StackPanel Orientation="Vertical" RenderTransformOrigin="0.5,0.5" Width="80" HorizontalAlignment="Center" VerticalAlignment="Center">
                         <Image x:Name="eggsIMG" Source="Resources/Eggs/EggsImage.png" Width="50" Height="50" />
-                        <TextBlock FontSize="12" HorizontalAlignment="Center" Text="{Binding Path= EggsTabHeader, FallbackValue=Eggs}" FontFamily="pack://application:,,,/Resources/Fonts/#Lato"/>
+                        <TextBlock FontSize="12" HorizontalAlignment="Center" Text="{Binding Path= EggsTabHeader, FallbackValue=Eggs}" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium"/>
                     </StackPanel>
                 </TabItem.Header>
                 <local:EggsControl DataContext="{Binding Path=EggsList}" x:Name="ctrlEggsControl" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" />
