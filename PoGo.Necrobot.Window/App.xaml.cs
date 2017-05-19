@@ -20,7 +20,6 @@ namespace PoGo.Necrobot.Window
     /// </summary>
     public partial class App : Application
     {
-        
         public App()
         {
             ShutdownMode = ShutdownMode.OnLastWindowClose;
@@ -90,6 +89,11 @@ namespace PoGo.Necrobot.Window
             {
                 NecroBot.CLI.Program.RunBotWithParameters(OnBotStartedEventHandler, new string[] { });
             });
+
+            if (Settings.Default.ConsoleToggled == true)
+                ConsoleHelper.ShowConsoleWindow();
+            if (Settings.Default.ConsoleToggled == false)
+                ConsoleHelper.HideConsoleWindow();
             
             MainWindow.Show();
         }

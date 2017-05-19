@@ -5,12 +5,14 @@ using PoGo.NecroBot.Logic.Event.Inventory;
 using PoGo.NecroBot.Logic.Event.Player;
 using PoGo.NecroBot.Logic.Event.Snipe;
 using PoGo.NecroBot.Logic.Event.UI;
+using PoGo.NecroBot.Logic.Logging;
 using POGOProtos.Inventory.Item;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace PoGo.Necrobot.Window
 {
@@ -35,10 +37,11 @@ namespace PoGo.Necrobot.Window
         }
         public void OnBotEvent(BotSwitchedEvent ex)
         {
-            //this.botMap.Reset();
-            datacontext.Reset();
-            popSwithAccount.IsOpen = true;
-            //show popup...
+            Dispatcher.Invoke(() =>
+            {
+                datacontext.Reset();
+                lblAccount.Content = "Switching Account...";
+            });
         }
         public void OnBotEvent(FinishUpgradeEvent e)
         {
@@ -61,10 +64,8 @@ namespace PoGo.Necrobot.Window
             Dispatcher.Invoke(() =>
             {
                 datacontext.Reset();
-
                 lblAccount.Content = currentSession.Translation.GetTranslation(NecroBot.Logic.Common.TranslationString.LoggingIn, ev.AuthType, ev.Username);
             });
-
         }
         public void OnBotEvent(SnipePokemonStarted ex)
         {
@@ -122,9 +123,7 @@ namespace PoGo.Necrobot.Window
 
             Dispatcher.Invoke(() =>
             {
-                popSwithAccount.IsOpen = false;
                 lblAccount.Content = $"{datacontext.UI.PlayerStatus} as : {datacontext.UI.PlayerName}";
-
             });
         }
         public void OnBotEvent(ProfileEvent profile)
@@ -179,15 +178,19 @@ namespace PoGo.Necrobot.Window
         {
             datacontext.PlayerInfo.UpdateCatchLimit(ev);
         }
-
         public void OnBotEvent(ErrorEvent ev)
         {
-            if(ev.RequireExit)
+            Dispatcher.Invoke(() =>
             {
-                popSwithAccount.IsOpen = false;
-                txtLastError.Text = ev.Message;
-                popError.IsOpen = true;
-            }
+                if (ev.RequireExit)
+                {
+                    lblAccount.Content = "An Error has been Detected and the bot will Shut Down in 10 Seconds (Info in Console/Logs)";
+                    Logger.Write($"Error Detected! ({ev.Message})", LogLevel.Error);
+                    var ExitTime = DateTime.Now.AddSeconds(10);
+                    if (DateTime.Now > ExitTime)
+                        Application.Current.Shutdown();
+                }
+            });
         }
         public void OnBotEvent(IEvent evt)
         {

@@ -40,7 +40,7 @@
                             </Storyboard>
                         </ControlTemplate.Resources>
                         <my:DataGridHeaderBorder x:Name="dataGridHeaderBorder" Margin="0" VerticalAlignment="Top" Height="31" IsClickable="{TemplateBinding CanUserSort}" IsHovered="{TemplateBinding IsMouseOver}" IsPressed="{TemplateBinding IsPressed}" SeparatorBrush="{TemplateBinding SeparatorBrush}" SeparatorVisibility="{TemplateBinding SeparatorVisibility}" SortDirection="{TemplateBinding SortDirection}" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" Grid.ColumnSpan="1">
-                            <Grid x:Name="grid" Width="Auto" Height="Auto" RenderTransformOrigin="0.5,0.5">
+                            <Grid x:Name="grid" Width="Auto" Height="Auto">
                                 <Grid.RenderTransform>
                                     <TransformGroup>
                                         <ScaleTransform/>
@@ -91,7 +91,8 @@
               AutoGenerateColumns="false" 
               GridLinesVisibility="None"
               IsReadOnly="True"
-              behaviors:DataGridBehavior.DisplayRowNumber="True">
+              behaviors:DataGridBehavior.DisplayRowNumber="True"
+              FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium">
         <DataGrid.Columns>
             <DataGridTextColumn Binding="{Binding Path=Id}" Header="#" IsReadOnly="True"/>
             <DataGridTemplateColumn Header="#">
