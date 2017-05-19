@@ -980,6 +980,7 @@ namespace RocketBot2.Forms
                     extra_box.ItemClick += Instance.ItemBox_ItemClick;
                     Instance.flpItems.Controls.Add(extra_box);
                 }
+
                 var box = new ItemBox(item);
                 if (appliedItems.ContainsKey(item.ItemId))
                 {
