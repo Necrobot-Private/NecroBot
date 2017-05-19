@@ -16,7 +16,7 @@ namespace PoGo.NecroBot.Logic.Forms
 
     public partial class AutoUpdateForm : Form
     {
-        private string CHANGE_LOGS = "https://raw.githubusercontent.com/Necrobot-Private/NecroBot/master/changelogs/v{0}.rft";
+        private string CHANGE_LOGS = "https://cdn.rawgit.com/Necrobot-Private/NecroBot/master/changelogs/v{0}.rft";
 
         public string LatestVersion { get; set; }
 

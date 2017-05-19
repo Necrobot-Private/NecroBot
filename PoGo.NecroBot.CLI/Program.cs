@@ -76,10 +76,10 @@ namespace PoGo.NecroBot.CLI
         private static bool _ignoreKillSwitch;
 
         private static readonly Uri StrKillSwitchUri =
-            new Uri("https://raw.githubusercontent.com/Necrobot-Private/Necrobot2/master/KillSwitch.txt");
+            new Uri("https://cdn.rawgit.com/Necrobot-Private/NecroBot/master/KillSwitch.txt");
 
         private static readonly Uri StrMasterKillSwitchUri =
-            new Uri("https://raw.githubusercontent.com/Silph-Road/NecroBot/master/PoGo.NecroBot.Logic/MKS.txt");
+            new Uri("https://cdn.rawgit.com/Necrobot-Private/NecroBot/master/PoGo.NecroBot.Logic/MKS.txt");
 
         private static Session _session;
 
@@ -328,7 +328,7 @@ namespace PoGo.NecroBot.CLI
                         HttpClient client = new HttpClient();
                         client.DefaultRequestHeaders.Add("X-AuthToken", apiCfg.AuthAPIKey);
                         var maskedKey = apiCfg.AuthAPIKey.Substring(0, 4) + "".PadLeft(apiCfg.AuthAPIKey.Length - 8, 'X') + apiCfg.AuthAPIKey.Substring(apiCfg.AuthAPIKey.Length - 4, 4);
-                        HttpResponseMessage response = client.PostAsync("https://pokehash.buddyauth.com/api/v131_0/hash", null).Result;
+                        HttpResponseMessage response = client.PostAsync("https://pokehash.buddyauth.com/api/v133_1/hash", null).Result;
 
                         string AuthKey = response.Headers.GetValues("X-AuthToken").FirstOrDefault();
                         string MaxRequestCount = response.Headers.GetValues("X-MaxRequestCount").FirstOrDefault();
