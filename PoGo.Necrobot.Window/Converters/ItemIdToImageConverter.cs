@@ -10,7 +10,7 @@ namespace PoGo.Necrobot.Window.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             ItemId itemId = (ItemId)Enum.Parse(typeof(ItemId), value.ToString());
-            return $"https://raw.githubusercontent.com/Necrobot-Private/PokemonGO-Assets/master/items/{(int)itemId}.png";
+            return $"https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/items/{(int)itemId}.png";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
