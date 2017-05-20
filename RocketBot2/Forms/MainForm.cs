@@ -62,9 +62,9 @@ namespace RocketBot2.Forms
         private bool _botStarted = false;
 
         private static readonly Uri StrKillSwitchUri =
-            new Uri("https://raw.githubusercontent.com/TheUnnamedOrganisation/RocketBot/master/KillSwitch.txt");
+            new Uri("https://cdn.rawgit.com/TheUnnamedOrganisation/RocketBot/master/KillSwitch.txt");
         private static readonly Uri StrMasterKillSwitchUri =
-            new Uri("https://raw.githubusercontent.com/TheUnnamedOrganisation/PoGo.NecroBot.Logic/master/MKS.txt");
+            new Uri("https://cdn.rawgit.com/TheUnnamedOrganisation/PoGo.NecroBot.Logic/master/MKS.txt");
 
         private GlobalSettings _settings;
         private StateMachine _machine;
@@ -425,37 +425,28 @@ namespace RocketBot2.Forms
             //TODO: Kills the application
             try
             {
-                List<Control> listControls = new List<Control>();
-                foreach (Control control in Instance.Controls)
-                {
-                    listControls.Add(control);
-                }
-                foreach (Control control in listControls)
-                {
-                    Instance.Controls.Remove(control);
-                    control.Dispose();
-                    GC.SuppressFinalize(control);
-                }
+                this.Dispose(true);
+                _playerOverlay.Dispose();
+                GC.SuppressFinalize(_playerOverlay);
+                _playerRouteOverlay.Dispose();
+                GC.SuppressFinalize(_playerRouteOverlay);
+                _pokemonsOverlay.Dispose();
+                GC.SuppressFinalize(_pokemonsOverlay);
+                _pokestopsOverlay.Dispose();
+                GC.SuppressFinalize(_pokestopsOverlay);
+                _searchAreaOverlay.Dispose();
+                GC.SuppressFinalize(_searchAreaOverlay);
+                GMapControl1.Dispose();
+                GC.SuppressFinalize(GMapControl1);
+                GC.SuppressFinalize(this);
                 // kills
                 Thread.CurrentThread.Abort(this);
             }
-            catch
+            catch (ThreadAbortException)
             {
-                Thread.ResetAbort();
-            }
-
-            try
-            {
-                foreach (var process in Process.GetProcessesByName(Assembly.GetExecutingAssembly().GetName().Name))
-                {
-                    process.Kill();
-                }
-            }
-            catch
-            {
+                return;
                 //not implanted
             }
-            //*/
         }
 
         private void PokeEaseToolStripMenuItem_Click(object sender, EventArgs e)
