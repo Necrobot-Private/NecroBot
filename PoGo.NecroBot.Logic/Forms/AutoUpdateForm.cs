@@ -5,19 +5,16 @@ using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.State;
 using System;
 using System.ComponentModel;
-using System.IO;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Newtonsoft.Json;
+
 namespace PoGo.NecroBot.Logic.Forms
 {
 
     public partial class AutoUpdateForm : Form
     {
-        private string CHANGE_LOGS = "https://cdn.rawgit.com/Necrobot-Private/NecroBot/master/changelogs/v{0}.rft";
-
         public string LatestVersion { get; set; }
 
         public string CurrentVersion { get; set; }
@@ -37,13 +34,10 @@ namespace PoGo.NecroBot.Logic.Forms
             richTextBox1.SetInnerMargins(25, 25, 25, 25);
             lblCurrent.Text = CurrentVersion;
             lblLatest.Text = LatestVersion;
-            var Data;
-            using (WebClient webClient = new System.Net.WebClient())
-            {
-                WebClient Web = new WebClient();
-                Data = Web.DownloadString("https://api.github.com/repos/Necrobot-Private/Necrobot/releases/tags/" + LatestVersion);
-            }
-            var changelog = Data.body;
+            var Client = new WebClient();
+            var json = Client.DownloadString("https://api.github.com/repos/Necrobot-Private/Necrobot/releases/tags/" + LatestVersion);
+            Releases obj = JsonConvert.DeserializeObject<Releases>(json).body;
+            var changelog = obj;
             LoadChangeLogs(changelog);
             if (AutoUpdate)
             {
@@ -137,16 +131,6 @@ namespace PoGo.NecroBot.Logic.Forms
         private void Btncancel_Click(object sender, EventArgs e)
         {
             Close();
-        }
-        public void GetJson()
-        {
-            using (WebClient webClient = new System.Net.WebClient())
-            {
-                WebClient n = new WebClient();
-                var json = n.DownloadString("https://api.github.com/repos/Necrobot-Private/Necrobot/releases/latest");
-                string valueOriginal = Convert.ToString(json);
-                Console.WriteLine(json);
-            }
         }
     }
 }
