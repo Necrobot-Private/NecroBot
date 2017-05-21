@@ -49,11 +49,8 @@ namespace PoGo.NecroBot.Logic.Forms
 
         private void LoadChangeLogs(string changelog)
         {
-            Task.Run(async () =>
+            Task.Run(() =>
             {
-
-                await Task.Delay(2000);
-
             }).ContinueWith((t) =>
             {
                 //load content
