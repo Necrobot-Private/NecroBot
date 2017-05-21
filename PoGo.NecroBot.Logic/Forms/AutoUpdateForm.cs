@@ -37,29 +37,13 @@ namespace PoGo.NecroBot.Logic.Forms
             var Client = new WebClient();
             var json = Client.DownloadString("https://api.github.com/repos/Necrobot-Private/Necrobot/releases/tags/v" + LatestVersion);
             Releases obj = JsonConvert.DeserializeObject<Releases>(json);
-            var changelog = obj.Body.ToString();
-            LoadChangeLogs(changelog);
+            richTextBox1.Text = obj.Body.ToString();
             if (AutoUpdate)
             {
                 btnUpdate.Enabled = false;
                 btnUpdate.Text = "Downloading...";
                 StartDownload();
             }
-        }
-
-        private void LoadChangeLogs(string changelog)
-        {
-            Task.Run(() =>
-            {
-            }).ContinueWith((t) =>
-            {
-                //load content
-                Invoke(new Action(() =>
-                {
-                    richTextBox1.Text = changelog;
-                }));
-
-            });
         }
 
         public bool DownloadFile(string url, string dest)
