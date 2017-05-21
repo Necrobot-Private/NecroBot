@@ -35,9 +35,9 @@ namespace PoGo.NecroBot.Logic.Forms
             lblCurrent.Text = CurrentVersion;
             lblLatest.Text = LatestVersion;
             var Client = new WebClient();
-            var json = Client.DownloadString("https://api.github.com/repos/Necrobot-Private/Necrobot/releases/tags/" + LatestVersion);
+            var json = Client.DownloadString("https://api.github.com/repos/Necrobot-Private/Necrobot/releases/tags/v" + LatestVersion);
             Releases obj = JsonConvert.DeserializeObject<Releases>(json);
-            var changelog = obj.Body;
+            var changelog = obj.Body.ToString();
             LoadChangeLogs(changelog);
             if (AutoUpdate)
             {
