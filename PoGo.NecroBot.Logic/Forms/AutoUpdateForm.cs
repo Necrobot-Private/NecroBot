@@ -10,7 +10,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using Newtonsoft.Json;
 namespace PoGo.NecroBot.Logic.Forms
 {
 
@@ -37,9 +37,14 @@ namespace PoGo.NecroBot.Logic.Forms
             richTextBox1.SetInnerMargins(25, 25, 25, 25);
             lblCurrent.Text = CurrentVersion;
             lblLatest.Text = LatestVersion;
-            var changelog = string.Format(CHANGE_LOGS, LatestVersion);
-            var tempPath = Path.GetTempPath() + Path.GetFileName(changelog);
-            LoadChangeLogs(changelog, tempPath);
+            var Data;
+            using (WebClient webClient = new System.Net.WebClient())
+            {
+                WebClient n = new WebClient();
+                Data = n.DownloadString("https://api.github.com/repos/Necrobot-Private/Necrobot/releases/tags" + LatestVersion);
+            }
+            var changelog = Data.body;
+            LoadChangeLogs(changelog);
             if (AutoUpdate)
             {
                 btnUpdate.Enabled = false;
@@ -48,50 +53,19 @@ namespace PoGo.NecroBot.Logic.Forms
             }
         }
 
-        private void LoadChangeLogs(string changelog, string tempPath)
+        private void LoadChangeLogs(string changelog)
         {
             Task.Run(async () =>
             {
+
                 await Task.Delay(2000);
-
-                using (var client = new HttpClient())
-                {
-                    try
-                    {
-                        var responseContent = await client.GetAsync(changelog);
-                        if (responseContent.StatusCode != HttpStatusCode.OK)
-                            return false;
-
-                        var httpStream = await responseContent.Content.ReadAsStreamAsync();
-                        using (var fileStream = File.Create(tempPath))
-                        using (var reader = new StreamReader(httpStream))
-                        {
-                            await httpStream.CopyToAsync(fileStream);
-                            fileStream.Flush();
-                            fileStream.Close();
-                        }
-                        
-                        return true;
-                    }
-                    catch
-                    {
-                        return false;
-                    }
-                }
 
             }).ContinueWith((t) =>
             {
                 //load content
                 Invoke(new Action(() =>
                 {
-                    if (t.Result)
-                    {
-                        richTextBox1.LoadFile(tempPath);
-                    }
-                    else
-                    {
-                        richTextBox1.Text = "No Changelog Detected....";
-                    }
+                    richTextBox1.Text = changelog;
                 }));
 
             });
@@ -163,6 +137,16 @@ namespace PoGo.NecroBot.Logic.Forms
         private void Btncancel_Click(object sender, EventArgs e)
         {
             Close();
+        }
+        public void GetJson()
+        {
+            using (WebClient webClient = new System.Net.WebClient())
+            {
+                WebClient n = new WebClient();
+                var json = n.DownloadString("https://api.github.com/repos/Necrobot-Private/Necrobot/releases/latest");
+                string valueOriginal = Convert.ToString(json);
+                Console.WriteLine(json);
+            }
         }
     }
 }
