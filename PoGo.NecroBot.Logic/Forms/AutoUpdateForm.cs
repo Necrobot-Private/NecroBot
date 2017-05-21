@@ -8,6 +8,9 @@ using System.ComponentModel;
 using System.Net;
 using System.Windows.Forms;
 using Newtonsoft.Json;
+using Markdig;
+using System.Text.RegularExpressions;
+using System.Web;
 
 namespace PoGo.NecroBot.Logic.Forms
 {
@@ -28,25 +31,29 @@ namespace PoGo.NecroBot.Logic.Forms
             InitializeComponent();
         }
 
+        public static string StripHTML(string HTMLText, bool decode = true)
+        {
+            Regex reg = new Regex("<[^>]+>", RegexOptions.IgnoreCase);
+            var stripped = reg.Replace(HTMLText, "");
+            return decode ? HttpUtility.HtmlDecode(stripped) : stripped;
+        }
+
         private void AutoUpdateForm_Load(object sender, EventArgs e)
         {
             richTextBox1.SetInnerMargins(25, 25, 25, 25);
             lblCurrent.Text = CurrentVersion;
             lblLatest.Text = LatestVersion;
             var Client = new WebClient();
-            var json = Client.DownloadString($"https://api.github.com/repos/Necrobot-Private/Necrobot/releases/tags/v{LatestVersion}");
-            Releases obj = JsonConvert.DeserializeObject<Releases>(json);
-            richTextBox1.Text = $"v{LatestVersion} Test";
-            /*var changelog = obj.Body.ToString();
-            if (changelog.Length > 0)
+            var ChangelogRaw = Client.DownloadString("https://cdn.rawgit.com/Necrobot-Private/NecroBot/master/CHANGELOG.md");
+            var ChangelogFormatted = StripHTML(Markdown.ToHtml(ChangelogRaw));
+            if (ChangelogFormatted.Length > 0)
             {
-                richTextBox1.Text = changelog;
+                richTextBox1.Text = ChangelogFormatted;
             }
             else
             {
-                richTextBox1.Text = "No Changelogs Detected...";
+                richTextBox1.Text = "No Changelog Detected...";
             }
-            richTextBox1.Text = obj.Body.ToString();*/
             if (AutoUpdate)
             {
                 btnUpdate.Enabled = false;
