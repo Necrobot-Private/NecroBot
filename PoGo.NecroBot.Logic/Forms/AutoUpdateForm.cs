@@ -40,8 +40,8 @@ namespace PoGo.NecroBot.Logic.Forms
             var Data;
             using (WebClient webClient = new System.Net.WebClient())
             {
-                WebClient n = new WebClient();
-                Data = n.DownloadString("https://api.github.com/repos/Necrobot-Private/Necrobot/releases/tags" + LatestVersion);
+                WebClient Web = new WebClient();
+                Data = Web.DownloadString("https://api.github.com/repos/Necrobot-Private/Necrobot/releases/tags/" + LatestVersion);
             }
             var changelog = Data.body;
             LoadChangeLogs(changelog);
