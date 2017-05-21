@@ -37,7 +37,7 @@ namespace PoGo.NecroBot.Logic.Forms
             var Client = new WebClient();
             var json = Client.DownloadString("https://api.github.com/repos/Necrobot-Private/Necrobot/releases/tags/" + LatestVersion);
             Releases obj = JsonConvert.DeserializeObject<Releases>(json);
-            var changelog = obj.body;
+            var changelog = obj.Body;
             LoadChangeLogs(changelog);
             if (AutoUpdate)
             {
@@ -132,5 +132,10 @@ namespace PoGo.NecroBot.Logic.Forms
         {
             Close();
         }
+    }
+    internal class Releases
+    {
+        [JsonProperty("body")]
+        public string Body { get; set; }
     }
 }
