@@ -43,7 +43,9 @@ namespace PoGo.Necrobot.Window.Controls
 
         private static void OnOverlayContentChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is Overlay overlay)
+#pragma warning disable IDE0019 // Use pattern matching - Build.Bat Error Happens if We Do
+            Overlay overlay = d as Overlay;
+            if (overlay != null)
             {
                 if (overlay.IsOverlayContentVisible)
                 {
@@ -51,11 +53,14 @@ namespace PoGo.Necrobot.Window.Controls
                     overlay.AddOverlayContent();
                 }
             }
+#pragma warning restore IDE0019 // Use pattern matching - Build.Bat Error Happens if We Do
         }
 
         private static void OnIsOverlayContentVisibleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is Overlay overlay)
+#pragma warning disable IDE0019 // Use pattern matching - Build.Bat Error Happens if We Do
+            Overlay overlay = d as Overlay;
+            if (overlay != null)
             {
                 if ((bool)e.NewValue)
                 {
@@ -66,6 +71,7 @@ namespace PoGo.Necrobot.Window.Controls
                     overlay.RemoveOverlayContent();
                 }
             }
+#pragma warning restore IDE0019 // Use pattern matching - Build.Bat Error Happens if We Do
         }
 
         private void AddOverlayContent()

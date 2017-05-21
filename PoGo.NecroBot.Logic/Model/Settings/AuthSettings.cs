@@ -446,6 +446,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         public void Save(string fullPath, bool validate = false)
         {
+#pragma warning disable IDE0018 // Inline variable declaration - Build.Bat Error Happens if We Do
             var jsonSerializeSettings = new JsonSerializerSettings
             {
                 DefaultValueHandling = DefaultValueHandling.Include,
@@ -470,7 +471,8 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             // validate Json using JsonSchema
             Logger.Write("Validating auth.json...");
             var jsonObj = JObject.Parse(output);
-            var valid = jsonObj.IsValid(JsonSchema, out IList<ValidationError> errors);
+            IList<ValidationError> errors;
+            var valid = jsonObj.IsValid(JsonSchema, out errors);
             if (valid) return;
             foreach (var error in errors)
             {
@@ -484,6 +486,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 LogLevel.Warning
             );
             Console.ReadKey();
+#pragma warning restore IDE0018 // Inline variable declaration - Build.Bat Error Happens if We Do
         }
 
         public void Save()

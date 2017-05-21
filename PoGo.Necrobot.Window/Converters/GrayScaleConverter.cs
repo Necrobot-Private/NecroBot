@@ -7,10 +7,11 @@ namespace PoGo.Necrobot.Window.Converters
 {
     public class GrayScaleConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType,
-            object parameter, System.Globalization.CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if (value is BitmapSource orgBmp)
+#pragma warning disable IDE0019 // Use pattern matching - Build.Bat Error Happens if We Do
+            BitmapSource orgBmp = value as BitmapSource;
+            if (orgBmp != null)
             {
                 if (orgBmp.Format == PixelFormats.Bgra32)
                 {
@@ -20,8 +21,8 @@ namespace PoGo.Necrobot.Window.Converters
                     orgBmp.CopyPixels(orgPixels, orgBmp.PixelWidth * 4, 0);
                     for (int i = 3; i < orgPixels.Length; i += 4)
                     {
-                        int grayVal = ((int)orgPixels[i - 3] +
-                        (int)orgPixels[i - 2] + (int)orgPixels[i - 1]);
+                        int grayVal = orgPixels[i - 3] +
+                        orgPixels[i - 2] + orgPixels[i - 1];
 
                         if (grayVal != 0)
                             grayVal = grayVal / 3;
@@ -36,6 +37,7 @@ namespace PoGo.Necrobot.Window.Converters
                 }
             }
             return value;
+#pragma warning restore IDE0019 // Use pattern matching - Build.Bat Error Happens if We Do
         }
         public object ConvertBack(object value, Type targetType, object parameter,
             System.Globalization.CultureInfo culture)

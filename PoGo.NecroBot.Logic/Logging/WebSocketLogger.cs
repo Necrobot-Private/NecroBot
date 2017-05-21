@@ -49,6 +49,8 @@ namespace PoGo.NecroBot.Logic.Logging
         /// <param name="color">Optional. Default is auotmatic</param>
         public void Write(string message, LogLevel level = LogLevel.Info, ConsoleColor color = ConsoleColor.Black)
         {
+#pragma warning disable IDE0018 // Inline variable declaration - Build.Bat Error Happens if We Do
+            LogEvent logEventToSend;
             // Remember to change to a font that supports your language, otherwise it'll still show as ???.
             Console.OutputEncoding = Encoding.UTF8;
             if (level > _maxLogLevel)
@@ -69,12 +71,13 @@ namespace PoGo.NecroBot.Logic.Logging
             {
                 if (!isBuffering)
                 {
-                    while (_messageQueue.TryDequeue(out LogEvent logEventToSend))
+                    while (_messageQueue.TryDequeue(out logEventToSend))
                     {
                         _session?.EventDispatcher?.Send(logEventToSend);
                     }
                 }
             }
+#pragma warning restore IDE0018 // Inline variable declaration - Build.Bat Error Happens if We Do
         }
 
         public void LineSelect(int lineChar = 0, int linesUp = 1)

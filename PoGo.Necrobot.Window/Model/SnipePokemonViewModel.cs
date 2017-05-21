@@ -8,12 +8,13 @@ namespace PoGo.Necrobot.Window.Model
 {
     public class SnipePokemonViewModel : ViewModelBase
     {
-
         public SnipePokemonViewModel(EncounteredEvent e)
         {
+#pragma warning disable IDE0018 // Inline variable declaration - Build.Bat Error Happens if We Do
             var session = TinyIoCContainer.Current.Resolve<ISession>();
+            ulong encounterid;
             UniqueId = e.EncounterId;
-            ulong.TryParse(e.EncounterId, out ulong encounterid);
+            ulong.TryParse(e.EncounterId, out encounterid);
             Ref = e;
             AllowSnipe = true;
             PokemonId = e.PokemonId;
@@ -27,7 +28,7 @@ namespace PoGo.Necrobot.Window.Model
             Level = e.Level;
             SpawnPointId = e.SpawnPointId;
             Verified = (EncounterId > 0 && !SpawnPointId.Contains("-") ? "Verified":"");
-            
+#pragma warning restore IDE0018 // Inline variable declaration - Build.Bat Error Happens if We Do
         }
         public string PokemonName => PokemonId.ToString();
 
