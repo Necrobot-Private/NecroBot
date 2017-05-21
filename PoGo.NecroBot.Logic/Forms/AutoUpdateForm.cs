@@ -6,7 +6,6 @@ using PoGo.NecroBot.Logic.State;
 using System;
 using System.ComponentModel;
 using System.Net;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 
@@ -35,8 +34,17 @@ namespace PoGo.NecroBot.Logic.Forms
             lblCurrent.Text = CurrentVersion;
             lblLatest.Text = LatestVersion;
             var Client = new WebClient();
-            var json = Client.DownloadString("https://api.github.com/repos/Necrobot-Private/Necrobot/releases/tags/v" + LatestVersion);
+            var json = Client.DownloadString($"https://api.github.com/repos/Necrobot-Private/Necrobot/releases/tags/v{LatestVersion}");
             Releases obj = JsonConvert.DeserializeObject<Releases>(json);
+            var changelog = obj.Body.ToString();
+            if (changelog.Length > 0)
+            {
+                richTextBox1.Text = changelog;
+            }
+            else
+            {
+                richTextBox1.Text = "No Changelogs Detected...";
+            }
             richTextBox1.Text = obj.Body.ToString();
             if (AutoUpdate)
             {
