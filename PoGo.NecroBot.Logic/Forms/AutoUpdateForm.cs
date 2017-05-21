@@ -36,7 +36,8 @@ namespace PoGo.NecroBot.Logic.Forms
             var Client = new WebClient();
             var json = Client.DownloadString($"https://api.github.com/repos/Necrobot-Private/Necrobot/releases/tags/v{LatestVersion}");
             Releases obj = JsonConvert.DeserializeObject<Releases>(json);
-            var changelog = obj.Body.ToString();
+            richTextBox1.Text = $"v{LatestVersion} Test";
+            /*var changelog = obj.Body.ToString();
             if (changelog.Length > 0)
             {
                 richTextBox1.Text = changelog;
@@ -45,7 +46,7 @@ namespace PoGo.NecroBot.Logic.Forms
             {
                 richTextBox1.Text = "No Changelogs Detected...";
             }
-            richTextBox1.Text = obj.Body.ToString();
+            richTextBox1.Text = obj.Body.ToString();*/
             if (AutoUpdate)
             {
                 btnUpdate.Enabled = false;

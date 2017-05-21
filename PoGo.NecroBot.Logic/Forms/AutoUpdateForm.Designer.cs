@@ -34,7 +34,6 @@
             this.lblMessage = new System.Windows.Forms.Label();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnUpdate = new System.Windows.Forms.Button();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.panel2 = new System.Windows.Forms.Panel();
             this.lblLatest = new System.Windows.Forms.Label();
             this.lblCurrent = new System.Windows.Forms.Label();
@@ -68,7 +67,6 @@
             this.panel1.Controls.Add(this.lblMessage);
             this.panel1.Controls.Add(this.btnCancel);
             this.panel1.Controls.Add(this.btnUpdate);
-            this.panel1.Controls.Add(this.progressBar1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel1.Location = new System.Drawing.Point(0, 281);
             this.panel1.Name = "panel1";
@@ -86,9 +84,9 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(407, 39);
+            this.btnCancel.Location = new System.Drawing.Point(407, 40);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(85, 23);
+            this.btnCancel.Size = new System.Drawing.Size(85, 22);
             this.btnCancel.TabIndex = 2;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -96,21 +94,13 @@
             // 
             // btnUpdate
             // 
-            this.btnUpdate.Location = new System.Drawing.Point(320, 39);
+            this.btnUpdate.Location = new System.Drawing.Point(287, 40);
             this.btnUpdate.Name = "btnUpdate";
-            this.btnUpdate.Size = new System.Drawing.Size(85, 25);
+            this.btnUpdate.Size = new System.Drawing.Size(114, 22);
             this.btnUpdate.TabIndex = 1;
             this.btnUpdate.Text = "Update";
             this.btnUpdate.UseVisualStyleBackColor = true;
             this.btnUpdate.Click += new System.EventHandler(this.BtnUpdate_Click);
-            // 
-            // progressBar1
-            // 
-            this.progressBar1.Location = new System.Drawing.Point(3, 6);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(488, 23);
-            this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
-            this.progressBar1.TabIndex = 0;
             // 
             // panel2
             // 
@@ -157,7 +147,7 @@
             // 
             this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.richTextBox1.Location = new System.Drawing.Point(3, 16);
-            this.richTextBox1.Margin = new System.Windows.Forms.Padding(10, 10, 10, 10);
+            this.richTextBox1.Margin = new System.Windows.Forms.Padding(10);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
             this.richTextBox1.Size = new System.Drawing.Size(490, 228);
@@ -195,7 +185,6 @@
         private System.Windows.Forms.Label lblMessage;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnUpdate;
-        private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.RichTextBox richTextBox1;
