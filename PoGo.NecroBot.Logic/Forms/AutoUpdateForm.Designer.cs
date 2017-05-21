@@ -48,18 +48,20 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 12);
+            this.label1.Location = new System.Drawing.Point(16, 15);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(78, 13);
+            this.label1.Size = new System.Drawing.Size(105, 17);
             this.label1.TabIndex = 0;
             this.label1.Text = "Current version";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(206, 13);
+            this.label2.Location = new System.Drawing.Point(275, 16);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(73, 13);
+            this.label2.Size = new System.Drawing.Size(97, 17);
             this.label2.TabIndex = 1;
             this.label2.Text = "Latest version";
             // 
@@ -70,25 +72,28 @@
             this.panel1.Controls.Add(this.btnUpdate);
             this.panel1.Controls.Add(this.progressBar1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 281);
+            this.panel1.Location = new System.Drawing.Point(0, 346);
+            this.panel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(496, 74);
+            this.panel1.Size = new System.Drawing.Size(661, 91);
             this.panel1.TabIndex = 2;
             // 
             // lblMessage
             // 
             this.lblMessage.AutoSize = true;
-            this.lblMessage.Location = new System.Drawing.Point(5, 41);
+            this.lblMessage.Location = new System.Drawing.Point(7, 50);
+            this.lblMessage.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblMessage.Name = "lblMessage";
-            this.lblMessage.Size = new System.Drawing.Size(198, 13);
+            this.lblMessage.Size = new System.Drawing.Size(260, 17);
             this.lblMessage.TabIndex = 3;
             this.lblMessage.Text = "Do you want to download latest update?";
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(407, 39);
+            this.btnCancel.Location = new System.Drawing.Point(543, 48);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.Size = new System.Drawing.Size(100, 28);
             this.btnCancel.TabIndex = 2;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -96,9 +101,10 @@
             // 
             // btnUpdate
             // 
-            this.btnUpdate.Location = new System.Drawing.Point(326, 39);
+            this.btnUpdate.Location = new System.Drawing.Point(435, 48);
+            this.btnUpdate.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnUpdate.Name = "btnUpdate";
-            this.btnUpdate.Size = new System.Drawing.Size(75, 23);
+            this.btnUpdate.Size = new System.Drawing.Size(100, 28);
             this.btnUpdate.TabIndex = 1;
             this.btnUpdate.Text = "Update";
             this.btnUpdate.UseVisualStyleBackColor = true;
@@ -106,10 +112,10 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(3, 6);
+            this.progressBar1.Location = new System.Drawing.Point(4, 7);
+            this.progressBar1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(488, 23);
-            this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.progressBar1.Size = new System.Drawing.Size(651, 28);
             this.progressBar1.TabIndex = 0;
             // 
             // panel2
@@ -120,25 +126,28 @@
             this.panel2.Controls.Add(this.label2);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel2.Location = new System.Drawing.Point(0, 0);
+            this.panel2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(496, 34);
+            this.panel2.Size = new System.Drawing.Size(661, 42);
             this.panel2.TabIndex = 3;
             // 
             // lblLatest
             // 
             this.lblLatest.AutoSize = true;
-            this.lblLatest.Location = new System.Drawing.Point(294, 13);
+            this.lblLatest.Location = new System.Drawing.Point(392, 16);
+            this.lblLatest.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblLatest.Name = "lblLatest";
-            this.lblLatest.Size = new System.Drawing.Size(40, 13);
+            this.lblLatest.Size = new System.Drawing.Size(52, 17);
             this.lblLatest.TabIndex = 3;
             this.lblLatest.Text = "1.0.0.0";
             // 
             // lblCurrent
             // 
             this.lblCurrent.AutoSize = true;
-            this.lblCurrent.Location = new System.Drawing.Point(96, 13);
+            this.lblCurrent.Location = new System.Drawing.Point(128, 16);
+            this.lblCurrent.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblCurrent.Name = "lblCurrent";
-            this.lblCurrent.Size = new System.Drawing.Size(40, 13);
+            this.lblCurrent.Size = new System.Drawing.Size(52, 17);
             this.lblCurrent.TabIndex = 2;
             this.lblCurrent.Text = "1.0.0.0";
             // 
@@ -146,9 +155,11 @@
             // 
             this.groupBox1.Controls.Add(this.richTextBox1);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox1.Location = new System.Drawing.Point(0, 34);
+            this.groupBox1.Location = new System.Drawing.Point(0, 42);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(496, 247);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Size = new System.Drawing.Size(661, 304);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Release notes";
@@ -156,23 +167,24 @@
             // richTextBox1
             // 
             this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.richTextBox1.Location = new System.Drawing.Point(3, 16);
-            this.richTextBox1.Margin = new System.Windows.Forms.Padding(10, 10, 10, 10);
+            this.richTextBox1.Location = new System.Drawing.Point(4, 19);
+            this.richTextBox1.Margin = new System.Windows.Forms.Padding(13, 12, 13, 12);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.Size = new System.Drawing.Size(490, 228);
+            this.richTextBox1.Size = new System.Drawing.Size(653, 281);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
             // 
             // AutoUpdateForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(496, 355);
+            this.ClientSize = new System.Drawing.Size(661, 437);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "AutoUpdateForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Tag = "New version available";
