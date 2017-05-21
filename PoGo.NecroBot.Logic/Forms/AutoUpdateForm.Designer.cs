@@ -34,6 +34,7 @@
             this.lblMessage = new System.Windows.Forms.Label();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnUpdate = new System.Windows.Forms.Button();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.panel2 = new System.Windows.Forms.Panel();
             this.lblLatest = new System.Windows.Forms.Label();
             this.lblCurrent = new System.Windows.Forms.Label();
@@ -101,6 +102,14 @@
             this.btnUpdate.Text = "Update";
             this.btnUpdate.UseVisualStyleBackColor = true;
             this.btnUpdate.Click += new System.EventHandler(this.BtnUpdate_Click);
+			//
+            // progressBar1
+            //
+            this.progressBar1.Location = new System.Drawing.Point(4, 7);
+            this.progressBar1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(651, 28);
+            this.progressBar1.TabIndex = 0;
             // 
             // panel2
             // 
@@ -185,6 +194,7 @@
         private System.Windows.Forms.Label lblMessage;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnUpdate;
+        private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.RichTextBox richTextBox1;
