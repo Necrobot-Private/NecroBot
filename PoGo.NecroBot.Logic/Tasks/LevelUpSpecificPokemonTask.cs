@@ -35,6 +35,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     var stardust = -PokemonCpUtils.GetStardustCostsForPowerup(pokemon.CpMultiplier); //+ pokemon.AdditionalCpMultiplier);
                     var totalStarDust = session.Inventory.UpdateStarDust(stardust);
 
+                    Logger.Write("$Pokemon Upgraded: {stardust}/{-PokemonCpUtils.GetStardustCostsForPowerup(pokemon.CpMultiplier + pokemon.AdditionalCpMultiplier)}", LogLevel.LevelUp);
                     Logger.Write("Pokemon Upgraded:" + session.Translation.GetPokemonTranslation(upgradeResult.UpgradedPokemon.PokemonId) + ":" + upgradeResult.UpgradedPokemon.Cp, LogLevel.LevelUp);
 
                     session.EventDispatcher.Send(new PokemonLevelUpEvent

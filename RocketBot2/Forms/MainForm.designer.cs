@@ -1,4 +1,4 @@
-﻿using RocketBot2.Models;
+using RocketBot2.Models;
 using System;
 using System.Windows.Forms;
 
@@ -114,7 +114,7 @@ namespace RocketBot2.Forms
             this.logTextBox.Name = "logTextBox";
             this.logTextBox.ReadOnly = true;
             this.logTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.logTextBox.Size = new System.Drawing.Size(764, 300);
+            this.logTextBox.Size = new System.Drawing.Size(765, 300);
             this.logTextBox.TabIndex = 0;
             this.logTextBox.Text = "";
             // 
@@ -221,7 +221,7 @@ namespace RocketBot2.Forms
             this.GMapControl1.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
             this.GMapControl1.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
             this.GMapControl1.ShowTileGridLines = false;
-            this.GMapControl1.Size = new System.Drawing.Size(757, 464);
+            this.GMapControl1.Size = new System.Drawing.Size(758, 465);
             this.GMapControl1.TabIndex = 23;
             this.GMapControl1.Zoom = 15D;
             this.GMapControl1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.GMapControl1_MouseDoubleClick);
@@ -403,7 +403,7 @@ namespace RocketBot2.Forms
             this.btnRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnRefresh.AutoSize = true;
             this.btnRefresh.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnRefresh.Location = new System.Drawing.Point(621, 745);
+            this.btnRefresh.Location = new System.Drawing.Point(617, 745);
             this.btnRefresh.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(78, 30);
@@ -433,7 +433,7 @@ namespace RocketBot2.Forms
             this.splitContainer1.Panel2.Controls.Add(this.lblPokemonList);
             this.splitContainer1.Panel2.Controls.Add(this.olvPokemonList);
             this.splitContainer1.Size = new System.Drawing.Size(1578, 779);
-            this.splitContainer1.SplitterDistance = 764;
+            this.splitContainer1.SplitterDistance = 765;
             this.splitContainer1.SplitterWidth = 5;
             this.splitContainer1.TabIndex = 27;
             // 
@@ -457,7 +457,7 @@ namespace RocketBot2.Forms
             this.splitContainer2.Panel2.Controls.Add(this.showMoreCheckBox);
             this.splitContainer2.Panel2.Controls.Add(this.speedLable);
             this.splitContainer2.Panel2.Controls.Add(this.GMapControl1);
-            this.splitContainer2.Size = new System.Drawing.Size(764, 779);
+            this.splitContainer2.Size = new System.Drawing.Size(765, 779);
             this.splitContainer2.SplitterDistance = 300;
             this.splitContainer2.SplitterWidth = 5;
             this.splitContainer2.TabIndex = 0;
@@ -470,7 +470,7 @@ namespace RocketBot2.Forms
             this.GMAPSatellite.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.GMAPSatellite.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
             this.GMAPSatellite.ForeColor = System.Drawing.Color.Red;
-            this.GMAPSatellite.Location = new System.Drawing.Point(648, 68);
+            this.GMAPSatellite.Location = new System.Drawing.Point(649, 68);
             this.GMAPSatellite.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             this.GMAPSatellite.Name = "GMAPSatellite";
             this.GMAPSatellite.Size = new System.Drawing.Size(104, 24);
@@ -491,7 +491,7 @@ namespace RocketBot2.Forms
             this.togglePrecalRoute.Enabled = false;
             this.togglePrecalRoute.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
             this.togglePrecalRoute.ForeColor = System.Drawing.Color.Red;
-            this.togglePrecalRoute.Location = new System.Drawing.Point(475, 46);
+            this.togglePrecalRoute.Location = new System.Drawing.Point(476, 46);
             this.togglePrecalRoute.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             this.togglePrecalRoute.Name = "togglePrecalRoute";
             this.togglePrecalRoute.Size = new System.Drawing.Size(277, 24);
@@ -512,7 +512,7 @@ namespace RocketBot2.Forms
             this.followTrainerCheckBox.Enabled = false;
             this.followTrainerCheckBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
             this.followTrainerCheckBox.ForeColor = System.Drawing.Color.Red;
-            this.followTrainerCheckBox.Location = new System.Drawing.Point(556, 25);
+            this.followTrainerCheckBox.Location = new System.Drawing.Point(557, 25);
             this.followTrainerCheckBox.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             this.followTrainerCheckBox.Name = "followTrainerCheckBox";
             this.followTrainerCheckBox.Size = new System.Drawing.Size(196, 24);
@@ -530,7 +530,7 @@ namespace RocketBot2.Forms
             this.showMoreCheckBox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.showMoreCheckBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
             this.showMoreCheckBox.ForeColor = System.Drawing.Color.Red;
-            this.showMoreCheckBox.Location = new System.Drawing.Point(524, 4);
+            this.showMoreCheckBox.Location = new System.Drawing.Point(525, 4);
             this.showMoreCheckBox.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             this.showMoreCheckBox.Name = "showMoreCheckBox";
             this.showMoreCheckBox.Size = new System.Drawing.Size(228, 24);
@@ -557,7 +557,7 @@ namespace RocketBot2.Forms
             this.btnPokeDex.AutoSize = true;
             this.btnPokeDex.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.btnPokeDex.Enabled = false;
-            this.btnPokeDex.Location = new System.Drawing.Point(709, 745);
+            this.btnPokeDex.Location = new System.Drawing.Point(705, 745);
             this.btnPokeDex.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             this.btnPokeDex.Name = "btnPokeDex";
             this.btnPokeDex.Size = new System.Drawing.Size(86, 30);
