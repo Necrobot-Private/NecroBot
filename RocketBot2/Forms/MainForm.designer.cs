@@ -395,7 +395,7 @@ namespace RocketBot2.Forms
             // smallPokemonImageList
             // 
             this.smallPokemonImageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
-            this.smallPokemonImageList.ImageSize = new System.Drawing.Size(32, 32);
+            this.smallPokemonImageList.ImageSize = new System.Drawing.Size(25, 25);
             this.smallPokemonImageList.TransparentColor = System.Drawing.Color.Transparent;
             // 
             // btnRefresh
