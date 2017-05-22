@@ -29,6 +29,9 @@ namespace PoGo.NecroBot.Logic.State
         public const string RemoteReleaseUrl =
             "https://github.com/Necrobot-Private/NecroBot/releases/download/v";
 
+        public const string ChangelogUri =
+             "https://cdn.rawgit.com/Necrobot-Private/NecroBot/master/CHANGELOG.md";
+
         public static Version RemoteVersion;
 
         public async Task<IState> Execute(ISession session, CancellationToken cancellationToken)
@@ -79,6 +82,7 @@ namespace PoGo.NecroBot.Logic.State
             {
                 Session = session,
                 DownloadLink = downloadLink,
+                ChangelogLink = ChangelogUri,
                 Destination = downloadFilePath,
                 AutoUpdate = true,
                 CurrentVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString(),
