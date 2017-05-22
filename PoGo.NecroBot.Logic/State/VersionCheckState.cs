@@ -30,7 +30,7 @@ namespace PoGo.NecroBot.Logic.State
             "https://github.com/Necrobot-Private/NecroBot/releases/download/v";
 
         public const string ChangelogUri =
-             "https://cdn.rawgit.com/Necrobot-Private/NecroBot/master/CHANGELOG.md";
+             "https://raw.githubusercontent.com/Necrobot-Private/NecroBot/master/CHANGELOG.md";
 
         public static Version RemoteVersion;
 
