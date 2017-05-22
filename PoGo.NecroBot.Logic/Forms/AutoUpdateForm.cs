@@ -20,6 +20,7 @@ namespace PoGo.NecroBot.Logic.Forms
         public string CurrentVersion { get; set; }
         public bool AutoUpdate { get; set; }
         public string DownloadLink { get; set; }
+        public string ChangelogLink { get; set; }
         public string Destination { get; set; }
         public ISession Session { get; set; }
 
@@ -41,7 +42,7 @@ namespace PoGo.NecroBot.Logic.Forms
             lblCurrent.Text = $"v{CurrentVersion}";
             lblLatest.Text = $"v{LatestVersion}";
             var Client = new WebClient();
-            var ChangelogRaw = Client.DownloadString("https://cdn.rawgit.com/Necrobot-Private/NecroBot/master/CHANGELOG.md");
+            var ChangelogRaw = Client.DownloadString(ChangelogLink);
             var ChangelogFormatted = StripHTML(Markdown.ToHtml(ChangelogRaw)).Replace("Full Changelog", "");
             if (ChangelogFormatted.Length > 0)
             {
@@ -103,7 +104,7 @@ namespace PoGo.NecroBot.Logic.Forms
         {
             Invoke(new Action(() =>
             {
-                lblMessage.Text = $"Updating Necrobot from v{CurrentVersion} to v{LatestVersion} ({e.ProgressPercentage}% Completed)";
+                lblMessage.Text = $"Updating {Application.ProductName} from v{CurrentVersion} to v{LatestVersion} ({e.ProgressPercentage}% Completed)";
             }));
         }
 
