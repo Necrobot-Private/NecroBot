@@ -88,8 +88,8 @@
     <Reference Include="GeoCoordinate.NetStandard1, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\GeoCoordinate.NetStandard1.1.0.1\lib\netstandard1.1\GeoCoordinate.NetStandard1.dll</HintPath>
     </Reference>
-    <Reference Include="Google.Api.CommonProtos, Version=1.0.0.0, Culture=neutral, PublicKeyToken=3ec5ea7f18953e47, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)\packages\Google.Api.CommonProtos.1.0.0\lib\net45\Google.Api.CommonProtos.dll</HintPath>
+    <Reference Include="Google.Api.CommonProtos, Version=1.1.0.0, Culture=neutral, PublicKeyToken=3ec5ea7f18953e47, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Google.Api.CommonProtos.1.1.0\lib\net45\Google.Api.CommonProtos.dll</HintPath>
     </Reference>
     <Reference Include="Google.Api.Gax, Version=1.0.1.0, Culture=neutral, PublicKeyToken=3ec5ea7f18953e47, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\Google.Api.Gax.1.0.1\lib\net45\Google.Api.Gax.dll</HintPath>
