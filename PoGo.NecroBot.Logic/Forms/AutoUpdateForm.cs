@@ -41,11 +41,11 @@ namespace PoGo.NecroBot.Logic.Forms
         private void AutoUpdateForm_Load(object sender, EventArgs e)
         {
             richTextBox1.SetInnerMargins(25, 25, 25, 25);
-            lblCurrent.Text = CurrentVersion;
-            lblLatest.Text = LatestVersion;
+            lblCurrent.Text = $"v{CurrentVersion}";
+            lblLatest.Text = $"v{LatestVersion}";
             var Client = new WebClient();
             var ChangelogRaw = Client.DownloadString("https://cdn.rawgit.com/Necrobot-Private/NecroBot/master/CHANGELOG.md");
-            var ChangelogFormatted = StripHTML(Markdown.ToHtml(ChangelogRaw));
+            var ChangelogFormatted = StripHTML(Markdown.ToHtml(ChangelogRaw)).Replace("Full Changelog","");
             if (ChangelogFormatted.Length > 0)
             {
                 richTextBox1.Text = ChangelogFormatted;
@@ -57,6 +57,7 @@ namespace PoGo.NecroBot.Logic.Forms
             if (AutoUpdate)
             {
                 btnUpdate.Enabled = false;
+                lblMessage.Enabled = true;
                 btnUpdate.Text = "Downloading...";
                 StartDownload();
             }
@@ -105,17 +106,16 @@ namespace PoGo.NecroBot.Logic.Forms
         {
             Invoke(new Action(() =>
             {
-                progressBar1.Value = e.ProgressPercentage;
+                lblMessage.Text = $"Updating Necrobot from v{CurrentVersion} to v{LatestVersion} ({e.ProgressPercentage}% Completed)";
             }));
         }
 
 
         public void StartDownload()
         {
-            Session.EventDispatcher.Send(new StatusBarEvent($"Auto Update v{LatestVersion}, Downloading from {DownloadLink}"));
+            Session.EventDispatcher.Send(new StatusBarEvent($"Updating to v{LatestVersion}, Downloading from {DownloadLink}"));
             Logger.Write(DownloadLink, LogLevel.Info);
             DownloadFile(DownloadLink, Destination);
-
         }
 
         private void BtnUpdate_Click(object sender, EventArgs e)
@@ -129,10 +129,5 @@ namespace PoGo.NecroBot.Logic.Forms
         {
             Close();
         }
-    }
-    internal class Releases
-    {
-        [JsonProperty("body")]
-        public string Body { get; set; }
     }
 }

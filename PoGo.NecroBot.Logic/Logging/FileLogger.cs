@@ -58,12 +58,14 @@ namespace PoGo.NecroBot.Logic.Logging
         /// <param name="color">Optional. Default is auotmatic</param>
         public void Write(string message, LogLevel level = LogLevel.Info, ConsoleColor color = ConsoleColor.Black)
         {
+#pragma warning disable IDE0018 // Inline variable declaration - Build.Bat Error Happens if We Do
             // Remember to change to a font that supports your language, otherwise it'll still show as ???.
             Console.OutputEncoding = Encoding.UTF8;
             if (level > _maxLogLevel)
                 return;
 
             var finalMessage = Logger.GetFinalMessage(message, level, color);
+            LogEvent logEventToSend;
 
             lock (ioLocker)
             {
@@ -76,12 +78,13 @@ namespace PoGo.NecroBot.Logic.Logging
 
                 using (StreamWriter sw = File.AppendText(logPath))
                 {
-                    while (_messageQueue.TryDequeue(out LogEvent logEventToSend))
+                    while (_messageQueue.TryDequeue(out logEventToSend))
                     {
                         sw.WriteLine(finalMessage);
                     }
                 }
             }
+#pragma warning restore IDE0018 // Inline variable declaration - Build.Bat Error Happens if We Do
         }
 
         public void LineSelect(int lineChar = 0, int linesUp = 1)

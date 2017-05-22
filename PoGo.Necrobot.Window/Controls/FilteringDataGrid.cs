@@ -175,12 +175,14 @@ namespace PoGo.Necrobot.Window.Controls
         public static T TryFindParent<T>(DependencyObject child)
           where T : DependencyObject
         {
+#pragma warning disable IDE0019 // Use pattern matching - Build.Bat Error Happens if We Do
             //get parent item
             DependencyObject parentObject = GetParentObject(child);
             //we've reached the end of the tree
             if (parentObject == null) return null;
             //check if the parent matches the type we're looking for
-            if (parentObject is T parent)
+            T parent = parentObject as T;
+            if (parent != null)
             {
                 return parent;
             }
@@ -189,6 +191,7 @@ namespace PoGo.Necrobot.Window.Controls
                 //use recursion to proceed with next level
                 return TryFindParent<T>(parentObject);
             }
+#pragma warning restore IDE0019 // Use pattern matching - Build.Bat Error Happens if We Do
         }
         /// <summary>
         /// This method is an alternative to WPF's
@@ -200,8 +203,10 @@ namespace PoGo.Necrobot.Window.Controls
         /// <returns>The submitted item's parent, if available. Otherwise null.</returns>
         public static DependencyObject GetParentObject(DependencyObject child)
         {
+#pragma warning disable IDE0019 // Use pattern matching - Build.Bat Error Happens if We Do
             if (child == null) return null;
-            if (child is ContentElement contentElement)
+            ContentElement contentElement = child as ContentElement;
+            if (contentElement != null)
             {
                 DependencyObject parent = ContentOperations.GetParent(contentElement);
                 if (parent != null) return parent;
@@ -210,6 +215,7 @@ namespace PoGo.Necrobot.Window.Controls
             }
             // If it's not a ContentElement, rely on VisualTreeHelper
             return VisualTreeHelper.GetParent(child);
+#pragma warning restore IDE0019 // Use pattern matching - Build.Bat Error Happens if We Do
         }
     }
 }
