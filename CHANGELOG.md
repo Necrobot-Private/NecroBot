@@ -1,12 +1,15 @@
 # Change Log
 
-## [Unreleased](https://github.com/Necrobot-Private/NecroBot/tree/HEAD)
-
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.174...HEAD)
+## [v1.0.0.175](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.175) (2017-05-22)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.174...v1.0.0.175)
 
 **Closed issues:**
 
 - -Nothing to see move along - [\#1744](https://github.com/Necrobot-Private/NecroBot/issues/1744)
+
+**Merged pull requests:**
+
+- Fix collecting levelup rewards. [\#1746](https://github.com/Necrobot-Private/NecroBot/pull/1746) ([hopebasket](https://github.com/hopebasket))
 
 ## [v1.0.0.174](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.174) (2017-05-22)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.173...v1.0.0.174)
@@ -1677,17 +1680,17 @@
 - Gym update [\#706](https://github.com/Necrobot-Private/NecroBot/pull/706) ([ziomber](https://github.com/ziomber))
 
 ## [v1.0.0.88](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.88) (2017-02-02)
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.86...v1.0.0.88)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.87...v1.0.0.88)
 
 **Merged pull requests:**
 
 - API Update to 0.55 [\#699](https://github.com/Necrobot-Private/NecroBot/pull/699) ([jjskuld](https://github.com/jjskuld))
 
-## [v1.0.0.86](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.86) (2017-02-01)
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.87...v1.0.0.86)
-
 ## [v1.0.0.87](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.87) (2017-02-01)
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.85...v1.0.0.87)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.86...v1.0.0.87)
+
+## [v1.0.0.86](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.86) (2017-02-01)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.85...v1.0.0.86)
 
 **Closed issues:**
 
