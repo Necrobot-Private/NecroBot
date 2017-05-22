@@ -26,9 +26,6 @@ namespace PoGo.NecroBot.Logic.State
         public const string VersionUri =
             "https://raw.githubusercontent.com/Necrobot-Private/NecroBot/master/PoGo.NecroBot.Logic/Properties/AssemblyInfo.cs";
 
-        public const string LatestReleaseApi =
-            "https://api.github.com/repos/Necrobot-Private/NecroBot/releases/latest";
-
         public const string RemoteReleaseUrl =
             "https://github.com/Necrobot-Private/NecroBot/releases/download/v";
 
