@@ -838,18 +838,19 @@ namespace PoGo.NecroBot.Logic
 
         public async Task<LevelUpRewardsResponse> GetLevelUpRewards(int level)
         {
+            var rewards = new LevelUpRewardsResponse();
             if (_level == 0 || level > _level)
             {
                 _level = level;
 
-                var rewards = await _client.Player.GetLevelUpRewards(level).ConfigureAwait(false);
+                rewards = await _client.Player.GetLevelUpRewards(level).ConfigureAwait(false);
                 foreach (var item in rewards.ItemsAwarded)
                 {
                     await UpdateInventoryItem(item.ItemId).ConfigureAwait(false);
                 }
             }
 
-            return new LevelUpRewardsResponse();
+            return rewards;
         }
 
         public async Task<bool> CanUpgradePokemon(PokemonData pokemon)
