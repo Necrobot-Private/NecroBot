@@ -33,8 +33,7 @@ namespace PoGo.NecroBot.CLI
 {
     class Options
     {
-        [Option('i', "init", Required = false,
-          HelpText = "Init account")]
+        [Option('i', "init", Required = false, HelpText = "Init account")]
         public bool Init { get; set; }
 
         [Option('t', "template", DefaultValue = "", Required = false , HelpText = "Prints all messages to standard output.")]
@@ -48,7 +47,6 @@ namespace PoGo.NecroBot.CLI
 
         [Option('s', "start", DefaultValue = 1,HelpText = "Start account", Required = false)]
         public int Start { get; set; }
-
 
         [Option('e', "end", DefaultValue = 10, HelpText = "End account",Required = false)]
         public int End { get; set; }
