@@ -17,14 +17,12 @@ namespace PoGo.NecroBot.Logic.Forms
     public partial class AutoUpdateForm : Form
     {
         public string LatestVersion { get; set; }
-
         public string CurrentVersion { get; set; }
-
         public bool AutoUpdate { get; set; }
         public string DownloadLink { get; set; }
         public string Destination { get; set; }
-
         public ISession Session { get; set; }
+
         public AutoUpdateForm()
         {
             InitializeComponent();
