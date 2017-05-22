@@ -100,7 +100,7 @@ namespace PoGo.Necrobot.Window.Model
 
         private double LookIV(string content)
         {
-
+#pragma warning disable IDE0018 // Inline variable declaration - Build.Bat Error Happens if We Do
             string[] patterns = new string[]
             {
                @"(\d{1,2}\.?\d*?)%"   ,
@@ -109,15 +109,16 @@ namespace PoGo.Necrobot.Window.Model
             foreach (var p in patterns)
             {
                 var match = Regex.Match(content, p);
+                double x;
                 if (match != null && !string.IsNullOrEmpty(match.Value))
                 {
-                    double.TryParse(match.Groups[1].Value, out double x);
+                    double.TryParse(match.Groups[1].Value, out x);
                     return x;
                 }
             }
             if (content.Contains("💯")) return 100.0;
-
             return 0;
+#pragma warning restore IDE0018 // Inline variable declaration - Build.Bat Error Happens if We Do
         }
 
         private Tuple<double, double> LookCoord(string content)
