@@ -26,11 +26,11 @@ namespace PoGo.NecroBot.Logic.State
         public const string VersionUri =
             "https://raw.githubusercontent.com/Necrobot-Private/NecroBot/master/PoGo.NecroBot.Logic/Properties/AssemblyInfo.cs";
 
-        public const string LatestReleaseApi =
-            "https://api.github.com/repos/Necrobot-Private/NecroBot/releases/latest";
-
         public const string RemoteReleaseUrl =
             "https://github.com/Necrobot-Private/NecroBot/releases/download/v";
+
+        public const string ChangelogUri =
+             "https://raw.githubusercontent.com/Necrobot-Private/NecroBot/master/CHANGELOG.md";
 
         public static Version RemoteVersion;
 
@@ -82,6 +82,7 @@ namespace PoGo.NecroBot.Logic.State
             {
                 Session = session,
                 DownloadLink = downloadLink,
+                ChangelogLink = ChangelogUri,
                 Destination = downloadFilePath,
                 AutoUpdate = true,
                 CurrentVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString(),
@@ -95,7 +96,6 @@ namespace PoGo.NecroBot.Logic.State
             {
                 Logger.Write("Update Skipped", LogLevel.Update);
                 return new LoginState();
-
             }
 
             if (!UnpackFile(downloadFilePath, extractedDir))

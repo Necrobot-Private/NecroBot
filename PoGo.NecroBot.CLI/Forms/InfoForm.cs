@@ -14,7 +14,7 @@ namespace PoGo.NecroBot.CLI.Forms
 
         private void InfoForm_Load(object sender, EventArgs e)
         {
-            Text = $"Necrobot 2 - {Assembly.GetExecutingAssembly().GetName().Version}";
+            Text = $"Necrobot 2 - v{Assembly.GetExecutingAssembly().GetName().Version.ToString()}";
         }
 
         private void DonateLogo_Click(object sender, EventArgs e)
