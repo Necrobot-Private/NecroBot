@@ -96,7 +96,6 @@ namespace PoGo.NecroBot.Logic.State
             {
                 Logger.Write("Update Skipped", LogLevel.Update);
                 return new LoginState();
-
             }
 
             if (!UnpackFile(downloadFilePath, extractedDir))

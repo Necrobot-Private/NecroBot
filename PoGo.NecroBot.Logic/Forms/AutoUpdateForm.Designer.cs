@@ -84,9 +84,8 @@
             this.lblMessage.Location = new System.Drawing.Point(16, 20);
             this.lblMessage.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblMessage.Name = "lblMessage";
-            this.lblMessage.Size = new System.Drawing.Size(79, 17);
+            this.lblMessage.Size = new System.Drawing.Size(0, 17);
             this.lblMessage.TabIndex = 3;
-            this.lblMessage.Text = "StatusHere";
             // 
             // btnCancel
             // 
@@ -109,11 +108,11 @@
             this.btnUpdate.Text = "Update";
             this.btnUpdate.UseVisualStyleBackColor = true;
             this.btnUpdate.Click += new System.EventHandler(this.BtnUpdate_Click);
-			//
+            // 
             // progressBar1
-            //
+            // 
             this.progressBar1.Location = new System.Drawing.Point(4, 7);
-            this.progressBar1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.progressBar1.Margin = new System.Windows.Forms.Padding(4);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(651, 28);
             this.progressBar1.TabIndex = 0;
@@ -137,9 +136,9 @@
             this.lblLatest.Location = new System.Drawing.Point(392, 16);
             this.lblLatest.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblLatest.Name = "lblLatest";
-            this.lblLatest.Size = new System.Drawing.Size(52, 17);
+            this.lblLatest.Size = new System.Drawing.Size(59, 17);
             this.lblLatest.TabIndex = 3;
-            this.lblLatest.Text = "1.0.0.0";
+            this.lblLatest.Text = "v1.0.0.0";
             // 
             // lblCurrent
             // 
@@ -147,9 +146,9 @@
             this.lblCurrent.Location = new System.Drawing.Point(128, 16);
             this.lblCurrent.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblCurrent.Name = "lblCurrent";
-            this.lblCurrent.Size = new System.Drawing.Size(52, 17);
+            this.lblCurrent.Size = new System.Drawing.Size(59, 17);
             this.lblCurrent.TabIndex = 2;
-            this.lblCurrent.Text = "1.0.0.0";
+            this.lblCurrent.Text = "v1.0.0.0";
             // 
             // groupBox1
             // 

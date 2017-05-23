@@ -43,7 +43,7 @@ namespace PoGo.NecroBot.Logic.Forms
             lblLatest.Text = $"v{LatestVersion}";
             var Client = new WebClient();
             var ChangelogRaw = Client.DownloadString(ChangelogLink);
-            var ChangelogFormatted = StripHTML(Markdown.ToHtml(ChangelogRaw)).Replace("Full Changelog", "");
+            var ChangelogFormatted = StripHTML(Markdown.ToHtml(ChangelogRaw)).Replace("Full Changelog", "").Replace("Change Log", "");
             if (ChangelogFormatted.Length > 0)
             {
                 richTextBox1.Text = ChangelogFormatted;
