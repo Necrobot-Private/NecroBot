@@ -125,6 +125,7 @@ namespace PoGo.NecroBot.Logic.Service
             Logger.Write(
                 session.Translation.GetTranslation(TranslationString.EventPokemonUpgraded,
                     session.Translation.GetPokemonTranslation(upgradePokemonEvent.PokemonId),
+                    upgradePokemonEvent.Lvl,
                     upgradePokemonEvent.Cp.ToString(),
                     upgradePokemonEvent.Perfection.ToString("0.00"),
                     upgradePokemonEvent.BestCp.ToString(),
