@@ -13,5 +13,6 @@ namespace PoGo.NecroBot.Logic.Event
         public ulong UniqueId;
         public int PCandies;
         public int PSD;
+        public double Lvl;
     }
 }

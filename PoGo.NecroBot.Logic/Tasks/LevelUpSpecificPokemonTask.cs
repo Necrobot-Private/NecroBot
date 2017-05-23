@@ -45,6 +45,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         UniqueId = pokemon.Id,
                         PSD = stardust,
                         PCandies = await PokemonInfo.GetCandy(session, pokemon).ConfigureAwait(false),
+                        Lvl = upgradeResult.UpgradedPokemon.Level(),
                     });
                 }
                 await DelayingUtils.DelayAsync(session.LogicSettings.DelayBetweenPlayerActions, 0, session.CancellationTokenSource.Token).ConfigureAwait(false);

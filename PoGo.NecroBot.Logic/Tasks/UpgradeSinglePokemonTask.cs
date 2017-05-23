@@ -11,6 +11,7 @@ using PokemonGo.RocketAPI.Exceptions;
 using POGOProtos.Data;
 using POGOProtos.Networking.Responses;
 using PokemonGo.RocketAPI.Helpers;
+using PoGo.NecroBot.Logic.Logging;
 
 #endregion
 
@@ -36,6 +37,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                 var stardust = -PokemonCpUtils.GetStardustCostsForPowerup(upgradeResult.UpgradedPokemon.CpMultiplier); //+ upgradeResult.UpgradedPokemon.AdditionalCpMultiplier);
                 var totalStarDust = session.Inventory.UpdateStarDust(stardust);
 
+                Logger.Write("$UpgradeSinglePokemonTasks: {stardust}/{-PokemonCpUtils.GetStardustCostsForPowerup(pokemon.CpMultiplier + pokemon.AdditionalCpMultiplier)}", LogLevel.LevelUp);
+                Logger.Write("UpgradeSinglePokemonTasks:" + session.Translation.GetPokemonTranslation(upgradeResult.UpgradedPokemon.PokemonId) + ":" + upgradeResult.UpgradedPokemon.Cp, LogLevel.LevelUp);
+
                 session.EventDispatcher.Send(new UpgradePokemonEvent()
                 {
                     Candy = await session.Inventory.GetCandyCount(pokemon.PokemonId).ConfigureAwait(false),
@@ -47,6 +51,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     BestPerfection = PokemonInfo.CalculatePokemonPerfection(bestPokemonOfType),
                     Perfection = PokemonInfo.CalculatePokemonPerfection(upgradeResult.UpgradedPokemon),
                     USD = stardust,
+                    Lvl = upgradeResult.UpgradedPokemon.Level(),
                 });
 
                 return true;
