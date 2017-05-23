@@ -6,13 +6,18 @@ using PoGo.NecroBot.Logic.Event;
 using POGOProtos.Networking.Responses;
 using POGOProtos.Inventory;
 using PoGo.NecroBot.Logic.Utils;
+using PoGo.NecroBot.Logic.State;
+using System.Windows;
 
 namespace PoGo.Necrobot.Window.Model
 {
     public class PlayerInfoModel : ViewModelBase
     {
+        public ISession Session { get; set; }
+
         public PokemonId BuddyPokemonId { get; set; }
         public string Name { get; set; }
+
         private double exp;
         public double Exp
         {
@@ -124,6 +129,8 @@ namespace PoGo.Necrobot.Window.Model
         public double WalkSpeed { get; set; }
         public int PokemonTransfered { get; set; }
 
+        public string CollectPokeCoin { get; set; }
+
         internal void OnProfileUpdate(ProfileEvent profile)
         {
             var stats = profile.Stats;
@@ -201,6 +208,13 @@ namespace PoGo.Necrobot.Window.Model
             WalkSpeed = speed;
             RaisePropertyChanged("WalkSpeed");
 
+        }
+
+        public async void GetPokeCoin()
+        {
+            var deployed = await Session.Inventory.GetDeployedPokemons();
+            var count = (deployed.Count() * 10).ToString();
+            CollectPokeCoin = $"Collect PokeCoin ({count}";
         }
     }
 }
