@@ -1,5 +1,22 @@
 # Change Log
 
+## [v1.0.0.176](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.176) (2017-05-23)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.175...v1.0.0.176)
+
+**Closed issues:**
+
+- Chrome captcha not shown [\#1736](https://github.com/Necrobot-Private/NecroBot/issues/1736)
+- Problem with Elevation Services [\#1729](https://github.com/Necrobot-Private/NecroBot/issues/1729)
+- Lucky eggs constantly problem [\#1674](https://github.com/Necrobot-Private/NecroBot/issues/1674)
+- Loop "\(ERREUR\) Unexpected error happen, bot will re-login" after "PokemonGo.RocketAPI.Exceptions.APIBadRequestException: BAD REQUEST" [\#1325](https://github.com/Necrobot-Private/NecroBot/issues/1325)
+
+**Merged pull requests:**
+
+- Updates Fody to 2.0.10 \(Necrobot, view associated PR for RocketBot\) [\#1750](https://github.com/Necrobot-Private/NecroBot/pull/1750) ([CDAGaming](https://github.com/CDAGaming))
+- Update Fody 2.0.9 to 2.0.10 [\#1749](https://github.com/Necrobot-Private/NecroBot/pull/1749) ([Furtif](https://github.com/Furtif))
+- Update egg form \(Rocketbot\) [\#1748](https://github.com/Necrobot-Private/NecroBot/pull/1748) ([Furtif](https://github.com/Furtif))
+- Formatting Tweaks [\#1747](https://github.com/Necrobot-Private/NecroBot/pull/1747) ([CDAGaming](https://github.com/CDAGaming))
+
 ## [v1.0.0.175](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.175) (2017-05-22)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.174...v1.0.0.175)
 
