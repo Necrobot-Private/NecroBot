@@ -30,6 +30,7 @@ using DotNetBrowser;
 using DotNetBrowser.WPF;
 using PokemonGo.RocketAPI.Extensions;
 using PoGo.Necrobot.Window.Win32;
+using System.Reflection;
 
 namespace PoGo.Necrobot.Window
 {
@@ -128,6 +129,7 @@ namespace PoGo.Necrobot.Window
             //Upgrade Settings, if Any
             Settings.Default.Upgrade();
 
+            Title = $"NecroBot Windows GUI - v{Assembly.GetExecutingAssembly().GetName().Version.ToString()}";
             // Timer Timing
             timer.Start();
             timer.Interval = 1;
