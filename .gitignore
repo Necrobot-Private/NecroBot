@@ -256,9 +256,3 @@ paket-files/
 node_modules
 PoGo.NecroBot.GUI.Electron/dist
 !packages/Google.Api*
-_SYNCAPP/metadata.xml
-*.xml
-_SYNCAPP/metadata.xml
-_SYNCAPP/metadata.xml
-_SYNCAPP/metadata.xml
-_SYNCAPP/metadata.xml
