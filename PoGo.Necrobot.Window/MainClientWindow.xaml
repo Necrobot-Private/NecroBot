@@ -202,7 +202,7 @@
                     <ColumnDefinition Width="1" />
                     <ColumnDefinition Width="150" />
                   </Grid.ColumnDefinitions>
-                        <TextBox x:Name="txtCmdInput" Grid.Column="0" ToolTip="{Binding Source=InputCommand, Converter={StaticResource ResourceKey=I18NConveter}}" MouseDown="TxtCmdInput_MouseDown" KeyDown="TxtCmdInput_KeyDown" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium" />
+                        <TextBox x:Name="txtCmdInput" Grid.Column="0" ToolTip="{Binding Source=InputCommand, Converter={StaticResource ResourceKey=I18NConveter}}" MouseDown="TxtCmdInput_MouseDown" KeyDown="TxtCmdInput_KeyDown" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium" VerticalContentAlignment="Center" />
                   <GridSplitter Grid.Column="1" />
                         <ComboBox x:Name="ConsoleThemer" Grid.Column="2" IsEditable="False" IsReadOnly="True" SelectionChanged="ConsoleThemer_SelectionChanged" BorderBrush="#FFCCCCCC" ToolTip="Set Console Colors" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium" />
                 </Grid>
