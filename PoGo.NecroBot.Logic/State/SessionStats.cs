@@ -168,7 +168,6 @@ namespace PoGo.NecroBot.Logic.State
 
         public void AddPokemonTimestamp(Int64 ts)
         {
-            SessionStats.LoadLegacyData(ownerSession);
             var manager = TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>();
             var db = manager.GetDbContext();
             var existing = db.PokemonTimestamp.Where(t => t.Timestamp == ts).FirstOrDefault();
@@ -188,7 +187,6 @@ namespace PoGo.NecroBot.Logic.State
 
         public void CleanOutExpiredStats()
         {
-            SessionStats.LoadLegacyData(ownerSession);
             var manager = TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>();
             var db = manager.GetDbContext();
             long TSminus24h = DateTime.Now.AddHours(-24).Ticks;
