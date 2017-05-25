@@ -89,7 +89,9 @@
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
-            <Button x:Name="btnCollectPokeCoin" Content="{Binding CollectPokeCoin}" Click="GetPokeCoin_Click" Grid.Column="3" Grid.Row="2" Grid.ColumnSpan="2"/>
+            <Button x:Name="btnCollectPokeCoin" Click="GetPokeCoin_Click" Grid.Column="4" Grid.Row="2">
+                <TextBlock Text="{Binding CollectPokeCoin}" />
+            </Button>
         </Grid>
     </DockPanel>
 </UserControl>

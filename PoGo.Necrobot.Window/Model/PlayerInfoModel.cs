@@ -6,15 +6,14 @@ using PoGo.NecroBot.Logic.Event;
 using POGOProtos.Networking.Responses;
 using POGOProtos.Inventory;
 using PoGo.NecroBot.Logic.Utils;
+using System.Threading.Tasks;
+using TinyIoC;
 using PoGo.NecroBot.Logic.State;
-using System.Windows;
 
 namespace PoGo.Necrobot.Window.Model
 {
     public class PlayerInfoModel : ViewModelBase
     {
-        public ISession Session { get; set; }
-
         public PokemonId BuddyPokemonId { get; set; }
         public string Name { get; set; }
 
@@ -131,7 +130,7 @@ namespace PoGo.Necrobot.Window.Model
 
         public string CollectPokeCoin { get; set; }
 
-        internal void OnProfileUpdate(ProfileEvent profile)
+        internal async Task OnProfileUpdateAsync(ProfileEvent profile)
         {
             var stats = profile.Stats;
             var playerStats = stats.FirstOrDefault(x => x.Experience > 0);
@@ -140,7 +139,7 @@ namespace PoGo.Necrobot.Window.Model
                 Exp = playerStats.Experience;
                 LevelExp = playerStats.NextLevelXp;
             }
-
+            await GetPokeCoin();
             playerProfile = profile.Profile;
         }
 
@@ -210,11 +209,13 @@ namespace PoGo.Necrobot.Window.Model
 
         }
 
-        public async void GetPokeCoin()
+        public async Task GetPokeCoin()
         {
+            Session = TinyIoCContainer.Current.Resolve<ISession>();
             var deployed = await Session.Inventory.GetDeployedPokemons();
             var count = (deployed.Count() * 10).ToString();
-            CollectPokeCoin = $"Collect PokeCoin ({count}";
+            CollectPokeCoin = $"Collect PokeCoin ({count})";
+            RaisePropertyChanged("CollectPokeCoin");
         }
     }
 }
