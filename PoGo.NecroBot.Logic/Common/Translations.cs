@@ -586,7 +586,7 @@ namespace PoGo.NecroBot.Logic.Common
                     "Connection refused. Your IP might have been Blacklisted by Niantic. Exiting.."),
                 new KeyValuePair<TranslationString, string>(TranslationString.NoEggsAvailable, "No Eggs Available"),
                 new KeyValuePair<TranslationString, string>(TranslationString.UseLuckyEggActive,
-                    "Lucky Egg Already Active"),
+                    "Lucky Egg Already Active. Time remaining: {0}m{1}s"),
                 new KeyValuePair<TranslationString, string>(TranslationString.UsedLuckyEgg, "Used Lucky Egg"),
                 new KeyValuePair<TranslationString, string>(TranslationString.UseLuckyEggAmount,
                     "Lucky Eggs in Inventory: {0}"),
