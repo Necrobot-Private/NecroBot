@@ -7,6 +7,7 @@
                       xmlns:local="clr-namespace:PoGo.Necrobot.Window.Controls"
                       xmlns:c="clr-namespace:PoGo.Necrobot.Window.Converters"
                       Title="Necrobot 2 - Windows GUI"
+                      TitleCaps="False"
                       Height="768"
                       Width="1366"
                       MinWidth="1024"
@@ -20,7 +21,7 @@
     <Controls:MetroWindow.TitleTemplate>
         <DataTemplate>
             <TextBlock x:Name="TitleText"
-                       Text="Necrobot 2 - Windows GUI"
+                       Text="{TemplateBinding Content}"
                        TextTrimming="CharacterEllipsis"
                        VerticalAlignment="Center"
                        Margin="4, 0, 0, 0"
@@ -111,7 +112,7 @@
             <GroupBox.Header>
                 <DockPanel LastChildFill="True">
                     <Button Content="Hide" DockPanel.Dock="Right" Name="btnHideInfo" Click="BtnHideInfo_Click" />
-                    <Label Content="Logging in (Check Console Tab/Window for Details)" Name="lblAccount" Foreground="White" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Bold" />
+                    <Label Content="Logging in (Check Console Tab/Window for Details)" Name="lblAccount" Foreground="White" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Bold" VerticalContentAlignment="Center" />
                 </DockPanel>
             </GroupBox.Header>
             <local:PlayerInfo DataContext="{Binding Path=PlayerInfo}" />
