@@ -89,7 +89,7 @@
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
-            <Button x:Name="btnCollectPokeCoin" Click="GetPokeCoin_Click" Grid.Column="4" Grid.Row="1" Margin="0,14,0,11" Grid.RowSpan="2">
+            <Button x:Name="btnCollectPokeCoin" Click="GetPokeCoin_Click" Grid.Column="4" Grid.Row="1" Margin="0,14,0,11" RenderTransformOrigin="0.527,-0.16" Grid.RowSpan="2">
                 <TextBlock Text="{Binding CollectPokeCoin}" />
             </Button>
         </Grid>
