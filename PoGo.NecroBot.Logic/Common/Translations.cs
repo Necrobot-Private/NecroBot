@@ -368,7 +368,7 @@ namespace PoGo.NecroBot.Logic.Common
                 new KeyValuePair<TranslationString, string>(TranslationString.EventPokemonTransferred,
                     "{0}\t- CP: {1} IV: {2}% [Best CP: {3} IV: {4}%] | Candies: {5}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.EventPokemonUpgraded,
-                    "{0}\t- Level: {1} | CP: {2}  IV: {3}%   [Best CP: {4}  IV: {5}%] | SD: {6} | Candies: {7}"),
+                    "{0}\t- Level: {1:0.0} | CP: {2}  IV: {3}%   [Best CP: {4}  IV: {5}%] | SD: {6} | Candies: {7}"),
 
                 new KeyValuePair<TranslationString, string>(TranslationString.EventItemRecycled, "{0}x {1}"),
 

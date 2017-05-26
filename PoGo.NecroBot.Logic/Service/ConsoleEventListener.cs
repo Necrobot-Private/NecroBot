@@ -657,7 +657,7 @@ namespace PoGo.NecroBot.Logic.Service
         private static void HandleEvent(GymWalkToTargetEvent ev, ISession session)
         {
             Logger.Write(
-                $"Traveling to gym : {ev.Name} | Lat: {ev.Latitude} , Lng: {ev.Longitude}| ({ev.Distance:0.00}m)",
+                $"Traveling to gym: {ev.Name} | Lat: {ev.Latitude}, Lng: {ev.Longitude} | ({ev.Distance:0.00}m)",
                 LogLevel.Gym, ConsoleColor.Cyan
             );
         }

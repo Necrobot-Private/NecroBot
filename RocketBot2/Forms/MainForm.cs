@@ -95,6 +95,8 @@ namespace RocketBot2.Forms
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            this.splitContainer1.SplitterDistance = this.splitContainer1.Width / 2;
+            this.splitContainer2.SplitterDistance = this.splitContainer2.Height / 3;
             SetStatusText(Application.ProductName + " " + Application.ProductVersion);
             speedLable.Parent = GMapControl1;
             showMoreCheckBox.Parent = GMapControl1;
@@ -107,8 +109,6 @@ namespace RocketBot2.Forms
             InitializeMap();
             VersionHelper.CheckVersion();
             btnRefresh.Enabled = false;
-            this.splitContainer1.SplitterDistance = this.splitContainer1.Width / 2;
-            this.splitContainer2.SplitterDistance = this.splitContainer2.Height / 3;
             ConsoleHelper.HideConsoleWindow();
         }
 
@@ -269,7 +269,7 @@ namespace RocketBot2.Forms
                     switch (pokeStop.Type)
                     {
                         case FortType.Checkpoint:
-                            fort = ResourceHelper.GetImage("Pokestop", null, null, 32, 32);
+                            fort = ResourceHelper.GetImage("Pokestop", null, null, 45, 45);
                             break;
                         case FortType.Gym:
                             switch (pokeStop.OwnedByTeam)
@@ -289,7 +289,7 @@ namespace RocketBot2.Forms
                             }
                             break;
                         default:
-                            fort = ResourceHelper.GetImage("Pokestop", null, null, 32, 32);
+                            fort = ResourceHelper.GetImage("Pokestop", null, null, 45, 45);
                             break;
                     }
                     var pokestopMarker = new GMapMarkerPokestops(pokeStopLoc, fort);
@@ -356,7 +356,7 @@ namespace RocketBot2.Forms
                         {
                             _pokestopsOverlay.Markers.Remove(marker);
                             var pokestopMarker = new GMapMarkerPokestops(pokeStopLoc,
-                               ResourceHelper.GetImage("Pokestop_looted", null, null, 32, 32));
+                               ResourceHelper.GetImage("Pokestop_looted", null, null, 45, 45));
                             //pokestopMarker.ToolTipMode = MarkerTooltipMode.OnMouseOver;
                             //pokestopMarker.ToolTip = new GMapBaloonToolTip(pokestopMarker);
                             _pokestopsOverlay.Markers.Add(pokestopMarker);
@@ -402,7 +402,7 @@ namespace RocketBot2.Forms
             {
                 foreach (var pokemon in encounterPokemons)
                 {
-                    var pkmImage = ResourceHelper.GetImage(null, null, pokemon, 25, 25);
+                    var pkmImage = ResourceHelper.GetImage(null, null, pokemon, 32, 32);
                     var pointLatLng = new PointLatLng(pokemon.Latitude, pokemon.Longitude);
                     GMapMarker pkmMarker = new GMapMarkerTrainer(pointLatLng, pkmImage);
                     _pokemonsOverlay.Markers.Add(pkmMarker);
@@ -487,6 +487,7 @@ namespace RocketBot2.Forms
             _botStarted = true;
             btnPokeDex.Enabled = _botStarted;
             Task.Run(StartBot).ConfigureAwait(false);
+            this.Refresh();
         }
 
         private void TodoToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1432,7 +1433,7 @@ namespace RocketBot2.Forms
             CatchIncensePokemonsTask.PokemonEncounterEvent += UpdateMap;
 
             CatchLurePokemonsTask.PokemonEncounterEvent +=
-                         mappokemons => _session.EventDispatcher.Send(new PokemonsEncounterEvent { EncounterPokemons = mappokemons });
+                mappokemons => _session.EventDispatcher.Send(new PokemonsEncounterEvent { EncounterPokemons = mappokemons });
             CatchLurePokemonsTask.PokemonEncounterEvent += UpdateMap;
 
             Resources.ProgressBar.Fill(100);
@@ -1457,6 +1458,12 @@ namespace RocketBot2.Forms
             ioc.Register<MultiAccountManager>(accountManager);
 
             var bot = accountManager.GetStartUpAccount();
+
+            Logger.Write(
+                $"(Start-Up Stats) User: {bot.Username} | XP: {bot.CurrentXp} | SD: {bot.Stardust}",
+                LogLevel.Info, ConsoleColor
+                .Magenta
+            );
 
             if (accountManager.AccountsReadOnly.Count > 1)
             {
