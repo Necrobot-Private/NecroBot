@@ -1,5 +1,4 @@
-﻿using LiteDB;
-using PoGo.NecroBot.Logic.Model.Settings;
+﻿using PoGo.NecroBot.Logic.Model.Settings;
 using System;
 using System.ComponentModel;
 
@@ -27,8 +26,7 @@ namespace PoGo.NecroBot.Logic.Model
         public long CurrentXp { get; set; }
         public long PrevLevelXp { get; set; }
         public long NextLevelXp { get; set; }
-
-        [BsonIgnore]
+        
         public string ExperienceInfo
         {
             get
