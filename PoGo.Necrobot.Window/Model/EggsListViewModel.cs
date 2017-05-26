@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using POGOProtos.Data;
@@ -7,7 +7,7 @@ using PoGo.NecroBot.Logic.Event;
 
 namespace PoGo.Necrobot.Window.Model
 {
-    public class EggsListViewModel  :ViewModelBase
+    public class EggsListViewModel : ViewModelBase
     {
         public ObservableCollection<EggViewModel> Eggs { get; set; }
         public ObservableCollection<IncubatorViewModel> Incubators { get; set; }
@@ -41,7 +41,7 @@ namespace PoGo.Necrobot.Window.Model
                 AddOrUpdate(egg, incu);
             }
 
-            
+
         }
 
         private void AddOrUpdateIncubator(EggIncubator incu)
@@ -65,7 +65,7 @@ namespace PoGo.Necrobot.Window.Model
                 Hatchable = incu == null
             };
             var existing = Eggs.FirstOrDefault(x => x.Id == eggModel.Id);
-            if(existing != null )
+            if (existing != null)
             {
                 // Do not update, it overwrites OnEggIncubatorStatus Status updates
                 // existing.UpdateWith(eggModel);
@@ -85,7 +85,7 @@ namespace PoGo.Necrobot.Window.Model
 
             egg.Hatchable = false;
             incu.InUse = true;
-            egg.KM = e.KmWalked;
+            egg.KM = e.KmToWalk - e.KmWalked; //Still in the works(TheWizard1328)
 
             egg.RaisePropertyChanged("KM");
             egg.RaisePropertyChanged("Hatchable");

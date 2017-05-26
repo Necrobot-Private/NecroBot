@@ -13,6 +13,29 @@ namespace PoGo.Necrobot.Window.Model
     {
         public PokemonId BuddyPokemonId { get; set; }
         public string Name { get; set; }
+
+        public double KmRemaining; // Not quite working yet
+        public double KmToWalk
+        {
+            get { return KmRemaining; }
+            set
+            {
+                KmRemaining = value;
+                RaisePropertyChanged("KmToWalk");
+                RaisePropertyChanged("EggPerc");
+            }
+        }
+
+        public int EggPerc
+        {
+            get
+            {
+                if (KmToWalk > 0)
+                    return (int)Math.Floor(KmRemaining / KmToWalk * 100);
+                return 0;
+            }
+        }
+
         private double exp;
         public double Exp
         {
@@ -122,7 +145,18 @@ namespace PoGo.Necrobot.Window.Model
         public string PokestopLimit { get; set; }
         public string CatchLimit { get; set; }
         public double WalkSpeed { get; set; }
-        public int PokemonTransfered { get; set; }
+
+        //Still needs some work(TheWizard1328)
+        public int pokemontransfered;
+        public int PokemonTransfered //{ get; set; }
+        {
+            get { return pokemontransfered; }
+            set
+            {
+                pokemontransfered = value;
+                RaisePropertyChanged("PokemonTransfered");
+            }
+        }
 
         internal void OnProfileUpdate(ProfileEvent profile)
         {
@@ -144,7 +178,7 @@ namespace PoGo.Necrobot.Window.Model
             var buddyData = playerProfile.PlayerData.BuddyPokemon;
 
             if (buddyData == null) return;
-             
+
             var buddy = inventory
                 .Select(x => x.InventoryItemData?.PokemonData)
                 .Where(x => x != null && x.Id == playerProfile.PlayerData.BuddyPokemon.Id)
@@ -172,6 +206,10 @@ namespace PoGo.Necrobot.Window.Model
             Exp = stat.StatsExport.CurrentXp - stat.StatsExport.PreviousXp;
             LevelExp = stat.StatsExport.LevelupXp - stat.StatsExport.PreviousXp;
             PokemonTransfered = stat.TotalPokemonTransferred;
+            //Still needs some work(TheWizard1328)
+            //KmRemaining = incubator.TargetKmWalked - kmWalked;
+            //KmToWalk = incubator.TargetKmWalked - incubator.StartKmWalked;
+
             RaisePropertyChanged("TotalPokemonTransferred;");
             RaisePropertyChanged("Runtime");
             RaisePropertyChanged("EXPPerHour");
@@ -182,25 +220,36 @@ namespace PoGo.Necrobot.Window.Model
             RaisePropertyChanged("Exp");
             RaisePropertyChanged("LevelExp");
 
+            RaisePropertyChanged("KmToWalk");
+            RaisePropertyChanged("KmRemaining");
+            RaisePropertyChanged("EggPerc");
         }
 
         internal void UpdatePokestopLimit(PokestopLimitUpdate ev)
         {
             PokestopLimit = $"{ev.Value}/{ev.Limit}";
             RaisePropertyChanged("PokestopLimit");
+            UpdateEggs(KmRemaining);
         }
 
         internal void UpdateCatchLimit(CatchLimitUpdate ev)
         {
             CatchLimit = $"{ev.Value}/{ev.Limit}";
             RaisePropertyChanged("CatchLimit");
+            UpdateEggs(KmRemaining);
         }
 
         public void UpdateSpeed(double speed)
         {
             WalkSpeed = speed;
             RaisePropertyChanged("WalkSpeed");
+            UpdateEggs(KmRemaining);
+        }
 
+        public void UpdateEggs(double kmremaining)
+        {
+            KmRemaining = kmremaining;
+            RaisePropertyChanged("KmRemaining");
         }
     }
 }

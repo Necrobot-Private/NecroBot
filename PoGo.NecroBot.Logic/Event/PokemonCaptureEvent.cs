@@ -1,4 +1,4 @@
-﻿#region using directives
+#region using directives
 
 using POGOProtos.Enums;
 using POGOProtos.Inventory;
@@ -26,6 +26,7 @@ namespace PoGo.NecroBot.Logic.Event
         public ItemId Pokeball;
         public double Probability;
         public int Stardust;
+        public int totalStarDust;
         public CatchPokemonResponse.Types.CatchStatus Status;
         public CatchPokemonResponse.Types.CaptureReason CaptureReason;
         public double Latitude;
@@ -37,9 +38,9 @@ namespace PoGo.NecroBot.Logic.Event
         public long Expires;
         public string CatchTypeText;
         public string Rarity;
-        public string Shiny {get; set;}
+        public string Shiny { get; set; }
         public string Form { get; internal set; }
         public string Costume { get; internal set; }
         public string Gender { get; internal set; }
-     }
+    }
 }

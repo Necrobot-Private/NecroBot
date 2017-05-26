@@ -365,9 +365,9 @@ namespace PoGo.NecroBot.Logic
             foreach (var item in Accounts)
             {
                 if (item.Level > 0)
-                    Logging.Logger.Write($"{item.Username} (Level: {item.Level})\t\t\tRuntime : {item.GetRuntime()}");
+                    Logging.Logger.Write($"{item.Username} (Level: {item.Level})\t\tRuntime: {item.RuntimeTotal}");
                 else
-                    Logging.Logger.Write($"{item.Username} (Level: ??)\t\t\tRuntime : {item.GetRuntime()}");
+                    Logging.Logger.Write($"{item.Username} (Level: ??)\t\tRuntime: {item.RuntimeTotal}");
             }
         }
 
