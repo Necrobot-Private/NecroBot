@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+using System.Drawing;
 using GMap.NET;
 using GMap.NET.WindowsForms;
 using System;

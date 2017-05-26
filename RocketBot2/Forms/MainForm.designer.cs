@@ -268,12 +268,12 @@ namespace RocketBot2.Forms
             this.olvPokemonList.FullRowSelect = true;
             this.olvPokemonList.GridLines = true;
             this.olvPokemonList.LargeImageList = this.largePokemonImageList;
-            this.olvPokemonList.Location = new System.Drawing.Point(2, 2);
+            this.olvPokemonList.Location = new System.Drawing.Point(2, 0);
             this.olvPokemonList.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             this.olvPokemonList.Name = "olvPokemonList";
             this.olvPokemonList.RowHeight = 32;
             this.olvPokemonList.ShowGroups = false;
-            this.olvPokemonList.Size = new System.Drawing.Size(800, 585);
+            this.olvPokemonList.Size = new System.Drawing.Size(804, 593);
             this.olvPokemonList.SmallImageList = this.smallPokemonImageList;
             this.olvPokemonList.TabIndex = 25;
             this.olvPokemonList.UseCompatibleStateImageBehavior = false;
@@ -395,7 +395,7 @@ namespace RocketBot2.Forms
             // smallPokemonImageList
             // 
             this.smallPokemonImageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
-            this.smallPokemonImageList.ImageSize = new System.Drawing.Size(25, 25);
+            this.smallPokemonImageList.ImageSize = new System.Drawing.Size(32, 32);
             this.smallPokemonImageList.TransparentColor = System.Drawing.Color.Transparent;
             // 
             // btnRefresh
