@@ -1,5 +1,4 @@
-﻿using LiteDB;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
 using PoGo.NecroBot.Logic.Exceptions;
 using PoGo.NecroBot.Logic.Forms;
 using PoGo.NecroBot.Logic.Logging;
@@ -151,15 +150,6 @@ namespace PoGo.NecroBot.Logic
 
             int schemaVersion = AuthSettings.SchemaVersionBeforeMigration;
 
-            // Backup old config file.
-            long ts = DateTime.UtcNow.ToUnixTime(); // Add timestamp to avoid file conflicts
-            if (File.Exists(ACCOUNT_DB_NAME))
-            {
-                string backupPath = $"accounts-{schemaVersion}-{ts}.backup.db";
-                Logging.Logger.Write($"Backing up {ACCOUNT_DB_NAME} to: {backupPath}", LogLevel.Info);
-            
-                File.Copy(ACCOUNT_DB_NAME, backupPath);
-            }
             // Add future schema migrations below.
             int version;
             for (version = schemaVersion; version < UpdateConfig.CURRENT_SCHEMA_VERSION; version++) 
@@ -173,51 +163,13 @@ namespace PoGo.NecroBot.Logic
                         
                         break;
 
-                    case 24:
-                        MigrateLiteDbToSqLite();
-                        //File.Delete(ACCOUNT_DB_NAME);
+                    case 25:
+                        File.Delete(ACCOUNT_DB_NAME);
                         break;
                 }
             }
         }
-
-        private void MigrateLiteDbToSqLite()
-        {
-            // Delete all accounts
-            _context.Account.RemoveRange(_context.Account);
-            _context.SaveChanges();
-
-            using (var liteDb = new LiteDatabase(ACCOUNT_DB_NAME))
-            {
-                var liteDbAccounts = liteDb.GetCollection<BotAccount>("accounts");
-                foreach (var liteDbAccount in liteDbAccounts.FindAll())
-                {
-                    if (string.IsNullOrEmpty(liteDbAccount.Username) || string.IsNullOrEmpty(liteDbAccount.Password))
-                        continue;
-
-                    Account newAccount = new Account();
-                    newAccount.AuthType = liteDbAccount.AuthType;
-                    newAccount.Username = liteDbAccount.Username;
-                    newAccount.Password = liteDbAccount.Password;
-                    newAccount.RuntimeTotal = liteDbAccount.RuntimeTotal;
-                    newAccount.LastRuntimeUpdatedAt = liteDbAccount.LastRuntimeUpdatedAt.ToUnixTime();
-                    if (liteDbAccount.ReleaseBlockTime > DateTime.Now)
-                        newAccount.ReleaseBlockTime = liteDbAccount.ReleaseBlockTime.ToUnixTime();
-                    newAccount.Nickname = liteDbAccount.Nickname;
-                    newAccount.LoggedTime = liteDbAccount.LoggedTime.ToUnixTime();
-                    newAccount.Level = liteDbAccount.Level;
-                    newAccount.LastLogin = liteDbAccount.LastLogin;
-                    newAccount.LastLoginTimestamp = liteDbAccount.LastLoginTimestamp;
-                    newAccount.Stardust = liteDbAccount.Stardust;
-                    newAccount.CurrentXp = liteDbAccount.CurrentXp;
-                    newAccount.NextLevelXp = liteDbAccount.NextLevelXp;
-                    newAccount.PrevLevelXp = liteDbAccount.PrevLevelXp;
-                    _context.Account.Add(newAccount);
-                    _context.SaveChanges();
-                }
-            }
-        }
-
+        
         private void SyncDatabase(List<AuthConfig> authConfigs)
         {
             if (authConfigs.Count() == 0)

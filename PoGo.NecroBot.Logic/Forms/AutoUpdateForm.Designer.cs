@@ -186,7 +186,7 @@
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "AutoUpdateForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Tag = "New version available";
+            this.Tag = "New Version Available!";
             this.Text = "New Version Available!";
             this.Load += new System.EventHandler(this.AutoUpdateForm_Load);
             this.panel1.ResumeLayout(false);
