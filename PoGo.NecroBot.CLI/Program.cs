@@ -478,12 +478,6 @@ namespace PoGo.NecroBot.CLI
 
             var bot = accountManager.GetStartUpAccount();
 
-            Logger.Write(
-               $"(Start-Up Stats) User: {bot.Username} | XP: {bot.CurrentXp} | SD: {bot.Stardust}",
-               LogLevel.Info, ConsoleColor
-               .Magenta
-               );
-
             _session.ReInitSessionWithNextBot(bot);
 
             machine.AsyncStart(new VersionCheckState(), _session, _subPath, excelConfigAllow);
@@ -495,6 +489,12 @@ namespace PoGo.NecroBot.CLI
             catch (IOException)
             {
             }
+
+            Logger.Write(
+               $"(Start-Up Stats) User: {bot.Username} | XP: {bot.CurrentXp} | SD: {bot.Stardust}",
+               LogLevel.Info, ConsoleColor
+               .Magenta
+               );
 
             if (settings.TelegramConfig.UseTelegramAPI)
                 _session.Telegram = new TelegramService(settings.TelegramConfig.TelegramAPIKey, _session);
