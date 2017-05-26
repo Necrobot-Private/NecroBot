@@ -96,7 +96,7 @@ namespace PoGo.NecroBot.CLI
             var ioc = TinyIoC.TinyIoCContainer.Current;
             //Setup Logger for API
             APIConfiguration.Logger = new APILogListener();
-            
+
             //Application.EnableVisualStyles();
             var strCulture = Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName;
 
@@ -319,7 +319,7 @@ namespace PoGo.NecroBot.CLI
                             "You have selected PogoDev API but you have not provided an API Key, please press any key to exit and correct you auth.json, \r\n The Pogodev API key can be purchased at - https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer",
                             LogLevel.Error
                         );
-                        
+
                         Console.ReadKey();
                         Environment.Exit(0);
                     }
@@ -458,7 +458,7 @@ namespace PoGo.NecroBot.CLI
             _session.Navigation.WalkStrategy.UpdatePositionEvent += LoadSaveState.SaveLocationToDisk;
 
             ProgressBar.Fill(100);
-            
+
             //TODO: temporary
             if (settings.Auth.APIConfig.UseLegacyAPI)
             {
@@ -469,14 +469,20 @@ namespace PoGo.NecroBot.CLI
                 return;
             }
             //
-            
+
             if (settings.WebsocketsConfig.UseWebsocket)
             {
                 var websocket = new WebSocketInterface(settings.WebsocketsConfig.WebSocketPort, _session);
                 _session.EventDispatcher.EventReceived += evt => websocket.Listen(evt, _session);
             }
-            
+
             var bot = accountManager.GetStartUpAccount();
+
+            Logger.Write(
+               $"(Start-Up Stats) User: {bot.Username} | XP: {bot.CurrentXp} | SD: {bot.Stardust}",
+               LogLevel.Info, ConsoleColor
+               .Magenta
+               );
 
             _session.ReInitSessionWithNextBot(bot);
 
