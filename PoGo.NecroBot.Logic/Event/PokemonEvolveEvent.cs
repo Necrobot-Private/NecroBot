@@ -1,4 +1,4 @@
-﻿#region using directives
+#region using directives
 
 using POGOProtos.Data;
 using POGOProtos.Enums;
@@ -14,6 +14,7 @@ namespace PoGo.NecroBot.Logic.Event
         public PokemonId Id;
         public ulong UniqueId;
         public EvolvePokemonResponse.Types.Result Result;
+        public int Candy;
 
         public int Sequence { get; set; }
         public PokemonData EvolvedPokemon { get; set; }

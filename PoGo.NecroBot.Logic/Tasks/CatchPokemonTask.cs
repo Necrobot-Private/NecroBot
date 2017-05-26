@@ -1,4 +1,4 @@
-﻿#region using directives
+#region using directives
 
 using System;
 using System.Globalization;
@@ -101,11 +101,11 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             var totalBalls = (await session.Inventory.GetItems().ConfigureAwait(false)).Where(x => x.ItemId == ItemId.ItemPokeBall || x.ItemId == ItemId.ItemGreatBall || x.ItemId == ItemId.ItemUltraBall).Sum(x => x.Count);
 
-            if(session.SaveBallForByPassCatchFlee && totalBalls < BALL_REQUIRED_TO_BYPASS_CATCHFLEE)
+            if (session.SaveBallForByPassCatchFlee && totalBalls < BALL_REQUIRED_TO_BYPASS_CATCHFLEE)
             {
                 return false;
             }
-                
+
             // Exit if user defined max limits reached
             if (session.Stats.CatchThresholdExceeds(session))
             {
@@ -271,7 +271,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         });
                         return false;
                     }
-                                                                        
+
                     // Determine whether to use berries or not
                     if (lastThrow != CatchPokemonResponse.Types.CatchStatus.CatchMissed)
                     {
@@ -457,9 +457,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                         evt.Form = (await session.Inventory.GetPokemons().ConfigureAwait(false)).First(x => x.Id == caughtPokemonResponse.CapturedPokemonId).PokemonDisplay.Form.ToString().Replace("Unown", "").Replace("Unset", "Normal");
                         evt.Costume = (await session.Inventory.GetPokemons().ConfigureAwait(false)).First(x => x.Id == caughtPokemonResponse.CapturedPokemonId).PokemonDisplay.Costume.ToString().Replace("Unset", "Regular");
                         evt.Gender = (await session.Inventory.GetPokemons().ConfigureAwait(false)).First(x => x.Id == caughtPokemonResponse.CapturedPokemonId).PokemonDisplay.Gender.ToString();
-                        
+
                         var totalExp = 0;
-                        var totalStarDust = caughtPokemonResponse.CaptureAward.Stardust.Sum();
+                        var stardust = caughtPokemonResponse.CaptureAward.Stardust.Sum();
                         if (encounteredPokemon != null)
                         {
                             encounteredPokemon.Id = caughtPokemonResponse.CapturedPokemonId;
@@ -468,12 +468,17 @@ namespace PoGo.NecroBot.Logic.Tasks
                         {
                             totalExp += xp;
                         }
-                        var stardust = session.Inventory.UpdateStarDust(totalStarDust);
+                        var totalStarDust = session.Inventory.UpdateStarDust(stardust);
+
+                        //This accounts for XP for CatchFlee
+                        if (totalExp < 1)
+                        { totalExp = 25; }
 
                         evt.Exp = totalExp;
                         evt.Stardust = stardust;
                         evt.UniqueId = caughtPokemonResponse.CapturedPokemonId;
                         evt.Candy = await session.Inventory.GetCandyFamily(pokemon.PokemonId).ConfigureAwait(false);
+                        evt.totalStarDust = totalStarDust;
 
                         if (session.LogicSettings.AutoFavoriteShinyOnCatch)
                         {
@@ -568,11 +573,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                 if (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchFlee)
                 {
                     CatchFleeContinuouslyCount++;
-                    if(CatchFleeContinuouslyCount >= 3 && session.LogicSettings.ByPassCatchFlee)
+                    if (CatchFleeContinuouslyCount >= 3 && session.LogicSettings.ByPassCatchFlee)
                     {
                         session.SaveBallForByPassCatchFlee = true;
-                        Logger.Write("Seem that bot has ben catch flee softban, Bot will start save 100 balls to by pass it.");
-                        
+                        Logger.Write("Seem that bot has been catch flee softban, Bot will start save 100 balls to by pass it.");
+
                     }
                     if (manager.AllowMultipleBot() && !session.LogicSettings.ByPassCatchFlee)
                     {
@@ -820,7 +825,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 var itemRecycleFilter = session.LogicSettings.ItemRecycleFilter.FirstOrDefault(x => x.Key == item.Key);
 
                 if ((filter.UseIfExceedBagRecycleFilter &&
-                    itemRecycleFilter.Key == item.Key  &&
+                    itemRecycleFilter.Key == item.Key &&
                     itemRecycleFilter.Value < berry.Count)
                     || ((filter.Pokemons.Count == 0 || filter.Pokemons.Contains(pokemonId)) &&
                     (!AmountOfBerries.ContainsKey(item.Key) || AmountOfBerries[item.Key] < filter.MaxItemsUsePerPokemon) &&

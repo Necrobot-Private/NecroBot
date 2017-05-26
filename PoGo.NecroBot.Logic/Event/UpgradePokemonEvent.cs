@@ -1,4 +1,4 @@
-﻿#region using directives
+#region using directives
 
 using POGOProtos.Data;
 using POGOProtos.Enums;
@@ -16,7 +16,10 @@ namespace PoGo.NecroBot.Logic.Event
         public PokemonId PokemonId;
         public ulong Id;
         public double Perfection;
+        public int USD;
+        public double Lvl;
 
         public PokemonData Pokemon { get; set; }
     }
 }
+

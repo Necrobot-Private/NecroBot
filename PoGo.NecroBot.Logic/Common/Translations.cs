@@ -18,11 +18,8 @@ namespace PoGo.NecroBot.Logic.Common
     public interface ITranslation
     {
         string GetTranslation(TranslationString translationString, params object[] data);
-
         string GetTranslation(TranslationString translationString);
-
         string GetPokemonTranslation(PokemonId id);
-
         string GetPokemonMovesetTranslation(PokemonMove move);
     }
 
@@ -82,6 +79,7 @@ namespace PoGo.NecroBot.Logic.Common
         LogEntrySniper,
         LogEntryRecycling,
         LogEntryPkmn,
+        LogEntryLevelUp,
         LogEntryTransfered,
         LogEntryEvolved,
         LogEntryBerry,
@@ -351,7 +349,7 @@ namespace PoGo.NecroBot.Logic.Common
                 new KeyValuePair<TranslationString, string>(TranslationString.FarmPokestopsNoUsableFound,
                     "No usable PokeStops found in your area. Is your maximum distance too small?"),
                 new KeyValuePair<TranslationString, string>(TranslationString.EventFortUsed,
-                    "Name: {0} XP: {1}, Gems: {2}, Items: {3}, Lat: {4}, Long: {5}, Alt: {6}"),
+                    "Name: {0} XP: {1}, Gems: {2}, Items: {3}, Eggs: {4}, Lat: {5}, Long: {6}, Alt: {7}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.EventFortFailed,
                     "Name: {0} INFO: Looting failed, possible softban. Unban in: {1}/{2}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.Gym, "Gym"),
@@ -364,21 +362,21 @@ namespace PoGo.NecroBot.Logic.Common
                 new KeyValuePair<TranslationString, string>(TranslationString.EventUsedLuckyEgg,
                     "Used Lucky Egg, remaining: {0}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.EventPokemonEvolvedSuccess,
-                    "{0} successfully for {1}xp"),
+                    "{0} to {1}. XP: {2} | Candies: {3}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.EventPokemonEvolvedFailed,
                     "Failed {0}. Result was {1}, stopping evolving {2}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.EventPokemonTransferred,
-                    "{0}\t- CP: {1}  IV: {2}%   [Best CP: {3}  IV: {4}%] (Candies: {5})"),
+                    "{0}\t- CP: {1} IV: {2}% [Best CP: {3} IV: {4}%] | Candies: {5}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.EventPokemonUpgraded,
-                    "{0}\t- CP: {1}  IV: {2}%   [Best CP: {3}  IV: {4}%]"),
+                    "{0}\t- Level: {1:0.0} | CP: {2}  IV: {3}%   [Best CP: {4}  IV: {5}%] | SD: {6} | Candies: {7}"),
 
                 new KeyValuePair<TranslationString, string>(TranslationString.EventItemRecycled, "{0}x {1}"),
 
                 //Logging Cleanup (mostly uneccessary information, may want a verbose pokemon capture logger setting)
                 new KeyValuePair<TranslationString, string>(TranslationString.EventPokemonCaptureSuccess,
-                    "({0}) | ({1}) {2} Lvl: {3} CP: ({4}/{5}) IV: {6}% | Chance: {7}% | {8}m dist | with a {9} ({10} left). | {11} EXP earned | {12} | lat: {13} long: {14} | Move1: {15} Move2: {16} | Rarity: {17} | Capture Reason: {18} | Shiny: {19} | Form: {20} | Costume: {21} |  Sex: {22}"),
+                    "({0}) | ({1}) {2} Lvl: {3} CP: ({4}/{5}) IV: {6}% | Chance: {7}% | {8}m dist | with a {9} ({10} left). | XP: {11} | SD: {12} | {13} | lat: {14} long: {15} | Move1: {16} Move2: {17} | Rarity: {18} | Capture Reason: {19} | Shiny: {20} | Form: {21} | Costume: {22} | Sex: {23}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.EventPokemonCaptureFailed,
-                    "({0}) | ({1}) {2} Lvl: {3} CP: ({4}/{5}) IV: {6}% | Chance: {7}% | {8}m dist | with a {9} ({10} left). | lat: {11} long: {12} | Move1: {13} Move2: {14} | Rarity :{15}"),
+                    "({0}) | ({1}) {2} Lvl: {3} CP: ({4}/{5}) IV: {6}% | Chance: {7}% | {8}m dist | with a {9} ({10} left). | XP: {11} | lat: {12} long: {13} | Move1: {14} Move2: {15} | Rarity :{16}"),
 
 
                 new KeyValuePair<TranslationString, string>(TranslationString.EventNoPokeballs,
@@ -416,9 +414,10 @@ namespace PoGo.NecroBot.Logic.Common
                 new KeyValuePair<TranslationString, string>(TranslationString.IncubatorPuttingEgg,
                     "Putting egg in incubator: {0:0.00}km left"),
                 new KeyValuePair<TranslationString, string>(TranslationString.IncubatorStatusUpdate,
-                    "Incubator status update: {0:0.00}km left"),
+                    "Incubator status update: {0:0.00} Km left of {1:0.00} Km egg."),
                 new KeyValuePair<TranslationString, string>(TranslationString.IncubatorEggHatched,
-                    "Incubated egg has hatched: {0} | Lvl: {1} CP: ({2}/{3}) IV: {4}%"),
+                    "{0} Km egg has hatched: {1} | Lvl: {2} | CP: ({3}/{4}) | IV: {5}% | XP: {6} | SD: {7} | Candies: {8}"),
+
                 new KeyValuePair<TranslationString, string>(TranslationString.LogEntryError, "ERROR"),
                 new KeyValuePair<TranslationString, string>(TranslationString.LogEntryAttention, "ATTENTION"),
                 new KeyValuePair<TranslationString, string>(TranslationString.LogEntryInfo, "INFO"),
@@ -427,6 +426,7 @@ namespace PoGo.NecroBot.Logic.Common
                 new KeyValuePair<TranslationString, string>(TranslationString.LogEntrySniper, "SNIPER"),
                 new KeyValuePair<TranslationString, string>(TranslationString.LogEntryRecycling, "RECYCLING"),
                 new KeyValuePair<TranslationString, string>(TranslationString.LogEntryPkmn, "PKMN"),
+                new KeyValuePair<TranslationString, string>(TranslationString.LogEntryLevelUp, "LevelUp"),
                 new KeyValuePair<TranslationString, string>(TranslationString.LogEntryTransfered, "TRANSFERRED"),
                 new KeyValuePair<TranslationString, string>(TranslationString.LogEntryEvolved, "EVOLVED"),
                 new KeyValuePair<TranslationString, string>(TranslationString.LogEntryBerry, "BERRY"),
@@ -899,10 +899,10 @@ namespace PoGo.NecroBot.Logic.Common
                     new KeyValuePair<PokemonId, string>((PokemonId) 026, "Raichu"),
                     new KeyValuePair<PokemonId, string>((PokemonId) 027, "Sandshrew"),
                     new KeyValuePair<PokemonId, string>((PokemonId) 028, "Sandslash"),
-                    new KeyValuePair<PokemonId, string>((PokemonId) 029, "NidoranFemale"),
+                    new KeyValuePair<PokemonId, string>((PokemonId) 029, "Nidoran(F)"),
                     new KeyValuePair<PokemonId, string>((PokemonId) 030, "Nidorina"),
                     new KeyValuePair<PokemonId, string>((PokemonId) 031, "Nidoqueen"),
-                    new KeyValuePair<PokemonId, string>((PokemonId) 032, "NidoranMale"),
+                    new KeyValuePair<PokemonId, string>((PokemonId) 032, "Nidoran(M)"),
                     new KeyValuePair<PokemonId, string>((PokemonId) 033, "Nidorino"),
                     new KeyValuePair<PokemonId, string>((PokemonId) 034, "Nidoking"),
                     new KeyValuePair<PokemonId, string>((PokemonId) 035, "Clefairy"),

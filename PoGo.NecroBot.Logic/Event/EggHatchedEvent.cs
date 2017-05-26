@@ -1,4 +1,4 @@
-﻿#region using directives
+#region using directives
 
 using POGOProtos.Enums;
 
@@ -14,5 +14,9 @@ namespace PoGo.NecroBot.Logic.Event
         public int MaxCp;
         public double Perfection;
         public PokemonId PokemonId;
+        public double Dist;
+        public long HXP;
+        public int HSD;
+        public int HCandy;
     }
 }
