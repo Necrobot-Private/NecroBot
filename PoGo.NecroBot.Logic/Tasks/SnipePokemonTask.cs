@@ -455,42 +455,42 @@ namespace PoGo.NecroBot.Logic.Tasks
                 cancellationToken.ThrowIfCancellationRequested();
                 TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
                 try
-                {   // Remed out due to 'Unhandled Error' on lines 460 & 461
-                    //var lClient = new TcpClient();
-                    //lClient.Connect(session.LogicSettings.SnipeLocationServer,
-                    //    session.LogicSettings.SnipeLocationServerPort);
+                {
+                    var lClient = new TcpClient();
+                    lClient.Connect(session.LogicSettings.SnipeLocationServer,
+                        session.LogicSettings.SnipeLocationServerPort);
 
-                    //var sr = new StreamReader(lClient.GetStream());
+                    var sr = new StreamReader(lClient.GetStream());
 
-                    //while (lClient.Connected)
-                    //{
-                    //    try
-                    //    {
-                    //        var line = sr.ReadLine();
-                    //        if (line == null)
-                    //            throw new Exception("Unable to ReadLine from sniper socket");
+                    while (lClient.Connected)
+                    {
+                        try
+                        {
+                            var line = sr.ReadLine();
+                            if (line == null)
+                                throw new Exception("Unable to ReadLine from sniper socket");
 
-                    //        var info = JsonConvert.DeserializeObject<SniperInfo>(line);
+                            var info = JsonConvert.DeserializeObject<SniperInfo>(line);
 
-                    //        if (SnipeLocations.Any(x =>
-                    //                Math.Abs(x.Latitude - info.Latitude) < 0.0001 &&
-                    //                Math.Abs(x.Longitude - info.Longitude) < 0.0001))
-                    //            // we might have different precisions from other sources
-                    //            continue;
+                            if (SnipeLocations.Any(x =>
+                                    Math.Abs(x.Latitude - info.Latitude) < 0.0001 &&
+                                    Math.Abs(x.Longitude - info.Longitude) < 0.0001))
+                                // we might have different precisions from other sources
+                                continue;
 
-                    //        SnipeLocations.RemoveAll(x => _lastSnipe > x.TimeStampAdded);
-                    //        SnipeLocations.RemoveAll(x => DateTime.Now > x.TimeStampAdded.AddMinutes(15));
-                    //        SnipeLocations.Add(info);
-                    //        session.EventDispatcher.Send(new SnipePokemonFoundEvent { PokemonFound = info });
-                    //    }
-                    //    catch (IOException)
-                    //    {
-                    //        session.EventDispatcher.Send(new ErrorEvent
-                    //        {
-                    //            Message = "The connection to the sniping location server has been lost."
-                    //        });
-                    //    }
-                    //}
+                            SnipeLocations.RemoveAll(x => _lastSnipe > x.TimeStampAdded);
+                            SnipeLocations.RemoveAll(x => DateTime.Now > x.TimeStampAdded.AddMinutes(15));
+                            SnipeLocations.Add(info);
+                            session.EventDispatcher.Send(new SnipePokemonFoundEvent { PokemonFound = info });
+                        }
+                        catch (IOException)
+                        {
+                            session.EventDispatcher.Send(new ErrorEvent
+                            {
+                                Message = "The connection to the sniping location server has been lost."
+                            });
+                        }
+                    }
                 }
                 catch (SocketException)
                 {
