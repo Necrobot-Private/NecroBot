@@ -95,8 +95,6 @@ namespace RocketBot2.Forms
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            this.splitContainer1.SplitterDistance = this.splitContainer1.Width / 2;
-            this.splitContainer2.SplitterDistance = this.splitContainer2.Height / 3;
             SetStatusText(Application.ProductName + " " + Application.ProductVersion);
             speedLable.Parent = GMapControl1;
             showMoreCheckBox.Parent = GMapControl1;
@@ -109,6 +107,8 @@ namespace RocketBot2.Forms
             InitializeMap();
             VersionHelper.CheckVersion();
             btnRefresh.Enabled = false;
+            //this.splitContainer1.SplitterDistance = this.splitContainer1.Width / 2;
+            //this.splitContainer2.SplitterDistance = this.splitContainer2.Height / 2;
             ConsoleHelper.HideConsoleWindow();
         }
 
@@ -212,14 +212,14 @@ namespace RocketBot2.Forms
             GMapControl1.MinZoom = 2;
             GMapControl1.MaxZoom = 18;
             GMapControl1.Zoom = 15;
-
+            
             GMapControl1.Overlays.Add(_searchAreaOverlay);
             GMapControl1.Overlays.Add(_pokestopsOverlay);
             GMapControl1.Overlays.Add(_pokemonsOverlay);
             GMapControl1.Overlays.Add(_playerOverlay);
             GMapControl1.Overlays.Add(_playerRouteOverlay);
 
-            _playerMarker = new GMapMarkerTrainer(new PointLatLng(lat, lng), ResourceHelper.GetImage("PlayerLocation", null, null, 25, 25));
+            _playerMarker = new GMapMarkerTrainer(new PointLatLng(lat, lng), ResourceHelper.GetImage("PlayerLocation", null, null, 32, 32));
             _playerOverlay.Markers.Add(_playerMarker);
             _playerMarker.Position = new PointLatLng(lat, lng);
             _searchAreaOverlay.Polygons.Clear();
@@ -269,7 +269,7 @@ namespace RocketBot2.Forms
                     switch (pokeStop.Type)
                     {
                         case FortType.Checkpoint:
-                            fort = ResourceHelper.GetImage("Pokestop", null, null, 45, 45);
+                            fort = ResourceHelper.GetImage("Pokestop", null, null, 32, 32);
                             break;
                         case FortType.Gym:
                             switch (pokeStop.OwnedByTeam)
@@ -289,7 +289,7 @@ namespace RocketBot2.Forms
                             }
                             break;
                         default:
-                            fort = ResourceHelper.GetImage("Pokestop", null, null, 45, 45);
+                            fort = ResourceHelper.GetImage("Pokestop", null, null, 32, 32);
                             break;
                     }
                     var pokestopMarker = new GMapMarkerPokestops(pokeStopLoc, fort);
@@ -310,8 +310,8 @@ namespace RocketBot2.Forms
                 _playerOverlay.Markers.Remove(_playerMarker);
                 if (!_currentLatLng.IsEmpty)
                     _playerMarker = _currentLatLng.Lng < latlng.Lng
-                        ? new GMapMarkerTrainer(latlng, ResourceHelper.GetImage("PlayerLocation2", null, null, 25, 25))
-                        : new GMapMarkerTrainer(latlng, ResourceHelper.GetImage("PlayerLocation", null, null, 25, 25));
+                        ? new GMapMarkerTrainer(latlng, ResourceHelper.GetImage("PlayerLocation2", null, null, 32, 32))
+                        : new GMapMarkerTrainer(latlng, ResourceHelper.GetImage("PlayerLocation", null, null, 32, 32));
                 _playerOverlay.Markers.Add(_playerMarker);
                 if (followTrainerCheckBox.Checked)
                     GMapControl1.Position = latlng;
@@ -356,7 +356,7 @@ namespace RocketBot2.Forms
                         {
                             _pokestopsOverlay.Markers.Remove(marker);
                             var pokestopMarker = new GMapMarkerPokestops(pokeStopLoc,
-                               ResourceHelper.GetImage("Pokestop_looted", null, null, 45, 45));
+                               ResourceHelper.GetImage("Pokestop_looted", null, null, 32, 32));
                             //pokestopMarker.ToolTipMode = MarkerTooltipMode.OnMouseOver;
                             //pokestopMarker.ToolTip = new GMapBaloonToolTip(pokestopMarker);
                             _pokestopsOverlay.Markers.Add(pokestopMarker);
@@ -402,7 +402,7 @@ namespace RocketBot2.Forms
             {
                 foreach (var pokemon in encounterPokemons)
                 {
-                    var pkmImage = ResourceHelper.GetImage(null, null, pokemon, 32, 32);
+                    var pkmImage = ResourceHelper.GetImage(null, null, pokemon, 25, 25);
                     var pointLatLng = new PointLatLng(pokemon.Latitude, pokemon.Longitude);
                     GMapMarker pkmMarker = new GMapMarkerTrainer(pointLatLng, pkmImage);
                     _pokemonsOverlay.Markers.Add(pkmMarker);
@@ -487,7 +487,6 @@ namespace RocketBot2.Forms
             _botStarted = true;
             btnPokeDex.Enabled = _botStarted;
             Task.Run(StartBot).ConfigureAwait(false);
-            this.Refresh();
         }
 
         private void TodoToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1433,21 +1432,10 @@ namespace RocketBot2.Forms
             CatchIncensePokemonsTask.PokemonEncounterEvent += UpdateMap;
 
             CatchLurePokemonsTask.PokemonEncounterEvent +=
-                mappokemons => _session.EventDispatcher.Send(new PokemonsEncounterEvent { EncounterPokemons = mappokemons });
+                         mappokemons => _session.EventDispatcher.Send(new PokemonsEncounterEvent { EncounterPokemons = mappokemons });
             CatchLurePokemonsTask.PokemonEncounterEvent += UpdateMap;
 
             Resources.ProgressBar.Fill(100);
-
-            //TODO: temporary
-            if (settings.Auth.APIConfig.UseLegacyAPI)
-            {
-                Logger.Write($"The PoGoDev Community Has Updated The Hashing Service To Be Compatible With {Client.API_VERSION} So We Have Updated Our Code To Be Compliant. Unfortunately During This Update Niantic Has Also Attempted To Block The Legacy .45 Service Again So At The Moment Only Hashing Service Users Are Able To Login Successfully. Please Be Patient As Always We Will Attempt To Keep The Bot 100% Free But Please Realize We Have Already Done Quite A Few Workarounds To Keep .45 Alive For You Guys.  Even If We Are Able To Get Access Again To The .45 API Again It Is Over 3 Months Old So Is Going To Be More Detectable And Cause Captchas. Please Consider Upgrading To A Paid API Key To Avoid Captchas And You Will  Be Connecting Using Latest Version So Less Detectable So More Safe For You In The End.", LogLevel.Warning);
-                Logger.Write("The bot will now close", LogLevel.Error);
-                Console.ReadLine();
-                Environment.Exit(0);
-                return;
-            }
-            //
 
             if (settings.WebsocketsConfig.UseWebsocket)
             {
@@ -1463,7 +1451,7 @@ namespace RocketBot2.Forms
                 $"(Start-Up Stats) User: {bot.Username} | XP: {bot.CurrentXp} | SD: {bot.Stardust}",
                 LogLevel.Info, ConsoleColor
                 .Magenta
-            );
+                );
 
             if (accountManager.AccountsReadOnly.Count > 1)
             {
@@ -1511,11 +1499,8 @@ namespace RocketBot2.Forms
             if (_session.LogicSettings.EnableHumanWalkingSnipe &&
                             _session.LogicSettings.HumanWalkingSnipeUseFastPokemap)
             {
-                // jjskuld - Ignore CS4014 warning for now.
-                //#pragma warning disable 4014
                 HumanWalkSnipeTask.StartFastPokemapAsync(_session,
                     _session.CancellationTokenSource.Token).ConfigureAwait(false); // that need to keep data live
-                //#pragma warning restore 4014
             }
 
             if (_session.LogicSettings.UseSnipeLocationServer ||
