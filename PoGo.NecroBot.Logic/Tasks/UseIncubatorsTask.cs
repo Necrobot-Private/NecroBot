@@ -110,8 +110,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                     var TotCandy = session.Inventory.GetCandyCount(hatched.PokemonId);
 
                     Logger.Write($"Hatch: KM Walked: {KMs}, kmWalked: {kmWalked}, KmToWalk: {KmToWalk} | " +
-                                         "XP1: {ExpAwarded1} | XP2: {ExpAwarded2} | " +
-                                         "SD1: {stardust1}, SD2: {stardust2}", LogLevel.Egg);
+                                         $"XP1: {ExpAwarded1} | XP2: {ExpAwarded2} | " +
+                                         $"SD1: {stardust1}, SD2: {stardust2}", LogLevel.Egg);
 
                     session.EventDispatcher.Send(new EggHatchedEvent
                     {
