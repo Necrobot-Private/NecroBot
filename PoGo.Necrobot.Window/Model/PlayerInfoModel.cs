@@ -17,8 +17,6 @@ namespace PoGo.Necrobot.Window.Model
         public PokemonId BuddyPokemonId { get; set; }
         public string Name { get; set; }
 
-<<<<<<< HEAD
-=======
         public double KmRemaining; // Not quite working yet
         public double KmToWalk
         {
@@ -41,7 +39,6 @@ namespace PoGo.Necrobot.Window.Model
             }
         }
 
->>>>>>> work_branch
         private double exp;
         public double Exp
         {
