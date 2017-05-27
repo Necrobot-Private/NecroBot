@@ -460,6 +460,9 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                         var totalExp = 0;
                         var stardust = caughtPokemonResponse.CaptureAward.Stardust.Sum();
+                        var totalStarDust = session.Inventory.UpdateStarDust(stardust);
+                        var CaptuerXP =  caughtPokemonResponse.CaptureAward.Xp.Sum();
+
                         if (encounteredPokemon != null)
                         {
                             encounteredPokemon.Id = caughtPokemonResponse.CapturedPokemonId;
@@ -468,7 +471,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                         {
                             totalExp += xp;
                         }
-                        var totalStarDust = session.Inventory.UpdateStarDust(stardust);
 
                         //This accounts for XP for CatchFlee
                         if (totalExp < 1)
