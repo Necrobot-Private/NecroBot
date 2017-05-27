@@ -6,6 +6,9 @@ using PoGo.NecroBot.Logic.Event;
 using POGOProtos.Networking.Responses;
 using POGOProtos.Inventory;
 using PoGo.NecroBot.Logic.Utils;
+using System.Threading.Tasks;
+using TinyIoC;
+using PoGo.NecroBot.Logic.State;
 
 namespace PoGo.Necrobot.Window.Model
 {
@@ -14,6 +17,8 @@ namespace PoGo.Necrobot.Window.Model
         public PokemonId BuddyPokemonId { get; set; }
         public string Name { get; set; }
 
+<<<<<<< HEAD
+=======
         public double KmRemaining; // Not quite working yet
         public double KmToWalk
         {
@@ -36,6 +41,7 @@ namespace PoGo.Necrobot.Window.Model
             }
         }
 
+>>>>>>> work_branch
         private double exp;
         public double Exp
         {
@@ -158,7 +164,9 @@ namespace PoGo.Necrobot.Window.Model
             }
         }
 
-        internal void OnProfileUpdate(ProfileEvent profile)
+        public string CollectPokeCoin { get; set; }
+
+        internal async Task OnProfileUpdateAsync(ProfileEvent profile)
         {
             var stats = profile.Stats;
             var playerStats = stats.FirstOrDefault(x => x.Experience > 0);
@@ -167,7 +175,7 @@ namespace PoGo.Necrobot.Window.Model
                 Exp = playerStats.Experience;
                 LevelExp = playerStats.NextLevelXp;
             }
-
+            await GetPokeCoin();
             playerProfile = profile.Profile;
         }
 
@@ -250,6 +258,15 @@ namespace PoGo.Necrobot.Window.Model
         {
             KmRemaining = kmremaining;
             RaisePropertyChanged("KmRemaining");
+        }
+
+        public async Task GetPokeCoin()
+        {
+            Session = TinyIoCContainer.Current.Resolve<ISession>();
+            var deployed = await Session.Inventory.GetDeployedPokemons();
+            var count = (deployed.Count() * 10).ToString();
+            CollectPokeCoin = $"Collect PokeCoin ({count})";
+            RaisePropertyChanged("CollectPokeCoin");
         }
     }
 }
