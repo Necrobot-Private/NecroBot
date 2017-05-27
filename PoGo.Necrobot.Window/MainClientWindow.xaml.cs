@@ -28,7 +28,6 @@ using System.Timers;
 using PoGo.NecroBot.Logic.Model;
 using DotNetBrowser;
 using DotNetBrowser.WPF;
-using PokemonGo.RocketAPI.Extensions;
 using PoGo.Necrobot.Window.Win32;
 using System.Reflection;
 
@@ -89,8 +88,8 @@ namespace PoGo.Necrobot.Window
             Width = Settings.Default.Width;
             Height = Settings.Default.Height;
 
-            BrowserSync();
-            ConsoleSync();
+            BrowserSync(Settings.Default.BrowserToggled);
+            ConsoleSync(Settings.Default.ConsoleToggled);
             ResetSync();
         }
 
@@ -98,7 +97,7 @@ namespace PoGo.Necrobot.Window
         {
             try
             {
-                string path = System.Reflection.Assembly.GetExecutingAssembly().Location;
+                string path = Assembly.GetExecutingAssembly().Location;
                 string appDir = Path.GetDirectoryName(path);
 #if DEBUG
                 LoggerProvider.Instance.LoggingEnabled = true;
@@ -106,7 +105,7 @@ namespace PoGo.Necrobot.Window
                 string logsDir = Path.Combine(appDir, "Logs");
                 if (!Directory.Exists(logsDir))
                     Directory.CreateDirectory(logsDir);
-                LoggerProvider.Instance.OutputFile = Path.Combine(logsDir, $"DotNetBrowser-{DateTime.UtcNow.ToUnixTime()}.log");
+                LoggerProvider.Instance.OutputFile = Path.Combine(logsDir, $"DotNetBrowser-{new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Local)}.log");
 #endif
                 var uri = new Uri(Path.Combine(appDir, @"PokeEase\index.html"));
                 var browser = BrowserFactory.Create(BrowserType.LIGHTWEIGHT);
@@ -120,16 +119,16 @@ namespace PoGo.Necrobot.Window
                 NecroBot.Logic.Logging.Logger.Write("DotNetBrowser has encountered an issue, and has been shut down to prevent a crash", LogLevel.Warning);
                 Settings.Default.BrowserToggled = false;
                 Settings.Default.Save();
-                BrowserSync();
+                BrowserSync(false);
             }
         }
 
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            //Upgrade Settings, if Any
+            //Upgrade Settings, if Any, and Set Window Title
             Settings.Default.Upgrade();
-
             Title = $"NecroBot Windows GUI - v{Assembly.GetExecutingAssembly().GetName().Version.ToString()}";
+
             // Timer Timing
             timer.Start();
             timer.Interval = 1;
@@ -156,20 +155,15 @@ namespace PoGo.Necrobot.Window
             ChangeMapModeTo(Settings.Default.MapMode);
             ChangeConsoleThemeTo(Settings.Default.ConsoleTheme);
 
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            LoadHelpArticleAsync();
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            // Load Help Article Feed
+            LoadHelpArticleAsync().ConfigureAwait(false);
         }
 
         private void TimerTick(object sender, ElapsedEventArgs e)
         {
-            var ThemeValue = Settings.Default.Theme;
-            var SchemeValue = Settings.Default.Scheme;
             Application.Current.Dispatcher.Invoke(delegate
             {
-                if (ThemeValue != Settings.Default.Theme | SchemeValue != Settings.Default.Scheme & Settings.Default.ResetLayout == true)
-                    Settings.Default.ResetLayout = false;
-                if (ThemeValue == "Yellow")
+                if (Settings.Default.Theme == "Yellow")
                 {
                     Theme.Foreground = DarkForeground;
                     Scheme.Foreground = DarkForeground;
@@ -181,19 +175,18 @@ namespace PoGo.Necrobot.Window
                     Scheme.Foreground = LightForeground;
                     MapMode.Foreground = LightForeground;
                 }
-                Settings.Default.Save();
             });
         }
 
-        public void BrowserSync()
+        public void BrowserSync(bool Status)
         {
             var translator = TinyIoCContainer.Current.Resolve<UITranslation>();
-            if (Settings.Default.BrowserToggled == false)
+            tabBrowser.IsEnabled = Status;
+            if (!Status)
             {
                 if (tabBrowser.IsSelected)
                     tabConsole.IsSelected = true;
 
-                tabBrowser.IsEnabled = false;
                 browserMenuText.Text = translator.EnableHub;
                 if (webView != null)
                 {
@@ -202,31 +195,34 @@ namespace PoGo.Necrobot.Window
                     webView.Dispose();
                 }
             }
-            else if (Settings.Default.BrowserToggled == true)
+            else if (Status)
             {
-                tabBrowser.IsEnabled = true;
                 browserMenuText.Text = translator.DisableHub;
                 InitBrowser();
             }
+            Settings.Default.BrowserToggled = Status;
             Settings.Default.Save();
+            ResetSync();
         }
 
-        public void ConsoleSync()
+        public void ConsoleSync(bool Status)
         {
             var translator = TinyIoCContainer.Current.Resolve<UITranslation>();
-            if (Settings.Default.ConsoleToggled == true)
+            if (Status)
             {
                 consoleMenuText.Text = translator.HideConsole;
                 ConsoleHelper.ShowConsoleWindow();
                 Settings.Default.ConsoleText = "Hide Console";
             }
-            if (Settings.Default.ConsoleToggled == false)
+            if (!Status)
             {
                 consoleMenuText.Text = translator.ShowConsole;
                 ConsoleHelper.HideConsoleWindow();
                 Settings.Default.ConsoleText = "Show Console";
             }
+            Settings.Default.ConsoleToggled = Status;
             Settings.Default.Save();
+            ResetSync();
         }
 
         public void ResetSync()
@@ -241,9 +237,11 @@ namespace PoGo.Necrobot.Window
                 ChangeSchemeTo("Dark");
                 ChangeMapModeTo("Normal");
                 ChangeConsoleThemeTo("Default");
+                BrowserSync(true);
+                ConsoleSync(false);
                 DefaultReset.IsEnabled = false;
             }
-            else if (Settings.Default.ResetLayout == false & Settings.Default.Theme == "Red" & Settings.Default.Scheme == "Dark" & Settings.Default.MapMode == "Normal" & Settings.Default.ConsoleTheme == "Default")
+            else if (Settings.Default.ResetLayout == false & Settings.Default.Theme == "Red" & Settings.Default.Scheme == "Dark" & Settings.Default.MapMode == "Normal" & Settings.Default.ConsoleTheme == "Default" & Settings.Default.BrowserToggled == true & Settings.Default.ConsoleToggled == false)
                 DefaultReset.IsEnabled = false;
             else if (Settings.Default.ResetLayout == false)
                 DefaultReset.IsEnabled = true;
@@ -311,12 +309,9 @@ namespace PoGo.Necrobot.Window
 
         private void MenuConsole_Click(object sender, RoutedEventArgs e)
         {
-            if (Settings.Default.ConsoleToggled == true)
-                Settings.Default.ConsoleToggled = false;
-            else if (Settings.Default.ConsoleToggled == false)
-                Settings.Default.ConsoleToggled = true;
+            Settings.Default.ConsoleToggled = !Settings.Default.ConsoleToggled;
             Settings.Default.Save();
-            ConsoleSync();
+            ConsoleSync(Settings.Default.ConsoleToggled);
         }
 
         private void MenuSetting_Click(object sender, RoutedEventArgs e)
@@ -336,11 +331,10 @@ namespace PoGo.Necrobot.Window
         private void BtnHideInfo_Click(object sender, RoutedEventArgs e)
         {
             var translator = TinyIoCContainer.Current.Resolve<UITranslation>();
-
             if (grbPlayerInfo.Height == 35)
             {
-                btnHideInfo.Content = translator.Hide;
                 grbPlayerInfo.Height = 120;
+                btnHideInfo.Content = translator.Hide;
             }
             else
             {
@@ -429,6 +423,7 @@ namespace PoGo.Necrobot.Window
             if (Theme == "Sienna")
                 Settings.Default.Theme = "Sienna";
             Settings.Default.Save();
+
             var AccountsBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Accounts/AccountsIMG_{Settings.Default.Theme}.png"));
             var ConsoleBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Console/ConsoleIMG_{Settings.Default.Theme}.png"));
             var EggsBitmap = new BitmapImage(new Uri($"pack://application:,,,/Resources/Eggs/EggsIMG_{Settings.Default.Theme}.png"));
@@ -446,13 +441,12 @@ namespace PoGo.Necrobot.Window
             pokemonIMG.Source = PokemonBitmap;
             sniperIMG.Source = SniperBitmap;
 
-            ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(Settings.Default.Theme), ThemeManager.GetAppTheme(Settings.Default.SchemeValue));
             if (Settings.Default.ResetLayout == true)
             {
                 ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent("Red"), ThemeManager.GetAppTheme("BaseDark"));
                 Settings.Default.ResetLayout = false;
             }
-            Settings.Default.Save();
+            ThemeManager.ChangeAppStyle(Application.Current, ThemeManager.GetAccent(Settings.Default.Theme), ThemeManager.GetAppTheme(Settings.Default.SchemeValue));
             ResetSync();
         }
 
@@ -582,9 +576,7 @@ namespace PoGo.Necrobot.Window
         private void Help_Click(object sender, RoutedEventArgs e)
         {
             popHelpArticles.IsOpen = true;
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            LoadHelpArticleAsync();
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            LoadHelpArticleAsync().ConfigureAwait(false);
         }
 
         private void Hyperlink_Click(object sender, RoutedEventArgs e)
@@ -610,7 +602,7 @@ namespace PoGo.Necrobot.Window
         {
             Settings.Default.BrowserToggled = !Settings.Default.BrowserToggled;
             Settings.Default.Save();
-            BrowserSync();
+            BrowserSync(Settings.Default.BrowserToggled);
         }
         public void ReInitializeSession(ISession session, GlobalSettings globalSettings, Account requestedAccount = null)
         {
