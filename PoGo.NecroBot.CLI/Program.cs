@@ -336,7 +336,6 @@ namespace PoGo.NecroBot.CLI
                         TimeSpan Expiration = AuthTokenExpiration - DateTime.Now;
                         string Result = $"Key: {maskedKey} RPM: {MaxRequestCount} Expiration Date: {AuthTokenExpiration.Month}/{AuthTokenExpiration.Day}/{AuthTokenExpiration.Year} ({Expiration.Days} Days {Expiration.Hours} Hours {Expiration.Minutes} Minutes)";
                         Logger.Write(Result, LogLevel.Info, ConsoleColor.Green);
-                        return;
                     }
                     catch
                     {
