@@ -4,7 +4,6 @@ using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.State;
 using POGOProtos.Inventory.Item;
-using POGOProtos.Networking.Responses;
 
 namespace PoGo.NecroBot.Logic.Tasks
 {
@@ -26,20 +25,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 Logger.Write(session.Translation.GetTranslation(TranslationString.UseLuckyEggAmount, currentAmountOfLuckyEggs));
             }
 
-            var UseEgg = await session.Inventory.UseLuckyEggConstantly().ConfigureAwait(false);
-
-            if (UseEgg.Result == UseItemXpBoostResponse.Types.Result.Success)
-            {
-                Logger.Write(session.Translation.GetTranslation(TranslationString.UsedLuckyEgg));
-            }
-            else if (UseEgg.Result == UseItemXpBoostResponse.Types.Result.ErrorNoItemsRemaining)
-            {
-                Logger.Write(session.Translation.GetTranslation(TranslationString.NoEggsAvailable));
-            }
-            else if (UseEgg.Result == UseItemXpBoostResponse.Types.Result.ErrorXpBoostAlreadyActive || (UseEgg.AppliedItems == null))
-            {
-                Logger.Write(session.Translation.GetTranslation(TranslationString.UseLuckyEggActive));
-            }
+            await session.Inventory.UseLuckyEgg().ConfigureAwait(false);
         }
     }
 }

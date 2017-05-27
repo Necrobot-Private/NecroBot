@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="PoGo.Necrobot.Window.Controls.PlayerInfo"
+<UserControl x:Class="PoGo.Necrobot.Window.Controls.PlayerInfo"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -11,10 +11,13 @@
         <c:I18NConveter x:Key="I18NConveter"></c:I18NConveter>
         <c:I18NMultiConveter x:Key="I18NMultiConveter"></c:I18NMultiConveter>
     </Control.Resources>
+
     <DockPanel LastChildFill="True">
         <StackPanel DockPanel.Dock="Left" Width="75" Orientation="Vertical">
-            <Image Name="image" Width="45" Source="{Binding Path=BuddyPokemonId, FallbackValue=https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/pokemon/0.png, Converter={StaticResource PokemonIdToImageConverter}}"/>
-            <TextBlock TextAlignment="Center" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Light">
+            <Image  x:Name="imgPokemon" Width="55" Height="55" Source="{Binding Path=BuddyPokemonId, FallbackValue=https://img.pokemondb.net/artwork/garchomp.jpg, Converter={StaticResource PokemonIdToImageConverter}}">
+            </Image>
+
+            <TextBlock x:Name="tbBuddyCandy" TextAlignment="Center" Width="75" Height="16" VerticalAlignment="Top">
                 <TextBlock.Text>
                     <MultiBinding  StringFormat="{}{0:0.00}/{1:0.00}" FallbackValue="xxx/xxx">
                         <Binding Path="BuddyTotalKM"></Binding>
@@ -23,6 +26,7 @@
                 </TextBlock.Text>
             </TextBlock>
         </StackPanel>
+
         <Grid Margin="10,0,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*"></ColumnDefinition>
@@ -36,14 +40,16 @@
                 <RowDefinition Height="25"></RowDefinition>
                 <RowDefinition Height="25"></RowDefinition>
             </Grid.RowDefinitions>
-            <TextBlock Grid.Column="0" Grid.Row="0" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Light">
+
+            <TextBlock x:Name="tbLevel" Grid.Column="0" Grid.Row="0" Width="158" Height="16" VerticalAlignment="Top">
                 <TextBlock.Text>
                     <MultiBinding StringFormat="Level: {0}" FallbackValue="Level: 40">
                         <Binding Path="Level" />
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
-            <TextBlock Grid.Column="1" Grid.Row="0" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Light">
+
+            <TextBlock x:Name="tbExp"  Grid.Column="1" Grid.Row="0" Width="158" Height="16" VerticalAlignment="Top">
                 <TextBlock.Text>
                     <MultiBinding StringFormat="EXP: {0}/{1} ({2}%)" FallbackValue="EXP: 100000/500000 (20%)">
                         <Binding Path="Exp" />
@@ -52,46 +58,67 @@
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
-            <TextBlock Grid.Column="2" Grid.Row="0" x:Name="textBlock" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Path=EXPPerHour, FallbackValue=EXP/H: 123, StringFormat=EXP/H: {0}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Light"/>
-            <TextBlock Grid.Column="3" Grid.Row="0" x:Name="textBlock_Copy" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Path=PKMPerHour, FallbackValue=PKM/H: 123 ,StringFormat=PKM/H: {0}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Light"/>
-            <TextBlock Grid.Column="0" Grid.Row="1" x:Name="textBlock1" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Runtime, FallbackValue=Runtime: xx:xx:xx:xx, StringFormat=Runtime: {0}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Light"/>
-            <TextBlock Grid.Column="1" Grid.Row="1" x:Name="textBlock2" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding TimeToLevelUp, FallbackValue=Level Up in :1d 24h, StringFormat=Level Up in {0}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Light"/>
-            <TextBlock Grid.Column="2" Grid.Row="1" x:Name="textBlock3" HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Stardust, FallbackValue=Stardust: 90000, StringFormat=Stardust: \{0\}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Light"/>
-            <TextBlock Grid.Column="4" Grid.Row="1"  HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Light">
+            <TextBlock Grid.Column="2" Grid.Row="0" x:Name="tbEXPH"  TextWrapping="Wrap" Text="{Binding Path=EXPPerHour, FallbackValue=EXP/H: 123, StringFormat=EXP/H: {0}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="158" Height="16"/>
+            <TextBlock Grid.Column="3" Grid.Row="0" x:Name="tbKMPH" TextWrapping="Wrap" Text="{Binding Path=PKMPerHour, FallbackValue=PKM/H: 123 ,StringFormat=PKM/H: {0}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" RenderTransformOrigin="6.212,4.375" Width="158" Height="16"/>
+            <TextBlock Grid.Column="0" Grid.Row="1" x:Name="tbRunTime"  TextWrapping="Wrap" Text="{Binding Runtime, FallbackValue=Runtime: 00:00, StringFormat=Runtime: {0}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="158" Height="16"/>
+
+            <TextBlock Grid.Column="1" Grid.Row="1" x:Name="tbLvlUP" TextWrapping="Wrap" Text="{Binding TimeToLevelUp, FallbackValue=Level Up in :1d 24h, StringFormat=Level Up in {0}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" RenderTransformOrigin="-0.51,0.5" Width="158" Height="16"/>
+            <TextBlock Grid.Column="2" Grid.Row="1" x:Name="tbStarDust" TextWrapping="Wrap" Text="{Binding Stardust, FallbackValue=Stardust: 0, StringFormat=Stardust: \{0\}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="158" Height="16"/>
+
+            <TextBlock x:Name="tbPokeStopLMT" Grid.Column="4" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="158" Height="16">
                 <TextBlock.Text>
-                    <MultiBinding Converter="{StaticResource ResourceKey=I18NMultiConveter}">
+                    <MultiBinding Converter="{StaticResource ResourceKey=I18NMultiConveter}" FallbackValue="PokeStops: 0">
                         <Binding Source="PokestopLimit"></Binding>
                         <Binding Path="PokestopLimit"></Binding>
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
-            <TextBlock Grid.Column="4" Grid.Row="0"  HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Light">
+
+            <TextBlock x:Name="tbCatchLMT" Grid.Column="4" Grid.Row="0" TextWrapping="Wrap" VerticalAlignment="Top" Width="158" Height="16">
                 <TextBlock.Text>
-                    <MultiBinding Converter="{StaticResource ResourceKey=I18NMultiConveter}">
+                    <MultiBinding Converter="{StaticResource ResourceKey=I18NMultiConveter}" FallbackValue="Pokemons: 0">
                         <Binding Source="CatchLimit"></Binding>
                         <Binding Path="CatchLimit"></Binding>
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
-            <TextBlock Grid.Column="3" Grid.Row="1"  HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Light">
+
+            <TextBlock x:Name="tbSpeed" Grid.Column="3" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="158" Height="16" Margin="0,2,0,0">
                 <TextBlock.Text>
-                    <MultiBinding Converter="{StaticResource ResourceKey=I18NMultiConveter}">
+                    <MultiBinding Converter="{StaticResource ResourceKey=I18NMultiConveter}" FallbackValue="Speed: 0.00">
                         <Binding Source="WalkSpeed"></Binding>
                         <Binding Path="WalkSpeed"></Binding>
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
-            <TextBlock Grid.Column="0" Grid.Row="2"  HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Light">
+
+            <TextBlock x:Name="tbTransfered" Grid.Column="0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="158" Height="16">
                 <TextBlock.Text>
-                    <MultiBinding Converter="{StaticResource ResourceKey=I18NMultiConveter}">
+                    <MultiBinding Converter="{StaticResource ResourceKey=I18NMultiConveter}" FallbackValue="Transfered: 0">
                         <Binding Source="PokemonTransfered"></Binding>
                         <Binding Path="PokemonTransfered"></Binding>
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
+<<<<<<< HEAD
             <Button x:Name="btnCollectPokeCoin" Click="GetPokeCoin_Click" Grid.Column="4" Grid.Row="1" Margin="0,14,0,11" RenderTransformOrigin="0.527,-0.16" Grid.RowSpan="2">
                 <TextBlock Text="{Binding CollectPokeCoin}" />
             </Button>
+=======
+
+            <TextBlock x:Name="tbEggStat" Grid.Column="1" Grid.Row="2" Height="16" Width="158" VerticalAlignment="Top">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="Egg Status: {0:0.00}/{1} KM ({2}%)" FallbackValue="Egg Status: 0.00/0 KM (0%)">
+                        <Binding Path="KmRemaining" />
+                        <Binding Path="KmToWalk" />
+                        <Binding Path="EggPerc" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+
+
+>>>>>>> work_branch
         </Grid>
     </DockPanel>
+
 </UserControl>

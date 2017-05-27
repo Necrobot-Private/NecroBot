@@ -7,6 +7,8 @@ using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.Model;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Utils;
+using PokemonGo.RocketAPI.Helpers;
+using PoGo.NecroBot.Logic.PoGoUtils;
 
 #endregion
 
@@ -30,13 +32,20 @@ namespace PoGo.NecroBot.Logic.Tasks
                 var upgradeResult = await session.Inventory.UpgradePokemon(pokemon.Id).ConfigureAwait(false);
                 if (upgradeResult.Result.ToString().ToLower().Contains("success"))
                 {
-                    Logger.Write("Pokemon Upgraded:" + session.Translation.GetPokemonTranslation(upgradeResult.UpgradedPokemon.PokemonId) + ":" + upgradeResult.UpgradedPokemon.Cp, LogLevel.LevelUp);
+                    var stardust = -PokemonCpUtils.GetStardustCostsForPowerup(pokemon.CpMultiplier); //+ pokemon.AdditionalCpMultiplier);
+                    var totalStarDust = session.Inventory.UpdateStarDust(stardust);
+
+                    Logger.Write($"LevelUpSpecificPokemonTasks: SD: {stardust} | CP: {-PokemonCpUtils.GetStardustCostsForPowerup(pokemon.CpMultiplier + pokemon.AdditionalCpMultiplier)}", LogLevel.Info);
+                    Logger.Write($"LevelUpSpecificPokemonTasks: {session.Translation.GetPokemonTranslation(upgradeResult.UpgradedPokemon.PokemonId)} | CP: {upgradeResult.UpgradedPokemon.Cp}", LogLevel.Info);
 
                     session.EventDispatcher.Send(new PokemonLevelUpEvent
                     {
                         Id = upgradeResult.UpgradedPokemon.PokemonId,
                         Cp = upgradeResult.UpgradedPokemon.Cp,
-                        UniqueId = pokemon.Id
+                        UniqueId = pokemon.Id,
+                        PSD = stardust,
+                        PCandies = await PokemonInfo.GetCandy(session, pokemon).ConfigureAwait(false),
+                        Lvl = upgradeResult.UpgradedPokemon.Level(),
                     });
                 }
                 await DelayingUtils.DelayAsync(session.LogicSettings.DelayBetweenPlayerActions, 0, session.CancellationTokenSource.Token).ConfigureAwait(false);
@@ -44,3 +53,4 @@ namespace PoGo.NecroBot.Logic.Tasks
         }
     }
 }
+

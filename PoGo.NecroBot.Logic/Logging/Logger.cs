@@ -37,7 +37,7 @@ namespace PoGo.NecroBot.Logic.Logging
         {
 #if DEBUG
             Write(message, color: ConsoleColor.DarkRed);
-            if(ex != null)
+            if (ex != null)
             {
                 Write(ex.Message, color: ConsoleColor.DarkRed);
             }
@@ -155,7 +155,7 @@ namespace PoGo.NecroBot.Logic.Logging
                     break;
                 case LogLevel.LevelUp:
                     Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.Magenta : color;
-                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Pkmn}) {message}";
+                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.LevelUp}) {message}";
                     break;
 
                 case LogLevel.Gym:

@@ -10,39 +10,24 @@ namespace PoGo.NecroBot.Logic.Logging
     public class LoggingStrings
     {
         public static string Attention;
-
         public static string Berry;
-
         public static string Debug;
-
         public static string Egg;
-
         public static string Error;
-
         public static string Evolved;
-
         public static string Farming;
-
         public static string Info;
-
         public static string Pkmn;
-
         public static string Pokestop;
-
         public static string Recycling;
-
         public static string Sniper;
-
         public static string Transferred;
-
         public static string Update;
-
         public static string New;
-
         public static string SoftBan;
         public static string Gym;
-
         public static string Service;
+        public static string LevelUp;
 
         public static void SetStrings(ISession session)
         {
@@ -117,6 +102,10 @@ namespace PoGo.NecroBot.Logic.Logging
             Service =
                 session?.Translation.GetTranslation(
                     TranslationString.LogEntryService) ?? "SERVICE";
+
+            LevelUp =
+                session?.Translation.GetTranslation(
+                    TranslationString.LogEntryLevelUp) ?? "Level UP";
         }
     }
 }
