@@ -95,9 +95,9 @@ namespace RocketBot2.Forms
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            this.splitContainer1.SplitterDistance = this.splitContainer1.Width / 2;
-            this.splitContainer2.SplitterDistance = this.splitContainer2.Height / 3;
-            this.Refresh();
+            this.splitContainer1.SplitterDistance = this.splitContainer1.Width / 2; // evenly splits left & right splitter panes
+            this.splitContainer2.SplitterDistance = this.splitContainer2.Height / 3;// Always keeps the logger window @ 1/3 of the window height
+            this.Refresh(); // Force screen refresh before items are poppulated
             SetStatusText(Application.ProductName + " " + Application.ProductVersion);
             speedLable.Parent = GMapControl1;
             showMoreCheckBox.Parent = GMapControl1;
