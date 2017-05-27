@@ -12,8 +12,8 @@ namespace PoGo.NecroBot.Logic.Logging
         DateTime lastVerboseLog = DateTime.Now;
         public void HashStatusUpdate(HashInfo info)
         {
-            DateTime expired = Convert.ToDateTime(info.Expired);
-            TimeSpan expiredTime = expired - DateTime.UtcNow;
+            DateTime expired = Convert.ToDateTime(info.Expired).ToLocalTime();
+            TimeSpan expiredTime = expired - DateTime.Now;
             ISession session = TinyIoCContainer.Current.Resolve<ISession>();
             if (session.Settings.DisplayVerboseLog && lastVerboseLog< DateTime.Now.AddSeconds(-60))
             {

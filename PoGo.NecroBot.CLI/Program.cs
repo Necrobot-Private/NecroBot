@@ -332,14 +332,10 @@ namespace PoGo.NecroBot.CLI
 
                         string AuthKey = response.Headers.GetValues("X-AuthToken").FirstOrDefault();
                         string MaxRequestCount = response.Headers.GetValues("X-MaxRequestCount").FirstOrDefault();
-                        DateTime AuthTokenExpiration = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(Convert.ToDouble(response.Headers.GetValues("X-AuthTokenExpiration").FirstOrDefault()));
-                        TimeSpan Expiration = AuthTokenExpiration - DateTime.UtcNow;
+                        DateTime AuthTokenExpiration = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Local).AddSeconds(Convert.ToDouble(response.Headers.GetValues("X-AuthTokenExpiration").FirstOrDefault())).ToLocalTime();
+                        TimeSpan Expiration = AuthTokenExpiration - DateTime.Now;
                         string Result = $"Key: {maskedKey} RPM: {MaxRequestCount} Expiration Date: {AuthTokenExpiration.Month}/{AuthTokenExpiration.Day}/{AuthTokenExpiration.Year} ({Expiration.Days} Days {Expiration.Hours} Hours {Expiration.Minutes} Minutes)";
                         Logger.Write(Result, LogLevel.Info, ConsoleColor.Green);
-                        AuthKey = null;
-                        MaxRequestCount = null;
-                        Expiration = new TimeSpan();
-                        Result = null;
                     }
                     catch
                     {
