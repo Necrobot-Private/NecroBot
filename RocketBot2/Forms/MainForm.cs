@@ -1285,14 +1285,10 @@ namespace RocketBot2.Forms
                         HttpResponseMessage response = client.PostAsync("https://pokehash.buddyauth.com/api/v133_1/hash", null).Result;
                         string AuthKey = response.Headers.GetValues("X-AuthToken").FirstOrDefault();
                         string MaxRequestCount = response.Headers.GetValues("X-MaxRequestCount").FirstOrDefault();
-                        DateTime AuthTokenExpiration = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(Convert.ToDouble(response.Headers.GetValues("X-AuthTokenExpiration").FirstOrDefault()));
-                        TimeSpan Expiration = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(Convert.ToDouble(response.Headers.GetValues("X-AuthTokenExpiration").FirstOrDefault())) - DateTime.UtcNow;
+                        DateTime AuthTokenExpiration = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Local).AddSeconds(Convert.ToDouble(response.Headers.GetValues("X-AuthTokenExpiration").FirstOrDefault())).ToLocalTime();
+                        TimeSpan Expiration = AuthTokenExpiration - DateTime.Now;
                         string Result = string.Format("Key: {0} RPM: {1} Expiration Date: {2}/{3}/{4}", maskedKey, MaxRequestCount, AuthTokenExpiration.Day, AuthTokenExpiration.Month, AuthTokenExpiration.Year);
                         Logger.Write(Result, LogLevel.Info, ConsoleColor.Green);
-                        AuthKey = null;
-                        MaxRequestCount = null;
-                        Expiration = new TimeSpan();
-                        Result = null;
                     }
                     catch
                     {
