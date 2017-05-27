@@ -517,7 +517,7 @@ namespace PoGo.Necrobot.Window
             if (e.Key == Key.Enter)
             {
                 NecroBot.Logic.Logging.Logger.Write(txtCmdInput.Text, LogLevel.Info, ConsoleColor.White);
-                txtCmdInput.Text = "Enter Your Command";
+                txtCmdInput.Text = "Enter Your Command:";
             }
         }
 
@@ -608,10 +608,7 @@ namespace PoGo.Necrobot.Window
 
         private void BrowserToggle_Click(object sender, RoutedEventArgs e)
         {
-            if (Settings.Default.BrowserToggled == true)
-                Settings.Default.BrowserToggled = false;
-            else if (Settings.Default.BrowserToggled == false)
-                Settings.Default.BrowserToggled = true;
+            Settings.Default.BrowserToggled = !Settings.Default.BrowserToggled;
             Settings.Default.Save();
             BrowserSync();
         }
@@ -625,20 +622,24 @@ namespace PoGo.Necrobot.Window
 
         private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Settings.Default.Height = Height;
-            Settings.Default.Width = Width;
+            if (WindowState != WindowState.Maximized)
+            {
+                Settings.Default.Height = Height;
+                Settings.Default.Width = Width;
+            }
+            else if (WindowState == WindowState.Maximized)
+            {
+                Settings.Default.Height = 768;
+                Settings.Default.Height = 1366;
+            }
             Settings.Default.Save();
             Process.GetCurrentProcess().Kill();
         }
 
         private void DefaultReset_Click(object sender, RoutedEventArgs e)
         {
-            if (Settings.Default.ResetLayout == true)
-                Settings.Default.ResetLayout = false;
-            else if (Settings.Default.ResetLayout == false)
-                Settings.Default.ResetLayout = true;
+            Settings.Default.ResetLayout = !Settings.Default.ResetLayout;
             Settings.Default.Save();
-            Settings.Default.Reload();
             ResetSync();
         }
     }
