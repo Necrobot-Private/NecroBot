@@ -1,11 +1,14 @@
-﻿using POGOProtos.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using PoGo.NecroBot.Logic.Event;
+using System.Threading.Tasks;
+using TinyIoC;
 using POGOProtos.Networking.Responses;
 using POGOProtos.Inventory;
+using POGOProtos.Enums;
+using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Utils;
+using PoGo.NecroBot.Logic.State;
 
 namespace PoGo.Necrobot.Window.Model
 {
@@ -14,7 +17,7 @@ namespace PoGo.Necrobot.Window.Model
         public PokemonId BuddyPokemonId { get; set; }
         public string Name { get; set; }
 
-        public double KmRemaining; // Not quite working yet
+        public double KmRemaining; // Not Working Quite Right
         public double KmToWalk
         {
             get { return KmRemaining; }
@@ -145,8 +148,9 @@ namespace PoGo.Necrobot.Window.Model
         public string PokestopLimit { get; set; }
         public string CatchLimit { get; set; }
         public double WalkSpeed { get; set; }
+        public string CollectPokeCoin { get; set; }
 
-        //Still needs some work(TheWizard1328)
+        //Still Needs Some Work(TheWizard1328)
         public int pokemontransfered;
         public int PokemonTransfered //{ get; set; }
         {
@@ -158,7 +162,7 @@ namespace PoGo.Necrobot.Window.Model
             }
         }
 
-        internal void OnProfileUpdate(ProfileEvent profile)
+        internal async Task OnProfileUpdateAsync(ProfileEvent profile)
         {
             var stats = profile.Stats;
             var playerStats = stats.FirstOrDefault(x => x.Experience > 0);
@@ -168,6 +172,7 @@ namespace PoGo.Necrobot.Window.Model
                 LevelExp = playerStats.NextLevelXp;
             }
 
+            await GetPokeCoin();
             playerProfile = profile.Profile;
         }
 
@@ -250,6 +255,15 @@ namespace PoGo.Necrobot.Window.Model
         {
             KmRemaining = kmremaining;
             RaisePropertyChanged("KmRemaining");
+        }
+
+        public async Task GetPokeCoin()
+        {
+            Session = TinyIoCContainer.Current.Resolve<ISession>();
+            var deployed = await Session.Inventory.GetDeployedPokemons();
+            var count = (deployed.Count() * 10).ToString();
+            CollectPokeCoin = $"Collect PokeCoin ({count})";
+            RaisePropertyChanged("CollectPokeCoin");
         }
     }
 }
