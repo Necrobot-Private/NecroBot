@@ -112,9 +112,6 @@
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
-
-
->>>>>>> work_branch
         </Grid>
     </DockPanel>
 
