@@ -74,6 +74,10 @@ namespace PoGo.Necrobot.Window
         public void OnBotEvent(EggIncubatorStatusEvent e)
         {
             datacontext.EggsList.OnEggIncubatorStatus(e);
+            //datacontext.PlayerInfo.UpdateEggs(e.KmRemaining); //Still in the works(TheWizard1328)
+            datacontext.PlayerInfo.RaisePropertyChanged("KmRemaining");
+            datacontext.PlayerInfo.RaisePropertyChanged("KmToWalk");
+            datacontext.PlayerInfo.RaisePropertyChanged("EggPerc");
         }
         public void OnBotEvent(InventoryRefreshedEvent e)
         {

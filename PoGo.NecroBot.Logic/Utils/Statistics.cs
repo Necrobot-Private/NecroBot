@@ -1,4 +1,4 @@
-﻿#region using directives
+#region using directives
 
 #region using directives
 
@@ -55,7 +55,7 @@ namespace PoGo.NecroBot.Logic.Utils
         public void OnStatisticChanged(ISession session)
         {
             var manager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
-            if (MultipleBotConfig.IsMultiBotActive(session.LogicSettings, manager) &&  manager.AllowSwitch())
+            if (MultipleBotConfig.IsMultiBotActive(session.LogicSettings, manager) && manager.AllowSwitch())
             {
                 var config = session.LogicSettings.MultipleBotConfig;
 
@@ -141,7 +141,7 @@ namespace PoGo.NecroBot.Logic.Utils
                     hours = Math.Truncate(TimeSpan.FromHours(time).TotalHours);
                     minutes = TimeSpan.FromHours(time).Minutes;
                 }
-                
+
                 if (LevelForRewards == -1 || stat.Level >= LevelForRewards)
                 {
                     if (session.LogicSettings.SkipCollectingLevelUpRewards)
@@ -150,7 +150,7 @@ namespace PoGo.NecroBot.Logic.Utils
                     }
                     else
                     {
-                        LevelUpRewardsResponse Result = await inventory.GetLevelUpRewards(stat.Level).ConfigureAwait(false);
+                        LevelUpRewardsResponse Result = await GetLevelUpRewards(session).ConfigureAwait(false);
 
                         if (Result.ToString().ToLower().Contains("awarded_already"))
                             LevelForRewards = stat.Level + 1;
@@ -158,7 +158,6 @@ namespace PoGo.NecroBot.Logic.Utils
                         if (Result.ToString().ToLower().Contains("success"))
                         {
                             Logger.Write("Leveled up: " + stat.Level, LogLevel.Info);
-                            LevelForRewards = stat.Level + 1;
 
                             RepeatedField<ItemAward> items = Result.ItemsAwarded;
 
@@ -199,7 +198,12 @@ namespace PoGo.NecroBot.Logic.Utils
             _initSessionDateTime = DateTime.Now;
             _exportStats = new StatsExport();
         }
-        
+
+        public async Task<LevelUpRewardsResponse> GetLevelUpRewards(ISession ctx)
+        {
+            return await ctx.Inventory.GetLevelUpRewards(LevelForRewards).ConfigureAwait(false);
+        }
+
         public double GetRuntime()
         {
             return (DateTime.Now - _initSessionDateTime).TotalSeconds / 3600;

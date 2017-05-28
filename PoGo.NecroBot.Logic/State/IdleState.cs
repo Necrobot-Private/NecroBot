@@ -28,7 +28,7 @@ namespace PoGo.NecroBot.Logic.State
         {
             session.EventDispatcher.Send(new WarnEvent()
             {
-                Message = "Hash server being down, Bot will enter IDLE state until service available. Ping interval is 5 sec..."
+                Message = "Hash server may be down, Bot will enter IDLE state until service becomes available. Ping interval, 5 sec..."
             });
 
             Console.WriteLine();
