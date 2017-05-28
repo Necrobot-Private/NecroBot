@@ -19,6 +19,8 @@ namespace PoGo.Necrobot.Window.Model
         public DateTime Insence_expires = new DateTime(0);
         public DateTime Luckyeggs_expires = new DateTime(0);
         private System.Timers.Timer tmr;
+        public string InsenceTMR { get; set; }
+        public string LuckyTMR { get; set; }
         public PokemonId BuddyPokemonId { get; set; }
         public string Name { get; set; }
 
@@ -323,7 +325,7 @@ namespace PoGo.Necrobot.Window.Model
             else
             {
                 // my value here  00:00:00
-                //label = lblTime.Text = $"{time.Minutes}m {Math.Abs(time.Seconds)}s";
+                InsenceTMR = $"{time.Minutes}m {Math.Abs(time.Seconds)}s";
             }
 
             var timel = Luckyeggs_expires - DateTime.UtcNow;
@@ -334,7 +336,7 @@ namespace PoGo.Necrobot.Window.Model
             else
             {
                 // my value here  00:00:00
-                //label = lblTime.Text = $"{timel.Minutes}m {Math.Abs(timel.Seconds)}s";
+                LuckyTMR = $"{timel.Minutes}m {Math.Abs(timel.Seconds)}s";
             }
         }
     }
