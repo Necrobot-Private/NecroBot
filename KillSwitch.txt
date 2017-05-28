@@ -1,0 +1,13 @@
+﻿BotStatus=ENABLE;
+//============================================//
+              POKEMON GO 0.63.0
+//============================================//
+
+    Necrobot is now compatible with 0.63.0 API.
+
+//============================================//
+              Updated: 5/20/2017
+
+
+For support/questions:
+OFFICIAL NECROBOT2 Discord: https://discord.gg/7FWyWVp
