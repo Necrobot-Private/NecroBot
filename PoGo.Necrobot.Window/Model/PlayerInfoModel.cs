@@ -10,6 +10,7 @@ using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Utils;
 using PoGo.NecroBot.Logic.State;
 using POGOProtos.Inventory.Item;
+using System.Timers;
 
 namespace PoGo.Necrobot.Window.Model
 {
@@ -17,6 +18,7 @@ namespace PoGo.Necrobot.Window.Model
     {
         public DateTime Insence_expires = new DateTime(0);
         public DateTime Luckyeggs_expires = new DateTime(0);
+        private System.Timers.Timer tmr;
         public PokemonId BuddyPokemonId { get; set; }
         public string Name { get; set; }
 
@@ -192,6 +194,7 @@ namespace PoGo.Necrobot.Window.Model
                 .Where(x => x != null && x.Id == playerProfile.PlayerData.BuddyPokemon.Id)
                 .FirstOrDefault();
 
+            // get applied items
             var appliedItems =
                 Session.Inventory.GetAppliedItems().Result
                 .SelectMany(aItems => aItems.Item)
@@ -220,6 +223,18 @@ namespace PoGo.Necrobot.Window.Model
                     }
                 }
             }
+
+            // add and enable timer
+            // 
+            // tmr
+            // 
+            tmr = new System.Timers.Timer()
+            {
+                Enabled = true,
+                Interval = 1000
+            };
+            tmr.Elapsed += new ElapsedEventHandler(this.Tmr_Tick);
+
 
             if (buddy == null) return;
 
@@ -308,6 +323,7 @@ namespace PoGo.Necrobot.Window.Model
             else
             {
                 // my value here  00:00:00
+                //label = lblTime.Text = $"{time.Minutes}m {Math.Abs(time.Seconds)}s";
             }
 
             var timel = Luckyeggs_expires - DateTime.UtcNow;
@@ -318,6 +334,7 @@ namespace PoGo.Necrobot.Window.Model
             else
             {
                 // my value here  00:00:00
+                //label = lblTime.Text = $"{timel.Minutes}m {Math.Abs(timel.Seconds)}s";
             }
         }
     }
