@@ -11,7 +11,6 @@
         <c:I18NConveter x:Key="I18NConveter"></c:I18NConveter>
         <c:I18NMultiConveter x:Key="I18NMultiConveter"></c:I18NMultiConveter>
     </Control.Resources>
-
     <DockPanel LastChildFill="True">
         <StackPanel DockPanel.Dock="Left" Width="75" Orientation="Vertical">
             <Image x:Name="imgPokemon" Width="55" Height="55" Source="{Binding Path=BuddyPokemonId, FallbackValue=https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/pokemon/0.png, Converter={StaticResource PokemonIdToImageConverter}}" />
@@ -24,7 +23,6 @@
                 </TextBlock.Text>
             </TextBlock>
         </StackPanel>
-
         <Grid Margin="10,0,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*"></ColumnDefinition>
@@ -54,11 +52,10 @@
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
-            <TextBlock Grid.Column="2" Grid.Row="0" x:Name="tbEXPH"  TextWrapping="Wrap" Text="{Binding Path=EXPPerHour, FallbackValue=EXP/H: 123, StringFormat=EXP/H: {0}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="158" Height="16"/>
-            <TextBlock Grid.Column="3" Grid.Row="0" x:Name="tbKMPH" TextWrapping="Wrap" Text="{Binding Path=PKMPerHour, FallbackValue=PKM/H: 123 ,StringFormat=PKM/H: {0}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" RenderTransformOrigin="6.212,4.375" Width="158" Height="16"/>
-            <TextBlock Grid.Column="0" Grid.Row="1" x:Name="tbRunTime"  TextWrapping="Wrap" Text="{Binding Runtime, FallbackValue=Runtime: 00:00, StringFormat=Runtime: {0}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="158" Height="16"/>
-
-            <TextBlock Grid.Column="1" Grid.Row="1" x:Name="tbLvlUP" TextWrapping="Wrap" Text="{Binding TimeToLevelUp, FallbackValue=Level Up in :1d 24h, StringFormat=Level Up in {0}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" RenderTransformOrigin="-0.51,0.5" Width="158" Height="16"/>
+            <TextBlock Grid.Column="2" Grid.Row="0" x:Name="tbEXPH" TextWrapping="Wrap" Text="{Binding Path=EXPPerHour, FallbackValue=EXP/H: 000, StringFormat=EXP/H: {0}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="158" Height="16"/>
+            <TextBlock Grid.Column="3" Grid.Row="0" x:Name="tbKMPH" TextWrapping="Wrap" Text="{Binding Path=PKMPerHour, FallbackValue=PKM/H: 000, StringFormat=PKM/H: {0}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="158" Height="16"/>
+            <TextBlock Grid.Column="0" Grid.Row="1" x:Name="tbRunTime" TextWrapping="Wrap" Text="{Binding Runtime, FallbackValue=Runtime: 00:00, StringFormat=Runtime: {0}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="158" Height="16"/>
+            <TextBlock Grid.Column="1" Grid.Row="1" x:Name="tbLvlUP" TextWrapping="Wrap" Text="{Binding TimeToLevelUp, FallbackValue=Level Up Time: 0d 0h, StringFormat=Level Up Time: {0}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="158" Height="16"/>
             <TextBlock Grid.Column="2" Grid.Row="1" x:Name="tbStarDust" TextWrapping="Wrap" Text="{Binding Stardust, FallbackValue=Stardust: 0, StringFormat=Stardust: \{0\}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="158" Height="16"/>
             <TextBlock x:Name="tbPokeStopLMT" Grid.Column="4" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="158" Height="16">
                 <TextBlock.Text>
@@ -103,5 +100,4 @@
             </TextBlock>
         </Grid>
     </DockPanel>
-
 </UserControl>
