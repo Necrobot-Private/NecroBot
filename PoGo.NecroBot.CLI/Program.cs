@@ -465,7 +465,7 @@ namespace PoGo.NecroBot.CLI
 
             _session.ReInitSessionWithNextBot(bot);
 
-            machine.AsyncStart(new VersionCheckState(), _session, _subPath, excelConfigAllow);
+            machine.AsyncStart(new PauseState(), _session, _subPath, excelConfigAllow);
 
             try
             {

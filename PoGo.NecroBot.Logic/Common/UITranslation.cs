@@ -12,6 +12,12 @@ namespace PoGo.NecroBot.Logic.Common
     {
         #region Main screen
 
+        [Description("Start Bot")]
+        public string IsRunning { get; set; }
+
+        [Description("Pause Bot")]
+        public string IsNotRunning { get; set; }
+
         [Description("Accounts")]
         public string AccountSetting { get; set; }
 
