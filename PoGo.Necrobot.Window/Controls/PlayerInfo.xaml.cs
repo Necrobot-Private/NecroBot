@@ -1,9 +1,9 @@
 ﻿using PoGo.Necrobot.Window.Model;
 using PoGo.NecroBot.Logic.State;
 using System;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Linq;
 
 namespace PoGo.Necrobot.Window.Controls
 {
@@ -40,9 +40,9 @@ namespace PoGo.Necrobot.Window.Controls
 
         public PlayerInfo()
         {
-            //this.DataContext = this.PlayerData;
             InitializeComponent();
         }
+        
         private async void GetPokeCoin_Click(object sender, RoutedEventArgs e)
         {
             var deployed = await Session.Inventory.GetDeployedPokemons();
@@ -55,6 +55,5 @@ namespace PoGo.Necrobot.Window.Controls
                 return;
             }
         }
-
-}
+    }
 }
