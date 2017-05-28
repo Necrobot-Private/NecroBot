@@ -149,7 +149,6 @@ namespace PoGo.Necrobot.Window.Model
         public string CatchLimit { get; set; }
         public double WalkSpeed { get; set; }
         public string CollectPokeCoin { get; set; }
-        //Still Needs Some Work(TheWizard1328)
         public int pokemontransfered;
         public int PokemonTransfered //{ get; set; }
         {
