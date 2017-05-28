@@ -100,14 +100,14 @@
             </TextBlock>
             <TextBlock Grid.Column="2" Grid.Row="2" x:Name="tb_lukyegg_time" TextWrapping="Wrap" VerticalAlignment="Top" Width="158" Height="16" Margin="0.2,0.6,0.2,0">
                 <TextBlock.Text>
-                    <MultiBinding StringFormat="LuckyEggs: {0:00m:00s}" FallbackValue="LuckyEggs: 00m:00s">
+                    <MultiBinding StringFormat="LuckyEggs: {0}" FallbackValue="LuckyEggs: 00m:00s">
                         <Binding Path="LuckyTMR" />
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
             <TextBlock Grid.Column="3" Grid.Row="2" x:Name="tb_incense_time" TextWrapping="Wrap" VerticalAlignment="Top" Width="158" Height="16" Margin="0.8,0.6,158,0" Grid.ColumnSpan="2">
                 <TextBlock.Text>
-                    <MultiBinding StringFormat="Insence: {0:00m:00s}" FallbackValue="Insence: 00m:00s">
+                    <MultiBinding StringFormat="Insence: {0}" FallbackValue="Insence: 00m:00s">
                         <Binding Path="InsenceTMR" />
                     </MultiBinding>
                 </TextBlock.Text>

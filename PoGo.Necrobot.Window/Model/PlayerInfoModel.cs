@@ -326,6 +326,7 @@ namespace PoGo.Necrobot.Window.Model
             {
                 // my value here  00:00:00
                 InsenceTMR = $"{time.Minutes}m {Math.Abs(time.Seconds)}s";
+                RaisePropertyChanged("InsenceTMR");
             }
 
             var timel = Luckyeggs_expires - DateTime.UtcNow;
@@ -337,6 +338,7 @@ namespace PoGo.Necrobot.Window.Model
             {
                 // my value here  00:00:00
                 LuckyTMR = $"{timel.Minutes}m {Math.Abs(timel.Seconds)}s";
+                RaisePropertyChanged("LuckyTMR");
             }
         }
     }
