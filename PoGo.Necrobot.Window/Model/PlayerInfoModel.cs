@@ -1,13 +1,13 @@
-﻿using POGOProtos.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using PoGo.NecroBot.Logic.Event;
-using POGOProtos.Networking.Responses;
-using POGOProtos.Inventory;
-using PoGo.NecroBot.Logic.Utils;
 using System.Threading.Tasks;
 using TinyIoC;
+using POGOProtos.Networking.Responses;
+using POGOProtos.Inventory;
+using POGOProtos.Enums;
+using PoGo.NecroBot.Logic.Event;
+using PoGo.NecroBot.Logic.Utils;
 using PoGo.NecroBot.Logic.State;
 
 namespace PoGo.Necrobot.Window.Model
@@ -17,7 +17,7 @@ namespace PoGo.Necrobot.Window.Model
         public PokemonId BuddyPokemonId { get; set; }
         public string Name { get; set; }
 
-        public double KmRemaining; // Not quite working yet
+        public double KmRemaining; // Not Working Quite Right
         public double KmToWalk
         {
             get { return KmRemaining; }
@@ -148,8 +148,9 @@ namespace PoGo.Necrobot.Window.Model
         public string PokestopLimit { get; set; }
         public string CatchLimit { get; set; }
         public double WalkSpeed { get; set; }
+        public string CollectPokeCoin { get; set; }
 
-        //Still needs some work(TheWizard1328)
+        //Still Needs Some Work(TheWizard1328)
         public int pokemontransfered;
         public int PokemonTransfered //{ get; set; }
         {
@@ -161,8 +162,6 @@ namespace PoGo.Necrobot.Window.Model
             }
         }
 
-        public string CollectPokeCoin { get; set; }
-
         internal async Task OnProfileUpdateAsync(ProfileEvent profile)
         {
             var stats = profile.Stats;
@@ -172,6 +171,7 @@ namespace PoGo.Necrobot.Window.Model
                 Exp = playerStats.Experience;
                 LevelExp = playerStats.NextLevelXp;
             }
+
             await GetPokeCoin();
             playerProfile = profile.Profile;
         }
