@@ -98,7 +98,9 @@
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
-            <Button x:Name="btnCollectPokeCoin" Click="GetPokeCoin_Click" Grid.Column="4" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Grid.Column="2" Grid.Row="2" x:Name="tb_lukyegg_time" TextWrapping="Wrap" VerticalAlignment="Top" Width="158" Height="16" Margin="0.2,0.6,0.2,0"><Run Text="LukyEggs"/><Run Text=": 00:00:00"/></TextBlock>
+            <TextBlock Grid.Column="3" Grid.Row="2" x:Name="tb_incense_time" TextWrapping="Wrap" VerticalAlignment="Top" Width="158" Height="16" Margin="0.8,0.6,158,0" Grid.ColumnSpan="2"><Run Text="Insence"/><Run Text=": 00:00:00"/></TextBlock>
+            <Button x:Name="btnCollectPokeCoin" Click="GetPokeCoin_Click" Grid.Column="4" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="23.4,24.4,24,0.2" Grid.RowSpan="2" Width="111">
                 <TextBlock Text="{Binding CollectPokeCoin, FallbackValue='Collect PokeCoin (0)', UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Button>
         </Grid>
