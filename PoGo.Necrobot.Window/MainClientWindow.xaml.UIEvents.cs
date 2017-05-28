@@ -134,7 +134,7 @@ namespace PoGo.Necrobot.Window
         {
             var stats = profile.Stats;
 
-            datacontext.PlayerInfo.OnProfileUpdateAsync(profile);
+            datacontext.PlayerInfo.OnProfileUpdateAsync(profile).ConfigureAwait(false);
 
             datacontext.UI.PlayerStatus = "Playing";
             datacontext.UI.PlayerName = profile.Profile.PlayerData.Username;
