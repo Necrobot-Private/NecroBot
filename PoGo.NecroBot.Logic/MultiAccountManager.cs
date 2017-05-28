@@ -1,5 +1,4 @@
-﻿//using LiteDB;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
 using PoGo.NecroBot.Logic.Exceptions;
 using PoGo.NecroBot.Logic.Forms;
 using PoGo.NecroBot.Logic.Logging;
@@ -151,15 +150,6 @@ namespace PoGo.NecroBot.Logic
 
             int schemaVersion = AuthSettings.SchemaVersionBeforeMigration;
 
-            // Backup old config file.
-            long ts = DateTime.UtcNow.ToUnixTime(); // Add timestamp to avoid file conflicts
-            if (File.Exists(ACCOUNT_DB_NAME))
-            {
-                string backupPath = $"accounts-{schemaVersion}-{ts}.backup.db";
-                Logging.Logger.Write($"Backing up {ACCOUNT_DB_NAME} to: {backupPath}", LogLevel.Info);
-
-                File.Copy(ACCOUNT_DB_NAME, backupPath);
-            }
             // Add future schema migrations below.
             int version;
             for (version = schemaVersion; version < UpdateConfig.CURRENT_SCHEMA_VERSION; version++) 
@@ -179,7 +169,7 @@ namespace PoGo.NecroBot.Logic
                 }
             }
         }
-
+        
         private void SyncDatabase(List<AuthConfig> authConfigs)
         {
             if (authConfigs.Count() == 0)

@@ -1,4 +1,4 @@
-#region using directives
+﻿#region using directives
 
 using System;
 using System.Linq;
@@ -101,17 +101,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                     }
                 }
             }
-
-            var allitems = await session.Inventory.GetItems().ConfigureAwait(false);
-            var pokeBallsCount = allitems.FirstOrDefault(i => i.ItemId == ItemId.ItemPokeBall)?.Count;
-            var greatBallsCount = allitems.FirstOrDefault(i => i.ItemId == ItemId.ItemGreatBall)?.Count;
-            var ultraBallsCount = allitems.FirstOrDefault(i => i.ItemId == ItemId.ItemUltraBall)?.Count;
-            var masterBallsCount = allitems.FirstOrDefault(i => i.ItemId == ItemId.ItemMasterBall)?.Count;
-            masterBallsCount =
-                masterBallsCount ?? 0; //return null ATM. need this code to logic check work
-            var PokeBalls = pokeBallsCount + greatBallsCount + ultraBallsCount + masterBallsCount;
-
-            if (0 < pokemons.Count && PokeBalls >= session.LogicSettings.PokeballsToKeepForSnipe)
+            
+            if (0 < pokemons.Count)
                 Logger.Write($"Catching {pokemons.Count} Pokemon Nearby...", LogLevel.Info);
 
             foreach (var pokemon in pokemons)
@@ -134,7 +125,15 @@ namespace PoGo.NecroBot.Logic.Tasks
                     continue; //this pokemon has been skipped because not meet with catch criteria before.
                 }
 
-                if (PokeBalls <
+                var allitems = await session.Inventory.GetItems().ConfigureAwait(false);
+                var pokeBallsCount = allitems.FirstOrDefault(i => i.ItemId == ItemId.ItemPokeBall)?.Count;
+                var greatBallsCount = allitems.FirstOrDefault(i => i.ItemId == ItemId.ItemGreatBall)?.Count;
+                var ultraBallsCount = allitems.FirstOrDefault(i => i.ItemId == ItemId.ItemUltraBall)?.Count;
+                var masterBallsCount = allitems.FirstOrDefault(i => i.ItemId == ItemId.ItemMasterBall)?.Count;
+                masterBallsCount =
+                    masterBallsCount ?? 0; //return null ATM. need this code to logic check work
+
+                if (pokeBallsCount + greatBallsCount + ultraBallsCount + masterBallsCount <
                     session.LogicSettings.PokeballsToKeepForSnipe && session.CatchBlockTime < DateTime.Now)
                 {
                     session.CatchBlockTime = DateTime.Now.AddMinutes(session.LogicSettings.OutOfBallCatchBlockTime);
