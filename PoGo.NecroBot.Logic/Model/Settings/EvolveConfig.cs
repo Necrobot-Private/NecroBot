@@ -21,8 +21,8 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 //PokemonId.Charmander,
                 //PokemonId.Squirtle,
                 PokemonId.Rattata
-                //PokemonId.Nidoran(F),
-                //PokemonId.Nidoran(M),
+                //PokemonId.NidoranFemale,
+                //PokemonId.NidoranMale,
                 //PokemonId.Oddish,
                 //PokemonId.Poliwag,
                 //PokemonId.Abra,
