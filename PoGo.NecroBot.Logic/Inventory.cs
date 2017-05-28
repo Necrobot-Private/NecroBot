@@ -670,8 +670,7 @@ namespace PoGo.NecroBot.Logic
         public async Task<IEnumerable<PokemonData>> GetDeployedPokemons()
         {
             var inventory = await GetPokemons().ConfigureAwait(false);
-            return
-                inventory.Where(i => !string.IsNullOrEmpty(i.DeployedFortId));
+            return inventory.Where(i => !string.IsNullOrEmpty(i.DeployedFortId));
         }
 
         public async Task<MoveSettings> GetMoveSetting(PokemonMove move)
