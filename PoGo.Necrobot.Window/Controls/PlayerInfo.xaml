@@ -73,7 +73,7 @@
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
-            <TextBlock x:Name="tbSpeed" Grid.Column="3" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="158" Height="16">
+            <TextBlock x:Name="tbSpeed" Grid.Column="3" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="158" Height="16" Margin="0,2,0,0">
                 <TextBlock.Text>
                     <MultiBinding Converter="{StaticResource ResourceKey=I18NMultiConveter}" FallbackValue="Speed: 0.00">
                         <Binding Source="WalkSpeed"></Binding>
