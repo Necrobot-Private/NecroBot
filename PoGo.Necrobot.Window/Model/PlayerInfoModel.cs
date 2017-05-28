@@ -9,11 +9,14 @@ using POGOProtos.Enums;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Utils;
 using PoGo.NecroBot.Logic.State;
+using POGOProtos.Inventory.Item;
 
 namespace PoGo.Necrobot.Window.Model
 {
     public class PlayerInfoModel : ViewModelBase
     {
+        public DateTime Insence_expires = new DateTime(0);
+        public DateTime Luckyeggs_expires = new DateTime(0);
         public PokemonId BuddyPokemonId { get; set; }
         public string Name { get; set; }
 
@@ -189,6 +192,35 @@ namespace PoGo.Necrobot.Window.Model
                 .Where(x => x != null && x.Id == playerProfile.PlayerData.BuddyPokemon.Id)
                 .FirstOrDefault();
 
+            var appliedItems =
+                Session.Inventory.GetAppliedItems().Result
+                .SelectMany(aItems => aItems.Item)
+                .ToDictionary(item => item.ItemId, item => new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(item.ExpireMs));
+
+            var items =
+                     Session.Inventory.GetItems().Result
+                    .Where(i => i != null)
+                    .OrderBy(i => i.ItemId);
+
+            foreach (var item in items)
+            {
+                if (appliedItems.ContainsKey(item.ItemId))
+                {   
+                    switch (item.ItemId)
+                    {
+                        case ItemId.ItemLuckyEgg:
+                            Luckyeggs_expires = appliedItems[item.ItemId];
+                            break;
+                        case ItemId.ItemIncenseOrdinary:
+                            Insence_expires = appliedItems[item.ItemId];
+                            break;
+                        default:
+                            Insence_expires = appliedItems[item.ItemId];
+                            break;
+                    }
+                }
+            }
+
             if (buddy == null) return;
 
             BuddyPokemonId = buddy.PokemonId;
@@ -264,6 +296,29 @@ namespace PoGo.Necrobot.Window.Model
             var count = (deployed.Count() * 10).ToString();
             CollectPokeCoin = $"Collect PokeCoin ({count})";
             RaisePropertyChanged("CollectPokeCoin");
+        }
+
+        private void Tmr_Tick(object sender, EventArgs e)
+        {
+            var time = Insence_expires - DateTime.UtcNow;
+            if (Insence_expires.Ticks == 0 || time.TotalSeconds < 0)
+            {
+                //not implanted
+            }
+            else
+            {
+                // my value here  00:00:00
+            }
+
+            var timel = Luckyeggs_expires - DateTime.UtcNow;
+            if (Luckyeggs_expires.Ticks == 0 || timel.TotalSeconds < 0)
+            {
+                //not implanted
+            }
+            else
+            {
+                // my value here  00:00:00
+            }
         }
     }
 }
