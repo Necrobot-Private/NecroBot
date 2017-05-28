@@ -479,11 +479,8 @@ namespace PoGo.NecroBot.CLI
             {
             }
 
-            Logger.Write(
-               $"(Start-Up Stats) User: {bot.Username} | XP: {bot.CurrentXp} | SD: {bot.Stardust}",
-               LogLevel.Info, ConsoleColor
-               .Magenta
-               );
+            Logger.Write($"(Start-Up Stats) User: {bot.Username} | XP: {bot.CurrentXp} | SD: {bot.Stardust}",
+               LogLevel.Info, ConsoleColor.Magenta);
 
             if (settings.TelegramConfig.UseTelegramAPI)
                 _session.Telegram = new TelegramService(settings.TelegramConfig.TelegramAPIKey, _session);

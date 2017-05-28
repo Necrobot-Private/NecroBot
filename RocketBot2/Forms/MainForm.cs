@@ -1459,11 +1459,8 @@ namespace RocketBot2.Forms
 
             var bot = accountManager.GetStartUpAccount();
 
-            Logger.Write(
-                $"(Start-Up Stats) User: {bot.Username} | XP: {bot.CurrentXp} | SD: {bot.Stardust}",
-                LogLevel.Info, ConsoleColor
-                .Magenta
-            );
+            Logger.Write($"(Start-Up Stats) User: {bot.Username} | XP: {bot.CurrentXp} | SD: {bot.Stardust}",
+                LogLevel.Info, ConsoleColor.Magenta);
 
             if (accountManager.AccountsReadOnly.Count > 1)
             {
