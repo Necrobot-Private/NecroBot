@@ -23,13 +23,23 @@ namespace PoGo.Necrobot.Window.Model
             Enabled = true,
         };
         private string InsenceAndLucky = "00m 00s";
-        public string InsenceAndLucky_expires
+        private bool isLucky = false;
+        public string Lucky_expires
         {
             get { return InsenceAndLucky; }
             set
             {
                 InsenceAndLucky = value;
-                RaisePropertyChanged("InsenceAndLucky_expires");
+                RaisePropertyChanged("Lucky_expires");
+            }
+        }
+        public string Insence_expires
+        {
+            get { return InsenceAndLucky; }
+            set
+            {
+                InsenceAndLucky = value;
+                RaisePropertyChanged("Insence_expires");
             }
         }
         public PokemonId BuddyPokemonId { get; set; }
@@ -220,9 +230,11 @@ namespace PoGo.Necrobot.Window.Model
 
             foreach (var item in items)
             {
+                isLucky = false;
                 if (appliedItems.ContainsKey(item.ItemId))
                 {   
                     expires = appliedItems[item.ItemId];
+                    if (item.ItemId == ItemId.ItemLuckyEgg) isLucky = true;
                 }
             }
 
@@ -315,7 +327,10 @@ namespace PoGo.Necrobot.Window.Model
             else
             {
                 // my value here  00m 00s
-                InsenceAndLucky_expires = $"{time.Minutes}m {Math.Abs(time.Seconds)}s";
+                if (isLucky)
+                    Lucky_expires = $"{time.Minutes}m {Math.Abs(time.Seconds)}s";
+                else
+                    Insence_expires = $"{time.Minutes}m {Math.Abs(time.Seconds)}s";
             }
         }
     }
