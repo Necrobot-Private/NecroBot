@@ -104,7 +104,7 @@ namespace PoGo.Necrobot.Window
             datacontext.RaisePropertyChanged("ItemsTabHeader");
 
             datacontext.PokemonList.Update(pokemons);
-            datacontext.RaisePropertyChanged("PokemonTabHeader");            
+            datacontext.RaisePropertyChanged("PokemonTabHeader");
         }
 
         public void OnBotEvent(InventoryItemUpdateEvent e)
