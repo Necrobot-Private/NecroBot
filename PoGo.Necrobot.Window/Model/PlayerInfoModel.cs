@@ -217,29 +217,6 @@ namespace PoGo.Necrobot.Window.Model
                 .Where(x => x != null && x.Id == playerProfile.PlayerData.BuddyPokemon.Id)
                 .FirstOrDefault();
 
-            // get applied items
-            var appliedItems =
-                Session.Inventory.GetAppliedItems().Result
-                .SelectMany(aItems => aItems.Item)
-                .ToDictionary(item => item.ItemId, item => new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(item.ExpireMs));
-
-            var items =
-                     Session.Inventory.GetItems().Result
-                    .Where(i => i != null)
-                    .OrderBy(i => i.ItemId);
-
-            foreach (var item in items)
-            {
-                isLucky = false;
-                if (appliedItems.ContainsKey(item.ItemId))
-                {   
-                    expires = appliedItems[item.ItemId];
-                    if (item.ItemId == ItemId.ItemLuckyEgg) isLucky = true;
-                }
-            }
-
-            tmr.Elapsed += new ElapsedEventHandler(Tmr_Tick);
-
             if (buddy == null) return;
 
             BuddyPokemonId = buddy.PokemonId;
@@ -279,6 +256,32 @@ namespace PoGo.Necrobot.Window.Model
             RaisePropertyChanged("KmToWalk");
             RaisePropertyChanged("KmRemaining");
             RaisePropertyChanged("EggPerc");
+
+            // get applied items
+            var appliedItems =
+                Session.Inventory.GetAppliedItems().Result
+                .SelectMany(aItems => aItems.Item)
+                .ToDictionary(item => item.ItemId, item => new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(item.ExpireMs));
+
+            var items =
+                     Session.Inventory.GetItems().Result
+                    .Where(i => i != null)
+                    .OrderBy(i => i.ItemId);
+
+            foreach (var item in items)
+            {
+                isLucky = false;
+                if (appliedItems.ContainsKey(item.ItemId))
+                {
+                    expires = appliedItems[item.ItemId];
+                    if (item.ItemId == ItemId.ItemLuckyEgg) isLucky = true;
+                }
+            }
+
+            RaisePropertyChanged("Insence_expires");
+            RaisePropertyChanged("Lucky_expires");
+
+            tmr.Elapsed += new ElapsedEventHandler(Tmr_Tick);
         }
 
         internal void UpdatePokestopLimit(PokestopLimitUpdate ev)
