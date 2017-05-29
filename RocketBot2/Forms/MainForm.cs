@@ -1455,6 +1455,9 @@ namespace RocketBot2.Forms
 
             var bot = accountManager.GetStartUpAccount();
 
+            Logger.Write($"(Start-Up Stats) User: {bot.Username} | XP: {bot.CurrentXp} | SD: {bot.Stardust}",
+                LogLevel.Info, ConsoleColor.Magenta);
+
             if (accountManager.AccountsReadOnly.Count > 1)
             {
                 foreach (var _bot in accountManager.AccountsReadOnly)
@@ -1468,21 +1471,15 @@ namespace RocketBot2.Forms
                         if (!Instance._botStarted)
                             _session.ReInitSessionWithNextBot(_bot);
                         accountManager.SwitchAccountTo(_bot);
-                        Logger.Write($"(Start-Up Stats) User: {_bot.Username} | XP: {_bot.CurrentXp} | SD: {_bot.Stardust}",
-                            LogLevel.Info, ConsoleColor.Magenta);
                     };
                     accountsToolStripMenuItem.DropDownItems.Add(_item);
                 }
                 _session.ReInitSessionWithNextBot(bot);
-                Logger.Write($"(Start-Up Stats) User: {bot.Username} | XP: {bot.CurrentXp} | SD: {bot.Stardust}",
-                    LogLevel.Info, ConsoleColor.Magenta);
             }
             else
             {
                 _session.ReInitSessionWithNextBot(bot);
                 menuStrip1.Items.Remove(accountsToolStripMenuItem);
-                Logger.Write($"(Start-Up Stats) User: {bot.Username} | XP: {bot.CurrentXp} | SD: {bot.Stardust}",
-                    LogLevel.Info, ConsoleColor.Magenta);
             }
 
             _machine = machine;

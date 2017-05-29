@@ -14,14 +14,13 @@ using PoGo.NecroBot.Logic.State;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Networking.Responses;
 using PoGo.NecroBot.Logic.Logging;
-using PokemonGo.RocketAPI.Helpers;
 
 #endregion
 
 namespace PoGo.NecroBot.Logic.Tasks
 {
     public class UseIncubatorsTask
-    {
+    {   // Still working on this-for NecroBot window console to update egg KM for egg with least KM remaining
         public static double KmToWalk { get; set; }
         public static long Exp { get; set; }
         public static long Stardust { get; set; }
@@ -109,7 +108,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                     var ExpAwarded2 = stats.TotalExperience;  // Session Exp
                     var TotCandy = session.Inventory.GetCandyCount(hatched.PokemonId);
                     //Temp logger line personal testing info
-                    Logger.Write($"Hatch: KM Walked: {KMs}, kmWalked: {kmWalked}, KmToWalk: {KmToWalk} | " +
+                    Logger.Write($"Hatch: PS-KmWalked: {playerStats.KmWalked}, H-EggKmWalkedStart: {hatched.EggKmWalkedStart}, " +
+                                 $"KmToWalk: {KmToWalk}kmWalked: {kmWalked}, | " +
                                  $"XP1: {ExpAwarded1} | XP2: {ExpAwarded2} | " +
                                  $"SD1: {stardust1}, SD2: {stardust2}", LogLevel.Egg);
 

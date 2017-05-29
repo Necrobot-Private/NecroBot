@@ -663,8 +663,7 @@ namespace PoGo.NecroBot.Logic
         public async Task<IEnumerable<PokemonData>> GetFavoritePokemons()
         {
             var inventory = await GetPokemons().ConfigureAwait(false);
-            return
-                inventory.Where(i => i.Favorite == 1);
+            return inventory.Where(i => i.Favorite == 1);
         }
 
         public async Task<IEnumerable<PokemonData>> GetDeployedPokemons()
@@ -967,8 +966,6 @@ namespace PoGo.NecroBot.Logic
             }
             return upgradePokemon;
         }
-
-
 
         public async Task<UpgradePokemonResponse> UpgradePokemon(ulong pokemonid)
         {
