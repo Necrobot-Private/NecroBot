@@ -16,11 +16,32 @@ namespace PoGo.Necrobot.Window.Model
 {
     public class PlayerInfoModel : ViewModelBase
     {
-        public DateTime Insence_expires = new DateTime(0);
-        public DateTime Luckyeggs_expires = new DateTime(0);
-        private System.Timers.Timer tmr;
-        public string InsenceTMR { get; set; }
-        public string LuckyTMR { get; set; }
+        private DateTime expires = new DateTime(0);
+        private System.Timers.Timer tmr = new Timer()
+        {
+            Interval = 1000,
+            Enabled = true,
+        };
+        private string InsenceAndLucky = "00m 00s";
+        private bool isLucky = false;
+        public string Lucky_expires
+        {
+            get { return InsenceAndLucky; }
+            set
+            {
+                InsenceAndLucky = value;
+                RaisePropertyChanged("Lucky_expires");
+            }
+        }
+        public string Insence_expires
+        {
+            get { return InsenceAndLucky; }
+            set
+            {
+                InsenceAndLucky = value;
+                RaisePropertyChanged("Insence_expires");
+            }
+        }
         public PokemonId BuddyPokemonId { get; set; }
         public string Name { get; set; }
 
@@ -190,53 +211,11 @@ namespace PoGo.Necrobot.Window.Model
             var buddyData = playerProfile.PlayerData.BuddyPokemon;
 
             if (buddyData == null) return;
-
+            
             var buddy = inventory
                 .Select(x => x.InventoryItemData?.PokemonData)
                 .Where(x => x != null && x.Id == playerProfile.PlayerData.BuddyPokemon.Id)
                 .FirstOrDefault();
-
-            // get applied items
-            var appliedItems =
-                Session.Inventory.GetAppliedItems().Result
-                .SelectMany(aItems => aItems.Item)
-                .ToDictionary(item => item.ItemId, item => new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(item.ExpireMs));
-
-            var items =
-                     Session.Inventory.GetItems().Result
-                    .Where(i => i != null)
-                    .OrderBy(i => i.ItemId);
-
-            foreach (var item in items)
-            {
-                if (appliedItems.ContainsKey(item.ItemId))
-                {   
-                    switch (item.ItemId)
-                    {
-                        case ItemId.ItemLuckyEgg:
-                            Luckyeggs_expires = appliedItems[item.ItemId];
-                            break;
-                        case ItemId.ItemIncenseOrdinary:
-                            Insence_expires = appliedItems[item.ItemId];
-                            break;
-                        default:
-                            Insence_expires = appliedItems[item.ItemId];
-                            break;
-                    }
-                }
-            }
-
-            // add and enable timer
-            // 
-            // tmr
-            // 
-            tmr = new System.Timers.Timer()
-            {
-                Enabled = true,
-                Interval = 1000
-            };
-            tmr.Elapsed += new ElapsedEventHandler(this.Tmr_Tick);
-
 
             if (buddy == null) return;
 
@@ -277,6 +256,32 @@ namespace PoGo.Necrobot.Window.Model
             RaisePropertyChanged("KmToWalk");
             RaisePropertyChanged("KmRemaining");
             RaisePropertyChanged("EggPerc");
+
+            // get applied items
+            var appliedItems =
+                Session.Inventory.GetAppliedItems().Result
+                .SelectMany(aItems => aItems.Item)
+                .ToDictionary(item => item.ItemId, item => new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(item.ExpireMs));
+
+            var items =
+                     Session.Inventory.GetItems().Result
+                    .Where(i => i != null)
+                    .OrderBy(i => i.ItemId);
+
+            foreach (var item in items)
+            {
+                isLucky = false;
+                if (appliedItems.ContainsKey(item.ItemId))
+                {
+                    expires = appliedItems[item.ItemId];
+                    if (item.ItemId == ItemId.ItemLuckyEgg) isLucky = true;
+                }
+            }
+
+            RaisePropertyChanged("Insence_expires");
+            RaisePropertyChanged("Lucky_expires");
+
+            tmr.Elapsed += new ElapsedEventHandler(Tmr_Tick);
         }
 
         internal void UpdatePokestopLimit(PokestopLimitUpdate ev)
@@ -317,28 +322,18 @@ namespace PoGo.Necrobot.Window.Model
 
         private void Tmr_Tick(object sender, EventArgs e)
         {
-            var time = Insence_expires - DateTime.UtcNow;
-            if (Insence_expires.Ticks == 0 || time.TotalSeconds < 0)
+            var time = expires - DateTime.UtcNow;
+            if (expires.Ticks == 0 || time.TotalSeconds < 0)
             {
-                //not implanted
+                //not implemented
             }
             else
             {
-                // my value here  00:00:00
-                InsenceTMR = $"{time.Minutes}m {Math.Abs(time.Seconds)}s";
-                RaisePropertyChanged("InsenceTMR");
-            }
-
-            var timel = Luckyeggs_expires - DateTime.UtcNow;
-            if (Luckyeggs_expires.Ticks == 0 || timel.TotalSeconds < 0)
-            {
-                //not implanted
-            }
-            else
-            {
-                // my value here  00:00:00
-                LuckyTMR = $"{timel.Minutes}m {Math.Abs(timel.Seconds)}s";
-                RaisePropertyChanged("LuckyTMR");
+                // my value here  00m 00s
+                if (isLucky)
+                    Lucky_expires = $"{time.Minutes}m {Math.Abs(time.Seconds)}s";
+                else
+                    Insence_expires = $"{time.Minutes}m {Math.Abs(time.Seconds)}s";
             }
         }
     }

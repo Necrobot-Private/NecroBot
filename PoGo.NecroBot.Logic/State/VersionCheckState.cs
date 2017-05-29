@@ -15,7 +15,6 @@ using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.Forms;
-using PoGo.NecroBot.Logic.State;
 using System.Net.Http;
 
 #endregion
@@ -27,11 +26,11 @@ namespace PoGo.NecroBot.Logic.State
         public const string VersionUri =
             "https://raw.githubusercontent.com/Necrobot-Private/NecroBot/master/PoGo.NecroBot.Logic/Properties/AssemblyInfo.cs";
 
-        public const string ChangelogUri =
-             "https://raw.githubusercontent.com/Necrobot-Private/NecroBot/master/CHANGELOG.md";
-
         public const string RemoteReleaseUrl =
             "https://github.com/Necrobot-Private/NecroBot/releases/download/v";
+
+        public const string ChangelogUri =
+             "https://raw.githubusercontent.com/Necrobot-Private/NecroBot/master/CHANGELOG.md";
 
         public static Version RemoteVersion;
 
@@ -65,9 +64,6 @@ namespace PoGo.NecroBot.Logic.State
             }
 
             SystemSounds.Asterisk.Play();
-
-            var remoteReleaseUrl =
-                $"https://github.com/Necrobot-Private/NecroBot/releases/download/v{RemoteVersion}/";
 
             string zipName = $"NecroBot2.Console.{RemoteVersion.ToString()}.zip";
             if (Assembly.GetEntryAssembly().FullName.ToLower().Contains("necrobot2.win"))

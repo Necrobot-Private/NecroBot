@@ -95,9 +95,6 @@ namespace RocketBot2.Forms
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            this.splitContainer1.SplitterDistance = this.splitContainer1.Width / 2; // evenly splits left & right splitter panes
-            this.splitContainer2.SplitterDistance = this.splitContainer2.Height / 3;// Always keeps the logger window @ 1/3 of the window height
-            this.Refresh(); // Force screen refresh before items are poppulated
             SetStatusText(Application.ProductName + " " + Application.ProductVersion);
             speedLable.Parent = GMapControl1;
             showMoreCheckBox.Parent = GMapControl1;
@@ -110,6 +107,8 @@ namespace RocketBot2.Forms
             InitializeMap();
             VersionHelper.CheckVersion();
             btnRefresh.Enabled = false;
+            //this.splitContainer1.SplitterDistance = this.splitContainer1.Width / 2;
+            //this.splitContainer2.SplitterDistance = this.splitContainer2.Height / 2;
             ConsoleHelper.HideConsoleWindow();
         }
 
@@ -1429,21 +1428,10 @@ namespace RocketBot2.Forms
             CatchIncensePokemonsTask.PokemonEncounterEvent += UpdateMap;
 
             CatchLurePokemonsTask.PokemonEncounterEvent +=
-                mappokemons => _session.EventDispatcher.Send(new PokemonsEncounterEvent { EncounterPokemons = mappokemons });
+                         mappokemons => _session.EventDispatcher.Send(new PokemonsEncounterEvent { EncounterPokemons = mappokemons });
             CatchLurePokemonsTask.PokemonEncounterEvent += UpdateMap;
 
             Resources.ProgressBar.Fill(100);
-
-            //TODO: temporary
-            if (settings.Auth.APIConfig.UseLegacyAPI)
-            {
-                Logger.Write($"The PoGoDev Community Has Updated The Hashing Service To Be Compatible With {Client.API_VERSION} So We Have Updated Our Code To Be Compliant. Unfortunately During This Update Niantic Has Also Attempted To Block The Legacy .45 Service Again So At The Moment Only Hashing Service Users Are Able To Login Successfully. Please Be Patient As Always We Will Attempt To Keep The Bot 100% Free But Please Realize We Have Already Done Quite A Few Workarounds To Keep .45 Alive For You Guys.  Even If We Are Able To Get Access Again To The .45 API Again It Is Over 3 Months Old So Is Going To Be More Detectable And Cause Captchas. Please Consider Upgrading To A Paid API Key To Avoid Captchas And You Will  Be Connecting Using Latest Version So Less Detectable So More Safe For You In The End.", LogLevel.Warning);
-                Logger.Write("The bot will now close", LogLevel.Error);
-                Console.ReadLine();
-                Environment.Exit(0);
-                return;
-            }
-            //
 
             if (settings.WebsocketsConfig.UseWebsocket)
             {
@@ -1454,9 +1442,6 @@ namespace RocketBot2.Forms
             ioc.Register<MultiAccountManager>(accountManager);
 
             var bot = accountManager.GetStartUpAccount();
-
-            Logger.Write($"(Start-Up Stats) User: {bot.Username} | XP: {bot.CurrentXp} | SD: {bot.Stardust}",
-                LogLevel.Info, ConsoleColor.Magenta);
 
             if (accountManager.AccountsReadOnly.Count > 1)
             {
@@ -1471,15 +1456,30 @@ namespace RocketBot2.Forms
                         if (!Instance._botStarted)
                             _session.ReInitSessionWithNextBot(_bot);
                         accountManager.SwitchAccountTo(_bot);
+                        Logger.Write(
+                            $"(Start-Up Stats) User: {_bot.Username} | XP: {_bot.CurrentXp} | SD: {_bot.Stardust}",
+                            LogLevel.Info, ConsoleColor
+                            .Magenta
+                            );
                     };
                     accountsToolStripMenuItem.DropDownItems.Add(_item);
                 }
                 _session.ReInitSessionWithNextBot(bot);
+                Logger.Write(
+                    $"(Start-Up Stats) User: {bot.Username} | XP: {bot.CurrentXp} | SD: {bot.Stardust}",
+                    LogLevel.Info, ConsoleColor
+                    .Magenta
+                    );
             }
             else
             {
                 _session.ReInitSessionWithNextBot(bot);
                 menuStrip1.Items.Remove(accountsToolStripMenuItem);
+                Logger.Write(
+                    $"(Start-Up Stats) User: {bot.Username} | XP: {bot.CurrentXp} | SD: {bot.Stardust}",
+                    LogLevel.Info, ConsoleColor
+                    .Magenta
+                    );
             }
 
             _machine = machine;
@@ -1504,11 +1504,8 @@ namespace RocketBot2.Forms
             if (_session.LogicSettings.EnableHumanWalkingSnipe &&
                             _session.LogicSettings.HumanWalkingSnipeUseFastPokemap)
             {
-                // jjskuld - Ignore CS4014 warning for now.
-                //#pragma warning disable 4014
                 HumanWalkSnipeTask.StartFastPokemapAsync(_session,
                     _session.CancellationTokenSource.Token).ConfigureAwait(false); // that need to keep data live
-                //#pragma warning restore 4014
             }
 
             if (_session.LogicSettings.UseSnipeLocationServer ||
