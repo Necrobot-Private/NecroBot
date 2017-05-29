@@ -16,7 +16,7 @@
             <Image x:Name="imgPokemon" Width="55" Height="55" Source="{Binding Path=BuddyPokemonId, FallbackValue=https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/pokemon/0.png, Converter={StaticResource PokemonIdToImageConverter}}" />
             <TextBlock x:Name="tbBuddyCandy" TextAlignment="Center" Width="75" Height="16" VerticalAlignment="Top">
                 <TextBlock.Text>
-                    <MultiBinding StringFormat="{}{0:0.00}/{1:0.00}" FallbackValue="xxx/xxx">
+                    <MultiBinding StringFormat="{}{0:0.00}/{1:0.00}" FallbackValue="0/0">
                         <Binding Path="BuddyTotalKM"></Binding>
                         <Binding Path="BuddyCurrentKM"></Binding>
                     </MultiBinding>
@@ -100,15 +100,15 @@
             </TextBlock>
             <TextBlock Grid.Column="2" Grid.Row="2" x:Name="tb_lukyegg_time" TextWrapping="Wrap" VerticalAlignment="Top" Width="158" Height="16" Margin="0.2,0.6,0.2,0">
                 <TextBlock.Text>
-                    <MultiBinding StringFormat="LuckyEggs: {0}" FallbackValue="LuckyEggs: 00m:00s">
-                        <Binding Path="LuckyTMR" />
+                    <MultiBinding StringFormat="LuckyEggs: {0}" FallbackValue="LuckyEggs: 00m 00s">
+                        <Binding Path="InsenceAndLucky_expires" />
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
             <TextBlock Grid.Column="3" Grid.Row="2" x:Name="tb_incense_time" TextWrapping="Wrap" VerticalAlignment="Top" Width="158" Height="16" Margin="0.8,0.6,158,0" Grid.ColumnSpan="2">
                 <TextBlock.Text>
-                    <MultiBinding StringFormat="Insence: {0}" FallbackValue="Insence: 00m:00s">
-                        <Binding Path="InsenceTMR" />
+                    <MultiBinding StringFormat="Insence: {0}" FallbackValue="Insence: 00m 00s">
+                        <Binding Path="InsenceAndLucky_expires" />
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
