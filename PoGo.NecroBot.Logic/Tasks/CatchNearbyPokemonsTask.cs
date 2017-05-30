@@ -111,7 +111,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 masterBallsCount ?? 0; //return null ATM. need this code to logic check work
             var PokeBalls = pokeBallsCount + greatBallsCount + ultraBallsCount + masterBallsCount;
 
-            if (0 < pokemons.Count && PokeBalls >= session.LogicSettings.PokeballsToKeepForSnipe)
+            if (0 < pokemons.Count && PokeBalls >= session.LogicSettings.PokeballsToKeepForSnipe) // Don't display if not enough Pokeballs - TheWizrad1328
                 Logger.Write($"Catching {pokemons.Count} Pokemon Nearby...", LogLevel.Info);
 
             foreach (var pokemon in pokemons)

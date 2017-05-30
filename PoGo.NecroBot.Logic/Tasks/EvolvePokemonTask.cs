@@ -29,8 +29,6 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            
-
             var pokemonToEvolveTask = await session.Inventory
                 .GetPokemonToEvolve(session.LogicSettings.PokemonEvolveFilters).ConfigureAwait(false);
             var pokemonToEvolve = pokemonToEvolveTask.Where(p => p != null).ToList();
