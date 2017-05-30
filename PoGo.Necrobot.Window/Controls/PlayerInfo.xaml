@@ -16,7 +16,7 @@
             <Image x:Name="imgPokemon" Width="55" Height="55" Source="{Binding Path=BuddyPokemonId, FallbackValue=https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/pokemon/0.png, Converter={StaticResource PokemonIdToImageConverter}}" />
             <TextBlock x:Name="tbBuddyCandy" TextAlignment="Center" Width="75" Height="16" VerticalAlignment="Top">
                 <TextBlock.Text>
-                    <MultiBinding StringFormat="{}{0:0.00}/{1:0.00}" FallbackValue="xxx/xxx">
+                    <MultiBinding StringFormat="{}{0:0.00}/{1:0.00}" FallbackValue="0/0">
                         <Binding Path="BuddyTotalKM"></Binding>
                         <Binding Path="BuddyCurrentKM"></Binding>
                     </MultiBinding>
@@ -98,8 +98,8 @@
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
-            <TextBlock Grid.Column="2" Grid.Row="2" x:Name="tb_lukyegg_time" TextWrapping="Wrap" VerticalAlignment="Top" Width="158" Height="16" Margin="0.2,0.6,0.2,0"><Run Text="LukyEggs"/><Run Text=": 00:00:00"/></TextBlock>
-            <TextBlock Grid.Column="3" Grid.Row="2" x:Name="tb_incense_time" TextWrapping="Wrap" VerticalAlignment="Top" Width="158" Height="16" Margin="0.8,0.6,158,0" Grid.ColumnSpan="2"><Run Text="Insence"/><Run Text=": 00:00:00"/></TextBlock>
+            <TextBlock Grid.Column="2" Grid.Row="2" x:Name="tb_lukyegg_time" TextWrapping="Wrap" Text="{Binding Lucky_expires, FallbackValue=LuckyEggs: 00m 00s, StringFormat=LuckyEggs: \{0\}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="158" Height="16"/>
+            <TextBlock Grid.Column="3" Grid.Row="2" x:Name="tb_incense_time" TextWrapping="Wrap" Text="{Binding Insence_expires, FallbackValue=Insence: 00m 00s, StringFormat=Insence: \{0\}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="158" Height="16"/>
             <Button x:Name="btnCollectPokeCoin" Click="GetPokeCoin_Click" Grid.Column="4" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="23.4,24.4,24,0.2" Grid.RowSpan="2" Width="111">
                 <TextBlock Text="{Binding CollectPokeCoin, FallbackValue='Collect PokeCoin (0)', UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Button>

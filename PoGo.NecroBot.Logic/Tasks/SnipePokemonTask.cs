@@ -455,7 +455,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 cancellationToken.ThrowIfCancellationRequested();
                 TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
                 try
-                {
+                {   // May rem out due to 'Unhandled Error' on lines 460 & 461 - TheWizard1328
                     var lClient = new TcpClient();
                     lClient.Connect(session.LogicSettings.SnipeLocationServer,
                         session.LogicSettings.SnipeLocationServerPort);

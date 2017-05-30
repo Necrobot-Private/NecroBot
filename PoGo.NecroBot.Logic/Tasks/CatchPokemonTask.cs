@@ -461,7 +461,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         var totalExp = 0;
                         var stardust = caughtPokemonResponse.CaptureAward.Stardust.Sum();
                         var totalStarDust = session.Inventory.UpdateStarDust(stardust);
-                        var CaptuerXP =  caughtPokemonResponse.CaptureAward.Xp.Sum();
+                        var CaptuerXP = caughtPokemonResponse.CaptureAward.Xp.Sum();
 
                         if (encounteredPokemon != null)
                         {
