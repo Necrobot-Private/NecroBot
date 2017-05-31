@@ -169,7 +169,7 @@ namespace PoGo.NecroBot.Logic
                 }
             }
         }
-        
+
         private void SyncDatabase(List<AuthConfig> authConfigs)
         {
             if (authConfigs.Count() == 0)
