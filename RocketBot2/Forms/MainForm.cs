@@ -1474,11 +1474,9 @@ namespace RocketBot2.Forms
                     };
                     accountsToolStripMenuItem.DropDownItems.Add(_item);
                 }
-                _session.ReInitSessionWithNextBot(bot);
             }
             else
             {
-                _session.ReInitSessionWithNextBot(bot);
                 menuStrip1.Items.Remove(accountsToolStripMenuItem);
 
                 TotXP = 0;
@@ -1490,6 +1488,10 @@ namespace RocketBot2.Forms
                 Logger.Write($"(Bot Stats2) User: {bot.Username} | XP: {bot.CurrentXp - TotXP} | SD: {bot.Stardust}",
                     LogLevel.Info, ConsoleColor.Magenta);
             }
+
+            _session.ReInitSessionWithNextBot(bot);
+            Logger.Write($"(Bot Stats) User: {bot.Username} | XP: {bot.CurrentXp} | SD: {bot.Stardust}",
+               LogLevel.Info, ConsoleColor.Magenta);
 
             _machine = machine;
             _settings = settings;
