@@ -1458,7 +1458,7 @@ namespace RocketBot2.Forms
                             _session.ReInitSessionWithNextBot(_bot);
                         accountManager.SwitchAccountTo(_bot);
                         Logger.Write($"(Bot Stats) User: {_bot.Username} | XP: {_bot.CurrentXp} | SD: {_bot.Stardust}",
-                            LogLevel.Update, ConsoleColor.Magenta);
+                            LogLevel.Info, ConsoleColor.Magenta);
                     };
                     accountsToolStripMenuItem.DropDownItems.Add(_item);
                 }
