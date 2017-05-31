@@ -195,25 +195,25 @@
                 <TabItem.Header>
                     <Image x:Name="consoleIMG" Source="Resources/Console/ConsoleImage.png" Width="65" Height="65" />
                 </TabItem.Header>
-              <DockPanel LastChildFill="True" x:Name="ConsolePanel">
-                <Grid DockPanel.Dock="Top">
-                  <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="1" />
-                    <ColumnDefinition Width="150" />
-                  </Grid.ColumnDefinitions>
+                <DockPanel LastChildFill="True" x:Name="ConsolePanel">
+                    <Grid DockPanel.Dock="Top">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="1" />
+                            <ColumnDefinition Width="150" />
+                        </Grid.ColumnDefinitions>
                         <TextBox x:Name="txtCmdInput" Grid.Column="0" ToolTip="{Binding Source=InputCommand, Converter={StaticResource ResourceKey=I18NConveter}}" MouseDown="TxtCmdInput_MouseDown" KeyDown="TxtCmdInput_KeyDown" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium" VerticalContentAlignment="Center" />
-                  <GridSplitter Grid.Column="1" />
+                        <GridSplitter Grid.Column="1" />
                         <ComboBox x:Name="ConsoleThemer" Grid.Column="2" IsEditable="False" IsReadOnly="True" SelectionChanged="ConsoleThemer_SelectionChanged" BorderBrush="#FFCCCCCC" ToolTip="Set Console Colors" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium" />
-                </Grid>
-                <RichTextBox ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" DockPanel.Dock="Bottom" x:Name="consoleLog" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontSize="15" IsReadOnly="True" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Light">
-                  <FlowDocument>
-                    <Paragraph LineHeight="25">
-                      <Run Text="" />
-                    </Paragraph>
-                  </FlowDocument>
-                </RichTextBox>
-              </DockPanel>
+                    </Grid>
+                    <RichTextBox ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" DockPanel.Dock="Bottom" x:Name="consoleLog" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontSize="15" IsReadOnly="True" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Light">
+                        <FlowDocument>
+                            <Paragraph LineHeight="25">
+                                <Run Text="" />
+                            </Paragraph>
+                        </FlowDocument>
+                    </RichTextBox>
+                </DockPanel>
             </TabItem>
             <TabItem Name="tabPokemons" Width="80" Height="70" Cursor="Hand" Background="{x:Null}">
                 <TabItem.Header>

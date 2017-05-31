@@ -104,7 +104,7 @@ namespace PoGo.Necrobot.Window
             datacontext.RaisePropertyChanged("ItemsTabHeader");
 
             datacontext.PokemonList.Update(pokemons);
-            datacontext.RaisePropertyChanged("PokemonTabHeader");            
+            datacontext.RaisePropertyChanged("PokemonTabHeader");
         }
 
         public void OnBotEvent(InventoryItemUpdateEvent e)
@@ -130,11 +130,11 @@ namespace PoGo.Necrobot.Window
                 lblAccount.Content = $"{datacontext.UI.PlayerStatus} as : {datacontext.UI.PlayerName}";
             });
         }
-        public void OnBotEvent(ProfileEvent profile)
+        public async Task OnBotEventAsync(ProfileEvent profile)
         {
             var stats = profile.Stats;
 
-            datacontext.PlayerInfo.OnProfileUpdate(profile);
+            await datacontext.PlayerInfo.OnProfileUpdateAsync(profile);
 
             datacontext.UI.PlayerStatus = "Playing";
             datacontext.UI.PlayerName = profile.Profile.PlayerData.Username;
