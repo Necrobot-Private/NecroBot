@@ -17,13 +17,7 @@ namespace PoGo.Necrobot.Window.Model
     public class PlayerInfoModel : ViewModelBase
     {
         private DateTime expires = new DateTime(0);
-        private System.Timers.Timer tmr = new Timer()
-        {
-            Interval = 1000,
-            Enabled = true,
-        };
         private string InsenceAndLucky = "00m 00s";
-        private bool isLucky = false;
         public string Lucky_expires
         {
             get { return InsenceAndLucky; }
@@ -270,18 +264,28 @@ namespace PoGo.Necrobot.Window.Model
 
             foreach (var item in items)
             {
-                isLucky = false;
+                bool isLucky = false;
                 if (appliedItems.ContainsKey(item.ItemId))
                 {
                     expires = appliedItems[item.ItemId];
                     if (item.ItemId == ItemId.ItemLuckyEgg) isLucky = true;
                 }
+
+                var time = expires - DateTime.UtcNow;
+                if (expires.Ticks == 0 || time.TotalSeconds < 0)
+                {
+                    //not implemented
+                }
+                else
+                {
+                    // my value here  00m 00s
+                    if (isLucky)
+                        Lucky_expires = $"{time.Minutes}m {Math.Abs(time.Seconds)}s";
+                    else
+                        Insence_expires = $"{time.Minutes}m {Math.Abs(time.Seconds)}s";
+
+                }
             }
-
-            RaisePropertyChanged("Insence_expires");
-            RaisePropertyChanged("Lucky_expires");
-
-            tmr.Elapsed += new ElapsedEventHandler(Tmr_Tick);
         }
 
         internal void UpdatePokestopLimit(PokestopLimitUpdate ev)
@@ -318,23 +322,6 @@ namespace PoGo.Necrobot.Window.Model
             var count = (deployed.Count() * 10).ToString();
             CollectPokeCoin = $"Collect PokeCoin ({count})";
             RaisePropertyChanged("CollectPokeCoin");
-        }
-
-        private void Tmr_Tick(object sender, EventArgs e)
-        {
-            var time = expires - DateTime.UtcNow;
-            if (expires.Ticks == 0 || time.TotalSeconds < 0)
-            {
-                //not implemented
-            }
-            else
-            {
-                // my value here  00m 00s
-                if (isLucky)
-                    Lucky_expires = $"{time.Minutes}m {Math.Abs(time.Seconds)}s";
-                else
-                    Insence_expires = $"{time.Minutes}m {Math.Abs(time.Seconds)}s";
-            }
         }
     }
 }
