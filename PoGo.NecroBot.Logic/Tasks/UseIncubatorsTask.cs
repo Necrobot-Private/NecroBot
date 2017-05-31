@@ -21,7 +21,7 @@ using PokemonGo.RocketAPI.Helpers;
 namespace PoGo.NecroBot.Logic.Tasks
 {
     public class UseIncubatorsTask
-    {
+    {   // Still working on this-for NecroBot window console to update egg KM for egg with least KM remaining TheWizard1328
         public static double KmToWalk { get; set; }
         public static long Exp { get; set; }
         public static long Stardust { get; set; }
@@ -108,8 +108,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                     var ExpAwarded1 = playerStats.Experience; // Total Player Exp
                     var ExpAwarded2 = stats.TotalExperience;  // Session Exp
                     var TotCandy = session.Inventory.GetCandyCount(hatched.PokemonId);
-                    //Temp logger line personal testing info
-                    Logger.Write($"Hatch: KM Walked: {KMs}, kmWalked: {kmWalked}, KmToWalk: {KmToWalk} | " +
+                    //Temp logger line personal testing info - TheWizard1328
+                    Logger.Write($"Hatch: PS-KmWalked: {playerStats.KmWalked}, H-EggKmWalkedStart: {hatched.EggKmWalkedStart}, " +
+                                 $"KmToWalk: {KmToWalk}kmWalked: {kmWalked}, | " +
                                  $"XP1: {ExpAwarded1} | XP2: {ExpAwarded2} | " +
                                  $"SD1: {stardust1}, SD2: {stardust2}", LogLevel.Egg);
 
