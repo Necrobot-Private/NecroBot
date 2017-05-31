@@ -1457,22 +1457,20 @@ namespace RocketBot2.Forms
                         if (!Instance._botStarted)
                             _session.ReInitSessionWithNextBot(_bot);
                         accountManager.SwitchAccountTo(_bot);
-                        Logger.Write($"(Start-Up Stats) User: {bot.Username} | XP: {bot.CurrentXp} | SD: {bot.Stardust}",
+                        Logger.Write($"(Bot Stats) User: {_bot.Username} | XP: {_bot.CurrentXp} | SD: {_bot.Stardust}",
                             LogLevel.Info, ConsoleColor.Magenta);
                     };
                     accountsToolStripMenuItem.DropDownItems.Add(_item);
                 }
-                _session.ReInitSessionWithNextBot(bot);
-                Logger.Write($"(Start-Up Stats) User: {bot.Username} | XP: {bot.CurrentXp} | SD: {bot.Stardust}",
-                    LogLevel.Info, ConsoleColor.Magenta);
             }
             else
             {
-                _session.ReInitSessionWithNextBot(bot);
                 menuStrip1.Items.Remove(accountsToolStripMenuItem);
-                Logger.Write($"(Start-Up Stats) User: {bot.Username} | XP: {bot.CurrentXp} | SD: {bot.Stardust}",
-                    LogLevel.Info, ConsoleColor.Magenta);
             }
+
+            _session.ReInitSessionWithNextBot(bot);
+            Logger.Write($"(Bot Stats) User: {bot.Username} | XP: {bot.CurrentXp} | SD: {bot.Stardust}",
+               LogLevel.Info, ConsoleColor.Magenta);
 
             _machine = machine;
             _settings = settings;
