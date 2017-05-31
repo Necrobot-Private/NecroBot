@@ -366,7 +366,7 @@ namespace PoGo.NecroBot.Logic
             {
                 var L = item.Username.Length;
                 var SP = "";
-                for (int i = 0; i < 31-L; i++)
+                for (int i = 0; i < 31 - L; i++)
                 {
                     SP += " ";
                 }
