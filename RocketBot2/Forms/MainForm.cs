@@ -1443,11 +1443,23 @@ namespace RocketBot2.Forms
             ioc.Register<MultiAccountManager>(accountManager);
 
             var bot = accountManager.GetStartUpAccount();
+            var TotXP = 0;
+
+            for (int i = 0; i < bot.Level + 1; i++)
+            {
+                TotXP = TotXP + Statistics.GetXpDiff(i);
+            }
 
             if (accountManager.AccountsReadOnly.Count > 1)
             {
                 foreach (var _bot in accountManager.AccountsReadOnly)
                 {
+                    TotXP = 0;
+                    for (int i = 0; i < bot.Level + 1; i++)
+                    {
+                        TotXP = TotXP + Statistics.GetXpDiff(i);
+                    }
+
                     var _item = new ToolStripMenuItem()
                     {
                         Text = _bot.Username
@@ -1457,7 +1469,7 @@ namespace RocketBot2.Forms
                         if (!Instance._botStarted)
                             _session.ReInitSessionWithNextBot(_bot);
                         accountManager.SwitchAccountTo(_bot);
-                        Logger.Write($"(Bot Stats1) User: {_bot.Username} | XP: {_bot.CurrentXp} | SD: {_bot.Stardust}",
+                        Logger.Write($"(Bot Stats1) User: {_bot.Username} | XP: {_bot.CurrentXp - TotXP} | SD: {_bot.Stardust}",
                             LogLevel.Update, ConsoleColor.Magenta);
                     };
                     accountsToolStripMenuItem.DropDownItems.Add(_item);
@@ -1468,7 +1480,14 @@ namespace RocketBot2.Forms
             {
                 _session.ReInitSessionWithNextBot(bot);
                 menuStrip1.Items.Remove(accountsToolStripMenuItem);
-                Logger.Write($"(Bot Stats2) User: {bot.Username} | XP: {bot.CurrentXp} | SD: {bot.Stardust}",
+
+                TotXP = 0;
+                for (int i = 0; i < bot.Level + 1; i++)
+                {
+                    TotXP = TotXP + Statistics.GetXpDiff(i);
+                }
+
+                Logger.Write($"(Bot Stats2) User: {bot.Username} | XP: {bot.CurrentXp - TotXP} | SD: {bot.Stardust}",
                     LogLevel.Info, ConsoleColor.Magenta);
             }
 
@@ -1476,7 +1495,7 @@ namespace RocketBot2.Forms
             _settings = settings;
             _excelConfigAllow = excelConfigAllow;
 
-            Logger.Write($"(Bot Stats3) User: {bot.Username} | XP: {bot.CurrentXp} | SD: {bot.Stardust}",
+            Logger.Write($"(Bot Stats3) User: {bot.Username} | XP: {bot.CurrentXp - TotXP} | SD: {bot.Stardust}",
                 LogLevel.Info, ConsoleColor.Magenta);
         }
 
