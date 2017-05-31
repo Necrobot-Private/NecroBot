@@ -211,7 +211,7 @@ namespace PoGo.Necrobot.Window.Model
             var buddyData = playerProfile.PlayerData.BuddyPokemon;
 
             if (buddyData == null) return;
-            
+
             var buddy = inventory
                 .Select(x => x.InventoryItemData?.PokemonData)
                 .Where(x => x != null && x.Id == playerProfile.PlayerData.BuddyPokemon.Id)
