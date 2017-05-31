@@ -169,7 +169,7 @@ namespace PoGo.NecroBot.Logic
                 }
             }
         }
-        
+
         private void SyncDatabase(List<AuthConfig> authConfigs)
         {
             if (authConfigs.Count() == 0)
@@ -364,10 +364,16 @@ namespace PoGo.NecroBot.Logic
         {
             foreach (var item in Accounts)
             {
+                var L = item.Username.Length;
+                var SP = "";
+                for (int i = 0; i < 31 - L; i++)
+                {
+                    SP += " ";
+                }
                 if (item.Level > 0)
-                    Logging.Logger.Write($"{item.Username} (Level: {item.Level})\t\tRuntime: {item.RuntimeTotal}");
+                    Logging.Logger.Write($"{item.Username}{SP}(Level: {item.Level:#0}) | Runtime: {item.RuntimeTotal:00:00:00}");
                 else
-                    Logging.Logger.Write($"{item.Username} (Level: ??)\t\tRuntime: {item.RuntimeTotal}");
+                    Logging.Logger.Write($"{item.Username}{SP}(Level: ??) | Runtime: {item.RuntimeTotal:00:00:00}");
             }
         }
 
