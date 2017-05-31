@@ -133,8 +133,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     continue; //this pokemon has been skipped because not meet with catch criteria before.
                 }
 
-                if (pokeBallsCount + greatBallsCount + ultraBallsCount + masterBallsCount <
-                    session.LogicSettings.PokeballsToKeepForSnipe && session.CatchBlockTime < DateTime.Now)
+                if (PokeBalls < session.LogicSettings.PokeballsToKeepForSnipe && session.CatchBlockTime < DateTime.Now)
                 {
                     session.CatchBlockTime = DateTime.Now.AddMinutes(session.LogicSettings.OutOfBallCatchBlockTime);
                     Logger.Write(session.Translation.GetTranslation(TranslationString.CatchPokemonDisable,
