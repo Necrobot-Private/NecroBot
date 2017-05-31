@@ -1455,7 +1455,7 @@ namespace RocketBot2.Forms
                 foreach (var _bot in accountManager.AccountsReadOnly)
                 {
                     TotXP = 0;
-                    for (int i = 0; i < bot.Level + 1; i++)
+                    for (int i = 0; i < _bot.Level + 1; i++)
                     {
                         TotXP = TotXP + Statistics.GetXpDiff(i);
                     }
@@ -1469,8 +1469,7 @@ namespace RocketBot2.Forms
                         if (!Instance._botStarted)
                             _session.ReInitSessionWithNextBot(_bot);
                         accountManager.SwitchAccountTo(_bot);
-                        Logger.Write($"(Bot Stats1) User: {_bot.Username} | XP: {_bot.CurrentXp - TotXP} | SD: {_bot.Stardust}",
-                            LogLevel.Update, ConsoleColor.Magenta);
+                        Logger.Write($"(Bot Stats) User: {_bot.Username} | XP: {_bot.CurrentXp - TotXP} | SD: {_bot.Stardust}", LogLevel.Info, ConsoleColor.Magenta);
                     };
                     accountsToolStripMenuItem.DropDownItems.Add(_item);
                 }
@@ -1478,27 +1477,20 @@ namespace RocketBot2.Forms
             else
             {
                 menuStrip1.Items.Remove(accountsToolStripMenuItem);
+            }
 
-                TotXP = 0;
-                for (int i = 0; i < bot.Level + 1; i++)
-                {
-                    TotXP = TotXP + Statistics.GetXpDiff(i);
-                }
-
-                Logger.Write($"(Bot Stats2) User: {bot.Username} | XP: {bot.CurrentXp - TotXP} | SD: {bot.Stardust}",
-                    LogLevel.Info, ConsoleColor.Magenta);
+            TotXP = 0;
+            for (int i = 0; i < bot.Level + 1; i++)
+            {
+                TotXP = TotXP + Statistics.GetXpDiff(i);
             }
 
             _session.ReInitSessionWithNextBot(bot);
-            Logger.Write($"(Bot Stats) User: {bot.Username} | XP: {bot.CurrentXp} | SD: {bot.Stardust}",
-               LogLevel.Info, ConsoleColor.Magenta);
+            Logger.Write($"(Bot Stats) User: {bot.Username} | XP: {bot.CurrentXp - TotXP} | SD: {bot.Stardust}", LogLevel.Info, ConsoleColor.Magenta);
 
             _machine = machine;
             _settings = settings;
             _excelConfigAllow = excelConfigAllow;
-
-            Logger.Write($"(Bot Stats3) User: {bot.Username} | XP: {bot.CurrentXp - TotXP} | SD: {bot.Stardust}",
-                LogLevel.Info, ConsoleColor.Magenta);
         }
 
         private Task StartBot()
