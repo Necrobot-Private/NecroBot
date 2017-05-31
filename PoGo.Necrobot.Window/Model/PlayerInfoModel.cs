@@ -1,20 +1,51 @@
-﻿using POGOProtos.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using PoGo.NecroBot.Logic.Event;
+using System.Threading.Tasks;
+using TinyIoC;
 using POGOProtos.Networking.Responses;
 using POGOProtos.Inventory;
+using POGOProtos.Enums;
+using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Utils;
+using PoGo.NecroBot.Logic.State;
+using POGOProtos.Inventory.Item;
+using System.Timers;
 
 namespace PoGo.Necrobot.Window.Model
 {
     public class PlayerInfoModel : ViewModelBase
     {
+        private DateTime expires = new DateTime(0);
+        private System.Timers.Timer tmr = new Timer()
+        {
+            Interval = 1000,
+            Enabled = true,
+        };
+        private string InsenceAndLucky = "00m 00s";
+        private bool isLucky = false;
+        public string Lucky_expires
+        {
+            get { return InsenceAndLucky; }
+            set
+            {
+                InsenceAndLucky = value;
+                RaisePropertyChanged("Lucky_expires");
+            }
+        }
+        public string Insence_expires
+        {
+            get { return InsenceAndLucky; }
+            set
+            {
+                InsenceAndLucky = value;
+                RaisePropertyChanged("Insence_expires");
+            }
+        }
         public PokemonId BuddyPokemonId { get; set; }
         public string Name { get; set; }
 
-        public double KmRemaining; // Not quite working yet
+        public double KmRemaining; // Not Working Quite Right
         public double KmToWalk
         {
             get { return KmRemaining; }
@@ -145,8 +176,9 @@ namespace PoGo.Necrobot.Window.Model
         public string PokestopLimit { get; set; }
         public string CatchLimit { get; set; }
         public double WalkSpeed { get; set; }
+        public string CollectPokeCoin { get; set; }
 
-        //Still needs some work(TheWizard1328)
+        //Still Needs Some Work(TheWizard1328)
         public int pokemontransfered;
         public int PokemonTransfered //{ get; set; }
         {
@@ -158,7 +190,7 @@ namespace PoGo.Necrobot.Window.Model
             }
         }
 
-        internal void OnProfileUpdate(ProfileEvent profile)
+        internal async Task OnProfileUpdateAsync(ProfileEvent profile)
         {
             var stats = profile.Stats;
             var playerStats = stats.FirstOrDefault(x => x.Experience > 0);
@@ -168,6 +200,7 @@ namespace PoGo.Necrobot.Window.Model
                 LevelExp = playerStats.NextLevelXp;
             }
 
+            await GetPokeCoin();
             playerProfile = profile.Profile;
         }
 
@@ -223,6 +256,32 @@ namespace PoGo.Necrobot.Window.Model
             RaisePropertyChanged("KmToWalk");
             RaisePropertyChanged("KmRemaining");
             RaisePropertyChanged("EggPerc");
+
+            // get applied items
+            var appliedItems =
+                Session.Inventory.GetAppliedItems().Result
+                .SelectMany(aItems => aItems.Item)
+                .ToDictionary(item => item.ItemId, item => new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(item.ExpireMs));
+
+            var items =
+                     Session.Inventory.GetItems().Result
+                    .Where(i => i != null)
+                    .OrderBy(i => i.ItemId);
+
+            foreach (var item in items)
+            {
+                isLucky = false;
+                if (appliedItems.ContainsKey(item.ItemId))
+                {
+                    expires = appliedItems[item.ItemId];
+                    if (item.ItemId == ItemId.ItemLuckyEgg) isLucky = true;
+                }
+            }
+
+            RaisePropertyChanged("Insence_expires");
+            RaisePropertyChanged("Lucky_expires");
+
+            tmr.Elapsed += new ElapsedEventHandler(Tmr_Tick);
         }
 
         internal void UpdatePokestopLimit(PokestopLimitUpdate ev)
@@ -250,6 +309,32 @@ namespace PoGo.Necrobot.Window.Model
         {
             KmRemaining = kmremaining;
             RaisePropertyChanged("KmRemaining");
+        }
+
+        public async Task GetPokeCoin()
+        {
+            Session = TinyIoCContainer.Current.Resolve<ISession>();
+            var deployed = await Session.Inventory.GetDeployedPokemons();
+            var count = (deployed.Count() * 10).ToString();
+            CollectPokeCoin = $"Collect PokeCoin ({count})";
+            RaisePropertyChanged("CollectPokeCoin");
+        }
+
+        private void Tmr_Tick(object sender, EventArgs e)
+        {
+            var time = expires - DateTime.UtcNow;
+            if (expires.Ticks == 0 || time.TotalSeconds < 0)
+            {
+                //not implemented
+            }
+            else
+            {
+                // my value here  00m 00s
+                if (isLucky)
+                    Lucky_expires = $"{time.Minutes}m {Math.Abs(time.Seconds)}s";
+                else
+                    Insence_expires = $"{time.Minutes}m {Math.Abs(time.Seconds)}s";
+            }
         }
     }
 }

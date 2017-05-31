@@ -95,6 +95,9 @@ namespace RocketBot2.Forms
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            this.splitContainer1.SplitterDistance = this.splitContainer1.Width / 100 * 45; // Splits left & right splitter panes @ 45%/55% of the window width
+            this.splitContainer2.SplitterDistance = this.splitContainer2.Height / 100 * 45;// Always keeps the logger window @ 45%/55% of the window height
+            this.Refresh(); // Force screen refresh before items are poppulated
             SetStatusText(Application.ProductName + " " + Application.ProductVersion);
             speedLable.Parent = GMapControl1;
             showMoreCheckBox.Parent = GMapControl1;
@@ -107,9 +110,7 @@ namespace RocketBot2.Forms
             InitializeMap();
             VersionHelper.CheckVersion();
             btnRefresh.Enabled = false;
-            //this.splitContainer1.SplitterDistance = this.splitContainer1.Width / 2;
-            //this.splitContainer2.SplitterDistance = this.splitContainer2.Height / 2;
-            ConsoleHelper.HideConsoleWindow();
+            //ConsoleHelper.HideConsoleWindow();
         }
 
         #endregion
@@ -1428,7 +1429,7 @@ namespace RocketBot2.Forms
             CatchIncensePokemonsTask.PokemonEncounterEvent += UpdateMap;
 
             CatchLurePokemonsTask.PokemonEncounterEvent +=
-                         mappokemons => _session.EventDispatcher.Send(new PokemonsEncounterEvent { EncounterPokemons = mappokemons });
+                mappokemons => _session.EventDispatcher.Send(new PokemonsEncounterEvent { EncounterPokemons = mappokemons });
             CatchLurePokemonsTask.PokemonEncounterEvent += UpdateMap;
 
             Resources.ProgressBar.Fill(100);
@@ -1442,11 +1443,23 @@ namespace RocketBot2.Forms
             ioc.Register<MultiAccountManager>(accountManager);
 
             var bot = accountManager.GetStartUpAccount();
+            var TotXP = 0;
+
+            for (int i = 0; i < bot.Level + 1; i++)
+            {
+                TotXP = TotXP + Statistics.GetXpDiff(i);
+            }
 
             if (accountManager.AccountsReadOnly.Count > 1)
             {
                 foreach (var _bot in accountManager.AccountsReadOnly)
                 {
+                    TotXP = 0;
+                    for (int i = 0; i < _bot.Level + 1; i++)
+                    {
+                        TotXP = TotXP + Statistics.GetXpDiff(i);
+                    }
+
                     var _item = new ToolStripMenuItem()
                     {
                         Text = _bot.Username
@@ -1456,31 +1469,24 @@ namespace RocketBot2.Forms
                         if (!Instance._botStarted)
                             _session.ReInitSessionWithNextBot(_bot);
                         accountManager.SwitchAccountTo(_bot);
-                        Logger.Write(
-                            $"(Start-Up Stats) User: {_bot.Username} | XP: {_bot.CurrentXp} | SD: {_bot.Stardust}",
-                            LogLevel.Info, ConsoleColor
-                            .Magenta
-                            );
+                        Logger.Write($"(Bot Stats) User: {_bot.Username} | XP: {_bot.CurrentXp - TotXP} | SD: {_bot.Stardust}", LogLevel.Info, ConsoleColor.Magenta);
                     };
                     accountsToolStripMenuItem.DropDownItems.Add(_item);
                 }
-                _session.ReInitSessionWithNextBot(bot);
-                Logger.Write(
-                    $"(Start-Up Stats) User: {bot.Username} | XP: {bot.CurrentXp} | SD: {bot.Stardust}",
-                    LogLevel.Info, ConsoleColor
-                    .Magenta
-                    );
             }
             else
             {
-                _session.ReInitSessionWithNextBot(bot);
                 menuStrip1.Items.Remove(accountsToolStripMenuItem);
-                Logger.Write(
-                    $"(Start-Up Stats) User: {bot.Username} | XP: {bot.CurrentXp} | SD: {bot.Stardust}",
-                    LogLevel.Info, ConsoleColor
-                    .Magenta
-                    );
             }
+
+            TotXP = 0;
+            for (int i = 0; i < bot.Level + 1; i++)
+            {
+                TotXP = TotXP + Statistics.GetXpDiff(i);
+            }
+
+            _session.ReInitSessionWithNextBot(bot);
+            Logger.Write($"(Bot Stats) User: {bot.Username} | XP: {bot.CurrentXp - TotXP} | SD: {bot.Stardust}", LogLevel.Info, ConsoleColor.Magenta);
 
             _machine = machine;
             _settings = settings;
