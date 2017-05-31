@@ -1462,17 +1462,15 @@ namespace RocketBot2.Forms
                     };
                     accountsToolStripMenuItem.DropDownItems.Add(_item);
                 }
-                _session.ReInitSessionWithNextBot(bot);
-                Logger.Write($"(Bot Stats) User: {bot.Username} | XP: {bot.CurrentXp} | SD: {bot.Stardust}",
-                   LogLevel.Info, ConsoleColor.Magenta);
             }
             else
             {
-                _session.ReInitSessionWithNextBot(bot);
                 menuStrip1.Items.Remove(accountsToolStripMenuItem);
-                Logger.Write($"(Bot Stats) User: {bot.Username} | XP: {bot.CurrentXp} | SD: {bot.Stardust}",
-                    LogLevel.Info, ConsoleColor.Magenta);
             }
+
+            _session.ReInitSessionWithNextBot(bot);
+            Logger.Write($"(Bot Stats) User: {bot.Username} | XP: {bot.CurrentXp} | SD: {bot.Stardust}",
+               LogLevel.Info, ConsoleColor.Magenta);
 
             _machine = machine;
             _settings = settings;
