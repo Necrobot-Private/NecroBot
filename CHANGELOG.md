@@ -1,5 +1,48 @@
 # Change Log
 
+## [v1.0.0.177](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.177) (2017-06-01)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.176...v1.0.0.177)
+
+**Fixed bugs:**
+
+- Bug in Bulk Transfer Option [\#1465](https://github.com/Necrobot-Private/NecroBot/issues/1465)
+
+**Closed issues:**
+
+- API not supported [\#1788](https://github.com/Necrobot-Private/NecroBot/issues/1788)
+- shadow ban [\#1763](https://github.com/Necrobot-Private/NecroBot/issues/1763)
+- AutoSnipe only works within a limit does not work in other countries or states [\#1754](https://github.com/Necrobot-Private/NecroBot/issues/1754)
+- Sniping Problem [\#1751](https://github.com/Necrobot-Private/NecroBot/issues/1751)
+- \[Request\] Update the Wiki's Instructions for Mapzen [\#1684](https://github.com/Necrobot-Private/NecroBot/issues/1684)
+- Necrobot doesn't snipe to all my accounts \(manual snipe\) [\#1515](https://github.com/Necrobot-Private/NecroBot/issues/1515)
+- PokemonsToEvolve section constantly gets deleted by the bot [\#1509](https://github.com/Necrobot-Private/NecroBot/issues/1509)
+- Turning on "UseLuckyEggConstantly" leads to a looping "UseItemXPBoost" exception causing a loop of re-logins [\#1488](https://github.com/Necrobot-Private/NecroBot/issues/1488)
+- AutoSnipe Only will snipe if you have pokestops left on limit [\#753](https://github.com/Necrobot-Private/NecroBot/issues/753)
+
+**Merged pull requests:**
+
+- Features/manual poke coin collection \(minor fixes\) [\#1790](https://github.com/Necrobot-Private/NecroBot/pull/1790) ([Furtif](https://github.com/Furtif))
+- Features/manual poke coin collection \(minor fixe \#1757\) [\#1784](https://github.com/Necrobot-Private/NecroBot/pull/1784) ([Furtif](https://github.com/Furtif))
+- Fixes [\#1783](https://github.com/Necrobot-Private/NecroBot/pull/1783) ([Lord-Haji](https://github.com/Lord-Haji))
+- Features/manual poke coin collection add functions and timers \#1757 [\#1779](https://github.com/Necrobot-Private/NecroBot/pull/1779) ([Furtif](https://github.com/Furtif))
+- Features/manual poke coin collection \(merge \#1768\) [\#1776](https://github.com/Necrobot-Private/NecroBot/pull/1776) ([Furtif](https://github.com/Furtif))
+- Features/manual poke coin collection \(1757\) final fix [\#1774](https://github.com/Necrobot-Private/NecroBot/pull/1774) ([Furtif](https://github.com/Furtif))
+- Features/manual poke coin collection \(1757\) fix [\#1773](https://github.com/Necrobot-Private/NecroBot/pull/1773) ([Furtif](https://github.com/Furtif))
+- Features/manual poke coin collection \(1757\) fix [\#1771](https://github.com/Necrobot-Private/NecroBot/pull/1771) ([Furtif](https://github.com/Furtif))
+- Layout and Indent Fixes for PlayerInfo [\#1769](https://github.com/Necrobot-Private/NecroBot/pull/1769) ([CDAGaming](https://github.com/CDAGaming))
+- Fix conflits \(\#1757\) [\#1767](https://github.com/Necrobot-Private/NecroBot/pull/1767) ([Furtif](https://github.com/Furtif))
+- \(Ready to Merge\) Tweaks and Fixes to Layout and other areas [\#1766](https://github.com/Necrobot-Private/NecroBot/pull/1766) ([CDAGaming](https://github.com/CDAGaming))
+- Show statistics when switching accounts \(RocketBot\) [\#1765](https://github.com/Necrobot-Private/NecroBot/pull/1765) ([Furtif](https://github.com/Furtif))
+- Suite of the pull request \(\#1762\) sync [\#1764](https://github.com/Necrobot-Private/NecroBot/pull/1764) ([Furtif](https://github.com/Furtif))
+- varius for teste [\#1762](https://github.com/Necrobot-Private/NecroBot/pull/1762) ([Furtif](https://github.com/Furtif))
+- Clean up lucky egg logic to always check expiration. [\#1760](https://github.com/Necrobot-Private/NecroBot/pull/1760) ([jjskuld](https://github.com/jjskuld))
+- Update Dependencies and Some Minor Layout Fixes [\#1758](https://github.com/Necrobot-Private/NecroBot/pull/1758) ([CDAGaming](https://github.com/CDAGaming))
+- Features/manual poke coin collection [\#1757](https://github.com/Necrobot-Private/NecroBot/pull/1757) ([Lord-Haji](https://github.com/Lord-Haji))
+- Remove old LiteDB code which is no longer in use. [\#1756](https://github.com/Necrobot-Private/NecroBot/pull/1756) ([jjskuld](https://github.com/jjskuld))
+- Updated pogoprotos to 2.10.x [\#1755](https://github.com/Necrobot-Private/NecroBot/pull/1755) ([jjskuld](https://github.com/jjskuld))
+- Layout Fixes and Display Version in Window Title [\#1753](https://github.com/Necrobot-Private/NecroBot/pull/1753) ([CDAGaming](https://github.com/CDAGaming))
+- v2.10.1.5 \(rocketbot\) [\#1752](https://github.com/Necrobot-Private/NecroBot/pull/1752) ([Furtif](https://github.com/Furtif))
+
 ## [v1.0.0.176](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.176) (2017-05-23)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.175...v1.0.0.176)
 
@@ -2454,7 +2497,7 @@
 - Feature/fix first start tutorial [\#352](https://github.com/Necrobot-Private/NecroBot/pull/352) ([jjskuld](https://github.com/jjskuld))
 
 ## [v1.0.0.22](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.22) (2016-11-16)
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.20...v1.0.0.22)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.21...v1.0.0.22)
 
 **Fixed bugs:**
 
@@ -2464,11 +2507,11 @@
 
 - Fix incorrect log level for prompt. [\#350](https://github.com/Necrobot-Private/NecroBot/pull/350) ([jjskuld](https://github.com/jjskuld))
 
-## [v1.0.0.20](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.20) (2016-11-16)
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.21...v1.0.0.20)
-
 ## [v1.0.0.21](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.21) (2016-11-16)
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.19...v1.0.0.21)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.20...v1.0.0.21)
+
+## [v1.0.0.20](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.20) (2016-11-16)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.19...v1.0.0.20)
 
 **Fixed bugs:**
 
@@ -2501,7 +2544,7 @@
 **Fixed bugs:**
 
 - Exception after ptc token expiration and Nyantic servers unstable [\#326](https://github.com/Necrobot-Private/NecroBot/issues/326)
-- Update api to fix PTC auth token refresh issue \\(\\#326\\) and improved error handling [\#335](https://github.com/Necrobot-Private/NecroBot/pull/335) ([jjskuld](https://github.com/jjskuld))
+- Update api to fix PTC auth token refresh issue \(\#326\) and improved error handling [\#335](https://github.com/Necrobot-Private/NecroBot/pull/335) ([jjskuld](https://github.com/jjskuld))
 
 ## [v1.0.0.17](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.17) (2016-11-14)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.16...v1.0.0.17)
@@ -2608,7 +2651,7 @@
 
 **Fixed bugs:**
 
-- Add ability to prioritize or exclude gyms. Fixes issue \\#231 [\#258](https://github.com/Necrobot-Private/NecroBot/pull/258) ([jjskuld](https://github.com/jjskuld))
+- Add ability to prioritize or exclude gyms. Fixes issue \#231 [\#258](https://github.com/Necrobot-Private/NecroBot/pull/258) ([jjskuld](https://github.com/jjskuld))
 - Fix MSnipe don't work when use subpath parameter. [\#257](https://github.com/Necrobot-Private/NecroBot/pull/257) ([AeyXD](https://github.com/AeyXD))
 
 **Closed issues:**
