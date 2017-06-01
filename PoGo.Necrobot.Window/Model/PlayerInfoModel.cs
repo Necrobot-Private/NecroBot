@@ -17,7 +17,7 @@ namespace PoGo.Necrobot.Window.Model
     public class PlayerInfoModel : ViewModelBase
     {
         private DateTime expires = new DateTime(0);
-        private string InsenceAndLucky = "00m 00s";
+        private string InsenceAndLucky;
         public string Lucky_expires
         {
             get { return InsenceAndLucky; }
