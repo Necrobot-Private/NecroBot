@@ -192,7 +192,7 @@ namespace PoGo.Necrobot.Window.Model
                 LevelExp = playerStats.NextLevelXp;
             }
 
-            GetPokeCoin().ConfigureAwait(false);
+            GetPokeCoin();
             playerProfile = profile.Profile;
         }
 
@@ -321,10 +321,10 @@ namespace PoGo.Necrobot.Window.Model
             RaisePropertyChanged("KmRemaining");
         }
 
-        public async Task GetPokeCoin()
+        public void GetPokeCoin()
         {
             Session = TinyIoCContainer.Current.Resolve<ISession>();
-            var deployed = await Session.Inventory.GetDeployedPokemons();
+            var deployed = Task.Run(async () => await Session.Inventory.GetDeployedPokemons().ConfigureAwait(false)).Result;
             var count = (deployed.Count() * 10).ToString();
             CollectPokeCoin = $"Collect PokeCoin ({count})";
             RaisePropertyChanged("CollectPokeCoin");
