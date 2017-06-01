@@ -4,6 +4,7 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace PoGo.Necrobot.Window.Controls
 {
@@ -43,16 +44,20 @@ namespace PoGo.Necrobot.Window.Controls
             InitializeComponent();
         }
         
-        private async void GetPokeCoin_Click(object sender, RoutedEventArgs e)
+        private void GetPokeCoin_Click(object sender, RoutedEventArgs e)
         {
-            var deployed = await Session.Inventory.GetDeployedPokemons();
-            if (deployed.Count() > 0)
+            try
             {
-                await Session.Client.Player.CollectDailyDefenderBonus();
+                //TODO: bug here null is returned
+                var deployed = Session.Inventory.GetDeployedPokemons().Result; 
+                if (deployed.Count() > 0)
+                {
+                    Task.Run(() => Session.Client.Player.CollectDailyDefenderBonus().ConfigureAwait(false));
+                }
             }
-            else
+            catch
             {
-                return;
+
             }
         }
     }

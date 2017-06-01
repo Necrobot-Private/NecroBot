@@ -16,30 +16,23 @@ namespace PoGo.Necrobot.Window.Model
 {
     public class PlayerInfoModel : ViewModelBase
     {
-        private DateTime expires = new DateTime(0);
-        private System.Timers.Timer tmr = new Timer()
-        {
-            Interval = 1000,
-            Enabled = true,
-        };
-        private string InsenceAndLucky = "00m 00s";
-        private bool isLucky = false;
+        private static DateTime expires = new DateTime(0);
+        private string lucky_expires;
         public string Lucky_expires
         {
-            get { return InsenceAndLucky; }
+            get { return lucky_expires; }
             set
             {
-                InsenceAndLucky = value;
-                RaisePropertyChanged("Lucky_expires");
+                lucky_expires = value;
             }
         }
+        private string insence_expires;
         public string Insence_expires
         {
-            get { return InsenceAndLucky; }
+            get { return insence_expires; }
             set
             {
-                InsenceAndLucky = value;
-                RaisePropertyChanged("Insence_expires");
+                insence_expires = value;
             }
         }
         public PokemonId BuddyPokemonId { get; set; }
@@ -190,7 +183,7 @@ namespace PoGo.Necrobot.Window.Model
             }
         }
 
-        internal async Task OnProfileUpdateAsync(ProfileEvent profile)
+        internal void OnProfileUpdate(ProfileEvent profile)
         {
             var stats = profile.Stats;
             var playerStats = stats.FirstOrDefault(x => x.Experience > 0);
@@ -200,7 +193,7 @@ namespace PoGo.Necrobot.Window.Model
                 LevelExp = playerStats.NextLevelXp;
             }
 
-            await GetPokeCoin();
+            GetPokeCoin();
             playerProfile = profile.Profile;
         }
 
@@ -243,6 +236,25 @@ namespace PoGo.Necrobot.Window.Model
             //KmRemaining = incubator.TargetKmWalked - kmWalked;
             //KmToWalk = incubator.TargetKmWalked - incubator.StartKmWalked;
 
+            //Code added by furtif
+            var inventory = Session.Inventory.GetCachedInventory().Result;
+            var eggsListViewModel = new EggsListViewModel();
+            eggsListViewModel.OnInventoryRefreshed(inventory);
+
+            foreach (var x in eggsListViewModel.Incubators)
+            {
+                if (x.IsUnlimited && x.InUse)
+                {
+                    KmRemaining = x.TotalKM - x.KM;
+                    KmToWalk = x.TotalKM;
+                }
+            }
+            //
+
+            RaisePropertyChanged("KmToWalk");
+            RaisePropertyChanged("KmRemaining");
+            RaisePropertyChanged("EggPerc");
+
             RaisePropertyChanged("TotalPokemonTransferred;");
             RaisePropertyChanged("Runtime");
             RaisePropertyChanged("EXPPerHour");
@@ -252,10 +264,6 @@ namespace PoGo.Necrobot.Window.Model
             RaisePropertyChanged("Stardust");
             RaisePropertyChanged("Exp");
             RaisePropertyChanged("LevelExp");
-
-            RaisePropertyChanged("KmToWalk");
-            RaisePropertyChanged("KmRemaining");
-            RaisePropertyChanged("EggPerc");
 
             // get applied items
             var appliedItems =
@@ -268,9 +276,12 @@ namespace PoGo.Necrobot.Window.Model
                     .Where(i => i != null)
                     .OrderBy(i => i.ItemId);
 
+            bool isLucky = false;
+            Lucky_expires = $"00m 00s";
+            Insence_expires = $"00m 00s";
+
             foreach (var item in items)
             {
-                isLucky = false;
                 if (appliedItems.ContainsKey(item.ItemId))
                 {
                     expires = appliedItems[item.ItemId];
@@ -278,10 +289,22 @@ namespace PoGo.Necrobot.Window.Model
                 }
             }
 
-            RaisePropertyChanged("Insence_expires");
-            RaisePropertyChanged("Lucky_expires");
+            var time = expires - DateTime.UtcNow;
+            if (expires.Ticks == 0 || time.TotalSeconds < 0)
+            {
+                // my value here  00m 00s
+            }
+            else
+            {
+                // my value here  00m 00s
+                if (isLucky)
+                    Lucky_expires = $"{time.Minutes}m {Math.Abs(time.Seconds)}s";
+                else
+                    Insence_expires = $"{time.Minutes}m {Math.Abs(time.Seconds)}s";
+            }
 
-            tmr.Elapsed += new ElapsedEventHandler(Tmr_Tick);
+            RaisePropertyChanged("Lucky_expires");
+            RaisePropertyChanged("Insence_expires");
         }
 
         internal void UpdatePokestopLimit(PokestopLimitUpdate ev)
@@ -311,30 +334,13 @@ namespace PoGo.Necrobot.Window.Model
             RaisePropertyChanged("KmRemaining");
         }
 
-        public async Task GetPokeCoin()
+        public void GetPokeCoin()
         {
             Session = TinyIoCContainer.Current.Resolve<ISession>();
-            var deployed = await Session.Inventory.GetDeployedPokemons();
+            var deployed = Session.Inventory.GetDeployedPokemons().Result;
             var count = (deployed.Count() * 10).ToString();
             CollectPokeCoin = $"Collect PokeCoin ({count})";
             RaisePropertyChanged("CollectPokeCoin");
-        }
-
-        private void Tmr_Tick(object sender, EventArgs e)
-        {
-            var time = expires - DateTime.UtcNow;
-            if (expires.Ticks == 0 || time.TotalSeconds < 0)
-            {
-                //not implemented
-            }
-            else
-            {
-                // my value here  00m 00s
-                if (isLucky)
-                    Lucky_expires = $"{time.Minutes}m {Math.Abs(time.Seconds)}s";
-                else
-                    Insence_expires = $"{time.Minutes}m {Math.Abs(time.Seconds)}s";
-            }
         }
     }
 }
