@@ -182,7 +182,7 @@ namespace PoGo.Necrobot.Window.Model
             }
         }
 
-        internal async Task OnProfileUpdateAsync(ProfileEvent profile)
+        internal void OnProfileUpdate(ProfileEvent profile)
         {
             var stats = profile.Stats;
             var playerStats = stats.FirstOrDefault(x => x.Experience > 0);
@@ -192,7 +192,7 @@ namespace PoGo.Necrobot.Window.Model
                 LevelExp = playerStats.NextLevelXp;
             }
 
-            await GetPokeCoin();
+            GetPokeCoin().ConfigureAwait(false);
             playerProfile = profile.Profile;
         }
 
