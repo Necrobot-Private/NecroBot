@@ -16,6 +16,7 @@ namespace PoGo.Necrobot.Window.Model
 {
     public class PlayerInfoModel : ViewModelBase
     {
+        private static DateTime expires = new DateTime(0);
         private string lucky_expires;
         public string Lucky_expires
         {
@@ -260,7 +261,6 @@ namespace PoGo.Necrobot.Window.Model
                     .Where(i => i != null)
                     .OrderBy(i => i.ItemId);
 
-            DateTime expires = new DateTime(0);
             bool isLucky = false;
             Lucky_expires = $"00m 00s";
             Insence_expires = $"00m 00s";
