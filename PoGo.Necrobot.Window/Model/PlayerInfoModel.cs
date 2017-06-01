@@ -23,7 +23,6 @@ namespace PoGo.Necrobot.Window.Model
             set
             {
                 lucky_expires = value;
-                RaisePropertyChanged("Lucky_expires");
             }
         }
         private string insence_expires;
@@ -33,7 +32,6 @@ namespace PoGo.Necrobot.Window.Model
             set
             {
                 insence_expires = value;
-                RaisePropertyChanged("Insence_expires");
             }
         }
         public PokemonId BuddyPokemonId { get; set; }
@@ -290,8 +288,10 @@ namespace PoGo.Necrobot.Window.Model
                     Lucky_expires = $"{time.Minutes}m {Math.Abs(time.Seconds)}s";
                 else
                     Insence_expires = $"{time.Minutes}m {Math.Abs(time.Seconds)}s";
-
             }
+
+            RaisePropertyChanged("Lucky_expires");
+            RaisePropertyChanged("Insence_expires");
         }
 
         internal void UpdatePokestopLimit(PokestopLimitUpdate ev)
