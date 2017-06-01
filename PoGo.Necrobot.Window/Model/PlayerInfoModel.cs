@@ -16,23 +16,23 @@ namespace PoGo.Necrobot.Window.Model
 {
     public class PlayerInfoModel : ViewModelBase
     {
-        private DateTime expires = new DateTime(0);
-        private string InsenceAndLucky;
+        private string lucky_expires;
         public string Lucky_expires
         {
-            get { return InsenceAndLucky; }
+            get { return lucky_expires; }
             set
             {
-                InsenceAndLucky = value;
+                lucky_expires = value;
                 RaisePropertyChanged("Lucky_expires");
             }
         }
+        private string insence_expires;
         public string Insence_expires
         {
-            get { return InsenceAndLucky; }
+            get { return insence_expires; }
             set
             {
-                InsenceAndLucky = value;
+                insence_expires = value;
                 RaisePropertyChanged("Insence_expires");
             }
         }
@@ -262,29 +262,35 @@ namespace PoGo.Necrobot.Window.Model
                     .Where(i => i != null)
                     .OrderBy(i => i.ItemId);
 
+            DateTime expires = new DateTime(0);
+            bool isLucky = false;
+
             foreach (var item in items)
-            {            
+            {
                 if (appliedItems.ContainsKey(item.ItemId))
                 {
-                    bool isLucky = false;
                     expires = appliedItems[item.ItemId];
                     if (item.ItemId == ItemId.ItemLuckyEgg) isLucky = true;
-
-                    var time = expires - DateTime.UtcNow;
-                    if (expires.Ticks == 0 || time.TotalSeconds < 0)
-                    {
-                        //not implemented
-                    }
-                    else
-                    {
-                        // my value here  00m 00s
-                        if (isLucky)
-                            Lucky_expires = $"{time.Minutes}m {Math.Abs(time.Seconds)}s";
-                        else
-                            Insence_expires = $"{time.Minutes}m {Math.Abs(time.Seconds)}s";
-
-                    }
                 }
+            }
+
+            var time = expires - DateTime.UtcNow;
+            if (expires.Ticks == 0 || time.TotalSeconds < 0)
+            {
+                // my value here  00m 00s
+                if (isLucky)
+                    Lucky_expires = $"00m 00s";
+                else
+                    Insence_expires = $"00m 00s";
+            }
+            else
+            {
+                // my value here  00m 00s
+                if (isLucky)
+                    Lucky_expires = $"{time.Minutes}m {Math.Abs(time.Seconds)}s";
+                else
+                    Insence_expires = $"{time.Minutes}m {Math.Abs(time.Seconds)}s";
+
             }
         }
 
