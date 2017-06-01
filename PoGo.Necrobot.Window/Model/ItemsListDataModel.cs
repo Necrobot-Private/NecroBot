@@ -79,7 +79,7 @@ namespace PoGo.Necrobot.Window.Model
                     existing.DropText = existing.DropText;
                     existing.RaisePropertyChanged("DropText");
 
-                    existing.AllowDrop = true;
+                    existing.AllowDrop = existing.AllowDrop;
                     existing.RaisePropertyChanged("AllowDrop");
                 }
             }
