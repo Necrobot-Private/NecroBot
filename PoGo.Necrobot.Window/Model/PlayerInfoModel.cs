@@ -45,8 +45,6 @@ namespace PoGo.Necrobot.Window.Model
             set
             {
                 KmRemaining = value;
-                RaisePropertyChanged("KmToWalk");
-                RaisePropertyChanged("EggPerc");
             }
         }
 
@@ -235,6 +233,22 @@ namespace PoGo.Necrobot.Window.Model
             //Still needs some work(TheWizard1328)
             //KmRemaining = incubator.TargetKmWalked - kmWalked;
             //KmToWalk = incubator.TargetKmWalked - incubator.StartKmWalked;
+            var inventory = Session.Inventory.GetCachedInventory().Result;
+            var eggsListViewModel = new EggsListViewModel();
+            eggsListViewModel.OnInventoryRefreshed(inventory);
+
+            foreach (var x in eggsListViewModel.Incubators)
+            {
+                if (x.IsUnlimited && x.InUse)
+                {
+                    KmRemaining = x.TotalKM - x.KM;
+                    KmToWalk = x.KM - x.TotalKM;
+                }
+            }
+
+            RaisePropertyChanged("KmToWalk");
+            RaisePropertyChanged("KmRemaining");
+            RaisePropertyChanged("EggPerc");
 
             RaisePropertyChanged("TotalPokemonTransferred;");
             RaisePropertyChanged("Runtime");
@@ -245,10 +259,6 @@ namespace PoGo.Necrobot.Window.Model
             RaisePropertyChanged("Stardust");
             RaisePropertyChanged("Exp");
             RaisePropertyChanged("LevelExp");
-
-            RaisePropertyChanged("KmToWalk");
-            RaisePropertyChanged("KmRemaining");
-            RaisePropertyChanged("EggPerc");
 
             // get applied items
             var appliedItems =

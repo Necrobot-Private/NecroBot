@@ -17,7 +17,7 @@ namespace PoGo.Necrobot.Window.Model
             Incubators = new ObservableCollection<IncubatorViewModel>();
         }
 
-        internal void OnInventoryRefreshed(IEnumerable<InventoryItem> inventory)
+        public void OnInventoryRefreshed(IEnumerable<InventoryItem> inventory)
         {
             var eggs = inventory
                 .Select(x => x.InventoryItemData?.PokemonData)
