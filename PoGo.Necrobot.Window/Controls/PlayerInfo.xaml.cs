@@ -1,7 +1,10 @@
 ﻿using PoGo.Necrobot.Window.Model;
+using PoGo.NecroBot.Logic.State;
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace PoGo.Necrobot.Window.Controls
 {
@@ -12,6 +15,7 @@ namespace PoGo.Necrobot.Window.Controls
 
     public partial class PlayerInfo : UserControl
     {
+        public ISession Session { get; set; }
 
         public String Label
         {
@@ -37,9 +41,24 @@ namespace PoGo.Necrobot.Window.Controls
 
         public PlayerInfo()
         {
-            //this.DataContext = this.PlayerData;
             InitializeComponent();
         }
-                           
+        
+        private void GetPokeCoin_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                //TODO: bug here null is returned
+                var deployed = Session.Inventory.GetDeployedPokemons().Result; 
+                if (deployed.Count() > 0)
+                {
+                    Task.Run(() => Session.Client.Player.CollectDailyDefenderBonus().ConfigureAwait(false));
+                }
+            }
+            catch
+            {
+
+            }
+        }
     }
 }

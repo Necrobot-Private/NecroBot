@@ -33,7 +33,7 @@ namespace PoGo.Necrobot.Window.Controls
                     {
                         if (MessageBox.Show($"Do you want to use {Item.ItemId}", "Use item", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                         {
-                            data.Drop(Item);
+                            //data.Drop(Item);
                             await UseLuckyEggTask.Execute(Session);
                         }
                     }
@@ -42,7 +42,7 @@ namespace PoGo.Necrobot.Window.Controls
                     {
                         if (MessageBox.Show($"Do you want to use {Item.ItemId}", "Use item", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                         {
-                            data.Drop(Item);
+                            //data.Drop(Item);
                             await UseIncenseTask.Execute(Session);
                         }
                     }

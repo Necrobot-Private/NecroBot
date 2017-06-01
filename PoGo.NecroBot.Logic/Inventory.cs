@@ -663,15 +663,13 @@ namespace PoGo.NecroBot.Logic
         public async Task<IEnumerable<PokemonData>> GetFavoritePokemons()
         {
             var inventory = await GetPokemons().ConfigureAwait(false);
-            return
-                inventory.Where(i => i.Favorite == 1);
+            return inventory.Where(i => i.Favorite == 1);
         }
 
         public async Task<IEnumerable<PokemonData>> GetDeployedPokemons()
         {
             var inventory = await GetPokemons().ConfigureAwait(false);
-            return
-                inventory.Where(i => !string.IsNullOrEmpty(i.DeployedFortId));
+            return inventory.Where(i => !string.IsNullOrEmpty(i.DeployedFortId));
         }
 
         public async Task<MoveSettings> GetMoveSetting(PokemonMove move)
@@ -968,8 +966,6 @@ namespace PoGo.NecroBot.Logic
             }
             return upgradePokemon;
         }
-
-
 
         public async Task<UpgradePokemonResponse> UpgradePokemon(ulong pokemonid)
         {
