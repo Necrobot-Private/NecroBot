@@ -100,7 +100,7 @@
             </TextBlock>
             <TextBlock Grid.Column="2" Grid.Row="2" x:Name="tb_lukyegg_time" TextWrapping="Wrap" Text="{Binding Lucky_expires, FallbackValue=LuckyEggs: 00m 00s, StringFormat=LuckyEggs: \{0\}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="158" Height="16"/>
             <TextBlock Grid.Column="3" Grid.Row="2" x:Name="tb_incense_time" TextWrapping="Wrap" Text="{Binding Insence_expires, FallbackValue=Insence: 00m 00s, StringFormat=Insence: \{0\}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="158" Height="16"/>
-            <Button x:Name="btnCollectPokeCoin" Click="GetPokeCoin_Click" Grid.Column="3" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="157,0,48,0.333" Width="111" Grid.ColumnSpan="2">
+            <Button x:Name="btnCollectPokeCoin" Click="GetPokeCoin_Click" Grid.Column="4" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center" Width="111" HorizontalContentAlignment="Center">
                 <TextBlock Text="{Binding CollectPokeCoin, FallbackValue='Collect PokeCoin (0)', UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Button>
         </Grid>
