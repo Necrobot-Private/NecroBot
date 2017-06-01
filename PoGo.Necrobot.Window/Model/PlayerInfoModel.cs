@@ -263,27 +263,27 @@ namespace PoGo.Necrobot.Window.Model
                     .OrderBy(i => i.ItemId);
 
             foreach (var item in items)
-            {
-                bool isLucky = false;
+            {            
                 if (appliedItems.ContainsKey(item.ItemId))
                 {
+                    bool isLucky = false;
                     expires = appliedItems[item.ItemId];
                     if (item.ItemId == ItemId.ItemLuckyEgg) isLucky = true;
-                }
 
-                var time = expires - DateTime.UtcNow;
-                if (expires.Ticks == 0 || time.TotalSeconds < 0)
-                {
-                    //not implemented
-                }
-                else
-                {
-                    // my value here  00m 00s
-                    if (isLucky)
-                        Lucky_expires = $"{time.Minutes}m {Math.Abs(time.Seconds)}s";
+                    var time = expires - DateTime.UtcNow;
+                    if (expires.Ticks == 0 || time.TotalSeconds < 0)
+                    {
+                        //not implemented
+                    }
                     else
-                        Insence_expires = $"{time.Minutes}m {Math.Abs(time.Seconds)}s";
+                    {
+                        // my value here  00m 00s
+                        if (isLucky)
+                            Lucky_expires = $"{time.Minutes}m {Math.Abs(time.Seconds)}s";
+                        else
+                            Insence_expires = $"{time.Minutes}m {Math.Abs(time.Seconds)}s";
 
+                    }
                 }
             }
         }
