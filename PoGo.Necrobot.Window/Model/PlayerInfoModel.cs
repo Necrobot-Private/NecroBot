@@ -262,6 +262,8 @@ namespace PoGo.Necrobot.Window.Model
 
             DateTime expires = new DateTime(0);
             bool isLucky = false;
+            Lucky_expires = $"00m 00s";
+            Insence_expires = $"00m 00s";
 
             foreach (var item in items)
             {
@@ -276,10 +278,6 @@ namespace PoGo.Necrobot.Window.Model
             if (expires.Ticks == 0 || time.TotalSeconds < 0)
             {
                 // my value here  00m 00s
-                if (isLucky)
-                    Lucky_expires = $"00m 00s";
-                else
-                    Insence_expires = $"00m 00s";
             }
             else
             {
