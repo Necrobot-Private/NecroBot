@@ -319,14 +319,13 @@ namespace PoGo.Necrobot.Window.Model
             RaisePropertyChanged("KmRemaining");
         }
 
-        public Task GetPokeCoin()
+        public void GetPokeCoin()
         {
             Session = TinyIoCContainer.Current.Resolve<ISession>();
             var deployed = Session.Inventory.GetDeployedPokemons().Result;
             var count = (deployed.Count() * 10).ToString();
             CollectPokeCoin = $"Collect PokeCoin ({count})";
             RaisePropertyChanged("CollectPokeCoin");
-            return Task.CompletedTask;
         }
     }
 }
