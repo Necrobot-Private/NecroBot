@@ -30,15 +30,40 @@ namespace PoGo.Necrobot.Window.Model
                 var existing = Items.FirstOrDefault(x => x.ItemId == item.ItemId);
                 if (existing == null)
                 {
+                    int count = 0;
+                    string title = "DROP";
+                    bool drop = true;
+                    if (item.ItemId == ItemId.ItemLuckyEgg
+                        || item.ItemId == ItemId.ItemIncenseOrdinary
+                        || item.ItemId == ItemId.ItemIncenseCool
+                        || item.ItemId == ItemId.ItemIncenseFloral
+                        || item.ItemId == ItemId.ItemIncenseSpicy)
+                    {
+                        count = 1;
+                        title = "USE";
+                        drop = false;
+                    }
+                    else
+                    {
+                        count = item.Count;
+                    }
+
                     Items.Add(new ItemsViewModel()
                     {
                         Name = item.ItemId.ToString().Replace("Item", "").Replace("Basic", "").Replace("Unlimited", "(∞)").Replace("Ordinary", "").Replace("TroyDisk", "Lure"),
                         ItemId = item.ItemId,
                         ItemCount = item.Count,
-                        SelectedValue = item.Count,
-                        AllowDrop = true,
-                        DropText = "Drop"
+                        SelectedValue = count,
+                        AllowDrop = drop,
+                        DropText = title
                     });
+
+                    foreach (var x in Items)
+                    {
+                        x.RaisePropertyChanged("DropText");
+                        x.RaisePropertyChanged("SelectedValue");
+                        x.RaisePropertyChanged("AllowDrop");
+                    }
                 }
                 else
                 {
@@ -50,11 +75,11 @@ namespace PoGo.Necrobot.Window.Model
                         existing.SelectedValue = existing.ItemCount;
                         existing.RaisePropertyChanged("SelectedValue");
                     }
-                    
-                    existing.DropText = "Drop";
+
+                    existing.DropText = existing.DropText;
                     existing.RaisePropertyChanged("DropText");
 
-                    existing.AllowDrop = true;
+                    existing.AllowDrop = existing.AllowDrop;
                     existing.RaisePropertyChanged("AllowDrop");
                 }
             }

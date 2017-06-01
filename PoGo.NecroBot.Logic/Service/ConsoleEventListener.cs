@@ -162,7 +162,7 @@ namespace PoGo.NecroBot.Logic.Service
         {
             Logger.Write(eggIncubatorStatusEvent.WasAddedNow
                     ? session.Translation.GetTranslation(TranslationString.IncubatorPuttingEgg,
-                        eggIncubatorStatusEvent.KmRemaining)
+                        eggIncubatorStatusEvent.KmToWalk)
                     : session.Translation.GetTranslation(TranslationString.IncubatorStatusUpdate,
                         eggIncubatorStatusEvent.KmRemaining,
                         eggIncubatorStatusEvent.KmToWalk),
