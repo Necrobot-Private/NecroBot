@@ -46,14 +46,18 @@ namespace PoGo.Necrobot.Window.Controls
         
         private void GetPokeCoin_Click(object sender, RoutedEventArgs e)
         {
-            var deployed = Task.Run(async () => await Session.Inventory.GetDeployedPokemons().ConfigureAwait(false)).Result;
-            if (deployed.Count() > 0)
+            try
             {
-                Task.Run(async () => await Session.Client.Player.CollectDailyDefenderBonus().ConfigureAwait(false));
+                //TODO: bug here null is returned
+                var deployed = Session.Inventory.GetDeployedPokemons().Result; 
+                if (deployed.Count() > 0)
+                {
+                    Task.Run(() => Session.Client.Player.CollectDailyDefenderBonus().ConfigureAwait(false));
+                }
             }
-            else
+            catch
             {
-                return;
+
             }
         }
     }
