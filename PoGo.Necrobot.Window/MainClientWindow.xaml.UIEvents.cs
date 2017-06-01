@@ -130,11 +130,11 @@ namespace PoGo.Necrobot.Window
                 lblAccount.Content = $"{datacontext.UI.PlayerStatus} as : {datacontext.UI.PlayerName}";
             });
         }
-        public async Task OnBotEventAsync(ProfileEvent profile)
+        public void OnBotEvent(ProfileEvent profile)
         {
             var stats = profile.Stats;
 
-            await datacontext.PlayerInfo.OnProfileUpdateAsync(profile);
+            datacontext.PlayerInfo.OnProfileUpdate(profile);
 
             datacontext.UI.PlayerStatus = "Playing";
             datacontext.UI.PlayerName = profile.Profile.PlayerData.Username;
