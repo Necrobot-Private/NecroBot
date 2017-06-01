@@ -45,6 +45,8 @@ namespace PoGo.Necrobot.Window.Model
             set
             {
                 KmRemaining = value;
+                RaisePropertyChanged("KmToWalk");
+                RaisePropertyChanged("EggPerc");
             }
         }
 
@@ -233,6 +235,8 @@ namespace PoGo.Necrobot.Window.Model
             //Still needs some work(TheWizard1328)
             //KmRemaining = incubator.TargetKmWalked - kmWalked;
             //KmToWalk = incubator.TargetKmWalked - incubator.StartKmWalked;
+
+            //Code added by furtif
             var inventory = Session.Inventory.GetCachedInventory().Result;
             var eggsListViewModel = new EggsListViewModel();
             eggsListViewModel.OnInventoryRefreshed(inventory);
@@ -242,9 +246,10 @@ namespace PoGo.Necrobot.Window.Model
                 if (x.IsUnlimited && x.InUse)
                 {
                     KmRemaining = x.TotalKM - x.KM;
-                    KmToWalk = x.KM - x.TotalKM;
+                    KmToWalk = x.TotalKM;
                 }
             }
+            //
 
             RaisePropertyChanged("KmToWalk");
             RaisePropertyChanged("KmRemaining");
