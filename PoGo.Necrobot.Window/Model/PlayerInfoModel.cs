@@ -193,7 +193,7 @@ namespace PoGo.Necrobot.Window.Model
                 LevelExp = playerStats.NextLevelXp;
             }
 
-            GetPokeCoin().ConfigureAwait(false);
+            GetPokeCoin();
             playerProfile = profile.Profile;
         }
 
