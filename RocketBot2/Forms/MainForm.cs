@@ -1467,50 +1467,55 @@ namespace RocketBot2.Forms
             ioc.Register<MultiAccountManager>(accountManager);
 
             var bot = accountManager.GetStartUpAccount();
-            var TotXP = 0;
 
-            for (int i = 0; i < bot.Level + 1; i++)
+            try
             {
-                TotXP = TotXP + Statistics.GetXpDiff(i);
-            }
-
-            if (accountManager.AccountsReadOnly.Count > 1)
-            {
-                foreach (var _bot in accountManager.AccountsReadOnly)
+                var TotXP = 0;
+                for (int i = 0; i < bot.Level + 1; i++)
                 {
-                    var _TotXP = 0;
-                    for (int i = 0; i < _bot.Level + 1; i++)
-                    {
-                        _TotXP = _TotXP + Statistics.GetXpDiff(i);
-                    }
-
-                    var _item = new ToolStripMenuItem()
-                    {
-                        Text = _bot.Username
-                    };
-                    _item.Click += delegate
-                    {
-                        if (!Instance._botStarted)
-                            _session.ReInitSessionWithNextBot(_bot);
-                        accountManager.SwitchAccountTo(_bot);
-                        Logger.Write($"(Bot Stats) User: {_bot.Nickname} | XP: {_bot.CurrentXp - _TotXP} | SD: {_bot.Stardust}", LogLevel.Info, ConsoleColor.Magenta);
-                    };
-                    accountsToolStripMenuItem.DropDownItems.Add(_item);
+                    TotXP = TotXP + Statistics.GetXpDiff(i);
                 }
-            }
-            else
-            {
-                menuStrip1.Items.Remove(accountsToolStripMenuItem);
-            }
 
-            _session.ReInitSessionWithNextBot(bot);
+                if (accountManager.AccountsReadOnly.Count > 1)
+                {
+                    foreach (var _bot in accountManager.AccountsReadOnly)
+                    {
+                        var _TotXP = 0;
+                        for (int i = 0; i < _bot.Level + 1; i++)
+                        {
+                            _TotXP = _TotXP + Statistics.GetXpDiff(i);
+                        }
+
+                        var _item = new ToolStripMenuItem()
+                        {
+                            Text = _bot.Username
+                        };
+                        _item.Click += delegate
+                        {
+                            if (!Instance._botStarted)
+                                _session.ReInitSessionWithNextBot(_bot);
+                            accountManager.SwitchAccountTo(_bot);
+                            Logger.Write($"(Bot Stats) User: {_bot.Nickname} | XP: {_bot.CurrentXp - _TotXP} | SD: {_bot.Stardust}", LogLevel.Info, ConsoleColor.Magenta);
+                        };
+                        accountsToolStripMenuItem.DropDownItems.Add(_item);
+                    }
+                }
+                else
+                {
+                    menuStrip1.Items.Remove(accountsToolStripMenuItem);
+                }
+                _session.ReInitSessionWithNextBot(bot);
+                Logger.Write($"(Bot Stats) User: {bot.Nickname} | XP: {bot.CurrentXp - TotXP} | SD: {bot.Stardust}", LogLevel.Info, ConsoleColor.Magenta);
+            }
+            catch
+            {
+
+            }
 
             _machine = machine;
             _settings = settings;
             _excelConfigAllow = excelConfigAllow;
-
-            Logger.Write($"(Bot Stats) User: {bot.Nickname} | XP: {bot.CurrentXp - TotXP} | SD: {bot.Stardust}", LogLevel.Info, ConsoleColor.Magenta);
-        }
+       }
 
         private Task StartBot()
         {
