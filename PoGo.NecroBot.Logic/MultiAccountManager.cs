@@ -366,12 +366,13 @@ namespace PoGo.NecroBot.Logic
             {
                 var SP = "";
                 var user = !string.IsNullOrEmpty(item.Nickname) ? item.Nickname : item.Username;
-
                 var L = user.Length;
-                    for (int i = 0; i < 31 - L; i++)
-                    {
-                        SP += " ";
-                    }
+
+                for (int i = 0; i < 31 - L; i++)
+                {
+                    SP += " ";
+                }
+
                 if (item.Level > 0)
                     Logging.Logger.Write($"{user}{SP}(Level: {item.Level:#0}) | Runtime: {item.RuntimeTotal:00:00:00}");
                 else
