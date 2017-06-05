@@ -115,21 +115,16 @@ namespace RocketBot2.Forms
 
         private void MainForm_Resize(object sender, EventArgs e)
         {
-            this.TrayIcon.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info; //Shows the info icon so the user doesn't thing there is an error.
-            this.TrayIcon.BalloonTipText = "RocketBot2 minimized doubleClick to restore";
-            this.TrayIcon.BalloonTipTitle = "RocketBot2 when Minimize";
-            this.TrayIcon.Text = "RocketBot2 minimized, doubleclick on this icon to restore";
-
+            TrayIcon.Visible = false;
             if (FormWindowState.Minimized == this.WindowState)
             {
+                TrayIcon.BalloonTipIcon = ToolTipIcon.Info; //Shows the info icon so the user doesn't thing there is an error.
+                TrayIcon.BalloonTipText = "RocketBot2 minimized doubleClick to restore";
+                TrayIcon.BalloonTipTitle = "RocketBot2 when Minimize";
+                TrayIcon.Text = "RocketBot2 minimized, doubleclick on this icon to restore";
                 TrayIcon.Visible = true;
                 TrayIcon.ShowBalloonTip(5000);
-                this.Hide();
-            }
-
-            else if (FormWindowState.Normal == this.WindowState)
-            {
-                TrayIcon.Visible = false;
+                Hide();
             }
         }
 
@@ -450,6 +445,7 @@ namespace RocketBot2.Forms
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            TrayIcon.Visible = false;
             //TODO: Kills the application
             try
             {
@@ -1468,12 +1464,15 @@ namespace RocketBot2.Forms
             ioc.Register<MultiAccountManager>(accountManager);
 
             var bot = accountManager.GetStartUpAccount();
+
             var TotXP = 0;
 
             for (int i = 0; i < bot.Level + 1; i++)
             {
                 TotXP = TotXP + Statistics.GetXpDiff(i);
             }
+
+            var user = !string.IsNullOrEmpty(bot.Nickname) ? bot.Nickname : bot.Username;
 
             if (accountManager.AccountsReadOnly.Count > 1)
             {
@@ -1485,16 +1484,18 @@ namespace RocketBot2.Forms
                         _TotXP = _TotXP + Statistics.GetXpDiff(i);
                     }
 
+                    var _user = !string.IsNullOrEmpty(_bot.Nickname) ? _bot.Nickname : _bot.Username;
+
                     var _item = new ToolStripMenuItem()
                     {
-                        Text = _bot.Username
+                        Text = _user
                     };
                     _item.Click += delegate
                     {
                         if (!Instance._botStarted)
                             _session.ReInitSessionWithNextBot(_bot);
                         accountManager.SwitchAccountTo(_bot);
-                        Logger.Write($"(Bot Stats) User: {_bot.Nickname} | XP: {_bot.CurrentXp - _TotXP} | SD: {_bot.Stardust}", LogLevel.Info, ConsoleColor.Magenta);
+                        Logger.Write($"(Bot Stats) User: {_user} | XP: {_bot.CurrentXp - _TotXP} | SD: {_bot.Stardust}", LogLevel.Info, ConsoleColor.Magenta);
                     };
                     accountsToolStripMenuItem.DropDownItems.Add(_item);
                 }
@@ -1510,7 +1511,7 @@ namespace RocketBot2.Forms
             _settings = settings;
             _excelConfigAllow = excelConfigAllow;
 
-            Logger.Write($"(Bot Stats) User: {bot.Nickname} | XP: {bot.CurrentXp - TotXP} | SD: {bot.Stardust}", LogLevel.Info, ConsoleColor.Magenta);
+            Logger.Write($"(Bot Stats) User: {user} | XP: {bot.CurrentXp - TotXP} | SD: {bot.Stardust}", LogLevel.Info, ConsoleColor.Magenta);
         }
 
         private Task StartBot()

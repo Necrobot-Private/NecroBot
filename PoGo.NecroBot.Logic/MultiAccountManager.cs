@@ -362,25 +362,21 @@ namespace PoGo.NecroBot.Logic
         
         public void DumpAccountList()
         {
-            var L = 0;
-            var maxL = 0;
-            foreach (var item in Accounts)
-            {
-                L = item.Username.Length;
-                if (L > maxL) { maxL = L; }
-            }
-
             foreach (var item in Accounts)
             {
                 var SP = "";
-                for (int i = 0; i < maxL - item.Username.Length + 1; i++)
+                var user = !string.IsNullOrEmpty(item.Nickname) ? item.Nickname : item.Username;
+                var userL = user.Length;
+
+                for (int i = 0; i < 31 - userL; i++)
                 {
                     SP += " ";
                 }
+
                 if (item.Level > 0)
-                    Logging.Logger.Write($"{item.Username}{SP}(Level: {item.Level:#0}) | Runtime: {item.RuntimeTotal:00:00:00}");
+                    Logging.Logger.Write($"{user}{SP}(Level: {item.Level:#0}) | Runtime: {item.RuntimeTotal:00:00:00}");
                 else
-                    Logging.Logger.Write($"{item.Username}{SP}(Level: ??) | Runtime: {item.RuntimeTotal:00:00:00}");
+                    Logging.Logger.Write($"{user}{SP}(Level: ??) | Runtime: {item.RuntimeTotal:00:00:00}");
             }
         }
 
