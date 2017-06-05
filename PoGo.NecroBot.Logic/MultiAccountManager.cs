@@ -366,9 +366,9 @@ namespace PoGo.NecroBot.Logic
             {
                 var SP = "";
                 var user = !string.IsNullOrEmpty(item.Nickname) ? item.Nickname : item.Username;
-                var L = user.Length;
+                var userL = user.Length;
 
-                for (int i = 0; i < 31 - L; i++)
+                for (int i = 0; i < 31 - userL; i++)
                 {
                     SP += " ";
                 }
