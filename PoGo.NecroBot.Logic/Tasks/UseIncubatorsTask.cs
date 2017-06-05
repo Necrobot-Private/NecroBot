@@ -100,23 +100,23 @@ namespace PoGo.NecroBot.Logic.Tasks
                     var hatched = pokemons.FirstOrDefault(x => !x.IsEgg && x.Id == incubator.PokemonId);
                     if (hatched == null) continue;
 
-                    //Still Needs some work(TheWizard1328)
-                    var stats = session.RuntimeStatistics;
-                    var KMs = playerStats.KmWalked - hatched.EggKmWalkedStart;
-                    var stardust1 = session.Inventory.GetStarDust();
-                    var stardust2 = stats.TotalStardust;
-                    var ExpAwarded1 = playerStats.Experience; // Total Player Exp
-                    var ExpAwarded2 = stats.TotalExperience;  // Session Exp
+                    //Still Needs some work - TheWizard1328
+                    var stats = session.RuntimeStatistics;           // Total Km walked
+                    var KMs = playerStats.KmWalked - hatched.EggKmWalkedStart; // Total Km Walked(hatched.EggKmWalkedStart=0)
+                    var stardust1 = session.Inventory.GetStarDust(); // Total trainer Stardust
+                    var stardust2 = stats.TotalStardust;             // Total trainer Stardust
+                    var ExpAwarded1 = playerStats.Experience;        // Total Player Exp - TheWizard1328
+                    var ExpAwarded2 = stats.TotalExperience;         // Session Exp - TheWizard1328
                     var TotCandy = session.Inventory.GetCandyCount(hatched.PokemonId);
                     //Temp logger line personal testing info - TheWizard1328
-                    Logger.Write($"Hatch: PS-KmWalked: {playerStats.KmWalked}, H-EggKmWalkedStart: {hatched.EggKmWalkedStart}, " +
-                                 $"KmToWalk: {KmToWalk}kmWalked: {kmWalked}, | " +
+                    Logger.Write($"Rem.Incu: {rememberedIncubators.Capacity} | Hatch: PS-KmWalked: {playerStats.KmWalked:0.00}, H-EggKmWalkedStart: {hatched.EggKmWalkedStart:0.00}, | " +
+                                 $"KmToWalk: {KmToWalk:0.00}kmWalked: {kmWalked:0.00}, | " +
                                  $"XP1: {ExpAwarded1} | XP2: {ExpAwarded2} | " +
-                                 $"SD1: {stardust1}, SD2: {stardust2}", LogLevel.Egg);
+                                 $"SD1: {stardust1} | SD2: {stardust2}", LogLevel.Egg);
 
                     session.EventDispatcher.Send(new EggHatchedEvent
                     {
-                        Dist = kmWalked - KmToWalk, //Still working on this(TheWizard1328)
+                        Dist = kmWalked - KmToWalk, //Still working on this - TheWizard1328
                         Id = hatched.Id,
                         PokemonId = hatched.PokemonId,
                         Level = PokemonInfo.GetLevel(hatched),
@@ -124,7 +124,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         MaxCp = PokemonInfo.CalculateMaxCp(hatched.PokemonId),
                         Perfection = Math.Round(PokemonInfo.CalculatePokemonPerfection(hatched), 2),
                         HXP = ExpAwarded1,
-                        HSD = stardust2,
+                        HSD = stardust2, // This still needs work too to display the total SD after hatching - TheWizard1328
                         HCandy = await TotCandy,
                     });
                 }

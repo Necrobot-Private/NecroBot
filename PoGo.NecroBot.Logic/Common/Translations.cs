@@ -416,7 +416,7 @@ namespace PoGo.NecroBot.Logic.Common
                 new KeyValuePair<TranslationString, string>(TranslationString.IncubatorStatusUpdate,
                     "Incubator status update: {0:0.00} Km left of {1:0.00} Km egg."),
                 new KeyValuePair<TranslationString, string>(TranslationString.IncubatorEggHatched,
-                    "{0} Km egg has hatched: {1} | Lvl: {2} | CP: ({3}/{4}) | IV: {5}% | XP: {6} | SD: {7} | Candies: {8}"),
+                    "{0:0.00} Km egg has hatched: {1} | Lvl: {2} | CP: ({3}/{4}) | IV: {5}% | XP: {6} | SD: {7} | Candies: {8}"),
 
                 new KeyValuePair<TranslationString, string>(TranslationString.LogEntryError, "ERROR"),
                 new KeyValuePair<TranslationString, string>(TranslationString.LogEntryAttention, "ATTENTION"),
