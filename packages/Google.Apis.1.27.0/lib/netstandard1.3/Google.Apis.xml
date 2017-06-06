@@ -120,6 +120,18 @@
             Gets or sets the callback for modifying requests made when downloading.
             </summary>
         </member>
+        <member name="E:Google.Apis.Download.MediaDownloader.ProgressChanged">
+            <inheritdoc/>
+        </member>
+        <member name="M:Google.Apis.Download.MediaDownloader.Download(System.String,System.IO.Stream)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Google.Apis.Download.MediaDownloader.DownloadAsync(System.String,System.IO.Stream)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Google.Apis.Download.MediaDownloader.DownloadAsync(System.String,System.IO.Stream,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
         <member name="T:Google.Apis.Download.MediaDownloader.CountedBuffer">
             <summary>
             CountedBuffer bundles together a byte buffer and a count of valid bytes.
@@ -343,6 +355,21 @@
             Gets or sets the callback for modifying HTTP requests made by this service request.
             </summary>
         </member>
+        <member name="P:Google.Apis.Requests.ClientServiceRequest`1.MethodName">
+            <inheritdoc/>
+        </member>
+        <member name="P:Google.Apis.Requests.ClientServiceRequest`1.RestPath">
+            <inheritdoc/>
+        </member>
+        <member name="P:Google.Apis.Requests.ClientServiceRequest`1.HttpMethod">
+            <inheritdoc/>
+        </member>
+        <member name="P:Google.Apis.Requests.ClientServiceRequest`1.RequestParameters">
+            <inheritdoc/>
+        </member>
+        <member name="P:Google.Apis.Requests.ClientServiceRequest`1.Service">
+            <inheritdoc/>
+        </member>
         <member name="M:Google.Apis.Requests.ClientServiceRequest`1.#ctor(Google.Apis.Services.IClientService)">
             <summary>Creates a new service request.</summary>
         </member>
@@ -352,11 +379,32 @@
             <see cref="P:Google.Apis.Requests.ClientServiceRequest`1.RequestParameters"/> dictionary.
             </summary>
         </member>
+        <member name="M:Google.Apis.Requests.ClientServiceRequest`1.Execute">
+            <inheritdoc/>
+        </member>
+        <member name="M:Google.Apis.Requests.ClientServiceRequest`1.ExecuteAsStream">
+            <inheritdoc/>
+        </member>
+        <member name="M:Google.Apis.Requests.ClientServiceRequest`1.ExecuteAsync">
+            <inheritdoc/>
+        </member>
+        <member name="M:Google.Apis.Requests.ClientServiceRequest`1.ExecuteAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Google.Apis.Requests.ClientServiceRequest`1.ExecuteAsStreamAsync">
+            <inheritdoc/>
+        </member>
+        <member name="M:Google.Apis.Requests.ClientServiceRequest`1.ExecuteAsStreamAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
         <member name="M:Google.Apis.Requests.ClientServiceRequest`1.ExecuteUnparsedAsync(System.Threading.CancellationToken)">
             <summary>Sync executes the request without parsing the result. </summary>
         </member>
         <member name="M:Google.Apis.Requests.ClientServiceRequest`1.ParseResponse(System.Net.Http.HttpResponseMessage)">
             <summary>Parses the response and deserialize the content into the requested response object. </summary>
+        </member>
+        <member name="M:Google.Apis.Requests.ClientServiceRequest`1.CreateRequest(System.Nullable{System.Boolean})">
+            <inheritdoc/>
         </member>
         <member name="M:Google.Apis.Requests.ClientServiceRequest`1.CreateBuilder">
             <summary>
@@ -368,6 +416,10 @@
         </member>
         <member name="M:Google.Apis.Requests.ClientServiceRequest`1.GenerateRequestUri">
             <summary>Generates the right URL for this request.</summary>
+        </member>
+        <member name="M:Google.Apis.Requests.ClientServiceRequest`1.GetBody">
+            <summary>Returns the body of this request.</summary>
+            <returns>The body of this request.</returns>
         </member>
         <member name="M:Google.Apis.Requests.ClientServiceRequest`1.AddETag(System.Net.Http.HttpRequestMessage)">
             <summary>
@@ -620,6 +672,57 @@
             waited request's time span, or create a back-off handler with you own implementation of 
             <see cref="T:Google.Apis.Util.IBackOff"/>).
             </summary>
+        </member>
+        <member name="P:Google.Apis.Services.BaseClientService.HttpClient">
+            <inheritdoc/>
+        </member>
+        <member name="P:Google.Apis.Services.BaseClientService.HttpClientInitializer">
+            <inheritdoc/>
+        </member>
+        <member name="P:Google.Apis.Services.BaseClientService.GZipEnabled">
+            <inheritdoc/>
+        </member>
+        <member name="P:Google.Apis.Services.BaseClientService.ApiKey">
+            <inheritdoc/>
+        </member>
+        <member name="P:Google.Apis.Services.BaseClientService.ApplicationName">
+            <inheritdoc/>
+        </member>
+        <member name="M:Google.Apis.Services.BaseClientService.SetRequestSerailizedContent(System.Net.Http.HttpRequestMessage,System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="P:Google.Apis.Services.BaseClientService.Serializer">
+            <inheritdoc/>
+        </member>
+        <member name="M:Google.Apis.Services.BaseClientService.SerializeObject(System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Google.Apis.Services.BaseClientService.DeserializeResponse``1(System.Net.Http.HttpResponseMessage)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Google.Apis.Services.BaseClientService.DeserializeError(System.Net.Http.HttpResponseMessage)">
+            <inheritdoc/>
+        </member>
+        <member name="P:Google.Apis.Services.BaseClientService.Name">
+            <inheritdoc/>
+        </member>
+        <member name="P:Google.Apis.Services.BaseClientService.BaseUri">
+            <inheritdoc/>
+        </member>
+        <member name="P:Google.Apis.Services.BaseClientService.BasePath">
+            <inheritdoc/>
+        </member>
+        <member name="P:Google.Apis.Services.BaseClientService.BatchUri">
+            <summary>The URI used for batch operations.</summary>
+        </member>
+        <member name="P:Google.Apis.Services.BaseClientService.BatchPath">
+            <summary>The path used for batch operations.</summary>
+        </member>
+        <member name="P:Google.Apis.Services.BaseClientService.Features">
+            <inheritdoc/>
+        </member>
+        <member name="M:Google.Apis.Services.BaseClientService.Dispose">
+            <inheritdoc/>
         </member>
         <member name="T:Google.Apis.Services.IClientService">
             <summary>
@@ -1257,14 +1360,14 @@
         <member name="M:Google.Apis.Util.Store.FileDataStore.#ctor(System.String,System.Boolean)">
             <summary>
             Constructs a new file data store. If <c>fullPath</c> is <c>false</c> the path will be used as relative to 
-            <see cref="F:System.Environment.SpecialFolder.ApplicationData"/> on Windows, or $HOME on Linux and MacOS,
+            <c>Environment.SpecialFolder.ApplicationData"</c> on Windows, or <c>$HOME</c> on Linux and MacOS,
             otherwise the input folder will be treated as absolute.
             The folder is created if it doesn't exist yet.
             </summary>
             <param name="folder">Folder path.</param>
             <param name="fullPath">
             Defines whether the folder parameter is absolute or relative to
-            <see cref="F:System.Environment.SpecialFolder.ApplicationData"/> on Windows, or $HOME on Linux and MacOS.
+            <c>Environment.SpecialFolder.ApplicationData</c> on Windows, or<c>$HOME</c> on Linux and MacOS.
             </param>
         </member>
         <member name="M:Google.Apis.Util.Store.FileDataStore.StoreAsync``1(System.String,``0)">
