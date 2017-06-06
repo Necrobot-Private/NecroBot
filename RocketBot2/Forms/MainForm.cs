@@ -1494,7 +1494,9 @@ namespace RocketBot2.Forms
                         if (!Instance._botStarted)
                             _session.ReInitSessionWithNextBot(_bot);
                         accountManager.SwitchAccountTo(_bot);
-                        Logger.Write($"(Bot Stats) User: {_bot.Nickname} | XP: {_bot.CurrentXp - _TotXP} | SD: {_bot.Stardust}", LogLevel.Info, ConsoleColor.Magenta);
+                        var _user = string.IsNullOrEmpty(_bot.Nickname) ? _bot.Username : _bot.Nickname;
+
+                        Logger.Write($"User: {_user} | XP: {_bot.CurrentXp - _TotXP:#0} | SD: {_bot.Stardust:#0}", LogLevel.BotStats, ConsoleColor.Magenta);
                     };
                     accountsToolStripMenuItem.DropDownItems.Add(_item);
                 }
@@ -1510,7 +1512,8 @@ namespace RocketBot2.Forms
             _settings = settings;
             _excelConfigAllow = excelConfigAllow;
 
-            Logger.Write($"(Bot Stats) User: {bot.Nickname} | XP: {bot.CurrentXp - TotXP} | SD: {bot.Stardust}", LogLevel.Info, ConsoleColor.Magenta);
+            var user = string.IsNullOrEmpty(bot.Nickname) ? bot.Username : bot.Nickname;
+            Logger.Write($"User: {user} | XP: {bot.CurrentXp - TotXP:#0} | SD: {bot.Stardust:#0}", LogLevel.BotStats, ConsoleColor.Magenta);
         }
 
         private Task StartBot()

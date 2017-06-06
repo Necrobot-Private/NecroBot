@@ -255,6 +255,10 @@
       "Value": "Level Up"
     },
     {
+      "Key": "logEntryBotStats",
+      "Value": "LEVEL UP"
+    },
+    {
       "Key": "logEntryTransfered",
       "Value": "TRANSFERIT"
     },
