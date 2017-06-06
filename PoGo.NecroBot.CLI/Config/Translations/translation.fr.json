@@ -422,7 +422,7 @@
     },
     {
       "Key": "pokemonRename",
-      "Value": "{0} ({1}) a été renommé de {2} en {3}."
+      "Value": "{0} a été renommé de {1} en {2}."
     },
     {
       "Key": "pokemonFavorite",

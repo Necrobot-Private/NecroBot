@@ -426,7 +426,7 @@
     },
     {
       "Key": "pokemonRename",
-      "Value": "ポケモン {0} ({1}) を {2} から {3}へ名前変更"
+      "Value": "ポケモン {0} を {1} から {2}へ名前変更"
     },
     {
       "Key": "pokemonFavorite",

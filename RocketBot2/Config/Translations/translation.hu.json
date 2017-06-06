@@ -426,7 +426,7 @@
     },
     {
       "Key": "pokemonRename",
-      "Value": "Pokemon {0} ({1}) atnevezve errol: {2} erre: {3}."
+      "Value": "Pokemon {0} atnevezve errol: {1} erre: {2}."
     },
     {
       "Key": "pokemonFavorite",

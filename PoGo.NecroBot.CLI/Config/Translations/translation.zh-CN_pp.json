@@ -426,7 +426,7 @@
     },
     {
       "Key": "pokemonRename",
-      "Value": "正在将神奇宝贝{0} ({1})由{2}重命名为{3}.\t\t"
+      "Value": "正在将神奇宝贝{0}由{1}重命名为{2}.\t\t"
     },
     {
       "Key": "pokemonFavorite",

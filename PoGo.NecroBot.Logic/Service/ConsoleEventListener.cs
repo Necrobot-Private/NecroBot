@@ -141,7 +141,7 @@ namespace PoGo.NecroBot.Logic.Service
                 session.Translation.GetTranslation(
                     TranslationString.PokemonRename,
                     session.Translation.GetPokemonTranslation(renamePokemonEvent.PokemonId),
-                    renamePokemonEvent.Id,
+                    //renamePokemonEvent.Id,
                     renamePokemonEvent.OldNickname,
                     renamePokemonEvent.NewNickname
                 ),

@@ -422,7 +422,7 @@
     },
     {
       "Key": "pokemonRename",
-      "Value": "Pokémon {0} ({1}) renombrado de {2} a {3}."
+      "Value": "Pokémon {0} renombrado de {1} a {2}."
     },
     {
       "Key": "pokemonFavorite",
