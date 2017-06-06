@@ -40,18 +40,37 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 await session.Client.Inventory.TransferPokemons(pokemonIds).ConfigureAwait(false);
 
+                var userL = 0;
+                var maxL = 0;
+                foreach (var pokemon in pokemonToTransfer)
+                {
+                    userL = pokemon.PokemonId.ToString().Length;
+                    if (userL > maxL)
+                    {
+                        maxL = userL;
+                    }
+                }
+
                 foreach (var pokemon in pokemonToTransfer)
                 {
                     var bestPokemonOfType = (session.LogicSettings.PrioritizeIvOverCp
                                                 ? await session.Inventory.GetHighestPokemonOfTypeByIv(pokemon).ConfigureAwait(false)
                                                 : await session.Inventory.GetHighestPokemonOfTypeByCp(pokemon).ConfigureAwait(false)) ??
                                             pokemon;
+                    var SP = "";
+                    var user = pokemon.PokemonId.ToString();
+                    for (int i = 0; i < maxL - user.Length + 1; i++)
+                    {
+                        SP += " ";
+                    }
+                    var PokeID = pokemon.PokemonId.ToString() + SP;
 
                     // Broadcast event as everyone would benefit
+
                     var ev = new TransferPokemonEvent
                     {
                         Id = pokemon.Id,
-                        PokemonId = pokemon.PokemonId,
+                        PokemonId = PokeID,
                         Perfection = PokemonInfo.CalculatePokemonPerfection(pokemon),
                         Cp = pokemon.Cp,
                         BestCp = bestPokemonOfType.Cp,
