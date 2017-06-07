@@ -115,21 +115,16 @@ namespace RocketBot2.Forms
 
         private void MainForm_Resize(object sender, EventArgs e)
         {
-            this.TrayIcon.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info; //Shows the info icon so the user doesn't thing there is an error.
-            this.TrayIcon.BalloonTipText = "RocketBot2 minimized doubleClick to restore";
-            this.TrayIcon.BalloonTipTitle = "RocketBot2 when Minimize";
-            this.TrayIcon.Text = "RocketBot2 minimized, doubleclick on this icon to restore";
-
+            TrayIcon.Visible = false;
             if (FormWindowState.Minimized == this.WindowState)
             {
+                TrayIcon.BalloonTipIcon = ToolTipIcon.Info; //Shows the info icon so the user doesn't thing there is an error.
+                TrayIcon.BalloonTipText = "RocketBot2 minimized doubleClick to restore";
+                TrayIcon.BalloonTipTitle = "RocketBot2 when Minimize";
+                TrayIcon.Text = "RocketBot2 minimized, doubleclick on this icon to restore";
                 TrayIcon.Visible = true;
                 TrayIcon.ShowBalloonTip(5000);
-                this.Hide();
-            }
-
-            else if (FormWindowState.Normal == this.WindowState)
-            {
-                TrayIcon.Visible = false;
+                Hide();
             }
         }
 
@@ -450,6 +445,7 @@ namespace RocketBot2.Forms
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            TrayIcon.Visible = false;
             //TODO: Kills the application
             try
             {
@@ -1467,6 +1463,17 @@ namespace RocketBot2.Forms
 
             ioc.Register<MultiAccountManager>(accountManager);
 
+            var bot = accountManager.GetStartUpAccount();
+
+            var TotXP = 0;
+
+            for (int i = 0; i < bot.Level + 1; i++)
+            {
+                TotXP = TotXP + Statistics.GetXpDiff(i);
+            }
+
+            var user = !string.IsNullOrEmpty(bot.Nickname) ? bot.Nickname : bot.Username;
+
             if (accountManager.AccountsReadOnly.Count > 1)
             {
                 foreach (var _bot in accountManager.AccountsReadOnly)
@@ -1477,15 +1484,18 @@ namespace RocketBot2.Forms
                         _TotXP = _TotXP + Statistics.GetXpDiff(i);
                     }
 
+                    var _user = !string.IsNullOrEmpty(_bot.Nickname) ? _bot.Nickname : _bot.Username;
+
                     var _item = new ToolStripMenuItem()
                     {
-                        Text = _bot.Username
+                        Text = _user
                     };
                     _item.Click += delegate
                     {
                         if (!Instance._botStarted)
                             _session.ReInitSessionWithNextBot(_bot);
                         accountManager.SwitchAccountTo(_bot);
+
                         var _user = string.IsNullOrEmpty(_bot.Nickname) ? _bot.Username : _bot.Nickname;
 
                         Logger.Write($"User: {_user} | XP: {_bot.CurrentXp - _TotXP:#0} | SD: {_bot.Stardust:#0}", LogLevel.BotStats, ConsoleColor.Magenta);
