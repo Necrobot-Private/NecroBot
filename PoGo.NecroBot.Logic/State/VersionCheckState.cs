@@ -16,6 +16,7 @@ using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.Forms;
 using System.Net.Http;
+using Microsoft.Win32;
 
 #endregion
 
@@ -32,7 +33,11 @@ namespace PoGo.NecroBot.Logic.State
         public const string ChangelogUri =
              "https://raw.githubusercontent.com/Necrobot-Private/NecroBot/master/CHANGELOG.md";
 
+        public const string NetVersionUrl =
+            "https://www.microsoft.com/net/download/framework";
+
         public static Version RemoteVersion;
+        public static string CurrentDotNetVersion;
 
         public async Task<IState> Execute(ISession session, CancellationToken cancellationToken)
         {
@@ -86,7 +91,8 @@ namespace PoGo.NecroBot.Logic.State
                 Destination = downloadFilePath,
                 AutoUpdate = true,
                 CurrentVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString(),
-                LatestVersion = $"{RemoteVersion}"
+                LatestVersion = $"{RemoteVersion}",
+                CurrentDotNetVersion = CurrentDotNetVersion
             };
 
             updated = (autoUpdateForm.ShowDialog() == DialogResult.OK);
@@ -174,6 +180,14 @@ namespace PoGo.NecroBot.Logic.State
 
                 var gitVersion = new Version($"{match.Groups[1]}.{match.Groups[2]}.{match.Groups[3]}.{match.Groups[4]}");
                 RemoteVersion = gitVersion;
+
+                RegistryKey DNVersion = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32).OpenSubKey("SOFTWARE\\Microsoft\\NET Framework Setup\\NDP\\v4\\Full\\");
+                int Version_DotNet = Convert.ToInt32(DNVersion.GetValue("Release"));
+                CurrentDotNetVersion = Version_DotNet.ToString();
+
+                if (Version_DotNet != 460798 || Version_DotNet != 460805) // If Not Equal to These Version codes, it isn't on Correct .Net Version
+                    return false;
+
                 if (gitVersion > Assembly.GetExecutingAssembly().GetName().Version)
                     return false;
             }
