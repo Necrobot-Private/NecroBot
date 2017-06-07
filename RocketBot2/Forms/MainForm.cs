@@ -1463,17 +1463,6 @@ namespace RocketBot2.Forms
 
             ioc.Register<MultiAccountManager>(accountManager);
 
-            var bot = accountManager.GetStartUpAccount();
-
-            var TotXP = 0;
-
-            for (int i = 0; i < bot.Level + 1; i++)
-            {
-                TotXP = TotXP + Statistics.GetXpDiff(i);
-            }
-
-            var user = !string.IsNullOrEmpty(bot.Nickname) ? bot.Nickname : bot.Username;
-
             if (accountManager.AccountsReadOnly.Count > 1)
             {
                 foreach (var _bot in accountManager.AccountsReadOnly)
@@ -1488,15 +1477,13 @@ namespace RocketBot2.Forms
 
                     var _item = new ToolStripMenuItem()
                     {
-                        Text = _user
+                        Text = _bot.Username
                     };
                     _item.Click += delegate
                     {
                         if (!Instance._botStarted)
                             _session.ReInitSessionWithNextBot(_bot);
                         accountManager.SwitchAccountTo(_bot);
-
-                        var _user = string.IsNullOrEmpty(_bot.Nickname) ? _bot.Username : _bot.Nickname;
 
                         Logger.Write($"User: {_user} | XP: {_bot.CurrentXp - _TotXP:#0} | SD: {_bot.Stardust:#0}", LogLevel.BotStats, ConsoleColor.Magenta);
                     };
