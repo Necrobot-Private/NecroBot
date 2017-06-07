@@ -39,6 +39,12 @@ namespace PoGo.NecroBot.Logic.State
         public static Version RemoteVersion;
         public static string CurrentDotNetVersion;
 
+        public const string LatestDotNetVersion1 =
+            "460798";
+
+        public const string LatestDotNetVersion2 =
+            "460805";
+
         public async Task<IState> Execute(ISession session, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -92,7 +98,9 @@ namespace PoGo.NecroBot.Logic.State
                 AutoUpdate = true,
                 CurrentVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString(),
                 LatestVersion = $"{RemoteVersion}",
-                CurrentDotNetVersion = CurrentDotNetVersion
+                CurrentDotNetVersion = CurrentDotNetVersion,
+                LatestDotNetVersion1 = LatestDotNetVersion1,
+                LatestDotNetVersion2 = LatestDotNetVersion2
             };
 
             updated = (autoUpdateForm.ShowDialog() == DialogResult.OK);
@@ -185,7 +193,7 @@ namespace PoGo.NecroBot.Logic.State
                 int Version_DotNet = Convert.ToInt32(DNVersion.GetValue("Release"));
                 CurrentDotNetVersion = Version_DotNet.ToString();
 
-                if (Version_DotNet != 460798 || Version_DotNet != 460805) // If Not Equal to These Version codes, it isn't on Correct .Net Version
+                if (CurrentDotNetVersion != LatestDotNetVersion1 || CurrentDotNetVersion != LatestDotNetVersion2) // If Not Equal to These Version codes, it isn't on Correct .Net Version
                     return false;
 
                 if (gitVersion > Assembly.GetExecutingAssembly().GetName().Version)

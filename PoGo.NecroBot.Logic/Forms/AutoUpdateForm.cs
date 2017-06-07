@@ -19,7 +19,8 @@ namespace PoGo.NecroBot.Logic.Forms
         public string LatestVersion { get; set; }
         public string CurrentVersion { get; set; }
         public string CurrentDotNetVersion { get; set; }
-        public string LatestDotNetVersion { get; set; }
+        public string LatestDotNetVersion1 { get; set; }
+        public string LatestDotNetVersion2 { get; set; }
         public bool AutoUpdate { get; set; }
         public string DownloadLink { get; set; }
         public string ChangelogLink { get; set; }
