@@ -1785,7 +1785,11 @@ new KeyValuePair<PokemonId, string>((PokemonId) 721, "Volcanion")
                     new KeyValuePair<PokemonMove, string>(PokemonMove.FeintAttackFast, "FeintAttackFast"),
                     new KeyValuePair<PokemonMove, string>(PokemonMove.SteelWingFast, "SteelWingFast"),
                     new KeyValuePair<PokemonMove, string>(PokemonMove.FireFangFast, "FireFangFast"),
-                    new KeyValuePair<PokemonMove, string>(PokemonMove.RockSmashFast, "RockSmashFast")
+                    new KeyValuePair<PokemonMove, string>(PokemonMove.RockSmashFast, "RockSmashFast"),
+                    new KeyValuePair<PokemonMove, string>(PokemonMove.DragonTailFast, "DragonTailFast"),
+                    new KeyValuePair<PokemonMove, string>(PokemonMove.EnergyBall, "EnergyBall"),
+                    new KeyValuePair<PokemonMove, string>(PokemonMove.Outrage, "Outrage"),
+                    new KeyValuePair<PokemonMove, string>(PokemonMove.Crunch, "Crunch")
                 };
 
         public string GetTranslation(TranslationString translationString, params object[] data)
