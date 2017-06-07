@@ -90,7 +90,7 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
                 );
 
                 // After blacklisting, retry.
-                return await GetElevation(lat, lng).ConfigureAwait(false);
+                return await service.GetElevation(lat, lng).ConfigureAwait(false);
             }
 
             return BaseElevationService.GetRandomElevation(elevationLocation.Altitude);
