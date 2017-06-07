@@ -1787,7 +1787,12 @@ new KeyValuePair<PokemonId, string>((PokemonId) 721, "Volcanion")
                     new KeyValuePair<PokemonMove, string>(PokemonMove.FireFangFast, "FireFangFast"),
                     new KeyValuePair<PokemonMove, string>(PokemonMove.RockSmashFast, "RockSmashFast"),
                     new KeyValuePair<PokemonMove, string>(PokemonMove.DragonTailFast, "DragonTailFast"),
+                    new KeyValuePair<PokemonMove, string>(PokemonMove.Avalanche, "Avalanche"),
+                    new KeyValuePair<PokemonMove, string>(PokemonMove.AirSlashFast, "AirSlashFast"),
+                    new KeyValuePair<PokemonMove, string>(PokemonMove.HeavySlam, "HeavySlam"),
                     new KeyValuePair<PokemonMove, string>(PokemonMove.EnergyBall, "EnergyBall"),
+                    new KeyValuePair<PokemonMove, string>(PokemonMove.ExtrasensoryFast, "ExtrasensoryFast"),
+                    new KeyValuePair<PokemonMove, string>(PokemonMove.Futuresight, "Futuresight"),
                     new KeyValuePair<PokemonMove, string>(PokemonMove.Outrage, "Outrage"),
                     new KeyValuePair<PokemonMove, string>(PokemonMove.Crunch, "Crunch")
                 };
