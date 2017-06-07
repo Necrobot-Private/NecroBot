@@ -1467,14 +1467,6 @@ namespace RocketBot2.Forms
 
             ioc.Register<MultiAccountManager>(accountManager);
 
-            var bot = accountManager.GetStartUpAccount();
-            var TotXP = 0;
-
-            for (int i = 0; i < bot.Level + 1; i++)
-            {
-                TotXP = TotXP + Statistics.GetXpDiff(i);
-            }
-
             if (accountManager.AccountsReadOnly.Count > 1)
             {
                 foreach (var _bot in accountManager.AccountsReadOnly)
@@ -1504,6 +1496,14 @@ namespace RocketBot2.Forms
             else
             {
                 menuStrip1.Items.Remove(accountsToolStripMenuItem);
+            }
+
+            var bot = accountManager.GetStartUpAccount();
+            var TotXP = 0;
+
+            for (int i = 0; i < bot.Level + 1; i++)
+            {
+                TotXP = TotXP + Statistics.GetXpDiff(i);
             }
 
             _session.ReInitSessionWithNextBot(bot);
