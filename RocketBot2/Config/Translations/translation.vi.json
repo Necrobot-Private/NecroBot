@@ -590,7 +590,7 @@
     },
     {
       "Key": "amountPkmSeenCaught",
-      "Value": "Số loài Pokemon đã thấy: {0}/231, số loài Pokemon đã bắt: {1}/231"
+      "Value": "Số loài Pokemon đã thấy: {0}/251, số loài Pokemon đã bắt: {1}/251"
     },
     {
       "Key": "pkmPotentialEvolveCount",

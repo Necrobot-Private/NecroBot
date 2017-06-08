@@ -642,7 +642,7 @@
     },
     {
       "Key": "amountPkmSeenCaught",
-      "Value": "Pokemons vus: {0}/238, Pokemons attrapés: {1}/238"
+      "Value": "Pokemons vus: {0}/251, Pokemons attrapés: {1}/251"
     },
     {
       "Key": "pkmPotentialEvolveCount",
