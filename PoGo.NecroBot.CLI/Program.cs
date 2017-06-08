@@ -482,8 +482,7 @@ namespace PoGo.NecroBot.CLI
                 TotXP = TotXP + Statistics.GetXpDiff(i);
             }
             var user = !string.IsNullOrEmpty(bot.Nickname) ? bot.Nickname : bot.Username;
-            Logger.Write($"(Bot Stats) User: {user} | XP: {bot.CurrentXp - TotXP} | SD: {bot.Stardust}",
-               LogLevel.Info, ConsoleColor.Magenta);
+            Logger.Write($"User: {user} | XP: {bot.CurrentXp - TotXP} | SD: {bot.Stardust}", LogLevel.BotStats);
 
             if (settings.TelegramConfig.UseTelegramAPI)
                 _session.Telegram = new TelegramService(settings.TelegramConfig.TelegramAPIKey, _session);

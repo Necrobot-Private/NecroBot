@@ -157,7 +157,10 @@ namespace PoGo.NecroBot.Logic.Logging
                     Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.Magenta : color;
                     finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.LevelUp}) {message}";
                     break;
-
+                case LogLevel.BotStats:
+                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.Magenta : color;
+                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.BotStats}) {message}";
+                    break;
                 case LogLevel.Gym:
                     Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.Magenta : color;
                     finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Gym}) {message}";
@@ -253,8 +256,9 @@ namespace PoGo.NecroBot.Logic.Logging
         New = 15,
         SoftBan = 16,
         LevelUp = 17,
-        Gym = 18,
-        Service = 19,
-        Debug = 20,
+        BotStats = 18,
+        Gym = 19,
+        Service = 20,
+        Debug = 21,
     }
 }

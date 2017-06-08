@@ -109,7 +109,7 @@ namespace PoGo.NecroBot.Logic.Service
         {
             Logger.Write(
                 session.Translation.GetTranslation(TranslationString.EventPokemonTransferred,
-                    session.Translation.GetPokemonTranslation(transferPokemonEvent.PokemonId),
+                    transferPokemonEvent.PokemonId,
                     transferPokemonEvent.Cp.ToString(),
                     transferPokemonEvent.Perfection.ToString("0.00"),
                     transferPokemonEvent.BestCp.ToString(),
@@ -141,7 +141,7 @@ namespace PoGo.NecroBot.Logic.Service
                 session.Translation.GetTranslation(
                     TranslationString.PokemonRename,
                     session.Translation.GetPokemonTranslation(renamePokemonEvent.PokemonId),
-                    renamePokemonEvent.Id,
+                    //renamePokemonEvent.Id,
                     renamePokemonEvent.OldNickname,
                     renamePokemonEvent.NewNickname
                 ),
