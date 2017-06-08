@@ -244,6 +244,10 @@
       "Key": "logEntryLevelUp",
       "Value": "LEVELUP"
     },
+	{
+	  "Key": "LogEntryBotStats",
+	  "Value": "BOTSTATS"
+	},  
     {
       "Key": "logEntryTransfered",
       "Value": "TRANSFERÉ"
