@@ -161,7 +161,6 @@ namespace PoGo.NecroBot.Logic.Logging
                     Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.Magenta : color;
                     finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.BotStats}) {message}";
                     break;
-
                 case LogLevel.Gym:
                     Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.Magenta : color;
                     finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Gym}) {message}";

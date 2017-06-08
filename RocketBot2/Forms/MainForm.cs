@@ -1223,7 +1223,7 @@ namespace RocketBot2.Forms
             {
                 if (CheckMKillSwitch())
                 {
-                    return;
+                    _botStarted = CheckMKillSwitch();
                 }
                 _botStarted = CheckKillSwitch();
             }
@@ -1295,10 +1295,8 @@ namespace RocketBot2.Forms
                             "You have selected PogoDev API but you have not provided an API Key, please press any key to exit and correct you auth.json, \r\n The Pogodev API key can be purchased at - https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer",
                             LogLevel.Error
                         );
-
-                        Console.ReadKey();
-                        Environment.Exit(0);
-                    }
+                        _botStarted = true;
+                   }
                     try
                     {
                         HttpClient client = new HttpClient();
@@ -1315,8 +1313,7 @@ namespace RocketBot2.Forms
                     catch
                     {
                         Logger.Write("The HashKey is invalid or has expired, please press any key to exit and correct you auth.json, \r\nThe Pogodev API key can be purchased at - https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer", LogLevel.Error);
-                        Console.ReadKey();
-                        Environment.Exit(0);
+                        _botStarted = true;
                     }
                 }
                 else if (apiCfg.UseLegacyAPI)
@@ -1336,8 +1333,7 @@ namespace RocketBot2.Forms
                          "At least 1 authentication method must be selected, please correct your auth.json.",
                          LogLevel.Error
                      );
-                    Console.ReadKey();
-                    Environment.Exit(0);
+                    _botStarted = true;
                 }
             }
 
@@ -1373,10 +1369,10 @@ namespace RocketBot2.Forms
                 {
                     GlobalSettings.Load(_subPath, _enableJsonValidation);
 
-                    Logger.Write("Press a Key to continue...",
-                        LogLevel.Warning);
-                    Console.ReadKey();
-                    return;
+                    //Logger.Write("Press a Key to continue...",
+                    //    LogLevel.Warning);
+                    //Console.ReadKey();
+                    //return;
                 }
 
                 if (excelConfigAllow)
@@ -1462,6 +1458,17 @@ namespace RocketBot2.Forms
             }
 
             ioc.Register<MultiAccountManager>(accountManager);
+            
+            var bot = accountManager.GetStartUpAccount();
+
+            var TotXP = 0;
+
+            for (int i = 0; i < bot.Level + 1; i++)
+            {
+                TotXP = TotXP + Statistics.GetXpDiff(i);
+            }
+
+            var user = !string.IsNullOrEmpty(bot.Nickname) ? bot.Nickname : bot.Username;
 
             if (accountManager.AccountsReadOnly.Count > 1)
             {
@@ -1477,15 +1484,14 @@ namespace RocketBot2.Forms
 
                     var _item = new ToolStripMenuItem()
                     {
-                        Text = _bot.Username
+                        Text = _user
                     };
                     _item.Click += delegate
                     {
                         if (!Instance._botStarted)
                             _session.ReInitSessionWithNextBot(_bot);
                         accountManager.SwitchAccountTo(_bot);
-
-                        Logger.Write($"User: {_user} | XP: {_bot.CurrentXp - _TotXP:#0} | SD: {_bot.Stardust:#0}", LogLevel.BotStats, ConsoleColor.Magenta);
+                        Logger.Write($"User: {_user} | XP: {_bot.CurrentXp - _TotXP} | SD: {_bot.Stardust}", LogLevel.BotStats);
                     };
                     accountsToolStripMenuItem.DropDownItems.Add(_item);
                 }
@@ -1495,22 +1501,15 @@ namespace RocketBot2.Forms
                 menuStrip1.Items.Remove(accountsToolStripMenuItem);
             }
 
-            var bot = accountManager.GetStartUpAccount();
-            var TotXP = 0;
-
-            for (int i = 0; i < bot.Level + 1; i++)
-            {
-                TotXP = TotXP + Statistics.GetXpDiff(i);
-            }
-
             _session.ReInitSessionWithNextBot(bot);
 
             _machine = machine;
             _settings = settings;
             _excelConfigAllow = excelConfigAllow;
 
-            var user = string.IsNullOrEmpty(bot.Nickname) ? bot.Username : bot.Nickname;
-            Logger.Write($"User: {user} | XP: {bot.CurrentXp - TotXP:#0} | SD: {bot.Stardust:#0}", LogLevel.BotStats, ConsoleColor.Magenta);
+            Logger.Write($"User: {user} | XP: {bot.CurrentXp - TotXP} | SD: {bot.Stardust}", LogLevel.BotStats);
+
+            if (_botStarted) startStopBotToolStripMenuItem.Text = @"■ Exit RocketBot2";
         }
 
         private Task StartBot()
@@ -1633,15 +1632,12 @@ namespace RocketBot2.Forms
                     }
                     else
                         return false;
-
-
                 }
                 catch (Exception ex)
                 {
                     Logger.Write(ex.Message, LogLevel.Error);
                 }
             }
-
             return false;
         }
 
@@ -1678,8 +1674,8 @@ namespace RocketBot2.Forms
                             }
 
                             Logger.Write("The bot will now close, please press enter to continue", LogLevel.Error);
-                            Console.ReadLine();
-                            Environment.Exit(0);
+                            //Console.ReadLine();
+                            //Environment.Exit(0);
                             return true;
                         }
                     }
