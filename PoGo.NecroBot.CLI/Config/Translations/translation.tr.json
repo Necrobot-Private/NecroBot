@@ -426,7 +426,7 @@
     },
     {
       "Key": "pokemonRename",
-      "Value": "{0} ({1}) | Pokémon'un ismi değiştirildi. (\"{2}\" -> \"{3}\")"
+      "Value": "{0} | Pokémon'un ismi değiştirildi. (\"{1}\" -> \"{2}\")"
     },
     {
       "Key": "pokemonFavorite",

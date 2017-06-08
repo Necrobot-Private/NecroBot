@@ -21,6 +21,7 @@ namespace PoGo.NecroBot.Logic.Common
         string GetTranslation(TranslationString translationString);
         string GetPokemonTranslation(PokemonId id);
         string GetPokemonMovesetTranslation(PokemonMove move);
+        object GetPokemonTranslation(string pokemonId);
     }
 
     public enum TranslationString
@@ -80,6 +81,7 @@ namespace PoGo.NecroBot.Logic.Common
         LogEntryRecycling,
         LogEntryPkmn,
         LogEntryLevelUp,
+        LogEntryBotStats,
         LogEntryTransfered,
         LogEntryEvolved,
         LogEntryBerry,
@@ -378,7 +380,6 @@ namespace PoGo.NecroBot.Logic.Common
                 new KeyValuePair<TranslationString, string>(TranslationString.EventPokemonCaptureFailed,
                     "({0}) | ({1}) {2} Lvl: {3} CP: ({4}/{5}) IV: {6}% | Chance: {7}% | {8}m dist | with a {9} ({10} left). | XP: {11} | lat: {12} long: {13} | Move1: {14} Move2: {15} | Rarity :{16}"),
 
-
                 new KeyValuePair<TranslationString, string>(TranslationString.EventNoPokeballs,
                     "No Pokeballs - We missed a {0} with CP {1}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.WaitingForMorePokemonToEvolve,
@@ -426,7 +427,8 @@ namespace PoGo.NecroBot.Logic.Common
                 new KeyValuePair<TranslationString, string>(TranslationString.LogEntrySniper, "SNIPER"),
                 new KeyValuePair<TranslationString, string>(TranslationString.LogEntryRecycling, "RECYCLING"),
                 new KeyValuePair<TranslationString, string>(TranslationString.LogEntryPkmn, "PKMN"),
-                new KeyValuePair<TranslationString, string>(TranslationString.LogEntryLevelUp, "LevelUp"),
+                new KeyValuePair<TranslationString, string>(TranslationString.LogEntryLevelUp, "LEVELUP"),
+                new KeyValuePair<TranslationString, string>(TranslationString.LogEntryBotStats, "BOTSTATS"),
                 new KeyValuePair<TranslationString, string>(TranslationString.LogEntryTransfered, "TRANSFERRED"),
                 new KeyValuePair<TranslationString, string>(TranslationString.LogEntryEvolved, "EVOLVED"),
                 new KeyValuePair<TranslationString, string>(TranslationString.LogEntryBerry, "BERRY"),
@@ -525,7 +527,7 @@ namespace PoGo.NecroBot.Logic.Common
                 new KeyValuePair<TranslationString, string>(TranslationString.DesiredDestTooFar,
                     "Your desired destination of {0}, {1} is too far from your current position of {2}, {3}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.PokemonRename,
-                    "Pokemon {0} ({1}) renamed from {2} to {3}."),
+                    "Pokemon {0} renamed from {1} to {2}."),
                 new KeyValuePair<TranslationString, string>(TranslationString.PokemonFavorite,
                     "{0}% perfect {1} (CP {2}) *Favorited*."),
                 new KeyValuePair<TranslationString, string>(TranslationString.PokemonUnFavorite,
@@ -598,7 +600,7 @@ namespace PoGo.NecroBot.Logic.Common
                     "Incense in Inventory: {0}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.UsedIncense, "Used an Incense"),
                 new KeyValuePair<TranslationString, string>(TranslationString.AmountPkmSeenCaught,
-                    "Amount of Pokemon Seen: {0}/231, Amount of Pokemon Caught: {1}/231"),
+                    "Amount of Pokemon Seen: {0}/249, Amount of Pokemon Caught: {1}/249"),
                 new KeyValuePair<TranslationString, string>(TranslationString.PkmPotentialEvolveCount,
                     "Potential Evolutions: {0}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.PkmNotEnoughRessources,
@@ -1931,6 +1933,11 @@ new KeyValuePair<PokemonId, string>((PokemonId) 721, "Volcanion")
             }
 
             File.WriteAllText(fullPath, output);
+        }
+
+        public object GetPokemonTranslation(string pokemonId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

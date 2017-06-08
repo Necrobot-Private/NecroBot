@@ -399,7 +399,7 @@ namespace PoGo.NecroBot.Logic
         }
         
         internal void DirtyEventHandle(Statistics stat)
-    {
+        {
             var account = GetCurrentAccount();
             if (account == null)
                 return;

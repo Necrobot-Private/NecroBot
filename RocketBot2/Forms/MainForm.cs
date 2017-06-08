@@ -1458,7 +1458,7 @@ namespace RocketBot2.Forms
             }
 
             ioc.Register<MultiAccountManager>(accountManager);
-
+            
             var bot = accountManager.GetStartUpAccount();
 
             var TotXP = 0;

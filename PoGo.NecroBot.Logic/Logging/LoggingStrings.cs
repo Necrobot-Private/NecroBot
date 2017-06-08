@@ -28,6 +28,7 @@ namespace PoGo.NecroBot.Logic.Logging
         public static string Gym;
         public static string Service;
         public static string LevelUp;
+        public static string BotStats;
 
         public static void SetStrings(ISession session)
         {
@@ -105,7 +106,11 @@ namespace PoGo.NecroBot.Logic.Logging
 
             LevelUp =
                 session?.Translation.GetTranslation(
-                    TranslationString.LogEntryLevelUp) ?? "Level UP";
+                    TranslationString.LogEntryLevelUp) ?? "LEVEL UP";
+
+            BotStats =
+                session?.Translation.GetTranslation(
+                    TranslationString.LogEntryBotStats) ?? "BOT STATS";
         }
     }
 }

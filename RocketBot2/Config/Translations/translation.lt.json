@@ -390,7 +390,7 @@
     },
     {
       "Key": "pokemonRename",
-      "Value": "Pokemonas {0} ({1}) pervadintas iš {2} į {3}."
+      "Value": "Pokemonas {0} pervadintas iš {1} į {2}."
     },
     {
       "Key": "pokemonFavorite",

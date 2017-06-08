@@ -426,7 +426,7 @@
     },
     {
       "Key": "pokemonRename",
-      "Value": "Pokemonul {0} ({1}) a fost redenumit din {2} în {3}."
+      "Value": "Pokemonul {0} a fost redenumit din {1} în {2}."
     },
     {
       "Key": "pokemonFavorite",

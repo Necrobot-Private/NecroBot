@@ -430,7 +430,7 @@
     },
     {
       "Key": "pokemonRename",
-      "Value": "神奇寶貝 {0} ({1}) 已從 {2} 改名為 {3}。\t\t"
+      "Value": "神奇寶貝 {0} 已從 {1} 改名為 {2}。\t\t"
     },
     {
       "Key": "pokemonFavorite",
