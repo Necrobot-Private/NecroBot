@@ -367,15 +367,17 @@ namespace PoGo.NecroBot.Logic.Common
                 new KeyValuePair<TranslationString, string>(TranslationString.EventPokemonEvolvedFailed,
                     "Failed {0}. Result was {1}, stopping evolving {2}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.EventPokemonTransferred,
-                    "{0}\t- CP: {1} IV: {2}% [Best CP: {3} IV: {4}%] | Candies: {5}"),
+                    "{0} - CP: {1} IV: {2}% [Best CP: {3} IV: {4}%] | Candies: {5}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.EventPokemonUpgraded,
-                    "{0}\t- Level: {1:0.0} | CP: {2}  IV: {3}%   [Best CP: {4}  IV: {5}%] | SD: {6} | Candies: {7}"),
+                    "{0}\t- Level: {1:0.0} | CP: {2} IV: {3}% [Best CP: {4} IV: {5}%] | SD: {6} | Candies: {7}"),
+
                 new KeyValuePair<TranslationString, string>(TranslationString.EventItemRecycled, "{0}x {1}"),
                 //Logging Cleanup (mostly uneccessary information, may want a verbose pokemon capture logger setting)
                 new KeyValuePair<TranslationString, string>(TranslationString.EventPokemonCaptureSuccess,
-                    "({0}) | ({1}) {2} Lvl: {3} CP: ({4}/{5}) IV: {6}% | Chance: {7}% | {8}m dist | with a {9} ({10} left). | XP: {11} | SD: {12} | {13} | lat: {14} long: {15} | Move1: {16} Move2: {17} | Rarity: {18} | Capture Reason: {19} | Shiny: {20} | Form: {21} | Costume: {22} | Sex: {23}"),
+                    "({0}) | ({1}) {2} Lvl: {3} CP: ({4}/{5}) IV: {6}% | Chance: {7}% | {8}m dist | with a {9} ({10} left) | XP: {11} | SD: {12} | {13} | lat: {14} long: {15} | Move1: {16} Move2: {17} | Rarity: {18} | Capture Reason: {19} | Shiny: {20} | Form: {21} | Costume: {22} | Sex: {23}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.EventPokemonCaptureFailed,
-                    "({0}) | ({1}) {2} Lvl: {3} CP: ({4}/{5}) IV: {6}% | Chance: {7}% | {8}m dist | with a {9} ({10} left). | XP: {11} | lat: {12} long: {13} | Move1: {14} Move2: {15} | Rarity :{16}"),
+                    "({0}) | ({1}) {2} Lvl: {3} CP: ({4}/{5}) IV: {6}% | Chance: {7}% | {8}m dist | with a {9} ({10} left) | XP: {11} | lat: {12} long: {13} | Move1: {14} Move2: {15} | Rarity :{16}"),
+
                 new KeyValuePair<TranslationString, string>(TranslationString.EventNoPokeballs,
                     "No Pokeballs - We missed a {0} with CP {1}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.WaitingForMorePokemonToEvolve,
@@ -740,7 +742,7 @@ namespace PoGo.NecroBot.Logic.Common
                 new KeyValuePair<TranslationString, string>(TranslationString.HighestsPokemoHeader,
                     "====== {0} ======"),
                 new KeyValuePair<TranslationString, string>(TranslationString.HighestsPokemoCell,
-                    "# CP {0}/{1} | ({2}% {3})\t| Lvl {4}\t {5}: {6}\t {7}: {8} {9}: {10} {11}: {12}"),
+                    "# CP {0}/{1} | ({2}% {3}) | Lvl: {4} | {5}: {6} | {7}: {8} | {9}: {10} | {11}: {12}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.HumanWalkingVariant,
                     "Walking Speed: Has been changed, {0:n2} Km/h to {1:n2} Km/h"),
                 new KeyValuePair<TranslationString, string>(TranslationString.AccountBanned, "Probably Permanent Ban!"),
@@ -1818,7 +1820,7 @@ new KeyValuePair<PokemonId, string>((PokemonId) 721, "Volcanion")
                     new KeyValuePair<PokemonMove, string>(PokemonMove.SnarlFast, "SnarlFast"),
                     new KeyValuePair<PokemonMove, string>(PokemonMove.Crunch, "Crunch"),
                     new KeyValuePair<PokemonMove, string>(PokemonMove.FoulPlay, "FoulPlay"),
-                    new KeyValuePair<PokemonMove, string>(PokemonMove.HiddenPowerFast, "HiddenPowerFast")
+                        new KeyValuePair<PokemonMove, string>(PokemonMove.HiddenPowerFast, "HiddenPowerFast")
                 };
 
         public string GetTranslation(TranslationString translationString, params object[] data)
