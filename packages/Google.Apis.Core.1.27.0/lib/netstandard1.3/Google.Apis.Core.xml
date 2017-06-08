@@ -52,6 +52,21 @@
         <member name="T:Google.Apis.Discovery.Parameter">
             <summary>Represents a method's parameter.</summary>
         </member>
+        <member name="P:Google.Apis.Discovery.Parameter.Name">
+            <inheritdoc/>
+        </member>
+        <member name="P:Google.Apis.Discovery.Parameter.Pattern">
+            <inheritdoc/>
+        </member>
+        <member name="P:Google.Apis.Discovery.Parameter.IsRequired">
+            <inheritdoc/>
+        </member>
+        <member name="P:Google.Apis.Discovery.Parameter.ParameterType">
+            <inheritdoc/>
+        </member>
+        <member name="P:Google.Apis.Discovery.Parameter.DefaultValue">
+            <inheritdoc/>
+        </member>
         <member name="T:Google.Apis.Http.BackOffHandler">
             <summary>
             A thread-safe back-off handler which handles an abnormal HTTP response or an exception with 
@@ -124,6 +139,12 @@
         </member>
         <member name="M:Google.Apis.Http.BackOffHandler.#ctor(Google.Apis.Http.BackOffHandler.Initializer)">
             <summary>Constructs a new back-off handler with the given initializer.</summary>
+        </member>
+        <member name="M:Google.Apis.Http.BackOffHandler.HandleResponseAsync(Google.Apis.Http.HandleUnsuccessfulResponseArgs)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Google.Apis.Http.BackOffHandler.HandleExceptionAsync(Google.Apis.Http.HandleExceptionArgs)">
+            <inheritdoc/>
         </member>
         <member name="M:Google.Apis.Http.BackOffHandler.HandleAsync(System.Boolean,System.Int32,System.Threading.CancellationToken)">
             <summary>
@@ -377,17 +398,38 @@
             Constructs a new back-off initializer with the given policy and back-off handler create function.
             </summary>
         </member>
+        <member name="M:Google.Apis.Http.ExponentialBackOffInitializer.Initialize(Google.Apis.Http.ConfigurableHttpClient)">
+            <inheritdoc/>
+        </member>
         <member name="T:Google.Apis.Http.HttpClientFactory">
             <summary>The default implementation of the HTTP client factory.</summary>
         </member>
         <member name="F:Google.Apis.Http.HttpClientFactory.Logger">
             <summary>The class logger.</summary>
         </member>
+        <member name="M:Google.Apis.Http.HttpClientFactory.CreateHttpClient(Google.Apis.Http.CreateHttpClientArgs)">
+            <inheritdoc/>
+        </member>
         <member name="M:Google.Apis.Http.HttpClientFactory.CreateHandler(Google.Apis.Http.CreateHttpClientArgs)">
             <summary>Creates a HTTP message handler. Override this method to mock a message handler.</summary>
         </member>
         <member name="T:Google.Apis.Http.HttpConsts">
             <summary>HTTP constants.</summary>
+        </member>
+        <member name="F:Google.Apis.Http.HttpConsts.Get">
+            <summary>Http GET request</summary>
+        </member>
+        <member name="F:Google.Apis.Http.HttpConsts.Delete">
+            <summary>Http DELETE request</summary>
+        </member>
+        <member name="F:Google.Apis.Http.HttpConsts.Put">
+            <summary>Http PUT request</summary>
+        </member>
+        <member name="F:Google.Apis.Http.HttpConsts.Post">
+            <summary>Http POST request</summary>
+        </member>
+        <member name="F:Google.Apis.Http.HttpConsts.Patch">
+            <summary>Http PATCH request</summary>
         </member>
         <member name="T:Google.Apis.Http.HttpExtenstions">
             <summary>
@@ -536,6 +578,9 @@
         <member name="M:Google.Apis.Http.MaxUrlLengthInterceptor.#ctor(System.UInt32)">
             <summary>Constructs a new Max URL length interceptor with the given max length.</summary>
         </member>
+        <member name="M:Google.Apis.Http.MaxUrlLengthInterceptor.InterceptAsync(System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
         <member name="T:Google.Apis.ISerializer">
             <summary>Serialization interface that supports serialize and deserialize methods.</summary>
         </member>
@@ -581,6 +626,18 @@
             A JSON converter which honers RFC 3339 and the serialized date is accepted by Google services.
             </summary>
         </member>
+        <member name="P:Google.Apis.Json.RFC3339DateTimeConverter.CanRead">
+            <inheritdoc/>
+        </member>
+        <member name="M:Google.Apis.Json.RFC3339DateTimeConverter.ReadJson(Newtonsoft.Json.JsonReader,System.Type,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Google.Apis.Json.RFC3339DateTimeConverter.CanConvert(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Google.Apis.Json.RFC3339DateTimeConverter.WriteJson(Newtonsoft.Json.JsonWriter,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <inheritdoc/>
+        </member>
         <member name="T:Google.Apis.Json.ExplicitNullConverter">
             <summary>
             A JSON converter to write <c>null</c> literals into JSON when explicitly requested.
@@ -622,6 +679,24 @@
             settings which are then passed to <see cref="M:Google.Apis.Json.NewtonsoftJsonSerializer.#ctor(Newtonsoft.Json.JsonSerializerSettings)"/>.
             </summary>
             <returns>A new set of default settings.</returns>
+        </member>
+        <member name="P:Google.Apis.Json.NewtonsoftJsonSerializer.Format">
+            <inheritdoc/>
+        </member>
+        <member name="M:Google.Apis.Json.NewtonsoftJsonSerializer.Serialize(System.Object,System.IO.Stream)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Google.Apis.Json.NewtonsoftJsonSerializer.Serialize(System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Google.Apis.Json.NewtonsoftJsonSerializer.Deserialize``1(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Google.Apis.Json.NewtonsoftJsonSerializer.Deserialize(System.String,System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Google.Apis.Json.NewtonsoftJsonSerializer.Deserialize``1(System.IO.Stream)">
+            <inheritdoc/>
         </member>
         <member name="T:Google.Apis.Logging.BaseLogger">
             <summary>
@@ -836,6 +911,30 @@
             Represents a NullLogger which does not do any logging.
             </summary>
         </member>
+        <member name="P:Google.Apis.Logging.NullLogger.IsDebugEnabled">
+            <inheritdoc/>
+        </member>
+        <member name="M:Google.Apis.Logging.NullLogger.ForType(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Google.Apis.Logging.NullLogger.ForType``1">
+            <inheritdoc/>
+        </member>
+        <member name="M:Google.Apis.Logging.NullLogger.Info(System.String,System.Object[])">
+            <inheritdoc/>
+        </member>
+        <member name="M:Google.Apis.Logging.NullLogger.Warning(System.String,System.Object[])">
+            <inheritdoc/>
+        </member>
+        <member name="M:Google.Apis.Logging.NullLogger.Debug(System.String,System.Object[])">
+            <inheritdoc/>
+        </member>
+        <member name="M:Google.Apis.Logging.NullLogger.Error(System.Exception,System.String,System.Object[])">
+            <inheritdoc/>
+        </member>
+        <member name="M:Google.Apis.Logging.NullLogger.Error(System.String,System.Object[])">
+            <inheritdoc/>
+        </member>
         <member name="T:Google.Apis.Requests.Parameters.ParameterCollection">
             <summary>A collection of parameters (key value pairs). May contain duplicate keys.</summary>
         </member>
@@ -1045,6 +1144,12 @@
             The error message returned
             </summary>
         </member>
+        <member name="M:Google.Apis.Requests.RequestError.ToString">
+            <summary>
+            Returns a string summary of this error
+            </summary>
+            <returns>A string summary of this error</returns>
+        </member>
         <member name="T:Google.Apis.Requests.SingleError">
             <summary>
             A single server error
@@ -1074,6 +1179,12 @@
             <summary>
             Location where the error was thrown
             </summary>
+        </member>
+        <member name="M:Google.Apis.Requests.SingleError.ToString">
+            <summary>
+            Returns a string summary of this error
+            </summary>
+            <returns>A string summary of this error</returns>
         </member>
         <member name="T:Google.Apis.Testing.VisibleForTestOnly">
             <summary>
@@ -1111,6 +1222,9 @@
         </member>
         <member name="M:Google.Apis.Util.ExponentialBackOff.#ctor(System.TimeSpan,System.Int32)">
             <summary>Constructs a new exponential back-off with the given delta and maximum retries.</summary>
+        </member>
+        <member name="M:Google.Apis.Util.ExponentialBackOff.GetNextBackOff(System.Int32)">
+            <inheritdoc/>
         </member>
         <member name="T:Google.Apis.Util.IBackOff">
             <summary>Strategy interface to control back-off between retry attempts.</summary>
@@ -1151,6 +1265,12 @@
         <member name="F:Google.Apis.Util.SystemClock.Default">
             <summary>The default instance.</summary>
         </member>
+        <member name="P:Google.Apis.Util.SystemClock.Now">
+            <inheritdoc/>
+        </member>
+        <member name="P:Google.Apis.Util.SystemClock.UtcNow">
+            <inheritdoc/>
+        </member>
         <member name="T:Google.Apis.Util.Repeatable`1">
             <summary>
             Repeatable class which allows you to both pass a single element, as well as an array, as a parameter value.
@@ -1158,6 +1278,9 @@
         </member>
         <member name="M:Google.Apis.Util.Repeatable`1.#ctor(System.Collections.Generic.IEnumerable{`0})">
             <summary>Creates a repeatable value.</summary>
+        </member>
+        <member name="M:Google.Apis.Util.Repeatable`1.GetEnumerator">
+            <inheritdoc/>
         </member>
         <member name="M:Google.Apis.Util.Repeatable`1.op_Implicit(`0)~Google.Apis.Util.Repeatable{`0}">
             <summary>Converts the single element into a repeatable.</summary>
@@ -1269,6 +1392,54 @@
         <member name="M:Google.Apis.Util.StringValueAttribute.#ctor(System.String)">
             <summary>Creates a new string value attribute with the specified text.</summary>
         </member>
+        <member name="T:Google.Apis.Util.UriPatcher">
+             <summary>
+             Workarounds for some unfortunate behaviors in the .NET Framework's
+             implementation of System.Uri
+             </summary>
+             <remarks>
+             UriPatcher lets us work around some unfortunate behaviors in the .NET Framework's
+             implementation of System.Uri.
+            
+             == Problem 1: Slashes and dots
+            
+             Prior to .NET 4.5, System.Uri would always unescape "%2f" ("/") and "%5c" ("\\").
+             Relative path components were also compressed.
+            
+             As a result, this:     "http://www.example.com/.%2f.%5c./"
+             ... turned into this:  "http://www.example.com/"
+            
+             This breaks API requests where slashes or dots appear in path parameters. Such requests
+             arise, for example, when these characters appear in the name of a GCS object.
+            
+             == Problem 2: Fewer unreserved characters
+            
+             Unless IDN/IRI parsing is enabled -- which it is not, by default, prior to .NET 4.5 --
+             Uri.EscapeDataString uses the set of "unreserved" characters from RFC 2396 instead of the
+             newer, *smaller* list from RFC 3986. We build requests using URI templating as described
+             by RFC 6570, which specifies that the latter definition (RFC 3986) should be used.
+            
+             This breaks API requests with parameters including any of: !*'()
+            
+             == Solutions
+            
+             Though the default behaviors changed in .NET 4.5, these "quirks" remain for compatibility
+             unless the application explicitly targets the new runtime.  Usually, that means adding a
+             TargetFrameworkAttribute to the entry assembly.
+            
+             Applications running on .NET 4.0 or later can also set "DontUnescapePathDotsAndSlashes"
+             and enable IDN/IRI parsing using app.config or web.config.
+            
+             As a class library, we can't control app.config or the entry assembly, so we can't take
+             either approach. Instead, we resort to reflection trickery to try to solve these problems
+             if we detect they exist. Sorry.
+             </remarks>
+        </member>
+        <member name="M:Google.Apis.Util.UriPatcher.PatchUriQuirks">
+            <summary>
+            Patch URI quirks in System.Uri. See class summary for details.
+            </summary>
+        </member>
         <member name="T:Google.Apis.Util.Utilities">
             <summary>A utility class which contains helper methods and extension methods.</summary>
         </member>
@@ -1339,6 +1510,12 @@
         </member>
         <member name="P:Google.GoogleApiException.HttpStatusCode">
             <summary>The HTTP status code which was returned along with this error, or 0 if unavailable.</summary>
+        </member>
+        <member name="M:Google.GoogleApiException.ToString">
+            <summary>
+            Returns a summary of this exception.
+            </summary>
+            <returns>A summary of this exception.</returns>
         </member>
     </members>
 </doc>
