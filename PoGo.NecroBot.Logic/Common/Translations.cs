@@ -21,7 +21,6 @@ namespace PoGo.NecroBot.Logic.Common
         string GetTranslation(TranslationString translationString);
         string GetPokemonTranslation(PokemonId id);
         string GetPokemonMovesetTranslation(PokemonMove move);
-        object GetPokemonTranslation(string pokemonId);
     }
 
     public enum TranslationString
@@ -371,15 +370,12 @@ namespace PoGo.NecroBot.Logic.Common
                     "{0}\t- CP: {1} IV: {2}% [Best CP: {3} IV: {4}%] | Candies: {5}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.EventPokemonUpgraded,
                     "{0}\t- Level: {1:0.0} | CP: {2}  IV: {3}%   [Best CP: {4}  IV: {5}%] | SD: {6} | Candies: {7}"),
-
                 new KeyValuePair<TranslationString, string>(TranslationString.EventItemRecycled, "{0}x {1}"),
-
                 //Logging Cleanup (mostly uneccessary information, may want a verbose pokemon capture logger setting)
                 new KeyValuePair<TranslationString, string>(TranslationString.EventPokemonCaptureSuccess,
                     "({0}) | ({1}) {2} Lvl: {3} CP: ({4}/{5}) IV: {6}% | Chance: {7}% | {8}m dist | with a {9} ({10} left). | XP: {11} | SD: {12} | {13} | lat: {14} long: {15} | Move1: {16} Move2: {17} | Rarity: {18} | Capture Reason: {19} | Shiny: {20} | Form: {21} | Costume: {22} | Sex: {23}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.EventPokemonCaptureFailed,
                     "({0}) | ({1}) {2} Lvl: {3} CP: ({4}/{5}) IV: {6}% | Chance: {7}% | {8}m dist | with a {9} ({10} left). | XP: {11} | lat: {12} long: {13} | Move1: {14} Move2: {15} | Rarity :{16}"),
-
                 new KeyValuePair<TranslationString, string>(TranslationString.EventNoPokeballs,
                     "No Pokeballs - We missed a {0} with CP {1}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.WaitingForMorePokemonToEvolve,
@@ -418,7 +414,6 @@ namespace PoGo.NecroBot.Logic.Common
                     "Incubator status update: {0:0.00} Km left of {1:0.00} Km egg."),
                 new KeyValuePair<TranslationString, string>(TranslationString.IncubatorEggHatched,
                     "{0:0.00} Km egg has hatched: {1} | Lvl: {2} | CP: ({3}/{4}) | IV: {5}% | XP: {6} | SD: {7} | Candies: {8}"),
-
                 new KeyValuePair<TranslationString, string>(TranslationString.LogEntryError, "ERROR"),
                 new KeyValuePair<TranslationString, string>(TranslationString.LogEntryAttention, "ATTENTION"),
                 new KeyValuePair<TranslationString, string>(TranslationString.LogEntryInfo, "INFO"),
@@ -474,7 +469,6 @@ namespace PoGo.NecroBot.Logic.Common
                     "Finished downloading newest Release..."),
                 new KeyValuePair<TranslationString, string>(TranslationString.FinishedUnpackingFiles,
                     "Finished unpacking files..."),
-
                 new KeyValuePair<TranslationString, string>(TranslationString.FinishedTransferringConfig,
                     "Finished transferring your config to the new version..."),
                 new KeyValuePair<TranslationString, string>(TranslationString.UpdateFinished,
@@ -515,7 +509,6 @@ namespace PoGo.NecroBot.Logic.Common
                     "Pokemon Inventory is full, transferring Pokemon..."),
                 new KeyValuePair<TranslationString, string>(TranslationString.BulkTransferFailed,
                     "Bulk transfer {0} pokemons was failed..."),
-
                 new KeyValuePair<TranslationString, string>(TranslationString.InvFullTransferManually,
                     "Pokemon Inventory is full! Please transfer Pokemon manually or set TransferDuplicatePokemon to true in settings..."),
                 new KeyValuePair<TranslationString, string>(TranslationString.InvFullPokestopLooting,
@@ -1933,11 +1926,6 @@ new KeyValuePair<PokemonId, string>((PokemonId) 721, "Volcanion")
             }
 
             File.WriteAllText(fullPath, output);
-        }
-
-        public object GetPokemonTranslation(string pokemonId)
-        {
-            throw new NotImplementedException();
         }
     }
 }

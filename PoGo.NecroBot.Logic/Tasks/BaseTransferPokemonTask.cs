@@ -63,12 +63,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                                         ? await session.Inventory.GetHighestPokemonOfTypeByIv(duplicatePokemon).ConfigureAwait(false)
                                         : await session.Inventory.GetHighestPokemonOfTypeByCp(duplicatePokemon).ConfigureAwait(false)) ??
                                     duplicatePokemon;
-            var PokeID = duplicatePokemon.PokemonId.ToString();
 
             var ev = new TransferPokemonEvent
             {
                 Id = duplicatePokemon.Id,
-                PokemonId = PokeID,
+                PokemonId = duplicatePokemon.PokemonId,
                 Perfection = PokemonInfo.CalculatePokemonPerfection(duplicatePokemon),
                 Cp = duplicatePokemon.Cp,
                 BestCp = bestPokemonOfType.Cp,
