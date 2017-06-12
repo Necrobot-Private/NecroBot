@@ -252,7 +252,11 @@
     },
     {
       "Key": "logEntryLevelUP",
-      "Value": "Level Up"
+      "Value": "LEVEL UP"
+    },
+    {
+      "Key": "logEntryBotStats",
+      "Value": "Bot Stats"
     },
     {
       "Key": "logEntryTransfered",
@@ -408,7 +412,7 @@
     },
     {
       "Key": "pokemonRename",
-      "Value": "Pokemon {0} ({1}) reanomenat de {2} a {3}."
+      "Value": "Pokemon {0} reanomenat de {1} a {2}."
     },
     {
       "Key": "pokemonFavorite",
@@ -565,7 +569,7 @@
     },
     {
       "Key": "amountPkmSeenCaught",
-      "Value": "Quantitat de Pokemon vists: {0}/231, Quantitat de Pokemon capturats: {1}/231"
+      "Value": "Quantitat de Pokemon vists: {0}/251, Quantitat de Pokemon capturats: {1}/251"
     },
     {
       "Key": "pkmPotentialEvolveCount",
@@ -629,7 +633,7 @@
     },
     {
       "Key": "HighestsPokemoCell",
-      "Value": "# CP {0}/{1} | ({2}% {3})\t| Lvl {4}\t {5}: {6}\t {7}: {8} {9}: {10} {11}: {12}"
+      "Value": "# CP {0}/{1} | ({2}% {3}) | Lvl: {4} | {5}: {6} | {7}: {8} | {9}: {10} | {11}: {12}"
     },
     {
       "Key": "HumanWalkingVariant",

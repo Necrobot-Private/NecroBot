@@ -1039,9 +1039,37 @@ namespace PoGo.NecroBot.Logic.Tasks
                                         await Task.Delay(1000).ConfigureAwait(false);
                                     }
                                 }
+
                                 attacker = attackResult.ActiveAttacker.PokemonData;
+                                defender = attackResult.ActiveDefender.PokemonData;
+                                var SP1 = "";
+                                var SP2 = "";
+                                var AttackerL = attacker.PokemonId.ToString().Length;
+                                var DefenderL = defender.PokemonId.ToString().Length;
+                                var maxL = AttackerL;
+                                if (DefenderL>maxL) { maxL = DefenderL; }
+
+                                for (int i = 0; i < maxL - AttackerL + 1; i++)
+                                {
+                                    SP1 += " ";
+                                }
+
+                                for (int i = 0; i < maxL - DefenderL + 1; i++)
+                                {
+                                    SP2 += " ";
+                                }
+
+                                var fortDetails = session.GymState.GetGymDetails(session, gym, true); //await session.Client.Fort.GetGymDetails(gym.Id, gym.Latitude, gym.Longitude).ConfigureAwait(false);
+                                var player = session.Profile.PlayerData;
+                                await EnsureJoinTeam(session, player).ConfigureAwait(false);
+
                                 //Console.SetCursorPosition(0, Console.CursorTop - 1);
-                                Logger.Write($"(ATTACK): Defender {attackResult.ActiveDefender.PokemonData.PokemonId.ToString()} HP {attackResult.ActiveDefender.CurrentHealth} - Attacker {attackResult.ActiveAttacker.PokemonData.PokemonId.ToString()} ({attackResult.ActiveAttacker.PokemonData.Cp} CP) HP/Sta {attackResult.ActiveAttacker.CurrentHealth}/{attackResult.ActiveAttacker.CurrentEnergy}", LogLevel.Gym);
+                                Logger.Write($"(ATTACKER): {attacker.PokemonId.ToString() + SP1} HP: {attackResult.ActiveAttacker.CurrentHealth:##0}, Sta: {attackResult.ActiveAttacker.CurrentEnergy:#0}", LogLevel.Gym, ConsoleColor.Green);
+                                Logger.Write($"(DEFENDER): {defender.PokemonId.ToString() + SP2} HP: {attackResult.ActiveDefender.CurrentHealth:##0}, Sta: {attackResult.ActiveDefender.CurrentEnergy:#0}", LogLevel.Gym,
+                                    (player.Team == TeamColor.Red)
+                                        ? ConsoleColor.Red
+                                        : (player.Team == TeamColor.Yellow ? ConsoleColor.Yellow : ConsoleColor.Blue));
+
                                 if (attackResult != null && attackResult.ActiveAttacker != null)
                                     session.GymState.MyTeam.Where(w => w.Attacker.Id == attackResult.ActiveAttacker.PokemonData.Id).FirstOrDefault().HpState = attackResult.ActiveAttacker.CurrentHealth;
                                 break;
