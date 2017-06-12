@@ -84,7 +84,14 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
             set { _settings.Auth.CurrentAuthConfig.Password = value; }
         }
-        
+
+        bool ISettings.AutoExitBotIfAccountFlagged
+        {
+            get { return _settings.Auth.CurrentAuthConfig.AutoExitBotIfAccountFlagged; }
+
+            set { _settings.Auth.CurrentAuthConfig.AutoExitBotIfAccountFlagged = value; }
+        }
+
         #endregion Auth Config Values
 
         #region Device Config Values

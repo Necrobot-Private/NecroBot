@@ -28,7 +28,11 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [MaxLength(50)]
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 3)]
         public string Password { get; set; }
-        
+
+        [DefaultValue(false)]
+        [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 4)]
+        public bool AutoExitBotIfAccountFlagged { get; set; }
+
         // Total runtime since client started
         [JsonIgnore]
         public double RuntimeTotal { get; set; }
