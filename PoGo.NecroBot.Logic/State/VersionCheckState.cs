@@ -37,13 +37,17 @@ namespace PoGo.NecroBot.Logic.State
             "https://www.microsoft.com/net/download/framework";
 
         public static Version RemoteVersion;
+
         public static string CurrentDotNetVersion;
+        public static string CurrentDotNetVersionID;
 
         public const string LatestDotNetVersion1 =
             "460798";
 
         public const string LatestDotNetVersion2 =
             "460805";
+
+        public static string LatestDotNetVersionID;
 
         public async Task<IState> Execute(ISession session, CancellationToken cancellationToken)
         {
@@ -94,6 +98,7 @@ namespace PoGo.NecroBot.Logic.State
                 Session = session,
                 DownloadLink = downloadLink,
                 ChangelogLink = ChangelogUri,
+                DotNetLink = NetVersionUrl,
                 Destination = downloadFilePath,
                 AutoUpdate = true,
                 CurrentVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString(),
@@ -191,9 +196,14 @@ namespace PoGo.NecroBot.Logic.State
 
                 RegistryKey DNVersion = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32).OpenSubKey("SOFTWARE\\Microsoft\\NET Framework Setup\\NDP\\v4\\Full\\");
                 int Version_DotNet = Convert.ToInt32(DNVersion.GetValue("Release"));
+                string VersionID_DotNet = Convert.ToString(DNVersion.GetValue("Version"));
                 CurrentDotNetVersion = Version_DotNet.ToString();
+                CurrentDotNetVersionID = VersionID_DotNet;
 
-                if (CurrentDotNetVersion != LatestDotNetVersion1 || CurrentDotNetVersion != LatestDotNetVersion2) // If Not Equal to These Version codes, it isn't on Correct .Net Version
+                string LatestDotNetVerID = LatestDotNetVersionID;
+
+                if (CurrentDotNetVersion != LatestDotNetVersion1)
+                    if (CurrentDotNetVersion != LatestDotNetVersion2) // If Not Equal to These Version codes, it isn't on Correct .Net Version
                     return false;
 
                 if (gitVersion > Assembly.GetExecutingAssembly().GetName().Version)

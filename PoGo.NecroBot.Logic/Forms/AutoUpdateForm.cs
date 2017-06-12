@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Markdig;
 using System.Text.RegularExpressions;
 using System.Web;
+using System.Diagnostics;
 
 namespace PoGo.NecroBot.Logic.Forms
 {
@@ -24,6 +25,7 @@ namespace PoGo.NecroBot.Logic.Forms
         public bool AutoUpdate { get; set; }
         public string DownloadLink { get; set; }
         public string ChangelogLink { get; set; }
+        public string DotNetLink { get; set; }
         public string Destination { get; set; }
         public ISession Session { get; set; }
 
@@ -61,6 +63,17 @@ namespace PoGo.NecroBot.Logic.Forms
                 lblMessage.Enabled = true;
                 btnUpdate.Text = "Downloading...";
                 StartDownload();
+
+                if (CurrentDotNetVersion != LatestDotNetVersion1) // If Not Equivalent to the First .Net Version Code, Check for the Other One
+                {
+                    if (CurrentDotNetVersion != LatestDotNetVersion2)
+                    {
+                        DialogResult msgDialog = MessageBox.Show($"Your .Net Version ({CurrentDotNetVersion} does not meet the Required .Net Versions ({LatestDotNetVersion1} / {LatestDotNetVersion2}). Please Click OK to Update your .Net Version!", ".Net Version Out-Of-Date", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
+                        if (msgDialog == DialogResult.OK)
+                            Process.Start(DotNetLink);
+                    }
+                }
             }
         }
 
