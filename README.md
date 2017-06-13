@@ -1,6 +1,6 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/g1dtrcdnjjbxugw6?svg=true)](https://ci.appveyor.com/project/jjskuld/necrobot/branch/master)
-[![Github All Releases](https://img.shields.io/github/downloads/Necrobot-Private/NecroBot/total.svg?maxAge=258)](https://github.com/Necrobot-Private/NecroBot/releases)
-[![GitHub license](https://img.shields.io/badge/license-AGPL-blue.svg)](https://raw.githubusercontent.com/Necrobot-Private/NecroBot/master/LICENSE.md)
+[![Github All Releases](https://img.shields.io/github/downloads/Necrobot-Private/NecroBot/total.svg)](https://github.com/Necrobot-Private/NecroBot/releases)
+[![ license](https://img.shields.io/badge/license-AGPL-blue.svg)](https://raw.githubusercontent.com/Necrobot-Private/NecroBot/master/LICENSE.md)
 
 <h1>Necrobot2 is now compatible with 0.63.4 API.</h1>
 
