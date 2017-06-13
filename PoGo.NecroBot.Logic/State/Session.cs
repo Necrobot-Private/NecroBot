@@ -108,7 +108,8 @@ namespace PoGo.NecroBot.Logic.State
                 {
                     AuthType = settings.AuthType,
                     Password = settings.Password,
-                    Username = settings.Username
+                    Username = settings.Username,
+                    AutoExitBotIfAccountFlagged = settings.AutoExitBotIfAccountFlagged
                 });
             }
             if (File.Exists("runtime.log"))
