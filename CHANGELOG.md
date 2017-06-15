@@ -1,5 +1,47 @@
 # Change Log
 
+## [Unreleased](https://github.com/Necrobot-Private/NecroBot/tree/HEAD)
+
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.178...HEAD)
+
+**Closed issues:**
+
+- help? [\#1818](https://github.com/Necrobot-Private/NecroBot/issues/1818)
+- 1.0.0.134 CLI is a Trojan.  [\#1817](https://github.com/Necrobot-Private/NecroBot/issues/1817)
+- login not possible [\#1816](https://github.com/Necrobot-Private/NecroBot/issues/1816)
+
+## [v1.0.0.178](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.178) (2017-06-14)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.177...v1.0.0.178)
+
+**Closed issues:**
+
+- Shadow Ban [\#1813](https://github.com/Necrobot-Private/NecroBot/issues/1813)
+- RPM needed and tips [\#1810](https://github.com/Necrobot-Private/NecroBot/issues/1810)
+- Not Collecting Level Up Reward [\#1807](https://github.com/Necrobot-Private/NecroBot/issues/1807)
+- AutoSnipe IV Calculator Calculating Wrong IV [\#1806](https://github.com/Necrobot-Private/NecroBot/issues/1806)
+- How do you update the bot's location? [\#1801](https://github.com/Necrobot-Private/NecroBot/issues/1801)
+- Hashing Key buying Problem. [\#1800](https://github.com/Necrobot-Private/NecroBot/issues/1800)
+- discord server [\#1777](https://github.com/Necrobot-Private/NecroBot/issues/1777)
+
+**Merged pull requests:**
+
+- Update LoginUserAgent \(update submodule\) [\#1815](https://github.com/Necrobot-Private/NecroBot/pull/1815) ([Furtif](https://github.com/Furtif))
+- Release v2.10.3.7 \(RocketBot2\) [\#1814](https://github.com/Necrobot-Private/NecroBot/pull/1814) ([Furtif](https://github.com/Furtif))
+- Auto Exit Bot If Account is Flagged [\#1812](https://github.com/Necrobot-Private/NecroBot/pull/1812) ([Furtif](https://github.com/Furtif))
+- Update CONTRIBUTORS.md [\#1811](https://github.com/Necrobot-Private/NecroBot/pull/1811) ([Furtif](https://github.com/Furtif))
+- Release v2.10.3.5 \(RocketBot2\) [\#1809](https://github.com/Necrobot-Private/NecroBot/pull/1809) ([Furtif](https://github.com/Furtif))
+- Latest API Update [\#1808](https://github.com/Necrobot-Private/NecroBot/pull/1808) ([hardknoxni69a](https://github.com/hardknoxni69a))
+- Code Clean up [\#1804](https://github.com/Necrobot-Private/NecroBot/pull/1804) ([Furtif](https://github.com/Furtif))
+- fix transfert translation event [\#1803](https://github.com/Necrobot-Private/NecroBot/pull/1803) ([Furtif](https://github.com/Furtif))
+- Fixes freezes bot if hash key not valide or expired \(RocketBot2\) and more \(Global\) [\#1802](https://github.com/Necrobot-Private/NecroBot/pull/1802) ([Furtif](https://github.com/Furtif))
+- Add 2gen missing moves in to translation.cs and fix elevationservice [\#1799](https://github.com/Necrobot-Private/NecroBot/pull/1799) ([Furtif](https://github.com/Furtif))
+- Updates Dependencies \(Preparation for .Net 4.7 Official Support\) [\#1797](https://github.com/Necrobot-Private/NecroBot/pull/1797) ([CDAGaming](https://github.com/CDAGaming))
+- 	fix multiaccount methodes [\#1796](https://github.com/Necrobot-Private/NecroBot/pull/1796) ([Furtif](https://github.com/Furtif))
+- Release v2.10.3.1 \(RocketBot\) [\#1795](https://github.com/Necrobot-Private/NecroBot/pull/1795) ([Furtif](https://github.com/Furtif))
+- merge RocketBot into NecroBot [\#1794](https://github.com/Necrobot-Private/NecroBot/pull/1794) ([TheWizard1328](https://github.com/TheWizard1328))
+- Add rocketbot to tray if minimized [\#1793](https://github.com/Necrobot-Private/NecroBot/pull/1793) ([Furtif](https://github.com/Furtif))
+- Update Dependencies and Adjustments [\#1792](https://github.com/Necrobot-Private/NecroBot/pull/1792) ([CDAGaming](https://github.com/CDAGaming))
+
 ## [v1.0.0.177](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.177) (2017-06-01)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.176...v1.0.0.177)
 
