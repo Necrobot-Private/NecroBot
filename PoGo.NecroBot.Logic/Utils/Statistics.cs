@@ -150,7 +150,7 @@ namespace PoGo.NecroBot.Logic.Utils
                     }
                     else
                     {
-                        LevelUpRewardsResponse Result = await GetLevelUpRewards(session).ConfigureAwait(false);
+                        LevelUpRewardsResponse Result = await inventory.GetLevelUpRewards(stat.Level).ConfigureAwait(false);
 
                         if (Result.ToString().ToLower().Contains("awarded_already"))
                             LevelForRewards = stat.Level + 1;
@@ -158,6 +158,7 @@ namespace PoGo.NecroBot.Logic.Utils
                         if (Result.ToString().ToLower().Contains("success"))
                         {
                             Logger.Write("Leveled up: " + stat.Level, LogLevel.Info);
+                            LevelForRewards = stat.Level + 1;
 
                             RepeatedField<ItemAward> items = Result.ItemsAwarded;
 
@@ -197,11 +198,6 @@ namespace PoGo.NecroBot.Logic.Utils
             TotalPokemonTransferred = 0;
             _initSessionDateTime = DateTime.Now;
             _exportStats = new StatsExport();
-        }
-
-        public async Task<LevelUpRewardsResponse> GetLevelUpRewards(ISession ctx)
-        {
-            return await ctx.Inventory.GetLevelUpRewards(LevelForRewards).ConfigureAwait(false);
         }
 
         public double GetRuntime()
