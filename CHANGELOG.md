@@ -2,13 +2,30 @@
 
 ## [Unreleased](https://github.com/Necrobot-Private/NecroBot/tree/HEAD)
 
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.178...HEAD)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.179...HEAD)
 
 **Closed issues:**
 
+- Exception caught, writing LogBuffer [\#1825](https://github.com/Necrobot-Private/NecroBot/issues/1825)
+- Nothing Works! [\#1824](https://github.com/Necrobot-Private/NecroBot/issues/1824)
+- System.Collections.Generic.KeyNotFoundException [\#1823](https://github.com/Necrobot-Private/NecroBot/issues/1823)
+- WinGUI Crashed with "Start From Scratch" Ver. 178 [\#1822](https://github.com/Necrobot-Private/NecroBot/issues/1822)
+- Update 1.0.0.178 makes NecroBot crash [\#1820](https://github.com/Necrobot-Private/NecroBot/issues/1820)
+
+## [v1.0.0.179](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.179) (2017-06-16)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.178...v1.0.0.179)
+
+**Closed issues:**
+
+- New error after update [\#1821](https://github.com/Necrobot-Private/NecroBot/issues/1821)
 - help? [\#1818](https://github.com/Necrobot-Private/NecroBot/issues/1818)
 - 1.0.0.134 CLI is a Trojan.  [\#1817](https://github.com/Necrobot-Private/NecroBot/issues/1817)
 - login not possible [\#1816](https://github.com/Necrobot-Private/NecroBot/issues/1816)
+
+**Merged pull requests:**
+
+- Fixes bug v1.0.0.178 Exception caught, writing LogBuffer [\#1826](https://github.com/Necrobot-Private/NecroBot/pull/1826) ([Furtif](https://github.com/Furtif))
+- Reapply Level Up Reward Fix [\#1819](https://github.com/Necrobot-Private/NecroBot/pull/1819) ([hopebasket](https://github.com/hopebasket))
 
 ## [v1.0.0.178](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.178) (2017-06-14)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.177...v1.0.0.178)
@@ -1782,17 +1799,17 @@
 - Gym update [\#706](https://github.com/Necrobot-Private/NecroBot/pull/706) ([ziomber](https://github.com/ziomber))
 
 ## [v1.0.0.88](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.88) (2017-02-02)
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.87...v1.0.0.88)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.86...v1.0.0.88)
 
 **Merged pull requests:**
 
 - API Update to 0.55 [\#699](https://github.com/Necrobot-Private/NecroBot/pull/699) ([jjskuld](https://github.com/jjskuld))
 
-## [v1.0.0.87](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.87) (2017-02-01)
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.86...v1.0.0.87)
-
 ## [v1.0.0.86](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.86) (2017-02-01)
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.85...v1.0.0.86)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.87...v1.0.0.86)
+
+## [v1.0.0.87](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.87) (2017-02-01)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.85...v1.0.0.87)
 
 **Closed issues:**
 
@@ -2539,7 +2556,7 @@
 - Feature/fix first start tutorial [\#352](https://github.com/Necrobot-Private/NecroBot/pull/352) ([jjskuld](https://github.com/jjskuld))
 
 ## [v1.0.0.22](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.22) (2016-11-16)
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.21...v1.0.0.22)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.20...v1.0.0.22)
 
 **Fixed bugs:**
 
@@ -2549,11 +2566,11 @@
 
 - Fix incorrect log level for prompt. [\#350](https://github.com/Necrobot-Private/NecroBot/pull/350) ([jjskuld](https://github.com/jjskuld))
 
-## [v1.0.0.21](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.21) (2016-11-16)
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.20...v1.0.0.21)
-
 ## [v1.0.0.20](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.20) (2016-11-16)
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.19...v1.0.0.20)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.21...v1.0.0.20)
+
+## [v1.0.0.21](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.21) (2016-11-16)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.19...v1.0.0.21)
 
 **Fixed bugs:**
 

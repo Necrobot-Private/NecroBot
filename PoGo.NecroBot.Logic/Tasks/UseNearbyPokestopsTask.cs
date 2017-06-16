@@ -67,27 +67,36 @@ namespace PoGo.NecroBot.Logic.Tasks
                 await CheckLimit(session).ConfigureAwait(false);
 
                 var fortInfo = pokeStop.Id.StartsWith(SetMoveToTargetTask.TARGET_ID) ? SetMoveToTargetTask.FakeFortInfo(pokeStop) : await session.Client.Fort.GetFort(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude).ConfigureAwait(false);
-
                 await WalkingToPokeStop(session, cancellationToken, pokeStop, fortInfo).ConfigureAwait(false);
 
                 await DoActionAtPokeStop(session, cancellationToken, pokeStop, fortInfo).ConfigureAwait(false);
 
-                bool gymAttackSucceeded = await UseGymBattleTask.Execute(session, cancellationToken, pokeStop, fortInfo).ConfigureAwait(false);
-
-                if (gymAttackSucceeded &&
-                    fortInfo.Type == FortType.Gym &&
-                    (session.GymState.GetGymDetails(session, pokeStop).GymState.FortData.OwnedByTeam == session.Profile.PlayerData.Team || session.GymState.CapturedGymId.Equals(fortInfo.FortId)) &&
-                    session.LogicSettings.GymConfig.Enable &&
-                    session.LogicSettings.GymConfig.EnableGymTraining)
+                try // Try to fix Error: System.NullReferenceException
                 {
-                    if (string.IsNullOrEmpty(session.GymState.TrainingGymId) || !session.GymState.TrainingGymId.Equals(fortInfo.FortId))
+                    bool gymAttackSucceeded = await UseGymBattleTask.Execute(session, cancellationToken, pokeStop, fortInfo).ConfigureAwait(false);
+
+                    if (gymAttackSucceeded &&
+                        fortInfo.Type == FortType.Gym &&
+                        (session.GymState.GetGymDetails(session, pokeStop).GymState.FortData.OwnedByTeam == session.Profile.PlayerData.Team || session.GymState.CapturedGymId.Equals(fortInfo.FortId)) &&
+                        session.LogicSettings.GymConfig.Enable &&
+                        session.LogicSettings.GymConfig.EnableGymTraining)
                     {
-                        session.GymState.TrainingGymId = fortInfo.FortId;
-                        session.GymState.TrainingRound = 0;
+                        if (string.IsNullOrEmpty(session.GymState.TrainingGymId) || !session.GymState.TrainingGymId.Equals(fortInfo.FortId))
+                        {
+                            session.GymState.TrainingGymId = fortInfo.FortId;
+                            session.GymState.TrainingRound = 0;
+                        }
+                        session.GymState.TrainingRound++;
+                        if (session.GymState.TrainingRound <= session.LogicSettings.GymConfig.MaxTrainingRoundsOnOneGym)
+                            continue;
                     }
-                    session.GymState.TrainingRound++;
-                    if (session.GymState.TrainingRound <= session.LogicSettings.GymConfig.MaxTrainingRoundsOnOneGym)
-                        continue;
+                }
+                catch
+                {
+#if DEBUG
+                    Logger.Write("catch in usenearbypokestopstask", LogLevel.Error);
+#endif
+                    return;
                 }
 
                 if (!await SetMoveToTargetTask.IsReachedDestination(pokeStop, session, cancellationToken).ConfigureAwait(false))
