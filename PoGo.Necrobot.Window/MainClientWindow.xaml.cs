@@ -64,7 +64,8 @@ namespace PoGo.Necrobot.Window
                 { LogLevel.SoftBan, new Tuple<string, string, string>("Pink", "#FF1E8E", "#EC008C") },
                 { LogLevel.LevelUp, new Tuple<string, string, string>("Blue", "#0883FF", "#0883FF") },
                 { LogLevel.Gym, new Tuple<string, string, string>("Purple", "#8308FF", "#197B30") },
-                { LogLevel.Service , new Tuple<string, string, string>("Blue", "#0883FF", "#0883FF") }
+                { LogLevel.Service , new Tuple<string, string, string>("Blue", "#0883FF", "#0883FF") },
+                { LogLevel.BotStats , new Tuple<string, string, string>("Cyan", "#B4E1FD", "#EC008C") }
         };
 
         private static SolidColorBrush DarkSolarizedBackground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#002B36"));
@@ -252,17 +253,26 @@ namespace PoGo.Necrobot.Window
         {
             consoleLog.Dispatcher.BeginInvoke(new Action(() =>
             {
-                if (Settings.Default.ConsoleTheme == "Low Contrast (Light)")
-                    color = ConsoleColors[level].Item3;
-                if (Settings.Default.ConsoleTheme == "Low Contrast (Dark)")
-                    color = ConsoleColors[level].Item2;
-                else if (Settings.Default.ConsoleTheme == "Default" || Settings.Default.ResetLayout == true)
-                    color = ConsoleColors[level].Item1;
+                try
+                {
+                    if (Settings.Default.ConsoleTheme == "Low Contrast (Light)")
+                        color = ConsoleColors[level].Item3;
+                    if (Settings.Default.ConsoleTheme == "Low Contrast (Dark)")
+                        color = ConsoleColors[level].Item2;
+                    else if (Settings.Default.ConsoleTheme == "Default" || Settings.Default.ResetLayout == true)
+                        color = ConsoleColors[level].Item1;
 
-                if (string.IsNullOrEmpty(color))
+                    if (string.IsNullOrEmpty(color))
+                    {
+                        NecroBot.Logic.Logging.Logger.Write($"No Color Detected for LogLevel ({level}) on this Scheme...", LogLevel.Error);
+                        return;
+                    }
+                }
+                catch
                 {
                     NecroBot.Logic.Logging.Logger.Write($"No Color Detected for LogLevel ({level}) on this Scheme...", LogLevel.Error);
-                    return;
+                    Settings.Default.ConsoleTheme = "Default";
+                    Settings.Default.ResetLayout = true;
                 }
 
                 if (lastClearLog.AddMinutes(15) < DateTime.Now)
