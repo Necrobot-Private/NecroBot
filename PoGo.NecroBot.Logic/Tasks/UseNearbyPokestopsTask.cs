@@ -93,9 +93,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
                 catch
                 {
-#if DEBUG
-                    Logger.Write("catch in usenearbypokestopstask", LogLevel.Error);
-#endif
+                    Logger.Write("Retry waiting, gym check please wait ...", LogLevel.Gym);
                     return;
                 }
 
