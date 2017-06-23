@@ -1,16 +1,23 @@
 # Change Log
 
-## [Unreleased](https://github.com/Necrobot-Private/NecroBot/tree/HEAD)
-
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.179...HEAD)
+## [v1.0.0.180](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.180) (2017-06-23)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.179...v1.0.0.180)
 
 **Closed issues:**
 
+- API Needed [\#1834](https://github.com/Necrobot-Private/NecroBot/issues/1834)
+- NecroBot2 dosen't work [\#1832](https://github.com/Necrobot-Private/NecroBot/issues/1832)
 - Exception caught, writing LogBuffer [\#1825](https://github.com/Necrobot-Private/NecroBot/issues/1825)
 - Nothing Works! [\#1824](https://github.com/Necrobot-Private/NecroBot/issues/1824)
 - System.Collections.Generic.KeyNotFoundException [\#1823](https://github.com/Necrobot-Private/NecroBot/issues/1823)
 - WinGUI Crashed with "Start From Scratch" Ver. 178 [\#1822](https://github.com/Necrobot-Private/NecroBot/issues/1822)
 - Update 1.0.0.178 makes NecroBot crash [\#1820](https://github.com/Necrobot-Private/NecroBot/issues/1820)
+
+**Merged pull requests:**
+
+- 0.67.1 support update [\#1833](https://github.com/Necrobot-Private/NecroBot/pull/1833) ([Furtif](https://github.com/Furtif))
+- Create ui.zh-TW.json [\#1830](https://github.com/Necrobot-Private/NecroBot/pull/1830) ([informer0827](https://github.com/informer0827))
+- Release v2.10.3.8 \(RocketBot2\)  [\#1829](https://github.com/Necrobot-Private/NecroBot/pull/1829) ([Furtif](https://github.com/Furtif))
 
 ## [v1.0.0.179](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.179) (2017-06-16)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.178...v1.0.0.179)
