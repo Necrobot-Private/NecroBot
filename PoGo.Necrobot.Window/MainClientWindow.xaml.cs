@@ -63,9 +63,9 @@ namespace PoGo.Necrobot.Window
                 { LogLevel.New, new Tuple<string, string, string>("Blue", "#0883FF", "#0883FF") },
                 { LogLevel.SoftBan, new Tuple<string, string, string>("Pink", "#FF1E8E", "#EC008C") },
                 { LogLevel.LevelUp, new Tuple<string, string, string>("Blue", "#0883FF", "#0883FF") },
+                { LogLevel.BotStats, new Tuple<string, string, string>("Blue", "#0883FF", "#0883FF") },
                 { LogLevel.Gym, new Tuple<string, string, string>("Purple", "#8308FF", "#197B30") },
-                { LogLevel.Service , new Tuple<string, string, string>("Blue", "#0883FF", "#0883FF") },
-                { LogLevel.BotStats , new Tuple<string, string, string>("Cyan", "#B4E1FD", "#EC008C") }
+                { LogLevel.Service , new Tuple<string, string, string>("Blue", "#0883FF", "#0883FF") }
         };
 
         private static SolidColorBrush DarkSolarizedBackground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#002B36"));
