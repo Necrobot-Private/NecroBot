@@ -326,7 +326,7 @@
         </member>
         <member name="M:Google.Api.Gax.PagedAsyncEnumerable`2.ReadPageAsync(System.Int32,System.Threading.CancellationToken)">
             <summary>
-            Asynchronously reads a single page of results with a fixed maximum size. The returned page is guaranteed
+            Eagerly (but asynchronously) reads a single page of results with a fixed maximum size. The returned page is guaranteed
             to have that many results, unless there is no more data available.
             </summary>
             <remarks>
@@ -334,7 +334,9 @@
             For example, a request for a page with 100 resources may return a page with 80 resources but
             a next page token for more to be retrieved. This is suitable for batch-processing, but not
             for user-visible paging such as in a web application, where fixed-size pages are expected.
-            This method may make more than one API call in order to fill the page.
+            This method may make more than one API call in order to fill the page, but after the page has been
+            returned, all the data will have been loaded. (In particular, iterating over the items in the page
+            multiple times will not make any further requests.)
             </remarks>
             <param name="pageSize">The page size. Must be greater than 0.</param>
             <param name="cancellationToken">A token to cancel the operation.</param>
@@ -362,7 +364,7 @@
         </member>
         <member name="M:Google.Api.Gax.PagedEnumerable`2.ReadPage(System.Int32)">
             <summary>
-            Asynchronously reads a single page of results with a fixed maximum size. The returned page is guaranteed
+            Eagerly reads a single page of results with a fixed maximum size. The returned page is guaranteed
             to have that many results, unless there is no more data available.
             </summary>
             <remarks>
@@ -370,7 +372,9 @@
             For example, a request for a page with 100 resources may return a page with 80 resources but
             a next page token for more to be retrieved. This is suitable for batch-processing, but not
             for user-visible paging such as in a web application, where fixed-size pages are expected.
-            This method may make more than one API call in order to fill the page.
+            This method may make more than one API call in order to fill the page, but after the page has been
+            returned, all the data will have been loaded. (In particular, iterating over the items in the page
+            multiple times will not make any further requests.)
             </remarks>
             <param name="pageSize">The page size. Must be greater than 0.</param>
             <returns>An asynchronous operation, the result of which is a page of resources.</returns>
@@ -943,45 +947,6 @@
         </member>
         <member name="M:Google.Api.Gax.ResourceNameList`1.RemoveAt(System.Int32)">
             <inheritdoc />
-        </member>
-        <member name="T:Google.Api.Gax.ScopedCredentialProvider">
-            <summary>
-            Simple factory of scoped credentials, which caches a scoped version of the
-            default application credentials to avoid repeated authentication.
-            </summary>
-        </member>
-        <member name="F:Google.Api.Gax.ScopedCredentialProvider._lazyScopedDefaultCredentials">
-            <summary>
-            Lazily-created task to retrieve the default application channel credentials. Once completed, this
-            task can be used whenever channel credentials are required. The returned task always runs in the
-            thread pool, so its result can be used synchronously from synchronous methods without risk of deadlock.
-            The same channel credentials are used by all pools. The field is initialized in the constructor, as it uses
-            _scopes, and you can't refer to an instance field within an instance field initializer.
-            </summary>
-        </member>
-        <member name="M:Google.Api.Gax.ScopedCredentialProvider.#ctor(System.Collections.Generic.IEnumerable{System.String})">
-            <summary>
-            Creates a channel pool which will apply the specified scopes to the credentials if they require any.
-            </summary>
-            <param name="scopes">The scopes to apply. Must not be null, and must not contain null references. May be empty.</param>
-        </member>
-        <member name="M:Google.Api.Gax.ScopedCredentialProvider.GetCredentials(Google.Apis.Auth.OAuth2.GoogleCredential)">
-            <summary>
-            Returns credentials with the scopes applied if required.
-            </summary>
-            <param name="credentials">Existing credentials, if any. This may be null,
-            in which case the default application credentials will be used.</param>
-            <returns>A task representing the asynchronous operation. The result of the task
-            is the scoped credentials.</returns>
-        </member>
-        <member name="M:Google.Api.Gax.ScopedCredentialProvider.GetCredentialsAsync(Google.Apis.Auth.OAuth2.GoogleCredential)">
-            <summary>
-            Asynchronously returns credentials with the scopes applied if required.
-            </summary>
-            <param name="credentials">Existing credentials, if any. This may be null,
-            in which case the default application credentials will be used.</param>
-            <returns>A task representing the asynchronous operation. The result of the task
-            is the scoped credentials.</returns>
         </member>
         <member name="T:Google.Api.Gax.SystemClock">
             <summary>
