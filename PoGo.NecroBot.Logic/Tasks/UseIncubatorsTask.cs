@@ -15,6 +15,7 @@ using POGOProtos.Inventory.Item;
 using POGOProtos.Networking.Responses;
 using PoGo.NecroBot.Logic.Logging;
 using PokemonGo.RocketAPI.Helpers;
+using PoGo.NecroBot.Logic.Utils;
 
 #endregion
 
@@ -113,6 +114,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                                  $"KmToWalk: {KmToWalk:0.00}kmWalked: {kmWalked:0.00}, | " +
                                  $"XP1: {ExpAwarded1} | XP2: {ExpAwarded2} | " +
                                  $"SD1: {stardust1} | SD2: {stardust2}", LogLevel.Egg);
+
+                    if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
+                        await PushNotificationClient.SendNotification(session, $"Egg has hatched.", $"Pokemon: {hatched.PokemonId}\n" +
+                                                                                                    $"Level: {PokemonInfo.GetLevel(hatched)}\n" +
+                                                                                                    $"CP: {hatched.Cp}\n" +
+                                                                                                    $"IV: {Math.Round(PokemonInfo.CalculatePokemonPerfection(hatched), 2)}\n", true).ConfigureAwait(false);
 
                     session.EventDispatcher.Send(new EggHatchedEvent
                     {

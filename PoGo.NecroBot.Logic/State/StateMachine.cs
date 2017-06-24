@@ -167,14 +167,20 @@ namespace PoGo.NecroBot.Logic.State
                     if (rsae.Snipe && rsae.EncounterData != null)
                         session.EventDispatcher.Send(new WarnEvent { Message = $"Detected a good pokemon with snipe {rsae.EncounterData.PokemonId.ToString()}   IV:{rsae.EncounterData.IV}  Move:{rsae.EncounterData.Move1}/ Move:{rsae.EncounterData.Move2}   LV: Move:{rsae.EncounterData.Level}" });
                     else
+                    {
                         session.EventDispatcher.Send(new WarnEvent { Message = "Encountered a good pokemon, switch another bot to catch him too." });
-                    
+                        if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
+                            await PushNotificationClient.SendNotification(session, $"Switch bot account", $"Encountered a good pokemon, switch another bot to catch him too.", true).ConfigureAwait(false);
+                    }
                     session.ReInitSessionWithNextBot(rsae.Bot, session.Client.CurrentLatitude, session.Client.CurrentLongitude, session.Client.CurrentAltitude);
                     state = new LoginState(rsae.LastEncounterPokemonId, rsae.EncounterData);
                 }
                 catch (ActiveSwitchByRuleException se)
                 {
-                    session.EventDispatcher.Send(new WarnEvent { Message = $"Switch bot account activated by : {se.MatchedRule.ToString()}  - {se.ReachedValue} " });
+                    session.EventDispatcher.Send(new WarnEvent { Message = $"Switch bot account activated by: {se.MatchedRule.ToString()} - {se.ReachedValue}" });
+                    if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
+                        await PushNotificationClient.SendNotification(session, $"Switch bot account", $"Activated by: {se.MatchedRule.ToString()} - {se.ReachedValue}", true).ConfigureAwait(false);
+
                     if (se.MatchedRule == SwitchRules.EmptyMap)
                     {
                         TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(90);
@@ -198,9 +204,10 @@ namespace PoGo.NecroBot.Logic.State
                             // TODO - await is legal here! USE it or use pragma to suppress compilerwarning and write a comment why it is not used
                             // TODO: Attention - do not touch (add pragma) when you do not know what you are doing ;)
                             // jjskuld - Ignore CS4014 warning for now.
-#pragma warning disable 4014
-                            PushNotificationClient.SendNotification(session, $"{se.MatchedRule} - {session.Settings.Username}", "This bot has reach limit, it will be blocked for 60 mins for safety.", true);
-#pragma warning restore 4014
+
+                            if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
+                                await PushNotificationClient.SendNotification(session, $"{se.MatchedRule} - {session.Settings.Username}", $"This bot has reach limit, it will be blocked for {session.LogicSettings.MultipleBotConfig.OnLimitPauseTimes} mins for safety.", true).ConfigureAwait(false);
+
                             session.EventDispatcher.Send(new WarnEvent() { Message = $"You reach limited. bot will sleep for {session.LogicSettings.MultipleBotConfig.OnLimitPauseTimes} min" });
 
                             TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(session.LogicSettings.MultipleBotConfig.OnLimitPauseTimes);
@@ -266,9 +273,8 @@ namespace PoGo.NecroBot.Logic.State
                 }
                 catch(PtcLoginException ex)
                 {
-#pragma warning disable 4014
-                    PushNotificationClient.SendNotification(session, $"PTC Login failed!!!! {session.Settings.Username}", session.Translation.GetTranslation(TranslationString.PtcLoginFail), true);
-#pragma warning restore 4014
+                    if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
+                        await PushNotificationClient.SendNotification(session, $"PTC Login failed!!!! {session.Settings.Username}", session.Translation.GetTranslation(TranslationString.PtcLoginFail), true).ConfigureAwait(false);
 
                     if (manager.AllowMultipleBot())
                     {
@@ -289,9 +295,8 @@ namespace PoGo.NecroBot.Logic.State
                     // TODO - await is legal here! USE it or use pragma to suppress compilerwarning and write a comment why it is not used
                     // TODO: Attention - do not touch (add pragma) when you do not know what you are doing ;)
                     // jjskuld - Ignore CS4014 warning for now.
-#pragma warning disable 4014
-                    PushNotificationClient.SendNotification(session, $"Banned!!!! {session.Settings.Username}", session.Translation.GetTranslation(TranslationString.AccountBanned), true);
-#pragma warning restore 4014
+                    if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
+                        await PushNotificationClient.SendNotification(session, $"Banned!!!! {session.Settings.Username}", session.Translation.GetTranslation(TranslationString.AccountBanned), true).ConfigureAwait(false);
 
                     if (manager.AllowMultipleBot())
                     {
@@ -352,9 +357,9 @@ namespace PoGo.NecroBot.Logic.State
                     var resolved = await CaptchaManager.SolveCaptcha(session, captchaException.Url).ConfigureAwait(false);
                     if (!resolved)
                     {
-#pragma warning disable 4014
-                        PushNotificationClient.SendNotification(session, $"Captcha required {session.Settings.Username}", session.Translation.GetTranslation(TranslationString.CaptchaShown), true);
-#pragma warning restore 4014
+                        if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
+                            await PushNotificationClient.SendNotification(session, $"Captcha required {session.Settings.Username}", session.Translation.GetTranslation(TranslationString.CaptchaShown), true).ConfigureAwait(false);
+
                         session.EventDispatcher.Send(new WarnEvent { Message = session.Translation.GetTranslation(TranslationString.CaptchaShown) });
                         Logger.Debug("Captcha not resolved");
                         if (manager.AllowMultipleBot())

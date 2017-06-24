@@ -16,7 +16,7 @@ namespace PoGo.NecroBot.Logic.Service
     {
         private static async Task HandleEventAsync(ErrorEvent errorEvent, ISession session)
         {
-            await PushNotificationClient.SendNotification(session, "Error occured", errorEvent.Message).ConfigureAwait(false);
+            await PushNotificationClient.SendNotification(session, "Error occured", errorEvent.Message,true).ConfigureAwait(false);
         }
 
         public static void HandleEvent(EncounteredEvent ev, ISession session)

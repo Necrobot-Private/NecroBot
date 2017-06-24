@@ -16,7 +16,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using TinyIoC;
-using static PoGo.NecroBot.Logic.Utils.PushNotificationClient;
 
 namespace PoGo.NecroBot.Logic
 {
@@ -76,7 +75,7 @@ namespace PoGo.NecroBot.Logic
             var session = TinyIoCContainer.Current.Resolve<ISession>();
             return _context.Account.FirstOrDefault(a => session.Settings.Username == a.Username && session.Settings.AuthType == a.AuthType);
         }
-        
+
         public void SwitchAccounts(Account newAccount)
         {
             if (newAccount == null)
@@ -107,16 +106,34 @@ namespace PoGo.NecroBot.Logic
             string body = "";
             foreach (var item in Accounts)
             {
-                body = body + $"{item.Username}     {item.GetRuntime()}\r\n";
+                body = body + $"{item.Username} - {item.GetRuntime()}\r\n";
             }
 
             var session = TinyIoCContainer.Current.Resolve<ISession>();
 
-            Logging.Logger.Write($"Account changed to {newAccount.Nickname}.");
+            var Account = !string.IsNullOrEmpty(newAccount.Nickname) ? newAccount.Nickname : newAccount.Username;
+            Logger.Write($"Account changed to {Account}.");
 
-#pragma warning disable 4014 // added to get rid of compiler warning. Remove this if async code is used below.
-            SendNotification(session, $"Account changed to {newAccount.Nickname}", body);
-#pragma warning restore 4014
+            var TotXP = 0;
+
+            for (int i = 0; i < newAccount.Level + 1; i++)
+            {
+                TotXP = TotXP + Statistics.GetXpDiff(i);
+            }
+
+            long? XP = newAccount.CurrentXp;
+            if (XP == null) { XP = 0; }
+            long? SD = newAccount.Stardust;
+            if (SD == null) { SD = 0; }
+            var NLevelXP = newAccount.NextLevelXp; 
+            if (newAccount.NextLevelXp == null) { NLevelXP = 0; }
+            Logger.Write($"User: {Account} | XP: {XP}({(double)XP / ((double)NLevelXP) * 100:#0.00}%) | SD: {SD}", LogLevel.BotStats);
+
+            if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
+                PushNotificationClient.SendNotification(session, $"Account changed to", $"{Account}\n" +
+                                                                 $"Level: {newAccount.Level}\n" +
+                                                                 $"XP: {XP:#,##0}({(double)XP / ((double)NLevelXP) * 100:#0.00}%)\n" +
+                                                                 $"SD: {SD:#,##0}\n", true).ConfigureAwait(false);
         }
 
         public void BlockCurrentBot(int expired = 60)
@@ -300,9 +317,9 @@ namespace PoGo.NecroBot.Logic
 
             // If we got here all accounts blocked so pause and retry.
             var pauseTime = session.LogicSettings.MultipleBotConfig.OnLimitPauseTimes;
-#pragma warning disable 4014 // added to get rid of compiler warning. Remove this if async code is used below.
-            SendNotification(session, "All accounts are blocked.", $"None of your accounts are available to switch to, so bot will sleep for {pauseTime} minutes until next account is available to run.", true);
-#pragma warning restore 4014
+
+            if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
+                PushNotificationClient.SendNotification(session, "All accounts are blocked.", $"None of your accounts are available to switch to, so bot will sleep for {pauseTime} minutes until next account is available to run.", true).ConfigureAwait(false);
 
             Task.Delay(pauseTime * 60 * 1000).Wait();
             return GetSwitchableAccount();
@@ -364,10 +381,11 @@ namespace PoGo.NecroBot.Logic
         {
             var userL = 0;
             var maxL = 0;
+            var user = "";
 
             foreach (var item in Accounts)
             {
-                var user = string.IsNullOrEmpty(item.Nickname) ? item.Username : item.Nickname;
+                user = string.IsNullOrEmpty(item.Nickname) ? item.Username : item.Nickname;
                 userL = user.Length;
                 if (userL > maxL)
                 {
@@ -378,16 +396,17 @@ namespace PoGo.NecroBot.Logic
             foreach (var item in Accounts)
             {
                 var SP = "";
-                var user = string.IsNullOrEmpty(item.Nickname) ? item.Username : item.Nickname;
+                user = string.IsNullOrEmpty(item.Nickname) ? item.Username : item.Nickname;
+
                 for (int i = 0; i < maxL - user.Length + 1; i++)
                 {
                     SP += " ";
                 }
 
                 if (item.Level > 0)
-                    Logging.Logger.Write($"{user}{SP}(Level: {item.Level:#0}) | Runtime: {item.RuntimeTotal:00:00:00}");
+                    Logger.Write($"{user}{SP}(Level: {item.Level:#0}) | Runtime: {item.RuntimeTotal,3:##0} Min",LogLevel.BotStats);
                 else
-                    Logging.Logger.Write($"{user}{SP}(Level: ??) | Runtime: {item.RuntimeTotal:00:00:00}");
+                    Logger.Write($"{user}{SP}(Level: ??) | Runtime: {item.RuntimeTotal,3:##0} Min", LogLevel.BotStats);
             }
         }
 
@@ -417,9 +436,9 @@ namespace PoGo.NecroBot.Logic
 
             account.Level = stat.StatsExport.Level;
             account.Stardust = stat.TotalStardust;
-            account.CurrentXp = stat.StatsExport.CurrentXp;
-            account.NextLevelXp = stat.StatsExport.LevelupXp;
-            account.PrevLevelXp = stat.StatsExport.PreviousXp;
+            account.CurrentXp = stat.StatsExport.CurrentXp - stat.StatsExport.LevelXp;
+            account.NextLevelXp = stat.StatsExport.LevelupXp - stat.StatsExport.LevelXp;
+            account.PrevLevelXp = stat.StatsExport.PreviousXp - stat.StatsExport.LevelXp;
             var now = DateTime.Now;
             if (account.LastRuntimeUpdatedAt.HasValue)
                 account.RuntimeTotal += (now - TimeUtil.GetDateTimeFromMilliseconds(account.LastRuntimeUpdatedAt.Value)).TotalMinutes;
