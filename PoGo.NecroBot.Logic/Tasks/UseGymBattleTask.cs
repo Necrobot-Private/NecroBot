@@ -27,6 +27,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 {
     public class UseGymBattleTask
     {
+        public static DateTime AttackStart { get; private set; }
+
         private static int _startBattleCounter = 3;
         private static readonly bool _logTimings = false;
         private static readonly DateTime UnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
@@ -225,6 +227,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     case BattleState.Active:
                         _startBattleCounter = 3;
+                        AttackStart = DateTime.Now.AddSeconds(120);
                         Logger.Write($"Time to start Attack Mode", LogLevel.Gym, ConsoleColor.DarkYellow);
                         thisAttackActions = await AttackGym(session, cancellationToken, fortDetails, result, index).ConfigureAwait(false);
                         battleActions.AddRange(thisAttackActions);
@@ -272,7 +275,15 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                         await Task.Delay(2000).ConfigureAwait(false);
 
-                        Logger.Write(string.Format("(Battle) XP: {0}, Gym points: {1}, Next defender Id: {2}", exp, point, defenderPokemonId), LogLevel.Gym, ConsoleColor.Magenta);
+                        Logger.Write($"(Battle) XP: {exp} | Gym points: {point} | Level: {UseGymBattleTask.GetGymLevel(point),2:#0} | Next defender Id: {defenderPokemonId}", LogLevel.Gym, ConsoleColor.Magenta);
+
+                        if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
+                            await PushNotificationClient.SendNotification(session, $"Gym Battle",
+                                                                                   $"We were victorious!\n" +
+                                                                                   $"XP: {exp}" +
+                                                                                   $"Prest: {point}" +
+                                                                                   $"Level: {UseGymBattleTask.GetGymLevel(point),2:#0}", true).ConfigureAwait(false); // +
+                                                                                   //$"{startResponse.Defender.ActivePokemon.PokemonData.PokemonId}", true);
                     }
                     continue;
                 }
@@ -362,10 +373,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                                             {
                                                 Logger.Write($"Collected {count * 10} coins", LogLevel.Gym, ConsoleColor.DarkYellow);
 
-                                                // jjskuld - Ignore CS4014 warning for now.
-                                                #pragma warning disable 4014
-                                                PushNotificationClient.SendNotification(session, $"Daily reward collected : {count * 10} coins", $"Congratulations, Your bot has worked hard and collected {count * 10} coins today.");
-                                                #pragma warning restore 4014
+                                                if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
+                                                    await PushNotificationClient.SendNotification(session, $"Daily reward collected: {count * 10} coins", $"Congratulations, Your bot has worked hard and collected {count * 10} coins today.",true).ConfigureAwait(false);
                                             }
                                             else
                                                 Logger.Write($"Hmm, we have failed with gaining a reward: {collectDailyBonusResponse}", LogLevel.Gym, ConsoleColor.Magenta);
@@ -897,8 +906,13 @@ namespace PoGo.NecroBot.Logic.Tasks
             var lastActions = startResponse.BattleLog.BattleActions.ToList();
 
             Logger.Write($"Gym battle started; fighting trainer: {startResponse.Defender.TrainerPublicProfile.Name}", LogLevel.Gym, ConsoleColor.Green);
-            Logger.Write($"We are attacking: {startResponse.Defender.ActivePokemon.PokemonData.PokemonId} ({startResponse.Defender.ActivePokemon.PokemonData.Cp} CP)", LogLevel.Gym, ConsoleColor.White);
+            Logger.Write($"We are attacking: {startResponse.Defender.ActivePokemon.PokemonData.PokemonId} ({startResponse.Defender.ActivePokemon.PokemonData.Cp} CP), Lvl: {startResponse.Defender.ActivePokemon.PokemonData.Level():0.0}", LogLevel.Gym, ConsoleColor.White);
             Console.WriteLine(Environment.NewLine);
+
+            if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
+                await PushNotificationClient.SendNotification(session, $"Gym battle started", $"Trainer: {startResponse.Defender.TrainerPublicProfile.Name}\n" +
+                                                                       $"We are attacking: {startResponse.Defender.ActivePokemon.PokemonData.PokemonId} ({startResponse.Defender.ActivePokemon.PokemonData.Cp} CP)\n" +
+                                                                       $"Lvl: {startResponse.Defender.ActivePokemon.PokemonData.Level():0.0}", true).ConfigureAwait(false);
 
             int loops = 0;
             List<BattleAction> emptyActions = new List<BattleAction>();
@@ -1042,33 +1056,26 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                                 attacker = attackResult.ActiveAttacker.PokemonData;
                                 defender = attackResult.ActiveDefender.PokemonData;
-                                var SP1 = "";
-                                var SP2 = "";
-                                var AttackerL = attacker.PokemonId.ToString().Length;
-                                var DefenderL = defender.PokemonId.ToString().Length;
-                                var maxL = AttackerL;
-                                if (DefenderL>maxL) { maxL = DefenderL; }
-
-                                for (int i = 0; i < maxL - AttackerL + 1; i++)
-                                {
-                                    SP1 += " ";
-                                }
-
-                                for (int i = 0; i < maxL - DefenderL + 1; i++)
-                                {
-                                    SP2 += " ";
-                                }
 
                                 var fortDetails = session.GymState.GetGymDetails(session, gym, true); //await session.Client.Fort.GetGymDetails(gym.Id, gym.Latitude, gym.Longitude).ConfigureAwait(false);
                                 var player = session.Profile.PlayerData;
                                 await EnsureJoinTeam(session, player).ConfigureAwait(false);
+                                var ev = fortDetails.GymState.FortData.OwnedByTeam;
+                                if (AttackStart > DateTime.Now) { AttackStart = DateTime.Now; }
 
                                 //Console.SetCursorPosition(0, Console.CursorTop - 1);
-                                Logger.Write($"(ATTACKER): {attacker.PokemonId.ToString() + SP1} HP: {attackResult.ActiveAttacker.CurrentHealth:##0}, Sta: {attackResult.ActiveAttacker.CurrentEnergy:#0}", LogLevel.Gym, ConsoleColor.Green);
-                                Logger.Write($"(DEFENDER): {defender.PokemonId.ToString() + SP2} HP: {attackResult.ActiveDefender.CurrentHealth:##0}, Sta: {attackResult.ActiveDefender.CurrentEnergy:#0}", LogLevel.Gym,
+                                Logger.Write($"(DEFENDER): {defender.PokemonId.ToString(),-12} | HP: {attackResult.ActiveDefender.CurrentHealth,3:##0} | Sta: {attackResult.ActiveDefender.CurrentEnergy,3:##0} | Lvl: {attackResult.ActiveDefender.PokemonData.Level(),4:#0.0}", LogLevel.Gym,
+                                    (ev == TeamColor.Red)
+                                        ? ConsoleColor.Red
+                                        : (ev == TeamColor.Yellow ? ConsoleColor.Yellow : ConsoleColor.Blue));
+                                Logger.Write($"(ATTACKER): {attacker.PokemonId.ToString(),-12} | HP: {attackResult.ActiveAttacker.CurrentHealth,3:##0} | Sta: {attackResult.ActiveAttacker.CurrentEnergy,3:##0} | Lvl: {attackResult.ActiveAttacker.PokemonData.Level(),4:#0.0}", LogLevel.Gym,
                                     (player.Team == TeamColor.Red)
                                         ? ConsoleColor.Red
                                         : (player.Team == TeamColor.Yellow ? ConsoleColor.Yellow : ConsoleColor.Blue));
+
+                                TimeSpan BattleTimer = DateTime.Now.Subtract(AttackStart);
+
+                                Logger.Write($"Battle Timer: {100 - BattleTimer.TotalSeconds,3:##0} Sec remaining.", LogLevel.Info, ConsoleColor.White);
 
                                 if (attackResult != null && attackResult.ActiveAttacker != null)
                                     session.GymState.MyTeam.Where(w => w.Attacker.Id == attackResult.ActiveAttacker.PokemonData.Id).FirstOrDefault().HpState = attackResult.ActiveAttacker.CurrentHealth;
@@ -1078,6 +1085,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 return lastActions;
                             case BattleState.TimedOut:
                                 Logger.Write($"Our attack timed out...:");
+                                if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
+                                    await PushNotificationClient.SendNotification(session, "Gym Battle", $"Our attack timed out...:",true).ConfigureAwait(false);
+                                await Task.Delay(1000).ConfigureAwait(false);
                                 return lastActions;
                             case BattleState.StateUnset:
                                 Logger.Write($"State was unset?: {attackResult}");

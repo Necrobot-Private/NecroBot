@@ -199,6 +199,7 @@ namespace PoGo.NecroBot.Logic.State
             Forts.Clear();
 
             var manager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
+            var session = TinyIoCContainer.Current.Resolve<ISession>();
 
             var nextBot = manager.GetSwitchableAccount(bot);
             if (nextBot != null)

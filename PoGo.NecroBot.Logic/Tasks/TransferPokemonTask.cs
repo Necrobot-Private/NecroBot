@@ -1,4 +1,4 @@
-﻿#region using directives
+#region using directives
 
 using System.Collections.Generic;
 using System.Linq;
@@ -51,7 +51,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     var ev = new TransferPokemonEvent
                     {
                         Id = pokemon.Id,
-                        PokemonId = pokemon.PokemonId,
+                        PokemonId = pokemon.PokemonId, //session.Translation.GetPokemonTranslation(pokemon.PokemonId),
                         Perfection = PokemonInfo.CalculatePokemonPerfection(pokemon),
                         Cp = pokemon.Cp,
                         BestCp = bestPokemonOfType.Cp,
