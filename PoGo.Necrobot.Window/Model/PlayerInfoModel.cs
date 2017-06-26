@@ -169,8 +169,7 @@ namespace PoGo.Necrobot.Window.Model
         public string PokestopLimit { get; set; }
         public string CatchLimit { get; set; }
         public double WalkSpeed { get; set; }
-        public string CollectPokeCoin { get; set; }
-
+ 
         //Still Needs Some Work(TheWizard1328)
         public int pokemontransfered;
         public int PokemonTransfered //{ get; set; }
@@ -193,7 +192,6 @@ namespace PoGo.Necrobot.Window.Model
                 LevelExp = playerStats.NextLevelXp;
             }
 
-            GetPokeCoin();
             playerProfile = profile.Profile;
         }
 
@@ -332,15 +330,6 @@ namespace PoGo.Necrobot.Window.Model
         {
             KmRemaining = kmremaining;
             RaisePropertyChanged("KmRemaining");
-        }
-
-        public void GetPokeCoin()
-        {
-            Session = TinyIoCContainer.Current.Resolve<ISession>();
-            var deployed = Session.Inventory.GetDeployedPokemons().Result;
-            var count = (deployed.Count() * 10).ToString();
-            CollectPokeCoin = $"Collect PokeCoin ({count})";
-            RaisePropertyChanged("CollectPokeCoin");
         }
     }
 }
