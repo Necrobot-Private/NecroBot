@@ -184,10 +184,9 @@ namespace PoGo.NecroBot.Logic.Utils
                                     Rewards += $"\n{item.ItemId} x {item.ItemCount}";
                                 }
                             }
-                            var Account = GetCurrentAccount();
 
                             if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
-                                await PushNotificationClient.SendNotification(session, $"{Account} has leveled up.", $"{Account} just reached level {stat.Level}{Rewards}", true).ConfigureAwait(false);
+                                await PushNotificationClient.SendNotification(session, $"Trainer has leveled up.", $"Trainer just reached level {stat.Level}{Rewards}", true).ConfigureAwait(false);
                         }
                     }
                 }
