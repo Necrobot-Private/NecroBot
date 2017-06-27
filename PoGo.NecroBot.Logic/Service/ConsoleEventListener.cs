@@ -176,7 +176,7 @@ namespace PoGo.NecroBot.Logic.Service
                 session.Translation.GetTranslation(
                     TranslationString.IncubatorEggHatched,
                     eggHatchedEvent.Dist,
-                    eggHatchedEvent.Id, // session.Translation.GetPokemonTranslation(
+                    session.Translation.GetPokemonTranslation(eggHatchedEvent.PokemonId),
                     eggHatchedEvent.Level,
                     eggHatchedEvent.Cp,
                     eggHatchedEvent.MaxCp,

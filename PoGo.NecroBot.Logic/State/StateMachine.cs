@@ -157,7 +157,7 @@ namespace PoGo.NecroBot.Logic.State
                 }
                 catch(ActiveSwitchAccountManualException ex)
                 {
-                    session.EventDispatcher.Send(new WarnEvent { Message = "Switch account requested by user" });
+                    session.EventDispatcher.Send(new WarnEvent { Message = "Switch bot account requested by: User" });
                     ReInitializeSession(session, globalSettings, ex.RequestedAccount);
                     state = new LoginState();
 
