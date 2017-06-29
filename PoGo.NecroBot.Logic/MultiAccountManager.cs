@@ -127,13 +127,13 @@ namespace PoGo.NecroBot.Logic
             if (SD == null) { SD = 0; }
             var NLevelXP = newAccount.NextLevelXp; 
             if (newAccount.NextLevelXp == null) { NLevelXP = 0; }
-            Logger.Write($"User: {Account} | XP: {XP}({(double)XP / ((double)NLevelXP) * 100:#0.00}%) | SD: {SD}", LogLevel.BotStats);
+            Logger.Write($"User: {Account} | Lvl: {newAccount.Level} | XP: {XP}({(double)XP / ((double)NLevelXP) * 100:#0.00}%) | SD: {SD}", LogLevel.BotStats);
 
             if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
                 PushNotificationClient.SendNotification(session, $"Account changed to", $"{Account}\n" +
-                                                                 $"Level: {newAccount.Level}\n" +
-                                                                 $"XP: {XP:#,##0}({(double)XP / ((double)NLevelXP) * 100:#0.00}%)\n" +
-                                                                 $"SD: {SD:#,##0}\n", true).ConfigureAwait(false);
+                                                                 $"Lvl: {newAccount.Level}\n" +
+                                                                 $"XP : {XP:#,##0}({(double)XP / ((double)NLevelXP) * 100:#0.00}%)\n" +
+                                                                 $"SD : {SD:#,##0}\n", true).ConfigureAwait(false);
         }
 
         public void BlockCurrentBot(int expired = 60)
@@ -404,9 +404,9 @@ namespace PoGo.NecroBot.Logic
                 }
 
                 if (item.Level > 0)
-                    Logger.Write($"{user}{SP}(Level: {item.Level:#0}) | Runtime: {item.RuntimeTotal,3:##0} Min",LogLevel.BotStats);
+                    Logger.Write($"{user}{SP}| Lvl: {item.Level:#0} | Runtime: {item.RuntimeTotal,3:##0} Min",LogLevel.BotStats);
                 else
-                    Logger.Write($"{user}{SP}(Level: ??) | Runtime: {item.RuntimeTotal,3:##0} Min", LogLevel.BotStats);
+                    Logger.Write($"{user}{SP}| Lvl: ?? | Runtime: {item.RuntimeTotal,3:##0} Min", LogLevel.BotStats);
             }
         }
 
