@@ -144,8 +144,8 @@ namespace PoGo.NecroBot.Logic.Service
             Logger.Write(
                 session.Translation.GetTranslation(
                     TranslationString.PokemonRename,
-                    session.Translation.GetPokemonTranslation(renamePokemonEvent.PokemonId).PadRight(12), 
-                    renamePokemonEvent.OldNickname.PadRight(12),
+                    session.Translation.GetPokemonTranslation(renamePokemonEvent.PokemonId).PadRight(13), 
+                    renamePokemonEvent.OldNickname.PadRight(13),
                     renamePokemonEvent.NewNickname
                 ),
                 LogLevel.Info);
@@ -178,7 +178,7 @@ namespace PoGo.NecroBot.Logic.Service
                 session.Translation.GetTranslation(
                     TranslationString.IncubatorEggHatched,
                     eggHatchedEvent.Dist.ToString("0.00").PadLeft(5),
-                    session.Translation.GetPokemonTranslation(eggHatchedEvent.PokemonId).PadRight(12),
+                    session.Translation.GetPokemonTranslation(eggHatchedEvent.PokemonId).PadRight(13),
                     eggHatchedEvent.Level.ToString("0.0").PadLeft(4),
                     eggHatchedEvent.Cp.ToString("0").PadLeft(4),
                     eggHatchedEvent.MaxCp.ToString("0").PadLeft(4),
