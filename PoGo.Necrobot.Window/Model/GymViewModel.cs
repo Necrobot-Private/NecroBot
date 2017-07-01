@@ -29,8 +29,8 @@ namespace PoGo.Necrobot.Window.Model
             get
             {
                 string fortIcon = "";
-                //TODO: review this
                 bool isRaid = false;
+                /*/TODO: review this
                 try
                 {
                     if (string.IsNullOrEmpty(fort.RaidInfo.RaidPokemon.PokemonId.ToString()))
@@ -42,6 +42,7 @@ namespace PoGo.Necrobot.Window.Model
                 {
                     isRaid = false;
                 }
+				//*/
 
                 switch (fort.OwnedByTeam)
                 {
