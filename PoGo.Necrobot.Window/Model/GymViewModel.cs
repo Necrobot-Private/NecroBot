@@ -29,7 +29,20 @@ namespace PoGo.Necrobot.Window.Model
             get
             {
                 string fortIcon = "";
-                bool isRaid = false; //TODO: pokeStop.RaidInfo.IsExclusive; //bug!
+                //TODO: review this
+                bool isRaid = false;
+                try
+                {
+                    if (string.IsNullOrEmpty(fort.RaidInfo.RaidPokemon.PokemonId.ToString()))
+                        isRaid = false;
+                    else
+                        isRaid = true;
+                }
+                catch
+                {
+                    isRaid = false;
+                }
+
                 switch (fort.OwnedByTeam)
                 {
                     case TeamColor.Neutral:
