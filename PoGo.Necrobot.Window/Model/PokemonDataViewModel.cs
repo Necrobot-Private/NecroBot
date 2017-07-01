@@ -308,15 +308,23 @@ namespace PoGo.Necrobot.Window.Model
 
         public string HPDisplay => $"{HP}/{MaxHP}";
 
+        public bool Slashed => PokemonData.IsBad ? true : false;
+
         public string PokemonIcon
         {
             get
             {
-                var additional = "";
-                additional = additional + ("-" + pokemonData.PokemonDisplay.Costume.ToString()).Replace("-Unset", "");
-                additional = additional + ("-" + pokemonData.PokemonDisplay.Form.ToString().Replace("Unown", "").Replace("-ExclamationPoint", "-ExclamationPoint").Replace("-QuestionMark", "-QuestionMark")).Replace("-Unset", "");
-                additional += pokemonData.PokemonDisplay.Shiny ? "-shiny": "";
-                return $"https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/pokemon/{(int)PokemonData.PokemonId}{additional}.png";
+
+                if (Slashed)
+                    return $"https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/pokemon/0.png";
+                else
+                {
+                    var additional = "";
+                    additional = additional + ("-" + pokemonData.PokemonDisplay.Costume.ToString()).Replace("-Unset", "");
+                    additional = additional + ("-" + pokemonData.PokemonDisplay.Form.ToString().Replace("Unown", "").Replace("-ExclamationPoint", "-ExclamationPoint").Replace("-QuestionMark", "-QuestionMark")).Replace("-Unset", "");
+                    additional += pokemonData.PokemonDisplay.Shiny ? "-shiny" : "";
+                    return $"https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/pokemon/{(int)PokemonData.PokemonId}{additional}.png";
+                }
             }
         }
 
