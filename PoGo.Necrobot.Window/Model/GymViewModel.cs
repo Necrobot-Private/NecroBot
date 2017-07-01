@@ -29,19 +29,32 @@ namespace PoGo.Necrobot.Window.Model
             get
             {
                 string fortIcon = "";
+                bool isRaid = false; //TODO: pokeStop.RaidInfo.IsExclusive; //bug!
                 switch (fort.OwnedByTeam)
                 {
                     case TeamColor.Neutral:
-                        fortIcon = "https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/unoccupied.png";
+                        if (isRaid)
+                            fortIcon = "https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/gym-unoccupied-raid.png";
+                        else
+                            fortIcon = "https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/unoccupied.png";
                         break;
                     case TeamColor.Blue:
-                        fortIcon = "https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/mystic.png";
+                        if (isRaid)
+                            fortIcon = "https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/gym-mystic-raid.png";
+                        else
+                            fortIcon = "https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/mystic.png";
                         break;
                     case TeamColor.Red:
-                        fortIcon = "https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/valor.png";
+                        if (isRaid)
+                            fortIcon = "https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/gym-valor-raid.png";
+                        else
+                            fortIcon = "https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/valor.png";
                         break;
                     case TeamColor.Yellow:
-                        fortIcon = "https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/instinct.png";
+                        if (isRaid)
+                            fortIcon = "https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/gym-instinct-raid.png";
+                        else
+                            fortIcon = "https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/instinct.png";
                         break;
                 }
                 return fortIcon;
