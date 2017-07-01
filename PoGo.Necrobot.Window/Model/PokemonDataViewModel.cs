@@ -316,7 +316,7 @@ namespace PoGo.Necrobot.Window.Model
             {
 
                 if (Slashed)
-                    return $"https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/pokemon/0.png";
+                    return $"https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/pokemon/0.png"; //slashed.png
                 else
                 {
                     var additional = "";
