@@ -118,7 +118,8 @@ namespace PoGo.NecroBot.Logic.Service
                     transferPokemonEvent.Perfection.ToString("0.00").PadLeft(6, ' '),
                     transferPokemonEvent.BestCp.ToString("0").PadLeft(4, ' '),
                     transferPokemonEvent.BestPerfection.ToString("0.00").PadLeft(6, ' '),
-                    transferPokemonEvent.Candy.ToString("0").PadLeft(4, ' ')
+                    transferPokemonEvent.Candy.ToString("0").PadLeft(4, ' '),
+                    transferPokemonEvent.Level.ToString("0.0").PadLeft(4, ' ')
                 ),
                 LogLevel.Transfer
             );
@@ -330,8 +331,8 @@ namespace PoGo.NecroBot.Logic.Service
                     familyCandies, 
                     pokemonCaptureEvent.Latitude.ToString("0.000000"),
                     pokemonCaptureEvent.Longitude.ToString("0.000000"),
-                    pokemonCaptureEvent.Move1.ToString().PadRight(15, ' '), 
-                    pokemonCaptureEvent.Move2.ToString().PadRight(15, ' '),
+                    pokemonCaptureEvent.Move1.ToString().PadRight(16, ' '), 
+                    pokemonCaptureEvent.Move2.ToString().PadRight(16, ' '),
                     pokemonCaptureEvent.Rarity.ToString().PadRight(10, ' '),
                     pokemonCaptureEvent.CaptureReason,
                     pokemonCaptureEvent.Shiny.ToString().PadRight(3, ' '),
