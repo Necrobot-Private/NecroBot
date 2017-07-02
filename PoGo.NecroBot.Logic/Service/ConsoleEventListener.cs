@@ -99,11 +99,11 @@ namespace PoGo.NecroBot.Logic.Service
                 ? session.Translation.GetTranslation(TranslationString.EventPokemonEvolvedSuccess,
                     strPokemon.PadRight(12, ' '),
                     session.Translation.GetPokemonTranslation(pokemonEvolveEvent.EvolvedPokemon.PokemonId).PadRight(12, ' '),
-                    pokemonEvolveEvent.Cp.ToString("0").PadLeft(4, ' '),
-                    pokemonEvolveEvent.Perfection.ToString("0.00").PadLeft(6, ' '),
+                    pokemonEvolveEvent.EvolvedPokemon.Cp.ToString("0").PadLeft(4, ' '),
+                    pokemonEvolveEvent.EvolvedPokemon.Perfection().ToString("0.00").PadLeft(6, ' '),
                     pokemonEvolveEvent.Exp.ToString("0").PadLeft(4, ' '),
                     pokemonEvolveEvent.Candy.ToString("0").PadLeft(3, ' '),
-                    pokemonEvolveEvent.Level.ToString("0.0").PadLeft(4, ' '))
+                    pokemonEvolveEvent.EvolvedPokemon.Level().ToString("0.0").PadLeft(4, ' '))
                 : session.Translation.GetTranslation(TranslationString.EventPokemonEvolvedFailed,
                     session.Translation.GetPokemonTranslation(pokemonEvolveEvent.Id).PadRight(12, ' '),
                     pokemonEvolveEvent.Result,
