@@ -29,46 +29,30 @@ namespace PoGo.Necrobot.Window.Model
             get
             {
                 string fortIcon = "";
-                bool isRaid = false;
-                /*/TODO: review this
+                /*bool isRaid = false;
                 try
                 {
-                    if (string.IsNullOrEmpty(fort.RaidInfo.RaidPokemon.PokemonId.ToString()))
-                        isRaid = false;
-                    else
+                    if (!string.IsNullOrEmpty(fort.RaidInfo.RaidPokemon.PokemonId.ToString()))
                         isRaid = true;
                 }
                 catch
                 {
                     isRaid = false;
-                }
-				//*/
-
+                }*/
+                gymStat = isRaid ? "-raid" : "";
                 switch (fort.OwnedByTeam)
                 {
                     case TeamColor.Neutral:
-                        if (isRaid)
-                            fortIcon = "https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/gym-unoccupied-raid.png";
-                        else
-                            fortIcon = "https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/unoccupied.png";
+                            fortIcon = $"https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/unoccupied{gymStat}.png";
                         break;
                     case TeamColor.Blue:
-                        if (isRaid)
-                            fortIcon = "https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/gym-mystic-raid.png";
-                        else
-                            fortIcon = "https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/mystic.png";
+                            fortIcon = "https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/mystic{gymStat}.png";
                         break;
                     case TeamColor.Red:
-                        if (isRaid)
-                            fortIcon = "https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/gym-valor-raid.png";
-                        else
-                            fortIcon = "https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/valor.png";
+                            fortIcon = "https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/valor{gymStat}.png";
                         break;
                     case TeamColor.Yellow:
-                        if (isRaid)
-                            fortIcon = "https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/gym-instinct-raid.png";
-                        else
-                            fortIcon = "https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/instinct.png";
+                            fortIcon = "https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/instinct{gymStat}.png";
                         break;
                 }
                 return fortIcon;
