@@ -39,7 +39,7 @@ namespace PoGo.Necrobot.Window.Model
                 {
                     isRaid = false;
                 }*/
-                gymStat = isRaid ? "-raid" : "";
+                string gymStat = isRaid ? "-raid" : "";
                 switch (fort.OwnedByTeam)
                 {
                     case TeamColor.Neutral:
