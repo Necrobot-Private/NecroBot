@@ -46,13 +46,13 @@ namespace PoGo.Necrobot.Window.Model
                             fortIcon = $"https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/unoccupied{gymStat}.png";
                         break;
                     case TeamColor.Blue:
-                            fortIcon = "https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/mystic{gymStat}.png";
+                            fortIcon = $"https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/mystic{gymStat}.png";
                         break;
                     case TeamColor.Red:
-                            fortIcon = "https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/valor{gymStat}.png";
+                            fortIcon = $"https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/valor{gymStat}.png";
                         break;
                     case TeamColor.Yellow:
-                            fortIcon = "https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/instinct{gymStat}.png";
+                            fortIcon = $"https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/instinct{gymStat}.png";
                         break;
                 }
                 return fortIcon;
