@@ -83,7 +83,7 @@ namespace PoGo.NecroBot.Logic.State
             }
         }
 
-        public GetGymDetailsResponse GetGymDetails(ISession session, FortData fort, bool force = false)
+        public GymGetInfoResponse GetGymDetails(ISession session, FortData fort, bool force = false)
         {
             CachedGymGetails gymDetails = null;
 
@@ -263,7 +263,7 @@ namespace PoGo.NecroBot.Logic.State
     {
         public DateTime LastCall { get; set; }
 
-        public GetGymDetailsResponse GymDetails { get; set; }
+        public GymGetInfoResponse GymDetails { get; set; }
 
         public CachedGymGetails(ISession session, FortData fort)
         {
@@ -274,9 +274,13 @@ namespace PoGo.NecroBot.Logic.State
         {
             var task = session.Client.Fort.GetGymDetails(fort.Id, fort.Latitude, fort.Longitude);
             task.Wait();
-            if (task.IsCompleted && task.Result.Result == GetGymDetailsResponse.Types.Result.Success)
+            if (task.IsCompleted && task.Result.Result == GymGetInfoResponse.Types.Result.Success)
             {
-                fort = task.Result.GymState.FortData;
+                var state = new POGOProtos.Data.Gym.GymState()
+                {
+                    FortData = fort
+                };
+                fort = state.FortData;
                 GymDetails = task.Result;
                 LastCall = DateTime.UtcNow;
             }
