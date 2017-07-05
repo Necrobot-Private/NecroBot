@@ -37,7 +37,8 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
                 answerTextmessage += "\n";
                 answerTextmessage += session.Translation.GetTranslation(TranslationString.CurrentReviveInv,
                     inventory.GetItemAmountByType(ItemId.ItemRevive),
-                    inventory.GetItemAmountByType(ItemId.ItemMaxRevive));
+                    inventory.GetItemAmountByType(ItemId.ItemMaxRevive)); //,
+                    //RaidBadge);
                 answerTextmessage += "\n";
                 answerTextmessage += session.Translation.GetTranslation(TranslationString.CurrentMiscItemInv,
                     await session.Inventory.GetItemAmountByType(ItemId.ItemRazzBerry).ConfigureAwait(false) +
