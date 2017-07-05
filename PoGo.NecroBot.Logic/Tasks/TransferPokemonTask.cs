@@ -56,7 +56,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Cp = pokemon.Cp,
                         BestCp = bestPokemonOfType.Cp,
                         BestPerfection = PokemonInfo.CalculatePokemonPerfection(bestPokemonOfType),
-                        Candy = await session.Inventory.GetCandyCount(pokemon.PokemonId).ConfigureAwait(false)
+                        Candy = await session.Inventory.GetCandyCount(pokemon.PokemonId).ConfigureAwait(false),
+                        Level = PokemonInfo.GetLevel(pokemon)
                     };
 
                     if ((await session.Inventory.GetCandyFamily(pokemon.PokemonId).ConfigureAwait(false)) != null)
