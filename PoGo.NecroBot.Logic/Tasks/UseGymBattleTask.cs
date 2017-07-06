@@ -32,8 +32,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         private static int _startBattleCounter = 3;
         private static readonly bool _logTimings = false;
         private static readonly DateTime UnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-        private static POGOProtos.Data.Gym.GymState _fortstate;
-
+        
         public static async Task<bool> Execute(ISession session, CancellationToken cancellationToken, FortData gym, FortDetailsResponse fortInfo)
         {
             if (!session.LogicSettings.GymConfig.Enable || gym.Type != FortType.Gym) return false;
@@ -66,7 +65,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     var player = session.Profile.PlayerData;
                     await EnsureJoinTeam(session, player).ConfigureAwait(false);
 
-                    _fortstate = new POGOProtos.Data.Gym.GymState()
+                    var _fortstate = new POGOProtos.Data.Gym.GymState()
                     {
                         FortData = gym
                     };
@@ -131,7 +130,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         private static async Task<bool> StartGymAttackLogic(ISession session, FortDetailsResponse fortInfo, GymGetInfoResponse fortDetails, FortData gym, CancellationToken cancellationToken)
         {
 
-            _fortstate = new POGOProtos.Data.Gym.GymState()
+            var _fortstate = new POGOProtos.Data.Gym.GymState()
             {
                 FortData = gym
             };
@@ -339,7 +338,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             cancellationToken.ThrowIfCancellationRequested();
             TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
 
-            _fortstate = new POGOProtos.Data.Gym.GymState()
+            var _fortstate = new POGOProtos.Data.Gym.GymState()
             {
                 FortData = fort
             };
@@ -938,7 +937,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             PokemonData attacker = null;
             PokemonData defender = null;
 
-            _fortstate = new POGOProtos.Data.Gym.GymState()
+            var _fortstate = new POGOProtos.Data.Gym.GymState()
             {
                 FortData = fort
             };
@@ -1383,8 +1382,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             try
             {
-
-                _fortstate = new POGOProtos.Data.Gym.GymState()
+               var _fortstate = new POGOProtos.Data.Gym.GymState()
                 {
                     FortData = fort
                 };
@@ -1427,7 +1425,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             GymGetInfoResponse gymDetails = session.GymState.GetGymDetails(session, fort);
 
-            _fortstate = new POGOProtos.Data.Gym.GymState()
+            var _fortstate = new POGOProtos.Data.Gym.GymState()
             {
                 FortData = fort
             };
