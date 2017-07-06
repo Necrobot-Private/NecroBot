@@ -34,14 +34,11 @@ namespace PoGo.Necrobot.Window.Model
                 {
                     if (!string.IsNullOrEmpty(fort.RaidInfo.RaidPokemon.PokemonId.ToString()))
                         isRaid = true;
-                    else
-                        isRaid = false;
                 }
                 catch
                 {
                     isRaid = false;
                 }
-
                 string gymStat = isRaid ? "-raid" : "";
                 switch (fort.OwnedByTeam)
                 {
