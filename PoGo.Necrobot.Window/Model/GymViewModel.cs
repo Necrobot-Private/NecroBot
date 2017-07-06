@@ -30,15 +30,18 @@ namespace PoGo.Necrobot.Window.Model
             {
                 string fortIcon = "";
                 bool isRaid = false;
-                /*try
+                try
                 {
                     if (!string.IsNullOrEmpty(fort.RaidInfo.RaidPokemon.PokemonId.ToString()))
                         isRaid = true;
+                    else
+                        isRaid = false;
                 }
                 catch
                 {
                     isRaid = false;
-                }*/
+                }
+
                 string gymStat = isRaid ? "-raid" : "";
                 switch (fort.OwnedByTeam)
                 {
@@ -58,6 +61,7 @@ namespace PoGo.Necrobot.Window.Model
                 return fortIcon;
             }
         }
+
         public string TeamIcon
         {
             get
