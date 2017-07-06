@@ -110,10 +110,7 @@ namespace PoGo.NecroBot.Logic
             }
 
             var session = TinyIoCContainer.Current.Resolve<ISession>();
-
             var Account = !string.IsNullOrEmpty(newAccount.Nickname) ? newAccount.Nickname : newAccount.Username;
-            Logger.Write($"Account changed to {Account}.");
-
             var TotXP = 0;
 
             for (int i = 0; i < newAccount.Level + 1; i++)
@@ -127,7 +124,10 @@ namespace PoGo.NecroBot.Logic
             if (SD == null) { SD = 0; }
             var NLevelXP = newAccount.NextLevelXp; 
             if (newAccount.NextLevelXp == null) { NLevelXP = 0; }
-            Logger.Write($"User: {Account} | Lvl: {newAccount.Level} | XP: {XP}({(double)XP / ((double)NLevelXP) * 100:#0.00}%) | SD: {SD}", LogLevel.BotStats);
+
+            Logger.Write($"Account changed to {Account}", LogLevel.BotStats);
+
+            Logger.Write($"Lvl: {newAccount.Level} | XP: {XP}({(double)XP / ((double)NLevelXP) * 100:#0.00}%) | SD: {SD}", LogLevel.BotStats);
 
             if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
                 PushNotificationClient.SendNotification(session, $"Account changed to", $"{Account}\n" +

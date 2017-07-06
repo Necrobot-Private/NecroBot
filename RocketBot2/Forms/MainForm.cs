@@ -249,6 +249,7 @@ namespace RocketBot2.Forms
             _searchAreaOverlay.Polygons.Clear();
             S2GMapDrawer.DrawS2Cells(S2Helper.GetNearbyCellIds(lng, lat), _searchAreaOverlay);
             trackBar.Value = DefaultZoomLevel;
+            GMapControl1.OnMapZoomChanged += delegate { trackBar.Value = (int)GMapControl1.Zoom; };
         }
 
         private void GMAPSatellite_CheckedChanged(object sender, EventArgs e)
@@ -299,7 +300,6 @@ namespace RocketBot2.Forms
                             break;
                         case FortType.Gym:
                             bool isRaid = false;
-                            /*/TODO: review this
                             try
                             {
                                 if (string.IsNullOrEmpty(pokeStop.RaidInfo.RaidPokemon.PokemonId.ToString()))
@@ -311,7 +311,7 @@ namespace RocketBot2.Forms
                             {
                                 isRaid = false;
                             }
-                            //*/
+
                             switch (pokeStop.OwnedByTeam)
                             { 
                                 case POGOProtos.Enums.TeamColor.Neutral:
