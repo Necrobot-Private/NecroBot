@@ -110,16 +110,16 @@ namespace PoGo.NecroBot.Logic.Tasks
                     var ExpAwarded2 = stats.TotalExperience;         // Session Exp - TheWizard1328
                     var TotCandy = session.Inventory.GetCandyCount(hatched.PokemonId);
                     //Temp logger line personal testing info - TheWizard1328
-                    Logger.Write($"Rem.Incu: {rememberedIncubators.Capacity} | Hatch: PS-KmWalked: {playerStats.KmWalked:0.00}, H-EggKmWalkedStart: {hatched.EggKmWalkedStart:0.00}, | " +
+                    Logger.Write($"Hatch: PS-KmWalked: {playerStats.KmWalked:0.00}, H-EggKmWalkedStart: {hatched.EggKmWalkedStart:0.00}, | " +
                                  $"KmToWalk: {KmToWalk:0.00}kmWalked: {kmWalked:0.00}, | " +
                                  $"XP1: {ExpAwarded1} | XP2: {ExpAwarded2} | " +
-                                 $"SD1: {stardust1} | SD2: {stardust2}", LogLevel.Egg);
+                                 $"SD1: {stardust1} | SD2: {stardust2}", LogLevel.Egg, ConsoleColor.DarkYellow);
 
                     if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
                         await PushNotificationClient.SendNotification(session, $"Egg has hatched.", $"Pokemon: {hatched.PokemonId}\n" +
-                                                                                                    $"Level: {PokemonInfo.GetLevel(hatched)}\n" +
-                                                                                                    $"CP: {hatched.Cp}\n" +
-                                                                                                    $"IV: {Math.Round(PokemonInfo.CalculatePokemonPerfection(hatched), 2)}\n", true).ConfigureAwait(false);
+                                                                                                    $"Lvl: {PokemonInfo.GetLevel(hatched)}\n" +
+                                                                                                    $"CP:  {hatched.Cp}\n" +
+                                                                                                    $"IV:  {Math.Round(PokemonInfo.CalculatePokemonPerfection(hatched), 2)}\n", true).ConfigureAwait(false);
 
                     session.EventDispatcher.Send(new EggHatchedEvent
                     {

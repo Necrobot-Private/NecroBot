@@ -113,7 +113,7 @@ namespace PoGo.NecroBot.Logic.Common
         [Description("TRANSFER")]
         public string TransferConfirmButton { get; set; }
 
-        [Description("Do you want to transfer {0} IV:{1:0.00}% Level:{2}")]
+        [Description("Do you want to transfer {0} IV:{1:0.00}% Lvl:{2}")]
         public string TransferConfirmText { get; set; }
 
         [Description("Shiny")]

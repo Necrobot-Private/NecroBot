@@ -15,6 +15,9 @@ namespace PoGo.NecroBot.Logic.Event
         public ulong UniqueId;
         public EvolvePokemonResponse.Types.Result Result;
         public int Candy;
+        public double Level;
+        public int Cp;
+        public double Perfection;
 
         public int Sequence { get; set; }
         public PokemonData EvolvedPokemon { get; set; }

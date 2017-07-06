@@ -157,7 +157,7 @@ namespace PoGo.NecroBot.Logic.Utils
                 {
                     if (session.LogicSettings.SkipCollectingLevelUpRewards)
                     {
-                        Logger.Write("Current level: " + stat.Level + ". Skipped collecting level up rewards.", LogLevel.Info);
+                        Logger.Write("Current Lvl: " + stat.Level + ". Skipped collecting level up rewards.", LogLevel.Info);
                     }
                     else
                     {
@@ -168,7 +168,7 @@ namespace PoGo.NecroBot.Logic.Utils
 
                         if (Result.ToString().ToLower().Contains("success"))
                         {
-                            Logger.Write("Leveled up: " + stat.Level, LogLevel.Info);
+                            Logger.Write($"{session.Profile.PlayerData.Username} has leveled up: " + stat.Level, LogLevel.Info);
                             LevelForRewards = stat.Level + 1;
 
                             RepeatedField<ItemAward> items = Result.ItemsAwarded;
@@ -177,16 +177,16 @@ namespace PoGo.NecroBot.Logic.Utils
                             if (items.Any<ItemAward>())
                             {
                                 Logger.Write("- Received Items -", LogLevel.Info);
-                                Rewards = "\nItems Rewarded:";
+                                Rewards = "\nItems Recieved:";
                                 foreach (ItemAward item in items)
                                 {
-                                    Logger.Write($"[ITEM] {item.ItemId} x {item.ItemCount} ", LogLevel.Info);
-                                    Rewards += $"\n{item.ItemId} x {item.ItemCount}";
+                                    Logger.Write($"RECIEVED {item.ItemCount,2:#0} - {item.ItemId}'s", LogLevel.Info);
+                                    Rewards += $"\n{item.ItemCount,2:#0} - {item.ItemId}'s";
                                 }
                             }
 
                             if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
-                                await PushNotificationClient.SendNotification(session, $"Trainer has leveled up.", $"Trainer just reached level {stat.Level}{Rewards}", true).ConfigureAwait(false);
+                                await PushNotificationClient.SendNotification(session, $"{session.Profile.PlayerData.Username} has leveled up.", $"Trainer just reached level {stat.Level}{Rewards}", true).ConfigureAwait(false);
                         }
                     }
                 }

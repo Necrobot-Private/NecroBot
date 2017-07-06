@@ -17,6 +17,7 @@ using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Tasks;
 using PoGo.NecroBot.Logic.Utils;
 using POGOProtos.Data;
+using POGOProtos.Data.Raid;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Map.Fort;
 using POGOProtos.Map.Pokemon;
@@ -80,6 +81,8 @@ namespace RocketBot2.Forms
         internal readonly GMapOverlay _pokemonsOverlay = new GMapOverlay("pokemons");
         internal readonly GMapOverlay _pokestopsOverlay = new GMapOverlay("pokestops");
         internal readonly GMapOverlay _searchAreaOverlay = new GMapOverlay("areas");
+
+        private const int DefaultZoomLevel = 15;
 
         public static Session _session;
 
@@ -233,7 +236,6 @@ namespace RocketBot2.Forms
 
             GMapControl1.MinZoom = 2;
             GMapControl1.MaxZoom = 18;
-            GMapControl1.Zoom = 15;
             
             GMapControl1.Overlays.Add(_searchAreaOverlay);
             GMapControl1.Overlays.Add(_pokestopsOverlay);
@@ -246,6 +248,8 @@ namespace RocketBot2.Forms
             _playerMarker.Position = new PointLatLng(lat, lng);
             _searchAreaOverlay.Polygons.Clear();
             S2GMapDrawer.DrawS2Cells(S2Helper.GetNearbyCellIds(lng, lat), _searchAreaOverlay);
+            trackBar.Value = DefaultZoomLevel;
+            GMapControl1.OnMapZoomChanged += delegate { trackBar.Value = (int)GMapControl1.Zoom; };
         }
 
         private void GMAPSatellite_CheckedChanged(object sender, EventArgs e)
@@ -287,6 +291,7 @@ namespace RocketBot2.Forms
                 foreach (var pokeStop in pokeStops)
                 {
                     var pokeStopLoc = new PointLatLng(pokeStop.Latitude, pokeStop.Longitude);
+
                     Image fort = null;
                     switch (pokeStop.Type)
                     {
@@ -294,19 +299,44 @@ namespace RocketBot2.Forms
                             fort = ResourceHelper.GetImage("Pokestop", null, null, 32, 32);
                             break;
                         case FortType.Gym:
-                            switch (pokeStop.OwnedByTeam)
+                            bool isRaid = false;
+                            try
                             {
+                                if (string.IsNullOrEmpty(pokeStop.RaidInfo.RaidPokemon.PokemonId.ToString()))
+                                    isRaid = false;
+                                else
+                                    isRaid = true;
+                            }
+                            catch
+                            {
+                                isRaid = false;
+                            }
+
+                            switch (pokeStop.OwnedByTeam)
+                            { 
                                 case POGOProtos.Enums.TeamColor.Neutral:
-                                    fort = ResourceHelper.GetImage("GymVide", null, null, 32, 32);
+                                    if (isRaid)
+                                        fort = ResourceHelper.GetImage("GymVideRaid", null, null, 32, 32);
+                                    else
+                                        fort = ResourceHelper.GetImage("GymVide", null, null, 32, 32);
                                     break;
                                 case POGOProtos.Enums.TeamColor.Blue:
-                                    fort = ResourceHelper.GetImage("GymBlue", null, null, 32, 32);
+                                    if (isRaid)
+                                        fort = ResourceHelper.GetImage("GymBlueRaid", null, null, 32, 32);
+                                    else
+                                        fort = ResourceHelper.GetImage("GymBlue", null, null, 32, 32);
                                     break;
                                 case POGOProtos.Enums.TeamColor.Red:
-                                    fort = ResourceHelper.GetImage("GymRed", null, null, 32, 32);
+                                    if (isRaid)
+                                        fort = ResourceHelper.GetImage("GymRedRaid", null, null, 32, 32);
+                                    else
+                                        fort = ResourceHelper.GetImage("GymRed", null, null, 32, 32);
                                     break;
                                 case POGOProtos.Enums.TeamColor.Yellow:
-                                    fort = ResourceHelper.GetImage("GymYellow", null, null, 32, 32);
+                                    if (isRaid)
+                                        fort = ResourceHelper.GetImage("GymYellowRaid", null, null, 32, 32);
+                                    else
+                                        fort = ResourceHelper.GetImage("GymYellow", null, null, 32, 32);
                                     break;
                             }
                             break;
@@ -438,6 +468,11 @@ namespace RocketBot2.Forms
             if (!_botStarted) return;
             var pos = GMapControl1.FromLocalToLatLng(e.Location.X, e.Location.Y);
             await SetMoveToTargetTask.Execute(pos.Lat, pos.Lng);
+        }
+
+        private void TrackBar_Scroll(object sender, EventArgs e)
+        {
+            GMapControl1.Zoom = trackBar.Value;
         }
 
         #endregion
@@ -1707,6 +1742,5 @@ namespace RocketBot2.Forms
         }
 
         #endregion
-
     }
 }

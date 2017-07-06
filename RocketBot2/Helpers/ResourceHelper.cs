@@ -281,6 +281,17 @@ namespace RocketBot2.Helpers
             }
             return bmp;
         }
+
+        public static Image GetSlashedPokemonImage(Image image)
+        {
+            Image source = GetImage("slashed", null, null, image.Size.Height, image.Size.Width);
+            var target = new Bitmap(image.Width, image.Height, PixelFormat.Format32bppArgb);
+            var graphics = Graphics.FromImage(target);
+            graphics.CompositingMode = CompositingMode.SourceOver; // this is the default, but just to be clear
+            graphics.DrawImage(image, 0, 0);
+            graphics.DrawImage(source, 0, 0);
+            return target;
+        }
         #endregion
     }
 }

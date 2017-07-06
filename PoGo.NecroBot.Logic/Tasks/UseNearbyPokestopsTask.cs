@@ -75,9 +75,15 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     bool gymAttackSucceeded = await UseGymBattleTask.Execute(session, cancellationToken, pokeStop, fortInfo).ConfigureAwait(false);
 
+                    var _fortstate = new POGOProtos.Data.Gym.GymState()
+                    {
+                        FortData = pokeStop
+                    };
+
+
                     if (gymAttackSucceeded &&
                         fortInfo.Type == FortType.Gym &&
-                        (session.GymState.GetGymDetails(session, pokeStop).GymState.FortData.OwnedByTeam == session.Profile.PlayerData.Team || session.GymState.CapturedGymId.Equals(fortInfo.FortId)) &&
+                        (_fortstate.FortData.OwnedByTeam == session.Profile.PlayerData.Team || session.GymState.CapturedGymId.Equals(fortInfo.FortId)) &&
                         session.LogicSettings.GymConfig.Enable &&
                         session.LogicSettings.GymConfig.EnableGymTraining)
                     {

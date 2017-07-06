@@ -524,7 +524,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     evt.Level = PokemonInfo.GetLevel(encounteredPokemon);
                     evt.Cp = encounteredPokemon.Cp;
                     evt.MaxCp = PokemonInfo.CalculateMaxCp(encounteredPokemon.PokemonId);
-                    evt.Perfection = Math.Round(PokemonInfo.CalculatePokemonPerfection(encounteredPokemon));
+                    evt.Perfection = Math.Round(PokemonInfo.CalculatePokemonPerfection(encounteredPokemon), 2);
                     evt.Probability = Math.Round(probability * 100, 2);
                     evt.Distance = distance;
                     evt.Pokeball = pokeball;
