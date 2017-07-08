@@ -465,16 +465,17 @@ namespace PoGo.NecroBot.CLI
 
             _session.ReInitSessionWithNextBot(bot);
 
-            machine.AsyncStart(new VersionCheckState(), _session, _subPath, excelConfigAllow);
-
             try
             {
                 Console.Clear();
             }
             catch (IOException)
             {
-            }
-
+            } 
+			
+            settings.CheckProxy(_session.Translation);
+			machine.AsyncStart(new VersionCheckState(), _session, _subPath, excelConfigAllow);
+			
             var TotXP = 0;
 
             for (int i = 0; i < bot.Level + 1; i++)
@@ -504,7 +505,7 @@ namespace PoGo.NecroBot.CLI
                 BotDataSocketClient.StartAsync(_session, Properties.Resources.EncryptKey);
                 _session.EventDispatcher.EventReceived += evt => BotDataSocketClient.Listen(evt, _session);
             }
-            settings.CheckProxy(_session.Translation);
+            //settings.CheckProxy(_session.Translation); //deplaced for fixes proxies
 
             if (_session.LogicSettings.ActivateMSniper)
             {
