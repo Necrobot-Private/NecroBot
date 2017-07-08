@@ -474,7 +474,7 @@ namespace PoGo.NecroBot.CLI
             } 
 			
             settings.CheckProxy(_session.Translation);
-			machine.AsyncStart(new VersionCheckState(), _session, _subPath, excelConfigAllow);
+            machine.AsyncStart(new VersionCheckState(), _session, _subPath, excelConfigAllow);
 			
             var TotXP = 0;
 
