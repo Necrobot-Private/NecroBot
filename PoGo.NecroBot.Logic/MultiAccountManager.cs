@@ -108,32 +108,6 @@ namespace PoGo.NecroBot.Logic
             {
                 body = body + $"{item.Username} - {item.GetRuntime()}\r\n";
             }
-
-            var session = TinyIoCContainer.Current.Resolve<ISession>();
-            var Account = !string.IsNullOrEmpty(newAccount.Nickname) ? newAccount.Nickname : newAccount.Username;
-            var TotXP = 0;
-
-            for (int i = 0; i < newAccount.Level + 1; i++)
-            {
-                TotXP = TotXP + Statistics.GetXpDiff(i);
-            }
-
-            long? XP = newAccount.CurrentXp;
-            if (XP == null) { XP = 0; }
-            long? SD = newAccount.Stardust;
-            if (SD == null) { SD = 0; }
-            var NLevelXP = newAccount.NextLevelXp; 
-            if (newAccount.NextLevelXp == null) { NLevelXP = 0; }
-
-            Logger.Write($"Account changed to {Account}", LogLevel.BotStats);
-
-            Logger.Write($"Lvl: {newAccount.Level} | XP: {XP}({(double)XP / ((double)NLevelXP) * 100:#0.00}%) | SD: {SD}", LogLevel.BotStats);
-
-            if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
-                PushNotificationClient.SendNotification(session, $"Account changed to", $"{Account}\n" +
-                                                                 $"Lvl: {newAccount.Level}\n" +
-                                                                 $"XP : {XP:#,##0}({(double)XP / ((double)NLevelXP) * 100:#0.00}%)\n" +
-                                                                 $"SD : {SD:#,##0}\n", true).ConfigureAwait(false);
         }
 
         public void BlockCurrentBot(int expired = 60)
@@ -404,9 +378,9 @@ namespace PoGo.NecroBot.Logic
                 }
 
                 if (item.Level > 0)
-                    Logger.Write($"{user}{SP}| Lvl: {item.Level:#0} | Runtime: {item.RuntimeTotal,3:##0} Min",LogLevel.BotStats);
+                    Logger.Write($"{user}{SP}| Lvl: {item.Level:#0} | XP: {item.CurrentXp,8:0} | SD: {item.Stardust,8:0} | Runtime: {item.RuntimeTotal,3:##0} Min",LogLevel.BotStats);
                 else
-                    Logger.Write($"{user}{SP}| Lvl: ?? | Runtime: {item.RuntimeTotal,3:##0} Min", LogLevel.BotStats);
+                    Logger.Write($"{user}{SP}| Lvl: ?? | XP:          | SD:        0 | Runtime: {item.RuntimeTotal,3:##0} Min", LogLevel.BotStats);
             }
         }
 

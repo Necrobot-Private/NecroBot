@@ -473,8 +473,8 @@ namespace PoGo.NecroBot.CLI
             }
             catch (IOException)
             {
-            }
-
+            } 
+			
             var TotXP = 0;
 
             for (int i = 0; i < bot.Level + 1; i++)

@@ -114,6 +114,11 @@ namespace PoGo.NecroBot.Logic.Service
 
         private static void HandleEvent(TransferPokemonEvent transferPokemonEvent, ISession session)
         {
+            if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true && transferPokemonEvent.Slashed)
+                PushNotificationClient.SendNotification(session, $"Transferred Slashed Pokemon", $"{session.Translation.GetPokemonTranslation(transferPokemonEvent.PokemonId)}\n" +
+                                                                                                 $"Lvl: {transferPokemonEvent.Level}\n" +
+                                                                                                 $"CP:  {transferPokemonEvent.Cp}/{transferPokemonEvent.BestCp}\n" +
+                                                                                                 $"IV:  {transferPokemonEvent.Perfection.ToString("0.00")}\n", true).ConfigureAwait(false);
             Logger.Write(
                 session.Translation.GetTranslation(TranslationString.EventPokemonTransferred,
                     session.Translation.GetPokemonTranslation(transferPokemonEvent.PokemonId).PadRight(12, ' '),
@@ -122,7 +127,8 @@ namespace PoGo.NecroBot.Logic.Service
                     transferPokemonEvent.BestCp.ToString("0").PadLeft(4, ' '),
                     transferPokemonEvent.BestPerfection.ToString("0.00").PadLeft(6, ' '),
                     transferPokemonEvent.Candy.ToString("0").PadLeft(4, ' '),
-                    transferPokemonEvent.Level.ToString("0.0").PadLeft(4, ' ')
+                    transferPokemonEvent.Level.ToString("0.0").PadLeft(4, ' '),
+                    transferPokemonEvent.Slashed.ToString().PadLeft(5, ' ')
                 ),
                 LogLevel.Transfer
             );
@@ -305,16 +311,18 @@ namespace PoGo.NecroBot.Logic.Service
             if (pokemonCaptureEvent.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess)
             {
                 if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true && pokemonCaptureEvent.Shiny == "Yes")
-                    PushNotificationClient.SendNotification(session, $"Shiny Pokemon Captured", $"{session.Translation.GetPokemonTranslation(pokemonCaptureEvent.Id)}\nLvl:{pokemonCaptureEvent.Level}\n" +
+                    PushNotificationClient.SendNotification(session, $"Shiny Pokemon Captured", $"{session.Translation.GetPokemonTranslation(pokemonCaptureEvent.Id)}\n" +
+                                                                                                $"Lvl: {pokemonCaptureEvent.Level}\n" +
                                                                                                 $"CP:  {pokemonCaptureEvent.Cp}/{pokemonCaptureEvent.MaxCp}\n" +
                                                                                                 $"IV:  {pokemonCaptureEvent.Perfection.ToString("0.00")}\n" +
                                                                                                 $"Lat: {pokemonCaptureEvent.Latitude.ToString("0.000000")}\n" +
                                                                                                 $"Lon: {pokemonCaptureEvent.Longitude.ToString("0.000000")}", true).ConfigureAwait(false);
 
                 if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true && pokemonCaptureEvent.Perfection >= session.LogicSettings.FavoriteMinIvPercentage)
-                    PushNotificationClient.SendNotification(session, $"High IV Pokemon Captured", $"{session.Translation.GetPokemonTranslation(pokemonCaptureEvent.Id)}({pokemonCaptureEvent.Perfection.ToString("0.00")}% IV)\n" +
+                    PushNotificationClient.SendNotification(session, $"High IV Pokemon Captured", $"{session.Translation.GetPokemonTranslation(pokemonCaptureEvent.Id)}\n" +
                                                                                                   $"Lvl: {pokemonCaptureEvent.Level}\n" +
                                                                                                   $"CP:  {pokemonCaptureEvent.Cp}/{pokemonCaptureEvent.MaxCp}\n" +
+                                                                                                  $"IV:  {pokemonCaptureEvent.Perfection.ToString("0.00")}\n" +
                                                                                                   $"Lat: {pokemonCaptureEvent.Latitude.ToString("0.000000")}\n" +
                                                                                                   $"Lon: {pokemonCaptureEvent.Longitude.ToString("0.000000")}", true).ConfigureAwait(false);
 
@@ -358,9 +366,10 @@ namespace PoGo.NecroBot.Logic.Service
                                                                                                     $"Lon: {pokemonCaptureEvent.Longitude.ToString("0.000000")}", true).ConfigureAwait(false);
 
                     if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true && pokemonCaptureEvent.Perfection >= session.LogicSettings.FavoriteMinIvPercentage)
-                        PushNotificationClient.SendNotification(session, $"High IV Pokemon Ran Away", $"{session.Translation.GetPokemonTranslation(pokemonCaptureEvent.Id)}({pokemonCaptureEvent.Perfection.ToString("0.00")}% IV)\n" +
+                        PushNotificationClient.SendNotification(session, $"High IV Pokemon Ran Away", $"{session.Translation.GetPokemonTranslation(pokemonCaptureEvent.Id)}\n" +
                                                                                                       $"Lvl: {pokemonCaptureEvent.Level}\n" +
                                                                                                       $"CP:  {pokemonCaptureEvent.Cp}/{pokemonCaptureEvent.MaxCp}\n" +
+                                                                                                      $"IV:  {pokemonCaptureEvent.Perfection.ToString("0.00")}\n" +
                                                                                                       $"Lat: {pokemonCaptureEvent.Latitude.ToString("0.000000")}\n" +
                                                                                                       $"Lon: {pokemonCaptureEvent.Longitude.ToString("0.000000")}", true).ConfigureAwait(false);
                 }

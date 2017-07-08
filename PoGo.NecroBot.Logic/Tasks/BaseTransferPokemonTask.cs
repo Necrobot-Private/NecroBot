@@ -67,7 +67,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             var ev = new TransferPokemonEvent
             {
                 Id = duplicatePokemon.Id,
-                PokemonId = duplicatePokemon.PokemonId, // session.Translation.GetPokemonTranslation(duplicatePokemon.PokemonId),
+                PokemonId = duplicatePokemon.PokemonId,
+                Slashed = duplicatePokemon.IsBad,
                 Perfection = PokemonInfo.CalculatePokemonPerfection(duplicatePokemon),
                 Cp = duplicatePokemon.Cp,
                 BestCp = bestPokemonOfType.Cp,

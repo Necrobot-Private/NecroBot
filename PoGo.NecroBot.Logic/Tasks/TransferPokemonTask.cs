@@ -52,6 +52,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     {
                         Id = pokemon.Id,
                         PokemonId = pokemon.PokemonId, //session.Translation.GetPokemonTranslation(pokemon.PokemonId),
+                        Slashed = pokemon.IsBad,
                         Perfection = PokemonInfo.CalculatePokemonPerfection(pokemon),
                         Cp = pokemon.Cp,
                         BestCp = bestPokemonOfType.Cp,
