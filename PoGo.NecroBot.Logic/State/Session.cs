@@ -203,7 +203,6 @@ namespace PoGo.NecroBot.Logic.State
 
             var nextBot = manager.GetSwitchableAccount(bot);
 
-            //var session = TinyIoCContainer.Current.Resolve<ISession>();
             var Account = !string.IsNullOrEmpty(nextBot.Nickname) ? nextBot.Nickname : nextBot.Username;
             var TotXP = 0;
 
