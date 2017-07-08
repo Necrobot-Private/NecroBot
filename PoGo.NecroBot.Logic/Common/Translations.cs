@@ -367,7 +367,7 @@ namespace PoGo.NecroBot.Logic.Common
                 new KeyValuePair<TranslationString, string>(TranslationString.EventPokemonEvolvedFailed,
                     "Failed {0}. Result was {1}, stopping evolving {2}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.EventPokemonTransferred,
-                    "{0} | CP: {1}/{3} | IV: {2}%/{4}% | Candies: {5} | Lvl: {6}"),
+                    "{0} | CP: {1}/{3} | IV: {2}%/{4}% | Candies: {5} | Lvl: {6} | Slashed: {7}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.EventPokemonUpgraded,
                     "{0} | CP: {2}/{4} | IV: {3}%/{5}% | SD: {6} | Candies: {7} | Lvl: {1}"),
 

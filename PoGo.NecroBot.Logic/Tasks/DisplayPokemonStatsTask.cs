@@ -86,30 +86,31 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     string[] data =
                     {
-                        "pokemonid",
-                        "pokemonlevel",
-                        "cp",
-                        "perfection",
-                        "stamina",
-                        "staminamax",
-                        "move1",
-                        "move2",
-                        "candy",
-                        "ownername",
-                        "origin",
-                        "heightm",
-                        "weightkg",
-                        "individualattack",
-                        "individualdefense",
-                        "individualstamina",
-                        "cpmultiplier",
-                        "battlesattacked",
-                        "battlesdefended",
-                        "creationtimems",
-                        "numupgrades",
-                        "additionalcpmultiplier",
-                        "favorite",
-                        "nickname"
+                        "Pokemon",
+                        "Slashed",
+                        "Level",
+                        "CP",
+                        "IV",
+                        "Stamina",
+                        "Stamina Max",
+                        "Move1",
+                        "Move2",
+                        "Candies",
+                        "Owner Name",
+                        "Origin",
+                        "Height(M)",
+                        "Weight(KG)",
+                        "Attack",
+                        "Defense",
+                        "Stamina",
+                        "CP Multi",
+                        "Gyms Attacked",
+                        "Gyms Defended",
+                        "Creationtimems",
+                        "Power Ups",
+                        "Additional CP Multi",
+                        "Favorite",
+                        "Nickname"
                     };
                     Dumper.Dump(session, data, dumpFileName);
 
@@ -123,6 +124,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         string[] pokemonData =
                         {
                             session.Translation.GetPokemonTranslation(pokemon.PokemonId),
+                            pokemon.IsBad.ToString(),
                             PokemonInfo.GetLevel(pokemon).ToString(),
                             pokemon.Cp.ToString(),
                             PokemonInfo.CalculatePokemonPerfection(pokemon).ToString(),
