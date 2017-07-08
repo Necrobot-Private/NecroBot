@@ -1,5 +1,19 @@
 # Change Log
 
+## [v1.0.0.184](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.184) (2017-07-08)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.183...v1.0.0.184)
+
+**Closed issues:**
+
+- Paid for key but no key received  [\#1885](https://github.com/Necrobot-Private/NecroBot/issues/1885)
+- \[Solved\]Necrobot doesn't write logs [\#1884](https://github.com/Necrobot-Private/NecroBot/issues/1884)
+- Bot not transferring.  I have changed the config with no luck [\#1871](https://github.com/Necrobot-Private/NecroBot/issues/1871)
+
+**Merged pull requests:**
+
+- Varios Updates [\#1886](https://github.com/Necrobot-Private/NecroBot/pull/1886) ([Furtif](https://github.com/Furtif))
+- rebase resources \(rockebot\) [\#1883](https://github.com/Necrobot-Private/NecroBot/pull/1883) ([Furtif](https://github.com/Furtif))
+
 ## [v1.0.0.183](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.183) (2017-07-06)
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.182...v1.0.0.183)
 
