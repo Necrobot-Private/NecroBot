@@ -30,19 +30,41 @@ namespace PoGo.Necrobot.Window.Model
             {
                 string fortIcon = "";
                 bool isRaid = false;
+                bool asBoss = false;
+
                 try
                 {
-                    if (!string.IsNullOrEmpty(fort.RaidInfo.RaidPokemon.PokemonId.ToString()))
+                    if (fort.RaidInfo.RaidBattleMs > 0)
                         isRaid = true;
                 }
                 catch
                 {
                     isRaid = false;
                 }
-                string gymStat = isRaid ? "-raid" : "";
+
+                try
+                {
+                    if (!string.IsNullOrEmpty(fort.RaidInfo.RaidPokemon.PokemonId.ToString()))
+                        asBoss = true;
+                }
+                catch
+                {
+                    asBoss = false;
+                }
+
+                string gymStat = isRaid ? "-raid" : null;
+                string gymBoss = asBoss ? $"https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/pokemon/{(int)fort.RaidInfo.RaidPokemon.PokemonId}.png" : null;
+
+                // Solution to overlay 2 images in string mode ????
+                // forticon + gymBoss or create asset 251 gyms red + 251 gyms blue + 251 neutral +251 yellow !!!!
+                // WFP is compatible to var image ??? 
+
                 switch (fort.OwnedByTeam)
                 {
                     case TeamColor.Neutral:
+                     /*/if (asBoss)
+                            fortIcon = gymimage + gymBoss;
+                        else //*/
                             fortIcon = $"https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/unoccupied{gymStat}.png";
                         break;
                     case TeamColor.Blue:
