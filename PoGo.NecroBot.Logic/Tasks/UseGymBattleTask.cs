@@ -1387,6 +1387,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                     FortData = fort
                 };
 
+                if (session.Profile.PlayerData.Team == TeamColor.Neutral)
+                    return false;
+
                 GymGetInfoResponse gymDetails = session.GymState.GetGymDetails(session, fort);
                 if (session.GymState.CapturedGymId.Equals(fort.Id) && _fortstate.FortData.OwnedByTeam != session.Profile.PlayerData.Team)
                     gymDetails = session.GymState.GetGymDetails(session, fort, true);
