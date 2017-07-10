@@ -369,18 +369,12 @@ namespace PoGo.NecroBot.Logic
 
             foreach (var item in Accounts)
             {
-                var SP = "";
                 user = string.IsNullOrEmpty(item.Nickname) ? item.Username : item.Nickname;
 
-                for (int i = 0; i < maxL - user.Length + 1; i++)
-                {
-                    SP += " ";
-                }
-
                 if (item.Level > 0)
-                    Logger.Write($"{user}{SP}| Lvl: {item.Level:#0} | XP: {item.CurrentXp,8:0} | SD: {item.Stardust,8:0} | Runtime: {item.RuntimeTotal,3:##0} Min",LogLevel.BotStats);
+                    Logger.Write($"{user.PadRight(maxL)} | Lvl: {item.Level,2:#0} | XP: {item.CurrentXp,8:0} | SD: {item.Stardust,8:0} | Runtime: {item.RuntimeTotal,3:##0} Min",LogLevel.BotStats);
                 else
-                    Logger.Write($"{user}{SP}| Lvl: ?? | XP:          | SD:        0 | Runtime: {item.RuntimeTotal,3:##0} Min", LogLevel.BotStats);
+                    Logger.Write($"{user.PadRight(maxL)} | Lvl: ?? | XP:        0 | SD:        0 | Runtime: {item.RuntimeTotal,3:##0} Min", LogLevel.BotStats);
             }
         }
 
