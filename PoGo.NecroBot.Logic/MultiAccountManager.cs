@@ -280,7 +280,7 @@ namespace PoGo.NecroBot.Logic
 
             if (_context.Account.Count() > 0)
             { 
-                var runnableAccount = _context.Account.OrderByDescending(p => p.RuntimeTotal).ThenBy(p => p.Id).LastOrDefault(p => p != currentAccount && (!p.ReleaseBlockTime.HasValue || p.ReleaseBlockTime.HasValue && p.ReleaseBlockTime.Value < DateTime.Now.ToUnixTime()));
+                var runnableAccount = _context.Account.OrderByDescending(p => p.Level).ThenBy(p => p.CurrentXp).LastOrDefault(p => p != currentAccount && (!p.ReleaseBlockTime.HasValue || p.ReleaseBlockTime.HasValue && p.ReleaseBlockTime.Value < DateTime.Now.ToUnixTime()));
 
                 if (runnableAccount != null)
                     return runnableAccount;
