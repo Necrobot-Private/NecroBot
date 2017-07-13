@@ -34,22 +34,19 @@ namespace PoGo.Necrobot.Window.Model
 
                 try
                 {
-                    if (fort.RaidInfo.RaidBattleMs > 0)
-                        isRaid = true;
+                    if (fort.RaidInfo != null)
+                    {
+                        var boss = fort.RaidInfo.RaidPokemon.PokemonId.ToString();
+                        if (boss != null)
+                            asBoss = true;
+ 
+                        if (fort.RaidInfo.RaidBattleMs > 0)
+                            isRaid = true;
+                    }
                 }
                 catch
                 {
-                    isRaid = false;
-                }
-
-                try
-                {
-                    if (!string.IsNullOrEmpty(fort.RaidInfo.RaidPokemon.PokemonId.ToString()))
-                        asBoss = true;
-                }
-                catch
-                {
-                    asBoss = false;
+                    //
                 }
 
                 string gymStat = isRaid ? "-raid" : null;
