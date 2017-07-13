@@ -220,9 +220,9 @@ namespace PoGo.NecroBot.Logic
                 return null;
 
             if (ignoreBlockCheck)
-                return _context.Account.OrderBy(x => x.RuntimeTotal.HasValue ? x.RuntimeTotal.Value : 0).ThenBy(x => x != null ? x.Id : 0).FirstOrDefault();
+                return _context.Account.OrderBy(x => x.Level.Value).ThenBy(x => x.CurrentXp.Value).FirstOrDefault();
             else
-                return _context.Account.OrderBy(x => x.RuntimeTotal.HasValue ? x.RuntimeTotal.Value : 0).ThenBy(x => x != null ? x.Id : 0).Where(x => x != null && x.ReleaseBlockTime.HasValue && x.ReleaseBlockTime.Value < DateTime.Now.ToUnixTime()).FirstOrDefault();
+                return _context.Account.OrderBy(x => x.Level.Value).ThenBy(x => x.CurrentXp.Value).Where(x => x != null && x.ReleaseBlockTime.HasValue && x.ReleaseBlockTime.Value < DateTime.Now.ToUnixTime()).FirstOrDefault();
         }
 
         public bool AllowMultipleBot()
