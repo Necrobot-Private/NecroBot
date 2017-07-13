@@ -26,6 +26,7 @@ using CommandLine;
 using CommandLine.Text;
 using PokemonGo.RocketAPI;
 using System.Net.Http;
+using POGOProtos.Networking.Responses;
 
 #endregion using directives
 
@@ -425,10 +426,10 @@ namespace PoGo.NecroBot.CLI
             stats.DirtyEvent +=
                 () =>
                 {
-                    var x = _session.Client.Player.GetPlayer().Result;
-                    string warn = x.Warn ? " *(Flagged)*" : null;
+                    GetPlayerResponse x = _session.Client.Player.GetPlayer().Result;
+                    string warn = x.Warn ? "*(Flagged)*-" : null;
 
-                    Console.Title = $"[Necrobot2 v{strVersion}] {warn} " +
+                    Console.Title = $"[Necrobot2 v{strVersion}] {warn}" +
                                     stats.GetTemplatedStats(
                                         _session.Translation.GetTranslation(TranslationString.StatsTemplateString),
                                         _session.Translation.GetTranslation(TranslationString.StatsXpTemplateString));
