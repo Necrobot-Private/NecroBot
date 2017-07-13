@@ -36,16 +36,15 @@ namespace PoGo.Necrobot.Window.Model
 
                 try
                 {
-					if (fort.RaidInfo != raidInfo)
-						raidInfo = new RaidInfo(fort.RaidInfo);
-					
-                    if (raidInfo != null)
+                    if (fort.RaidInfo != raidInfo)
                     {
+                        raidInfo = new RaidInfo(fort.RaidInfo);
+
                         PokemonId boss = raidInfo.RaidPokemon.PokemonId;
 
                         if (boss > 0)
                             asBoss = true;
- 
+
                         if (raidInfo.RaidBattleMs > 0)
                             isRaid = true;
                     }

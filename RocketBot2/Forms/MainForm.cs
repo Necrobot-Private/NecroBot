@@ -335,10 +335,9 @@ namespace RocketBot2.Forms
                             try
                             {
                                 if (pokeStop.RaidInfo != raidInfo)
+                                { 
                                     raidInfo = new RaidInfo(pokeStop.RaidInfo);
 
-                                if (raidInfo != null)
-                                {
                                     PokemonId boss = raidInfo.RaidPokemon.PokemonId;
 
                                     if (boss > 0)
