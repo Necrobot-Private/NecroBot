@@ -1,6 +1,5 @@
 ﻿using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Utils;
-using POGOProtos.Data.Raid;
 using POGOProtos.Enums;
 using POGOProtos.Map.Fort;
 using TinyIoC;
@@ -32,20 +31,18 @@ namespace PoGo.Necrobot.Window.Model
                 string fortIcon = "";
                 bool isRaid = false;
                 bool asBoss = false;
-                RaidInfo raidInfo = null;
 
                 try
                 {
-                    if (fort.RaidInfo != raidInfo)
+                    if (fort.RaidInfo != null)
                     {
-                        raidInfo = new RaidInfo(fort.RaidInfo);
+                        long asBossTime = fort.RaidInfo.RaidEndMs;
+                        long isRaidTime = fort.RaidInfo.RaidBattleMs;
 
-                        PokemonId boss = raidInfo.RaidPokemon.PokemonId;
-
-                        if (boss > 0 && raidInfo.RaidEndMs > 0)
+                        if (fort.RaidInfo.RaidPokemon.PokemonId > 0 && asBossTime > 0)
                             asBoss = true;
 
-                        if (raidInfo.RaidBattleMs > 0)
+                        if (isRaidTime > 0)
                             isRaid = true;
                     }
                 }
