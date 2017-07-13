@@ -334,7 +334,7 @@ namespace RocketBot2.Forms
                         case FortType.Gym:
                             try
                             {
-                                if (pokeStop.RaidInfo != null)
+                                if (pokeStop.RaidInfo != raidInfo)
                                     raidInfo = new RaidInfo(pokeStop.RaidInfo);
 
                                 if (raidInfo != null)

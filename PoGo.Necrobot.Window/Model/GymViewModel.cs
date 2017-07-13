@@ -36,7 +36,7 @@ namespace PoGo.Necrobot.Window.Model
 
                 try
                 {
-					if (fort.RaidInfo != null)
+					if (fort.RaidInfo != raidInfo)
 						raidInfo = new RaidInfo(fort.RaidInfo);
 					
                     if (raidInfo != null)
