@@ -42,7 +42,7 @@ namespace PoGo.Necrobot.Window.Model
 
                         PokemonId boss = raidInfo.RaidPokemon.PokemonId;
 
-                        if (boss > 0)
+                        if (boss > 0 && raidInfo.RaidEndMs > 0)
                             asBoss = true;
 
                         if (raidInfo.RaidBattleMs > 0)
