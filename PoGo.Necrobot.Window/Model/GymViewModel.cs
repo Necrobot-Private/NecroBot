@@ -31,25 +31,27 @@ namespace PoGo.Necrobot.Window.Model
                 string fortIcon = "";
                 bool isRaid = false;
                 bool asBoss = false;
+                long asBossTime = 0;
+                long isRaidTime = 0;
 
                 try
                 {
+                    isRaidTime = fort.RaidInfo.RaidBattleMs;
                     if (fort.RaidInfo != null)
                     {
-                        long asBossTime = fort.RaidInfo.RaidEndMs;
-                        long isRaidTime = fort.RaidInfo.RaidBattleMs;
+                        asBossTime = fort.RaidInfo.RaidEndMs;
 
                         if (fort.RaidInfo.RaidPokemon.PokemonId > 0 && asBossTime > 0)
                             asBoss = true;
-
-                        if (isRaidTime > 0)
-                            isRaid = true;
                     }
                 }
                 catch
                 {
                     //
                 }
+
+                if (isRaidTime > 0)
+                    isRaid = true;
 
                 string gymStat = isRaid ? "-raid" : null;
                 string gymBoss = asBoss ? $"https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/pokemon/{(int)fort.RaidInfo.RaidPokemon.PokemonId}.png" : null;
