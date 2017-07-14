@@ -304,6 +304,8 @@ namespace RocketBot2.Forms
                     int hg = 32;
                     int wg = 32;
                     Image fort = ResourceHelper.GetImage($"Pokestop", null, null, hg, wg);
+                    DateTime expires = new DateTime(0);
+                    TimeSpan time = new TimeSpan(0);
 
                     switch (pokeStop.Type)
                     {
@@ -335,12 +337,12 @@ namespace RocketBot2.Forms
 
                             try
                             {
+                                isRaidSpawnTime = pokeStop.RaidInfo.RaidSpawnMs;
                                 isRaidTime = pokeStop.RaidInfo.RaidBattleMs;
 
                                 if (pokeStop.RaidInfo != null)
                                 {
                                     asBossTime = pokeStop.RaidInfo.RaidEndMs;
-                                    isRaidSpawnTime = pokeStop.RaidInfo.RaidSpawnMs - asBossTime;
 
                                     if (pokeStop.RaidInfo.RaidPokemon.PokemonId > 0 && asBossTime > 0)
                                     {
@@ -404,39 +406,42 @@ namespace RocketBot2.Forms
 
                     if (isRaid)
                     {
-                        GMapBaloonToolTip toolTip = new GMapBaloonToolTip(pokestopMarker);
-                        pokestopMarker.ToolTipMode = MarkerTooltipMode.OnMouseOver;
-                        DateTime tm = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(isRaidTime);
-                        TimeSpan time = tm - DateTime.UtcNow;
-                        string timerText = $"Next RAID starts in: {time.Hours}h {time.Minutes}m"; // {Math.Abs(time.Seconds)}s";
-                        toolTip.Marker.ToolTipText = timerText;
+                        if (!(expires.Ticks == 0 || time.TotalSeconds < 0))
+                        {
+                            GMapBaloonToolTip toolTip = new GMapBaloonToolTip(pokestopMarker);
+                            pokestopMarker.ToolTipMode = MarkerTooltipMode.OnMouseOver;
+                            string timerText = $"Next RAID starts in: {time.Hours}h {time.Minutes}m"; // {Math.Abs(time.Seconds)}s";
+                            toolTip.Marker.ToolTipText = timerText;
+                        }
                     }
 
-                    if (asBoss)
+                    if (asBoss || isSpawn)
                     {
-                        GMapBaloonToolTip toolTip = new GMapBaloonToolTip(pokestopMarker);
-                        pokestopMarker.ToolTipMode = MarkerTooltipMode.OnMouseOver;
-                        TimeSpan time = new TimeSpan(0);
                         string boss = null;
                         string raidDesc = null;
 
                         if (isSpawn)
                         {
-                            DateTime tm = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(isRaidSpawnTime);
-                            time =  tm - DateTime.UtcNow;
+                            expires = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(isRaidSpawnTime);
+                            time = expires - DateTime.UtcNow;
                             raidDesc = "Local SPAWN ends in";
                             boss = $"Raid Spawn: {_session.Translation.GetPokemonTranslation(pokeStop.RaidInfo.RaidPokemon.PokemonId)} CP: {pokeStop.RaidInfo.RaidPokemon.Cp}";
                         }
                         else
                         {
-                            DateTime tm = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(asBossTime);
-                            time = tm - DateTime.UtcNow;
+                            expires = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(asBossTime);
+                            time = expires - DateTime.UtcNow;
                             raidDesc = "Local RAID ends in";
                             boss = $"Boss: {_session.Translation.GetPokemonTranslation(pokeStop.RaidInfo.RaidPokemon.PokemonId)} CP: {pokeStop.RaidInfo.RaidPokemon.Cp}";
                         }
 
-                        string timerText = $"{raidDesc}: {time.Hours}h {time.Minutes}m\n\r{boss}"; // {Math.Abs(time.Seconds)}s";
-                        toolTip.Marker.ToolTipText = timerText;
+                        if (!(expires.Ticks == 0 || time.TotalSeconds < 0))
+                        {
+                            GMapBaloonToolTip toolTip = new GMapBaloonToolTip(pokestopMarker);
+                            pokestopMarker.ToolTipMode = MarkerTooltipMode.OnMouseOver;
+                            string timerText = $"{raidDesc}: {time.Hours}h {time.Minutes}m\n\r{boss}"; // {Math.Abs(time.Seconds)}s";
+                            toolTip.Marker.ToolTipText = timerText;
+                        }
                     }
 
                     lock (_pokestopsOverlay.Markers)
