@@ -279,7 +279,7 @@ namespace PoGo.NecroBot.Logic
                 return bot;
 
             if (_context.Account.Count() > 0)
-            { 
+            {
                 var runnableAccount = _context.Account.OrderByDescending(p => p.Level).ThenBy(p => p.CurrentXp).LastOrDefault(p => p != currentAccount && (!p.ReleaseBlockTime.HasValue || p.ReleaseBlockTime.HasValue && p.ReleaseBlockTime.Value < DateTime.Now.ToUnixTime()));
 
                 if (runnableAccount != null)
@@ -372,7 +372,7 @@ namespace PoGo.NecroBot.Logic
                 user = string.IsNullOrEmpty(item.Nickname) ? item.Username : item.Nickname;
 
                 if (item.Level > 0)
-                    Logger.Write($"{user.PadRight(maxL)} | Lvl: {item.Level,2:#0} | XP: {item.CurrentXp,8:0} | SD: {item.Stardust,8:0} | Runtime: {item.RuntimeTotal,3:##0} Min",LogLevel.BotStats);
+                    Logger.Write($"{user.PadRight(maxL)} | Lvl: {item.Level,2:#0} | XP: {item.CurrentXp,8:0} | SD: {item.Stardust,8:0} | Runtime: {item.RuntimeTotal,3:##0} Min", LogLevel.BotStats);
                 else
                     Logger.Write($"{user.PadRight(maxL)} | Lvl: ?? | XP:        0 | SD:        0 | Runtime: {item.RuntimeTotal,3:##0} Min", LogLevel.BotStats);
             }
