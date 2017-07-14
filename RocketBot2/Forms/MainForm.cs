@@ -238,7 +238,7 @@ namespace RocketBot2.Forms
 
             GMapControl1.MinZoom = 2;
             GMapControl1.MaxZoom = 18;
-            
+
             GMapControl1.Overlays.Add(_searchAreaOverlay);
             GMapControl1.Overlays.Add(_pokestopsOverlay);
             GMapControl1.Overlays.Add(_pokemonsOverlay);
@@ -646,7 +646,7 @@ namespace RocketBot2.Forms
 
         private void BtnRefresh_Click(object sender, EventArgs e)
         {
-             ReloadPokemonList().ConfigureAwait(false);
+            ReloadPokemonList().ConfigureAwait(false);
         }
 
         private void StartStopBotToolStripMenuItem_Click(object sender, EventArgs e)
@@ -903,7 +903,7 @@ namespace RocketBot2.Forms
                 _session,
                 _session.CancellationTokenSource.Token,
                 pokemonObject.Id);
-                await ReloadPokemonList().ConfigureAwait(false);
+            await ReloadPokemonList().ConfigureAwait(false);
         }
 
         private void PokemonProperties(PokemonObject pokemonObject)
@@ -954,7 +954,7 @@ namespace RocketBot2.Forms
             {
                 await Task.Run(async () => { await FavoritePokemonTask.Execute(_session, pokemon.Id, !fav); });
             }
-                await ReloadPokemonList().ConfigureAwait(false);
+            await ReloadPokemonList().ConfigureAwait(false);
         }
 
         private async void TransferPokemon(IEnumerable<PokemonData> pokemons)
@@ -977,7 +977,7 @@ namespace RocketBot2.Forms
                                 _session, _session.CancellationTokenSource.Token, _pokemons
                             );
                         });
-                            await ReloadPokemonList().ConfigureAwait(false);
+                        await ReloadPokemonList().ConfigureAwait(false);
                     }
                     break;
             }
@@ -992,11 +992,11 @@ namespace RocketBot2.Forms
                 {
                     case DialogResult.Yes:
                         await Task.Run(async () => { await UpgradeSinglePokemonTask.Execute(_session, pokemon.Id, true /* upgrade x times */); });
-                            await ReloadPokemonList().ConfigureAwait(false);
+                        await ReloadPokemonList().ConfigureAwait(false);
                         break;
                     case DialogResult.No:
                         await Task.Run(async () => { await UpgradeSinglePokemonTask.Execute(_session, pokemon.Id, false, 1 /* Only upgrade 1 time */); });
-                            await ReloadPokemonList().ConfigureAwait(false);
+                        await ReloadPokemonList().ConfigureAwait(false);
                         break;
                 }
             }
@@ -1049,7 +1049,7 @@ namespace RocketBot2.Forms
                     continue;
                 }
                 await Task.Run(async () => { await RenameSinglePokemonTask.Execute(_session, pokemon.Id, nickname, _session.CancellationTokenSource.Token); });
-                    await ReloadPokemonList().ConfigureAwait(false);
+                await ReloadPokemonList().ConfigureAwait(false);
             }
         }
 
@@ -1201,7 +1201,7 @@ namespace RocketBot2.Forms
                         }
                         break;
                 }
-                    await ReloadPokemonList().ConfigureAwait(false);
+                await ReloadPokemonList().ConfigureAwait(false);
             }
         }
 
@@ -1239,21 +1239,7 @@ namespace RocketBot2.Forms
 
             // Command line parsing
             var commandLine = new Arguments(args);
-            bool autoStart = false;
             // Look for specific arguments values
-            if (commandLine["autostart"] != null && commandLine["autostart"].Length > 0)
-            {
-                switch (commandLine["autostart"])
-                {
-                    case "true":
-                        autoStart = true;
-                        break;
-
-                    case "false":
-                        autoStart = false;
-                        break;
-                }
-            }
             if (commandLine["subpath"] != null && commandLine["subpath"].Length > 0)
             {
                 _subPath = commandLine["subpath"];
@@ -1353,6 +1339,7 @@ namespace RocketBot2.Forms
                 }
             }
 
+            bool AutoStart = false;
             var options = new Options();
             if (CommandLine.Parser.Default.ParseArguments(args, options))
             {
@@ -1361,6 +1348,8 @@ namespace RocketBot2.Forms
                 {
                     settings.GenerateAccount(options.IsGoogle, options.Template, options.Start, options.End, options.Password);
                 }
+                if (options.AutoStart)
+                    AutoStart = true;
             }
 
             var lastPosFile = Path.Combine(profileConfigPath, "LastPos.ini");
@@ -1563,10 +1552,10 @@ namespace RocketBot2.Forms
                     GetPlayerResponse x = _session.Client.Player.GetPlayer().Result;
                     string warn = x.Warn ? "*(Flagged)*-" : null;
 
-                        SetStatusText($"[RocketBot2 v{strVersion}] {warn}" +
-                                    stats.GetTemplatedStats(
-                                        _session.Translation.GetTranslation(TranslationString.StatsTemplateString),
-                                        _session.Translation.GetTranslation(TranslationString.StatsXpTemplateString)));
+                    SetStatusText($"[RocketBot2 v{strVersion}] {warn}" +
+                                stats.GetTemplatedStats(
+                                    _session.Translation.GetTranslation(TranslationString.StatsTemplateString),
+                                    _session.Translation.GetTranslation(TranslationString.StatsXpTemplateString)));
                 };
 
             Resources.ProgressBar.Fill(40);
@@ -1660,7 +1649,7 @@ namespace RocketBot2.Forms
 
             if (_botStarted) startStopBotToolStripMenuItem.Text = @"■ Exit RocketBot2";
 
-            if (autoStart)
+            if (AutoStart)
                 StartStopBotToolStripMenuItem_Click(null, null);
         }
 
