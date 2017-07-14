@@ -2,6 +2,7 @@
 using PoGo.NecroBot.Logic.Utils;
 using POGOProtos.Enums;
 using POGOProtos.Map.Fort;
+using System;
 using TinyIoC;
 
 namespace PoGo.Necrobot.Window.Model
@@ -30,18 +31,22 @@ namespace PoGo.Necrobot.Window.Model
             {
                 string fortIcon = "";
                 bool isRaid = false;
+                bool isSpawn = false;
                 bool asBoss = false;
                 long asBossTime = 0;
                 long isRaidTime = 0;
+                long isRaidSpawnTime = 0;
 
                 try
                 {
                     isRaidTime = fort.RaidInfo.RaidBattleMs;
+
                     if (fort.RaidInfo != null)
                     {
                         asBossTime = fort.RaidInfo.RaidEndMs;
+                        isRaidSpawnTime = fort.RaidInfo.RaidSpawnMs - asBossTime;
 
-                        if (fort.RaidInfo.RaidPokemon.PokemonId > 0 && asBossTime > 0)
+                        if (fort.RaidInfo.RaidPokemon.PokemonId > 0 && asBossTime > 0 || isRaidSpawnTime > 0)
                             asBoss = true;
                     }
                 }
@@ -53,9 +58,34 @@ namespace PoGo.Necrobot.Window.Model
                 if (isRaidTime > 0)
                     isRaid = true;
 
-                string gymStat = isRaid ? "-raid" : null;
-                string gymBoss = asBoss ? $"https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/pokemon/{(int)fort.RaidInfo.RaidPokemon.PokemonId}.png" : null;
+                if (isRaidSpawnTime > 0)
+                    isSpawn = true;
 
+                string gymBoss = null;
+
+                if (asBoss)
+                {
+                    //TODO: Review this
+                    TimeSpan time = new TimeSpan();
+
+                    if (isSpawn)
+                    {
+                        time = new TimeSpan(isRaidSpawnTime);
+                        DateTime tm = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(isRaidSpawnTime);
+                        time = tm - DateTime.UtcNow;
+                        gymBoss = $"https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/pokemon/{(int)fort.RaidInfo.RaidPokemon.PokemonId}.png";
+                    }
+                    else
+                    {
+                        time = new TimeSpan(asBossTime);
+                        DateTime tm = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(asBossTime);
+                        time = tm - DateTime.UtcNow;
+                        gymBoss = $"https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/pokemon/{(int)fort.RaidInfo.RaidPokemon.PokemonId}.png";
+                    }
+                }
+
+                string gymStat = isRaid ? "-raid" : null;
+ 
                 // Solution to overlay 2 images in string mode ????
                 // forticon + gymBoss or create asset 251 gyms red + 251 gyms blue + 251 neutral +251 yellow !!!!
                 // WFP is compatible to var image ??? 
