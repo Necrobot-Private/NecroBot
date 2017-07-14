@@ -44,7 +44,7 @@ namespace PoGo.Necrobot.Window.Model
                     if (fort.RaidInfo != null)
                     {
                         asBossTime = fort.RaidInfo.RaidEndMs;
-                        isRaidSpawnTime = fort.RaidInfo.RaidSpawnMs - asBossTime;
+                        isRaidSpawnTime = fort.RaidInfo.RaidSpawnMs;
 
                         if (fort.RaidInfo.RaidPokemon.PokemonId > 0 && asBossTime > 0 || isRaidSpawnTime > 0)
                             asBoss = true;
@@ -67,26 +67,36 @@ namespace PoGo.Necrobot.Window.Model
                 {
                     //TODO: Review this
                     TimeSpan time = new TimeSpan(0);
-
+					DateTime expires = new DateTime(0);
+ 
                     if (isSpawn)
                     {
-                        DateTime tm = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(isRaidSpawnTime);
-                        time = tm - DateTime.UtcNow;
+                        expires = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(isRaidSpawnTime);
+                        time = expires - DateTime.UtcNow;
                         gymBoss = $"https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/pokemon/{(int)fort.RaidInfo.RaidPokemon.PokemonId}.png";
                     }
                     else
                     {
-                        DateTime tm = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(asBossTime);
-                        time = tm - DateTime.UtcNow;
+                        expires = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(asBossTime);
+                        time = expires - DateTime.UtcNow;
                         gymBoss = $"https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/pokemon/{(int)fort.RaidInfo.RaidPokemon.PokemonId}.png";
                     }
-                }
+
+					if (!(expires.Ticks == 0 || time.TotalSeconds < 0))
+                    {
+                        //
+                    }
+					else
+					{
+						//
+					}
+                 }
 
                 string gymStat = isRaid ? "-raid" : null;
  
                 // Solution to overlay 2 images in string mode ????
                 // forticon + gymBoss or create asset 251 gyms red + 251 gyms blue + 251 neutral +251 yellow !!!!
-                // WFP is compatible to var image ??? 
+                // WPF is compatible to var image ??? 
 
                 switch (fort.OwnedByTeam)
                 {
