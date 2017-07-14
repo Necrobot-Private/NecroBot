@@ -66,18 +66,16 @@ namespace PoGo.Necrobot.Window.Model
                 if (asBoss)
                 {
                     //TODO: Review this
-                    TimeSpan time = new TimeSpan();
+                    TimeSpan time = new TimeSpan(0);
 
                     if (isSpawn)
                     {
-                        time = new TimeSpan(isRaidSpawnTime);
                         DateTime tm = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(isRaidSpawnTime);
                         time = tm - DateTime.UtcNow;
                         gymBoss = $"https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/pokemon/{(int)fort.RaidInfo.RaidPokemon.PokemonId}.png";
                     }
                     else
                     {
-                        time = new TimeSpan(asBossTime);
                         DateTime tm = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(asBossTime);
                         time = tm - DateTime.UtcNow;
                         gymBoss = $"https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/pokemon/{(int)fort.RaidInfo.RaidPokemon.PokemonId}.png";
