@@ -342,7 +342,7 @@ namespace RocketBot2.Forms
                                     asBossTime = pokeStop.RaidInfo.RaidEndMs;
                                     isRaidSpawnTime = pokeStop.RaidInfo.RaidSpawnMs - asBossTime;
 
-                                    if (pokeStop.RaidInfo.RaidPokemon.PokemonId > 0 && asBossTime > 0 || isRaidSpawnTime > 0)
+                                    if (pokeStop.RaidInfo.RaidPokemon.PokemonId > 0 && asBossTime > 0)
                                     {
                                         asBoss = true;
                                         hg = 48;
@@ -353,7 +353,7 @@ namespace RocketBot2.Forms
                             }
                             catch
                             {
-                                fort = ResourceHelper.GetImage($"GymVide", null, null, hg, wg);
+                                //
                             }
 
                             if (isRaidTime > 0)
@@ -416,13 +416,12 @@ namespace RocketBot2.Forms
                     {
                         GMapBaloonToolTip toolTip = new GMapBaloonToolTip(pokestopMarker);
                         pokestopMarker.ToolTipMode = MarkerTooltipMode.OnMouseOver;
-                        TimeSpan time = new TimeSpan();
+                        TimeSpan time = new TimeSpan(0);
                         string boss = null;
                         string raidDesc = null;
 
                         if (isSpawn)
                         {
-                            time = new TimeSpan(isRaidSpawnTime);
                             DateTime tm = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(isRaidSpawnTime);
                             time =  tm - DateTime.UtcNow;
                             raidDesc = "Local SPAWN ends in";
@@ -430,7 +429,6 @@ namespace RocketBot2.Forms
                         }
                         else
                         {
-                            time = new TimeSpan(asBossTime);
                             DateTime tm = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(asBossTime);
                             time = tm - DateTime.UtcNow;
                             raidDesc = "Local RAID ends in";
