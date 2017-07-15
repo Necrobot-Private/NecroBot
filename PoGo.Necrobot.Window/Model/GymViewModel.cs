@@ -35,22 +35,24 @@ namespace PoGo.Necrobot.Window.Model
                 bool asBoss = false;
                 DateTime expires = new DateTime(0);
                 TimeSpan time = new TimeSpan(0);
+                string finalText = null;
+                string boss = null;
 
                 try
                 {
-                    if (fort.RaidInfo.RaidBattleMs > 0)
-                    {
-                        expires = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(fort.RaidInfo.RaidBattleMs);
-                        time = expires - DateTime.UtcNow;
-                        if (!(expires.Ticks == 0 || time.TotalSeconds < 0))
-                        {
-                            //string finalText = $"Next RAID starts in: {time.Hours}h {time.Minutes}m";
-                            isRaid = true;
-                        }
-                    }
-
                     if (fort.RaidInfo != null)
                     {
+                        if (fort.RaidInfo.RaidBattleMs > 0)
+                        {
+                            expires = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(fort.RaidInfo.RaidBattleMs);
+                            time = expires - DateTime.UtcNow;
+                            if (!(expires.Ticks == 0 || time.TotalSeconds < 0))
+                            {
+                                finalText = $"Next RAID starts in: {time.Hours}h {time.Minutes}m";
+                                isRaid = true;
+                            }
+                        }
+
                         if (fort.RaidInfo.RaidPokemon.PokemonId > 0)
                         {
                             expires = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(fort.RaidInfo.RaidEndMs);
@@ -58,7 +60,8 @@ namespace PoGo.Necrobot.Window.Model
                             if (!(expires.Ticks == 0 || time.TotalSeconds < 0))
                             {
                                 asBoss = true;
-                                //string finalText = $"Local RAID ends in: {time.Hours}h {time.Minutes}m";
+                                boss = $"Boss: {fort.RaidInfo.RaidPokemon.PokemonId} CP: {fort.RaidInfo.RaidPokemon.Cp}";
+                                finalText = $"Local RAID ends in: {time.Hours}h {time.Minutes}m";
                             }
                         }
 
@@ -69,7 +72,7 @@ namespace PoGo.Necrobot.Window.Model
                             if (!(expires.Ticks == 0 || time.TotalSeconds < 0))
                             {
                                 isSpawn = true;
-                                //string finalText = $"Local SPAWN ends in: {time.Hours}h {time.Minutes}m";
+                                finalText = !asBoss ? $"Local SPAWN ends in: {time.Hours}h {time.Minutes}m" : $"Local SPAWN ends in: {time.Hours}h {time.Minutes}m\n\r{boss}";
                             }
                         }
                     }
