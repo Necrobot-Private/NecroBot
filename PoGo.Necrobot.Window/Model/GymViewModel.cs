@@ -33,64 +33,54 @@ namespace PoGo.Necrobot.Window.Model
                 bool isRaid = false;
                 bool isSpawn = false;
                 bool asBoss = false;
-                long asBossTime = 0;
-                long isRaidTime = 0;
-                long isRaidSpawnTime = 0;
+                DateTime expires = new DateTime(0);
+                TimeSpan time = new TimeSpan(0);
 
                 try
                 {
-                    isRaidTime = fort.RaidInfo.RaidBattleMs;
+                    if (fort.RaidInfo.RaidBattleMs > 0)
+                    {
+                        expires = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(fort.RaidInfo.RaidBattleMs);
+                        time = expires - DateTime.UtcNow;
+                        if (!(expires.Ticks == 0 || time.TotalSeconds < 0))
+                        {
+                            //string finalText = $"Next RAID starts in: {time.Hours}h {time.Minutes}m";
+                            isRaid = true;
+                        }
+                    }
 
                     if (fort.RaidInfo != null)
                     {
-                        asBossTime = fort.RaidInfo.RaidEndMs;
-                        isRaidSpawnTime = fort.RaidInfo.RaidSpawnMs;
+                        if (fort.RaidInfo.RaidPokemon.PokemonId > 0)
+                        {
+                            expires = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(fort.RaidInfo.RaidEndMs);
+                            time = expires - DateTime.UtcNow;
+                            if (!(expires.Ticks == 0 || time.TotalSeconds < 0))
+                            {
+                                asBoss = true;
+                                //string finalText = $"Local RAID ends in: {time.Hours}h {time.Minutes}m";
+                            }
+                        }
 
-                        if (fort.RaidInfo.RaidPokemon.PokemonId > 0 && asBossTime > 0 || isRaidSpawnTime > 0)
-                            asBoss = true;
+                        if (fort.RaidInfo.RaidSpawnMs > 0)
+                        {
+                            expires = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(fort.RaidInfo.RaidSpawnMs);
+                            time = expires - DateTime.UtcNow;
+                            if (!(expires.Ticks == 0 || time.TotalSeconds < 0))
+                            {
+                                isSpawn = true;
+                                //string finalText = $"Local SPAWN ends in: {time.Hours}h {time.Minutes}m";
+                            }
+                        }
                     }
                 }
                 catch
                 {
-                    //
+
                 }
 
-                if (isRaidTime > 0)
-                    isRaid = true;
-
-                if (isRaidSpawnTime > 0)
-                    isSpawn = true;
-
-                string gymBoss = null;
-
-                if (asBoss)
-                {
-                    //TODO: Review this
-                    TimeSpan time = new TimeSpan(0);
-					DateTime expires = new DateTime(0);
- 
-                    if (isSpawn)
-                    {
-                        expires = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(isRaidSpawnTime);
-                        time = expires - DateTime.UtcNow;
-                        gymBoss = $"https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/pokemon/{(int)fort.RaidInfo.RaidPokemon.PokemonId}.png";
-                    }
-                    else
-                    {
-                        expires = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(asBossTime);
-                        time = expires - DateTime.UtcNow;
-                        gymBoss = $"https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/pokemon/{(int)fort.RaidInfo.RaidPokemon.PokemonId}.png";
-                    }
-
-					if (!(expires.Ticks == 0 || time.TotalSeconds < 0))
-                    {
-                        //
-                    }
-					else
-					{
-						//
-					}
-                 }
+                if (isSpawn) { } //
+                if (asBoss) { } //
 
                 string gymStat = isRaid ? "-raid" : null;
  
