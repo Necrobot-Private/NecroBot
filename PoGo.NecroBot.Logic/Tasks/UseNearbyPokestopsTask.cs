@@ -383,9 +383,27 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static int softbanCount = 0;
 
-        private static async Task FarmPokestop(ISession session, FortData pokeStop, FortDetailsResponse fortInfo, CancellationToken cancellationToken, bool doNotRetry = false)
+        public static async Task FarmPokestop(ISession session, FortData pokeStop, FortDetailsResponse fortInfo, CancellationToken cancellationToken, bool doNotRetry = false)
         {
             var manager = TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>();
+
+            if (pokeStop.Type == FortType.Gym)
+            {
+                FortData fixFort = new FortData(pokeStop)
+                {
+                    Type = FortType.Checkpoint,
+                    RaidInfo = null
+                };
+
+                FortDetailsResponse fixFortInfo = new FortDetailsResponse(fortInfo)
+                {
+                    Type = FortType.Checkpoint
+                };
+
+                pokeStop = new FortData(fixFort);
+                fortInfo = new FortDetailsResponse(fixFortInfo);
+            }
+               
 
             // If the cooldown is in the future than don't farm the pokestop.
             if (pokeStop.CooldownCompleteTimestampMs > DateTime.UtcNow.ToUnixTime())
