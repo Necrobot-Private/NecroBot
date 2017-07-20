@@ -531,8 +531,39 @@ namespace RocketBot2.Forms
 
         private async void GMapControl1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if (!_botStarted) return;
             var pos = GMapControl1.FromLocalToLatLng(e.Location.X, e.Location.Y);
+            if (!_botStarted)
+            {
+                // Sets current location 
+                double Dist = LocationUtils.CalculateDistanceInMeters(_session.Client.CurrentLatitude, _session.Client.CurrentLongitude, pos.Lat, pos.Lng);
+                double Alt = _session.ElevationService.GetElevation(pos.Lat, pos.Lng).Result;
+
+                var lastPosFile = Path.Combine(_settings.ProfileConfigPath, "LastPos.ini");
+                if (File.Exists(lastPosFile))
+                {
+                    File.Delete(lastPosFile);
+                }
+
+                _session.Client.Settings.DefaultLatitude = pos.Lat;
+                _session.Client.Settings.DefaultLongitude = pos.Lng;
+
+                _settings.LocationConfig.DefaultLatitude = pos.Lat;
+                _settings.LocationConfig.DefaultLongitude = pos.Lng;
+
+                _session.Client.Player.SetCoordinates(pos.Lat, pos.Lng, Alt);
+
+                var newLocation = new PointLatLng(pos.Lat, pos.Lng);
+                GMapControl1.Position = newLocation;
+                _playerMarker.Position = newLocation;
+                _playerLocations.Clear();
+                _playerLocations.Add(newLocation);
+                UpdateMap();
+
+                _settings.Save(Path.Combine(Path.Combine(Directory.GetCurrentDirectory(), "Config"), "config.json"));
+
+                Logger.Write($"New starting location has been set to: Lat: {pos.Lat:0.00000000} Long: {pos.Lng:0.00000000} Dist: {Dist:0.00}m Altitude: {Alt:0.00}m",LogLevel.Info);
+                return;
+            }
             await SetMoveToTargetTask.Execute(pos.Lat, pos.Lng);
         }
 
