@@ -683,6 +683,7 @@
     <Compile Include="Tasks\UseLuckyEggConstantlyTask.cs" />
     <Compile Include="Tasks\UseLuckyEggTask.cs" />
     <Compile Include="Tasks\UseNearbyPokestopsTask.cs" />
+    <Compile Include="Tasks\UseItemCaptureTask.cs" />
     <Compile Include="TinyIoC.cs" />
     <Compile Include="Utils\AsyncLock.cs" />
     <Compile Include="Utils\DelayingUtils.cs" />
