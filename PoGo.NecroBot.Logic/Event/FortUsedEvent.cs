@@ -9,6 +9,7 @@ namespace PoGo.NecroBot.Logic.Event
         public string Id;
         public bool InventoryFull;
         public string Items;
+        public string Badges;
         public double Latitude;
         public double Longitude;
         public double Altitude;
