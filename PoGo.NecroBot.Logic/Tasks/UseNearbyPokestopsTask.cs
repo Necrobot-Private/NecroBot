@@ -383,7 +383,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static int softbanCount = 0;
 
-        private static async Task FarmPokestop(ISession session, FortData pokeStop, FortDetailsResponse fortInfo, CancellationToken cancellationToken, bool doNotRetry = false)
+        public static async Task FarmPokestop(ISession session, FortData pokeStop, FortDetailsResponse fortInfo, CancellationToken cancellationToken, bool doNotRetry = false)
         {
             var manager = TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>();
 

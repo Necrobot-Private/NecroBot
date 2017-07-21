@@ -2,6 +2,7 @@
 using PoGo.NecroBot.Logic.Utils;
 using POGOProtos.Enums;
 using POGOProtos.Map.Fort;
+using System;
 using TinyIoC;
 
 namespace PoGo.Necrobot.Window.Model
@@ -30,19 +31,72 @@ namespace PoGo.Necrobot.Window.Model
             {
                 string fortIcon = "";
                 bool isRaid = false;
+                bool isSpawn = false;
+                bool asBoss = false;
+                DateTime expires = new DateTime(0);
+                TimeSpan time = new TimeSpan(0);
+                string finalText = null;
+                string boss = null;
+
                 try
                 {
-                    if (!string.IsNullOrEmpty(fort.RaidInfo.RaidPokemon.PokemonId.ToString()))
-                        isRaid = true;
+                    if (fort.RaidInfo != null)
+                    {
+                        if (fort.RaidInfo.RaidBattleMs > 0)
+                        {
+                            expires = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(fort.RaidInfo.RaidBattleMs);
+                            time = expires - DateTime.UtcNow;
+                            if (!(expires.Ticks == 0 || time.TotalSeconds < 0))
+                            {
+                                finalText = $"Next RAID starts in: {time.Hours}h {time.Minutes}m";
+                                isRaid = true;
+                            }
+                        }
+
+                        if (fort.RaidInfo.RaidPokemon.PokemonId > 0)
+                        {
+                            expires = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(fort.RaidInfo.RaidEndMs);
+                            time = expires - DateTime.UtcNow;
+                            if (!(expires.Ticks == 0 || time.TotalSeconds < 0))
+                            {
+                                asBoss = true;
+                                boss = $"Boss: {fort.RaidInfo.RaidPokemon.PokemonId} CP: {fort.RaidInfo.RaidPokemon.Cp}";
+                                finalText = $"Local RAID ends in: {time.Hours}h {time.Minutes}m";
+                            }
+                        }
+
+                        if (fort.RaidInfo.RaidSpawnMs > 0)
+                        {
+                            expires = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(fort.RaidInfo.RaidSpawnMs);
+                            time = expires - DateTime.UtcNow;
+                            if (!(expires.Ticks == 0 || time.TotalSeconds < 0))
+                            {
+                                isSpawn = true;
+                                finalText = !asBoss ? $"Local SPAWN ends in: {time.Hours}h {time.Minutes}m" : $"Local SPAWN ends in: {time.Hours}h {time.Minutes}m\n\r{boss}";
+                            }
+                        }
+                    }
                 }
                 catch
                 {
-                    isRaid = false;
+
                 }
-                string gymStat = isRaid ? "-raid" : "";
+
+                if (isSpawn) { } //
+                if (asBoss) { } //
+
+                string gymStat = isRaid ? "-raid" : null;
+ 
+                // Solution to overlay 2 images in string mode ????
+                // forticon + gymBoss or create asset 251 gyms red + 251 gyms blue + 251 neutral +251 yellow !!!!
+                // WPF is compatible to var image ??? 
+
                 switch (fort.OwnedByTeam)
                 {
                     case TeamColor.Neutral:
+                     /*/if (asBoss)
+                            fortIcon = gymimage + gymBoss;
+                        else //*/
                             fortIcon = $"https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/unoccupied{gymStat}.png";
                         break;
                     case TeamColor.Blue:

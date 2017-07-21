@@ -220,9 +220,9 @@ namespace PoGo.NecroBot.Logic
                 return null;
 
             if (ignoreBlockCheck)
-                return _context.Account.OrderBy(x => x.RuntimeTotal.HasValue ? x.RuntimeTotal.Value : 0).ThenBy(x => x != null ? x.Id : 0).FirstOrDefault();
+                return _context.Account.OrderBy(x => x.Level.Value).ThenBy(x => x.CurrentXp.Value).FirstOrDefault();
             else
-                return _context.Account.OrderBy(x => x.RuntimeTotal.HasValue ? x.RuntimeTotal.Value : 0).ThenBy(x => x != null ? x.Id : 0).Where(x => x != null && x.ReleaseBlockTime.HasValue && x.ReleaseBlockTime.Value < DateTime.Now.ToUnixTime()).FirstOrDefault();
+                return _context.Account.OrderBy(x => x.Level.Value).ThenBy(x => x.CurrentXp.Value).Where(x => x != null && x.ReleaseBlockTime.HasValue && x.ReleaseBlockTime.Value < DateTime.Now.ToUnixTime()).FirstOrDefault();
         }
 
         public bool AllowMultipleBot()
@@ -279,8 +279,8 @@ namespace PoGo.NecroBot.Logic
                 return bot;
 
             if (_context.Account.Count() > 0)
-            { 
-                var runnableAccount = _context.Account.OrderByDescending(p => p.RuntimeTotal).ThenBy(p => p.Id).LastOrDefault(p => p != currentAccount && (!p.ReleaseBlockTime.HasValue || p.ReleaseBlockTime.HasValue && p.ReleaseBlockTime.Value < DateTime.Now.ToUnixTime()));
+            {
+                var runnableAccount = _context.Account.OrderByDescending(p => p.Level).ThenBy(p => p.CurrentXp).LastOrDefault(p => p != currentAccount && (!p.ReleaseBlockTime.HasValue || p.ReleaseBlockTime.HasValue && p.ReleaseBlockTime.Value < DateTime.Now.ToUnixTime()));
 
                 if (runnableAccount != null)
                     return runnableAccount;
@@ -369,18 +369,12 @@ namespace PoGo.NecroBot.Logic
 
             foreach (var item in Accounts)
             {
-                var SP = "";
                 user = string.IsNullOrEmpty(item.Nickname) ? item.Username : item.Nickname;
 
-                for (int i = 0; i < maxL - user.Length + 1; i++)
-                {
-                    SP += " ";
-                }
-
                 if (item.Level > 0)
-                    Logger.Write($"{user}{SP}| Lvl: {item.Level:#0} | XP: {item.CurrentXp,8:0} | SD: {item.Stardust,8:0} | Runtime: {item.RuntimeTotal,3:##0} Min",LogLevel.BotStats);
+                    Logger.Write($"{user.PadRight(maxL)} | Lvl: {item.Level,2:#0} | XP: {item.CurrentXp,8:0} | SD: {item.Stardust,8:0} | Runtime: {item.RuntimeTotal,3:##0} Min", LogLevel.BotStats);
                 else
-                    Logger.Write($"{user}{SP}| Lvl: ?? | XP:          | SD:        0 | Runtime: {item.RuntimeTotal,3:##0} Min", LogLevel.BotStats);
+                    Logger.Write($"{user.PadRight(maxL)} | Lvl: ?? | XP:        0 | SD:        0 | Runtime: {item.RuntimeTotal,3:##0} Min", LogLevel.BotStats);
             }
         }
 

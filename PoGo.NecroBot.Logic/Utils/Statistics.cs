@@ -180,8 +180,8 @@ namespace PoGo.NecroBot.Logic.Utils
                                 Rewards = "\nItems Recieved:";
                                 foreach (ItemAward item in items)
                                 {
-                                    Logger.Write($"{item.ItemCount,2:#0} - {item.ItemId}'s", LogLevel.Info);
-                                    Rewards += $"\n{item.ItemCount,2:#0} - {item.ItemId}'s";
+                                    Logger.Write($"{item.ItemCount,2:#0}x {item.ItemId}'s", LogLevel.Info);
+                                    Rewards += $"\n{item.ItemCount,2:#0}x {item.ItemId}'s";
                                 }
                             }
 

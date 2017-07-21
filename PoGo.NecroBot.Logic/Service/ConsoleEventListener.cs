@@ -506,19 +506,19 @@ namespace PoGo.NecroBot.Logic.Service
                 Logger.Write(
                     session.Translation.GetTranslation(
                         TranslationString.HighestsPokemoCell,
-                        pokemon.Item1.Cp.ToString(), //.PadLeft(4, ' '),
-                        pokemon.Item2.ToString(), //.PadLeft(4, ' '),
-                        pokemon.Item3.ToString("0.00"),
+                        pokemon.Item1.Cp.ToString().PadLeft(4, ' '),
+                        pokemon.Item2.ToString().PadLeft(4, ' '),
+                        pokemon.Item3.ToString("0.00").PadRight(6, ' '),
                         strPerfect,
-                        pokemon.Item4.ToString("00"),
+                        pokemon.Item4.ToString("00").PadRight(2, ' '),
                         strName,
-                        session.Translation.GetPokemonTranslation(pokemon.Item1.PokemonId), //.PadRight(12, ' '),
+                        session.Translation.GetPokemonTranslation(pokemon.Item1.PokemonId).PadRight(12, ' '),
                         move1,
-                        strMove1, //.PadRight(15, ' '),
+                        strMove1.PadRight(16, ' '),
                         move2,
-                        strMove2, //.PadRight(15, ' '),
+                        strMove2.PadRight(16, ' '),
                         candy,
-                        pokemon.Item7
+                        pokemon.Item7.ToString("00").PadRight(2, ' ')
                     ),
                     LogLevel.Info,
                     ConsoleColor.Yellow

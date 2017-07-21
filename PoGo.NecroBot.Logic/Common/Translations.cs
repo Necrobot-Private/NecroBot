@@ -742,7 +742,7 @@ namespace PoGo.NecroBot.Logic.Common
                 new KeyValuePair<TranslationString, string>(TranslationString.HighestsPokemoHeader,
                     "====== {0} ======"),
                 new KeyValuePair<TranslationString, string>(TranslationString.HighestsPokemoCell,
-                    "# CP {0,4:###0}/{1,4:###0} | ({2,6:##0.00}% {3,6:##0.00}) | Lvl: {4,2:#0} | {5}: {6,-12} | {7}: {8,-15} | {9}: {10,-15} | {11}: {12,2:#0}"),
+                    "# CP {0}/{1} | ({2}% {3}) | Lvl: {4} | {5}: {6} | {7}: {8} | {9}: {10} | {11}: {12}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.HumanWalkingVariant,
                     "Walking Speed: Has been changed, {0:n2} Km/h to {1:n2} Km/h"),
                 new KeyValuePair<TranslationString, string>(TranslationString.AccountBanned, "Probably Permanent Ban!"),

@@ -91,6 +91,9 @@ namespace RocketBot2.Forms
             cbUseLegacyAPI.Checked = _settings.Auth.APIConfig.UseLegacyAPI;
             cbDiplayHashServerLog.Checked = _settings.Auth.APIConfig.DiplayHashServerLog;
 
+            cbEnablePushBulletNotification.Checked = _settings.NotificationConfig.EnablePushBulletNotification;
+            tbPushBulletAPIKey.Text = _settings.NotificationConfig.PushBulletApiKey;
+
             #endregion
 
             #region Map Info
@@ -295,7 +298,7 @@ namespace RocketBot2.Forms
             tbDataServiceIdentification.Text = _settings.DataSharingConfig.DataServiceIdentification;
             cbEnableSyncData.Checked = _settings.DataSharingConfig.EnableSyncData;
             cbEnableGyms.Checked = _settings.GymConfig.Enable;
-            cBoxTeaamColor.Text = _settings.GymConfig.DefaultTeam;
+            cBoxTeamColor.Text = _settings.GymConfig.DefaultTeam;
             cbUseHumanlikeDelays.Checked = _settings.HumanlikeDelays.UseHumanlikeDelays;
         }
             #endregion
@@ -514,7 +517,11 @@ namespace RocketBot2.Forms
                 _settings.Auth.APIConfig.UseLegacyAPI = cbUseLegacyAPI.Checked;
                 _settings.Auth.APIConfig.DiplayHashServerLog = cbDiplayHashServerLog.Checked;
                 _settings.Auth.Save(AuthFilePath);
-                
+
+                //Settings added by TheWizard
+                _settings.NotificationConfig.EnablePushBulletNotification = cbEnablePushBulletNotification.Checked;
+                _settings.NotificationConfig.PushBulletApiKey = tbPushBulletAPIKey.Text;
+
                 #endregion
 
                 #region RocketBot2.Form Settings
@@ -647,7 +654,7 @@ namespace RocketBot2.Forms
                 _settings.CustomCatchConfig.ForceGreatThrowOverCp = Convert.ToInt32(tbForceGreatThrowOverCp.Text);
                 _settings.CustomCatchConfig.ForceExcellentThrowOverCp = Convert.ToInt32(tbForceExcellentThrowOverCp.Text);
                 _settings.GymConfig.Enable = cbEnableGyms.Checked;
-                _settings.GymConfig.DefaultTeam = cBoxTeaamColor.Text;
+                _settings.GymConfig.DefaultTeam = cBoxTeamColor.Text;
                 _settings.DataSharingConfig.AutoSnipe = cbAutoSniper.Checked;
                 _settings.DataSharingConfig.DataServiceIdentification = tbDataServiceIdentification.Text;
                 _settings.DataSharingConfig.EnableSyncData = cbEnableSyncData.Checked;
@@ -822,6 +829,11 @@ namespace RocketBot2.Forms
         {
             gMapCtrl.Dispose();
         }
+
+        private void CbEnablePushBulletNotification_CheckedChanged(object sender, EventArgs e)
+        {
+            _settings.NotificationConfig.EnablePushBulletNotification = cbEnablePushBulletNotification.Checked;
+        }
         #endregion
-    }       
+    }
 }

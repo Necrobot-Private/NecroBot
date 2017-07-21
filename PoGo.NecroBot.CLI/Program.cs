@@ -26,6 +26,7 @@ using CommandLine;
 using CommandLine.Text;
 using PokemonGo.RocketAPI;
 using System.Net.Http;
+using POGOProtos.Networking.Responses;
 
 #endregion using directives
 
@@ -424,10 +425,15 @@ namespace PoGo.NecroBot.CLI
             var strVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString(4);
             stats.DirtyEvent +=
                 () =>
-                    Console.Title = $"[Necrobot2 v{strVersion}] " +
+                {
+                    GetPlayerResponse x = _session.Client.Player.GetPlayer().Result;
+                    string warn = x.Warn ? "*(Flagged)*-" : null;
+
+                    Console.Title = $"[Necrobot2 v{strVersion}] {warn}" +
                                     stats.GetTemplatedStats(
                                         _session.Translation.GetTranslation(TranslationString.StatsTemplateString),
                                         _session.Translation.GetTranslation(TranslationString.StatsXpTemplateString));
+                };
             ProgressBar.Fill(40);
 
             var aggregator = new StatisticsAggregator(stats);

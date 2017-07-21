@@ -132,6 +132,16 @@ namespace RocketBot2.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap GymVisited {
+            get {
+                object obj = ResourceManager.GetObject("GymVisited", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap GymYellow {
             get {
                 object obj = ResourceManager.GetObject("GymYellow", resourceCulture);
@@ -212,6 +222,26 @@ namespace RocketBot2.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap Pokestop_looted_VisitedLure {
+            get {
+                object obj = ResourceManager.GetObject("Pokestop_looted_VisitedLure", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Pokestop_Lured {
+            get {
+                object obj = ResourceManager.GetObject("Pokestop_Lured", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap question {
             get {
                 object obj = ResourceManager.GetObject("question", resourceCulture);
@@ -225,6 +255,16 @@ namespace RocketBot2.Properties {
         public static System.Drawing.Bitmap slashed {
             get {
                 object obj = ResourceManager.GetObject("slashed", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap spawn {
+            get {
+                object obj = ResourceManager.GetObject("spawn", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

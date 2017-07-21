@@ -168,9 +168,9 @@ namespace PoGo.NecroBot.Logic.State
                         session.EventDispatcher.Send(new WarnEvent { Message = $"Detected a good pokemon with snipe {rsae.EncounterData.PokemonId.ToString()}   IV:{rsae.EncounterData.IV}  Move:{rsae.EncounterData.Move1}/ Move:{rsae.EncounterData.Move2}   LV: Move:{rsae.EncounterData.Level}" });
                     else
                     {
-                        session.EventDispatcher.Send(new WarnEvent { Message = "Encountered a good pokemon, switch another bot to catch him too." });
+                        session.EventDispatcher.Send(new WarnEvent { Message = "Encountered a good pokemon, switch bots to catch him too." });
                         if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
-                            await PushNotificationClient.SendNotification(session, $"Switch bot account", $"Encountered a good pokemon, switch another bot to catch him too.", true).ConfigureAwait(false);
+                            await PushNotificationClient.SendNotification(session, $"Switch bot account", $"Encountered a good pokemon, switch bots to catch him too.", true).ConfigureAwait(false);
                     }
                     session.ReInitSessionWithNextBot(rsae.Bot, session.Client.CurrentLatitude, session.Client.CurrentLongitude, session.Client.CurrentAltitude);
                     state = new LoginState(rsae.LastEncounterPokemonId, rsae.EncounterData);

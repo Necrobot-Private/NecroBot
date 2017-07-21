@@ -215,6 +215,8 @@ namespace PoGo.NecroBot.Logic.State
             if (XP == null) { XP = 0; }
             long? SD = nextBot.Stardust;
             if (SD == null) { SD = 0; }
+            long? Lvl = nextBot.Level;
+            if (Lvl == null) { Lvl = 0; }
             var NLevelXP = nextBot.NextLevelXp;
             if (nextBot.NextLevelXp == null) { NLevelXP = 0; }
 
@@ -222,7 +224,7 @@ namespace PoGo.NecroBot.Logic.State
 
             if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
                 PushNotificationClient.SendNotification(session, $"Account changed to", $"{Account}\n" +
-                                                                 $"Lvl: {nextBot.Level}\n" +
+                                                                 $"Lvl: {Lvl}\n" +
                                                                  $"XP : {XP:#,##0}({(double)XP / ((double)NLevelXP) * 100:#0.00}%)\n" +
                                                                  $"SD : {SD:#,##0}\n", true).ConfigureAwait(false);
 

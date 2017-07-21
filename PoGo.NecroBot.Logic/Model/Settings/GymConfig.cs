@@ -15,6 +15,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         internal enum TeamColor
         {
+            Neutral,
             Yellow,
             Red,
             Blue
