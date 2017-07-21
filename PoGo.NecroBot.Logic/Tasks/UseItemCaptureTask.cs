@@ -10,11 +10,10 @@ namespace PoGo.NecroBot.Logic.Tasks
 {
     public class UseItemCaptureTask
     {
-        public static async Task Execute(ISession session, ItemId itemid, ulong encounterid, FortData fort)
+        public static async Task Execute(ISession session, ItemId itemid, ulong encounterid, string spawnpointid)
         {
-            string UsedTo = encounterid > 0 ? "Pokemon" : "Fort";
-            Logger.Write($"Use {itemid.ToString()} as {UsedTo}", LogLevel.Recycling);
-            await session.Client.Inventory.UseItemCapture(itemid, encounterid, fort.Id).ConfigureAwait(false);
+            Logger.Write($"Use {itemid.ToString()}", LogLevel.Recycling);
+            await session.Client.Inventory.UseItemCapture(itemid, encounterid, spawnpointid).ConfigureAwait(false);
         }
     }
 }

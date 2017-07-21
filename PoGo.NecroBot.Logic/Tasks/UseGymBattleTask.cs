@@ -37,7 +37,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             if (!session.LogicSettings.GymConfig.Enable || gym.Type != FortType.Gym) return false;
 
-            Logger.Write($"Loot Gym {fortInfo.Name} {fortInfo.Description}", LogLevel.Gym);
+            Logger.Write($"Loot Gym: {fortInfo.Name}, Description: {fortInfo.Description}", LogLevel.Gym);
             await UseNearbyPokestopsTask.FarmPokestop(session, gym, fortInfo, cancellationToken, true).ConfigureAwait(false);
 
             //disable other for dev 
