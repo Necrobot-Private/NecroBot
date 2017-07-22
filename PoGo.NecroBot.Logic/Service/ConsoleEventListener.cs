@@ -211,7 +211,7 @@ namespace PoGo.NecroBot.Logic.Service
 
             string PokemonDataEgg = "No";
 
-            if (fortUsedEvent.PokemonDataEgg != null)
+            if (fortUsedEvent.PokemonDataEgg != null && fortUsedEvent.PokemonDataEgg.PokemonId != PokemonId.Missingno)
             {
                 PokemonDataEgg = $"{session.Translation.GetPokemonTranslation(fortUsedEvent.PokemonDataEgg.PokemonId)}" +
                     $"CP: {fortUsedEvent.PokemonDataEgg.Cp} IV: {PokemonInfo.CalculatePokemonPerfection(fortUsedEvent.PokemonDataEgg) / 100}%";
