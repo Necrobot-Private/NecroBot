@@ -205,9 +205,11 @@ namespace PoGo.NecroBot.Logic.Service
 
         private static void HandleEvent(FortUsedEvent fortUsedEvent, ISession session)
         {
-            string itemString = fortUsedEvent.InventoryFull
-                ? session.Translation.GetTranslation(TranslationString.InvFullPokestopLooting)
-                : fortUsedEvent.Items;
+            if (fortUsedEvent.InventoryFull)
+            {
+                Logger.Write(session.Translation.GetTranslation(TranslationString.InvFullPokestopLooting), fortUsedEvent.Fort.Type == FortType.Checkpoint ? LogLevel.Pokestop : LogLevel.Gym, ConsoleColor.Red);
+                return;
+            }
 
             string PokemonDataEgg = "No";
 
@@ -218,7 +220,7 @@ namespace PoGo.NecroBot.Logic.Service
 
             string eventMessage = session.Translation.GetTranslation(TranslationString.EventFortUsed, fortUsedEvent.Name,
                     fortUsedEvent.Exp, fortUsedEvent.Gems,
-                    itemString, fortUsedEvent.Badges, fortUsedEvent.BonusLoot, fortUsedEvent.RaidTickets, fortUsedEvent.TeamBonusLoot, PokemonDataEgg, session.Inventory.GetEggs().Result.Count(), fortUsedEvent.Latitude, fortUsedEvent.Longitude, fortUsedEvent.Altitude);
+                     fortUsedEvent.Items, fortUsedEvent.Badges, fortUsedEvent.BonusLoot, fortUsedEvent.RaidTickets, fortUsedEvent.TeamBonusLoot, PokemonDataEgg, session.Inventory.GetEggs().Result.Count(), fortUsedEvent.Latitude, fortUsedEvent.Longitude, fortUsedEvent.Altitude);
 
             if (fortUsedEvent.Fort.Type == FortType.Checkpoint)
                 Logger.Write(eventMessage, LogLevel.Pokestop);
