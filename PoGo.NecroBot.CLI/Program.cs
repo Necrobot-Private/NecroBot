@@ -429,7 +429,7 @@ namespace PoGo.NecroBot.CLI
                     GetPlayerResponse x = _session.Client.Player.GetPlayer().Result;
                     string warn = x.Warn ? "*(Flagged)*-" : null;
 
-                    Console.Title = $"[Necrobot2 v{strVersion}] {warn}" +
+                    Console.Title = $"[Necrobot2 v{strVersion}] Team: {x.PlayerData.Team} - {warn}" +
                                     stats.GetTemplatedStats(
                                         _session.Translation.GetTranslation(TranslationString.StatsTemplateString),
                                         _session.Translation.GetTranslation(TranslationString.StatsXpTemplateString));
