@@ -350,7 +350,7 @@ namespace PoGo.NecroBot.Logic.Common
                 new KeyValuePair<TranslationString, string>(TranslationString.FarmPokestopsNoUsableFound,
                     "No usable PokeStops found in your area. Is your maximum distance too small?"),
                 new KeyValuePair<TranslationString, string>(TranslationString.EventFortUsed,
-                    "Name: {0} | XP: {1} | Gems: {2} | Items: {3} | Badges: {4} | BonusLoot: {5} | RaidTickets: {6} | TeamBonusLoot: {7} | PokemonEgg: {8} | Eggs: {9} | Lat: {10} Long: {11} | Alt: {12}"),
+                    "Name: {0} | XP: {1} | Gems: {2} | Items: {3} | Badges: {4} | BonusLoot: {5} | RaidTickets: {6} | TeamBonusLoot: {7} | PokemonEgg: {8} (Eggs: {9}) | Lat: {10} Long: {11} | Alt: {12}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.EventFortFailed,
                     "Name: {0} INFO: Looting failed, possible softban. Unban in: {1}/{2}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.Gym, "Gym"),
@@ -376,7 +376,7 @@ namespace PoGo.NecroBot.Logic.Common
                 new KeyValuePair<TranslationString, string>(TranslationString.EventPokemonCaptureSuccess,
                     "({0}) | ({1}) {2} | Lvl: {3} | CP: {4}/{5} | IV: {6}% | Chance: {7}% | {8}m dist | with a {9} ({10} left) | XP: {11} | SD: {12} | {13} | lat: {14} long: {15} | Move1: {16} Move2: {17} | Rarity: {18} | Capture Reason: {19} | Shiny: {20} | Form: {21} | Costume: {22} | Sex: {23}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.EventPokemonCaptureFailed,
-                    "({0}) | ({1}) {2} | Lvl: {3} | CP: {4}/{5} | IV: {6}% | Chance: {7}% | {8}m dist | with a {9} ({10} left) | XP: {11} |                          | lat: {12} long: {13} | Move1: {14} Move2: {15} | Rarity :{16}"),
+                    "({0}) | ({1}) {2} | Lvl: {3} | CP: {4}/{5} | IV: {6}% | Chance: {7}% | {8}m dist | with a {9} ({10} left) | XP: {11} | lat: {12} long: {13} | Move1: {14} Move2: {15} | Rarity :{16}"),
 
                 new KeyValuePair<TranslationString, string>(TranslationString.EventNoPokeballs,
                     "No Pokeballs - We missed a {0} with CP {1}"),
