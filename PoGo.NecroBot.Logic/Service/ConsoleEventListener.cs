@@ -207,7 +207,7 @@ namespace PoGo.NecroBot.Logic.Service
         {
             if (fortUsedEvent.InventoryFull)
             {
-                Logger.Write(session.Translation.GetTranslation(TranslationString.InvFullPokestopLooting), fortUsedEvent.Fort.Type == FortType.Checkpoint ? LogLevel.Pokestop : LogLevel.Gym, ConsoleColor.Red);
+                Logger.Write(session.Translation.GetTranslation(TranslationString.InvFullPokestopLooting), fortUsedEvent.Fort.Type == FortType.Checkpoint ? LogLevel.Pokestop : LogLevel.Gym, ConsoleColor.Cyan);  //LogLevel.Pokestop);
                 return;
             }
 
