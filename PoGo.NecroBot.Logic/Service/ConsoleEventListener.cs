@@ -214,7 +214,7 @@ namespace PoGo.NecroBot.Logic.Service
             if (fortUsedEvent.PokemonDataEgg != null && fortUsedEvent.PokemonDataEgg.PokemonId != PokemonId.Missingno)
             {
                 PokemonDataEgg = $"{session.Translation.GetPokemonTranslation(fortUsedEvent.PokemonDataEgg.PokemonId)}" +
-                    $"CP: {fortUsedEvent.PokemonDataEgg.Cp} IV: {PokemonInfo.CalculatePokemonPerfection(fortUsedEvent.PokemonDataEgg) / 100}%";
+                    $" CP: {fortUsedEvent.PokemonDataEgg.Cp} IV: {PokemonInfo.CalculatePokemonPerfection(fortUsedEvent.PokemonDataEgg) / 100}%";
             }
             string eventMessage = session.Translation.GetTranslation(TranslationString.EventFortUsed, fortUsedEvent.Name,
                     fortUsedEvent.Exp, fortUsedEvent.Gems,
