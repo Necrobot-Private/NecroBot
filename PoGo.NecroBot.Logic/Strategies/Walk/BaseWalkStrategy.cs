@@ -26,10 +26,12 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
 
         public event UpdatePositionDelegate UpdatePositionEvent;
         public event GetRouteDelegate GetRouteEvent;
+        public virtual List<GeoCoordinate> Points { get; set; }
 
         protected virtual void OnGetRouteEvent(List<GeoCoordinate> points)
         {
             GetRouteEvent?.Invoke(points);
+            Points = points;
         }
 
         public abstract Task Walk(IGeoLocation targetLocation, Func<Task> functionExecutedWhileWalking, ISession session, CancellationToken cancellationToken, double walkSpeed = 0.0);
@@ -63,7 +65,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
             }
         }
 
-        internal void DoUpdatePositionEvent(ISession session, double latitude, double longitude, double speed, double variant =0)
+        internal void DoUpdatePositionEvent(ISession session, double latitude, double longitude, double speed, double variant = 0.0)
         {
             UpdatePositionEvent?.Invoke(session, latitude, longitude, speed);
         }
