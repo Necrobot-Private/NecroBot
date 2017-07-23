@@ -297,23 +297,27 @@ namespace RocketBot2.Forms
                 if (_pokemonsOverlay.Markers.Count > 8)
                     _pokemonsOverlay.Markers.Clear();
 
-                if (_session.Navigation.WalkStrategy.Points.Count > 0 && Points != _session.Navigation.WalkStrategy.Points)
+                if (_session.Navigation.WalkStrategy.Points.Count > 0)
                 {
-                    Points = _session.Navigation.WalkStrategy.Points;
-                    _playerLocations.Clear();
-                    _playerRouteOverlay.Routes.Clear();
-                    List<PointLatLng> routePointLatLngs = new List<PointLatLng>();
-                    foreach (var item in Points)
+                    if (Points != _session.Navigation.WalkStrategy.Points)
                     {
-                        routePointLatLngs.Add(new PointLatLng(item.Latitude, item.Longitude));
+                        Points = _session.Navigation.WalkStrategy.Points;
+                        _playerLocations.Clear();
+                        _playerRouteOverlay.Routes.Clear();
+                        List<PointLatLng> routePointLatLngs = new List<PointLatLng>();
+                        foreach (var item in Points)
+                        {
+                            routePointLatLngs.Add(new PointLatLng(item.Latitude, item.Longitude));
+                        }
+                        GMapRoute routes = new GMapRoute(routePointLatLngs, routePointLatLngs.ToString())
+                        {
+                            Stroke = new Pen(Color.FromArgb(255, 51, 51), 3) { DashStyle = DashStyle.Dash }
+                        };
+                        _playerRouteOverlay.Routes.Add(routes);
+
+                        InitializePokestopsAndRoute(SelectPokeStop).ConfigureAwait(false);
+                        return;
                     }
-                    GMapRoute routes = new GMapRoute(routePointLatLngs, routePointLatLngs.ToString())
-                    {
-                        Stroke = new Pen(Color.FromArgb(255, 51, 51), 3) { DashStyle = DashStyle.Dash }
-                    };
-                    _playerRouteOverlay.Routes.Add(routes);
-                    InitializePokestopsAndRoute(SelectPokeStop).ConfigureAwait(false);
-                    return;
                 }
 
                 _pokestopsOverlay.Routes.Clear();
