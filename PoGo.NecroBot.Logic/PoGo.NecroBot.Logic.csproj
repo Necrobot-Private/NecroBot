@@ -676,6 +676,7 @@
     <Compile Include="Tasks\TransferPokemonTask.cs" />
     <Compile Include="Tasks\TransferWeakPokemonTask.cs" />
     <Compile Include="Tasks\UpgradeSinglePokemonTask.cs" />
+    <Compile Include="Tasks\UseFortItemsTask.cs" />
     <Compile Include="Tasks\UseIncenseConstantlyTask.cs" />
     <Compile Include="Tasks\UseGymBattleTask.cs" />
     <Compile Include="Tasks\UseIncenseTask.cs" />
