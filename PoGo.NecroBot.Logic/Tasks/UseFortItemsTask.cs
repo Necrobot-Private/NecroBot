@@ -31,10 +31,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                     Logger.Write($"{item.ItemId} no result set!", LogLevel.Error);
                     break;
                 case AddFortModifierResponse.Types.Result.PoiInaccessible:
-                    Logger.Write($"{item.ItemId} poi inaccessible!", LogLevel.Error);
+                    Logger.Write($"Pokestop poi inaccessible!", LogLevel.Error);
                     break;
                 case AddFortModifierResponse.Types.Result.TooFarAway:
-                    Logger.Write($"{item.ItemId} too far away!", LogLevel.Error);
+                    Logger.Write($"Pokestop too far away!", LogLevel.Error);
                     break;
                 default:
                     Logger.Write($"Failed to use an {item.ItemId}!", LogLevel.Error);
