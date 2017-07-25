@@ -681,9 +681,11 @@
     <Compile Include="Tasks\UseGymBattleTask.cs" />
     <Compile Include="Tasks\UseIncenseTask.cs" />
     <Compile Include="Tasks\UseIncubatorsTask.cs" />
+    <Compile Include="Tasks\UseItemMoveRerollTask.cs" />
     <Compile Include="Tasks\UseLuckyEggConstantlyTask.cs" />
     <Compile Include="Tasks\UseLuckyEggTask.cs" />
     <Compile Include="Tasks\UseNearbyPokestopsTask.cs" />
+    <Compile Include="Tasks\UseRareCandyTask.cs" />
     <Compile Include="TinyIoC.cs" />
     <Compile Include="Utils\AsyncLock.cs" />
     <Compile Include="Utils\DelayingUtils.cs" />
