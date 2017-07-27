@@ -18,18 +18,22 @@ namespace PoGo.NecroBot.Logic.Tasks
             switch (response.Result)
             {
                 case ReleasePokemonResponse.Types.Result.Success:
-                    Logger.Write($"Success");
+                    Logger.Write($"Success", LogLevel.Info);
                     break;
                 case ReleasePokemonResponse.Types.Result.Failed:
                     Logger.Write($"Failed to use MoveReroll!", LogLevel.Error);
                     break;
                 case ReleasePokemonResponse.Types.Result.ErrorPokemonIsBuddy:
+                    Logger.Write($"Error Pokemon Is Buddy", LogLevel.Error);
                     break;
                 case ReleasePokemonResponse.Types.Result.ErrorPokemonIsEgg:
+                    Logger.Write($"Error Pokemon Is Egg", LogLevel.Error);
                     break;
                 case ReleasePokemonResponse.Types.Result.PokemonDeployed:
+                    Logger.Write($"Pokemon Deployed", LogLevel.Warning);
                     break;
                 case ReleasePokemonResponse.Types.Result.Unset:
+                    Logger.Write($"Unset", LogLevel.Warning);
                     break;
                 default:
                     Logger.Write($"Failed to use MoveReroll!", LogLevel.Warning);
