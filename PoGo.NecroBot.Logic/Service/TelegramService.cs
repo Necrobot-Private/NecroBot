@@ -149,7 +149,7 @@ namespace PoGo.NecroBot.Logic.Service
         public async Task SendMessage(string message)
         {
             if (string.IsNullOrEmpty(message) || lastChatId == 0) return;
-            await _bot.SendTextMessageAsync(lastChatId, message, replyMarkup: new ReplyKeyboardHide()).ConfigureAwait(false);
+            await _bot.SendTextMessageAsync(lastChatId, message, replyMarkup: new ReplyKeyboardRemove()).ConfigureAwait(false);
         }
     }
 }
