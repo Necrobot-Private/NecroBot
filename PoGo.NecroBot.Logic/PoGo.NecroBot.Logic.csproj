@@ -616,6 +616,7 @@
     <Compile Include="Tasks\FavoritePokemonTask.cs" />
     <Compile Include="Tasks\GetGymBadgeDetailsTask.cs" />
     <Compile Include="Tasks\GetPokeDexCount.cs" />
+    <Compile Include="Tasks\GymFeedPokemonTask.cs" />
     <Compile Include="Tasks\HumanRandomActionTask.cs" />
     <Compile Include="Tasks\HumanWalkSnipeTask.cs" />
     <Compile Include="Tasks\HumanWalkSnipeTask.FastPokemap.cs">
