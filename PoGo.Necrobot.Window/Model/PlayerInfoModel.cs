@@ -12,7 +12,7 @@ using PoGo.NecroBot.Logic.State;
 using POGOProtos.Inventory.Item;
 using System.Timers;
 
-namespace PoGo.Necrobot.Window.Model
+namespace PoGo.NecroBot.Window.Model
 {
     public class PlayerInfoModel : ViewModelBase
     {

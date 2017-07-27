@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using POGOProtos.Data;
 
-namespace PoGo.Necrobot.Window.Model
+namespace PoGo.NecroBot.Window.Model
 {
 
     public class EggViewModel : ViewModelBase

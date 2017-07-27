@@ -12,7 +12,7 @@ namespace PoGo.NecroBot.Logic.Tasks
     {
         public static async Task Execute(ISession session, FortData fort)
         {
-            var response = await session.Client.Inventory.GetGymBadgeDetails(fort.Id, fort.Latitude, fort.Longitude).ConfigureAwait(false);
+            var response = await session.Client.Fort.GetGymBadgeDetails(fort.Id, fort.Latitude, fort.Longitude).ConfigureAwait(false);
         }
     }
 }

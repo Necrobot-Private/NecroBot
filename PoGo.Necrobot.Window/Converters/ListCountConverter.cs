@@ -1,9 +1,9 @@
-﻿using PoGo.Necrobot.Window.Model;
+﻿using PoGo.NecroBot.Window.Model;
 using System;
 using System.Collections.ObjectModel;
 using System.Windows.Data;
 
-namespace PoGo.Necrobot.Window.Converters
+namespace PoGo.NecroBot.Window.Converters
 {
     [ValueConversion(typeof(bool), typeof(bool))]
     public class ListCountConverter : IValueConverter

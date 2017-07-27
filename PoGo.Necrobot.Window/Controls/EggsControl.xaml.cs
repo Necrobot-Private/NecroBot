@@ -1,10 +1,10 @@
-﻿using PoGo.Necrobot.Window.Model;
+﻿using PoGo.NecroBot.Window.Model;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace PoGo.Necrobot.Window.Controls
+namespace PoGo.NecroBot.Window.Controls
 {
     /// <summary>
     /// Interaction logic for EggsControl.xaml

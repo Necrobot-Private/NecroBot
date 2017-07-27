@@ -9,7 +9,7 @@ using POGOProtos.Inventory;
 using System.Threading.Tasks;
 using PoGo.NecroBot.Logic.Model;
 
-namespace PoGo.Necrobot.Window.Model
+namespace PoGo.NecroBot.Window.Model
 {
     public class PokemonViewFilter : ViewModelBase
     {

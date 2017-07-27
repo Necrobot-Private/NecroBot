@@ -4,16 +4,16 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Navigation;
 using PoGo.NecroBot.Logic.State;
-using PoGo.Necrobot.Window.Win32;
+using PoGo.NecroBot.Window.Win32;
 using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic;
 using PoGo.NecroBot.Logic.Model.Settings;
-using PoGo.Necrobot.Window.Properties;
+using PoGo.NecroBot.Window.Properties;
 using System.IO;
 using PoGo.NecroBot.Logic.Common;
 using TinyIoC;
 
-namespace PoGo.Necrobot.Window
+namespace PoGo.NecroBot.Window
 {
     /// <summary>
     /// Interaction logic for App.xaml

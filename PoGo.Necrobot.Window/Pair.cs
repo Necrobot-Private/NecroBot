@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 
-namespace PoGo.Necrobot.Window
+namespace PoGo.NecroBot.Window
 {
     public class Pair<TKey, TValue> : INotifyPropertyChanged
     {

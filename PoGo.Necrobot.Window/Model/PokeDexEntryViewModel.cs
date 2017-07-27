@@ -1,6 +1,6 @@
 ﻿using POGOProtos.Enums;
 
-namespace PoGo.Necrobot.Window.Model
+namespace PoGo.NecroBot.Window.Model
 {
     public class PokeDexEntryViewModel : ViewModelBase
     {

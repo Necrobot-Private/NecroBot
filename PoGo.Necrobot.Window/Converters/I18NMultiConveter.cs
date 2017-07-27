@@ -6,7 +6,7 @@ using System.Windows.Data;
 using TinyIoC;
 using System.Globalization;
 
-namespace PoGo.Necrobot.Window.Converters
+namespace PoGo.NecroBot.Window.Converters
 {
     public class I18NMultiConveter : IMultiValueConverter
     {                                         

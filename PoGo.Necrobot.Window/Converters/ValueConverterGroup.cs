@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
-namespace PoGo.Necrobot.Window.Converters
+namespace PoGo.NecroBot.Window.Converters
 {
 //    <c:ValueConverterGroup x:Key="InvertAndVisibilitate">
 //   <c:BooleanInverterConverter/>

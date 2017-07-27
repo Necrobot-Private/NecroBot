@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace PoGo.Necrobot.Window.Controls.Sidebars
+namespace PoGo.NecroBot.Window.Controls.Sidebars
 {
     /// <summary>
     /// Interaction logic for PokestopItem.xaml

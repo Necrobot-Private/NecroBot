@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace PoGo.Necrobot.Window.Win32
+namespace PoGo.NecroBot.Window.Win32
 {
     class ConsoleHelper
     {

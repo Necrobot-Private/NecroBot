@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="PoGo.Necrobot.Window.Properties" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="PoGo.NecroBot.Window.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
     <Setting Name="Theme" Type="System.String" Scope="User">

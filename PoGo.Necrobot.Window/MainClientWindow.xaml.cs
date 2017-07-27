@@ -8,9 +8,9 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using MahApps.Metro;
 using MahApps.Metro.Controls;
-using PoGo.Necrobot.Window.Properties;
+using PoGo.NecroBot.Window.Properties;
 using PoGo.NecroBot.Logic.State;
-using PoGo.Necrobot.Window.Model;
+using PoGo.NecroBot.Window.Model;
 using PoGo.NecroBot.Logic.Logging;
 using System.Diagnostics;
 using TinyIoC;
@@ -28,10 +28,10 @@ using System.Timers;
 using PoGo.NecroBot.Logic.Model;
 using DotNetBrowser;
 using DotNetBrowser.WPF;
-using PoGo.Necrobot.Window.Win32;
+using PoGo.NecroBot.Window.Win32;
 using System.Reflection;
 
-namespace PoGo.Necrobot.Window
+namespace PoGo.NecroBot.Window
 {
     /// <summary>
     /// Interaction logic for SplashScreen.xaml

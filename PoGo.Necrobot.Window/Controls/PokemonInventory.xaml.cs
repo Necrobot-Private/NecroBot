@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Win32;
-using PoGo.Necrobot.Window.Model;
+using PoGo.NecroBot.Window.Model;
 using PoGo.NecroBot.Logic.DataDumper;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Tasks;
@@ -12,7 +12,7 @@ using TinyIoC;
 using PoGo.NecroBot.Logic;
 using PoGo.NecroBot.Logic.Model.Settings;
 
-namespace PoGo.Necrobot.Window.Controls
+namespace PoGo.NecroBot.Window.Controls
 {
     public delegate void PokemonItemSelected(PokemonDataViewModel selected);
 

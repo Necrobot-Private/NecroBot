@@ -1,7 +1,7 @@
 ﻿<UserControl
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	x:Class="PoGo.Necrobot.Window.Controls.MapMarkers.MapPokemonMarker"
+	x:Class="PoGo.NecroBot.Window.Controls.MapMarkers.MapPokemonMarker"
 	Height="45" Width="45" Opacity="10" MouseLeftButtonDown="UserControl_MouseLeftButtonDown" IsHitTestVisible="True" PreviewMouseDoubleClick="UserControl_PreviewMouseDoubleClick">
     <Grid>
         <Button Background="Transparent" BorderThickness="0">

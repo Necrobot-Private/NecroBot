@@ -7,17 +7,17 @@ using System.Windows.Input;
 using GMap.NET;
 using GMap.NET.MapProviders;
 using GMap.NET.WindowsPresentation;
-using PoGo.Necrobot.Window.Controls.MapMarkers;
-using PoGo.Necrobot.Window.Model;
+using PoGo.NecroBot.Window.Controls.MapMarkers;
+using PoGo.NecroBot.Window.Model;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Tasks;
 using POGOProtos.Map.Fort;
 using PoGo.NecroBot.Logic.Event;
 using POGOProtos.Map.Pokemon;
 using PoGo.NecroBot.Logic.Utils;
-using PoGo.Necrobot.Window.Properties;
+using PoGo.NecroBot.Window.Properties;
 
-namespace PoGo.Necrobot.Window.Controls
+namespace PoGo.NecroBot.Window.Controls
 {
     /// <summary>
     /// Interaction logic for MapControl.xaml

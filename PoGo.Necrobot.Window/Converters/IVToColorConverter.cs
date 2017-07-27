@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Data;
 
-namespace PoGo.Necrobot.Window.Converters
+namespace PoGo.NecroBot.Window.Converters
 {
     public class IVToColorConverter : IValueConverter
     {

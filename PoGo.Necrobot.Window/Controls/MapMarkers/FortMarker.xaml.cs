@@ -1,11 +1,11 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 using GMap.NET.WindowsPresentation;
-using PoGo.Necrobot.Window.Model;
+using PoGo.NecroBot.Window.Model;
 using PoGo.NecroBot.Logic.Tasks;
 using POGOProtos.Map.Fort;
 
-namespace PoGo.Necrobot.Window.Controls.MapMarkers
+namespace PoGo.NecroBot.Window.Controls.MapMarkers
 {
     /// <summary>
     /// Interaction logic for CustomMarkerDemo.xaml

@@ -1,4 +1,4 @@
-﻿using PoGo.Necrobot.Window.Model;
+﻿using PoGo.NecroBot.Window.Model;
 using PoGo.NecroBot.CLI;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Event.Snipe;
@@ -12,7 +12,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 
-namespace PoGo.Necrobot.Window.Controls
+namespace PoGo.NecroBot.Window.Controls
 {
     /// <summary>
     /// Interaction logic for SniperControl.xaml

@@ -16,14 +16,14 @@ namespace PoGo.NecroBot.Logic.Tasks
     {
         public static async Task Execute(ISession session, FortData gym, ItemData item, PokemonData pokemon, int startingQuantity = 1)
         {
-            var response = await session.Client.Inventory.GymFeedPokemon(gym.Id, item.ItemId, pokemon.Id, startingQuantity).ConfigureAwait(false);
+            var response = await session.Client.Fort.GymFeedPokemon(gym.Id, item.ItemId, pokemon.Id, startingQuantity).ConfigureAwait(false);
             switch (response.Result)
             {
                 case GymFeedPokemonResponse.Types.Result.Success:
                     Logger.Write($"Succes", LogLevel.Info);
                     break;
                 case GymFeedPokemonResponse.Types.Result.ErrorCannotUse:
-                    Logger.Write($"ErrorCannotUse!", LogLevel.Error);
+                    Logger.Write($"Error Cannot Use {item.ItemId}!", LogLevel.Error);
                     break;
                 case GymFeedPokemonResponse.Types.Result.ErrorGymBusy:
                     Logger.Write($"Error Gym Busy!", LogLevel.Error);

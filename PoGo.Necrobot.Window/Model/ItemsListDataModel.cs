@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using POGOProtos.Inventory.Item;
 
-namespace PoGo.Necrobot.Window.Model
+namespace PoGo.NecroBot.Window.Model
 {
     public class ItemsListViewModel : ViewModelBase
     {
@@ -37,11 +37,14 @@ namespace PoGo.Necrobot.Window.Model
                         || item.ItemId == ItemId.ItemIncenseOrdinary
                         || item.ItemId == ItemId.ItemIncenseCool
                         || item.ItemId == ItemId.ItemIncenseFloral
-                        || item.ItemId == ItemId.ItemIncenseSpicy)
+                        || item.ItemId == ItemId.ItemIncenseSpicy
+                        || item.ItemId == ItemId.ItemMoveRerollFastAttack
+                        || item.ItemId == ItemId.ItemMoveRerollSpecialAttack
+                        || item.ItemId == ItemId.ItemRareCandy)
                     {
-                        count = 1;
+                        //count = 1;
                         title = "USE";
-                        drop = false;
+                        //drop = false;
                     }
                     else
                     {

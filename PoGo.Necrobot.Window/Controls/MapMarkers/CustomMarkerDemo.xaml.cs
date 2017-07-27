@@ -5,7 +5,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using GMap.NET.WindowsPresentation;
 
-namespace PoGo.Necrobot.Window.Controls.MapMarkers
+namespace PoGo.NecroBot.Window.Controls.MapMarkers
 {
     /// <summary>
     /// Interaction logic for CustomMarkerDemo.xaml
