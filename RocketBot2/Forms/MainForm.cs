@@ -265,26 +265,10 @@ namespace RocketBot2.Forms
             List<FortData> pokeStops = new List<FortData>();
             try
             {
-                GetMapObjectsResponse mapObjects = await _session.Client.Map.GetMapObjects().ConfigureAwait(false);
-                List<FortData> forts = new List<FortData>(mapObjects.MapCells.SelectMany(p => p.Forts).ToList());
-
-                if (forts == _session.Forts || _session.Forts.Count < 0)
-                    return;
-
-                foreach (var fort in forts)
-                {
-                    lock (_session.Forts)
-                    {
-                        for (var i = 0; i < _session.Forts.Count; i++)
-                        {
-                             if (_session.Forts[i].Id == fort.Id && _session.Forts[i] != fort)
-                                _session.Forts[i] = new FortData(fort);
-                        }
-                    }
-                }
+                List<FortData> reloaded = new List<FortData>(await UseNearbyPokestopsTask.UpdateFortsData(_session).ConfigureAwait(false));
 
                 //get optimized route
-                pokeStops = new List<FortData>(RouteOptimizeUtil.Optimize(_session.Forts.ToArray(), _session.Client.CurrentLatitude, _session.Client.CurrentLongitude));
+                pokeStops = new List<FortData>(RouteOptimizeUtil.Optimize(reloaded.ToArray(), _session.Client.CurrentLatitude, _session.Client.CurrentLongitude));
             }
             catch
             {
@@ -367,7 +351,7 @@ namespace RocketBot2.Forms
                                         time = expires - DateTime.UtcNow;
                                         if (!(expires.Ticks == 0 || time.TotalSeconds < 0))
                                         {
-                                            finalText = $"Next RAID starts in: {time.Hours:00}h {time.Minutes:00}m {Math.Abs(time.Seconds):00}s";
+                                            finalText = $"Next RAID starts in: {time.Hours:00}h:{time.Minutes:00}m\nat: {(DateTime.Now + time).Hour:00}:{(DateTime.Now + time).Minute:00} Local time";
                                             isRaid = true;
                                         }
                                     }
@@ -383,7 +367,7 @@ namespace RocketBot2.Forms
                                             wg = 48;
                                             ImgGymBoss = ResourceHelper.GetImage(null, pokeStop.RaidInfo.RaidPokemon, null, 38, 38);
                                             boss = $"Boss: {_session.Translation.GetPokemonTranslation(pokeStop.RaidInfo.RaidPokemon.PokemonId)} CP: {pokeStop.RaidInfo.RaidPokemon.Cp}";
-                                            finalText = $"Local RAID ends in: {time.Hours:00}h {time.Minutes:00}m {Math.Abs(time.Seconds):00}s\r\n{boss}";
+                                            finalText = $"Local RAID ends in: {time.Hours:00}h:{time.Minutes:00}m\nat: {(DateTime.Now + time).Hour:00}:{(DateTime.Now + time).Minute:00} Local time\n\r{boss}";
                                         }
                                     }
 
@@ -394,8 +378,8 @@ namespace RocketBot2.Forms
                                         if (!(expires.Ticks == 0 || time.TotalSeconds < 0))
                                         {
                                             isSpawn = true;
-                                            finalText = !asBoss ? $"Local SPAWN ends in: {time.Hours}h {time.Minutes}m {Math.Abs(time.Seconds)}s"
-                                            : $"Local SPAWN ends in: {time.Hours:00}h {time.Minutes:00}m {Math.Abs(time.Seconds):00}s\n\r{finalText}";
+                                            finalText = !asBoss ? $"Local SPAWN ends in: {time.Hours:00}h:{time.Minutes:00}m\nat: {(DateTime.Now + time).Hour:00}:{(DateTime.Now + time).Minute:00} Local time"
+                                            : $"Local SPAWN ends in: {time.Hours:00}h:{time.Minutes:00}m\nLocal time: {expires:HH:mm}\n\r{boss}";
                                         }
                                     }
                                 }
@@ -524,7 +508,7 @@ namespace RocketBot2.Forms
         private void Navigation_UpdatePositionEvent()
         {
             var latlng = new PointLatLng(_session.Client.CurrentLatitude, _session.Client.CurrentLongitude);
- 
+
             SynchronizationContext.Post(o =>
             {
                 _playerOverlay.Markers.Clear();
@@ -569,12 +553,13 @@ namespace RocketBot2.Forms
         private async void GMapControl1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             var pos = GMapControl1.FromLocalToLatLng(e.Location.X, e.Location.Y);
+            double Dist = LocationUtils.CalculateDistanceInMeters(_session.Client.CurrentLatitude, _session.Client.CurrentLongitude, pos.Lat, pos.Lng);
+            double Alt = await _session.ElevationService.GetElevation(pos.Lat, pos.Lng).ConfigureAwait(false);
+            double Speed = _session.Client.CurrentSpeed; // _session.LogicSettings.WalkingSpeedInKilometerPerHour;
+
             if (!_botStarted)
             {
                 // Sets current location 
-                double Dist = LocationUtils.CalculateDistanceInMeters(_session.Client.CurrentLatitude, _session.Client.CurrentLongitude, pos.Lat, pos.Lng);
-                double Alt = await _session.ElevationService.GetElevation(pos.Lat, pos.Lng).ConfigureAwait(false);
-
                 var lastPosFile = Path.Combine(_settings.ProfileConfigPath, "LastPos.ini");
                 if (File.Exists(lastPosFile))
                 {
@@ -596,9 +581,10 @@ namespace RocketBot2.Forms
 
                 _settings.Save(Path.Combine(_settings.ProfileConfigPath, "config.json"));
 
-                Logger.Write($"New starting location has been set to: Lat: {pos.Lat:0.00000000} Long: {pos.Lng:0.00000000} Dist: {Dist:0.00}m Altitude: {Alt:0.00}m",LogLevel.Info);
+                Logger.Write($"New starting location has been set to: Lat: {pos.Lat:0.00000000} Long: {pos.Lng:0.00000000} Alt: {Alt:0.00}m | Dist: {Dist:0.00}m", LogLevel.Info);
                 return;
             }
+            Logger.Write($"Trainer now traveling to: Lat: {pos.Lat:0.00000000} Long: {pos.Lng:0.00000000} Dist: {Dist:0.00}m Travel Time: {Dist * 60 / Speed / 1000:0.00}min", LogLevel.Info);
             await SetMoveToTargetTask.Execute(pos.Lat, pos.Lng).ConfigureAwait(false);
         }
 
