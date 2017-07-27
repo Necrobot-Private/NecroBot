@@ -20,7 +20,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             switch (response.Result)
             {
                 case GymFeedPokemonResponse.Types.Result.Success:
-                    Logger.Write($"Succes");
+                    Logger.Write($"Succes", LogLevel.Info);
                     break;
                 case GymFeedPokemonResponse.Types.Result.ErrorCannotUse:
                     Logger.Write($"ErrorCannotUse!", LogLevel.Error);
