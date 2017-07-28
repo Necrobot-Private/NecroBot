@@ -94,9 +94,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                         {
                             if (!deployedPokemons.Any(a => a.DeployedFortId.Equals(fortInfo.FortId)))
                             {
-                                FortDeployPokemonResponse response = await DeployPokemonToGym(session, fortInfo, fortDetails, cancellationToken, _fortstate.FortData).ConfigureAwait(false);
+                                GymDeployResponse response = await DeployPokemonToGym(session, fortInfo, fortDetails, cancellationToken, _fortstate.FortData).ConfigureAwait(false);
 
-                                if (response != null && response.Result == FortDeployPokemonResponse.Types.Result.Success)
+                                if (response != null && response.Result == GymDeployResponse.Types.Result.Success)
                                 {
                                     deployedPokemons = await session.Inventory.GetDeployedPokemons().ConfigureAwait(false);
                                     deployedList = new List<PokemonData>(deployedPokemons);
@@ -340,9 +340,9 @@ namespace PoGo.NecroBot.Logic.Tasks
             return true;
         }
 
-        private static async Task<FortDeployPokemonResponse> DeployPokemonToGym(ISession session, FortDetailsResponse fortInfo, GymGetInfoResponse fortDetails, CancellationToken cancellationToken, FortData fort)
+        private static async Task<GymDeployResponse> DeployPokemonToGym(ISession session, FortDetailsResponse fortInfo, GymGetInfoResponse fortDetails, CancellationToken cancellationToken, FortData fort)
         {
-            FortDeployPokemonResponse response = null;
+            GymDeployResponse response = null;
             cancellationToken.ThrowIfCancellationRequested();
             TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
 
@@ -366,7 +366,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     {
                         try
                         {
-                            response = await session.Client.Fort.FortDeployPokemon(fortInfo.FortId, pokemon.Id).ConfigureAwait(false);
+                            response = await session.Client.Fort.GymDeploy(fortInfo.FortId, pokemon.Id).ConfigureAwait(false);
                         }
                         catch (APIBadRequestException)
                         {
@@ -374,7 +374,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                             await Execute(session, cancellationToken, _fortstate.FortData, fortInfo).ConfigureAwait(false);
                             return null;
                         }
-                        if (response?.Result == FortDeployPokemonResponse.Types.Result.Success)
+                        if (response?.Result == GymDeployResponse.Types.Result.Success)
                         {
                             session.EventDispatcher.Send(new GymDeployEvent()
                             {
