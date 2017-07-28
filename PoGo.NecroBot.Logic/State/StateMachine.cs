@@ -1,4 +1,4 @@
-﻿#region using directives
+#region using directives
 
 using System;
 using System.IO;
@@ -258,7 +258,8 @@ namespace PoGo.NecroBot.Logic.State
 
                     // Resetting position
                     session.EventDispatcher.Send(new ErrorEvent { Message = $"Resetting position before relogging in." });
-                    session.Client.Player.UpdatePlayerLocation(session.Client.Settings.DefaultLatitude, session.Client.Settings.DefaultLongitude, session.Client.Settings.DefaultAltitude, 0);
+                    // TheWizard1328 - Changed this to CurrentLocation from DefaultLocation because Bot would JUMP back to DefaultLocation and could be considered as teleporting even in a short distance.
+                    session.Client.Player.UpdatePlayerLocation(session.Client.CurrentLatitude, session.Client.CurrentLongitude, session.Client.CurrentAltitude, 0);
                     state = new LoginState();
                 }
                 catch (OperationCanceledException)

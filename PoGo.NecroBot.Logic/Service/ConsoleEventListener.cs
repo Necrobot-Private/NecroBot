@@ -215,7 +215,7 @@ namespace PoGo.NecroBot.Logic.Service
 
             if (fortUsedEvent.PokemonDataEgg != null && fortUsedEvent.PokemonDataEgg.IsEgg)
             {
-                PokemonDataEgg = $"Yes {fortUsedEvent.PokemonDataEgg.EggKmWalkedTarget:0.0}km";
+                PokemonDataEgg = $"Yes {fortUsedEvent.PokemonDataEgg.EggKmWalkedTarget:0.0} Km";
             }
 
             string eventMessage = session.Translation.GetTranslation(TranslationString.EventFortUsed, fortUsedEvent.Name,
@@ -544,9 +544,10 @@ namespace PoGo.NecroBot.Logic.Service
 
         private static void HandleEvent(EvolveCountEvent evolveCountEvent, ISession session)
         {
-            Logger.Write(
-                session.Translation.GetTranslation(TranslationString.PkmPotentialEvolveCount, evolveCountEvent.Evolves),
-                LogLevel.Evolve
+            if (evolveCountEvent.Evolves>0)
+                Logger.Write(
+                    session.Translation.GetTranslation(TranslationString.PkmPotentialEvolveCount, evolveCountEvent.Evolves),
+                    LogLevel.Evolve
             );
         }
 
