@@ -111,7 +111,7 @@ namespace PoGo.NecroBot.CLI.Forms
             this.radHashServer.Size = new System.Drawing.Size(200, 25);
             this.radHashServer.TabIndex = 5;
             this.radHashServer.TabStop = true;
-            this.radHashServer.Text = "PogoDev Hash - API v" + Client.API_VERSION;
+            this.radHashServer.Text = "PogoDev Hash - API v" + Constants.API_VERSION;
             this.radHashServer.UseVisualStyleBackColor = true;
             // 
             // label2

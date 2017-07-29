@@ -1,7 +1,7 @@
 ﻿using PoGo.NecroBot.Logic.State;
 using System.ComponentModel;
 
-namespace PoGo.Necrobot.Window.Model
+namespace PoGo.NecroBot.Window.Model
 {
     public class ViewModelBase    : INotifyPropertyChanged
     {

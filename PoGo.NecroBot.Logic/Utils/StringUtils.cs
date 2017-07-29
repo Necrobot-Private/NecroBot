@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using POGOProtos.Inventory.Item;
+using POGOProtos.Inventory;
 
 #endregion
 
@@ -11,6 +12,20 @@ namespace PoGo.NecroBot.Logic.Utils
 {
     public static class StringUtils
     {
+        public static string GetSummedFriendlyNameOfGetLootList(IEnumerable<LootItem> items)
+        {
+            var enumerable = items as IList<LootItem> ?? items.ToList();
+
+            if (!enumerable.Any())
+                return string.Empty;
+
+            return
+                enumerable.GroupBy(i => i.Item)
+                    .Select(kvp => new { ItemName = kvp.Key.ToString(), Amount = kvp.Sum(x => x.Count) })
+                    .Select(y => $"{y.Amount} x {y.ItemName}")
+                    .Aggregate((a, b) => $"{a}, {b}");
+        }
+
         public static string GetSummedFriendlyNameOfItemAwardList(IEnumerable<ItemAward> items)
         {
             var enumerable = items as IList<ItemAward> ?? items.ToList();
@@ -20,11 +35,10 @@ namespace PoGo.NecroBot.Logic.Utils
 
             return
                 enumerable.GroupBy(i => i.ItemId)
-                    .Select(kvp => new {ItemName = kvp.Key.ToString(), Amount = kvp.Sum(x => x.ItemCount)})
+                    .Select(kvp => new { ItemName = kvp.Key.ToString(), Amount = kvp.Sum(x => x.ItemCount) })
                     .Select(y => $"{y.Amount} x {y.ItemName}")
                     .Aggregate((a, b) => $"{a}, {b}");
         }
-
 
         private static readonly Func<bool, bool, bool> AndFunc = (x, y) => x && y;
         private static readonly Func<bool, bool, bool> OrFunc = (x, y) => x || y;

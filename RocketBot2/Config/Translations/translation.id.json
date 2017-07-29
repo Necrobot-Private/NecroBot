@@ -82,7 +82,7 @@
     },
     {
       "Key": "eventFortUsed",
-      "Value": "Sampai di: {0} | Mendapatkan: {1} EXP, Gem: {2} | Barang: {3} | Koordinat: {4}, {5} | Ketinggian elevasi: {6}"
+      "Value": "Name: {0} | XP: {1} | Gems: {2} | Items: {3} | Badges: {4} | BonusLoot: {5} | RaidTickets: {6} | TeamBonusLoot: {7} | PokemonEgg: {8} (Eggs: {9}) | Lat: {10} Long: {11} | Alt: {12}"
     },
     {
       "Key": "eventFortFailed",
@@ -134,11 +134,11 @@
     },
     {
       "Key": "eventPokemonCaptureSuccess",
-      "Value": "({0}) | ({1}) {2} | Lvl: {3} CP: {4}/{5} IV: {6}% | Kemungkinan: {7}% | Jarak: {8} meter | Menggunakan: {9} (Sisa {10}) | Mendapatkan: {11} EXP | {12} | Koordinat: {13}, {14} | Jurus: 1 {15} - 2 {16} | Kelangkaan: {17}"
+      "Value": "({0}) | ({1}) {2} | Lvl: {3} | CP: {4}/{5} | IV: {6}% | Chance: {7}% | {8}m dist | with a {9} ({10} left) | XP: {11} | SD: {12} | {13} | lat: {14} long: {15} | Move1: {16} Move2: {17} | Rarity: {18} | Capture Reason: {19} | Shiny: {20} | Form: {21} | Costume: {22} | Sex: {23}"
     },
     {
       "Key": "eventPokemonCaptureFailed",
-      "Value": "({0}) | ({1}) {2} | Lvl: {3} CP: {4}/{5} IV: {6}% | Kemungkinan: {7}% | Jarak: {8} meter | Menggunakan: {9} (Sisa {10}) | Koordinat: {11}, {12} | Jurus: 1 {13} - 2 {14} | Kelangkaan: {15}"
+      "Value": "({0}) | ({1}) {2} | Lvl: {3} | CP: {4}/{5} | IV: {6}% | Chance: {7}% | {8}m dist | with a {9} ({10} left) | XP: {11} | lat: {12} long: {13} | Move1: {14} Move2: {15} | Rarity :{16}"
     },
     {
       "Key": "eventNoPokeballs",

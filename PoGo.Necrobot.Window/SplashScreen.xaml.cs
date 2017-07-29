@@ -2,7 +2,7 @@
 using Microsoft.Win32;
 using System.Windows;
 
-namespace PoGo.Necrobot.Window
+namespace PoGo.NecroBot.Window
 {
     /// <summary>
     /// Interaction logic for SplashScreen.xaml

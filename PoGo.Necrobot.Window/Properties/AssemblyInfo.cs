@@ -9,7 +9,7 @@ using System.Windows;
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("PoGo.Necrobot.Window")]
+[assembly: AssemblyProduct("PoGo.NecroBot.Window")]
 [assembly: AssemblyCopyright("Copyright NecroBot-Private Team © 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

@@ -12,67 +12,106 @@ using PoGo.NecroBot.Logic.Event;
 using System.Linq;
 using POGOProtos.Data;
 using POGOProtos.Enums;
+using PoGo.NecroBot.Logic.PoGoUtils;
+using System.Collections.Generic;
+using PoGo.NecroBot.Logic.Logging;
 
 namespace RocketBot2.Forms
 {
     public partial class ItemBox : UserControl
     {
         public DateTime expires = new DateTime(0);
-        public ItemData Item_ { get; }
-        public bool DisableTimer = false;
-        public static ISession Session;
-        public static Incubators _incubator;
-        public Control Box;
-
+        private ItemData Item_ { get; }
+        private bool DisableTimer = false;
+        private static ISession Session;
+        private static Incubators _incubator;
+        private Control Box;
+ 
         public ItemBox() { }
 
-        public ItemBox(ISession session, ItemData item, PokemonId pokemonid, Image picture)
+        public ItemBox(ISession session, ItemData item, PokemonData pokemonData, Image picture)
         {
             InitializeComponent();
             Session = session;
             DisableTimer = true;
-            lbl.Font = new System.Drawing.Font("Segoe UI", 7.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            lbl.Font = new System.Drawing.Font("Segoe UI", 6.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             lblTime.Font = new System.Drawing.Font("Segoe UI", 7.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             pb.Image = picture;
-            lblTime.Text = $"{Session.Translation.GetPokemonTranslation(pokemonid)}";
+            lblTime.Text = $"{Session.Translation.GetPokemonTranslation(pokemonData.PokemonId)}";
             lblTime.Visible = true;
-            var PokemonSettings = Session.Inventory.GetPokemonSettings().Result.FirstOrDefault(x => x.PokemonId == pokemonid);
-            lbl.Text = $"{PokemonSettings.FamilyId}";
+            var PokemonSettings = Session.Inventory.GetPokemonSettings().Result.FirstOrDefault(x => x.PokemonId == pokemonData.PokemonId);
+ 
+            switch (item.ItemId)
+            {
+                case ItemId.ItemRareCandy:
+                    lbl.Text = $"{PokemonSettings.FamilyId.ToString().Replace("Family", null).Replace("Male","(M)").Replace("Female","(F)")}\n\rCandy: {Session.Inventory.GetCandyCount(pokemonData.PokemonId).Result}";
+                    break;
+                case ItemId.ItemMoveRerollFastAttack:
+                    lbl.Text = $"{Session.Translation.GetPokemonMovesetTranslation(pokemonData.Move1)}\n\r{Session.Translation.GetPokemonMovesetTranslation(pokemonData.Move2)}";
+                    break;
+                case ItemId.ItemMoveRerollSpecialAttack:
+                    lbl.Text = $"{Session.Translation.GetPokemonMovesetTranslation(pokemonData.Move1)}\n\r{Session.Translation.GetPokemonMovesetTranslation(pokemonData.Move2)}";
+                    break;
+                default:
+                    lbl.Text = null;
+                    break;
+            }
+
             lblTime.Parent = pb;
 
             foreach (Control control in Controls)
             {
                 control.MouseEnter += ChildMouseEnter;
                 control.MouseLeave += ChildMouseLeave;
-                control.MouseClick += delegate { UseItemRareCandy(item.ItemId, (ulong)(int)pokemonid); };
+                control.MouseClick += delegate { UseItem(session, item, pokemonData); };
                 Box = control;
             }
         }
 
-        private void UseItemRareCandy(ItemId itemid, ulong pokemonid)
+        private async void UseItem(ISession session, ItemData item, PokemonData pokemon)
         {
-            PokeDexForm.ActiveForm.Close();
-            /*
-            DialogResult result = MessageBox.Show($"Use RareCandy Item on this Pokemon Family?", $"{Application.ProductName} - Use RareCandy", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            switch (result)
+            switch (item.ItemId)
             {
-                case DialogResult.Yes:
-                    await UseItemCaptureTask.Execute(Session, itemid, pokemonid, null);
+                case ItemId.ItemRareCandy:
+                    await Task.Run(async () => { await UseRareCandyTask.Execute(session, item, pokemon).ConfigureAwait(false); });
+                    break;
+                case ItemId.ItemMoveRerollFastAttack:
+                    string text = $"{session.Translation.GetPokemonTranslation(pokemon.PokemonId)} will forget move1: {session.Translation.GetPokemonMovesetTranslation(pokemon.Move1)}\n\rDo you want to continue?";
+                    DialogResult result = MessageBox.Show(text, $"Use {item.ItemId}", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    switch (result)
+                    {
+                        case DialogResult.Yes:
+                            await Task.Run(async () => { await UseItemMoveRerollTask.Execute(session, item, pokemon).ConfigureAwait(false); });
+                            break;
+                    }
+                    break;
+                case ItemId.ItemMoveRerollSpecialAttack:
+                    string text2 = $"{session.Translation.GetPokemonTranslation(pokemon.PokemonId)} will forget move2: {session.Translation.GetPokemonMovesetTranslation(pokemon.Move2)}\n\rDo you want to continue?";
+                    DialogResult result2 = MessageBox.Show(text2, $"Use {item.ItemId}", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    switch (result2)
+                    {
+                        case DialogResult.Yes:
+                            await Task.Run(async () => { await UseItemMoveRerollTask.Execute(session, item, pokemon).ConfigureAwait(false); });
+                            break;
+                    }
+                    break;
+                default:
+                    Logger.Write($"{item.ItemId} Can not be used for the moment, the bot still does not completely generate this process.", LogLevel.Warning);
                     break;
             }
-            */
+            PokeDexForm.ActiveForm.Close();
         }
 
-        public ItemBox(int see, int cath, Image pic)
+        public ItemBox(int see, int cath, Image pic, string name)
         {
             InitializeComponent();
             DisableTimer = true;
             lbl.Font = new System.Drawing.Font("Segoe UI", 7.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             lblTime.Font = new System.Drawing.Font("Segoe UI", 7.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             pb.Image = pic;
-            lblTime.Text = $"Seen: {see}";
+            lblTime.Text = $"{name}";
             lblTime.Visible = true;
-            lbl.Text = $"Catch: {cath}";
+            lbl.Text = $"Seen: {see}\n\rCatch: {cath}";
             lblTime.Parent = pb;
         }
 

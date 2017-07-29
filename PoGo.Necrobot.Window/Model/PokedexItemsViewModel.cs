@@ -5,7 +5,7 @@ using System.Linq;
 using POGOProtos.Inventory;
 using POGOProtos.Enums;
 
-namespace PoGo.Necrobot.Window.Model
+namespace PoGo.NecroBot.Window.Model
 {
     public class PokedexItemsViewModel : ViewModelBase
     {

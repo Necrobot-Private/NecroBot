@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace PoGo.Necrobot.Window
+namespace PoGo.NecroBot.Window
 {
     public class ObservablePairCollection<TKey, TValue> : ObservableCollection<Pair<TKey, TValue>>
     {

@@ -3,9 +3,9 @@ using System;
 using System.Threading.Tasks;
 using System.Windows;
 using PoGo.NecroBot.Logic.State;
-using PoGo.Necrobot.Window.Model;
+using PoGo.NecroBot.Window.Model;
 
-namespace PoGo.Necrobot.Window
+namespace PoGo.NecroBot.Window
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

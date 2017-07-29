@@ -1,5 +1,5 @@
 ﻿using MahApps.Metro.Controls;
-using PoGo.Necrobot.Window.Model;
+using PoGo.NecroBot.Window.Model;
 using PoGo.NecroBot.Logic.Common;
 using PoGo.NecroBot.Logic.Model.Settings;
 using POGOProtos.Enums;
@@ -14,7 +14,7 @@ using System.Windows.Data;
 using System.Windows.Media;
 using TinyIoC;
 
-namespace PoGo.Necrobot.Window
+namespace PoGo.NecroBot.Window
 {
     /// <summary>
     /// Interaction logic for FilterSetting.xaml

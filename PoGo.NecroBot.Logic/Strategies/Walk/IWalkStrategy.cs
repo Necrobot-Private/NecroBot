@@ -3,12 +3,15 @@ using System.Threading;
 using System.Threading.Tasks;
 using PoGo.NecroBot.Logic.Model;
 using PoGo.NecroBot.Logic.State;
+using GeoCoordinatePortable;
+using System.Collections.Generic;
 
 namespace PoGo.NecroBot.Logic.Strategies.Walk
 {
     public interface IWalkStrategy
     {
         string RouteName { get; }
+        List<GeoCoordinate> Points { get; set; }
         event UpdatePositionDelegate UpdatePositionEvent;
         event GetRouteDelegate GetRouteEvent;
 

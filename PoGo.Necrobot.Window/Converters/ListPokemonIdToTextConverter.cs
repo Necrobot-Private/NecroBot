@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Data;
 
-namespace PoGo.Necrobot.Window.Converters
+namespace PoGo.NecroBot.Window.Converters
 {
     [ValueConversion(typeof(List<PokemonId>), typeof(string))]
     public class ListPokemonIdToTextConverter : IValueConverter

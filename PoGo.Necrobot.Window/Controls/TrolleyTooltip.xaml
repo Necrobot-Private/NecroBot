@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="PoGo.Necrobot.Window.Controls.TrolleyTooltip"
+﻿<UserControl x:Class="PoGo.NecroBot.Window.Controls.TrolleyTooltip"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Background="Transparent" Height="186" Width="226" IsHitTestVisible="False">

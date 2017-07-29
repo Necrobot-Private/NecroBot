@@ -5,7 +5,7 @@ using POGOProtos.Map.Fort;
 using System;
 using TinyIoC;
 
-namespace PoGo.Necrobot.Window.Model
+namespace PoGo.NecroBot.Window.Model
 {
     public class GymViewModel : ViewModelBase
     {

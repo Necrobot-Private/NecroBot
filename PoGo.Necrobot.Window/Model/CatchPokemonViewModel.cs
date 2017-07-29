@@ -2,7 +2,7 @@
 using POGOProtos.Enums;
 using POGOProtos.Inventory;
 
-namespace PoGo.Necrobot.Window.Model
+namespace PoGo.NecroBot.Window.Model
 {
     public class CatchPokemonViewModel : SidebarItemViewModel
     {

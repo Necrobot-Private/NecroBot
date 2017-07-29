@@ -3,7 +3,7 @@ using System.Linq;
 using POGOProtos.Data;
 using System.Collections.ObjectModel;
 
-namespace PoGo.Necrobot.Window.Model
+namespace PoGo.NecroBot.Window.Model
 {
     public class DataContext : ViewModelBase
     {

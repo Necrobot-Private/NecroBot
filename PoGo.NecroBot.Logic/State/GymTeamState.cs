@@ -272,7 +272,7 @@ namespace PoGo.NecroBot.Logic.State
 
         public void LoadData(ISession session, FortData fort)
         {
-            var task = session.Client.Fort.GetGymDetails(fort.Id, fort.Latitude, fort.Longitude);
+            var task = session.Client.Fort.GymGetInfo(fort.Id, fort.Latitude, fort.Longitude);
             task.Wait();
             if (task.IsCompleted && task.Result.Result == GymGetInfoResponse.Types.Result.Success)
             {

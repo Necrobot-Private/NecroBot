@@ -1,6 +1,6 @@
 ﻿using POGOProtos.Inventory.Item;
 
-namespace PoGo.Necrobot.Window.Model
+namespace PoGo.NecroBot.Window.Model
 {
     public class ItemsViewModel  :ViewModelBase
     {

@@ -2,7 +2,7 @@
 using System;
 using PoGo.NecroBot.Logic.State;
 
-namespace PoGo.Necrobot.Window
+namespace PoGo.NecroBot.Window
 {
     public class UILogger : ILogger
     {

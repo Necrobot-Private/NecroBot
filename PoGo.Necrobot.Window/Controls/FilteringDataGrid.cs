@@ -8,7 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace PoGo.Necrobot.Window.Controls
+namespace PoGo.NecroBot.Window.Controls
 {
     //Credit - https://www.codeproject.com/Articles/41755/Filtering-the-WPF-DataGrid-automatically-via-the-h
 

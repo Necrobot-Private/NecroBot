@@ -12,7 +12,7 @@ using POGOProtos.Inventory;
 using PoGo.NecroBot.Logic.State;
 using TinyIoC;
 
-namespace PoGo.Necrobot.Window.Model
+namespace PoGo.NecroBot.Window.Model
 {
     public class SnipeListViewModel : ViewModelBase
     {

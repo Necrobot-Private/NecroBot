@@ -1,5 +1,5 @@
 ﻿using MahApps.Metro.Controls;
-using PoGo.Necrobot.Window.Model;
+using PoGo.NecroBot.Window.Model;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Event.Inventory;
 using PoGo.NecroBot.Logic.Event.Player;
@@ -14,7 +14,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace PoGo.Necrobot.Window
+namespace PoGo.NecroBot.Window
 {
     public partial class MainClientWindow
     {

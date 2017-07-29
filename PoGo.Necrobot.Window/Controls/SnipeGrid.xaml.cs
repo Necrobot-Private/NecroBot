@@ -1,10 +1,10 @@
-﻿using PoGo.Necrobot.Window.Model;
+﻿using PoGo.NecroBot.Window.Model;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace PoGo.Necrobot.Window.Controls
+namespace PoGo.NecroBot.Window.Controls
 {
     public delegate void OnSnipePokemon(SnipePokemonViewModel selected, bool allBotInstanceSnipe);
 

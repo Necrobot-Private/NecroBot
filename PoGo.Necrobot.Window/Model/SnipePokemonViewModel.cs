@@ -4,7 +4,7 @@ using PoGo.NecroBot.Logic.Event;
 using TinyIoC;
 using PoGo.NecroBot.Logic.State;
 
-namespace PoGo.Necrobot.Window.Model
+namespace PoGo.NecroBot.Window.Model
 {
     public class SnipePokemonViewModel : ViewModelBase
     {

@@ -226,7 +226,7 @@ namespace PoGo.NecroBot.Logic.State
                 PushNotificationClient.SendNotification(session, $"Account changed to", $"{Account}\n" +
                                                                  $"Lvl: {Lvl}\n" +
                                                                  $"XP : {XP:#,##0}({(double)XP / ((double)NLevelXP) * 100:#0.00}%)\n" +
-                                                                 $"SD : {SD:#,##0}\n", true).ConfigureAwait(false);
+                                                                 $"SD : {SD:#,##0}", true).ConfigureAwait(false);
 
             if (nextBot != null)
                 manager.SwitchAccounts(nextBot);

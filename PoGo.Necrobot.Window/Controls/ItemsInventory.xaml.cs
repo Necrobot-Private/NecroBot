@@ -2,10 +2,11 @@
 using System.Windows.Controls;
 using PoGo.NecroBot.Logic.State;
 using POGOProtos.Inventory.Item;
-using PoGo.Necrobot.Window.Model;
+using PoGo.NecroBot.Window.Model;
 using PoGo.NecroBot.Logic.Tasks;
+using PoGo.NecroBot.Logic.Logging;
 
-namespace PoGo.Necrobot.Window.Controls
+namespace PoGo.NecroBot.Window.Controls
 {
     /// <summary>
     /// Interaction logic for ItemsInventory.xaml
@@ -46,6 +47,15 @@ namespace PoGo.Necrobot.Window.Controls
                             await UseIncenseTask.Execute(Session);
                         }
                     }
+                    break;
+                case ItemId.ItemMoveRerollFastAttack:
+                    Logger.Write($"{Item.ItemId} Can not be used for the moment, the bot still does not completely generate this process.", LogLevel.Warning);
+                    break;
+                case ItemId.ItemMoveRerollSpecialAttack:
+                    Logger.Write($"{Item.ItemId} Can not be used for the moment, the bot still does not completely generate this process.", LogLevel.Warning);
+                    break;
+                case ItemId.ItemRareCandy:
+                    Logger.Write($"{Item.ItemId} Can not be used for the moment, the bot still does not completely generate this process.", LogLevel.Warning);
                     break;
                 default:
                     {

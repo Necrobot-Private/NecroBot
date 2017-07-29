@@ -7,7 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 
-namespace PoGo.Necrobot.Window.Controls
+namespace PoGo.NecroBot.Window.Controls
 {
     [TemplatePart(Name = "PART_OverlayAdorner", Type = typeof(AdornerDecorator))]
     public class Overlay : ContentControl

@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Data;
 using TinyIoC;
 
-namespace PoGo.Necrobot.Window.Converters
+namespace PoGo.NecroBot.Window.Converters
 {
     public class I18NConveter : IValueConverter
     {

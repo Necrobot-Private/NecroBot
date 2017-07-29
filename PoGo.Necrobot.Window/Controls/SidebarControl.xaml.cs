@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace PoGo.Necrobot.Window.Controls
+namespace PoGo.NecroBot.Window.Controls
 {
     /// <summary>
     /// Interaction logic for Sidebar.xaml

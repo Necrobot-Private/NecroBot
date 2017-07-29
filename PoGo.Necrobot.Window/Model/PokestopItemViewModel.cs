@@ -1,6 +1,6 @@
 ﻿using PoGo.NecroBot.Logic.Event;
 
-namespace PoGo.Necrobot.Window.Model
+namespace PoGo.NecroBot.Window.Model
 {
     public class PokestopItemViewModel : SidebarItemViewModel
     {

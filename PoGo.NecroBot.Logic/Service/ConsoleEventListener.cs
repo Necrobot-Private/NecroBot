@@ -17,6 +17,9 @@ using POGOProtos.Networking.Responses;
 using PoGo.NecroBot.Logic.Event.Snipe;
 using System.Linq;
 using PoGo.NecroBot.Logic.Utils;
+using System.Drawing;
+using System.Collections.Generic;
+using PoGo.NecroBot.Logic.PoGoUtils;
 
 #endregion
 
@@ -202,14 +205,27 @@ namespace PoGo.NecroBot.Logic.Service
 
         private static void HandleEvent(FortUsedEvent fortUsedEvent, ISession session)
         {
-            var itemString = fortUsedEvent.InventoryFull
-                ? session.Translation.GetTranslation(TranslationString.InvFullPokestopLooting)
-                : fortUsedEvent.Items;
-            Logger.Write(
-                session.Translation.GetTranslation(TranslationString.EventFortUsed, fortUsedEvent.Name,
+            if (fortUsedEvent.InventoryFull)
+            {
+                Logger.Write(session.Translation.GetTranslation(TranslationString.InvFullPokestopLooting), fortUsedEvent.Fort.Type == FortType.Checkpoint ? LogLevel.Pokestop : LogLevel.Gym, ConsoleColor.Cyan);  //LogLevel.Pokestop);
+                return;
+            }
+
+            string PokemonDataEgg = "No";
+
+            if (fortUsedEvent.PokemonDataEgg != null && fortUsedEvent.PokemonDataEgg.IsEgg)
+            {
+                PokemonDataEgg = $"Yes {fortUsedEvent.PokemonDataEgg.EggKmWalkedTarget:0.0} Km";
+            }
+
+            string eventMessage = session.Translation.GetTranslation(TranslationString.EventFortUsed, fortUsedEvent.Name,
                     fortUsedEvent.Exp, fortUsedEvent.Gems,
-                    itemString, session.Inventory.GetEggs().Result.Count(), fortUsedEvent.Latitude, fortUsedEvent.Longitude, fortUsedEvent.Altitude),
-                LogLevel.Pokestop);
+                     fortUsedEvent.Items, fortUsedEvent.Badges, fortUsedEvent.BonusLoot, fortUsedEvent.RaidTickets, fortUsedEvent.TeamBonusLoot, PokemonDataEgg, session.Inventory.GetEggs().Result.Count(), fortUsedEvent.Latitude, fortUsedEvent.Longitude, fortUsedEvent.Altitude);
+
+            if (fortUsedEvent.Fort.Type == FortType.Checkpoint)
+                Logger.Write(eventMessage, LogLevel.Pokestop);
+            else
+                Logger.Write(eventMessage, LogLevel.Gym, ConsoleColor.Cyan); //LogLevel.Pokestop);
         }
 
         private static void HandleEvent(FortFailedEvent fortFailedEvent, ISession session)
@@ -528,9 +544,10 @@ namespace PoGo.NecroBot.Logic.Service
 
         private static void HandleEvent(EvolveCountEvent evolveCountEvent, ISession session)
         {
-            Logger.Write(
-                session.Translation.GetTranslation(TranslationString.PkmPotentialEvolveCount, evolveCountEvent.Evolves),
-                LogLevel.Evolve
+            if (evolveCountEvent.Evolves>0)
+                Logger.Write(
+                    session.Translation.GetTranslation(TranslationString.PkmPotentialEvolveCount, evolveCountEvent.Evolves),
+                    LogLevel.Evolve
             );
         }
 

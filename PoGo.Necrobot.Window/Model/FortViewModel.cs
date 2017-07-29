@@ -5,7 +5,7 @@ using PokemonGo.RocketAPI.Extensions;
 using System;
 using TinyIoC;
 
-namespace PoGo.Necrobot.Window.Model
+namespace PoGo.NecroBot.Window.Model
 {
     public class FortViewModel : ViewModelBase
     {

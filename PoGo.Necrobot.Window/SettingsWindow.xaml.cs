@@ -11,12 +11,12 @@ using System.ComponentModel.DataAnnotations;
 using System.Windows.Controls.Primitives;
 using POGOProtos.Enums;
 using PoGo.NecroBot.Logic.Model.Settings;
-using PoGo.Necrobot.Window.Converters;
+using PoGo.NecroBot.Window.Converters;
 using System.Collections.ObjectModel;
 using PoGo.NecroBot.Logic.Common;
 using TinyIoC;
 
-namespace PoGo.Necrobot.Window
+namespace PoGo.NecroBot.Window
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

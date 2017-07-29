@@ -4,7 +4,7 @@ using System.Windows.Documents;
 using System.Windows.Media;
 
 
-namespace PoGo.Necrobot.Window.Controls
+namespace PoGo.NecroBot.Window.Controls
 {
     public class TemplatedAdorner : Adorner
     {

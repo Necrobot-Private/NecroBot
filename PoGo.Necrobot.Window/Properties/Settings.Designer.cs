@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace PoGo.Necrobot.Window.Properties {
+namespace PoGo.NecroBot.Window.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

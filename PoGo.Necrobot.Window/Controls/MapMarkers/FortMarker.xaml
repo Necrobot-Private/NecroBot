@@ -1,8 +1,8 @@
 ﻿<UserControl
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	x:Class="PoGo.Necrobot.Window.Controls.MapMarkers.FortMarker"
-    xmlns:cv="clr-namespace:PoGo.Necrobot.Window.Converters"
+	x:Class="PoGo.NecroBot.Window.Controls.MapMarkers.FortMarker"
+    xmlns:cv="clr-namespace:PoGo.NecroBot.Window.Converters"
 	Height="45" Width="45" Opacity="10" 
     MouseLeftButtonDown="UserControl_MouseLeftButtonDown"
     IsHitTestVisible="True"

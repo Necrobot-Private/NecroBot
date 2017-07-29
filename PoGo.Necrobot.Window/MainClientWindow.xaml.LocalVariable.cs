@@ -1,7 +1,7 @@
 ﻿using PoGo.NecroBot.Logic;
 using PoGo.NecroBot.Logic.State;
 
-namespace PoGo.Necrobot.Window
+namespace PoGo.NecroBot.Window
 {
     public partial class MainClientWindow
     {
