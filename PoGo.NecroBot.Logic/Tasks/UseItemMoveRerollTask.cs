@@ -1,6 +1,7 @@
 ﻿using PoGo.NecroBot.Logic.Logging;
 using PoGo.NecroBot.Logic.State;
 using POGOProtos.Data;
+using POGOProtos.Inventory.Item;
 using POGOProtos.Networking.Responses;
 using System;
 using System.Collections.Generic;
@@ -12,31 +13,37 @@ namespace PoGo.NecroBot.Logic.Tasks
 {
     public class UseItemMoveRerollTask
     {
-        public static async Task Execute(ISession session, PokemonData pokemondata)
+        public static async Task Execute(ISession session, ItemData item, PokemonData pokemondata)
         {
-            var response = await session.Client.Inventory.UseItemMoveReroll(pokemondata.Id).ConfigureAwait(false);
+            var response = await session.Client.Inventory.UseItemMoveReroll(item.ItemId, pokemondata.Id).ConfigureAwait(false);
             switch (response.Result)
             {
-                case ReleasePokemonResponse.Types.Result.Success:
-                    Logger.Write($"Success", LogLevel.Info);
+                case UseItemMoveRerollResponse.Types.Result.Success:
+                    Logger.Write($"Success to use {item.ItemId}", LogLevel.Info);
                     break;
-                case ReleasePokemonResponse.Types.Result.Failed:
-                    Logger.Write($"Failed to use MoveReroll!", LogLevel.Error);
+                case UseItemMoveRerollResponse.Types.Result.InvalidPokemon:
+                    Logger.Write($"Failed Invalid Pokemon!", LogLevel.Error);
                     break;
-                case ReleasePokemonResponse.Types.Result.ErrorPokemonIsBuddy:
-                    Logger.Write($"Error Pokemon Is Buddy", LogLevel.Error);
+                case UseItemMoveRerollResponse.Types.Result.ItemNotInInventory:
+                    Logger.Write($"Error Item Not In Inventory!", LogLevel.Error);
                     break;
-                case ReleasePokemonResponse.Types.Result.ErrorPokemonIsEgg:
-                    Logger.Write($"Error Pokemon Is Egg", LogLevel.Error);
+                case UseItemMoveRerollResponse.Types.Result.NoOtherMoves:
+                    Logger.Write($"Error No Other Moves!", LogLevel.Error);
                     break;
-                case ReleasePokemonResponse.Types.Result.PokemonDeployed:
-                    Logger.Write($"Pokemon Deployed", LogLevel.Warning);
+                case UseItemMoveRerollResponse.Types.Result.NoPlayer:
+                    Logger.Write($"No Player!", LogLevel.Error);
                     break;
-                case ReleasePokemonResponse.Types.Result.Unset:
-                    Logger.Write($"Unset", LogLevel.Warning);
+                case UseItemMoveRerollResponse.Types.Result.NoPokemon:
+                    Logger.Write($"No Pokemon!", LogLevel.Error);
+                    break;
+                case UseItemMoveRerollResponse.Types.Result.WrongItemType:
+                    Logger.Write($"Wrong Item Type!", LogLevel.Error);
+                    break;
+                case UseItemMoveRerollResponse.Types.Result.Unset:
+                    Logger.Write($"Unset!", LogLevel.Warning);
                     break;
                 default:
-                    Logger.Write($"Failed to use MoveReroll!", LogLevel.Warning);
+                    Logger.Write($"Failed to use {item.ItemId}!", LogLevel.Warning);
                     break;
             }
         }
