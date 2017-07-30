@@ -1,5 +1,40 @@
 # Change Log
 
+## [v1.0.0.186](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.186) (2017-07-29)
+
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.185...v1.0.0.186)
+
+**Closed issues:**
+
+- WIN GUI not working [\#1922](https://github.com/Necrobot-Private/NecroBot/issues/1922)
+- Dont reset parameters [\#1921](https://github.com/Necrobot-Private/NecroBot/issues/1921)
+- Issue on new computer [\#1920](https://github.com/Necrobot-Private/NecroBot/issues/1920)
+- Pokestop spinning stopped after catch limit is reached.  [\#1919](https://github.com/Necrobot-Private/NecroBot/issues/1919)
+- need help snipe [\#1918](https://github.com/Necrobot-Private/NecroBot/issues/1918)
+- When i open necrobot.win I can only choose to pay [\#1917](https://github.com/Necrobot-Private/NecroBot/issues/1917)
+- where to get the GUI Display please [\#1916](https://github.com/Necrobot-Private/NecroBot/issues/1916)
+- Get this error:Auth token was missing from oauth login response. [\#1915](https://github.com/Necrobot-Private/NecroBot/issues/1915)
+- Egg status not refreshing properly. [\#1913](https://github.com/Necrobot-Private/NecroBot/issues/1913)
+- need help [\#1912](https://github.com/Necrobot-Private/NecroBot/issues/1912)
+- NecroBot2.Win not starting at all [\#1910](https://github.com/Necrobot-Private/NecroBot/issues/1910)
+- Can't attack gym [\#1909](https://github.com/Necrobot-Private/NecroBot/issues/1909)
+- Can't farm pokestop [\#1906](https://github.com/Necrobot-Private/NecroBot/issues/1906)
+- Necrobo2.Win.exe error on startup [\#1904](https://github.com/Necrobot-Private/NecroBot/issues/1904)
+- 0.69 Update [\#1901](https://github.com/Necrobot-Private/NecroBot/issues/1901)
+- After relogin Bot jumps back to initial coordinates [\#1899](https://github.com/Necrobot-Private/NecroBot/issues/1899)
+- Snipe Does not works well. [\#1898](https://github.com/Necrobot-Private/NecroBot/issues/1898)
+- Status code Forbidden [\#1897](https://github.com/Necrobot-Private/NecroBot/issues/1897)
+- The HashKey is invalid or has expired, please press any key to exit and correct you auth.json,  [\#1893](https://github.com/Necrobot-Private/NecroBot/issues/1893)
+- se han producido uno o varios errores [\#1892](https://github.com/Necrobot-Private/NecroBot/issues/1892)
+- REQUEST spin gym discs [\#1872](https://github.com/Necrobot-Private/NecroBot/issues/1872)
+- \[10:35:38\] \(ERROR\) You have to log into an browser with the email  [\#1862](https://github.com/Necrobot-Private/NecroBot/issues/1862)
+- After captcha resolved, bot should continute without re-login [\#935](https://github.com/Necrobot-Private/NecroBot/issues/935)
+
+**Merged pull requests:**
+
+- Other Updates [\#1903](https://github.com/Necrobot-Private/NecroBot/pull/1903) ([Furtif](https://github.com/Furtif))
+- Create CODE\_OF\_CONDUCT.md [\#1902](https://github.com/Necrobot-Private/NecroBot/pull/1902) ([Lord-Haji](https://github.com/Lord-Haji))
+
 ## [v1.0.0.185](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.185) (2017-07-21)
 
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.184...v1.0.0.185)
@@ -1979,19 +2014,19 @@
 
 ## [v1.0.0.88](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.88) (2017-02-02)
 
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.86...v1.0.0.88)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.87...v1.0.0.88)
 
 **Merged pull requests:**
 
 - API Update to 0.55 [\#699](https://github.com/Necrobot-Private/NecroBot/pull/699) ([jjskuld](https://github.com/jjskuld))
 
-## [v1.0.0.86](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.86) (2017-02-01)
-
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.87...v1.0.0.86)
-
 ## [v1.0.0.87](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.87) (2017-02-01)
 
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.85...v1.0.0.87)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.86...v1.0.0.87)
+
+## [v1.0.0.86](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.86) (2017-02-01)
+
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.85...v1.0.0.86)
 
 **Closed issues:**
 
