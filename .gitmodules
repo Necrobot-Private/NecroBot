@@ -5,15 +5,19 @@
 [submodule "POGOProtos"]
 	path = POGOProtos
 	url = https://github.com/Necrobot-Private/POGOProtos.git
+	branch = master
 [submodule "PoGo.NecroBot.GUI.Electron"]
 	path = PoGo.NecroBot.GUI.Electron
 	url = https://github.com/Necrobot-Private/NecroBot.GUI.Electron.git
+	branch = master
 [submodule "PokeEase"]
 	path = PokeEase
 	url = https://github.com/Necrobot-Private/PokeEase.git
+	branch = master
 [submodule "PokemonGO-Assets-Global"]
 	path = PokemonGO-Assets
 	url = https://github.com/Necrobot-Private/PokemonGO-Assets.git
+	branch = master
 [submodule "PokemonGO-Assets"]
 	path = RocketBot2/Resources/PokemonGO-Assets
 	url = https://github.com/Necrobot-Private/PokemonGO-Assets.git
