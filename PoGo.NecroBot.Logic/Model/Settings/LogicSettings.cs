@@ -228,12 +228,14 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public int TotalAmountOfPotionsToKeep => GenRandom(_settings.RecycleConfig.TotalAmountOfPotionsToKeep);
         public int TotalAmountOfRevivesToKeep => GenRandom(_settings.RecycleConfig.TotalAmountOfRevivesToKeep);
         public int TotalAmountOfBerriesToKeep => GenRandom(_settings.RecycleConfig.TotalAmountOfBerriesToKeep);
+        public int TotalAmountOfEvolutionToKeep => GenRandom(_settings.RecycleConfig.TotalAmountOfEvolutionToKeep);
 
         public bool UseRecyclePercentsInsteadOfTotals => _settings.RecycleConfig.UseRecyclePercentsInsteadOfTotals;
         public int PercentOfInventoryPokeballsToKeep => GenRandom(_settings.RecycleConfig.PercentOfInventoryPokeballsToKeep);
         public int PercentOfInventoryPotionsToKeep => GenRandom(_settings.RecycleConfig.PercentOfInventoryPotionsToKeep);
         public int PercentOfInventoryRevivesToKeep => GenRandom(_settings.RecycleConfig.PercentOfInventoryRevivesToKeep);
         public int PercentOfInventoryBerriesToKeep => GenRandom(_settings.RecycleConfig.PercentOfInventoryBerriesToKeep);
+        public int PercentOfInventoryEvolutionToKeep => GenRandom(_settings.RecycleConfig.PercentOfInventoryEvolutionToKeep);
 
         public bool UseSnipeLimit => _settings.SnipeConfig.UseSnipeLimit;
         public bool UsePokeStopLimit => _settings.PokeStopConfig.UsePokeStopLimit;
