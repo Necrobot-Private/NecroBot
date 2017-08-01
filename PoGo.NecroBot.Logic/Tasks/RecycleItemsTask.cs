@@ -56,15 +56,19 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             var currentAmountOfRevives = currentRevives + currentMaxRevives;
 
-            if (session.LogicSettings.DetailedCountsBeforeRecycling)
-                Logger.Write(session.Translation.GetTranslation(TranslationString.CurrentReviveInv,
-                    currentRevives.ToString("0").PadLeft(3, ' '), currentMaxRevives.ToString("0").PadLeft(3, ' ')));
-
             var currentAmountOfEvoItems = await session.Inventory.GetItemAmountByType(ItemId.ItemUpGrade).ConfigureAwait(false) +
                                           await session.Inventory.GetItemAmountByType(ItemId.ItemDragonScale).ConfigureAwait(false) +
                                           await session.Inventory.GetItemAmountByType(ItemId.ItemKingsRock).ConfigureAwait(false) +
                                           await session.Inventory.GetItemAmountByType(ItemId.ItemMetalCoat).ConfigureAwait(false) +
                                           await session.Inventory.GetItemAmountByType(ItemId.ItemSunStone).ConfigureAwait(false);
+
+            var currentAmountOfRAIDPasses = await session.Inventory.GetItemAmountByType(ItemId.ItemFreeRaidTicket).ConfigureAwait(false) +
+                                            await session.Inventory.GetItemAmountByType(ItemId.ItemPaidRaidTicket).ConfigureAwait(false);
+
+            if (session.LogicSettings.DetailedCountsBeforeRecycling)
+                Logger.Write(session.Translation.GetTranslation(TranslationString.CurrentReviveInv,
+                    currentRevives.ToString("0").PadLeft(3, ' '), currentMaxRevives.ToString("0").PadLeft(3, ' '), currentAmountOfEvoItems.ToString("0").PadLeft(3, ' '), currentAmountOfRAIDPasses.ToString("0").PadLeft(3, ' ')));
+
             var currentAmountOfBerries = await session.Inventory.GetItemAmountByType(ItemId.ItemRazzBerry).ConfigureAwait(false) +
                                          await session.Inventory.GetItemAmountByType(ItemId.ItemBlukBerry).ConfigureAwait(false) +
                                          await session.Inventory.GetItemAmountByType(ItemId.ItemNanabBerry).ConfigureAwait(false) +
@@ -82,7 +86,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             if (session.LogicSettings.DetailedCountsBeforeRecycling)
                 Logger.Write(session.Translation.GetTranslation(TranslationString.CurrentMiscItemInv,
-                    currentAmountOfBerries.ToString("0").PadLeft(3,' '), currentAmountOfIncense.ToString("0").PadLeft(3, ' '), currentAmountOfLuckyEggs.ToString("0").PadLeft(3, ' '), currentAmountOfLures.ToString("0").PadLeft(3, ' '), currentAmountOfEvoItems.ToString("0").PadLeft(3, ' ')));
+                    currentAmountOfBerries.ToString("0").PadLeft(3,' '), currentAmountOfIncense.ToString("0").PadLeft(3, ' '), currentAmountOfLuckyEggs.ToString("0").PadLeft(3, ' '), currentAmountOfLures.ToString("0").PadLeft(3, ' ')));
 
             if (!session.LogicSettings.VerboseRecycling)
                 Logger.Write(session.Translation.GetTranslation(TranslationString.RecyclingQuietly), LogLevel.Recycling);
