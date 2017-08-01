@@ -261,7 +261,8 @@ namespace PoGo.NecroBot.Logic.State
                     int totalPercent = session.LogicSettings.PercentOfInventoryPokeballsToKeep +
                                        session.LogicSettings.PercentOfInventoryPotionsToKeep +
                                        session.LogicSettings.PercentOfInventoryRevivesToKeep +
-                                       session.LogicSettings.PercentOfInventoryBerriesToKeep;
+                                       session.LogicSettings.PercentOfInventoryBerriesToKeep +
+                                       session.LogicSettings.PercentOfInventoryEvolutionToKeep;
 
                     if (totalPercent > 100)
                     {

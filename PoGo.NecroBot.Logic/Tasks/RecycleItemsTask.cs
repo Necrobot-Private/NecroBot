@@ -379,53 +379,53 @@ namespace PoGo.NecroBot.Logic.Tasks
             var metal = await session.Inventory.GetItemAmountByType(ItemId.ItemMetalCoat).ConfigureAwait(false);
             var sun = await session.Inventory.GetItemAmountByType(ItemId.ItemSunStone).ConfigureAwait(false);
 
-            int totalBerryCount = upgrade + dragon + kings + metal + sun;
+            int totalEvolutionCount = upgrade + dragon + kings + metal + sun;
             int random = rnd.Next(-1 * session.LogicSettings.RandomRecycleValue, session.LogicSettings.RandomRecycleValue + 1);
 
-            int totalBerriesToKeep;
+            int totalEvolutionToKeep;
             if (session.LogicSettings.UseRecyclePercentsInsteadOfTotals)
             {
-                totalBerriesToKeep = (int)Math.Floor(session.LogicSettings.PercentOfInventoryBerriesToKeep / 100.0 * session.Profile.PlayerData.MaxItemStorage);
+                totalEvolutionToKeep = (int)Math.Floor(session.LogicSettings.PercentOfInventoryEvolutionToKeep / 100.0 * session.Profile.PlayerData.MaxItemStorage);
             }
             else
             {
-                totalBerriesToKeep = session.LogicSettings.TotalAmountOfBerriesToKeep;
+                totalEvolutionToKeep = session.LogicSettings.TotalAmountOfBerriesToKeep;
             }
 
-            if (totalBerryCount > totalBerriesToKeep)
+            if (totalEvolutionCount > totalEvolutionToKeep)
             {
                 if (session.LogicSettings.RandomizeRecycle)
                 {
-                    _diff = totalBerryCount - totalBerriesToKeep + random;
+                    _diff = totalEvolutionCount - totalEvolutionToKeep + random;
                 }
                 else
                 {
-                    _diff = totalBerryCount - totalBerriesToKeep;
+                    _diff = totalEvolutionCount - totalEvolutionToKeep;
                 }
 
                 if (_diff > 0)
                 {
-                    await RecycleItems(session, cancellationToken, upgrade, ItemId.ItemRazzBerry).ConfigureAwait(false);
+                    await RecycleItems(session, cancellationToken, upgrade, ItemId.ItemUpGrade).ConfigureAwait(false);
                 }
 
                 if (_diff > 0)
                 {
-                    await RecycleItems(session, cancellationToken, dragon, ItemId.ItemBlukBerry).ConfigureAwait(false);
+                    await RecycleItems(session, cancellationToken, dragon, ItemId.ItemDragonScale).ConfigureAwait(false);
                 }
 
                 if (_diff > 0)
                 {
-                    await RecycleItems(session, cancellationToken, kings, ItemId.ItemNanabBerry).ConfigureAwait(false);
+                    await RecycleItems(session, cancellationToken, kings, ItemId.ItemKingsRock).ConfigureAwait(false);
                 }
 
                 if (_diff > 0)
                 {
-                    await RecycleItems(session, cancellationToken, metal, ItemId.ItemPinapBerry).ConfigureAwait(false);
+                    await RecycleItems(session, cancellationToken, metal, ItemId.ItemMetalCoat).ConfigureAwait(false);
                 }
 
                 if (_diff > 0)
                 {
-                    await RecycleItems(session, cancellationToken, sun, ItemId.ItemWeparBerry).ConfigureAwait(false);
+                    await RecycleItems(session, cancellationToken, sun, ItemId.ItemSunStone).ConfigureAwait(false);
                 }
             }
         }

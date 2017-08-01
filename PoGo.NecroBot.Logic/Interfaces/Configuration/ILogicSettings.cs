@@ -139,6 +139,7 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         int PercentOfInventoryPotionsToKeep { get; }
         int PercentOfInventoryRevivesToKeep { get; }
         int PercentOfInventoryBerriesToKeep { get; }
+        int PercentOfInventoryEvolutionToKeep { get; }
 
         bool DetailedCountsBeforeRecycling { get; }
         bool VerboseRecycling { get; }
