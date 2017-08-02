@@ -17,9 +17,7 @@ using POGOProtos.Networking.Responses;
 using PoGo.NecroBot.Logic.Event.Snipe;
 using System.Linq;
 using PoGo.NecroBot.Logic.Utils;
-using System.Drawing;
-using System.Collections.Generic;
-using PoGo.NecroBot.Logic.PoGoUtils;
+using PoGo.NecroBot.Logic.Model.Settings;
 
 #endregion
 
@@ -799,4 +797,3 @@ namespace PoGo.NecroBot.Logic.Service
         }
     }
 }
-
