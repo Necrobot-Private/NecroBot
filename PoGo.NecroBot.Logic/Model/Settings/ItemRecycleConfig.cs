@@ -58,10 +58,10 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 8)]
         public int TotalAmountOfBerriesToKeep { get; set; }
 
-        [NecrobotConfig(Description = "How many Evolution to be kept ", Position = 8)]
+        [NecrobotConfig(Description = "How many Evolution to be kept ", Position = 9)]
         [DefaultValue(50)]
         [Range(0, 999)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 8)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 9)]
         public int TotalAmountOfEvolutionToKeep { get; set; }
 
         /* Percents */
@@ -94,10 +94,10 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 14)]
         public int PercentOfInventoryBerriesToKeep { get; set; }
 
-        [NecrobotConfig(Description = "How many evolution to be kept as a percent of inventory ", Position = 14)]
+        [NecrobotConfig(Description = "How many evolution to be kept as a percent of inventory ", Position = 15)]
         [DefaultValue(10)]
         [Range(0, 100)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 14)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 15)]
         public int PercentOfInventoryEvolutionToKeep { get; set; }
     }
 }
