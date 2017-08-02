@@ -423,7 +423,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 Logger.Write("You have disabled reward collecting in your config file", LogLevel.Gym, ConsoleColor.Magenta);
                         }
                         else
-                            Logger.Write(string.Format("Failed to deploy pokemon. Rresult: {0}", response.Result), LogLevel.Gym, ConsoleColor.Magenta);
+                            Logger.Write(string.Format("Failed to deploy pokemon. Result: {0}", response.Result), LogLevel.Gym, ConsoleColor.Magenta);
                     }
                     else
                         Logger.Write($"You don't have any pokemon to be deployed!", LogLevel.Gym);

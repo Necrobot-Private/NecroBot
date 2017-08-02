@@ -261,7 +261,8 @@ namespace PoGo.NecroBot.Logic.State
                     int totalPercent = session.LogicSettings.PercentOfInventoryPokeballsToKeep +
                                        session.LogicSettings.PercentOfInventoryPotionsToKeep +
                                        session.LogicSettings.PercentOfInventoryRevivesToKeep +
-                                       session.LogicSettings.PercentOfInventoryBerriesToKeep;
+                                       session.LogicSettings.PercentOfInventoryBerriesToKeep +
+                                       session.LogicSettings.PercentOfInventoryEvolutionToKeep;
 
                     if (totalPercent > 100)
                     {
@@ -279,6 +280,7 @@ namespace PoGo.NecroBot.Logic.State
                         Logger.Write(session.Translation.GetTranslation(TranslationString.PercentPotionsToKeep, session.LogicSettings.PercentOfInventoryPotionsToKeep, (int)Math.Floor(session.LogicSettings.PercentOfInventoryPotionsToKeep / 100.0 * session.Profile.PlayerData.MaxItemStorage)), LogLevel.Info);
                         Logger.Write(session.Translation.GetTranslation(TranslationString.PercentRevivesToKeep, session.LogicSettings.PercentOfInventoryRevivesToKeep, (int)Math.Floor(session.LogicSettings.PercentOfInventoryRevivesToKeep / 100.0 * session.Profile.PlayerData.MaxItemStorage)), LogLevel.Info);
                         Logger.Write(session.Translation.GetTranslation(TranslationString.PercentBerriesToKeep, session.LogicSettings.PercentOfInventoryBerriesToKeep, (int)Math.Floor(session.LogicSettings.PercentOfInventoryBerriesToKeep / 100.0 * session.Profile.PlayerData.MaxItemStorage)), LogLevel.Info);
+                        Logger.Write(session.Translation.GetTranslation(TranslationString.PercentEvolutionToKeep, session.LogicSettings.PercentOfInventoryEvolutionToKeep, (int)Math.Floor(session.LogicSettings.PercentOfInventoryEvolutionToKeep / 100.0 * session.Profile.PlayerData.MaxItemStorage)), LogLevel.Info);
                     }
                 }
                 else
@@ -286,7 +288,8 @@ namespace PoGo.NecroBot.Logic.State
                     int maxTheoreticalItems = session.LogicSettings.TotalAmountOfPokeballsToKeep +
                                               session.LogicSettings.TotalAmountOfPotionsToKeep +
                                               session.LogicSettings.TotalAmountOfRevivesToKeep +
-                                              session.LogicSettings.TotalAmountOfBerriesToKeep;
+                                              session.LogicSettings.TotalAmountOfBerriesToKeep +
+                                              session.LogicSettings.TotalAmountOfEvolutionToKeep;
 
                     if (maxTheoreticalItems > session.Profile.PlayerData.MaxItemStorage)
                     {

@@ -37,8 +37,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             if (session.LogicSettings.DetailedCountsBeforeRecycling)
                 Logger.Write(session.Translation.GetTranslation(TranslationString.CurrentPokeballInv,
-                    currentAmountOfPokeballs, currentAmountOfGreatballs, currentAmountOfUltraballs,
-                    currentAmountOfMasterballs));
+                    currentAmountOfPokeballs.ToString("0").PadLeft(3, ' '), currentAmountOfGreatballs.ToString("0").PadLeft(3, ' '), currentAmountOfUltraballs.ToString("0").PadLeft(3, ' '),
+                    currentAmountOfMasterballs.ToString("0").PadLeft(3, ' ')));
 
             var currentPotions = await session.Inventory.GetItemAmountByType(ItemId.ItemPotion).ConfigureAwait(false);
             var currentSuperPotions = await session.Inventory.GetItemAmountByType(ItemId.ItemSuperPotion).ConfigureAwait(false);
@@ -49,22 +49,34 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             if (session.LogicSettings.DetailedCountsBeforeRecycling)
                 Logger.Write(session.Translation.GetTranslation(TranslationString.CurrentPotionInv,
-                    currentPotions, currentSuperPotions, currentHyperPotions, currentMaxPotions));
+                    currentPotions.ToString("0").PadLeft(3, ' '), currentSuperPotions.ToString("0").PadLeft(3, ' '), currentHyperPotions.ToString("0").PadLeft(3, ' '), currentMaxPotions.ToString("0").PadLeft(3, ' ')));
 
             var currentRevives = await session.Inventory.GetItemAmountByType(ItemId.ItemRevive).ConfigureAwait(false);
             var currentMaxRevives = await session.Inventory.GetItemAmountByType(ItemId.ItemMaxRevive).ConfigureAwait(false);
 
             var currentAmountOfRevives = currentRevives + currentMaxRevives;
 
+            var currentAmountOfEvoItems = await session.Inventory.GetItemAmountByType(ItemId.ItemUpGrade).ConfigureAwait(false) +
+                                          await session.Inventory.GetItemAmountByType(ItemId.ItemDragonScale).ConfigureAwait(false) +
+                                          await session.Inventory.GetItemAmountByType(ItemId.ItemKingsRock).ConfigureAwait(false) +
+                                          await session.Inventory.GetItemAmountByType(ItemId.ItemMetalCoat).ConfigureAwait(false) +
+                                          await session.Inventory.GetItemAmountByType(ItemId.ItemSunStone).ConfigureAwait(false);
+
+            var currentAmountOfRAIDPasses = await session.Inventory.GetItemAmountByType(ItemId.ItemFreeRaidTicket).ConfigureAwait(false) +
+                                            await session.Inventory.GetItemAmountByType(ItemId.ItemPaidRaidTicket).ConfigureAwait(false);
+
             if (session.LogicSettings.DetailedCountsBeforeRecycling)
                 Logger.Write(session.Translation.GetTranslation(TranslationString.CurrentReviveInv,
-                    currentRevives, currentMaxRevives));
+                    currentRevives.ToString("0").PadLeft(3, ' '), currentMaxRevives.ToString("0").PadLeft(3, ' '), currentAmountOfEvoItems.ToString("0").PadLeft(3, ' '), currentAmountOfRAIDPasses.ToString("0").PadLeft(3, ' ')));
 
             var currentAmountOfBerries = await session.Inventory.GetItemAmountByType(ItemId.ItemRazzBerry).ConfigureAwait(false) +
                                          await session.Inventory.GetItemAmountByType(ItemId.ItemBlukBerry).ConfigureAwait(false) +
                                          await session.Inventory.GetItemAmountByType(ItemId.ItemNanabBerry).ConfigureAwait(false) +
                                          await session.Inventory.GetItemAmountByType(ItemId.ItemWeparBerry).ConfigureAwait(false) +
-                                         await session.Inventory.GetItemAmountByType(ItemId.ItemPinapBerry).ConfigureAwait(false);
+                                         await session.Inventory.GetItemAmountByType(ItemId.ItemPinapBerry).ConfigureAwait(false) +
+                                         await session.Inventory.GetItemAmountByType(ItemId.ItemGoldenPinapBerry).ConfigureAwait(false) +
+                                         await session.Inventory.GetItemAmountByType(ItemId.ItemGoldenRazzBerry).ConfigureAwait(false) +
+                                         await session.Inventory.GetItemAmountByType(ItemId.ItemGoldenNanabBerry).ConfigureAwait(false);
             var currentAmountOfIncense = await session.Inventory.GetItemAmountByType(ItemId.ItemIncenseOrdinary).ConfigureAwait(false) +
                                          await session.Inventory.GetItemAmountByType(ItemId.ItemIncenseSpicy).ConfigureAwait(false) +
                                          await session.Inventory.GetItemAmountByType(ItemId.ItemIncenseCool).ConfigureAwait(false) +
@@ -74,7 +86,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             if (session.LogicSettings.DetailedCountsBeforeRecycling)
                 Logger.Write(session.Translation.GetTranslation(TranslationString.CurrentMiscItemInv,
-                    currentAmountOfBerries, currentAmountOfIncense, currentAmountOfLuckyEggs, currentAmountOfLures));
+                    currentAmountOfBerries.ToString("0").PadLeft(3,' '), currentAmountOfIncense.ToString("0").PadLeft(3, ' '), currentAmountOfLuckyEggs.ToString("0").PadLeft(3, ' '), currentAmountOfLures.ToString("0").PadLeft(3, ' ')));
 
             if (!session.LogicSettings.VerboseRecycling)
                 Logger.Write(session.Translation.GetTranslation(TranslationString.RecyclingQuietly), LogLevel.Recycling);
@@ -83,6 +95,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             await OptimizedRecyclePotions(session, cancellationToken).ConfigureAwait(false);
             await OptimizedRecycleRevives(session, cancellationToken).ConfigureAwait(false);
             await OptimizedRecycleBerries(session, cancellationToken).ConfigureAwait(false);
+            await OptimizedRecycleEvoItems(session, cancellationToken).ConfigureAwait(false);
 
             //await session.Inventory.RefreshCachedInventory().ConfigureAwait(false);
             currentTotalItems = await session.Inventory.GetTotalItemCount().ConfigureAwait(false);
@@ -93,14 +106,14 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             foreach (var item in items)
             {
-                if (item.Count <= 1 || 
-                    (session.SaveBallForByPassCatchFlee && 
-                        (item.ItemId == ItemId.ItemPokeBall || 
-                        item.ItemId == ItemId.ItemGreatBall || 
+                if (item.Count <= 1 ||
+                    (session.SaveBallForByPassCatchFlee &&
+                        (item.ItemId == ItemId.ItemPokeBall ||
+                        item.ItemId == ItemId.ItemGreatBall ||
                         item.ItemId == ItemId.ItemUltraBall))
 
                     ) continue;
-                
+
                 cancellationToken.ThrowIfCancellationRequested();
                 TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
                 await session.Client.Inventory.RecycleItem(item.ItemId, item.Count).ConfigureAwait(false);
@@ -294,8 +307,11 @@ namespace PoGo.NecroBot.Logic.Tasks
             var nanab = await session.Inventory.GetItemAmountByType(ItemId.ItemNanabBerry).ConfigureAwait(false);
             var pinap = await session.Inventory.GetItemAmountByType(ItemId.ItemPinapBerry).ConfigureAwait(false);
             var wepar = await session.Inventory.GetItemAmountByType(ItemId.ItemWeparBerry).ConfigureAwait(false);
+            var goldnana = await session.Inventory.GetItemAmountByType(ItemId.ItemGoldenNanabBerry).ConfigureAwait(false);
+            var goldpinap = await session.Inventory.GetItemAmountByType(ItemId.ItemGoldenPinapBerry).ConfigureAwait(false);
+            var goldrazz = await session.Inventory.GetItemAmountByType(ItemId.ItemGoldenRazzBerry).ConfigureAwait(false);
 
-            int totalBerryCount = razz + bluk + nanab + pinap + wepar;
+            int totalBerryCount = razz + bluk + nanab + pinap + wepar + goldnana + goldpinap + goldrazz;
             int random = rnd.Next(-1 * session.LogicSettings.RandomRecycleValue, session.LogicSettings.RandomRecycleValue + 1);
 
             int totalBerriesToKeep;
@@ -342,6 +358,78 @@ namespace PoGo.NecroBot.Logic.Tasks
                 if (_diff > 0)
                 {
                     await RecycleItems(session, cancellationToken, wepar, ItemId.ItemWeparBerry).ConfigureAwait(false);
+                }
+
+                if (_diff > 0)
+                {
+                    await RecycleItems(session, cancellationToken, goldnana, ItemId.ItemGoldenNanabBerry).ConfigureAwait(false);
+                }
+                if (_diff > 0)
+                {
+                    await RecycleItems(session, cancellationToken, goldpinap, ItemId.ItemGoldenPinapBerry).ConfigureAwait(false);
+                }
+                if (_diff > 0)
+                {
+                    await RecycleItems(session, cancellationToken, goldrazz, ItemId.ItemGoldenRazzBerry).ConfigureAwait(false);
+                }
+            }
+        }
+
+        private static async Task OptimizedRecycleEvoItems(ISession session, CancellationToken cancellationToken)
+        {
+            var upgrade = await session.Inventory.GetItemAmountByType(ItemId.ItemUpGrade).ConfigureAwait(false);
+            var dragon = await session.Inventory.GetItemAmountByType(ItemId.ItemDragonScale).ConfigureAwait(false);
+            var kings = await session.Inventory.GetItemAmountByType(ItemId.ItemKingsRock).ConfigureAwait(false);
+            var metal = await session.Inventory.GetItemAmountByType(ItemId.ItemMetalCoat).ConfigureAwait(false);
+            var sun = await session.Inventory.GetItemAmountByType(ItemId.ItemSunStone).ConfigureAwait(false);
+
+            int totalEvolutionCount = upgrade + dragon + kings + metal + sun;
+            int random = rnd.Next(-1 * session.LogicSettings.RandomRecycleValue, session.LogicSettings.RandomRecycleValue + 1);
+
+            int totalEvolutionToKeep;
+            if (session.LogicSettings.UseRecyclePercentsInsteadOfTotals)
+            {
+                totalEvolutionToKeep = (int)Math.Floor(session.LogicSettings.PercentOfInventoryEvolutionToKeep / 100.0 * session.Profile.PlayerData.MaxItemStorage);
+            }
+            else
+            {
+                totalEvolutionToKeep = session.LogicSettings.TotalAmountOfEvolutionToKeep;
+            }
+
+            if (totalEvolutionCount > totalEvolutionToKeep)
+            {
+                if (session.LogicSettings.RandomizeRecycle)
+                {
+                    _diff = totalEvolutionCount - totalEvolutionToKeep + random;
+                }
+                else
+                {
+                    _diff = totalEvolutionCount - totalEvolutionToKeep;
+                }
+
+                if (_diff > 0)
+                {
+                    await RecycleItems(session, cancellationToken, upgrade, ItemId.ItemUpGrade).ConfigureAwait(false);
+                }
+
+                if (_diff > 0)
+                {
+                    await RecycleItems(session, cancellationToken, dragon, ItemId.ItemDragonScale).ConfigureAwait(false);
+                }
+
+                if (_diff > 0)
+                {
+                    await RecycleItems(session, cancellationToken, kings, ItemId.ItemKingsRock).ConfigureAwait(false);
+                }
+
+                if (_diff > 0)
+                {
+                    await RecycleItems(session, cancellationToken, metal, ItemId.ItemMetalCoat).ConfigureAwait(false);
+                }
+
+                if (_diff > 0)
+                {
+                    await RecycleItems(session, cancellationToken, sun, ItemId.ItemSunStone).ConfigureAwait(false);
                 }
             }
         }
