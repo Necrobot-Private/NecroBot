@@ -87,15 +87,18 @@ namespace PoGo.NecroBot.Logic.Tasks
                     string[] data =
                     {
                         "Pokemon",
+                        "Nickname",
                         "Slashed",
                         "Level",
                         "CP",
                         "IV",
+                        "Candies",
+                        "Power Ups",
+                        "Favorite",
                         "Stamina",
                         "Stamina Max",
                         "Move1",
                         "Move2",
-                        "Candies",
                         "Owner Name",
                         "Origin",
                         "Height(M)",
@@ -107,10 +110,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         "Gyms Attacked",
                         "Gyms Defended",
                         "Creationtimems",
-                        "Power Ups",
-                        "Additional CP Multi",
-                        "Favorite",
-                        "Nickname"
+                        "Additional CP Multi"
                     };
                     Dumper.Dump(session, data, dumpFileName);
 
@@ -124,15 +124,18 @@ namespace PoGo.NecroBot.Logic.Tasks
                         string[] pokemonData =
                         {
                             session.Translation.GetPokemonTranslation(pokemon.PokemonId),
+                            pokemon.Nickname,
                             pokemon.IsBad.ToString(),
                             PokemonInfo.GetLevel(pokemon).ToString(),
                             pokemon.Cp.ToString(),
                             PokemonInfo.CalculatePokemonPerfection(pokemon).ToString(),
+                            PokemonInfo.GetCandy(session, pokemon).ToString(),
+                            pokemon.NumUpgrades.ToString(),
+                            pokemon.Favorite.ToString(),
                             pokemon.Stamina.ToString(),
                             pokemon.StaminaMax.ToString(),
                             pokemon.Move1.ToString(),
                             pokemon.Move2.ToString(),
-                            PokemonInfo.GetCandy(session, pokemon).ToString(),
                             pokemon.OwnerName,
                             pokemon.Origin.ToString(),
                             pokemon.HeightM.ToString(),
@@ -144,10 +147,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                             pokemon.BattlesAttacked.ToString(),
                             pokemon.BattlesDefended.ToString(),
                             pokemon.CreationTimeMs.ToString(),
-                            pokemon.NumUpgrades.ToString(),
-                            pokemon.AdditionalCpMultiplier.ToString(),
-                            pokemon.Favorite.ToString(),
-                            pokemon.Nickname
+                            pokemon.AdditionalCpMultiplier.ToString()
                         };
                         Dumper.Dump(session, pokemonData, dumpFileName);
                     }
@@ -165,3 +165,5 @@ namespace PoGo.NecroBot.Logic.Tasks
         }
     }
 }
+
+

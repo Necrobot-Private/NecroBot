@@ -34,7 +34,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                         : await session.Inventory.GetHighestPokemonOfTypeByCp(upgradeResult
                                             .UpgradedPokemon).ConfigureAwait(false)) ?? upgradeResult.UpgradedPokemon;
 
-                var stardust = -PokemonCpUtils.GetStardustCostsForPowerup(upgradeResult.UpgradedPokemon.CpMultiplier); //+ upgradeResult.UpgradedPokemon.AdditionalCpMultiplier);
+                var stardust = -PokemonCpUtils.GetStardustCostsForPowerup(upgradeResult.UpgradedPokemon.CpMultiplier);
                 var totalStarDust = session.Inventory.UpdateStarDust(stardust);
 
                 session.EventDispatcher.Send(new UpgradePokemonEvent()

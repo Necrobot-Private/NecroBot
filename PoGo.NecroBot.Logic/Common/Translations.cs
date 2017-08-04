@@ -508,7 +508,7 @@ namespace PoGo.NecroBot.Logic.Common
                 new KeyValuePair<TranslationString, string>(TranslationString.PercentBerriesToKeep,
                     "[Recycle Configuration] Berries   ({0,2:##}%): {1,3:###}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.PercentEvolutionToKeep,
-                    "[Recycle Configuration] Evolution   ({0,2:##}%): {1,3:###}"),
+                    "[Recycle Configuration] Evolution ({0,2:##}%): {1,3:###}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.RecyclingQuietly, "Recycling Quietly..."),
                 new KeyValuePair<TranslationString, string>(TranslationString.InvFullTransferring,
                     "Pokemon Inventory is full, transferring Pokemon..."),

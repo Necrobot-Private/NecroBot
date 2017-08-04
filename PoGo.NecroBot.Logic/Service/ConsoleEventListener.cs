@@ -707,14 +707,13 @@ namespace PoGo.NecroBot.Logic.Service
         //TODO - move to string translation later.
         private static void HandleEvent(GymDeployEvent ev, ISession session)
         {
-            var GXP = session.RuntimeStatistics.TotalExperience;
-            var GSD = session.Inventory.GetStarDust();
+            var Info = new GymDetailInfoEvent(); 
 
-            Logger.Write($"Great!!! Your {ev.PokemonId.ToString()} is now defending {ev.Name} GYM. | XP: {GXP} | SD: {GSD}",
+            Logger.Write($"Great!!! Your {ev.PokemonId.ToString()} is now defending {ev.Name} GYM. | Gym Points: {UseGymBattleTask.GetGymLevel(Info.Point)}",
                 LogLevel.Gym, ConsoleColor.Green);
 
             if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
-                PushNotificationClient.SendNotification(session, $"Gym Post", $"Great!!! Your {ev.PokemonId.ToString()} is now defending {ev.Name} GYM.\nXP: {GXP}\nSD: {GSD}", true).ConfigureAwait(false);
+                PushNotificationClient.SendNotification(session, $"Gym Post", $"Great!!! Your {ev.PokemonId.ToString()} is now defending {ev.Name} GYM.\nGym Points: {UseGymBattleTask.GetGymLevel(Info.Point)}", true).ConfigureAwait(false);
         }
 
         private static void HandleEvent(GymBattleStarted ev, ISession session)
