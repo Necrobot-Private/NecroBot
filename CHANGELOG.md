@@ -1,5 +1,26 @@
 # Change Log
 
+## [v1.0.0.187](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.187) (2017-08-05)
+
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.186...v1.0.0.187)
+
+**Closed issues:**
+
+- Evolving ready pokemons from selected number [\#1936](https://github.com/Necrobot-Private/NecroBot/issues/1936)
+- Set credentials [\#1935](https://github.com/Necrobot-Private/NecroBot/issues/1935)
+- the sniping feature is back as old ways so you can add back sniping the bot [\#1933](https://github.com/Necrobot-Private/NecroBot/issues/1933)
+- Attackgym [\#1931](https://github.com/Necrobot-Private/NecroBot/issues/1931)
+- Question [\#1930](https://github.com/Necrobot-Private/NecroBot/issues/1930)
+- NecroBot2.Win.exe disappeared [\#1927](https://github.com/Necrobot-Private/NecroBot/issues/1927)
+- I tester new necrobot version [\#1926](https://github.com/Necrobot-Private/NecroBot/issues/1926)
+- Problem necrobot [\#1925](https://github.com/Necrobot-Private/NecroBot/issues/1925)
+
+**Merged pull requests:**
+
+- Add missed console infos [\#1937](https://github.com/Necrobot-Private/NecroBot/pull/1937) ([Furtif](https://github.com/Furtif))
+- Fixe some bugs [\#1934](https://github.com/Necrobot-Private/NecroBot/pull/1934) ([Furtif](https://github.com/Furtif))
+- Others .... \[0.61.1\] [\#1924](https://github.com/Necrobot-Private/NecroBot/pull/1924) ([Furtif](https://github.com/Furtif))
+
 ## [v1.0.0.186](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.186) (2017-07-29)
 
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.185...v1.0.0.186)
@@ -3453,6 +3474,8 @@
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v0.1-beta...v0.1.1)
 
 ## [v0.1-beta](https://github.com/Necrobot-Private/NecroBot/tree/v0.1-beta) (2016-07-25)
+
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/a41afe98b7db9983f3bbbbb4a6984c456586fe02...v0.1-beta)
 
 
 
