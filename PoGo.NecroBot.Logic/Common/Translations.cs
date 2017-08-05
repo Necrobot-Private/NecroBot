@@ -1,4 +1,4 @@
-﻿#region using directives
+#region using directives
 
 using System;
 using System.Collections.Generic;
@@ -357,7 +357,7 @@ namespace PoGo.NecroBot.Logic.Common
                 new KeyValuePair<TranslationString, string>(TranslationString.Gym, "Gym"),
                 new KeyValuePair<TranslationString, string>(TranslationString.Pokestop, "Pokestop"),
                 new KeyValuePair<TranslationString, string>(TranslationString.EventFortTargeted,
-                    "Traveling to {0}: {1} ({2} m) ({3} seconds) (route {4})"),
+                    "Traveling {0}m({1} sec) via {2} to next {3}: {4}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.EventProfileLogin, "Playing as {0}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.EventUsedIncense,
                     "Used Incense, remaining: {0}"),
@@ -377,7 +377,7 @@ namespace PoGo.NecroBot.Logic.Common
                 new KeyValuePair<TranslationString, string>(TranslationString.EventPokemonCaptureSuccess,
                     "({0}) | ({1}) {2} | Lvl: {3} | CP: {4}/{5} | IV: {6}% | Chance: {7}% | {8}m dist | with a {9} ({10} left) | XP: {11} | SD: {12} | {13} | lat: {14} long: {15} | Move1: {16} Move2: {17} | Rarity: {18} | Capture Reason: {19} | Shiny: {20} | Form: {21} | Costume: {22} | Sex: {23}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.EventPokemonCaptureFailed,
-                    "({0}) | ({1}) {2} | Lvl: {3} | CP: {4}/{5} | IV: {6}% | Chance: {7}% | {8}m dist | with a {9} ({10} left) | XP: {11} | lat: {12} long: {13} | Move1: {14} Move2: {15} | Rarity :{16}"),
+                    "({0}) | ({1}) {2} | Lvl: {3} | CP: {4}/{5} | IV: {6}% | Chance: {7}% | {8}m dist | with a {9} ({10} left) | XP: {11} | lat: {12} long: {13} | Move1: {14} Move2: {15} | Rarity: {16}"),
 
                 new KeyValuePair<TranslationString, string>(TranslationString.EventNoPokeballs,
                     "No Pokeballs - We missed a {0} with CP {1}"),
