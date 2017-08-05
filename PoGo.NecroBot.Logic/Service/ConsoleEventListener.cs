@@ -260,9 +260,9 @@ namespace PoGo.NecroBot.Logic.Service
                 targetType = session.Translation.GetTranslation(TranslationString.Pokestop); // "Pokestop";
 
             Logger.Write(
-                session.Translation.GetTranslation(TranslationString.EventFortTargeted, targetType,
-                    fortTargetEvent.Name,
-                    Math.Round(fortTargetEvent.Distance), intTimeForArrival, fortTargetEvent.Route),
+                session.Translation.GetTranslation(TranslationString.EventFortTargeted, Math.Round(fortTargetEvent.Distance),
+                    intTimeForArrival, fortTargetEvent.Route,
+                    targetType, fortTargetEvent.Name), 
                 LogLevel.Info, ConsoleColor.Gray);
         }
 
@@ -707,7 +707,7 @@ namespace PoGo.NecroBot.Logic.Service
         //TODO - move to string translation later.
         private static void HandleEvent(GymDeployEvent ev, ISession session)
         {
-            var Info = new GymDetailInfoEvent(); 
+            var Info = new GymDetailInfoEvent();
 
             Logger.Write($"Great!!! Your {ev.PokemonId.ToString()} is now defending {ev.Name} GYM. | Gym Points: {UseGymBattleTask.GetGymLevel(Info.Point)}",
                 LogLevel.Gym, ConsoleColor.Green);

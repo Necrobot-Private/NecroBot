@@ -1,4 +1,4 @@
-﻿#region using directives
+#region using directives
 
 using System;
 using System.Collections.Generic;
@@ -63,7 +63,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 Latitude = data.Latitude,
                 Longitude = data.Longitude,
-                Name = "Your selected location",
+                Name = "User selected POI",
                 Type = FortType.Checkpoint
             };
         }
