@@ -1,5 +1,4 @@
 ﻿using POGOProtos.Data;
-using POGOProtos.Inventory;
 using POGOProtos.Map.Fort;
 
 namespace PoGo.NecroBot.Logic.Event

@@ -9,7 +9,6 @@ using PoGo.NecroBot.Logic.Service.Elevation;
 using PoGo.NecroBot.Logic.State;
 using PokemonGo.RocketAPI.Enums;
 using System.Diagnostics;
-using System.Collections.Generic;
 
 namespace PoGo.NecroBot.CLI.Forms
 {

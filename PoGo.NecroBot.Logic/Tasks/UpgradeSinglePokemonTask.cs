@@ -11,7 +11,6 @@ using PokemonGo.RocketAPI.Exceptions;
 using POGOProtos.Data;
 using POGOProtos.Networking.Responses;
 using PokemonGo.RocketAPI.Helpers;
-using PoGo.NecroBot.Logic.Logging;
 
 #endregion
 

@@ -14,7 +14,6 @@ using PoGo.NecroBot.Logic.State;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Networking.Responses;
 using PoGo.NecroBot.Logic.Logging;
-using PokemonGo.RocketAPI.Helpers;
 using PoGo.NecroBot.Logic.Utils;
 
 #endregion

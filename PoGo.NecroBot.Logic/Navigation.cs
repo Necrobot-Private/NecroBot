@@ -1,7 +1,6 @@
 ﻿#region using directives
 
 using GeoCoordinatePortable;
-using Newtonsoft.Json.Linq;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Interfaces.Configuration;
 using PoGo.NecroBot.Logic.Model;
@@ -10,10 +9,7 @@ using PoGo.NecroBot.Logic.Strategies.Walk;
 using PokemonGo.RocketAPI;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 

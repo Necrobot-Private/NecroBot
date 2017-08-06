@@ -1,5 +1,4 @@
 ﻿using PoGo.NecroBot.Window.Model;
-using PoGo.NecroBot.CLI;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Event.Snipe;
 using PoGo.NecroBot.Logic.Service;

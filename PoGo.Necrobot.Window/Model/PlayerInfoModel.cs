@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using TinyIoC;
 using POGOProtos.Networking.Responses;
 using POGOProtos.Inventory;
 using POGOProtos.Enums;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Utils;
-using PoGo.NecroBot.Logic.State;
 using POGOProtos.Inventory.Item;
-using System.Timers;
 
 namespace PoGo.NecroBot.Window.Model
 {

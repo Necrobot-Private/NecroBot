@@ -3,8 +3,6 @@ using PoGo.NecroBot.Logic.State;
 using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace PoGo.NecroBot.Window.Controls
 {

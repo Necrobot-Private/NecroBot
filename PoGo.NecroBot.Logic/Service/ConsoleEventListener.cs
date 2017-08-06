@@ -17,7 +17,6 @@ using POGOProtos.Networking.Responses;
 using PoGo.NecroBot.Logic.Event.Snipe;
 using System.Linq;
 using PoGo.NecroBot.Logic.Utils;
-using PoGo.NecroBot.Logic.Model.Settings;
 
 #endregion
 

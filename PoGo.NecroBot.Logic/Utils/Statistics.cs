@@ -14,7 +14,6 @@ using PoGo.NecroBot.Logic.State;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Networking.Responses;
 using TinyIoC;
-using PoGo.NecroBot.Logic.Utils;
 
 #endregion
 
