@@ -64,7 +64,7 @@ namespace PoGo.NecroBot.Logic.Service
 
         private static void HandleEvent(TargetLocationEvent ev, ISession session)
         {
-            Logger.Write(session.Translation.GetTranslation(TranslationString.TargetLocationSet, ev.Latitude, ev.Longitude), LogLevel.Info);
+            //Logger.Write(session.Translation.GetTranslation(TranslationString.TargetLocationSet, ev.Latitude, ev.Longitude), LogLevel.Info);
         }
         private static void HandleEvent(BuddyUpdateEvent ev, ISession session)
         {
