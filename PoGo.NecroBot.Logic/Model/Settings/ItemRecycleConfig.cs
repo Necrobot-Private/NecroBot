@@ -17,7 +17,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool VerboseRecycling { get; set; }
 
         [NecrobotConfig(Description = "Specify percentage of inventory full to start recycle", Position = 2)]
-        [DefaultValue(90)]
+        [DefaultValue(80)]
         [Range(0, 100)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
         public double RecycleInventoryAtUsagePercentage { get; set; }
@@ -35,31 +35,31 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         /*Amounts*/
         [NecrobotConfig(Description = "How many pokeballs (normal, great, ultra) to be kept ", Position = 5)]
-        [DefaultValue(120)]
+        [DefaultValue(100)]
         [Range(0, 999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 5)]
         public int TotalAmountOfPokeballsToKeep { get; set; }
 
         [NecrobotConfig(Description = "How many potions (normal, hyper, ultra, max) to be kept ", Position = 6)]
-        [DefaultValue(80)]
+        [DefaultValue(75)]
         [Range(0, 999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 6)]
         public int TotalAmountOfPotionsToKeep { get; set; }
 
         [NecrobotConfig(Description = "How many revives (normal, max) to be kept ", Position = 7)]
-        [DefaultValue(60)]
+        [DefaultValue(75)]
         [Range(0, 999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 7)]
         public int TotalAmountOfRevivesToKeep { get; set; }
 
         [NecrobotConfig(Description = "How many berries to be kept ", Position = 8)]
-        [DefaultValue(50)]
+        [DefaultValue(45)]
         [Range(0, 999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 8)]
         public int TotalAmountOfBerriesToKeep { get; set; }
 
         [NecrobotConfig(Description = "How many Evolution to be kept ", Position = 9)]
-        [DefaultValue(50)]
+        [DefaultValue(25)]
         [Range(0, 999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 9)]
         public int TotalAmountOfEvolutionToKeep { get; set; }
