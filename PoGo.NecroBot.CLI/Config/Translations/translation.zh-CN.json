@@ -686,7 +686,7 @@
     },
     {
       "Key": "firstStartSetupDefaultLatLongPrompt",
-      "Value": "请输入纬度和经度 (右键点击粘贴) - 格式: “纬度, 经度”
+      "Value": "请输入纬度和经度 (右键点击粘贴) - 格式: “纬度, 经度"
     },
     {
       "Key": "firstStartSetupDefaultLatLongConfirm",
