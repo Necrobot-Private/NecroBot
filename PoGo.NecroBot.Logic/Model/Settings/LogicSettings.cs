@@ -120,6 +120,8 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool SkipCollectingLevelUpRewards => _settings.PlayerConfig.SkipCollectingLevelUpRewards;
         public int BulkTransferSize => _settings.PokemonConfig.BulkTransferSize;
         public int BulkTransferStogareBuffer => _settings.PokemonConfig.BulkTransferStogareBuffer;
+        public bool AutoWalkAI => _settings.PlayerConfig.AutoWalkAI;
+        public int AutoWalkDist => _settings.PlayerConfig.AutoWalkDist;
 
         public bool UseEggIncubators => _settings.PokemonConfig.UseEggIncubators;
         public bool UseLimitedEggIncubators => _settings.PokemonConfig.UseLimitedEggIncubators;
@@ -197,6 +199,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public Dictionary<PokemonId, SnipeFilter> PokemonSnipeFilters => _settings.SnipePokemonFilter;
         public Dictionary<PokemonId, EvolveFilter> PokemonEvolveFilters => _settings.PokemonEvolveFilter;
         public bool StartupWelcomeDelay => _settings.ConsoleConfig.StartupWelcomeDelay;
+
         public bool UseGoogleWalk => _settings.GoogleWalkConfig.UseGoogleWalk;
         public double DefaultStepLength => _settings.GoogleWalkConfig.DefaultStepLength;
         public bool UseGoogleWalkCache => _settings.GoogleWalkConfig.Cache;
@@ -294,6 +297,5 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public int CatchFleeDelay => _settings.HumanlikeDelays.CatchFleeDelay;
         public int CatchMissedDelay => _settings.HumanlikeDelays.CatchMissedDelay;
         public int BeforeCatchDelay => _settings.HumanlikeDelays.BeforeCatchDelay;
-
     }
 }

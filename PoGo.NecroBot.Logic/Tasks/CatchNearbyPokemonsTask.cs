@@ -1,4 +1,4 @@
-﻿#region using directives
+#region using directives
 
 using System;
 using System.Linq;
@@ -56,7 +56,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                         ReachedValue = session.LogicSettings.CatchPokemonLimit
                     };
                 }
-
                 return;
             }
 

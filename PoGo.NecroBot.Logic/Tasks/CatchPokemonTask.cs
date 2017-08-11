@@ -56,7 +56,6 @@ namespace PoGo.NecroBot.Logic.Tasks
             return $"{username}{pokemonId}{Math.Round(latitude, 6)}{Math.Round(longitude, 6)}";
         }
 
-
         // Structure of calling Tasks
 
         // ## From CatchNearbyPokemonTask
@@ -119,7 +118,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                         ReachedValue = session.LogicSettings.CatchPokemonLimit
                     };
                 }
-
                 return false;
             }
             using (var block = new BlockableScope(session, BotActions.Catch))
@@ -345,7 +343,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                             }
                         }
 
-
                         // Round to 2 decimals
                         normalizedRecticleSize = Math.Round(normalizedRecticleSize, 2);
 
@@ -375,19 +372,16 @@ namespace PoGo.NecroBot.Logic.Tasks
                         for (int i = 0; i < numPokeBalls - 1; i++)
                         {
                             ballToByPass.Add(ItemId.ItemPokeBall);
-
                         }
                         var numGreatBalls = await session.Inventory.GetItemAmountByType(ItemId.ItemGreatBall).ConfigureAwait(false);
                         for (int i = 0; i < numGreatBalls - 1; i++)
                         {
                             ballToByPass.Add(ItemId.ItemGreatBall);
-
                         }
                         var numUltraBalls = await session.Inventory.GetItemAmountByType(ItemId.ItemUltraBall).ConfigureAwait(false);
                         for (int i = 0; i < numUltraBalls - 1; i++)
                         {
                             ballToByPass.Add(ItemId.ItemUltraBall);
-
                         }
                         bool catchMissed = true;
 
@@ -423,7 +417,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 break;
                             }
                         }
-
                     }
                     else
                     {
@@ -438,7 +431,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                         await session.Inventory.UpdateInventoryItem(pokeball).ConfigureAwait(false);
                     }
 
-
                     var evt = new PokemonCaptureEvent()
                     {
                         Status = caughtPokemonResponse.Status,
@@ -449,10 +441,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     lastThrow = caughtPokemonResponse.Status; // sets lastThrow status
 
-
                     if (caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess)
                     {
-
                         evt.Shiny = (await session.Inventory.GetPokemons().ConfigureAwait(false)).First(x => x.Id == caughtPokemonResponse.CapturedPokemonId).PokemonDisplay.Shiny ? "Yes" : "No";
                         evt.Form = (await session.Inventory.GetPokemons().ConfigureAwait(false)).First(x => x.Id == caughtPokemonResponse.CapturedPokemonId).PokemonDisplay.Form.ToString().Replace("Unown", "").Replace("Unset", "Normal");
                         evt.Costume = (await session.Inventory.GetPokemons().ConfigureAwait(false)).First(x => x.Id == caughtPokemonResponse.CapturedPokemonId).PokemonDisplay.Costume.ToString().Replace("Unset", "Regular");
@@ -547,23 +537,18 @@ namespace PoGo.NecroBot.Logic.Tasks
                             case CatchPokemonResponse.Types.CatchStatus.CatchError:
                                 await DelayingUtils.DelayAsync(session.LogicSettings.CatchErrorDelay, 0, session.CancellationTokenSource.Token).ConfigureAwait(false);
                                 break;
-
                             case CatchPokemonResponse.Types.CatchStatus.CatchSuccess:
                                 await DelayingUtils.DelayAsync(session.LogicSettings.CatchSuccessDelay, 0, session.CancellationTokenSource.Token).ConfigureAwait(false);
                                 break;
-
                             case CatchPokemonResponse.Types.CatchStatus.CatchEscape:
                                 await DelayingUtils.DelayAsync(session.LogicSettings.CatchEscapeDelay, 0, session.CancellationTokenSource.Token).ConfigureAwait(false);
                                 break;
-
                             case CatchPokemonResponse.Types.CatchStatus.CatchFlee:
                                 await DelayingUtils.DelayAsync(session.LogicSettings.CatchFleeDelay, 0, session.CancellationTokenSource.Token).ConfigureAwait(false);
                                 break;
-
                             case CatchPokemonResponse.Types.CatchStatus.CatchMissed:
                                 await DelayingUtils.DelayAsync(session.LogicSettings.CatchMissedDelay, 0, session.CancellationTokenSource.Token).ConfigureAwait(false);
                                 break;
-
                             default:
                                 break;
                         }
@@ -579,7 +564,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                     {
                         session.SaveBallForByPassCatchFlee = true;
                         Logger.Write("Seem that bot has been catch flee softban, Bot will start save 100 balls to by pass it.");
-
                     }
                     if (manager.AllowMultipleBot() && !session.LogicSettings.ByPassCatchFlee)
                     {
@@ -669,12 +653,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                             Snipe = true,
                             Bot = evalNextBot
                         };
-
                     }
                 }
-
                 return;
-
             }
 
             if (MultipleBotConfig.IsMultiBotActive(session.LogicSettings, accountManager) &&
@@ -812,18 +793,16 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             var itemToUses = session.LogicSettings.ItemUseFilters;
 
-
             foreach (var item in itemToUses)
             {
                 var inventoryItems = await session.Inventory.GetItems().ConfigureAwait(false);
-
                 var berries = inventoryItems.Where(p => p.ItemId == item.Key);
                 var berry = berries.FirstOrDefault();
 
                 if (berry == null || berry.Count <= 0)
                     continue;
-                var filter = item.Value;
 
+                var filter = item.Value;
                 var itemRecycleFilter = session.LogicSettings.ItemRecycleFilter.FirstOrDefault(x => x.Key == item.Key);
 
                 if ((filter.UseIfExceedBagRecycleFilter &&
@@ -857,8 +836,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
                 await DelayingUtils.DelayAsync(session.LogicSettings.DelayBetweenPlayerActions, 500, cancellationToken).ConfigureAwait(false);
             }
-
         }
-
     }
 }

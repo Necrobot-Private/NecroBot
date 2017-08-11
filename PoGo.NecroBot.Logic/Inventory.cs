@@ -39,7 +39,6 @@ namespace PoGo.NecroBot.Logic
         private int _level = 0;
         private IEnumerable<PokemonSettings> _pokemonSettings = null;
         private DateTime _lastLuckyEggTime;
-
         private readonly List<ItemId> _revives = new List<ItemId> { ItemId.ItemRevive, ItemId.ItemMaxRevive };
         private ISession ownerSession;
 
@@ -125,7 +124,6 @@ namespace PoGo.NecroBot.Logic
             {
                 _player = await GetPlayerData().ConfigureAwait(false);
             }
-
             return _client.Inventory.InventoryItems.Select(kvp => kvp.Value);
         }
 
@@ -144,8 +142,8 @@ namespace PoGo.NecroBot.Logic
         {
             var session = TinyIoCContainer.Current.Resolve<ISession>();
             var myPokemon = await GetPokemons().ConfigureAwait(false);
-
             var pokemonToTransfer = myPokemon.Where(p => !pokemonsNotToTransfer.Contains(p.PokemonId) && CanTransferPokemon(p));
+
             try
             {
                 pokemonToTransfer =
@@ -185,7 +183,6 @@ namespace PoGo.NecroBot.Logic
 
                 pokemonToTransfer = pokemonToTransfer.Where(pokemon => !pokemonToEvolve.Any(p => p.Id == pokemon.Id));
             }
-
             return pokemonToTransfer.OrderBy(poke => poke.Cp);
         }
 
@@ -196,7 +193,6 @@ namespace PoGo.NecroBot.Logic
         {
             var session = TinyIoCContainer.Current.Resolve<ISession>();
             var myPokemon = await GetPokemons().ConfigureAwait(false);
-
             var pokemonToTransfer = myPokemon.Where(p => !pokemonsNotToTransfer.Contains(p.PokemonId) && CanTransferPokemon(p));
 
             try
@@ -233,13 +229,11 @@ namespace PoGo.NecroBot.Logic
             }
 
             var results = new List<PokemonData>();
-
             var pokemonToEvolve = await GetPokemonToEvolve(pokemonEvolveFilters).ConfigureAwait(false);
 
             foreach (var pokemonGroupToTransfer in pokemonToTransfer.GroupBy(p => p.PokemonId).ToList())
             {
                 var amountToKeepInStorage = Math.Max(GetApplyFilter<TransferFilter>(session.LogicSettings.PokemonsTransferFilter, pokemonGroupToTransfer.Key).KeepMinDuplicatePokemon, 0);
-
                 var inStorage = myPokemon.Count(data => data.PokemonId == pokemonGroupToTransfer.Key);
                 var needToRemove = inStorage - amountToKeepInStorage;
 
@@ -274,7 +268,6 @@ namespace PoGo.NecroBot.Logic
                         .Take(canBeRemoved));
                 }
             }
-
             return results;
         }
 
@@ -283,9 +276,7 @@ namespace PoGo.NecroBot.Logic
         {
             var session = TinyIoCContainer.Current.Resolve<ISession>();
             var myPokemon = await GetPokemons().ConfigureAwait(false);
-
             var transferrablePokemon = myPokemon.Where(p => !pokemonsNotToTransfer.Contains(p.PokemonId) && CanTransferPokemon(p));
-
             var results = new List<PokemonData>();
 
             foreach (var pokemonGroupToTransfer in transferrablePokemon.GroupBy(p => p.PokemonId).ToList())
@@ -301,7 +292,7 @@ namespace PoGo.NecroBot.Logic
 
                 var needToRemove = inStorage - amountToKeepInStorage;
 
-                Logger.Write($"Max duplicate {pokemonGroupToTransfer.Key.ToString().PadRight(12, ' ')} is {amountToKeepInStorage,2:0}. {needToRemove,2:0} out of {inStorage,2:0} {pokemonGroupToTransfer.Key.ToString().PadRight(12, ' ')} need to be transferred.", Logic.Logging.LogLevel.Info);
+                Logger.Write($"Duplicate Pokemon Allowed: {amountToKeepInStorage,2:0}. {needToRemove,2:0} out of {inStorage,2:0} {pokemonGroupToTransfer.Key.ToString().PadRight(12, ' ')} will be transferred.", Logic.Logging.LogLevel.Info);
 
                 if (prioritizeIVoverCp)
                 {
@@ -318,7 +309,6 @@ namespace PoGo.NecroBot.Logic
                         .Take(needToRemove));
                 }
             }
-
             return results;
         }
 
@@ -448,7 +438,6 @@ namespace PoGo.NecroBot.Logic
             {
                 _player = await _client.Player.GetPlayer().ConfigureAwait(false);
             }
-
             return _player;
         }
 
@@ -552,7 +541,6 @@ namespace PoGo.NecroBot.Logic
         public async Task UseLuckyEgg()
         {
             var inventoryContent = await ownerSession.Inventory.GetItems().ConfigureAwait(false);
-
             var luckyEgg = inventoryContent.FirstOrDefault(p => p.ItemId == ItemId.ItemLuckyEgg);
 
             if (luckyEgg == null || luckyEgg.Count == 0) // We tried to use egg but we don't have any more. Just return.
@@ -579,25 +567,21 @@ namespace PoGo.NecroBot.Logic
                         Logger.Write(ownerSession.Translation.GetTranslation(TranslationString.UsedLuckyEgg));
                     }
                     break;
-
                 case UseItemXpBoostResponse.Types.Result.ErrorNoItemsRemaining:
                     {
                         Logger.Write(ownerSession.Translation.GetTranslation(TranslationString.NoEggsAvailable));
                     }
                     break;
-
                 case UseItemXpBoostResponse.Types.Result.ErrorXpBoostAlreadyActive:
                     {
                         TimeSpan duration = _lastLuckyEggTime.AddMinutes(30) - DateTime.Now;
                         Logger.Write(ownerSession.Translation.GetTranslation(TranslationString.UseLuckyEggActive, duration.Minutes, duration.Seconds));
                     }
                     break;
-
                 default:
                     Logger.Write($"Failed to use a Lucky Egg!", LogLevel.Error);
                     break;
             }
-
             await DelayingUtils.DelayAsync(ownerSession.LogicSettings.DelayBetweenPlayerActions, 0, ownerSession.CancellationTokenSource.Token).ConfigureAwait(false);
         }
 
@@ -641,7 +625,6 @@ namespace PoGo.NecroBot.Logic
                 await DelayingUtils.DelayAsync(3000, 3000, ownerSession.CancellationTokenSource.Token).ConfigureAwait(false);
                 return await GetPokemonFamilies(++retries).ConfigureAwait(false);
             }
-
             return families.ToList();
         }
 
@@ -699,7 +682,6 @@ namespace PoGo.NecroBot.Logic
                 _pokemonSettings = _client.Download.ItemTemplates.Select(i => i.PokemonSettings)
                     .Where(p => p != null && p.FamilyId != PokemonFamilyId.FamilyUnset);
             }
-
             return _pokemonSettings;
         }
 
@@ -827,7 +809,6 @@ namespace PoGo.NecroBot.Logic
                 }
                 return canEvolve;
             }
-
             return true;
         }
 
@@ -867,7 +848,6 @@ namespace PoGo.NecroBot.Logic
                 int candiesLeft = await GetCandyCount(pokemonId).ConfigureAwait(false);
                 PokemonSettings settings = (await GetPokemonSettings().ConfigureAwait(false)).FirstOrDefault(x => x.PokemonId == pokemonId);
                 int pokemonLeft = orderedGroup.Count();
-
                 int candyNeed = GetCandyToEvolve(settings, filter);
 
                 if (candyNeed == -1)
@@ -882,7 +862,6 @@ namespace PoGo.NecroBot.Logic
                     pokemonToEvolve.AddRange(orderedGroup.Take(evolutionInfo.Evolves).ToList());
                 }
             }
-
             return pokemonToEvolve;
         }
 
@@ -899,7 +878,6 @@ namespace PoGo.NecroBot.Logic
                     await UpdateInventoryItem(item.ItemId).ConfigureAwait(false);
                 }
             }
-
             return rewards;
         }
 
@@ -960,10 +938,8 @@ namespace PoGo.NecroBot.Logic
                         (appliedFilter.Moves != null && appliedFilter.Moves.Count > 0 && appliedFilter.Moves.Any(x => x[0] == pokemon.Move1 && x[1] == pokemon.Move2))
                     ))))
                 {
-
                     upgradePokemon.Add(pokemon);
                 }
-
             }
             return upgradePokemon;
         }

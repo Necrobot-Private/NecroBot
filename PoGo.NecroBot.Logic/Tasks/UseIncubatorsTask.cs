@@ -41,9 +41,9 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             var rememberedIncubatorsFilePath = Path.Combine(session.LogicSettings.ProfilePath, "temp", "incubators.json");
             var rememberedIncubators = GetRememberedIncubators(rememberedIncubatorsFilePath);
-
             var response = await session.Client.Inventory.UseItemEggIncubator(incubators.Id, unusedEggs.Id).ConfigureAwait(false);
             var newRememberedIncubators = new List<IncubatorUsage>();
+
             if (response.Result == UseItemEggIncubatorResponse.Types.Result.Success)
             {
                 newRememberedIncubators.Add(new IncubatorUsage { IncubatorId = incubators.Id, PokemonId = unusedEggs.Id });

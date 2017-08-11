@@ -63,7 +63,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 Latitude = data.Latitude,
                 Longitude = data.Longitude,
-                Name = "User selected POI",
+                Name = "User selected",
                 Type = FortType.Checkpoint
             };
         }

@@ -41,7 +41,6 @@ namespace PoGo.NecroBot.Logic.Service
 
         private static void HandleEvent(SnipePokemonUpdateEvent e, ISession session)
         {
-
             //move to resource later
             if (e.IsRemoteEvent)
                 Logger.Write($"Expired snipe pokemon has been removed from queue : {e.Data.PokemonId} ");
@@ -66,6 +65,7 @@ namespace PoGo.NecroBot.Logic.Service
         {
             //Logger.Write(session.Translation.GetTranslation(TranslationString.TargetLocationSet, ev.Latitude, ev.Longitude), LogLevel.Info);
         }
+
         private static void HandleEvent(BuddyUpdateEvent ev, ISession session)
         {
             Logger.Write(
@@ -252,11 +252,16 @@ namespace PoGo.NecroBot.Logic.Service
             int intTimeForArrival = (int) (fortTargetEvent.Distance /
                                            (session.LogicSettings.WalkingSpeedInKilometerPerHour * 0.5));
 
-            string targetType;
+            string targetType = "";
             if (fortTargetEvent.Type == FortType.Gym)
                 targetType = session.Translation.GetTranslation(TranslationString.Gym); // "Gym";
-            else
-                targetType = session.Translation.GetTranslation(TranslationString.Pokestop); // "Pokestop";
+            else if (fortTargetEvent.Type == FortType.Checkpoint)
+            {
+                if(fortTargetEvent.Name != "User selected")
+                    targetType = session.Translation.GetTranslation(TranslationString.Pokestop); // "Pokestop";
+                else
+                    targetType = "POI";
+            }
 
             Logger.Write(
                 session.Translation.GetTranslation(TranslationString.EventFortTargeted, Math.Round(fortTargetEvent.Distance),
@@ -664,7 +669,6 @@ namespace PoGo.NecroBot.Logic.Service
                         ConsoleColor.Yellow
                     );
                     break;
-
                 case HumanWalkSnipeEventTypes.NotEnoughtPalls:
                     Logger.Write(
                         session.Translation.GetTranslation(
@@ -697,7 +701,9 @@ namespace PoGo.NecroBot.Logic.Service
 
         private static void HandleEvent(GymDetailInfoEvent ev, ISession session)
         {
-            Logger.Write($"Visited Gym: {ev.Name} | Team: {ev.Team} | Gym points: {ev.Point} | Lvl: {UseGymBattleTask.GetGymLevel(ev.Point)}", LogLevel.Gym,
+            var GymDeployed = new GymDeployResponse();
+            var Deployed = GymDeployed.GymStatusAndDefenders.GymDefender.ToList();
+            Logger.Write($"Visited Gym: {ev.Name} | Team: {ev.Team} | Gym points: {ev.Point} | Free Spots: {6 - Deployed.Count}", LogLevel.Gym,
                 (ev.Team == TeamColor.Red)
                     ? ConsoleColor.Red
                     : (ev.Team == TeamColor.Yellow ? ConsoleColor.Yellow : ConsoleColor.Blue));
@@ -707,12 +713,14 @@ namespace PoGo.NecroBot.Logic.Service
         private static void HandleEvent(GymDeployEvent ev, ISession session)
         {
             var Info = new GymDetailInfoEvent();
+            var GymDeployed = new GymDeployResponse();
+            var Deployed = GymDeployed.GymStatusAndDefenders.GymDefender.ToList();
 
-            Logger.Write($"Great!!! Your {ev.PokemonId.ToString()} is now defending {ev.Name} GYM. | Gym Points: {UseGymBattleTask.GetGymLevel(Info.Point)}",
+            Logger.Write($"Great!!! Your {ev.PokemonId.ToString()} is now defending {ev.Name} GYM. | Free Spots: {6 - Deployed.Count}",
                 LogLevel.Gym, ConsoleColor.Green);
 
             if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
-                PushNotificationClient.SendNotification(session, $"Gym Post", $"Great!!! Your {ev.PokemonId.ToString()} is now defending {ev.Name} GYM.\nGym Points: {UseGymBattleTask.GetGymLevel(Info.Point)}", true).ConfigureAwait(false);
+                PushNotificationClient.SendNotification(session, $"Gym Post", $"Great!!! Your {ev.PokemonId.ToString()} is now defending {ev.Name} GYM.\nFree Spots: {6 - Deployed.Count}", true).ConfigureAwait(false);
         }
 
         private static void HandleEvent(GymBattleStarted ev, ISession session)
@@ -726,7 +734,6 @@ namespace PoGo.NecroBot.Logic.Service
                 LogLevel.Error, ConsoleColor.Red);
         }
 
-
         private static void HandleEvent(GymListEvent ev, ISession session)
         {
             Logger.Write($"{ev.Gyms.Count} gyms has been added to farming area.", LogLevel.Gym, ConsoleColor.Cyan);
@@ -734,10 +741,10 @@ namespace PoGo.NecroBot.Logic.Service
 
         private static void HandleEvent(GymWalkToTargetEvent ev, ISession session)
         {
-            Logger.Write(
-                $"Traveling to gym: {ev.Name} | Lat: {ev.Latitude}, Lng: {ev.Longitude} | ({ev.Distance:0.00}m)",
-                LogLevel.Gym, ConsoleColor.Cyan
-            );
+            //Logger.Write(
+            //    $"Traveling to gym: {ev.Name} | Lat: {ev.Latitude}, Lng: {ev.Longitude} | ({ev.Distance:0.00}m)",
+            //    LogLevel.Gym, ConsoleColor.Cyan
+            //);
         }
 
         private static void HandleEvent(GymTeamJoinEvent ev, ISession session)

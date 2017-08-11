@@ -160,7 +160,6 @@ namespace PoGo.NecroBot.Logic.State
                     session.EventDispatcher.Send(new WarnEvent { Message = "Switch bot account requested by: User" });
                     ReInitializeSession(session, globalSettings, ex.RequestedAccount);
                     state = new LoginState();
-
                 }
                 catch (ActiveSwitchByPokemonException rsae)
                 {
@@ -222,7 +221,6 @@ namespace PoGo.NecroBot.Logic.State
                     //return to login state
                     state = new LoginState();
                 }
-
                 catch (InvalidResponseException e)
                 {
                     session.EventDispatcher.Send(new ErrorEvent { Message = $"Niantic Servers unstable, throttling API Calls. {e.Message}" });
@@ -331,7 +329,6 @@ namespace PoGo.NecroBot.Logic.State
                         ReInitializeSession(session, globalSettings);
                     state = new LoginState();
                 }
-
                 catch (PtcOfflineException)
                 {
                     session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.PtcOffline) });
