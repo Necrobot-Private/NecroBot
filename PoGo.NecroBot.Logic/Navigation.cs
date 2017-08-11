@@ -157,7 +157,18 @@ namespace PoGo.NecroBot.Logic
                 else
                 {
                     if (_GoogleWalk || _MapZenWalk)
-                        Logging.Logger.Write($"Distance to travel is < {_AutoWalkDist}m, switching back to '{fortTargetEvent.Route}'", Logging.LogLevel.Info, ConsoleColor.DarkYellow);
+                    {
+                        string route = null;
+                        try
+                        {
+                            route = fortTargetEvent.Route;
+                        }
+                        catch
+                        {
+                            route = "unnamed route";
+                        }
+                        Logging.Logger.Write($"Distance to travel is < {_AutoWalkDist}m, switching back to '{route}'", Logging.LogLevel.Info, ConsoleColor.DarkYellow);
+                    }
                 }
             }
 
