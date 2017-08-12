@@ -165,7 +165,7 @@ namespace PoGo.NecroBot.Logic
                         }
                         catch
                         {
-                            route = "unnamed route";
+                            route = "NecroBot Walk";
                         }
                         Logging.Logger.Write($"Distance to travel is < {_AutoWalkDist}m, switching back to '{route}'", Logging.LogLevel.Info, ConsoleColor.DarkYellow);
                     }
