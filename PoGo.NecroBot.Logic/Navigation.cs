@@ -140,13 +140,17 @@ namespace PoGo.NecroBot.Logic
             { 
                 if (distance >= _AutoWalkDist)
                 {
-                    if (_MapZenWalk == true && _MapZenAPI != "")
+                    if (_MapZenWalk && _MapZenAPI != "")
                     {
                         Logging.Logger.Write($"Distance to travel is > {_AutoWalkDist}m, switching to 'MapzenWalk'", Logging.LogLevel.Info, ConsoleColor.DarkYellow);
                     }
-                    if (_GoogleWalk == true && _GoogleAPI != "")
+                    if (_GoogleWalk && _GoogleAPI != "")
                     {
                         Logging.Logger.Write($"Distance to travel is > {_AutoWalkDist}m, switching to 'GoogleWalk'", Logging.LogLevel.Info, ConsoleColor.DarkYellow);
+                    }
+                    if (_YoursWalk)
+                    {
+                        Logging.Logger.Write($"Distance to travel is > {_AutoWalkDist}m, switching to 'YoursWalk'", Logging.LogLevel.Info, ConsoleColor.DarkYellow);
                     }
                 }
                 else
