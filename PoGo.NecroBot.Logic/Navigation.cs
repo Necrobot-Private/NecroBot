@@ -136,7 +136,7 @@ namespace PoGo.NecroBot.Logic
         private void InitializeWalkStrategies(ILogicSettings logicSettings)
         {
             //AutoWalkAI code???
-            if(_AutoWalkAI)
+            /*if(_AutoWalkAI)
             { 
                 if (distance >= _AutoWalkDist)
                 {
@@ -160,7 +160,7 @@ namespace PoGo.NecroBot.Logic
                         Logging.Logger.Write($"Distance to travel is < {_AutoWalkDist}m, switching back to 'NecroBot Walk'", Logging.LogLevel.Info, ConsoleColor.DarkYellow);
                     }
                 }
-            }
+            }*/
 
             WalkStrategyQueue = new List<IWalkStrategy>();
 
