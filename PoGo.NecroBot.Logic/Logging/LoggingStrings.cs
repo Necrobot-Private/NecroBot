@@ -26,6 +26,7 @@ namespace PoGo.NecroBot.Logic.Logging
         public static string New;
         public static string SoftBan;
         public static string Gym;
+        public static string GymDisk;
         public static string Service;
         public static string LevelUp;
         public static string BotStats;
@@ -99,6 +100,10 @@ namespace PoGo.NecroBot.Logic.Logging
             Gym =
                 session?.Translation.GetTranslation(
                     TranslationString.LogEntryGym) ?? "GYM";
+
+            GymDisk =
+                session?.Translation.GetTranslation(
+                    TranslationString.LogEntryGymDisk) ?? "GYM DISK";
 
             Service =
                 session?.Translation.GetTranslation(

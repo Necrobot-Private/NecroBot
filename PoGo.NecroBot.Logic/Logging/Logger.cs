@@ -165,6 +165,10 @@ namespace PoGo.NecroBot.Logic.Logging
                     Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.Magenta : color;
                     finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Gym}) {message}";
                     break;
+                case LogLevel.GymDisk:
+                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.Cyan : color;
+                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.GymDisk}) {message}";
+                    break;
                 case LogLevel.Service:
                     Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.White : color;
                     finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Service}) {message}";
@@ -244,5 +248,6 @@ namespace PoGo.NecroBot.Logic.Logging
         Gym = 19,
         Service = 20,
         Debug = 21,
+        GymDisk = 22,
     }
 }

@@ -184,7 +184,7 @@ namespace PoGo.NecroBot.Logic.Utils
                                 }
                             }
 
-                            if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
+                            if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification)
                                 await PushNotificationClient.SendNotification(session, $"{session.Profile.PlayerData.Username} has leveled up.", $"Trainer just reached level {stat.Level}{Rewards}", true).ConfigureAwait(false);
                         }
                     }

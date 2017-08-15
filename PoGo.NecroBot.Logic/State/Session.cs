@@ -208,7 +208,7 @@ namespace PoGo.NecroBot.Logic.State
 
             Logger.Write($"Account changed to {Account}", LogLevel.BotStats);
 
-            if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
+            if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification)
                 PushNotificationClient.SendNotification(session, $"Account changed to", $"{Account}\n" +
                                                                  $"Lvl: {Lvl}\n" +
                                                                  $"XP : {XP:#,##0}({(double)XP / ((double)NLevelXP) * 100:#0.00}%)\n" +

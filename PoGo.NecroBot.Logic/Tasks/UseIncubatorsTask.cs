@@ -114,7 +114,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                  $"XP1: {ExpAwarded1} | XP2: {ExpAwarded2} | " +
                                  $"SD1: {stardust1} | SD2: {stardust2}", LogLevel.Egg, ConsoleColor.DarkYellow);
 
-                    if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
+                    if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification)
                         await PushNotificationClient.SendNotification(session, $"Egg has hatched.", $"Pokemon: {hatched.PokemonId}\n" +
                                                                                                     $"Lvl: {PokemonInfo.GetLevel(hatched)}\n" +
                                                                                                     $"CP:  {hatched.Cp}\n" +

@@ -38,7 +38,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public double MaxDistance { get; set; }
 
         [NecrobotConfig(Description = "Default team color for bot to join.", Position = 4)]
-        [DefaultValue("Yellow")]
+        [DefaultValue("Neutral")]
         [EnumDataType(typeof(TeamColor))]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
         public string DefaultTeam { get; set; }

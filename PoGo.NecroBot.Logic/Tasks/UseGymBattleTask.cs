@@ -39,7 +39,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             var FortDesc = "";
             if (fortInfo.Description != "") { FortDesc = $", Description: { fortInfo.Description}"; }
-            Logger.Write($"Loot Gym: {fortInfo.Name}{FortDesc}", LogLevel.Gym);
+            Logger.Write($"Loot Gym: {fortInfo.Name}{FortDesc}", LogLevel.GymDisk);
             await UseNearbyPokestopsTask.FarmPokestop(session, gym, fortInfo, cancellationToken, true).ConfigureAwait(false);
 
             /*/TODO: disabled others returns false for dev 
@@ -295,7 +295,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                         Logger.Write($"(Battle) XP: {exp} | Gym points: {point} | Lvl: {UseGymBattleTask.GetGymLevel(point),2:#0} | Next defender Id: {defenderPokemonId}", LogLevel.Gym, ConsoleColor.Magenta);
 
-                        if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
+                        if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification)
                             await PushNotificationClient.SendNotification(session, $"Gym Battle",
                                                                                    $"We were victorious!\n" +
                                                                                    $"XP: {exp}" +
@@ -396,7 +396,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                             {
                                                 Logger.Write($"Collected {count * 10} coins", LogLevel.Gym, ConsoleColor.DarkYellow);
 
-                                                if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
+                                                if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification)
                                                     await PushNotificationClient.SendNotification(session, $"Daily reward collected: {count * 10} coins", $"Congratulations, Your bot has worked hard and collected {count * 10} coins today.",true).ConfigureAwait(false);
                                             }
                                             else
@@ -911,7 +911,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             Logger.Write($"We are attacking: {startResponse.Defender.ActivePokemon.PokemonData.PokemonId} ({startResponse.Defender.ActivePokemon.PokemonData.Cp} CP), Lvl: {startResponse.Defender.ActivePokemon.PokemonData.Level():0.0}", LogLevel.Gym, ConsoleColor.White);
             Console.WriteLine(Environment.NewLine);
 
-            if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
+            if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification)
                 await PushNotificationClient.SendNotification(session, $"Gym battle started", $"Trainer: {startResponse.Defender.TrainerPublicProfile.Name}\n" +
                                                                        $"We are attacking: {startResponse.Defender.ActivePokemon.PokemonData.PokemonId} ({startResponse.Defender.ActivePokemon.PokemonData.Cp} CP)\n" +
                                                                        $"Lvl: {startResponse.Defender.ActivePokemon.PokemonData.Level():0.0}", true).ConfigureAwait(false);
@@ -1093,7 +1093,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 return lastActions;
                             case BattleState.TimedOut:
                                 Logger.Write($"Our attack timed out...:");
-                                if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
+                                if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification)
                                     await PushNotificationClient.SendNotification(session, "Gym Battle", $"Our attack timed out...:",true).ConfigureAwait(false);
                                 await Task.Delay(1000).ConfigureAwait(false);
                                 return lastActions;

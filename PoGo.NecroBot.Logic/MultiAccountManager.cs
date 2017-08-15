@@ -34,6 +34,7 @@ namespace PoGo.NecroBot.Logic
         }
 
         private LocalView<Account> _localAccounts;
+
         public LocalView<Account> Accounts
         {
             get
@@ -289,7 +290,8 @@ namespace PoGo.NecroBot.Logic
             // If we got here all accounts blocked so pause and retry.
             var pauseTime = session.LogicSettings.MultipleBotConfig.OnLimitPauseTimes;
 
-            if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
+            Logic.Logging.Logger.Write($"All accounts are blocked. None of your accounts are available to switch to, so bot will sleep for {pauseTime} minutes until next account is available to run.");
+            if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification)
                 PushNotificationClient.SendNotification(session, "All accounts are blocked.", $"None of your accounts are available to switch to, so bot will sleep for {pauseTime} minutes until next account is available to run.", true).ConfigureAwait(false);
 
             Task.Delay(pauseTime * 60 * 1000).Wait();
