@@ -83,7 +83,7 @@ namespace PoGo.NecroBot.Logic.State
             CancellationTokenSource = new CancellationTokenSource();
             Forts = new List<FortData>();
             VisibleForts = new List<FortData>();
-            Cache = new MemoryCache("Necrobot2");
+            Cache = new MemoryCache("NecroBot2");
             accounts = new List<AuthConfig>();
             EventDispatcher = new EventDispatcher();
             LogicSettings = logicSettings;

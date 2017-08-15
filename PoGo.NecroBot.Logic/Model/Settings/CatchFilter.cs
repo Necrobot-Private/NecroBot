@@ -26,35 +26,35 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             Operator = op;
         }
 
-        [NecrobotConfig(IsPrimaryKey = true, Key = "Enable Catch filter", Description = "Allows bot to check for filter for catching specific pokemon(s)", Position = 1)]
+        [NecroBotConfig(IsPrimaryKey = true, Key = "Enable Catch filter", Description = "Allows bot to check for filter for catching specific pokemon(s)", Position = 1)]
         [DefaultValue(false)]
         [JsonIgnore]
         public bool EnableCatchFilter { get; set; }
 
-        [NecrobotConfig(Key = "Min IV", Description = "Min IV for catching pokemon", Position = 2)]
+        [NecroBotConfig(Key = "Min IV", Description = "Min IV for catching pokemon", Position = 2)]
         [DefaultValue(95)]
         [Range(0, 100)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public int MinIV {get; set;}
 
-        [NecrobotConfig(Key = "Min LV", Description = "Min LV for auto catching pokemon", Position = 3)]
+        [NecroBotConfig(Key = "Min LV", Description = "Min LV for auto catching pokemon", Position = 3)]
         [DefaultValue(95)]
         [Range(0, 999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public int MinLV { get; set; }
 
-        [NecrobotConfig(Key = "Min CP", Description = "Min CP for auto catching pokemon", Position = 4)]
+        [NecroBotConfig(Key = "Min CP", Description = "Min CP for auto catching pokemon", Position = 4)]
         [DefaultValue(10)]
         [Range(0, 9999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public int MinCP { get; set; }
 
-        [NecrobotConfig(Key = "Moves", Description = "List of desired moves for catching pokemon", Position = 5)]
+        [NecroBotConfig(Key = "Moves", Description = "List of desired moves for catching pokemon", Position = 5)]
         [DefaultValue(null)]
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
         public List<List<PokemonMove>> Moves { get; set; }
 
-        [NecrobotConfig(Key = "Operator", Position = 6, Description = "The operator logic use to check for catch")]
+        [NecroBotConfig(Key = "Operator", Position = 6, Description = "The operator logic use to check for catch")]
         [DefaultValue("or")]
         [EnumDataType(typeof(Operator))]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 5)]

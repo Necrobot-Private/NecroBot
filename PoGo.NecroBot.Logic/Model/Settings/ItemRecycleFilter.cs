@@ -19,12 +19,12 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             Value = value;
         }
 
-        [NecrobotConfig(Description ="Item Name")]
+        [NecroBotConfig(Description ="Item Name")]
         [DefaultValue(ItemId.ItemUnknown)]
         [JsonProperty(Required = Required.Always, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public ItemId Key { get; set; }
 
-        [NecrobotConfig(Description = "Item Amount to keep")]
+        [NecroBotConfig(Description = "Item Amount to keep")]
         [DefaultValue(0)]
         [Range(0, 999)]
         [JsonProperty(Required = Required.Always, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]

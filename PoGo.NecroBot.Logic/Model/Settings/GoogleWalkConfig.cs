@@ -24,24 +24,24 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             transit
         }
 
-        [NecrobotConfig(Description = "Use Google's API to resolve paths for destinations", Position = 1)]
+        [NecroBotConfig(Description = "Use Google's API to resolve paths for destinations", Position = 1)]
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public bool UseGoogleWalk { get; set; }
 
-        [NecrobotConfig(Description = "Set step length in met for 1 step", Position = 2)]
+        [NecroBotConfig(Description = "Set step length in met for 1 step", Position = 2)]
         [DefaultValue(1.3d)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
         public double DefaultStepLength { get; set; }
 
-        [NecrobotConfig(Description = "Set heuristic for Google's Algorithm Detection - driving, walking, bicycling, transit", Position = 3)]
+        [NecroBotConfig(Description = "Set heuristic for Google's Algorithm Detection - driving, walking, bicycling, transit", Position = 3)]
         [DefaultValue("walking")]
         [EnumDataType(typeof(GoogleWalkTravelModes))]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 3)]
         //https://developers.google.com/maps/documentation/directions/intro?hl=pt-br#TravelModes
         public string GoogleHeuristic { get; set; }
 
-        [NecrobotConfig(Description = "API Key to be used to connect to Google's API Service", Position = 4)]
+        [NecroBotConfig(Description = "API Key to be used to connect to Google's API Service", Position = 4)]
         [DefaultValue(null)]
         [MinLength(0)]
         [MaxLength(64)]
@@ -49,12 +49,12 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         // If you have a key, nowadays a single contract is $16.000,00 USD. With a key you can deactivate Cache
         public string GoogleAPIKey { get; set; }
 
-        [NecrobotConfig(Description = "Allows bot to use cache ", Position = 5)]
+        [NecroBotConfig(Description = "Allows bot to use cache ", Position = 5)]
         [DefaultValue(true)]
         [JsonProperty("Cache", Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 5)]
         public bool Cache { get; set; }
 
-        [NecrobotConfig(Description = "API key to be used to connect to Google's Elevation API Service (Not the Same as Google API Key)", Position = 6)]
+        [NecroBotConfig(Description = "API key to be used to connect to Google's Elevation API Service (Not the Same as Google API Key)", Position = 6)]
         [DefaultValue(null)]
         [MinLength(0)]
         [MaxLength(64)]

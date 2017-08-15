@@ -37,7 +37,7 @@ namespace PoGo.NecroBot.Logic.Utils
 
                 foreach (var item in setting.GetType().GetFields())
                 {
-                    var att = item.GetCustomAttributes<NecrobotConfigAttribute>(true).FirstOrDefault();
+                    var att = item.GetCustomAttributes<NecroBotConfigAttribute>(true).FirstOrDefault();
                     if (att != null)
                     {
                         ExcelWorksheet workSheet = BuildSheetHeader(package, item, att);
@@ -108,7 +108,7 @@ namespace PoGo.NecroBot.Logic.Utils
 
                     foreach (var prop in valueType.GetProperties())
                     {
-                        var att = prop.GetCustomAttribute<NecrobotConfigAttribute>();
+                        var att = prop.GetCustomAttribute<NecroBotConfigAttribute>();
                         if (att != null)
                         {
                             col = Math.Max(col, att.Position);
@@ -157,10 +157,10 @@ namespace PoGo.NecroBot.Logic.Utils
 
         private static void WriteOnePropertyToSheet(ExcelWorksheet workSheet, object configProp, FieldInfo cfg)
         {
-            var att2 = cfg.GetCustomAttributes(typeof(NecrobotConfigAttribute), true).FirstOrDefault();
+            var att2 = cfg.GetCustomAttributes(typeof(NecroBotConfigAttribute), true).FirstOrDefault();
             if (att2 != null)
             {
-                var exAtt = att2 as NecrobotConfigAttribute;
+                var exAtt = att2 as NecroBotConfigAttribute;
                 string configKey = string.IsNullOrEmpty(exAtt.Key) ? cfg.Name : exAtt.Key;
                 var propValue = cfg.GetValue(configProp);
                 workSheet.Cells[exAtt.Position + OFFSET_START, 1].Value = configKey;
@@ -289,7 +289,7 @@ namespace PoGo.NecroBot.Logic.Utils
 
         private static ExcelWorksheet BuildSheetHeader(ExcelPackage package, FieldInfo item, object att)
         {
-            NecrobotConfigAttribute excelAtt = att as NecrobotConfigAttribute;
+            NecroBotConfigAttribute excelAtt = att as NecroBotConfigAttribute;
             ExcelWorksheet workSheet = package.Workbook.Worksheets[excelAtt.SheetName];
             if (workSheet == null)
             {
@@ -309,13 +309,13 @@ namespace PoGo.NecroBot.Logic.Utils
 
                     foreach (var vtp in valueType.GetProperties())
                     {
-                        var att1 = vtp.GetCustomAttributes<NecrobotConfigAttribute>(true).FirstOrDefault();
+                        var att1 = vtp.GetCustomAttributes<NecroBotConfigAttribute>(true).FirstOrDefault();
                         int colIndex = (att1 == null ? pos : att1.Position) + COL_OFFSET;
                         workSheet.Column(colIndex).AutoFit();
                         workSheet.Cells[4, colIndex].Value = att1 == null ? vtp.Name : att1.Key;
                         if (att1 != null)
                         {
-                            workSheet.Cells[4, colIndex].AddComment(att1.Description, "necrobot2");
+                            workSheet.Cells[4, colIndex].AddComment(att1.Description, "NecroBot2");
                             AddValidationForType(workSheet, vtp, $"{GetCol(colIndex)}5:{GetCol(colIndex)}155");
                         }
                         pos++;
@@ -474,8 +474,8 @@ namespace PoGo.NecroBot.Logic.Utils
             {
                 foreach (var item in setting.GetType().GetFields())
                 {
-                    var att = item.GetCustomAttributes(typeof(NecrobotConfigAttribute), true)
-                        .Cast<NecrobotConfigAttribute>()
+                    var att = item.GetCustomAttributes(typeof(NecroBotConfigAttribute), true)
+                        .Cast<NecroBotConfigAttribute>()
                         .FirstOrDefault();
                     if (att != null)
                     {
@@ -500,8 +500,8 @@ namespace PoGo.NecroBot.Logic.Utils
                         {
                             foreach (var cfg in configProp.GetType().GetFields())
                             {
-                                var peAtt = cfg.GetCustomAttributes(typeof(NecrobotConfigAttribute), true)
-                                    .Cast<NecrobotConfigAttribute>()
+                                var peAtt = cfg.GetCustomAttributes(typeof(NecroBotConfigAttribute), true)
+                                    .Cast<NecroBotConfigAttribute>()
                                     .FirstOrDefault();
                                 if (peAtt != null)
                                 {
@@ -565,7 +565,7 @@ namespace PoGo.NecroBot.Logic.Utils
 
                 foreach (var prop in typeof(T).GetProperties())
                 {
-                    var attr = prop.GetCustomAttribute<NecrobotConfigAttribute>();
+                    var attr = prop.GetCustomAttribute<NecroBotConfigAttribute>();
                     if (attr != null)
                     {
                         var celvalue = ws.Cells[i, COL_OFFSET + attr.Position].Value;
@@ -603,7 +603,7 @@ namespace PoGo.NecroBot.Logic.Utils
             var type = typeof(T);
             foreach (var fi in type.GetProperties())
             {
-                var attr = fi.GetCustomAttributes<NecrobotConfigAttribute>(true).FirstOrDefault();
+                var attr = fi.GetCustomAttributes<NecroBotConfigAttribute>(true).FirstOrDefault();
                 if (attr != null)
                 {
                     var cell = ws.Cells[4, attr.Position + COL_OFFSET];
@@ -667,7 +667,7 @@ namespace PoGo.NecroBot.Logic.Utils
 
                     foreach (var fi in typeof(T).GetProperties())
                     {
-                        var attr = fi.GetCustomAttributes<NecrobotConfigAttribute>(true).FirstOrDefault();
+                        var attr = fi.GetCustomAttributes<NecroBotConfigAttribute>(true).FirstOrDefault();
                         if (attr != null)
                         {
                             string addr = $"{attr.Key}{i}";
@@ -690,7 +690,7 @@ namespace PoGo.NecroBot.Logic.Utils
 
                     foreach (var fi in typeof(T).GetFields())
                     {
-                        var attr = fi.GetCustomAttributes<NecrobotConfigAttribute>(true).FirstOrDefault();
+                        var attr = fi.GetCustomAttributes<NecroBotConfigAttribute>(true).FirstOrDefault();
                         if (attr != null)
                         {
                             string addr = $"{attr.Key}{i}";

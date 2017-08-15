@@ -49,55 +49,55 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         }
 
         [JsonIgnore]
-        [NecrobotConfig(HiddenOnGui = true,IsPrimaryKey = true, Key = "Allow Transfer", Position = 1, Description = "If Enabled, bot will transfer this type of pokemon when matched with filter condition.")]
+        [NecroBotConfig(HiddenOnGui = true,IsPrimaryKey = true, Key = "Allow Transfer", Position = 1, Description = "If Enabled, bot will transfer this type of pokemon when matched with filter condition.")]
         public bool AllowTransfer { get; set; }
 
         [JsonIgnore]
-        [NecrobotConfig(Key = "Do Not Transfer", Position = 2, Description = "If Enabled, Bot won't transfer this pokemon. If Not, Bot will use other parameters to check.")]
+        [NecroBotConfig(Key = "Do Not Transfer", Position = 2, Description = "If Enabled, Bot won't transfer this pokemon. If Not, Bot will use other parameters to check.")]
         public bool DoNotTransfer { get; set; }
 
-        [NecrobotConfig(Key = "KeepMinCp", Position = 3 , Description = "Pokemon with CP lower than this value will be transfered")]
+        [NecroBotConfig(Key = "KeepMinCp", Position = 3 , Description = "Pokemon with CP lower than this value will be transfered")]
         [DefaultValue(1250)]
         [Range(0, 9999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public int KeepMinCp { get; set; }
 
-        [NecrobotConfig (Key = "KeepMinIvPercentage", Position = 4, Description = "Pokemon with IV lower than this value will be transfered")]
+        [NecroBotConfig (Key = "KeepMinIvPercentage", Position = 4, Description = "Pokemon with IV lower than this value will be transfered")]
         [DefaultValue(90)]
         [Range(0, 101)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
         public float KeepMinIvPercentage { get; set; }
 
-        [NecrobotConfig(Key = "KeepMinLvl", Position = 5, Description = "Pokemon with LV lower than this value will be transfered")]
+        [NecroBotConfig(Key = "KeepMinLvl", Position = 5, Description = "Pokemon with LV lower than this value will be transfered")]
         [DefaultValue(6)]
         [Range(0, 999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 3)]
         public int KeepMinLvl { get; set; }
 
-        [NecrobotConfig(Key = "UseKeepMinLvl", Position = 6, Description = "Use Min Level for transfer")]
+        [NecroBotConfig(Key = "UseKeepMinLvl", Position = 6, Description = "Use Min Level for transfer")]
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 4)]
         public bool UseKeepMinLvl { get; set; }
 
-        [NecrobotConfig(Key = "KeepMinOperator", Position = 7, Description ="The operator logic use to check for transfer ")]
+        [NecroBotConfig(Key = "KeepMinOperator", Position = 7, Description ="The operator logic use to check for transfer ")]
         [DefaultValue("or")]
         [EnumDataType(typeof(Operator))]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 5)]
         public string KeepMinOperator { get; set; }
 
-        [NecrobotConfig(Key = "KeepMinDuplicatePokemon", Position = 8, Description = "Min number of duplication pokemon to keep")]
+        [NecroBotConfig(Key = "KeepMinDuplicatePokemon", Position = 8, Description = "Min number of duplication pokemon to keep")]
         [DefaultValue(1)]
         [Range(0, 999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 6)]
         public int KeepMinDuplicatePokemon { get; set; }
 
-        [NecrobotConfig(Key = "KeepMaxDuplicatePokemon", Position = 9, Description = "Max number of duplication pokemon to keep")]
+        [NecroBotConfig(Key = "KeepMaxDuplicatePokemon", Position = 9, Description = "Max number of duplication pokemon to keep")]
         [DefaultValue(1000)]
         [Range(0, 100000)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 7)]
         public int KeepMaxDuplicatePokemon { get; set; }
 
-        [NecrobotConfig(Key = "Moves", Position = 10, Description = "Defined unwanted moves, and pokemon that have this move will be transfered")]
+        [NecroBotConfig(Key = "Moves", Position = 10, Description = "Defined unwanted moves, and pokemon that have this move will be transfered")]
         [DefaultValue(null)]
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 8)]
         public List<List<PokemonMove>> Moves { get; set; }
@@ -106,18 +106,18 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 9)]
         public List<PokemonMove> DeprecatedMoves { get; set; }
 
-        [NecrobotConfig(Key = "MovesOperator", Position = 11)]
+        [NecroBotConfig(Key = "MovesOperator", Position = 11)]
         [DefaultValue("and")]
         [EnumDataType(typeof(Operator))]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 10)]
         public string MovesOperator { get; set; }
 
-        [NecrobotConfig(Key = "CatchOnlyPokemonMeetTransferCriteria", Position = 12, Description ="Turn on this option to allow bot to catch only good pokemon with not meet transfer condition.")]
+        [NecroBotConfig(Key = "CatchOnlyPokemonMeetTransferCriteria", Position = 12, Description ="Turn on this option to allow bot to catch only good pokemon with not meet transfer condition.")]
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 11)]
         public bool CatchOnlyPokemonMeetTransferCriteria { get; set; }
 
-        [NecrobotConfig(Key = "AffectToPokemons", Position = 13, Description = "Define the list of pokemon which this setting will affect")]
+        [NecroBotConfig(Key = "AffectToPokemons", Position = 13, Description = "Define the list of pokemon which this setting will affect")]
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 12)]
         public List<PokemonId> AffectToPokemons { get; set; }
 

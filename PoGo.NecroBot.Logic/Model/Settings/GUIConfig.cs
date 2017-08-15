@@ -12,13 +12,13 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         {
         }
 
-        [NecrobotConfig(Description = "The number of seconds that the bot will display auto snipe data", Position = 1)]
+        [NecroBotConfig(Description = "The number of seconds that the bot will display auto snipe data", Position = 1)]
         [DefaultValue(150)]
         [Range(0, 900)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public int SnipeItemListDisplayTime { get; set; }
 
-        [NecrobotConfig(Description = "Interval to refresh auto snipe data ", Position = 1)]
+        [NecroBotConfig(Description = "Interval to refresh auto snipe data ", Position = 1)]
         [DefaultValue(10)]
         [Range(0, 30)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]

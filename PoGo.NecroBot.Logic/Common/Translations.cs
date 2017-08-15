@@ -861,7 +861,7 @@ namespace PoGo.NecroBot.Logic.Common
                 new KeyValuePair<TranslationString, string>(TranslationString.TelegramCommandProfileMsgBody,
                     "Account: {0}\nLvl: {1}\nPokecoins: {2}\nTotal XP: {3}\nXP until level up: {4}\nPokemon caught: {5}\nPokemon sent: {6}\nPokemon in bag: {7}\nPokemon evolved: {8}\nPokestops visited: {9}\nItems in bag: {10}\nStardust: {11}\nEggs hatched: {12}\nPokedex entries: {13}\nKM walked: {14:n0}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.TelegramCommandStatusMsgBody,
-                    "Bot: Necrobot2 v{0}\nAccount: {1}\nRuntime: {2}\nLvl: {3}\nStardust: {15}\nPokecoins: {16}\nAdvance in: {4}h {5}m | {6} EP\nXP / h: {7:n0}\nPokemon / h: {8:n0}\nStardust / h: {9:n0}\nPokemon Sent: {10}\nPokemon Evolved: {11}\nRecycled: {12}\nPokestop limit: {13}\nCatch limit: {14}"),
+                    "Bot: NecroBot2 v{0}\nAccount: {1}\nRuntime: {2}\nLvl: {3}\nStardust: {15}\nPokecoins: {16}\nAdvance in: {4}h {5}m | {6} EP\nXP / h: {7:n0}\nPokemon / h: {8:n0}\nStardust / h: {9:n0}\nPokemon Sent: {10}\nPokemon Evolved: {11}\nRecycled: {12}\nPokestop limit: {13}\nCatch limit: {14}"),
             };
 
         [JsonProperty("PokemonStrings",
