@@ -1,0 +1,105 @@
+<UserControl x:Class="PoGo.NecroBot.Window.Controls.PlayerInfo"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PoGo.NecroBot.Window.Controls"
+             xmlns:c="clr-namespace:PoGo.NecroBot.Window.Converters"
+             mc:Ignorable="d"  Width="875">
+    <Control.Resources>
+        <c:PokemonIdToImageConverter x:Key="PokemonIdToImageConverter"/>
+        <c:I18NConveter x:Key="I18NConveter"></c:I18NConveter>
+        <c:I18NMultiConveter x:Key="I18NMultiConveter"></c:I18NMultiConveter>
+    </Control.Resources>
+    <DockPanel LastChildFill="True">
+        <StackPanel DockPanel.Dock="Left" Width="75" Orientation="Vertical">
+            <Image x:Name="imgPokemon" Width="55" Height="55" Source="{Binding Path=BuddyPokemonId, FallbackValue=https://cdn.rawgit.com/NecroBot-Private/PokemonGO-Assets/master/pokemon/0.png, Converter={StaticResource PokemonIdToImageConverter}}" />
+            <TextBlock x:Name="tbBuddyCandy" TextAlignment="Center" Width="75" Height="16" VerticalAlignment="Top">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{}{0:0.00}/{1:0.00}" FallbackValue="0/0">
+                        <Binding Path="BuddyTotalKM"></Binding>
+                        <Binding Path="BuddyCurrentKM"></Binding>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+        </StackPanel>
+        <Grid Margin="10,0,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"></RowDefinition>
+                <RowDefinition Height="25"></RowDefinition>
+                <RowDefinition Height="25"></RowDefinition>
+            </Grid.RowDefinitions>
+            <TextBlock x:Name="tbLevel" Grid.Column="0" Grid.Row="0" Width="158" Height="16" VerticalAlignment="Top">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="Level: {0}" FallbackValue="Level: 40">
+                        <Binding Path="Level" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+            <TextBlock x:Name="tbExp" Grid.Column="1" Grid.Row="0" Width="158" Height="16" VerticalAlignment="Top">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="EXP: {0}/{1} ({2}%)" FallbackValue="EXP: 100000/500000 (20%)">
+                        <Binding Path="Exp" />
+                        <Binding Path="LevelExp" />
+                        <Binding Path="PercentComplete" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+            <TextBlock Grid.Column="2" Grid.Row="0" x:Name="tbEXPH" TextWrapping="Wrap" Text="{Binding Path=EXPPerHour, FallbackValue=EXP/H: 123, StringFormat=EXP/H: {0}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="158" Height="16"/>
+            <TextBlock Grid.Column="3" Grid.Row="0" x:Name="tbKMPH" TextWrapping="Wrap" Text="{Binding Path=PKMPerHour, FallbackValue=PKM/H: 123 ,StringFormat=PKM/H: {0}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="158" Height="16"/>
+            <TextBlock Grid.Column="0" Grid.Row="1" x:Name="tbRunTime" TextWrapping="Wrap" Text="{Binding Runtime, FallbackValue=Runtime: 00:00, StringFormat=Runtime: {0}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="158" Height="16"/>
+            <TextBlock Grid.Column="1" Grid.Row="1" x:Name="tbLvlUP" TextWrapping="Wrap" Text="{Binding TimeToLevelUp, FallbackValue=Level Up in :1d 24h, StringFormat=Level Up in {0}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="158" Height="16"/>
+            <TextBlock Grid.Column="2" Grid.Row="1" x:Name="tbStarDust" TextWrapping="Wrap" Text="{Binding Stardust, FallbackValue=Stardust: 0, StringFormat=Stardust: \{0\}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="158" Height="16"/>
+            <TextBlock x:Name="tbPokeStopLMT" Grid.Column="4" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="158" Height="16">
+                <TextBlock.Text>
+                    <MultiBinding Converter="{StaticResource ResourceKey=I18NMultiConveter}" FallbackValue="PokeStops: 0">
+                        <Binding Source="PokestopLimit"></Binding>
+                        <Binding Path="PokestopLimit"></Binding>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+            <TextBlock x:Name="tbCatchLMT" Grid.Column="4" Grid.Row="0" TextWrapping="Wrap" VerticalAlignment="Top" Width="158" Height="16">
+                <TextBlock.Text>
+                    <MultiBinding Converter="{StaticResource ResourceKey=I18NMultiConveter}" FallbackValue="Pokemons: 0">
+                        <Binding Source="CatchLimit"></Binding>
+                        <Binding Path="CatchLimit"></Binding>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+            <TextBlock x:Name="tbSpeed" Grid.Column="3" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="158" Height="16">
+                <TextBlock.Text>
+                    <MultiBinding Converter="{StaticResource ResourceKey=I18NMultiConveter}" FallbackValue="Speed: 0.00">
+                        <Binding Source="WalkSpeed"></Binding>
+                        <Binding Path="WalkSpeed"></Binding>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+            <TextBlock x:Name="tbTransfered" Grid.Column="0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="158" Height="16">
+                <TextBlock.Text>
+                    <MultiBinding Converter="{StaticResource ResourceKey=I18NMultiConveter}" FallbackValue="Transfered: 0">
+                        <Binding Source="PokemonTransfered"></Binding>
+                        <Binding Path="PokemonTransfered"></Binding>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+            <TextBlock x:Name="tbEggStat" Grid.Column="1" Grid.Row="2" Height="16" Width="158" VerticalAlignment="Top">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="Egg Status: {0:0.00}/{1} KM ({2}%)" FallbackValue="Egg Status: 0.00/0 KM (0%)">
+                        <Binding Path="KmRemaining" />
+                        <Binding Path="KmToWalk" />
+                        <Binding Path="EggPerc" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+            <TextBlock Grid.Column="2" Grid.Row="2" x:Name="tb_lukyegg_time" TextWrapping="Wrap" Text="{Binding Lucky_expires, FallbackValue=LuckyEggs: 00m 00s, StringFormat=LuckyEggs: \{0\}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="158" Height="16"/>
+            <TextBlock Grid.Column="3" Grid.Row="2" x:Name="tb_incense_time" TextWrapping="Wrap" Text="{Binding Insence_expires, FallbackValue=Insence: 00m 00s, StringFormat=Insence: \{0\}, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="158" Height="16"/>
+        </Grid>
+    </DockPanel>
+</UserControl>

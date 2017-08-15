@@ -1,0 +1,103 @@
+﻿<UserControl x:Class="PoGo.NecroBot.Window.Controls.SniperControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PoGo.NecroBot.Window.Controls"
+             xmlns:c="clr-namespace:PoGo.NecroBot.Window.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="500" d:DesignWidth="900" Loaded="UserControl_Loaded">
+    <Control.Resources>
+        <c:ListCountConverter x:Key="ListCountConverter" />
+        <c:I18NConveter x:Key="I18NConveter" />
+    </Control.Resources>
+    <TabControl x:Name="tabControl" >
+        <TabControl.Resources>
+            <Style TargetType="{x:Type TabItem}">
+                <Setter Property="HeaderTemplate">
+                    <Setter.Value>
+                        <DataTemplate>
+                            <ContentPresenter Content="{TemplateBinding Content}">
+                                <ContentPresenter.LayoutTransform>
+                                    <RotateTransform Angle="0" />
+                                </ContentPresenter.LayoutTransform>
+                            </ContentPresenter>
+                        </DataTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Padding" Value="3" />
+            </Style>
+        </TabControl.Resources>
+        <TabItem>
+            <TabItem.Header>
+                <TextBlock Margin="5,2,5,2" Text="{Binding Source=TabSnipeRarePokemon, Converter={StaticResource I18NConveter}}" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium"/>
+            </TabItem.Header>
+            <local:SnipeGrid DataContext="{Binding Path=RareList}" OnSnipePokemon="SnipeGrid_OnSnipePokemon"/>
+        </TabItem>
+        <TabItem>
+            <TabItem.Header>
+                <TextBlock Margin="5,2,5,2" Text="{Binding Source=TabSnipeIV100, Converter={StaticResource I18NConveter}}" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium"/>
+            </TabItem.Header>
+            <local:SnipeGrid DataContext="{Binding Path=IV100List}" OnSnipePokemon="SnipeGrid_OnSnipePokemon" />
+        </TabItem>
+        <TabItem>
+            <TabItem.Header>
+                <TextBlock Margin="5,2,5,2" Text="{Binding Source=TabSnipeOtherPokemon, Converter={StaticResource I18NConveter}}" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium"/>
+            </TabItem.Header>
+            <local:SnipeGrid DataContext="{Binding Path=OtherList}" OnSnipePokemon="SnipeGrid_OnSnipePokemon"/>
+        </TabItem>
+        <TabItem>
+            <TabItem.Header>
+                <TextBlock Margin="5,2,5,2" Text="{Binding Source=TabSnipeAutoListPokemon, Converter={StaticResource I18NConveter}}" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium"/>
+            </TabItem.Header>
+            <local:SnipeGrid DataContext="{Binding Path=SnipeQueueItems}"/>
+        </TabItem>
+        <TabItem>
+            <TabItem.Header>
+                <TextBlock Margin="5,2,5,2" Text="{Binding Source=TabSnipeNotInDexPokemon, Converter={StaticResource I18NConveter}}" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium"/>
+            </TabItem.Header>
+            <local:SnipeGrid DataContext="{Binding Path=PokedexSnipeItems}" OnSnipePokemon="SnipeGrid_OnSnipePokemon"/>
+        </TabItem>
+        <TabItem>
+            <TabItem.Header>
+                <TextBlock Margin="5,2,5,2" Text="{Binding Source=TabSnipeAddManualCoord, Converter={StaticResource I18NConveter}}" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium"/>
+            </TabItem.Header>
+            <Grid Margin="50,50,50,50">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="5*" />
+                    <ColumnDefinition Width="2*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="10" />
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="10" />
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="10" />
+                    <RowDefinition Height="150" />
+                    <RowDefinition Height="10"  />
+                    <RowDefinition Height="30" />
+                </Grid.RowDefinitions>
+                <TextBlock Text="{Binding Source=Latitude, Converter={StaticResource I18NConveter}}" Grid.Column="0" Grid.Row="0" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium"/>
+                <TextBlock Text="{Binding Source=Longitude, Converter={StaticResource I18NConveter}}" Grid.Column="0" Grid.Row="2" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium"/>
+                <TextBlock Text="{Binding Source=PokemonName, Converter={StaticResource I18NConveter}}" Grid.Column="0" Grid.Row="4" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium"/>
+                <TextBlock Text="{Binding Source=FreeInput, Converter={StaticResource I18NConveter}}" Grid.Column="0" Grid.Row="6" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium"/>
+                <TextBox Text="{Binding Path=ManualSnipe.Latitude, Mode=TwoWay}" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium"/>
+                <TextBox Text="{Binding Path=ManualSnipe.Longitude , Mode=TwoWay}" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Stretch" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium"/>
+                <ComboBox  Grid.Column="1" Grid.Row="4" Name="cobPokemonId"  SelectedValue="{Binding Path=ManualSnipe.PokemonId, Mode=TwoWay}" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium"/>
+                <DockPanel LastChildFill="True" Grid.Column="1" Grid.Row="6">
+                    <TextBlock DockPanel.Dock="Top" Text="{Binding Source=FreeInputExplain, Converter={StaticResource I18NConveter}}" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium"/>
+                    <RichTextBox TextChanged="RichTextBox_TextChanged" Name="rtbFreeText" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium">
+                        <FlowDocument>
+                            <Paragraph>
+                                <Run Text="{Binding Path=ManualSnipe.InputText, Mode=TwoWay}" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium"/>
+                            </Paragraph>
+                        </FlowDocument>
+                    </RichTextBox>
+                </DockPanel>
+                <Button Grid.Column="1" Grid.Row="8" Content="{Binding Source=AddToSnipeButtonText, Converter={StaticResource I18NConveter}}" Name="btnAddCoord" Click="BtnAddCoord_Click" FontFamily="pack://application:,,,/Resources/Fonts/#Lato" FontWeight="Medium"/>
+            </Grid>
+        </TabItem>
+    </TabControl>
+</UserControl>

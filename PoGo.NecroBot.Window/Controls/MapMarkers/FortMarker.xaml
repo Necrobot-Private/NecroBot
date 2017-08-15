@@ -1,0 +1,108 @@
+﻿<UserControl
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	x:Class="PoGo.NecroBot.Window.Controls.MapMarkers.FortMarker"
+    xmlns:cv="clr-namespace:PoGo.NecroBot.Window.Converters"
+	Height="45" Width="45" Opacity="10" 
+    MouseLeftButtonDown="UserControl_MouseLeftButtonDown"
+    IsHitTestVisible="True"
+    PreviewMouseDoubleClick="UserControl_PreviewMouseDoubleClick"
+    >
+    <Control.Resources>
+        <cv:I18NConveter x:Key="I18NConveter"/>
+    </Control.Resources>
+    <Grid>
+        <Button Background="Transparent" BorderThickness="0">
+            <Image Name="icon" 
+               Source="{Binding Path=FortIcon}" 
+               VerticalAlignment="Center" 
+               HorizontalAlignment="Center" 
+               IsHitTestVisible="false" 
+               />
+            <Button.Triggers>
+                <EventTrigger RoutedEvent="Button.Click">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <BooleanAnimationUsingKeyFrames 
+                                 Storyboard.TargetName="popInfo" 
+                                 Storyboard.TargetProperty="IsOpen">
+                                    <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="True" />
+                                </BooleanAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+            </Button.Triggers>
+        </Button>
+
+        <Popup Name="popInfo" IsOpen="False" StaysOpen="True"
+               PlacementTarget="{Binding ElementName=icon}">
+            <Border Background="GhostWhite" BorderBrush="{Binding Path=FortStatusColor}" BorderThickness="1,3,1,5">
+                <StackPanel>
+                    <DockPanel Margin="10" Width="250">
+                        <StackPanel DockPanel.Dock="Left">
+                            <Image Source="{Binding Path=FortIcon}" Width="60" ></Image>
+                            <TextBlock Text="{Binding Path=FortName}" TextAlignment="Center" Margin="0,10,0,0"></TextBlock>
+                        </StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="4*"></ColumnDefinition>
+                                <ColumnDefinition Width="6*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="25"></RowDefinition>
+                                <RowDefinition Height="25"></RowDefinition>
+                                <RowDefinition Height="25"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Column="0" Grid.Row="0" Text="{Binding Source=Latitude, Converter={StaticResource I18NConveter}}"></TextBlock>
+                            <TextBlock Grid.Column="0" Grid.Row="1" Text="{Binding Source=Longitude, Converter={StaticResource I18NConveter}}"></TextBlock>
+                            <TextBlock Grid.Column="0" Grid.Row="2" Text="{Binding Source=Distance, Converter={StaticResource I18NConveter}}"></TextBlock>
+
+                            <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding Path=Latitude}"></TextBlock>
+                            <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Path=Longitude}"></TextBlock>
+                            <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding Path=Distance, StringFormat={}{0:0.00}}"></TextBlock>
+                        </Grid>
+                    </DockPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button Margin="15,10,0,10" Width="100" Click="BtnWalkHere_Click" Content="{Binding Source=WalkToHere, Converter={StaticResource I18NConveter}}" >
+                            <Button.Triggers>
+                                <EventTrigger RoutedEvent="Button.Click">
+                                    <EventTrigger.Actions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <BooleanAnimationUsingKeyFrames Storyboard.TargetName="popInfo" Storyboard.TargetProperty="IsOpen">
+                                                    <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="False" />
+                                                </BooleanAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger.Actions>
+                                </EventTrigger>
+                            </Button.Triggers>
+                            
+                        </Button>
+                        <Button Margin="15,10,0,10" Width="100" Click="BtnClose_Click" Content="{Binding Source=Close, Converter={StaticResource I18NConveter}}">
+                            <Button.Triggers>
+                                <EventTrigger RoutedEvent="Button.Click">
+                                    <EventTrigger.Actions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <BooleanAnimationUsingKeyFrames Storyboard.TargetName="popInfo" Storyboard.TargetProperty="IsOpen">
+                                                    <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="False" />
+                                                </BooleanAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger.Actions>
+                                </EventTrigger>
+                            </Button.Triggers>
+                            
+                        </Button>
+
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+        </Popup>
+    </Grid>
+
+</UserControl>
