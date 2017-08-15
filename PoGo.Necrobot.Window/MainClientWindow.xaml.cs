@@ -65,6 +65,7 @@ namespace PoGo.NecroBot.Window
                 { LogLevel.LevelUp, new Tuple<string, string, string>("Blue", "#0883FF", "#0883FF") },
                 { LogLevel.BotStats, new Tuple<string, string, string>("Blue", "#0883FF", "#0883FF") },
                 { LogLevel.Gym, new Tuple<string, string, string>("Purple", "#8308FF", "#197B30") },
+                { LogLevel.GymDisk, new Tuple<string, string, string>("Cyan", "#B4E1FD", "#EC008C") },
                 { LogLevel.Service , new Tuple<string, string, string>("Blue", "#0883FF", "#0883FF") }
         };
 
