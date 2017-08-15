@@ -549,7 +549,7 @@ namespace PoGo.NecroBot.Window
 
         private void BtnDonate_Click(object sender, RoutedEventArgs e)
         {
-            Process.Start("http://snipe.necrobot2.com?donate");
+            Process.Start("http://snipe.NecroBot2.com?donate");
         }
 
         private void BtnSwitchAcount_Click(object sender, RoutedEventArgs e)
@@ -568,7 +568,7 @@ namespace PoGo.NecroBot.Window
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    var responseContent = await client.GetAsync("https://github.com/Necrobot-Private/NecroBot/releases.atom");
+                    var responseContent = await client.GetAsync("https://github.com/NecroBot-Private/NecroBot/releases.atom");
                     if (responseContent.StatusCode != HttpStatusCode.OK)
                         return;
 

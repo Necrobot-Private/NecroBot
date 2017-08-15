@@ -316,14 +316,14 @@ namespace PoGo.NecroBot.Window.Model
             {
 
                 if (Slashed)
-                    return $"https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/pokemon/slashed.png";
+                    return $"https://cdn.rawgit.com/NecroBot-Private/PokemonGO-Assets/master/pokemon/slashed.png";
                 else
                 {
                     var additional = "";
                     additional = additional + ("-" + pokemonData.PokemonDisplay.Costume.ToString()).Replace("-Unset", "");
                     additional = additional + ("-" + pokemonData.PokemonDisplay.Form.ToString().Replace("Unown", "").Replace("-ExclamationPoint", "-ExclamationPoint").Replace("-QuestionMark", "-QuestionMark")).Replace("-Unset", "");
                     additional += pokemonData.PokemonDisplay.Shiny ? "-shiny" : "";
-                    return $"https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/pokemon/{(int)PokemonData.PokemonId}{additional}.png";
+                    return $"https://cdn.rawgit.com/NecroBot-Private/PokemonGO-Assets/master/pokemon/{(int)PokemonData.PokemonId}{additional}.png";
                 }
             }
         }

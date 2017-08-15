@@ -66,7 +66,7 @@ namespace PoGo.NecroBot.Window
 
         public UIElement BuildDictionaryForm<Y, T>(FieldInfo pi, Dictionary<Y, T> dictionary)
         {
-            var natt = pi.GetCustomAttribute<NecrobotConfigAttribute>();
+            var natt = pi.GetCustomAttribute<NecroBotConfigAttribute>();
 
             string resKey = $"Setting.{pi.Name}";
 
@@ -91,7 +91,7 @@ namespace PoGo.NecroBot.Window
             var type = typeof(T);
             foreach (var item in type.GetProperties())
             {
-                var att = item.GetCustomAttribute<NecrobotConfigAttribute>(true);
+                var att = item.GetCustomAttribute<NecroBotConfigAttribute>(true);
                 if (att != null && !att.IsPrimaryKey)
                 {
                     string headerKey = $"{resKey}.{item.Name}";
@@ -119,7 +119,7 @@ namespace PoGo.NecroBot.Window
             var type = typeof(T);
             foreach (var item in type.GetProperties())
             {
-                var att = item.GetCustomAttribute<NecrobotConfigAttribute>(true);
+                var att = item.GetCustomAttribute<NecroBotConfigAttribute>(true);
                 if (att != null && !att.IsPrimaryKey)
                 {
                     var dataGridControl = GetDataGridInputControl(item);
@@ -140,7 +140,7 @@ namespace PoGo.NecroBot.Window
         }
         private DataGridColumn GetDataGridInputControl(PropertyInfo item)
         {
-            var att = item.GetCustomAttribute<NecrobotConfigAttribute>(true);
+            var att = item.GetCustomAttribute<NecroBotConfigAttribute>(true);
 
             var binding = new Binding($"Value.{item.Name}")
             {
@@ -265,7 +265,7 @@ namespace PoGo.NecroBot.Window
 
             return accountColumn;
         }
-        public UIElement BuildForm(FieldInfo fi, object source, NecrobotConfigAttribute propAtt)
+        public UIElement BuildForm(FieldInfo fi, object source, NecroBotConfigAttribute propAtt)
         {
             var type = source.GetType();
 
@@ -293,7 +293,7 @@ namespace PoGo.NecroBot.Window
             return BuildObjectForm(fi,source, propAtt);
 
         }
-        public UIElement BuildObjectForm(FieldInfo fi,object source, NecrobotConfigAttribute configAttibute)
+        public UIElement BuildObjectForm(FieldInfo fi,object source, NecroBotConfigAttribute configAttibute)
         {
 
             StackPanel panelWrap = new StackPanel() {
@@ -320,7 +320,7 @@ namespace PoGo.NecroBot.Window
 
             foreach (var item in type.GetProperties())
             {
-                var att = item.GetCustomAttributes<NecrobotConfigAttribute>(true).FirstOrDefault();
+                var att = item.GetCustomAttributes<NecroBotConfigAttribute>(true).FirstOrDefault();
                 if (att != null)
                 {
 
@@ -433,7 +433,7 @@ namespace PoGo.NecroBot.Window
             DataContext = Settings;
             foreach (var item in Settings.GetType().GetFields())
             {
-                var att = item.GetCustomAttributes<NecrobotConfigAttribute>(true).FirstOrDefault();
+                var att = item.GetCustomAttributes<NecroBotConfigAttribute>(true).FirstOrDefault();
                 if (att != null)
                 {
                     string resKey = $"Setting.{item.Name}";
@@ -450,7 +450,7 @@ namespace PoGo.NecroBot.Window
         {
             foreach (var item in Settings.GetType().GetFields())
             {
-                var att = item.GetCustomAttributes<NecrobotConfigAttribute>(true).FirstOrDefault();
+                var att = item.GetCustomAttributes<NecroBotConfigAttribute>(true).FirstOrDefault();
                 if (att != null)
                 {
                     var type = item.FieldType;

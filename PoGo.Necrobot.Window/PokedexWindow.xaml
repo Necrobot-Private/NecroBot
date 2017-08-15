@@ -6,7 +6,7 @@
                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                       xmlns:c="clr-namespace:PoGo.NecroBot.Window.Converters"
                       xmlns:effect="clr-namespace:GrayscaleEffect;assembly=GrayscaleEffect"
-                      Title="Necrobot 2 - PokeDex"
+                      Title="NecroBot 2 - PokeDex"
                       Height="768"
                       Width="1366" 
                       BorderThickness="0" 
@@ -19,7 +19,7 @@
     <Controls:MetroWindow.TitleTemplate>
         <DataTemplate>
             <TextBlock x:Name="TitleText"
-                       Text="Necrobot 2 - PokeDex"
+                       Text="NecroBot 2 - PokeDex"
                        TextTrimming="CharacterEllipsis"
                        VerticalAlignment="Center"
                        Margin="7, 0, 0, 0"

@@ -6,7 +6,7 @@
                       xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                       xmlns:local="clr-namespace:PoGo.NecroBot.Window.Controls"
                       xmlns:c="clr-namespace:PoGo.NecroBot.Window.Converters"
-                      Title="Necrobot 2 - Windows GUI"
+                      Title="NecroBot 2 - Windows GUI"
                       TitleCaps="False"
                       Height="768"
                       Width="1366"

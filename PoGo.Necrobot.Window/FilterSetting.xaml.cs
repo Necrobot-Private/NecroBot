@@ -85,7 +85,7 @@ namespace PoGo.NecroBot.Window
             {
                 if (item.Name == "AffectToPokemons") continue;
 
-                var att = item.GetCustomAttributes<NecrobotConfigAttribute>(true).FirstOrDefault();
+                var att = item.GetCustomAttributes<NecroBotConfigAttribute>(true).FirstOrDefault();
                 if (att != null && !att.HiddenOnGui)
                 {
                     string resKey = $"Setting.{FilterName}.{item.Name}";

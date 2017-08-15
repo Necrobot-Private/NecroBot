@@ -17,7 +17,7 @@ namespace PoGo.NecroBot.Window.Model
             IsUnlimited = incu.ItemId == POGOProtos.Inventory.Item.ItemId.ItemIncubatorBasicUnlimited;
 
         }
-        public string Icon => "https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/eggs/egg_incubator.png";
+        public string Icon => "https://cdn.rawgit.com/NecroBot-Private/PokemonGO-Assets/master/eggs/egg_incubator.png";
         public double Availbility => InUse ? 0 : 1;
 
         public string Id { get;  set; }

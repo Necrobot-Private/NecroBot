@@ -77,10 +77,10 @@ namespace PoGo.NecroBot.CLI
         private static bool _ignoreKillSwitch;
 
         private static readonly Uri StrKillSwitchUri =
-            new Uri("https://raw.githubusercontent.com/Necrobot-Private/NecroBot/master/KillSwitch.txt");
+            new Uri("https://raw.githubusercontent.com/NecroBot-Private/NecroBot/master/KillSwitch.txt");
 
         private static readonly Uri StrMasterKillSwitchUri =
-            new Uri("https://raw.githubusercontent.com/Necrobot-Private/NecroBot/master/PoGo.NecroBot.Logic/MKS.txt");
+            new Uri("https://raw.githubusercontent.com/NecroBot-Private/NecroBot/master/PoGo.NecroBot.Logic/MKS.txt");
 
         private static Session _session;
 
@@ -353,9 +353,9 @@ namespace PoGo.NecroBot.CLI
                         HttpResponseMessage response = client.PostAsync($"https://pokehash.buddyauth.com/{_session.Client.ApiEndPoint}", null).Result;
                         string AuthKey = response.Headers.GetValues("X-AuthToken").FirstOrDefault();
                         string MaxRequestCount = response.Headers.GetValues("X-MaxRequestCount").FirstOrDefault();
-                        DateTime AuthTokenExpiration = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Local).AddSeconds(Convert.ToDouble(response.Headers.GetValues("X-AuthTokenExpiration").FirstOrDefault())).ToLocalTime();
+                        DateTime AuthTokenExpiration = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Unspecified).AddSeconds(Convert.ToDouble(response.Headers.GetValues("X-AuthTokenExpiration").FirstOrDefault())).ToLocalTime();
                         TimeSpan Expiration = AuthTokenExpiration - DateTime.Now;
-                        string Result = string.Format("Key: {0} RPM: {1} Expiration Date: {2}/{3}/{4}", maskedKey, MaxRequestCount, AuthTokenExpiration.Day, AuthTokenExpiration.Month, AuthTokenExpiration.Year);
+                        string Result = string.Format("Key: {0} RPM: {1} Expires in: {2} days ({3})", maskedKey, MaxRequestCount, Expiration.Days - 1, AuthTokenExpiration);
                         Logger.Write(Result, LogLevel.Info, ConsoleColor.Green);
                     }
                     catch
@@ -456,7 +456,7 @@ namespace PoGo.NecroBot.CLI
                     GetPlayerResponse x = _session.Client.Player.GetPlayer().Result;
                     string warn = x.Warn ? "*(Flagged)*-" : null;
 
-                    Console.Title = $"[Necrobot2 v{strVersion}] Team: {x.PlayerData.Team} - {warn}" +
+                    Console.Title = $"[NecroBot2 v{strVersion}] Team: {x.PlayerData.Team} - {warn}" +
                                     stats.GetTemplatedStats(
                                         _session.Translation.GetTranslation(TranslationString.StatsTemplateString),
                                         _session.Translation.GetTranslation(TranslationString.StatsXpTemplateString));
@@ -545,7 +545,7 @@ namespace PoGo.NecroBot.CLI
 #pragma warning restore 4014
             _session.EventDispatcher.EventReceived += evt => AnalyticsService.Listen(evt, _session);
 
-            var trackFile = Path.GetTempPath() + "\\necrobot2.io";
+            var trackFile = Path.GetTempPath() + "\\NecroBot2.io";
 
             if (!File.Exists(trackFile) || File.GetLastWriteTime(trackFile) < DateTime.Now.AddDays(-1))
             {

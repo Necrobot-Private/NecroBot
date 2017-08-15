@@ -97,16 +97,16 @@ namespace PoGo.NecroBot.Window.Model
                      /*/if (asBoss)
                             fortIcon = gymimage + gymBoss;
                         else //*/
-                            fortIcon = $"https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/unoccupied{gymStat}.png";
+                            fortIcon = $"https://cdn.rawgit.com/NecroBot-Private/PokemonGO-Assets/master/NecroEase/markers/unoccupied{gymStat}.png";
                         break;
                     case TeamColor.Blue:
-                            fortIcon = $"https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/mystic{gymStat}.png";
+                            fortIcon = $"https://cdn.rawgit.com/NecroBot-Private/PokemonGO-Assets/master/NecroEase/markers/mystic{gymStat}.png";
                         break;
                     case TeamColor.Red:
-                            fortIcon = $"https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/valor{gymStat}.png";
+                            fortIcon = $"https://cdn.rawgit.com/NecroBot-Private/PokemonGO-Assets/master/NecroEase/markers/valor{gymStat}.png";
                         break;
                     case TeamColor.Yellow:
-                            fortIcon = $"https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/markers/instinct{gymStat}.png";
+                            fortIcon = $"https://cdn.rawgit.com/NecroBot-Private/PokemonGO-Assets/master/NecroEase/markers/instinct{gymStat}.png";
                         break;
                 }
                 return fortIcon;
@@ -121,16 +121,16 @@ namespace PoGo.NecroBot.Window.Model
                 switch (fort.OwnedByTeam)
                 {
                     case TeamColor.Neutral:
-                        fortIcon = "https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/gui/unoccupied.png";
+                        fortIcon = "https://cdn.rawgit.com/NecroBot-Private/PokemonGO-Assets/master/NecroEase/gui/unoccupied.png";
                         break;
                     case TeamColor.Blue:
-                        fortIcon = "https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/gui/mystic.png";
+                        fortIcon = "https://cdn.rawgit.com/NecroBot-Private/PokemonGO-Assets/master/NecroEase/gui/mystic.png";
                         break;
                     case TeamColor.Red:
-                        fortIcon = "https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/gui/valor.png";
+                        fortIcon = "https://cdn.rawgit.com/NecroBot-Private/PokemonGO-Assets/master/NecroEase/gui/valor.png";
                         break;
                     case TeamColor.Yellow:
-                        fortIcon = "https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/NecroEase/gui/instinct.png";
+                        fortIcon = "https://cdn.rawgit.com/NecroBot-Private/PokemonGO-Assets/master/NecroEase/gui/instinct.png";
                         break;
                 }
                 return fortIcon;

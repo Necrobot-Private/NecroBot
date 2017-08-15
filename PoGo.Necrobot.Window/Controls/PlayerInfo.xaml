@@ -13,7 +13,7 @@
     </Control.Resources>
     <DockPanel LastChildFill="True">
         <StackPanel DockPanel.Dock="Left" Width="75" Orientation="Vertical">
-            <Image x:Name="imgPokemon" Width="55" Height="55" Source="{Binding Path=BuddyPokemonId, FallbackValue=https://cdn.rawgit.com/Necrobot-Private/PokemonGO-Assets/master/pokemon/0.png, Converter={StaticResource PokemonIdToImageConverter}}" />
+            <Image x:Name="imgPokemon" Width="55" Height="55" Source="{Binding Path=BuddyPokemonId, FallbackValue=https://cdn.rawgit.com/NecroBot-Private/PokemonGO-Assets/master/pokemon/0.png, Converter={StaticResource PokemonIdToImageConverter}}" />
             <TextBlock x:Name="tbBuddyCandy" TextAlignment="Center" Width="75" Height="16" VerticalAlignment="Top">
                 <TextBlock.Text>
                     <MultiBinding StringFormat="{}{0:0.00}/{1:0.00}" FallbackValue="0/0">
