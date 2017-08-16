@@ -14,13 +14,3 @@ Be aware, you've been warned.
 
 For support/questions:
 OFFICIAL NECROBOT2 Discord: https://discord.gg/7FWyWVp
-killswitch.txt file
-vous avez rejoint general-necrobot2
-NECROBOT2
-LeaMic - Aujourd'hui à 19:40
-As you're probably aware, all current API implementations are resulting in shadow bans, warnings and eventually account closure. This is not due to any specific implementation, and no API is currently unaffected. We are continuing to do our best to find the root cause, but as of right now we have nothing to report.  We do not believe the cause to be machine learning, or anything behavioral driven.
-
-I stated in #re-research earlier, but unless you are absolutely happy to have your accounts banned; stop using the API's.  Shadow bans, warnings and account closures are now happening significantly faster than they were several weeks ago (I added test accounts this morning, which are already banned)
-
-We will share more once we further understand the problem, but you're going to have to bear with us.
-lea into pogodev
