@@ -115,7 +115,7 @@ namespace PoGo.NecroBot.CLI.Forms
 
         private void LinkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("http://NecroBot2.com/config.json/2017/01/07/how-to-config-auto-snipe/");
+            Process.Start("http://necrobot2.com/config.json/2017/01/07/how-to-config-auto-snipe/");
         }
 
         private void SnipePage_Initialize(object sender, WizardPageInitEventArgs e)
