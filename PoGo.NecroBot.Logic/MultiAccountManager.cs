@@ -33,6 +33,10 @@ namespace PoGo.NecroBot.Logic
             SyncDatabase(accounts);
         }
 
+        public MultiAccountManager()
+        {
+        }
+
         private LocalView<Account> _localAccounts;
 
         public LocalView<Account> Accounts

@@ -49,7 +49,7 @@ namespace PoGo.NecroBot.Logic.State
                                 session.EventDispatcher.Send(new WarnEvent
                                 {
                                     Message =
-                                        session.Translation.GetTranslation(TranslationString.NotRealisticTravel, kmph)
+                                        session.Translation.GetTranslation(TranslationString.NotRealisticTravel, kmph.ToString("0.00"))
                                 });
                             }
                         }

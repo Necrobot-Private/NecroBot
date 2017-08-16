@@ -22,4 +22,3 @@ namespace PoGo.NecroBot.Logic.Event
         public PokemonData Pokemon { get; set; }
     }
 }
-
