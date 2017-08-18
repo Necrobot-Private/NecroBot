@@ -267,7 +267,7 @@ namespace PoGo.NecroBot.Logic.Service
                             /*
                             session.EventDispatcher.Send(new WarnEvent()
                             {
-                                Message = $"Couldn't establish the connection to necrobot socket server : {socketURL}"
+                                Message = $"Couldn't establish the connection to NecroBot socket server : {socketURL}"
                             });
                             */
                             if (session.LogicSettings.DataSharingConfig.EnableFailoverDataServers && servers.Count > 1)
@@ -286,7 +286,7 @@ namespace PoGo.NecroBot.Logic.Service
 
                         while (ws.ReadyState == WebSocketState.Open && !termintated)
                         {
-                            //Logger.Write("Connected to necrobot data service.");
+                            //Logger.Write("Connected to NecroBot data service.");
                             retries = 0;
 
                             if (ws.IsAlive && clientData.HasData())
@@ -311,7 +311,7 @@ namespace PoGo.NecroBot.Logic.Service
                         /*
                         session.EventDispatcher.Send(new WarnEvent
                         {
-                            Message = "Disconnected from necrobot socket. New connection will be established when service becomes available..."
+                            Message = "Disconnected from NecroBot socket. New connection will be established when service becomes available..."
                         });
                         */
                     }

@@ -32,7 +32,7 @@ namespace PoGo.NecroBot.Logic.State
     {
         ISettings Settings { get; set; }
         Inventory Inventory { get; }
-        Client Client { get; }
+        Client Client { get; set; }
         GetPlayerResponse Profile { get; set; }
         Navigation Navigation { get; }
         ILogicSettings LogicSettings { get; set; }
@@ -57,7 +57,6 @@ namespace PoGo.NecroBot.Logic.State
         double KnownLatitudeBeforeSnipe { get; set; }
         double KnownLongitudeBeforeSnipe { get; set; }
         bool SaveBallForByPassCatchFlee { set; get; }
-
     }
 
     public class Session : ISession
@@ -69,7 +68,6 @@ namespace PoGo.NecroBot.Logic.State
         }
 
         public bool SaveBallForByPassCatchFlee { get; set; }
-
         public DateTime LoggedTime { get; set; }
         private List<AuthConfig> accounts;
 
@@ -85,7 +83,7 @@ namespace PoGo.NecroBot.Logic.State
             CancellationTokenSource = new CancellationTokenSource();
             Forts = new List<FortData>();
             VisibleForts = new List<FortData>();
-            Cache = new MemoryCache("Necrobot2");
+            Cache = new MemoryCache("NecroBot2");
             accounts = new List<AuthConfig>();
             EventDispatcher = new EventDispatcher();
             LogicSettings = logicSettings;
@@ -132,26 +130,16 @@ namespace PoGo.NecroBot.Logic.State
         public List<FortData> Forts { get; set; }
         public List<FortData> VisibleForts { get; set; }
         public GlobalSettings GlobalSettings { get; set; }
-
         public ISettings Settings { get; set; }
-
         public Inventory Inventory { get; private set; }
-
-        public Client Client { get; private set; }
-
+        public Client Client { get; set; }
         public GetPlayerResponse Profile { get; set; }
         public Navigation Navigation { get; private set; }
-
         public ILogicSettings LogicSettings { get; set; }
-
         public ITranslation Translation { get; }
-
         public IEventDispatcher EventDispatcher { get; }
-
         public TelegramService Telegram { get; set; }
-
         public SessionStats Stats { get; set; }
-
         public IElevationService ElevationService { get; set; }
         public AnalyticsService AnalyticsService { get; set; }
         public CancellationTokenSource CancellationTokenSource { get; set; }
@@ -200,9 +188,7 @@ namespace PoGo.NecroBot.Logic.State
 
             var manager = TinyIoCContainer.Current.Resolve<MultiAccountManager>();
             var session = TinyIoCContainer.Current.Resolve<ISession>();
-
             var nextBot = manager.GetSwitchableAccount(bot);
-
             var Account = !string.IsNullOrEmpty(nextBot.Nickname) ? nextBot.Nickname : nextBot.Username;
             var TotXP = 0;
 
@@ -222,7 +208,7 @@ namespace PoGo.NecroBot.Logic.State
 
             Logger.Write($"Account changed to {Account}", LogLevel.BotStats);
 
-            if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
+            if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification)
                 PushNotificationClient.SendNotification(session, $"Account changed to", $"{Account}\n" +
                                                                  $"Lvl: {Lvl}\n" +
                                                                  $"XP : {XP:#,##0}({(double)XP / ((double)NLevelXP) * 100:#0.00}%)\n" +

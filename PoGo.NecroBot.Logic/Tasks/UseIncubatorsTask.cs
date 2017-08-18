@@ -14,7 +14,6 @@ using PoGo.NecroBot.Logic.State;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Networking.Responses;
 using PoGo.NecroBot.Logic.Logging;
-using PokemonGo.RocketAPI.Helpers;
 using PoGo.NecroBot.Logic.Utils;
 
 #endregion
@@ -42,9 +41,9 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             var rememberedIncubatorsFilePath = Path.Combine(session.LogicSettings.ProfilePath, "temp", "incubators.json");
             var rememberedIncubators = GetRememberedIncubators(rememberedIncubatorsFilePath);
-
             var response = await session.Client.Inventory.UseItemEggIncubator(incubators.Id, unusedEggs.Id).ConfigureAwait(false);
             var newRememberedIncubators = new List<IncubatorUsage>();
+
             if (response.Result == UseItemEggIncubatorResponse.Types.Result.Success)
             {
                 newRememberedIncubators.Add(new IncubatorUsage { IncubatorId = incubators.Id, PokemonId = unusedEggs.Id });
@@ -115,7 +114,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                  $"XP1: {ExpAwarded1} | XP2: {ExpAwarded2} | " +
                                  $"SD1: {stardust1} | SD2: {stardust2}", LogLevel.Egg, ConsoleColor.DarkYellow);
 
-                    if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
+                    if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification)
                         await PushNotificationClient.SendNotification(session, $"Egg has hatched.", $"Pokemon: {hatched.PokemonId}\n" +
                                                                                                     $"Lvl: {PokemonInfo.GetLevel(hatched)}\n" +
                                                                                                     $"CP:  {hatched.Cp}\n" +

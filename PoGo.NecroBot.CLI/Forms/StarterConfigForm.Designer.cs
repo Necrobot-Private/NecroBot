@@ -111,7 +111,7 @@
             this.SelectLanguagePage.NextPage = this.AccountPage;
             this.SelectLanguagePage.Size = new System.Drawing.Size(685, 249);
             this.SelectLanguagePage.TabIndex = 0;
-            this.SelectLanguagePage.Text = "Welcome to NECROBOT2";
+            this.SelectLanguagePage.Text = "Welcome to NecroBot2";
             this.SelectLanguagePage.Commit += new System.EventHandler<AeroWizard.WizardPageConfirmEventArgs>(this.SelectLanguagePage_Commit);
             this.SelectLanguagePage.Click += new System.EventHandler(this.SelectLanguagePage_Click);
             // 
@@ -583,7 +583,7 @@
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "StarterConfigForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Initial Necrobot2 Config";
+            this.Text = "Initial NecroBot2 Config";
             this.TopMost = true;
             ((System.ComponentModel.ISupportInitialize)(this.wizardControl1)).EndInit();
             this.SelectLanguagePage.ResumeLayout(false);

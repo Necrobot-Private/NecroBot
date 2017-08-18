@@ -10,37 +10,37 @@ namespace PoGo.NecroBot.Logic.Model.Settings
     public class BotSwitchPokemonFilter    : BaseConfig, IPokemonFilter
     {
         [JsonIgnore]
-        [NecrobotConfig(IsPrimaryKey = true, Key = "Allow Switch", Description = "Allows bot to use invidual filters for switching accounts", Position = 1)]
+        [NecroBotConfig(IsPrimaryKey = true, Key = "Allow Switch", Description = "Allows bot to use invidual filters for switching accounts", Position = 1)]
         public bool AllowBotSwitch { get; set; }
 
-        [NecrobotConfig(Key = "Min IV", Description = "When this pokemon has a IV > this value, the bot will switch accounts", Position = 2)]
+        [NecroBotConfig(Key = "Min IV", Description = "When this pokemon has a IV > this value, the bot will switch accounts", Position = 2)]
         [Range(0, 100)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public int IV { get; set; }
 
-        [NecrobotConfig(Key = "Min LV", Description = "When this pokemon has a LV > this value, the bot will switch accounts", Position = 3)]
+        [NecroBotConfig(Key = "Min LV", Description = "When this pokemon has a LV > this value, the bot will switch accounts", Position = 3)]
         [Range(0, 999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
         public int LV { get; set; }
 
-        [NecrobotConfig(Key = "Move", Description = "When a wild pokemon has the move match, the bot will switch accounts to catch", Position = 4)]
+        [NecroBotConfig(Key = "Move", Description = "When a wild pokemon has the move match, the bot will switch accounts to catch", Position = 4)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 3)]
         public List<List<PokemonMove>> Moves { get; set; }
 
 
-        [NecrobotConfig(Key = "Remain times", Description = "Number of seconds since pokemon disappeared", Position = 5)]
+        [NecroBotConfig(Key = "Remain times", Description = "Number of seconds since pokemon disappeared", Position = 5)]
         [Range(0, 900)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
 
         public int RemainTimes { get; set; }
 
-        [NecrobotConfig(Key = "Operator", Description = "The operator to check", Position = 6)]
+        [NecroBotConfig(Key = "Operator", Description = "The operator to check", Position = 6)]
         [EnumDataType(typeof(Operator))]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public string Operator { get; set; }
 
 
-        [NecrobotConfig(Key = "Affect to Pokemons", Description = "List of same pokemon to apply to this filter", Position = 6)]
+        [NecroBotConfig(Key = "Affect to Pokemons", Description = "List of same pokemon to apply to this filter", Position = 6)]
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
 
         public List<PokemonId> AffectToPokemons { get; set; }
@@ -103,86 +103,86 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         {
         }
 
-        [NecrobotConfig (Description = "Bot will switch to new account after this many minutes ", Position = 1)]
+        [NecroBotConfig (Description = "Bot will switch to new account after this many minutes ", Position = 1)]
         [DefaultValue(55)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public int RuntimeSwitch { get; set; }
 
-        [NecrobotConfig(Description = "Add +-this or anything between to the RuntimeSwitch", Position = 1)]
+        [NecroBotConfig(Description = "Add +-this or anything between to the RuntimeSwitch", Position = 1)]
         [DefaultValue(10)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public int RuntimeSwitchRandomTime { get; set; }
 
-        [NecrobotConfig(Description = "This many minutes to block this bot when reaching the daily limit ", Position = 1)]
+        [NecroBotConfig(Description = "This many minutes to block this bot when reaching the daily limit ", Position = 1)]
         [DefaultValue(15)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
 
         public int OnLimitPauseTimes { get; set; }
 
-        [NecrobotConfig(Description = "Allows bot to switch account when encountering a rare pokemon that you've definied in the list", Position = 2)]
+        [NecroBotConfig(Description = "Allows bot to switch account when encountering a rare pokemon that you've definied in the list", Position = 2)]
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
         public bool OnRarePokemon { get; set; }
 
-        [NecrobotConfig(Description = "Allows bot to switch account when encountering a pokemon IV higher than this value", Position = 3)]
+        [NecroBotConfig(Description = "Allows bot to switch account when encountering a pokemon IV higher than this value", Position = 3)]
         [DefaultValue(90.0)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 3)]
         public double MinIVToSwitch { get; set; }
 
-        [NecrobotConfig(Description = "Bot will switch to a new account after collecting this much EXP in a session ", Position = 4)]
+        [NecroBotConfig(Description = "Bot will switch to a new account after collecting this much EXP in a session ", Position = 4)]
         [DefaultValue(25000)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 3)]
         public int EXPSwitch { get; set; }
 
-        [NecrobotConfig(Description = "Bot will switch to a new account after this many pokestops are farmed", Position = 5)]
+        [NecroBotConfig(Description = "Bot will switch to a new account after this many pokestops are farmed", Position = 5)]
         [DefaultValue(500)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 4)]
         public int PokestopSwitch { get; set; }
 
-        [NecrobotConfig(Description = "Bot will switch to a new account after this many pokemon are caught ", Position = 6)]
+        [NecroBotConfig(Description = "Bot will switch to a new account after this many pokemon are caught ", Position = 6)]
         [DefaultValue(200)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 5)]
         public int PokemonSwitch { get; set; }
 
-        [NecrobotConfig(Description = "Bot will switch to a new account after this many pokemon are caught in 1 hours - not being used atm ", Position = 7)]
+        [NecroBotConfig(Description = "Bot will switch to a new account after this many pokemon are caught in 1 hours - not being used atm ", Position = 7)]
         [DefaultValue(100)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 6)]
         public int PokemonPerHourSwitch { get; set; } //only apply if runtime > 1h. 
 
-        [NecrobotConfig(Description = "Tell bot to start at default location", Position = 8)]
+        [NecroBotConfig(Description = "Tell bot to start at default location", Position = 8)]
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 7)]
         public bool StartFromDefaultLocation { get; set; } //only apply if runtime > 1h. 
 
-        [NecrobotConfig(Description = "How many times pokestop softban can triger bot switch, 0 means it doesn't switch", Position = 9)]
+        [NecroBotConfig(Description = "How many times pokestop softban can triger bot switch, 0 means it doesn't switch", Position = 9)]
         [DefaultValue(5)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 7)]
         [Range(0, 100)]
         public int PokestopSoftbanCount { get; set; } //only apply if runtime > 1h. 
 
 
-        [NecrobotConfig(Description = "Displays bot list (include ran time) on switch", Position = 10)]
+        [NecroBotConfig(Description = "Displays bot list (include ran time) on switch", Position = 10)]
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 9)]
         public bool DisplayList { get; set; }
 
-        [NecrobotConfig(Description = "Bot will display a list of accounts that you have setup in auth.json then ask you to select which account you want to start with.", Position = 11)]
+        [NecroBotConfig(Description = "Bot will display a list of accounts that you have setup in auth.json then ask you to select which account you want to start with.", Position = 11)]
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 9)]
         public bool SelectAccountOnStartUp { get; set; }
 
-        [NecrobotConfig(Description = "Number of continuously catch flees before switching account", Position = 12)]
+        [NecroBotConfig(Description = "Number of continuously catch flees before switching account", Position = 12)]
         [DefaultValue(5)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 12)]
         public int CatchFleeCount{ get; set; }
 
-        [NecrobotConfig(Description = "Switch account on meeting catch limit", Position = 13)]
+        [NecroBotConfig(Description = "Switch account on meeting catch limit", Position = 13)]
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 13)]
         public bool SwitchOnCatchLimit { get; set; }
 
 
-        [NecrobotConfig(Description = "Switch account on meeting pokestop limit", Position = 14)]
+        [NecroBotConfig(Description = "Switch account on meeting pokestop limit", Position = 14)]
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 14)]
         public bool SwitchOnPokestopLimit { get; set; }

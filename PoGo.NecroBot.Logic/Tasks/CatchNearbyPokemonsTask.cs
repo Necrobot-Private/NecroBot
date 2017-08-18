@@ -1,4 +1,4 @@
-﻿#region using directives
+#region using directives
 
 using System;
 using System.Linq;
@@ -56,7 +56,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                         ReachedValue = session.LogicSettings.CatchPokemonLimit
                     };
                 }
-
                 return;
             }
 
@@ -163,8 +162,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 if (encounter == null || encounter.Status != EncounterResponse.Types.Status.EncounterSuccess)
                 {
-                    await LocationUtils.UpdatePlayerLocationWithAltitude(session,
-                        new GeoCoordinate(pokemon.Latitude, pokemon.Longitude, session.Client.CurrentAltitude), 0).ConfigureAwait(false); // Set speed to 0 for random speed.
+                    //await LocationUtils.UpdatePlayerLocationWithAltitude(session,
+                    //    new GeoCoordinate(pokemon.Latitude, pokemon.Longitude, session.Client.CurrentAltitude), 0).ConfigureAwait(false); // Set speed to 0 for random speed.
                     encounter =
                         await session.Client.Encounter.EncounterPokemon(pokemon.EncounterId, pokemon.SpawnPointId).ConfigureAwait(false);
                 }

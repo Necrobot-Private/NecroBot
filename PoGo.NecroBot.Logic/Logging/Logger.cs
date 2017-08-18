@@ -165,6 +165,10 @@ namespace PoGo.NecroBot.Logic.Logging
                     Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.Magenta : color;
                     finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Gym}) {message}";
                     break;
+                case LogLevel.GymDisk:
+                    Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.Cyan : color;
+                    finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.GymDisk}) {message}";
+                    break;
                 case LogLevel.Service:
                     Console.ForegroundColor = color == ConsoleColor.Black ? ConsoleColor.White : color;
                     finalMessage = $"[{DateTime.Now.ToString("HH:mm:ss")}] ({LoggingStrings.Service}) {message}";
@@ -183,52 +187,36 @@ namespace PoGo.NecroBot.Logic.Logging
             {
                 case ConsoleColor.Black:
                     return "#002b36";
-
                 case ConsoleColor.Blue:
                     return "#268bd2";
-
                 case ConsoleColor.Cyan:
                     return "#2aa198";
-
                 case ConsoleColor.DarkBlue:
                     return "#000080";
-
                 case ConsoleColor.DarkCyan:
                     return "#008B8B";
-
                 case ConsoleColor.DarkGray:
                     return "#586e75";
-
                 case ConsoleColor.DarkGreen:
                     return "#008000";
-
                 case ConsoleColor.DarkMagenta:
                     return "#800080";
-
                 case ConsoleColor.DarkRed:
                     return "#800000";
-
                 case ConsoleColor.DarkYellow:
                     return "#808000";
-
                 case ConsoleColor.Gray:
                     return "#93a1a1";
-
                 case ConsoleColor.Green:
                     return "#859900";
-
                 case ConsoleColor.Magenta:
                     return "#d33682";
-
                 case ConsoleColor.Red:
                     return "#dc322f";
-
                 case ConsoleColor.White:
                     return "#fdf6e3";
-
                 case ConsoleColor.Yellow:
                     return "#b58900";
-
                 default:
                     // Grey
                     return "#93a1a1";
@@ -260,5 +248,6 @@ namespace PoGo.NecroBot.Logic.Logging
         Gym = 19,
         Service = 20,
         Debug = 21,
+        GymDisk = 22,
     }
 }

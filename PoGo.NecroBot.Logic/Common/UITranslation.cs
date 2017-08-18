@@ -349,7 +349,7 @@ namespace PoGo.NecroBot.Logic.Common
 
             foreach (var item in setting.GetFields())
             {
-                var configAttibute = item.GetCustomAttribute<NecrobotConfigAttribute>();
+                var configAttibute = item.GetCustomAttribute<NecroBotConfigAttribute>();
                 if (configAttibute != null)
                 {
                     var fileName = !string.IsNullOrEmpty(configAttibute.SheetName) ? configAttibute.SheetName : item.Name;
@@ -394,7 +394,7 @@ namespace PoGo.NecroBot.Logic.Common
         {
             foreach (var configItem in configType.GetProperties())
             {
-                var propAttibute = configItem.GetCustomAttribute<NecrobotConfigAttribute>();
+                var propAttibute = configItem.GetCustomAttribute<NecroBotConfigAttribute>();
                 if (propAttibute != null)
                 {
                     string fieldValue = !string.IsNullOrEmpty(propAttibute.Key) ? propAttibute.Key : configItem.Name;

@@ -21,6 +21,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static List<ulong> PokemonId = new List<ulong>();
 
         public static List<ulong> PokemonIdcp = new List<ulong>();
+        private static MultiAccountManager _MultiAccountManager;
 
         public static async Task Execute(ISession session)
         {
@@ -79,7 +80,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                 : await session.Inventory.GetHighestsCp(1000).ConfigureAwait(false);
             if (session.LogicSettings.DumpPokemonStats)
             {
-                const string dumpFileName = "PokeBagStats";
+                _MultiAccountManager = new MultiAccountManager();
+                var account = _MultiAccountManager.GetCurrentAccount();
+                string dumpFileName = account.Nickname; // "-PokeBagStats";
                 try
                 {
                     Dumper.ClearDumpFile(session, dumpFileName);
@@ -110,7 +113,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         "Gyms Attacked",
                         "Gyms Defended",
                         "Creationtimems",
-                        "Additional CP Multi"
+                        "Add CP Multi"
                     };
                     Dumper.Dump(session, data, dumpFileName);
 

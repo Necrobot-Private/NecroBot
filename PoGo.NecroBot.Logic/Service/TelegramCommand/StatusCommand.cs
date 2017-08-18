@@ -24,9 +24,9 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
         {
             if (cmd.ToLower() == Command)
             {
-                var necroBotVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString(4);
-                var necroBotStatistics = session.RuntimeStatistics;
-                var necrobotStats = await necroBotStatistics.GetCurrentInfo(session, session.Inventory).ConfigureAwait(false);
+                var NecroBotVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString(4);
+                var NecroBotStatistics = session.RuntimeStatistics;
+                var NecroBotStats = await NecroBotStatistics.GetCurrentInfo(session, session.Inventory).ConfigureAwait(false);
 
                 var answerCatchLimit = "diabled";
                 var answerPokestopLimit = "disabled";
@@ -53,19 +53,19 @@ namespace PoGo.NecroBot.Logic.Service.TelegramCommand
 
                 answerTextmessage += session.Translation.GetTranslation(
                     TranslationString.TelegramCommandStatusMsgBody,
-                    necroBotVersion,
+                    NecroBotVersion,
                     session.Profile.PlayerData.Username,
-                    necroBotStatistics.FormatRuntime(),
-                    necrobotStats.Level,
-                    necrobotStats.HoursUntilLvl,
-                    necrobotStats.MinutesUntilLevel,
-                    necrobotStats.LevelupXp - necrobotStats.CurrentXp,
-                    necroBotStatistics.TotalExperience/necroBotStatistics.GetRuntime(),
-                    necroBotStatistics.TotalPokemons/necroBotStatistics.GetRuntime(),
-                    necroBotStatistics.TotalStardust/necroBotStatistics.GetRuntime(),
-                    necroBotStatistics.TotalPokemonTransferred,
-                    necroBotStatistics.TotalPokemonEvolved,
-                    necroBotStatistics.TotalItemsRemoved,
+                    NecroBotStatistics.FormatRuntime(),
+                    NecroBotStats.Level,
+                    NecroBotStats.HoursUntilLvl,
+                    NecroBotStats.MinutesUntilLevel,
+                    NecroBotStats.LevelupXp - NecroBotStats.CurrentXp,
+                    NecroBotStatistics.TotalExperience/NecroBotStatistics.GetRuntime(),
+                    NecroBotStatistics.TotalPokemons/NecroBotStatistics.GetRuntime(),
+                    NecroBotStatistics.TotalStardust/NecroBotStatistics.GetRuntime(),
+                    NecroBotStatistics.TotalPokemonTransferred,
+                    NecroBotStatistics.TotalPokemonEvolved,
+                    NecroBotStatistics.TotalItemsRemoved,
                     answerPokestopLimit,
                     answerCatchLimit,
                     session.Profile.PlayerData.Currencies[1].Amount,

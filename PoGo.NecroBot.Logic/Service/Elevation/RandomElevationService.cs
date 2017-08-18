@@ -16,7 +16,7 @@ namespace PoGo.NecroBot.Logic.Service.Elevation
 
         public override string GetServiceId()
         {
-            return "Random Elevation Service (Necrobot Default)";
+            return "Random Elevation Service (NecroBot Default)";
         }
 
 // jjskuld - Ignore CS1998 warning for now.

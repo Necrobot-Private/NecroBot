@@ -14,7 +14,7 @@ namespace PoGo.NecroBot.CLI.Forms
 
         private void InfoForm_Load(object sender, EventArgs e)
         {
-            Text = $"Necrobot 2 - v{Assembly.GetExecutingAssembly().GetName().Version.ToString()}";
+            Text = $"NecroBot 2 - v{Assembly.GetExecutingAssembly().GetName().Version.ToString()}";
         }
 
         private void DonateLogo_Click(object sender, EventArgs e)
@@ -39,7 +39,7 @@ namespace PoGo.NecroBot.CLI.Forms
 
         private void NecroLogo_Click(object sender, EventArgs e)
         {
-            Process.Start("https://github.com/Necrobot-Private/NecroBot");
+            Process.Start("https://github.com/NecroBot-Private/NecroBot");
         }
     }
 }

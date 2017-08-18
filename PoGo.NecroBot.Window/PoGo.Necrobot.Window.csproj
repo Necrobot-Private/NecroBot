@@ -1,0 +1,993 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{462F0601-DA74-4226-AF72-654F5EDFF020}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PoGo.Necrobot.Window</RootNamespace>
+    <AssemblyName>NecroBot2.Win</AssemblyName>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Optimize>false</Optimize>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Optimize>true</Optimize>
+    <DebugType>None</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <Optimize>false</Optimize>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <Optimize>true</Optimize>
+    <DebugType>None</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Ico.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <Optimize>false</Optimize>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>None</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Costura, Version=1.6.2.0, Culture=neutral, PublicKeyToken=9919ef960d84173d, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Costura.Fody.1.6.2\lib\dotnet\Costura.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DotNetBrowser, Version=1.11.0.0, Culture=neutral, PublicKeyToken=b0b5aaca9c95c84e, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\DotNetBrowser.1.11\lib\DotNetBrowser.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetBrowser.Chromium, Version=1.11.0.0, Culture=neutral, PublicKeyToken=b0b5aaca9c95c84e, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\DotNetBrowser.1.11\lib\DotNetBrowser.Chromium.dll</HintPath>
+    </Reference>
+    <Reference Include="Geocoding, Version=3.6.0.0, Culture=neutral, PublicKeyToken=7c714700b88674c7, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Geocoding.net.3.6.1\lib\net40\Geocoding.dll</HintPath>
+    </Reference>
+    <Reference Include="GMap.NET.Core, Version=1.7.5.0, Culture=neutral, PublicKeyToken=b85b9027b614afef, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\GMap.NET.Presentation.1.7.5\lib\net40\GMap.NET.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="GMap.NET.WindowsPresentation, Version=1.7.5.0, Culture=neutral, PublicKeyToken=b85b9027b614afef, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\GMap.NET.Presentation.1.7.5\lib\net40\GMap.NET.WindowsPresentation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Google.Protobuf, Version=3.3.0.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Google.Protobuf.3.3.0\lib\net45\Google.Protobuf.dll</HintPath>
+    </Reference>
+    <Reference Include="GrayscaleEffect, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Effects\GrayscaleEffect.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="MahApps.Metro, Version=1.5.0.23, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\MahApps.Metro.1.5.0\lib\net45\MahApps.Metro.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.EntityFrameworkCore, Version=1.1.2.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Microsoft.EntityFrameworkCore.1.1.2\lib\net451\Microsoft.EntityFrameworkCore.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Caching.Abstractions, Version=1.1.2.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Microsoft.Extensions.Caching.Abstractions.1.1.2\lib\netstandard1.0\Microsoft.Extensions.Caching.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Caching.Memory, Version=1.1.2.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Microsoft.Extensions.Caching.Memory.1.1.2\lib\net451\Microsoft.Extensions.Caching.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection, Version=1.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Microsoft.Extensions.DependencyInjection.1.1.1\lib\netstandard1.1\Microsoft.Extensions.DependencyInjection.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=1.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Microsoft.Extensions.DependencyInjection.Abstractions.1.1.1\lib\netstandard1.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging, Version=1.1.2.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Microsoft.Extensions.Logging.1.1.2\lib\netstandard1.1\Microsoft.Extensions.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=1.1.2.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Microsoft.Extensions.Logging.Abstractions.1.1.2\lib\netstandard1.1\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Options, Version=1.1.2.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Microsoft.Extensions.Options.1.1.2\lib\netstandard1.0\Microsoft.Extensions.Options.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Primitives, Version=1.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Microsoft.Extensions.Primitives.1.1.1\lib\netstandard1.0\Microsoft.Extensions.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.CoreUtility, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Microsoft.VisualStudio.CoreUtility.15.0.26606\lib\net45\Microsoft.VisualStudio.CoreUtility.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.OLE.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>$(SolutionDir)\packages\Microsoft.VisualStudio.OLE.Interop.7.10.6070\lib\Microsoft.VisualStudio.OLE.Interop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Framework, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Microsoft.VisualStudio.Shell.Framework.15.0.26606\lib\net45\Microsoft.VisualStudio.Shell.Framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.10.0, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Microsoft.VisualStudio.Shell.Immutable.10.0.15.0.25414\lib\net40\Microsoft.VisualStudio.Shell.Immutable.10.0.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Utilities, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Microsoft.VisualStudio.Utilities.15.0.26607\lib\net46\Microsoft.VisualStudio.Utilities.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Win32.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Remotion.Linq, Version=2.1.0.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Remotion.Linq.2.1.2\lib\net45\Remotion.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="S2Geometry, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\S2Geometry.1.0.3\lib\portable-net45+wp8+win8\S2Geometry.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SuperSocket.Common, Version=1.6.6.1, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\SuperSocket.1.6.6.1\lib\net45\SuperSocket.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="SuperSocket.Facility, Version=1.6.6.1, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\SuperSocket.1.6.6.1\lib\net45\SuperSocket.Facility.dll</HintPath>
+    </Reference>
+    <Reference Include="SuperSocket.SocketBase, Version=1.6.6.1, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\SuperSocket.1.6.6.1\lib\net45\SuperSocket.SocketBase.dll</HintPath>
+    </Reference>
+    <Reference Include="SuperSocket.SocketEngine, Version=1.6.6.1, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\SuperSocket.Engine.1.6.6.1\lib\net45\SuperSocket.SocketEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="SuperSocket.SocketService, Version=1.6.6.1, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\SuperSocket.Engine.1.6.6.1\lib\net45\SuperSocket.SocketService.exe</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\System.AppContext.4.3.0\lib\net46\System.AppContext.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Collections.Immutable, Version=1.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\System.Collections.Immutable.1.3.1\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Console, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\System.Console.4.3.0\lib\net46\System.Console.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\System.Diagnostics.DiagnosticSource.4.4.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Diagnostics.Tracing, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\System.Diagnostics.Tracing.4.3.0\lib\net462\System.Diagnostics.Tracing.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Globalization.Calendars, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\System.Globalization.Calendars.4.3.0\lib\net46\System.Globalization.Calendars.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Interactive.Async, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\System.Interactive.Async.3.1.1\lib\net46\System.Interactive.Async.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\System.IO.4.3.0\lib\net462\System.IO.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Compression, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.IO.Compression.ZipFile, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\System.IO.Compression.ZipFile.4.3.0\lib\net46\System.IO.Compression.ZipFile.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.FileSystem, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\System.IO.FileSystem.4.3.0\lib\net46\System.IO.FileSystem.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\System.IO.FileSystem.Primitives.4.3.0\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http, Version=4.1.1.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\System.Net.Http.4.3.2\lib\net46\System.Net.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Sockets, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\System.Net.Sockets.4.3.0\lib\net46\System.Net.Sockets.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Reflection, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\System.Reflection.4.3.0\lib\net462\System.Reflection.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\System.Runtime.4.3.0\lib\net462\System.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\System.Runtime.CompilerServices.Unsafe.4.3.0\lib\netstandard1.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Extensions, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\System.Runtime.Extensions.4.3.0\lib\net462\System.Runtime.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net461\System.Security.Cryptography.Algorithms.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Windows.Controls.Input.Toolkit, Version=3.5.40128.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\WPFToolkit.3.5.50211.1\lib\System.Windows.Controls.Input.Toolkit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Windows.Controls.Layout.Toolkit, Version=3.5.40128.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\WPFToolkit.3.5.50211.1\lib\System.Windows.Controls.Layout.Toolkit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\MahApps.Metro.1.5.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml.ReaderWriter, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\System.Xml.ReaderWriter.4.3.0\lib\net46\System.Xml.ReaderWriter.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WPFToolkit, Version=3.5.40128.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\WPFToolkit.3.5.50211.1\lib\WPFToolkit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock, Version=3.1.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Extended.Wpf.Toolkit.3.1\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=3.1.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Extended.Wpf.Toolkit.3.1\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=3.1.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Extended.Wpf.Toolkit.3.1\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=3.1.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Extended.Wpf.Toolkit.3.1\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.DataGrid, Version=3.1.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Extended.Wpf.Toolkit.3.1\lib\net40\Xceed.Wpf.DataGrid.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.Toolkit, Version=3.1.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Extended.Wpf.Toolkit.3.1\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Behaviors\DataGridBehavior.cs" />
+    <Compile Include="Controls\EggsControl.xaml.cs">
+      <DependentUpon>EggsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\EmptyItemsControlAdornerBehavior.cs" />
+    <Compile Include="Controls\FilteringDataGrid.cs" />
+    <Compile Include="Controls\MapMarkers\GymMarker.xaml.cs">
+      <DependentUpon>GymMarker.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MapMarkers\FortMarker.xaml.cs">
+      <DependentUpon>FortMarker.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MapMarkers\MapPokemonMarker.xaml.cs">
+      <DependentUpon>MapPokemonMarker.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MapMarkers\TargetMarker.xaml.cs">
+      <DependentUpon>TargetMarker.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Overlay.cs" />
+    <Compile Include="Controls\SnipeGrid.xaml.cs">
+      <DependentUpon>SnipeGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\TemplatedAdorner.cs" />
+    <Compile Include="Converters\GrayScaleConverter.cs" />
+    <Compile Include="Converters\ListPokemonIdToTextConverter.cs" />
+    <Compile Include="Converters\HeaderFilterConverter.cs" />
+    <Compile Include="Converters\I18NMultiConveter.cs" />
+    <Compile Include="Converters\I18NConveter.cs" />
+    <Compile Include="Converters\EnumToNumberConverter.cs" />
+    <Compile Include="Converters\ListPokemonIdConverter.cs" />
+    <Compile Include="Converters\DurationTextConverter.cs" />
+    <Compile Include="Converters\TimestampToDateTimeConverter.cs" />
+    <Compile Include="Converters\PokemonIdToImageConverter.cs" />
+    <Compile Include="Converters\ValueConverterGroup.cs" />
+    <Compile Include="Converters\VisibleIfTrueConverter.cs" />
+    <Compile Include="Converters\PokemonImageConverter.cs" />
+    <Compile Include="Converters\ListCountConverter.cs" />
+    <Compile Include="Converters\VisibleWhenGreateThenZeroConverter.cs" />
+    <Compile Include="FilterSetting.xaml.cs">
+      <DependentUpon>FilterSetting.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Model\AddManualSnipeCoordViewModel.cs" />
+    <Compile Include="Model\AffectPokemonViewModel.cs" />
+    <Compile Include="Model\EggsListViewModel.cs" />
+    <Compile Include="Model\EggViewModel.cs" />
+    <Compile Include="Model\GymViewModel.cs" />
+    <Compile Include="Model\FortViewModel.cs" />
+    <Compile Include="Model\IncubatorViewModel.cs" />
+    <Compile Include="Model\MapPokemonViewModel.cs" />
+    <Compile Include="Model\MapViewModel.cs" />
+    <Compile Include="Model\ObservableCollectionExt.cs" />
+    <Compile Include="Model\PokeDexEntryViewModel.cs" />
+    <Compile Include="Model\PokedexItemsViewModel.cs" />
+    <Compile Include="Model\PokemonViewModelBase.cs" />
+    <Compile Include="Model\SnipeListViewModel.cs" />
+    <Compile Include="Model\SnipePokemonViewModel.cs" />
+    <Compile Include="PokedexWindow.xaml.cs">
+      <DependentUpon>PokedexWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ItemsInventory.xaml.cs">
+      <DependentUpon>ItemsInventory.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MapControl.xaml.cs">
+      <DependentUpon>MapControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MapMarkers\Circle.xaml.cs">
+      <DependentUpon>Circle.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MapMarkers\Cross.xaml.cs">
+      <DependentUpon>Cross.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MapMarkers\CustomMarkerDemo.xaml.cs">
+      <DependentUpon>CustomMarkerDemo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MapMarkers\PlayerMarker.xaml.cs">
+      <DependentUpon>PlayerMarker.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MapMarkers\CustomMarkerRed.xaml.cs">
+      <DependentUpon>CustomMarkerRed.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PlayerInfo.xaml.cs">
+      <DependentUpon>PlayerInfo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PokemonInventory.xaml.cs">
+      <DependentUpon>PokemonInventory.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SidebarControl.xaml.cs">
+      <DependentUpon>SidebarControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Sidebars\CatchPokemonItem.xaml.cs">
+      <DependentUpon>CatchPokemonItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Sidebars\PokestopItem.xaml.cs">
+      <DependentUpon>PokestopItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SniperControl.xaml.cs">
+      <DependentUpon>SniperControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\TrolleyTooltip.xaml.cs">
+      <DependentUpon>TrolleyTooltip.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Converters\FavoriteTextConverter.cs" />
+    <Compile Include="Converters\CheckAllowEvolveConverter.cs" />
+    <Compile Include="Converters\FriendlyEvolveTextConverter.cs" />
+    <Compile Include="Converters\IVToColorConverter.cs" />
+    <Compile Include="Converters\FriendlyTransferTextConverter.cs" />
+    <Compile Include="Converters\AllowTransferCheckConverter.cs" />
+    <Compile Include="Converters\ItemIdToImageConverter.cs" />
+    <Compile Include="Converters\CollapseWhenGreateThenZeroConverter.cs" />
+    <Compile Include="Converters\InverseBooleanConverter.cs" />
+    <Compile Include="Converters\MoveConverter.cs" />
+    <Compile Include="Converters\OperatorConverter.cs" />
+    <Compile Include="Extensions\UIExtensions.cs" />
+    <Compile Include="Extensions\ObjectExtentions.cs" />
+    <Compile Include="MainClientWindow.xaml.LocalVariable.cs">
+      <DependentUpon>MainClientWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MainClientWindow.xaml.cs">
+      <DependentUpon>MainClientWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MainClientWindow.xaml.UIEvents.cs">
+      <DependentUpon>MainClientWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Model\CatchPokemonViewModel.cs" />
+    <Compile Include="Model\DataContext.cs" />
+    <Compile Include="Model\ItemsListDataModel.cs" />
+    <Compile Include="Model\ItemsViewModel.cs" />
+    <Compile Include="Model\PlayerInfoModel.cs" />
+    <Compile Include="Model\PokemonDataViewModel.cs" />
+    <Compile Include="Model\PokemonListModel.cs" />
+    <Compile Include="Model\PokestopItemViewModel.cs" />
+    <Compile Include="Model\SidebarItemViewModel.cs" />
+    <Compile Include="Model\SidebarViewModel.cs" />
+    <Compile Include="Model\UIViewModel.cs" />
+    <Compile Include="Model\ViewModelBase.cs" />
+    <Compile Include="SplashScreen.xaml.cs">
+      <DependentUpon>SplashScreen.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UILogger.cs" />
+    <Compile Include="Win32\ConsoleHelper.cs" />
+    <Page Include="Controls\EggsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\MapMarkers\GymMarker.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\MapMarkers\FortMarker.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\MapMarkers\MapPokemonMarker.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\MapMarkers\TargetMarker.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\SnipeGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="FilterSetting.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PokedexWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\ItemsInventory.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\MapControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\MapMarkers\Circle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\MapMarkers\Cross.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\MapMarkers\CustomMarkerDemo.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\MapMarkers\PlayerMarker.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\MapMarkers\CustomMarkerRed.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\PlayerInfo.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\PokemonInventory.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SidebarControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Sidebars\CatchPokemonItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Sidebars\PokestopItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SniperControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\TrolleyTooltip.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SettingsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SettingsWindow.xaml.cs">
+      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="Resources\Icons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\IconsNonShared.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MainClientWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SplashScreen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ObservableCollectionConverter.cs" />
+    <Compile Include="ObservablePairCollection.cs" />
+    <Compile Include="Pair.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="cert.pfx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Config\log4net.config" />
+    <None Include="Config\log4net.unix.config" />
+    <None Include="Config\Translations\ui.pl.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Config\Translations\ui.vn.json" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+    <Resource Include="Resources\Fonts\Lato\Lato-Black.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Fonts\Lato\Lato-BlackItalic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Fonts\Lato\Lato-Bold.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Fonts\Lato\Lato-BoldItalic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Fonts\Lato\Lato-Hairline.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Fonts\Lato\Lato-HairlineItalic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Fonts\Lato\Lato-Heavy.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Fonts\Lato\Lato-HeavyItalic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Fonts\Lato\Lato-Italic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Fonts\Lato\Lato-Light.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Fonts\Lato\Lato-LightItalic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Fonts\Lato\Lato-Medium.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Fonts\Lato\Lato-MediumItalic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Fonts\Lato\Lato-Regular.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Fonts\Lato\Lato-Semibold.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Fonts\Lato\Lato-SemiboldItalic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Fonts\Lato\Lato-Thin.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Fonts\Lato\Lato-ThinItalic.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Entypo.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\WindowsIcons-license.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Entypo-license.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="$(SolutionDir)\FeroxRev\PokemonGo.RocketAPI.csproj">
+      <Project>{05d2da44-1b8e-4cf7-94ed-4d52451cd095}</Project>
+      <Name>PokemonGo.RocketAPI</Name>
+    </ProjectReference>
+    <ProjectReference Include="$(SolutionDir)\PoGo.NecroBot.Logic\PoGo.NecroBot.Logic.csproj">
+      <Project>{0739e40d-c589-4aeb-93e5-ee8cd6773c60}</Project>
+      <Name>PoGo.NecroBot.Logic</Name>
+    </ProjectReference>
+    <ProjectReference Include="$(SolutionDir)\PoGo.NecroBot.CLI\PoGo.NecroBot.CLI.csproj">
+      <Project>{1fea147e-f704-497b-a538-00b053b5f672}</Project>
+      <Name>PoGo.NecroBot.CLI</Name>
+    </ProjectReference>
+    <ProjectReference Include="$(SolutionDir)\POGOProtos\POGOProtos.csproj">
+      <Project>{a03a7bb2-4f0b-467b-84b2-9a76e6aae6fb}</Project>
+      <Name>POGOProtos</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="FodyWeavers.xml">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Controls\MapMarkers\bigMarkerGreen.png" />
+    <Resource Include="Controls\MapMarkers\red-dot.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Controls\MapMarkers\trainer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Controls\MapMarkers\big-trainer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Controls\MapMarkers\pokestop-normal.png" />
+    <Resource Include="Controls\MapMarkers\pokestop-used.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Ico.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ajax-loader.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Sniper\SniperIMG_Cobalt.png" />
+    <Resource Include="Resources\Sniper\SniperIMG_Amber.png" />
+    <Resource Include="Resources\Sniper\SniperIMG_Teal.png" />
+    <Resource Include="Resources\Sniper\SniperIMG_Taupe.png" />
+    <Resource Include="Resources\Sniper\SniperIMG_Steel.png" />
+    <Resource Include="Resources\Sniper\SniperIMG_Sienna.png" />
+    <Resource Include="Resources\Sniper\SniperIMG_Purple.png" />
+    <Resource Include="Resources\Sniper\SniperIMG_Pink.png" />
+    <Resource Include="Resources\Sniper\SniperIMG_Olive.png" />
+    <Resource Include="Resources\Sniper\SniperIMG_Mauve.png" />
+    <Resource Include="Resources\Sniper\SniperIMG_Magenta.png" />
+    <Resource Include="Resources\Sniper\SniperIMG_Lime.png" />
+    <Resource Include="Resources\Sniper\SniperIMG_Emerald.png" />
+    <Resource Include="Resources\Sniper\SniperIMG_Cyan.png" />
+    <Resource Include="Resources\Sniper\SniperIMG_Crimson.png" />
+    <Resource Include="Resources\Pokemon\PokemonIMG_Sienna.png" />
+    <Resource Include="Resources\Pokemon\PokemonIMG_Purple.png" />
+    <Resource Include="Resources\Pokemon\PokemonIMG_Pink.png" />
+    <Resource Include="Resources\Pokemon\PokemonIMG_Olive.png" />
+    <Resource Include="Resources\Pokemon\PokemonIMG_Mauve.png" />
+    <Resource Include="Resources\Pokemon\PokemonIMG_Magenta.png" />
+    <Resource Include="Resources\Pokemon\PokemonIMG_Lime.png" />
+    <Resource Include="Resources\Pokemon\PokemonIMG_Emerald.png" />
+    <Resource Include="Resources\Pokemon\PokemonIMG_Cyan.png" />
+    <Resource Include="Resources\Pokemon\PokemonIMG_Crimson.png" />
+    <Resource Include="Resources\Pokemon\PokemonIMG_Cobalt.png" />
+    <Resource Include="Resources\Pokemon\PokemonIMG_Amber.png" />
+    <Resource Include="Resources\Pokemon\PokemonIMG_Teal.png" />
+    <Resource Include="Resources\Pokemon\PokemonIMG_Taupe.png" />
+    <Resource Include="Resources\Pokemon\PokemonIMG_Steel.png" />
+    <Resource Include="Resources\Map\MapIMG_Teal.png" />
+    <Resource Include="Resources\Map\MapIMG_Taupe.png" />
+    <Resource Include="Resources\Map\MapIMG_Steel.png" />
+    <Resource Include="Resources\Map\MapIMG_Sienna.png" />
+    <Resource Include="Resources\Map\MapIMG_Purple.png" />
+    <Resource Include="Resources\Map\MapIMG_Pink.png" />
+    <Resource Include="Resources\Map\MapIMG_Olive.png" />
+    <Resource Include="Resources\Map\MapIMG_Mauve.png" />
+    <Resource Include="Resources\Map\MapIMG_Magenta.png" />
+    <Resource Include="Resources\Map\MapIMG_Lime.png" />
+    <Resource Include="Resources\Map\MapIMG_Emerald.png" />
+    <Resource Include="Resources\Map\MapIMG_Cyan.png" />
+    <Resource Include="Resources\Map\MapIMG_Crimson.png" />
+    <Resource Include="Resources\Map\MapIMG_Cobalt.png" />
+    <Resource Include="Resources\Map\MapIMG_Amber.png" />
+    <Resource Include="Resources\Items\ItemsIMG_Teal.png" />
+    <Resource Include="Resources\Items\ItemsIMG_Taupe.png" />
+    <Resource Include="Resources\Items\ItemsIMG_Steel.png" />
+    <Resource Include="Resources\Items\ItemsIMG_Sienna.png" />
+    <Resource Include="Resources\Items\ItemsIMG_Purple.png" />
+    <Resource Include="Resources\Items\ItemsIMG_Pink.png" />
+    <Resource Include="Resources\Items\ItemsIMG_Olive.png" />
+    <Resource Include="Resources\Items\ItemsIMG_Mauve.png" />
+    <Resource Include="Resources\Items\ItemsIMG_Magenta.png" />
+    <Resource Include="Resources\Items\ItemsIMG_Lime.png" />
+    <Resource Include="Resources\Items\ItemsIMG_Emerald.png" />
+    <Resource Include="Resources\Items\ItemsIMG_Cyan.png" />
+    <Resource Include="Resources\Items\ItemsIMG_Crimson.png" />
+    <Resource Include="Resources\Items\ItemsIMG_Cobalt.png" />
+    <Resource Include="Resources\Items\ItemsIMG_Amber.png" />
+    <Resource Include="Resources\Hub\HubIMG_Teal.png" />
+    <Resource Include="Resources\Hub\HubIMG_Taupe.png" />
+    <Resource Include="Resources\Hub\HubIMG_Steel.png" />
+    <Resource Include="Resources\Hub\HubIMG_Sienna.png" />
+    <Resource Include="Resources\Hub\HubIMG_Purple.png" />
+    <Resource Include="Resources\Hub\HubIMG_Pink.png" />
+    <Resource Include="Resources\Hub\HubIMG_Olive.png" />
+    <Resource Include="Resources\Hub\HubIMG_Mauve.png" />
+    <Resource Include="Resources\Hub\HubIMG_Magenta.png" />
+    <Resource Include="Resources\Hub\HubIMG_Lime.png" />
+    <Resource Include="Resources\Hub\HubIMG_Emerald.png" />
+    <Resource Include="Resources\Hub\HubIMG_Cyan.png" />
+    <Resource Include="Resources\Hub\HubIMG_Crimson.png" />
+    <Resource Include="Resources\Hub\HubIMG_Cobalt.png" />
+    <Resource Include="Resources\Hub\HubIMG_Amber.png" />
+    <Resource Include="Resources\Eggs\EggsIMG_Amber.png" />
+    <Resource Include="Resources\Eggs\EggsIMG_Teal.png" />
+    <Resource Include="Resources\Eggs\EggsIMG_Taupe.png" />
+    <Resource Include="Resources\Eggs\EggsIMG_Steel.png" />
+    <Resource Include="Resources\Eggs\EggsIMG_Sienna.png" />
+    <Resource Include="Resources\Eggs\EggsIMG_Purple.png" />
+    <Resource Include="Resources\Eggs\EggsIMG_Pink.png" />
+    <Resource Include="Resources\Eggs\EggsIMG_Olive.png" />
+    <Resource Include="Resources\Eggs\EggsIMG_Mauve.png" />
+    <Resource Include="Resources\Eggs\EggsIMG_Magenta.png" />
+    <Resource Include="Resources\Eggs\EggsIMG_Lime.png" />
+    <Resource Include="Resources\Eggs\EggsIMG_Emerald.png" />
+    <Resource Include="Resources\Eggs\EggsIMG_Cyan.png" />
+    <Resource Include="Resources\Eggs\EggsIMG_Crimson.png" />
+    <Resource Include="Resources\Eggs\EggsIMG_Cobalt.png" />
+    <Resource Include="Resources\Console\ConsoleIMG_Cobalt.png" />
+    <Resource Include="Resources\Console\ConsoleIMG_Amber.png" />
+    <Resource Include="Resources\Console\ConsoleIMG_Teal.png" />
+    <Resource Include="Resources\Console\ConsoleIMG_Taupe.png" />
+    <Resource Include="Resources\Console\ConsoleIMG_Steel.png" />
+    <Resource Include="Resources\Console\ConsoleIMG_Sienna.png" />
+    <Resource Include="Resources\Console\ConsoleIMG_Purple.png" />
+    <Resource Include="Resources\Console\ConsoleIMG_Pink.png" />
+    <Resource Include="Resources\Console\ConsoleIMG_Olive.png" />
+    <Resource Include="Resources\Console\ConsoleIMG_Mauve.png" />
+    <Resource Include="Resources\Console\ConsoleIMG_Magenta.png" />
+    <Resource Include="Resources\Console\ConsoleIMG_Lime.png" />
+    <Resource Include="Resources\Console\ConsoleIMG_Emerald.png" />
+    <Resource Include="Resources\Console\ConsoleIMG_Cyan.png" />
+    <Resource Include="Resources\Console\ConsoleIMG_Crimson.png" />
+    <Resource Include="Resources\Accounts\AccountsIMG_Emerald.png" />
+    <Resource Include="Resources\Accounts\AccountsIMG_Cyan.png" />
+    <Resource Include="Resources\Accounts\AccountsIMG_Crimson.png" />
+    <Resource Include="Resources\Accounts\AccountsIMG_Cobalt.png" />
+    <Resource Include="Resources\Accounts\AccountsIMG_Amber.png" />
+    <Resource Include="Resources\Accounts\AccountsIMG_Teal.png" />
+    <Resource Include="Resources\Accounts\AccountsIMG_Taupe.png" />
+    <Resource Include="Resources\Accounts\AccountsIMG_Steel.png" />
+    <Resource Include="Resources\Accounts\AccountsIMG_Sienna.png" />
+    <Resource Include="Resources\Accounts\AccountsIMG_Purple.png" />
+    <Resource Include="Resources\Accounts\AccountsIMG_Pink.png" />
+    <Resource Include="Resources\Accounts\AccountsIMG_Olive.png" />
+    <Resource Include="Resources\Accounts\AccountsIMG_Mauve.png" />
+    <Resource Include="Resources\Accounts\AccountsIMG_Magenta.png" />
+    <Resource Include="Resources\Accounts\AccountsIMG_Lime.png" />
+    <Resource Include="Resources\Sniper\SniperIMG_Red.png" />
+    <Resource Include="Resources\Sniper\SniperIMG_Orange.png" />
+    <Resource Include="Resources\Sniper\SniperIMG_Indigo.png" />
+    <Resource Include="Resources\Sniper\SniperIMG_Green.png" />
+    <Resource Include="Resources\Sniper\SniperIMG_Brown.png" />
+    <Resource Include="Resources\Sniper\SniperIMG_Blue.png" />
+    <Resource Include="Resources\Sniper\SniperIMG_Yellow.png" />
+    <Resource Include="Resources\Sniper\SniperIMG_Violet.png" />
+    <Resource Include="Resources\Pokemon\PokemonIMG_Indigo.png" />
+    <Resource Include="Resources\Pokemon\PokemonIMG_Green.png" />
+    <Resource Include="Resources\Pokemon\PokemonIMG_Brown.png" />
+    <Resource Include="Resources\Pokemon\PokemonIMG_Blue.png" />
+    <Resource Include="Resources\Pokemon\PokemonIMG_Yellow.png" />
+    <Resource Include="Resources\Pokemon\PokemonIMG_Violet.png" />
+    <Resource Include="Resources\Pokemon\PokemonIMG_Red.png" />
+    <Resource Include="Resources\Pokemon\PokemonIMG_Orange.png" />
+    <Resource Include="Resources\Map\MapIMG_Red.png" />
+    <Resource Include="Resources\Map\MapIMG_Orange.png" />
+    <Resource Include="Resources\Map\MapIMG_Indigo.png" />
+    <Resource Include="Resources\Map\MapIMG_Green.png" />
+    <Resource Include="Resources\Map\MapIMG_Brown.png" />
+    <Resource Include="Resources\Map\MapIMG_Blue.png" />
+    <Resource Include="Resources\Map\MapIMG_Yellow.png" />
+    <Resource Include="Resources\Map\MapIMG_Violet.png" />
+    <Resource Include="Resources\Items\ItemsIMG_Orange.png" />
+    <Resource Include="Resources\Items\ItemsIMG_Indigo.png" />
+    <Resource Include="Resources\Items\ItemsIMG_Green.png" />
+    <Resource Include="Resources\Items\ItemsIMG_Brown.png" />
+    <Resource Include="Resources\Items\ItemsIMG_Blue.png" />
+    <Resource Include="Resources\Items\ItemsIMG_Yellow.png" />
+    <Resource Include="Resources\Items\ItemsIMG_Violet.png" />
+    <Resource Include="Resources\Items\ItemsIMG_Red.png" />
+    <Resource Include="Resources\Hub\HubIMG_Yellow.png" />
+    <Resource Include="Resources\Hub\HubIMG_Violet.png" />
+    <Resource Include="Resources\Hub\HubIMG_Red.png" />
+    <Resource Include="Resources\Hub\HubIMG_Orange.png" />
+    <Resource Include="Resources\Hub\HubIMG_Indigo.png" />
+    <Resource Include="Resources\Hub\HubIMG_Green.png" />
+    <Resource Include="Resources\Hub\HubIMG_Brown.png" />
+    <Resource Include="Resources\Hub\HubIMG_Blue.png" />
+    <Resource Include="Resources\Eggs\EggsIMG_Orange.png" />
+    <Resource Include="Resources\Eggs\EggsIMG_Indigo.png" />
+    <Resource Include="Resources\Eggs\EggsIMG_Green.png" />
+    <Resource Include="Resources\Eggs\EggsIMG_Brown.png" />
+    <Resource Include="Resources\Eggs\EggsIMG_Blue.png" />
+    <Resource Include="Resources\Eggs\EggsIMG_Yellow.png" />
+    <Resource Include="Resources\Eggs\EggsIMG_Violet.png" />
+    <Resource Include="Resources\Eggs\EggsIMG_Red.png" />
+    <Resource Include="Resources\Console\ConsoleIMG_Yellow.png" />
+    <Resource Include="Resources\Console\ConsoleIMG_Violet.png" />
+    <Resource Include="Resources\Console\ConsoleIMG_Red.png" />
+    <Resource Include="Resources\Console\ConsoleIMG_Orange.png" />
+    <Resource Include="Resources\Console\ConsoleIMG_Indigo.png" />
+    <Resource Include="Resources\Console\ConsoleIMG_Green.png" />
+    <Resource Include="Resources\Console\ConsoleIMG_Brown.png" />
+    <Resource Include="Resources\Console\ConsoleIMG_Blue.png" />
+    <Resource Include="Resources\Accounts\AccountsIMG_Green.png" />
+    <Resource Include="Resources\Accounts\AccountsIMG_Brown.png" />
+    <Resource Include="Resources\Accounts\AccountsIMG_Blue.png" />
+    <Resource Include="Resources\Accounts\AccountsIMG_Yellow.png" />
+    <Resource Include="Resources\Accounts\AccountsIMG_Violet.png" />
+    <Resource Include="Resources\Accounts\AccountsIMG_Red.png" />
+    <Resource Include="Resources\Accounts\AccountsIMG_Orange.png" />
+    <Resource Include="Resources\Accounts\AccountsIMG_Indigo.png" />
+    <Resource Include="Resources\Accounts\AccountsImage.png" />
+    <Resource Include="Resources\Sniper\SniperImage.png" />
+    <Resource Include="Resources\Pokemon\PokemonImage.png" />
+    <Resource Include="Resources\Map\MapImage.png" />
+    <Resource Include="Resources\Items\ItemsImage.png" />
+    <Resource Include="Resources\Hub\HubImage.png" />
+    <Resource Include="Resources\Eggs\EggsImage.png" />
+    <Resource Include="Resources\Console\ConsoleImage.png" />
+    <EmbeddedResource Include="Resources\teamdev.licenses" />
+    <Resource Include="Resources\Fonts\Lato\SIL Open Font License.txt" />
+    <Resource Include="Controls\MapMarkers\pokestop.png" />
+    <EmbeddedResource Include="costura32\sqlite3.dll" />
+    <EmbeddedResource Include="costura64\sqlite3.dll" />
+    <Content Include="Effects\GrayscaleEffect.dll" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\packages\Fody.2.1.2\build\netstandard1.0\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\packages\Fody.2.1.2\build\netstandard1.0\Fody.targets'))" />
+    <Error Condition="!Exists('$(SolutionDir)\packages\Costura.Fody.1.6.2\build\dotnet\Costura.Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\packages\Costura.Fody.1.6.2\build\dotnet\Costura.Fody.targets'))" />
+    <Error Condition="!Exists('$(SolutionDir)\packages\Selenium.WebDriver.ChromeDriver.2.31.0\build\Selenium.WebDriver.ChromeDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\packages\Selenium.WebDriver.ChromeDriver.2.31.0\build\Selenium.WebDriver.ChromeDriver.targets'))" />
+  </Target>
+  <UsingTask TaskName="CosturaCleanup" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll" TaskFactory="CodeTaskFactory">
+    <ParameterGroup>
+      <Config Output="false" Required="true" ParameterType="Microsoft.Build.Framework.ITaskItem" />
+      <Files Output="false" Required="true" ParameterType="Microsoft.Build.Framework.ITaskItem[]" />
+    </ParameterGroup>
+    <Task Evaluate="true">
+      <Reference xmlns="http://schemas.microsoft.com/developer/msbuild/2003" Include="System.Xml" />
+      <Reference xmlns="http://schemas.microsoft.com/developer/msbuild/2003" Include="System.Xml.Linq" />
+      <Using xmlns="http://schemas.microsoft.com/developer/msbuild/2003" Namespace="System" />
+      <Using xmlns="http://schemas.microsoft.com/developer/msbuild/2003" Namespace="System.IO" />
+      <Using xmlns="http://schemas.microsoft.com/developer/msbuild/2003" Namespace="System.Xml.Linq" />
+      <Code xmlns="http://schemas.microsoft.com/developer/msbuild/2003" Type="Fragment" Language="cs"><![CDATA[
+var config = XElement.Load(Config.ItemSpec).Elements("Costura").FirstOrDefault();
+
+if (config == null) return true;
+
+var excludedAssemblies = new List<string>();
+var attribute = config.Attribute("ExcludeAssemblies");
+if (attribute != null)
+    foreach (var item in attribute.Value.Split('|').Select(x => x.Trim()).Where(x => x != string.Empty))
+        excludedAssemblies.Add(item);
+var element = config.Element("ExcludeAssemblies");
+if (element != null)
+    foreach (var item in element.Value.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()).Where(x => x != string.Empty))
+        excludedAssemblies.Add(item);
+
+var filesToCleanup = Files.Select(f => f.ItemSpec).Where(f => !excludedAssemblies.Contains(Path.GetFileNameWithoutExtension(f), StringComparer.InvariantCultureIgnoreCase));
+
+foreach (var item in filesToCleanup)
+  File.Delete(item);
+]]></Code>
+    </Task>
+  </UsingTask>
+  <Target Name="CleanReferenceCopyLocalPaths" AfterTargets="AfterBuild;NonWinFodyTarget">
+    <CosturaCleanup Config="FodyWeavers.xml" Files="@(ReferenceCopyLocalPaths->'$(OutDir)%(DestinationSubDirectory)%(Filename)%(Extension)')" />
+  </Target>
+  <PropertyGroup>
+    <PostBuildEvent>cd "$(TargetDir)"
+del *.config
+xcopy /y /f /e "$(SolutionDir)\PokeEase\Public" "$(TargetDir)\PokeEase\"
+del /s /q x86
+rmdir /s /q x86
+del /s /q x64
+rmdir /s /q x64</PostBuildEvent>
+  </PropertyGroup>
+  <Import Project="$(SolutionDir)\packages\Fody.2.1.2\build\netstandard1.0\Fody.targets" Condition="Exists('$(SolutionDir)\packages\Fody.2.1.2\build\netstandard1.0\Fody.targets')" />
+  <Import Project="$(SolutionDir)\packages\Costura.Fody.1.6.2\build\dotnet\Costura.Fody.targets" Condition="Exists('$(SolutionDir)\packages\Costura.Fody.1.6.2\build\dotnet\Costura.Fody.targets')" />
+  <Import Project="$(SolutionDir)\packages\Selenium.WebDriver.ChromeDriver.2.31.0\build\Selenium.WebDriver.ChromeDriver.targets" Condition="Exists('$(SolutionDir)\packages\Selenium.WebDriver.ChromeDriver.2.31.0\build\Selenium.WebDriver.ChromeDriver.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

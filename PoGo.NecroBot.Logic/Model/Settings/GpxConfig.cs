@@ -13,14 +13,14 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
-        [NecrobotConfig(Description = "If this option is turned on, the bot will walk using the predifined path in GpxFile", Position = 1)]
+        [NecroBotConfig(Description = "If this option is turned on, the bot will walk using the predifined path in GpxFile", Position = 1)]
         public bool UseGpxPathing { get; set; }
 
         [DefaultValue("GPXPath.GPX")]
         [MinLength(0)]
         [MaxLength(255)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
-        [NecrobotConfig(Description = "The GPX file name or full path. if you not enter full path, you have to copy the file into bot directory", Position = 2)]
+        [NecroBotConfig(Description = "The GPX file name or full path. if you not enter full path, you have to copy the file into bot directory", Position = 2)]
         public string GpxFile { get; set; }
     }
 }

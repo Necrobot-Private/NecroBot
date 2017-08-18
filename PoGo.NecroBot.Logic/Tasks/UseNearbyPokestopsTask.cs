@@ -408,7 +408,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             int zeroCheck = Math.Min(5, retryNumber); //How many times it checks fort before it thinks it's softban
 
             var distance = LocationUtils.CalculateDistanceInMeters(pokeStop.Latitude, pokeStop.Longitude, session.Client.CurrentLatitude, session.Client.CurrentLongitude);
-            if (distance > 30)
+            //This should be < ## not > ##. > makes bot jump to pokestop if < then when in range will just spin.
+            if (distance < 50) //if (distance > 30)
             {
                 await LocationUtils.UpdatePlayerLocationWithAltitude(session, new GeoCoordinate(pokeStop.Latitude, pokeStop.Longitude), 0).ConfigureAwait(false);
                 await session.Client.Misc.RandomAPICall().ConfigureAwait(false);

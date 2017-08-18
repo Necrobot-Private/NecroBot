@@ -37,7 +37,9 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             if (!session.LogicSettings.GymConfig.Enable || gym.Type != FortType.Gym) return false;
 
-            Logger.Write($"Loot Gym: {fortInfo.Name}, Description: {fortInfo.Description}", LogLevel.Gym);
+            var FortDesc = "";
+            if (fortInfo.Description != "") { FortDesc = $", Description: { fortInfo.Description}"; }
+            Logger.Write($"Loot Gym: {fortInfo.Name}{FortDesc}", LogLevel.GymDisk);
             await UseNearbyPokestopsTask.FarmPokestop(session, gym, fortInfo, cancellationToken, true).ConfigureAwait(false);
 
             /*/TODO: disabled others returns false for dev 
@@ -51,7 +53,6 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
 
             await session.GymState.LoadMyPokemons(session).ConfigureAwait(false);
-
 
             cancellationToken.ThrowIfCancellationRequested();
             TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
@@ -131,13 +132,11 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 Logger.Write($"Ignoring Gym: {fortInfo?.Name} - ", LogLevel.Gym, ConsoleColor.Cyan);
             }
-
             return false;
         }
 
         private static async Task<bool> StartGymAttackLogic(ISession session, FortDetailsResponse fortInfo, GymGetInfoResponse fortDetails, FortData gym, CancellationToken cancellationToken)
         {
-
             var _fortstate = new POGOProtos.Data.Gym.GymState()
             {
                 FortData = gym
@@ -296,7 +295,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                         Logger.Write($"(Battle) XP: {exp} | Gym points: {point} | Lvl: {UseGymBattleTask.GetGymLevel(point),2:#0} | Next defender Id: {defenderPokemonId}", LogLevel.Gym, ConsoleColor.Magenta);
 
-                        if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
+                        if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification)
                             await PushNotificationClient.SendNotification(session, $"Gym Battle",
                                                                                    $"We were victorious!\n" +
                                                                                    $"XP: {exp}" +
@@ -353,7 +352,6 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             var points = _fortstate.FortData.GymPoints;
             var maxCount = GetGymLevel(points);
-
             var availableSlots = maxCount - _fortstate.Memberships.Count();
 
             if (availableSlots > 0)
@@ -398,7 +396,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                             {
                                                 Logger.Write($"Collected {count * 10} coins", LogLevel.Gym, ConsoleColor.DarkYellow);
 
-                                                if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
+                                                if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification)
                                                     await PushNotificationClient.SendNotification(session, $"Daily reward collected: {count * 10} coins", $"Congratulations, Your bot has worked hard and collected {count * 10} coins today.",true).ConfigureAwait(false);
                                             }
                                             else
@@ -481,7 +479,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                     }
                 }
             }
-
             return attackers;
         }
 
@@ -510,7 +507,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                     if (attackersFromConfig != null && attackersFromConfig.Count > 0)
                         return attackersFromConfig.OrderByDescending(o => o.Cp).FirstOrDefault();
                 }
-
             }
 
             MyPokemonStat myAttacker = session.GymState.MyPokemons
@@ -622,7 +618,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                     return new PokemonType[] { PokemonType.Fighting, PokemonType.Fire, PokemonType.Ground };
                 case PokemonType.Water:
                     return new PokemonType[] { PokemonType.Electric, PokemonType.Grass };
-
                 default:
                     return null;
             }
@@ -670,7 +665,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                     return new PokemonType[] { PokemonType.Bug, PokemonType.Dragon, PokemonType.Fairy, PokemonType.Flying, PokemonType.Grass, PokemonType.Ice, PokemonType.Normal, PokemonType.Psychic, PokemonType.Rock, PokemonType.Steel };
                 case PokemonType.Water:
                     return new PokemonType[] { PokemonType.Fire, PokemonType.Ice, PokemonType.Steel, PokemonType.Water };
-
                 default:
                     return null;
             }
@@ -738,14 +732,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                             Remaining = (maxRevives - 1)
                         });
                         break;
-
                     case UseItemReviveResponse.Types.Result.ErrorDeployedToFort:
                         Logger.Write($"Pokemon: {pokemon.PokemonId} (CP: {pokemon.Cp}) is already deployed to a gym...");
                         return;
-
                     case UseItemReviveResponse.Types.Result.ErrorCannotUse:
                         return;
-
                     default:
                         return;
                 }
@@ -767,14 +758,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Remaining = (normalPotions - 1)
                     });
                     break;
-
                 case UseItemPotionResponse.Types.Result.ErrorDeployedToFort:
                     Logger.Write($"Pokemon: {pokemon.PokemonId} (CP: {pokemon.Cp}) is already deployed to a gym...");
                     return false;
-
                 case UseItemPotionResponse.Types.Result.ErrorCannotUse:
                     return false;
-
                 default:
                     return false;
             }
@@ -797,14 +785,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Remaining = (superPotions - 1)
                     });
                     break;
-
                 case UseItemPotionResponse.Types.Result.ErrorDeployedToFort:
                     Logger.Write($"Pokemon: {pokemon.PokemonId} (CP: {pokemon.Cp}) is already deployed to a gym...");
                     return false;
-
                 case UseItemPotionResponse.Types.Result.ErrorCannotUse:
                     return false;
-
                 default:
                     return false;
             }
@@ -826,14 +811,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Remaining = (hyperPotions - 1)
                     });
                     break;
-
                 case UseItemPotionResponse.Types.Result.ErrorDeployedToFort:
                     Logger.Write($"Pokemon: {pokemon.PokemonId} (CP: {pokemon.Cp}) is already deployed to a gym...");
                     return false;
-
                 case UseItemPotionResponse.Types.Result.ErrorCannotUse:
                     return false;
-
                 default:
                     return false;
             }
@@ -855,14 +837,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Remaining = maxPotions
                     });
                     break;
-
                 case UseItemPotionResponse.Types.Result.ErrorDeployedToFort:
                     Logger.Write($"Pokemon: {pokemon.PokemonId} (CP: {pokemon.Cp}) is already deployed to a gym...");
                     return false;
-
                 case UseItemPotionResponse.Types.Result.ErrorCannotUse:
                     return false;
-
                 default:
                     return false;
             }
@@ -875,7 +854,6 @@ namespace PoGo.NecroBot.Logic.Tasks
             var superPotions = await session.Inventory.GetItemAmountByType(ItemId.ItemSuperPotion).ConfigureAwait(false);
             var hyperPotions = await session.Inventory.GetItemAmountByType(ItemId.ItemHyperPotion).ConfigureAwait(false);
             var maxPotions = await session.Inventory.GetItemAmountByType(ItemId.ItemMaxPotion).ConfigureAwait(false);
-
             var healPower = normalPotions * 20 + superPotions * 50 + hyperPotions * 200;
 
             if (healPower < (pokemon.StaminaMax - pokemon.Stamina) && maxPotions > 0)
@@ -919,7 +897,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                     await session.Inventory.UpdateInventoryItem(ItemId.ItemPotion).ConfigureAwait(false);
                 }
             }
-
             return pokemon.Stamina == pokemon.StaminaMax;
         }
 
@@ -934,7 +911,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             Logger.Write($"We are attacking: {startResponse.Defender.ActivePokemon.PokemonData.PokemonId} ({startResponse.Defender.ActivePokemon.PokemonData.Cp} CP), Lvl: {startResponse.Defender.ActivePokemon.PokemonData.Level():0.0}", LogLevel.Gym, ConsoleColor.White);
             Console.WriteLine(Environment.NewLine);
 
-            if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
+            if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification)
                 await PushNotificationClient.SendNotification(session, $"Gym battle started", $"Trainer: {startResponse.Defender.TrainerPublicProfile.Name}\n" +
                                                                        $"We are attacking: {startResponse.Defender.ActivePokemon.PokemonData.PokemonId} ({startResponse.Defender.ActivePokemon.PokemonData.Cp} CP)\n" +
                                                                        $"Lvl: {startResponse.Defender.ActivePokemon.PokemonData.Level():0.0}", true).ConfigureAwait(false);
@@ -1116,14 +1093,13 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 return lastActions;
                             case BattleState.TimedOut:
                                 Logger.Write($"Our attack timed out...:");
-                                if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
+                                if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification)
                                     await PushNotificationClient.SendNotification(session, "Gym Battle", $"Our attack timed out...:",true).ConfigureAwait(false);
                                 await Task.Delay(1000).ConfigureAwait(false);
                                 return lastActions;
                             case BattleState.StateUnset:
                                 Logger.Write($"State was unset?: {attackResult}");
                                 return lastActions;
-
                             case BattleState.Victory:
                                 Logger.Write($"We were victorious!: ");
                                 await Task.Delay(2000).ConfigureAwait(false);
@@ -1151,7 +1127,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                 };
             }
             return lastActions;
-
         }
 
         public static DateTime DateTimeFromUnixTimestampMillis(long millis)
@@ -1192,10 +1167,9 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 var normalMove = session.GymState.MyPokemons.FirstOrDefault(f => f.Data.Id == attacker.Id).Attack;
                 var specialMove = session.GymState.MyPokemons.FirstOrDefault(f => f.Data.Id == attacker.Id).SpecialAttack;
-
                 bool skipDodge = ((lastSpecialAttack?.DurationMs ?? 0) < normalMove.DurationMs + 550) || session.LogicSettings.GymConfig.DontUseDodge; //if our normal attack is too slow and defender special is too fast so we should to only do dodge all the time then we totally skip dodge
-
                 bool canDoSpecialAttack = Math.Abs(specialMove.EnergyDelta) <= energy && (!(session.GymState.TimeToDodge > now.ToUnixTime() && session.GymState.TimeToDodge < now.ToUnixTime() + specialMove.DurationMs) || skipDodge);
+
                 if (session.LogicSettings.GymConfig.NotUsedSkills.Any(a => a.Key == attacker.PokemonId && a.Value == specialMove.MovementId))
                     canDoSpecialAttack = false;
 
@@ -1265,7 +1239,6 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static async Task<StartGymBattleResponse> StartBattle(ISession session, FortData gym, IEnumerable<PokemonData> attackers, ulong defenderId)
         {
-
             IEnumerable<PokemonData> currentPokemons = attackers;
 
             var pokemonDatas = currentPokemons as PokemonData[] ?? currentPokemons.ToArray();
@@ -1494,7 +1467,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 return _pokemon;
                         }
                 }
-
             }
 
             while (pokemon == null)

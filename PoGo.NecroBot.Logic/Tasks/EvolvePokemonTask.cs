@@ -1,4 +1,4 @@
-﻿#region using directives
+#region using directives
 
 using System;
 using System.Collections.Generic;
@@ -108,7 +108,6 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static async Task UseLuckyEgg(ISession session)
         {
             var inventoryContent = await session.Inventory.GetItems().ConfigureAwait(false);
-
             var luckyEgg = inventoryContent.FirstOrDefault(p => p.ItemId == ItemId.ItemLuckyEgg);
 
             if (luckyEgg.Count == 0) // We tried to use egg but we don't have any more. Just return.
@@ -182,7 +181,6 @@ namespace PoGo.NecroBot.Logic.Tasks
         private static async Task<bool> ShouldUseLuckyEgg(ISession session, List<PokemonData> pokemonToEvolve)
         {
             var inventoryContent = await session.Inventory.GetItems().ConfigureAwait(false);
-
             var luckyEggs = inventoryContent.Where(p => p.ItemId == ItemId.ItemLuckyEgg);
             var luckyEgg = luckyEggs.FirstOrDefault();
 
@@ -195,10 +193,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                 else
                 {
                     var evolvablePokemon = await session.Inventory.GetPokemons().ConfigureAwait(false);
-
                     var deltaPokemonToUseLuckyEgg = session.LogicSettings.UseLuckyEggsMinPokemonAmount -
                                                     pokemonToEvolve.Count;
-
                     var availableSpace = session.Profile.PlayerData.MaxPokemonStorage - evolvablePokemon.Count();
 
                     if (deltaPokemonToUseLuckyEgg > availableSpace)

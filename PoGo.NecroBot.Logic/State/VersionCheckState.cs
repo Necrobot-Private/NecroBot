@@ -24,13 +24,13 @@ namespace PoGo.NecroBot.Logic.State
     public class VersionCheckState : IState
     {
         public const string VersionUri =
-            "https://raw.githubusercontent.com/Necrobot-Private/NecroBot/master/PoGo.NecroBot.Logic/Properties/AssemblyInfo.cs";
+            "https://raw.githubusercontent.com/NecroBot-Private/NecroBot/master/PoGo.NecroBot.Logic/Properties/AssemblyInfo.cs";
 
         public const string RemoteReleaseUrl =
-            "https://github.com/Necrobot-Private/NecroBot/releases/download/v";
+            "https://github.com/NecroBot-Private/NecroBot/releases/download/v";
 
         public const string ChangelogUri =
-             "https://raw.githubusercontent.com/Necrobot-Private/NecroBot/master/CHANGELOG.md";
+             "https://raw.githubusercontent.com/NecroBot-Private/NecroBot/master/CHANGELOG.md";
 
         public static Version RemoteVersion;
 
@@ -66,7 +66,7 @@ namespace PoGo.NecroBot.Logic.State
             SystemSounds.Asterisk.Play();
 
             string zipName = $"NecroBot2.Console.{RemoteVersion.ToString()}.zip";
-            if (Assembly.GetEntryAssembly().FullName.ToLower().Contains("necrobot2.win"))
+            if (Assembly.GetEntryAssembly().FullName.ToLower().Contains("NecroBot2.win"))
             {
                 zipName = $"NecroBot2.WIN.{RemoteVersion.ToString()}.zip";
             }

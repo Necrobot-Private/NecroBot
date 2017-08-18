@@ -24,12 +24,12 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         {
         }
 
-        [NecrobotConfig(Description = "Use your walk api to resolve path for bot moving", Position = 1)]
+        [NecroBotConfig(Description = "Use your walk api to resolve path for bot moving", Position = 1)]
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public bool UseYoursWalk { get; set; }
 
-        [NecrobotConfig(Description = "Set heuricstic for moving: motorcar, bicycle, foot..", Position = 2)]
+        [NecroBotConfig(Description = "Set heuricstic for moving: motorcar, bicycle, foot..", Position = 2)]
         [DefaultValue("bicycle")]
         [EnumDataType(typeof(YoursWalkTravelModes))]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]

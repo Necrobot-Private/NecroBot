@@ -1,22 +1,19 @@
-﻿#region using directives
+#region using directives
 
 using GeoCoordinatePortable;
-using Newtonsoft.Json.Linq;
 using PoGo.NecroBot.Logic.Event;
 using PoGo.NecroBot.Logic.Interfaces.Configuration;
 using PoGo.NecroBot.Logic.Model;
+using PoGo.NecroBot.Logic.Model.Settings;
 using PoGo.NecroBot.Logic.State;
 using PoGo.NecroBot.Logic.Strategies.Walk;
+using PoGo.NecroBot.Logic.Utils;
 using PokemonGo.RocketAPI;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-
 
 #endregion
 
@@ -31,11 +28,19 @@ namespace PoGo.NecroBot.Logic
         private readonly Client _client;
         private Random WalkingRandom = new Random();
         private List<IWalkStrategy> WalkStrategyQueue { get; set; }
+
         public Dictionary<Type, DateTime> WalkStrategyBlackList = new Dictionary<Type, DateTime>();
+
+        private bool _GoogleWalk, _MapZenWalk, _YoursWalk, _AutoWalkAI;
+        private double distance;
+        private int _AutoWalkDist;
 
         public Navigation(Client client, ILogicSettings logicSettings)
         {
             _client = client;
+
+            _AutoWalkAI = logicSettings.AutoWalkAI;
+            _AutoWalkDist = logicSettings.AutoWalkDist;
 
             InitializeWalkStrategies(logicSettings);
             WalkStrategy = GetStrategy(logicSettings);
@@ -63,7 +68,6 @@ namespace PoGo.NecroBot.Logic
                             CurrentWalkingSpeed = randomicSpeed
                         });
                     }
-
                     return randomicSpeed;
                 }
                 else
@@ -84,11 +88,9 @@ namespace PoGo.NecroBot.Logic
                             CurrentWalkingSpeed = randomicSpeed
                         });
                     }
-
                     return randomicSpeed;
                 }
             }
-
             return currentSpeed;
         }
 
@@ -97,20 +99,64 @@ namespace PoGo.NecroBot.Logic
             ISession session,
             CancellationToken cancellationToken, double customWalkingSpeed = 0.0)
         {
+            _AutoWalkAI = session.LogicSettings.AutoWalkAI;
+            _AutoWalkDist = session.LogicSettings.AutoWalkDist;
+
+            distance = LocationUtils.CalculateDistanceInMeters(session.Client.CurrentLatitude, session.Client.CurrentLongitude,
+            targetLocation.Latitude, targetLocation.Longitude);
+
             cancellationToken.ThrowIfCancellationRequested();
             TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
-            
+
             // If the stretegies become bigger, create a factory for easy management
 
             //Logging.Logger.Write($"Navigation - Walking speed {customWalkingSpeed}");
+            InitializeWalkStrategies(session.LogicSettings);
+            WalkStrategy = GetStrategy(session.LogicSettings);
             await WalkStrategy.Walk(targetLocation, functionExecutedWhileWalking, session, cancellationToken, customWalkingSpeed).ConfigureAwait(false);
         }
 
         private void InitializeWalkStrategies(ILogicSettings logicSettings)
         {
+            //AutoWalkAI code
+            if (_AutoWalkAI && distance > 15)
+            {
+                _YoursWalk = false; _MapZenWalk = false; _GoogleWalk = false;
+                if (distance >= _AutoWalkDist)
+                {
+                    if (logicSettings.UseYoursWalk)
+                    {
+                        Logging.Logger.Write($"Distance to travel is > {_AutoWalkDist}m, switching to 'YoursWalk'", Logging.LogLevel.Info, ConsoleColor.DarkYellow);
+                        _YoursWalk = true;
+                    }
+                    if (logicSettings.UseMapzenWalk && logicSettings.MapzenTurnByTurnApiKey != "")
+                    {
+                        Logging.Logger.Write($"Distance to travel is > {_AutoWalkDist}m, using 'Mapzen Walk'", Logging.LogLevel.Info, ConsoleColor.DarkYellow);
+                        _MapZenWalk = true;
+                    }
+                    if (logicSettings.UseGoogleWalk && logicSettings.GoogleApiKey != "")
+                    {
+                        Logging.Logger.Write($"Distance to travel is > {_AutoWalkDist}m, using 'Google Walk'", Logging.LogLevel.Info, ConsoleColor.DarkYellow);
+                        _GoogleWalk = true;
+                    }
+                }
+                else
+                {
+                    if (logicSettings.UseYoursWalk)
+                    {
+                        Logging.Logger.Write($"Distance to travel is < {_AutoWalkDist}m, using 'NecroBot Walk'", Logging.LogLevel.Info, ConsoleColor.DarkYellow);
+                        _YoursWalk = true;
+                    }
+                    else
+                    {
+                        Logging.Logger.Write($"Distance to travel is < {_AutoWalkDist}m, using 'Human Walk'", Logging.LogLevel.Info, ConsoleColor.DarkYellow);
+                    }
+                }
+            }
+
             WalkStrategyQueue = new List<IWalkStrategy>();
 
-            // Maybe change configuration for a Navigation Type.
+            //Maybe change configuration for a Navigation Type.
             if (logicSettings.DisableHumanWalking)
             {
                 WalkStrategyQueue.Add(new FlyStrategy(_client));
@@ -121,19 +167,19 @@ namespace PoGo.NecroBot.Logic
                 WalkStrategyQueue.Add(new HumanPathWalkingStrategy(_client));
             }
 
-            if (logicSettings.UseGoogleWalk)
+            if (_YoursWalk)
+            {
+                WalkStrategyQueue.Add(new YoursNavigationStrategy(_client));
+            }
+
+            if (_GoogleWalk)
             {
                 WalkStrategyQueue.Add(new GoogleStrategy(_client));
             }
 
-            if (logicSettings.UseMapzenWalk)
+            if (_MapZenWalk)
             {
                 WalkStrategyQueue.Add(new MapzenNavigationStrategy(_client));
-            }
-
-            if (logicSettings.UseYoursWalk)
-            {
-                WalkStrategyQueue.Add(new YoursNavigationStrategy(_client));
             }
 
             WalkStrategyQueue.Add(new HumanStrategy(_client));

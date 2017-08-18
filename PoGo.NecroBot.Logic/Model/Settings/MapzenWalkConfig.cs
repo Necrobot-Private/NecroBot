@@ -18,23 +18,23 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             pedestrian
         }
 
-        [NecrobotConfig(Description = "Allows bot to use Mapzen API to resolve path", Position = 1)]
+        [NecroBotConfig(Description = "Allows bot to use Mapzen API to resolve path", Position = 1)]
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
         public bool UseMapzenWalk { get; set; }
 
-        [NecrobotConfig(Description = "API Key used to connect to Mapzen Services", Position = 2)]
+        [NecroBotConfig(Description = "API Key used to connect to Mapzen Services", Position = 2)]
         [DefaultValue(null)]
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
         public string MapzenTurnByTurnApiKey { get; set; }
 
-        [NecrobotConfig(Description = "Set the heuristic to find routes", Position = 3)]
+        [NecroBotConfig(Description = "Set the heuristic to find routes", Position = 3)]
         [DefaultValue("bicycle")]
         [EnumDataType(typeof(MapzenWalkTravelModes))]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 3)]
         public string MapzenWalkHeuristic { get; set; }
 
-        [NecrobotConfig(Description = "API Key used to connect to Mapzen API Elevation Services", Position = 4)]
+        [NecroBotConfig(Description = "API Key used to connect to Mapzen API Elevation Services", Position = 4)]
         [DefaultValue(null)]
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 4)]
         public string MapzenElevationApiKey { get; set; }

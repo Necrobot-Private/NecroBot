@@ -15,7 +15,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
         {
         }
 
-        public override string RouteName => "Necrobot Flying";
+        public override string RouteName => "NecroBot Flying";
 
 
         public override async Task Walk(IGeoLocation targetLocation,

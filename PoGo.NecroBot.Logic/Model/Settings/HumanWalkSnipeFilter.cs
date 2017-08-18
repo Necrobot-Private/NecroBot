@@ -14,55 +14,55 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         }
 
         [JsonIgnore]
-        [NecrobotConfig(IsPrimaryKey = true, Key = "Allow Snipe", Position = 1, Description = "Allows bot to snipe this pokemon")]
+        [NecroBotConfig(IsPrimaryKey = true, Key = "Allow Snipe", Position = 1, Description = "Allows bot to snipe this pokemon")]
         public bool AllowSnipe { get; set; }
 
         [DefaultValue(300.0)]
         [Range(0, 9999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
-        [NecrobotConfig(Key = "MaxDistance" , Description = "Max distance that bot is allowed to walk to snipe this pokemon", Position = 2)]
+        [NecroBotConfig(Key = "MaxDistance" , Description = "Max distance that bot is allowed to walk to snipe this pokemon", Position = 2)]
         public double MaxDistance { get; set; }
 
-        [NecrobotConfig(Key = "Priority", Description = "Priority for this pokemon compared to others", Position = 3)]
+        [NecroBotConfig(Key = "Priority", Description = "Priority for this pokemon compared to others", Position = 3)]
         [DefaultValue(1)]
         [Range(0, 151)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
         public int Priority { get; set; }
 
-        [NecrobotConfig(Key = "Max Walk Times", Description = "Max walk time for bot to catch this pokemon compared to others", Position = 4)]
+        [NecroBotConfig(Key = "Max Walk Times", Description = "Max walk time for bot to catch this pokemon compared to others", Position = 4)]
         [DefaultValue(200.0)]
         [Range(0, 9999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 3)]
         public double MaxWalkTimes { get; set; }
 
-        [NecrobotConfig(Key = "Allow Catch", Description = "Allows bot to catch pokemon while it walking to snipe target", Position = 5)]
+        [NecroBotConfig(Key = "Allow Catch", Description = "Allows bot to catch pokemon while it walking to snipe target", Position = 5)]
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 4)]
         public bool CatchPokemonWhileWalking { get; set; }
 
-        [NecrobotConfig(Key = "Allow Spin", Description = "Allows bot spin pokestops while it's walking to snipe target", Position = 6)]
+        [NecroBotConfig(Key = "Allow Spin", Description = "Allows bot spin pokestops while it's walking to snipe target", Position = 6)]
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 5)]
         public bool SpinPokestopWhileWalking { get; set; }
 
-        [NecrobotConfig(Key = "Max Speed", Description = "The max speed up to apply while walking to this pokemon", Position = 7)]
+        [NecroBotConfig(Key = "Max Speed", Description = "The max speed up to apply while walking to this pokemon", Position = 7)]
         [DefaultValue(60.0)]
         [Range(0, 999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 6)]
         public double MaxSpeedUpSpeed { get; set; }
 
-        [NecrobotConfig(Key = "Allow SpeedUP", Description = "Allows bot to speed up to catch this pokemon", Position = 8)]
+        [NecroBotConfig(Key = "Allow SpeedUP", Description = "Allows bot to speed up to catch this pokemon", Position = 8)]
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 7)]
         public bool AllowSpeedUp { get; set; }
 
-        [NecrobotConfig(Key = "Delay at Dest", Description = "Sets delay time at destination", Position = 9)]
+        [NecroBotConfig(Key = "Delay at Dest", Description = "Sets delay time at destination", Position = 9)]
         [DefaultValue(10000)]
         [Range(0, 999999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 8)]
         public int DelayTimeAtDestination { get; set; }
 
-        [NecrobotConfig(Key = "Allow Transfer", Description = "Allows bot to transfer pokemon while it's walking to target", Position = 10)]
+        [NecroBotConfig(Key = "Allow Transfer", Description = "Allows bot to transfer pokemon while it's walking to target", Position = 10)]
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 9)]
         public bool AllowTransferWhileWalking { get; set; }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -15,14 +15,13 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
 {
     abstract class BaseWalkStrategy : IWalkStrategy
     {
-        protected readonly Client _client;
+        public static Client _client;
 
         protected double _currentWalkingSpeed = 0;
         protected const double SpeedDownTo = 10 / 3.6;
         protected double _minStepLengthInMeters = 1.3d;
         protected bool isCancelled = false;
         protected readonly Random _randWalking = new Random();
-        //protected IWalkStrategy _fallbackStrategy;
 
         public event UpdatePositionDelegate UpdatePositionEvent;
         public event GetRouteDelegate GetRouteEvent;

@@ -46,7 +46,7 @@ namespace PoGo.NecroBot.Logic.Utils
         {
             await Task.Run(() =>
             {
-                var fromAddress = new MailAddress(cfg.GmailUsername, "Necrobot Notifier");
+                var fromAddress = new MailAddress(cfg.GmailUsername, "NecroBot Notifier");
                 //var toAddress = new MailAddress(cfg.Recipients);
 
                 string fromPassword = cfg.GmailPassword;

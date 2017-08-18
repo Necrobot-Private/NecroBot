@@ -160,7 +160,6 @@ namespace PoGo.NecroBot.Logic.State
                     session.EventDispatcher.Send(new WarnEvent { Message = "Switch bot account requested by: User" });
                     ReInitializeSession(session, globalSettings, ex.RequestedAccount);
                     state = new LoginState();
-
                 }
                 catch (ActiveSwitchByPokemonException rsae)
                 {
@@ -169,7 +168,7 @@ namespace PoGo.NecroBot.Logic.State
                     else
                     {
                         session.EventDispatcher.Send(new WarnEvent { Message = "Encountered a good pokemon, switch bots to catch him too." });
-                        if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
+                        if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification)
                             await PushNotificationClient.SendNotification(session, $"Switch bot account", $"Encountered a good pokemon, switch bots to catch him too.", true).ConfigureAwait(false);
                     }
                     session.ReInitSessionWithNextBot(rsae.Bot, session.Client.CurrentLatitude, session.Client.CurrentLongitude, session.Client.CurrentAltitude);
@@ -178,7 +177,7 @@ namespace PoGo.NecroBot.Logic.State
                 catch (ActiveSwitchByRuleException se)
                 {
                     session.EventDispatcher.Send(new WarnEvent { Message = $"Switch bot account activated by: {se.MatchedRule.ToString()} - {se.ReachedValue}" });
-                    if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
+                    if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification)
                         await PushNotificationClient.SendNotification(session, $"Switch bot account", $"Activated by: {se.MatchedRule.ToString()} - {se.ReachedValue}", true).ConfigureAwait(false);
 
                     if (se.MatchedRule == SwitchRules.EmptyMap)
@@ -205,7 +204,7 @@ namespace PoGo.NecroBot.Logic.State
                             // TODO: Attention - do not touch (add pragma) when you do not know what you are doing ;)
                             // jjskuld - Ignore CS4014 warning for now.
 
-                            if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
+                            if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification)
                                 await PushNotificationClient.SendNotification(session, $"{se.MatchedRule} - {session.Settings.Username}", $"This bot has reach limit, it will be blocked for {session.LogicSettings.MultipleBotConfig.OnLimitPauseTimes} mins for safety.", true).ConfigureAwait(false);
 
                             session.EventDispatcher.Send(new WarnEvent() { Message = $"You reach limited. bot will sleep for {session.LogicSettings.MultipleBotConfig.OnLimitPauseTimes} min" });
@@ -222,7 +221,6 @@ namespace PoGo.NecroBot.Logic.State
                     //return to login state
                     state = new LoginState();
                 }
-
                 catch (InvalidResponseException e)
                 {
                     session.EventDispatcher.Send(new ErrorEvent { Message = $"Niantic Servers unstable, throttling API Calls. {e.Message}" });
@@ -274,7 +272,7 @@ namespace PoGo.NecroBot.Logic.State
                 }
                 catch(PtcLoginException ex)
                 {
-                    if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
+                    if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification)
                         await PushNotificationClient.SendNotification(session, $"PTC Login failed!!!! {session.Settings.Username}", session.Translation.GetTranslation(TranslationString.PtcLoginFail), true).ConfigureAwait(false);
 
                     if (manager.AllowMultipleBot())
@@ -296,7 +294,7 @@ namespace PoGo.NecroBot.Logic.State
                     // TODO - await is legal here! USE it or use pragma to suppress compilerwarning and write a comment why it is not used
                     // TODO: Attention - do not touch (add pragma) when you do not know what you are doing ;)
                     // jjskuld - Ignore CS4014 warning for now.
-                    if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
+                    if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification)
                         await PushNotificationClient.SendNotification(session, $"Banned!!!! {session.Settings.Username}", session.Translation.GetTranslation(TranslationString.AccountBanned), true).ConfigureAwait(false);
 
                     if (manager.AllowMultipleBot())
@@ -331,7 +329,6 @@ namespace PoGo.NecroBot.Logic.State
                         ReInitializeSession(session, globalSettings);
                     state = new LoginState();
                 }
-
                 catch (PtcOfflineException)
                 {
                     session.EventDispatcher.Send(new ErrorEvent { Message = session.Translation.GetTranslation(TranslationString.PtcOffline) });
@@ -358,7 +355,7 @@ namespace PoGo.NecroBot.Logic.State
                     var resolved = await CaptchaManager.SolveCaptcha(session, captchaException.Url).ConfigureAwait(false);
                     if (!resolved)
                     {
-                        if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
+                        if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification)
                             await PushNotificationClient.SendNotification(session, $"Captcha required {session.Settings.Username}", session.Translation.GetTranslation(TranslationString.CaptchaShown), true).ConfigureAwait(false);
 
                         session.EventDispatcher.Send(new WarnEvent { Message = session.Translation.GetTranslation(TranslationString.CaptchaShown) });

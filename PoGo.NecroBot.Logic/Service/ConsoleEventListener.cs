@@ -17,7 +17,6 @@ using POGOProtos.Networking.Responses;
 using PoGo.NecroBot.Logic.Event.Snipe;
 using System.Linq;
 using PoGo.NecroBot.Logic.Utils;
-using PoGo.NecroBot.Logic.Model.Settings;
 
 #endregion
 
@@ -42,7 +41,6 @@ namespace PoGo.NecroBot.Logic.Service
 
         private static void HandleEvent(SnipePokemonUpdateEvent e, ISession session)
         {
-
             //move to resource later
             if (e.IsRemoteEvent)
                 Logger.Write($"Expired snipe pokemon has been removed from queue : {e.Data.PokemonId} ");
@@ -65,8 +63,9 @@ namespace PoGo.NecroBot.Logic.Service
 
         private static void HandleEvent(TargetLocationEvent ev, ISession session)
         {
-            Logger.Write(session.Translation.GetTranslation(TranslationString.TargetLocationSet, ev.Latitude, ev.Longitude), LogLevel.Info);
+            //Logger.Write(session.Translation.GetTranslation(TranslationString.TargetLocationSet, ev.Latitude, ev.Longitude), LogLevel.Info);
         }
+
         private static void HandleEvent(BuddyUpdateEvent ev, ISession session)
         {
             Logger.Write(
@@ -115,7 +114,7 @@ namespace PoGo.NecroBot.Logic.Service
 
         private static void HandleEvent(TransferPokemonEvent transferPokemonEvent, ISession session)
         {
-            if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true && transferPokemonEvent.Slashed)
+            if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification && transferPokemonEvent.Slashed)
                 PushNotificationClient.SendNotification(session, $"Transferred Slashed Pokemon", $"{session.Translation.GetPokemonTranslation(transferPokemonEvent.PokemonId)}\n" +
                                                                                                  $"Lvl: {transferPokemonEvent.Level}\n" +
                                                                                                  $"CP:  {transferPokemonEvent.Cp}/{transferPokemonEvent.BestCp}\n" +
@@ -253,17 +252,23 @@ namespace PoGo.NecroBot.Logic.Service
             int intTimeForArrival = (int) (fortTargetEvent.Distance /
                                            (session.LogicSettings.WalkingSpeedInKilometerPerHour * 0.5));
 
-            string targetType;
+            string targetType = "";
             if (fortTargetEvent.Type == FortType.Gym)
                 targetType = session.Translation.GetTranslation(TranslationString.Gym); // "Gym";
-            else
-                targetType = session.Translation.GetTranslation(TranslationString.Pokestop); // "Pokestop";
+            else if (fortTargetEvent.Type == FortType.Checkpoint)
+            {
+                if(fortTargetEvent.Name != "User selected")
+                    targetType = session.Translation.GetTranslation(TranslationString.Pokestop); // "Pokestop";
+                else
+                    targetType = "POI";
+            }
 
-            Logger.Write(
-                session.Translation.GetTranslation(TranslationString.EventFortTargeted, Math.Round(fortTargetEvent.Distance),
-                    intTimeForArrival, fortTargetEvent.Route,
-                    targetType, fortTargetEvent.Name), 
-                LogLevel.Info, ConsoleColor.Gray);
+            if (fortTargetEvent.Distance > 15)
+                Logger.Write(
+                    session.Translation.GetTranslation(TranslationString.EventFortTargeted, Math.Round(fortTargetEvent.Distance).ToString("0").PadLeft(3, ' '),
+                        intTimeForArrival.ToString("0").PadLeft(3,' '), fortTargetEvent.Route,
+                        targetType, fortTargetEvent.Name),
+                    LogLevel.Info, ConsoleColor.Gray);
         }
 
         private static void HandleEvent(PokemonCaptureEvent pokemonCaptureEvent, ISession session)
@@ -324,7 +329,7 @@ namespace PoGo.NecroBot.Logic.Service
 
             if (pokemonCaptureEvent.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess)
             {
-                if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true && pokemonCaptureEvent.Shiny == "Yes")
+                if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification && pokemonCaptureEvent.Shiny == "Yes")
                     PushNotificationClient.SendNotification(session, $"Shiny Pokemon Captured", $"{session.Translation.GetPokemonTranslation(pokemonCaptureEvent.Id)}\n" +
                                                                                                 $"Lvl: {pokemonCaptureEvent.Level}\n" +
                                                                                                 $"CP:  {pokemonCaptureEvent.Cp}/{pokemonCaptureEvent.MaxCp}\n" +
@@ -332,7 +337,7 @@ namespace PoGo.NecroBot.Logic.Service
                                                                                                 $"Lat: {pokemonCaptureEvent.Latitude.ToString("0.000000")}\n" +
                                                                                                 $"Lon: {pokemonCaptureEvent.Longitude.ToString("0.000000")}", true).ConfigureAwait(false);
 
-                if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true && pokemonCaptureEvent.Perfection >= session.LogicSettings.FavoriteMinIvPercentage)
+                if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification && pokemonCaptureEvent.Perfection >= session.LogicSettings.FavoriteMinIvPercentage)
                     PushNotificationClient.SendNotification(session, $"High IV Pokemon Captured", $"{session.Translation.GetPokemonTranslation(pokemonCaptureEvent.Id)}\n" +
                                                                                                   $"Lvl: {pokemonCaptureEvent.Level}\n" +
                                                                                                   $"CP:  {pokemonCaptureEvent.Cp}/{pokemonCaptureEvent.MaxCp}\n" +
@@ -371,7 +376,7 @@ namespace PoGo.NecroBot.Logic.Service
             {
                 if (pokemonCaptureEvent.Status == CatchPokemonResponse.Types.CatchStatus.CatchFlee)
                 {
-                    if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true && pokemonCaptureEvent.Shiny == "Yes")
+                    if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification && pokemonCaptureEvent.Shiny == "Yes")
                         PushNotificationClient.SendNotification(session, $"Shiny Pokemon Ran Away", $"{session.Translation.GetPokemonTranslation(pokemonCaptureEvent.Id)}\n" +
                                                                                                     $"Lvl: {pokemonCaptureEvent.Level}\n" +
                                                                                                     $"CP:  {pokemonCaptureEvent.Cp}/{pokemonCaptureEvent.MaxCp}\n" +
@@ -379,7 +384,7 @@ namespace PoGo.NecroBot.Logic.Service
                                                                                                     $"Lat: {pokemonCaptureEvent.Latitude.ToString("0.000000")}\n" +
                                                                                                     $"Lon: {pokemonCaptureEvent.Longitude.ToString("0.000000")}", true).ConfigureAwait(false);
 
-                    if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true && pokemonCaptureEvent.Perfection >= session.LogicSettings.FavoriteMinIvPercentage)
+                    if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification && pokemonCaptureEvent.Perfection >= session.LogicSettings.FavoriteMinIvPercentage)
                         PushNotificationClient.SendNotification(session, $"High IV Pokemon Ran Away", $"{session.Translation.GetPokemonTranslation(pokemonCaptureEvent.Id)}\n" +
                                                                                                       $"Lvl: {pokemonCaptureEvent.Level}\n" +
                                                                                                       $"CP:  {pokemonCaptureEvent.Cp}/{pokemonCaptureEvent.MaxCp}\n" +
@@ -665,7 +670,6 @@ namespace PoGo.NecroBot.Logic.Service
                         ConsoleColor.Yellow
                     );
                     break;
-
                 case HumanWalkSnipeEventTypes.NotEnoughtPalls:
                     Logger.Write(
                         session.Translation.GetTranslation(
@@ -698,7 +702,9 @@ namespace PoGo.NecroBot.Logic.Service
 
         private static void HandleEvent(GymDetailInfoEvent ev, ISession session)
         {
-            Logger.Write($"Visited Gym: {ev.Name} | Team: {ev.Team} | Gym points: {ev.Point} | Lvl: {UseGymBattleTask.GetGymLevel(ev.Point)}", LogLevel.Gym,
+            var GymDeployed = new GymDeployResponse();
+            var Deployed = GymDeployed.GymStatusAndDefenders.GymDefender.ToList();
+            Logger.Write($"Visited Gym: {ev.Name} | Team: {ev.Team} | Gym points: {ev.Point} | Free Spots: {6 - Deployed.Count}", LogLevel.Gym,
                 (ev.Team == TeamColor.Red)
                     ? ConsoleColor.Red
                     : (ev.Team == TeamColor.Yellow ? ConsoleColor.Yellow : ConsoleColor.Blue));
@@ -708,12 +714,14 @@ namespace PoGo.NecroBot.Logic.Service
         private static void HandleEvent(GymDeployEvent ev, ISession session)
         {
             var Info = new GymDetailInfoEvent();
+            var GymDeployed = new GymDeployResponse();
+            var Deployed = GymDeployed.GymStatusAndDefenders.GymDefender.ToList();
 
-            Logger.Write($"Great!!! Your {ev.PokemonId.ToString()} is now defending {ev.Name} GYM. | Gym Points: {UseGymBattleTask.GetGymLevel(Info.Point)}",
+            Logger.Write($"Great!!! Your {ev.PokemonId.ToString()} is now defending {ev.Name} GYM. | Free Spots: {6 - Deployed.Count}",
                 LogLevel.Gym, ConsoleColor.Green);
 
-            if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
-                PushNotificationClient.SendNotification(session, $"Gym Post", $"Great!!! Your {ev.PokemonId.ToString()} is now defending {ev.Name} GYM.\nGym Points: {UseGymBattleTask.GetGymLevel(Info.Point)}", true).ConfigureAwait(false);
+            if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification)
+                PushNotificationClient.SendNotification(session, $"Gym Post", $"Great!!! Your {ev.PokemonId.ToString()} is now defending {ev.Name} GYM.\nFree Spots: {6 - Deployed.Count}", true).ConfigureAwait(false);
         }
 
         private static void HandleEvent(GymBattleStarted ev, ISession session)
@@ -727,7 +735,6 @@ namespace PoGo.NecroBot.Logic.Service
                 LogLevel.Error, ConsoleColor.Red);
         }
 
-
         private static void HandleEvent(GymListEvent ev, ISession session)
         {
             Logger.Write($"{ev.Gyms.Count} gyms has been added to farming area.", LogLevel.Gym, ConsoleColor.Cyan);
@@ -735,10 +742,10 @@ namespace PoGo.NecroBot.Logic.Service
 
         private static void HandleEvent(GymWalkToTargetEvent ev, ISession session)
         {
-            Logger.Write(
-                $"Traveling to gym: {ev.Name} | Lat: {ev.Latitude}, Lng: {ev.Longitude} | ({ev.Distance:0.00}m)",
-                LogLevel.Gym, ConsoleColor.Cyan
-            );
+            //Logger.Write(
+            //    $"Traveling to gym: {ev.Name} | Lat: {ev.Latitude}, Lng: {ev.Longitude} | ({ev.Distance:0.00}m)",
+            //    LogLevel.Gym, ConsoleColor.Cyan
+            //);
         }
 
         private static void HandleEvent(GymTeamJoinEvent ev, ISession session)

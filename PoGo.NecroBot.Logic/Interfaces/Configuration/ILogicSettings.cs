@@ -255,5 +255,7 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         int CatchFleeDelay { get; }
         int CatchMissedDelay { get; }
         int BeforeCatchDelay { get; }
+        bool AutoWalkAI { get; }
+        int AutoWalkDist { get; }
     }
 }
