@@ -83,6 +83,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                 _MultiAccountManager = new MultiAccountManager();
                 var account = _MultiAccountManager.GetCurrentAccount();
                 string dumpFileName = account.Nickname; // "-PokeBagStats";
+
+                //If user dump file exists then cancel file dump
+                if (File.Exists(Path.Combine(Path.Combine(session.LogicSettings.ProfilePath, "Dumps"), $"{dumpFileName}-NecroBot2 DumpFile.csv"))) return;
+
                 try
                 {
                     Dumper.ClearDumpFile(session, dumpFileName);
@@ -90,12 +94,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                     string[] data =
                     {
                         "Pokemon",
-                        "Nickname",
+                        "Candies",
                         "Slashed",
+                        "Nickname",
                         "Level",
                         "CP",
                         "IV",
-                        "Candies",
                         "Power Ups",
                         "Favorite",
                         "Stamina",
@@ -126,13 +130,13 @@ namespace PoGo.NecroBot.Logic.Tasks
                     {
                         string[] pokemonData =
                         {
-                            session.Translation.GetPokemonTranslation(pokemon.PokemonId),
-                            pokemon.Nickname,
+                            session.Translation.GetPokemonTranslation(pokemon.PokemonId).Replace(' ', '_'),
+                            session.Inventory.GetCandyFamily(pokemon.PokemonId).ToString(), // PokemonInfo.GetCandy(session, pokemon).ToString(),
                             pokemon.IsBad.ToString(),
+                            pokemon.Nickname.Replace(' ', '_'),
                             PokemonInfo.GetLevel(pokemon).ToString(),
                             pokemon.Cp.ToString(),
                             PokemonInfo.CalculatePokemonPerfection(pokemon).ToString(),
-                            PokemonInfo.GetCandy(session, pokemon).ToString(),
                             pokemon.NumUpgrades.ToString(),
                             pokemon.Favorite.ToString(),
                             pokemon.Stamina.ToString(),

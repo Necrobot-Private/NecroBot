@@ -135,10 +135,33 @@ namespace PoGo.NecroBot.Logic
                 .Where(p => p != null);
         }
 
+        public async Task<IEnumerable<PokemonData>> GetSlashedPokemonToTransfer()
+        {
+            var session = TinyIoCContainer.Current.Resolve<ISession>();
+            var myPokemon = await GetPokemons().ConfigureAwait(false);
+            var pokemonToTransfer = myPokemon.Where(p => p.IsBad);
+
+            try
+            {
+                pokemonToTransfer =
+                    pokemonToTransfer.Where(
+                            p =>
+                            {
+                                var pokemonTransferFilter = session.LogicSettings.PokemonsTransferFilter.GetFilter<TransferFilter>(p.PokemonId);
+                                return true;
+                            })
+                        .ToList();
+            }
+            catch (ActiveSwitchByRuleException e)
+            {
+                throw e;
+            }
+            return pokemonToTransfer.OrderBy(poke => poke.Cp);
+        }
+
         public async Task<IEnumerable<PokemonData>> GetWeakPokemonToTransfer(
             IEnumerable<PokemonId> pokemonsNotToTransfer, Dictionary<PokemonId, EvolveFilter> pokemonEvolveFilters,
-            bool keepPokemonsThatCanEvolve = false
-        )
+            bool keepPokemonsThatCanEvolve = false)
         {
             var session = TinyIoCContainer.Current.Resolve<ISession>();
             var myPokemon = await GetPokemons().ConfigureAwait(false);

@@ -25,6 +25,7 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static double KmToWalk { get; set; }
         public static long Exp { get; set; }
         public static long Stardust { get; set; }
+        public static object eggIncubatorStatusEvent { get; private set; }
 
         public static async Task Execute(ISession session, CancellationToken cancellationToken,
             ulong eggId, string incubatorId)
@@ -92,6 +93,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 var rememberedIncubatorsFilePath = Path.Combine(session.LogicSettings.ProfilePath, "temp", "incubators.json");
                 var rememberedIncubators = GetRememberedIncubators(rememberedIncubatorsFilePath);
                 var pokemons = (await session.Inventory.GetPokemons().ConfigureAwait(false)).ToList();
+                var eggIncubatorStatusEvent = new EggIncubatorStatusEvent();
 
                 // Check if eggs in remembered incubator usages have since hatched
                 // (instead of calling session.Client.Inventory.GetHatchedEgg(), which doesn't seem to work properly)
@@ -102,17 +104,15 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     //Still Needs some work - TheWizard1328
                     var stats = session.RuntimeStatistics;           // Total Km walked
-                    var KMs = playerStats.KmWalked - hatched.EggKmWalkedStart; // Total Km Walked(hatched.EggKmWalkedStart=0)
+                    var KMs = eggIncubatorStatusEvent.KmToWalk; //playerStats.KmWalked - hatched.EggKmWalkedStart; // Total Km Walked(hatched.EggKmWalkedStart=0)
                     var stardust1 = session.Inventory.GetStarDust(); // Total trainer Stardust
                     var stardust2 = stats.TotalStardust;             // Total trainer Stardust
                     var ExpAwarded1 = playerStats.Experience;        // Total Player Exp - TheWizard1328
                     var ExpAwarded2 = stats.TotalExperience;         // Session Exp - TheWizard1328
                     var TotCandy = session.Inventory.GetCandyCount(hatched.PokemonId);
                     //Temp logger line personal testing info - TheWizard1328
-                    Logger.Write($"Hatch: PS-KmWalked: {playerStats.KmWalked:0.00}, H-EggKmWalkedStart: {hatched.EggKmWalkedStart:0.00}, | " +
-                                 $"KmToWalk: {KmToWalk:0.00}kmWalked: {kmWalked:0.00}, | " +
-                                 $"XP1: {ExpAwarded1} | XP2: {ExpAwarded2} | " +
-                                 $"SD1: {stardust1} | SD2: {stardust2}", LogLevel.Egg, ConsoleColor.DarkYellow);
+                    Logger.Write($"Hatch: eISE.KmWalked: {eggIncubatorStatusEvent.KmWalked:0.00} | eISE.KmToWalk: {eggIncubatorStatusEvent.KmToWalk:0.00} | " +
+                                 $"XP1: {ExpAwarded1} | XP2: {ExpAwarded2} | SD1: {stardust1} | SD2: {stardust2}", LogLevel.Egg, ConsoleColor.DarkYellow);
 
                     if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification)
                         await PushNotificationClient.SendNotification(session, $"Egg has hatched.", $"Pokemon: {hatched.PokemonId}\n" +
@@ -122,7 +122,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     session.EventDispatcher.Send(new EggHatchedEvent
                     {
-                        Dist = kmWalked - KmToWalk, //Still working on this - TheWizard1328
+                        Dist = KMs, //Still working on this - TheWizard1328
                         Id = hatched.Id,
                         PokemonId = hatched.PokemonId,
                         Level = PokemonInfo.GetLevel(hatched),

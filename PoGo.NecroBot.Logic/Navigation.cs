@@ -124,20 +124,20 @@ namespace PoGo.NecroBot.Logic
                 _YoursWalk = false; _MapZenWalk = false; _GoogleWalk = false;
                 if (distance >= _AutoWalkDist)
                 {
-                    if (logicSettings.UseYoursWalk)
-                    {
-                        Logging.Logger.Write($"Distance to travel is > {_AutoWalkDist}m, switching to 'YoursWalk'", Logging.LogLevel.Info, ConsoleColor.DarkYellow);
-                        _YoursWalk = true;
-                    }
-                    if (logicSettings.UseMapzenWalk && logicSettings.MapzenTurnByTurnApiKey != "")
-                    {
-                        Logging.Logger.Write($"Distance to travel is > {_AutoWalkDist}m, using 'Mapzen Walk'", Logging.LogLevel.Info, ConsoleColor.DarkYellow);
-                        _MapZenWalk = true;
-                    }
                     if (logicSettings.UseGoogleWalk && logicSettings.GoogleApiKey != "")
                     {
                         Logging.Logger.Write($"Distance to travel is > {_AutoWalkDist}m, using 'Google Walk'", Logging.LogLevel.Info, ConsoleColor.DarkYellow);
                         _GoogleWalk = true;
+                    }
+                    else if (logicSettings.UseMapzenWalk && logicSettings.MapzenTurnByTurnApiKey != "")
+                    {
+                        Logging.Logger.Write($"Distance to travel is > {_AutoWalkDist}m, using 'Mapzen Walk'", Logging.LogLevel.Info, ConsoleColor.DarkYellow);
+                        _MapZenWalk = true;
+                    }
+                    else if (logicSettings.UseYoursWalk)
+                    {
+                        Logging.Logger.Write($"Distance to travel is > {_AutoWalkDist}m, switching to 'YoursWalk'", Logging.LogLevel.Info, ConsoleColor.DarkYellow);
+                        _YoursWalk = true;
                     }
                 }
                 else
@@ -158,29 +158,19 @@ namespace PoGo.NecroBot.Logic
 
             //Maybe change configuration for a Navigation Type.
             if (logicSettings.DisableHumanWalking)
-            {
                 WalkStrategyQueue.Add(new FlyStrategy(_client));
-            }
 
             if (logicSettings.UseGpxPathing)
-            {
                 WalkStrategyQueue.Add(new HumanPathWalkingStrategy(_client));
-            }
 
             if (_YoursWalk)
-            {
                 WalkStrategyQueue.Add(new YoursNavigationStrategy(_client));
-            }
 
             if (_GoogleWalk)
-            {
                 WalkStrategyQueue.Add(new GoogleStrategy(_client));
-            }
 
             if (_MapZenWalk)
-            {
                 WalkStrategyQueue.Add(new MapzenNavigationStrategy(_client));
-            }
 
             WalkStrategyQueue.Add(new HumanStrategy(_client));
         }

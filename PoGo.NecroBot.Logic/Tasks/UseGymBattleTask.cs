@@ -38,8 +38,9 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (!session.LogicSettings.GymConfig.Enable || gym.Type != FortType.Gym) return false;
 
             var FortDesc = "";
-            if (fortInfo.Description != "") { FortDesc = $", Description: { fortInfo.Description}"; }
+            if (fortInfo.Description != "") { FortDesc = $", Description: {fortInfo.Description}"; }
             Logger.Write($"Loot Gym: {fortInfo.Name}{FortDesc}", LogLevel.GymDisk);
+
             await UseNearbyPokestopsTask.FarmPokestop(session, gym, fortInfo, cancellationToken, true).ConfigureAwait(false);
 
             /*/TODO: disabled others returns false for dev 
