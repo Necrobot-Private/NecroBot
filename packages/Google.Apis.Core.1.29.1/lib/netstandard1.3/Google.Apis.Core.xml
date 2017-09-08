@@ -655,6 +655,17 @@
         <member name="M:Google.Apis.Json.ExplicitNullConverter.WriteJson(Newtonsoft.Json.JsonWriter,System.Object,Newtonsoft.Json.JsonSerializer)">
             <inheritdoc />
         </member>
+        <member name="T:Google.Apis.Json.NewtonsoftJsonContractResolver">
+            <summary>
+            A JSON contract resolver to apply <see cref="T:Google.Apis.Json.RFC3339DateTimeConverter"/> and <see cref="F:Google.Apis.Json.NewtonsoftJsonContractResolver.ExplicitNullConverter"/> as necessary.
+            </summary>
+            <remarks>
+            Using a contract resolver is recommended in the Json.NET performance tips: https://www.newtonsoft.com/json/help/html/Performance.htm#JsonConverters
+            </remarks>
+        </member>
+        <member name="M:Google.Apis.Json.NewtonsoftJsonContractResolver.CreateContract(System.Type)">
+            <inheritdoc />
+        </member>
         <member name="T:Google.Apis.Json.NewtonsoftJsonSerializer">
             <summary>Class for serialization and deserialization of JSON documents using the Newtonsoft Library.</summary>
         </member>

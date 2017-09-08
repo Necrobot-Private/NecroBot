@@ -908,6 +908,17 @@
             </para>
             </summary>
         </member>
+        <member name="M:Google.Apis.Auth.OAuth2.GoogleCredential.FromFile(System.String)">
+            <summary>
+            Loads credential from the specified file containing JSON credential data.
+            <para>
+            The file can contain a Service Account key file in JSON format from the Google Developers
+            Console or a stored user credential using the format supported by the Cloud SDK.
+            </para>
+            </summary>
+            <param name="path">The path to the credential file.</param>
+            <returns>The loaded credentials.</returns>
+        </member>
         <member name="M:Google.Apis.Auth.OAuth2.GoogleCredential.FromJson(System.String)">
             <summary>
             Loads credential from a string containing JSON credential data.
@@ -926,6 +937,18 @@
             <param name="accessMethod">Optional. The <see cref="T:Google.Apis.Auth.OAuth2.IAccessMethod"/> to use within this credential.
             If <c>null</c>, will default to <see cref="T:Google.Apis.Auth.OAuth2.BearerToken.AuthorizationHeaderAccessMethod"/>.</param>
             <returns>A credential based on the provided access token.</returns>
+        </member>
+        <member name="M:Google.Apis.Auth.OAuth2.GoogleCredential.FromComputeCredential(Google.Apis.Auth.OAuth2.ComputeCredential)">
+            <summary>
+            Create a <see cref="T:Google.Apis.Auth.OAuth2.GoogleCredential"/> from a <see cref="T:Google.Apis.Auth.OAuth2.ComputeCredential"/>.
+            In general, do not use this method. Call <see cref="M:Google.Apis.Auth.OAuth2.GoogleCredential.GetApplicationDefault"/> or
+            <see cref="M:Google.Apis.Auth.OAuth2.GoogleCredential.GetApplicationDefaultAsync"/>, which will provide the most suitable
+            credentials for the current platform.
+            </summary>
+            <param name="computeCredential">Optional. The compute credential to use in the returned <see cref="T:Google.Apis.Auth.OAuth2.GoogleCredential"/>.
+            If <c>null</c>, then a new <see cref="T:Google.Apis.Auth.OAuth2.ComputeCredential"/> will be instantiated, using the default
+            <see cref="T:Google.Apis.Auth.OAuth2.ComputeCredential.Initializer"/>.</param>
+            <returns>A <see cref="T:Google.Apis.Auth.OAuth2.GoogleCredential"/> with an underlying <see cref="T:Google.Apis.Auth.OAuth2.ComputeCredential"/>.</returns>
         </member>
         <member name="P:Google.Apis.Auth.OAuth2.GoogleCredential.IsCreateScopedRequired">
              <summary>
