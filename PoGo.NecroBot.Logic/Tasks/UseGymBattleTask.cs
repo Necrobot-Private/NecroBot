@@ -267,7 +267,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         break;
                 }
 
-                var rewarded = battleActions.Select(x => x.BattleResults?.PlayerExperienceAwarded).Where(x => x != null);
+                var rewarded = battleActions.Select(x => x.BattleResults?.PlayerXpAwarded).Where(x => x != null);
                 var lastAction = battleActions.LastOrDefault();
 
                 if (lastAction.Type == BattleActionType.ActionTimedOut ||
@@ -287,7 +287,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     if (lastAction.BattleResults != null)
                     {
-                        var exp = lastAction.BattleResults.PlayerExperienceAwarded;
+                        var exp = lastAction.BattleResults.PlayerXpAwarded;
                         var point = lastAction.BattleResults.GymPointsDelta;
                         gym.GymPoints += point;
                         defenderPokemonId = unchecked((ulong)lastAction.BattleResults.NextDefenderPokemonId);
