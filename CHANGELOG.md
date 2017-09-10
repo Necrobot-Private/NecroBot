@@ -1,5 +1,61 @@
 # Change Log
 
+## [Unreleased](https://github.com/Necrobot-Private/NecroBot/tree/HEAD)
+
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/1.0.0.200...HEAD)
+
+**Closed issues:**
+
+- No Support for Pokemon GO API - 0.73.1 - Error Message [\#1961](https://github.com/Necrobot-Private/NecroBot/issues/1961)
+
+## [1.0.0.200](https://github.com/Necrobot-Private/NecroBot/tree/1.0.0.200) (2017-09-10)
+
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.187...1.0.0.200)
+
+**Closed issues:**
+
+- We have detected a Pokemon API change. The bot emulates API version 0.69.1, which is no longer supported.  Minimum API version is now 0.73.1 [\#1962](https://github.com/Necrobot-Private/NecroBot/issues/1962)
+- Unable to start [\#1960](https://github.com/Necrobot-Private/NecroBot/issues/1960)
+- Trojan:Win32/Skeeyah.A!rfn [\#1959](https://github.com/Necrobot-Private/NecroBot/issues/1959)
+- Hash API server down time problems [\#1958](https://github.com/Necrobot-Private/NecroBot/issues/1958)
+- Error Fort is full [\#1957](https://github.com/Necrobot-Private/NecroBot/issues/1957)
+- Telegram [\#1956](https://github.com/Necrobot-Private/NecroBot/issues/1956)
+-  \(\)Exception caught, writing LogBuffer - no .json [\#1955](https://github.com/Necrobot-Private/NecroBot/issues/1955)
+- Exception caught, writing LogBuffer. [\#1952](https://github.com/Necrobot-Private/NecroBot/issues/1952)
+- Will there be sniper now? [\#1951](https://github.com/Necrobot-Private/NecroBot/issues/1951)
+- Item error ? [\#1949](https://github.com/Necrobot-Private/NecroBot/issues/1949)
+- NecroBot don't spin PokeStops [\#1948](https://github.com/Necrobot-Private/NecroBot/issues/1948)
+- gyms and raids [\#1947](https://github.com/Necrobot-Private/NecroBot/issues/1947)
+- \[19:53:13\] \(INFO\) PokemonGo.RocketAPI.Exceptions.HasherException: Hash API server \(https://pokehash.buddyauth.com/api/v137\_1/hash\) might down! [\#1946](https://github.com/Necrobot-Private/NecroBot/issues/1946)
+- Can we do raid battles? [\#1945](https://github.com/Necrobot-Private/NecroBot/issues/1945)
+- no login [\#1944](https://github.com/Necrobot-Private/NecroBot/issues/1944)
+- how to get kangaskhan and unown [\#1943](https://github.com/Necrobot-Private/NecroBot/issues/1943)
+- BOT starts loop and do nothing [\#1942](https://github.com/Necrobot-Private/NecroBot/issues/1942)
+- What about a web site? [\#1941](https://github.com/Necrobot-Private/NecroBot/issues/1941)
+- Gym Question [\#1939](https://github.com/Necrobot-Private/NecroBot/issues/1939)
+- Gym's API issues [\#1938](https://github.com/Necrobot-Private/NecroBot/issues/1938)
+- I CANNOT OPEN THE BOT \(There Is A Zip File With The Error\) [\#1932](https://github.com/Necrobot-Private/NecroBot/issues/1932)
+- Not spining spinners or and staying in place not moving much after update. [\#1929](https://github.com/Necrobot-Private/NecroBot/issues/1929)
+- Export to Excel holds wrong value for candy [\#1928](https://github.com/Necrobot-Private/NecroBot/issues/1928)
+- who have free api key [\#1923](https://github.com/Necrobot-Private/NecroBot/issues/1923)
+- Unable to Evolve Sunkern [\#1914](https://github.com/Necrobot-Private/NecroBot/issues/1914)
+- Cheked mass transfer error [\#1911](https://github.com/Necrobot-Private/NecroBot/issues/1911)
+- Error PokemonGo.RocketAPI.Helpers.RequestBuilder.\<GenerateSignature\>d\_\_12.MoveNext\(\) [\#1905](https://github.com/Necrobot-Private/NecroBot/issues/1905)
+- Bot doesn t work! [\#1895](https://github.com/Necrobot-Private/NecroBot/issues/1895)
+- For me necrobot have a problem [\#1891](https://github.com/Necrobot-Private/NecroBot/issues/1891)
+- \[00:10:13\] \(ERROR\) You have to log into an browser with the email 'myemailaddress'. [\#1890](https://github.com/Necrobot-Private/NecroBot/issues/1890)
+- no evolving [\#1836](https://github.com/Necrobot-Private/NecroBot/issues/1836)
+- "Try later" Bot works every other day [\#1831](https://github.com/Necrobot-Private/NecroBot/issues/1831)
+- Ptc account doesn't work  [\#1781](https://github.com/Necrobot-Private/NecroBot/issues/1781)
+
+**Merged pull requests:**
+
+- 0.73.1 supports [\#1963](https://github.com/Necrobot-Private/NecroBot/pull/1963) ([Furtif](https://github.com/Furtif))
+- Updates/package updates [\#1954](https://github.com/Necrobot-Private/NecroBot/pull/1954) ([Lord-Haji](https://github.com/Lord-Haji))
+- Update translation.zh-CN.json [\#1953](https://github.com/Necrobot-Private/NecroBot/pull/1953) ([VBQL](https://github.com/VBQL))
+- Change Api calls methods [\#1950](https://github.com/Necrobot-Private/NecroBot/pull/1950) ([Furtif](https://github.com/Furtif))
+- Modified EventFortTargeted Logger line [\#1940](https://github.com/Necrobot-Private/NecroBot/pull/1940) ([Furtif](https://github.com/Furtif))
+
 ## [v1.0.0.187](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.187) (2017-08-05)
 
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.186...v1.0.0.187)
@@ -1017,7 +1073,7 @@
 
 - Features/netstandard [\#1337](https://github.com/Necrobot-Private/NecroBot/pull/1337) ([jjskuld](https://github.com/jjskuld))
 - Fix async usage in WPF by using async click handlers instead of Task.Run [\#1335](https://github.com/Necrobot-Private/NecroBot/pull/1335) ([jjskuld](https://github.com/jjskuld))
-- Bug  Egg Display Distance Bug [\#1332](https://github.com/Necrobot-Private/NecroBot/pull/1332) ([montolio](https://github.com/montolio))
+- Bug  Egg Display Distance Bug [\#1332](https://github.com/Necrobot-Private/NecroBot/pull/1332) ([bernhard-efler](https://github.com/bernhard-efler))
 - Replace usage of DelayingUtils.Delay with DelayingUtils.DelayAsync [\#1330](https://github.com/Necrobot-Private/NecroBot/pull/1330) ([jjskuld](https://github.com/jjskuld))
 - Allow 100 IV to be transferred [\#1329](https://github.com/Necrobot-Private/NecroBot/pull/1329) ([jjskuld](https://github.com/jjskuld))
 - Fix Pokemon Tab Display [\#1317](https://github.com/Necrobot-Private/NecroBot/pull/1317) ([Lord-Haji](https://github.com/Lord-Haji))
