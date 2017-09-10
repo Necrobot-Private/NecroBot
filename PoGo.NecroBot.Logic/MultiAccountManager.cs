@@ -224,7 +224,7 @@ namespace PoGo.NecroBot.Logic
             if (ignoreBlockCheck)
                 return _context.Account.OrderBy(x => x.Level.Value).ThenBy(x => x.CurrentXp.Value).FirstOrDefault();
             else
-                return _context.Account.OrderBy(x => x.Level.Value).ThenBy(x => x.CurrentXp.Value).Where(x => x != null && x.ReleaseBlockTime.HasValue && x.ReleaseBlockTime.Value < DateTime.Now.ToUnixTime()).FirstOrDefault();
+                return _context.Account.OrderBy(x => x.Level.Value).ThenBy(x => x.CurrentXp.Value).ThenBy(x => x.RuntimeTotal.Value).Where(x => x != null && x.ReleaseBlockTime.HasValue && x.ReleaseBlockTime.Value < DateTime.Now.ToUnixTime()).FirstOrDefault();
         }
 
         public bool AllowMultipleBot()
@@ -282,7 +282,7 @@ namespace PoGo.NecroBot.Logic
 
             if (_context.Account.Count() > 0)
             {
-                var runnableAccount = _context.Account.OrderByDescending(p => p.CurrentXp).ThenBy(p => p.Level).LastOrDefault(p => p != currentAccount && (!p.ReleaseBlockTime.HasValue || p.ReleaseBlockTime.HasValue && p.ReleaseBlockTime.Value < DateTime.Now.ToUnixTime()));
+                var runnableAccount = _context.Account.OrderBy(x => x.RuntimeTotal.Value).ThenBy(p => p.Level).ThenBy(p => p.CurrentXp).FirstOrDefault(p => p != currentAccount);
 
                 if (runnableAccount != null)
                     return runnableAccount;
@@ -374,9 +374,9 @@ namespace PoGo.NecroBot.Logic
                 user = string.IsNullOrEmpty(item.Nickname) ? item.Username : item.Nickname;
 
                 if (item.Level > 0)
-                    Logger.Write($"{user.PadRight(maxL)} | Lvl: {item.Level,2:#0} | XP: {item.CurrentXp,8:0} | SD: {item.Stardust,8:0} | Runtime: {item.RuntimeTotal,3:##0} Min", LogLevel.BotStats);
+                    Logger.Write($"{user.PadRight(maxL)} | Lvl: {item.Level,2:#0} | XP: {item.CurrentXp,8:0} | SD: {item.Stardust,8:0} | Runtime: {item.RuntimeTotal:00:00}", LogLevel.BotStats);
                 else
-                    Logger.Write($"{user.PadRight(maxL)} | Lvl: ?? | XP:        0 | SD:        0 | Runtime: {item.RuntimeTotal,3:##0} Min", LogLevel.BotStats);
+                    Logger.Write($"{user.PadRight(maxL)} | Lvl: ?? | XP:        0 | SD:        0 | Runtime: {item.RuntimeTotal:#0:00}", LogLevel.BotStats);
             }
         }
 

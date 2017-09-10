@@ -1,15 +1,12 @@
-BotStatus=DISABLED;
+BotStatus=ENABLED;
 //============================================//
-              POKEMON GO 0.69.1
+              POKEMON GO 0.73.1
 //============================================//
 
-    Necrobot is now compatible with 0.69.1 API.
-New forced API 0.69.1 isn't safe and may cause 
-your account to get banned few hours later. 
-Be aware, you've been warned.
+    Necrobot is now compatible with 0.73.1 API.
 
 //============================================//
-              Updated: 8/2/2017
+              Updated: 9/7/2017
 
 
 For support/questions:

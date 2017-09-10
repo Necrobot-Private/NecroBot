@@ -33,6 +33,16 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 4)]
         public bool AutoExitBotIfAccountFlagged { get; set; }
 
+        [DefaultValue(40.781441)]
+        [Range(-90, 90)]
+        [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 5)]
+        public Double AccountLatitude { get; set; }
+
+        [DefaultValue(-73.966586)]
+        [Range(-180, 180)]
+        [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 6)]
+        public Double AccountLongitude { get; set; }
+
         // Total runtime since client started
         [JsonIgnore]
         public double RuntimeTotal { get; set; }

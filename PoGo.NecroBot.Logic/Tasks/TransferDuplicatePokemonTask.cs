@@ -45,6 +45,15 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             await Execute(session, maxPokemonsToTransfer, cancellationToken).ConfigureAwait(false);
 
+            var SlashedPokemonsToTransfer = await
+               session.Inventory.GetSlashedPokemonToTransfer().ConfigureAwait(false);
+
+            if (SlashedPokemonsToTransfer.Count() > 0)
+            {
+                Logging.Logger.Write($"Transfering {SlashedPokemonsToTransfer.Count()} Slashed pokemon.");
+                await Execute(session, SlashedPokemonsToTransfer, cancellationToken).ConfigureAwait(false);
+            }
+
             // Evolve after transfer
             await EvolvePokemonTask.Execute(session, cancellationToken).ConfigureAwait(false);
         }

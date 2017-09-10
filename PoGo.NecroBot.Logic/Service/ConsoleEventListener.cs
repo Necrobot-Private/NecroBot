@@ -17,6 +17,8 @@ using POGOProtos.Networking.Responses;
 using PoGo.NecroBot.Logic.Event.Snipe;
 using System.Linq;
 using PoGo.NecroBot.Logic.Utils;
+using PoGo.NecroBot.Logic.Model.Settings;
+using System.IO;
 
 #endregion
 
@@ -200,6 +202,9 @@ namespace PoGo.NecroBot.Logic.Service
                 LogLevel.Egg);
         }
 
+        public static GlobalSettings _settings;
+        public static Session _session;
+
         private static void HandleEvent(FortUsedEvent fortUsedEvent, ISession session)
         {
             if (fortUsedEvent.InventoryFull)
@@ -222,7 +227,16 @@ namespace PoGo.NecroBot.Logic.Service
             if (fortUsedEvent.Fort.Type == FortType.Checkpoint)
                 Logger.Write(eventMessage, LogLevel.Pokestop);
             else
-                Logger.Write(eventMessage, LogLevel.Gym, ConsoleColor.Cyan); //LogLevel.Pokestop);
+                Logger.Write(eventMessage, LogLevel.GymDisk, ConsoleColor.Cyan); //LogLevel.Pokestop);
+
+            //_session.Client.Settings.DefaultLatitude = fortUsedEvent.Latitude;
+            //_session.Client.Settings.DefaultLongitude = fortUsedEvent.Longitude;
+
+            //_settings.LocationConfig.DefaultLatitude = fortUsedEvent.Latitude;
+            //_settings.LocationConfig.DefaultLongitude = fortUsedEvent.Longitude;
+
+            //_session.Client.Player.SetCoordinates(fortUsedEvent.Latitude, fortUsedEvent.Longitude, fortUsedEvent.Altitude);
+            //_settings.Save(Path.Combine(_settings.ProfileConfigPath, "config.json"));
         }
 
         private static void HandleEvent(FortFailedEvent fortFailedEvent, ISession session)
@@ -257,7 +271,7 @@ namespace PoGo.NecroBot.Logic.Service
                 targetType = session.Translation.GetTranslation(TranslationString.Gym); // "Gym";
             else if (fortTargetEvent.Type == FortType.Checkpoint)
             {
-                if(fortTargetEvent.Name != "User selected")
+                if (fortTargetEvent.Name != "User selected")
                     targetType = session.Translation.GetTranslation(TranslationString.Pokestop); // "Pokestop";
                 else
                     targetType = "POI";

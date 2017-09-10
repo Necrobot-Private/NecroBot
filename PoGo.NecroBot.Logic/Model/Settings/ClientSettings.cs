@@ -92,6 +92,18 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             set { _settings.Auth.CurrentAuthConfig.AutoExitBotIfAccountFlagged = value; }
         }
 
+        double ISettings.AccountLatitude
+        {
+            get { return _settings.Auth.CurrentAuthConfig.AccountLatitude; }
+            set { _settings.Auth.CurrentAuthConfig.AccountLatitude = value; }
+        }
+
+        double ISettings.AccountLongitude
+        {
+            get { return _settings.Auth.CurrentAuthConfig.AccountLongitude; }
+            set { _settings.Auth.CurrentAuthConfig.AccountLongitude = value; }
+        }
+        
         #endregion Auth Config Values
 
         #region Device Config Values

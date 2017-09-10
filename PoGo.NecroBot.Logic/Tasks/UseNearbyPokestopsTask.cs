@@ -371,10 +371,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                     {
                         await EvolvePokemonTask.Execute(session, cancellationToken).ConfigureAwait(false);
                     }
-                    if (session.LogicSettings.RenamePokemon)
-                        await RenamePokemonTask.Execute(session, cancellationToken).ConfigureAwait(false);
                     if (session.LogicSettings.AutomaticallyLevelUpPokemon)
                         await LevelUpPokemonTask.Execute(session, cancellationToken).ConfigureAwait(false);
+                    if (session.LogicSettings.RenamePokemon)
+                        await RenamePokemonTask.Execute(session, cancellationToken).ConfigureAwait(false);
 
                     await GetPokeDexCount.Execute(session, cancellationToken).ConfigureAwait(false);
                 }
@@ -440,6 +440,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         latitude += 0.000003;
                         longitude += 0.000005;
                         await LocationUtils.UpdatePlayerLocationWithAltitude(session, new GeoCoordinate(latitude, longitude), 0).ConfigureAwait(false);
+
                         retry--;
                     }
                 }

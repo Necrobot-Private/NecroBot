@@ -38,8 +38,9 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (!session.LogicSettings.GymConfig.Enable || gym.Type != FortType.Gym) return false;
 
             var FortDesc = "";
-            if (fortInfo.Description != "") { FortDesc = $", Description: { fortInfo.Description}"; }
+            if (fortInfo.Description != "") { FortDesc = $", Description: {fortInfo.Description}"; }
             Logger.Write($"Loot Gym: {fortInfo.Name}{FortDesc}", LogLevel.GymDisk);
+
             await UseNearbyPokestopsTask.FarmPokestop(session, gym, fortInfo, cancellationToken, true).ConfigureAwait(false);
 
             /*/TODO: disabled others returns false for dev 
@@ -266,7 +267,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         break;
                 }
 
-                var rewarded = battleActions.Select(x => x.BattleResults?.PlayerExperienceAwarded).Where(x => x != null);
+                var rewarded = battleActions.Select(x => x.BattleResults?.PlayerXpAwarded).Where(x => x != null);
                 var lastAction = battleActions.LastOrDefault();
 
                 if (lastAction.Type == BattleActionType.ActionTimedOut ||
@@ -286,7 +287,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     if (lastAction.BattleResults != null)
                     {
-                        var exp = lastAction.BattleResults.PlayerExperienceAwarded;
+                        var exp = lastAction.BattleResults.PlayerXpAwarded;
                         var point = lastAction.BattleResults.GymPointsDelta;
                         gym.GymPoints += point;
                         defenderPokemonId = unchecked((ulong)lastAction.BattleResults.NextDefenderPokemonId);
