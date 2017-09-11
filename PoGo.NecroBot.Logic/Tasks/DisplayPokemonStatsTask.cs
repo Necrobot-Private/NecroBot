@@ -131,7 +131,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         string[] pokemonData =
                         {
                             session.Translation.GetPokemonTranslation(pokemon.PokemonId).Replace(' ', '_'),
-                            session.Inventory.GetCandyFamily(pokemon.PokemonId).ToString(), // PokemonInfo.GetCandy(session, pokemon).ToString(),
+                            session.Inventory.GetCandyCount(pokemon.PokemonId).ToString(), // PokemonInfo.GetCandy(session, pokemon.PokemonId).ToString(),
                             pokemon.IsBad.ToString(),
                             pokemon.Nickname.Replace(' ', '_'),
                             PokemonInfo.GetLevel(pokemon).ToString(),
@@ -172,5 +172,3 @@ namespace PoGo.NecroBot.Logic.Tasks
         }
     }
 }
-
-

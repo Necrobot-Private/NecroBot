@@ -1,4 +1,4 @@
-﻿using PoGo.NecroBot.Logic.Model.Settings;
+using PoGo.NecroBot.Logic.Model.Settings;
 using PokemonGo.RocketAPI.Enums;
 using System;
 using System.Collections.Generic;
@@ -13,6 +13,10 @@ namespace PoGo.NecroBot.Logic.Model
         public AuthType AuthType { get; set; }
         [Required]
         public string Username { get; set; }
+        public bool AutoExitBotIfAccountFlagged { get; set; }
+        public double AccountLatitude { get; set; }
+        public double AccountLongitude { get; set; }
+        public bool AccountActive { get; set; }
         [Required]
         public string Password { get; set; }
         public double? RuntimeTotal { get; set; }
@@ -30,6 +34,7 @@ namespace PoGo.NecroBot.Logic.Model
         public long? IsRunning { get; set; }
         public ICollection<PokemonTimestamp> PokemonTimestamp { get; set; }
         public ICollection<PokestopTimestamp> PokestopTimestamp { get; set; }
+        private GlobalSettings _globalSettings { get; set; }
     }
 
     public partial class Account : INotifyPropertyChanged
@@ -45,6 +50,10 @@ namespace PoGo.NecroBot.Logic.Model
             AuthType = item.AuthType;
             Password = item.Password;
             Username = item.Username;
+            AutoExitBotIfAccountFlagged = item.AutoExitBotIfAccountFlagged;
+            AccountLatitude = item.AccountLatitude;
+            AccountLongitude = item.AccountLongitude;
+            AccountActive = item.AccountActive;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

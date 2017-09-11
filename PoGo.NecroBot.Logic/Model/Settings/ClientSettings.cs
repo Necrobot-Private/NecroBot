@@ -103,7 +103,13 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             get { return _settings.Auth.CurrentAuthConfig.AccountLongitude; }
             set { _settings.Auth.CurrentAuthConfig.AccountLongitude = value; }
         }
-        
+
+        bool ISettings.AccountActive
+        {
+            get { return _settings.Auth.CurrentAuthConfig.AccountActive; }
+            set { _settings.Auth.CurrentAuthConfig.AccountActive = value; }
+        }
+
         #endregion Auth Config Values
 
         #region Device Config Values

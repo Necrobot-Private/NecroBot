@@ -35,22 +35,30 @@ namespace PoGo.NecroBot.Logic.Tasks
                     session.LogicSettings.PokemonEvolveFilters,
                     session.LogicSettings.KeepPokemonsThatCanEvolve,
                     session.LogicSettings.PrioritizeIvOverCp).ConfigureAwait(false);
-            
-            await Execute(session, duplicatePokemons, cancellationToken).ConfigureAwait(false);
+
+            if (duplicatePokemons.Count() > 0)
+            {
+                Logging.Logger.Write($"Transferring {duplicatePokemons.Count()} Duplicate pokemon.",Logging.LogLevel.Transfer);
+                await Execute(session, duplicatePokemons, cancellationToken).ConfigureAwait(false);
+            }
 
             var maxPokemonsToTransfer = await
                session.Inventory.GetMaxPokemonToTransfer(
                    session.LogicSettings.PokemonsNotToTransfer,
                    session.LogicSettings.PrioritizeIvOverCp).ConfigureAwait(false);
 
-            await Execute(session, maxPokemonsToTransfer, cancellationToken).ConfigureAwait(false);
+            if (maxPokemonsToTransfer.Count() > 0)
+            {
+                Logging.Logger.Write($"Transferring {maxPokemonsToTransfer.Count()} pokemon over max limit.", Logging.LogLevel.Transfer);
+                await Execute(session, maxPokemonsToTransfer, cancellationToken).ConfigureAwait(false);
+            }
 
             var SlashedPokemonsToTransfer = await
                session.Inventory.GetSlashedPokemonToTransfer().ConfigureAwait(false);
 
             if (SlashedPokemonsToTransfer.Count() > 0)
             {
-                Logging.Logger.Write($"Transfering {SlashedPokemonsToTransfer.Count()} Slashed pokemon.");
+                Logging.Logger.Write($"Transferring {SlashedPokemonsToTransfer.Count()} Slashed pokemon.", Logging.LogLevel.Transfer);
                 await Execute(session, SlashedPokemonsToTransfer, cancellationToken).ConfigureAwait(false);
             }
 
