@@ -35,8 +35,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                     session.LogicSettings.PokemonEvolveFilters,
                     session.LogicSettings.KeepPokemonsThatCanEvolve).ConfigureAwait(false);
 
-            await Execute(session, weakPokemon, cancellationToken).ConfigureAwait(false);
-
+            if (weakPokemon.Count() > 0)
+            {
+                Logging.Logger.Write($"Transferring {weakPokemon.Count()} Weak pokemon.", Logging.LogLevel.Transfer);
+                await Execute(session, weakPokemon, cancellationToken).ConfigureAwait(false);
+            }
             // Evolve after transfer.
             await EvolvePokemonTask.Execute(session, cancellationToken).ConfigureAwait(false);
         }

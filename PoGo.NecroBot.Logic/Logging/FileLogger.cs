@@ -40,7 +40,18 @@ namespace PoGo.NecroBot.Logic.Logging
             _maxLogLevel = maxLogLevel;
 
             string path = Path.Combine(Directory.GetCurrentDirectory(), subPath, "Logs");
-            Directory.CreateDirectory(path);
+            if (Directory.Exists(path))
+            {
+                string[] txtList = Directory.GetFiles(path, "*.txt");
+                foreach (string f in txtList)
+                {
+                    File.Delete(f);
+                }
+            }
+            else
+            {
+                Directory.CreateDirectory(path);
+            }
 
             if (string.IsNullOrEmpty(fileName))
                 fileName = $"NecroBot2-{DateTime.Today.ToString("yyyy-MM-dd")}-{DateTime.Now.ToString("HH-mm-ss")}.txt";

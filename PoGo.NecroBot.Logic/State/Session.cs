@@ -109,7 +109,8 @@ namespace PoGo.NecroBot.Logic.State
                     Username = settings.Username,
                     AutoExitBotIfAccountFlagged = settings.AutoExitBotIfAccountFlagged,
                     AccountLatitude = settings.AccountLatitude,
-                    AccountLongitude = settings.AccountLongitude
+                    AccountLongitude = settings.AccountLongitude,
+                    AccountActive = settings.AccountActive
                 });
             }
             if (File.Exists("runtime.log"))

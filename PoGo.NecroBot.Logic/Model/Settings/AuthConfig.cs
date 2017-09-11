@@ -43,6 +43,10 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 6)]
         public Double AccountLongitude { get; set; }
 
+        [DefaultValue(true)]
+        [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 7)]
+        public bool AccountActive { get; set; }
+
         // Total runtime since client started
         [JsonIgnore]
         public double RuntimeTotal { get; set; }
