@@ -102,7 +102,7 @@ namespace RocketBot2.Forms
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            // Splits left & right splitter panes @ 45%/55% of the window width for smaller screens...
+            // Splits left & right splitter panes @ 47%/53% of the window width for smaller screens...
             // Otherwise gives more realistate to left side while makingsure all olvPokemonList columns are visible.
             var Spliter1Width = 0;
             for (int i = 0; i < olvPokemonList.Columns.Count; i++)
@@ -110,11 +110,11 @@ namespace RocketBot2.Forms
                 Spliter1Width += olvPokemonList.GetColumn(i).Width;
             }
             if (Spliter1Width > this.Width / 2)
-                this.splitContainer1.SplitterDistance = this.splitContainer1.Width / 100 * 45;
+                this.splitContainer1.SplitterDistance = this.splitContainer1.Width / 100 * 47;
             else
-                this.splitContainer1.SplitterDistance = this.Width - Spliter1Width - 55;
+                this.splitContainer1.SplitterDistance = this.Width - Spliter1Width - 53;
 
-            this.splitContainer2.SplitterDistance = this.splitContainer2.Height / 100 * 45;// Always keeps the logger window @ 45%/55% of the window height
+            this.splitContainer2.SplitterDistance = this.splitContainer2.Height / 100 * 47;// Always keeps the logger window @ 47%/53% of the window height
 
             this.Refresh(); // Force screen refresh before items are poppulated
             SetStatusText(Application.ProductName + " " + Application.ProductVersion);
@@ -157,17 +157,13 @@ namespace RocketBot2.Forms
             TrayIcon.Visible = false;
             if (FormWindowState.Minimized == this.WindowState)
             {
-                GlobalSettings settings;
-                settings = new GlobalSettings();
-
-                var logicSettings = new LogicSettings(settings);
-                MultiAccountManager accountManager = new MultiAccountManager(settings, logicSettings.Bots);
+                MultiAccountManager accountManager = new MultiAccountManager(_settings, _session.LogicSettings.Bots);
                 var bot = string.IsNullOrEmpty(accountManager.GetCurrentAccount().Nickname) ? accountManager.GetCurrentAccount().Username : accountManager.GetCurrentAccount().Nickname;
 
                 TrayIcon.BalloonTipIcon = ToolTipIcon.Info; //Shows the info icon so the user doesn't thing there is an error.
                 TrayIcon.BalloonTipTitle = $"RocketBot2 [{bot}] is minimized";
                 TrayIcon.BalloonTipText = "Click on this icon to restore";
-                TrayIcon.Text = "RocketBot2 is minimized, Click on this icon to restore";
+                TrayIcon.Text = $"[{bot}], Click here to restore";
                 TrayIcon.Visible = true;
                 TrayIcon.ShowBalloonTip(5000);
                 Hide();
@@ -228,7 +224,6 @@ namespace RocketBot2.Forms
                 LoadPokeStopsTimer.Enabled = _botStarted;
                 togglePrecalRoute.Enabled = _botStarted;
                 followTrainerCheckBox.Enabled = _botStarted;
-                cbAutoWalkAI.Enabled = Instance._botStarted;
                 LoadPokeStopsRefresh.Enabled = _botStarted;
             }
             await InitializePokestopsAndRoute().ConfigureAwait(false);
@@ -377,7 +372,7 @@ namespace RocketBot2.Forms
                 if (_pokemonsOverlay.Markers.Count > 8)
                     _pokemonsOverlay.Markers.Clear();
 
-                //_pokestopsOverlay.Routes.Clear();
+                _pokestopsOverlay.Routes.Clear();
 
                 if (togglePrecalRoute.CheckState == CheckState.Checked)
                 {
@@ -638,7 +633,7 @@ namespace RocketBot2.Forms
                 {
                     var step = new GMapRoute(_playerLocations, "step")
                     {
-                        Stroke = new Pen(Color.FromArgb(0, 204, 0), 1) { DashStyle = DashStyle.Solid }
+                        Stroke = new Pen(Color.FromArgb(0, 204, 0), 2) { DashStyle = DashStyle.Dash }
                     };
                     _playerOverlay.Routes.Add(step);
                 }
@@ -695,8 +690,6 @@ namespace RocketBot2.Forms
 
                 _playerLocations.Clear();
                 Navigation_UpdatePositionEvent();
-
-                _settings.Save(Path.Combine(_settings.ProfileConfigPath, "config.json"));
 
                 Logger.Write($"New starting location has been set to: Lat: {pos.Lat:0.00000000} Long: {pos.Lng:0.00000000} Alt: {Alt:0.00}m | Dist: {Dist:0.00} {DistUnits}", LogLevel.Info);
                 return;
@@ -897,7 +890,7 @@ namespace RocketBot2.Forms
 
                     var step = new GMapRoute(_playerLocations, "step")
                     {
-                        Stroke = new Pen(Color.FromArgb(0, 204, 0), 1) { DashStyle = DashStyle.Solid }
+                        Stroke = new Pen(Color.FromArgb(0, 204, 0), 2) { DashStyle = DashStyle.Dash }
                     };
 
                     if (togglePrecalRoute.CheckState == CheckState.Checked)
@@ -925,7 +918,6 @@ namespace RocketBot2.Forms
         private void CbEnablePushBulletNotification_CheckedChanged(object sender, EventArgs e)
         {
             _settings.NotificationConfig.EnablePushBulletNotification = cbEnablePushBulletNotification.Checked;
-            _settings.Save(Path.Combine(_settings.ProfileConfigPath, "config.json"));
         }
 
         private void CbAutoWalkAI_CheckedChanged(object sender, EventArgs e)
