@@ -14,7 +14,7 @@ namespace PoGo.NecroBot.Logic.State
             {
                 try
                 {
-                    await client.GetStringAsync("http://hashing.pogodev.io/api/hash/versions").ConfigureAwait(false);
+                    await client.GetStringAsync("https://pokehash.buddyauth.com/api/hash/versions").ConfigureAwait(false);
                     return true;
                 }
                 catch (Exception)
