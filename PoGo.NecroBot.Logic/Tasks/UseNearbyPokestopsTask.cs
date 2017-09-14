@@ -80,7 +80,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                         FortData = pokeStop
                     };
 
-
                     if (gymAttackSucceeded &&
                         fortInfo.Type == FortType.Gym &&
                         (_fortstate.FortData.OwnedByTeam == session.Profile.PlayerData.Team || session.GymState.CapturedGymId.Equals(fortInfo.FortId)) &&

@@ -43,11 +43,6 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             await UseNearbyPokestopsTask.FarmPokestop(session, gym, fortInfo, cancellationToken, true).ConfigureAwait(false);
 
-            /*/TODO: disabled others returns false for dev 
-            Logger.Write($"RAID battles can not be used for the moment, the bot still does not completely generate this process.", LogLevel.Gym, ConsoleColor.Blue);
-            if (gym != null) return false;
-            //*/
-
             if (session.GymState.MoveSettings == null)
             {
                 session.GymState.MoveSettings = await session.Inventory.GetMoveSettings().ConfigureAwait(false);
