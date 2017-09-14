@@ -80,7 +80,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         FortData = pokeStop
                     };
 
-                    if (gymAttackSucceeded &&
+                    if (gymAttackSucceeded && fortInfo.Type == FortType.Gym &&
                         (_fortstate.FortData.OwnedByTeam == session.Profile.PlayerData.Team || session.GymState.CapturedGymId.Equals(fortInfo.FortId)) &&
                         session.LogicSettings.GymConfig.Enable &&
                         session.LogicSettings.GymConfig.EnableGymTraining)
@@ -98,7 +98,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 catch
                 {
                     Logger.Write("Retry waiting, gym check please wait ...", LogLevel.Gym);
-                    return;
+                    break;
                 }
 
                 if (!await SetMoveToTargetTask.IsReachedDestination(pokeStop, session, cancellationToken).ConfigureAwait(false))
