@@ -207,7 +207,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
                 var thisAttackActions = new List<BattleAction>();
 
-                StartGymBattleResponse result = null;
+                GymStartSessionResponse result = null;
                 try
                 {
                     result = await StartBattle(session, gym, pokemonDatas, defenderPokemonId).ConfigureAwait(false);
@@ -230,14 +230,14 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 index++;
                 // If we can't start battle in 10 tries, let's skip the gym
-                if (result == null || result.Result != StartGymBattleResponse.Types.Result.Success)
+                if (result == null || result.Result != GymStartSessionResponse.Types.Result.Success)
                 {
                     session.EventDispatcher.Send(new GymErrorUnset { GymName = fortInfo.Name });
                     isVictory = false;
                     break;
                 }
 
-                switch (result.BattleLog.State)
+                switch (result.Battle.BattleLog.State)
                 {
                     case BattleState.Active:
                         _startBattleCounter = 3;
@@ -898,19 +898,19 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static int _currentAttackerEnergy;
 
-        private static async Task<List<BattleAction>> AttackGym(ISession session, CancellationToken cancellationToken, GymGetInfoResponse currentFortData, StartGymBattleResponse startResponse, int counter, FortData fort)
+        private static async Task<List<BattleAction>> AttackGym(ISession session, CancellationToken cancellationToken, GymGetInfoResponse currentFortData, GymStartSessionResponse startResponse, int counter, FortData fort)
         {
-            long serverMs = startResponse.BattleLog.BattleStartTimestampMs;
-            var lastActions = startResponse.BattleLog.BattleActions.ToList();
+            long serverMs = startResponse.Battle.BattleLog.BattleStartTimestampMs;
+            var lastActions = startResponse.Battle.BattleLog.BattleActions.ToList();
 
-            Logger.Write($"Gym battle started; fighting trainer: {startResponse.Defender.TrainerPublicProfile.Name}", LogLevel.Gym, ConsoleColor.Green);
-            Logger.Write($"We are attacking: {startResponse.Defender.ActivePokemon.PokemonData.PokemonId} ({startResponse.Defender.ActivePokemon.PokemonData.Cp} CP), Lvl: {startResponse.Defender.ActivePokemon.PokemonData.Level():0.0}", LogLevel.Gym, ConsoleColor.White);
+            Logger.Write($"Gym battle started; fighting trainer: {startResponse.Battle.Defender.TrainerPublicProfile.Name}", LogLevel.Gym, ConsoleColor.Green);
+            Logger.Write($"We are attacking: {startResponse.Battle.Defender.ActivePokemon.PokemonData.PokemonId} ({startResponse.Battle.Defender.ActivePokemon.PokemonData.Cp} CP), Lvl: {startResponse.Battle.Defender.ActivePokemon.PokemonData.Level():0.0}", LogLevel.Gym, ConsoleColor.White);
             Console.WriteLine(Environment.NewLine);
 
             if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification)
-                await PushNotificationClient.SendNotification(session, $"Gym battle started", $"Trainer: {startResponse.Defender.TrainerPublicProfile.Name}\n" +
-                                                                       $"We are attacking: {startResponse.Defender.ActivePokemon.PokemonData.PokemonId} ({startResponse.Defender.ActivePokemon.PokemonData.Cp} CP)\n" +
-                                                                       $"Lvl: {startResponse.Defender.ActivePokemon.PokemonData.Level():0.0}", true).ConfigureAwait(false);
+                await PushNotificationClient.SendNotification(session, $"Gym battle started", $"Trainer: {startResponse.Battle.Defender.TrainerPublicProfile.Name}\n" +
+                                                                       $"We are attacking: {startResponse.Battle.Defender.ActivePokemon.PokemonData.PokemonId} ({startResponse.Battle.Defender.ActivePokemon.PokemonData.Cp} CP)\n" +
+                                                                       $"Lvl: {startResponse.Battle.Defender.ActivePokemon.PokemonData.Level():0.0}", true).ConfigureAwait(false);
 
             int loops = 0;
             List<BattleAction> emptyActions = new List<BattleAction>();
@@ -955,7 +955,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                         TimedLog("Start making attack");
                         long timeBefore = DateTime.UtcNow.ToUnixTime();
-                        attackResult = await session.Client.Fort.GymBattleAttak(gym.Id, startResponse.BattleId, attackActionz, a2).ConfigureAwait(false);
+                        attackResult = await session.Client.Fort.GymBattleAttak(gym.Id, startResponse.Battle.BattleId, attackActionz, a2).ConfigureAwait(false);
                         long timeAfter = DateTime.UtcNow.ToUnixTime();
                         TimedLog(string.Format("Finished making attack call: {0}", timeAfter - timeBefore));
 
@@ -1233,7 +1233,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             return actions;
         }
 
-        private static async Task<StartGymBattleResponse> StartBattle(ISession session, FortData gym, IEnumerable<PokemonData> attackers, ulong defenderId)
+        private static async Task<GymStartSessionResponse> StartBattle(ISession session, FortData gym, IEnumerable<PokemonData> attackers, ulong defenderId)
         {
             IEnumerable<PokemonData> currentPokemons = attackers;
 
@@ -1246,9 +1246,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                 var result = await session.Client.Fort.StartGymBattle(gym.Id, defenderId, attackingPokemonIds).ConfigureAwait(false);
                 await Task.Delay(2000).ConfigureAwait(false);
 
-                if (result.Result == StartGymBattleResponse.Types.Result.Success)
+                if (result.Result == GymStartSessionResponse.Types.Result.Success)
                 {
-                    switch (result.BattleLog.State)
+                    switch (result.Battle.BattleLog.State)
                     {
                         case BattleState.Active:
                             Logger.Write("Starting new battle...");
@@ -1260,25 +1260,73 @@ namespace PoGo.NecroBot.Logic.Tasks
                             Logger.Write($"We were victorious");
                             return result;
                         case BattleState.StateUnset:
-                            Logger.Write($"Error occoured: {result.BattleLog.State}");
+                            Logger.Write($"Error occoured: {result.Battle.BattleLog.State}");
                             break;
                         case BattleState.TimedOut:
-                            Logger.Write($"Error occoured: {result.BattleLog.State}");
+                            Logger.Write($"Error occoured: {result.Battle.BattleLog.State}");
                             break;
                         default:
-                            Logger.Write($"Unhandled occoured: {result.BattleLog.State}");
+                            Logger.Write($"Unhandled occoured: {result.Battle.BattleLog.State}");
                             break;
                     }
                 }
-                else if (result.Result == StartGymBattleResponse.Types.Result.ErrorGymBattleLockout)
+                else if (result.Result == GymStartSessionResponse.Types.Result.ErrorGymBattleLockout)
                 {
                     return result;
                 }
-                else if (result.Result == StartGymBattleResponse.Types.Result.ErrorAllPokemonFainted)
+                else if (result.Result == GymStartSessionResponse.Types.Result.ErrorAllPokemonFainted)
                 {
                     return result;
                 }
-                else if (result.Result == StartGymBattleResponse.Types.Result.Unset)
+                else if (result.Result == GymStartSessionResponse.Types.Result.ErrorGymEmpty)
+                {
+                    return result;
+                }
+                else if (result.Result == GymStartSessionResponse.Types.Result.ErrorGymNeutral)
+                {
+                    return result;
+                }
+                else if (result.Result == GymStartSessionResponse.Types.Result.ErrorGymNotFound)
+                {
+                    return result;
+                }
+                else if (result.Result == GymStartSessionResponse.Types.Result.ErrorGymWrongTeam)
+                {
+                    return result;
+                }
+                else if (result.Result == GymStartSessionResponse.Types.Result.ErrorInvalidDefender)
+                {
+                    return result;
+                }
+                else if (result.Result == GymStartSessionResponse.Types.Result.ErrorNotInRange)
+                {
+                    return result;
+                }
+                else if (result.Result == GymStartSessionResponse.Types.Result.ErrorPlayerBelowMinimumLevel)
+                {
+                    return result;
+                }
+                else if (result.Result == GymStartSessionResponse.Types.Result.ErrorPoiInaccessible)
+                {
+                    return result;
+                }
+                else if (result.Result == GymStartSessionResponse.Types.Result.ErrorRaidActive)
+                {
+                    return result;
+                }
+                else if (result.Result == GymStartSessionResponse.Types.Result.ErrorTooManyBattles)
+                {
+                    return result;
+                }
+                else if (result.Result == GymStartSessionResponse.Types.Result.ErrorTooManyPlayers)
+                {
+                    return result;
+                }
+                else if (result.Result == GymStartSessionResponse.Types.Result.ErrorTrainingInvalidAttackerCount)
+                {
+                    return result;
+                }
+                else if (result.Result == GymStartSessionResponse.Types.Result.Unset)
                 {
                     return result;
                 }
