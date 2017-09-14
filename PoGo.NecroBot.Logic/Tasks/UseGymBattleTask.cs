@@ -39,9 +39,6 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             var FortDesc = "";
             if (fortInfo.Description != "") { FortDesc = $", Description: {fortInfo.Description}"; }
-            Logger.Write($"Loot Gym: {fortInfo.Name}{FortDesc}", LogLevel.GymDisk);
-
-            await UseNearbyPokestopsTask.FarmPokestop(session, gym, fortInfo, cancellationToken, true).ConfigureAwait(false);
 
             if (session.GymState.MoveSettings == null)
             {
@@ -1243,7 +1240,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             try
             {
-                var result = await session.Client.Fort.StartGymBattle(gym.Id, defenderId, attackingPokemonIds).ConfigureAwait(false);
+                var result = await session.Client.Fort.GymStartSession(gym.Id, defenderId, attackingPokemonIds).ConfigureAwait(false);
                 await Task.Delay(2000).ConfigureAwait(false);
 
                 if (result.Result == GymStartSessionResponse.Types.Result.Success)
