@@ -39,6 +39,9 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             var FortDesc = "";
             if (fortInfo.Description != "") { FortDesc = $", Description: {fortInfo.Description}"; }
+            Logger.Write($"Loot Gym: {fortInfo.Name}{FortDesc}", LogLevel.GymDisk);
+
+            await UseNearbyPokestopsTask.FarmPokestop(session, gym, fortInfo, cancellationToken, true).ConfigureAwait(false);
 
             if (session.GymState.MoveSettings == null)
             {

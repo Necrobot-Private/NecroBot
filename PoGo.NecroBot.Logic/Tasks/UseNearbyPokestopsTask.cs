@@ -319,6 +319,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static async Task DoActionAtPokeStop(ISession session, CancellationToken cancellationToken, FortData pokeStop, FortDetailsResponse fortInfo, bool doNotTrySpin = false)
         {
+            if (pokeStop.Type != FortType.Checkpoint) return;
+
             //Catch Lure Pokemon
             if (pokeStop.LureInfo != null)
             {
