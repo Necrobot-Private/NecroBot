@@ -227,17 +227,7 @@ namespace PoGo.NecroBot.Logic.Service
             if (fortUsedEvent.Fort.Type == FortType.Checkpoint)
                 Logger.Write(eventMessage, LogLevel.Pokestop);
             else
-                Logger.Write(eventMessage, LogLevel.GymDisk, ConsoleColor.Cyan); //LogLevel.Pokestop);
-
-            //_session.Client.Player.SetCoordinates(fortUsedEvent.Latitude, fortUsedEvent.Longitude, fortUsedEvent.Altitude);
-
-            //_settings.LocationConfig.DefaultLatitude = fortUsedEvent.Latitude;
-            //_settings.LocationConfig.DefaultLongitude = fortUsedEvent.Longitude;
-
-            //_session.Client.Settings.DefaultLatitude = fortUsedEvent.Latitude;
-            //_session.Client.Settings.DefaultLongitude = fortUsedEvent.Longitude;
-
-            //_settings.Save(Path.Combine(_settings.ProfileConfigPath, "config.json"));
+                Logger.Write(eventMessage, LogLevel.GymDisk);
         }
 
         private static void HandleEvent(FortFailedEvent fortFailedEvent, ISession session)

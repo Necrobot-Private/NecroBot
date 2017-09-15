@@ -246,8 +246,8 @@ namespace PoGo.NecroBot.Logic.Logging
         LevelUp = 17,
         BotStats = 18,
         Gym = 19,
-        Service = 20,
-        Debug = 21,
-        GymDisk = 22,
+        GymDisk = 20,
+        Service = 21,
+        Debug = 22
     }
 }

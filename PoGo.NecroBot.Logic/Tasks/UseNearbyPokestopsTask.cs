@@ -71,7 +71,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 await DoActionAtPokeStop(session, cancellationToken, pokeStop, fortInfo).ConfigureAwait(false);
 
-                try // Try to fix Error: System.NullReferenceException
+                try
                 {
                     bool gymAttackSucceeded = await UseGymBattleTask.Execute(session, cancellationToken, pokeStop, fortInfo).ConfigureAwait(false);
 
@@ -80,9 +80,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         FortData = pokeStop
                     };
 
-
-                    if (gymAttackSucceeded &&
-                        fortInfo.Type == FortType.Gym &&
+                    if (gymAttackSucceeded && fortInfo.Type == FortType.Gym &&
                         (_fortstate.FortData.OwnedByTeam == session.Profile.PlayerData.Team || session.GymState.CapturedGymId.Equals(fortInfo.FortId)) &&
                         session.LogicSettings.GymConfig.Enable &&
                         session.LogicSettings.GymConfig.EnableGymTraining)
@@ -100,7 +98,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 catch
                 {
                     Logger.Write("Retry waiting, gym check please wait ...", LogLevel.Gym);
-                    return;
+                    break;
                 }
 
                 if (!await SetMoveToTargetTask.IsReachedDestination(pokeStop, session, cancellationToken).ConfigureAwait(false))
@@ -321,8 +319,6 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static async Task DoActionAtPokeStop(ISession session, CancellationToken cancellationToken, FortData pokeStop, FortDetailsResponse fortInfo, bool doNotTrySpin = false)
         {
-            if (pokeStop.Type != FortType.Checkpoint) return;
-
             //Catch Lure Pokemon
             if (pokeStop.LureInfo != null)
             {
@@ -427,7 +423,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                     fortSearch = await session.Client.Fort.SearchFort(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude).ConfigureAwait(false);
                     if (fortSearch.Result == FortSearchResponse.Types.Result.OutOfRange)
                     {
-                        
                         if (retry > 2)
                         {
                             await Task.Delay(500).ConfigureAwait(false);
@@ -509,6 +504,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         InventoryFull = fortSearch.Result == FortSearchResponse.Types.Result.InventoryFull,
                         Fort = pokeStop
                     });
+
                     if (fortSearch.Result == FortSearchResponse.Types.Result.Success)
                     {
                         mapEmptyCount = 0;
@@ -594,8 +590,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                     await Task.Delay(randomWaitTime, cancellationToken).ConfigureAwait(false);
                 }
             }
-
         }
+
         private static int mapEmptyCount = 0;
         //Please do not change GetPokeStops() in this file, it's specifically set
         //to only find stops within 40 meters for GPX pathing, as we are not going to the pokestops,
