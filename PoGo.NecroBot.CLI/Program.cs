@@ -348,9 +348,15 @@ namespace PoGo.NecroBot.CLI
                     try
                     {
                         HttpClient client = new HttpClient();
+                        string urlcheck = null;
                         client.DefaultRequestHeaders.Add("X-AuthToken", apiCfg.AuthAPIKey);
                         var maskedKey = apiCfg.AuthAPIKey.Substring(0, 4) + "".PadLeft(apiCfg.AuthAPIKey.Length - 8, 'X') + apiCfg.AuthAPIKey.Substring(apiCfg.AuthAPIKey.Length - 4, 4);
-                        HttpResponseMessage response = client.PostAsync($"https://pokehash.buddyauth.com/{_session.Client.ApiEndPoint}", null).Result;
+                        if (!string.IsNullOrEmpty(settings.Auth.APIConfig.UrlHashServices))
+                            urlcheck = $"{settings.Auth.APIConfig.UrlHashServices}{settings.Auth.APIConfig.EndPoint}";
+                        else
+                            urlcheck = $"https://pokehash.buddyauth.com/{Constants.ApiEndPoint}";
+                        Logger.Write($"Check key from server: {urlcheck} end point.", LogLevel.Info, ConsoleColor.Blue);
+                        HttpResponseMessage response = client.PostAsync(urlcheck, null).Result;
                         string AuthKey = response.Headers.GetValues("X-AuthToken").FirstOrDefault();
                         string MaxRequestCount = response.Headers.GetValues("X-MaxRequestCount").FirstOrDefault();
                         DateTime AuthTokenExpiration = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Unspecified).AddSeconds(Convert.ToDouble(response.Headers.GetValues("X-AuthTokenExpiration").FirstOrDefault())).ToLocalTime();

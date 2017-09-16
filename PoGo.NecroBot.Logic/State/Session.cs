@@ -214,7 +214,7 @@ namespace PoGo.NecroBot.Logic.State
             if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification)
                 PushNotificationClient.SendNotification(session, $"Account changed to", $"{Account}\n" +
                                                                  $"Lvl: {Lvl}\n" +
-                                                                 $"XP : {XP:#,##0}({(double)XP / ((double)NLevelXP) * 100:#0.00}%)\n" +
+                                                                 $"XP : {XP:#,##0} ({(double)XP / ((double)NLevelXP) * 100:#0.00}%)\n" +
                                                                  $"SD : {SD:#,##0}", true).ConfigureAwait(false);
 
             if (nextBot != null)

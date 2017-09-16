@@ -264,5 +264,17 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             get { return _settings.Auth.APIConfig.DiplayHashServerLog; }
             set { _settings.Auth.APIConfig.DiplayHashServerLog = value; }
         }
+
+        public string UrlHashServices
+        {
+            get { return _settings.Auth.APIConfig.UrlHashServices; }
+            set { _settings.Auth.APIConfig.UrlHashServices = value; }
+        } 
+
+        public string EndPoint
+        {
+            get { return _settings.Auth.APIConfig.EndPoint; }
+            set { _settings.Auth.APIConfig.EndPoint = value; }
+        }
     }
 }

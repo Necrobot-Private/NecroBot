@@ -37,7 +37,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             if (weakPokemon.Count() > 0)
             {
-                Logging.Logger.Write($"Transferring {weakPokemon.Count()} Weak pokemon.", Logging.LogLevel.Transfer);
+                Logging.Logger.Write($"Transferring {weakPokemon.Count()} Weak pokemon.", Logging.LogLevel.Info, System.ConsoleColor.Yellow);
                 await Execute(session, weakPokemon, cancellationToken).ConfigureAwait(false);
             }
             // Evolve after transfer.
