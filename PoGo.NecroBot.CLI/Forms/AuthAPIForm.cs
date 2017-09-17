@@ -77,5 +77,17 @@ namespace PoGo.NecroBot.CLI.Forms
             DialogResult = DialogResult.OK;
             Close();
         }
+
+        private void RadHashServer_Click(object sender, EventArgs e)
+        {
+            if (radHashServer.Checked == true)
+            {
+                txtAPIKey.Enabled = true;
+            }
+            else if (radHashServer.Checked == false)
+            {
+                txtAPIKey.Enabled = false;
+            }
+        }
     }
 }

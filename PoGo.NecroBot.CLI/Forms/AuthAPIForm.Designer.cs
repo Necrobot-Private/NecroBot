@@ -113,6 +113,7 @@ namespace PoGo.NecroBot.CLI.Forms
             this.radHashServer.TabStop = true;
             this.radHashServer.Text = "PogoDev Hash - API v" + Constants.API_VERSION;
             this.radHashServer.UseVisualStyleBackColor = true;
+            this.radHashServer.Click += new System.EventHandler(this.RadHashServer_Click);
             // 
             // label2
             // 
