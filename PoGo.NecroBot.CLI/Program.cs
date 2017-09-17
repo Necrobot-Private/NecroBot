@@ -355,18 +355,18 @@ namespace PoGo.NecroBot.CLI
                             urlcheck = $"{settings.Auth.APIConfig.UrlHashServices}{settings.Auth.APIConfig.EndPoint}";
                         else
                             urlcheck = $"https://pokehash.buddyauth.com/{Constants.ApiEndPoint}";
-                        Logger.Write($"Check key from server: {urlcheck} end point.", LogLevel.Info, ConsoleColor.Blue);
+                        Logger.Write($"Hash End-Point Set to '{urlcheck}'", LogLevel.Info, ConsoleColor.Blue);
                         HttpResponseMessage response = client.PostAsync(urlcheck, null).Result;
                         string AuthKey = response.Headers.GetValues("X-AuthToken").FirstOrDefault();
                         string MaxRequestCount = response.Headers.GetValues("X-MaxRequestCount").FirstOrDefault();
                         DateTime AuthTokenExpiration = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Unspecified).AddSeconds(Convert.ToDouble(response.Headers.GetValues("X-AuthTokenExpiration").FirstOrDefault())).ToLocalTime();
                         TimeSpan Expiration = AuthTokenExpiration - DateTime.Now;
-                        string Result = string.Format("Key: {0} RPM: {1} Expires in: {2} days ({3})", maskedKey, MaxRequestCount, Expiration.Days - 1, AuthTokenExpiration);
+                        string Result = $"Key: {maskedKey} RPM: {MaxRequestCount} Expires in: {Expiration.Days - 1} days ({AuthTokenExpiration})";
                         Logger.Write(Result, LogLevel.Info, ConsoleColor.Green);
                     }
                     catch
                     {
-                        Logger.Write("The HashKey is invalid or has expired, please press any key to exit and correct you auth.json, \r\nThe Pogodev API key can be purchased at - https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer", LogLevel.Error);
+                        Logger.Write("The HashKey is invalid or has expired, please press any key to exit and correct your auth.json, \r\nThe PogoDev API key can be purchased at - https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer", LogLevel.Error);
                         Console.ReadKey();
                         Environment.Exit(0);
                     }
