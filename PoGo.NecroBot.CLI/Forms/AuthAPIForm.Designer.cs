@@ -1,4 +1,4 @@
-﻿using PokemonGo.RocketAPI;
+using PokemonGo.RocketAPI;
 
 namespace PoGo.NecroBot.CLI.Forms
 {
@@ -137,6 +137,7 @@ namespace PoGo.NecroBot.CLI.Forms
             this.radCustomHash.TabIndex = 9;
             this.radCustomHash.Text = "Custom Hash - API v" + Constants.API_VERSION;
             this.radCustomHash.UseVisualStyleBackColor = true;
+            this.radCustomHash.Click += new System.EventHandler(this.RadCustomHash_Click);
             // 
             // label4
             // 

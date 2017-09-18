@@ -98,7 +98,7 @@ namespace PoGo.NecroBot.CLI.Forms
                     txtCustomHash.Enabled = true;
                 }
             }
-            else if (!radHashServer.Checked || radCustomHash.Checked)
+            else if (!radHashServer.Checked || !radCustomHash.Checked)
             {
                 txtAPIKey.Enabled = false;
                 if (!radCustomHash.Checked)
@@ -113,6 +113,26 @@ namespace PoGo.NecroBot.CLI.Forms
             if (txtCustomHash.Text.Contains(Constants.ApiEndPoint))
             {
                 txtCustomHash.Text.Replace(Constants.ApiEndPoint, "");
+            }
+        }
+
+        private void RadCustomHash_Click(object sender, EventArgs e)
+        {
+            if (radHashServer.Checked || radCustomHash.Checked)
+            {
+                txtAPIKey.Enabled = true;
+                if (radCustomHash.Checked)
+                {
+                    txtCustomHash.Enabled = true;
+                }
+            }
+            else if (!radHashServer.Checked || !radCustomHash.Checked)
+            {
+                txtAPIKey.Enabled = false;
+                if (!radCustomHash.Checked)
+                {
+                    txtCustomHash.Enabled = false;
+                }
             }
         }
     }

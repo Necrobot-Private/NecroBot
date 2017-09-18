@@ -82,6 +82,7 @@ namespace RocketBot2.Forms
             this.radHashServer.TabIndex = 5;
             this.radHashServer.Text = "PogoDev Hash Server API - " + Constants.API_VERSION;
             this.radHashServer.UseVisualStyleBackColor = true;
+            this.radHashServer.Click += new System.EventHandler(this.RadHashServer_Click);
             // 
             // label2
             // 
@@ -127,6 +128,7 @@ namespace RocketBot2.Forms
             this.radCustomHash.TabIndex = 9;
             this.radCustomHash.Text = "Custom Hash Server API - " + Constants.API_VERSION;
             this.radCustomHash.UseVisualStyleBackColor = true;
+            this.radCustomHash.Click += new System.EventHandler(this.RadCustomHash_Click);
             // 
             // label4
             // 
@@ -143,8 +145,9 @@ namespace RocketBot2.Forms
             this.txtCustomHash.Location = new System.Drawing.Point(15, 145);
             this.txtCustomHash.Margin = new System.Windows.Forms.Padding(5);
             this.txtCustomHash.Name = "txtCustomHash";
-            this.txtCustomHash.Size = new System.Drawing.Size(350, 25);
+            this.txtCustomHash.Size = new System.Drawing.Size(350, 30);
             this.txtCustomHash.TabIndex = 10;
+            this.txtCustomHash.TextChanged += new System.EventHandler(this.TxtCustomHash_TextChanged);
             // 
             // AuthAPIForm
             // 
@@ -169,7 +172,6 @@ namespace RocketBot2.Forms
             this.ShowInTaskbar = false;
             this.Text = "APIConfig";
             this.TopMost = true;
-            this.Load += new System.EventHandler(this.AuthAPIForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
