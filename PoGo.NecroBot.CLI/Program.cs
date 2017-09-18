@@ -371,25 +371,6 @@ namespace PoGo.NecroBot.CLI
                         Environment.Exit(0);
                     }
                 }
-                else if (apiCfg.UseLegacyAPI)
-                {
-                    Logger.Write(
-                   "You bot will start after 15 seconds, You are running bot with Legacy API (0.45), but it will increase your risk of being banned and triggering captchas. Config Captchas in config.json to auto-resolve them",
-                   LogLevel.Warning);
-
-#if RELEASE
-                    Thread.Sleep(15000);
-#endif
-                }
-                else
-                {
-                    Logger.Write(
-                         "At least 1 authentication method must be selected, please correct your auth.json.",
-                         LogLevel.Error
-                     );
-                    Console.ReadKey();
-                    Environment.Exit(0);
-                }
 
                 //GlobalSettings.Load(_subPath, _enableJsonValidation);
 

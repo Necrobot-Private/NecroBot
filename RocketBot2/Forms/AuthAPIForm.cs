@@ -13,15 +13,17 @@ namespace RocketBot2.Forms
             {
                 return new APIConfig()
                 {
-                    UseLegacyAPI = radLegacy.Checked,
                     UsePogoDevAPI = radHashServer.Checked,
-                    AuthAPIKey = txtAPIKey.Text.Trim()
+                    UseCustomAPI = radCustomHash.Checked,
+                    AuthAPIKey = txtAPIKey.Text.Trim(),
+                    UrlHashServices = txtCustomHash.Text.Trim()
                 };
             }
             set
             {
                 radHashServer.Checked = value.UsePogoDevAPI;
-                radLegacy.Checked = value.UseLegacyAPI;
+                radCustomHash.Checked = value.UseCustomAPI;
+                txtCustomHash.Enabled = value.UseCustomAPI;
             }
         }
 
@@ -55,20 +57,27 @@ namespace RocketBot2.Forms
             }
         }
 
-        private void LnkBuy_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            Process.Start("https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer");
-        }
-
         private void BtnOK_Click(object sender, EventArgs e)
         {
             if (radHashServer.Checked && string.IsNullOrEmpty(txtAPIKey.Text))
             {
-                MessageBox.Show("Please enter API Key", "Missing API key", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Please enter a valid API Key", "Missing API Key", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            if (!radHashServer.Checked && !radLegacy.Checked)
+            if (radCustomHash.Checked && string.IsNullOrEmpty(txtAPIKey.Text))
+            {
+                MessageBox.Show("Please enter a valid API Key", "Missing API Key", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (radCustomHash.Checked && string.IsNullOrEmpty(txtCustomHash.Text))
+            {
+                MessageBox.Show("Please enter a valid Hash URL", "Missing Hash URL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (!radHashServer.Checked && !radCustomHash.Checked)
             {
                 MessageBox.Show("Please select an API method", "Config error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
