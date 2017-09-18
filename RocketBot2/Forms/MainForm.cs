@@ -1682,7 +1682,7 @@ namespace RocketBot2.Forms
 
                 var apiCfg = settings.Auth.APIConfig;
 
-                if (apiCfg.UsePogoDevAPI)
+                if (apiCfg.UsePogoDevAPI || apiCfg.UseCustomAPI)
                 {
                     if (string.IsNullOrEmpty(apiCfg.AuthAPIKey))
                     {
@@ -1698,7 +1698,7 @@ namespace RocketBot2.Forms
                         string urlcheck = null;
                         client.DefaultRequestHeaders.Add("X-AuthToken", apiCfg.AuthAPIKey);
                         var maskedKey = apiCfg.AuthAPIKey.Substring(0, 4) + "".PadLeft(apiCfg.AuthAPIKey.Length - 8, 'X') + apiCfg.AuthAPIKey.Substring(apiCfg.AuthAPIKey.Length - 4, 4);
-                        if (!string.IsNullOrEmpty(settings.Auth.APIConfig.UrlHashServices))
+                        if (settings.Auth.APIConfig.UseCustomAPI)
                             urlcheck = $"{settings.Auth.APIConfig.UrlHashServices}{settings.Auth.APIConfig.EndPoint}";
                         else
                             urlcheck = $"https://pokehash.buddyauth.com/{Constants.ApiEndPoint}";

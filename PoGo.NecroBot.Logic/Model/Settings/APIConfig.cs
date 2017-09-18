@@ -30,7 +30,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 4)]
         public bool DiplayHashServerLog { get; set; }
 
-        [DefaultValue("")]
+        [DefaultValue("https://pokehash.buddyauth.com/")]
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 5)]
         public string UrlHashServices { get; set; }
 

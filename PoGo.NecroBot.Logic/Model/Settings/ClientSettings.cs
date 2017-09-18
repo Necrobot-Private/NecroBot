@@ -247,7 +247,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             set { _settings.Auth.APIConfig.UsePogoDevAPI = value; }
         }
 
-        public bool UseCustomHashServer
+        public bool UseCustomAPI
         {
             get { return _settings.Auth.APIConfig.UseCustomAPI; }
             set { _settings.Auth.APIConfig.UseCustomAPI = value; }

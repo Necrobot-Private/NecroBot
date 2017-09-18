@@ -37,6 +37,7 @@ namespace RocketBot2.Forms
         private readonly ISession _session;
         private List<AuthConfig> accounts;
 
+
         public List<AuthConfig> Accounts
         {
             get { return accounts; }
@@ -126,6 +127,8 @@ namespace RocketBot2.Forms
 
             //apiconfig
             cbUsePogoDevAPI.Checked = _settings.Auth.APIConfig.UsePogoDevAPI;
+            cbUseCustomAPI.Checked = _settings.Auth.APIConfig.UseCustomAPI;
+            tbHashURL.Text = _settings.Auth.APIConfig.UrlHashServices;
             tbAuthAPIKey.Text = _settings.Auth.APIConfig.AuthAPIKey;
             cbDiplayHashServerLog.Checked = _settings.Auth.APIConfig.DiplayHashServerLog;
 
