@@ -113,41 +113,38 @@ namespace PoGo.NecroBot.Logic
         private void InitializeWalkStrategies(ILogicSettings logicSettings)
         {
             //AutoWalkAI code
-            _YoursWalk = logicSettings.UseYoursWalk;
-            _MapZenWalk = logicSettings.UseMapzenWalk;
-            _GoogleWalk = logicSettings.UseGoogleWalk;
-
             _AutoWalkAI = logicSettings.AutoWalkAI;
             _AutoWalkDist = logicSettings.AutoWalkDist;
 
-            if (_AutoWalkAI)
+            if (_AutoWalkAI && distance > 15)
             {
-                if (distance > 15)
+                _YoursWalk = true; _GoogleWalk = false; _MapZenWalk = false;
+                if (distance >= _AutoWalkDist)
                 {
-                    _YoursWalk = false; _MapZenWalk = false; _GoogleWalk = false;
-                    if (distance >= _AutoWalkDist)
+                    _YoursWalk = logicSettings.UseYoursWalk;
+                    _GoogleWalk = logicSettings.UseGoogleWalk;
+                    _MapZenWalk = logicSettings.UseMapzenWalk;
+
+                    if (logicSettings.GoogleApiKey != "")
                     {
-                        if (_GoogleWalk && logicSettings.GoogleApiKey != "")
-                        {
-                            Logging.Logger.Write($"Distance to travel is > {_AutoWalkDist}m, using 'Google Walk'", Logging.LogLevel.Info, ConsoleColor.DarkYellow);
-                            _GoogleWalk = true;
-                        }
-                        else if (_MapZenWalk && logicSettings.MapzenTurnByTurnApiKey != "")
-                        {
-                            Logging.Logger.Write($"Distance to travel is > {_AutoWalkDist}m, using 'Mapzen Walk'", Logging.LogLevel.Info, ConsoleColor.DarkYellow);
-                            _MapZenWalk = true;
-                        }
-                        else if (_YoursWalk)
-                        {
-                            Logging.Logger.Write($"Distance to travel is > {_AutoWalkDist}m, switching to 'YoursWalk'", Logging.LogLevel.Info, ConsoleColor.DarkYellow);
-                            _YoursWalk = true;
-                        }
+                        Logging.Logger.Write($"Distance to travel is > {_AutoWalkDist}m, using 'Google Walk'", Logging.LogLevel.Info, ConsoleColor.DarkYellow);
+                        _GoogleWalk = true;
+                    }
+                    else if (logicSettings.MapzenTurnByTurnApiKey != "")
+                    {
+                        Logging.Logger.Write($"Distance to travel is > {_AutoWalkDist}m, using 'Mapzen Walk'", Logging.LogLevel.Info, ConsoleColor.DarkYellow);
+                        _MapZenWalk = true;
                     }
                     else
                     {
-                        Logging.Logger.Write($"Distance to travel is < {_AutoWalkDist}m, using 'YoursWalk'", Logging.LogLevel.Info, ConsoleColor.DarkYellow);
+                        Logging.Logger.Write($"Distance to travel is > {_AutoWalkDist}m, switching to 'NecroBot Walk'", Logging.LogLevel.Info, ConsoleColor.DarkYellow);
                         _YoursWalk = true;
                     }
+                }
+                else
+                {
+                    Logging.Logger.Write($"Distance to travel is < {_AutoWalkDist}m, using 'NecroBot Walk'", Logging.LogLevel.Info, ConsoleColor.DarkYellow);
+                    _YoursWalk = true;
                 }
             }
 

@@ -30,6 +30,9 @@ namespace PoGo.NecroBot.Logic.Service
     {
         public delegate void HumanWalkEventDelegate(HumanWalkingEvent e);
         public static event HumanWalkEventDelegate HumanWalkEvent;
+        public static ISettings _Settings { get; set; }
+        public static GlobalSettings _settings;// { get; set; }
+        public static Session _session;
 
         private static void HandleEvent(ProfileEvent profileEvent, ISession session)
         {
@@ -203,10 +206,6 @@ namespace PoGo.NecroBot.Logic.Service
                 LogLevel.Egg);
         }
 
-        public static ISettings _Settings { get; set; }
-        public static GlobalSettings _GlobalSettings { get; set; }
-        public static Session _session;
-
         private static void HandleEvent(FortUsedEvent fortUsedEvent, ISession session)
         {
             if (fortUsedEvent.InventoryFull)
@@ -229,25 +228,25 @@ namespace PoGo.NecroBot.Logic.Service
             if (fortUsedEvent.Fort.Type == FortType.Checkpoint)
                 Logger.Write(eventMessage, LogLevel.Pokestop);
             else
-                Logger.Write(eventMessage, LogLevel.GymDisk, ConsoleColor.Cyan); //LogLevel.Pokestop);
+                Logger.Write(eventMessage, LogLevel.GymDisk);
 
-            // TheWizard is Working on this. 
-            var globalSettings = new GlobalSettings();
-            globalSettings.Auth.CurrentAuthConfig.AccountLatitude = fortUsedEvent.Latitude;
-            globalSettings.Auth.CurrentAuthConfig.AccountLongitude = fortUsedEvent.Longitude;
+            // TheWizard is Working on this. Don't incorporate till it's done.
+            //var globalSettings = new GlobalSettings();
+            _settings.Auth.CurrentAuthConfig.AccountLatitude = fortUsedEvent.Latitude;
+            _settings.Auth.CurrentAuthConfig.AccountLongitude = fortUsedEvent.Longitude;
 
             //_session.Client.Player.SetCoordinates(fortUsedEvent.Latitude, fortUsedEvent.Longitude, fortUsedEvent.Altitude);
 
-            //_GlobalSettings.LocationConfig.AccountLatitude = fortUsedEvent.Latitude;
+            //_settings.LocationConfig.AccountLatitude = fortUsedEvent.Latitude;
             //_Settings.AccountLongitude = fortUsedEvent.Longitude;
 
-            //_GlobalSettings.LocationConfig.DefaultLatitude = fortUsedEvent.Latitude;
-            //_GlobalSettings.LocationConfig.DefaultLongitude = fortUsedEvent.Longitude;
+            //_settings.LocationConfig.DefaultLatitude = fortUsedEvent.Latitude;
+            //_settings.LocationConfig.DefaultLongitude = fortUsedEvent.Longitude;
 
             //_session.Client.Settings.DefaultLatitude = fortUsedEvent.Latitude;
             //_session.Client.Settings.DefaultLongitude = fortUsedEvent.Longitude;
 
-            //globalSettings.Save(Path.Combine(globalSettings.ProfileConfigPath, "config.json"));
+            _settings.Save(Path.Combine(_settings.ProfileConfigPath, "config.json"));
         }
 
         private static void HandleEvent(FortFailedEvent fortFailedEvent, ISession session)

@@ -217,6 +217,9 @@ namespace PoGo.NecroBot.Logic.State
                                                                  $"XP : {XP:#,##0} ({(double)XP / ((double)NLevelXP) * 100:#0.00}%)\n" +
                                                                  $"SD : {SD:#,##0}", true).ConfigureAwait(false);
 
+#if DEBUG
+            Thread.Sleep(1000); //Pauses execution for 1 sec. Personal use for TheWizard. I need a 1 sec gap between this and next logger line.
+#endif 
             if (nextBot != null)
                 manager.SwitchAccounts(nextBot);
 
