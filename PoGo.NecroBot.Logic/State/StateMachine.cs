@@ -177,8 +177,8 @@ namespace PoGo.NecroBot.Logic.State
                 catch (ActiveSwitchByRuleException se)
                 {
                     session.EventDispatcher.Send(new WarnEvent { Message = $"Switch bot account activated by: {se.MatchedRule.ToString()} - {se.ReachedValue}" });
-                    if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification)
-                        await PushNotificationClient.SendNotification(session, $"Switch bot account", $"Activated by: {se.MatchedRule.ToString()} - {se.ReachedValue}", true).ConfigureAwait(false);
+                    //if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification)
+                    //    await PushNotificationClient.SendNotification(session, $"Switch bot account", $"Activated by: {se.MatchedRule.ToString()} - {se.ReachedValue}", true).ConfigureAwait(false);
 
                     if (se.MatchedRule == SwitchRules.EmptyMap)
                     {

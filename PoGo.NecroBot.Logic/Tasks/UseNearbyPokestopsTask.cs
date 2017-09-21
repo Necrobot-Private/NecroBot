@@ -291,7 +291,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         public static async Task SpinPokestopNearBy(ISession session, CancellationToken cancellationToken, FortData destinationFort = null)
         {
-            var allForts = session.Forts.Where(p => p.Type == FortType.Checkpoint).ToList();
+            var allForts = session.Forts.ToList(); // old code now gyms have spinDisk --> .Where(p => p.Type == FortType.Checkpoint).ToList();
 
             if (allForts.Count > 0)
             {

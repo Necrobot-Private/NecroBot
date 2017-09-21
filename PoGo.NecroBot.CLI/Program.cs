@@ -334,7 +334,7 @@ namespace PoGo.NecroBot.CLI
 
                 var apiCfg = settings.Auth.APIConfig;
 
-                if (apiCfg.UsePogoDevAPI)
+                if (apiCfg.UsePogoDevAPI || apiCfg.UseCustomAPI)
                 {
                     if (string.IsNullOrEmpty(apiCfg.AuthAPIKey))
                     {
@@ -348,41 +348,28 @@ namespace PoGo.NecroBot.CLI
                     try
                     {
                         HttpClient client = new HttpClient();
+                        string urlcheck = null;
                         client.DefaultRequestHeaders.Add("X-AuthToken", apiCfg.AuthAPIKey);
                         var maskedKey = apiCfg.AuthAPIKey.Substring(0, 4) + "".PadLeft(apiCfg.AuthAPIKey.Length - 8, 'X') + apiCfg.AuthAPIKey.Substring(apiCfg.AuthAPIKey.Length - 4, 4);
-                        HttpResponseMessage response = client.PostAsync($"https://pokehash.buddyauth.com/{_session.Client.ApiEndPoint}", null).Result;
+                        if (settings.Auth.APIConfig.UseCustomAPI)
+                            urlcheck = $"{settings.Auth.APIConfig.UrlHashServices}{settings.Auth.APIConfig.EndPoint}";
+                        else
+                            urlcheck = $"https://pokehash.buddyauth.com/{Constants.ApiEndPoint}";
+                        Logger.Write($"Hash End-Point Set to '{urlcheck}'", LogLevel.Info, ConsoleColor.Blue);
+                        HttpResponseMessage response = client.PostAsync(urlcheck, null).Result;
                         string AuthKey = response.Headers.GetValues("X-AuthToken").FirstOrDefault();
                         string MaxRequestCount = response.Headers.GetValues("X-MaxRequestCount").FirstOrDefault();
                         DateTime AuthTokenExpiration = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Unspecified).AddSeconds(Convert.ToDouble(response.Headers.GetValues("X-AuthTokenExpiration").FirstOrDefault())).ToLocalTime();
                         TimeSpan Expiration = AuthTokenExpiration - DateTime.Now;
-                        string Result = string.Format("Key: {0} RPM: {1} Expires in: {2} days ({3})", maskedKey, MaxRequestCount, Expiration.Days - 1, AuthTokenExpiration);
+                        string Result = $"Key: {maskedKey} RPM: {MaxRequestCount} Expires in: {Expiration.Days - 1} days ({AuthTokenExpiration})";
                         Logger.Write(Result, LogLevel.Info, ConsoleColor.Green);
                     }
                     catch
                     {
-                        Logger.Write("The HashKey is invalid or has expired, please press any key to exit and correct you auth.json, \r\nThe Pogodev API key can be purchased at - https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer", LogLevel.Error);
+                        Logger.Write("The HashKey is invalid or has expired, please press any key to exit and correct your auth.json, \r\nThe PogoDev API key can be purchased at - https://talk.pogodev.org/d/51-api-hashing-service-by-pokefarmer", LogLevel.Error);
                         Console.ReadKey();
                         Environment.Exit(0);
                     }
-                }
-                else if (apiCfg.UseLegacyAPI)
-                {
-                    Logger.Write(
-                   "You bot will start after 15 seconds, You are running bot with Legacy API (0.45), but it will increase your risk of being banned and triggering captchas. Config Captchas in config.json to auto-resolve them",
-                   LogLevel.Warning);
-
-#if RELEASE
-                    Thread.Sleep(15000);
-#endif
-                }
-                else
-                {
-                    Logger.Write(
-                         "At least 1 authentication method must be selected, please correct your auth.json.",
-                         LogLevel.Error
-                     );
-                    Console.ReadKey();
-                    Environment.Exit(0);
                 }
 
                 //GlobalSettings.Load(_subPath, _enableJsonValidation);

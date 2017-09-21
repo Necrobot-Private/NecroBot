@@ -315,7 +315,7 @@ namespace PoGo.NecroBot.Logic
 
                 var needToRemove = inStorage - amountToKeepInStorage;
 
-                Logger.Write($"Duplicate Pokemon Allowed: {amountToKeepInStorage,2:0}. Transferring {needToRemove,2:0} {pokemonGroupToTransfer.Key} now.", Logic.Logging.LogLevel.Info);
+                Logger.Write($"Max Duplicate Pokemon Allowed: {amountToKeepInStorage,2:0}. Transferring {needToRemove,2:0} {pokemonGroupToTransfer.Key} now.", Logic.Logging.LogLevel.Info);
 
                 if (prioritizeIVoverCp)
                 {
