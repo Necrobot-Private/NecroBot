@@ -89,7 +89,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 }
                             }
 
-                            if (CanTrainGym(session, gym, deployedList))
+                            if (await CanTrainGym(session, gym, deployedList).ConfigureAwait(false))
                             {
                                 if (string.IsNullOrEmpty(session.GymState.TrainingGymId) || !session.GymState.TrainingGymId.Equals(fortInfo.FortId))
                                 {
@@ -241,7 +241,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                     TimedLog("PokemonDatas: " + string.Join(", ", pokemonDatas.Select(s => string.Format("Id: {0} Name: {1} CP: {2} HP: {3}", s.Id, s.PokemonId, s.Cp, s.Stamina))));
                     TimedLog("DefenderId: " + defenderPokemonId);
                     TimedLog("ActionsLog -> " + string.Join(Environment.NewLine, battleActions));
-
                     break;
                 }
 
@@ -262,6 +261,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Logger.Write($"Time to start Attack Mode", LogLevel.Gym, ConsoleColor.DarkYellow);
                         thisAttackActions = await AttackGym(session, cancellationToken, fortDetails, result, index, gym).ConfigureAwait(false);
                         battleActions.AddRange(thisAttackActions);
+                        isVictory = false;
                         break;
                     case BattleState.Defeated:
                         isVictory = false;
@@ -276,6 +276,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         isVictory = true;
                         break;
                     default:
+                        isVictory = false;
                         Logger.Write($"Unhandled result starting gym battle:\n{result}");
                         break;
                 }
@@ -518,7 +519,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                     if (attackersFromConfig != null && attackersFromConfig.Count > 0)
                         return attackersFromConfig.OrderByDescending(o => o.Cp).FirstOrDefault();
                 }
-
             }
 
             MyPokemonStat myAttacker = session.GymState.MyPokemons
@@ -630,7 +630,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                     return new PokemonType[] { PokemonType.Fighting, PokemonType.Fire, PokemonType.Ground };
                 case PokemonType.Water:
                     return new PokemonType[] { PokemonType.Electric, PokemonType.Grass };
-
                 default:
                     return null;
             }
@@ -678,7 +677,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                     return new PokemonType[] { PokemonType.Bug, PokemonType.Dragon, PokemonType.Fairy, PokemonType.Flying, PokemonType.Grass, PokemonType.Ice, PokemonType.Normal, PokemonType.Psychic, PokemonType.Rock, PokemonType.Steel };
                 case PokemonType.Water:
                     return new PokemonType[] { PokemonType.Fire, PokemonType.Ice, PokemonType.Steel, PokemonType.Water };
-
                 default:
                     return null;
             }
@@ -753,7 +751,6 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                     case UseItemReviveResponse.Types.Result.ErrorCannotUse:
                         return;
-
                     default:
                         return;
                 }
@@ -774,19 +771,15 @@ namespace PoGo.NecroBot.Logic.Tasks
                         PokemonId = pokemon.PokemonId.ToString(),
                         Remaining = (normalPotions - 1)
                     });
-                    break;
-
+                    return true;
                 case UseItemPotionResponse.Types.Result.ErrorDeployedToFort:
                     Logger.Write($"Pokemon: {pokemon.PokemonId} (CP: {pokemon.Cp}) is already deployed to a gym...");
                     return false;
-
                 case UseItemPotionResponse.Types.Result.ErrorCannotUse:
                     return false;
-
                 default:
                     return false;
             }
-            return true;
         }
 
         private static async Task<bool> UseSuperPotion(ISession session, PokemonData pokemon, int superPotions)
@@ -804,19 +797,15 @@ namespace PoGo.NecroBot.Logic.Tasks
                         PokemonId = pokemon.PokemonId.ToString(),
                         Remaining = (superPotions - 1)
                     });
-                    break;
-
+                    return true;
                 case UseItemPotionResponse.Types.Result.ErrorDeployedToFort:
                     Logger.Write($"Pokemon: {pokemon.PokemonId} (CP: {pokemon.Cp}) is already deployed to a gym...");
                     return false;
-
                 case UseItemPotionResponse.Types.Result.ErrorCannotUse:
                     return false;
-
                 default:
                     return false;
             }
-            return true;
         }
 
         private static async Task<bool> UseHyperPotion(ISession session, PokemonData pokemon, int hyperPotions)
@@ -833,19 +822,15 @@ namespace PoGo.NecroBot.Logic.Tasks
                         PokemonId = pokemon.PokemonId.ToString(),
                         Remaining = (hyperPotions - 1)
                     });
-                    break;
-
+                    return true;
                 case UseItemPotionResponse.Types.Result.ErrorDeployedToFort:
                     Logger.Write($"Pokemon: {pokemon.PokemonId} (CP: {pokemon.Cp}) is already deployed to a gym...");
                     return false;
-
                 case UseItemPotionResponse.Types.Result.ErrorCannotUse:
                     return false;
-
                 default:
                     return false;
             }
-            return true;
         }
 
         private static async Task<bool> UseMaxPotion(ISession session, PokemonData pokemon, int maxPotions)
@@ -862,19 +847,15 @@ namespace PoGo.NecroBot.Logic.Tasks
                         PokemonId = pokemon.PokemonId.ToString(),
                         Remaining = maxPotions
                     });
-                    break;
-
+                    return true;
                 case UseItemPotionResponse.Types.Result.ErrorDeployedToFort:
                     Logger.Write($"Pokemon: {pokemon.PokemonId} (CP: {pokemon.Cp}) is already deployed to a gym...");
                     return false;
-
                 case UseItemPotionResponse.Types.Result.ErrorCannotUse:
                     return false;
-
                 default:
                     return false;
             }
-            return true;
         }
 
         public static async Task<bool> HealPokemon(ISession session, PokemonData pokemon)
@@ -1121,11 +1102,13 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
                                     await PushNotificationClient.SendNotification(session, "Gym Battle", $"Our attack timed out...:", true).ConfigureAwait(false);
                                 await Task.Delay(1000).ConfigureAwait(false);
-                                return lastActions;
+                                Logger.Write($"Try again...:");
+                                var fortInfo = await session.Client.Fort.GetFort(fort.Id, fort.Latitude, fort.Longitude).ConfigureAwait(false);
+                                await Execute(session, session.CancellationTokenSource.Token, fort, fortInfo).ConfigureAwait(false);
+                                break; // return lastActions;
                             case BattleState.StateUnset:
                                 Logger.Write($"State was unset?: {attackResult}");
                                 return lastActions;
-
                             case BattleState.Victory:
                                 Logger.Write($"We were victorious!: ");
                                 await Task.Delay(2000).ConfigureAwait(false);
@@ -1153,7 +1136,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                 };
             }
             return lastActions;
-
         }
 
         public static DateTime DateTimeFromUnixTimestampMillis(long millis)
@@ -1294,13 +1276,13 @@ namespace PoGo.NecroBot.Logic.Tasks
                             return result;
                         case BattleState.StateUnset:
                             Logger.Write($"Error occoured: {result.Battle.BattleLog.State}");
-                            break;
+                            return result; 
                         case BattleState.TimedOut:
                             Logger.Write($"Error occoured: {result.Battle.BattleLog.State}");
-                            break;
+                            return result;
                         default:
                             Logger.Write($"Unhandled occoured: {result.Battle.BattleLog.State}");
-                            break;
+                            return result; 
                     }
                 }
                 else if (result.Result == GymStartSessionResponse.Types.Result.ErrorGymBattleLockout)
@@ -1363,6 +1345,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     return result;
                 }
+                else
                 return result;
             }
             catch (APIBadRequestException e)
@@ -1394,10 +1377,8 @@ namespace PoGo.NecroBot.Logic.Tasks
         internal static int GetGymLevel(double points)
         {
             if (points < 2000) return 1;
-            else
-            if (points < 4000) return 2;
-            else
-                if (points < 8000) return 3;
+            else if (points < 4000) return 2;
+            else if (points < 8000) return 3;
             else if (points < 12000) return 4;
             else if (points < 16000) return 5;
             else if (points < 20000) return 6;
@@ -1410,10 +1391,8 @@ namespace PoGo.NecroBot.Logic.Tasks
         internal static int GetGymMaxPointsOnLevel(int lvl)
         {
             if (lvl == 1) return 2000 - 1;
-            else
-            if (lvl == 2) return 4000 - 1;
-            else
-                if (lvl == 3) return 8000 - 1;
+            else if (lvl == 2) return 4000 - 1;
+            else if (lvl == 3) return 8000 - 1;
             else if (lvl == 4) return 12000 - 1;
             else if (lvl == 5) return 16000 - 1;
             else if (lvl == 6) return 20000 - 1;
@@ -1436,12 +1415,12 @@ namespace PoGo.NecroBot.Logic.Tasks
             return true;
         }
 
-        internal static bool CanTrainGym(ISession session, FortData fort, IEnumerable<PokemonData> deployedPokemons)
+        internal async static Task<bool> CanTrainGym(ISession session, FortData fort, IEnumerable<PokemonData> deployedPokemons)
         {
             try
             {
                 GymGetInfoResponse gymDetails = session.GymState.GymGetInfo(session, fort);
-                FortDetailsResponse fortInfo = session.Client.Fort.GetFort(fort.Id, fort.Latitude, fort.Longitude).Result;
+                FortDetailsResponse fortInfo = await session.Client.Fort.GetFort(fort.Id, fort.Latitude, fort.Longitude).ConfigureAwait(false);
 
                 if (session.Profile.PlayerData.Team == TeamColor.Neutral)
                     return false;
@@ -1456,6 +1435,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     fort.OwnedByTeam = session.Profile.PlayerData.Team;
 
                 bool isDeployed = deployedPokemons != null && deployedPokemons.Count() > 0 ? deployedPokemons.Any(a => a?.DeployedFortId == fort.Id) : false;
+
                 if (gymDetails != null && GetGymLevel(fort.GymPoints) > gymDetails.GymStatusAndDefenders.GymDefender.Count && !isDeployed) // free slot should be used always but not always we know that...
                     return true;
                 if (!session.LogicSettings.GymConfig.EnableGymTraining)
@@ -1476,7 +1456,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 TimedLog(string.Format("{0} -> {1} -> {2}", ex.Message, string.Join(", ", deployedPokemons), fort));
                 return false;
             }
-            return true;
+            return false;
         }
 
         internal static bool CanDeployToGym(ISession session, FortData fort, IEnumerable<PokemonData> deployedPokemons)
