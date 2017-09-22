@@ -130,7 +130,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     if (gym.RaidInfo.RaidPokemon.PokemonId != PokemonId.Missingno)
                     {
-                        //Raid modes
+                        //Raid modes 
                         //var raidDetails = await session.Client.Fort.GetRaidDetails(gym.Id, gym.RaidInfo.RaidSeed).ConfigureAwait(false);
                         //var joinLobbyResult = await session.Client.Fort.JoinLobby(gym.Id, gym.RaidInfo.RaidSeed, false).ConfigureAwait(false);
                         //var setLobbyVisibility = await session.Client.Fort.SetLobbyVisibility(gym.Id, gym.RaidInfo.RaidSeed);
@@ -273,6 +273,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         isVictory = false;
                         break;
                     case BattleState.Victory:
+                        isVictory = true;
                         break;
                     default:
                         Logger.Write($"Unhandled result starting gym battle:\n{result}");
@@ -449,8 +450,8 @@ namespace PoGo.NecroBot.Logic.Tasks
         private static async Task<IEnumerable<PokemonData>> CompleteAttackTeam(ISession session, IEnumerable<PokemonData> defenders, bool isTraining)
         {
             /*
-             *  While i'm trying to make this gym attack i've made an error and complete team with the same one pokemon 6 times.
-             *  Guess what, it was no error. More, fight in gym was successfull and this one pokemon didn't died once but after faint got max hp again and fight again.
+             *  While i'm trying to make this gym attack i've made an error and complete team with the same one pokemon 6 times. 
+             *  Guess what, it was no error. More, fight in gym was successfull and this one pokemon didn't died once but after faint got max hp again and fight again. 
              *  So after all we used only one pokemon.
              *  Maybe we can use it somehow.
              */
