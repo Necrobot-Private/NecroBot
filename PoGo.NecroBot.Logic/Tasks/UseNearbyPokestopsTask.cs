@@ -68,20 +68,14 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 var fortInfo = pokeStop.Id.StartsWith(SetMoveToTargetTask.TARGET_ID) ? SetMoveToTargetTask.FakeFortInfo(pokeStop) : await session.Client.Fort.GetFort(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude).ConfigureAwait(false);
                 await WalkingToPokeStop(session, cancellationToken, pokeStop, fortInfo).ConfigureAwait(false);
-
                 await DoActionAtPokeStop(session, cancellationToken, pokeStop, fortInfo).ConfigureAwait(false);
 
-                try
+                if (fortInfo.Type == FortType.Gym)
                 {
                     bool gymAttackSucceeded = await UseGymBattleTask.Execute(session, cancellationToken, pokeStop, fortInfo).ConfigureAwait(false);
 
-                    var _fortstate = new POGOProtos.Data.Gym.GymState()
-                    {
-                        FortData = pokeStop
-                    };
-
-                    if (gymAttackSucceeded && fortInfo.Type == FortType.Gym &&
-                        (_fortstate.FortData.OwnedByTeam == session.Profile.PlayerData.Team || session.GymState.CapturedGymId.Equals(fortInfo.FortId)) &&
+                    if (gymAttackSucceeded &&
+                        (pokeStop.OwnedByTeam == session.Profile.PlayerData.Team || session.GymState.CapturedGymId.Equals(fortInfo.FortId)) &&
                         session.LogicSettings.GymConfig.Enable &&
                         session.LogicSettings.GymConfig.EnableGymTraining)
                     {
@@ -94,11 +88,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                         if (session.GymState.TrainingRound <= session.LogicSettings.GymConfig.MaxTrainingRoundsOnOneGym)
                             continue;
                     }
-                }
-                catch
-                {
-                    Logger.Write("Retry waiting, gym check please wait ...", LogLevel.Gym);
-                    break;
                 }
 
                 if (!await SetMoveToTargetTask.IsReachedDestination(pokeStop, session, cancellationToken).ConfigureAwait(false))

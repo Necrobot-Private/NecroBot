@@ -342,34 +342,22 @@
     <Compile Include="Exceptions\ActiveSwitchAccountManualException.cs" />
     <Compile Include="Exceptions\ActiveSwitchByRuleException.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="Forms\AutoUpdateForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Forms\AutoUpdateForm.cs" />
     <Compile Include="Forms\AutoUpdateForm.Designer.cs">
       <DependentUpon>AutoUpdateForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\CaptchaSolveForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Forms\CaptchaSolveForm.cs" />
     <Compile Include="Forms\CaptchaSolveForm.Designer.cs">
       <DependentUpon>CaptchaSolveForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\EXComboBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Forms\EXListView.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Forms\EXComboBox.cs" />
+    <Compile Include="Forms\EXListView.cs" />
     <Compile Include="Forms\Extentions.cs" />
-    <Compile Include="Forms\InitialTutorialForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Forms\InitialTutorialForm.cs" />
     <Compile Include="Forms\InitialTutorialForm.Designer.cs">
       <DependentUpon>InitialTutorialForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\SelectAccountForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Forms\SelectAccountForm.cs" />
     <Compile Include="Forms\SelectAccountForm.Designer.cs">
       <DependentUpon>SelectAccountForm.cs</DependentUpon>
     </Compile>
@@ -654,9 +642,7 @@
     <Compile Include="Logging\ILogger.cs" />
     <Compile Include="Utils\JitterUtils.cs" />
     <Compile Include="Utils\LocationUtils.cs" />
-    <Compile Include="Utils\NecroWebClient.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Utils\NecroWebClient.cs" />
     <Compile Include="Utils\PushNotificationClient.cs" />
     <Compile Include="Utils\RouteOptimizeUtil.cs" />
     <Compile Include="Utils\Statistics.cs" />

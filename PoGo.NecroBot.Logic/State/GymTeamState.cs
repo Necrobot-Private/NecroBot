@@ -17,7 +17,7 @@ namespace PoGo.NecroBot.Logic.State
         /// </summary>
         private const long _cacheTime = 2 * 60;
 
-        private Dictionary<string, CachedGymGetails> _gymDetails { get; set; }
+        private Dictionary<string, CachedGymGetInfo> _gymDetails { get; set; }
 
         public List<MyPokemonStat> MyPokemons { get; private set; }
 
@@ -44,7 +44,7 @@ namespace PoGo.NecroBot.Logic.State
             MyTeam = new List<GymPokemon>();
             MyPokemons = new List<MyPokemonStat>();
             OtherDefenders = new List<AnyPokemonStat>();
-            _gymDetails = new Dictionary<string, CachedGymGetails>();
+            _gymDetails = new Dictionary<string, CachedGymGetInfo>();
             TimeToDodge = 0;
             SwithAttacker = null;
         }
@@ -83,15 +83,15 @@ namespace PoGo.NecroBot.Logic.State
             }
         }
 
-        public GymGetInfoResponse GetGymDetails(ISession session, FortData fort, bool force = false)
+        public GymGetInfoResponse GymGetInfo(ISession session, FortData fort, bool force = false)
         {
-            CachedGymGetails gymDetails = null;
+            CachedGymGetInfo gymDetails = null;
 
             if (_gymDetails.Keys.Contains(fort.Id))
                 gymDetails = _gymDetails[fort.Id];
             else
             {
-                gymDetails = new CachedGymGetails(session, fort);
+                gymDetails = new CachedGymGetInfo(session, fort);
                 _gymDetails.Add(fort.Id, gymDetails);
                 force = false;
             }
@@ -102,7 +102,7 @@ namespace PoGo.NecroBot.Logic.State
                 _gymDetails[fort.Id] = gymDetails;
             }
 
-            return gymDetails.GymDetails;
+            return gymDetails.GymGetInfo;
         }
 
         public void Dispose()
@@ -259,32 +259,25 @@ namespace PoGo.NecroBot.Logic.State
         }
     }
 
-    public class CachedGymGetails
+    public class CachedGymGetInfo
     {
         public DateTime LastCall { get; set; }
 
-        public GymGetInfoResponse GymDetails { get; set; }
+        public GymGetInfoResponse GymGetInfo { get; set; }
 
-        public CachedGymGetails(ISession session, FortData fort)
+        public CachedGymGetInfo(ISession session, FortData fort)
         {
             LoadData(session, fort);
         }
 
-        public void LoadData(ISession session, FortData fort)
+        public async void LoadData(ISession session, FortData fort)
         {
-            var task = session.Client.Fort.GymGetInfo(fort.Id, fort.Latitude, fort.Longitude);
-            task.Wait();
-            if (task.IsCompleted && task.Result.Result == GymGetInfoResponse.Types.Result.Success)
+            var task = await session.Client.Fort.GymGetInfo(fort.Id, fort.Latitude, fort.Longitude).ConfigureAwait(false);
+            if (task.Result == GymGetInfoResponse.Types.Result.Success)
             {
-                var state = new POGOProtos.Data.Gym.GymState()
-                {
-                    FortData = fort
-                };
-                fort = state.FortData;
-                GymDetails = task.Result;
+                GymGetInfo = task;
                 LastCall = DateTime.UtcNow;
             }
         }
     }
-
 }

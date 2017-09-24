@@ -233,9 +233,9 @@ namespace PoGo.NecroBot.Logic
                 return null;
 
             if (ignoreBlockCheck)
-                return _context.Account.OrderByDescending(x => x.Level).ThenByDescending(x => x.CurrentXp).Where(x => x.AccountActive == true).LastOrDefault();
+                return _context.Account.OrderByDescending(x => x.Level).ThenByDescending(x => x.CurrentXp).Where(a => a.AccountActive == true).LastOrDefault();
             else
-                return _context.Account.OrderByDescending(x => x.Level).ThenByDescending(x => x.CurrentXp).ThenBy(x => x.RuntimeTotal).Where(x => x != null && x.ReleaseBlockTime.HasValue && x.ReleaseBlockTime < DateTime.Now.ToUnixTime()).FirstOrDefault();
+                return _context.Account.OrderByDescending(x => x.Level).ThenByDescending(x => x.CurrentXp).ThenBy(x => x.RuntimeTotal).Where(x => x != null && x.ReleaseBlockTime.HasValue && x.ReleaseBlockTime < DateTime.Now.ToUnixTime()).LastOrDefault();
         }
 
         public bool AllowMultipleBot()
@@ -246,7 +246,7 @@ namespace PoGo.NecroBot.Logic
         public Account GetStartUpAccount()
         {
             ISession session = TinyIoCContainer.Current.Resolve<ISession>();
-            Account startupAccount;
+            Account startupAccount = null;
             
             if (!AllowMultipleBot())
             {
@@ -293,7 +293,7 @@ namespace PoGo.NecroBot.Logic
 
             if (_context.Account.Count() > 0)
             {
-                var runnableAccount = _context.Account.OrderByDescending(x => x.RuntimeTotal).ThenBy(x => x.AccountActive).ThenByDescending(p => p.Level).ThenByDescending(p => p.CurrentXp).LastOrDefault(p => p != currentAccount);
+                var runnableAccount = _context.Account.OrderByDescending(x => x.RuntimeTotal).ThenByDescending(p => p.Level).ThenByDescending(p => p.CurrentXp).LastOrDefault(p => p != currentAccount && p.AccountActive == true);
 
                 if (runnableAccount != null)
                     return runnableAccount;
@@ -384,23 +384,26 @@ namespace PoGo.NecroBot.Logic
                 }
             }
 
+            int acnt = 0;
+
             foreach (var item in Accounts.OrderByDescending(p => p.Level).ThenByDescending(p => p.CurrentXp))
             {
                 user = string.IsNullOrEmpty(item.Nickname) ? item.Username : item.Nickname;
+                acnt = acnt + 1;
 
                 if (item.Level > 0)
                 {
-                    if (item.AccountActive)
-                        Logger.Write($"{user.PadRight(maxL)} | Lvl: {item.Level,2:#0} | XP: {item.CurrentXp,8:0}({(double)item.CurrentXp.Value / (double)item.NextLevelXp.Value * 100,2:#0}%) | SD: {item.Stardust,8:0} | Runtime: {item.RuntimeTotal:00:00}", LogLevel.BotStats);
+                    if (_globalSettings.Auth.Bots[(int)item.Id - 1].AccountActive)
+                        Logger.Write($"{acnt,2}) {user.PadRight(maxL)} | Lvl: {item.Level,2:#0} | XP: {item.CurrentXp,8:0} ({(int)((double)item.CurrentXp.Value / (double)item.NextLevelXp.Value * 100),2:#0}%) | SD: {item.Stardust,8:0} | Runtime: {item.RuntimeTotal:00:00}", LogLevel.BotStats);
                     else
-                        Logger.Write($"{user.PadRight(maxL)} | Lvl: {item.Level,2:#0} | XP: {item.CurrentXp,8:0}({(double)item.CurrentXp.Value / (double)item.NextLevelXp.Value * 100,2:#0}%) | SD: {item.Stardust,8:0} | Runtime: {item.RuntimeTotal:00:00}", LogLevel.BotStats, ConsoleColor.Red);
+                        Logger.Write($"{acnt,2}) {user.PadRight(maxL)} | Lvl: {item.Level,2:#0} | XP: {item.CurrentXp,8:0} ({(int)((double)item.CurrentXp.Value / (double)item.NextLevelXp.Value * 100),2:#0}%) | SD: {item.Stardust,8:0} | Runtime: {item.RuntimeTotal:00:00}", LogLevel.BotStats, ConsoleColor.Red);
                 }
                 else
                 {
                     if (item.AccountActive)
-                        Logger.Write($"{user.PadRight(maxL)} | Lvl: ?? | XP:        0( 0%) | SD:        0 | Runtime: {item.RuntimeTotal:00:00}", LogLevel.BotStats, ConsoleColor.Yellow);
+                        Logger.Write($"{acnt,2}) {user.PadRight(maxL)} | Lvl: ?? | XP:        0 ( 0%) | SD:        0 | Runtime: {item.RuntimeTotal:00:00}", LogLevel.BotStats, ConsoleColor.Yellow);
                     else
-                        Logger.Write($"{user.PadRight(maxL)} | Lvl: ?? | XP:        0( 0%) | SD:        0 | Runtime: {item.RuntimeTotal:00:00}", LogLevel.BotStats, ConsoleColor.Red);
+                        Logger.Write($"{acnt,2}) {user.PadRight(maxL)} | Lvl: ?? | XP:        0 ( 0%) | SD:        0 | Runtime: {item.RuntimeTotal:00:00}", LogLevel.BotStats, ConsoleColor.Red);
                 }
             }
         }
