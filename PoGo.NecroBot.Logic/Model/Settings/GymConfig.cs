@@ -85,7 +85,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [DefaultValue(3)]
         [Range(1, 10)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
-        public int MaxGymLevelToAttack { get; set; }
+        public int MaxGymPlayersToAttack { get; set; }
 
         [NecroBotConfig(Description = "Max gym defenders to attack", Position = 13)]
         [DefaultValue(3)]
@@ -106,19 +106,19 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [NecroBotConfig(Description = "Enables gym training", Position = 16)]
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
-        public bool EnableGymTraining { get; set; }
+        public bool EnableGymBerries { get; set; }
 
         [NecroBotConfig(Description = "Train in gyms even when missing maximum points", Position = 17)]
         [DefaultValue(1000)]
         [Range(1, 50000)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
-        public int TrainGymWhenMissingMaxPoints { get; set; }
+        public int BerriesGymWhenMissingMaxCP { get; set; }
 
         [NecroBotConfig(Description = "Max gym LVL to train", Position = 18)]
         [DefaultValue(4)]
         [Range(1, 10)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
-        public int MaxGymLvlToTrain { get; set; }
+        public int MaxGymPlayerToSendBerries { get; set; }
 
         [NecroBotConfig(Description = "Train in an already defended gym", Position = 19)]
         [DefaultValue(true)]
@@ -174,7 +174,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [NecroBotConfig(Description = "Max Training Rounds in a gym", Position = 29)]
         [DefaultValue(5)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
-        public int MaxTrainingRoundsOnOneGym { get; set; }
+        public int MaxBerriesRoundsOnOneGym { get; set; }
 
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
         [NecroBotConfig(Description = "List of Defenders to use for Gyms", Position = 30)]
