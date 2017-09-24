@@ -77,15 +77,15 @@ namespace PoGo.NecroBot.Logic.Tasks
                     if (gymAttackSucceeded &&
                         (pokeStop.OwnedByTeam == session.Profile.PlayerData.Team || session.GymState.CapturedGymId.Equals(fortInfo.FortId)) &&
                         session.LogicSettings.GymConfig.Enable &&
-                        session.LogicSettings.GymConfig.EnableGymTraining)
+                        session.LogicSettings.GymConfig.EnableGymBerries)
                     {
-                        if (string.IsNullOrEmpty(session.GymState.TrainingGymId) || !session.GymState.TrainingGymId.Equals(fortInfo.FortId))
+                        if (string.IsNullOrEmpty(session.GymState.BerriesGymId) || !session.GymState.BerriesGymId.Equals(fortInfo.FortId))
                         {
-                            session.GymState.TrainingGymId = fortInfo.FortId;
-                            session.GymState.TrainingRound = 0;
+                            session.GymState.BerriesGymId = fortInfo.FortId;
+                            session.GymState.BerriesRound = 0;
                         }
-                        session.GymState.TrainingRound++;
-                        if (session.GymState.TrainingRound <= session.LogicSettings.GymConfig.MaxTrainingRoundsOnOneGym)
+                        session.GymState.BerriesRound++;
+                        if (session.GymState.BerriesRound <= session.LogicSettings.GymConfig.MaxBerriesRoundsOnOneGym)
                             continue;
                     }
                 }
@@ -219,13 +219,13 @@ namespace PoGo.NecroBot.Logic.Tasks
                 .Where(f => f.Type == FortType.Checkpoint ||
                        (session.LogicSettings.GymConfig.Enable && (
                             UseGymBattleTask.CanAttackGym(session, f, deployedPokemons) ||
-                            UseGymBattleTask.CanTrainGym(session, f, deployedPokemons) ||
+                            UseGymBattleTask.CanBerrieGym(session, f, deployedPokemons) ||
                             UseGymBattleTask.CanDeployToGym(session, f, deployedPokemons))))
                 .ToList();
 
             if (session.LogicSettings.GymConfig.Enable &&
                 ((session.LogicSettings.GymConfig.EnableAttackGym && forts.Where(w => w.Type == FortType.Gym && UseGymBattleTask.CanAttackGym(session, w, deployedPokemons)).Count() == 0) ||
-                (session.LogicSettings.GymConfig.EnableGymTraining && forts.Where(w => w.Type == FortType.Gym && UseGymBattleTask.CanTrainGym(session, w, deployedPokemons)).Count() == 0)
+                (session.LogicSettings.GymConfig.EnableGymBerries && forts.Where(w => w.Type == FortType.Gym && UseGymBattleTask.CanBerrieGym(session, w, deployedPokemons)).Count() == 0)
                 ))
             {
                 //Logger.Write("No usable gym found. Trying to refresh list.", LogLevel.Gym, ConsoleColor.Magenta);

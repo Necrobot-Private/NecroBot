@@ -63,11 +63,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                 {
                     var player = session.Profile.PlayerData;
                     await EnsureJoinTeam(session, player).ConfigureAwait(false);
+                    var defenders = fortDetails.GymStatusAndDefenders.GymDefender.Select(x => x.MotivatedPokemon.Pokemon).ToList();
 
                     session.EventDispatcher.Send(new GymDetailInfoEvent()
                     {
                         Team = gym.OwnedByTeam,
-                        Point = gym.GymPoints,
+                        Players = defenders.Count(),
                         Name = fortDetails.Name,
                     });
 
@@ -89,16 +90,18 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 }
                             }
 
-                            if (CanTrainGym(session, gym, deployedList))
+                            if (CanBerrieGym(session, gym, deployedList))
                             {
-                                if (string.IsNullOrEmpty(session.GymState.TrainingGymId) || !session.GymState.TrainingGymId.Equals(fortInfo.FortId))
+                                if (string.IsNullOrEmpty(session.GymState.BerriesGymId) || !session.GymState.BerriesGymId.Equals(fortInfo.FortId))
                                 {
-                                    session.GymState.TrainingGymId = fortInfo.FortId;
-                                    session.GymState.TrainingRound = 0;
+                                    session.GymState.BerriesGymId = fortInfo.FortId;
+                                    session.GymState.BerriesRound = 0;
                                 }
-                                session.GymState.TrainingRound++;
-                                if (session.GymState.TrainingRound <= session.LogicSettings.GymConfig.MaxTrainingRoundsOnOneGym)
-                                    return await StartGymAttackLogic(session, fortInfo, fortDetails, gym, cancellationToken).ConfigureAwait(false);
+                                session.GymState.BerriesRound++;
+                                //Review this....
+                                return false;
+                                //if (session.GymState.BerriesRound <= session.LogicSettings.GymConfig.MaxBerriesRoundsOnOneGym)
+                                //    return await StartGymAttackLogic(session, fortInfo, fortDetails, gym, cancellationToken).ConfigureAwait(false);
                             }
                         }
                         else
@@ -197,9 +200,9 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             if (session.Profile.PlayerData.Team != gym.OwnedByTeam)
             {
-                if (session.LogicSettings.GymConfig.MaxGymLevelToAttack < GetGymLevel(gym.GymPoints))
+                if (session.LogicSettings.GymConfig.MaxGymPlayersToAttack < defenders.Count)
                 {
-                    Logger.Write($"This gym's level is {GetGymLevel(gym.GymPoints)} > {session.LogicSettings.GymConfig.MaxGymLevelToAttack} in your config. Bot walk away...", LogLevel.Gym, ConsoleColor.Red);
+                    Logger.Write($"This gym's Players is {defenders.Count} > {session.LogicSettings.GymConfig.MaxGymPlayersToAttack} in your config. Bot walk away...", LogLevel.Gym, ConsoleColor.Red);
                     return false;
                 }
 
@@ -342,14 +345,14 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                         await Task.Delay(2000).ConfigureAwait(false);
 
-                        Logger.Write($"(Battle) XP: {exp} | Gym points: {point} | Lvl: {UseGymBattleTask.GetGymLevel(point),2:#0} | Next defender Id: {defenderPokemonId}", LogLevel.Gym, ConsoleColor.Magenta);
+                        Logger.Write($"(Battle) XP: {exp} | Gym points: {point} | Players: {defenders.Count,2:#0} | Next defender Id: {defenderPokemonId}", LogLevel.Gym, ConsoleColor.Magenta);
 
                         if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
                             await PushNotificationClient.SendNotification(session, $"Gym Battle",
                                                                                    $"We were victorious!\n" +
                                                                                    $"XP: {exp}" +
                                                                                    $"Prest: {point}" +
-                                                                                   $"Lvl: {UseGymBattleTask.GetGymLevel(point),2:#0}", true).ConfigureAwait(false); // +
+                                                                                   $"Players: {defenders.Count,2:#0}", true).ConfigureAwait(false); // +
                                                                                                                                                                     //$"{startResponse.Defender.ActivePokemon.PokemonData.PokemonId}", true);
                     }
                     continue;
@@ -394,8 +397,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             cancellationToken.ThrowIfCancellationRequested();
             TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
 
-            var points = fort.GymPoints;
-            var maxCount = GetGymLevel(points);
+            var allCp = GetGymAllCpOnGym(fortDetails.GymStatusAndDefenders.GymDefender.Select(x => x.MotivatedPokemon.Pokemon).ToList());
+            var maxCount = 6;
 
             var availableSlots = maxCount - fortDetails.GymStatusAndDefenders.GymDefender.Count();
 
@@ -432,6 +435,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 var count = deployed.Count();
                                 if (count >= session.LogicSettings.GymConfig.CollectCoinAfterDeployed)
                                 {
+                                    /*
+                                     * This is not used now
                                     try
                                     {
                                         if (session.Profile.PlayerData.DailyBonus.NextDefenderBonusCollectTimestampMs <= DateTime.UtcNow.ToLocalTime().ToUnixTime())
@@ -458,6 +463,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                                         await Task.Delay(500).ConfigureAwait(false);
                                     }
+                                    */
                                 }
                                 else
                                     Logger.Write(string.Format("You have {0} defenders deployed but {1} are required to get your reward", count, session.LogicSettings.GymConfig.CollectCoinAfterDeployed), LogLevel.Gym, ConsoleColor.Magenta);
@@ -476,7 +482,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
             else
             {
-                string message = string.Format("No FREE slots in GYM: {0}/{1} ({2})", fortDetails.GymStatusAndDefenders.GymDefender.Count(), maxCount, points);
+                string message = string.Format("No FREE slots in GYM: {0}/{1} (All Cp: {2})", fortDetails.GymStatusAndDefenders.GymDefender.Count(), maxCount, allCp);
                 Logger.Write(message, LogLevel.Gym, ConsoleColor.White);
             }
             return response;
@@ -1429,36 +1435,12 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
         }
 
-        internal static int GetGymLevel(double points)
+        internal static int GetGymAllCpOnGym(List<PokemonData> pokemonPlayers)//
         {
-            if (points < 2000) return 1;
-            else
-            if (points < 4000) return 2;
-            else
-                if (points < 8000) return 3;
-            else if (points < 12000) return 4;
-            else if (points < 16000) return 5;
-            else if (points < 20000) return 6;
-            else if (points < 30000) return 7;
-            else if (points < 40000) return 8;
-            else if (points < 50000) return 10;
-            return 10;
-        }
-
-        internal static int GetGymMaxPointsOnLevel(int lvl)
-        {
-            if (lvl == 1) return 2000 - 1;
-            else
-            if (lvl == 2) return 4000 - 1;
-            else
-                if (lvl == 3) return 8000 - 1;
-            else if (lvl == 4) return 12000 - 1;
-            else if (lvl == 5) return 16000 - 1;
-            else if (lvl == 6) return 20000 - 1;
-            else if (lvl == 7) return 30000 - 1;
-            else if (lvl == 8) return 40000 - 1;
-            else if (lvl == 9) return 50000 - 1;
-            return 52000;
+            int allCp = 0;
+            foreach (var x in pokemonPlayers)
+                allCp = allCp + x.Cp;
+            return allCp;
         }
 
         internal static bool CanAttackGym(ISession session, FortData fort, IEnumerable<PokemonData> deployedPokemons)
@@ -1467,14 +1449,14 @@ namespace PoGo.NecroBot.Logic.Tasks
                 return false;
             if (fort.OwnedByTeam == session.Profile.PlayerData.Team)
                 return false;
-            if (GetGymLevel(fort.GymPoints) > session.LogicSettings.GymConfig.MaxGymLevelToAttack)
+            if (session.LogicSettings.GymConfig.MaxGymPlayersToAttack <= 6)
                 return false;
             if (deployedPokemons != null && session.LogicSettings.GymConfig.DontAttackAfterCoinsLimitReached && deployedPokemons.Count() >= session.LogicSettings.GymConfig.CollectCoinAfterDeployed)
                 return false;
             return true;
         }
 
-        internal static bool CanTrainGym(ISession session, FortData fort, IEnumerable<PokemonData> deployedPokemons)
+        internal static bool CanBerrieGym(ISession session, FortData fort, IEnumerable<PokemonData> deployedPokemons)
         {
             try
             {
@@ -1494,17 +1476,17 @@ namespace PoGo.NecroBot.Logic.Tasks
                     fort.OwnedByTeam = session.Profile.PlayerData.Team;
 
                 bool isDeployed = deployedPokemons != null && deployedPokemons.Count() > 0 ? deployedPokemons.Any(a => a?.DeployedFortId == fort.Id) : false;
-                if (gymDetails != null && GetGymLevel(fort.GymPoints) > gymDetails.GymStatusAndDefenders.GymDefender.Count && !isDeployed) // free slot should be used always but not always we know that...
+                if (gymDetails != null && gymDetails.GymStatusAndDefenders.GymDefender.Count < 6 && !isDeployed) // free slot should be used always but not always we know that...
                     return true;
-                if (!session.LogicSettings.GymConfig.EnableGymTraining)
+                if (!session.LogicSettings.GymConfig.EnableGymBerries)
                     return false;
                 if (fort.OwnedByTeam != session.Profile.PlayerData.Team)
                     return false;
                 if (!session.LogicSettings.GymConfig.TrainAlreadyDefendedGym && isDeployed)
                     return false;
-                if (GetGymLevel(fort.GymPoints) > session.LogicSettings.GymConfig.MaxGymLvlToTrain)
+                if (session.LogicSettings.GymConfig.MaxGymPlayerToSendBerries <= gymDetails.GymStatusAndDefenders.GymDefender.Count)
                     return false;
-                if (GetGymMaxPointsOnLevel(GetGymLevel(fort.GymPoints)) - fort.GymPoints > session.LogicSettings.GymConfig.TrainGymWhenMissingMaxPoints)
+                if (GetGymAllCpOnGym(gymDetails.GymStatusAndDefenders.GymDefender.Select(x => x.MotivatedPokemon.Pokemon).ToList()) > session.LogicSettings.GymConfig.BerriesGymWhenMissingMaxCP)
                     return false;
                 if (deployedPokemons != null && session.LogicSettings.GymConfig.DontAttackAfterCoinsLimitReached && deployedPokemons.Count() >= session.LogicSettings.GymConfig.CollectCoinAfterDeployed)
                     return false;
@@ -1527,7 +1509,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (fort.OwnedByTeam == TeamColor.Neutral)
                 return true;
 
-            if (gymDetails != null && fort.OwnedByTeam == session.Profile.PlayerData.Team && gymDetails.GymStatusAndDefenders.GymDefender.Count < GetGymLevel(fort.GymPoints))
+            if (gymDetails != null && fort.OwnedByTeam == session.Profile.PlayerData.Team && gymDetails.GymStatusAndDefenders.GymDefender.Count < 6)
                 return true;
 
             return false;
