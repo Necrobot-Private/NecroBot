@@ -393,7 +393,7 @@ namespace PoGo.NecroBot.Logic
 
                 if (item.Level > 0)
                 {
-                    if (_globalSettings.Auth.Bots[(int)item.Id - 1].AccountActive)
+                    if (item.AccountActive)
                         Logger.Write($"{acnt,2}) {user.PadRight(maxL)} | Lvl: {item.Level,2:#0} | XP: {item.CurrentXp,8:0} ({(int)((double)item.CurrentXp.Value / (double)item.NextLevelXp.Value * 100),2:#0}%) | SD: {item.Stardust,8:0} | Runtime: {item.RuntimeTotal:00:00}", LogLevel.BotStats);
                     else
                         Logger.Write($"{acnt,2}) {user.PadRight(maxL)} | Lvl: {item.Level,2:#0} | XP: {item.CurrentXp,8:0} ({(int)((double)item.CurrentXp.Value / (double)item.NextLevelXp.Value * 100),2:#0}%) | SD: {item.Stardust,8:0} | Runtime: {item.RuntimeTotal:00:00}", LogLevel.BotStats, ConsoleColor.Red);

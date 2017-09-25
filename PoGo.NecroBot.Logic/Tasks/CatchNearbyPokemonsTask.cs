@@ -63,9 +63,9 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             var nearbyPokemons = await GetNearbyPokemons(session).ConfigureAwait(false);
 
-            Logger.Write($"There are {nearbyPokemons.Count()} pokemon nearby.", LogLevel.Debug);
-
             if (nearbyPokemons == null) return;
+
+            Logger.Write($"Spotted {nearbyPokemons.Count()} pokemon in the area. Trying to catch them all.", LogLevel.Debug);
 
             var priorityPokemon = nearbyPokemons.Where(p => p.PokemonId == priority).FirstOrDefault();
             var pokemons = nearbyPokemons.Where(p => p.PokemonId != priority).ToList();
@@ -109,8 +109,11 @@ namespace PoGo.NecroBot.Logic.Tasks
             masterBallsCount = masterBallsCount ?? 0; //return null ATM. need this code to logic check work
             var PokeBalls = pokeBallsCount + greatBallsCount + ultraBallsCount + masterBallsCount;
 
-            if (0 < pokemons.Count && PokeBalls >= session.LogicSettings.PokeballsToKeepForSnipe) // Don't display if not enough Pokeballs - TheWizrad1328
-                Logger.Write($"Catching {pokemons.Count} Pokemon Nearby...", LogLevel.Info);
+            if (pokemons.Count > 0)
+                if (PokeBalls >= session.LogicSettings.PokeballsToKeepForSnipe)  // Don't display if not enough Pokeballs - TheWizrad1328
+                  Logger.Write($"Catching {pokemons.Count} Pokemon Nearby...", LogLevel.Info);
+              else
+                  Logger.Write($"{session.LogicSettings.PokeballsToKeepForSnipe - PokeBalls} more Pokeballs are needed to catch {pokemons.Count} nearby Pokemon...", LogLevel.Info);
 
             foreach (var pokemon in pokemons)
             {

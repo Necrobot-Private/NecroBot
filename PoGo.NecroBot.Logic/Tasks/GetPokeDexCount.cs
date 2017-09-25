@@ -27,7 +27,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             var _totalData = PokeDex.Count();
 
             Logger.Write(session.Translation
-                .GetTranslation(TranslationString.AmountPkmSeenCaught, _totalData, _totalCaptures)
+                .GetTranslation(TranslationString.AmountPkmSeenCaught, _totalData, 252, _totalCaptures, 252)
             );
         }
     }

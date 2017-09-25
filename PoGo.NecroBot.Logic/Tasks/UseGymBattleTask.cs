@@ -51,6 +51,8 @@ namespace PoGo.NecroBot.Logic.Tasks
             _gym = gym;
             _gymDetails = fortDetails;
             _deployedPokemons = await session.Inventory.GetDeployedPokemons().ConfigureAwait(false);
+            //if (MaxPlayers < fortDetails.GymStatusAndDefenders.GymDefender.Count())
+            //    MaxPlayers = fortDetails.GymStatusAndDefenders.GymDefender.Count();
 
             if (session.GymState.MoveSettings == null)
             {
@@ -336,12 +338,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                                                                            $"XP: {exp}" +
                                                                            $"Players: {defenders.Count(),2:#0}", true).ConfigureAwait(false); // +
 
-                if (index == defenders.Count())
-                {
-                    Logger.Write($"All defenfers: {index}/{defenders.Count()} all CP on gym: {GetGymAllCpOnGym()}", LogLevel.Gym);
-                    Logger.Write($"Try to deploy...", LogLevel.Gym, ConsoleColor.Yellow);
-                    await DeployPokemonToGym().ConfigureAwait(false);
-                }
                 await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
             }
 
