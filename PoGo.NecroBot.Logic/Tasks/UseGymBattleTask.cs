@@ -239,13 +239,14 @@ namespace PoGo.NecroBot.Logic.Tasks
                 GymStartSessionResponse result = null;
                 try
                 {
-                    result = await StartBattle(pokemonDatas, defenderPokemonId).ConfigureAwait(false);
+                    result = await GymStartSession(pokemonDatas, defenderPokemonId).ConfigureAwait(false);
                 }
                 catch (APIBadRequestException)
                 {
                     Logger.Write("Can't start battle", LogLevel.Gym, ConsoleColor.Red);
                     isFailedToStart = true;
                     isVictory = false;
+                    isFailedTimeOut = false;
                     _startBattleCounter--;
 
                     Logger.Write("Starting battle Results: " + result, LogLevel.Gym, ConsoleColor.Red);
@@ -1225,7 +1226,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             return actions;
         }
 
-        private static async Task<GymStartSessionResponse> StartBattle(IEnumerable<PokemonData> attackers, ulong defenderId)
+        private static async Task<GymStartSessionResponse> GymStartSession(IEnumerable<PokemonData> attackers, ulong defenderId)
         {
             IEnumerable<PokemonData> currentPokemons = attackers;
             var pokemonDatas = currentPokemons as PokemonData[] ?? currentPokemons.ToArray();
@@ -1301,50 +1302,38 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static bool CanAttackGym()
         {
-            try
+            if (_gym?.RaidInfo != null)
             {
-                if (!_session.LogicSettings.GymConfig.EnableAttackGym)
+                if (_gym.RaidInfo.RaidPokemon.PokemonId != PokemonId.Missingno)
                     return false;
-
-                if (_gym?.RaidInfo != null)
-                {
-                    if (_gym.RaidInfo.RaidPokemon.PokemonId != PokemonId.Missingno)
-                        return false;
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Write(string.Format("{0} -> {1} -> {2}", ex.Message, string.Join(", ", _deployedPokemons), _gym), LogLevel.Gym, ConsoleColor.Red);
-                return false;
             }
             return true;
         }
 
         private static bool CanAttackRaid()
         {
+            if (_gym?.RaidInfo != null)
+            {
+                if (_gym.RaidInfo.RaidPokemon.PokemonId != PokemonId.Missingno)
+                    return true;
+            }
             return false;
         }
 
         private static bool CanBerrieGym()
         {
+            if (_deployedPokemons.Any(a => a.DeployedFortId.Equals(_gym.Id)))
+                return true;
             return false;
         }
 
         private static bool CanDeployToGym()
         {
-            try
-            {
-                if (_deployedPokemons.Any(a => a.DeployedFortId.Equals(_gym.Id)))
-                    return false;
-
-                if (_gymDetails.GymStatusAndDefenders.GymDefender.Count() == MaxPlayers)
-                    return false;
-            }
-            catch (Exception ex)
-            {
-                Logger.Write(string.Format("{0} -> {1} -> {2}", ex.Message, string.Join(", ", _deployedPokemons), _gym), LogLevel.Gym, ConsoleColor.Red);
+            if (_deployedPokemons.Any(a => a.DeployedFortId.Equals(_gym.Id)))
                 return false;
-            }
+
+            if (_gymDetails.GymStatusAndDefenders.GymDefender.Count() == MaxPlayers)
+                return false;
             return true;
         }
 
