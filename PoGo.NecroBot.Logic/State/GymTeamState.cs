@@ -16,27 +16,14 @@ namespace PoGo.NecroBot.Logic.State
         /// Cache time in seconds
         /// </summary>
         private const long _cacheTime = 2 * 60;
-
-        private Dictionary<string, CachedGymGetInfo> _gymDetails { get; set; }
-
         public List<MyPokemonStat> MyPokemons { get; private set; }
-
         public List<AnyPokemonStat> OtherDefenders { get; private set; }
-
         public List<GymPokemon> MyTeam { get; private set; }
-
         public IEnumerable<MoveSettings> MoveSettings { get; set; }
-
         public long TimeToDodge { get; set; }
-
         public long LastWentDodge { get; set; }
-
         public SwitchPokemonData SwithAttacker { get; set; }
-
-        public int BerriesRound { get; set; }
-
         public string BerriesGymId { get; set; }
-
         public string CapturedGymId { get; set; }
 
         public GymTeamState()
@@ -44,7 +31,6 @@ namespace PoGo.NecroBot.Logic.State
             MyTeam = new List<GymPokemon>();
             MyPokemons = new List<MyPokemonStat>();
             OtherDefenders = new List<AnyPokemonStat>();
-            _gymDetails = new Dictionary<string, CachedGymGetInfo>();
             TimeToDodge = 0;
             SwithAttacker = null;
         }
@@ -81,28 +67,6 @@ namespace PoGo.NecroBot.Logic.State
                 MyPokemonStat mps = new MyPokemonStat(session, pokemon);
                 MyPokemons.Add(mps);
             }
-        }
-
-        public GymGetInfoResponse GymGetInfo(ISession session, FortData fort, bool force = false)
-        {
-            CachedGymGetInfo gymDetails = null;
-
-            if (_gymDetails.Keys.Contains(fort.Id))
-                gymDetails = _gymDetails[fort.Id];
-            else
-            {
-                gymDetails = new CachedGymGetInfo(session, fort);
-                _gymDetails.Add(fort.Id, gymDetails);
-                force = false;
-            }
-
-            if (force || gymDetails.LastCall.AddSeconds(_cacheTime) < DateTime.UtcNow)
-            {
-                gymDetails.LoadData(session, fort);
-                _gymDetails[fort.Id] = gymDetails;
-            }
-
-            return gymDetails.GymGetInfo;
         }
 
         public void Dispose()
@@ -216,12 +180,6 @@ namespace PoGo.NecroBot.Logic.State
             if (isTraining && cp <= Data.Cp)
                 factor -= 100;
 
-            if (session.LogicSettings.GymConfig.NotUsedSkills.Any(a => a.Key == Data.PokemonId && a.Value == Attack.MovementId))
-                factor -= 20;
-
-            if (session.LogicSettings.GymConfig.NotUsedSkills.Any(a => a.Key == Data.PokemonId && a.Value == SpecialAttack.MovementId))
-                factor -= 20;
-
             return factor;
         }
 
@@ -256,28 +214,6 @@ namespace PoGo.NecroBot.Logic.State
         {
             OldAttacker = Old;
             NewAttacker = New;
-        }
-    }
-
-    public class CachedGymGetInfo
-    {
-        public DateTime LastCall { get; set; }
-
-        public GymGetInfoResponse GymGetInfo { get; set; }
-
-        public CachedGymGetInfo(ISession session, FortData fort)
-        {
-            LoadData(session, fort);
-        }
-
-        public async void LoadData(ISession session, FortData fort)
-        {
-            var task = await session.Client.Fort.GymGetInfo(fort.Id, fort.Latitude, fort.Longitude).ConfigureAwait(false);
-            if (task.Result == GymGetInfoResponse.Types.Result.Success)
-            {
-                GymGetInfo = task;
-                LastCall = DateTime.UtcNow;
-            }
         }
     }
 }
