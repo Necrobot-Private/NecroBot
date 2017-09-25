@@ -728,7 +728,7 @@ namespace PoGo.NecroBot.Logic.Service
         {
             var GymDeployed = new GymDeployResponse();
             var Deployed = GymDeployed.GymStatusAndDefenders.GymDefender.ToList();
-            Logger.Write($"Visited Gym: {ev.Name} | Team: {ev.Team} | Gym points: {ev.Point} | Free Spots: {6 - Deployed.Count}", LogLevel.Gym,
+            Logger.Write($"Visited Gym: {ev.Name} | Team: {ev.Team} | Gym Players: {ev.Players} | Free Spots: {6 - Deployed.Count}", LogLevel.Gym,
                 (ev.Team == TeamColor.Red)
                     ? ConsoleColor.Red
                     : (ev.Team == TeamColor.Yellow ? ConsoleColor.Yellow : ConsoleColor.Blue));
