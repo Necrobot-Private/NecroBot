@@ -82,9 +82,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                     session.AddForts(new List<FortData>() { pokeStop }); //replace object in memory.
                 }
 
-                await MSniperServiceTask.Execute(session, cancellationToken).ConfigureAwait(false);
                 if (session.LogicSettings.EnableHumanWalkingSnipe)
                 {
+                    await MSniperServiceTask.Execute(session, cancellationToken).ConfigureAwait(false);
                     await HumanWalkSnipeTask.Execute(session, cancellationToken, pokeStop, fortInfo).ConfigureAwait(false);
                 }
 
@@ -184,10 +184,8 @@ namespace PoGo.NecroBot.Logic.Tasks
         }
         public static async Task<FortData> GetNextPokeStop(ISession session)
         {
-
             var priorityTarget = await SetMoveToTargetTask.GetTarget(session).ConfigureAwait(false);
             if (priorityTarget != null) return priorityTarget;
-
 
             if (session.Forts == null ||
                 session.Forts.Count == 0 ||
@@ -196,11 +194,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                 //TODO : A logic need to be add for handle this  case?
             };
 
-                   //NOTE : This code is killing perfomance of BOT if GYM is turn on, need to refactor to avoid this hummer call API
+            //NOTE : This code is killing perfomance of BOT if GYM is turn on, need to refactor to avoid this hummer call API
 
-            var forts = session.Forts
-                .Where(p => p.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime())
-                .Where(f => f != null).ToList();
+            var forts = session.Forts.Where(p => p.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime())
+                .Where(x => x.Id != string.Empty).ToList();
 
             forts = forts.OrderBy(
                         p =>
@@ -218,13 +215,11 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
 
             var reviveCount = (await session.Inventory.GetItems().ConfigureAwait(false)).Where(w => w.ItemId == POGOProtos.Inventory.Item.ItemId.ItemRevive || w.ItemId == POGOProtos.Inventory.Item.ItemId.ItemMaxRevive).Select(s => s.Count).Sum();
-            if (!session.LogicSettings.GymConfig.Enable
-                || session.LogicSettings.GymConfig.MinRevivePotions > reviveCount
-            /*|| session.Inventory.GetPlayerStats().FirstOrDefault().Level <= 5*/
-            )
+            if (session.LogicSettings.GymConfig.Enable && session.LogicSettings.GymConfig.MinRevivePotions > reviveCount)
             {
                 // Filter out the gyms
-                forts = forts.Where(x => x.Type != FortType.Gym).ToList();
+                forts = forts.Where(p => p.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime())
+                    .Where(x => x.Type == FortType.Gym).ToList();
             }
 
             if (session.LogicSettings.GymConfig.PrioritizeGymOverPokestop)
@@ -237,21 +232,21 @@ namespace PoGo.NecroBot.Logic.Tasks
                 if (session.LogicSettings.GymConfig.PrioritizeGymWithFreeSlot)
                 {
                     var freeSlots = new List<FortData>();
-                    foreach (var _gym in gyms)
+                    foreach (var gym in gyms)
                     {
-                        if (_gym.OwnedByTeam == session.Profile.PlayerData.Team)
+                        if (gym.OwnedByTeam == session.Profile.PlayerData.Team)
                         {
-                            var task = await session.Client.Fort.GymGetInfo(_gym.Id, _gym.Latitude, _gym.Longitude).ConfigureAwait(false);
+                            var task = await session.Client.Fort.GymGetInfo(gym.Id, gym.Latitude, gym.Longitude).ConfigureAwait(false);
                             if (task.Result == GymGetInfoResponse.Types.Result.Success)
                             {
                                 if (task.GymStatusAndDefenders.GymDefender.Count() < UseGymBattleTask.MaxPlayers)
-                                    freeSlots.Add(_gym);
+                                    freeSlots.Add(gym);
                             }
                         }
                     }
 
                     if (freeSlots.Count() > 0)
-                        return freeSlots.First();
+                        return freeSlots.FirstOrDefault();
                 }
 
                 // Return the first gym in range.
