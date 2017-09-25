@@ -96,37 +96,32 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool UsePokemonToAttackOnlyByCp { get; set; }
 
-        [NecroBotConfig(Description = "List of pokemon that bot won't use in gym battles or deploys", Position = 15)]
-        [DefaultValue("Kangaskhan;Tauros;MrMime;Farfetchd")]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public List<PokemonId> ExcludeForGyms { get; set; }
-
-        [NecroBotConfig(Description = "Do not use dodge in gyms", Position = 16)]
+        [NecroBotConfig(Description = "Do not use dodge in gyms", Position = 15)]
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool DontUseDodge { get; set; }
 
-        [NecroBotConfig(Description = "Minimum revive potions to use gym module", Position = 17)]
+        [NecroBotConfig(Description = "Minimum revive potions to use gym module", Position = 16)]
         [DefaultValue(5)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
         public int MinRevivePotions { get; set; }
 
-        [NecroBotConfig(Description = "Prioritize Gym with free slot", Position = 18)]
+        [NecroBotConfig(Description = "Prioritize Gym with free slot", Position = 17)]
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool PrioritizeGymWithFreeSlot { get; set; }
 
-        [NecroBotConfig(Description = "Save Max Revives", Position = 19)]
+        [NecroBotConfig(Description = "Save Max Revives", Position = 18)]
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool SaveMaxRevives { get; set; }
 
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
-        [NecroBotConfig(Description = "List of Defenders to use for Gyms", Position = 20)]
+        [NecroBotConfig(Description = "List of Defenders to use for Gyms", Position = 19)]
         public List<TeamMemberConfig> Defenders { get; set; } = TeamMemberConfig.GetDefaultDefenders();
 
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
-        [NecroBotConfig(Description = "List of Attackers to use for Gyms", Position = 21)]
+        [NecroBotConfig(Description = "List of Attackers to use for Gyms", Position = 20)]
         public List<TeamMemberConfig> Attackers { get; set; } = TeamMemberConfig.GetDefaultAttackers();
     }
 
