@@ -183,7 +183,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static async Task StartGymAttackLogic()
         {
-            var defenders = _gymDetails.GymStatusAndDefenders.GymDefender.Select(x => x.MotivatedPokemon.Pokemon);
+            var defenders = _gymDetails.GymStatusAndDefenders.GymDefender.Select(x => x.MotivatedPokemon.Pokemon).ToList();
 
             if (defenders.Count() < 1)
                 return;
@@ -230,10 +230,18 @@ namespace PoGo.NecroBot.Logic.Tasks
             bool isFailedTimeOut = false;
             List<BattleAction> battleActions = new List<BattleAction>();
             ulong defenderPokemonId = defenders.First().Id;
+            Logger.Write("Attacking Team consists of:", LogLevel.Gym);
 
             while (index < defenders.Count())
             {
-                Logger.Write("Attacking Team consists of: " + string.Join(", ", _session.GymState.MyTeam.Select(s => string.Format("{0} ({1} HP / {2} CP) [{3}]", s.Attacker.PokemonId, s.HpState, s.Attacker.Cp, s.Attacker.Id))), LogLevel.Gym, ConsoleColor.White);
+                bool newl = false;
+                Logger.Write(string.Join(", ",
+                    _session.GymState.MyTeam.Select(s => string.Format("{0} ({1} HP / {2} CP)\n\r",
+                    s.Attacker.PokemonId.ToString(),
+                    s.HpState,
+                    s.Attacker.Cp))), LogLevel.Gym, newl ? ConsoleColor.White : ConsoleColor.Yellow);
+                newl = true;
+
                 var thisAttackActions = new List<BattleAction>();
 
                 GymStartSessionResponse result = null;
@@ -260,10 +268,12 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 index++;
                 // If we can't start battle in 10 tries, let's skip the gym
-                if (result != null || result.Result != GymStartSessionResponse.Types.Result.Success)
+                if (result.Result != GymStartSessionResponse.Types.Result.Success)
                 {
                     _session.EventDispatcher.Send(new GymErrorUnset { GymName = _gymInfo.Name });
                     isVictory = false;
+                    isFailedTimeOut = false;
+                    _startBattleCounter--;
                     break;
                 }
 
@@ -1342,7 +1352,6 @@ namespace PoGo.NecroBot.Logic.Tasks
             PokemonData pokemon = null;
             List<ulong> excluded = new List<ulong>();
             var pokemonList = (await _session.Inventory.GetPokemons().ConfigureAwait(false)).ToList();
-            pokemonList.RemoveAll(x => _session.LogicSettings.GymConfig.ExcludeForGyms.Contains(x.PokemonId));
 
             if (_session.LogicSettings.GymConfig.Defenders != null && _session.LogicSettings.GymConfig.Defenders.Count > 0)
             {
