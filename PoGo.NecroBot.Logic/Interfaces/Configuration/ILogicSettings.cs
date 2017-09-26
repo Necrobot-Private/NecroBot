@@ -41,6 +41,7 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         int ByPassSpinCount { get; }
         double AutoSnipeMaxDistance { get; }
         bool EvolveAllPokemonWithEnoughCandy { get; }
+        bool EvolvePreserveMinCandies { get; }
         bool KeepPokemonsThatCanEvolve { get; }
 
         bool UseTransferFilterToCatch { get; }

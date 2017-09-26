@@ -868,7 +868,14 @@ namespace PoGo.NecroBot.Logic
                 //if (!filters.ContainsKey(pokemon.PokemonId)) continue;
                 var filter = filters[pokemonId];
 
-                int candiesLeft = await GetCandyCount(pokemonId).ConfigureAwait(false);
+                int candiesToUse = await GetCandyCount(pokemonId).ConfigureAwait(false);
+
+                if(ownerSession.LogicSettings.EvolvePreserveMinCandies)
+                {
+                    // Do not use candies below defined MinCandiesBeforeEvolve
+                    candiesToUse -= filter.MinCandiesBeforeEvolve;
+                }
+
                 PokemonSettings settings = (await GetPokemonSettings().ConfigureAwait(false)).FirstOrDefault(x => x.PokemonId == pokemonId);
                 int pokemonLeft = orderedGroup.Count();
                 int candyNeed = GetCandyToEvolve(settings, filter);
@@ -877,7 +884,7 @@ namespace PoGo.NecroBot.Logic
                     continue; // If we were unable to determine which branch to use, then skip this pokemon.
 
                 // Calculate the number of evolutions possible (taking into account +1 candy for evolve and +1 candy for transfer)
-                EvolutionCalculations evolutionInfo = CalculatePokemonEvolution(pokemonLeft, candiesLeft, candyNeed, 1);
+                EvolutionCalculations evolutionInfo = CalculatePokemonEvolution(pokemonLeft, candiesToUse, candyNeed, 1);
 
                 if (evolutionInfo.Evolves > 0)
                 {
