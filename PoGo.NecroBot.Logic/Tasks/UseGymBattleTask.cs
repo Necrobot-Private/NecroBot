@@ -1287,6 +1287,9 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static bool CanAttackGym()
         {
+            if (!_session.LogicSettings.GymConfig.EnableAttackGym)
+                return false;
+
             if (_gym?.RaidInfo != null)
             {
                 if (_gym.RaidInfo.RaidPokemon.PokemonId != PokemonId.Missingno)
