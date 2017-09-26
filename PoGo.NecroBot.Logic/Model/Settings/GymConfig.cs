@@ -21,8 +21,8 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             Blue
         }
 
-        [NecroBotConfig(Description = "Allows bot go to a gym for training, defense or battle with other teams.", Position = 1)]
-        [DefaultValue(false)]
+        [NecroBotConfig(Description = "Allows bot go to a gym for berries, defense or battle with other teams.", Position = 1)]
+        [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool Enable { get; set; }
 
@@ -32,7 +32,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool PrioritizeGymOverPokestop { get; set; }
 
         [NecroBotConfig(Description = "Maximum distance bot is allowed to walk to a gym.", Position = 3)]
-        [DefaultValue(500.0)]
+        [DefaultValue(1500.0)]
         [Range(0, 9999)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
         public double MaxDistance { get; set; }
@@ -44,18 +44,18 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public string DefaultTeam { get; set; }
 
         [NecroBotConfig(Description = "Max CP that pokemon will be selected for defending gyms.", Position = 5)]
-        [DefaultValue(1800)]
+        [DefaultValue(4000)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
         public int MaxCPToDeploy { get; set; }
 
         [NecroBotConfig(Description = "Max LV of pokemon that can be put into a gym.", Position = 6)]
-        [DefaultValue(16)]
+        [DefaultValue(40)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
         public int MaxLevelToDeploy { get; set; }
 
         [NecroBotConfig(Description = "Time in minutes to visit, come back, and check gym, depending on distance setting", Position = 7)]
-        [DefaultValue(60)]
-        [Range(0, 999)]
+        [DefaultValue(5)]
+        [Range(0, 10)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
         public int VisitTimeout { get; set; }
 
@@ -65,7 +65,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool UseRandomPokemon { get; set; }
 
         [NecroBotConfig(Description = "Enables attacking gyms", Position = 9)]
-        [DefaultValue(false)]
+        [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool EnableAttackGym { get; set; }
 
@@ -74,7 +74,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool HealDefendersBeforeApplyToGym { get; set; }
 
-        [NecroBotConfig(Description = "Enables gym training", Position = 11)]
+        [NecroBotConfig(Description = "Enables gym berries", Position = 11)]
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool EnableGymBerries { get; set; }
@@ -107,7 +107,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public int MinRevivePotions { get; set; }
 
         [NecroBotConfig(Description = "Prioritize Gym with free slot", Position = 17)]
-        [DefaultValue(true)]
+        [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
         public bool PrioritizeGymWithFreeSlot { get; set; }
 
@@ -164,11 +164,11 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             return new List<TeamMemberConfig>()
             {
                 { new TeamMemberConfig() { Pokemon=PokemonId.Lapras, MinCP=1000 } },
-                { new TeamMemberConfig() { Pokemon=PokemonId.Snorlax,  MinCP=1000, MaxCP=2400 } },
+                { new TeamMemberConfig() { Pokemon=PokemonId.Snorlax,  MinCP=1000 } },
                 { new TeamMemberConfig() { Pokemon=PokemonId.Vaporeon,  MinCP=2000, Moves = new List<PokemonMove[]>() { new PokemonMove[2] { PokemonMove.MoveUnset, PokemonMove.HydroPump } } } },
-                { new TeamMemberConfig() { Pokemon=PokemonId.Dragonite,  MinCP=2000, MaxCP=2499 } },
-                { new TeamMemberConfig() { Pokemon=PokemonId.Charizard,  MinCP=2000, MaxCP=2499 } },
-                { new TeamMemberConfig() { Pokemon=PokemonId.Flareon,  MinCP=2000, MaxCP=2499 } }
+                { new TeamMemberConfig() { Pokemon=PokemonId.Dragonite,  MinCP=2000 } },
+                { new TeamMemberConfig() { Pokemon=PokemonId.Charizard,  MinCP=2000 } },
+                { new TeamMemberConfig() { Pokemon=PokemonId.Alakazam,  MinCP=2000 } }
             };
         }
 
@@ -179,9 +179,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 { new TeamMemberConfig() { Pokemon=PokemonId.Dragonite, MinCP=2500 } },
                 { new TeamMemberConfig() { Pokemon=PokemonId.Vaporeon, MinCP=2000 } },
                 { new TeamMemberConfig() { Pokemon=PokemonId.Gyarados, MinCP=2000 } },
-                { new TeamMemberConfig() { Pokemon=PokemonId.Snorlax, MinCP=2401 } },
-                { new TeamMemberConfig() { Pokemon=PokemonId.Charizard,  MinCP=2000, MaxCP=2499 } },
-                { new TeamMemberConfig() { Pokemon=PokemonId.Flareon,  MinCP=2000, MaxCP=2499 } }
+                { new TeamMemberConfig() { Pokemon=PokemonId.Snorlax, MinCP=2000 } },
+                { new TeamMemberConfig() { Pokemon=PokemonId.Charizard,  MinCP=2000 } },
+                { new TeamMemberConfig() { Pokemon=PokemonId.Lapras,  MinCP=2000 } }
             };
         }
 

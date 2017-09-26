@@ -600,7 +600,7 @@ namespace PoGo.NecroBot.Logic.Common
                     "Incense in Inventory: {0}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.UsedIncense, "Used an Incense"),
                 new KeyValuePair<TranslationString, string>(TranslationString.AmountPkmSeenCaught,
-                    "Pokemon Seen: {0}/251, Pokemon Caught: {1}/251"),
+                    "Pokemon Seen: {0}/{1}, Pokemon Caught: {2}/{3}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.PkmPotentialEvolveCount,
                     "Potential Evolutions: {0}"),
                 new KeyValuePair<TranslationString, string>(TranslationString.PkmNotEnoughRessources,

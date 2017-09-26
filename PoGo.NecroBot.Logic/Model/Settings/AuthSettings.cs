@@ -292,7 +292,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                     DeviceConfig.DeviceId = RandomString(32, "0123456789abcdef");
                 }
 
-                Save(_filePath);
+                //Save(_filePath);
             }
             catch (JsonReaderException exception)
             {
