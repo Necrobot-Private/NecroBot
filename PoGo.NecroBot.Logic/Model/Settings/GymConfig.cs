@@ -97,9 +97,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool UsePokemonToAttackOnlyByCp { get; set; }
 
         [NecroBotConfig(Description = "Do not use dodge in gyms", Position = 15)]
-        [DefaultValue(false)]
+        [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate)]
-        public bool DontUseDodge { get; set; }
+        public bool UseDodge { get; set; }
 
         [NecroBotConfig(Description = "Minimum revive potions to use gym module", Position = 16)]
         [DefaultValue(5)]
