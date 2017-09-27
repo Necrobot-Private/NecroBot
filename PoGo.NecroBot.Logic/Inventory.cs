@@ -271,8 +271,9 @@ namespace PoGo.NecroBot.Logic
                 var numToSaveForEvolve = pokemonGroupToTransfer.Count(p => pokemonToEvolveForThisGroup.Any(p2 => p2.Id == p.Id));
                 canBeRemoved -= numToSaveForEvolve;
                 var PokemonId = session.Translation.GetPokemonTranslation(pokemonGroupToTransfer.Key);
+                int candyCount = await GetCandyCount(pokemonGroupToTransfer.Key).ConfigureAwait(false);
 
-                Logger.Write($"Saving {numToSaveForEvolve,2:#0} {PokemonId,-12} for evolve. Number of {PokemonId,-12} to be transferred: {canBeRemoved,2:#0}", Logic.Logging.LogLevel.Info);
+                Logger.Write($"Saving {numToSaveForEvolve,2:#0} {PokemonId,-12} for evolve | Candies: {candyCount,4:#0} | Number to be transferred: {canBeRemoved,2:#0}", Logic.Logging.LogLevel.Info);
 
                 if (prioritizeIVoverCp)
                 {
@@ -786,8 +787,16 @@ namespace PoGo.NecroBot.Logic
                     return false;
                 }
 
-                if (appliedFilter.MinCandiesBeforeEvolve > 0 && familyCandy < appliedFilter.MinCandiesBeforeEvolve)
-                    return false;
+                int minCandiesBeforeEvolve = appliedFilter.MinCandiesBeforeEvolve;
+                if (minCandiesBeforeEvolve > 0)
+                {
+                    if (ownerSession.LogicSettings.EvolvePreserveMinCandiesFromFilter)
+                    {
+                        minCandiesBeforeEvolve += GetCandyToEvolve(settings, appliedFilter);
+                    }
+                    if (familyCandy < minCandiesBeforeEvolve)
+                        return false;
+                }
             }
 
             PokemonId evolveTo = PokemonId.Missingno;
@@ -862,29 +871,24 @@ namespace PoGo.NecroBot.Logic
             foreach (var g in groupedPokemons)
             {
                 PokemonId pokemonId = g.Key;
-
-                var orderedGroup = g.OrderByDescending(p => p.Cp);
-
-                //if (!filters.ContainsKey(pokemon.PokemonId)) continue;
                 var filter = filters[pokemonId];
 
-                int candiesToUse = await GetCandyCount(pokemonId).ConfigureAwait(false);
-
-                if(ownerSession.LogicSettings.EvolvePreserveMinCandies)
+                int candiesAvailable = await GetCandyCount(pokemonId).ConfigureAwait(false);
+                if (ownerSession.LogicSettings.EvolvePreserveMinCandiesFromFilter)
                 {
-                    // Do not use candies below defined MinCandiesBeforeEvolve
-                    candiesToUse -= filter.MinCandiesBeforeEvolve;
+                    // Do not use candies below filter defined MinCandiesBeforeEvolve
+                    candiesAvailable -= filter.MinCandiesBeforeEvolve;
                 }
 
                 PokemonSettings settings = (await GetPokemonSettings().ConfigureAwait(false)).FirstOrDefault(x => x.PokemonId == pokemonId);
-                int pokemonLeft = orderedGroup.Count();
                 int candyNeed = GetCandyToEvolve(settings, filter);
-
                 if (candyNeed == -1)
                     continue; // If we were unable to determine which branch to use, then skip this pokemon.
 
+                var orderedGroup = g.OrderByDescending(p => p.Cp);
+                int pokemonLeft = orderedGroup.Count();
                 // Calculate the number of evolutions possible (taking into account +1 candy for evolve and +1 candy for transfer)
-                EvolutionCalculations evolutionInfo = CalculatePokemonEvolution(pokemonLeft, candiesToUse, candyNeed, 1);
+                EvolutionCalculations evolutionInfo = CalculatePokemonEvolution(pokemonLeft, candiesAvailable, candyNeed, 1);
 
                 if (evolutionInfo.Evolves > 0)
                 {

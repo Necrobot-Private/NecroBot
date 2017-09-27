@@ -103,7 +103,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool FastSoftBanBypass => _settings.SoftBanConfig.FastSoftBanBypass;
         public int ByPassSpinCount => _settings.SoftBanConfig.ByPassSpinCount;
         public bool EvolveAllPokemonWithEnoughCandy => _settings.PokemonConfig.EvolveAllPokemonWithEnoughCandy;
-        public bool EvolvePreserveMinCandies => _settings.PokemonConfig.EvolvePreserveMinCandies;
+        public bool EvolvePreserveMinCandiesFromFilter => _settings.PokemonConfig.EvolvePreserveMinCandiesFromFilter;
         public bool EvolveFavoritedOnly => _settings.PokemonConfig.EvolveFavoritedOnly;
         public string EvolveOperator => _settings.PokemonConfig.EvolveOperator;
         public double EvolveMinIV => _settings.PokemonConfig.EvolveMinIV;

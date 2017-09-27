@@ -479,10 +479,10 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 79)]
         public bool ByPassCatchFlee{ get; set; }
 
-        [NecroBotConfig(Description = "When enabled, bot will not use the candy defined in PokemonEvolveFilter/MinCandiesBeforeEvolve", Position = 80)]
+        [NecroBotConfig(Description = "When enabled, bot will preserve amount of candy defined in PokemonEvolveFilter/MinCandiesBeforeEvolve, only use candies above that value", Position = 80)]
         [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 80)]
-        public bool EvolvePreserveMinCandies { get; set; }
+        public bool EvolvePreserveMinCandiesFromFilter { get; set; }
 
     }
 }
