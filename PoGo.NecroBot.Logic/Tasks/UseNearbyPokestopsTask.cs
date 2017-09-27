@@ -70,10 +70,13 @@ namespace PoGo.NecroBot.Logic.Tasks
                 await WalkingToPokeStop(session, cancellationToken, pokeStop, fortInfo).ConfigureAwait(false);
                 await DoActionAtPokeStop(session, cancellationToken, pokeStop, fortInfo).ConfigureAwait(false);
 
-                var fortDetails = await session.Client.Fort.GymGetInfo(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude).ConfigureAwait(false);
-                if (fortDetails.Result == GymGetInfoResponse.Types.Result.Success)
+                if (pokeStop.Type == FortType.Gym)
                 {
-                    await UseGymBattleTask.Execute(session, cancellationToken, pokeStop, fortInfo, fortDetails).ConfigureAwait(false);
+                    var fortDetails = await session.Client.Fort.GymGetInfo(pokeStop.Id, pokeStop.Latitude, pokeStop.Longitude).ConfigureAwait(false);
+                    if (fortDetails.Result == GymGetInfoResponse.Types.Result.Success)
+                    {
+                        await UseGymBattleTask.Execute(session, cancellationToken, pokeStop, fortInfo, fortDetails).ConfigureAwait(false);
+                    }
                 }
 
                 if (!await SetMoveToTargetTask.IsReachedDestination(pokeStop, session, cancellationToken).ConfigureAwait(false))
