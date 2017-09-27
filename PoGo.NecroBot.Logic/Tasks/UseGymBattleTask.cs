@@ -52,7 +52,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             _gym = gym;
             _gymDetails = fortDetails;
             _deployedPokemons = await session.Inventory.GetDeployedPokemons().ConfigureAwait(false);
-            var _defenders = _gymDetails.GymStatusAndDefenders.GymDefender.Select(p => p.MotivatedPokemon.Pokemon).ToList();
+            _defenders = _gymDetails.GymStatusAndDefenders.GymDefender.Select(p => p.MotivatedPokemon.Pokemon).ToList();
 
 
             if (session.GymState.MoveSettings == null)
