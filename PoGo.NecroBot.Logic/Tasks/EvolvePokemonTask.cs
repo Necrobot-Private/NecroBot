@@ -42,56 +42,64 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 if (session.LogicSettings.KeepPokemonsThatCanEvolve)
                 {
-                    var luckyEggMin = session.LogicSettings.UseLuckyEggsMinPokemonAmount;
-                    var maxStorage = session.Profile.PlayerData.MaxPokemonStorage;
-                    var totalPokemon = await session.Inventory.GetPokemons().ConfigureAwait(false);
-                    var totalEggs = await session.Inventory.GetEggs().ConfigureAwait(false);
+                    var eggsAvailable = await session.Inventory.GetEggs().ConfigureAwait(false);
 
-                    var pokemonNeededInInventory = (maxStorage - totalEggs.Count()) *
-                                                   session.LogicSettings.EvolveKeptPokemonsAtStorageUsagePercentage /
-                                                   100.0f;
-                    var needPokemonToStartEvolve = Math.Round(
-                        Math.Max(0, Math.Min(session.LogicSettings.EvolveKeptPokemonIfBagHasOverThisManyPokemon,
-                            Math.Min(pokemonNeededInInventory, session.Profile.PlayerData.MaxPokemonStorage))));
+                    if (session.LogicSettings.EvolveKeptPokemonsIfLuckyEggCanBeUsed && eggsAvailable.Count() > 0)
+                    { // Decide depending on possible evolutions with egg usage
 
-                    var deltaCount = needPokemonToStartEvolve - totalPokemon.Count();
-                    if (session.LogicSettings.UseLuckyEggsWhileEvolving)
-                    {
-                        if (luckyEggMin > maxStorage)
+                        int luckyEggMin = session.LogicSettings.UseLuckyEggsMinPokemonAmount;
+                        int missingPossibleEvolutions = luckyEggMin - pokemonToEvolve.Count();
+
+                        if (missingPossibleEvolutions > 0)
                         {
-                            session.EventDispatcher.Send(new WarnEvent
+                            session.EventDispatcher.Send(new UpdateEvent()
                             {
                                 Message = session.Translation.GetTranslation(
-                                    TranslationString.UseLuckyEggsMinPokemonAmountTooHigh,
-                                    luckyEggMin, maxStorage)
+                                    TranslationString.WaitingForMoreEvolutionsToEvolveWithEgg,
+                                    missingPossibleEvolutions,
+                                    pokemonToEvolve.Count(),
+                                    luckyEggMin)
+                            });
+                            return;
+                        }
+                    }
+                    else
+                    { // Decide depending on pokemon storage load
+
+                        var maxStorage = session.Profile.PlayerData.MaxPokemonStorage;
+
+                        // Take the lower value of absolute and relative configuration
+                        int thresholdFromRelConfig = Convert.ToInt32(maxStorage * session.LogicSettings.EvolveKeptPokemonsAtStorageUsagePercentage / 100.0f);
+                        int thresholdFromAbsConfig = session.LogicSettings.EvolveKeptPokemonIfBagHasOverThisManyPokemon;
+                        var neededPokemonsToStartEvolve = Math.Max(0, Math.Min(thresholdFromAbsConfig, Math.Min(thresholdFromRelConfig, maxStorage)));
+
+                        // Calculate missing pokemons until storage full enough
+                        var totalPokemon = await session.Inventory.GetPokemons().ConfigureAwait(false);
+                        int missingPokemonsInStorage = neededPokemonsToStartEvolve - totalPokemon.Count();
+
+                        if (missingPokemonsInStorage > 0)
+                        {
+                            session.EventDispatcher.Send(new UpdateEvent()
+                            {
+                                Message = session.Translation.GetTranslation(
+                                TranslationString.WaitingForMorePokemonToEvolve,
+                                pokemonToEvolve.Count,
+                                missingPokemonsInStorage,
+                                totalPokemon.Count(),
+                                neededPokemonsToStartEvolve,
+                                session.LogicSettings.EvolveKeptPokemonsAtStorageUsagePercentage
+                            )
                             });
                             return;
                         }
                     }
 
-                    if (deltaCount > 0)
+                    // One of the conditions met, trigger evolve
+                    if (await ShouldUseLuckyEgg(session, pokemonToEvolve).ConfigureAwait(false))
                     {
-                        session.EventDispatcher.Send(new UpdateEvent()
-                        {
-                            Message = session.Translation.GetTranslation(
-                                TranslationString.WaitingForMorePokemonToEvolve,
-                                pokemonToEvolve.Count,
-                                deltaCount,
-                                totalPokemon.Count(),
-                                needPokemonToStartEvolve,
-                                session.LogicSettings.EvolveKeptPokemonsAtStorageUsagePercentage
-                            )
-                        });
-                        return;
+                        await UseLuckyEgg(session).ConfigureAwait(false);
                     }
-                    else
-                    {
-                        if (await ShouldUseLuckyEgg(session, pokemonToEvolve).ConfigureAwait(false))
-                        {
-                            await UseLuckyEgg(session).ConfigureAwait(false);
-                        }
-                        await Evolve(session, pokemonToEvolve).ConfigureAwait(false);
-                    }
+                    await Evolve(session, pokemonToEvolve).ConfigureAwait(false);
                 }
                 else if (session.LogicSettings.EvolveAllPokemonWithEnoughCandy ||
                          session.LogicSettings.EvolveAllPokemonAboveIv)
