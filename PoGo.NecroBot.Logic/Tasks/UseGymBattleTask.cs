@@ -1406,6 +1406,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                 Logger.Write("Gym Details: API Bad Request Exception", LogLevel.Gym, ConsoleColor.Red);
                 return null;
             }
+            catch (NullReferenceException e)
+            {
+                e.Data.Clear();
+                Logger.Write("Gym Details: Null Reference Exception", LogLevel.Gym, ConsoleColor.Red);
+                return null;
+            }
         }
 
         private static async Task EnsureJoinTeam(PlayerData player)
