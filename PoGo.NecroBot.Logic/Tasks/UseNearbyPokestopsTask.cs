@@ -221,7 +221,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (session.LogicSettings.GymConfig.Enable && session.LogicSettings.GymConfig.MinRevivePotions > reviveCount)
             {
                 // Filter out the gyms
-                forts = forts.Where(p => p.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime())
+                forts = forts//Favorise battles .Where(p => p.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime())
                     .Where(x => x.Type == FortType.Gym).ToList();
             }
 
