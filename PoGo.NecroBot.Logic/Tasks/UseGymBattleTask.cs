@@ -32,7 +32,6 @@ namespace PoGo.NecroBot.Logic.Tasks
         private static FortDetailsResponse _gymInfo { get; set; }
         private static GymGetInfoResponse _gymDetails { get; set; }
         private static IEnumerable<PokemonData> _deployedPokemons { get; set; }
-        //private static IEnumerable<PokemonData> _defenders { get; set; }
         private static FortData _gym { get; set; }
         private static ISession _session;
 
@@ -1442,38 +1441,60 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static bool CanAttackGym()
         {
-            if (!_session.LogicSettings.GymConfig.EnableAttackGym)
-                return false;
-
-            if (_gym?.RaidInfo != null)
+            try
             {
-                if (_gym.RaidInfo.RaidPokemon.PokemonId != PokemonId.Missingno)
+                if (!_session.LogicSettings.GymConfig.EnableAttackGym)
                     return false;
+
+                if (_gym?.RaidInfo != null)
+                {
+                    if (_gym.RaidInfo.RaidPokemon.PokemonId != PokemonId.Missingno)
+                        return false;
+                }
+                return true;
             }
-            return true;
+            catch
+            {
+                return false;
+            }
         }
 
         private static bool CanAttackRaid()
         {
-            if (!_session.LogicSettings.GymConfig.EnableAttackRaid)
-                return false;
-
-            if (_gym?.RaidInfo != null)
+            try
             {
-                if (_gym.RaidInfo.RaidPokemon.PokemonId != PokemonId.Missingno)
-                    return true;
+                if (!_session.LogicSettings.GymConfig.EnableAttackRaid)
+                    return false;
+
+                if (_gym?.RaidInfo != null)
+                {
+                    if (_gym.RaidInfo.RaidPokemon.PokemonId != PokemonId.Missingno)
+                        return true;
+                }
+                return false;
             }
-            return false;
+            catch
+            {
+                return false;
+            }
         }
 
         private static bool CanBerrieGym()
         {
-            if (!_session.LogicSettings.GymConfig.EnableGymBerries)
-                return false;
+            try
+            {
+                if (!_session.LogicSettings.GymConfig.EnableGymBerries)
+                    return false;
 
-            if (!_deployedPokemons.Any(a => a.DeployedFortId.Equals(_gym.Id)))
+                //Only berries if my pokemon is into gym
+                if (!_deployedPokemons.Any(a => a.DeployedFortId.Equals(_gym.Id)))
+                    return false;
+                return true;
+            }
+            catch
+            {
                 return false;
-            return true;
+            }
         }
 
         private static bool CanDeployToGym()
