@@ -1107,7 +1107,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         Logger.Write(string.Format("Last retrieved action was: {0}", a2), LogLevel.Gym, ConsoleColor.Red);
                         Logger.Write(string.Format("Actions to perform were: {0}", string.Join(", ", attackActionz)), LogLevel.Gym, ConsoleColor.Red);
                         Logger.Write(string.Format("Attacker was: {0}, defender was: {1}", attacker, defender), LogLevel.Gym, ConsoleColor.Red);
-                        continue;
+                        return lastActions;
                     };
 
                     switch (attackResult.Result)
