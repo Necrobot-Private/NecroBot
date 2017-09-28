@@ -262,7 +262,6 @@ namespace PoGo.NecroBot.Window.Model
             // get applied items
             var appliedItems =
                 Session.Inventory.GetAppliedItems().Result
-                .SelectMany(aItems => aItems.Item)
                 .ToDictionary(item => item.ItemId, item => new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(item.ExpireMs));
 
             var items =

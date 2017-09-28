@@ -31,24 +31,33 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             var pokemonToEvolveTask = await session.Inventory
                 .GetPokemonToEvolve(session.LogicSettings.PokemonEvolveFilters).ConfigureAwait(false);
-            var pokemonToEvolve = pokemonToEvolveTask.Where(p => p != null).ToList();
+            var pokemonsToEvolve = pokemonToEvolveTask.Where(p => p != null).ToList();
 
             session.EventDispatcher.Send(new EvolveCountEvent
             {
-                Evolves = pokemonToEvolve.Count()
+                Evolves = pokemonsToEvolve.Count()
             });
 
-            if (pokemonToEvolve.Any())
+            if (pokemonsToEvolve.Any())
             {
                 if (session.LogicSettings.KeepPokemonsThatCanEvolve)
                 {
-                    var eggsAvailable = await session.Inventory.GetEggs().ConfigureAwait(false);
+                    TimeSpan luckyEggRemainingTime = await session.Inventory.GetLuckyEggRemainingTime().ConfigureAwait(false);
 
-                    if (session.LogicSettings.EvolveKeptPokemonsIfLuckyEggCanBeUsed && eggsAvailable.Count() > 0)
+                    if (session.LogicSettings.UseLuckyEggsWhileEvolving && luckyEggRemainingTime.TotalSeconds > 0)
+                    {
+                        Logger.Write(session.Translation.GetTranslation(TranslationString.UseLuckyEggActive, luckyEggRemainingTime.Minutes, luckyEggRemainingTime.Seconds), LogLevel.Info, ConsoleColor.DarkGreen);
+                        await Evolve(session, pokemonsToEvolve).ConfigureAwait(false);
+                        return;
+                    }
+
+                    int luckyEggsAvailable = await session.Inventory.GetItemAmountByType(ItemId.ItemLuckyEgg).ConfigureAwait(false);
+
+                    if (session.LogicSettings.EvolveKeptPokemonsIfLuckyEggCanBeUsed && luckyEggsAvailable > 0)
                     { // Decide depending on possible evolutions with egg usage
 
                         int luckyEggMin = session.LogicSettings.UseLuckyEggsMinPokemonAmount;
-                        int missingPossibleEvolutions = luckyEggMin - pokemonToEvolve.Count();
+                        int missingPossibleEvolutions = luckyEggMin - pokemonsToEvolve.Count();
 
                         if (missingPossibleEvolutions > 0)
                         {
@@ -57,7 +66,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 Message = session.Translation.GetTranslation(
                                     TranslationString.WaitingForMoreEvolutionsToEvolveWithEgg,
                                     missingPossibleEvolutions,
-                                    pokemonToEvolve.Count(),
+                                    pokemonsToEvolve.Count(),
                                     luckyEggMin)
                             });
                             return;
@@ -83,7 +92,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                             {
                                 Message = session.Translation.GetTranslation(
                                 TranslationString.WaitingForMorePokemonToEvolve,
-                                pokemonToEvolve.Count,
+                                pokemonsToEvolve.Count,
                                 missingPokemonsInStorage,
                                 totalPokemon.Count(),
                                 neededPokemonsToStartEvolve,
@@ -95,20 +104,20 @@ namespace PoGo.NecroBot.Logic.Tasks
                     }
 
                     // One of the conditions met, trigger evolve
-                    if (await ShouldUseLuckyEgg(session, pokemonToEvolve).ConfigureAwait(false))
+                    if (await ShouldUseLuckyEgg(session, pokemonsToEvolve).ConfigureAwait(false))
                     {
                         await UseLuckyEgg(session).ConfigureAwait(false);
                     }
-                    await Evolve(session, pokemonToEvolve).ConfigureAwait(false);
+                    await Evolve(session, pokemonsToEvolve).ConfigureAwait(false);
                 }
                 else if (session.LogicSettings.EvolveAllPokemonWithEnoughCandy ||
                          session.LogicSettings.EvolveAllPokemonAboveIv)
                 {
-                    if (await ShouldUseLuckyEgg(session, pokemonToEvolve).ConfigureAwait(false))
+                    if (await ShouldUseLuckyEgg(session, pokemonsToEvolve).ConfigureAwait(false))
                     {
                         await UseLuckyEgg(session).ConfigureAwait(false);
                     }
-                    await Evolve(session, pokemonToEvolve).ConfigureAwait(false);
+                    await Evolve(session, pokemonsToEvolve).ConfigureAwait(false);
                 }
             }
         }

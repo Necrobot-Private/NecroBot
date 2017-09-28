@@ -127,12 +127,13 @@ namespace PoGo.NecroBot.Logic
             return _client.Inventory.InventoryItems.Select(kvp => kvp.Value);
         }
 
-        public async Task<IEnumerable<AppliedItems>> GetAppliedItems()
+        public async Task<IEnumerable<AppliedItem>> GetAppliedItems()
         {
             var inventory = await GetCachedInventory().ConfigureAwait(false);
             return inventory
                 .Select(i => i.InventoryItemData?.AppliedItems)
-                .Where(p => p != null);
+                .Where(aItems => aItems?.Item != null)
+                .SelectMany(aItems => aItems.Item);
         }
 
         public async Task<IEnumerable<PokemonData>> GetSlashedPokemonToTransfer()
@@ -560,6 +561,22 @@ namespace PoGo.NecroBot.Logic
             return inventory
                 .Select(i => i.InventoryItemData?.PlayerStats)
                 .Where(p => p != null);
+        }
+
+        public async Task<TimeSpan> GetLuckyEggRemainingTime()
+        {
+            var appliedItems = await ownerSession.Inventory.GetAppliedItems().ConfigureAwait(false);
+            var luckyEgg = appliedItems.FirstOrDefault(i => i.ItemId == ItemId.ItemLuckyEgg);
+            if (luckyEgg != null)
+            {
+                // Could be old/cached
+                var expires = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds(luckyEgg.ExpireMs);
+                TimeSpan duration = expires - DateTime.UtcNow;
+                if (duration.TotalSeconds > 0)
+                    return duration;
+            }
+
+            return new TimeSpan(0);
         }
 
         public async Task UseLuckyEgg()
