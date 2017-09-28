@@ -294,7 +294,7 @@
     <Compile Include="Event\Gym\GymBattleStarted.cs" />
     <Compile Include="Event\Gym\GymDeployEvent.cs" />
     <Compile Include="Event\Gym\GymDetailInfoEvent.cs" />
-    <Compile Include="Event\Gym\GymErrorUnset.cs" />
+    <Compile Include="Event\Gym\GymEventMessages.cs" />
     <Compile Include="Event\Gym\GymListEvent.cs" />
     <Compile Include="Event\Gym\GymTeamJoinEvent.cs" />
     <Compile Include="Event\Gym\GymWalkToTargetEvent.cs" />
@@ -560,7 +560,6 @@
     <Compile Include="Tasks\FavoritePokemonTask.cs" />
     <Compile Include="Tasks\GetGymBadgeDetailsTask.cs" />
     <Compile Include="Tasks\GetPokeDexCount.cs" />
-    <Compile Include="Tasks\GymFeedPokemonTask.cs" />
     <Compile Include="Tasks\HumanRandomActionTask.cs" />
     <Compile Include="Tasks\HumanWalkSnipeTask.cs" />
     <Compile Include="Tasks\HumanWalkSnipeTask.FastPokemap.cs">

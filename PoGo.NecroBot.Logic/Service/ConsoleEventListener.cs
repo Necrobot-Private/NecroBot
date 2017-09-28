@@ -753,10 +753,12 @@ namespace PoGo.NecroBot.Logic.Service
             Logger.Write($"Battle started at gym: {ev.GymName}...", LogLevel.Gym, ConsoleColor.Blue);
         }
 
-        private static void HandleEvent(GymErrorUnset ev, ISession session)
+        private static void HandleEvent(GymEventMessages ev, ISession session)
         {
-            Logger.Write($"Error starting battle with gym: {ev.GymName}. Skipping...",
-                LogLevel.Error, ConsoleColor.Red);
+            string sky = null;
+            if (ev.consoleColor == ConsoleColor.Red) sky = "Skipping...";
+            Logger.Write($"{ev.Message} {sky}",
+                LogLevel.Gym, ev.consoleColor);
         }
 
         private static void HandleEvent(GymListEvent ev, ISession session)
