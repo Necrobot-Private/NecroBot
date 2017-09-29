@@ -138,7 +138,8 @@ namespace PoGo.NecroBot.CLI.Forms
 
             settings.GoogleWalkConfig.UseGoogleWalk = chkEnableGoogle.Checked;
             settings.GoogleWalkConfig.GoogleAPIKey = txtGoogleKey.Text;
-            settings.GoogleWalkConfig.UseGoogleWalk = chkAllowYourwalk.Checked;
+
+            settings.YoursWalkConfig.UseYoursWalk = chkAllowYourwalk.Checked;
 
             settings.MapzenWalkConfig.UseMapzenWalk = chkMazen.Checked;
             settings.MapzenWalkConfig.MapzenTurnByTurnApiKey = txtMapzenKey.Text;

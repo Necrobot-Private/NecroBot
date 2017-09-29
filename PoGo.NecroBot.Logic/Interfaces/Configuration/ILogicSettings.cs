@@ -41,6 +41,7 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         int ByPassSpinCount { get; }
         double AutoSnipeMaxDistance { get; }
         bool EvolveAllPokemonWithEnoughCandy { get; }
+        bool EvolvePreserveMinCandiesFromFilter { get; }
         bool KeepPokemonsThatCanEvolve { get; }
 
         bool UseTransferFilterToCatch { get; }
@@ -147,6 +148,7 @@ namespace PoGo.NecroBot.Logic.Interfaces.Configuration
         double RecycleInventoryAtUsagePercentage { get; }
         double EvolveKeptPokemonsAtStorageUsagePercentage { get; }
         int EvolveKeptPokemonIfBagHasOverThisManyPokemon { get; }
+        bool EvolveKeptPokemonsIfLuckyEggCanBeUsed { get; }
         bool UseSnipeLimit { get; }
         bool UsePokeStopLimit { get; }
         bool UseCatchLimit { get; }

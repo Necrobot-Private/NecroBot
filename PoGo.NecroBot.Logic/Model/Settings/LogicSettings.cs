@@ -103,6 +103,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public bool FastSoftBanBypass => _settings.SoftBanConfig.FastSoftBanBypass;
         public int ByPassSpinCount => _settings.SoftBanConfig.ByPassSpinCount;
         public bool EvolveAllPokemonWithEnoughCandy => _settings.PokemonConfig.EvolveAllPokemonWithEnoughCandy;
+        public bool EvolvePreserveMinCandiesFromFilter => _settings.PokemonConfig.EvolvePreserveMinCandiesFromFilter;
         public bool EvolveFavoritedOnly => _settings.PokemonConfig.EvolveFavoritedOnly;
         public string EvolveOperator => _settings.PokemonConfig.EvolveOperator;
         public double EvolveMinIV => _settings.PokemonConfig.EvolveMinIV;
@@ -164,7 +165,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public string GpxFile => _settings.GPXConfig.GpxFile;
         public bool UseGpxPathing => _settings.GPXConfig.UseGpxPathing;
         public bool UseLuckyEggsWhileEvolving => _settings.PokemonConfig.UseLuckyEggsWhileEvolving;
-        public int UseLuckyEggsMinPokemonAmount => GenRandom(_settings.PokemonConfig.UseLuckyEggsMinPokemonAmount);
+        public int UseLuckyEggsMinPokemonAmount => _settings.PokemonConfig.UseLuckyEggsMinPokemonAmount;
         public bool EvolveAllPokemonAboveIv => _settings.PokemonConfig.EvolveAllPokemonAboveIv;
         public float EvolveAboveIvValue => _settings.PokemonConfig.EvolveAboveIvValue;
         public bool RenamePokemon => _settings.PokemonConfig.RenamePokemon;
@@ -186,6 +187,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public double RecycleInventoryAtUsagePercentage => GenRandom(_settings.RecycleConfig.RecycleInventoryAtUsagePercentage);
         public double EvolveKeptPokemonsAtStorageUsagePercentage => GenRandom(_settings.PokemonConfig.EvolveKeptPokemonsAtStorageUsagePercentage);
         public int EvolveKeptPokemonIfBagHasOverThisManyPokemon => GenRandom(_settings.PokemonConfig.EvolveKeptPokemonIfBagHasOverThisManyPokemon);
+        public bool EvolveKeptPokemonsIfLuckyEggCanBeUsed => _settings.PokemonConfig.EvolveKeptPokemonsIfLuckyEggCanBeUsed;
         public Dictionary<ItemId, ItemUseFilter> ItemUseFilters => _settings.ItemUseFilters;
 
         public ICollection<KeyValuePair<ItemId, int>> ItemRecycleFilter => _settings.ItemRecycleFilter.Select(itemRecycleFilter => new KeyValuePair<ItemId, int>(itemRecycleFilter.Key, itemRecycleFilter.Value)).ToList();
