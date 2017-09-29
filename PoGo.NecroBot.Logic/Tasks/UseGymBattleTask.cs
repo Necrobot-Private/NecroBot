@@ -544,6 +544,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
             catch (NullReferenceException e)
             {
+                e.Data.Clear();
                 Logger.Write("Error Null Reference Exception", LogLevel.Gym, ConsoleColor.Red);
             }
         }
