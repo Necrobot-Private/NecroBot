@@ -165,7 +165,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public string GpxFile => _settings.GPXConfig.GpxFile;
         public bool UseGpxPathing => _settings.GPXConfig.UseGpxPathing;
         public bool UseLuckyEggsWhileEvolving => _settings.PokemonConfig.UseLuckyEggsWhileEvolving;
-        public int UseLuckyEggsMinPokemonAmount => GenRandom(_settings.PokemonConfig.UseLuckyEggsMinPokemonAmount);
+        public int UseLuckyEggsMinPokemonAmount => _settings.PokemonConfig.UseLuckyEggsMinPokemonAmount;
         public bool EvolveAllPokemonAboveIv => _settings.PokemonConfig.EvolveAllPokemonAboveIv;
         public float EvolveAboveIvValue => _settings.PokemonConfig.EvolveAboveIvValue;
         public bool RenamePokemon => _settings.PokemonConfig.RenamePokemon;
