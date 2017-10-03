@@ -216,7 +216,9 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
 
                     UpdatePositionEvent?.Invoke(session, waypoint.Latitude, waypoint.Longitude, _currentWalkingSpeed);
 
-                    await Task.Delay(timeToWalk).ConfigureAwait(false); 
+                    //Fix crach
+                    if (timeToWalk > 0)
+                    await Task.Delay(timeToWalk, cancellationToken).ConfigureAwait(false); 
                     if (functionExecutedWhileWalking != null)
                         await functionExecutedWhileWalking().ConfigureAwait(false); // look for pokemon
                 } while (LocationUtils.CalculateDistanceInMeters(currentLocation, nextStep) >= 2);
