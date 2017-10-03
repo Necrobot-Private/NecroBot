@@ -263,7 +263,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                 _defenders.Add(player);
 
             if (_defenders.Count() < 1)
-                await DeployPokemonToGym().ConfigureAwait(false);
+            {
+                await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
+                return;
+            }
 
             var badassPokemon = await CompleteAttackTeam(_defenders).ConfigureAwait(false);
             if (badassPokemon == null)
@@ -296,154 +299,163 @@ namespace PoGo.NecroBot.Logic.Tasks
                 if (pokemon.Stamina < pokemon.StaminaMax)
                     Logger.Write($"You are out of healing potions! {pokemon.PokemonId.ToString()} ({pokemon.Cp} CP) was not fully healed", LogLevel.Gym, ConsoleColor.Magenta);
             }
-            //await Task.Delay(2000).ConfigureAwait(false);
 
-            var index = 0;
-            List<BattleAction> battleActions = new List<BattleAction>();
-            ulong defenderPokemonId = _defenders.First().Id;
-            Logger.Write("Attacking Team consists of:", LogLevel.Gym);
+            await Task.Delay(2000).ConfigureAwait(false);
 
-            while (index < _defenders.Count())
+            try
             {
-                Logger.Write(string.Join(", ",
-                    _session.GymState.MyTeam.Select(s => string.Format("\n{0} ({1} HP / {2} CP)",
-                    s.Attacker.PokemonId.ToString(),
-                    s.HpState,
-                    s.Attacker.Cp))), LogLevel.Info, ConsoleColor.Yellow);
+                var index = 0;
+                List<BattleAction> battleActions = new List<BattleAction>();
+                ulong defenderPokemonId = _defenders.First().Id;
+                Logger.Write("Attacking Team consists of:", LogLevel.Gym);
 
-                GymStartSessionResponse result = await GymStartSession(pokemonDatas, defenderPokemonId).ConfigureAwait(false);
-
-                switch (result.Result)
+                while (index < _defenders.Count())
                 {
-                    case GymStartSessionResponse.Types.Result.ErrorAllPokemonFainted:
-                        _session.EventDispatcher.Send(new GymEventMessages { Message = $"{_gymInfo.Name} Result: Error All Pokemon Fainted", consoleColor = ConsoleColor.Red });
-                        await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
-                        break;
-                    case GymStartSessionResponse.Types.Result.ErrorGymBattleLockout:
-                        _session.EventDispatcher.Send(new GymEventMessages { Message = $"{_gymInfo.Name} Result: Error Gym Battle Lockout", consoleColor = ConsoleColor.Red });
-                        //await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
-                        break;
-                    case GymStartSessionResponse.Types.Result.ErrorGymEmpty:
-                        _session.EventDispatcher.Send(new GymEventMessages { Message = $"{_gymInfo.Name} Result: Error Gym Empty", consoleColor = ConsoleColor.Yellow });
-                        await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
-                        //await DeployPokemonToGym().ConfigureAwait(false);
-                        break;
-                    case GymStartSessionResponse.Types.Result.ErrorGymNeutral:
-                        _session.EventDispatcher.Send(new GymEventMessages { Message = $"{_gymInfo.Name} Result: Error Gym Neutral", consoleColor = ConsoleColor.Yellow });
-                        await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
-                        //await DeployPokemonToGym().ConfigureAwait(false);
-                        break;
-                    case GymStartSessionResponse.Types.Result.ErrorGymNotFound:
-                        _session.EventDispatcher.Send(new GymEventMessages { Message = $"{_gymInfo.Name} Result: Error Gym Not Found", consoleColor = ConsoleColor.Red });
-                        //await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
-                        break;
-                    case GymStartSessionResponse.Types.Result.ErrorGymWrongTeam:
-                        _session.EventDispatcher.Send(new GymEventMessages { Message = $"{_gymInfo.Name} Result: Error Gym Wrong Team", consoleColor = ConsoleColor.Red });
-                        //await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
-                        break;
-                    case GymStartSessionResponse.Types.Result.ErrorInvalidDefender:
-                        _session.EventDispatcher.Send(new GymEventMessages { Message = $"{_gymInfo.Name} Result: Error Invalid Defender", consoleColor = ConsoleColor.Red });
-                        //await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
-                        await DeployPokemonToGym().ConfigureAwait(false);
-                        break;
-                    case GymStartSessionResponse.Types.Result.ErrorNotInRange:
-                        _session.EventDispatcher.Send(new GymEventMessages { Message = $"{_gymInfo.Name} Result: Error Not In Range", consoleColor = ConsoleColor.Red });
-                        //await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
-                        break;
-                    case GymStartSessionResponse.Types.Result.ErrorPlayerBelowMinimumLevel:
-                        _session.EventDispatcher.Send(new GymEventMessages { Message = $"{_gymInfo.Name} Result: Error Player Below Minimum Level", consoleColor = ConsoleColor.Red });
-                        //await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
-                        break;
-                    case GymStartSessionResponse.Types.Result.ErrorPoiInaccessible:
-                        _session.EventDispatcher.Send(new GymEventMessages { Message = $"{_gymInfo.Name} Result: Error Poi Inaccessible", consoleColor = ConsoleColor.Red });
-                        //await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
-                        break;
-                    case GymStartSessionResponse.Types.Result.ErrorRaidActive:
-                        _session.EventDispatcher.Send(new GymEventMessages { Message = $"{_gymInfo.Name} Result: Error Raid Active", consoleColor = ConsoleColor.Red });
-                        //await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
-                        break;
-                    case GymStartSessionResponse.Types.Result.ErrorTooManyBattles:
-                        _session.EventDispatcher.Send(new GymEventMessages { Message = $"{_gymInfo.Name} Result: Error Too Many Battles", consoleColor = ConsoleColor.Red });
-                        //await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
-                        break;
-                    case GymStartSessionResponse.Types.Result.ErrorTooManyPlayers:
-                        _session.EventDispatcher.Send(new GymEventMessages { Message = $"{_gymInfo.Name} Result: Error Too Many Players", consoleColor = ConsoleColor.Red });
-                        //await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
-                        break;
-                    case GymStartSessionResponse.Types.Result.ErrorTrainingInvalidAttackerCount:
-                        _session.EventDispatcher.Send(new GymEventMessages { Message = $"{_gymInfo.Name} Result: Error Training Invalid Attacker Count", consoleColor = ConsoleColor.Red });
-                        //await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
-                        break;
-                    case GymStartSessionResponse.Types.Result.Success:
-                        switch (result.Battle.BattleLog.State)
-                        {
-                            case BattleState.Active:
-                                AttackStart = DateTime.Now.AddSeconds(120);
-                                Logger.Write($"Time to start Attack Mode", LogLevel.Gym, ConsoleColor.DarkYellow);
-                                var thisAttackActions = new List<BattleAction>();
-                                thisAttackActions = await AttackGym(result, index).ConfigureAwait(false);
-                                battleActions.AddRange(thisAttackActions);
-                                break;
-                            case BattleState.Defeated:
-                                Logger.Write("Defeat to try again (10 sec)");
-                                await Task.Delay(10000).ConfigureAwait(false);
-                                await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
-                                break;
-                            case BattleState.StateUnset:
-                                Logger.Write("Gym Unset to try again (10 sec)");
-                                await Task.Delay(10000).ConfigureAwait(false);
-                                await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
-                                break;
-                            case BattleState.TimedOut:
-                                Logger.Write("TimeOut to try again (10 sec)");
-                                if (_session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
-                                    await PushNotificationClient.SendNotification(_session, "Gym Battle", $"Our attack timed out...:", true).ConfigureAwait(false);
-                                await Task.Delay(10000).ConfigureAwait(false);
-                                await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
-                                break;
-                            case BattleState.Victory:
-                                var lastAction = battleActions.LastOrDefault();
-                                var exp = lastAction.BattleResults.PlayerXpAwarded;
-                                defenderPokemonId = unchecked((ulong)lastAction.BattleResults.NextDefenderPokemonId);
+                    Logger.Write(string.Join(", ",
+                        _session.GymState.MyTeam.Select(s => string.Format("\n{0} ({1} HP / {2} CP)",
+                        s.Attacker.PokemonId.ToString(),
+                        s.HpState,
+                        s.Attacker.Cp))), LogLevel.Info, ConsoleColor.Yellow);
 
-                                await Task.Delay(5000).ConfigureAwait(false);
+                    GymStartSessionResponse result = await GymStartSession(pokemonDatas, defenderPokemonId).ConfigureAwait(false);
 
-                                Logger.Write($"(Battle) XP: {exp} | Players: {_defenders.Count(),2:#0} | Next defender Id: {defenderPokemonId.ToString()}", LogLevel.Gym, ConsoleColor.Magenta);
+                    switch (result.Result)
+                    {
+                        case GymStartSessionResponse.Types.Result.ErrorAllPokemonFainted:
+                            _session.EventDispatcher.Send(new GymEventMessages { Message = $"{_gymInfo.Name} Result: Error All Pokemon Fainted", consoleColor = ConsoleColor.Red });
+                            await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
+                            break;
+                        case GymStartSessionResponse.Types.Result.ErrorGymBattleLockout:
+                            _session.EventDispatcher.Send(new GymEventMessages { Message = $"{_gymInfo.Name} Result: Error Gym Battle Lockout", consoleColor = ConsoleColor.Red });
+                            //await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
+                            break;
+                        case GymStartSessionResponse.Types.Result.ErrorGymEmpty:
+                            _session.EventDispatcher.Send(new GymEventMessages { Message = $"{_gymInfo.Name} Result: Error Gym Empty", consoleColor = ConsoleColor.Yellow });
+                            await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
+                            //await DeployPokemonToGym().ConfigureAwait(false);
+                            break;
+                        case GymStartSessionResponse.Types.Result.ErrorGymNeutral:
+                            _session.EventDispatcher.Send(new GymEventMessages { Message = $"{_gymInfo.Name} Result: Error Gym Neutral", consoleColor = ConsoleColor.Yellow });
+                            await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
+                            //await DeployPokemonToGym().ConfigureAwait(false);
+                            break;
+                        case GymStartSessionResponse.Types.Result.ErrorGymNotFound:
+                            _session.EventDispatcher.Send(new GymEventMessages { Message = $"{_gymInfo.Name} Result: Error Gym Not Found", consoleColor = ConsoleColor.Red });
+                            //await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
+                            break;
+                        case GymStartSessionResponse.Types.Result.ErrorGymWrongTeam:
+                            _session.EventDispatcher.Send(new GymEventMessages { Message = $"{_gymInfo.Name} Result: Error Gym Wrong Team", consoleColor = ConsoleColor.Red });
+                            //await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
+                            break;
+                        case GymStartSessionResponse.Types.Result.ErrorInvalidDefender:
+                            _session.EventDispatcher.Send(new GymEventMessages { Message = $"{_gymInfo.Name} Result: Error Invalid Defender", consoleColor = ConsoleColor.Red });
+                            await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
+                            //await DeployPokemonToGym().ConfigureAwait(false);
+                            break;
+                        case GymStartSessionResponse.Types.Result.ErrorNotInRange:
+                            _session.EventDispatcher.Send(new GymEventMessages { Message = $"{_gymInfo.Name} Result: Error Not In Range", consoleColor = ConsoleColor.Red });
+                            //await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
+                            break;
+                        case GymStartSessionResponse.Types.Result.ErrorPlayerBelowMinimumLevel:
+                            _session.EventDispatcher.Send(new GymEventMessages { Message = $"{_gymInfo.Name} Result: Error Player Below Minimum Level", consoleColor = ConsoleColor.Red });
+                            //await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
+                            break;
+                        case GymStartSessionResponse.Types.Result.ErrorPoiInaccessible:
+                            _session.EventDispatcher.Send(new GymEventMessages { Message = $"{_gymInfo.Name} Result: Error Poi Inaccessible", consoleColor = ConsoleColor.Red });
+                            //await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
+                            break;
+                        case GymStartSessionResponse.Types.Result.ErrorRaidActive:
+                            _session.EventDispatcher.Send(new GymEventMessages { Message = $"{_gymInfo.Name} Result: Error Raid Active", consoleColor = ConsoleColor.Red });
+                            //await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
+                            break;
+                        case GymStartSessionResponse.Types.Result.ErrorTooManyBattles:
+                            _session.EventDispatcher.Send(new GymEventMessages { Message = $"{_gymInfo.Name} Result: Error Too Many Battles", consoleColor = ConsoleColor.Red });
+                            //await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
+                            break;
+                        case GymStartSessionResponse.Types.Result.ErrorTooManyPlayers:
+                            _session.EventDispatcher.Send(new GymEventMessages { Message = $"{_gymInfo.Name} Result: Error Too Many Players", consoleColor = ConsoleColor.Red });
+                            //await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
+                            break;
+                        case GymStartSessionResponse.Types.Result.ErrorTrainingInvalidAttackerCount:
+                            _session.EventDispatcher.Send(new GymEventMessages { Message = $"{_gymInfo.Name} Result: Error Training Invalid Attacker Count", consoleColor = ConsoleColor.Red });
+                            //await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
+                            break;
+                        case GymStartSessionResponse.Types.Result.Success:
+                            switch (result.Battle.BattleLog.State)
+                            {
+                                case BattleState.Active:
+                                    AttackStart = DateTime.Now.AddSeconds(120);
+                                    Logger.Write($"Time to start Attack Mode", LogLevel.Gym, ConsoleColor.DarkYellow);
+                                    var thisAttackActions = new List<BattleAction>();
+                                    thisAttackActions = await AttackGym(result, index).ConfigureAwait(false);
+                                    battleActions.AddRange(thisAttackActions);
+                                    break;
+                                case BattleState.Defeated:
+                                    Logger.Write("Defeat to try again (10 sec)");
+                                    await Task.Delay(10000).ConfigureAwait(false);
+                                    await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
+                                    break;
+                                case BattleState.StateUnset:
+                                    Logger.Write("Gym Unset to try again (10 sec)");
+                                    await Task.Delay(10000).ConfigureAwait(false);
+                                    await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
+                                    break;
+                                case BattleState.TimedOut:
+                                    Logger.Write("TimeOut to try again (10 sec)");
+                                    if (_session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
+                                        await PushNotificationClient.SendNotification(_session, "Gym Battle", $"Our attack timed out...:", true).ConfigureAwait(false);
+                                    await Task.Delay(10000).ConfigureAwait(false);
+                                    await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
+                                    break;
+                                case BattleState.Victory:
+                                    var lastAction = battleActions.LastOrDefault();
+                                    var exp = lastAction.BattleResults.PlayerXpAwarded;
+                                    defenderPokemonId = unchecked((ulong)lastAction.BattleResults.NextDefenderPokemonId);
 
-                                if (_session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
-                                    await PushNotificationClient.SendNotification(_session, $"Gym Battle",
-                                                                                           $"We were victorious!\n" +
-                                                                                           $"XP: {exp}" +
-                                                                                           $"Players: {_defenders.Count(),2:#0}", true).ConfigureAwait(false); // +
+                                    await Task.Delay(5000).ConfigureAwait(false);
 
-                                await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
-                                break;
-                            default:
-                                continue;
-                        }
-                        _session.EventDispatcher.Send(new GymEventMessages { Message = $"{_gymInfo.Name} Result: Success", consoleColor = ConsoleColor.Green });
-                        //await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
-                        break;
-                    case GymStartSessionResponse.Types.Result.Unset:
-                        _session.EventDispatcher.Send(new GymEventMessages { Message = $"{_gymInfo.Name} Result: Unset", consoleColor = ConsoleColor.Red });
-                        //await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
-                        break;
-                    default:
-                        _session.EventDispatcher.Send(new GymEventMessages { Message = $"{_gymInfo.Name} Result: Default", consoleColor = ConsoleColor.Red });
-                        continue;
+                                    Logger.Write($"(Battle) XP: {exp} | Players: {_defenders.Count(),2:#0} | Next defender Id: {defenderPokemonId.ToString()}", LogLevel.Gym, ConsoleColor.Magenta);
+
+                                    if (_session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
+                                        await PushNotificationClient.SendNotification(_session, $"Gym Battle",
+                                                                                               $"We were victorious!\n" +
+                                                                                               $"XP: {exp}" +
+                                                                                               $"Players: {_defenders.Count(),2:#0}", true).ConfigureAwait(false); // +
+
+                                    await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
+                                    break;
+                                default:
+                                    continue;
+                            }
+                            _session.EventDispatcher.Send(new GymEventMessages { Message = $"{_gymInfo.Name} Result: Success", consoleColor = ConsoleColor.Green });
+                            //await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
+                            break;
+                        case GymStartSessionResponse.Types.Result.Unset:
+                            _session.EventDispatcher.Send(new GymEventMessages { Message = $"{_gymInfo.Name} Result: Unset", consoleColor = ConsoleColor.Red });
+                            //await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails).ConfigureAwait(false);
+                            break;
+                        default:
+                            _session.EventDispatcher.Send(new GymEventMessages { Message = $"{_gymInfo.Name} Result: Default", consoleColor = ConsoleColor.Red });
+                            continue;
+                    }
+
+                    var rewarded = battleActions.Select(x => x.BattleResults?.PlayerXpAwarded).Where(x => x != null);
+                    var faintedPKM = battleActions.Where(x => x != null && x.Type == BattleActionType.ActionFaint).Select(x => x.ActivePokemonId).Distinct();
+                    var livePokemons = pokemonDatas.Where(x => !faintedPKM.Any(y => y == x.Id));
+                    var faintedPokemons = pokemonDatas.Where(x => faintedPKM.Any(y => y == x.Id));
+                    pokemonDatas = livePokemons.Concat(faintedPokemons).ToArray();
+                    index++;
                 }
 
-                var rewarded = battleActions.Select(x => x.BattleResults?.PlayerXpAwarded).Where(x => x != null);
-                var faintedPKM = battleActions.Where(x => x != null && x.Type == BattleActionType.ActionFaint).Select(x => x.ActivePokemonId).Distinct();
-                var livePokemons = pokemonDatas.Where(x => !faintedPKM.Any(y => y == x.Id));
-                var faintedPokemons = pokemonDatas.Where(x => faintedPKM.Any(y => y == x.Id));
-                pokemonDatas = livePokemons.Concat(faintedPokemons).ToArray();
-                index++;
+                //Logger.Write(string.Join(Environment.NewLine, battleActions.OrderBy(o => o.ActionStartMs).Select(s => s).Distinct()), LogLevel.Gym, ConsoleColor.White);
+                Logger.Write("Great try to deploy.", LogLevel.Gym, ConsoleColor.Green);
+                await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails);
             }
-
-            //Logger.Write(string.Join(Environment.NewLine, battleActions.OrderBy(o => o.ActionStartMs).Select(s => s).Distinct()), LogLevel.Gym, ConsoleColor.White);
-            Logger.Write("Try to deploy pokemon", LogLevel.Gym);
-            await DeployPokemonToGym().ConfigureAwait(false);
+            catch
+            {
+                Logger.Write("You all pokemons here dead.. Try again...", LogLevel.Gym, ConsoleColor.Red);
+                await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails);
+            }
         }
 
         private static async Task DeployPokemonToGym()
@@ -675,7 +687,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
 
             if (newAttacker != null)
-                Logger.Write(string.Format("New atacker to switch will be {0} {1} CP {2}", newAttacker.PokemonId.ToString(), newAttacker.Cp, newAttacker.Id), LogLevel.Gym, ConsoleColor.Green);
+                Logger.Write(string.Format("New atacker to switch will be {0} CP {1}", newAttacker.PokemonId.ToString(), newAttacker.Cp), LogLevel.Gym, ConsoleColor.Green);
 
             return newAttacker;
         }
@@ -1377,6 +1389,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static async Task<GymStartSessionResponse> GymStartSession(IEnumerable<PokemonData> attackers, ulong defenderId)
         {
+            GymStartSessionResponse result = null;
             try
             {
                 IEnumerable<PokemonData> currentPokemons = attackers;
@@ -1384,7 +1397,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 var attackerPokemons = pokemonDatas.Select(pokemon => pokemon.Id);
                 var attackingPokemonIds = attackerPokemons as ulong[] ?? attackerPokemons.ToArray();
 
-                GymStartSessionResponse result = await _session.Client.Fort.GymStartSession(_gym.Id, defenderId, attackingPokemonIds).ConfigureAwait(false);
+                result = await _session.Client.Fort.GymStartSession(_gym.Id, defenderId, attackingPokemonIds).ConfigureAwait(false);
                 await Task.Delay(2000).ConfigureAwait(false);
 
                 if (result.Result == GymStartSessionResponse.Types.Result.Success)
@@ -1416,15 +1429,18 @@ namespace PoGo.NecroBot.Logic.Tasks
             catch (APIBadRequestException e)
             {
                 e.Data.Clear();
-                Logger.Write("Gym Details: API Bad Request Exception", LogLevel.Gym, ConsoleColor.Red);
-                return null;
+                Logger.Write("Gym Details: API Bad Request Exception. Try again...", LogLevel.Gym, ConsoleColor.Red);
+                await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails);
+                //return null;
             }
             catch (NullReferenceException e)
             {
                 e.Data.Clear();
-                Logger.Write("Gym Details: Null Reference Exception", LogLevel.Gym, ConsoleColor.Red);
-                return null;
+                Logger.Write("Gym Details: Null Reference Exception. Try again...", LogLevel.Gym, ConsoleColor.Red);
+                await Execute(_session, _session.CancellationTokenSource.Token, _gym, _gymInfo, _gymDetails);
+                ///return null;
             }
+            return result;
         }
 
         private static async Task EnsureJoinTeam(PlayerData player)
