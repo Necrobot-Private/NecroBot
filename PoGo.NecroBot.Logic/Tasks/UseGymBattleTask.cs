@@ -441,7 +441,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                 index++;
             }
 
-            Logger.Write(string.Join(Environment.NewLine, battleActions.OrderBy(o => o.ActionStartMs).Select(s => s).Distinct()), LogLevel.Gym, ConsoleColor.White);
+            //Logger.Write(string.Join(Environment.NewLine, battleActions.OrderBy(o => o.ActionStartMs).Select(s => s).Distinct()), LogLevel.Gym, ConsoleColor.White);
+            Logger.Write("Try to deploy pokemon", LogLevel.Gym);
+            await DeployPokemonToGym().ConfigureAwait(false);
         }
 
         private static async Task DeployPokemonToGym()
