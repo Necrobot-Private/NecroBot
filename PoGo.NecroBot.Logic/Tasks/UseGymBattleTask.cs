@@ -275,7 +275,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             int currentDefender = 0;
             var _defenders = GymDetails.GymStatusAndDefenders.GymDefender.Select(x => x.MotivatedPokemon.Pokemon).ToList();
 
-            if (_defenders.Count() < 1)
+            if (_defenders.Count() < 1 || Gym.OwnedByTeam == Session.Client.Player.PlayerData.Team)
             {
                 return;
             }
@@ -338,14 +338,14 @@ namespace PoGo.NecroBot.Logic.Tasks
                         battleActions.AddRange(thisAttackActions);
                         break;
                     case BattleState.Defeated:
-                        Logger.Write("Defeat to try again (10 sec)");
-                        await Task.Delay(10000).ConfigureAwait(false);
-                        await Execute(Session, Session.CancellationTokenSource.Token, Gym, GymInfo, GymDetails).ConfigureAwait(false);
+                        //Logger.Write("Defeat to try again (10 sec)");
+                        //await Task.Delay(10000).ConfigureAwait(false);
+                        //await Execute(Session, Session.CancellationTokenSource.Token, Gym, GymInfo, GymDetails).ConfigureAwait(false);
                         break;
                     case BattleState.StateUnset:
-                        Logger.Write("Gym Unset to try again (10 sec)");
-                        await Task.Delay(10000).ConfigureAwait(false);
-                        await Execute(Session, Session.CancellationTokenSource.Token, Gym, GymInfo, GymDetails).ConfigureAwait(false);
+                        //Logger.Write("Gym Unset to try again (10 sec)");
+                        //await Task.Delay(10000).ConfigureAwait(false);
+                        //await Execute(Session, Session.CancellationTokenSource.Token, Gym, GymInfo, GymDetails).ConfigureAwait(false);
                         break;
                     case BattleState.TimedOut:
                         Logger.Write("TimeOut to try again (10 sec)");
@@ -1349,7 +1349,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         // Call to DeployPokemon
                         Logger.Write("Try to deploy", LogLevel.Gym, ConsoleColor.Blue);
                         await DeployPokemonToGym().ConfigureAwait(false);
-                        return null;
+                        break;
                     case GymStartSessionResponse.Types.Result.ErrorGymWrongTeam:
                         Logger.Write("Failed with error ERROR_GYM_WRONG_TEAM", LogLevel.Gym, ConsoleColor.Red);
                         break;
@@ -1357,7 +1357,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         // Call to DeployPokemon
                         Logger.Write("Try to deploy", LogLevel.Gym, ConsoleColor.Blue);
                         await DeployPokemonToGym().ConfigureAwait(false);
-                        return null;
+                        break;
                     case GymStartSessionResponse.Types.Result.ErrorInvalidDefender:
                         Logger.Write("Failed with error ERROR_INVALID_DEFENDER", LogLevel.Gym, ConsoleColor.Red);
                         break;

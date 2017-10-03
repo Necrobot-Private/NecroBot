@@ -130,7 +130,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
                     points.Remove(points.First());
             }
 
-            Points = new List<GeoCoordinate>(points);
+            Points = points;
 
             var walkedPointsList = new List<GeoCoordinate>();
             foreach (var nextStep in points)
@@ -216,10 +216,6 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
 
                     UpdatePositionEvent?.Invoke(session, waypoint.Latitude, waypoint.Longitude, _currentWalkingSpeed);
 
-                    //Fix crach
-                    if (timeToWalk > 0)
-                        timeToWalk = 0;
-
                     await Task.Delay(timeToWalk).ConfigureAwait(false);
                     if (functionExecutedWhileWalking != null)
                         await functionExecutedWhileWalking().ConfigureAwait(false); // look for pokemon
@@ -238,8 +234,8 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
         {
             var randFactor = 0.3d;
             var initialStepLengthMm = initialStepLength * 1000;
-            var randomMin = (int) (initialStepLengthMm * (1 - randFactor));
-            var randomMax = (int) (initialStepLengthMm * (1 + randFactor));
+            var randomMin = (int)(initialStepLengthMm * (1 - randFactor));
+            var randomMax = (int)(initialStepLengthMm * (1 + randFactor));
             var randStep = _randWalking.Next(randomMin, randomMax);
             return randStep / 1000d;
         }
