@@ -152,20 +152,19 @@ namespace PoGo.NecroBot.Logic
             if (logicSettings.DisableHumanWalking)
                 WalkStrategyQueue.Add(new FlyStrategy(_client));
 
-            else if (logicSettings.UseGpxPathing)
+            if (logicSettings.UseGpxPathing)
                 WalkStrategyQueue.Add(new HumanPathWalkingStrategy(_client));
 
-            else if (_GoogleWalk)
+            if (_GoogleWalk)
                 WalkStrategyQueue.Add(new GoogleStrategy(_client));
 
-            else if (_MapZenWalk)
+            if (_MapZenWalk)
                 WalkStrategyQueue.Add(new MapzenNavigationStrategy(_client));
 
-            else if (_YoursWalk)
+            if (_YoursWalk)
                 WalkStrategyQueue.Add(new YoursNavigationStrategy(_client));
 
             // This is the NecroBot Walk default
-            else
             WalkStrategyQueue.Add(new HumanStrategy(_client));
         }
 
