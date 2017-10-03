@@ -154,7 +154,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
                     currentLocation; //store the current location for comparison and correction purposes
                 var requestSendDateTime = DateTime.Now;
                 await LocationUtils.UpdatePlayerLocationWithAltitude(session, waypoint,
-                        (float) speedInMetersPerSecond).ConfigureAwait(false);
+                        (float)speedInMetersPerSecond).ConfigureAwait(false);
 
                 var realDistanceToTarget = LocationUtils.CalculateDistanceInMeters(currentLocation, targetLocation);
                 if (realDistanceToTarget < 2)
@@ -212,13 +212,15 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
                     //store the current location for comparison and correction purposes
                     previousLocation = currentLocation;
                     requestSendDateTime = DateTime.Now;
-                    await LocationUtils.UpdatePlayerLocationWithAltitude(session, waypoint, (float) speedInMetersPerSecond).ConfigureAwait(false);
+                    await LocationUtils.UpdatePlayerLocationWithAltitude(session, waypoint, (float)speedInMetersPerSecond).ConfigureAwait(false);
 
                     UpdatePositionEvent?.Invoke(session, waypoint.Latitude, waypoint.Longitude, _currentWalkingSpeed);
 
                     //Fix crach
                     if (timeToWalk > 0)
-                    await Task.Delay(timeToWalk, cancellationToken).ConfigureAwait(false); 
+                        timeToWalk = 0;
+
+                    await Task.Delay(timeToWalk).ConfigureAwait(false);
                     if (functionExecutedWhileWalking != null)
                         await functionExecutedWhileWalking().ConfigureAwait(false); // look for pokemon
                 } while (LocationUtils.CalculateDistanceInMeters(currentLocation, nextStep) >= 2);
@@ -226,7 +228,6 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
                 UpdatePositionEvent?.Invoke(session, nextStep.Latitude, nextStep.Longitude, _currentWalkingSpeed);
             }
         }
-
 
         /// <summary>
         /// Basic step length is given but we want to randomize it a bit to avoid usage of steps of the same length

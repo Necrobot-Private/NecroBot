@@ -1349,7 +1349,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         // Call to DeployPokemon
                         Logger.Write("Try to deploy", LogLevel.Gym, ConsoleColor.Blue);
                         await DeployPokemonToGym().ConfigureAwait(false);
-                        break;
+                        return null;
                     case GymStartSessionResponse.Types.Result.ErrorGymWrongTeam:
                         Logger.Write("Failed with error ERROR_GYM_WRONG_TEAM", LogLevel.Gym, ConsoleColor.Red);
                         break;
@@ -1357,7 +1357,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         // Call to DeployPokemon
                         Logger.Write("Try to deploy", LogLevel.Gym, ConsoleColor.Blue);
                         await DeployPokemonToGym().ConfigureAwait(false);
-                        break;
+                        return null;
                     case GymStartSessionResponse.Types.Result.ErrorInvalidDefender:
                         Logger.Write("Failed with error ERROR_INVALID_DEFENDER", LogLevel.Gym, ConsoleColor.Red);
                         break;
@@ -1394,7 +1394,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                 Logger.Write("Start Gym Failed (" + numTries + "): " + result.Result, LogLevel.Gym, ConsoleColor.Red);
                 numTries--;
             } while (numTries > 0 && result != null);
-
             return result;
         }
 
