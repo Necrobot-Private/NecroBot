@@ -20,7 +20,6 @@ using System.Threading.Tasks;
 namespace PoGo.NecroBot.Logic
 {
     public delegate void UpdatePositionDelegate(ISession session, double lat, double lng, double speed);
-    public delegate void GetRouteDelegate(List<GeoCoordinate> points);
 
     public class Navigation
     {
@@ -131,13 +130,20 @@ namespace PoGo.NecroBot.Logic
                     }
                     else
                     {
-                        Logging.Logger.Write($"No AutoWalkAI strategy enabled, using 'NecroBot Walk'", Logging.LogLevel.Info, ConsoleColor.DarkYellow);
+                        Logging.Logger.Write($"No Base walk strategy enabled, using 'NecroBot Walk'", Logging.LogLevel.Info, ConsoleColor.DarkYellow);
                     }
                 }
                 else
                 {
                     Logging.Logger.Write($"Distance to travel is < {_AutoWalkDist}m, using 'NecroBot Walk'", Logging.LogLevel.Info, ConsoleColor.DarkYellow);
                 }
+            }
+            else
+            {
+                //No AutoWalkAI strategy enabled, using 'NecroBot Config defaults'
+                _GoogleWalk = logicSettings.UseGoogleWalk;
+                _MapZenWalk = logicSettings.UseMapzenWalk;
+                _YoursWalk = logicSettings.UseYoursWalk;
             }
 
             WalkStrategyQueue = new List<IWalkStrategy>();
@@ -146,19 +152,20 @@ namespace PoGo.NecroBot.Logic
             if (logicSettings.DisableHumanWalking)
                 WalkStrategyQueue.Add(new FlyStrategy(_client));
 
-            if (logicSettings.UseGpxPathing)
+            else if (logicSettings.UseGpxPathing)
                 WalkStrategyQueue.Add(new HumanPathWalkingStrategy(_client));
 
-            if (_GoogleWalk)
+            else if (_GoogleWalk)
                 WalkStrategyQueue.Add(new GoogleStrategy(_client));
 
-            if (_MapZenWalk)
+            else if (_MapZenWalk)
                 WalkStrategyQueue.Add(new MapzenNavigationStrategy(_client));
 
-            if (_YoursWalk)
+            else if (_YoursWalk)
                 WalkStrategyQueue.Add(new YoursNavigationStrategy(_client));
 
             // This is the NecroBot Walk default
+            else
             WalkStrategyQueue.Add(new HumanStrategy(_client));
         }
 

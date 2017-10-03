@@ -24,14 +24,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
         protected readonly Random _randWalking = new Random();
 
         public event UpdatePositionDelegate UpdatePositionEvent;
-        public event GetRouteDelegate GetRouteEvent;
         public virtual List<GeoCoordinate> Points { get; set; }
-
-        protected virtual void OnGetRouteEvent(List<GeoCoordinate> points)
-        {
-            GetRouteEvent?.Invoke(points);
-            Points = points;
-        }
 
         public abstract Task Walk(IGeoLocation targetLocation, Func<Task> functionExecutedWhileWalking, ISession session, CancellationToken cancellationToken, double walkSpeed = 0.0);
 
@@ -137,7 +130,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
                     points.Remove(points.First());
             }
 
-            OnGetRouteEvent(points);
+            Points = new List<GeoCoordinate>(points);
 
             var walkedPointsList = new List<GeoCoordinate>();
             foreach (var nextStep in points)

@@ -136,11 +136,15 @@ namespace PoGo.NecroBot.Logic.State
                 }
                 catch (APIBadRequestException)
                 {
-                    session.EventDispatcher.Send(new ErrorEvent() {Message = "Unexpected error happen, bot will re-login"});
+                    session.EventDispatcher.Send(new ErrorEvent() {Message = "An unexpected error has occured. Logging in again... (Bad API Request)" });
 
-                    if (manager.AllowMultipleBot())
+                    /* changed state if bad request
+                     * 
+                     * if (manager.AllowMultipleBot())
                         ReInitializeSession(session, globalSettings);
-                    state = new LoginState();
+                    state = new LoginState();*/
+                    await Delay(1000).ConfigureAwait(false);
+                    state = _initialState;
                 }
                 catch (AccountNotVerifiedException)
                 {
