@@ -737,15 +737,11 @@ namespace PoGo.NecroBot.Logic.Service
         //TODO - move to string translation later.
         private static void HandleEvent(GymDeployEvent ev, ISession session)
         {
-            var Info = new GymDetailInfoEvent();
-            var GymDeployed = new GymDeployResponse();
-            var Deployed = GymDeployed.GymStatusAndDefenders.GymDefender.ToList();
-
-            Logger.Write($"Great!!! Your {ev.PokemonId.ToString()} is now defending {ev.Name} GYM. | Free Spots: {6 - Deployed.Count}",
+            Logger.Write($"Great!!! Your {ev.PokemonId.ToString()} is now defending {ev.GymGetInfo.Name} GYM. | Free Spots: {6 - ev.GymGetInfo.GymStatusAndDefenders.GymDefender.Count()}",
                 LogLevel.Gym, ConsoleColor.Green);
 
             if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification)
-                PushNotificationClient.SendNotification(session, $"Gym Post", $"Great!!! Your {ev.PokemonId.ToString()} is now defending {ev.Name} GYM.\nFree Spots: {6 - Deployed.Count}", true).ConfigureAwait(false);
+                PushNotificationClient.SendNotification(session, $"Gym Post", $"Great!!! Your {ev.PokemonId.ToString()} is now defending {ev.GymGetInfo.Name} GYM.\nFree Spots: {6 - ev.GymGetInfo.GymStatusAndDefenders.GymDefender.Count()}", true).ConfigureAwait(false);
         }
 
         private static void HandleEvent(GymBattleStarted ev, ISession session)

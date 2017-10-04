@@ -312,21 +312,24 @@ namespace PoGo.NecroBot.Logic.Tasks
                     Logger.Write($"You are out of healing potions! {pokemon.PokemonId.ToString()} ({pokemon.Cp} CP) was not fully healed", LogLevel.Gym, ConsoleColor.Magenta);
             }
 
-            await Task.Delay(2000).ConfigureAwait(false);
+            //await Task.Delay(2000).ConfigureAwait(false);
 
             List<BattleAction> battleActions = new List<BattleAction>();
             Logger.Write("Attacking Team consists of:", LogLevel.Gym);
 
             while (currentDefender < _defenders.Count())
             {
+                var defender = GymDetails.GymStatusAndDefenders.GymDefender[currentDefender].MotivatedPokemon.Pokemon.Id;
+                GymStartSessionResponse result = await GymStartSession(pokemonDatas, defender).ConfigureAwait(false);
+
+                if (result.Result != GymStartSessionResponse.Types.Result.Success)
+                    return;
+
                 Logger.Write(string.Join(", ",
                     Session.GymState.MyTeam.Select(s => string.Format("\n{0} ({1} HP / {2} CP)",
                     s.Attacker.PokemonId.ToString(),
                     s.HpState,
                     s.Attacker.Cp))), LogLevel.Info, ConsoleColor.Yellow);
-
-                var defender = GymDetails.GymStatusAndDefenders.GymDefender[currentDefender].MotivatedPokemon.Pokemon.Id;
-                GymStartSessionResponse result = await GymStartSession(pokemonDatas, defender).ConfigureAwait(false);
 
                 switch (result.Battle.BattleLog.State)
                 {
@@ -380,7 +383,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 var faintedPokemons = pokemonDatas.Where(x => faintedPKM.Any(y => y == x.Id));
                 pokemonDatas = livePokemons.Concat(faintedPokemons).ToArray();
             }
-
+            
             //Logger.Write(string.Join(Environment.NewLine, battleActions.OrderBy(o => o.ActionStartMs).Select(s => s).Distinct()), LogLevel.Gym, ConsoleColor.White);
         }
 
@@ -462,7 +465,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                     Session.EventDispatcher.Send(new GymDeployEvent()
                                     {
                                         PokemonId = pokemon.PokemonId,
-                                        Name = GymDetails.Name
+                                        GymGetInfo = GymDetails
                                     });
 
                                     Session.GymState.CapturedGymId = Gym.Id;
@@ -1333,7 +1336,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 catch (Exception ex)
                 {
                     Logger.Write("Exception [GymStartSession]:" + ex.Message);
-                    return null;
+                    return result;
                 }
                 switch (result.Result)
                 {
@@ -1349,7 +1352,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         // Call to DeployPokemon
                         Logger.Write("Try to deploy", LogLevel.Gym, ConsoleColor.Blue);
                         await DeployPokemonToGym().ConfigureAwait(false);
-                        break;
+                        return result;//break;
                     case GymStartSessionResponse.Types.Result.ErrorGymWrongTeam:
                         Logger.Write("Failed with error ERROR_GYM_WRONG_TEAM", LogLevel.Gym, ConsoleColor.Red);
                         break;
@@ -1357,10 +1360,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                         // Call to DeployPokemon
                         Logger.Write("Try to deploy", LogLevel.Gym, ConsoleColor.Blue);
                         await DeployPokemonToGym().ConfigureAwait(false);
-                        break;
+                        return result;//break;
                     case GymStartSessionResponse.Types.Result.ErrorInvalidDefender:
                         Logger.Write("Failed with error ERROR_INVALID_DEFENDER", LogLevel.Gym, ConsoleColor.Red);
-                        break;
+                        return result;//break;
                     case GymStartSessionResponse.Types.Result.ErrorTrainingInvalidAttackerCount:
                         Logger.Write("Failed with error ERROR_TRAINING_INVALID_ATTACKER_COUNT", LogLevel.Gym, ConsoleColor.Red);
                         break;

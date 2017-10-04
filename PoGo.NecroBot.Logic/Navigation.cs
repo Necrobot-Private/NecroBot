@@ -32,7 +32,7 @@ namespace PoGo.NecroBot.Logic
 
         private bool _GoogleWalk, _MapZenWalk, _YoursWalk, _AutoWalkAI;
         private double distance;
-        private int speedChangeFactor = 1;
+        //private int speedChangeFactor = 1;
         private int _AutoWalkDist;
 
         public Navigation(Client client, ILogicSettings logicSettings)
@@ -45,6 +45,9 @@ namespace PoGo.NecroBot.Logic
 
         public double VariantRandom(ISession session, double currentSpeed)
         {
+            /*
+             * this changes as bug into BaseWalkStrategy
+             * 
             double variantSpeed = session.LogicSettings.WalkingSpeedVariant;
             if (variantSpeed == 0.0)
                 return currentSpeed;
@@ -80,6 +83,51 @@ namespace PoGo.NecroBot.Logic
                 });
             }
             return newSpeed;
+            */
+            if (WalkingRandom.Next(1, 10) > 5)
+            {
+                if (WalkingRandom.Next(1, 10) > 5)
+                {
+                    var randomicSpeed = currentSpeed;
+                    var max = session.LogicSettings.WalkingSpeedInKilometerPerHour +
+                              session.LogicSettings.WalkingSpeedVariant;
+                    randomicSpeed += WalkingRandom.NextDouble() * (0.02 - 0.001) + 0.001;
+
+                    if (randomicSpeed > max)
+                        randomicSpeed = max;
+
+                    if (Math.Round(randomicSpeed, 2) != Math.Round(currentSpeed, 2))
+                    {
+                        session.EventDispatcher.Send(new HumanWalkingEvent
+                        {
+                            OldWalkingSpeed = currentSpeed,
+                            CurrentWalkingSpeed = randomicSpeed
+                        });
+                    }
+                    return randomicSpeed;
+                }
+                else
+                {
+                    var randomicSpeed = currentSpeed;
+                    var min = session.LogicSettings.WalkingSpeedInKilometerPerHour -
+                              session.LogicSettings.WalkingSpeedVariant;
+                    randomicSpeed -= WalkingRandom.NextDouble() * (0.02 - 0.001) + 0.001;
+
+                    if (randomicSpeed < min)
+                        randomicSpeed = min;
+
+                    if (Math.Round(randomicSpeed, 2) != Math.Round(currentSpeed, 2))
+                    {
+                        session.EventDispatcher.Send(new HumanWalkingEvent
+                        {
+                            OldWalkingSpeed = currentSpeed,
+                            CurrentWalkingSpeed = randomicSpeed
+                        });
+                    }
+                    return randomicSpeed;
+                }
+            }
+            return currentSpeed;
         }
 
         public async Task Move(IGeoLocation targetLocation,
