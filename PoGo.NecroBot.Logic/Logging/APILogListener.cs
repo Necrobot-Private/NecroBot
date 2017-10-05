@@ -10,12 +10,17 @@ namespace PoGo.NecroBot.Logic.Logging
     public class APILogListener : PokemonGo.RocketAPI.ILogger
     {
         DateTime lastVerboseLog = DateTime.Now;
+        public void InboxStatusUpdate(string message, ConsoleColor color = ConsoleColor.White)
+        {
+            Logger.Write(message, LogLevel.Service, color);
+        }
+
         public void HashStatusUpdate(HashInfo info)
         {
             DateTime expired = Convert.ToDateTime(info.Expired).ToLocalTime();
             TimeSpan expiredTime = expired - DateTime.Now;
             ISession session = TinyIoCContainer.Current.Resolve<ISession>();
-            if (session.Settings.DisplayVerboseLog && lastVerboseLog< DateTime.Now.AddSeconds(-60))
+            if (session.Settings.DisplayVerboseLog && lastVerboseLog < DateTime.Now.AddSeconds(-60))
             {
                 lastVerboseLog = DateTime.Now;
                 Logger.Write($"(HASH SERVER) Key[{info.MaskedAPIKey}] - Last Minute: {info.Last60MinAPICalles} RPM, AVG: {info.Last60MinAPIAvgTime:0.00} MS, Fastest: {info.Fastest}, Slowest: {info.Slowest}, Available: {info.HealthyRate:0.00%}, Expires: {expired.ToString("MM/dd/yyyy")} @ {expired.ToString("HH:mm:ss tt")} ({expiredTime.Days} Days {expiredTime.Hours} Hours {expiredTime.Minutes} Minutes)", LogLevel.Info, ConsoleColor.White);
