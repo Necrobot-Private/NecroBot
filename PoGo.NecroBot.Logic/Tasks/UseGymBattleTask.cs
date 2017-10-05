@@ -1051,8 +1051,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                             int currentDefenderEnergy = attackResult.BattleUpdate.ActiveDefender.CurrentEnergy;
                             PokemonData attacker = attackResult.BattleUpdate.ActiveAttacker?.PokemonData;
                             PokemonData defender = attackResult.BattleUpdate.ActiveDefender?.PokemonData;
-                            ActiveAttacker = attacker;
-                            ActiveDefender = defender;
 
                             if (!Session.LogicSettings.GymConfig.UsePokemonToAttackOnlyByCp) //we should manually switch pokemon to best one
                                 Session.GymState.MyTeam.Where(w => w.Attacker.Id == attacker.Id).FirstOrDefault().HpState = 0;
@@ -1060,7 +1058,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                             if (ActiveAttacker.Id != attacker.Id)
                             {
                                 var newAttacker = GetBestInBattle(defender);
-                                if (Session.GymState.SwithAttacker != null)
+                                if (Session.GymState.SwithAttacker == null)
                                 {
                                     Session.GymState.SwithAttacker = new SwitchPokemonData(attacker.Id, newAttacker.Id);
                                     Logger.Write(string.Format("Set our new attacker {0} ({1} CP)",
@@ -1079,6 +1077,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                             }
                             else
                                 asSwitshed = false;
+
+                            ActiveAttacker = attacker;
+                            ActiveDefender = defender;
 
                             if (CurrentAttackerEnergy < 1)
                             {
