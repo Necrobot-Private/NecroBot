@@ -990,6 +990,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                                                                        $"We are attacking: {startResponse.Battle.Defender.ActivePokemon.PokemonData.PokemonId.ToString()} ({startResponse.Battle.Defender.ActivePokemon.PokemonData.Cp} CP)\n" +
                                                                        $"Lvl: {startResponse.Battle.Defender.ActivePokemon.PokemonData.Level():0.0}", true).ConfigureAwait(false);
 
+            bool asSwitshed = false;
+
             while (true)
             {
                 //exit battle if gyms is disabled into config
@@ -1005,7 +1007,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 Logger.Write("Start making attack", LogLevel.Gym, ConsoleColor.Green);
 
                 Logger.Write(string.Format("Going to make attack : {0}",
-                    string.Join(", ", attackActionz.Select(s => string.Format("{0} -> {1}", s.Type, s.DurationMs)))), LogLevel.Gym, ConsoleColor.Blue);
+                    string.Join(", ", attackActionz.Select(s => string.Format("{0} -> {1}", s.Type, s.DurationMs)))), LogLevel.Gym, ConsoleColor.Yellow);
 
                 BattleAction a2 = (last == null || last.Type == BattleActionType.ActionVictory || last.Type == BattleActionType.ActionDefeat ? EmptyAction : last);
 
@@ -1049,7 +1051,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                             int currentDefenderEnergy = attackResult.BattleUpdate.ActiveDefender.CurrentEnergy;
                             PokemonData attacker = attackResult.BattleUpdate.ActiveAttacker?.PokemonData;
                             PokemonData defender = attackResult.BattleUpdate.ActiveDefender?.PokemonData;
-                            ActiveDefender = attacker;
+                            ActiveAttacker = attacker;
                             ActiveDefender = defender;
 
                             if (!Session.LogicSettings.GymConfig.UsePokemonToAttackOnlyByCp) //we should manually switch pokemon to best one
@@ -1058,17 +1060,29 @@ namespace PoGo.NecroBot.Logic.Tasks
                             if (ActiveAttacker.Id != attacker.Id)
                             {
                                 var newAttacker = GetBestInBattle(defender);
-                                if (newAttacker != null && newAttacker.Id != attacker.Id)
+                                if (Session.GymState.SwithAttacker != null)
+                                {
+                                    Session.GymState.SwithAttacker = new SwitchPokemonData(attacker.Id, newAttacker.Id);
+                                    Logger.Write(string.Format("Set our new attacker {0} ({1} CP)",
+                                        newAttacker.PokemonId.ToString(), newAttacker.Cp), LogLevel.Gym, ConsoleColor.Magenta);
+                                    asSwitshed = true;
+                                }
+                                else if (!asSwitshed && newAttacker != null && newAttacker.Id != attacker.Id)
                                 {
                                     Session.GymState.SwithAttacker = new SwitchPokemonData(attacker.Id, newAttacker.Id);
                                     Logger.Write(string.Format("Our Pokemon has fainted in battle, our new attacker is: {0} ({1} CP)",
                                         attacker.PokemonId.ToString(), attacker.Cp), LogLevel.Gym, ConsoleColor.Red);
+                                    asSwitshed = true;
                                 }
+                                else
+                                    asSwitshed = false;
                             }
+                            else
+                                asSwitshed = false;
 
                             if (CurrentAttackerEnergy < 1)
                             {
-                                Logger.Write("Death penalty applied", LogLevel.Gym, ConsoleColor.Yellow);
+                                Logger.Write(string.Format("Death penalty applied to {0}", attacker.PokemonId.ToString()), LogLevel.Gym, ConsoleColor.Red);
                                 await Task.Delay(1000).ConfigureAwait(false);
                             }
 
@@ -1165,7 +1179,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     TargetPokemonId = Session.GymState.SwithAttacker.NewAttacker,
                     TargetIndex = -1,
                 });
-                Logger.Write(string.Format("Trying to switch pokemon: {0} to: {1}, serverMs: {2}", Session.GymState.SwithAttacker.OldAttacker, Session.GymState.SwithAttacker.NewAttacker, serverMs), LogLevel.Gym, ConsoleColor.White);
+                Logger.Write(string.Format("Trying to switch pokemon: {0} to: {1}, serverMs: {2}", Session.GymState.SwithAttacker.OldAttacker, Session.GymState.SwithAttacker.NewAttacker, serverMs), LogLevel.Gym, ConsoleColor.Yellow);
                 Session.GymState.SwithAttacker = null;
                 return actions;
             }
@@ -1199,7 +1213,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     };
 
                     Logger.Write(string.Format("Trying to dodge an attack {0}, lastSpecialAttack.DamageWindowsStartTimestampMs: {1}, serverMs: {2}",
-                        dodge, lastSpecialAttack.DamageWindowsStartTimestampMs, serverMs), LogLevel.Gym, ConsoleColor.White);
+                        dodge, lastSpecialAttack.DamageWindowsStartTimestampMs, serverMs), LogLevel.Gym, ConsoleColor.Cyan);
                     actions.Add(dodge);
                 }
                 else
@@ -1212,7 +1226,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         action2.DamageWindowsStartTimestampMs = specialMove.DamageWindowStartMs;
                         action2.DamageWindowsEndTimestampMs = specialMove.DamageWindowEndMs;
                         Logger.Write(string.Format("Trying to make an special attack {0}, on: {1}, duration: {2}"
-                            , specialMove.MovementId, GymInfo.Name, specialMove.DurationMs), LogLevel.Gym, ConsoleColor.White);
+                            , specialMove.MovementId, GymInfo.Name, specialMove.DurationMs), LogLevel.Gym, ConsoleColor.Blue);
                     }
                     else if (canDoAttack)
                     {
@@ -1225,7 +1239,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     }
                     else
                     {
-                        Logger.Write("SHIT", LogLevel.Gym, ConsoleColor.Yellow);
+                        Logger.Write("SHIT", LogLevel.Gym, ConsoleColor.Red);
                     }
                     action2.ActionStartMs = now.ToUnixTime();
                     action2.TargetIndex = -1;
