@@ -967,8 +967,8 @@ namespace PoGo.NecroBot.Logic.Tasks
 
         private static async Task<List<BattleAction>> AttackGym(GymStartSessionResponse startResponse)
         {
-            PokemonData ActiveAttacker = startResponse.Battle.Attacker?.ActivePokemon.PokemonData;
-            PokemonData ActiveDefender = startResponse.Battle.Defender?.ActivePokemon.PokemonData;
+            PokemonData ActiveAttacker = startResponse.Battle.Attacker.ActivePokemon?.PokemonData;
+            PokemonData ActiveDefender = startResponse.Battle.Defender.ActivePokemon?.PokemonData;
             List<BattleAction> LastActions = startResponse.Battle.BattleLog.BattleActions.ToList();
             long ServerMs = startResponse.Battle.BattleLog.BattleStartTimestampMs;
             List<BattleAction> EmptyActions = new List<BattleAction>();
@@ -1001,7 +1001,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 BattleAction lastSpecialAttack = LastActions.Where(w => !Session.GymState.MyTeam.Any(a => a.Attacker.Id.Equals(w.ActivePokemonId)) && w.Type == BattleActionType.ActionSpecialAttack).LastOrDefault();
 
                 Logger.Write("Getting actions", LogLevel.Gym, ConsoleColor.White);
-                var attackActionz = last == null || last.Type == BattleActionType.ActionVictory || last.Type == BattleActionType.ActionDefeat ? EmptyActions : GetActions(ServerMs, ActiveAttacker, ActiveDefender, CurrentAttackerEnergy, last, lastSpecialAttack);
+                var attackActionz = (last == null || last.Type == BattleActionType.ActionVictory || last.Type == BattleActionType.ActionDefeat ? EmptyActions : GetActions(ServerMs, ActiveAttacker, ActiveDefender, CurrentAttackerEnergy, last, lastSpecialAttack));
                 Logger.Write("Start making attack", LogLevel.Gym, ConsoleColor.Green);
 
                 Logger.Write(string.Format("Going to make attack : {0}",
