@@ -95,6 +95,7 @@ namespace RocketBot2.Forms
         public static int[] BotGreen;
         public static int[] BotBlue;
         public static int BotID;
+        public static bool BotBattle = true;
 
         public MainForm(string[] _args)
         {
@@ -587,7 +588,7 @@ namespace RocketBot2.Forms
                         Points = _session.Navigation.WalkStrategy.Points;
                         _playerLocations.Clear();
                         _playerRoutePointsOverlay.Routes.Clear();
-                        //_playerOverlay.Routes.Clear();
+                        _playerOverlay.Routes.Clear();
                         List<PointLatLng> routePointLatLngs = new List<PointLatLng>();
                         foreach (var item in Points)
                         {
@@ -673,6 +674,11 @@ namespace RocketBot2.Forms
 
                 settings.Auth.CurrentAuthConfig.AccountLatitude = _currentLatLng.Lat;
                 settings.Auth.CurrentAuthConfig.AccountLongitude = _currentLatLng.Lng;
+
+                for (int i = 0; i < settings.Auth.Bots.Count(); i++)
+                {
+                    if (settings.Auth.Bots[i].Username == settings.Auth.CurrentAuthConfig.Username) BotID = i;
+                }
 
                 if (togglePrecalRoute.CheckState == CheckState.Checked || togglePrecalRoute.CheckState == CheckState.Indeterminate)
                 {
@@ -1896,7 +1902,7 @@ namespace RocketBot2.Forms
                         if (!Instance._botStarted)
                         {
                             //settings = GlobalSettings.Load(_subPath, false);
-                            //settings.Auth.Load(Path.Combine(_settings.ProfileConfigPath, "auth.json"), Path.Combine(_settings.ProfileConfigPath, "auth.schema.json"), _settings.UpdateConfig.SchemaVersion);
+                            //settings.Auth.Load(Path.Combine(settings.ProfileConfigPath, "auth.json"), Path.Combine(settings.ProfileConfigPath, "auth.schema.json"), settings.UpdateConfig.SchemaVersion);
                             _session.ReInitSessionWithNextBot(_bot);
 
                             _playerOverlay.Markers.Clear();

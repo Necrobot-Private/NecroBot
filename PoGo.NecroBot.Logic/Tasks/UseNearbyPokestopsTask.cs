@@ -81,7 +81,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 if (!await SetMoveToTargetTask.IsReachedDestination(pokeStop, session, cancellationToken).ConfigureAwait(false))
                 {
-                    pokeStop.CooldownCompleteTimestampMs = DateTime.UtcNow.ToUnixTime() + (pokeStop.Type == FortType.Gym ? session.LogicSettings.GymConfig.VisitTimeout : 5) * 60 * 1000; //5 minutes to cooldown
+                    pokeStop.CooldownCompleteTimestampMs = DateTime.UtcNow.ToUnixTime() + 5 * 60 * 1000; //5 minutes to cooldown
                     session.AddForts(new List<FortData>() { pokeStop }); //replace object in memory.
                 }
 
@@ -221,7 +221,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (session.LogicSettings.GymConfig.Enable && session.LogicSettings.GymConfig.MinRevivePotions > reviveCount)
             {
                 // Filter out the gyms
-                forts = forts.Where(p => p.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime())
+                forts = forts//Favorise battles .Where(p => p.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime())
                     .Where(x => x.Type == FortType.Gym).ToList();
             }
 

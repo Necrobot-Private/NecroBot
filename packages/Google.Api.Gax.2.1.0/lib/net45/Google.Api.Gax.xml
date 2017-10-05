@@ -4,6 +4,35 @@
         <name>Google.Api.Gax</name>
     </assembly>
     <members>
+        <member name="T:Google.Api.Gax.BatchingSettings">
+            <summary>
+            Batching settings used to specify the conditions under which a batch of data
+            will be further processed.
+            </summary>
+        </member>
+        <member name="M:Google.Api.Gax.BatchingSettings.#ctor(System.Nullable{System.Int64},System.Nullable{System.Int64},System.Nullable{System.TimeSpan})">
+            <summary>
+            Creates a new instance with the specified settings.
+            </summary>
+            <param name="elementCountThreshold">The element count above which further processing of a batch will occur.</param>
+            <param name="byteCountThreshold">The byte count above which further processing of a batch will occur.</param>
+            <param name="delayThreshold">The batch lifetime above which further processing of a batch will occur.</param>
+        </member>
+        <member name="P:Google.Api.Gax.BatchingSettings.ElementCountThreshold">
+            <summary>
+            The element count above which further processing of a batch will occur.
+            </summary>
+        </member>
+        <member name="P:Google.Api.Gax.BatchingSettings.ByteCountThreshold">
+            <summary>
+            The byte count above which further processing of a batch will occur.
+            </summary>
+        </member>
+        <member name="P:Google.Api.Gax.BatchingSettings.DelayThreshold">
+            <summary>
+            The batch lifetime above which further processing of a batch will occur.
+            </summary>
+        </member>
         <member name="T:Google.Api.Gax.EmptyDictionary`2">
             <summary>
             Provides cached instances of empty dictionaries.
@@ -84,6 +113,11 @@
             What <see cref="T:Google.Api.Gax.ExpirationType"/> is contained in this <see cref="T:Google.Api.Gax.Expiration"/>.
             </summary>
         </member>
+        <member name="T:Google.Api.Gax.ExpirationExtensions">
+            <summary>
+            Extension methods for <see cref="T:Google.Api.Gax.Expiration"/>.
+            </summary>
+        </member>
         <member name="M:Google.Api.Gax.ExpirationExtensions.CalculateDeadline(Google.Api.Gax.Expiration,Google.Api.Gax.IClock)">
             <summary>
             Calculate a deadline from an <see cref="T:Google.Api.Gax.Expiration"/> and a <see cref="T:Google.Api.Gax.IClock"/>.
@@ -91,6 +125,32 @@
             <param name="expiration"><see cref="T:Google.Api.Gax.Expiration"/>, may be null.</param>
             <param name="clock"><see cref="T:Google.Api.Gax.IClock"/> to use for deadline calculation.</param>
             <returns>The calculated absolute deadline, or null if no deadline should be used.</returns>
+        </member>
+        <member name="T:Google.Api.Gax.FlowControlSettings">
+            <summary>
+            Settings used to control data flow.
+            </summary>
+        </member>
+        <member name="M:Google.Api.Gax.FlowControlSettings.#ctor(System.Nullable{System.Int64},System.Nullable{System.Int64})">
+            <summary>
+            Creates a new instance with the specified settings.
+            </summary>
+            <param name="maxOutstandingElementCount">The maximum number of elements that can be outstanding before data flow is restricted, or
+            null if there is no specified limit.</param>
+            <param name="maxOutstandingByteCount">The maximum number of bytes that can be outstanding before data flow is restricted, or
+            null if there is no specified limit.</param>
+        </member>
+        <member name="P:Google.Api.Gax.FlowControlSettings.MaxOutstandingElementCount">
+            <summary>
+            The maximum number of elements that can be outstanding before data flow is restricted, or
+            null if there is no specified limit.
+            </summary>
+        </member>
+        <member name="P:Google.Api.Gax.FlowControlSettings.MaxOutstandingByteCount">
+            <summary>
+            The maximum number of bytes that can be outstanding before data flow is restricted, or
+            null if there is no specified limit.
+            </summary>
         </member>
         <member name="T:Google.Api.Gax.GaxPreconditions">
             <summary>
@@ -132,6 +192,92 @@
             <param name="maxInclusive">The largest valid value.</param>
             <returns><paramref name="argument"/> if it was in range</returns>
             <exception cref="T:System.ArgumentOutOfRangeException">The argument was outside the specified range.</exception>
+        </member>
+        <member name="M:Google.Api.Gax.GaxPreconditions.CheckArgumentRange``1(``0,System.String,``0,``0)">
+            <summary>
+            Checks that the given argument value is valid.
+            </summary>
+            <remarks>
+            Note that the upper bound (<paramref name="maxInclusive"/>) is inclusive,
+            not exclusive. This is deliberate, to allow the specification of ranges which include
+            <see cref="F:System.Int64.MaxValue"/>.
+            </remarks>
+            <param name="argument">The value of the argument passed to the calling method.</param>
+            <param name="paramName">The name of the parameter in the calling method.</param>
+            <param name="minInclusive">The smallest valid value.</param>
+            <param name="maxInclusive">The largest valid value.</param>
+            <returns><paramref name="argument"/> if it was in range</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">The argument was outside the specified range.</exception>
+        </member>
+        <member name="M:Google.Api.Gax.GaxPreconditions.CheckArgumentRange``1(System.Nullable{``0},System.String,``0,``0)">
+            <summary>
+            Checks that the given argument value, if not <c>null</c>, is valid.
+            </summary>
+            <remarks>
+            Note that the upper bound (<paramref name="maxInclusive"/>) is inclusive,
+            not exclusive. This is deliberate, to allow the specification of ranges which include
+            <see cref="F:System.Int32.MaxValue"/>.
+            </remarks>
+            <param name="argument">The value of the argument passed to the calling method.</param>
+            <param name="paramName">The name of the parameter in the calling method.</param>
+            <param name="minInclusive">The smallest valid value.</param>
+            <param name="maxInclusive">The largest valid value.</param>
+            <returns><paramref name="argument"/> if it was in range, or <c>null</c>.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">The argument was outside the specified range.</exception>
+        </member>
+        <member name="M:Google.Api.Gax.GaxPreconditions.CheckNonNegative(System.Int32,System.String)">
+            <summary>
+            Checks that the given argument value is not negative.
+            </summary>
+            <param name="argument">The value of the argument passed to the calling method.</param>
+            <param name="paramName">The name of the parameter in the calling method.</param>
+            <returns><paramref name="argument"/> if it was non-negative.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">The argument was negative.</exception>
+        </member>
+        <member name="M:Google.Api.Gax.GaxPreconditions.CheckNonNegative(System.Nullable{System.Int32},System.String)">
+            <summary>
+            Checks that the given argument value, if not <c>null</c>, is not negative.
+            </summary>
+            <param name="argument">The value of the argument passed to the calling method.</param>
+            <param name="paramName">The name of the parameter in the calling method.</param>
+            <returns><paramref name="argument"/> if it was non-negative, or <c>null</c>.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">The argument was negative.</exception>
+        </member>
+        <member name="M:Google.Api.Gax.GaxPreconditions.CheckNonNegative(System.Int64,System.String)">
+            <summary>
+            Checks that the given argument value is not negative.
+            </summary>
+            <param name="argument">The value of the argument passed to the calling method.</param>
+            <param name="paramName">The name of the parameter in the calling method.</param>
+            <returns><paramref name="argument"/> if it was non-negative.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">The argument was negative.</exception>
+        </member>
+        <member name="M:Google.Api.Gax.GaxPreconditions.CheckNonNegative(System.Nullable{System.Int64},System.String)">
+            <summary>
+            Checks that the given argument value, if not <c>null</c>, is not negative.
+            </summary>
+            <param name="argument">The value of the argument passed to the calling method.</param>
+            <param name="paramName">The name of the parameter in the calling method.</param>
+            <returns><paramref name="argument"/> if it was non-negative, or <c>null</c>.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">The argument was negative.</exception>
+        </member>
+        <member name="M:Google.Api.Gax.GaxPreconditions.CheckNonNegative(System.Double,System.String)">
+            <summary>
+            Checks that the given argument value is not negative.
+            </summary>
+            <param name="argument">The value of the argument passed to the calling method.</param>
+            <param name="paramName">The name of the parameter in the calling method.</param>
+            <returns><paramref name="argument"/> if it was non-negative.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">The argument was negative.</exception>
+        </member>
+        <member name="M:Google.Api.Gax.GaxPreconditions.CheckNonNegative(System.Nullable{System.Double},System.String)">
+            <summary>
+            Checks that the given argument value, if not <c>null</c>, is not negative.
+            </summary>
+            <param name="argument">The value of the argument passed to the calling method.</param>
+            <param name="paramName">The name of the parameter in the calling method.</param>
+            <returns><paramref name="argument"/> if it was non-negative, or <c>null</c>.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">The argument was negative.</exception>
         </member>
         <member name="M:Google.Api.Gax.GaxPreconditions.CheckState(System.Boolean,System.String)">
             <summary>
@@ -203,8 +349,8 @@
         </member>
         <member name="M:Google.Api.Gax.GaxPreconditions.CheckNonNegativeDelay(System.TimeSpan,System.String)">
             <summary>
-            Checks that the given <see cref="T:System.TimeSpan"/> used as a delay is non-negative. This is internal
-            as it's very specialized.
+            Checks that the given <see cref="T:System.TimeSpan"/> used as a delay is non-negative. This is a very specific
+            call; most users won't need it.
             </summary>
             <param name="value">The value to check.</param>
             <param name="paramName">The name of the parameter whose value is being tested.</param>
@@ -788,7 +934,7 @@
             Repeatedly calls the specified polling action, delaying between calls,
             until a given condition is met in the response.
             </summary>
-            <typeparam name="TResponse">The response type. Must not be null.</typeparam>
+            <typeparam name="TResponse">The response type.</typeparam>
             <param name="pollAction">The poll action, typically performing an RPC. The value passed to the
             action is the overall deadline, so that the RPC settings can be adjusted accordingly. A null value
             indicates no deadline.</param>
@@ -806,7 +952,7 @@
             Asynchronously repeatedly calls the specified polling action, delaying between calls,
             until a given condition is met in the response.
             </summary>
-            <typeparam name="TResponse">The response type. Must not be null.</typeparam>
+            <typeparam name="TResponse">The response type.</typeparam>
             <param name="pollAction">The poll action, typically performing an RPC. The value passed to the
             action is the overall deadline, so that the RPC settings can be adjusted accordingly. A null
             value indicates no deadline.</param>
@@ -839,12 +985,39 @@
             and the next RPC request being sent.
             </remarks>
         </member>
+        <member name="P:Google.Api.Gax.PollSettings.DelayMultiplier">
+            <summary>
+            The multiplier to apply to the delay on each iteration; must be greater or equal to 1.0.
+            </summary>
+        </member>
+        <member name="P:Google.Api.Gax.PollSettings.MaxDelay">
+            <summary>
+            The maximum delay to use. If the increasing delay due to the delay multiplier exceeds this,
+            this maximum is used instead.
+            </summary>
+        </member>
         <member name="M:Google.Api.Gax.PollSettings.#ctor(Google.Api.Gax.Expiration,System.TimeSpan)">
             <summary>
-            Creates poll settings from the given expiration, delay and call settings.
+            Creates poll settings from the given expiration and constant delay.
+            </summary>
+            <param name="expiration">The expiration to use in order to know when to stop polling. Must not be null.</param>
+            <param name="delay">The constant delay between RPC calls. Must be non-negative.</param>
+        </member>
+        <member name="M:Google.Api.Gax.PollSettings.#ctor(Google.Api.Gax.Expiration,System.TimeSpan,System.Double,System.TimeSpan)">
+            <summary>
+            Creates poll settings from the given expiration, delay, delay multiplier and maximum delay.
             </summary>
             <param name="expiration">The expiration to use in order to know when to stop polling. Must not be null.</param>
             <param name="delay">The delay between RPC calls. Must be non-negative.</param>
+            <param name="delayMultiplier">The multiplier to apply to the delay on each iteration; must be greater or equal to 1.0.</param>
+            <param name="maxDelay">The maximum delay to use.</param>
+        </member>
+        <member name="M:Google.Api.Gax.PollSettings.NextDelay(System.TimeSpan)">
+            <summary>
+            Works out the next delay from the current one, based on the multiplier and maximum.
+            </summary>
+            <param name="currentDelay">The current delay.</param>
+            <returns>The next delay.</returns>
         </member>
         <member name="T:Google.Api.Gax.ResourceMismatchException">
             <summary>
@@ -1160,6 +1333,9 @@
             <summary>
             Appends the .NET environment information to the list.
             </summary>
+        </member>
+        <member name="M:Google.Api.Gax.VersionHeaderBuilder.ToString">
+            <inheritdoc />
         </member>
     </members>
 </doc>
