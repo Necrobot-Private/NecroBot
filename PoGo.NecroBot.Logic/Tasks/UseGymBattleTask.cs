@@ -969,16 +969,16 @@ namespace PoGo.NecroBot.Logic.Tasks
         {
             PokemonData ActiveAttacker = startResponse.Battle.Attacker?.ActivePokemon.PokemonData;
             PokemonData ActiveDefender = startResponse.Battle.Defender?.ActivePokemon.PokemonData;
-            List<BattleAction> lastActions = startResponse.Battle.BattleLog.BattleActions.ToList();
-            long serverMs = startResponse.Battle.BattleLog.BattleStartTimestampMs;
-            List<BattleAction> emptyActions = new List<BattleAction>();
-            BattleAction emptyAction = new BattleAction();
-            int _currentAttackerEnergy = 0;
+            List<BattleAction> LastActions = startResponse.Battle.BattleLog.BattleActions.ToList();
+            long ServerMs = startResponse.Battle.BattleLog.BattleStartTimestampMs;
+            List<BattleAction> EmptyActions = new List<BattleAction>();
+            BattleAction EmptyAction = new BattleAction();
+            int CurrentAttackerEnergy = 0;
 
             if (ActiveAttacker == null || ActiveDefender == null)
             {
                 Logger.Write("Attacker or defender is NULL!!", LogLevel.Gym, ConsoleColor.Red);
-                return emptyActions;
+                return EmptyActions;
             }
 
             Logger.Write($"Gym battle started; fighting trainer: {startResponse.Battle.Defender.TrainerPublicProfile.Name}", LogLevel.Gym, ConsoleColor.Green);
@@ -994,29 +994,27 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 //exit battle if gyms is disabled into config
                 if (!Session.LogicSettings.GymConfig.Enable)
-                    return emptyActions;
+                    return EmptyActions;
 
                 Logger.Write("Starts loop", LogLevel.Gym);
-                var last = lastActions.LastOrDefault();
+                var last = LastActions.Where(w => !Session.GymState.MyTeam.Any(a => a.Attacker.Id.Equals(w.ActivePokemonId))).LastOrDefault();
+                BattleAction lastSpecialAttack = LastActions.Where(w => !Session.GymState.MyTeam.Any(a => a.Attacker.Id.Equals(w.ActivePokemonId)) && w.Type == BattleActionType.ActionSpecialAttack).LastOrDefault();
 
                 Logger.Write("Getting actions", LogLevel.Gym, ConsoleColor.White);
-                var attackActionz = GetActions(serverMs, ActiveAttacker, ActiveDefender, _currentAttackerEnergy, last);
+                var attackActionz = last == null || last.Type == BattleActionType.ActionVictory || last.Type == BattleActionType.ActionDefeat ? EmptyActions : GetActions(ServerMs, ActiveAttacker, ActiveDefender, CurrentAttackerEnergy, last, lastSpecialAttack);
                 Logger.Write("Start making attack", LogLevel.Gym, ConsoleColor.Green);
-
-                long timeBefore = DateTime.UtcNow.ToUnixTime();
-                long timeAfter = DateTime.UtcNow.ToUnixTime();
 
                 Logger.Write(string.Format("Going to make attack : {0}",
                     string.Join(", ", attackActionz.Select(s => string.Format("{0} -> {1}", s.Type, s.DurationMs)))), LogLevel.Gym, ConsoleColor.Blue);
 
+                BattleAction a2 = (last == null || last.Type == BattleActionType.ActionVictory || last.Type == BattleActionType.ActionDefeat ? EmptyAction : last);
+
+                long timeBefore = DateTime.UtcNow.ToUnixTime();
+                GymBattleAttackResponse attackResult = await Session.Client.Fort.GymBattleAttak(Gym.Id, startResponse.Battle.BattleId, attackActionz, a2, ServerMs).ConfigureAwait(false);
+                long timeAfter = DateTime.UtcNow.ToUnixTime();
+
                 var attackTime = attackActionz.Sum(x => x.DurationMs);
                 int attackTimeCorrected = attackTime;
-
-                if (attackActionz.Any(a => a.Type != BattleActionType.ActionSpecialAttack))
-                    attackTimeCorrected = attackTime - (int)(timeAfter - timeBefore);
-                Logger.Write(string.Format("Finished making attack call: {0}", timeAfter - timeBefore), LogLevel.Gym, ConsoleColor.White);
-                Logger.Write(string.Format("Waiting for attack to be prepared: {0} (last call was {1}, after correction {2})",
-                   attackTime, timeAfter, attackTimeCorrected > 0 ? attackTimeCorrected : 0), LogLevel.Gym, ConsoleColor.Yellow);
 
                 if (attackTimeCorrected > 0)
                     await Task.Delay(attackTimeCorrected).ConfigureAwait(false);
@@ -1027,27 +1025,32 @@ namespace PoGo.NecroBot.Logic.Tasks
                     await Task.Delay(3000).ConfigureAwait(false);
                 }
 
-                BattleAction a2 = (last == null || last.Type == BattleActionType.ActionVictory || last.Type == BattleActionType.ActionDefeat ? emptyAction : last);
+                if (attackActionz.Any(a => a.Type != BattleActionType.ActionSpecialAttack))
+                    attackTimeCorrected = attackTime - (int)(timeAfter - timeBefore);
 
-                GymBattleAttackResponse attackResult = await Session.Client.Fort.GymBattleAttak(Gym.Id, startResponse.Battle.BattleId, attackActionz, a2, serverMs).ConfigureAwait(false);
+                Logger.Write(string.Format("Finished making attack call: {0}", timeAfter - timeBefore), LogLevel.Gym, ConsoleColor.White);
+                Logger.Write(string.Format("Waiting for attack to be prepared: {0} (last call was {1}, after correction {2})",
+                   attackTime, timeAfter, attackTimeCorrected > 0 ? attackTimeCorrected : 0), LogLevel.Gym, ConsoleColor.Yellow);
 
                 if (attackResult.Result == GymBattleAttackResponse.Types.Result.Success)
                 {
                     if (attackResult.BattleUpdate.BattleLog.BattleActions.Count > 0)
                     {
                         var result = attackResult.BattleUpdate.BattleLog.BattleActions.OrderBy(o => o.ActionStartMs).Distinct();
-                        lastActions.AddRange(result);
+                        LastActions.AddRange(result);
                     }
 
-                    serverMs = attackResult.BattleUpdate.BattleLog.ServerMs;
+                    ServerMs = attackResult.BattleUpdate.BattleLog.ServerMs;
 
                     switch (attackResult.BattleUpdate.BattleLog.State)
                     {
                         case BattleState.Active:
-                            _currentAttackerEnergy = attackResult.BattleUpdate.ActiveAttacker.CurrentEnergy;
+                            CurrentAttackerEnergy = attackResult.BattleUpdate.ActiveAttacker.CurrentEnergy;
                             int currentDefenderEnergy = attackResult.BattleUpdate.ActiveDefender.CurrentEnergy;
                             PokemonData attacker = attackResult.BattleUpdate.ActiveAttacker?.PokemonData;
                             PokemonData defender = attackResult.BattleUpdate.ActiveDefender?.PokemonData;
+                            ActiveDefender = attacker;
+                            ActiveDefender = defender;
 
                             if (!Session.LogicSettings.GymConfig.UsePokemonToAttackOnlyByCp) //we should manually switch pokemon to best one
                                 Session.GymState.MyTeam.Where(w => w.Attacker.Id == attacker.Id).FirstOrDefault().HpState = 0;
@@ -1063,7 +1066,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 }
                             }
 
-                            if (_currentAttackerEnergy < 1)
+                            if (CurrentAttackerEnergy < 1)
                             {
                                 Logger.Write("Death penalty applied", LogLevel.Gym, ConsoleColor.Yellow);
                                 await Task.Delay(1000).ConfigureAwait(false);
@@ -1078,7 +1081,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 (ev == TeamColor.Red)
                                     ? ConsoleColor.Red
                                     : (ev == TeamColor.Yellow ? ConsoleColor.Yellow : ConsoleColor.Blue));
-                            Logger.Write($"(ATTACKER): {attacker.PokemonId.ToString(),-12} | HP: {attackResult.BattleUpdate.ActiveAttacker.CurrentHealth,3:##0} | Sta: {_currentAttackerEnergy,3:##0} | Lvl: {attackResult.BattleUpdate.ActiveAttacker.PokemonData.Level(),4:#0.0}", LogLevel.Gym,
+                            Logger.Write($"(ATTACKER): {attacker.PokemonId.ToString(),-12} | HP: {attackResult.BattleUpdate.ActiveAttacker.CurrentHealth,3:##0} | Sta: {CurrentAttackerEnergy,3:##0} | Lvl: {attackResult.BattleUpdate.ActiveAttacker.PokemonData.Level(),4:#0.0}", LogLevel.Gym,
                                 (player.Team == TeamColor.Red)
                                     ? ConsoleColor.Red
                                     : (player.Team == TeamColor.Yellow ? ConsoleColor.Yellow : ConsoleColor.Blue));
@@ -1095,21 +1098,21 @@ namespace PoGo.NecroBot.Logic.Tasks
                             Logger.Write($"We have been defeated to try again (10 sec)... (AttackGym)", LogLevel.Gym, ConsoleColor.DarkYellow);
                             await Task.Delay(10000).ConfigureAwait(false);
                             await Execute(Session, Session.CancellationTokenSource.Token, Gym, GymInfo, GymDetails).ConfigureAwait(false);
-                            return emptyActions;
+                            return EmptyActions;
                         case BattleState.TimedOut:
                             Logger.Write($"Our attack timed out... (AttackGym)", LogLevel.Gym, ConsoleColor.DarkYellow);
-                            return lastActions;
+                            return LastActions;
                         case BattleState.StateUnset:
                             Logger.Write($"State was unset... (AttackGym)", LogLevel.Gym, ConsoleColor.DarkYellow);
-                            return lastActions;
+                            return LastActions;
                         case BattleState.Victory:
-                            var defenderPokemonId = lastActions.LastOrDefault().BattleResults.NextDefenderPokemonId;
-                            Logger.Write($"We were victorious... (AttackGym) XP: {lastActions.LastOrDefault().BattleResults.PlayerXpAwarded} | Players: {GymDetails.GymStatusAndDefenders.GymDefender.Count(),2:#0} | Next defender Id: {defenderPokemonId.ToString()}", LogLevel.Gym, ConsoleColor.Green);
+                            var defenderPokemonId = LastActions.LastOrDefault().BattleResults.NextDefenderPokemonId;
+                            Logger.Write($"We were victorious... (AttackGym) XP: {LastActions.LastOrDefault().BattleResults.PlayerXpAwarded} | Players: {GymDetails.GymStatusAndDefenders.GymDefender.Count(),2:#0} | Next defender Id: {defenderPokemonId.ToString()}", LogLevel.Gym, ConsoleColor.Green);
                             await Task.Delay(2000).ConfigureAwait(false);
-                            return lastActions;
+                            return LastActions;
                         default:
                             Logger.Write($"Unhandled attack response... (AttackGym)", LogLevel.Gym, ConsoleColor.DarkYellow);
-                            return lastActions;
+                            return LastActions;
                     }
                 }
                 else
@@ -1135,7 +1138,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                             Logger.Write("Attack Default... (AttackGym)", LogLevel.Gym, ConsoleColor.Red);
                             break;
                     }
-                    return emptyActions;
+                    return EmptyActions;
                 }
             }
         }
@@ -1145,7 +1148,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             return UnixEpoch.AddMilliseconds(millis);
         }
 
-        private static List<BattleAction> GetActions(long serverMs, PokemonData attacker, PokemonData defender, int energy, BattleAction lastAction)
+        private static List<BattleAction> GetActions(long serverMs, PokemonData attacker, PokemonData defender, int energy, BattleAction lastAction, BattleAction lastSpecialAttack)
         {
             List<BattleAction> actions = new List<BattleAction>();
             DateTime now = DateTimeFromUnixTimestampMillis(serverMs);
@@ -1167,9 +1170,9 @@ namespace PoGo.NecroBot.Logic.Tasks
                 return actions;
             }
 
-            if (lastAction != null && lastAction.DamageWindowsStartTimestampMs > serverMs)
+            if (lastSpecialAttack != null && lastSpecialAttack.DamageWindowsStartTimestampMs > serverMs)
             {
-                long dodgeTime = lastAction.DamageWindowsStartTimestampMs - beforeDodge;
+                long dodgeTime = lastSpecialAttack.DamageWindowsStartTimestampMs - beforeDodge;
                 if (Session.GymState.TimeToDodge < dodgeTime)
                     Session.GymState.TimeToDodge = dodgeTime;
             }
@@ -1178,7 +1181,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             {
                 var normalMove = Session.GymState.MyPokemons.FirstOrDefault(f => f.Data.Id == attacker.Id).Attack;
                 var specialMove = Session.GymState.MyPokemons.FirstOrDefault(f => f.Data.Id == attacker.Id).SpecialAttack;
-                bool skipDodge = ((lastAction?.DurationMs ?? 0) < normalMove.DurationMs + 550) || Session.LogicSettings.GymConfig.UseDodge; //if our normal attack is too slow and defender special is too fast so we should to only do dodge all the time then we totally skip dodge
+                bool skipDodge = ((lastSpecialAttack?.DurationMs ?? 0) < normalMove.DurationMs + 550) || Session.LogicSettings.GymConfig.UseDodge; //if our normal attack is too slow and defender special is too fast so we should to only do dodge all the time then we totally skip dodge
                 bool canDoSpecialAttack = Math.Abs(specialMove.EnergyDelta) <= energy && (!(Session.GymState.TimeToDodge > now.ToUnixTime() && Session.GymState.TimeToDodge < now.ToUnixTime() + specialMove.DurationMs) || skipDodge);
                 bool canDoAttack = !canDoSpecialAttack && (!(Session.GymState.TimeToDodge > now.ToUnixTime() && Session.GymState.TimeToDodge < now.ToUnixTime() + normalMove.DurationMs) || skipDodge);
 
@@ -1196,7 +1199,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     };
 
                     Logger.Write(string.Format("Trying to dodge an attack {0}, lastSpecialAttack.DamageWindowsStartTimestampMs: {1}, serverMs: {2}",
-                        dodge, lastAction.DamageWindowsStartTimestampMs, serverMs), LogLevel.Gym, ConsoleColor.White);
+                        dodge, lastSpecialAttack.DamageWindowsStartTimestampMs, serverMs), LogLevel.Gym, ConsoleColor.White);
                     actions.Add(dodge);
                 }
                 else
