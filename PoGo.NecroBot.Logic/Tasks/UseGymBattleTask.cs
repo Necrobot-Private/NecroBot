@@ -1082,7 +1082,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                                         attacker.PokemonId.ToString(), attacker.Cp), LogLevel.Gym, ConsoleColor.Red);
                                 if (extraWait)
                                     Logger.Write("Death penalty applied.", LogLevel.Gym, ConsoleColor.Red);
-                                    await Task.Delay(1000).ConfigureAwait(false);
+                                await Task.Delay(1000).ConfigureAwait(false);
                             }
 
                             ActiveAttacker = attacker;
@@ -1111,12 +1111,14 @@ namespace PoGo.NecroBot.Logic.Tasks
                             Logger.Write("Attack success... (AttackGym)", LogLevel.Gym, ConsoleColor.Green);
                             continue;
                         case BattleState.Defeated:
-                            Logger.Write($"We have been defeated to try again (10 sec)... (AttackGym)", LogLevel.Gym, ConsoleColor.DarkYellow);
+                            Logger.Write($"We have been defeated. Trying again in 10 sec... (AttackGym)", LogLevel.Gym, ConsoleColor.DarkYellow);
                             await Task.Delay(10000).ConfigureAwait(false);
                             await Execute(Session, Session.CancellationTokenSource.Token, Gym, GymInfo, GymDetails).ConfigureAwait(false);
                             return EmptyActions;
                         case BattleState.TimedOut:
                             Logger.Write($"Our attack timed out to try again (10 sec)... (AttackGym)", LogLevel.Gym, ConsoleColor.DarkYellow);
+                                if (Session.LogicSettings.NotificationConfig.EnablePushBulletNotification == true)
+                                    await PushNotificationClient.SendNotification(Session, "Gym Battle", $"Our attack timed out...:", true).ConfigureAwait(false);
                             await Task.Delay(10000).ConfigureAwait(false);
                             await Execute(Session, Session.CancellationTokenSource.Token, Gym, GymInfo, GymDetails).ConfigureAwait(false);
                             return EmptyActions;
@@ -1229,7 +1231,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         action2.DurationMs = specialMove.DurationMs;
                         action2.DamageWindowsStartTimestampMs = specialMove.DamageWindowStartMs;
                         action2.DamageWindowsEndTimestampMs = specialMove.DamageWindowEndMs;
-                        Logger.Write(string.Format("Trying to make an special attack {0}, on: {1}, duration: {2}"
+                        Logger.Write(string.Format("Trying to make a special attack {0}, on: {1}, duration: {2}"
                             , specialMove.MovementId, GymInfo.Name, specialMove.DurationMs), LogLevel.Gym, ConsoleColor.Blue);
                     }
                     else if (canDoAttack)
@@ -1238,7 +1240,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         action2.DurationMs = normalMove.DurationMs;
                         action2.DamageWindowsStartTimestampMs = normalMove.DamageWindowStartMs;
                         action2.DamageWindowsEndTimestampMs = normalMove.DamageWindowEndMs;
-                        Logger.Write(string.Format("Trying to make an normal attack {0}, on: {1}, duration: {2}"
+                        Logger.Write(string.Format("Trying to make a normal attack {0}, on: {1}, duration: {2}"
                             , normalMove.MovementId, GymInfo.Name, normalMove.DurationMs), LogLevel.Gym, ConsoleColor.White);
                     }
                     else

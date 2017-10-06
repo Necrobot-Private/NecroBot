@@ -108,7 +108,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 if (PokeBalls >= session.LogicSettings.PokeballsToKeepForSnipe)  // Don't display if not enough Pokeballs - TheWizrad1328
                   Logger.Write($"Catching {pokemons.Count} Pokemon Nearby...", LogLevel.Info);
               else
-                  Logger.Write($"{session.LogicSettings.PokeballsToKeepForSnipe - PokeBalls} more Pokeballs are needed to catch {pokemons.Count} nearby Pokemon...", LogLevel.Info);
+                  Logger.Write($"collecting {session.LogicSettings.PokeballsToKeepForSnipe - PokeBalls} more Pokeballs. Catching of pokemon is temporarily susspended...", LogLevel.Info);
 
             foreach (var pokemon in pokemons)
             {
