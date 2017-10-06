@@ -20,7 +20,6 @@ using POGOProtos.Enums;
 using POGOProtos.Inventory.Item;
 using POGOProtos.Map.Pokemon;
 using POGOProtos.Networking.Responses;
-using Quobject.Collections.Immutable;
 using PoGo.NecroBot.Logic.Logging;
 using GeoCoordinatePortable;
 

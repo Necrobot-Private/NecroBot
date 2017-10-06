@@ -20,7 +20,6 @@ using System.Threading.Tasks;
 namespace PoGo.NecroBot.Logic
 {
     public delegate void UpdatePositionDelegate(ISession session, double lat, double lng, double speed);
-    public delegate void GetRouteDelegate(List<GeoCoordinate> points);
 
     public class Navigation
     {
@@ -33,7 +32,7 @@ namespace PoGo.NecroBot.Logic
 
         private bool _GoogleWalk, _MapZenWalk, _YoursWalk, _AutoWalkAI;
         private double distance;
-        private int speedChangeFactor = 1;
+        //private int speedChangeFactor = 1;
         private int _AutoWalkDist;
 
         public Navigation(Client client, ILogicSettings logicSettings)
@@ -46,6 +45,9 @@ namespace PoGo.NecroBot.Logic
 
         public double VariantRandom(ISession session, double currentSpeed)
         {
+            /*
+             * this changes as bug into BaseWalkStrategy
+             * 
             double variantSpeed = session.LogicSettings.WalkingSpeedVariant;
             if (variantSpeed == 0.0)
                 return currentSpeed;
@@ -81,6 +83,51 @@ namespace PoGo.NecroBot.Logic
                 });
             }
             return newSpeed;
+            */
+            if (WalkingRandom.Next(1, 10) > 5)
+            {
+                if (WalkingRandom.Next(1, 10) > 5)
+                {
+                    var randomicSpeed = currentSpeed;
+                    var max = session.LogicSettings.WalkingSpeedInKilometerPerHour +
+                              session.LogicSettings.WalkingSpeedVariant;
+                    randomicSpeed += WalkingRandom.NextDouble() * (0.02 - 0.001) + 0.001;
+
+                    if (randomicSpeed > max)
+                        randomicSpeed = max;
+
+                    if (Math.Round(randomicSpeed, 2) != Math.Round(currentSpeed, 2))
+                    {
+                        session.EventDispatcher.Send(new HumanWalkingEvent
+                        {
+                            OldWalkingSpeed = currentSpeed,
+                            CurrentWalkingSpeed = randomicSpeed
+                        });
+                    }
+                    return randomicSpeed;
+                }
+                else
+                {
+                    var randomicSpeed = currentSpeed;
+                    var min = session.LogicSettings.WalkingSpeedInKilometerPerHour -
+                              session.LogicSettings.WalkingSpeedVariant;
+                    randomicSpeed -= WalkingRandom.NextDouble() * (0.02 - 0.001) + 0.001;
+
+                    if (randomicSpeed < min)
+                        randomicSpeed = min;
+
+                    if (Math.Round(randomicSpeed, 2) != Math.Round(currentSpeed, 2))
+                    {
+                        session.EventDispatcher.Send(new HumanWalkingEvent
+                        {
+                            OldWalkingSpeed = currentSpeed,
+                            CurrentWalkingSpeed = randomicSpeed
+                        });
+                    }
+                    return randomicSpeed;
+                }
+            }
+            return currentSpeed;
         }
 
         public async Task Move(IGeoLocation targetLocation,
@@ -131,13 +178,20 @@ namespace PoGo.NecroBot.Logic
                     }
                     else
                     {
-                        Logging.Logger.Write($"No AutoWalkAI strategy enabled, using 'NecroBot Walk'", Logging.LogLevel.Info, ConsoleColor.DarkYellow);
+                        Logging.Logger.Write($"No Base walk strategy enabled, using 'NecroBot Walk'", Logging.LogLevel.Info, ConsoleColor.DarkYellow);
                     }
                 }
                 else
                 {
                     Logging.Logger.Write($"Distance to travel is < {_AutoWalkDist}m, using 'NecroBot Walk'", Logging.LogLevel.Info, ConsoleColor.DarkYellow);
                 }
+            }
+            else
+            {
+                //No AutoWalkAI strategy enabled, using 'NecroBot Config defaults'
+                _GoogleWalk = logicSettings.UseGoogleWalk;
+                _MapZenWalk = logicSettings.UseMapzenWalk;
+                _YoursWalk = logicSettings.UseYoursWalk;
             }
 
             WalkStrategyQueue = new List<IWalkStrategy>();

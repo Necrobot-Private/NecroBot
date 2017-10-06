@@ -24,14 +24,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
         protected readonly Random _randWalking = new Random();
 
         public event UpdatePositionDelegate UpdatePositionEvent;
-        public event GetRouteDelegate GetRouteEvent;
         public virtual List<GeoCoordinate> Points { get; set; }
-
-        protected virtual void OnGetRouteEvent(List<GeoCoordinate> points)
-        {
-            GetRouteEvent?.Invoke(points);
-            Points = points;
-        }
 
         public abstract Task Walk(IGeoLocation targetLocation, Func<Task> functionExecutedWhileWalking, ISession session, CancellationToken cancellationToken, double walkSpeed = 0.0);
 
@@ -137,7 +130,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
                     points.Remove(points.First());
             }
 
-            OnGetRouteEvent(points);
+            Points = points;
 
             var walkedPointsList = new List<GeoCoordinate>();
             foreach (var nextStep in points)
@@ -161,7 +154,7 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
                     currentLocation; //store the current location for comparison and correction purposes
                 var requestSendDateTime = DateTime.Now;
                 await LocationUtils.UpdatePlayerLocationWithAltitude(session, waypoint,
-                        (float) speedInMetersPerSecond).ConfigureAwait(false);
+                        (float)speedInMetersPerSecond).ConfigureAwait(false);
 
                 var realDistanceToTarget = LocationUtils.CalculateDistanceInMeters(currentLocation, targetLocation);
                 if (realDistanceToTarget < 2)
@@ -219,11 +212,11 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
                     //store the current location for comparison and correction purposes
                     previousLocation = currentLocation;
                     requestSendDateTime = DateTime.Now;
-                    await LocationUtils.UpdatePlayerLocationWithAltitude(session, waypoint, (float) speedInMetersPerSecond).ConfigureAwait(false);
+                    await LocationUtils.UpdatePlayerLocationWithAltitude(session, waypoint, (float)speedInMetersPerSecond).ConfigureAwait(false);
 
                     UpdatePositionEvent?.Invoke(session, waypoint.Latitude, waypoint.Longitude, _currentWalkingSpeed);
 
-                    await Task.Delay(timeToWalk).ConfigureAwait(false); 
+                    await Task.Delay(timeToWalk).ConfigureAwait(false);
                     if (functionExecutedWhileWalking != null)
                         await functionExecutedWhileWalking().ConfigureAwait(false); // look for pokemon
                 } while (LocationUtils.CalculateDistanceInMeters(currentLocation, nextStep) >= 2);
@@ -231,7 +224,6 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
                 UpdatePositionEvent?.Invoke(session, nextStep.Latitude, nextStep.Longitude, _currentWalkingSpeed);
             }
         }
-
 
         /// <summary>
         /// Basic step length is given but we want to randomize it a bit to avoid usage of steps of the same length
@@ -242,8 +234,8 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
         {
             var randFactor = 0.3d;
             var initialStepLengthMm = initialStepLength * 1000;
-            var randomMin = (int) (initialStepLengthMm * (1 - randFactor));
-            var randomMax = (int) (initialStepLengthMm * (1 + randFactor));
+            var randomMin = (int)(initialStepLengthMm * (1 - randFactor));
+            var randomMax = (int)(initialStepLengthMm * (1 + randFactor));
             var randStep = _randWalking.Next(randomMin, randomMax);
             return randStep / 1000d;
         }
