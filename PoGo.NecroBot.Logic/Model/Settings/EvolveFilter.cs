@@ -131,10 +131,8 @@ namespace PoGo.NecroBot.Logic.Model.Settings
 
         public IPokemonFilter GetGlobalFilter()
         {
-            var session = TinyIoCContainer.Current.Resolve<ISession>();
-            var _logicSettings = session.LogicSettings;
-
-            return new EvolveFilter(_logicSettings.EvolveMinIV, _logicSettings.EvolveMinIV, _logicSettings.EvolveMinCP, _logicSettings.EvolveFavoritedOnly,_logicSettings.EvolveOperator);
+            // TODO move EvolveAnyPokemonAboveIv logic here
+            return null;
         }
     }
 }

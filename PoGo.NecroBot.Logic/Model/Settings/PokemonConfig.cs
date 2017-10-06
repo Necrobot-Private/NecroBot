@@ -75,17 +75,6 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 90)]
         public bool UseLuckyEggConstantly;
 
-        [NecroBotConfig(Description = "Number of Pokemon ready for evolve that can and are able to use lucky egg", Position = 100)]
-        [DefaultValue(30)]
-        [Range(0, 999)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 100)]
-        public int UseLuckyEggsMinPokemonAmount{ get; set; }
-
-        [NecroBotConfig(Description = "Allows bot to use lucky eggs when evolving pokemon", Position = 110)]
-        [DefaultValue(false)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 110)]
-        public bool UseLuckyEggsWhileEvolving;
-
         /*Berries*/
         //[NecroBotConfig(Description = "Specify min CP will be use berries when catch", Position = 120)]
         //[DefaultValue(1000)]
@@ -276,50 +265,11 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 430)]
         public string UpgradePokemonMinimumStatsOperator { get; set; }
 
-        /*Evolve*/
-        [NecroBotConfig(Description = "Specify min IV for evolving pokemon", Position = 440)]
-        [DefaultValue(95)]
-        [Range(0, 100)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 440)]
-        public float EvolveAboveIvValue { get; set; }
-
-        [NecroBotConfig(Description = "Allows bot to evolve all pokemon above this IV", Position = 450)]
-        [DefaultValue(false)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 450)]
-        public bool EvolveAllPokemonAboveIv;
-
-        [NecroBotConfig(Description = "When enabled, bot will evolve pokemon when it has enough candy", Position = 460)]
-        [DefaultValue(true)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 460)]
-        public bool EvolveAllPokemonWithEnoughCandy { get; set; }
-
-        [NecroBotConfig(Description = "When enabled, bot will preserve amount of candy defined in PokemonEvolveFilter/MinCandiesBeforeEvolve, only use candies above that value", Position = 465)]
-        [DefaultValue(true)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 465)]
-        public bool EvolvePreserveMinCandiesFromFilter { get; set; }
-
-        [NecroBotConfig(Description = "Specify the max storage pokemon bag for triggering evolve", Position = 470)]
-        [DefaultValue(90)]
-        [Range(0, 100)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 470)]
-        public double EvolveKeptPokemonsAtStorageUsagePercentage { get; set; }
-
-        [NecroBotConfig(Description = "Specify the pokemon to keep for mass evolve", Position = 480)]
-        [DefaultValue(120)]
-        [Range(0, 999)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 480)]
-        public int EvolveKeptPokemonIfBagHasOverThisManyPokemon = 120;
-
-        [NecroBotConfig(Description = "If enabled, bot will evolve kept pokemons when it can use a lucky egg and number of possible evolutions is at least as set in UseLuckyEggsMinPokemonAmount", Position = 485)]
-        [DefaultValue(true)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 485)]
-        public bool EvolveKeptPokemonsIfLuckyEggCanBeUsed { get; set; }
-
         /*Keep*/
-        [NecroBotConfig(Description = "Allows bot to keep low candy pokemon for evolve", Position = 490)]
-        [DefaultValue(false)]
+        [NecroBotConfig(Description = "Allows bot to keep pokemon for evolving if configured in EvolveConfig and appropriate candy is available", Position = 490)]
+        [DefaultValue(true)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 490)]
-        public bool KeepPokemonsThatCanEvolve;
+        public bool KeepPokemonsToBeEvolved { get; set; }
 
         [NecroBotConfig(Description = "Specify min CP to not transfer pokemon", Position = 500)]
         [DefaultValue(1250)]
@@ -457,37 +407,13 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 730)]
         public double UpgradePokemonLvlMinimum { get;  set; }
 
-        [NecroBotConfig(Description = "Global settting - Allows bot to only evolve favorited pokemons", Position = 740)]
-        [DefaultValue(true)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 740)]
-
-        public bool EvolveFavoritedOnly { get; set; }
-        [NecroBotConfig(Description = "The logic check to evolve pokemon", Position = 750)]
-        [DefaultValue("and")]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 750)]
-        public string EvolveOperator { get; set; }
-
-        [NecroBotConfig(Description = "Set Min IV for bot to evolve", Position = 760)]
-        [DefaultValue(100)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 760)]
-        [Range(0,101)]
-        public double EvolveMinIV { get; set; }
-        [NecroBotConfig(Description = "Set Min CP for bot to evolve", Position = 770)]
-        [DefaultValue(2000)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 770)]
-        [Range(0,5000)]
-
-        public double EvolveMinCP { get; set; }
-        [NecroBotConfig(Description = "Set Min Level for bot to evolve", Position = 780)]
-        [DefaultValue(25)]
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 780)]
-        [Range(0, 5000)]
-        public double EvolveMinLevel { get;  set; }
-
         [NecroBotConfig(Description = "Allows bot to bypass catchflee - not recommended to use this feature", Position = 790)]
         [DefaultValue(false)]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 790)]
         public bool ByPassCatchFlee{ get; set; }
-
+        
+        [NecroBotConfig(SheetName = "EvolveConfig", Description = "Setting up for pokemon evolving", Position = 800)]
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Ignore, Order = 800)]
+        public EvolveConfig EvolveConfig = new EvolveConfig();
     }
 }

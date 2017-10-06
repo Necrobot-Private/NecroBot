@@ -29,7 +29,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     session.Inventory.GetDuplicatePokemonToTransfer(
                         session.LogicSettings.PokemonsNotToTransfer,
                         session.LogicSettings.PokemonEvolveFilters,
-                        session.LogicSettings.KeepPokemonsThatCanEvolve,
+                        session.LogicSettings.KeepPokemonsToBeEvolved,
                         session.LogicSettings.PrioritizeIvOverCp).ConfigureAwait(false);
 
                 pokemons = pokemons.Where(x => !duplicatePokemons.Any(p => p.Id == x.Id));
@@ -41,7 +41,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     session.Inventory.GetWeakPokemonToTransfer(
                         session.LogicSettings.PokemonsNotToTransfer,
                         session.LogicSettings.PokemonEvolveFilters,
-                        session.LogicSettings.KeepPokemonsThatCanEvolve).ConfigureAwait(false);
+                        session.LogicSettings.KeepPokemonsToBeEvolved).ConfigureAwait(false);
 
                 pokemons = pokemons.Where(x => !weakPokemons.Any(p => p.Id == x.Id));
             }

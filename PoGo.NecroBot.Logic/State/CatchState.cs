@@ -102,10 +102,7 @@ namespace PoGo.NecroBot.Logic.State
                             });
                         }
 
-                        if (session.LogicSettings.EvolveAllPokemonAboveIv ||
-                            session.LogicSettings.EvolveAllPokemonWithEnoughCandy ||
-                            session.LogicSettings.UseLuckyEggsWhileEvolving ||
-                            session.LogicSettings.KeepPokemonsThatCanEvolve)
+                        if (EvolvePokemonTask.IsActivated(session))
                         {
                             await EvolvePokemonTask.Execute(session, cancellationToken).ConfigureAwait(false);
                         }
