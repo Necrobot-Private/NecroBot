@@ -1317,8 +1317,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                     case GymStartSessionResponse.Types.Result.ErrorInvalidDefender:
                         Logger.Write("Failed with error ERROR_INVALID_DEFENDER", LogLevel.Gym, ConsoleColor.Red);
                         // Call to DeployPokemon
-                        Logger.Write("Try to deploy", LogLevel.Gym, ConsoleColor.Blue);
-                        await DeployPokemonToGym().ConfigureAwait(false);
+                        //Logger.Write("Try to deploy", LogLevel.Gym, ConsoleColor.Blue);
+                        //await DeployPokemonToGym().ConfigureAwait(false);
                         return result;
                     case GymStartSessionResponse.Types.Result.ErrorTrainingInvalidAttackerCount:
                         Logger.Write("Failed with error ERROR_TRAINING_INVALID_ATTACKER_COUNT", LogLevel.Gym, ConsoleColor.Red);
