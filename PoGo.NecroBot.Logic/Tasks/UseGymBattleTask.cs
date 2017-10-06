@@ -1115,11 +1115,13 @@ namespace PoGo.NecroBot.Logic.Tasks
                             await Execute(Session, Session.CancellationTokenSource.Token, Gym, GymInfo, GymDetails).ConfigureAwait(false);
                             return EmptyActions;
                         case BattleState.TimedOut:
-                            Logger.Write($"Our attack timed out... (AttackGym)", LogLevel.Gym, ConsoleColor.DarkYellow);
-                            return LastActions;
+                            Logger.Write($"Our attack timed out to try again (10 sec)... (AttackGym)", LogLevel.Gym, ConsoleColor.DarkYellow);
+                            await Task.Delay(10000).ConfigureAwait(false);
+                            await Execute(Session, Session.CancellationTokenSource.Token, Gym, GymInfo, GymDetails).ConfigureAwait(false);
+                            return EmptyActions;
                         case BattleState.StateUnset:
                             Logger.Write($"State was unset... (AttackGym)", LogLevel.Gym, ConsoleColor.DarkYellow);
-                            return LastActions;
+                            return EmptyActions;
                         case BattleState.Victory:
                             var defenderPokemonId = LastActions.LastOrDefault().BattleResults.NextDefenderPokemonId;
                             Logger.Write($"We were victorious... (AttackGym) XP: {LastActions.LastOrDefault().BattleResults.PlayerXpAwarded} | Players: {GymDetails.GymStatusAndDefenders.GymDefender.Count(),2:#0} | Next defender Id: {defenderPokemonId.ToString()}", LogLevel.Gym, ConsoleColor.Green);
