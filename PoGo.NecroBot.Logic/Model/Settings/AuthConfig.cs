@@ -36,12 +36,12 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [DefaultValue(40.781441)]
         [Range(-90, 90)]
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 5)]
-        public Double AccountLatitude { get; set; }
+        public double AccountLatitude { get; set; }
 
         [DefaultValue(-73.966586)]
         [Range(-180, 180)]
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 6)]
-        public Double AccountLongitude { get; set; }
+        public double AccountLongitude { get; set; }
 
         [DefaultValue(true)]
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 7)]

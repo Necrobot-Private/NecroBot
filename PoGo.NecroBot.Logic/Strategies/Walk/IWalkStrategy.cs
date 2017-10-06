@@ -13,7 +13,6 @@ namespace PoGo.NecroBot.Logic.Strategies.Walk
         string RouteName { get; }
         List<GeoCoordinate> Points { get; set; }
         event UpdatePositionDelegate UpdatePositionEvent;
-        event GetRouteDelegate GetRouteEvent;
 
         Task Walk(IGeoLocation destinationLocation, Func<Task> functionExecutedWhileWalking,
             ISession session, CancellationToken cancellationToken, double customWalkingSpeed = 0.0);
