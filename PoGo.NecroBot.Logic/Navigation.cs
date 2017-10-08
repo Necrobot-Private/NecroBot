@@ -155,18 +155,18 @@ namespace PoGo.NecroBot.Logic
             _AutoWalkAI = logicSettings.AutoWalkAI;
             _AutoWalkDist = logicSettings.AutoWalkDist;
 
-            if (_AutoWalkAI && distance > 15)
+            if (_AutoWalkAI)
             {
                 _YoursWalk = false; _GoogleWalk = false; _MapZenWalk = false;
 
                 if (distance >= _AutoWalkDist)
                 {
-                    if (logicSettings.UseGoogleWalk && logicSettings.GoogleApiKey != "")
+                    if (logicSettings.GoogleApiKey != "")
                     {
                         Logging.Logger.Write($"Distance to travel is > {_AutoWalkDist}m, using 'Google Walk'", Logging.LogLevel.Info, ConsoleColor.DarkYellow);
                         _GoogleWalk = true;
                     }
-                    else if (logicSettings.UseMapzenWalk && logicSettings.MapzenTurnByTurnApiKey != "")
+                    else if (logicSettings.MapzenTurnByTurnApiKey != "")
                     {
                         Logging.Logger.Write($"Distance to travel is > {_AutoWalkDist}m, using 'Mapzen Walk'", Logging.LogLevel.Info, ConsoleColor.DarkYellow);
                         _MapZenWalk = true;
@@ -181,7 +181,7 @@ namespace PoGo.NecroBot.Logic
                         Logging.Logger.Write($"No Base walk strategy enabled, using 'NecroBot Walk'", Logging.LogLevel.Info, ConsoleColor.DarkYellow);
                     }
                 }
-                else
+                else if (distance > 15)
                 {
                     Logging.Logger.Write($"Distance to travel is < {_AutoWalkDist}m, using 'NecroBot Walk'", Logging.LogLevel.Info, ConsoleColor.DarkYellow);
                 }

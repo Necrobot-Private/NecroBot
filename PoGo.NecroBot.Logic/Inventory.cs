@@ -789,31 +789,11 @@ namespace PoGo.NecroBot.Logic
 
             int familyCandy = await GetCandyCount(pokemon.PokemonId).ConfigureAwait(false);
 
-            if (checkEvolveFilterRequirements)
+            if (checkEvolveFilterRequirements
+                && !IsEvolveByGlobalIvFilter(pokemon)
+                && !IsEvolveBySpecificFilter(pokemon, settings, familyCandy, appliedFilter))
             {
-                if (!appliedFilter.Operator.BoolFunc(
-                    appliedFilter.MinIV <= pokemon.Perfection(),
-                    appliedFilter.MinLV <= pokemon.Level(),
-                    appliedFilter.MinCP <= pokemon.CP(),
-                    (appliedFilter.Moves == null ||
-                    appliedFilter.Moves.Count == 0 ||
-                    appliedFilter.Moves.Any(x => x[0] == pokemon.Move1 && x[1] == pokemon.Move2)
-                    )
-                ))
-                {
-                    return false;
-                }
-
-                int minCandiesBeforeEvolve = appliedFilter.MinCandiesBeforeEvolve;
-                if (minCandiesBeforeEvolve > 0)
-                {
-                    if (ownerSession.LogicSettings.EvolvePreserveMinCandiesFromFilter)
-                    {
-                        minCandiesBeforeEvolve += GetCandyToEvolve(settings, appliedFilter);
-                    }
-                    if (familyCandy < minCandiesBeforeEvolve)
-                        return false;
-                }
+                return false;
             }
 
             PokemonId evolveTo = PokemonId.Missingno;
@@ -861,6 +841,46 @@ namespace PoGo.NecroBot.Logic
             return true;
         }
 
+        private bool IsEvolveBySpecificFilter(PokemonData pokemon, PokemonSettings settings, int familyCandy, EvolveFilter appliedFilter)
+        {
+            if (appliedFilter == null || !ownerSession.LogicSettings.EvolvePokemonsThatMatchFilter)
+                return false;
+
+            if (!appliedFilter.Operator.BoolFunc(
+                        appliedFilter.MinIV <= pokemon.Perfection(),
+                        appliedFilter.MinLV <= pokemon.Level(),
+                        appliedFilter.MinCP <= pokemon.CP(),
+                        (appliedFilter.Moves == null ||
+                        appliedFilter.Moves.Count == 0 ||
+                        appliedFilter.Moves.Any(x => x[0] == pokemon.Move1 && x[1] == pokemon.Move2)
+                        )
+                    ))
+            {
+                return false;
+            }
+
+            int minCandiesBeforeEvolve = appliedFilter.MinCandiesBeforeEvolve;
+            if (minCandiesBeforeEvolve > 0)
+            {
+                if (ownerSession.LogicSettings.EvolvePreserveMinCandiesFromFilter)
+                {
+                    minCandiesBeforeEvolve += GetCandyToEvolve(settings, appliedFilter);
+                }
+                if (familyCandy < minCandiesBeforeEvolve)
+                    return false;
+            }
+
+            return true;
+        }
+
+        private bool IsEvolveByGlobalIvFilter(PokemonData pokemon)
+        {
+            if (ownerSession.LogicSettings.EvolveAnyPokemonAboveIv
+                && ownerSession.LogicSettings.EvolveAnyPokemonAboveIvValue <= pokemon.Perfection())
+                return true;
+            return false;
+        }
+
         public async Task<IEnumerable<PokemonData>> GetPokemonToEvolve(Dictionary<PokemonId, EvolveFilter> filters = null)
         {
             var buddy = (await GetPlayerData().ConfigureAwait(false)).PlayerData.BuddyPokemon?.Id;
@@ -871,9 +891,7 @@ namespace PoGo.NecroBot.Logic
 
             foreach (var pokemon in myPokemons)
             {
-                if (!filters.ContainsKey(pokemon.PokemonId)) continue;
-                var filter = filters[pokemon.PokemonId];
-
+                filters.TryGetValue(pokemon.PokemonId, out var filter);
                 if (await CanEvolvePokemon(pokemon, filter, true).ConfigureAwait(false))
                 {
                     possibleEvolvePokemons.Add(pokemon);
@@ -888,10 +906,10 @@ namespace PoGo.NecroBot.Logic
             foreach (var g in groupedPokemons)
             {
                 PokemonId pokemonId = g.Key;
-                var filter = filters[pokemonId];
+                filters.TryGetValue(pokemonId, out var filter);
 
                 int candiesAvailable = await GetCandyCount(pokemonId).ConfigureAwait(false);
-                if (ownerSession.LogicSettings.EvolvePreserveMinCandiesFromFilter)
+                if (filter != null && ownerSession.LogicSettings.EvolvePreserveMinCandiesFromFilter)
                 {
                     // Do not use candies below filter defined MinCandiesBeforeEvolve
                     candiesAvailable -= filter.MinCandiesBeforeEvolve;

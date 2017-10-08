@@ -38,15 +38,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                             if (ActionRandom.Next(1, 10) > 4)
                                 await TransferWeakPokemonTask.Execute(session, cancellationToken).ConfigureAwait(false);
                         if (ActionRandom.Next(1, 10) > 4)
-                        {
-                            if (session.LogicSettings.EvolveAllPokemonAboveIv ||
-                                session.LogicSettings.EvolveAllPokemonWithEnoughCandy ||
-                                session.LogicSettings.UseLuckyEggsWhileEvolving ||
-                                session.LogicSettings.KeepPokemonsThatCanEvolve)
-                            {
+                            if (EvolvePokemonTask.IsActivated(session))
                                 await EvolvePokemonTask.Execute(session, cancellationToken).ConfigureAwait(false);
-                            }
-                        }
                         break;
                     case 3:
                         if (session.LogicSettings.UseLuckyEggConstantly)

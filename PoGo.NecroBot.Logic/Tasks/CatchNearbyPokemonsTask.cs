@@ -91,13 +91,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                     if (session.LogicSettings.TransferWeakPokemon)
                         await TransferWeakPokemonTask.Execute(session, cancellationToken).ConfigureAwait(false);
 
-                    if (session.LogicSettings.EvolveAllPokemonAboveIv ||
-                        session.LogicSettings.EvolveAllPokemonWithEnoughCandy ||
-                        session.LogicSettings.UseLuckyEggsWhileEvolving ||
-                        session.LogicSettings.KeepPokemonsThatCanEvolve)
-                    {
+                    if (EvolvePokemonTask.IsActivated(session))
                         await EvolvePokemonTask.Execute(session, cancellationToken).ConfigureAwait(false);
-                    }
                 }
             }
 
@@ -113,7 +108,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 if (PokeBalls >= session.LogicSettings.PokeballsToKeepForSnipe)  // Don't display if not enough Pokeballs - TheWizrad1328
                   Logger.Write($"Catching {pokemons.Count} Pokemon Nearby...", LogLevel.Info);
               else
-                  Logger.Write($"{session.LogicSettings.PokeballsToKeepForSnipe - PokeBalls} more Pokeballs are needed to catch {pokemons.Count} nearby Pokemon...", LogLevel.Info);
+                  Logger.Write($"collecting {session.LogicSettings.PokeballsToKeepForSnipe - PokeBalls} more Pokeballs. Catching of pokemon is temporarily susspended...", LogLevel.Info);
 
             foreach (var pokemon in pokemons)
             {
@@ -190,13 +185,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                             await TransferDuplicatePokemonTask.Execute(session, cancellationToken).ConfigureAwait(false);
                         if (session.LogicSettings.TransferWeakPokemon)
                             await TransferWeakPokemonTask.Execute(session, cancellationToken).ConfigureAwait(false);
-                        if (session.LogicSettings.EvolveAllPokemonAboveIv ||
-                            session.LogicSettings.EvolveAllPokemonWithEnoughCandy ||
-                            session.LogicSettings.UseLuckyEggsWhileEvolving ||
-                            session.LogicSettings.KeepPokemonsThatCanEvolve)
-                        {
+                        if (EvolvePokemonTask.IsActivated(session))
                             await EvolvePokemonTask.Execute(session, cancellationToken).ConfigureAwait(false);
-                        }
                     }
                     else
                         session.EventDispatcher.Send(new WarnEvent
