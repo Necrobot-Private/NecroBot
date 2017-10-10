@@ -1419,8 +1419,8 @@ namespace PoGo.NecroBot.Logic.Tasks
                 return false;
 
             //Only berries if my pokemon is into gym
-            if (!DeployedPokemons.Any(a => a.DeployedFortId.Equals(Gym.Id)))
-                return false;
+            if (DeployedPokemons.Any(a => a.DeployedFortId.Equals(Gym.Id)))
+               return true;
 
             try
             {
@@ -1432,7 +1432,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 //
             }
 
-            return true;
+            return false;
         }
 
         private static bool CanDeployToGym()
@@ -1440,10 +1440,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (!Session.LogicSettings.GymConfig.EnableDeployPokemon || !Session.LogicSettings.GymConfig.Enable)
                 return false;
 
-            if (DeployedPokemons.Any(a => a.DeployedFortId.Equals(Gym.Id)))
-                return false;
-
-            if (!(GymDetails.GymStatusAndDefenders.GymDefender.Count() < MaxPlayers))
+             if (!(GymDetails.GymStatusAndDefenders.GymDefender.Count() < MaxPlayers))
                 return false;
 
             try
