@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System.IO;
 using System.Text;
 using System.Security.Cryptography;
+using PokemonGo.RocketAPI.Helpers;
 
 namespace PoGo.NecroBot.Logic.Model.Settings
 {
@@ -20,24 +21,24 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             ios
         }
 
-        [DefaultValue("android")]
+        [DefaultValue("ios")]
         [EnumDataType(typeof(DevicePlatformType))]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 1)]
-        public string DevicePlatform = "android";
+        public string DevicePlatform = "ios";
 
-        [DefaultValue("random")]
+        [DefaultValue("custom")]
         [MinLength(0)]
         [MaxLength(32)]
         [RegularExpression(@"[a-zA-Z0-9_\-\.\s]")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
-        public string DevicePackageName = "random";
+        public string DevicePackageName = "custom";
 
-        [DefaultValue("8525f5d8201f78b5")]
+        [DefaultValue("c9e09530c39b11f75383dfcfe4e7e90fef92469e")]
         [MinLength(12)]
         [MaxLength(40)]
         [RegularExpression(@"^[0-9A-Fa-f]+$")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 3)]
-        public string DeviceId = "8525f5d8201f78b5";
+        public string DeviceId = DeviceInfoHelper.GetRandomIosDevice().DeviceId;
 
         [DefaultValue(null)]
         [MinLength(0)]
@@ -53,19 +54,19 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 5)]
         public string AndroidBootloader;
 
-        [DefaultValue("HTC")]
+        [DefaultValue("Apple")]
         [MinLength(0)]
         [MaxLength(32)]
         [RegularExpression(@"[a-zA-Z0-9_\-\.\s]")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 6)]
-        public string DeviceBrand = "HTC";
+        public string DeviceBrand = "Apple";
 
-        [DefaultValue("HTC 10")]
+        [DefaultValue("iPhone")]
         [MinLength(0)]
         [MaxLength(32)]
         [RegularExpression(@"[a-zA-Z0-9_\-\.\s]")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 7)]
-        public string DeviceModel = "HTC 10";
+        public string DeviceModel = "iPhone";
 
         [DefaultValue(null)]
         [MinLength(0)]
@@ -74,33 +75,33 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 8)]
         public string DeviceModelIdentifier;
 
-        [DefaultValue("qcom")]
+        [DefaultValue("iPhone9,3")]
         [MinLength(0)]
         [MaxLength(32)]
         [RegularExpression(@"[a-zA-Z0-9_\-\.\s]")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 9)]
-        public string DeviceModelBoot = "qcom";
+        public string DeviceModelBoot = "iPhone9,3";
 
-        [DefaultValue("HTC")]
+        [DefaultValue("Apple")]
         [MinLength(0)]
         [MaxLength(32)]
         [RegularExpression(@"[a-zA-Z0-9_\-\.\s]")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 10)]
-        public string HardwareManufacturer = "HTC";
+        public string HardwareManufacturer = "Apple";
 
-        [DefaultValue("HTC 10")]
+        [DefaultValue("D101AP")]
         [MinLength(0)]
         [MaxLength(32)]
         [RegularExpression(@"[a-zA-Z0-9_\-\.\s]")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 11)]
-        public string HardwareModel = "HTC 10";
+        public string HardwareModel = "D101AP";
 
-        [DefaultValue("pmewl_00531")]
+        [DefaultValue("iOS")]
         [MinLength(0)]
         [MaxLength(32)]
         [RegularExpression(@"[a-zA-Z0-9_\-\.\s]")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 12)]
-        public string FirmwareBrand = "pmewl_00531";
+        public string FirmwareBrand = "iOS";
 
         [DefaultValue(null)]
         [MinLength(0)]
@@ -109,12 +110,12 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 13)]
         public string FirmwareTags;
 
-        [DefaultValue("user")]
+        [DefaultValue("11.1.0")]
         [MinLength(0)]
         [MaxLength(32)]
         [RegularExpression(@"[a-zA-Z0-9_\-\.\s]")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 14)]
-        public string FirmwareType = "user";
+        public string FirmwareType = "11.1.0";
 
         [DefaultValue(null)]
         [MinLength(0)]
