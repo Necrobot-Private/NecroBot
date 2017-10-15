@@ -125,7 +125,7 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         public string FirmwareFingerprint;
 
         [DefaultValue(false)]
-        [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 15)]
+        [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 16)]
         public bool UseRandomDeviceId;
 
         public static string GetDeviceId(string username)
