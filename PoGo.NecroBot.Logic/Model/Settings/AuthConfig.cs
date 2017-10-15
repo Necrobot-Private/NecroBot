@@ -47,6 +47,23 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 7)]
         public bool AccountActive { get; set; }
 
+        //TimeZone Player locale settings
+        [DefaultValue("US")]
+        [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 8)]
+        public string Country { get; set; }
+
+        [DefaultValue("en")]
+        [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 9)]
+        public string Language { get; set; }
+
+        [DefaultValue("America/New_York")]
+        [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 10)]
+        public string TimeZone { get; set; }
+
+        [DefaultValue("en-us")]
+        [JsonProperty(Required = Required.Default, DefaultValueHandling = DefaultValueHandling.Populate, Order = 11)]
+        public string POSIX { get; set; }
+
         // Total runtime since client started
         [JsonIgnore]
         public double RuntimeTotal { get; set; }

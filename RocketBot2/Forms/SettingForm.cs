@@ -6,6 +6,7 @@ using PoGo.NecroBot.Logic.Model.Settings;
 using PoGo.NecroBot.Logic.State;
 using POGOProtos.Enums;
 using PokemonGo.RocketAPI.Enums;
+using PokemonGo.RocketAPI.Helpers;
 using RocketBot2.Forms.advSettings;
 using RocketBot2.Helpers;
 using RocketBot2.Win32;
@@ -31,8 +32,6 @@ namespace RocketBot2.Forms
         private static readonly string AuthFilePath = Path.Combine(ConfigFolderPath, "auth.json");
         private static readonly string ConfigFilePath = Path.Combine(ConfigFolderPath, "config.json");
         private static readonly string LanguagePath = Path.Combine(ConfigFolderPath, "Translations");
-        private readonly DeviceHelper _deviceHelper;
-        private readonly List<DeviceInfo> _deviceInfos;
         public static GlobalSettings _settings;
         public static MultiAccountManager accountManager;
         private readonly ISession _session;
@@ -42,9 +41,6 @@ namespace RocketBot2.Forms
             InitializeComponent();
             _settings = settings;
             _session = session;
-
-            _deviceHelper = new DeviceHelper();
-            _deviceInfos = _deviceHelper.DeviceBucket;
 
             args = _args;
             var Pokemons = Enum.GetValues(typeof(PokemonId)).Cast<PokemonId>().Where(id => id != PokemonId.Missingno);
@@ -57,6 +53,14 @@ namespace RocketBot2.Forms
                 clbEvolve.Items.Add(pokemon);
                 clbSnipePokemonFilter.Items.Add(pokemon);
             }
+
+            var zones = new TimeZoneIds().GetTimeZoneIds();
+            foreach (var tz in zones)
+            {
+                cbTimeZone.Items.Add(tz.Key);
+            }
+
+            cbTimeZone.Text = settings.Auth.CurrentAuthConfig.TimeZone;
 
             var logicSettings = new LogicSettings(settings);
             accountManager = new MultiAccountManager(settings, logicSettings.Bots);
@@ -170,7 +174,6 @@ namespace RocketBot2.Forms
             FirmwareTagsTb.Text = _settings.Auth.DeviceConfig.FirmwareTags;
             FirmwareTypeTb.Text = _settings.Auth.DeviceConfig.FirmwareType;
             FirmwareFingerprintTb.Text = _settings.Auth.DeviceConfig.FirmwareFingerprint;
-            deviceTypeCb.SelectedIndex = _settings.Auth.DeviceConfig.DeviceBrand.ToLower() == "apple" ? 0 : 1;
 
             #endregion
 
@@ -513,29 +516,22 @@ namespace RocketBot2.Forms
             }
         }
 
-        private void PopulateDevice(int tabIndex = -1)
-        {
-            deviceTypeCb.SelectedIndex = tabIndex == -1 ? _deviceHelper.GetRandomIndex(2) : tabIndex;
-            var candidateDevices = deviceTypeCb.SelectedIndex == 0
-                ? _deviceInfos.Where(d => d.DeviceBrand.ToLower() == "apple").ToList()
-                : _deviceInfos.Where(d => d.DeviceBrand.ToLower() != "apple").ToList();
-            var selectIndex = _deviceHelper.GetRandomIndex(candidateDevices.Count);
-
-            DeviceIdTb.Text = candidateDevices[selectIndex].DeviceId == "8525f5d8201f78b5"
-                ? _deviceHelper.RandomString(16, "0123456789abcdef")
-                : candidateDevices[selectIndex].DeviceId;
-            AndroidBoardNameTb.Text = candidateDevices[selectIndex].AndroidBoardName;
-            AndroidBootloaderTb.Text = candidateDevices[selectIndex].AndroidBootloader;
-            DeviceBrandTb.Text = candidateDevices[selectIndex].DeviceBrand;
-            DeviceModelTb.Text = candidateDevices[selectIndex].DeviceModel;
-            DeviceModelIdentifierTb.Text = candidateDevices[selectIndex].DeviceModelIdentifier;
-            DeviceModelBootTb.Text = candidateDevices[selectIndex].DeviceModelBoot;
-            HardwareManufacturerTb.Text = candidateDevices[selectIndex].HardwareManufacturer;
-            HardwareModelTb.Text = candidateDevices[selectIndex].HardwareModel;
-            FirmwareBrandTb.Text = candidateDevices[selectIndex].FirmwareBrand;
-            FirmwareTagsTb.Text = candidateDevices[selectIndex].FirmwareTags;
-            FirmwareTypeTb.Text = candidateDevices[selectIndex].FirmwareType;
-            FirmwareFingerprintTb.Text = candidateDevices[selectIndex].FirmwareFingerprint;
+        private void PopulateDevice()
+        { 
+            var device = DeviceInfoHelper.GetRandomIosDevice();
+            DeviceIdTb.Text = device.DeviceId;
+            AndroidBoardNameTb.Text = device.AndroidBoardName;
+            AndroidBootloaderTb.Text = device.AndroidBootloader;
+            DeviceBrandTb.Text = device.DeviceBrand;
+            DeviceModelTb.Text = device.DeviceModel;
+            DeviceModelIdentifierTb.Text = device.DeviceModelIdentifier;
+            DeviceModelBootTb.Text = device.DeviceModelBoot;
+            HardwareManufacturerTb.Text = device.HardwareManufacturer;
+            HardwareModelTb.Text = device.HardwareModel;
+            FirmwareBrandTb.Text = device.FirmwareBrand;
+            FirmwareTagsTb.Text = device.FirmwareTags;
+            FirmwareTypeTb.Text = device.FirmwareType;
+            FirmwareFingerprintTb.Text = device.FirmwareFingerprint;
         }
 
         private static void ListSelectAllHandler(CheckedListBox targetList, bool setToValue)
@@ -580,6 +576,14 @@ namespace RocketBot2.Forms
                 {
                     File.Delete(lastPosFile);
                 }
+
+                //TimeZones for current Player
+                var x = new TimeZoneIds().GetTimeZoneIds();
+                _settings.Auth.CurrentAuthConfig.TimeZone = cbTimeZone.Text;
+                _settings.Auth.CurrentAuthConfig.Country = x[cbTimeZone.Text].Item1;
+                _settings.Auth.CurrentAuthConfig.Language = x[cbTimeZone.Text].Item2;
+                _settings.Auth.CurrentAuthConfig.POSIX = x[cbTimeZone.Text].Item3;
+                //
                 _settings.Auth.CurrentAuthConfig.AuthType = authTypeCb.Text == @"Google" ? AuthType.Google : AuthType.Ptc;
                 _settings.Auth.CurrentAuthConfig.Username = UserLoginBox.Text;
                 _settings.Auth.CurrentAuthConfig.Password = UserPasswordBox.Text;
@@ -896,7 +900,7 @@ namespace RocketBot2.Forms
 
         private void RandomIDBtn_Click(object sender, EventArgs e)
         {
-            DeviceIdTb.Text = _deviceHelper.RandomString(16, "0123456789abcdef");
+            DeviceIdTb.Text = DeviceInfoHelper.GetRandomIosDevice().DeviceId;
         }
 
         private void RandomDeviceBtn_Click(object sender, EventArgs e)
@@ -912,11 +916,6 @@ namespace RocketBot2.Forms
         private void UseProxyAuthCb_CheckedChanged(object sender, EventArgs e)
         {
             ToggleProxyCtrls();
-        }
-
-        private void DeviceTypeCb_SelectionChangeCommitted(object sender, EventArgs e)
-        {
-            PopulateDevice(deviceTypeCb.SelectedIndex);
         }
 
         private void CbPowerUpAll_CheckedChanged(object sender, EventArgs e)

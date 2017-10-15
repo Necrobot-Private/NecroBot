@@ -110,6 +110,30 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             set { _settings.Auth.CurrentAuthConfig.AccountActive = value; }
         }
 
+        string ISettings.Country
+        {
+            get { return _settings.Auth.CurrentAuthConfig.Country; }
+            set { _settings.Auth.CurrentAuthConfig.Country = value; }
+        }
+
+        string ISettings.Language
+        {
+            get { return _settings.Auth.CurrentAuthConfig.Language; }
+            set { _settings.Auth.CurrentAuthConfig.Language = value; }
+        }
+
+        string ISettings.TimeZone
+        {
+            get { return _settings.Auth.CurrentAuthConfig.TimeZone; }
+            set { _settings.Auth.CurrentAuthConfig.TimeZone = value; }
+        }
+
+        string ISettings.POSIX
+        {
+            get { return _settings.Auth.CurrentAuthConfig.POSIX; }
+            set { _settings.Auth.CurrentAuthConfig.POSIX = value; }
+        }
+
         #endregion Auth Config Values
 
         #region Device Config Values

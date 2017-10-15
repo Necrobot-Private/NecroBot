@@ -32,6 +32,8 @@
             this.cancelBtn = new System.Windows.Forms.Button();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabAuth = new System.Windows.Forms.TabPage();
+            this.cbTimeZone = new System.Windows.Forms.ComboBox();
+            this.label34 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPosition = new System.Windows.Forms.TabPage();
             this.AdressBox = new System.Windows.Forms.TextBox();
@@ -40,14 +42,13 @@
             this.ResetLocationBtn = new System.Windows.Forms.Button();
             this.gMapCtrl = new GMap.NET.WindowsForms.GMapControl();
             this.tabDevice = new System.Windows.Forms.TabPage();
+            this.label18 = new System.Windows.Forms.Label();
             this.groupBox20 = new System.Windows.Forms.GroupBox();
             this.FirmwareTypeTb = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.FirmwareFingerprintTb = new System.Windows.Forms.TextBox();
             this.label22 = new System.Windows.Forms.Label();
-            this.label18 = new System.Windows.Forms.Label();
-            this.deviceTypeCb = new System.Windows.Forms.ComboBox();
             this.RandomDeviceBtn = new System.Windows.Forms.Button();
             this.label20 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
@@ -417,6 +418,8 @@
             // tabAuth
             // 
             this.tabAuth.BackColor = System.Drawing.SystemColors.Control;
+            this.tabAuth.Controls.Add(this.cbTimeZone);
+            this.tabAuth.Controls.Add(this.label34);
             this.tabAuth.Controls.Add(this.tabControl1);
             this.tabAuth.Controls.Add(this.GoogleApiBox);
             this.tabAuth.Controls.Add(this.GoogleApiLabel);
@@ -442,6 +445,23 @@
             this.tabAuth.Size = new System.Drawing.Size(954, 485);
             this.tabAuth.TabIndex = 0;
             this.tabAuth.Text = "Auth";
+            // 
+            // cbTimeZone
+            // 
+            this.cbTimeZone.FormattingEnabled = true;
+            this.cbTimeZone.Location = new System.Drawing.Point(125, 265);
+            this.cbTimeZone.Name = "cbTimeZone";
+            this.cbTimeZone.Size = new System.Drawing.Size(203, 28);
+            this.cbTimeZone.TabIndex = 36;
+            // 
+            // label34
+            // 
+            this.label34.AutoSize = true;
+            this.label34.Location = new System.Drawing.Point(8, 269);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(79, 20);
+            this.label34.TabIndex = 35;
+            this.label34.Text = "TimeZone:";
             // 
             // tabControl1
             // 
@@ -565,10 +585,9 @@
             // tabDevice
             // 
             this.tabDevice.BackColor = System.Drawing.SystemColors.Control;
+            this.tabDevice.Controls.Add(this.label18);
             this.tabDevice.Controls.Add(this.groupBox20);
             this.tabDevice.Controls.Add(this.label22);
-            this.tabDevice.Controls.Add(this.label18);
-            this.tabDevice.Controls.Add(this.deviceTypeCb);
             this.tabDevice.Controls.Add(this.RandomDeviceBtn);
             this.tabDevice.Controls.Add(this.label20);
             this.tabDevice.Controls.Add(this.label21);
@@ -602,6 +621,18 @@
             this.tabDevice.Size = new System.Drawing.Size(604, 445);
             this.tabDevice.TabIndex = 1;
             this.tabDevice.Text = "Device";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.label18.Location = new System.Drawing.Point(8, 16);
+            this.label18.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(577, 20);
+            this.label18.TabIndex = 71;
+            this.label18.Text = "PokemonGo.RocketAPI (FeroxRev Credits) emulates only iOS android is not supported" +
+    ".";
             // 
             // groupBox20
             // 
@@ -676,32 +707,6 @@
             this.label22.Text = "This setting change what the server\r\nthink you are using to play Pokémon GO. \r\nIt" +
     "s a good idea to change your device to \r\nwhat phone you are using to prevent ban" +
     ".";
-            // 
-            // label18
-            // 
-            this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(8, 20);
-            this.label18.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(92, 20);
-            this.label18.TabIndex = 36;
-            this.label18.Text = "Device Type:";
-            // 
-            // deviceTypeCb
-            // 
-            this.deviceTypeCb.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.deviceTypeCb.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.deviceTypeCb.FormattingEnabled = true;
-            this.deviceTypeCb.Items.AddRange(new object[] {
-            "Apple",
-            "Android"});
-            this.deviceTypeCb.Location = new System.Drawing.Point(188, 15);
-            this.deviceTypeCb.Margin = new System.Windows.Forms.Padding(2, 5, 2, 5);
-            this.deviceTypeCb.Name = "deviceTypeCb";
-            this.deviceTypeCb.Size = new System.Drawing.Size(106, 28);
-            this.deviceTypeCb.TabIndex = 37;
-            this.deviceTypeCb.SelectionChangeCommitted += new System.EventHandler(this.DeviceTypeCb_SelectionChangeCommitted);
             // 
             // RandomDeviceBtn
             // 
@@ -1011,7 +1016,7 @@
             // 
             this.tbHashURL.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbHashURL.Location = new System.Drawing.Point(109, 115);
+            this.tbHashURL.Location = new System.Drawing.Point(109, 111);
             this.tbHashURL.Margin = new System.Windows.Forms.Padding(2);
             this.tbHashURL.Name = "tbHashURL";
             this.tbHashURL.Size = new System.Drawing.Size(186, 27);
@@ -1022,7 +1027,7 @@
             this.label74.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label74.AutoSize = true;
-            this.label74.Location = new System.Drawing.Point(2, 118);
+            this.label74.Location = new System.Drawing.Point(4, 114);
             this.label74.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label74.Name = "label74";
             this.label74.Size = new System.Drawing.Size(75, 20);
@@ -1033,7 +1038,7 @@
             // 
             this.tbPushBulletAPIKey.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbPushBulletAPIKey.Location = new System.Drawing.Point(109, 181);
+            this.tbPushBulletAPIKey.Location = new System.Drawing.Point(109, 173);
             this.tbPushBulletAPIKey.Margin = new System.Windows.Forms.Padding(2);
             this.tbPushBulletAPIKey.Name = "tbPushBulletAPIKey";
             this.tbPushBulletAPIKey.Size = new System.Drawing.Size(186, 27);
@@ -1044,7 +1049,7 @@
             this.label68.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label68.AutoSize = true;
-            this.label68.Location = new System.Drawing.Point(2, 186);
+            this.label68.Location = new System.Drawing.Point(4, 176);
             this.label68.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label68.Name = "label68";
             this.label68.Size = new System.Drawing.Size(83, 20);
@@ -1054,7 +1059,7 @@
             // cbEnablePushBulletNotification
             // 
             this.cbEnablePushBulletNotification.AutoSize = true;
-            this.cbEnablePushBulletNotification.Location = new System.Drawing.Point(8, 150);
+            this.cbEnablePushBulletNotification.Location = new System.Drawing.Point(8, 145);
             this.cbEnablePushBulletNotification.Margin = new System.Windows.Forms.Padding(2);
             this.cbEnablePushBulletNotification.Name = "cbEnablePushBulletNotification";
             this.cbEnablePushBulletNotification.Size = new System.Drawing.Size(231, 24);
@@ -1090,7 +1095,7 @@
             // 
             this.tbAuthAPIKey.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbAuthAPIKey.Location = new System.Drawing.Point(109, 219);
+            this.tbAuthAPIKey.Location = new System.Drawing.Point(109, 206);
             this.tbAuthAPIKey.Margin = new System.Windows.Forms.Padding(2);
             this.tbAuthAPIKey.Name = "tbAuthAPIKey";
             this.tbAuthAPIKey.Size = new System.Drawing.Size(186, 27);
@@ -1101,7 +1106,7 @@
             this.label67.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label67.AutoSize = true;
-            this.label67.Location = new System.Drawing.Point(2, 222);
+            this.label67.Location = new System.Drawing.Point(4, 209);
             this.label67.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label67.Name = "label67";
             this.label67.Size = new System.Drawing.Size(97, 20);
@@ -1236,11 +1241,11 @@
             this.proxyGb.Controls.Add(this.label19);
             this.proxyGb.Controls.Add(this.useProxyCb);
             this.proxyGb.Controls.Add(this.label23);
-            this.proxyGb.Location = new System.Drawing.Point(5, 268);
+            this.proxyGb.Location = new System.Drawing.Point(5, 302);
             this.proxyGb.Margin = new System.Windows.Forms.Padding(2);
             this.proxyGb.Name = "proxyGb";
             this.proxyGb.Padding = new System.Windows.Forms.Padding(2);
-            this.proxyGb.Size = new System.Drawing.Size(332, 202);
+            this.proxyGb.Size = new System.Drawing.Size(332, 168);
             this.proxyGb.TabIndex = 27;
             this.proxyGb.TabStop = false;
             this.proxyGb.Text = "Proxy Setting";
@@ -1259,7 +1264,7 @@
             // 
             this.proxyUserTb.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.proxyUserTb.Location = new System.Drawing.Point(120, 135);
+            this.proxyUserTb.Location = new System.Drawing.Point(120, 107);
             this.proxyUserTb.Margin = new System.Windows.Forms.Padding(2, 8, 2, 8);
             this.proxyUserTb.Name = "proxyUserTb";
             this.proxyUserTb.Size = new System.Drawing.Size(202, 27);
@@ -1269,7 +1274,7 @@
             // 
             this.proxyPwTb.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.proxyPwTb.Location = new System.Drawing.Point(120, 168);
+            this.proxyPwTb.Location = new System.Drawing.Point(120, 137);
             this.proxyPwTb.Margin = new System.Windows.Forms.Padding(2, 8, 2, 8);
             this.proxyPwTb.Name = "proxyPwTb";
             this.proxyPwTb.PasswordChar = '*';
@@ -1279,7 +1284,7 @@
             // label24
             // 
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(32, 138);
+            this.label24.Location = new System.Drawing.Point(4, 110);
             this.label24.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(78, 20);
@@ -1289,7 +1294,7 @@
             // label25
             // 
             this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(38, 168);
+            this.label25.Location = new System.Drawing.Point(3, 140);
             this.label25.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(73, 20);
@@ -1309,7 +1314,7 @@
             // useProxyAuthCb
             // 
             this.useProxyAuthCb.AutoSize = true;
-            this.useProxyAuthCb.Location = new System.Drawing.Point(8, 108);
+            this.useProxyAuthCb.Location = new System.Drawing.Point(120, 25);
             this.useProxyAuthCb.Margin = new System.Windows.Forms.Padding(2);
             this.useProxyAuthCb.Name = "useProxyAuthCb";
             this.useProxyAuthCb.Size = new System.Drawing.Size(196, 24);
@@ -1321,7 +1326,7 @@
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(68, 50);
+            this.label19.Location = new System.Drawing.Point(5, 55);
             this.label19.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(43, 20);
@@ -1343,7 +1348,7 @@
             // label23
             // 
             this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(72, 82);
+            this.label23.Location = new System.Drawing.Point(5, 81);
             this.label23.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(38, 20);
@@ -2136,7 +2141,7 @@
             this.gbExcludeTrans.Margin = new System.Windows.Forms.Padding(2, 5, 2, 5);
             this.gbExcludeTrans.Name = "gbExcludeTrans";
             this.gbExcludeTrans.Padding = new System.Windows.Forms.Padding(2, 5, 2, 5);
-            this.gbExcludeTrans.Size = new System.Drawing.Size(338, 518);
+            this.gbExcludeTrans.Size = new System.Drawing.Size(338, 534);
             this.gbExcludeTrans.TabIndex = 20;
             this.gbExcludeTrans.TabStop = false;
             this.gbExcludeTrans.Text = "Exclude";
@@ -2150,7 +2155,7 @@
             this.clbTransfer.Location = new System.Drawing.Point(2, 25);
             this.clbTransfer.Margin = new System.Windows.Forms.Padding(2, 5, 2, 5);
             this.clbTransfer.Name = "clbTransfer";
-            this.clbTransfer.Size = new System.Drawing.Size(334, 488);
+            this.clbTransfer.Size = new System.Drawing.Size(334, 504);
             this.clbTransfer.TabIndex = 0;
             // 
             // cbNotTransferAll
@@ -2395,7 +2400,7 @@
             this.gbPUP.Margin = new System.Windows.Forms.Padding(2, 5, 2, 5);
             this.gbPUP.Name = "gbPUP";
             this.gbPUP.Padding = new System.Windows.Forms.Padding(2, 5, 2, 5);
-            this.gbPUP.Size = new System.Drawing.Size(338, 518);
+            this.gbPUP.Size = new System.Drawing.Size(338, 534);
             this.gbPUP.TabIndex = 5;
             this.gbPUP.TabStop = false;
             this.gbPUP.Text = "Power Up";
@@ -2409,7 +2414,7 @@
             this.clbPowerUp.Location = new System.Drawing.Point(2, 25);
             this.clbPowerUp.Margin = new System.Windows.Forms.Padding(2, 5, 2, 5);
             this.clbPowerUp.Name = "clbPowerUp";
-            this.clbPowerUp.Size = new System.Drawing.Size(334, 488);
+            this.clbPowerUp.Size = new System.Drawing.Size(334, 504);
             this.clbPowerUp.TabIndex = 0;
             // 
             // cbPowerUpAll
@@ -2691,7 +2696,7 @@
             this.gbEvolve.Margin = new System.Windows.Forms.Padding(2, 5, 2, 5);
             this.gbEvolve.Name = "gbEvolve";
             this.gbEvolve.Padding = new System.Windows.Forms.Padding(2, 5, 2, 5);
-            this.gbEvolve.Size = new System.Drawing.Size(338, 518);
+            this.gbEvolve.Size = new System.Drawing.Size(338, 534);
             this.gbEvolve.TabIndex = 90;
             this.gbEvolve.TabStop = false;
             this.gbEvolve.Text = "Evolve Filter List (00/000)";
@@ -2705,7 +2710,7 @@
             this.clbEvolve.Location = new System.Drawing.Point(2, 25);
             this.clbEvolve.Margin = new System.Windows.Forms.Padding(2, 5, 2, 5);
             this.clbEvolve.Name = "clbEvolve";
-            this.clbEvolve.Size = new System.Drawing.Size(334, 488);
+            this.clbEvolve.Size = new System.Drawing.Size(334, 504);
             this.clbEvolve.TabIndex = 0;
             // 
             // tabSnipePokemonFilter
@@ -2730,7 +2735,7 @@
             this.gbSnipe.Margin = new System.Windows.Forms.Padding(2, 5, 2, 5);
             this.gbSnipe.Name = "gbSnipe";
             this.gbSnipe.Padding = new System.Windows.Forms.Padding(2, 5, 2, 5);
-            this.gbSnipe.Size = new System.Drawing.Size(338, 518);
+            this.gbSnipe.Size = new System.Drawing.Size(338, 534);
             this.gbSnipe.TabIndex = 17;
             this.gbSnipe.TabStop = false;
             this.gbSnipe.Text = "Snipe";
@@ -2744,7 +2749,7 @@
             this.clbSnipePokemonFilter.Location = new System.Drawing.Point(2, 25);
             this.clbSnipePokemonFilter.Margin = new System.Windows.Forms.Padding(2, 5, 2, 5);
             this.clbSnipePokemonFilter.Name = "clbSnipePokemonFilter";
-            this.clbSnipePokemonFilter.Size = new System.Drawing.Size(334, 488);
+            this.clbSnipePokemonFilter.Size = new System.Drawing.Size(334, 504);
             this.clbSnipePokemonFilter.TabIndex = 0;
             // 
             // cbSnipePokemonFilterAll
@@ -3719,7 +3724,7 @@
             this.splitContainer2.Panel2.BackColor = System.Drawing.SystemColors.Control;
             this.splitContainer2.Panel2.Controls.Add(this.splitContainer5);
             this.splitContainer2.Size = new System.Drawing.Size(950, 481);
-            this.splitContainer2.SplitterDistance = 469;
+            this.splitContainer2.SplitterDistance = 468;
             this.splitContainer2.SplitterWidth = 5;
             this.splitContainer2.TabIndex = 3;
             // 
@@ -3737,8 +3742,8 @@
             // splitContainer4.Panel2
             // 
             this.splitContainer4.Panel2.BackColor = System.Drawing.SystemColors.Control;
-            this.splitContainer4.Size = new System.Drawing.Size(469, 481);
-            this.splitContainer4.SplitterDistance = 256;
+            this.splitContainer4.Size = new System.Drawing.Size(468, 481);
+            this.splitContainer4.SplitterDistance = 255;
             this.splitContainer4.SplitterWidth = 5;
             this.splitContainer4.TabIndex = 3;
             // 
@@ -3748,9 +3753,9 @@
             this.Auth.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Auth.LabelEdit = true;
             this.Auth.Location = new System.Drawing.Point(0, 0);
-            this.Auth.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.Auth.Margin = new System.Windows.Forms.Padding(5);
             this.Auth.Name = "Auth";
-            this.Auth.Size = new System.Drawing.Size(256, 481);
+            this.Auth.Size = new System.Drawing.Size(255, 481);
             this.Auth.TabIndex = 2;
             // 
             // splitContainer5
@@ -3763,7 +3768,7 @@
             // splitContainer5.Panel1
             // 
             this.splitContainer5.Panel1.Controls.Add(this.Config);
-            this.splitContainer5.Size = new System.Drawing.Size(476, 481);
+            this.splitContainer5.Size = new System.Drawing.Size(477, 481);
             this.splitContainer5.SplitterDistance = 261;
             this.splitContainer5.SplitterWidth = 5;
             this.splitContainer5.TabIndex = 3;
@@ -3774,7 +3779,7 @@
             this.Config.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Config.LabelEdit = true;
             this.Config.Location = new System.Drawing.Point(0, 0);
-            this.Config.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.Config.Margin = new System.Windows.Forms.Padding(5);
             this.Config.Name = "Config";
             this.Config.Size = new System.Drawing.Size(261, 481);
             this.Config.TabIndex = 2;
@@ -4022,7 +4027,6 @@
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.Button RandomIDBtn;
-        private System.Windows.Forms.ComboBox deviceTypeCb;
         private System.Windows.Forms.Button RandomDeviceBtn;
         private System.Windows.Forms.TextBox FirmwareFingerprintTb;
         private System.Windows.Forms.Label label14;
@@ -4050,7 +4054,6 @@
         private System.Windows.Forms.Label BoardName;
         private System.Windows.Forms.TextBox DeviceIdTb;
         private System.Windows.Forms.Label deviceIdlb;
-        private System.Windows.Forms.Label label18;
         private System.Windows.Forms.TabPage tabPokemon;
         private System.Windows.Forms.TabControl tcPokemonDetail;
         private System.Windows.Forms.TabPage tabCatch;
@@ -4282,5 +4285,8 @@
         private System.Windows.Forms.TextBox textBox12;
         private System.Windows.Forms.CheckBox cbEvolvePokemonsThatMatchFilter;
         private System.Windows.Forms.CheckBox cbKeepPokemonsToBeEvolved;
+        private System.Windows.Forms.ComboBox cbTimeZone;
+        private System.Windows.Forms.Label label34;
+        private System.Windows.Forms.Label label18;
     }
 }
