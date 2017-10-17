@@ -1,0 +1,97 @@
+version: 0.0.0.{build}
+pull_requests:
+  do_not_increment_build_number: true
+branches:
+  only:
+  - master
+image: Visual Studio 2017
+configuration: Release
+platform: Any CPU
+clone_folder: c:\projects\necrobot2
+init:
+- ps: >-
+    if ($env:APPVEYOR_REPO_TAG -eq "true") {
+        $env:NecroBot2_Version = "$($env:APPVEYOR_REPO_TAG_NAME.Replace('v', ''))";
+    } else {
+        $env:NecroBot2_Version = "$($env:APPVEYOR_BUILD_VERSION)";
+    }
+assembly_info:
+  patch: true
+  file: '**\AssemblyInfo.*'
+  assembly_version: $(NecroBot2_Version)
+  assembly_file_version: 1.0.0.0
+  assembly_informational_version: $(APPVEYOR_REPO_TAG_NAME)
+environment:
+  CHANGELOG_GITHUB_TOKEN:
+    secure: CPUqE4qQLKF3sOOGWqNCH6DGaQJBAonBDh91/RpE5rEUR6DrO7ZnKLTgqzhsMnSw
+  access_token:
+    secure: CPUqE4qQLKF3sOOGWqNCH6DGaQJBAonBDh91/RpE5rEUR6DrO7ZnKLTgqzhsMnSw
+  github_email:
+    secure: q32LLnz5hlL/+cIhr5LXN09qd+6DeuWfX3griYwFygg=
+  github_user:
+    secure: ipQgvyBETytnrPuvqLXfPw==
+  priv_key:
+    secure: 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
+install:
+- git submodule update --init --recursive
+before_build:
+- nuget.exe restore
+build:
+  project: NecroBot-Private for Pokemon GO.sln
+  verbosity: quiet
+after_build:
+- ps: >-
+    Remove-Item "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)" -Recurse -ErrorAction Ignore; New-Item -ItemType Directory -Force -Path "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)"; New-Item -ItemType Directory -Force -Path "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)"; if ($env:PLATFORM -eq "x86") {
+        Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\PoGo.NecroBot.CLI\bin\$($env:PLATFORM)\$($env:CONFIGURATION)" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2" -Force;
+        Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\PoGo.Necrobot.Window\bin\$($env:PLATFORM)\$($env:CONFIGURATION)" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2.Win" -Force;
+        Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\RocketBot2\bin\$($env:PLATFORM)\$($env:CONFIGURATION)" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\RocketBot2" -Force;
+    }   elseif ($env:PLATFORM -eq "x64") {
+        Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\PoGo.NecroBot.CLI\bin\$($env:PLATFORM)\$($env:CONFIGURATION)" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2" -Force;
+        Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\PoGo.Necrobot.Window\bin\$($env:PLATFORM)\$($env:CONFIGURATION)" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2.Win" -Force;
+        Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\RocketBot2\bin\$($env:PLATFORM)\$($env:CONFIGURATION)" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\RocketBot2" -Force;
+    } elseif ($env:PLATFORM -eq "Any CPU") {
+        Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\PoGo.NecroBot.CLI\bin\$($env:CONFIGURATION)" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2" -Force;
+        Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\PoGo.Necrobot.Window\bin\$($env:CONFIGURATION)" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\NecroBot2.Win" -Force;
+        Move-Item -Path "$($env:APPVEYOR_BUILD_FOLDER)\RocketBot2\bin\$($env:CONFIGURATION)" -Destination "$($env:APPVEYOR_BUILD_FOLDER)\$($env:PLATFORM)\$($env:CONFIGURATION)\RocketBot2" -Force;
+    }
+test: off
+artifacts:
+- path: '\$(PLATFORM)\$(CONFIGURATION)\NecroBot2.Win'
+  name: NecroBot2.WIN.$(NecroBot2_Version)
+- path: '\$(PLATFORM)\$(CONFIGURATION)\NecroBot2'
+  name: NecroBot2.Console.$(NecroBot2_Version)
+- path: '\$(PLATFORM)\$(CONFIGURATION)\RocketBot2'
+  name: RocketBot2
+before_deploy:
+- ps: $fileContent = "-----BEGIN RSA PRIVATE KEY-----`n"; $fileContent += $env:priv_key.Replace(' ', "`n"); $fileContent += "`n-----END RSA PRIVATE KEY-----`n"; Set-Content "$env:USERPROFILE\.ssh\id_rsa" "$($fileContent)"; Set-Content "$env:USERPROFILE\.git-credentials" "https://$($env:auth_token):x-oauth-basic@github.com`n";
+- git config --global user.name "%github_user%"
+- git checkout -b Appveyor "%APPVEYOR_REPO_BRANCH%"
+- SET PATH=C:\Ruby23-x64\bin;%PATH%
+- ruby --version
+- where ruby
+- gem update --system --no-document --no-post-install-message
+- gem --version
+- where gem
+- gem install bundler
+- bundle install
+- bundle exec github_changelog_generator --user jjskuld --project necrobot
+- git add "CHANGELOG.md"
+- git add "PoGo.NecroBot.CLI/Properties/AssemblyInfo.cs"
+- git add "PoGo.NecroBot.Logic/Properties/AssemblyInfo.cs"
+- git add "PoGo.Necrobot.Window/Properties/AssemblyInfo.cs"
+- git commit -m "%APPVEYOR_REPO_TAG_NAME%"
+- git checkout "%APPVEYOR_REPO_BRANCH%"
+- git merge Appveyor
+- git branch -d Appveyor
+- git pull "origin" "%APPVEYOR_REPO_BRANCH%"
+- git push "origin" "%APPVEYOR_REPO_BRANCH%"
+deploy:
+- provider: GitHub
+  tag: $(APPVEYOR_REPO_TAG_NAME)
+  release: NecroBot2 $(APPVEYOR_REPO_TAG_NAME)
+  description: '[CHANGELOG.md](https://github.com/Necrobot-Private/NecroBot/blob/master/CHANGELOG.md)'
+  auth_token:
+    secure: yX+AZTJ0yQGeqKmdce7nJA==
+  force_update: true
+  on:
+    appveyor_repo_tag: true
