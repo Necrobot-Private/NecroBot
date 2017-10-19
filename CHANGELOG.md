@@ -1,12 +1,30 @@
 # Change Log
 
-## [Unreleased](https://github.com/Necrobot-Private/NecroBot/tree/HEAD)
+## [v1.0.0.370](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.370) (2017-10-19)
 
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/1.0.0.300...HEAD)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.350...v1.0.0.370)
+
+**Closed issues:**
+
+- 0.79.3 compatible version [\#1991](https://github.com/Necrobot-Private/NecroBot/issues/1991)
 
 **Merged pull requests:**
 
-- 0.75.1 supports [\#1983](https://github.com/Necrobot-Private/NecroBot/pull/1983) ([Furtif](https://github.com/Furtif))
+- set hex deviceid to good length 0.79.3 supports [\#1990](https://github.com/Necrobot-Private/NecroBot/pull/1990) ([Furtif](https://github.com/Furtif))
+
+## [v1.0.0.350](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.350) (2017-10-15)
+
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/1.0.0.300...v1.0.0.350)
+
+**Closed issues:**
+
+- API Change 0.77.1 [\#1988](https://github.com/Necrobot-Private/NecroBot/issues/1988)
+
+**Merged pull requests:**
+
+- Add List of NSTimeZone Names\(iOS 9.3.1\) for player locale 0.77.1 [\#1987](https://github.com/Necrobot-Private/NecroBot/pull/1987) ([Furtif](https://github.com/Furtif))
+- CLI, RocketBot2: Reworked Evolve Logic and Settings [\#1985](https://github.com/Necrobot-Private/NecroBot/pull/1985) ([Mantelinho](https://github.com/Mantelinho))
+- Killswitch Hotfix [\#1984](https://github.com/Necrobot-Private/NecroBot/pull/1984) ([CDAGaming](https://github.com/CDAGaming))
 
 ## [1.0.0.300](https://github.com/Necrobot-Private/NecroBot/tree/1.0.0.300) (2017-10-06)
 
@@ -24,6 +42,7 @@
 
 **Merged pull requests:**
 
+- 0.75.1 supports [\#1983](https://github.com/Necrobot-Private/NecroBot/pull/1983) ([Furtif](https://github.com/Furtif))
 - Logic and CLI: added evolve features, fixed bugs  [\#1982](https://github.com/Necrobot-Private/NecroBot/pull/1982) ([Mantelinho](https://github.com/Mantelinho))
 - Base SubModule and fixes gyms battes [\#1980](https://github.com/Necrobot-Private/NecroBot/pull/1980) ([Furtif](https://github.com/Furtif))
 - Update code [\#1979](https://github.com/Necrobot-Private/NecroBot/pull/1979) ([Furtif](https://github.com/Furtif))
@@ -34,7 +53,6 @@
 - Change gym methodes [\#1968](https://github.com/Necrobot-Private/NecroBot/pull/1968) ([Furtif](https://github.com/Furtif))
 - fixes Hash API server down time :xx:xx:xx  Last Ping [\#1965](https://github.com/Necrobot-Private/NecroBot/pull/1965) ([Furtif](https://github.com/Furtif))
 - Rocketbot updates [\#1964](https://github.com/Necrobot-Private/NecroBot/pull/1964) ([Furtif](https://github.com/Furtif))
-- 0.73.1 supports [\#1963](https://github.com/Necrobot-Private/NecroBot/pull/1963) ([Furtif](https://github.com/Furtif))
 
 ## [1.0.0.200](https://github.com/Necrobot-Private/NecroBot/tree/1.0.0.200) (2017-09-10)
 
@@ -78,6 +96,7 @@
 
 **Merged pull requests:**
 
+- 0.73.1 supports [\#1963](https://github.com/Necrobot-Private/NecroBot/pull/1963) ([Furtif](https://github.com/Furtif))
 - Updates/package updates [\#1954](https://github.com/Necrobot-Private/NecroBot/pull/1954) ([Lord-Haji](https://github.com/Lord-Haji))
 - Update translation.zh-CN.json [\#1953](https://github.com/Necrobot-Private/NecroBot/pull/1953) ([VBQL](https://github.com/VBQL))
 - Change Api calls methods [\#1950](https://github.com/Necrobot-Private/NecroBot/pull/1950) ([Furtif](https://github.com/Furtif))
@@ -103,7 +122,6 @@
 - Add missed console infos [\#1937](https://github.com/Necrobot-Private/NecroBot/pull/1937) ([Furtif](https://github.com/Furtif))
 - Fixe some bugs [\#1934](https://github.com/Necrobot-Private/NecroBot/pull/1934) ([Furtif](https://github.com/Furtif))
 - Others .... \[0.61.1\] [\#1924](https://github.com/Necrobot-Private/NecroBot/pull/1924) ([Furtif](https://github.com/Furtif))
-- Other Updates [\#1903](https://github.com/Necrobot-Private/NecroBot/pull/1903) ([Furtif](https://github.com/Furtif))
 
 ## [v1.0.0.186](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.186) (2017-07-29)
 
@@ -137,8 +155,8 @@
 
 **Merged pull requests:**
 
+- Other Updates [\#1903](https://github.com/Necrobot-Private/NecroBot/pull/1903) ([Furtif](https://github.com/Furtif))
 - Create CODE\_OF\_CONDUCT.md [\#1902](https://github.com/Necrobot-Private/NecroBot/pull/1902) ([Lord-Haji](https://github.com/Lord-Haji))
-- 0.69.0 Support - Various Updates [\#1887](https://github.com/Necrobot-Private/NecroBot/pull/1887) ([Furtif](https://github.com/Furtif))
 
 ## [v1.0.0.185](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.185) (2017-07-21)
 
@@ -152,7 +170,7 @@
 
 **Merged pull requests:**
 
-- Varios Updates [\#1886](https://github.com/Necrobot-Private/NecroBot/pull/1886) ([Furtif](https://github.com/Furtif))
+- 0.69.0 Support - Various Updates [\#1887](https://github.com/Necrobot-Private/NecroBot/pull/1887) ([Furtif](https://github.com/Furtif))
 
 ## [v1.0.0.184](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.184) (2017-07-08)
 
@@ -166,6 +184,7 @@
 
 **Merged pull requests:**
 
+- Varios Updates [\#1886](https://github.com/Necrobot-Private/NecroBot/pull/1886) ([Furtif](https://github.com/Furtif))
 - rebase resources \(rockebot\) [\#1883](https://github.com/Necrobot-Private/NecroBot/pull/1883) ([Furtif](https://github.com/Furtif))
 
 ## [v1.0.0.183](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.183) (2017-07-06)
@@ -211,7 +230,6 @@
 **Merged pull requests:**
 
 - v2.11.0.7 RB [\#1857](https://github.com/Necrobot-Private/NecroBot/pull/1857) ([Furtif](https://github.com/Furtif))
-- Pushbullet update & Translation - Fix pointer submodule feroxrev [\#1851](https://github.com/Necrobot-Private/NecroBot/pull/1851) ([Furtif](https://github.com/Furtif))
 - Update ui.pl.json WIP [\#1828](https://github.com/Necrobot-Private/NecroBot/pull/1828) ([SLASHLogin](https://github.com/SLASHLogin))
 
 ## [v1.0.0.181](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.181) (2017-06-27)
@@ -233,6 +251,7 @@
 **Merged pull requests:**
 
 - GetInbox Every Request [\#1855](https://github.com/Necrobot-Private/NecroBot/pull/1855) ([hardknoxni69a](https://github.com/hardknoxni69a))
+- Pushbullet update & Translation - Fix pointer submodule feroxrev [\#1851](https://github.com/Necrobot-Private/NecroBot/pull/1851) ([Furtif](https://github.com/Furtif))
 - add golden razz berrie and premierball ids [\#1846](https://github.com/Necrobot-Private/NecroBot/pull/1846) ([Furtif](https://github.com/Furtif))
 - Partial gyms fixes [\#1842](https://github.com/Necrobot-Private/NecroBot/pull/1842) ([Furtif](https://github.com/Furtif))
 
@@ -271,7 +290,6 @@
 
 - Fixes bug v1.0.0.178 Exception caught, writing LogBuffer [\#1826](https://github.com/Necrobot-Private/NecroBot/pull/1826) ([Furtif](https://github.com/Furtif))
 - Reapply Level Up Reward Fix [\#1819](https://github.com/Necrobot-Private/NecroBot/pull/1819) ([hopebasket](https://github.com/hopebasket))
-- Update LoginUserAgent \(update submodule\) [\#1815](https://github.com/Necrobot-Private/NecroBot/pull/1815) ([Furtif](https://github.com/Furtif))
 
 ## [v1.0.0.178](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.178) (2017-06-14)
 
@@ -289,6 +307,7 @@
 
 **Merged pull requests:**
 
+- Update LoginUserAgent \(update submodule\) [\#1815](https://github.com/Necrobot-Private/NecroBot/pull/1815) ([Furtif](https://github.com/Furtif))
 - Release v2.10.3.7 \(RocketBot2\) [\#1814](https://github.com/Necrobot-Private/NecroBot/pull/1814) ([Furtif](https://github.com/Furtif))
 - Auto Exit Bot If Account is Flagged [\#1812](https://github.com/Necrobot-Private/NecroBot/pull/1812) ([Furtif](https://github.com/Furtif))
 - Update CONTRIBUTORS.md [\#1811](https://github.com/Necrobot-Private/NecroBot/pull/1811) ([Furtif](https://github.com/Furtif))
@@ -304,7 +323,6 @@
 - merge RocketBot into NecroBot [\#1794](https://github.com/Necrobot-Private/NecroBot/pull/1794) ([TheWizard1328](https://github.com/TheWizard1328))
 - Add rocketbot to tray if minimized [\#1793](https://github.com/Necrobot-Private/NecroBot/pull/1793) ([Furtif](https://github.com/Furtif))
 - Update Dependencies and Adjustments [\#1792](https://github.com/Necrobot-Private/NecroBot/pull/1792) ([CDAGaming](https://github.com/CDAGaming))
-- Features/manual poke coin collection [\#1757](https://github.com/Necrobot-Private/NecroBot/pull/1757) ([Lord-Haji](https://github.com/Lord-Haji))
 
 ## [v1.0.0.177](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.177) (2017-06-01)
 
@@ -344,6 +362,7 @@
 - varius for teste [\#1762](https://github.com/Necrobot-Private/NecroBot/pull/1762) ([Furtif](https://github.com/Furtif))
 - Clean up lucky egg logic to always check expiration. [\#1760](https://github.com/Necrobot-Private/NecroBot/pull/1760) ([jjskuld](https://github.com/jjskuld))
 - Update Dependencies and Some Minor Layout Fixes [\#1758](https://github.com/Necrobot-Private/NecroBot/pull/1758) ([CDAGaming](https://github.com/CDAGaming))
+- Features/manual poke coin collection [\#1757](https://github.com/Necrobot-Private/NecroBot/pull/1757) ([Lord-Haji](https://github.com/Lord-Haji))
 - Remove old LiteDB code which is no longer in use. [\#1756](https://github.com/Necrobot-Private/NecroBot/pull/1756) ([jjskuld](https://github.com/jjskuld))
 - Updated pogoprotos to 2.10.x [\#1755](https://github.com/Necrobot-Private/NecroBot/pull/1755) ([jjskuld](https://github.com/jjskuld))
 - Layout Fixes and Display Version in Window Title [\#1753](https://github.com/Necrobot-Private/NecroBot/pull/1753) ([CDAGaming](https://github.com/CDAGaming))
@@ -378,7 +397,6 @@
 **Merged pull requests:**
 
 - Fix collecting levelup rewards. [\#1746](https://github.com/Necrobot-Private/NecroBot/pull/1746) ([hopebasket](https://github.com/hopebasket))
-- Changelog methode update [\#1742](https://github.com/Necrobot-Private/NecroBot/pull/1742) ([Furtif](https://github.com/Furtif))
 
 ## [v1.0.0.174](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.174) (2017-05-22)
 
@@ -409,6 +427,7 @@
 **Merged pull requests:**
 
 - Updates Google.Api.CommonProtos to v1.1.0 [\#1743](https://github.com/Necrobot-Private/NecroBot/pull/1743) ([CDAGaming](https://github.com/CDAGaming))
+- Changelog methode update [\#1742](https://github.com/Necrobot-Private/NecroBot/pull/1742) ([Furtif](https://github.com/Furtif))
 - Features/improve auto update Changes + Sync [\#1740](https://github.com/Necrobot-Private/NecroBot/pull/1740) ([CDAGaming](https://github.com/CDAGaming))
 - varius \(rocketbot\) [\#1739](https://github.com/Necrobot-Private/NecroBot/pull/1739) ([Furtif](https://github.com/Furtif))
 - Updated Method \(Needs Github Formatting for Auto Updating .md File\) - features/ImproveAutoUpdate [\#1737](https://github.com/Necrobot-Private/NecroBot/pull/1737) ([CDAGaming](https://github.com/CDAGaming))
@@ -416,7 +435,6 @@
 - Build.Bat Fixes \(Undoes Inline Optimizations\) and Fixes Version Check… [\#1734](https://github.com/Necrobot-Private/NecroBot/pull/1734) ([CDAGaming](https://github.com/CDAGaming))
 - Update Costura.Fody to v1.5.0 [\#1731](https://github.com/Necrobot-Private/NecroBot/pull/1731) ([CDAGaming](https://github.com/CDAGaming))
 - RocketBot2 release v2.10.1.2 \(current\) [\#1728](https://github.com/Necrobot-Private/NecroBot/pull/1728) ([Furtif](https://github.com/Furtif))
-- Updated submodules [\#1727](https://github.com/Necrobot-Private/NecroBot/pull/1727) ([jjskuld](https://github.com/jjskuld))
 
 ## [v1.0.0.173](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.173) (2017-05-20)
 
@@ -430,6 +448,7 @@
 
 **Merged pull requests:**
 
+- Updated submodules [\#1727](https://github.com/Necrobot-Private/NecroBot/pull/1727) ([jjskuld](https://github.com/jjskuld))
 - Updates Newtonsoft.Json.Schema from 2.0.11 to 2.0.12 [\#1726](https://github.com/Necrobot-Private/NecroBot/pull/1726) ([CDAGaming](https://github.com/CDAGaming))
 - Replace Random Pokemon Image for Actual Placeholder in MapPokemonMarker [\#1725](https://github.com/Necrobot-Private/NecroBot/pull/1725) ([CDAGaming](https://github.com/CDAGaming))
 - Updated PokeHash Endpoint [\#1724](https://github.com/Necrobot-Private/NecroBot/pull/1724) ([LordBunny](https://github.com/LordBunny))
@@ -438,7 +457,6 @@
 - Refactor Resources URL to use cdn.rawgit domain [\#1720](https://github.com/Necrobot-Private/NecroBot/pull/1720) ([Lord-Haji](https://github.com/Lord-Haji))
 - Many Bug Fixes & General Improvements - Ready to Merge! [\#1719](https://github.com/Necrobot-Private/NecroBot/pull/1719) ([CDAGaming](https://github.com/CDAGaming))
 - Adapted construction and Update submodule POGOProtos : add x64 platform [\#1717](https://github.com/Necrobot-Private/NecroBot/pull/1717) ([Furtif](https://github.com/Furtif))
-- Update POGOProtos to v2.10.1 and fixes appveyor warnigs [\#1713](https://github.com/Necrobot-Private/NecroBot/pull/1713) ([Furtif](https://github.com/Furtif))
 
 ## [v1.0.0.172](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.172) (2017-05-18)
 
@@ -454,6 +472,7 @@
 **Merged pull requests:**
 
 - Update translation.zh-TW.json [\#1715](https://github.com/Necrobot-Private/NecroBot/pull/1715) ([informer0827](https://github.com/informer0827))
+- Update POGOProtos to v2.10.1 and fixes appveyor warnigs [\#1713](https://github.com/Necrobot-Private/NecroBot/pull/1713) ([Furtif](https://github.com/Furtif))
 - Update translation.zh-TW.json [\#1712](https://github.com/Necrobot-Private/NecroBot/pull/1712) ([informer0827](https://github.com/informer0827))
 - Fix ConsoleThemer Border & Add 3-Way Color Support \(WIP\) [\#1710](https://github.com/Necrobot-Private/NecroBot/pull/1710) ([CDAGaming](https://github.com/CDAGaming))
 - REVERT WPF Performance Improvements - Remove Native Console [\#1709](https://github.com/Necrobot-Private/NecroBot/pull/1709) ([jjskuld](https://github.com/jjskuld))
@@ -467,11 +486,14 @@
 - Bug fix/local sniping [\#1707](https://github.com/Necrobot-Private/NecroBot/pull/1707) ([jjskuld](https://github.com/jjskuld))
 - fix MainClientWindow ToUnixTime missing using [\#1704](https://github.com/Necrobot-Private/NecroBot/pull/1704) ([Furtif](https://github.com/Furtif))
 - Update translation.zh-TW.json [\#1703](https://github.com/Necrobot-Private/NecroBot/pull/1703) ([informer0827](https://github.com/informer0827))
-- Updated platform 8 for 0.63.1 [\#1701](https://github.com/Necrobot-Private/NecroBot/pull/1701) ([jjskuld](https://github.com/jjskuld))
 
 ## [v1.0.0.170](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.170) (2017-05-15)
 
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.169...v1.0.0.170)
+
+**Merged pull requests:**
+
+- Updated platform 8 for 0.63.1 [\#1701](https://github.com/Necrobot-Private/NecroBot/pull/1701) ([jjskuld](https://github.com/jjskuld))
 
 ## [v1.0.0.169](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.169) (2017-05-15)
 
@@ -511,7 +533,6 @@
 - v2.9.2.2 Current Build \(RocketBot2\) [\#1679](https://github.com/Necrobot-Private/NecroBot/pull/1679) ([Furtif](https://github.com/Furtif))
 - Updated PokeEase and Electron GUI with new version of PokeEase [\#1678](https://github.com/Necrobot-Private/NecroBot/pull/1678) ([jjskuld](https://github.com/jjskuld))
 - Cleanup - Removed unused encryption and removed unnecessary comments. [\#1677](https://github.com/Necrobot-Private/NecroBot/pull/1677) ([jjskuld](https://github.com/jjskuld))
-- Updated Rocket API to add new cipher. [\#1675](https://github.com/Necrobot-Private/NecroBot/pull/1675) ([jjskuld](https://github.com/jjskuld))
 
 ## [v1.0.0.168](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.168) (2017-05-08)
 
@@ -519,6 +540,7 @@
 
 **Merged pull requests:**
 
+- Updated Rocket API to add new cipher. [\#1675](https://github.com/Necrobot-Private/NecroBot/pull/1675) ([jjskuld](https://github.com/jjskuld))
 - Fixed wrong key name caused exception throwing [\#1672](https://github.com/Necrobot-Private/NecroBot/pull/1672) ([informer0827](https://github.com/informer0827))
 -  fix utf8 booms tripled  [\#1671](https://github.com/Necrobot-Private/NecroBot/pull/1671) ([Furtif](https://github.com/Furtif))
 - Updates TinyIoC.cs [\#1669](https://github.com/Necrobot-Private/NecroBot/pull/1669) ([CDAGaming](https://github.com/CDAGaming))
@@ -614,7 +636,6 @@
 - Updates, Fixes, and Optimizations - DO NOT MERGE YET [\#1615](https://github.com/Necrobot-Private/NecroBot/pull/1615) ([CDAGaming](https://github.com/CDAGaming))
 - Performance enhancements [\#1614](https://github.com/Necrobot-Private/NecroBot/pull/1614) ([jjskuld](https://github.com/jjskuld))
 - some snipe method change to adapt with new implement on server side [\#1613](https://github.com/Necrobot-Private/NecroBot/pull/1613) ([samuraitruong](https://github.com/samuraitruong))
-- Turn of log spamming when bot data socket does not connect. [\#1611](https://github.com/Necrobot-Private/NecroBot/pull/1611) ([jjskuld](https://github.com/jjskuld))
 
 ## [v1.0.0.163](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.163) (2017-05-02)
 
@@ -626,8 +647,8 @@
 
 **Merged pull requests:**
 
+- Turn of log spamming when bot data socket does not connect. [\#1611](https://github.com/Necrobot-Private/NecroBot/pull/1611) ([jjskuld](https://github.com/jjskuld))
 - Update analytics [\#1610](https://github.com/Necrobot-Private/NecroBot/pull/1610) ([jjskuld](https://github.com/jjskuld))
-- Mask the ApiKey to not be logged completely [\#1605](https://github.com/Necrobot-Private/NecroBot/pull/1605) ([Furtif](https://github.com/Furtif))
 
 ## [v1.0.0.162](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.162) (2017-05-01)
 
@@ -652,6 +673,7 @@
 **Merged pull requests:**
 
 - Features/analytics [\#1608](https://github.com/Necrobot-Private/NecroBot/pull/1608) ([jjskuld](https://github.com/jjskuld))
+- Mask the ApiKey to not be logged completely [\#1605](https://github.com/Necrobot-Private/NecroBot/pull/1605) ([Furtif](https://github.com/Furtif))
 - Features/hydra build [\#1604](https://github.com/Necrobot-Private/NecroBot/pull/1604) ([Lord-Haji](https://github.com/Lord-Haji))
 - Features/HydraBuild - Merges with Latest Master + Bug Fixes [\#1601](https://github.com/Necrobot-Private/NecroBot/pull/1601) ([CDAGaming](https://github.com/CDAGaming))
 - Add functions for fixes player warnings [\#1599](https://github.com/Necrobot-Private/NecroBot/pull/1599) ([Furtif](https://github.com/Furtif))
@@ -704,7 +726,6 @@
 - Fix Browser Naming [\#1574](https://github.com/Necrobot-Private/NecroBot/pull/1574) ([Lord-Haji](https://github.com/Lord-Haji))
 - Fix Sprites Display on Pokemon Tab Grid [\#1573](https://github.com/Necrobot-Private/NecroBot/pull/1573) ([Lord-Haji](https://github.com/Lord-Haji))
 - Fix Shell immutable build error [\#1572](https://github.com/Necrobot-Private/NecroBot/pull/1572) ([Lord-Haji](https://github.com/Lord-Haji))
-- Decrease softban limits \(500 pokemon, 700 pokestops\) [\#1563](https://github.com/Necrobot-Private/NecroBot/pull/1563) ([jjskuld](https://github.com/jjskuld))
 
 ## [v1.0.0.159](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.159) (2017-04-25)
 
@@ -724,9 +745,9 @@
 
 **Merged pull requests:**
 
+- Decrease softban limits \(500 pokemon, 700 pokestops\) [\#1563](https://github.com/Necrobot-Private/NecroBot/pull/1563) ([jjskuld](https://github.com/jjskuld))
 - Fix Android device variables when generating random iOS device. [\#1557](https://github.com/Necrobot-Private/NecroBot/pull/1557) ([morbosc](https://github.com/morbosc))
 - fix default snipe links [\#1550](https://github.com/Necrobot-Private/NecroBot/pull/1550) ([Furtif](https://github.com/Furtif))
-- Clean up socket logic. [\#1531](https://github.com/Necrobot-Private/NecroBot/pull/1531) ([jjskuld](https://github.com/jjskuld))
 
 ## [v1.0.0.158](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.158) (2017-04-20)
 
@@ -767,6 +788,7 @@
 
 - Update build.bat and nuget [\#1538](https://github.com/Necrobot-Private/NecroBot/pull/1538) ([Furtif](https://github.com/Furtif))
 - Dark Mode - HydraBuild - REUPLOADED [\#1532](https://github.com/Necrobot-Private/NecroBot/pull/1532) ([CDAGaming](https://github.com/CDAGaming))
+- Clean up socket logic. [\#1531](https://github.com/Necrobot-Private/NecroBot/pull/1531) ([jjskuld](https://github.com/jjskuld))
 - Adds Dark Mode - HydraBuild [\#1528](https://github.com/Necrobot-Private/NecroBot/pull/1528) ([CDAGaming](https://github.com/CDAGaming))
 - Fixes Enable/Disable Hub and Resolution Saving - HydraBuild [\#1525](https://github.com/Necrobot-Private/NecroBot/pull/1525) ([CDAGaming](https://github.com/CDAGaming))
 - New Build.Bat to Detect VS Install and Use it's MSBuild - HydraBuild \(Ready to Merge\) [\#1524](https://github.com/Necrobot-Private/NecroBot/pull/1524) ([CDAGaming](https://github.com/CDAGaming))
@@ -786,7 +808,6 @@
 **Merged pull requests:**
 
 - Features/costume&form [\#1496](https://github.com/Necrobot-Private/NecroBot/pull/1496) ([Lord-Haji](https://github.com/Lord-Haji))
-- Adds Final FancyBuild Images & Cleans up Old Translations [\#1493](https://github.com/Necrobot-Private/NecroBot/pull/1493) ([CDAGaming](https://github.com/CDAGaming))
 
 ## [v1.0.0.156](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.156) (2017-04-15)
 
@@ -801,6 +822,7 @@
 **Merged pull requests:**
 
 - Update PoGo.NecroBot.Logic.csproj [\#1494](https://github.com/Necrobot-Private/NecroBot/pull/1494) ([Furtif](https://github.com/Furtif))
+- Adds Final FancyBuild Images & Cleans up Old Translations [\#1493](https://github.com/Necrobot-Private/NecroBot/pull/1493) ([CDAGaming](https://github.com/CDAGaming))
 - Sort initial account list by id [\#1492](https://github.com/Necrobot-Private/NecroBot/pull/1492) ([jjskuld](https://github.com/jjskuld))
 - Fix ordering of bot runtime when runtime total is equal. [\#1491](https://github.com/Necrobot-Private/NecroBot/pull/1491) ([jjskuld](https://github.com/jjskuld))
 - Updates Dependencies [\#1490](https://github.com/Necrobot-Private/NecroBot/pull/1490) ([CDAGaming](https://github.com/CDAGaming))
@@ -883,7 +905,6 @@
 **Merged pull requests:**
 
 - Fixes \#1442 - Upgrade all LiteDB 3.0 databases. [\#1444](https://github.com/Necrobot-Private/NecroBot/pull/1444) ([jjskuld](https://github.com/jjskuld))
-- 61Update [\#1441](https://github.com/Necrobot-Private/NecroBot/pull/1441) ([hardknoxni69a](https://github.com/hardknoxni69a))
 
 ## [v1.0.0.152](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.152) (2017-04-09)
 
@@ -897,6 +918,7 @@
 
 **Merged pull requests:**
 
+- 61Update [\#1441](https://github.com/Necrobot-Private/NecroBot/pull/1441) ([hardknoxni69a](https://github.com/hardknoxni69a))
 - Update translation.zh-TW.json [\#1439](https://github.com/Necrobot-Private/NecroBot/pull/1439) ([informer0827](https://github.com/informer0827))
 - Cherry Build - Necrobot Repo PR \(WIP\) [\#1433](https://github.com/Necrobot-Private/NecroBot/pull/1433) ([CDAGaming](https://github.com/CDAGaming))
 
@@ -1012,7 +1034,6 @@
 - Fix bug \#1395 [\#1398](https://github.com/Necrobot-Private/NecroBot/pull/1398) ([jjskuld](https://github.com/jjskuld))
 - Update rocket API to fix ssl cert error and captcha login errors. [\#1396](https://github.com/Necrobot-Private/NecroBot/pull/1396) ([jjskuld](https://github.com/jjskuld))
 - Update translation.de.json [\#1389](https://github.com/Necrobot-Private/NecroBot/pull/1389) ([Experte9](https://github.com/Experte9))
-- Update/Sprites Update [\#1381](https://github.com/Necrobot-Private/NecroBot/pull/1381) ([Lord-Haji](https://github.com/Lord-Haji))
 - Extended Integration of PokeEase & Win GUI + Build Fixes [\#1354](https://github.com/Necrobot-Private/NecroBot/pull/1354) ([CDAGaming](https://github.com/CDAGaming))
 
 ## [v1.0.0.146](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.146) (2017-03-29)
@@ -1028,7 +1049,7 @@
 
 **Merged pull requests:**
 
-- Update CatchPokemonTask.cs [\#1378](https://github.com/Necrobot-Private/NecroBot/pull/1378) ([Lord-Haji](https://github.com/Lord-Haji))
+- Update/Sprites Update [\#1381](https://github.com/Necrobot-Private/NecroBot/pull/1381) ([Lord-Haji](https://github.com/Lord-Haji))
 
 ## [v1.0.0.145](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.145) (2017-03-28)
 
@@ -1067,6 +1088,7 @@
 
 **Merged pull requests:**
 
+- Update CatchPokemonTask.cs [\#1378](https://github.com/Necrobot-Private/NecroBot/pull/1378) ([Lord-Haji](https://github.com/Lord-Haji))
 - Update [\#1377](https://github.com/Necrobot-Private/NecroBot/pull/1377) ([Lord-Haji](https://github.com/Lord-Haji))
 - Features/auto favorite shiny on catch [\#1373](https://github.com/Necrobot-Private/NecroBot/pull/1373) ([Lord-Haji](https://github.com/Lord-Haji))
 - Features/shiny pokemon display [\#1366](https://github.com/Necrobot-Private/NecroBot/pull/1366) ([Lord-Haji](https://github.com/Lord-Haji))
@@ -1100,7 +1122,6 @@
 - Bug  Egg Display Distance Bug [\#1332](https://github.com/Necrobot-Private/NecroBot/pull/1332) ([bernhard-efler](https://github.com/bernhard-efler))
 - Replace usage of DelayingUtils.Delay with DelayingUtils.DelayAsync [\#1330](https://github.com/Necrobot-Private/NecroBot/pull/1330) ([jjskuld](https://github.com/jjskuld))
 - Allow 100 IV to be transferred [\#1329](https://github.com/Necrobot-Private/NecroBot/pull/1329) ([jjskuld](https://github.com/jjskuld))
-- Fix download url for BinTray [\#1319](https://github.com/Necrobot-Private/NecroBot/pull/1319) ([jjskuld](https://github.com/jjskuld))
 - Fix Pokemon Tab Display [\#1317](https://github.com/Necrobot-Private/NecroBot/pull/1317) ([Lord-Haji](https://github.com/Lord-Haji))
 
 ## [v1.0.0.143](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.143) (2017-03-19)
@@ -1127,12 +1148,12 @@
 
 **Merged pull requests:**
 
+- Fix download url for BinTray [\#1319](https://github.com/Necrobot-Private/NecroBot/pull/1319) ([jjskuld](https://github.com/jjskuld))
 - Fix auto updater to download versioned zip from BinTray. [\#1318](https://github.com/Necrobot-Private/NecroBot/pull/1318) ([jjskuld](https://github.com/jjskuld))
 - Fixes bug \#1312 - Manual snipe coords not parsed properly occasionally [\#1316](https://github.com/Necrobot-Private/NecroBot/pull/1316) ([jjskuld](https://github.com/jjskuld))
 - ConfigureAwait [\#1315](https://github.com/Necrobot-Private/NecroBot/pull/1315) ([Furtif](https://github.com/Furtif))
 - Bug Fix: Pokemon Count Display [\#1313](https://github.com/Necrobot-Private/NecroBot/pull/1313) ([Lord-Haji](https://github.com/Lord-Haji))
 - Update submodules [\#1311](https://github.com/Necrobot-Private/NecroBot/pull/1311) ([Lord-Haji](https://github.com/Lord-Haji))
-- Features/async cleanup [\#1308](https://github.com/Necrobot-Private/NecroBot/pull/1308) ([jjskuld](https://github.com/jjskuld))
 
 ## [v1.0.0.140](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.140) (2017-03-17)
 
@@ -1155,6 +1176,7 @@
 
 **Merged pull requests:**
 
+- Features/async cleanup [\#1308](https://github.com/Necrobot-Private/NecroBot/pull/1308) ([jjskuld](https://github.com/jjskuld))
 - Update Rocket API to fix session invalidation errors. [\#1296](https://github.com/Necrobot-Private/NecroBot/pull/1296) ([jjskuld](https://github.com/jjskuld))
 - Update sprites [\#1295](https://github.com/Necrobot-Private/NecroBot/pull/1295) ([Lord-Haji](https://github.com/Lord-Haji))
 - uses UseIncenseTask and UseLuckyEggTask [\#1294](https://github.com/Necrobot-Private/NecroBot/pull/1294) ([Furtif](https://github.com/Furtif))
@@ -1189,7 +1211,6 @@
 - Fix multibot errors when single account is configured. [\#1283](https://github.com/Necrobot-Private/NecroBot/pull/1283) ([jjskuld](https://github.com/jjskuld))
 - Change Await to .Result [\#1281](https://github.com/Necrobot-Private/NecroBot/pull/1281) ([Furtif](https://github.com/Furtif))
 - Features/wpf [\#1279](https://github.com/Necrobot-Private/NecroBot/pull/1279) ([jjskuld](https://github.com/jjskuld))
-- Big clean up of multi bot functionality. Multibot is now always enabled. [\#1277](https://github.com/Necrobot-Private/NecroBot/pull/1277) ([jjskuld](https://github.com/jjskuld))
 
 ## [v1.0.0.138](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.138) (2017-03-15)
 
@@ -1208,13 +1229,13 @@
 
 **Merged pull requests:**
 
+- Big clean up of multi bot functionality. Multibot is now always enabled. [\#1277](https://github.com/Necrobot-Private/NecroBot/pull/1277) ([jjskuld](https://github.com/jjskuld))
 - Replacing WebClient references with HttpClient [\#1276](https://github.com/Necrobot-Private/NecroBot/pull/1276) ([jjskuld](https://github.com/jjskuld))
 - When using elevation service, store altitudes in local database. [\#1274](https://github.com/Necrobot-Private/NecroBot/pull/1274) ([jjskuld](https://github.com/jjskuld))
 - Fix wpf binding errors and other errors. [\#1273](https://github.com/Necrobot-Private/NecroBot/pull/1273) ([jjskuld](https://github.com/jjskuld))
 - Create cache dir for geo locations cache if it doesn't exist. [\#1272](https://github.com/Necrobot-Private/NecroBot/pull/1272) ([jjskuld](https://github.com/jjskuld))
 - fix ProgressBar [\#1269](https://github.com/Necrobot-Private/NecroBot/pull/1269) ([Furtif](https://github.com/Furtif))
 - Pokemon/Pokestop Limit Updates [\#1263](https://github.com/Necrobot-Private/NecroBot/pull/1263) ([jjskuld](https://github.com/jjskuld))
-- Copy cert file to output directory \(both CLI and Win project\) [\#1262](https://github.com/Necrobot-Private/NecroBot/pull/1262) ([jjskuld](https://github.com/jjskuld))
 
 ## [v1.0.0.137](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.137) (2017-03-14)
 
@@ -1232,6 +1253,7 @@
 
 **Merged pull requests:**
 
+- Copy cert file to output directory \(both CLI and Win project\) [\#1262](https://github.com/Necrobot-Private/NecroBot/pull/1262) ([jjskuld](https://github.com/jjskuld))
 - Bug fix/session invalidation [\#1261](https://github.com/Necrobot-Private/NecroBot/pull/1261) ([jjskuld](https://github.com/jjskuld))
 - Move Application.EnableVisualStyles and fix clean accounts after update [\#1259](https://github.com/Necrobot-Private/NecroBot/pull/1259) ([Furtif](https://github.com/Furtif))
 - Bug fixes for Rocket Api [\#1255](https://github.com/Necrobot-Private/NecroBot/pull/1255) ([jjskuld](https://github.com/jjskuld))
@@ -1257,7 +1279,6 @@
 - \[Asthetics\] Code Organization Fixes + Titles No Longer Caps [\#1248](https://github.com/Necrobot-Private/NecroBot/pull/1248) ([CDAGaming](https://github.com/CDAGaming))
 - FurtifFerox&FinalLocalCatchUpdate [\#1241](https://github.com/Necrobot-Private/NecroBot/pull/1241) ([hardknoxni69a](https://github.com/hardknoxni69a))
 - Update Rocket API - Bug fix - Better error handling by resetting client auth on relog [\#1238](https://github.com/Necrobot-Private/NecroBot/pull/1238) ([jjskuld](https://github.com/jjskuld))
-- Pokemon To Catch Locally List [\#1231](https://github.com/Necrobot-Private/NecroBot/pull/1231) ([hardknoxni69a](https://github.com/hardknoxni69a))
 
 ## [v1.0.0.135](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.135) (2017-03-11)
 
@@ -1298,6 +1319,7 @@
 
 **Merged pull requests:**
 
+- Pokemon To Catch Locally List [\#1231](https://github.com/Necrobot-Private/NecroBot/pull/1231) ([hardknoxni69a](https://github.com/hardknoxni69a))
 - reduction == for dialog [\#1223](https://github.com/Necrobot-Private/NecroBot/pull/1223) ([Furtif](https://github.com/Furtif))
 - Eggy Confirmed No Changes. Good To Bot [\#1220](https://github.com/Necrobot-Private/NecroBot/pull/1220) ([hardknoxni69a](https://github.com/hardknoxni69a))
 - KillSwitchOverride DialogBox [\#1219](https://github.com/Necrobot-Private/NecroBot/pull/1219) ([Furtif](https://github.com/Furtif))
@@ -1335,7 +1357,6 @@
 - Update PoGo.NecroBot.Logic.csproj [\#1191](https://github.com/Necrobot-Private/NecroBot/pull/1191) ([Furtif](https://github.com/Furtif))
 - Add salt for device id so that the device id is not constantly changing. [\#1190](https://github.com/Necrobot-Private/NecroBot/pull/1190) ([jjskuld](https://github.com/jjskuld))
 - Features/multibot [\#1187](https://github.com/Necrobot-Private/NecroBot/pull/1187) ([jjskuld](https://github.com/jjskuld))
-- Push 133Update [\#1180](https://github.com/Necrobot-Private/NecroBot/pull/1180) ([hardknoxni69a](https://github.com/hardknoxni69a))
 
 ## [v1.0.0.133](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.133) (2017-03-06)
 
@@ -1359,6 +1380,7 @@
 
 **Merged pull requests:**
 
+- Push 133Update [\#1180](https://github.com/Necrobot-Private/NecroBot/pull/1180) ([hardknoxni69a](https://github.com/hardknoxni69a))
 - Features/login time [\#1177](https://github.com/Necrobot-Private/NecroBot/pull/1177) ([jjskuld](https://github.com/jjskuld))
 - Enable multiple API Key in config [\#1167](https://github.com/Necrobot-Private/NecroBot/pull/1167) ([samuraitruong](https://github.com/samuraitruong))
 - Gym update [\#1165](https://github.com/Necrobot-Private/NecroBot/pull/1165) ([ziomber](https://github.com/ziomber))
@@ -1385,10 +1407,6 @@
 
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.130...v1.0.0.131)
 
-**Merged pull requests:**
-
-- Clean up packages [\#1157](https://github.com/Necrobot-Private/NecroBot/pull/1157) ([jjskuld](https://github.com/jjskuld))
-
 ## [v1.0.0.130](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.130) (2017-03-03)
 
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.128v2...v1.0.0.130)
@@ -1400,6 +1418,10 @@
 - User credentials are invalid and login failed [\#1151](https://github.com/Necrobot-Private/NecroBot/issues/1151)
 - Information needed - How does Sniping work ? [\#1150](https://github.com/Necrobot-Private/NecroBot/issues/1150)
 - Error while traveling to a chosen location [\#1141](https://github.com/Necrobot-Private/NecroBot/issues/1141)
+
+**Merged pull requests:**
+
+- Clean up packages [\#1157](https://github.com/Necrobot-Private/NecroBot/pull/1157) ([jjskuld](https://github.com/jjskuld))
 
 ## [v1.0.0.128v2](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.128v2) (2017-03-03)
 
@@ -1665,7 +1687,6 @@
 - Patch Gen2 continue [\#934](https://github.com/Necrobot-Private/NecroBot/pull/934) ([samuraitruong](https://github.com/samuraitruong))
 - Added reset the number of attempts to start fighting [\#928](https://github.com/Necrobot-Private/NecroBot/pull/928) ([Finfinder](https://github.com/Finfinder))
 - Feature/gen2 evolution support [\#923](https://github.com/Necrobot-Private/NecroBot/pull/923) ([samuraitruong](https://github.com/samuraitruong))
-- fix manual switch loop [\#909](https://github.com/Necrobot-Private/NecroBot/pull/909) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.113](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.113) (2017-02-19)
 
@@ -1684,6 +1705,7 @@
 
 - Fix POGOProtos to be master again. [\#920](https://github.com/Necrobot-Private/NecroBot/pull/920) ([jjskuld](https://github.com/jjskuld))
 - Gym update [\#917](https://github.com/Necrobot-Private/NecroBot/pull/917) ([ziomber](https://github.com/ziomber))
+- fix manual switch loop [\#909](https://github.com/Necrobot-Private/NecroBot/pull/909) ([samuraitruong](https://github.com/samuraitruong))
 - Add vietnamese translate [\#897](https://github.com/Necrobot-Private/NecroBot/pull/897) ([pkmhaianh](https://github.com/pkmhaianh))
 
 ## [v1.0.0.112](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.112) (2017-02-18)
@@ -1697,7 +1719,6 @@
 **Merged pull requests:**
 
 - Refactor berries use function to support new types of berries [\#906](https://github.com/Necrobot-Private/NecroBot/pull/906) ([samuraitruong](https://github.com/samuraitruong))
-- Feature/reanble snipe [\#904](https://github.com/Necrobot-Private/NecroBot/pull/904) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.111](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.111) (2017-02-18)
 
@@ -1710,8 +1731,8 @@
 
 **Merged pull requests:**
 
+- Feature/reanble snipe [\#904](https://github.com/Necrobot-Private/NecroBot/pull/904) ([samuraitruong](https://github.com/samuraitruong))
 - back compitable [\#903](https://github.com/Necrobot-Private/NecroBot/pull/903) ([samuraitruong](https://github.com/samuraitruong))
-- Feature/reanble snipe [\#882](https://github.com/Necrobot-Private/NecroBot/pull/882) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.110](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.110) (2017-02-18)
 
@@ -1734,7 +1755,7 @@
 **Merged pull requests:**
 
 - 0.57.2 [\#883](https://github.com/Necrobot-Private/NecroBot/pull/883) ([jjskuld](https://github.com/jjskuld))
-- Fix bug for walk strategy null error [\#880](https://github.com/Necrobot-Private/NecroBot/pull/880) ([jjskuld](https://github.com/jjskuld))
+- Feature/reanble snipe [\#882](https://github.com/Necrobot-Private/NecroBot/pull/882) ([samuraitruong](https://github.com/samuraitruong))
 - Some translation + polish translation [\#879](https://github.com/Necrobot-Private/NecroBot/pull/879) ([SLASHLogin](https://github.com/SLASHLogin))
 
 ## [v1.0.0.109](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.109) (2017-02-17)
@@ -1748,7 +1769,7 @@
 
 **Merged pull requests:**
 
-- 0.57.2 [\#877](https://github.com/Necrobot-Private/NecroBot/pull/877) ([jjskuld](https://github.com/jjskuld))
+- Fix bug for walk strategy null error [\#880](https://github.com/Necrobot-Private/NecroBot/pull/880) ([jjskuld](https://github.com/jjskuld))
 
 ## [v1.0.0.108](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.108) (2017-02-17)
 
@@ -1760,6 +1781,10 @@
 - API Error [\#873](https://github.com/Necrobot-Private/NecroBot/issues/873)
 - Gym Battle [\#865](https://github.com/Necrobot-Private/NecroBot/issues/865)
 - Pokestops constantly out of range [\#860](https://github.com/Necrobot-Private/NecroBot/issues/860)
+
+**Merged pull requests:**
+
+- 0.57.2 [\#877](https://github.com/Necrobot-Private/NecroBot/pull/877) ([jjskuld](https://github.com/jjskuld))
 
 ## [v1.0.0.107](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.107) (2017-02-16)
 
@@ -1778,7 +1803,6 @@
 
 - Feature/reanble snipe [\#864](https://github.com/Necrobot-Private/NecroBot/pull/864) ([samuraitruong](https://github.com/samuraitruong))
 - More tweaks to fix pokestop out of range bug. [\#861](https://github.com/Necrobot-Private/NecroBot/pull/861) ([jjskuld](https://github.com/jjskuld))
-- Temporarily revert search form causing blank selection line in WPF GUI. [\#856](https://github.com/Necrobot-Private/NecroBot/pull/856) ([jjskuld](https://github.com/jjskuld))
 - Gym update [\#819](https://github.com/Necrobot-Private/NecroBot/pull/819) ([ziomber](https://github.com/ziomber))
 
 ## [v1.0.0.106](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.106) (2017-02-15)
@@ -1796,6 +1820,7 @@
 **Merged pull requests:**
 
 - Add reverse geolocation caching to speed up WPF GUI pokemon inventory [\#857](https://github.com/Necrobot-Private/NecroBot/pull/857) ([jjskuld](https://github.com/jjskuld))
+- Temporarily revert search form causing blank selection line in WPF GUI. [\#856](https://github.com/Necrobot-Private/NecroBot/pull/856) ([jjskuld](https://github.com/jjskuld))
 
 ## [v1.0.0.105](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.105) (2017-02-15)
 
@@ -1804,7 +1829,6 @@
 **Merged pull requests:**
 
 - temporary call get map object to resolve softban [\#851](https://github.com/Necrobot-Private/NecroBot/pull/851) ([samuraitruong](https://github.com/samuraitruong))
-- Fix google walk speed [\#847](https://github.com/Necrobot-Private/NecroBot/pull/847) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.104](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.104) (2017-02-15)
 
@@ -1819,6 +1843,7 @@
 **Merged pull requests:**
 
 - Update FarmPokestopsTask.cs [\#848](https://github.com/Necrobot-Private/NecroBot/pull/848) ([Furtif](https://github.com/Furtif))
+- Fix google walk speed [\#847](https://github.com/Necrobot-Private/NecroBot/pull/847) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.103](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.103) (2017-02-15)
 
@@ -1842,7 +1867,6 @@
 - Fix pokestop status not updating on WPF map. [\#836](https://github.com/Necrobot-Private/NecroBot/pull/836) ([jjskuld](https://github.com/jjskuld))
 - Fix bug \#822 - First time tutorial does not complete correctly. [\#834](https://github.com/Necrobot-Private/NecroBot/pull/834) ([jjskuld](https://github.com/jjskuld))
 - Fixes bug \#832 - Mapzen and Google elevation services sometimes incorrectly enabled [\#833](https://github.com/Necrobot-Private/NecroBot/pull/833) ([jjskuld](https://github.com/jjskuld))
-- disable snipe & API UpdatePlayer removed [\#825](https://github.com/Necrobot-Private/NecroBot/pull/825) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.102](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.102) (2017-02-14)
 
@@ -1850,7 +1874,7 @@
 
 **Merged pull requests:**
 
-- Feature/gui i18 n [\#814](https://github.com/Necrobot-Private/NecroBot/pull/814) ([samuraitruong](https://github.com/samuraitruong))
+- disable snipe & API UpdatePlayer removed [\#825](https://github.com/Necrobot-Private/NecroBot/pull/825) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.101](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.101) (2017-02-13)
 
@@ -1865,8 +1889,8 @@
 
 **Merged pull requests:**
 
+- Feature/gui i18 n [\#814](https://github.com/Necrobot-Private/NecroBot/pull/814) ([samuraitruong](https://github.com/samuraitruong))
 - Bug fix \#812 - Allow pokemon to be upgraded to more than 2 levels greater than trainer level [\#813](https://github.com/Necrobot-Private/NecroBot/pull/813) ([jjskuld](https://github.com/jjskuld))
-- MISC update [\#809](https://github.com/Necrobot-Private/NecroBot/pull/809) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.100](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.100) (2017-02-12)
 
@@ -1879,9 +1903,9 @@
 
 **Merged pull requests:**
 
+- MISC update [\#809](https://github.com/Necrobot-Private/NecroBot/pull/809) ([samuraitruong](https://github.com/samuraitruong))
 - Patch 1 [\#807](https://github.com/Necrobot-Private/NecroBot/pull/807) ([Furtif](https://github.com/Furtif))
 - Gym update [\#798](https://github.com/Necrobot-Private/NecroBot/pull/798) ([ziomber](https://github.com/ziomber))
-- allow sync snipe fail event back to server - initial [\#796](https://github.com/Necrobot-Private/NecroBot/pull/796) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.99](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.99) (2017-02-11)
 
@@ -1895,9 +1919,9 @@
 
 **Merged pull requests:**
 
+- allow sync snipe fail event back to server - initial [\#796](https://github.com/Necrobot-Private/NecroBot/pull/796) ([samuraitruong](https://github.com/samuraitruong))
 - Gym update [\#793](https://github.com/Necrobot-Private/NecroBot/pull/793) ([ziomber](https://github.com/ziomber))
 - Fix bug \#790 - Pokestops should change back to the unvisited color when spinnable [\#791](https://github.com/Necrobot-Private/NecroBot/pull/791) ([jjskuld](https://github.com/jjskuld))
-- Update Rocket API to fix access token expiry bug. [\#789](https://github.com/Necrobot-Private/NecroBot/pull/789) ([jjskuld](https://github.com/jjskuld))
 - Add snipe level [\#786](https://github.com/Necrobot-Private/NecroBot/pull/786) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.98](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.98) (2017-02-10)
@@ -1922,13 +1946,13 @@
 
 **Merged pull requests:**
 
+- Update Rocket API to fix access token expiry bug. [\#789](https://github.com/Necrobot-Private/NecroBot/pull/789) ([jjskuld](https://github.com/jjskuld))
 - Gym update [\#788](https://github.com/Necrobot-Private/NecroBot/pull/788) ([ziomber](https://github.com/ziomber))
 - Add migration for DefaultBuddyPokemon [\#787](https://github.com/Necrobot-Private/NecroBot/pull/787) ([jjskuld](https://github.com/jjskuld))
 - Fix bug \#781 - DefaultBuddyPokemon should be set to empty string [\#785](https://github.com/Necrobot-Private/NecroBot/pull/785) ([jjskuld](https://github.com/jjskuld))
 - Bug fix - Reverts pull \#741 [\#784](https://github.com/Necrobot-Private/NecroBot/pull/784) ([jjskuld](https://github.com/jjskuld))
 - Updates to rocket api to fix access token expiry bug. [\#780](https://github.com/Necrobot-Private/NecroBot/pull/780) ([jjskuld](https://github.com/jjskuld))
 - Fix bug \#774 - Duplicate pokemon in WPF GUI inventory after evolve. [\#775](https://github.com/Necrobot-Private/NecroBot/pull/775) ([jjskuld](https://github.com/jjskuld))
-- bug & enhancement [\#773](https://github.com/Necrobot-Private/NecroBot/pull/773) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.97](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.97) (2017-02-09)
 
@@ -1944,9 +1968,9 @@
 
 **Merged pull requests:**
 
+- bug & enhancement [\#773](https://github.com/Necrobot-Private/NecroBot/pull/773) ([samuraitruong](https://github.com/samuraitruong))
 - changed candy gain after evolution [\#769](https://github.com/Necrobot-Private/NecroBot/pull/769) ([postechacker](https://github.com/postechacker))
 - Gym module update [\#766](https://github.com/Necrobot-Private/NecroBot/pull/766) ([ziomber](https://github.com/ziomber))
-- Gym Exclude [\#761](https://github.com/Necrobot-Private/NecroBot/pull/761) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.96](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.96) (2017-02-08)
 
@@ -1970,9 +1994,9 @@
 
 **Merged pull requests:**
 
+- Gym Exclude [\#761](https://github.com/Necrobot-Private/NecroBot/pull/761) ([samuraitruong](https://github.com/samuraitruong))
 - Fix multithreading crash due to LiteDB 2 not being thread-safe. [\#760](https://github.com/Necrobot-Private/NecroBot/pull/760) ([joe1chen](https://github.com/joe1chen))
 - Add caught location to pokemon inventory [\#759](https://github.com/Necrobot-Private/NecroBot/pull/759) ([jjskuld](https://github.com/jjskuld))
-- Add ability to rename pokemon from WPF GUI [\#758](https://github.com/Necrobot-Private/NecroBot/pull/758) ([jjskuld](https://github.com/jjskuld))
 - Create ui.pl.json [\#756](https://github.com/Necrobot-Private/NecroBot/pull/756) ([SLASHLogin](https://github.com/SLASHLogin))
 - Gym update [\#754](https://github.com/Necrobot-Private/NecroBot/pull/754) ([ziomber](https://github.com/ziomber))
 
@@ -1987,7 +2011,7 @@
 
 **Merged pull requests:**
 
-- autocomplete tutorial added back [\#751](https://github.com/Necrobot-Private/NecroBot/pull/751) ([samuraitruong](https://github.com/samuraitruong))
+- Add ability to rename pokemon from WPF GUI [\#758](https://github.com/Necrobot-Private/NecroBot/pull/758) ([jjskuld](https://github.com/jjskuld))
 
 ## [v1.0.0.94](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.94) (2017-02-07)
 
@@ -1997,6 +2021,10 @@
 
 - snipe issue: no pokemon to snipe [\#748](https://github.com/Necrobot-Private/NecroBot/issues/748)
 - \[request\] gui translation [\#600](https://github.com/Necrobot-Private/NecroBot/issues/600)
+
+**Merged pull requests:**
+
+- autocomplete tutorial added back [\#751](https://github.com/Necrobot-Private/NecroBot/pull/751) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.93](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.93) (2017-02-07)
 
@@ -2012,7 +2040,6 @@
 
 - Change DefaultBuddyPokemon to have a default value of null [\#750](https://github.com/Necrobot-Private/NecroBot/pull/750) ([jjskuld](https://github.com/jjskuld))
 - Update translation.pl.json [\#745](https://github.com/Necrobot-Private/NecroBot/pull/745) ([SLASHLogin](https://github.com/SLASHLogin))
-- Donot switch account when using incence or lucky eegs [\#735](https://github.com/Necrobot-Private/NecroBot/pull/735) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.92](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.92) (2017-02-06)
 
@@ -2044,7 +2071,7 @@
 - Change in choosing the next pokestop or gym [\#741](https://github.com/Necrobot-Private/NecroBot/pull/741) ([Finfinder](https://github.com/Finfinder))
 - Resuming the attack [\#740](https://github.com/Necrobot-Private/NecroBot/pull/740) ([Finfinder](https://github.com/Finfinder))
 - Update SnipeGrid.xaml [\#736](https://github.com/Necrobot-Private/NecroBot/pull/736) ([hardknoxni69a](https://github.com/hardknoxni69a))
-- Feature/gui i18 n [\#734](https://github.com/Necrobot-Private/NecroBot/pull/734) ([samuraitruong](https://github.com/samuraitruong))
+- Donot switch account when using incence or lucky eegs [\#735](https://github.com/Necrobot-Private/NecroBot/pull/735) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.91](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.91) (2017-02-05)
 
@@ -2065,8 +2092,8 @@
 
 **Merged pull requests:**
 
+- Feature/gui i18 n [\#734](https://github.com/Necrobot-Private/NecroBot/pull/734) ([samuraitruong](https://github.com/samuraitruong))
 - Feature/gui i18 n [\#725](https://github.com/Necrobot-Private/NecroBot/pull/725) ([samuraitruong](https://github.com/samuraitruong))
-- Feature/gui i18 n [\#718](https://github.com/Necrobot-Private/NecroBot/pull/718) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.90](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.90) (2017-02-04)
 
@@ -2089,6 +2116,7 @@
 
 **Merged pull requests:**
 
+- Feature/gui i18 n [\#718](https://github.com/Necrobot-Private/NecroBot/pull/718) ([samuraitruong](https://github.com/samuraitruong))
 - Fix bug \#705 - Evolution calculations [\#716](https://github.com/Necrobot-Private/NecroBot/pull/716) ([jjskuld](https://github.com/jjskuld))
 - Bug fix - Human sniping crash [\#715](https://github.com/Necrobot-Private/NecroBot/pull/715) ([jjskuld](https://github.com/jjskuld))
 - \#707 fixed but...  [\#711](https://github.com/Necrobot-Private/NecroBot/pull/711) ([ziomber](https://github.com/ziomber))
@@ -2132,7 +2160,6 @@
 - Fix bug \#685 - Fix stardust not updating in GUI [\#694](https://github.com/Necrobot-Private/NecroBot/pull/694) ([jjskuld](https://github.com/jjskuld))
 - Bug fix/threadsafe inventory [\#693](https://github.com/Necrobot-Private/NecroBot/pull/693) ([jjskuld](https://github.com/jjskuld))
 - Allow rename by level token [\#692](https://github.com/Necrobot-Private/NecroBot/pull/692) ([samuraitruong](https://github.com/samuraitruong))
-- Feature/gui i18 n [\#691](https://github.com/Necrobot-Private/NecroBot/pull/691) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.85](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.85) (2017-02-01)
 
@@ -2140,8 +2167,8 @@
 
 **Merged pull requests:**
 
+- Feature/gui i18 n [\#691](https://github.com/Necrobot-Private/NecroBot/pull/691) ([samuraitruong](https://github.com/samuraitruong))
 - Feature/gui i18 n [\#690](https://github.com/Necrobot-Private/NecroBot/pull/690) ([samuraitruong](https://github.com/samuraitruong))
-- Feature/gui i18 n [\#689](https://github.com/Necrobot-Private/NecroBot/pull/689) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.84](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.84) (2017-02-01)
 
@@ -2154,7 +2181,7 @@
 
 **Merged pull requests:**
 
-- Add access key support for socket data connection [\#688](https://github.com/Necrobot-Private/NecroBot/pull/688) ([samuraitruong](https://github.com/samuraitruong))
+- Feature/gui i18 n [\#689](https://github.com/Necrobot-Private/NecroBot/pull/689) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.83](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.83) (2017-02-01)
 
@@ -2177,6 +2204,7 @@
 
 **Merged pull requests:**
 
+- Add access key support for socket data connection [\#688](https://github.com/Necrobot-Private/NecroBot/pull/688) ([samuraitruong](https://github.com/samuraitruong))
 - Gym update [\#687](https://github.com/Necrobot-Private/NecroBot/pull/687) ([ziomber](https://github.com/ziomber))
 
 ## [v1.0.0.82](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.82) (2017-01-31)
@@ -2188,10 +2216,6 @@
 - Bug: double record entry in GUI after manual evolve. [\#672](https://github.com/Necrobot-Private/NecroBot/issues/672)
 - amount of pokemon seen and caught decreasing? [\#669](https://github.com/Necrobot-Private/NecroBot/issues/669)
 
-**Merged pull requests:**
-
-- Bug fix/wpf pokemon inventory [\#681](https://github.com/Necrobot-Private/NecroBot/pull/681) ([jjskuld](https://github.com/jjskuld))
-
 ## [v1.0.0.81](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.81) (2017-01-31)
 
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.80...v1.0.0.81)
@@ -2202,7 +2226,7 @@
 
 **Merged pull requests:**
 
-- upt [\#677](https://github.com/Necrobot-Private/NecroBot/pull/677) ([msx752](https://github.com/msx752))
+- Bug fix/wpf pokemon inventory [\#681](https://github.com/Necrobot-Private/NecroBot/pull/681) ([jjskuld](https://github.com/jjskuld))
 
 ## [v1.0.0.80](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.80) (2017-01-30)
 
@@ -2215,6 +2239,7 @@
 
 **Merged pull requests:**
 
+- upt [\#677](https://github.com/Necrobot-Private/NecroBot/pull/677) ([msx752](https://github.com/msx752))
 - GUI - add popup on pokestop and gym [\#673](https://github.com/Necrobot-Private/NecroBot/pull/673) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.79](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.79) (2017-01-29)
@@ -2231,7 +2256,6 @@
 
 - Feature/gui i18 n [\#670](https://github.com/Necrobot-Private/NecroBot/pull/670) ([samuraitruong](https://github.com/samuraitruong))
 - Revert "update" [\#666](https://github.com/Necrobot-Private/NecroBot/pull/666) ([samuraitruong](https://github.com/samuraitruong))
-- Bug fix/inventory updates [\#665](https://github.com/Necrobot-Private/NecroBot/pull/665) ([jjskuld](https://github.com/jjskuld))
 - update [\#653](https://github.com/Necrobot-Private/NecroBot/pull/653) ([huangmai](https://github.com/huangmai))
 
 ## [v1.0.0.78](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.78) (2017-01-28)
@@ -2243,13 +2267,13 @@
 - -1 left ? [\#664](https://github.com/Necrobot-Private/NecroBot/issues/664)
 - Is it bug? [\#663](https://github.com/Necrobot-Private/NecroBot/issues/663)
 
+**Merged pull requests:**
+
+- Bug fix/inventory updates [\#665](https://github.com/Necrobot-Private/NecroBot/pull/665) ([jjskuld](https://github.com/jjskuld))
+
 ## [v1.0.0.77](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.77) (2017-01-28)
 
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.76...v1.0.0.77)
-
-**Merged pull requests:**
-
-- Add caching for map requests. [\#661](https://github.com/Necrobot-Private/NecroBot/pull/661) ([jjskuld](https://github.com/jjskuld))
 
 ## [v1.0.0.76](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.76) (2017-01-28)
 
@@ -2264,6 +2288,7 @@
 
 **Merged pull requests:**
 
+- Add caching for map requests. [\#661](https://github.com/Necrobot-Private/NecroBot/pull/661) ([jjskuld](https://github.com/jjskuld))
 - Feature/gui i18 n [\#660](https://github.com/Necrobot-Private/NecroBot/pull/660) ([samuraitruong](https://github.com/samuraitruong))
 - Feature/wpf gui [\#659](https://github.com/Necrobot-Private/NecroBot/pull/659) ([jjskuld](https://github.com/jjskuld))
 - Feature/wpf gui [\#658](https://github.com/Necrobot-Private/NecroBot/pull/658) ([jjskuld](https://github.com/jjskuld))
@@ -2288,7 +2313,6 @@
 **Merged pull requests:**
 
 - Feature/gui i18 n [\#648](https://github.com/Necrobot-Private/NecroBot/pull/648) ([samuraitruong](https://github.com/samuraitruong))
-- Allow socket send all data [\#645](https://github.com/Necrobot-Private/NecroBot/pull/645) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.73](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.73) (2017-01-25)
 
@@ -2300,6 +2324,10 @@
 - Account ban and purchased key [\#638](https://github.com/Necrobot-Private/NecroBot/issues/638)
 - softban ? [\#629](https://github.com/Necrobot-Private/NecroBot/issues/629)
 - Hasher problem?  [\#626](https://github.com/Necrobot-Private/NecroBot/issues/626)
+
+**Merged pull requests:**
+
+- Allow socket send all data [\#645](https://github.com/Necrobot-Private/NecroBot/pull/645) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.72](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.72) (2017-01-25)
 
@@ -2315,7 +2343,6 @@
 
 - Update translation.pl.json [\#641](https://github.com/Necrobot-Private/NecroBot/pull/641) ([SLASHLogin](https://github.com/SLASHLogin))
 - Revert change to the first time tutorial for now. [\#639](https://github.com/Necrobot-Private/NecroBot/pull/639) ([jjskuld](https://github.com/jjskuld))
-- Multiaccount manager [\#614](https://github.com/Necrobot-Private/NecroBot/pull/614) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.71](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.71) (2017-01-24)
 
@@ -2332,6 +2359,7 @@
 - Re-enable kill switch override. [\#634](https://github.com/Necrobot-Private/NecroBot/pull/634) ([jjskuld](https://github.com/jjskuld))
 - Added Minimum CP for Auto Favorite [\#633](https://github.com/Necrobot-Private/NecroBot/pull/633) ([Finfinder](https://github.com/Finfinder))
 - Patch 1 [\#631](https://github.com/Necrobot-Private/NecroBot/pull/631) ([Furtif](https://github.com/Furtif))
+- Multiaccount manager [\#614](https://github.com/Necrobot-Private/NecroBot/pull/614) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.70](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.70) (2017-01-23)
 
@@ -2370,7 +2398,6 @@
 **Merged pull requests:**
 
 - change rocket api hash ref back to master branch [\#610](https://github.com/Necrobot-Private/NecroBot/pull/610) ([samuraitruong](https://github.com/samuraitruong))
-- some minor fix & submodule sync [\#607](https://github.com/Necrobot-Private/NecroBot/pull/607) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.68](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.68) (2017-01-21)
 
@@ -2385,9 +2412,9 @@
 
 **Merged pull requests:**
 
+- some minor fix & submodule sync [\#607](https://github.com/Necrobot-Private/NecroBot/pull/607) ([samuraitruong](https://github.com/samuraitruong))
 - Gym tunnings [\#604](https://github.com/Necrobot-Private/NecroBot/pull/604) ([ziomber](https://github.com/ziomber))
 - Bug fix - WPF gui inventory not updating properly after evolve [\#599](https://github.com/Necrobot-Private/NecroBot/pull/599) ([jjskuld](https://github.com/jjskuld))
-- Update UK25 [\#596](https://github.com/Necrobot-Private/NecroBot/pull/596) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.67](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.67) (2017-01-20)
 
@@ -2395,8 +2422,8 @@
 
 **Merged pull requests:**
 
+- Update UK25 [\#596](https://github.com/Necrobot-Private/NecroBot/pull/596) ([samuraitruong](https://github.com/samuraitruong))
 - add remove config back [\#594](https://github.com/Necrobot-Private/NecroBot/pull/594) ([samuraitruong](https://github.com/samuraitruong))
-- add buddy display on GUI [\#592](https://github.com/Necrobot-Private/NecroBot/pull/592) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.66](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.66) (2017-01-20)
 
@@ -2413,13 +2440,13 @@
 
 **Merged pull requests:**
 
+- add buddy display on GUI [\#592](https://github.com/Necrobot-Private/NecroBot/pull/592) ([samuraitruong](https://github.com/samuraitruong))
 - gym module [\#589](https://github.com/Necrobot-Private/NecroBot/pull/589) ([ziomber](https://github.com/ziomber))
 - GUI - Nearby pokemon catch [\#587](https://github.com/Necrobot-Private/NecroBot/pull/587) ([samuraitruong](https://github.com/samuraitruong))
 - Telegram profile [\#584](https://github.com/Necrobot-Private/NecroBot/pull/584) ([Andi-fr](https://github.com/Andi-fr))
 - TelegramCommands I18N [\#581](https://github.com/Necrobot-Private/NecroBot/pull/581) ([Andi-fr](https://github.com/Andi-fr))
 - Add to rename favorite pokemon [\#580](https://github.com/Necrobot-Private/NecroBot/pull/580) ([Finfinder](https://github.com/Finfinder))
 - Gym module [\#578](https://github.com/Necrobot-Private/NecroBot/pull/578) ([ziomber](https://github.com/ziomber))
-- make IV function to be simple [\#575](https://github.com/Necrobot-Private/NecroBot/pull/575) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.65](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.65) (2017-01-18)
 
@@ -2440,11 +2467,11 @@
 
 **Merged pull requests:**
 
+- make IV function to be simple [\#575](https://github.com/Necrobot-Private/NecroBot/pull/575) ([samuraitruong](https://github.com/samuraitruong))
 - Gym attack module tunning [\#574](https://github.com/Necrobot-Private/NecroBot/pull/574) ([ziomber](https://github.com/ziomber))
 - Auto update & Manual snipes input [\#572](https://github.com/Necrobot-Private/NecroBot/pull/572) ([samuraitruong](https://github.com/samuraitruong))
 - \[Issue556\] TelegramCommand /status [\#565](https://github.com/Necrobot-Private/NecroBot/pull/565) ([Andi-fr](https://github.com/Andi-fr))
 - CleanUp Code [\#562](https://github.com/Necrobot-Private/NecroBot/pull/562) ([Andi-fr](https://github.com/Andi-fr))
-- fix null exception & fix duplicate settings [\#559](https://github.com/Necrobot-Private/NecroBot/pull/559) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.64](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.64) (2017-01-17)
 
@@ -2457,10 +2484,10 @@
 
 **Merged pull requests:**
 
+- fix null exception & fix duplicate settings [\#559](https://github.com/Necrobot-Private/NecroBot/pull/559) ([samuraitruong](https://github.com/samuraitruong))
 - Feature/win wpf gui [\#558](https://github.com/Necrobot-Private/NecroBot/pull/558) ([samuraitruong](https://github.com/samuraitruong))
 - Gym attack module optimization [\#553](https://github.com/Necrobot-Private/NecroBot/pull/553) ([ziomber](https://github.com/ziomber))
 - Refactors TelegramService.cs [\#552](https://github.com/Necrobot-Private/NecroBot/pull/552) ([Andi-fr](https://github.com/Andi-fr))
-- allow add buddy from GUI [\#548](https://github.com/Necrobot-Private/NecroBot/pull/548) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.63](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.63) (2017-01-16)
 
@@ -2477,6 +2504,7 @@
 
 **Merged pull requests:**
 
+- allow add buddy from GUI [\#548](https://github.com/Necrobot-Private/NecroBot/pull/548) ([samuraitruong](https://github.com/samuraitruong))
 - - german I18N [\#537](https://github.com/Necrobot-Private/NecroBot/pull/537) ([Andi-fr](https://github.com/Andi-fr))
 - Gym Battles updates [\#532](https://github.com/Necrobot-Private/NecroBot/pull/532) ([ziomber](https://github.com/ziomber))
 
@@ -2514,10 +2542,6 @@
 
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.58...v1.0.0.59)
 
-**Merged pull requests:**
-
-- add candy snipe mode [\#524](https://github.com/Necrobot-Private/NecroBot/pull/524) ([samuraitruong](https://github.com/samuraitruong))
-
 ## [v1.0.0.58](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.58) (2017-01-13)
 
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.57...v1.0.0.58)
@@ -2528,7 +2552,7 @@
 
 **Merged pull requests:**
 
-- GUI - Fix bugs [\#520](https://github.com/Necrobot-Private/NecroBot/pull/520) ([samuraitruong](https://github.com/samuraitruong))
+- add candy snipe mode [\#524](https://github.com/Necrobot-Private/NecroBot/pull/524) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.57](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.57) (2017-01-13)
 
@@ -2551,16 +2575,13 @@
 
 **Merged pull requests:**
 
+- GUI - Fix bugs [\#520](https://github.com/Necrobot-Private/NecroBot/pull/520) ([samuraitruong](https://github.com/samuraitruong))
 - Feature/inventory recycle by percent [\#519](https://github.com/Necrobot-Private/NecroBot/pull/519) ([jjskuld](https://github.com/jjskuld))
 - sync rocket api [\#514](https://github.com/Necrobot-Private/NecroBot/pull/514) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.56](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.56) (2017-01-12)
 
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.55...v1.0.0.56)
-
-**Merged pull requests:**
-
-- fix bug  & anhancement GUI [\#507](https://github.com/Necrobot-Private/NecroBot/pull/507) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.55](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.55) (2017-01-12)
 
@@ -2578,13 +2599,13 @@
 - Auto transfer favourite pokemon [\#471](https://github.com/Necrobot-Private/NecroBot/issues/471)
 - \(ERROR\) PoGo.NecroBot.Logic.Exceptions.ActiveSwitchByRuleException [\#399](https://github.com/Necrobot-Private/NecroBot/issues/399)
 
+**Merged pull requests:**
+
+- fix bug  & anhancement GUI [\#507](https://github.com/Necrobot-Private/NecroBot/pull/507) ([samuraitruong](https://github.com/samuraitruong))
+
 ## [v1.0.0.54](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.54) (2017-01-11)
 
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.53...v1.0.0.54)
-
-**Merged pull requests:**
-
-- Feature/win wpf gui [\#499](https://github.com/Necrobot-Private/NecroBot/pull/499) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.53](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.53) (2017-01-11)
 
@@ -2593,6 +2614,10 @@
 **Closed issues:**
 
 - Filter catch not met [\#480](https://github.com/Necrobot-Private/NecroBot/issues/480)
+
+**Merged pull requests:**
+
+- Feature/win wpf gui [\#499](https://github.com/Necrobot-Private/NecroBot/pull/499) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.52](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.52) (2017-01-09)
 
@@ -2606,10 +2631,6 @@
 - Best Config [\#485](https://github.com/Necrobot-Private/NecroBot/issues/485)
 - \(ERROR\) Current Operation was canceled when Switch Bot [\#444](https://github.com/Necrobot-Private/NecroBot/issues/444)
 
-**Merged pull requests:**
-
-- Add INFO window [\#484](https://github.com/Necrobot-Private/NecroBot/pull/484) ([samuraitruong](https://github.com/samuraitruong))
-
 ## [v1.0.0.51](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.51) (2017-01-05)
 
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.50...v1.0.0.51)
@@ -2622,6 +2643,10 @@
 - "DataServiceIdentification": "",  ????? [\#398](https://github.com/Necrobot-Private/NecroBot/issues/398)
 - \[feature request\] Captcha Support  [\#324](https://github.com/Necrobot-Private/NecroBot/issues/324)
 
+**Merged pull requests:**
+
+- Add INFO window [\#484](https://github.com/Necrobot-Private/NecroBot/pull/484) ([samuraitruong](https://github.com/samuraitruong))
+
 ## [v1.0.0.50](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.50) (2017-01-04)
 
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.49...v1.0.0.50)
@@ -2629,7 +2654,6 @@
 **Merged pull requests:**
 
 - add retry state when api down [\#481](https://github.com/Necrobot-Private/NecroBot/pull/481) ([samuraitruong](https://github.com/samuraitruong))
-- Feature/snipe enhancement misc [\#476](https://github.com/Necrobot-Private/NecroBot/pull/476) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.49](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.49) (2017-01-03)
 
@@ -2651,6 +2675,10 @@
 - Softban bug [\#390](https://github.com/Necrobot-Private/NecroBot/issues/390)
 - NecroBot2 GUI - Can't transfer/evolve/power up Pokemon  [\#321](https://github.com/Necrobot-Private/NecroBot/issues/321)
 
+**Merged pull requests:**
+
+- Feature/snipe enhancement misc [\#476](https://github.com/Necrobot-Private/NecroBot/pull/476) ([samuraitruong](https://github.com/samuraitruong))
+
 ## [v1.0.0.48](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.48) (2017-01-02)
 
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.47...v1.0.0.48)
@@ -2660,7 +2688,6 @@
 - Allow 101 in IV for Snipe that allow exclude snipe [\#468](https://github.com/Necrobot-Private/NecroBot/pull/468) ([samuraitruong](https://github.com/samuraitruong))
 - Patch 2 [\#467](https://github.com/Necrobot-Private/NecroBot/pull/467) ([Furtif](https://github.com/Furtif))
 - EvolveKeptPokemonsOverrideStartIfThisManyReady Should Be EvolveKeptPokemonIfBagHasOverThisManyPokemon [\#466](https://github.com/Necrobot-Private/NecroBot/pull/466) ([hardknoxni69a](https://github.com/hardknoxni69a))
-- Fix bulk transfer \> 100 pkm [\#463](https://github.com/Necrobot-Private/NecroBot/pull/463) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.47](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.47) (2017-01-02)
 
@@ -2672,7 +2699,7 @@
 
 **Merged pull requests:**
 
-- fix manual snipe  [\#460](https://github.com/Necrobot-Private/NecroBot/pull/460) ([samuraitruong](https://github.com/samuraitruong))
+- Fix bulk transfer \> 100 pkm [\#463](https://github.com/Necrobot-Private/NecroBot/pull/463) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.46](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.46) (2017-01-01)
 
@@ -2687,20 +2714,20 @@
 
 **Merged pull requests:**
 
+- fix manual snipe  [\#460](https://github.com/Necrobot-Private/NecroBot/pull/460) ([samuraitruong](https://github.com/samuraitruong))
 - Feature/snipe enhancement misc [\#455](https://github.com/Necrobot-Private/NecroBot/pull/455) ([samuraitruong](https://github.com/samuraitruong))
-- Critical fix getpokedex entry from cache instead of all api [\#454](https://github.com/Necrobot-Private/NecroBot/pull/454) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.45](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.45) (2016-12-31)
 
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.44...v1.0.0.45)
 
+**Merged pull requests:**
+
+- Critical fix getpokedex entry from cache instead of all api [\#454](https://github.com/Necrobot-Private/NecroBot/pull/454) ([samuraitruong](https://github.com/samuraitruong))
+
 ## [v1.0.0.44](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.44) (2016-12-30)
 
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.43...v1.0.0.44)
-
-**Merged pull requests:**
-
-- snipe enhancement [\#453](https://github.com/Necrobot-Private/NecroBot/pull/453) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.43](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.43) (2016-12-30)
 
@@ -2715,8 +2742,8 @@
 
 **Merged pull requests:**
 
+- snipe enhancement [\#453](https://github.com/Necrobot-Private/NecroBot/pull/453) ([samuraitruong](https://github.com/samuraitruong))
 - Feature/snipe enhancement misc [\#451](https://github.com/Necrobot-Private/NecroBot/pull/451) ([samuraitruong](https://github.com/samuraitruong))
-- Add inventory auto fresh [\#441](https://github.com/Necrobot-Private/NecroBot/pull/441) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.42](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.42) (2016-12-29)
 
@@ -2724,7 +2751,7 @@
 
 **Merged pull requests:**
 
-- fix critical bug - transfer pokemon but not pass any pokemons - cause… [\#439](https://github.com/Necrobot-Private/NecroBot/pull/439) ([samuraitruong](https://github.com/samuraitruong))
+- Add inventory auto fresh [\#441](https://github.com/Necrobot-Private/NecroBot/pull/441) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [v1.0.0.41](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.41) (2016-12-28)
 
@@ -2733,6 +2760,10 @@
 **Closed issues:**
 
 - \[!\] Not an issue [\#414](https://github.com/Necrobot-Private/NecroBot/issues/414)
+
+**Merged pull requests:**
+
+- fix critical bug - transfer pokemon but not pass any pokemons - cause… [\#439](https://github.com/Necrobot-Private/NecroBot/pull/439) ([samuraitruong](https://github.com/samuraitruong))
 
 ## [1.0.0.40](https://github.com/Necrobot-Private/NecroBot/tree/1.0.0.40) (2016-12-28)
 
@@ -2750,21 +2781,17 @@
 
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.37...1.0.0.38)
 
-**Merged pull requests:**
-
-- Feature/transfer bulk [\#437](https://github.com/Necrobot-Private/NecroBot/pull/437) ([samuraitruong](https://github.com/samuraitruong))
-
 ## [v1.0.0.37](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.37) (2016-12-28)
 
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.36...v1.0.0.37)
 
+**Merged pull requests:**
+
+- Feature/transfer bulk [\#437](https://github.com/Necrobot-Private/NecroBot/pull/437) ([samuraitruong](https://github.com/samuraitruong))
+
 ## [v1.0.0.36](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.36) (2016-12-27)
 
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.35...v1.0.0.36)
-
-**Merged pull requests:**
-
-- Switch credentials for appveyor github integration. [\#436](https://github.com/Necrobot-Private/NecroBot/pull/436) ([jjskuld](https://github.com/jjskuld))
 
 ## [v1.0.0.35](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.35) (2016-12-27)
 
@@ -2772,7 +2799,7 @@
 
 **Merged pull requests:**
 
-- disable killswitch [\#434](https://github.com/Necrobot-Private/NecroBot/pull/434) ([samuraitruong](https://github.com/samuraitruong))
+- Switch credentials for appveyor github integration. [\#436](https://github.com/Necrobot-Private/NecroBot/pull/436) ([jjskuld](https://github.com/jjskuld))
 
 ## [v1.0.0.34](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.34) (2016-12-27)
 
@@ -2780,8 +2807,8 @@
 
 **Merged pull requests:**
 
+- disable killswitch [\#434](https://github.com/Necrobot-Private/NecroBot/pull/434) ([samuraitruong](https://github.com/samuraitruong))
 - Temporary disable killswitch [\#433](https://github.com/Necrobot-Private/NecroBot/pull/433) ([samuraitruong](https://github.com/samuraitruong))
-- Fix x86 build which got changed to x64 [\#430](https://github.com/Necrobot-Private/NecroBot/pull/430) ([joe1chen](https://github.com/joe1chen))
 
 ## [v1.0.0.33](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.33) (2016-12-26)
 
@@ -2799,6 +2826,7 @@
 
 **Merged pull requests:**
 
+- Fix x86 build which got changed to x64 [\#430](https://github.com/Necrobot-Private/NecroBot/pull/430) ([joe1chen](https://github.com/joe1chen))
 - Lots of changes [\#429](https://github.com/Necrobot-Private/NecroBot/pull/429) ([samuraitruong](https://github.com/samuraitruong))
 - Update CONTRIBUTORS.md [\#426](https://github.com/Necrobot-Private/NecroBot/pull/426) ([Furtif](https://github.com/Furtif))
 - Update README.md [\#425](https://github.com/Necrobot-Private/NecroBot/pull/425) ([Furtif](https://github.com/Furtif))
@@ -2841,7 +2869,6 @@
 - minor changes [\#389](https://github.com/Necrobot-Private/NecroBot/pull/389) ([msx752](https://github.com/msx752))
 - new feature is implemented [\#387](https://github.com/Necrobot-Private/NecroBot/pull/387) ([msx752](https://github.com/msx752))
 - performance: msniper-service is updated [\#386](https://github.com/Necrobot-Private/NecroBot/pull/386) ([msx752](https://github.com/msx752))
-- Fix bug where bot were using old/existing translation.en.json [\#382](https://github.com/Necrobot-Private/NecroBot/pull/382) ([mo0ojava](https://github.com/mo0ojava))
 
 ## [v1.0.0.29](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.29) (2016-11-19)
 
@@ -2855,6 +2882,7 @@
 
 - minor changes for mssvc [\#385](https://github.com/Necrobot-Private/NecroBot/pull/385) ([msx752](https://github.com/msx752))
 - code cleans [\#383](https://github.com/Necrobot-Private/NecroBot/pull/383) ([msx752](https://github.com/msx752))
+- Fix bug where bot were using old/existing translation.en.json [\#382](https://github.com/Necrobot-Private/NecroBot/pull/382) ([mo0ojava](https://github.com/mo0ojava))
 
 ## [v1.0.0.28](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.28) (2016-11-19)
 
@@ -3028,7 +3056,6 @@
 
 **Fixed bugs:**
 
-- \(INFO\) Skipped ?? [\#298](https://github.com/Necrobot-Private/NecroBot/issues/298)
 - temporary 'TimeTillHiddenMs' fix for msniper.com [\#304](https://github.com/Necrobot-Private/NecroBot/pull/304) ([msx752](https://github.com/msx752))
 
 ## [v1.0.0.13](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.13) (2016-11-08)
@@ -3037,6 +3064,7 @@
 
 **Fixed bugs:**
 
+- \(INFO\) Skipped ?? [\#298](https://github.com/Necrobot-Private/NecroBot/issues/298)
 - Fixes \#298 - Don't skip pokemon by default. [\#303](https://github.com/Necrobot-Private/NecroBot/pull/303) ([jjskuld](https://github.com/jjskuld))
 
 ## [v1.0.0.12](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.12) (2016-11-08)
@@ -3180,7 +3208,6 @@
 **Fixed bugs:**
 
 - 0.9.9.8 Error: Microsoft.CSharp.RuntimeBinder.RuntimeBinderException [\#208](https://github.com/Necrobot-Private/NecroBot/issues/208)
-- 0.9.9.6 'POGOProtos.Networking.Responses.DiskEncounterResponse' does not contain a definition for 'WildPokemon' [\#179](https://github.com/Necrobot-Private/NecroBot/issues/179)
 - 0.9.8.1 SpeedUp messed up [\#14](https://github.com/Necrobot-Private/NecroBot/issues/14)
 - Fix pokestop spin bug \(bug \#213\) [\#214](https://github.com/Necrobot-Private/NecroBot/pull/214) ([jjskuld](https://github.com/jjskuld))
 - Bug fix - Console not showing poke stop name. [\#212](https://github.com/Necrobot-Private/NecroBot/pull/212) ([jjskuld](https://github.com/jjskuld))
@@ -3194,6 +3221,7 @@
 
 - Building solution got error "The name 'PokemonMoveMetaRegistry' does not exist in the current context". [\#189](https://github.com/Necrobot-Private/NecroBot/issues/189)
 - 0.9.9.6 Keep on walking to a pokeshop but it never reach it [\#184](https://github.com/Necrobot-Private/NecroBot/issues/184)
+- 0.9.9.6 'POGOProtos.Networking.Responses.DiskEncounterResponse' does not contain a definition for 'WildPokemon' [\#179](https://github.com/Necrobot-Private/NecroBot/issues/179)
 - Fix \#179 WildPokemon-error with Incense/Lures [\#206](https://github.com/Necrobot-Private/NecroBot/pull/206) ([mo0ojava](https://github.com/mo0ojava))
 - Bug fix for bot skipping pokestops [\#199](https://github.com/Necrobot-Private/NecroBot/pull/199) ([jjskuld](https://github.com/jjskuld))
 
