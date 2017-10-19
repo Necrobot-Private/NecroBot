@@ -33,9 +33,9 @@ namespace PoGo.NecroBot.Logic.Model.Settings
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 2)]
         public string DevicePackageName = "custom";
 
-        [DefaultValue("c9e09530c39b11f75383dfcfe4e7e90fef92469e")]
-        [MinLength(12)]
-        [MaxLength(40)]
+        [DefaultValue("2d207c0f186091c04abc7ff706a985ee")]
+        [MinLength(16)]
+        [MaxLength(32)]
         [RegularExpression(@"^[0-9A-Fa-f]+$")]
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.Populate, Order = 3)]
         public string DeviceId = DeviceInfoHelper.GetRandomIosDevice().DeviceId;
