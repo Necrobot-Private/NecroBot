@@ -60,6 +60,13 @@ namespace PoGo.NecroBot.Logic.Tasks
             await Session.GymState.LoadMyPokemons(Session).ConfigureAwait(false);
 
             var distance = Session.Navigation.WalkStrategy.CalculateDistance(Session.Client.CurrentLatitude, Session.Client.CurrentLongitude, Gym.Latitude, Gym.Longitude);
+            var player = Session.Profile.PlayerData;
+
+            if (player.Team == TeamColor.Neutral && session.LogicSettings.GymConfig.DefaultTeam == "Neutral")
+            {
+                Logger.Write($"No team selected yet.. Gym battle functions are disabled.", LogLevel.Gym, ConsoleColor.White);
+                return;
+            }
 
             if (GymInfo != null)
             {
@@ -71,7 +78,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                     Longitude = GymInfo.Longitude
                 });
 
-                var player = Session.Profile.PlayerData;
                 await EnsureJoinTeam(player).ConfigureAwait(false);
 
                 Session.EventDispatcher.Send(new GymDetailInfoEvent()
@@ -306,12 +312,20 @@ namespace PoGo.NecroBot.Logic.Tasks
                 if (result.Result != GymStartSessionResponse.Types.Result.Success)
                     return;
 
-                Logger.Write("Attacking Team consists of:", LogLevel.Gym);
-                Logger.Write(string.Join(", ",
-                    Session.GymState.MyTeam.Select(s => string.Format("\n{0} ({1} HP / {2} CP)",
+
+
+
+
+
+
+
+                Logger.Write("Attacking Team consists of:" + string.Join(", ",
+                    Session.GymState.MyTeam.Select(s => string.Format("{0} ({1} HP / {2} CP)",
                     s.Attacker.PokemonId.ToString(),
                     s.HpState,
-                    s.Attacker.Cp))), LogLevel.Info, ConsoleColor.Yellow);
+                    s.Attacker.Cp))), LogLevel.Gym, ConsoleColor.Yellow);
+
+
 
                 //await Task.Delay(2000).ConfigureAwait(false);
                 List<BattleAction> battleActions = new List<BattleAction>();
@@ -369,7 +383,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                 var faintedPokemons = pokemonDatas.Where(x => faintedPKM.Any(y => y == x.Id));
                 pokemonDatas = livePokemons.Concat(faintedPokemons).ToArray();
             }
-            
+
             //Logger.Write(string.Join(Environment.NewLine, battleActions.OrderBy(o => o.ActionStartMs).Select(s => s).Distinct()), LogLevel.Gym, ConsoleColor.White);
         }
 
@@ -1078,8 +1092,11 @@ namespace PoGo.NecroBot.Logic.Tasks
                                     extraWait = false; //don't wait, this is in swap call                                
                                 }
                                 if (informDie)
+
                                     Logger.Write(string.Format("Our Pokemon has fainted in battle, our new attacker is: {0} ({1} CP)",
                                         attacker.PokemonId.ToString(), attacker.Cp), LogLevel.Gym, ConsoleColor.Red);
+
+
                                 if (extraWait)
                                     Logger.Write("Death penalty applied.", LogLevel.Gym, ConsoleColor.Red);
                                 await Task.Delay(1000).ConfigureAwait(false);
@@ -1097,12 +1114,37 @@ namespace PoGo.NecroBot.Logic.Tasks
                                 (ev == TeamColor.Red)
                                     ? ConsoleColor.Red
                                     : (ev == TeamColor.Yellow ? ConsoleColor.Yellow : ConsoleColor.Blue));
+
+
+
+
+
                             Logger.Write($"(ATTACKER): {attacker.PokemonId.ToString(),-12} | HP: {attackResult.BattleUpdate.ActiveAttacker.CurrentHealth,3:##0} | Sta: {CurrentAttackerEnergy,3:##0} | Lvl: {attackResult.BattleUpdate.ActiveAttacker.PokemonData.Level(),4:#0.0}", LogLevel.Gym,
                                 (player.Team == TeamColor.Red)
                                     ? ConsoleColor.Red
                                     : (player.Team == TeamColor.Yellow ? ConsoleColor.Yellow : ConsoleColor.Blue));
 
+
+
+
+
+
                             TimeSpan BattleTimer = DateTime.Now.Subtract(AttackStart);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                             Logger.Write($"Battle Timer: {100 - BattleTimer.TotalSeconds,3:##0} Sec remaining.", LogLevel.Info, ConsoleColor.White);
 

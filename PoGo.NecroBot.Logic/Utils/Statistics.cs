@@ -45,6 +45,8 @@ namespace PoGo.NecroBot.Logic.Utils
 
         public StatsExport StatsExport => _exportStats;
 
+
+
         public void Dirty(Inventory inventory, ISession session)
         {
             _exportStats = GetCurrentInfo(session, inventory).Result;
@@ -108,6 +110,8 @@ namespace PoGo.NecroBot.Logic.Utils
                 var totalMin = (DateTime.Now - _initSessionDateTime).TotalMinutes;
                 if (newRandomSwitchTime > 0 && newRandomSwitchTime <= totalMin)
                 {
+
+
                     // Setup random time to false, so that next account generates new random runtime
                     isRandomTimeSet = false;
 
@@ -119,6 +123,11 @@ namespace PoGo.NecroBot.Logic.Utils
                         ReachedValue = Math.Round(totalMin, 1)
                     };
                 }
+
+
+
+
+
             }
         }
 

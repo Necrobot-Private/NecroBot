@@ -1,4 +1,4 @@
-﻿#region using directives
+#region using directives
 
 using System;
 using System.Collections.Generic;
@@ -387,9 +387,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                     if (fortSearch.Result == FortSearchResponse.Types.Result.OutOfRange)
                     {
                         if (retry > 2)
-                        {
                             await Task.Delay(500).ConfigureAwait(false);
-                        }
                         else
                             await session.Client.Map.GetMapObjects(true).ConfigureAwait(false);
 
@@ -403,7 +401,13 @@ namespace PoGo.NecroBot.Logic.Tasks
                     }
                 }
                 while (fortSearch.Result == FortSearchResponse.Types.Result.OutOfRange && retry > 0);
-                Logger.Debug($"Loot pokestop result: {fortSearch.Result}");
+
+                if (fortSearch.Result == FortSearchResponse.Types.Result.PoiInaccessible)
+                {
+                    Logger.Debug($"Loot {fortInfo.Type} result: {fortSearch.Result} trainer level must be >= 5 to access gym disk."); //, LogLevel.Gym, ConsoleColor.White);
+                    break;
+                }
+
                 if (fortSearch.ExperienceAwarded > 0 && timesZeroXPawarded > 0) timesZeroXPawarded = 0;
                 if (fortSearch.ExperienceAwarded == 0 && fortSearch.Result != FortSearchResponse.Types.Result.InventoryFull)
                 {

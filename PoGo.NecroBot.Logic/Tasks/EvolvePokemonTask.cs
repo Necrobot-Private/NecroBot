@@ -189,6 +189,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             if (branch == null) return ItemId.ItemUnknown;
             return branch.EvolutionItemRequirement;
         }
+
         private static async Task Evolve(ISession session, CancellationToken cancellationToken, List<PokemonData> pokemonToEvolve)
         {
             int sequence = 1;
