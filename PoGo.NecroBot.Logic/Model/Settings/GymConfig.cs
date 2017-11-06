@@ -168,11 +168,11 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             return new List<TeamMemberConfig>()
             {
                 { new TeamMemberConfig() { Pokemon=PokemonId.Lapras, MinCP=1000 } },
-                { new TeamMemberConfig() { Pokemon=PokemonId.Snorlax,  MinCP=1000 } },
-                { new TeamMemberConfig() { Pokemon=PokemonId.Vaporeon,  MinCP=2000, Moves = new List<PokemonMove[]>() { new PokemonMove[2] { PokemonMove.MoveUnset, PokemonMove.HydroPump } } } },
-                { new TeamMemberConfig() { Pokemon=PokemonId.Dragonite,  MinCP=2000 } },
-                { new TeamMemberConfig() { Pokemon=PokemonId.Charizard,  MinCP=2000 } },
-                { new TeamMemberConfig() { Pokemon=PokemonId.Alakazam,  MinCP=2000 } }
+                { new TeamMemberConfig() { Pokemon=PokemonId.Snorlax, MinCP=1000 } },
+                { new TeamMemberConfig() { Pokemon=PokemonId.Vaporeon, MinCP=2000, Moves = new List<PokemonMove[]>() { new PokemonMove[2] { PokemonMove.MoveUnset, PokemonMove.HydroPump } } } },
+                { new TeamMemberConfig() { Pokemon=PokemonId.Dragonite, MinCP=2000 } },
+                { new TeamMemberConfig() { Pokemon=PokemonId.Charizard, MinCP=2000 } },
+                { new TeamMemberConfig() { Pokemon=PokemonId.Alakazam, MinCP=2000 } }
             };
         }
 
@@ -184,8 +184,8 @@ namespace PoGo.NecroBot.Logic.Model.Settings
                 { new TeamMemberConfig() { Pokemon=PokemonId.Vaporeon, MinCP=2000 } },
                 { new TeamMemberConfig() { Pokemon=PokemonId.Gyarados, MinCP=2000 } },
                 { new TeamMemberConfig() { Pokemon=PokemonId.Snorlax, MinCP=2000 } },
-                { new TeamMemberConfig() { Pokemon=PokemonId.Charizard,  MinCP=2000 } },
-                { new TeamMemberConfig() { Pokemon=PokemonId.Lapras,  MinCP=2000 } }
+                { new TeamMemberConfig() { Pokemon=PokemonId.Charizard, MinCP=2000 } },
+                { new TeamMemberConfig() { Pokemon=PokemonId.Lapras, MinCP=2000 } }
             };
         }
 

@@ -97,11 +97,11 @@ namespace PoGo.NecroBot.Logic.Tasks
             }
 
             var allitems = await session.Inventory.GetItems().ConfigureAwait(false);
-            var pokeBallsCount = allitems.FirstOrDefault(i => i.ItemId == ItemId.ItemPokeBall)?.Count;
-            var greatBallsCount = allitems.FirstOrDefault(i => i.ItemId == ItemId.ItemGreatBall)?.Count;
-            var ultraBallsCount = allitems.FirstOrDefault(i => i.ItemId == ItemId.ItemUltraBall)?.Count;
-            var masterBallsCount = allitems.FirstOrDefault(i => i.ItemId == ItemId.ItemMasterBall)?.Count;
-            masterBallsCount = masterBallsCount ?? 0; //return null ATM. need this code to logic check work
+            var pokeBallsCount = allitems.FirstOrDefault(i => i.ItemId == ItemId.ItemPokeBall)?.Count ?? 0;
+            var greatBallsCount = allitems.FirstOrDefault(i => i.ItemId == ItemId.ItemGreatBall)?.Count ?? 0;
+            var ultraBallsCount = allitems.FirstOrDefault(i => i.ItemId == ItemId.ItemUltraBall)?.Count ?? 0;
+            var masterBallsCount = allitems.FirstOrDefault(i => i.ItemId == ItemId.ItemMasterBall)?.Count ?? 0;
+            //masterBallsCount = masterBallsCount ?? 0; //return null ATM. need this code to logic check work
             var PokeBalls = pokeBallsCount + greatBallsCount + ultraBallsCount + masterBallsCount;
 
             if (pokemons.Count > 0)

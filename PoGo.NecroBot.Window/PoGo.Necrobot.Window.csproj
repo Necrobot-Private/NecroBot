@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -89,11 +89,11 @@
       <HintPath>$(SolutionDir)\packages\Costura.Fody.1.6.2\lib\dotnet\Costura.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="DotNetBrowser, Version=1.12.0.0, Culture=neutral, PublicKeyToken=b0b5aaca9c95c84e, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)\packages\DotNetBrowser.1.12\lib\DotNetBrowser.dll</HintPath>
+    <Reference Include="DotNetBrowser, Version=1.13.0.0, Culture=neutral, PublicKeyToken=b0b5aaca9c95c84e, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\DotNetBrowser.1.13\lib\DotNetBrowser.dll</HintPath>
     </Reference>
-    <Reference Include="DotNetBrowser.Chromium, Version=1.12.0.0, Culture=neutral, PublicKeyToken=b0b5aaca9c95c84e, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)\packages\DotNetBrowser.1.12\lib\DotNetBrowser.Chromium.dll</HintPath>
+    <Reference Include="DotNetBrowser.Chromium, Version=1.13.0.0, Culture=neutral, PublicKeyToken=b0b5aaca9c95c84e, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\DotNetBrowser.1.13\lib\DotNetBrowser.Chromium.dll</HintPath>
     </Reference>
     <Reference Include="Geocoding, Version=3.6.0.0, Culture=neutral, PublicKeyToken=7c714700b88674c7, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\Geocoding.net.3.6.1\lib\net40\Geocoding.dll</HintPath>
@@ -157,8 +157,8 @@
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="POGOProtos.Core, Version=2.18.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)packages\POGOProtos.Core.2.18.1\lib\net45\POGOProtos.Core.dll</HintPath>
+    <Reference Include="POGOProtos.Core, Version=2.19.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\POGOProtos.Core.2.19.0\lib\net45\POGOProtos.Core.dll</HintPath>
     </Reference>
     <Reference Include="Remotion.Linq, Version=2.1.0.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\Remotion.Linq.2.1.2\lib\net45\Remotion.Linq.dll</HintPath>
@@ -859,7 +859,7 @@
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\packages\Costura.Fody.1.6.2\build\dotnet\Costura.Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\packages\Costura.Fody.1.6.2\build\dotnet\Costura.Fody.targets'))" />
     <Error Condition="!Exists('$(SolutionDir)packages\Selenium.WebDriver.ChromeDriver.2.33.0\build\Selenium.WebDriver.ChromeDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)packages\Selenium.WebDriver.ChromeDriver.2.33.0\build\Selenium.WebDriver.ChromeDriver.targets'))" />
-    <Error Condition="!Exists('$(SolutionDir)packages\Fody.2.1.3\build\netstandard1.2\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)packages\Fody.2.1.3\build\netstandard1.2\Fody.targets'))" />
+    <Error Condition="!Exists('$(SolutionDir)packages\Fody.2.2.0\build\netstandard1.2\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)packages\Fody.2.2.0\build\netstandard1.2\Fody.targets'))" />
   </Target>
   <UsingTask TaskName="CosturaCleanup" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll" TaskFactory="CodeTaskFactory">
     <ParameterGroup>
@@ -908,7 +908,7 @@ rmdir /s /q x64</PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\packages\Costura.Fody.1.6.2\build\dotnet\Costura.Fody.targets" Condition="Exists('$(SolutionDir)\packages\Costura.Fody.1.6.2\build\dotnet\Costura.Fody.targets')" />
   <Import Project="$(SolutionDir)packages\Selenium.WebDriver.ChromeDriver.2.33.0\build\Selenium.WebDriver.ChromeDriver.targets" Condition="Exists('$(SolutionDir)packages\Selenium.WebDriver.ChromeDriver.2.33.0\build\Selenium.WebDriver.ChromeDriver.targets')" />
-  <Import Project="$(SolutionDir)packages\Fody.2.1.3\build\netstandard1.2\Fody.targets" Condition="Exists('$(SolutionDir)packages\Fody.2.1.3\build\netstandard1.2\Fody.targets')" />
+  <Import Project="$(SolutionDir)packages\Fody.2.2.0\build\netstandard1.2\Fody.targets" Condition="Exists('$(SolutionDir)packages\Fody.2.2.0\build\netstandard1.2\Fody.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

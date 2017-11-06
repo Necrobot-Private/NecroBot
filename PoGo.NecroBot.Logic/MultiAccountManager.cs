@@ -293,7 +293,7 @@ namespace PoGo.NecroBot.Logic
 
             if (_context.Account.Count() > 0)
             {
-                var runnableAccount = _context.Account.OrderByDescending(x => x.RuntimeTotal).ThenByDescending(p => p.Level).ThenByDescending(p => p.CurrentXp).LastOrDefault(p => p != currentAccount && p.AccountActive == true);
+                var runnableAccount = _context.Account.OrderByDescending(p => p.Level).ThenByDescending(p => p.CurrentXp).Where(a => a.AccountActive == true).LastOrDefault(); //_context.Account.OrderByDescending(x => x.RuntimeTotal).ThenByDescending(p => p.Level).ThenByDescending(p => p.CurrentXp).LastOrDefault(p => p != currentAccount && p.AccountActive == true);
 
                 if (runnableAccount != null)
                     return runnableAccount;
@@ -359,7 +359,7 @@ namespace PoGo.NecroBot.Logic
                 localAccount.RaisePropertyChanged("PrevLevelXp");
                 localAccount.RaisePropertyChanged("ExperienceInfo");
 
-                localAccount.AccountLatitude = string.IsNullOrEmpty(current.AccountLatitude.ToString()) ? Client.CurrentLatitude : current.AccountLatitude; //current.AccountLatitude;
+                localAccount.AccountLatitude = string.IsNullOrEmpty(current.AccountLatitude.ToString()) ? Client.CurrentLatitude : current.AccountLatitude;
                 localAccount.AccountLongitude = string.IsNullOrEmpty(current.AccountLongitude.ToString()) ? Client.CurrentLongitude : current.AccountLongitude;
                 localAccount.AccountActive = current.AccountActive;
 

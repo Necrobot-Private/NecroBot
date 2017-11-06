@@ -114,7 +114,7 @@ namespace PoGo.NecroBot.Logic.Service
                     session.Translation.GetPokemonTranslation(pokemonEvolveEvent.Id).PadRight(12, ' '),
                     pokemonEvolveEvent.Result,
                     strPokemon);
-            logMessage = (pokemonEvolveEvent.Sequence > 0 ? $"{pokemonEvolveEvent.Sequence}. " : "") + logMessage;
+            logMessage = (pokemonEvolveEvent.Sequence > 0 ? $"{pokemonEvolveEvent.Sequence.ToString("0").PadLeft(2,' ')}. " : "   ") + logMessage;
             Logger.Write(logMessage, LogLevel.Evolve);
         }
 
