@@ -88,8 +88,8 @@
     <Reference Include="Google.Api.CommonProtos, Version=1.1.0.0, Culture=neutral, PublicKeyToken=3ec5ea7f18953e47, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\Google.Api.CommonProtos.1.1.0\lib\net45\Google.Api.CommonProtos.dll</HintPath>
     </Reference>
-    <Reference Include="Google.Api.Gax, Version=2.2.0.0, Culture=neutral, PublicKeyToken=3ec5ea7f18953e47, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)\packages\Google.Api.Gax.2.2.0\lib\net45\Google.Api.Gax.dll</HintPath>
+    <Reference Include="Google.Api.Gax, Version=2.2.1.0, Culture=neutral, PublicKeyToken=3ec5ea7f18953e47, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Google.Api.Gax.2.2.1\lib\net45\Google.Api.Gax.dll</HintPath>
     </Reference>
     <Reference Include="Google.Apis.Analytics.v3, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -104,8 +104,8 @@
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Markdig, Version=0.14.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)\packages\Markdig.0.14.3\lib\net40\Markdig.dll</HintPath>
+    <Reference Include="Markdig, Version=0.14.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Markdig.0.14.6\lib\net40\Markdig.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Client, Version=2.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\Microsoft.AspNet.SignalR.Client.2.2.2\lib\net45\Microsoft.AspNet.SignalR.Client.dll</HintPath>
@@ -152,8 +152,8 @@
     <Reference Include="Newtonsoft.Json.Schema, Version=3.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\Newtonsoft.Json.Schema.3.0.4\lib\net45\Newtonsoft.Json.Schema.dll</HintPath>
     </Reference>
-    <Reference Include="POGOProtos.Core, Version=2.19.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)packages\POGOProtos.Core.2.19.0\lib\net45\POGOProtos.Core.dll</HintPath>
+    <Reference Include="POGOProtos.Core, Version=2.19.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\POGOProtos.Core.2.19.1\lib\net45\POGOProtos.Core.dll</HintPath>
     </Reference>
     <Reference Include="Remotion.Linq, Version=2.1.0.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\Remotion.Linq.2.1.2\lib\net45\Remotion.Linq.dll</HintPath>
@@ -215,6 +215,14 @@
       <HintPath>$(SolutionDir)\packages\System.Runtime.CompilerServices.Unsafe.4.4.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security.Cryptography.Algorithms">
+      <HintPath>$(SolutionDir)\packages\System.Security.Cryptography.Algorithms.4.3.1\lib\net461\System.Security.Cryptography.Algorithms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.X509Certificates">
+      <HintPath>$(SolutionDir)\packages\System.Security.Cryptography.X509Certificates.4.3.2\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
