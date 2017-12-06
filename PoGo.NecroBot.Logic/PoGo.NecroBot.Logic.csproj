@@ -1,0 +1,719 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(SolutionDir)\packages\SQLite.3.13.0\build\net45\SQLite.props" Condition="Exists('$(SolutionDir)\packages\SQLite.3.13.0\build\net45\SQLite.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0739E40D-C589-4AEB-93E5-EE8CD6773C60}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PoGo.NecroBot.Logic</RootNamespace>
+    <AssemblyName>PoGo.NecroBot.Logic</AssemblyName>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>none</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AeroWizard, Version=2.1.10.0, Culture=neutral, PublicKeyToken=915e74f5d64b8f37, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\AeroWizard.2.1.10\lib\net452\AeroWizard.dll</HintPath>
+    </Reference>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.1.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Portable.BouncyCastle.1.8.1.3\lib\net40\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
+    <Reference Include="CloudFlareUtilities, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\CloudFlareUtilities.0.4.0-alpha\lib\portable45-net45+win8+wpa81\CloudFlareUtilities.dll</HintPath>
+    </Reference>
+    <Reference Include="EngineIoClientDotNet, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\EngineIoClientDotNet.1.0.3\lib\net45\EngineIoClientDotNet.dll</HintPath>
+    </Reference>
+    <Reference Include="EPPlus, Version=4.1.1.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)packages\EPPlus.4.1.1\lib\net40\EPPlus.dll</HintPath>
+    </Reference>
+    <Reference Include="Geocoding, Version=3.6.0.0, Culture=neutral, PublicKeyToken=7c714700b88674c7, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Geocoding.net.3.6.1\lib\net40\Geocoding.dll</HintPath>
+    </Reference>
+    <Reference Include="GeoCoordinate.NetStandard1, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\GeoCoordinate.NetStandard1.1.0.1\lib\netstandard1.1\GeoCoordinate.NetStandard1.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Api.CommonProtos, Version=1.1.0.0, Culture=neutral, PublicKeyToken=3ec5ea7f18953e47, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Google.Api.CommonProtos.1.1.0\lib\net45\Google.Api.CommonProtos.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Api.Gax, Version=2.2.1.0, Culture=neutral, PublicKeyToken=3ec5ea7f18953e47, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Google.Api.Gax.2.2.1\lib\net45\Google.Api.Gax.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.Analytics.v3, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(SolutionDir)\packages\Google.Apis.Analytics.v3.1.0.2\lib\net45\Google.Apis.Analytics.v3.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Protobuf, Version=3.4.1.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Google.Protobuf.3.4.1\lib\net45\Google.Protobuf.dll</HintPath>
+    </Reference>
+    <Reference Include="GPSOAuthSharp.NetStandard1, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\GPSOAuthSharp.NetStandard1.1.0.1\lib\netstandard1.1\GPSOAuthSharp.NetStandard1.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Markdig, Version=0.14.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Markdig.0.14.6\lib\net40\Markdig.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Client, Version=2.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Microsoft.AspNet.SignalR.Client.2.2.2\lib\net45\Microsoft.AspNet.SignalR.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.Sqlite, Version=1.1.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Microsoft.Data.Sqlite.1.1.0\lib\net451\Microsoft.Data.Sqlite.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.EntityFrameworkCore, Version=1.1.2.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Microsoft.EntityFrameworkCore.1.1.2\lib\net451\Microsoft.EntityFrameworkCore.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.EntityFrameworkCore.Relational, Version=1.1.2.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Microsoft.EntityFrameworkCore.Relational.1.1.2\lib\net451\Microsoft.EntityFrameworkCore.Relational.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.EntityFrameworkCore.Sqlite, Version=1.1.2.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Microsoft.EntityFrameworkCore.Sqlite.1.1.2\lib\net451\Microsoft.EntityFrameworkCore.Sqlite.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Caching.Abstractions, Version=1.1.2.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Microsoft.Extensions.Caching.Abstractions.1.1.2\lib\netstandard1.0\Microsoft.Extensions.Caching.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Caching.Memory, Version=1.1.2.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Microsoft.Extensions.Caching.Memory.1.1.2\lib\net451\Microsoft.Extensions.Caching.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection, Version=1.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Microsoft.Extensions.DependencyInjection.1.1.1\lib\netstandard1.1\Microsoft.Extensions.DependencyInjection.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=1.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Microsoft.Extensions.DependencyInjection.Abstractions.1.1.1\lib\netstandard1.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging, Version=1.1.2.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Microsoft.Extensions.Logging.1.1.2\lib\netstandard1.1\Microsoft.Extensions.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=1.1.2.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Microsoft.Extensions.Logging.Abstractions.1.1.2\lib\netstandard1.1\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Options, Version=1.1.2.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Microsoft.Extensions.Options.1.1.2\lib\netstandard1.0\Microsoft.Extensions.Options.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Primitives, Version=1.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Microsoft.Extensions.Primitives.1.1.1\lib\netstandard1.0\Microsoft.Extensions.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json.Schema, Version=3.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Newtonsoft.Json.Schema.3.0.4\lib\net45\Newtonsoft.Json.Schema.dll</HintPath>
+    </Reference>
+    <Reference Include="POGOProtos.Core, Version=2.19.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\POGOProtos.Core.2.19.1\lib\net45\POGOProtos.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Remotion.Linq, Version=2.1.0.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Remotion.Linq.2.1.2\lib\net45\Remotion.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="S2Geometry, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\S2Geometry.1.0.3\lib\portable-net45+wp8+win8\S2Geometry.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SocketIoClientDotNet, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\SocketIoClientDotNet.1.0.3\lib\net45\SocketIoClientDotNet.dll</HintPath>
+    </Reference>
+    <Reference Include="SuperSocket.Common, Version=1.6.6.1, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\SuperSocket.1.6.6.1\lib\net45\SuperSocket.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="SuperSocket.Facility, Version=1.6.6.1, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\SuperSocket.1.6.6.1\lib\net45\SuperSocket.Facility.dll</HintPath>
+    </Reference>
+    <Reference Include="SuperSocket.SocketBase, Version=1.6.6.1, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\SuperSocket.1.6.6.1\lib\net45\SuperSocket.SocketBase.dll</HintPath>
+    </Reference>
+    <Reference Include="SuperSocket.SocketEngine, Version=1.6.6.1, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\SuperSocket.Engine.1.6.6.1\lib\net45\SuperSocket.SocketEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="SuperSocket.SocketService, Version=1.6.6.1, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\SuperSocket.Engine.1.6.6.1\lib\net45\SuperSocket.SocketService.exe</HintPath>
+    </Reference>
+    <Reference Include="SuperSocket.WebSocket, Version=1.6.6.1, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\SuperSocket.WebSocket.1.6.6.1\lib\net45\SuperSocket.WebSocket.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Collections.Immutable, Version=1.2.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\System.Collections.Immutable.1.4.0\lib\netstandard2.0\System.Collections.Immutable.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.2.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\System.Diagnostics.DiagnosticSource.4.4.1\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Interactive.Async, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\System.Interactive.Async.3.1.1\lib\net46\System.Interactive.Async.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Compression.FileSystem">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\System.Runtime.CompilerServices.Unsafe.4.4.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security.Cryptography.Algorithms">
+      <HintPath>$(SolutionDir)\packages\System.Security.Cryptography.Algorithms.4.3.1\lib\net461\System.Security.Cryptography.Algorithms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.X509Certificates">
+      <HintPath>$(SolutionDir)\packages\System.Security.Cryptography.X509Certificates.4.3.2\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Telegram.Bot, Version=13.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Telegram.Bot.13.2.1\lib\netstandard1.1\Telegram.Bot.dll</HintPath>
+    </Reference>
+    <Reference Include="WebDriver, Version=3.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Selenium.WebDriver.3.7.0\lib\net45\WebDriver.dll</HintPath>
+    </Reference>
+    <Reference Include="WebDriver.Support, Version=3.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Selenium.Support.3.7.0\lib\net45\WebDriver.Support.dll</HintPath>
+    </Reference>
+    <Reference Include="websocket-sharp, Version=1.0.2.59611, Culture=neutral, PublicKeyToken=5660b08a1845a91e, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\WebSocketSharp.1.0.3-rc11\lib\websocket-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="WebSocket4Net, Version=0.15.0.9, Culture=neutral, PublicKeyToken=eb4e154b696bf72a, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\WebSocket4Net.0.15.0\lib\net45\WebSocket4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="Zlib.Portable, Version=1.11.0.0, Culture=neutral, PublicKeyToken=431cba815f6a8b5b, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\Zlib.Portable.Signed.1.11.0\lib\portable-net4+sl5+wp8+win8+wpa81+MonoTouch+MonoAndroid\Zlib.Portable.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.Core">
+      <HintPath>$(SolutionDir)\packages\Google.Apis.Core.1.30.0\lib\net45\Google.Apis.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis">
+      <HintPath>$(SolutionDir)\packages\Google.Apis.1.30.0\lib\net45\Google.Apis.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.PlatformServices">
+      <HintPath>$(SolutionDir)\packages\Google.Apis.1.30.0\lib\net45\Google.Apis.PlatformServices.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.Auth">
+      <HintPath>$(SolutionDir)\packages\Google.Apis.Auth.1.30.0\lib\net45\Google.Apis.Auth.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.Auth.PlatformServices">
+      <HintPath>$(SolutionDir)\packages\Google.Apis.Auth.1.30.0\lib\net45\Google.Apis.Auth.PlatformServices.dll</HintPath>
+    </Reference>
+    <Reference Include="mscorlib" />
+    <Reference Include="SuperSocket.ClientEngine">
+      <HintPath>$(SolutionDir)\packages\SuperSocket.ClientEngine.Core.0.8.0.14\lib\net45\SuperSocket.ClientEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Caching.cs" />
+    <Compile Include="Captcha\Anti-Captcha\AnticaptchaApiWrapper.cs" />
+    <Compile Include="Captcha\Anti-Captcha\AntiCaptchaClient.cs" />
+    <Compile Include="Captcha\Anti-Captcha\AnticaptchaResult.cs" />
+    <Compile Include="Captcha\Anti-Captcha\AnticaptchaTask.cs" />
+    <Compile Include="Captcha\Anti-Captcha\HttpHelper.cs" />
+    <Compile Include="Captcha\CaptchaManager.cs" />
+    <Compile Include="Captcha\CaptchaSolutionClient.cs" />
+    <Compile Include="Captcha\TwoCaptchaClient.cs" />
+    <Compile Include="Common\PokemonGradeHelper.cs" />
+    <Compile Include="Common\UITranslation.cs" />
+    <Compile Include="DataDumper\IDumper.cs" />
+    <Compile Include="DataDumper\Dumper.cs" />
+    <Compile Include="Common\Translations.cs" />
+    <Compile Include="Event\BotSwitchedEvent.cs" />
+    <Compile Include="Event\DisplayHighestsPokemonEvent.cs" />
+    <Compile Include="Event\EggHatchedEvent.cs" />
+    <Compile Include="Event\EggsListEvent.cs" />
+    <Compile Include="Event\EncounteredEvent.cs" />
+    <Compile Include="Event\EventDispatcher.cs" />
+    <Compile Include="Event\EventUsedPotion.cs" />
+    <Compile Include="Event\EventUsedRevive.cs" />
+    <Compile Include="Event\EvolveCountEvent.cs" />
+    <Compile Include="Event\FortTargetEvent.cs" />
+    <Compile Include="Event\FortFailedEvent.cs" />
+    <Compile Include="Event\FortUsedEvent.cs" />
+    <Compile Include="Event\GetRouteEvent.cs" />
+    <Compile Include="Event\Gym\GymBattleStarted.cs" />
+    <Compile Include="Event\Gym\GymDeployEvent.cs" />
+    <Compile Include="Event\Gym\GymDetailInfoEvent.cs" />
+    <Compile Include="Event\Gym\GymEventMessages.cs" />
+    <Compile Include="Event\Gym\GymListEvent.cs" />
+    <Compile Include="Event\Gym\GymTeamJoinEvent.cs" />
+    <Compile Include="Event\Gym\GymWalkToTargetEvent.cs" />
+    <Compile Include="Event\HumanWalkingEvent.cs" />
+    <Compile Include="Event\HumanWalkSnipeEvent.cs" />
+    <Compile Include="Event\InfoEvent.cs" />
+    <Compile Include="Event\InventoryListEvent.cs" />
+    <Compile Include="Event\Inventory\FavoriteEvent.cs" />
+    <Compile Include="Event\Inventory\InventoryItemUpdateEvent.cs" />
+    <Compile Include="Event\Inventory\InventoryRefreshedEvent.cs" />
+    <Compile Include="Event\Inventory\UpgradeFinishEvent.cs" />
+    <Compile Include="Event\ItemRecycledEvent.cs" />
+    <Compile Include="Event\KillSwitchEvent.cs" />
+    <Compile Include="Event\LogEvent.cs" />
+    <Compile Include="Event\LootPokestopEvent.cs" />
+    <Compile Include="Event\NoPokeballEvent.cs" />
+    <Compile Include="Event\Player\BuddyUpdateEvent.cs" />
+    <Compile Include="Event\Player\LoggedEvent.cs" />
+    <Compile Include="Event\Player\LoginEvent.cs" />
+    <Compile Include="Event\Player\TargetLocationEvent.cs" />
+    <Compile Include="Event\PokemonsEncounterEvent.cs" />
+    <Compile Include="Event\PokestopLimitUpdate.cs" />
+    <Compile Include="Event\SnipePokemonFoundEvent.cs" />
+    <Compile Include="Event\SnipeEvent.cs" />
+    <Compile Include="Event\SnipeModeEvent.cs" />
+    <Compile Include="Event\PokemonListEvent.cs" />
+    <Compile Include="Event\PokemonLevelUpEvent.cs" />
+    <Compile Include="Event\SnipeScanEvent.cs" />
+    <Compile Include="Event\NicknameUpdateEvent.cs" />
+    <Compile Include="Event\Snipe\AllBotSnipeEvent.cs" />
+    <Compile Include="Event\Snipe\AutoSnipePokemonAddedEvent.cs" />
+    <Compile Include="Event\Snipe\SnipePokemonStarted.cs" />
+    <Compile Include="Event\Snipe\SnipePokemonUpdateEvent.cs" />
+    <Compile Include="Event\RenamePokemonEvent.cs" />
+    <Compile Include="Event\UI\StatusBarEvent.cs" />
+    <Compile Include="Event\UpgradePokemonEvent.cs" />
+    <Compile Include="Event\UpdateEvent.cs" />
+    <Compile Include="Event\PokemonCaptureEvent.cs" />
+    <Compile Include="Event\PokeStopListEvent.cs" />
+    <Compile Include="Event\ProfileEvent.cs" />
+    <Compile Include="Event\TransferPokemonEvent.cs" />
+    <Compile Include="Event\UpdatePositionEvent.cs" />
+    <Compile Include="Event\UseBerryEvent.cs" />
+    <Compile Include="Event\EggIncubatorStatusEvent.cs" />
+    <Compile Include="Exceptions\ActiveSwitchAccountManualException.cs" />
+    <Compile Include="Exceptions\ActiveSwitchByRuleException.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="Forms\AutoUpdateForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AutoUpdateForm.Designer.cs">
+      <DependentUpon>AutoUpdateForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\CaptchaSolveForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CaptchaSolveForm.Designer.cs">
+      <DependentUpon>CaptchaSolveForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\EXComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\EXListView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\Extentions.cs" />
+    <Compile Include="Forms\InitialTutorialForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\InitialTutorialForm.Designer.cs">
+      <DependentUpon>InitialTutorialForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SelectAccountForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SelectAccountForm.Designer.cs">
+      <DependentUpon>SelectAccountForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Interfaces\Configuration\ILogicSettings.cs" />
+    <Compile Include="Inventory.cs" />
+    <Compile Include="Localization\Localizer.cs" />
+    <Compile Include="Logging\APILogListener.cs" />
+    <Compile Include="Logging\WebSocketLogger.cs" />
+    <Compile Include="Logging\FileLogger.cs" />
+    <Compile Include="Logging\Logger.cs" />
+    <Compile Include="Logging\LoggingStrings.cs" />
+    <Compile Include="Model\Account.cs" />
+    <Compile Include="Model\GeoLocationConfigContext.cs" />
+    <Compile Include="Model\ElevationConfigContext.cs" />
+    <Compile Include="Model\BotAccount.cs" />
+    <Compile Include="Model\BotActions.cs" />
+    <Compile Include="Exceptions\ActiveSwitchByPokemonException.cs" />
+    <Compile Include="Model\AccountConfigContext.cs" />
+    <Compile Include="Model\ElevationLocation.cs" />
+    <Compile Include="Model\GeoLocation.cs" />
+    <Compile Include="Model\Google\GoogleObjects\Address_Components.cs" />
+    <Compile Include="Model\Google\GoogleObjects\Bounds.cs" />
+    <Compile Include="Model\Google\GoogleObjects\DirectionsResponse.cs" />
+    <Compile Include="Model\Google\GoogleObjects\DistanceMatrixResponse.cs" />
+    <Compile Include="Model\Google\GoogleObjects\Element.cs" />
+    <Compile Include="Model\Google\GoogleObjects\Geo.cs" />
+    <Compile Include="Model\Google\GoogleObjects\GeocodedWaypoints.cs" />
+    <Compile Include="Model\Google\GoogleObjects\GeocodingResponse.cs" />
+    <Compile Include="Model\Google\GoogleObjects\Geometry.cs" />
+    <Compile Include="Model\Google\GoogleObjects\GoogleType.cs" />
+    <Compile Include="Model\Google\GoogleObjects\Leg.cs" />
+    <Compile Include="Model\Google\GoogleObjects\Polyline.cs" />
+    <Compile Include="Model\Google\GoogleObjects\Result.cs" />
+    <Compile Include="Model\Google\GoogleObjects\Route.cs" />
+    <Compile Include="Model\Google\GoogleObjects\Row.cs" />
+    <Compile Include="Model\Google\GoogleObjects\Step.cs" />
+    <Compile Include="Model\Google\GoogleObjects\ValueText.cs" />
+    <Compile Include="Model\Google\GoogleResult.cs" />
+    <Compile Include="Model\Google\GoogleWalk.cs" />
+    <Compile Include="Model\IGeoLocation.cs" />
+    <Compile Include="Model\PokemonGrade.cs" />
+    <Compile Include="Model\PokemonTimestamp.cs" />
+    <Compile Include="Model\PokestopTimestamp.cs" />
+    <Compile Include="Model\Settings\AuthConfig.cs" />
+    <Compile Include="Model\Settings\AuthSettings.cs" />
+    <Compile Include="Model\Settings\BaseConfig.cs" />
+    <Compile Include="Model\Settings\CatchConfig.cs" />
+    <Compile Include="Model\Settings\BerryUseFilter.cs" />
+    <Compile Include="Model\Settings\ClientSettings.cs" />
+    <Compile Include="Model\Settings\CaptchaConfig.cs" />
+    <Compile Include="Model\Settings\ConsoleConfig.cs" />
+    <Compile Include="Model\Settings\CustomCatchConfig.cs" />
+    <Compile Include="Model\Settings\DataSharingConfig.cs" />
+    <Compile Include="Model\Settings\APIConfig.cs" />
+    <Compile Include="Model\Settings\DeviceConfig.cs" />
+    <Compile Include="Model\Settings\EvolveConfig.cs" />
+    <Compile Include="Model\Settings\CatchFilter.cs" />
+    <Compile Include="Model\Settings\ExcelConfigAttribute.cs" />
+    <Compile Include="Model\Settings\FilterUtil.cs" />
+    <Compile Include="Model\Settings\GlobalSettings.cs" />
+    <Compile Include="Model\Settings\GoogleWalkConfig.cs" />
+    <Compile Include="Model\Settings\GpxConfig.cs" />
+    <Compile Include="Model\Settings\GUIConfig.cs" />
+    <Compile Include="Model\Settings\GymConfig.cs" />
+    <Compile Include="Model\Settings\HumanlikeDelays.cs" />
+    <Compile Include="Model\Settings\HumanWalkSnipeConfig.cs" />
+    <Compile Include="Model\Settings\HumanWalkSnipeFilter.cs" />
+    <Compile Include="Model\Settings\IPokemonFilter.cs" />
+    <Compile Include="Model\Settings\ItemRecycleFilter.cs" />
+    <Compile Include="Model\Settings\LevelUpConfig.cs" />
+    <Compile Include="Model\Settings\Location.cs" />
+    <Compile Include="Model\Settings\LocationConfig.cs" />
+    <Compile Include="Model\Settings\MultipleBotConfig.cs" />
+    <Compile Include="Model\Settings\NotificationConfig.cs" />
+    <Compile Include="Model\Settings\PlayerConfig.cs" />
+    <Compile Include="Model\Settings\PokemonConfig.cs" />
+    <Compile Include="Model\Settings\PokeStopConfig.cs" />
+    <Compile Include="Model\Settings\ProxyConfig.cs" />
+    <Compile Include="Model\Settings\ItemRecycleConfig.cs" />
+    <Compile Include="Model\Settings\SnipeConfig.cs" />
+    <Compile Include="Model\Settings\EvolveFilter.cs" />
+    <Compile Include="Model\Settings\CatchSettings.cs" />
+    <Compile Include="Model\Settings\SoftBanConfig.cs" />
+    <Compile Include="Model\Settings\TelegramConfig.cs" />
+    <Compile Include="Model\Settings\TransferConfig.cs" />
+    <Compile Include="Model\Settings\SnipeFilter.cs" />
+    <Compile Include="Model\Settings\TransferFilter.cs" />
+    <Compile Include="Model\Settings\UpdateConfig.cs" />
+    <Compile Include="Model\Settings\UpgradeFilter.cs" />
+    <Compile Include="Model\Settings\WebsocketsConfig.cs" />
+    <Compile Include="Model\Settings\MapzenWalkConfig.cs" />
+    <Compile Include="Model\Settings\YoursWalkConfig.cs" />
+    <Compile Include="Model\Mapzen\MapzenWalk.cs" />
+    <Compile Include="Model\Yours\YoursWalk.cs" />
+    <Compile Include="MultiAccountManager.cs" />
+    <Compile Include="Navigation.cs" />
+    <Compile Include="PoGoUtils\PokemonEvolutionHelper.cs" />
+    <Compile Include="PoGoUtils\PokemonInfo.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Service\AnalyticsService.cs" />
+    <Compile Include="Service\BotDataSocketClient.cs" />
+    <Compile Include="Service\ConsoleEventListener.cs" />
+    <Compile Include="Service\PushNotificationListener.cs" />
+    <Compile Include="Service\SniperEventListener.cs" />
+    <Compile Include="Service\TelegramCommand\ICommand.cs" />
+    <Compile Include="Service\TelegramCommand\LocCommand.cs" />
+    <Compile Include="Service\TelegramUtils.cs" />
+    <Compile Include="Service\Elevation\BaseElevationService.cs" />
+    <Compile Include="Service\Elevation\ElevationService.cs" />
+    <Compile Include="Service\Elevation\IElevationService.cs" />
+    <Compile Include="Service\Elevation\MapzenElevationService.cs" />
+    <Compile Include="Service\Elevation\RandomElevationService.cs" />
+    <Compile Include="Service\GoogleDirectionsService.cs" />
+    <Compile Include="Service\Elevation\GoogleElevationService.cs" />
+    <Compile Include="Service\TelegramCommand\AccountsCommand.cs" />
+    <Compile Include="Service\TelegramCommand\CommandLocation.cs" />
+    <Compile Include="Service\TelegramCommand\CommandMessage.cs" />
+    <Compile Include="Service\TelegramCommand\SnipeCommand.cs" />
+    <Compile Include="Service\TelegramCommand\RecycleCommand.cs" />
+    <Compile Include="Service\TelegramCommand\LogsCommand.cs" />
+    <Compile Include="Service\TelegramCommand\RestartCommand.cs" />
+    <Compile Include="Service\TelegramCommand\ExitCommand.cs" />
+    <Compile Include="Service\TelegramCommand\TopCommand.cs" />
+    <Compile Include="Service\TelegramCommand\AllCommand.cs" />
+    <Compile Include="Service\TelegramCommand\ProfileCommand.cs" />
+    <Compile Include="Service\TelegramCommand\PokedexCommand.cs" />
+    <Compile Include="Service\TelegramCommand\ICommandGenerify.cs" />
+    <Compile Include="Service\TelegramCommand\HelpCommand.cs" />
+    <Compile Include="Service\TelegramCommand\ItemsCommand.cs" />
+    <Compile Include="Service\TelegramCommand\StatusCommand.cs" />
+    <Compile Include="Service\TelegramService.cs" />
+    <Compile Include="Model\Settings\LogicSettings.cs" />
+    <Compile Include="Service\MapzenDirectionsService.cs" />
+    <Compile Include="Service\WebSocketHandler\ActionCommands\DropItemHandler.cs" />
+    <Compile Include="Service\WebSocketHandler\ActionCommands\EvolvePokemonHandler.cs" />
+    <Compile Include="Service\WebSocketHandler\ActionCommands\FastpokemapHandler.cs" />
+    <Compile Include="Service\WebSocketHandler\ActionCommands\FavoritePokemonHandler.cs" />
+    <Compile Include="Service\WebSocketHandler\ActionCommands\HumanSnipePriorityPokemonHandler.cs" />
+    <Compile Include="Service\WebSocketHandler\ActionCommands\HumanSnipeRemovePokemonHandler.cs" />
+    <Compile Include="Service\WebSocketHandler\ActionCommands\LevelUpPokemonHandler.cs" />
+    <Compile Include="Service\WebSocketHandler\ActionCommands\SetConfigHandler.cs" />
+    <Compile Include="Service\WebSocketHandler\ActionCommands\SetMoveToTargetHandler.cs" />
+    <Compile Include="Service\WebSocketHandler\ActionCommands\SetTrainerNicknameHandler.cs" />
+    <Compile Include="Service\WebSocketHandler\ActionCommands\TransferPokemonHandler.cs" />
+    <Compile Include="Service\WebSocketHandler\ActionCommands\UpgradePokemonHandler.cs" />
+    <Compile Include="Service\WebSocketHandler\EncodingHelper.cs" />
+    <Compile Include="Service\WebSocketHandler\GetCommands\Events\ConfigResponce.cs" />
+    <Compile Include="Service\WebSocketHandler\GetCommands\Events\EggListResponce.cs" />
+    <Compile Include="Service\WebSocketHandler\GetCommands\Events\ItemListResponce.cs" />
+    <Compile Include="Service\WebSocketHandler\GetCommands\Events\PokemonListResponce.cs" />
+    <Compile Include="Service\WebSocketHandler\GetCommands\Events\SnipeListResponce.cs" />
+    <Compile Include="Service\WebSocketHandler\GetCommands\Events\TrainerProfileResponce.cs" />
+    <Compile Include="Service\WebSocketHandler\GetCommands\Events\WebResponce.cs" />
+    <Compile Include="Service\WebSocketHandler\GetCommands\GetConfigHandler.cs" />
+    <Compile Include="Service\WebSocketHandler\GetCommands\GetEggListHandler.cs" />
+    <Compile Include="Service\WebSocketHandler\GetCommands\GetItemsListHandler.cs" />
+    <Compile Include="Service\WebSocketHandler\GetCommands\GetPokemonListHandler.cs" />
+    <Compile Include="Service\WebSocketHandler\GetCommands\GetPokemonSettingsHandler.cs" />
+    <Compile Include="Service\WebSocketHandler\GetCommands\GetPokemonSnipeListHandler.cs" />
+    <Compile Include="Service\WebSocketHandler\GetCommands\GetTrainerProfileHandler.cs" />
+    <Compile Include="Service\WebSocketHandler\GetCommands\Helpers\ConfigWeb.cs" />
+    <Compile Include="Service\WebSocketHandler\GetCommands\Helpers\EggListWeb.cs" />
+    <Compile Include="Service\WebSocketHandler\GetCommands\Helpers\PokemonListWeb.cs" />
+    <Compile Include="Service\WebSocketHandler\GetCommands\Helpers\TrainerProfileWeb.cs" />
+    <Compile Include="Service\WebSocketHandler\GetCommands\Tasks\GetConfigTask.cs" />
+    <Compile Include="Service\WebSocketHandler\GetCommands\Tasks\GetEggListTask.cs" />
+    <Compile Include="Service\WebSocketHandler\GetCommands\Tasks\GetItemListTask.cs" />
+    <Compile Include="Service\WebSocketHandler\GetCommands\Tasks\GetPokemonListTask.cs" />
+    <Compile Include="Service\WebSocketHandler\GetCommands\Tasks\GetPokemonSettingsTask.cs" />
+    <Compile Include="Service\WebSocketHandler\GetCommands\Tasks\GetPokemonSnipeListTask.cs" />
+    <Compile Include="Service\WebSocketHandler\GetCommands\Tasks\GetTrainerProfileTask.cs" />
+    <Compile Include="Service\WebSocketHandler\IWebSocketRequestHandler.cs" />
+    <Compile Include="Service\WebSocketHandler\IWebSocketResponce.cs" />
+    <Compile Include="Service\WebSocketHandler\WebSocketEventManager.cs" />
+    <Compile Include="Service\WebSocketInterface.cs" />
+    <Compile Include="Service\YoursDirectionsService.cs" />
+    <Compile Include="State\BlockableScope.cs" />
+    <Compile Include="State\BotSwitcherState.cs" />
+    <Compile Include="State\CheckTosState.cs" />
+    <Compile Include="State\CatchState.cs" />
+    <Compile Include="State\GymTeamState.cs" />
+    <Compile Include="State\IdleState.cs" />
+    <Compile Include="State\SessionStats.cs" />
+    <Compile Include="Strategies\Walk\BaseWalkStrategy.cs" />
+    <Compile Include="Strategies\Walk\FlyStrategy.cs" />
+    <Compile Include="Strategies\Walk\GoogleStrategy.cs" />
+    <Compile Include="Strategies\Walk\HumanPathWalkingStrategy.cs" />
+    <Compile Include="Strategies\Walk\HumanStrategy.cs" />
+    <Compile Include="Strategies\Walk\IWalkStrategy.cs" />
+    <Compile Include="Strategies\Walk\MapzenNavigationStrategy.cs" />
+    <Compile Include="Strategies\Walk\YoursNavigationStrategy.cs" />
+    <Compile Include="Tasks\BaseTransferPokemonTask.cs" />
+    <Compile Include="Tasks\EggsListTask.cs" />
+    <Compile Include="Tasks\EvolveSpecificPokemonTask.cs" />
+    <Compile Include="Tasks\FavoritePokemonTask.cs" />
+    <Compile Include="Tasks\GetGymBadgeDetailsTask.cs" />
+    <Compile Include="Tasks\GetPokeDexCount.cs" />
+    <Compile Include="Tasks\HumanRandomActionTask.cs" />
+    <Compile Include="Tasks\HumanWalkSnipeTask.cs" />
+    <Compile Include="Tasks\HumanWalkSnipeTask.FastPokemap.cs">
+      <DependentUpon>HumanWalkSnipeTask.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tasks\HumanWalkSnipeTask.Pokecrew.cs">
+      <DependentUpon>HumanWalkSnipeTask.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tasks\HumanWalkSnipeTask.Pokeradar.cs">
+      <DependentUpon>HumanWalkSnipeTask.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tasks\HumanWalkSnipeTask.Pokesnipers.cs">
+      <DependentUpon>HumanWalkSnipeTask.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tasks\HumanWalkSnipeTask.PokeWatchers.cs">
+      <DependentUpon>HumanWalkSnipeTask.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tasks\HumanWalkSnipeTask.PokeZZ.cs">
+      <DependentUpon>HumanWalkSnipeTask.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tasks\HumanWalkSnipeTask.Skiplagged.cs">
+      <DependentUpon>HumanWalkSnipeTask.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tasks\InventoryListTask.cs" />
+    <Compile Include="Tasks\LevelUpPokemonTask.cs" />
+    <Compile Include="Tasks\LevelUpSpecificPokemonTask.cs" />
+    <Compile Include="Tasks\PokemonListTask.cs" />
+    <Compile Include="State\Session.cs" />
+    <Compile Include="Event\ErrorEvent.cs" />
+    <Compile Include="State\FarmState.cs" />
+    <Compile Include="State\InfoState.cs" />
+    <Compile Include="StatisticsAggregator.cs" />
+    <Compile Include="Tasks\CatchIncensePokemonsTask.cs" />
+    <Compile Include="Tasks\CatchLurePokemonsTask.cs" />
+    <Compile Include="Tasks\CatchNearbyPokemonsTask.cs" />
+    <Compile Include="Tasks\CatchPokemonTask.cs" />
+    <Compile Include="Tasks\DisplayPokemonStatsTask.cs" />
+    <Compile Include="Tasks\EvolvePokemonTask.cs" />
+    <Compile Include="Event\IEvent.cs" />
+    <Compile Include="State\IState.cs" />
+    <Compile Include="State\LoginState.cs" />
+    <Compile Include="Event\NoticeEvent.cs" />
+    <Compile Include="Event\PokemonEvolveEvent.cs" />
+    <Compile Include="State\LoadSaveState.cs" />
+    <Compile Include="State\StateMachine.cs" />
+    <Compile Include="Tasks\FarmPokestopsGPXTask.cs" />
+    <Compile Include="Tasks\FarmPokestopsTask.cs" />
+    <Compile Include="Tasks\RecycleItemsTask.cs" />
+    <Compile Include="Tasks\RenameSinglePokemonTask.cs" />
+    <Compile Include="Tasks\RenamePokemonTask.cs" />
+    <Compile Include="Tasks\SelectBuddyPokemonTask.cs" />
+    <Compile Include="Tasks\SetMoveToTargetTask.cs" />
+    <Compile Include="Tasks\MSniperServiceTask.cs" />
+    <Compile Include="Tasks\SnipePokemonTask.cs" />
+    <Compile Include="Tasks\TransferDuplicatePokemonTask.cs" />
+    <Compile Include="Event\UseLuckyEggEvent.cs" />
+    <Compile Include="State\VersionCheckState.cs" />
+    <Compile Include="Event\WarnEvent.cs" />
+    <Compile Include="Tasks\TransferPokemonTask.cs" />
+    <Compile Include="Tasks\TransferWeakPokemonTask.cs" />
+    <Compile Include="Tasks\UpgradeSinglePokemonTask.cs" />
+    <Compile Include="Tasks\UseFortItemsTask.cs" />
+    <Compile Include="Tasks\UseIncenseConstantlyTask.cs" />
+    <Compile Include="Tasks\UseGymBattleTask.cs" />
+    <Compile Include="Tasks\UseIncenseTask.cs" />
+    <Compile Include="Tasks\UseIncubatorsTask.cs" />
+    <Compile Include="Tasks\UseItemMoveRerollTask.cs" />
+    <Compile Include="Tasks\UseLuckyEggConstantlyTask.cs" />
+    <Compile Include="Tasks\UseLuckyEggTask.cs" />
+    <Compile Include="Tasks\UseNearbyPokestopsTask.cs" />
+    <Compile Include="Tasks\UseRareCandyTask.cs" />
+    <Compile Include="TinyIoC.cs" />
+    <Compile Include="Utils\AsyncLock.cs" />
+    <Compile Include="Utils\DelayingUtils.cs" />
+    <Compile Include="Utils\EggWalker.cs" />
+    <Compile Include="Utils\ErrorHandler.cs" />
+    <Compile Include="Utils\ExcelConfigHelper.cs" />
+    <Compile Include="Utils\GPXReader.cs" />
+    <Compile Include="Logging\ILogger.cs" />
+    <Compile Include="Utils\JitterUtils.cs" />
+    <Compile Include="Utils\LocationUtils.cs" />
+    <Compile Include="Utils\NecroWebClient.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Utils\PushNotificationClient.cs" />
+    <Compile Include="Utils\RouteOptimizeUtil.cs" />
+    <Compile Include="Utils\Statistics.cs" />
+    <Compile Include="Utils\StringUtils.cs" />
+    <Compile Include="Utils\WebUtils.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Forms\AutoUpdateForm.resx">
+      <DependentUpon>AutoUpdateForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\CaptchaSolveForm.resx">
+      <DependentUpon>CaptchaSolveForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\InitialTutorialForm.resx">
+      <DependentUpon>InitialTutorialForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SelectAccountForm.resx">
+      <DependentUpon>SelectAccountForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="config.xlsm" />
+    <None Include="Config\log4net.config" />
+    <None Include="Config\log4net.unix.config" />
+    <None Include="packages.config" />
+    <None Include="Resources\msvc.cer" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="$(SolutionDir)\FeroxRev\PokemonGo.RocketAPI.csproj">
+      <Project>{05d2da44-1b8e-4cf7-94ed-4d52451cd095}</Project>
+      <Name>PokemonGo.RocketAPI</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ajax-loader.gif" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\packages\SQLite.3.13.0\build\net45\SQLite.props')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\packages\SQLite.3.13.0\build\net45\SQLite.props'))" />
+    <Error Condition="!Exists('$(SolutionDir)packages\Selenium.WebDriver.ChromeDriver.2.33.0\build\Selenium.WebDriver.ChromeDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)packages\Selenium.WebDriver.ChromeDriver.2.33.0\build\Selenium.WebDriver.ChromeDriver.targets'))" />
+  </Target>
+  <Import Project="$(SolutionDir)packages\Selenium.WebDriver.ChromeDriver.2.33.0\build\Selenium.WebDriver.ChromeDriver.targets" Condition="Exists('$(SolutionDir)packages\Selenium.WebDriver.ChromeDriver.2.33.0\build\Selenium.WebDriver.ChromeDriver.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
