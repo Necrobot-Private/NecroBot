@@ -1,16 +1,42 @@
 # Change Log
 
+## [v1.0.0.385](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.385) (2017-12-13)
+
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.380...v1.0.0.385)
+
+**Closed issues:**
+
+- Cant get the bot running [\#2006](https://github.com/Necrobot-Private/NecroBot/issues/2006)
+
+**Merged pull requests:**
+
+- New api [\#2005](https://github.com/Necrobot-Private/NecroBot/pull/2005) ([Furtif](https://github.com/Furtif))
+
+## [v1.0.0.380](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.380) (2017-12-01)
+
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.376...v1.0.0.380)
+
+**Closed issues:**
+
+- Pokemon API Change to 0.79.4 - Necrobot only supports 0.79.3 [\#2001](https://github.com/Necrobot-Private/NecroBot/issues/2001)
+- \[22:36:22\] \(ERROR\) An unexpected error has occured. Logging in again... \(Bad API Request\) [\#1999](https://github.com/Necrobot-Private/NecroBot/issues/1999)
+- User credentials are invalid and login failed. [\#1998](https://github.com/Necrobot-Private/NecroBot/issues/1998)
+
+**Merged pull requests:**
+
+- Others wip [\#2004](https://github.com/Necrobot-Private/NecroBot/pull/2004) ([Furtif](https://github.com/Furtif))
+
 ## [v1.0.0.376](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.376) (2017-11-23)
 
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.375...v1.0.0.376)
-
-## [v1.0.0.375](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.375) (2017-11-21)
-
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.374...v1.0.0.375)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.374...v1.0.0.376)
 
 ## [v1.0.0.374](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.374) (2017-11-21)
 
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/1.0.0.373...v1.0.0.374)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.375...v1.0.0.374)
+
+## [v1.0.0.375](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.375) (2017-11-21)
+
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/1.0.0.373...v1.0.0.375)
 
 ## [1.0.0.373](https://github.com/Necrobot-Private/NecroBot/tree/1.0.0.373) (2017-11-21)
 
@@ -126,7 +152,6 @@
 - Unable to Evolve Sunkern [\#1914](https://github.com/Necrobot-Private/NecroBot/issues/1914)
 - Cheked mass transfer error [\#1911](https://github.com/Necrobot-Private/NecroBot/issues/1911)
 - Error PokemonGo.RocketAPI.Helpers.RequestBuilder.\<GenerateSignature\>d\_\_12.MoveNext\(\) [\#1905](https://github.com/Necrobot-Private/NecroBot/issues/1905)
-- Bot doesn t work! [\#1895](https://github.com/Necrobot-Private/NecroBot/issues/1895)
 
 **Merged pull requests:**
 
@@ -178,11 +203,6 @@
 - Can't farm pokestop [\#1906](https://github.com/Necrobot-Private/NecroBot/issues/1906)
 - Necrobo2.Win.exe error on startup [\#1904](https://github.com/Necrobot-Private/NecroBot/issues/1904)
 - 0.69 Update [\#1901](https://github.com/Necrobot-Private/NecroBot/issues/1901)
-- After relogin Bot jumps back to initial coordinates [\#1899](https://github.com/Necrobot-Private/NecroBot/issues/1899)
-- Snipe Does not works well. [\#1898](https://github.com/Necrobot-Private/NecroBot/issues/1898)
-- Status code Forbidden [\#1897](https://github.com/Necrobot-Private/NecroBot/issues/1897)
-- The HashKey is invalid or has expired, please press any key to exit and correct you auth.json,  [\#1893](https://github.com/Necrobot-Private/NecroBot/issues/1893)
-- se han producido uno o varios errores [\#1892](https://github.com/Necrobot-Private/NecroBot/issues/1892)
 
 **Merged pull requests:**
 
@@ -511,15 +531,15 @@
 
 ## [v1.0.0.88](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.88) (2017-02-02)
 
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.86...v1.0.0.88)
-
-## [v1.0.0.86](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.86) (2017-02-01)
-
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.87...v1.0.0.86)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.87...v1.0.0.88)
 
 ## [v1.0.0.87](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.87) (2017-02-01)
 
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.85...v1.0.0.87)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.86...v1.0.0.87)
+
+## [v1.0.0.86](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.86) (2017-02-01)
+
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.85...v1.0.0.86)
 
 ## [v1.0.0.85](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.85) (2017-02-01)
 
