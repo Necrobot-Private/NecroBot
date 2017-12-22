@@ -202,6 +202,11 @@
             Key for unsuccessful response handlers in an <see cref="T:System.Net.Http.HttpRequestMessage"/> properties.
             </summary>
         </member>
+        <member name="F:Google.Apis.Http.ConfigurableMessageHandler.ResponseStreamInterceptorProviderKey">
+            <summary>
+            Key for a stream response interceptor provider in an <see cref="T:System.Net.Http.HttpRequestMessage"/> properties.
+            </summary>
+        </member>
         <member name="F:Google.Apis.Http.ConfigurableMessageHandler.ApiVersion">
             <summary>The current API version of this client library.</summary>
         </member>
@@ -381,6 +386,16 @@
             </summary>
             <returns> Whether this method changed the request and handled redirect successfully. </returns>
         </member>
+        <member name="T:Google.Apis.Http.StreamInterceptor">
+            <summary>
+            A delegate used to intercept stream data without modifying it.
+            The parameters should always be validated before the delegate is called,
+            so the delegate itself does not need to validate them again.
+            </summary>
+            <param name="buffer">The buffer containing the data.</param>
+            <param name="offset">The offset into the buffer.</param>
+            <param name="count">The number of bytes being read/written.</param>
+        </member>
         <member name="T:Google.Apis.Http.ExponentialBackOffPolicy">
             <summary>
             Indicates if exponential back-off is used automatically on exceptions in a service requests and \ or when 503 
@@ -427,6 +442,11 @@
         </member>
         <member name="M:Google.Apis.Http.HttpClientFactory.CreateHandler(Google.Apis.Http.CreateHttpClientArgs)">
             <summary>Creates a HTTP message handler. Override this method to mock a message handler.</summary>
+        </member>
+        <member name="M:Google.Apis.Http.HttpClientFactory.CreateSimpleClientHandler">
+            <summary>
+            Creates a simple client handler with redirection and compression disabled.
+            </summary>
         </member>
         <member name="T:Google.Apis.Http.HttpConsts">
             <summary>HTTP constants.</summary>
@@ -595,6 +615,50 @@
         </member>
         <member name="M:Google.Apis.Http.MaxUrlLengthInterceptor.InterceptAsync(System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
             <inheritdoc/>
+        </member>
+        <member name="T:Google.Apis.Http.StreamInterceptionHandler">
+            <summary>
+            An HttpMessageHandler that (conditionally) intercepts response streams, allowing inline
+            stream processing. An interceptor provider function is fetched from each request via the
+            <see cref="F:Google.Apis.Http.ConfigurableMessageHandler.ResponseStreamInterceptorProviderKey"/> property;
+            if the property is not present on the request (or is null), the response will definitely not be
+            intercepted. If the property is present and non-null, the interceptor provider is called for
+            the response. This may return a null reference, indicating that interception isn't required, and
+            the response can be returned as-is. Otherwise, we use a <see cref="T:Google.Apis.Http.StreamReplacingHttpContent"/>
+            with an intercepting stream which passes all data read to the interceptor.
+            </summary>
+        </member>
+        <member name="M:Google.Apis.Http.StreamInterceptionHandler.SendAsync(System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
+            <summary>
+            For each request, check whether we 
+            </summary>
+            <param name="request"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Google.Apis.Http.TwoWayDelegatingHandler">
+            <summary>
+            An HttpMessageHandler that delegates to one of two inner handlers based on a condition
+            checked on each request.
+            </summary>
+        </member>
+        <member name="T:Google.Apis.Http.TwoWayDelegatingHandler.AccessibleDelegatingHandler">
+            <summary>
+            Handler to wrap another, just so that we can effectively expose its SendAsync method.
+            </summary>
+        </member>
+        <member name="T:Google.Apis.Http.GzipDeflateHandler">
+            <summary>
+            An HttpMessageHandler that performs decompression for Deflate and Gzip content.
+            </summary>
+        </member>
+        <member name="T:Google.Apis.Http.StreamReplacingHttpContent">
+            <summary>
+            An HttpContent based on an existing one, but allowing the stream to be replaced.
+            This is similar to StreamContent, but it defers the stream creation until it's requested by the client.
+            (An alternative would be to use StreamContent with a custom stream that only retrieved the stream when
+            first used.) Headers are copied from the original content.
+            </summary>
         </member>
         <member name="T:Google.Apis.ISerializer">
             <summary>Serialization interface that supports serialize and deserialize methods.</summary>

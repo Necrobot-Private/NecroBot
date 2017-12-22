@@ -46,7 +46,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
             Logger.Write(session.Translation.GetTranslation(TranslationString.LookingForLurePokemon), LogLevel.Debug);
 
-            var fortId = currentFortData.Id;
+            var fortId = currentFortData;
 
             var pokemonId = currentFortData.LureInfo.ActivePokemonId;
 

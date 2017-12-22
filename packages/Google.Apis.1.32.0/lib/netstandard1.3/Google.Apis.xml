@@ -82,6 +82,13 @@
             of the requested media.
             </summary>
         </member>
+        <member name="P:Google.Apis.Download.MediaDownloader.ResponseStreamInterceptorProvider">
+            <summary>
+            A provider for response stream interceptors. Each time a response is produced, the provider
+            is called, and can return <c>null</c> if interception is not required, or an interceptor for
+            that response. The provider itself should not read the response's content stream, but can check headers.
+            </summary>
+        </member>
         <member name="T:Google.Apis.Download.MediaDownloader.DownloadProgress">
             <summary>
             Download progress model, which contains the status of the download, the amount of bytes whose where 
@@ -975,6 +982,11 @@
         <member name="E:Google.Apis.Upload.ResumableUpload.ProgressChanged">
             <summary>Event called whenever the progress of the upload changes.</summary>
         </member>
+        <member name="P:Google.Apis.Upload.ResumableUpload.UploadStreamInterceptor">
+            <summary>
+            Interceptor used to propagate data successfully uploaded on each chunk.
+            </summary>
+        </member>
         <member name="T:Google.Apis.Upload.ResumableUpload.ServerErrorCallback">
             <summary>
             Callback class that is invoked on abnormal response or an exception.
@@ -1182,10 +1194,10 @@
         <member name="M:Google.Apis.Upload.ResumableUpload.MediaCompleted(System.Net.Http.HttpResponseMessage)">
             <summary>A callback when the media was uploaded successfully.</summary>
         </member>
-        <member name="M:Google.Apis.Upload.ResumableUpload.PrepareNextChunkUnknownSize(System.Net.Http.HttpRequestMessage,System.IO.Stream,System.Threading.CancellationToken)">
+        <member name="M:Google.Apis.Upload.ResumableUpload.PrepareNextChunkUnknownSize(System.IO.Stream,System.Threading.CancellationToken,System.Byte[]@,System.Int32@)">
             <summary>Prepares the given request with the next chunk in case the steam length is unknown.</summary>
         </member>
-        <member name="M:Google.Apis.Upload.ResumableUpload.PrepareNextChunkKnownSize(System.Net.Http.HttpRequestMessage,System.IO.Stream,System.Threading.CancellationToken)">
+        <member name="M:Google.Apis.Upload.ResumableUpload.PrepareNextChunkKnownSize(System.IO.Stream,System.Threading.CancellationToken,System.Byte[]@,System.Int32@)">
             <summary>Prepares the given request with the next chunk in case the steam length is known.</summary>
         </member>
         <member name="M:Google.Apis.Upload.ResumableUpload.GetNextByte(System.String)">
