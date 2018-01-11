@@ -1,5 +1,21 @@
 # Change Log
 
+## [Unreleased](https://github.com/Necrobot-Private/NecroBot/tree/HEAD)
+
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.400...HEAD)
+
+**Closed issues:**
+
+- UK27 cracked [\#2013](https://github.com/Necrobot-Private/NecroBot/issues/2013)
+
+## [v1.0.0.400](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.400) (2018-01-11)
+
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.390...v1.0.0.400)
+
+**Merged pull requests:**
+
+- Add new features [\#2014](https://github.com/Necrobot-Private/NecroBot/pull/2014) ([Furtif](https://github.com/Furtif))
+
 ## [v1.0.0.390](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.390) (2017-12-22)
 
 [Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.385...v1.0.0.390)
@@ -45,15 +61,15 @@
 
 ## [v1.0.0.376](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.376) (2017-11-23)
 
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.375...v1.0.0.376)
-
-## [v1.0.0.375](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.375) (2017-11-21)
-
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/1.0.0.373...v1.0.0.375)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/1.0.0.373...v1.0.0.376)
 
 ## [1.0.0.373](https://github.com/Necrobot-Private/NecroBot/tree/1.0.0.373) (2017-11-21)
 
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.374...1.0.0.373)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.375...1.0.0.373)
+
+## [v1.0.0.375](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.375) (2017-11-21)
+
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.374...v1.0.0.375)
 
 ## [v1.0.0.374](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.374) (2017-11-21)
 
@@ -167,7 +183,6 @@
 - Export to Excel holds wrong value for candy [\#1928](https://github.com/Necrobot-Private/NecroBot/issues/1928)
 - who have free api key [\#1923](https://github.com/Necrobot-Private/NecroBot/issues/1923)
 - Unable to Evolve Sunkern [\#1914](https://github.com/Necrobot-Private/NecroBot/issues/1914)
-- Cheked mass transfer error [\#1911](https://github.com/Necrobot-Private/NecroBot/issues/1911)
 
 **Merged pull requests:**
 
@@ -214,7 +229,6 @@
 - Get this error:Auth token was missing from oauth login response. [\#1915](https://github.com/Necrobot-Private/NecroBot/issues/1915)
 - Egg status not refreshing properly. [\#1913](https://github.com/Necrobot-Private/NecroBot/issues/1913)
 - need help [\#1912](https://github.com/Necrobot-Private/NecroBot/issues/1912)
-- NecroBot2.Win not starting at all [\#1910](https://github.com/Necrobot-Private/NecroBot/issues/1910)
 
 ## [v1.0.0.185](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.185) (2017-07-21)
 
