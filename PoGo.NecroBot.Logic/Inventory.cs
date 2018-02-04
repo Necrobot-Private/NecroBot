@@ -85,7 +85,8 @@ namespace PoGo.NecroBot.Logic
             ItemId.ItemPokeBall,
             ItemId.ItemGreatBall,
             ItemId.ItemUltraBall,
-            ItemId.ItemMasterBall
+            ItemId.ItemMasterBall,
+            ItemId.ItemPremierBall
         };
 
         private readonly List<ItemId> _potions = new List<ItemId>
