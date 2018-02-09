@@ -1,12 +1,19 @@
 # Change Log
 
-## [Unreleased](https://github.com/Necrobot-Private/NecroBot/tree/HEAD)
+## [v1.0.0.500](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.500) (2018-02-09)
 
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.400...HEAD)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.400...v1.0.0.500)
 
 **Closed issues:**
 
+- API KEY CHANGE HELP PLEASE!!! [\#2017](https://github.com/Necrobot-Private/NecroBot/issues/2017)
+- Bot api change [\#2016](https://github.com/Necrobot-Private/NecroBot/issues/2016)
 - UK27 cracked [\#2013](https://github.com/Necrobot-Private/NecroBot/issues/2013)
+
+**Merged pull requests:**
+
+- new appversion [\#2018](https://github.com/Necrobot-Private/NecroBot/pull/2018) ([Furtif](https://github.com/Furtif))
+- Update [\#2015](https://github.com/Necrobot-Private/NecroBot/pull/2015) ([Furtif](https://github.com/Furtif))
 
 ## [v1.0.0.400](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.400) (2018-01-11)
 
@@ -61,15 +68,15 @@
 
 ## [v1.0.0.376](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.376) (2017-11-23)
 
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/1.0.0.373...v1.0.0.376)
-
-## [1.0.0.373](https://github.com/Necrobot-Private/NecroBot/tree/1.0.0.373) (2017-11-21)
-
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.375...1.0.0.373)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.375...v1.0.0.376)
 
 ## [v1.0.0.375](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.375) (2017-11-21)
 
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.374...v1.0.0.375)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/1.0.0.373...v1.0.0.375)
+
+## [1.0.0.373](https://github.com/Necrobot-Private/NecroBot/tree/1.0.0.373) (2017-11-21)
+
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.374...1.0.0.373)
 
 ## [v1.0.0.374](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.374) (2017-11-21)
 
@@ -182,7 +189,6 @@
 - Not spining spinners or and staying in place not moving much after update. [\#1929](https://github.com/Necrobot-Private/NecroBot/issues/1929)
 - Export to Excel holds wrong value for candy [\#1928](https://github.com/Necrobot-Private/NecroBot/issues/1928)
 - who have free api key [\#1923](https://github.com/Necrobot-Private/NecroBot/issues/1923)
-- Unable to Evolve Sunkern [\#1914](https://github.com/Necrobot-Private/NecroBot/issues/1914)
 
 **Merged pull requests:**
 
@@ -226,9 +232,6 @@
 - need help snipe [\#1918](https://github.com/Necrobot-Private/NecroBot/issues/1918)
 - When i open necrobot.win I can only choose to pay [\#1917](https://github.com/Necrobot-Private/NecroBot/issues/1917)
 - where to get the GUI Display please [\#1916](https://github.com/Necrobot-Private/NecroBot/issues/1916)
-- Get this error:Auth token was missing from oauth login response. [\#1915](https://github.com/Necrobot-Private/NecroBot/issues/1915)
-- Egg status not refreshing properly. [\#1913](https://github.com/Necrobot-Private/NecroBot/issues/1913)
-- need help [\#1912](https://github.com/Necrobot-Private/NecroBot/issues/1912)
 
 ## [v1.0.0.185](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.185) (2017-07-21)
 
@@ -820,15 +823,15 @@
 
 ## [v1.0.0.22](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.22) (2016-11-16)
 
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.21...v1.0.0.22)
-
-## [v1.0.0.21](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.21) (2016-11-16)
-
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.20...v1.0.0.21)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.20...v1.0.0.22)
 
 ## [v1.0.0.20](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.20) (2016-11-16)
 
-[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.19...v1.0.0.20)
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.21...v1.0.0.20)
+
+## [v1.0.0.21](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.21) (2016-11-16)
+
+[Full Changelog](https://github.com/Necrobot-Private/NecroBot/compare/v1.0.0.19...v1.0.0.21)
 
 ## [v1.0.0.19](https://github.com/Necrobot-Private/NecroBot/tree/v1.0.0.19) (2016-11-15)
 
