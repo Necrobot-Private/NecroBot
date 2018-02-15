@@ -390,8 +390,9 @@
         </member>
         <member name="F:Google.Apis.Auth.OAuth2.ComputeCredential.MetadataServerPingTimeoutInMilliseconds">
             <summary>
-            Experimentally, 200ms was found to be 99.9999% reliable. 
-            This is a conservative timeout to minimize hanging on some troublesome network. 
+            Originally 1000ms was used without a retry. This proved inadequate; even 2000ms without
+            a retry occasionally failed. We have observed that after a timeout, the next attempt
+            succeeds very quickly (sub-50ms) which suggests that this should be fine.
             </summary>
         </member>
         <member name="F:Google.Apis.Auth.OAuth2.ComputeCredential.MetadataFlavor">

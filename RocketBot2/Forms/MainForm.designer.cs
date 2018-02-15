@@ -697,7 +697,7 @@ namespace RocketBot2.Forms
             this.lblPokemonList.Name = "lblPokemonList";
             this.lblPokemonList.Size = new System.Drawing.Size(831, 16);
             this.lblPokemonList.TabIndex = 27;
-            this.lblPokemonList.Text = "Pokémon Seen: 0/252, Pokémon Caught: 0/252 | Storage: 250 (Pokémons: 0, Eggs: 0) " +
+            this.lblPokemonList.Text = "Pokémon Seen: 0/386, Pokémon Caught: 0/386 | Storage: 250 (Pokémons: 0, Eggs: 0) " +
     "[Deployments: 0]";
             this.lblPokemonList.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 

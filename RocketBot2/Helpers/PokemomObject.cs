@@ -327,7 +327,8 @@ namespace RocketBot2.Helpers
                 {
                     if (t != null)
                     {
-                        CandyToEvolveDict.Add(t.PokemonId, t.EvolutionBranch.Select(x => x.CandyCost).FirstOrDefault());
+                        //CandyToEvolveDict.Add(t.PokemonId, t.EvolutionBranch.Select(x => x.CandyCost).FirstOrDefault());
+                        CandyToEvolveDict.Add(t.PokemonId, session.Inventory.GetCandyToEvolve(templates.FirstOrDefault(p => p.PokemonId == t.PokemonId)));
                     }
                 }
             }
