@@ -777,6 +777,10 @@ namespace PoGo.NecroBot.Logic
 
         public async Task<bool> CanEvolvePokemon(PokemonData pokemon, EvolveFilter appliedFilter = null, bool checkEvolveFilterRequirements = false)
         {
+            // Can't evolve pokemon null.
+            if (pokemon == null || pokemon.PokemonId == PokemonId.Missingno || pokemon.IsBad)
+                return false;
+
             // Can't evolve pokemon in gyms.
             if (!string.IsNullOrEmpty(pokemon.DeployedFortId))
                 return false;
