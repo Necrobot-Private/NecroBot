@@ -168,7 +168,7 @@
       <HintPath>$(SolutionDir)\packages\Newtonsoft.Json.Schema.3.0.5\lib\net45\Newtonsoft.Json.Schema.dll</HintPath>
     </Reference>
     <Reference Include="POGOProtos.Core">
-      <HintPath>$(SolutionDir)\packages\POGOProtos.Core.2.22.0\lib\net45\POGOProtos.Core.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\POGOProtos.Core.2.23.1\lib\net45\POGOProtos.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Remotion.Linq, Version=2.2.0.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b, processorArchitecture=MSIL">
