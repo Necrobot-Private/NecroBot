@@ -3,7 +3,7 @@ BotStatus=DISABLED;
               POKEMON GO 0.95.3
 //============================================//
 
-    Necrobot compatible with 0.91.2 API.
+    Necrobot is compatible with 0.91.2 API.
 
 //============================================//
               Updated: 03/22/2017
