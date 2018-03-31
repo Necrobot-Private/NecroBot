@@ -218,7 +218,7 @@
     },
     {
       "Key": "incubatorStatusUpdate",
-      "Value": "更新孵化器狀態：剩餘{0:0.00}公里\t\t"
+      "Value": "更新孵化器狀態：剩餘{0:0.00}公里 of {2} Km egg.\t\t"
     },
     {
       "Key": "incubatorEggHatched",

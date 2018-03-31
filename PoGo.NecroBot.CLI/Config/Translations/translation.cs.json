@@ -182,11 +182,11 @@
     },
     {
       "Key": "incubatorPuttingEgg",
-      "Value": "Vložení vajíčka do inkubátoru: {0:0.00}km zbývá"
+      "Value": "{0}) Vložení vajíčka do inkubátoru: {1:0.00}km zbývá"
     },
     {
       "Key": "incubatorStatusUpdate",
-      "Value": "Stav inkubátoru aktualizován: {0:0.00}km zbývá"
+      "Value": "{0}) Stav inkubátoru aktualizován: {1:0.00}km zbývá of {2} Km egg."
     },
     {
       "Key": "incubatorEggHatched",
@@ -912,7 +912,7 @@
     },
     {
       "Key": "farfetchd",
-      "Value": "farfetchd"
+      "Value": "Farfetchd"
     },
     {
       "Key": "doduo",

@@ -181,9 +181,11 @@ namespace PoGo.NecroBot.Logic.Service
         {
             Logger.Write(eggIncubatorStatusEvent.WasAddedNow
                     ? session.Translation.GetTranslation(TranslationString.IncubatorPuttingEgg,
+                        eggIncubatorStatusEvent.Eggs,
                         eggIncubatorStatusEvent.KmToWalk.ToString("0.00").PadLeft(5))
                     : session.Translation.GetTranslation(TranslationString.IncubatorStatusUpdate,
-                        eggIncubatorStatusEvent.KmRemaining.ToString("0.00").PadLeft(5),
+                        eggIncubatorStatusEvent.Eggs,
+                        eggIncubatorStatusEvent.KmRemaining.ToString("0.00").PadLeft(6),
                         eggIncubatorStatusEvent.KmToWalk.ToString("0.00").PadLeft(5)),
                 LogLevel.Egg);
         }
@@ -222,8 +224,8 @@ namespace PoGo.NecroBot.Logic.Service
             }
 
             string eventMessage = session.Translation.GetTranslation(TranslationString.EventFortUsed, fortUsedEvent.Name,
-                    fortUsedEvent.Exp, fortUsedEvent.Gems,
-                     fortUsedEvent.Items, fortUsedEvent.Badges, fortUsedEvent.BonusLoot, fortUsedEvent.RaidTickets, fortUsedEvent.TeamBonusLoot, PokemonDataEgg, session.Inventory.GetEggs().Result.Count(), fortUsedEvent.Latitude, fortUsedEvent.Longitude, fortUsedEvent.Altitude);
+                    fortUsedEvent.Exp.ToString("0").PadLeft(4), fortUsedEvent.Gems.PadLeft(3),
+                     fortUsedEvent.Items, fortUsedEvent.Badges.PadLeft(3), fortUsedEvent.BonusLoot, fortUsedEvent.RaidTickets, fortUsedEvent.TeamBonusLoot, PokemonDataEgg, session.Inventory.GetEggs().Result.Count(), fortUsedEvent.Latitude, fortUsedEvent.Longitude, fortUsedEvent.Altitude);
 
             if (fortUsedEvent.Fort.Type == FortType.Checkpoint)
                 Logger.Write(eventMessage, LogLevel.Pokestop);
@@ -261,6 +263,9 @@ namespace PoGo.NecroBot.Logic.Service
                 Logger.Write(
                     session.Translation.GetTranslation(TranslationString.SoftBanBypassed),
                     LogLevel.SoftBan, ConsoleColor.Green);
+
+                if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification)
+                    PushNotificationClient.SendNotification(session, "Soft Ban", "Successfully bypassed!", true).ConfigureAwait(false);
             }
             else
             {

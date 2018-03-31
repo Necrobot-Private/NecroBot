@@ -218,11 +218,11 @@
     },
     {
       "Key": "incubatorPuttingEgg",
-      "Value": "Meletakkan telur ({0:0.00} km) ke dalam inkubator"
+      "Value": "{0}) Meletakkan telur ({1:0.00} km) ke dalam inkubator"
     },
     {
       "Key": "incubatorStatusUpdate",
-      "Value": "Status terbaru inkubator: {0:0.00} km lagi menetas!"
+      "Value": "{0}) Status terbaru inkubator: {1:0.00} km lagi menetas of {2} Km egg!"
     },
     {
       "Key": "incubatorEggHatched",

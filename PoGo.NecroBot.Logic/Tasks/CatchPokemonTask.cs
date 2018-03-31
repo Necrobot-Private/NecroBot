@@ -408,7 +408,13 @@ namespace PoGo.NecroBot.Logic.Tasks
                             await session.Inventory.UpdateInventoryItem(ballToByPass[i]).ConfigureAwait(false);
 
                             await Task.Delay(100).ConfigureAwait(false);
-                            Logger.Write($"CatchFlee By pass : {ballToByPass[i].ToString()} , Attempt {i}, result {caughtPokemonResponse.Status}");
+                            Logger.Write($"CatchFlee By pass: {ballToByPass[i].ToString()} , Attempt {i}, result {caughtPokemonResponse.Status}");
+
+                            if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification && i == 0)
+                                await PushNotificationClient.SendNotification(session, "Catch Flee Soft Ban", "Attempting to bypass Catch Flee Soft Ban.", true).ConfigureAwait(false);
+
+                            if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification && caughtPokemonResponse.Status == CatchPokemonResponse.Types.CatchStatus.CatchSuccess)
+                                await PushNotificationClient.SendNotification(session, "Catch Flee Soft Ban", "Catch Flee Soft Ban bypassed.", true).ConfigureAwait(false);
 
                             if (caughtPokemonResponse.Status != CatchPokemonResponse.Types.CatchStatus.CatchMissed)
                             {
@@ -563,7 +569,10 @@ namespace PoGo.NecroBot.Logic.Tasks
                     if (CatchFleeContinuouslyCount >= 3 && session.LogicSettings.ByPassCatchFlee)
                     {
                         session.SaveBallForByPassCatchFlee = true;
-                        Logger.Write("Seem that bot has been catch flee softban, Bot will start save 100 balls to by pass it.");
+                        Logger.Write("Seems your bot has been CatchFlee Softban, Bot will start save 100 balls to by pass it.");
+
+                        if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification)
+                            await PushNotificationClient.SendNotification(session, "CatchFlee Soft Ban", "Seems your bot has been catch flee softban, Bot will start save 100 balls to by pass it.", true).ConfigureAwait(false);
                     }
                     if (manager.AllowMultipleBot() && !session.LogicSettings.ByPassCatchFlee)
                     {

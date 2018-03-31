@@ -134,6 +134,18 @@ namespace PoGo.NecroBot.Logic.Model.Settings
             set { _settings.Auth.CurrentAuthConfig.POSIX = value; }
         }
 
+        double ISettings.RunStart
+        {
+            get { return _settings.Auth.CurrentAuthConfig.RunStart; }
+            set { _settings.Auth.CurrentAuthConfig.RunStart = value; }
+        }
+
+        double ISettings.RunEnd
+        {
+            get { return _settings.Auth.CurrentAuthConfig.RunEnd; }
+            set { _settings.Auth.CurrentAuthConfig.RunEnd = value; }
+        }
+
         #endregion Auth Config Values
 
         #region Device Config Values

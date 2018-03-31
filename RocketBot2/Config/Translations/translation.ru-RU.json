@@ -207,14 +207,14 @@
       "Key": "welcomeWarning",
       "Value": "Убедитесь, что Широта и Долгота верны! Закройте программу, если это не так! Широта: {0} Долгота: {1}"
     },
-    {
-      "Key": "incubatorPuttingEgg",
-      "Value": "Кладем яйцо в инкубатор: {0:0.00}км осталось"
-    },
-    {
-      "Key": "incubatorStatusUpdate",
-      "Value": "Статус инкубатора: {0:0.00}км осталось"
-    },
+      {
+        "Key": "incubatorPuttingEgg",
+        "Value": "{0}) Кладем яйцо в инкубатор: {1:0.00}км осталось"
+      },
+      {
+        "Key": "incubatorStatusUpdate",
+        "Value": "{0}) Статус инкубатора: {1:0.00}км осталось of {2} Km egg."
+      },
     {
       "Key": "incubatorEggHatched",
       "Value": "Из Яйца получили: {0} | Lvl: {1} CP: ({2}/{3}) IV: {4}%"

@@ -182,11 +182,11 @@
     },
     {
       "Key": "incubatorPuttingEgg",
-      "Value": "Lege Ei in die Ei-Brutmaschine: {0:0.00}km verbleibend"
+      "Value": "{0}) Lege Ei in die Ei-Brutmaschine: {1:0.00}km verbleibend"
     },
     {
       "Key": "incubatorStatusUpdate",
-      "Value": "Ei-Brutmaschine Status Update: {0:0.00}km verbleibend"
+      "Value": "{0}) Ei-Brutmaschine Status Update: {1:0.00}km verbleibend of {2} Km egg."
     },
     {
       "Key": "incubatorEggHatched",

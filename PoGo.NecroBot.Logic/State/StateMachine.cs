@@ -162,6 +162,9 @@ namespace PoGo.NecroBot.Logic.State
                 catch(ActiveSwitchAccountManualException ex)
                 {
                     session.EventDispatcher.Send(new WarnEvent { Message = "Switch bot account requested by: User" });
+                    if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification)
+                        await PushNotificationClient.SendNotification(session, $"Switch bot account", $"Activated by: User", true).ConfigureAwait(false);
+
                     ReInitializeSession(session, globalSettings, ex.RequestedAccount);
                     state = new LoginState();
                 }
@@ -181,8 +184,8 @@ namespace PoGo.NecroBot.Logic.State
                 catch (ActiveSwitchByRuleException se)
                 {
                     session.EventDispatcher.Send(new WarnEvent { Message = $"Switch bot account activated by: {se.MatchedRule.ToString()} - {se.ReachedValue}" });
-                    //if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification)
-                    //    await PushNotificationClient.SendNotification(session, $"Switch bot account", $"Activated by: {se.MatchedRule.ToString()} - {se.ReachedValue}", true).ConfigureAwait(false);
+                    if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification)
+                        await PushNotificationClient.SendNotification(session, $"Switch bot account", $"Activated by: {se.MatchedRule.ToString()} - {se.ReachedValue}", true).ConfigureAwait(false);
 
                     if (se.MatchedRule == SwitchRules.EmptyMap)
                     {
@@ -209,9 +212,9 @@ namespace PoGo.NecroBot.Logic.State
                             // jjskuld - Ignore CS4014 warning for now.
 
                             if (session.LogicSettings.NotificationConfig.EnablePushBulletNotification)
-                                await PushNotificationClient.SendNotification(session, $"{se.MatchedRule} - {session.Settings.Username}", $"This bot has reach limit, it will be blocked for {session.LogicSettings.MultipleBotConfig.OnLimitPauseTimes} mins for safety.", true).ConfigureAwait(false);
+                                await PushNotificationClient.SendNotification(session, $"{se.MatchedRule} - {session.Settings.Username}", $"Bot has reached it's limit, it will be blocked for {session.LogicSettings.MultipleBotConfig.OnLimitPauseTimes} mins for safety.", true).ConfigureAwait(false);
 
-                            session.EventDispatcher.Send(new WarnEvent() { Message = $"You reach limited. bot will sleep for {session.LogicSettings.MultipleBotConfig.OnLimitPauseTimes} min" });
+                            session.EventDispatcher.Send(new WarnEvent() { Message = $"Bot has reached it's limit, it will be blocked for {session.LogicSettings.MultipleBotConfig.OnLimitPauseTimes} min" });
 
                             TinyIoCContainer.Current.Resolve<MultiAccountManager>().BlockCurrentBot(session.LogicSettings.MultipleBotConfig.OnLimitPauseTimes);
 
