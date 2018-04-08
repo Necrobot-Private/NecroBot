@@ -705,7 +705,7 @@ namespace RocketBot2.Forms
                 {
                     var step = new GMapRoute(_playerLocations, "step")
                     {
-                        //Stroke = new Pen(Color.FromArgb(BotRed[BotID], BotGreen[BotID], BotBlue[BotID]), 1) { DashStyle = DashStyle.Solid }
+                        //Stroke = new Pen(Color.FromArgb(BotRed[BotID], BotGreen[BotID], BotBlue[BotID]), 2) { DashStyle = DashStyle.Solid }
                         Stroke = new Pen(Color.FromArgb(255, 0, 0), 2) { DashStyle = DashStyle.Solid }
                     };
                     _playerOverlay.Routes.Add(step);
@@ -1669,8 +1669,9 @@ namespace RocketBot2.Forms
 
             bool AutoStart = false;
             var options = new Options();
-            if (CommandLine.Parser.Default.ParseArguments(args, options))
-            {
+
+            //if (CommandLine.Parser.Default.ParseArguments(args, options))
+            //{
                 // Values are available here
                 if (options.Init)
                 {
@@ -1678,7 +1679,7 @@ namespace RocketBot2.Forms
                 }
                 if (options.AutoStart)
                     AutoStart = true;
-            }
+            //}
 
             var lastPosFile = Path.Combine(profileConfigPath, "LastPos.ini");
             if (File.Exists(lastPosFile) && settings.LocationConfig.StartFromLastPosition)

@@ -423,6 +423,334 @@
             <param name="cancellationToken">The cancellation token that will be watched during the sleep operation.</param>
             <exception cref="T:System.OperationCanceledException">The cancellation token was cancelled during the sleep.</exception>
         </member>
+        <member name="T:Google.Api.Gax.Json.InvalidJsonException">
+            <summary>
+            Thrown when an attempt is made to parse invalid JSON, e.g. using
+            a non-string property key, or including a redundant comma.
+            </summary>
+        </member>
+        <member name="T:Google.Api.Gax.Json.JsonBuilder">
+            <summary>
+            Utility class for generating JSON. This class doesn't perform much in the way of validity
+            checks - that's left as the responsibility of the caller. However, it allows values and properties
+            to be written in a simple, chainable way, without the caller needing to worry about adding commas.
+            </summary>
+        </member>
+        <member name="F:Google.Api.Gax.Json.JsonBuilder.CommonRepresentations">
+            <summary>
+            The JSON representation of the first 160 characters of Unicode.
+            Empty strings are replaced by the static constructor.
+            </summary>
+        </member>
+        <member name="M:Google.Api.Gax.Json.JsonBuilder.#ctor(System.Text.StringBuilder)">
+            <summary>
+            Constructs a new instance using the specified <see cref="T:System.Text.StringBuilder"/>.
+            </summary>
+            <param name="builder">The <see cref="T:System.Text.StringBuilder"/> to append to. Must not be null.</param>
+        </member>
+        <member name="M:Google.Api.Gax.Json.JsonBuilder.#ctor">
+            <summary>
+            Constructs a new instance with a new <see cref="T:System.Text.StringBuilder"/>.
+            </summary>
+        </member>
+        <member name="M:Google.Api.Gax.Json.JsonBuilder.StartObject">
+            <summary>
+            Writes the start of an object to the builder.
+            </summary>
+            <returns>A reference to the same <see cref="T:Google.Api.Gax.Json.JsonBuilder"/> the method was called on, for chaining.</returns>
+        </member>
+        <member name="M:Google.Api.Gax.Json.JsonBuilder.StartArray">
+            <summary>
+            Writes the start of an array to the builder.
+            </summary>
+            <returns>A reference to the same <see cref="T:Google.Api.Gax.Json.JsonBuilder"/> the method was called on, for chaining.</returns>
+        </member>
+        <member name="M:Google.Api.Gax.Json.JsonBuilder.EndArray">
+            <summary>
+            Writes the end of an array to the builder.
+            </summary>
+            <returns>A reference to the same <see cref="T:Google.Api.Gax.Json.JsonBuilder"/> the method was called on, for chaining.</returns>
+        </member>
+        <member name="M:Google.Api.Gax.Json.JsonBuilder.EndObject">
+            <summary>
+            Writes the end of an object to the builder.
+            </summary>
+            <returns>A reference to the same <see cref="T:Google.Api.Gax.Json.JsonBuilder"/> the method was called on, for chaining.</returns>
+        </member>
+        <member name="M:Google.Api.Gax.Json.JsonBuilder.Value(System.String)">
+            <summary>
+            Writes a string value to the builder, escaping it if necessary.
+            </summary>
+            <param name="value">The value to write. May be null.</param>
+            <returns>A reference to the same <see cref="T:Google.Api.Gax.Json.JsonBuilder"/> the method was called on, for chaining.</returns>
+        </member>
+        <member name="M:Google.Api.Gax.Json.JsonBuilder.Value(System.Boolean)">
+            <summary>
+            Writes a Boolean value to the builder.
+            </summary>
+            <param name="value">The value to write.</param>
+            <returns>A reference to the same <see cref="T:Google.Api.Gax.Json.JsonBuilder"/> the method was called on, for chaining.</returns>
+        </member>
+        <member name="M:Google.Api.Gax.Json.JsonBuilder.Value(System.Double)">
+            <summary>
+            Writes a numeric value to the builder.
+            </summary>
+            <param name="value">The value to write.</param>
+            <returns>A reference to the same <see cref="T:Google.Api.Gax.Json.JsonBuilder"/> the method was called on, for chaining.</returns>
+        </member>
+        <member name="M:Google.Api.Gax.Json.JsonBuilder.Property(System.String,System.String)">
+            <summary>
+            Writes a name/value property pair to the builder for a string value.
+            </summary>
+            <param name="name">The name of the property. Must not be null.</param>
+            <param name="value">The value of the property. May be null.</param>
+            <returns>A reference to the same <see cref="T:Google.Api.Gax.Json.JsonBuilder"/> the method was called on, for chaining.</returns>
+        </member>
+        <member name="M:Google.Api.Gax.Json.JsonBuilder.Property(System.String,System.Boolean)">
+            <summary>
+            Writes a name/value property pair to the builder for a Boolean value.
+            </summary>
+            <param name="name">The name of the property. Must not be null.</param>
+            <param name="value">The value of the property.</param>
+            <returns>A reference to the same <see cref="T:Google.Api.Gax.Json.JsonBuilder"/> the method was called on, for chaining.</returns>
+        </member>
+        <member name="M:Google.Api.Gax.Json.JsonBuilder.Property(System.String,System.Double)">
+            <summary>
+            Writes a name/value property pair to the builder for a numeric value.
+            </summary>
+            <param name="name">The name of the property. Must not be null.</param>
+            <param name="value">The value of the property.</param>
+            <returns>A reference to the same <see cref="T:Google.Api.Gax.Json.JsonBuilder"/> the method was called on, for chaining.</returns>
+        </member>
+        <member name="M:Google.Api.Gax.Json.JsonBuilder.PropertyName(System.String)">
+            <summary>
+            Writes a property name to the builder, so that an array or object value may then be written.
+            </summary>
+            <param name="name">The name of the property. Must not be null.</param>
+            <returns>A reference to the same <see cref="T:Google.Api.Gax.Json.JsonBuilder"/> the method was called on, for chaining.</returns>
+        </member>
+        <member name="M:Google.Api.Gax.Json.JsonBuilder.ToString">
+            <summary>
+            Returns the string representation of the underlying <see cref="T:System.Text.StringBuilder"/>.
+            If this builder was created with an existing StringBuilder instance, any data written earlier
+            will be included in the result.
+            </summary>
+            <returns>The string representation of the builder.</returns>
+        </member>
+        <member name="T:Google.Api.Gax.Json.JsonParser">
+            <summary>
+            Crude JSON parser. This is only capable of parsing documents that are fully compliant with RFC 7159.
+            Each JSON value is represented as:
+            
+            - JSON string: System.String
+            - JSON number: System.Double
+            - JSON array: System.Collections.Generic.List`1{System.Object}
+            - JSON object: System.Collections.Generic.Dictionary`1{System.String, System.Object}
+            - JSON Boolean: System.Boolean
+            - JSON null: null reference
+            </summary>
+        </member>
+        <member name="T:Google.Api.Gax.Json.JsonTokenizer">
+            <summary>
+            Simple but strict JSON tokenizer, rigidly following RFC 7159.
+            </summary>
+            <remarks>
+            <para>
+            This tokenizer is stateful, and only returns "useful" tokens - names, values etc.
+            It does not create tokens for the separator between names and values, or for the comma
+            between values. It validates the token stream as it goes - so callers can assume that the
+            tokens it produces are appropriate. For example, it would never produce "start object, end array."
+            </para>
+            <para>Not thread-safe.</para>
+            </remarks>
+        </member>
+        <member name="M:Google.Api.Gax.Json.JsonTokenizer.FromTextReader(System.IO.TextReader)">
+            <summary>
+             Creates a tokenizer that reads from the given text reader.
+            </summary>
+        </member>
+        <member name="M:Google.Api.Gax.Json.JsonTokenizer.PushContainer(Google.Api.Gax.Json.JsonTokenizer.ContainerType)">
+            <summary>
+            Pushes a new container type onto the stack and validates that we don't violate the maximum depth.
+            </summary>
+            <param name="type"></param>
+        </member>
+        <member name="M:Google.Api.Gax.Json.JsonTokenizer.Peek">
+            <summary>
+            Peeks at the next token in the stream, without changing the visible state.
+            </summary>
+            <returns>The next token in the stream.</returns>
+        </member>
+        <member name="M:Google.Api.Gax.Json.JsonTokenizer.SkipValue">
+            <summary>
+            Skips the value we're about to read. This must only be called immediately after reading a property name.
+            If the value is an object or an array, the complete object/array is skipped.
+            </summary>
+        </member>
+        <member name="M:Google.Api.Gax.Json.JsonTokenizer.Next">
+            <summary>
+            Returns the next JSON token in the stream.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">This method is called after an EndDocument token has been returned</exception>
+            <exception cref="T:Google.Api.Gax.Json.InvalidJsonException">The input text does not comply with RFC 7159</exception>
+            <returns>The next token in the stream.</returns>
+        </member>
+        <member name="M:Google.Api.Gax.Json.JsonTokenizer.ReadString">
+            <summary>
+            Reads a string token. It is assumed that the opening " has already been read.
+            </summary>
+        </member>
+        <member name="M:Google.Api.Gax.Json.JsonTokenizer.ReadEscapedCharacter">
+            <summary>
+            Reads an escaped character. It is assumed that the leading backslash has already been read.
+            </summary>
+        </member>
+        <member name="M:Google.Api.Gax.Json.JsonTokenizer.ReadUnicodeEscape">
+            <summary>
+            Reads an escaped Unicode 4-nybble hex sequence. It is assumed that the leading \u has already been read.
+            </summary>
+        </member>
+        <member name="M:Google.Api.Gax.Json.JsonTokenizer.ConsumeLiteral(System.String)">
+            <summary>
+            Consumes a text-only literal, throwing an exception if the read text doesn't match it.
+            It is assumed that the first letter of the literal has already been read.
+            </summary>
+        </member>
+        <member name="M:Google.Api.Gax.Json.JsonTokenizer.ValidateAndModifyStateForValue(System.String)">
+            <summary>
+            Validates that we're in a valid state to read a value (using the given error prefix if necessary)
+            and changes the state to the appropriate one, e.g. ObjectAfterColon to ObjectAfterProperty.
+            </summary>
+        </member>
+        <member name="M:Google.Api.Gax.Json.JsonTokenizer.PopContainer">
+            <summary>
+            Pops the top-most container, and sets the state to the appropriate one for the end of a value
+            in the parent container.
+            </summary>
+        </member>
+        <member name="T:Google.Api.Gax.Json.JsonTokenizer.State">
+            <summary>
+            Possible states of the tokenizer.
+            </summary>
+            <remarks>
+            <para>This is a flags enum purely so we can simply and efficiently represent a set of valid states
+            for checking.</para>
+            <para>
+            Each is documented with an example,
+            where ^ represents the current position within the text stream. The examples all use string values,
+            but could be any value, including nested objects/arrays.
+            The complete state of the tokenizer also includes a stack to indicate the contexts (arrays/objects).
+            Any additional notional state of "AfterValue" indicates that a value has been completed, at which 
+            point there's an immediate transition to ExpectedEndOfDocument,  ObjectAfterProperty or ArrayAfterValue.
+            </para>
+            <para>
+            These states were derived manually by reading RFC 7159 carefully.
+            </para>
+            </remarks>
+        </member>
+        <member name="F:Google.Api.Gax.Json.JsonTokenizer.State.StartOfDocument">
+            <summary>
+            ^ { "foo": "bar" }
+            Before the value in a document. Next states: ObjectStart, ArrayStart, "AfterValue"
+            </summary>
+        </member>
+        <member name="F:Google.Api.Gax.Json.JsonTokenizer.State.ExpectedEndOfDocument">
+            <summary>
+            { "foo": "bar" } ^
+            After the value in a document. Next states: ReaderExhausted
+            </summary>
+        </member>
+        <member name="F:Google.Api.Gax.Json.JsonTokenizer.State.ReaderExhausted">
+            <summary>
+            { "foo": "bar" } ^ (and already read to the end of the reader)
+            Terminal state.
+            </summary>
+        </member>
+        <member name="F:Google.Api.Gax.Json.JsonTokenizer.State.ObjectStart">
+            <summary>
+            { ^ "foo": "bar" }
+            Before the *first* property in an object.
+            Next states:
+            "AfterValue" (empty object)
+            ObjectBeforeColon (read a name)
+            </summary>
+        </member>
+        <member name="F:Google.Api.Gax.Json.JsonTokenizer.State.ObjectBeforeColon">
+            <summary>
+            { "foo" ^ : "bar", "x": "y" }
+            Next state: ObjectAfterColon
+            </summary>
+        </member>
+        <member name="F:Google.Api.Gax.Json.JsonTokenizer.State.ObjectAfterColon">
+            <summary>
+            { "foo" : ^ "bar", "x": "y" }
+            Before any property other than the first in an object.
+            (Equivalently: after any property in an object) 
+            Next states:
+            "AfterValue" (value is simple)
+            ObjectStart (value is object)
+            ArrayStart (value is array)
+            </summary>
+        </member>
+        <member name="F:Google.Api.Gax.Json.JsonTokenizer.State.ObjectAfterProperty">
+            <summary>
+            { "foo" : "bar" ^ , "x" : "y" }
+            At the end of a property, so expecting either a comma or end-of-object
+            Next states: ObjectAfterComma or "AfterValue"
+            </summary>
+        </member>
+        <member name="F:Google.Api.Gax.Json.JsonTokenizer.State.ObjectAfterComma">
+            <summary>
+            { "foo":"bar", ^ "x":"y" }
+            Read the comma after the previous property, so expecting another property.
+            This is like ObjectStart, but closing brace isn't valid here
+            Next state: ObjectBeforeColon.
+            </summary>
+        </member>
+        <member name="F:Google.Api.Gax.Json.JsonTokenizer.State.ArrayStart">
+            <summary>
+            [ ^ "foo", "bar" ]
+            Before the *first* value in an array.
+            Next states:
+            "AfterValue" (read a value)
+            "AfterValue" (end of array; will pop stack)
+            </summary>
+        </member>
+        <member name="F:Google.Api.Gax.Json.JsonTokenizer.State.ArrayAfterValue">
+            <summary>
+            [ "foo" ^ , "bar" ]
+            After any value in an array, so expecting either a comma or end-of-array
+            Next states: ArrayAfterComma or "AfterValue"
+            </summary>
+        </member>
+        <member name="F:Google.Api.Gax.Json.JsonTokenizer.State.ArrayAfterComma">
+            <summary>
+            [ "foo", ^ "bar" ]
+            After a comma in an array, so there *must* be another value (simple or complex).
+            Next states: "AfterValue" (simple value), StartObject, StartArray
+            </summary>
+        </member>
+        <member name="T:Google.Api.Gax.Json.JsonTokenizer.PushBackReader">
+            <summary>
+            Wrapper around a text reader allowing small amounts of buffering and location handling.
+            </summary>
+        </member>
+        <member name="F:Google.Api.Gax.Json.JsonTokenizer.PushBackReader.nextChar">
+            <summary>
+            The buffered next character, if we have one.
+            </summary>
+        </member>
+        <member name="M:Google.Api.Gax.Json.JsonTokenizer.PushBackReader.Read">
+            <summary>
+            Returns the next character in the stream, or null if we have reached the end.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Google.Api.Gax.Json.JsonTokenizer.PushBackReader.CreateException(System.String)">
+            <summary>
+            Creates a new exception appropriate for the current state of the reader.
+            </summary>
+        </member>
         <member name="T:Google.Api.Gax.Page`1">
             <summary>
             A page of resources which will only have fewer results than requested if
@@ -943,7 +1271,7 @@
         </member>
         <member name="M:Google.Api.Gax.Platform.Instance">
             <summary>
-            Get execution platform information. This may block for up to one second.
+            Get execution platform information. This may block briefly while network operations are in progress.
             </summary>
             <returns>Execution platform information.</returns>
         </member>

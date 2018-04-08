@@ -171,6 +171,15 @@
                             bookstore_web.apps.googleusercontent.com
              </summary>
         </member>
+        <member name="F:Google.Api.AuthProvider.AuthorizationUrlFieldNumber">
+            <summary>Field number for the "authorization_url" field.</summary>
+        </member>
+        <member name="P:Google.Api.AuthProvider.AuthorizationUrl">
+            <summary>
+            Redirect URL if JWT token is required but no present or is expired.
+            Implement authorizationUrl of securityDefinitions in OpenAPI spec.
+            </summary>
+        </member>
         <member name="T:Google.Api.OAuthRequirements">
              <summary>
              OAuth scopes are a way to define data and permissions on data. For example,
@@ -340,94 +349,62 @@
              <summary>
              Billing related configuration of the service.
             
-             The following example shows how to configure metrics for billing:
-            
+             The following example shows how to configure monitored resources and metrics
+             for billing:
+                 monitored_resources:
+                 - type: library.googleapis.com/branch
+                   labels:
+                   - key: /city
+                     description: The city where the library branch is located in.
+                   - key: /name
+                     description: The name of the branch.
                  metrics:
-                 - name: library.googleapis.com/read_calls
-                   metric_kind: DELTA
-                   value_type: INT64
-                 - name: library.googleapis.com/write_calls
+                 - name: library.googleapis.com/book/borrowed_count
                    metric_kind: DELTA
                    value_type: INT64
                  billing:
-                   metrics:
-                   - library.googleapis.com/read_calls
-                   - library.googleapis.com/write_calls
-            
-             The next example shows how to enable billing status check and customize the
-             check behavior. It makes sure billing status check is included in the `Check`
-             method of [Service Control API](https://cloud.google.com/service-control/).
-             In the example, "google.storage.Get" method can be served when the billing
-             status is either `current` or `delinquent`, while "google.storage.Write"
-             method can only be served when the billing status is `current`:
-            
-                 billing:
-                   rules:
-                   - selector: google.storage.Get
-                     allowed_statuses:
-                     - current
-                     - delinquent
-                   - selector: google.storage.Write
-                     allowed_statuses: current
-            
-             Mostly services should only allow `current` status when serving requests.
-             In addition, services can choose to allow both `current` and `delinquent`
-             statuses when serving read-only requests to resources. If there's no
-             matching selector for operation, no billing status check will be performed.
+                   consumer_destinations:
+                   - monitored_resource: library.googleapis.com/branch
+                     metrics:
+                     - library.googleapis.com/book/borrowed_count
              </summary>
         </member>
-        <member name="F:Google.Api.Billing.MetricsFieldNumber">
+        <member name="F:Google.Api.Billing.ConsumerDestinationsFieldNumber">
+            <summary>Field number for the "consumer_destinations" field.</summary>
+        </member>
+        <member name="P:Google.Api.Billing.ConsumerDestinations">
+            <summary>
+            Billing configurations for sending metrics to the consumer project.
+            There can be multiple consumer destinations per service, each one must have
+            a different monitored resource type. A metric can be used in at most
+            one consumer destination.
+            </summary>
+        </member>
+        <member name="T:Google.Api.Billing.Types">
+            <summary>Container for nested types declared in the Billing message type.</summary>
+        </member>
+        <member name="T:Google.Api.Billing.Types.BillingDestination">
+            <summary>
+            Configuration of a specific billing destination (Currently only support
+            bill against consumer project).
+            </summary>
+        </member>
+        <member name="F:Google.Api.Billing.Types.BillingDestination.MonitoredResourceFieldNumber">
+            <summary>Field number for the "monitored_resource" field.</summary>
+        </member>
+        <member name="P:Google.Api.Billing.Types.BillingDestination.MonitoredResource">
+            <summary>
+            The monitored resource type. The type must be defined in
+            [Service.monitored_resources][google.api.Service.monitored_resources] section.
+            </summary>
+        </member>
+        <member name="F:Google.Api.Billing.Types.BillingDestination.MetricsFieldNumber">
             <summary>Field number for the "metrics" field.</summary>
         </member>
-        <member name="P:Google.Api.Billing.Metrics">
+        <member name="P:Google.Api.Billing.Types.BillingDestination.Metrics">
             <summary>
-            Names of the metrics to report to billing. Each name must
-            be defined in [Service.metrics][google.api.Service.metrics] section.
-            </summary>
-        </member>
-        <member name="F:Google.Api.Billing.RulesFieldNumber">
-            <summary>Field number for the "rules" field.</summary>
-        </member>
-        <member name="P:Google.Api.Billing.Rules">
-            <summary>
-            A list of billing status rules for configuring billing status check.
-            </summary>
-        </member>
-        <member name="T:Google.Api.BillingStatusRule">
-             <summary>
-             Defines the billing status requirements for operations.
-            
-             When used with
-             [Service Control API](https://cloud.google.com/service-control/), the
-             following statuses are supported:
-            
-             - **current**: the associated billing account is up to date and capable of
-                            paying for resource usages.
-             - **delinquent**: the associated billing account has a correctable problem,
-                               such as late payment.
-            
-             Mostly services should only allow `current` status when serving requests.
-             In addition, services can choose to allow both `current` and `delinquent`
-             statuses when serving read-only requests to resources. If the list of
-             allowed_statuses is empty, it means no billing requirement.
-             </summary>
-        </member>
-        <member name="F:Google.Api.BillingStatusRule.SelectorFieldNumber">
-            <summary>Field number for the "selector" field.</summary>
-        </member>
-        <member name="P:Google.Api.BillingStatusRule.Selector">
-            <summary>
-            Selects the operation names to which this rule applies.
-            Refer to [selector][google.api.DocumentationRule.selector] for syntax details.
-            </summary>
-        </member>
-        <member name="F:Google.Api.BillingStatusRule.AllowedStatusesFieldNumber">
-            <summary>Field number for the "allowed_statuses" field.</summary>
-        </member>
-        <member name="P:Google.Api.BillingStatusRule.AllowedStatuses">
-            <summary>
-            Allowed billing statuses. The billing status check passes if the actual
-            billing status matches any of the provided values here.
+            Names of the metrics to report to this billing destination.
+            Each name must be defined in [Service.metrics][google.api.Service.metrics] section.
             </summary>
         </member>
         <member name="T:Google.Api.ConfigChangeReflection">
@@ -1325,7 +1302,7 @@
         </member>
         <member name="T:Google.Api.Http">
             <summary>
-            Defines the HTTP configuration for a service. It contains a list of
+            Defines the HTTP configuration for an API service. It contains a list of
             [HttpRule][google.api.HttpRule], each specifying the mapping of an RPC method
             to one or more HTTP REST API methods.
             </summary>
@@ -1340,14 +1317,27 @@
              **NOTE:** All service configuration rules follow "last one wins" order.
              </summary>
         </member>
+        <member name="F:Google.Api.Http.FullyDecodeReservedExpansionFieldNumber">
+            <summary>Field number for the "fully_decode_reserved_expansion" field.</summary>
+        </member>
+        <member name="P:Google.Api.Http.FullyDecodeReservedExpansion">
+             <summary>
+             When set to true, URL path parmeters will be fully URI-decoded except in
+             cases of single segment matches in reserved expansion, where "%2F" will be
+             left encoded.
+            
+             The default behavior is to not decode RFC 6570 reserved characters in multi
+             segment matches.
+             </summary>
+        </member>
         <member name="T:Google.Api.HttpRule">
              <summary>
              `HttpRule` defines the mapping of an RPC method to one or more HTTP
-             REST APIs.  The mapping determines what portions of the request
-             message are populated from the path, query parameters, or body of
-             the HTTP request.  The mapping is typically specified as an
-             `google.api.http` annotation, see "google/api/annotations.proto"
-             for details.
+             REST API methods. The mapping specifies how different portions of the RPC
+             request message are mapped to URL path, URL query parameters, and
+             HTTP request body. The mapping is typically specified as an
+             `google.api.http` annotation on the RPC method,
+             see "google/api/annotations.proto" for details.
             
              The mapping consists of a field specifying the path template and
              method kind.  The path template can refer to fields in the request
@@ -1393,6 +1383,11 @@
              pattern automatically become (optional) HTTP query
              parameters. Assume the following definition of the request message:
             
+                 service Messaging {
+                   rpc GetMessage(GetMessageRequest) returns (Message) {
+                     option (google.api.http).get = "/v1/messages/{message_id}";
+                   }
+                 }
                  message GetMessageRequest {
                    message SubMessage {
                      string subfield = 1;
@@ -1500,7 +1495,7 @@
              to the request message are as follows:
             
              1. The `body` field specifies either `*` or a field path, or is
-                omitted. If omitted, it assumes there is no HTTP body.
+                omitted. If omitted, it indicates there is no HTTP request body.
              2. Leaf fields (recursive expansion of nested messages in the
                 request) can be classified into three types:
                  (a) Matched in the URL template.
@@ -1519,28 +1514,34 @@
                  FieldPath = IDENT { "." IDENT } ;
                  Verb     = ":" LITERAL ;
             
-             The syntax `*` matches a single path segment. It follows the semantics of
-             [RFC 6570](https://tools.ietf.org/html/rfc6570) Section 3.2.2 Simple String
-             Expansion.
+             The syntax `*` matches a single path segment. The syntax `**` matches zero
+             or more path segments, which must be the last part of the path except the
+             `Verb`. The syntax `LITERAL` matches literal text in the path.
             
-             The syntax `**` matches zero or more path segments. It follows the semantics
-             of [RFC 6570](https://tools.ietf.org/html/rfc6570) Section 3.2.3 Reserved
-             Expansion. NOTE: it must be the last segment in the path except the Verb.
-            
-             The syntax `LITERAL` matches literal text in the URL path.
-            
-             The syntax `Variable` matches the entire path as specified by its template;
-             this nested template must not contain further variables. If a variable
+             The syntax `Variable` matches part of the URL path as specified by its
+             template. A variable template must not contain other variables. If a variable
              matches a single path segment, its template may be omitted, e.g. `{var}`
              is equivalent to `{var=*}`.
             
+             If a variable contains exactly one path segment, such as `"{var}"` or
+             `"{var=*}"`, when such a variable is expanded into a URL path, all characters
+             except `[-_.~0-9a-zA-Z]` are percent-encoded. Such variables show up in the
+             Discovery Document as `{var}`.
+            
+             If a variable contains one or more path segments, such as `"{var=foo/*}"`
+             or `"{var=**}"`, when such a variable is expanded into a URL path, all
+             characters except `[-_.~/0-9a-zA-Z]` are percent-encoded. Such variables
+             show up in the Discovery Document as `{+var}`.
+            
+             NOTE: While the single segment variable matches the semantics of
+             [RFC 6570](https://tools.ietf.org/html/rfc6570) Section 3.2.2
+             Simple String Expansion, the multi segment variable **does not** match
+             RFC 6570 Reserved Expansion. The reason is that the Reserved Expansion
+             does not expand special characters like `?` and `#`, which would lead
+             to invalid URLs.
+            
              NOTE: the field paths in variables and in the `body` must not refer to
              repeated fields or map fields.
-            
-             Use CustomHttpPattern to specify any HTTP method that is not included in the
-             `pattern` field, such as HEAD, or "*" to leave the HTTP method unspecified for
-             a given URL path rule. The wild-card rule is useful for services that provide
-             content to Web (HTML) clients.
              </summary>
         </member>
         <member name="F:Google.Api.HttpRule.SelectorFieldNumber">
@@ -1598,7 +1599,10 @@
         </member>
         <member name="P:Google.Api.HttpRule.Custom">
             <summary>
-            Custom pattern is used for defining custom verbs.
+            The custom pattern is used for specifying an HTTP method that is not
+            included in the `pattern` field, such as HEAD, or "*" to leave the
+            HTTP method unspecified for this rule. The wild-card rule is useful
+            for services that provide content to Web (HTML) clients.
             </summary>
         </member>
         <member name="F:Google.Api.HttpRule.BodyFieldNumber">
@@ -2730,10 +2734,10 @@
         </member>
         <member name="P:Google.Api.Service.ConfigVersion">
             <summary>
-            The version of the service configuration. The config version may
-            influence interpretation of the configuration, for example, to
-            determine defaults. This is documented together with applicable
-            options. The current default for the config version itself is `3`.
+            The semantic version of the service configuration. The config version
+            affects the interpretation of the service configuration. For example,
+            certain features are enabled by default for certain config versions.
+            The latest config version is `3`.
             </summary>
         </member>
         <member name="F:Google.Api.Service.NameFieldNumber">
@@ -2760,7 +2764,7 @@
         </member>
         <member name="P:Google.Api.Service.Title">
             <summary>
-            The product title associated with this service.
+            The product title for this service.
             </summary>
         </member>
         <member name="F:Google.Api.Service.ProducerProjectIdFieldNumber">
@@ -2768,9 +2772,7 @@
         </member>
         <member name="P:Google.Api.Service.ProducerProjectId">
             <summary>
-            The id of the Google developer project that owns the service.
-            Members of this project can manage the service configuration,
-            manage consumption of the service, etc.
+            The Google project that owns this service.
             </summary>
         </member>
         <member name="F:Google.Api.Service.ApisFieldNumber">
@@ -2911,6 +2913,14 @@
             <summary>
             Defines the monitored resources used by this service. This is required
             by the [Service.monitoring][google.api.Service.monitoring] and [Service.logging][google.api.Service.logging] configurations.
+            </summary>
+        </member>
+        <member name="F:Google.Api.Service.BillingFieldNumber">
+            <summary>Field number for the "billing" field.</summary>
+        </member>
+        <member name="P:Google.Api.Service.Billing">
+            <summary>
+            Billing configuration.
             </summary>
         </member>
         <member name="F:Google.Api.Service.LoggingFieldNumber">
@@ -3178,6 +3188,15 @@
             True, if the method allows unregistered calls; false otherwise.
             </summary>
         </member>
+        <member name="F:Google.Api.UsageRule.SkipServiceControlFieldNumber">
+            <summary>Field number for the "skip_service_control" field.</summary>
+        </member>
+        <member name="P:Google.Api.UsageRule.SkipServiceControl">
+            <summary>
+            True, if the method should skip service control. If so, no control plane
+            feature (like quota and billing) will be enabled.
+            </summary>
+        </member>
         <member name="T:Google.Rpc.CodeReflection">
             <summary>Holder for reflection information generated from google/rpc/code.proto</summary>
         </member>
@@ -3243,9 +3262,12 @@
         <member name="F:Google.Rpc.Code.NotFound">
              <summary>
              Some requested entity (e.g., file or directory) was not found.
-             For privacy reasons, this code *may* be returned when the client
-             does not have the access rights to the entity, though such usage is
-             discouraged.
+            
+             Note to server developers: if a request is denied for an entire class
+             of users, such as gradual feature rollout or undocumented whitelist,
+             `NOT_FOUND` may be used. If a request is denied for some users within
+             a class of users, such as user-based access control, `PERMISSION_DENIED`
+             must be used.
             
              HTTP Mapping: 404 Not Found
              </summary>
@@ -3265,7 +3287,9 @@
              caused by exhausting some resource (use `RESOURCE_EXHAUSTED`
              instead for those errors). `PERMISSION_DENIED` must not be
              used if the caller can not be identified (use `UNAUTHENTICATED`
-             instead for those errors).
+             instead for those errors). This error code does not imply the
+             request is valid or the requested entity exists or satisfies
+             other pre-conditions.
             
              HTTP Mapping: 403 Forbidden
              </summary>
@@ -3297,7 +3321,8 @@
              between `FAILED_PRECONDITION`, `ABORTED`, and `UNAVAILABLE`:
               (a) Use `UNAVAILABLE` if the client can retry just the failing call.
               (b) Use `ABORTED` if the client should retry at a higher level
-                  (e.g., restarting a read-modify-write sequence).
+                  (e.g., when a client-specified test-and-set fails, indicating the
+                  client should restart a read-modify-write sequence).
               (c) Use `FAILED_PRECONDITION` if the client should not retry until
                   the system state has been explicitly fixed.  E.g., if an "rmdir"
                   fails because the directory is non-empty, `FAILED_PRECONDITION`
@@ -3481,6 +3506,62 @@
             
              For example: "Service disabled" or "Daily Limit for read operations
              exceeded".
+             </summary>
+        </member>
+        <member name="T:Google.Rpc.PreconditionFailure">
+             <summary>
+             Describes what preconditions have failed.
+            
+             For example, if an RPC failed because it required the Terms of Service to be
+             acknowledged, it could list the terms of service violation in the
+             PreconditionFailure message.
+             </summary>
+        </member>
+        <member name="F:Google.Rpc.PreconditionFailure.ViolationsFieldNumber">
+            <summary>Field number for the "violations" field.</summary>
+        </member>
+        <member name="P:Google.Rpc.PreconditionFailure.Violations">
+            <summary>
+            Describes all precondition violations.
+            </summary>
+        </member>
+        <member name="T:Google.Rpc.PreconditionFailure.Types">
+            <summary>Container for nested types declared in the PreconditionFailure message type.</summary>
+        </member>
+        <member name="T:Google.Rpc.PreconditionFailure.Types.Violation">
+            <summary>
+            A message type used to describe a single precondition failure.
+            </summary>
+        </member>
+        <member name="F:Google.Rpc.PreconditionFailure.Types.Violation.TypeFieldNumber">
+            <summary>Field number for the "type" field.</summary>
+        </member>
+        <member name="P:Google.Rpc.PreconditionFailure.Types.Violation.Type">
+            <summary>
+            The type of PreconditionFailure. We recommend using a service-specific
+            enum type to define the supported precondition violation types. For
+            example, "TOS" for "Terms of Service violation".
+            </summary>
+        </member>
+        <member name="F:Google.Rpc.PreconditionFailure.Types.Violation.SubjectFieldNumber">
+            <summary>Field number for the "subject" field.</summary>
+        </member>
+        <member name="P:Google.Rpc.PreconditionFailure.Types.Violation.Subject">
+            <summary>
+            The subject, relative to the type, that failed.
+            For example, "google.com/cloud" relative to the "TOS" type would
+            indicate which terms of service is being referenced.
+            </summary>
+        </member>
+        <member name="F:Google.Rpc.PreconditionFailure.Types.Violation.DescriptionFieldNumber">
+            <summary>Field number for the "description" field.</summary>
+        </member>
+        <member name="P:Google.Rpc.PreconditionFailure.Types.Violation.Description">
+             <summary>
+             A description of how the precondition failed. Developers can use this
+             description to understand how to fix the failure.
+            
+             For example: "Terms of service not accepted".
              </summary>
         </member>
         <member name="T:Google.Rpc.BadRequest">
@@ -3682,7 +3763,7 @@
              error message is needed, put the localized message in the error details or
              localize it in the client. The optional error details may contain arbitrary
              information about the error. There is a predefined set of error detail types
-             in the package `google.rpc` which can be used for common error conditions.
+             in the package `google.rpc` that can be used for common error conditions.
             
              # Language mapping
             
@@ -3705,7 +3786,7 @@
                  errors.
             
              - Workflow errors. A typical workflow has multiple steps. Each step may
-                 have a `Status` message for error reporting purpose.
+                 have a `Status` message for error reporting.
             
              - Batch operations. If a client uses batch request and batch response, the
                  `Status` message should be used directly inside batch response, one for
@@ -3742,8 +3823,8 @@
         </member>
         <member name="P:Google.Rpc.Status.Details">
             <summary>
-            A list of messages that carry the error details.  There will be a
-            common set of message types for APIs to use.
+            A list of messages that carry the error details.  There is a common set of
+            message types for APIs to use.
             </summary>
         </member>
         <member name="T:Google.Type.ColorReflection">

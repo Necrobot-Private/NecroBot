@@ -1036,4 +1036,850 @@
   <data name="_150_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>pokemongo-assets\pokemon\150-shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="_252" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\252.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_252_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\252_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_253" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\253.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_253_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\253_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_254" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\254.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_254_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\254_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_255" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\255.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_255_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\255_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_255_1_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\255_1_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_255_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\255_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_256" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\256.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_256_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\256_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_256_1_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\256_1_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_256_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\256_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_257" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\257.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_257_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\257_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_257_1_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\257_1_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_257_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\257_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_258" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\258.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_258_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\258_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_259" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\259.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_259_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\259_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_260" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\260.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_260_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\260_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_261" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\261.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_261_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\261_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_262" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\262.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_262_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\262_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_263" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\263.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_263_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\263_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_264" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\264.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_264_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\264_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_265" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\265.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_265_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\265_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_266" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\266.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_266_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\266_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_267" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\267.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_267_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\267_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_267_1_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\267_1_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_267_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\267_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_268" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\268.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_268_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\268_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_269" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\269.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_269_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\269_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_269_1_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\269_1_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_269_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\269_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_270" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\270.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_270_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\270_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_271" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\271.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_271_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\271_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_272" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\272.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_272_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\272_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_272_1_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\272_1_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_272_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\272_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_273" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\273.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_273_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\273_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_274" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\274.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_274_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\274_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_274_1_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\274_1_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_274_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\274_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_275" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\275.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_275_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\275_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_275_1_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\275_1_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_275_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\275_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_276" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\276.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_276_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\276_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_277" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\277.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_277_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\277_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_278" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\278.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_278_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\278_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_279" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\279.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_279_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\279_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_280" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\280.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_280_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\280_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_281" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\281.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_281_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\281_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_282" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\282.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_282_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\282_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_283" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\283.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_283_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\283_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_284" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\284.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_284_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\284_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_285" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\285.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_285_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\285_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_286" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\286.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_286_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\286_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_287" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\287.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_287_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\287_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_288" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\288.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_288_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\288_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_289" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\289.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_289_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\289_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_293" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\293.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_293_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\293_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_294" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\294.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_294_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\294_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_295" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\295.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_295_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\295_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_296" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\296.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_296_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\296_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_297" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\297.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_297_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\297_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_298" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\298.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_298_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\298_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_299" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\299.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_299_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\299_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_300" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\300.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_300_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\300_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_301" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\301.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_301_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\301_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_302" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\302.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_302_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\302_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_303" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\303.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_303_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\303_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_304" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\304.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_304_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\304_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_305" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\305.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_305_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\305_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_306" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\306.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_306_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\306_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_307" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\307.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_307_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\307_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_307_1_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\307_1_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_307_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\307_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_308" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\308.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_308_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\308_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_308_1_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\308_1_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_308_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\308_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_309" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\309.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_309_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\309_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_310" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\310.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_310_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\310_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_311" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\311.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_311_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\311_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_312" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\312.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_312_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\312_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_313" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\313.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_313_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\313_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_314" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\314.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_314_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\314_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_315" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\315.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_315_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\315_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_315_1_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\315_1_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_315_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\315_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_316" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\316.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_316_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\316_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_316_1_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\316_1_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_316_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\316_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_317" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\317.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_317_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\317_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_317_1_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\317_1_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_317_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\317_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_318" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\318.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_318_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\318_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_319" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\319.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_319_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\319_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_320" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\320.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_320_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\320_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_321" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\321.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_321_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\321_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_322" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\322.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_322_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\322_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_322_1_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\322_1_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_322_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\322_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_323" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\323.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_323_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\323_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_323_1_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\323_1_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_323_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\323_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_324" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\324.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_324_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\324_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_325" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\325.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_325_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\325_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_326" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\326.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_326_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\326_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_328" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\328.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_328_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\328_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_329" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\329.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_329_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\329_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_330" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\330.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_330_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\330_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_331" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\331.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_331_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\331_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_332" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\332.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_332_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\332_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_332_1_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\332_1_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_332_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\332_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_333" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\333.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_333_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\333_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_334" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\334.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_334_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\334_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_335" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\335.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_335_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\335_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_336" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\336.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_336_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\336_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_337" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\337.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_337_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\337_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_338" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\338.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_338_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\338_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_339" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\339.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_339_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\339_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_340" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\340.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_340_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\340_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_341" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\341.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_341_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\341_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_342" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\342.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_342_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\342_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_343" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\343.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_343_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\343_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_344" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\344.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_344_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\344_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_345" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\345.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_345_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\345_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_346" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\346.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_346_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\346_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_347" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\347.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_347_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\347_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_348" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\348.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_348_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\348_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_349" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\349.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_349_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\349_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_350" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\350.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_350_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\350_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_350_1_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\350_1_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_350_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\350_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_351_11" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\351_11.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_351_11_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\351_11_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_351_12" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\351_12.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_351_12_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\351_12_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_351_13" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\351_13.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_351_13_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\351_13_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_351_14" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\351_14.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_351_14_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\351_14_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_353" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\353.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_353_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\353_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_354" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\354.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_354_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\354_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_355" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\355.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_355_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\355_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_356" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\356.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_356_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\356_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_357" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\357.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_357_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\357_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_358" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\358.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_358_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\358_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_359" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\359.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_359_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\359_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_360" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\360.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_360_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\360_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_361" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\361.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_361_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\361_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_362" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\362.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_362_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\362_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_363" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\363.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_363_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\363_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_364" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\364.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_364_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\364_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_365" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\365.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_365_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\365_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_369" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\369.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_369_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\369_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_369_1_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\369_1_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_369_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\369_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_370" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\370.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_370_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\370_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_371" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\371.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_371_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\371_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_372" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\372.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_372_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\372_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_373" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\373.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_373_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\373_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_374" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\374.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_374_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\374_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_375" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\375.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_375_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\375_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_376" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\376.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_376_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\376_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_382" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\382.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_382_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\382_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_383" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\383.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_383_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\383_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_384" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\384.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_384_shiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>pokemongo-assets\pokemon\384_shiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
