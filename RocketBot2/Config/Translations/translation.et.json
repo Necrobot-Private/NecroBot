@@ -210,11 +210,11 @@
     },
     {
       "Key": "incubatorPuttingEgg",
-      "Value": "Panen muna inkubaatorisse: {0:0.00} km veel jäänud"
+      "Value": "{0}) Panen muna inkubaatorisse: {1:0.00} km veel jäänud"
     },
     {
       "Key": "incubatorStatusUpdate",
-      "Value": "Inkubaatori seis: {0:0.00} km veel jäänud"
+      "Value": "{0}) Inkubaatori seis: {1:0.00} km veel jäänud of {2} Km egg."
     },
     {
       "Key": "incubatorEggHatched",

@@ -210,11 +210,11 @@
     },
     {
       "Key": "incubatorPuttingEgg",
-      "Value": "Se pune oul în incubator: {0:0.00} km rămași"
+      "Value": "{0}) Se pune oul în incubator: {1:0.00} km rămași"
     },
     {
       "Key": "incubatorStatusUpdate",
-      "Value": "Actualizare pentru statusului incubatorului: {0:0.00} km rămași"
+      "Value": "{0}) Actualizare pentru statusului incubatorului: {1:0.00} km rămași of {2} Km egg."
     },
     {
       "Key": "incubatorEggHatched",

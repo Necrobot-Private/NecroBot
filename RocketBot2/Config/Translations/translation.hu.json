@@ -210,11 +210,11 @@
     },
     {
       "Key": "incubatorPuttingEgg",
-      "Value": "Tojas behelyezese az inkubatorba: {0:0.00}km maradt"
+      "Value": "{0}) Tojas behelyezese az inkubatorba: {1:0.00}km maradt"
     },
     {
       "Key": "incubatorStatusUpdate",
-      "Value": "Aktualis inkubator allapot: {0:0.00}km maradt"
+      "Value": "{0}) Aktualis inkubator allapot: {1:0.00}km maradt of {2} Km egg."
     },
     {
       "Key": "incubatorEggHatched",

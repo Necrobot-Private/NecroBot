@@ -210,11 +210,11 @@
     },
     {
       "Key": "incubatorPuttingEgg",
-      "Value": "Umieszczono Jajko w inkubatorze. Pozostało {0:0.00}km"
+      "Value": "{0}) Umieszczono Jajko w inkubatorze. Pozostało {1:0.00}km"
     },
     {
       "Key": "incubatorStatusUpdate",
-      "Value": "Pozostało: {0:0.00}km do wyklucia"
+      "Value": "{0}) Pozostało: {1:0.00}km do wyklucia of {2} Km egg."
     },
     {
       "Key": "incubatorEggHatched",
@@ -1080,7 +1080,7 @@
     },
     {
       "Key": "farfetchd",
-      "Value": "Farfetch'd"
+      "Value": "Farfetchd"
     },
     {
       "Key": "doduo",

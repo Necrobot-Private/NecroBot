@@ -777,15 +777,19 @@ namespace PoGo.NecroBot.Logic
 
         public async Task<bool> CanEvolvePokemon(PokemonData pokemon, EvolveFilter appliedFilter = null, bool checkEvolveFilterRequirements = false)
         {
+            // Can't evolve pokemon null.
+            if (pokemon == null || pokemon.PokemonId == PokemonId.Missingno || pokemon.IsBad)
+                return false;
+
             // Can't evolve pokemon in gyms.
             if (!string.IsNullOrEmpty(pokemon.DeployedFortId))
                 return false;
 
             IEnumerable<PokemonSettings> pokemonSettings = await GetPokemonSettings().ConfigureAwait(false);
-            var settings = pokemonSettings.SingleOrDefault(x => x.PokemonId == pokemon.PokemonId);
+            var settings = pokemonSettings.FirstOrDefault(x => x.PokemonId == pokemon.PokemonId);
 
             // Can't evolve pokemon that are not evolvable.
-            if (settings.EvolutionIds.Count == 0 && settings.EvolutionBranch.Count == 0)
+            if (settings == null || settings.EvolutionIds.Count == 0 && settings.EvolutionBranch.Count == 0)
                 return false;
 
             int familyCandy = await GetCandyCount(pokemon.PokemonId).ConfigureAwait(false);

@@ -2,6 +2,7 @@
 {
     public class EggIncubatorStatusEvent : IEvent
     {
+        public int Eggs;
         public string IncubatorId;
         public double KmRemaining;
         public double KmToWalk;

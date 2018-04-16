@@ -15,6 +15,7 @@ using PokemonGo.RocketAPI.Exceptions;
 using POGOProtos.Enums;
 using TinyIoC;
 using PokemonGo.RocketAPI.Util;
+using PokemonGo.RocketAPI.Extensions;
 
 #endregion
 
@@ -210,7 +211,11 @@ namespace PoGo.NecroBot.Logic.State
                 if (currentAccount != null)
                 {
                     currentAccount.LastLogin = successfullyLoggedIn ? "Success" : "Failure";
-                    currentAccount.LastLoginTimestamp = TimeUtil.GetCurrentTimestampInMilliseconds();
+                    if (currentAccount.LastLogin == "Success")
+                    {
+                        currentAccount.LastLoginTimestamp = TimeUtil.GetCurrentTimestampInMilliseconds();
+                        currentAccount.LastRuntimeUpdatedAt = DateTime.Now.ToUnixTime();
+                    }
                     accountManager.UpdateLocalAccount(currentAccount);
                 }
             }
@@ -231,6 +236,14 @@ namespace PoGo.NecroBot.Logic.State
                     if (successfullyLoggedIn)
                     {
                         var currentAccount = accountManager?.GetCurrentAccount();
+
+                        var pokName = string.IsNullOrEmpty(currentAccount.Nickname) ? currentAccount.Username : currentAccount.Nickname;
+                        var EXP = currentAccount.CurrentXp; var SD = currentAccount.Stardust; var LV = currentAccount.Level;
+                        if (EXP < 1) { EXP = 0; }
+                        if (SD < 1) { SD = 0; }
+                        if (LV < 1) { LV = 0; }
+                        Logic.Logging.Logger.Write($"(STATS UPDATE) {pokName} Stats updated | Lvl: {LV} | XP: {EXP} | SD: {SD}", LogLevel.Info);
+
                         if (currentAccount != null)
                         {
                             if (session.Profile.Banned)

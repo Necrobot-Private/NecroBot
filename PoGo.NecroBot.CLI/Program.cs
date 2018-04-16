@@ -37,24 +37,26 @@ namespace PoGo.NecroBot.CLI
         [Option('i', "init", Required = false, HelpText = "Init account")]
         public bool Init { get; set; }
 
-        [Option('t', "template", DefaultValue = "", Required = false, HelpText = "Prints all messages to standard output.")]
+        [Option('t', "template", Default = "", Required = false, HelpText = "Prints all messages to standard output.")]
         public string Template { get; set; }
 
-        [Option('p', "password", DefaultValue = "", Required = false, HelpText = "Password")]
+        [Option('p', "password", Default = "", Required = false, HelpText = "Password")]
         public string Password { get; set; }
 
-        [Option('g', "google", DefaultValue = false, Required = false, HelpText = "is google account")]
+        [Option('g', "google", Default = false, Required = false, HelpText = "is google account")]
         public bool IsGoogle { get; set; }
 
-        [Option('s', "start", DefaultValue = 1, HelpText = "Start account", Required = false)]
+        [Option('s', "start", Default = 1, HelpText = "Start account", Required = false)]
         public int Start { get; set; }
 
-        [Option('e', "end", DefaultValue = 10, HelpText = "End account", Required = false)]
+        [Option('e', "end", Default = 10, HelpText = "End account", Required = false)]
         public int End { get; set; }
 
+        /*
+         * outed or deprecated
         [ParserState]
         public IParserState LastParserState { get; set; }
-
+        
         [HelpOption]
         public string GetUsage()
         {
@@ -66,6 +68,7 @@ namespace PoGo.NecroBot.CLI
             Environment.Exit(0);
             return null;
         }
+        */
     }
 
     public class Program
@@ -216,14 +219,14 @@ namespace PoGo.NecroBot.CLI
             }
 
             var options = new Options();
-            if (CommandLine.Parser.Default.ParseArguments(args, options))
-            {
+            //if (CommandLine.Parser.Default.ParseArguments(args, options))
+            //{
                 // Values are available here
                 if (options.Init)
                 {
                     settings.GenerateAccount(options.IsGoogle, options.Template, options.Start, options.End, options.Password);
                 }
-            }
+            //}
             var lastPosFile = Path.Combine(profileConfigPath, "LastPos.ini");
             if (File.Exists(lastPosFile) && settings.LocationConfig.StartFromLastPosition)
             {
@@ -440,7 +443,7 @@ namespace PoGo.NecroBot.CLI
             stats.DirtyEvent +=
                 () =>
                 {
-                    GetPlayerResponse x = _session.Client.Player.GetPlayer().Result;
+                    GetPlayerResponse x =  _session.Client.Player.GetPlayer().Result;
                     string warn = x.Warn ? "*(Flagged)*-" : null;
 
                     Console.Title = $"[NecroBot2 v{strVersion}] Team: {x.PlayerData.Team} - {warn}" +

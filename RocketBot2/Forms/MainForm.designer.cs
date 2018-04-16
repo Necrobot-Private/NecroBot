@@ -207,8 +207,8 @@ namespace RocketBot2.Forms
             // 
             // GMapControl1
             // 
-            this.GMapControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.GMapControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.GMapControl1.Bearing = 0F;
             this.GMapControl1.CanDragMap = true;
@@ -254,8 +254,8 @@ namespace RocketBot2.Forms
             this.olvPokemonList.AllColumns.Add(this.pkmnTransferButton);
             this.olvPokemonList.AllColumns.Add(this.pkmnPowerUpButton);
             this.olvPokemonList.AllColumns.Add(this.pkmnEvolveButton);
-            this.olvPokemonList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.olvPokemonList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.olvPokemonList.CellEditUseWholeCell = false;
             this.olvPokemonList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -664,7 +664,7 @@ namespace RocketBot2.Forms
             // 
             // lblInventory
             // 
-            this.lblInventory.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.lblInventory.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblInventory.Location = new System.Drawing.Point(2, 742);
             this.lblInventory.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
@@ -676,7 +676,7 @@ namespace RocketBot2.Forms
             // 
             // flpItems
             // 
-            this.flpItems.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.flpItems.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.flpItems.AutoScroll = true;
             this.flpItems.BackColor = System.Drawing.SystemColors.Window;
@@ -690,7 +690,7 @@ namespace RocketBot2.Forms
             // 
             // lblPokemonList
             // 
-            this.lblPokemonList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.lblPokemonList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblPokemonList.Location = new System.Drawing.Point(3, 605);
             this.lblPokemonList.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);

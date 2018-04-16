@@ -78,6 +78,7 @@ namespace PoGo.NecroBot.Logic.Tasks
             var allPokemonInBag = session.LogicSettings.PrioritizeIvOverCp
                 ? await session.Inventory.GetHighestsPerfect(1000).ConfigureAwait(false)
                 : await session.Inventory.GetHighestsCp(1000).ConfigureAwait(false);
+
             if (session.LogicSettings.DumpPokemonStats)
             {
                 _MultiAccountManager = new MultiAccountManager();

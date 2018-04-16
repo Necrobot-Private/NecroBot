@@ -11,6 +11,7 @@ using PokemonGo.RocketAPI.Exceptions;
 using POGOProtos.Data;
 using POGOProtos.Networking.Responses;
 using PokemonGo.RocketAPI.Helpers;
+using PoGo.NecroBot.Logic.Logging;
 
 #endregion
 
@@ -35,10 +36,6 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                 //stardust from what I've gathered is supposed to be - not + for AdditionalCpMultiplier
                 var stardust = -PokemonCpUtils.GetStardustCostsForPowerup(upgradeResult.UpgradedPokemon.CpMultiplier);
-                var stardust2 = -PokemonCpUtils.GetStardustCostsForPowerup(upgradeResult.UpgradedPokemon.CpMultiplier - upgradeResult.UpgradedPokemon.AdditionalCpMultiplier);
-                var totalStarDust = session.Inventory.UpdateStarDust(stardust);
-                Logging.Logger.Write($"SD1: {stardust,5:0} | SD2: {stardust2,5:0} | TotalSD: {totalStarDust,5:0}", Logging.LogLevel.Error);
-
                 session.EventDispatcher.Send(new UpgradePokemonEvent()
                 {
                     Candy = await session.Inventory.GetCandyCount(pokemon.PokemonId).ConfigureAwait(false),

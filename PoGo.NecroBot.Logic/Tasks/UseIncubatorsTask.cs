@@ -27,6 +27,8 @@ namespace PoGo.NecroBot.Logic.Tasks
         public static long Stardust { get; set; }
         public static object eggIncubatorStatusEvent { get; private set; }
 
+        public static float kmWalked; // = playerStats.KmWalked;
+
         public static async Task Execute(ISession session, CancellationToken cancellationToken,
             ulong eggId, string incubatorId)
         {
@@ -45,12 +47,29 @@ namespace PoGo.NecroBot.Logic.Tasks
             var response = await session.Client.Inventory.UseItemEggIncubator(incubators.Id, unusedEggs.Id).ConfigureAwait(false);
             var newRememberedIncubators = new List<IncubatorUsage>();
 
+            var playerStats = (await session.Inventory.GetPlayerStats().ConfigureAwait(false)).FirstOrDefault();
+
+#if DEBUG
+            if (session.LogicSettings.NotificationConfig.PushBulletApiKey != null)
+            {
+                var OldNot = session.LogicSettings.NotificationConfig.EnablePushBulletNotification;
+                session.LogicSettings.NotificationConfig.EnablePushBulletNotification = true;
+                await PushNotificationClient.SendNotification(session, $"Session paused.", $"Check your code.", true).ConfigureAwait(false);
+                session.LogicSettings.NotificationConfig.EnablePushBulletNotification = OldNot;
+            }
+#endif
+            kmWalked = playerStats.KmWalked;
+
+            var eggs = 0;
+
             if (response.Result == UseItemEggIncubatorResponse.Types.Result.Success)
             {
+                eggs += 1;
                 newRememberedIncubators.Add(new IncubatorUsage { IncubatorId = incubators.Id, PokemonId = unusedEggs.Id });
 
                 session.EventDispatcher.Send(new EggIncubatorStatusEvent
                 {
+                    Eggs = eggs,
                     IncubatorId = incubators.Id,
                     WasAddedNow = true,
                     PokemonId = unusedEggs.Id,
@@ -78,8 +97,6 @@ namespace PoGo.NecroBot.Logic.Tasks
                 if (playerStats == null)
                     return;
 
-                var kmWalked = playerStats.KmWalked;
-
                 var incubators = (await session.Inventory.GetEggIncubators().ConfigureAwait(false))
                     .Where(x => x.UsesRemaining > 0 || x.ItemId == ItemId.ItemIncubatorBasicUnlimited)
                     .OrderByDescending(x => x.ItemId == ItemId.ItemIncubatorBasicUnlimited)
@@ -103,12 +120,12 @@ namespace PoGo.NecroBot.Logic.Tasks
                     if (hatched == null) continue;
 
                     //Still Needs some work - TheWizard1328
-                    var stats = session.RuntimeStatistics;           // Total Km walked
-                    var KMs = eggIncubatorStatusEvent.KmToWalk; //playerStats.KmWalked - hatched.EggKmWalkedStart; // Total Km Walked(hatched.EggKmWalkedStart=0)
-                    var stardust1 = session.Inventory.GetStarDust(); // Total trainer Stardust
-                    var stardust2 = stats.TotalStardust;             // Total trainer Stardust
-                    var ExpAwarded1 = playerStats.Experience;        // Total Player Exp - TheWizard1328
-                    var ExpAwarded2 = stats.TotalExperience;         // Session Exp - TheWizard1328
+
+                    var KMs = playerStats.KmWalked - kmWalked;                          // playerStats.KmWalked - hatched.EggKmWalkedStart; // Total Km Walked(hatched.EggKmWalkedStart=0)
+                    var stardust1 = session.Inventory.GetStarDust();                    // Total trainer Stardust
+                    var stardust2 = session.RuntimeStatistics.TotalStardust;            // Total trainer Stardust
+                    var ExpAwarded1 = playerStats.Experience;                           // Total Player Exp - TheWizard1328
+                    var ExpAwarded2 = session.RuntimeStatistics.TotalExperience;        // Session Exp - TheWizard1328
                     var TotCandy = session.Inventory.GetCandyCount(hatched.PokemonId);
                     //Temp logger line personal testing info - TheWizard1328
 #if DEBUG
@@ -137,11 +154,14 @@ namespace PoGo.NecroBot.Logic.Tasks
                 }
 
                 var newRememberedIncubators = new List<IncubatorUsage>();
+                var eggs = 0;
 
                 foreach (var incubator in incubators)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
                     TinyIoC.TinyIoCContainer.Current.Resolve<MultiAccountManager>().ThrowIfSwitchAccountRequested();
+                    eggs += 1;
+
                     if (incubator.PokemonId == 0)
                     {
                         // Unlimited incubators prefer short eggs, limited incubators prefer long eggs
@@ -165,6 +185,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                         session.EventDispatcher.Send(new EggIncubatorStatusEvent
                         {
+                            Eggs = eggs,
                             IncubatorId = incubator.Id,
                             WasAddedNow = true,
                             PokemonId = egg.Id,
@@ -182,6 +203,7 @@ namespace PoGo.NecroBot.Logic.Tasks
 
                         session.EventDispatcher.Send(new EggIncubatorStatusEvent
                         {
+                            Eggs = eggs,
                             IncubatorId = incubator.Id,
                             PokemonId = incubator.PokemonId,
                             KmToWalk = incubator.TargetKmWalked - incubator.StartKmWalked,

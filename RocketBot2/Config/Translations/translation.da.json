@@ -238,11 +238,11 @@
     },
     {
       "Key": "incubatorPuttingEgg",
-      "Value": "Putter æg i inkubator: {0:0.00}km tilbage"
+      "Value": "{0}) Putter æg i inkubator: {1:0.00}km tilbage"
     },
     {
       "Key": "incubatorStatusUpdate",
-      "Value": "Ægge inkubator Status: {0:0.00}km tilbage"
+      "Value": "{0}) Ægge inkubator Status: {1:0.00}km tilbage of {2} Km egg."
     },
     {
       "Key": "incubatorEggHatched",

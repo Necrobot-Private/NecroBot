@@ -178,11 +178,11 @@
     },
     {
       "Key": "incubatorPuttingEgg",
-      "Value": "A colocar ovo na incubadora: restam {0:0.00}km"
+      "Value": "{0}) A colocar ovo na incubadora: restam {1:0.00}km"
     },
     {
       "Key": "incubatorStatusUpdate",
-      "Value": "Status da incubadora atualizado: restam {0:0.00}km"
+      "Value": "{0}) Status da incubadora atualizado: restam {1:0.00}km of {2} Km egg."
     },
     {
       "Key": "incubatorEggHatched",

@@ -202,15 +202,14 @@ namespace PoGo.NecroBot.Logic.Tasks
             var forts = session.Forts.Where(p => p.CooldownCompleteTimestampMs < DateTime.UtcNow.ToUnixTime())
                 .Where(x => x.Id != string.Empty).ToList();
 
-            forts = forts.OrderBy(
-                        p =>
-                            session.Navigation.WalkStrategy.CalculateDistance(
+            forts = forts.OrderBy(p => p.Visited).ThenBy(
+                                p => session.Navigation.WalkStrategy.CalculateDistance(
                                 session.Client.CurrentLatitude,
                                 session.Client.CurrentLongitude,
                                 p.Latitude,
                                 p.Longitude,
-                                session)
-                                ).ToList();
+                                session)).ToList();
+
 
             if (session.LogicSettings.UseGpxPathing)
             {
@@ -257,7 +256,23 @@ namespace PoGo.NecroBot.Logic.Tasks
                     return gyms.FirstOrDefault();
             }
 
-            return forts.FirstOrDefault();
+            //Need observation 
+            /*
+            Random RndFort = new Random((int)DateTime.Now.Ticks);
+            int R = 10; if (forts.Count < R) { R = forts.Count; }
+
+            {
+                int RndF = RndFort.Next(1, R);
+
+                Logger.Debug($"Total Pokestops: {forts.Count} | Rnd Stop Chosen: {RndF}");
+
+                return forts[RndF - 1];
+            } 
+            else
+            {
+            */
+                return forts.FirstOrDefault();
+            //}
         }
 
         public static async Task SpinPokestopNearBy(ISession session, CancellationToken cancellationToken, FortData destinationFort = null)
@@ -494,7 +509,7 @@ namespace PoGo.NecroBot.Logic.Tasks
                         if (session.SaveBallForByPassCatchFlee)
                         {
                             var totalBalls = (await session.Inventory.GetItems().ConfigureAwait(false)).Where(x => x.ItemId == ItemId.ItemPokeBall || x.ItemId == ItemId.ItemGreatBall || x.ItemId == ItemId.ItemUltraBall).Sum(x => x.Count);
-                            Logger.Write($"Ball requires for by pass catch flee {totalBalls}/{CatchPokemonTask.BALL_REQUIRED_TO_BYPASS_CATCHFLEE}");
+                            Logger.Write($"Balls required to by-pass catch flee {totalBalls}/{CatchPokemonTask.BALL_REQUIRED_TO_BYPASS_CATCHFLEE}");
                         }
                         else
                             MSniperServiceTask.UnblockSnipe(false);

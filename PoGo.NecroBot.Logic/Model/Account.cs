@@ -17,6 +17,8 @@ namespace PoGo.NecroBot.Logic.Model
         public double AccountLatitude { get; set; }
         public double AccountLongitude { get; set; }
         public bool AccountActive { get; set; }
+        public double RunStart { get; set; }
+        public double RunEnd { get; set; }
         [Required]
         public string Password { get; set; }
         public double? RuntimeTotal { get; set; }
@@ -54,6 +56,8 @@ namespace PoGo.NecroBot.Logic.Model
             AccountLatitude = item.AccountLatitude;
             AccountLongitude = item.AccountLongitude;
             AccountActive = item.AccountActive;
+            RunStart = item.RunStart;
+            RunEnd = item.RunEnd;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

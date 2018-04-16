@@ -186,11 +186,11 @@
     },
     {
       "Key": "incubatorPuttingEgg",
-      "Value": "Dedamas kiaušinis į inkubatorių: {0:0.00}km liko"
+      "Value": "{0}) Dedamas kiaušinis į inkubatorių: {1:0.00}km liko"
     },
     {
       "Key": "incubatorStatusUpdate",
-      "Value": "Inkubatoriaus atnaujinimas: {0:0.00}km liko"
+      "Value": "{0}) Inkubatoriaus atnaujinimas: {1:0.00}km liko of {2} Km egg."
     },
     {
       "Key": "incubatorEggHatched",
