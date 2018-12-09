@@ -15,7 +15,7 @@ namespace PoGo.NecroBot.Window.Model
         {
             get
             {
-                return $"https://cdn.rawgit.com/NecroBot-Private/PokemonGO-Assets/master/pokemon/{(int)PokemonId}.png";
+                return $"https://cdn.jsdelivr.net/gh/NecroBot-Private/PokemonGO-Assets@master/pokemon/{(int)PokemonId}.png";
             }
         }
 
